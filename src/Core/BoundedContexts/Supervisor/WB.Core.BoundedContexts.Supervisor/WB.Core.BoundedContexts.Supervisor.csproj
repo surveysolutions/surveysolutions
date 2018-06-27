@@ -9,4 +9,19 @@
     <ProjectReference Include="..\..\..\SharedKernels\Enumerator\Enumerator\WB.Core.SharedKernels.Enumerator.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="Properties\SupervisorDashboard.Designer.cs">
+      <DependentUpon>SupervisorDashboard.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\SupervisorDashboard.resx">
+      <LastGenOutput>SupervisorDashboard.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+  </ItemGroup>
+
 </Project>

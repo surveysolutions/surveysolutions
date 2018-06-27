@@ -1,0 +1,350 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+  <style name="Dashboard_InterviewListItem">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_marginLeft">@dimen/Dashboard_Layout_marginLeft</item>
+    <item name="android:layout_marginRight">@dimen/Dashboard_Layout_marginRight</item>
+    <item name="android:layout_marginBottom">@dimen/Dashboard_Items_space</item>
+
+    <item name="android:clipChildren">false</item>
+    <item name="android:clipToPadding">false</item>
+    <item name="android:padding">@dimen/Dashboard_Card_Elevation</item>
+  </style>
+
+  <style name="Dashboard_Card_Status">
+    <item name="android:layout_width">7dp</item>
+    <item name="android:layout_height">0dp</item>
+  </style>
+
+  <style name="Dashboard_InterviewItem_InformationBlock">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">match_parent</item>
+    <item name="android:layout_marginLeft">@dimen/Dashboard_InterviewItem_InformationBlock_margin</item>
+    <item name="android:paddingTop">@dimen/Dashboard_InterviewItem_InformationBlock_margin</item>
+    <item name="android:orientation">vertical</item>
+  </style>
+
+  <style name="Dashboard_InterviewItem_Footer">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">14dp</item>
+  </style>
+
+  <style name="Dashboard_ExpandHandle">
+    <item name="android:layout_marginBottom">7dp</item>
+    <item name="android:layout_marginTop">7dp</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_width">wrap_content</item>
+  </style>
+
+  <style name="Dashboard_InterviewItem_Id">
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:maxLines">2</item>
+    <item name="android:scrollHorizontally">false</item>
+    <item name="android:textSize">@dimen/textsize_22</item>
+    <item name="android:fontFamily">Roboto</item>
+    <item name="android:layout_width">0dp</item>
+    <item name="android:textColor">@color/dashboard_interview_title</item>
+  </style>
+
+  <style name="Dashboard_InterviewItem_SubId">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_marginLeft">0dp</item>
+    <item name="android:layout_marginTop">0dp</item>
+    <item name="android:maxLines">2</item>
+    <item name="android:scrollHorizontally">false</item>
+    <item name="android:textSize">@dimen/textsize_14</item>
+  </style>
+
+  <style name="Dashboard_InterviewItem_Title">
+    <item name="android:layout_width">0dp</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:maxLines">3</item>
+    <item name="android:ellipsize">end</item>
+    <item name="android:paddingEnd">14dp</item>
+    <item name="android:scrollHorizontally">false</item>
+    <item name="android:textSize">@dimen/textsize_14</item>
+    <item name="android:textStyle">normal</item>
+    <item name="android:fontFamily">sans-serif-medium</item>
+    <item name="android:textColor">@color/dashboard_interview_title</item>
+  </style>
+  <style name="Dashboard_InterviewItem_SubTitle">
+    <item name="android:layout_width">0dp</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:paddingEnd">@dimen/dashboard_card_base_margin</item>
+    <item name="android:textSize">@dimen/textsize_14</item>
+    <item name="android:textStyle">normal</item>
+    <item name="android:fontFamily">sans-serif-medium</item>
+  </style>
+
+  <style name="dashboard_prefilledQuestion_container">
+    <item name="android:layout_width">0dp</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_marginTop">@dimen/dashboard_card_base_margin</item>
+    <item name="android:divider">@drawable/list_divider_material</item>
+    <item name="android:orientation">vertical</item>
+    <item name="android:showDividers">beginning|middle</item>
+    <item name="android:focusable">false</item>
+    <item name="android:focusableInTouchMode">false</item>
+  </style>
+
+  <style name="Dashboard_InterviewItem_PrefilledQuestions">
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_width">0dp</item>
+    <item name="android:layout_marginRight">@dimen/dashboard_card_base_margin</item>
+    <item name="android:focusable">false</item>
+    <item name="android:layout_marginTop">@dimen/dashboard_card_base_margin</item>
+    <item name="android:focusableInTouchMode">false</item>
+  </style>
+
+  <style name="Dashboard_InterviewItem_PrefilledQuestion">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">@dimen/dashboard_card_duo_margin</item>
+    <item name="android:orientation">horizontal</item>
+    <item name="android:fontFamily">Roboto</item>
+    <item name="android:gravity">center_vertical</item>
+    <item name="android:textSize">@dimen/textsize_14</item>
+    <item name="android:singleLine">true</item>
+  </style>
+
+  <style name="Dashboard_InterviewItem_PrefilledQuestion_Question">
+    <item name="android:layout_width">0dp</item>
+    <item name="android:layout_weight">34</item>
+    <item name="android:textSize">@dimen/textsize_14</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:textStyle">italic</item>
+    <item name="android:textColor">@color/dashboard_prefilled_question</item>
+    <item name="android:singleLine">true</item>
+
+    <item name="android:maxWidth">@dimen/Dashboard_PrefilledQuestion_Width</item>
+  </style>
+
+  <style name="Dashboard_InterviewItem_PrefilledQuestion_Answer">
+    <item name="android:layout_width">0dp</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_gravity">left|center_vertical</item>
+    <item name="android:layout_weight">55</item>
+
+    <item name="android:textSize">@dimen/textsize_14</item>
+    <item name="android:textColor">@color/dashboard_interview_title</item>
+
+    <item name="android:fontFamily">sans-serif-medium</item>
+    <item name="android:textStyle">normal</item>
+    <item name="android:singleLine">true</item>
+  </style>
+
+  <style name="Dashboard_InterviewItem_Comment">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:textSize">@dimen/textsize_14</item>
+    <item name="android:textStyle">bold</item>
+  </style>
+
+  <style name="Dashboard_Assignment_CompletionState" parent="Dashboard_InterviewItem_Comment">
+    <item name="android:layout_width">@dimen/zero</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:textColor">@color/dashboard_questionnairelist_empty_text</item>
+    <item name="android:layout_weight">1</item>
+    <item name="android:layout_gravity">center_vertical</item>
+    <item name="android:paddingLeft">@dimen/Dashboard_InterviewItem_Comment_lines_margin</item>
+    <item name="android:singleLine">true</item>
+  </style>
+
+  <style name="Dashboard_InterviewItem_MainActionButton">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_marginTop">@dimen/dashboard_card_base_margin</item>
+    <item name="android:layout_marginBottom">@dimen/dashboard_card_duo_margin</item>
+    <item name="android:background">@drawable/default_input_button</item>
+    <item name="android:paddingLeft">@dimen/dashboard_card_base_margin</item>
+    <item name="android:paddingRight">@dimen/dashboard_card_base_margin</item>
+    <item name="android:textSize">@dimen/textsize_12</item>
+    <item name="android:letterSpacing">0.05</item>
+    <item name="android:textAllCaps">true</item>
+
+    <item name="android:fontFamily">sans-serif-medium</item>
+    <item name="android:textStyle">normal</item>
+  </style>
+
+  <style name="Dashboard_Location">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_gravity">center_vertical</item>
+    <item name="android:textColor">@color/btn_default</item>
+    <item name="android:textAllCaps">true</item>
+    <item name="android:textSize">@dimen/textsize_12</item>
+    <item name="android:letterSpacing">0.05</item>
+    <item name="android:fontFamily">sans-serif-medium</item>
+    <item name="android:textStyle">normal</item>
+
+    <item name="android:background">?attr/selectableItemBackground</item>
+    <item name="android:padding">@dimen/Interview_Group_button_padding</item>
+  </style>
+
+  <style name="Dashboard_InterviewItem_CreateButton">
+    <item name="android:layout_width">0dp</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_marginTop">@dimen/dashboard_card_base_margin</item>
+    <item name="android:layout_marginBottom">@dimen/dashboard_card_duo_margin</item>
+    <item name="android:background">@drawable/default_input_button</item>
+    <item name="android:paddingLeft">@dimen/Dashboard_InterviewItem_InformationBlock_margin</item>
+    <item name="android:paddingRight">@dimen/Dashboard_InterviewItem_InformationBlock_margin</item>
+    <item name="android:textAllCaps">true</item>
+  </style>
+
+  <style name="Dashboard_InterviewItem_RemoveInterviewButton">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:textColor">@color/dashboard_interview_title</item>
+    <item name="android:layout_gravity">center_vertical</item>
+    <item name="android:padding">@dimen/Interview_Group_button_padding</item>
+    <item name="android:paddingLeft">@dimen/zero</item>
+    <item name="android:layout_marginLeft">@dimen/Dashboard_InterviewItem_InformationBlock_margin</item>
+    <item name="android:textAllCaps">true</item>
+    <item name="android:letterSpacing">0.1</item>
+    <item name="android:background">?attr/selectableItemBackground</item>
+  </style>
+
+  <style name="Dashboard_Tab_Description">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:textSize">@dimen/textsize_22</item>
+    <item name="android:fontFamily">Roboto</item>
+    <item name="android:layout_marginBottom">@dimen/Dashboard_TabMenu_marginBottom</item>
+    <item name="android:layout_marginLeft">@dimen/Dashboard_Layout_marginLeft</item>
+    <item name="android:layout_marginRight">@dimen/Dashboard_Layout_marginRight</item>
+  </style>
+  
+    <style name="Dashboard_Menu_Handle">
+    <item name="android:layout_width">@dimen/dashboard_card_duo_margin</item>
+    <item name="android:layout_height">18dp</item>
+    <item name="android:layout_marginRight">@dimen/dashboard_card_base_margin</item>
+    <item name="android:paddingLeft">0dp</item>
+    <item name="android:paddingRight">0dp</item>
+  </style>
+  
+  <style name="Dashboard_NoInterviewsPanel">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:orientation">vertical</item>
+    <item name="android:layout_marginTop">@dimen/Dashboard_TabMenu_marginTop</item>
+    <item name="android:layout_marginBottom">@dimen/Dashboard_TabMenu_marginBottom</item>
+    <item name="android:layout_marginLeft">@dimen/Dashboard_Layout_marginLeft</item>
+    <item name="android:layout_marginRight">@dimen/Dashboard_Layout_marginRight</item>
+  </style>
+
+  <style name="Dashboard_NewTab_NoInterviewsPanel" parent="Dashboard_NoInterviewsPanel">
+    <item name="android:layout_marginTop">@dimen/zero</item>
+    <item name="android:layout_marginBottom">@dimen/zero</item>
+  </style>
+
+  <style name="Dashboard_NoInterviewsTitle">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:textSize">@dimen/textsize_22</item>
+    <item name="android:fontFamily">Roboto</item>
+    <item name="android:layout_marginTop">@dimen/Dashboard_NoInterviewsTitle_marginTop</item>
+  </style>
+
+  <style name="Dashboard_NewTab_NoInterviewsTitle" parent="Dashboard_NoInterviewsTitle">
+    <item name="android:layout_marginTop">@dimen/zero</item>
+  </style>
+
+  <style name="Dashboard_NoInterviewsText">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:textSize">@dimen/textsize_20</item>
+    <item name="android:fontFamily">Roboto</item>
+    <item name="android:textColor">@color/dashboard_no_interviews_text</item>
+    <item name="android:layout_marginTop">@dimen/Dashboard_NoInterviewsText_marginTop</item>
+  </style>
+
+  <style name="Dashboard_NoInterviewsSyncButton">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:background">@drawable/default_input_button</item>
+    <item name="android:paddingLeft">@dimen/Dashboard_InterviewItem_InformationBlock_margin</item>
+    <item name="android:paddingRight">@dimen/Dashboard_InterviewItem_InformationBlock_margin</item>
+    <item name="android:textStyle">bold</item>
+    <item name="android:textAllCaps">true</item>
+    <item name="android:layout_marginTop">@dimen/Dashboard_NoInterviewsText_marginTop</item>
+    <item name="android:drawableLeft">@drawable/dashboard_sync_icon_small</item>
+  </style>
+
+  <style name="Dashboard_NewTab_NoInterviewsSyncButton" parent="Dashboard_NoInterviewsSyncButton">
+    <item name="android:layout_marginBottom">@dimen/Dashboard_NoInterviewsText_marginTop</item>
+  </style>
+
+  <style name="Dashboard_ReceiveDate">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:textColor">@color/group_not_started</item>
+    <item name="android:paddingRight">@dimen/Interview_Group_button_padding</item>
+    <item name="android:layout_gravity">right</item>
+  </style>
+
+  <style name="ToolbarTitle_Container">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+  </style>
+
+  <style name="Dashboard_SearchView_FilterInput">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:singleLine">true</item>
+    <item name="android:layout_gravity">center_vertical</item>
+    <item name="android:inputType">textVisiblePassword|textNoSuggestions</item>
+    <item name="android:maxLines">1</item>
+    <item name="android:layout_weight">1</item>
+    <item name="android:focusable">true</item>
+    <item name="android:focusableInTouchMode">true</item>
+    <item name="android:textCursorDrawable">@null</item>
+    <item name="android:background">@android:color/transparent</item>
+  </style>
+
+  <style name="Dashboard_SearchView_DeleteButton">
+    <item name="android:layout_width">@dimen/Dashboard_SearchView_DeleteButton_size</item>
+    <item name="android:layout_height">@dimen/Dashboard_SearchView_DeleteButton_size</item>
+    <item name="android:layout_marginRight">@dimen/Interview_Question_Answer_Input_background_padding</item>
+    <item name="android:layout_gravity">center_vertical</item>
+    <item name="android:scaleType">fitCenter</item>
+    <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
+  </style>
+
+  <style name="Dashboard_SearchView_SearchIcon">
+    <item name="android:layout_width">@dimen/Dashboard_SearchView_SearchButton_size</item>
+    <item name="android:layout_height">@dimen/Dashboard_SearchView_SearchButton_size</item>
+    <item name="android:layout_marginLeft">@dimen/Interview_Question_Answer_Input_background_padding</item>
+    <item name="android:layout_marginRight">@dimen/Interview_Question_Answer_Input_background_padding</item>
+    <item name="android:scaleType">fitCenter</item>
+    <item name="android:layout_gravity">center_vertical</item>
+    <item name="android:background">?attr/selectableItemBackgroundBorderless</item>
+  </style>
+
+  <style name="Dashboard_SearchView_Container">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">@dimen/Dashboard_SearchView_SearchView_height</item>
+    <item name="android:paddingLeft">@dimen/Dashboard_SearchView_SearchView_padding</item>
+    <item name="android:paddingRight">@dimen/Dashboard_SearchView_SearchView_padding</item>
+    <item name="android:layout_gravity">right</item>
+    <item name="android:orientation">horizontal</item>
+  </style>
+
+  <style name="Dashboard_Search_Body">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">match_parent</item>
+    <item name="android:background">@color/dashboard_search_background_color</item>
+  </style>
+
+  <style name="Dashboard_Search_SearchResult">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:layout_marginLeft">@dimen/Dashboard_Layout_marginLeft</item>
+    <item name="android:layout_marginRight">@dimen/Dashboard_Layout_marginRight</item>
+    <item name="android:layout_marginTop">@dimen/Dashboard_Layout_marginLeft</item>
+    <item name="android:layout_marginBottom">@dimen/Dashboard_Layout_marginLeft</item>
+    <item name="android:textSize">@dimen/textsize_18</item>
+    <item name="android:fontFamily">Roboto</item>
+  </style>
+</resources>

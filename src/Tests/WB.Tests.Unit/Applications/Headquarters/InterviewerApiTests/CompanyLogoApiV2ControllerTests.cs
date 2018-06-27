@@ -6,8 +6,8 @@ using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2;
 using WB.Tests.Abc;
+using WB.UI.Headquarters.API.DataCollection.Interviewer.v2;
 using WB.UI.Headquarters.Models.CompanyLogo;
 
 namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests

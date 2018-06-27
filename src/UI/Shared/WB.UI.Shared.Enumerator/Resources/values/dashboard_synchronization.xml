@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+  <style name="Dashboard_Synchronization_Operation_Title">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:textSize">@dimen/textsize_14</item>
+    <item name="android:textStyle">bold</item>
+    <item name="android:textColor">@color/dashboard_synchronization_regular_title</item>
+  </style>
+
+  <style name="Dashboard_Synchronization_WithError_Title" parent="Dashboard_Synchronization_Operation_Title">
+    <item name="android:textColor">@color/dashboard_synchronization_fail_title</item>
+  </style>
+
+  <style name="Dashboard_Synchronization_Statistics_Text">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+    <item name="android:textSize">@dimen/textsize_14</item>
+    <item name="android:textStyle">bold</item>
+    <item name="android:textColor">@color/dashboard_synchronization_statistics_text</item>
+  </style>
+
+  <style name="Dashboard_Synchronization_Lock_Text" parent="Dashboard_Synchronization_Statistics_Text">
+    <item name="android:layout_width">@dimen/Dashboard_Synchronization_Statistics_Width</item>
+    <item name="android:layout_alignParentBottom">true</item>
+  </style>
+
+  <style name="Dashboard_Synchronization_Cancel_Text" parent="Dashboard_Synchronization_Statistics_Text">
+    <item name="android:textAllCaps">true</item>
+    <item name="android:textColor">@color/dashboard_synchronization_regular_title</item>
+    <item name="android:layout_alignParentBottom">true</item>
+    <item name="android:layout_alignParentRight">true</item>
+    <item name="android:background">?attr/selectableItemBackground</item>
+    <item name="android:padding">@dimen/button_shadow_margin</item>
+  </style>
+
+  <style name="Dashboard_Synchronization_Holder">
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:layout_height">@dimen/Dashboard_Synchronization_Statistics_Height</item>
+    <item name="android:layout_marginLeft">@dimen/Dashboard_Layout_marginLeft</item>
+    <item name="android:layout_marginTop">@dimen/Dashboard_Layout_marginLeft</item>
+    <item name="android:layout_marginBottom">@dimen/Dashboard_Layout_marginRight</item>
+    <item name="android:layout_marginRight">@dimen/Dashboard_Layout_marginRight</item>
+  </style>
+
+  <style name="Dashboard_Synchronization_Image">
+    <item name="android:layout_width">wrap_content</item>
+    <item name="android:layout_height">wrap_content</item>
+  </style>
+
+  <style name="Dashboard_Synchronization_Statistics_Holder" parent="VerticalContentHeightWrappingLayout">
+    <item name="android:layout_width">@dimen/Dashboard_Synchronization_Statistics_Width</item>
+    <item name="android:layout_alignParentBottom">true</item>
+  </style>
+
+  <style name="Dashboard_Progress_Indicator" parent="Progress_Indicator">
+    <item name="android:layout_marginTop">6dp</item>
+    <item name="android:layout_marginBottom">6dp</item>
+  </style>
+
+  <style name="Dashboard_Synchronization_Divider">
+    <item name="android:layout_height">@dimen/Dashboard_Synchronization_Divider_Height</item>
+    <item name="android:layout_width">match_parent</item>
+    <item name="android:background">@color/dashboard_synchronization_delimiter</item>
+  </style>
+</resources>
