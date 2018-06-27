@@ -12,6 +12,7 @@ using MvvmCross.IoC;
 using MvvmCross.Views;
 using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.BoundedContexts.Supervisor.ViewModel;
+using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure;
@@ -31,7 +32,6 @@ using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Services.Internals;
 using WB.UI.Shared.Enumerator.Services.Logging;
 using WB.UI.Supervisor.Activities;
-using WB.UI.Supervisor.Activities.Dashboard;
 using WB.UI.Supervisor.MvvmBindings;
 using WB.UI.Supervisor.Services.Implementation;
 

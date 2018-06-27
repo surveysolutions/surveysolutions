@@ -7,7 +7,6 @@ using Android.Widget;
 using Autofac;
 using MvvmCross;
 using MvvmCross.Binding.Bindings.Target.Construction;
-using MvvmCross.Converters;
 using MvvmCross.IoC;
 using MvvmCross.Views;
 using WB.Core.BoundedContexts.Interviewer.Services;
@@ -28,7 +27,6 @@ using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading;
 using WB.UI.Interviewer.Activities;
 using WB.UI.Interviewer.Activities.Dashboard;
-using WB.UI.Interviewer.Converters;
 using WB.UI.Interviewer.CustomBindings;
 using WB.UI.Interviewer.Infrastructure;
 using WB.UI.Interviewer.ServiceLocation;
@@ -72,21 +70,6 @@ namespace WB.UI.Interviewer
 
             var container = Mvx.Resolve<IMvxViewsContainer>();
             container.AddAll(viewModelViewLookup);
-        }
-
-        protected override void FillValueConverters(IMvxValueConverterRegistry registry)
-        {
-            base.FillValueConverters(registry);
-
-            registry.AddOrOverwrite("Localization", new EnumeratorLocalizationValueConverter());
-            registry.AddOrOverwrite("StatusToDasboardBackground", new StatusToDasboardBackgroundConverter());
-            registry.AddOrOverwrite("InterviewStatusToColor", new InterviewStatusToColorConverter());
-            registry.AddOrOverwrite("InterviewStatusToDrawable", new InterviewStatusToDrawableConverter());
-            registry.AddOrOverwrite("InterviewStatusToButton", new InterviewStatusToButtonConverter());
-            registry.AddOrOverwrite("SynchronizationStatusToDrawable", new SynchronizationStatusToDrawableConverter());
-            registry.AddOrOverwrite("ValidationStyleBackground", new TextEditValidationStyleBackgroundConverter());
-            registry.AddOrOverwrite("IsSynchronizationFailOrCanceled", new IsSynchronizationFailOrCanceledConverter());
-            registry.AddOrOverwrite("SynchronizationStatusToTextColor", new SynchronizationStatusToTextColorConverter());
         }
 
         protected override void FillTargetFactories(IMvxTargetBindingFactoryRegistry registry)

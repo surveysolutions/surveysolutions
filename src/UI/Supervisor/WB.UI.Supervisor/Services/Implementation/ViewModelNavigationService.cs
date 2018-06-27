@@ -4,6 +4,7 @@ using Android.Content;
 using MvvmCross.Navigation;
 using MvvmCross.Platforms.Android;
 using WB.Core.BoundedContexts.Supervisor.ViewModel;
+using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;

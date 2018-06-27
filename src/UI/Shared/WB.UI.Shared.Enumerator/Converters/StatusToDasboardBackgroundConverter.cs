@@ -1,31 +1,29 @@
 ﻿using System;
 using System.Globalization;
 using MvvmCross.Converters;
-using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 
-
-namespace WB.UI.Interviewer.Converters
+namespace WB.UI.Shared.Enumerator.Converters
 {
-    public class InterviewStatusToColorConverter : MvxValueConverter<DashboardInterviewStatus, int>
+    public class StatusToDasboardBackgroundConverter : MvxValueConverter<DashboardInterviewStatus, int>
     {
         protected override int Convert(DashboardInterviewStatus status, Type targetType, object parameter, CultureInfo culture)
         {
             switch (status)
             {
                 case DashboardInterviewStatus.Assignment:
-                case DashboardInterviewStatus.New:
-                    return Resource.Color.dashboard_interview_subtitle;
+                    return Resource.Drawable.dashboard_interview_status_new;
 
+                case DashboardInterviewStatus.New:
                 case DashboardInterviewStatus.InProgress:
-                    return Resource.Color.dashboard_in_progress_tab;
+                    return Resource.Drawable.dashboard_interview_status_inprogress;
 
                 case DashboardInterviewStatus.Completed:
-                    return Resource.Color.dashboard_completed_tab;
+                    return Resource.Drawable.dashboard_interview_status_completed;
 
                 case DashboardInterviewStatus.Rejected:
-                    return Resource.Color.dashboard_rejected_tab;
+                    return Resource.Drawable.dashboard_interview_status_rejected;
             }
 
             throw new ArgumentException("status is unknown - {0}".FormatString(status));

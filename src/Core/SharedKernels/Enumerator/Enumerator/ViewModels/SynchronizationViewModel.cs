@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using MvvmCross.Commands;
+using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Views;
@@ -9,6 +10,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
     public class SynchronizationViewModel : MvxNotifyPropertyChanged
     {
+        private readonly IMvxMessenger messenger;
+
+        public SynchronizationViewModel(IMvxMessenger messenger)
+        {
+            this.messenger = messenger;
+        }
+
         public ISyncBgService SyncBgService { get; set; }
 
         public event EventHandler SyncCompleted;
@@ -136,6 +144,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         protected virtual void OnSyncCompleted()
         {
+            this.messenger.Publish(new SynchronizationCompletedMsg(this));
             this.SyncCompleted?.Invoke(this, EventArgs.Empty);
         }
     }
