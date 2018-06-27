@@ -41,7 +41,7 @@ namespace WB.UI.Headquarters.API
             ILogger logger,
             IImageFileStorage imageFileRepository,
             IFileSystemAccessor fileSystemAccessor,
-            ISyncProtocolVersionProvider syncVersionProvider,
+            IInterviewerSyncProtocolVersionProvider syncVersionProvider,
             ITabletInformationService tabletInformationService,
             IInterviewPackagesService incomingSyncPackagesQueue, 
             IUserViewFactory userViewFactory,

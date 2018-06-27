@@ -42,7 +42,7 @@ namespace WB.Core.SharedKernels.Enumerator
             registry.Bind<IAsyncRunner, AsyncRunner>();
             registry.Bind<ICompositeCollectionInflationService, CompositeCollectionInflationService>();
             registry.BindAsSingleton<ILastCompletionComments, LastCompletionComments>();
-
+            
             registry.Bind<IAggregateRootCacheCleaner, DummyAggregateRootCacheCleaner>();
 
             registry.Bind<NavigationState>();

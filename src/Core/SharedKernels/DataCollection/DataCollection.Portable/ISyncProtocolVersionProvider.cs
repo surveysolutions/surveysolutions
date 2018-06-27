@@ -5,4 +5,12 @@
         int GetProtocolVersion();
         int GetLastNonUpdatableVersion();
     }
+
+    public interface IInterviewerSyncProtocolVersionProvider : ISyncProtocolVersionProvider
+    {
+    }
+
+    public interface ISupervisorSyncProtocolVersionProvider : ISyncProtocolVersionProvider
+    {
+    }
 }
