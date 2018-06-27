@@ -143,6 +143,21 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             return SignInStatus.Success;
         }
         
+        public async Task<SignInStatus> SignInSupervisorAsync(string userName, string password, bool isPersistent = false)
+        {
+            var user = await this.UserManager.FindByNameAsync(userName);
+            if (user == null || !await this.UserManager.CheckPasswordAsync(user, password))
+                return SignInStatus.Failure;
+
+            if (user.IsLockedByHeadquaters || user.IsArchived)
+                return SignInStatus.LockedOut;
+            
+            var identity = await this.UserManager.CreateIdentityAsync(user, "Supervisor");
+            SetPrincipal(identity);
+
+            return SignInStatus.Success;
+        }
+        
         private void SetPrincipal(ClaimsIdentity identity)
         {
             var principal = new ClaimsPrincipal(identity);

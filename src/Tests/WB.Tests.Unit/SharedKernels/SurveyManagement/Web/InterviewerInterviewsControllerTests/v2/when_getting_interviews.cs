@@ -8,7 +8,7 @@ using Moq;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
-using WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2;
+using WB.UI.Headquarters.API.DataCollection.Interviewer.v2;
 
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests.InterviewerInterviewsControllerTests.v2
@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests.InterviewerI
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
             var interviewInformationFactory = Mock.Of<IInterviewInformationFactory>(
-                x => x.GetInProgressInterviews(interviewId1) == interviewsFromStorage);
+                x => x.GetInProgressInterviewsForInterviewer(interviewId1) == interviewsFromStorage);
 
             controller = CreateInterviewerInterviewsController(
                 interviewsFactory: interviewInformationFactory);

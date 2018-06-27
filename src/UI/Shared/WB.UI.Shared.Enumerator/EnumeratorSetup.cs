@@ -76,6 +76,7 @@ namespace WB.UI.Shared.Enumerator
 
         protected override void InitializeViewLookup()
         {
+            base.InitializeViewLookup();
             var viewModelViewLookup = new Dictionary<Type, Type>()
             {
                 {typeof (EnumerationStageViewModel), typeof (InterviewEntitiesListFragment)},
@@ -108,6 +109,16 @@ namespace WB.UI.Shared.Enumerator
             registry.AddOrOverwrite("VisibleOrInvisible", new VisibleOrInvisibleValueConverter());
             registry.AddOrOverwrite("AudioNoiseTypeToShape", new AudioNoiseTypeToShapeConverter());
             registry.AddOrOverwrite("AudioNoiseTypeToDot", new AudioNoiseTypeToDotConverter());
+
+            registry.AddOrOverwrite("Localization", new EnumeratorLocalizationValueConverter());
+            registry.AddOrOverwrite("StatusToDasboardBackground", new StatusToDasboardBackgroundConverter());
+            registry.AddOrOverwrite("InterviewStatusToColor", new InterviewStatusToColorConverter());
+            registry.AddOrOverwrite("InterviewStatusToDrawable", new InterviewStatusToDrawableConverter());
+            registry.AddOrOverwrite("InterviewStatusToButton", new InterviewStatusToButtonConverter());
+            registry.AddOrOverwrite("SynchronizationStatusToDrawable", new SynchronizationStatusToDrawableConverter());
+            registry.AddOrOverwrite("ValidationStyleBackground", new TextEditValidationStyleBackgroundConverter());
+            registry.AddOrOverwrite("IsSynchronizationFailOrCanceled", new IsSynchronizationFailOrCanceledConverter());
+            registry.AddOrOverwrite("SynchronizationStatusToTextColor", new SynchronizationStatusToTextColorConverter());
         }
 
         protected override void FillTargetFactories(IMvxTargetBindingFactoryRegistry registry)
@@ -146,6 +157,8 @@ namespace WB.UI.Shared.Enumerator
             registry.RegisterCustomBindingFactory<SignaturePadView>("Signature", (view) => new SignatureBinding(view));
             registry.RegisterCustomBindingFactory<SignaturePadView>("SignaturePadSettings", (view) => new SignaturePadSettingsBinding(view));
             registry.RegisterCustomBindingFactory<ImageButton>("Playback", (view) => new ImageButtonPlaybackToggleBinding(view));
+            registry.RegisterCustomBindingFactory<RecyclerView>("ScrollToPosition", view => new RecyclerViewScrollToPositionBinding(view));
+
             MvxAppCompatSetupHelper.FillTargetFactories(registry);
 
             RegisterAutoCompleteTextViewBindings(registry);

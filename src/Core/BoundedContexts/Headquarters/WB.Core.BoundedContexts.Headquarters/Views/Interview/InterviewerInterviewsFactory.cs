@@ -32,7 +32,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
         }
 
-        public IEnumerable<InterviewInformation> GetInProgressInterviews(Guid interviewerId)
+        public IEnumerable<InterviewInformation> GetInProgressInterviewsForInterviewer(Guid interviewerId)
         {
             var processigPackages = this.incomingSyncPackagesQueue.GetAllPackagesInterviewIds();
 
@@ -51,6 +51,41 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             return inProgressInterviews.Where(
                 interview => !deletedQuestionnaires.Any(deletedQuestionnaire => deletedQuestionnaire.QuestionnaireId == interview.QuestionnaireId && deletedQuestionnaire.Version == interview.QuestionnaireVersion)
                 && !processigPackages.Any(filename => filename.Contains(interview.InterviewId.FormatGuid())))
+                .Select(interview => new InterviewInformation
+                {
+                    Id = interview.InterviewId,
+                    QuestionnaireIdentity = new QuestionnaireIdentity(interview.QuestionnaireId, interview.QuestionnaireVersion),
+                    IsRejected = interview.WasRejectedBySupervisor
+                });
+        }
+
+        public IEnumerable<InterviewInformation> GetInProgressInterviewsForSupervisor(Guid supervisorId)
+        {
+            var processigPackages = this.incomingSyncPackagesQueue.GetAllPackagesInterviewIds();
+
+            var inProgressInterviews = this.reader.Query(interviews =>
+                interviews.Where(interview => 
+                        ( // assigned on supervisor
+                            interview.ResponsibleId == supervisorId &&
+                            (interview.Status == InterviewStatus.SupervisorAssigned || interview.Status == InterviewStatus.RejectedByHeadquarters)
+                        ) ||
+                        ( // assigned on interviewers on his team
+                            interview.TeamLeadId == supervisorId &&
+                            (interview.Status == InterviewStatus.InterviewerAssigned || interview.Status == InterviewStatus.RejectedBySupervisor || interview.Status == InterviewStatus.RejectedByHeadquarters)
+                        )
+                    )
+                    .Select(x => new { x.InterviewId, x.QuestionnaireId, x.QuestionnaireVersion, x.WasRejectedBySupervisor })
+                    .ToList());
+
+            var deletedQuestionnaires = this.questionnaireBrowseViewFactory.Load(new QuestionnaireBrowseInputModel()
+            {
+                Page = 1,
+                PageSize = int.MaxValue
+            }).Items.Where(questionnaire => questionnaire.IsDeleted);
+
+            return inProgressInterviews.Where(
+                    interview => !deletedQuestionnaires.Any(deletedQuestionnaire => deletedQuestionnaire.QuestionnaireId == interview.QuestionnaireId && deletedQuestionnaire.Version == interview.QuestionnaireVersion)
+                                 && !processigPackages.Any(filename => filename.Contains(interview.InterviewId.FormatGuid())))
                 .Select(interview => new InterviewInformation
                 {
                     Id = interview.InterviewId,
