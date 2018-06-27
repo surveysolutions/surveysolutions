@@ -62,8 +62,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                     Data =
                     {
                         {ExceptionKeys.InterviewId, this.InterviewTree.InterviewId},
-                        {ExceptionKeys.QuestionId, question.Identity },
-                        {ExceptionKeys.QuestionId, question.VariableName }
+                        {ExceptionKeys.QuestionId, question.Identity.ToString() },
+                        {ExceptionKeys.Variable, question.VariableName }
                     }
                 };
 

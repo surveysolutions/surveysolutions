@@ -362,12 +362,12 @@ namespace WB.Core.BoundedContexts.Headquarters
                 .Handles<ResumeInterviewCommand>(cmd => cmd.InterviewId, a => a.Resume)
                 .Handles<OpenInterviewBySupervisorCommand>(cmd => cmd.InterviewId, a => a.OpenBySupevisor)
                 .Handles<CloseInterviewBySupervisorCommand>(cmd => cmd.InterviewId, a => a.CloseBySupevisor)
-                ;
             
             CommandRegistry.Configure<StatefulInterview, InterviewCommand>(configuration => 
                 configuration
                 .PostProcessBy<InterviewSummaryErrorsCountPostProcessor>()
                     .SkipPostProcessFor<HardDeleteInterview>()
+                    .SkipPostProcessFor<DeleteInterviewCommand>()
                     .SkipPostProcessFor<MarkInterviewAsReceivedByInterviewer>()
                     .SkipPostProcessFor<AssignInterviewerCommand>()
                     .SkipPostProcessFor<AssignSupervisorCommand>()
