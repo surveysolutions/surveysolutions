@@ -8,7 +8,7 @@ using WB.Core.SharedKernels.QuestionnaireEntities;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 
 
-namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
+namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 {
     internal class when_verifying_questionnaire_with_static_text_with_validation_expression_and_without_validation_meassage : QuestionnaireVerifierTestsContext
     {

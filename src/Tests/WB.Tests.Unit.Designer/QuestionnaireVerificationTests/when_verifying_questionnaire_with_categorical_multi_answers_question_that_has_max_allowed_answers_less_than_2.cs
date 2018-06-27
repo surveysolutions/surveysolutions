@@ -7,7 +7,7 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 
-namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
+namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 {
     class when_verifying_questionnaire_with_categorical_multi_answers_question_that_has_max_allowed_answers_less_than_2 : QuestionnaireVerifierTestsContext
     {
