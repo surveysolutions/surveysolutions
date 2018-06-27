@@ -104,8 +104,8 @@ namespace WB.UI.Supervisor
                 .As<IRestServiceSettings>()
                 .As<IDeviceSettings>()
                 .As<ISupervisorSettings>()
-                .WithParameter("backupFolder", AndroidPathUtils.GetPathToSubfolderInExternalDirectory("Backup"))
-                .WithParameter("restoreFolder", AndroidPathUtils.GetPathToSubfolderInExternalDirectory("Restore"));
+                .WithParameter("backupFolder", AndroidPathUtils.GetPathToSupervisorSubfolderInExternalDirectory("Backup"))
+                .WithParameter("restoreFolder", AndroidPathUtils.GetPathToSupervisorSubfolderInExternalDirectory("Restore"));
 
             builder.RegisterType<InterviewDashboardEventHandler>().SingleInstance();
 
