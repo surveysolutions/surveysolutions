@@ -5,7 +5,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 
-namespace WB.Core.BoundedContexts.Supervisor.ViewModel
+namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
 {
     public class DashboardViewModelArgs
     {
@@ -28,7 +28,6 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.Synchronization = synchronization;
-
             this.Synchronization.Init();
         }
 

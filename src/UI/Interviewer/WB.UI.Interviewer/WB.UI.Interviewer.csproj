@@ -302,17 +302,9 @@
     <Compile Include="Activities\PrefsActivity.cs" />
     <Compile Include="Activities\RelinkDeviceActivity.cs" />
     <Compile Include="Activities\LoginActivity.cs" />
-    <Compile Include="Converters\InterviewStatusToButtonConverter.cs" />
-    <Compile Include="Converters\InterviewStatusToDrawableConverter.cs" />
-    <Compile Include="Converters\IsSynchronizationFailOrCanceledConverter.cs" />
-    <Compile Include="Converters\SynchronizationStatusToDrawableConverter.cs" />
-    <Compile Include="Converters\InterviewStatusToColorConverter.cs" />
-    <Compile Include="Converters\SynchronizationStatusToTextColorConverter.cs" />
-    <Compile Include="Converters\TextEditValidationStyleBackgroundConverter.cs" />
     <Compile Include="CustomBindings\ImageCompanyLogoBinding.cs" />
     <Compile Include="CustomBindings\TextViewIsCurrentDashboardTabBinding.cs" />
     <Compile Include="CustomBindings\ViewDrawableTargetBinding.cs" />
-    <Compile Include="CustomBindings\StatusToDasboardBackgroundConverter.cs" />
     <Compile Include="CustomControls\InterviewerDashboardTemplateSelector.cs" />
     <Compile Include="CustomControls\MvxFragmentStatePagerAdapter.cs" />
     <Compile Include="Implementations\Services\StoredEvent.cs" />
@@ -430,23 +422,7 @@
     <AndroidResource Include="Resources\drawable-xhdpi\login_logo.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\login_logo.png" />
     <AndroidResource Include="Resources\drawable-mdpi\login_logo.png" />
-    <AndroidResource Include="Resources\drawable\ic_download.png" />
-    <AndroidResource Include="Resources\drawable\ic_synchronization_fail.png" />
-    <AndroidResource Include="Resources\drawable\ic_synchronization_success.png" />
-    <AndroidResource Include="Resources\drawable\ic_upload.png" />
     <AndroidResource Include="Resources\xml\preferences.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\synchronization_fail_process_indicator.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\synchronization_success_process_indicator.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\synchronization_upload_indicator.xml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\drawable\synchronization_download_indicator.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\values\relink.xml">
@@ -527,6 +503,7 @@
   </Choose>
   <ItemGroup>
     <Folder Include="Assets\" />
+    <Folder Include="Converters\" />
     <Folder Include="Resources\drawable-xxxhdpi\" />
   </ItemGroup>
   <ItemGroup>
