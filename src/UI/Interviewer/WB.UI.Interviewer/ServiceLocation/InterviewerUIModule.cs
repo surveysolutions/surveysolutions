@@ -85,7 +85,7 @@ namespace WB.UI.Interviewer.ServiceLocation
             registry.Bind<PrefilledQuestionsViewModel>();
             registry.Bind<InterviewViewModel>();
             registry.Bind<BackupRestoreViewModel>();
-            registry.Bind<BackupViewModel>();
+            registry.Bind<SendTabletInformationViewModel>();
             registry.Bind<BandwidthTestViewModel>();
             registry.Bind<CheckNewVersionViewModel>();
             registry.Bind<DiagnosticsViewModel>();

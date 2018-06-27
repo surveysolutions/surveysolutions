@@ -459,7 +459,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     await this.restService.SendStreamAsync(
                         stream: fileStream,
                         customHeaders: backupHeaders,
-                        url: string.Concat(ApiUrl, "/tabletInfo"),
+                        url: string.Concat(ApplicationUrl, "/tabletInfo"),
                         credentials: this.restCredentials,
                         token: token).ConfigureAwait(false);
                 }

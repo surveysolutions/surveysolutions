@@ -6,7 +6,6 @@ using System.Threading;
 using System.Web.Http;
 using System.Web.Http.ExceptionHandling;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
-using WB.Core.SharedKernel.Structures.TabletInformation;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.UI.Headquarters.API.DataCollection;
