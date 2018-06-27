@@ -4,6 +4,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Supervisor.Activities;
 

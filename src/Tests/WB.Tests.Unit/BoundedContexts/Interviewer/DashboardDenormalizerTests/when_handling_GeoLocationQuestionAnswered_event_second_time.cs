@@ -8,7 +8,9 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Enumerator.Denormalizer;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
@@ -51,7 +53,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
         [NUnit.Framework.Test] public void should_set_GPS_location_longitude_to_answered_value () =>
             dashboardItem.LocationLongitude.Should().Be(answerLongitude);
 
-        private static InterviewerDashboardEventHandler denormalizer;
+        private static InterviewDashboardEventHandler denormalizer;
         private static IPublishedEvent<GeoLocationQuestionAnswered> @event;
         private static InterviewView dashboardItem;
         private static double answerLatitude = 10;
