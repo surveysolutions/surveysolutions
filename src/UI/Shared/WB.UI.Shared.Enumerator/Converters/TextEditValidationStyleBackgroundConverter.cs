@@ -2,7 +2,7 @@
 using System.Globalization;
 using MvvmCross.Converters;
 
-namespace WB.UI.Supervisor.MvvmBindings
+namespace WB.UI.Shared.Enumerator.Converters
 {
     public class TextEditValidationStyleBackgroundConverter : MvxValueConverter<bool, int>
     {

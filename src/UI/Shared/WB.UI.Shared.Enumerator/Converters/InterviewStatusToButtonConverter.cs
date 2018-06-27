@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Globalization;
 using MvvmCross.Converters;
-using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 
-namespace WB.UI.Interviewer.Converters
+namespace WB.UI.Shared.Enumerator.Converters
 {
     public class InterviewStatusToButtonConverter : MvxValueConverter<DashboardInterviewStatus, int>
     {

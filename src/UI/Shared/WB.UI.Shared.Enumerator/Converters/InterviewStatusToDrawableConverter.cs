@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Globalization;
 using MvvmCross.Converters;
-using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 
-namespace WB.UI.Interviewer.CustomBindings
+namespace WB.UI.Shared.Enumerator.Converters
 {
-    public class StatusToDasboardBackgroundConverter : MvxValueConverter<DashboardInterviewStatus, int>
+    public class InterviewStatusToDrawableConverter : MvxValueConverter<DashboardInterviewStatus, int>
     {
         protected override int Convert(DashboardInterviewStatus status, Type targetType, object parameter, CultureInfo culture)
         {
@@ -17,6 +16,8 @@ namespace WB.UI.Interviewer.CustomBindings
                     return Resource.Drawable.dashboard_interview_status_new;
 
                 case DashboardInterviewStatus.New:
+                    return Resource.Drawable.dashboard_interview_status_inprogress;
+
                 case DashboardInterviewStatus.InProgress:
                     return Resource.Drawable.dashboard_interview_status_inprogress;
 

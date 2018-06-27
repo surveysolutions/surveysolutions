@@ -1,10 +1,7 @@
 ﻿using Android.OS;
-using Android.Runtime;
 using Android.Views;
 using MvvmCross.Droid.Support.V7.RecyclerView;
 using MvvmCross.Platforms.Android.Binding.BindingContext;
-using MvvmCross.Platforms.Android.Presenters.Attributes;
-using WB.Core.BoundedContexts.Supervisor.ViewModel;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.Activities.Dashboard;
@@ -26,23 +23,5 @@ namespace WB.UI.Supervisor.Activities.Dashboard
             recyclerView.Adapter = new RecyclerViewAdapter((IMvxAndroidBindingContext)base.BindingContext);
             return view;
         }
-    }
-
-    [MvxFragmentPresentation(typeof(DashboardCompletedInterviewsViewModel), Resource.Id.dashboard_content,
-        ActivityHostViewModelType = typeof(DashboardViewModel))]
-    public class DashboardCompletedInterviewsFragment : RecyclerViewFragment<DashboardCompletedInterviewsViewModel>
-    {
-    }
-
-    [MvxFragmentPresentation(typeof(DashboardRejectedInterviewsViewModel), Resource.Id.dashboard_content,
-        ActivityHostViewModelType = typeof(DashboardViewModel))]
-    public class DashboardRejectedInterviewsFragment : RecyclerViewFragment<DashboardRejectedInterviewsViewModel>
-    {
-    }
-
-    [MvxFragmentPresentation(typeof(ToBeAssignedItemsViewModel), Resource.Id.dashboard_content,
-        ActivityHostViewModelType = typeof(DashboardViewModel))]
-    public class DashboardToBeAssignedFragment : RecyclerViewFragment<ToBeAssignedItemsViewModel>
-    {
     }
 }
