@@ -7,28 +7,17 @@
   <color name="login_Input_disabled_color">#D0D0D0</color>
   <color name="login_Input_border_valid_disabled_color">#D0D0D0</color>
   <color name="login_Input_border_valid_color">#D0D0D0</color>
-  <color name="login_Input_border_invalid_color">#e64a19</color>
-
+  
   <color name="dashboard_main_color">#404040</color>
 
-  <color name="dashboard_interview_title">#404040</color>
   <color name="dashboard_interview_subtitle">#9e9e9e</color>
-  <color name="dashboard_interview_delimeter">#ebebeb</color>
 
-  <color name="dashboard_interview_background">#FFFFFF</color>
-  <color name="dashboard_new_tab">#6D6D6D</color>
-  <color name="dashboard_prefilled_question">#999999</color>
-  <color name="dashboard_in_progress_tab">#1976d2</color>
-  <color name="dashboard_completed_tab">#388e3c</color>
-  <color name="dashboard_rejected_tab">#e64a19</color>
-  <color name="dashboard_new_interview_status">#E9E9E9</color>
+
   <color name="dashboard_no_interviews_text">#A7A7A7</color>
   <color name="dashboard_synchronization_delimiter">#E3E3E3</color>
   <color name="dashboard_synchronization_regular_title">#000000</color>
   <color name="dashboard_synchronization_statistics_text">#FF747474</color>
   <color name="dashboard_synchronization_fail_title">#96F45D28</color>
-  <color name="dashboard_border">#ECECEC</color>
-  <color name="dashboard_border_shadow">#C2C2C2</color>
 
   <color name="dashboard_search_background_color">#F2F2F2</color>
   <color name="dashboard_search_exit_color">#2A81CB</color>

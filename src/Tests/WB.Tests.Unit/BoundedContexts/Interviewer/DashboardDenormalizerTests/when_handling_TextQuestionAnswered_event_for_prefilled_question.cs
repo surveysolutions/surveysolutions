@@ -7,6 +7,8 @@ using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.Enumerator.Denormalizer;
+using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
 
@@ -48,7 +50,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
         public void should_interview_be_new_for_interviewer() =>
             interviewViewStorage.GetById(interviewId.FormatGuid())?.StartedDateTime.Should().BeNull();
 
-        private static InterviewerDashboardEventHandler denormalizer;
+        private static InterviewDashboardEventHandler denormalizer;
         private static IPublishedEvent<TextQuestionAnswered> @event;
         private static Guid interviewId;
         private static SqliteInmemoryStorage<InterviewView> interviewViewStorage;

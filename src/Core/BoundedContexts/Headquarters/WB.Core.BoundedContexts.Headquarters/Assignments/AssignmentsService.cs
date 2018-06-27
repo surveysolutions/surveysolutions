@@ -32,6 +32,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
             .ToList());
         }
 
+        public List<Assignment> GetAssignmentsForSupervisor(Guid supervisorId)
+        {
+            return this.assignmentsAccessor.Query(x =>
+                x.Where(assigment =>
+                        (assigment.ResponsibleId == supervisorId || assigment.Responsible.ReadonlyProfile.SupervisorId == supervisorId)
+                        && !assigment.Archived
+                        && (assigment.Quantity == null || assigment.InterviewSummaries.Count < assigment.Quantity))
+                    .ToList());
+        }
+
         public List<int> GetAllAssignmentIds(Guid responsibleId)
         {
             return this.assignmentsAccessor.Query(x =>
@@ -93,7 +103,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 QuestionnaireId = assignment.QuestionnaireId,
                 Quantity = assignment.InterviewsNeeded,
                 CreatedAtUtc = assignment.CreatedAtUtc,
-                ProtectedVariables = assignment.ProtectedVariables
+                ProtectedVariables = assignment.ProtectedVariables,
+                ResponsibleId = assignment.ResponsibleId
             };
 
             var assignmentIdentifyingData = assignment.IdentifyingData.ToLookup(id => id.Identity);
