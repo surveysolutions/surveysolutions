@@ -27,7 +27,7 @@
         <button type="submit" ng-show="!questionnaire.isReadOnlyForUser" 
                 id="edit-chapter-save-button" class="btn btn-lg" ng-class="{ 'btn-primary': groupForm.$dirty }" 
                 ng-click="saveGroup()" unsaved-warning-clear ng-disabled="!groupForm.$valid" ng-i18next="Save"></button>
-        <button type="reset" id="edit-chapter-cancel-button" class="btn btn-lg btn-link" ng-click="cancelGroup()" unsaved-warning-clear unsaved-warning-clear ng-i18next="Cancel"></button>
+        <button type="reset" id="edit-chapter-cancel-button" class="btn btn-lg btn-link" ng-click="cancelGroup()" unsaved-warning-clear ng-i18next="Cancel"></button>
     </div>
     <div class="pull-right">
         <button type="button" ng-show="!questionnaire.isReadOnlyForUser" id="add-comment-button" class="btn btn-lg btn-link" ng-click="toggleComments(activeQuestion)" unsaved-warning-clear>

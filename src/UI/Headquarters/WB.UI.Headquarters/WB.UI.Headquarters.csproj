@@ -2083,6 +2083,7 @@
     <Compile Include="Migrations\PlainStore\M001-100\M201804031536_MakeUserPreloadingOptionalFields.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M201805101216_AddProtectedVariables.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M201805311125_AddResponsibleIdIndexForAssignments.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M201806151438_AddQuestionnaireVariableToQuestionnaireBrowseItems.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201709081506_RemoveInterviewStatusTimespans.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201709071054_Remove_Readsideversions.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M024_DeleteInterviewEntitiesTable.cs" />
@@ -2122,6 +2123,7 @@
     <Compile Include="Migrations\PlainStore\M001-100\M201805141242_CreateSyncPackageTrackingTable.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201806191234_AddErrorsCountToInterviewSummary.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201806191240_FillErrorsCountInInterviewSummary.cs" />
+    <Compile Include="Migrations\ReadSide\M001-100\M201806271400_AddUniqueConstraintOnInterviewEntities.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\QuestionnaireEntityMigration.cs" />
     <Compile Include="Migrations\Users\M005_AddDeviceAppVersionToProfile.cs" />
     <Compile Include="Migrations\Users\M201709081340_RemovedUserDocumentAndRolesTables.cs" />

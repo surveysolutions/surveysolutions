@@ -12,14 +12,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
     {
         private IEnumerable<ICompositeView> children;
 
-        public QuestionnaireView(QuestionnaireDocument doc, IEnumerable<SharedPerson> sharedPersons)
+        public QuestionnaireView(QuestionnaireDocument doc, IEnumerable<SharedPersonView> sharedPersons)
         {
             this.Source = doc;
             this.SharedPersons = sharedPersons.ToReadOnlyCollection();
         }
 
         public QuestionnaireDocument Source { get; }
-        public IReadOnlyCollection<SharedPerson> SharedPersons { get; }
+        public IReadOnlyCollection<SharedPersonView> SharedPersons { get; }
 
         public IEnumerable<ICompositeView> Children
         {

@@ -218,6 +218,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfQuestionnaireTitleIsEmpty(command.Title);
 
             this.innerDocument.Title = System.Web.HttpUtility.HtmlDecode(command.Title);
+            this.innerDocument.VariableName = System.Web.HttpUtility.HtmlDecode(command.Variable);
             this.innerDocument.IsPublic = command.IsPublic;
         }
 
@@ -1661,7 +1662,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         #region Shared Person command handlers
 
-        public void AddSharedPerson(Guid personId, string email, ShareType shareType, Guid responsibleId)
+        public void AddSharedPerson(Guid personId, string emailOrLogin, ShareType shareType, Guid responsibleId)
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(responsibleId);
 
@@ -1669,21 +1670,21 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.OwnerCannotBeInShareList,
-                    string.Format(ExceptionMessages.UserIsOwner, email));
+                    string.Format(ExceptionMessages.UserIsOwner, emailOrLogin));
             }
 
             if (this.SharedUsersIds.Contains(personId))
             {
                 throw new QuestionnaireException(
                     DomainExceptionType.UserExistInShareList,
-                    string.Format(ExceptionMessages.UserIsInTheList, email));
+                    string.Format(ExceptionMessages.UserIsInTheList, emailOrLogin));
             }
 
-            this.sharedPersons.Add(new SharedPerson()
+            this.sharedPersons.Add(new SharedPerson
             {
                 UserId = personId,
                 ShareType = shareType,
-                Email = email,
+                Email = emailOrLogin,
             });
         }
 

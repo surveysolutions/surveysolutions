@@ -8,7 +8,7 @@ using WB.Core.BoundedContexts.Designer.ValueObjects;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 
 
-namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
+namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 {
     internal class when_questionnaire_has_question_statictext_and_group_conditionally_enabled_by_future_question: QuestionnaireVerifierTestsContext
     {
