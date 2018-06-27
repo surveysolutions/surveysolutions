@@ -203,7 +203,8 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Unbind<ISupportedVersionProvider>();
             registry.Bind<ISupportedVersionProvider, SupportedVersionProvider>();
 
-            registry.BindAsSingleton<ISyncProtocolVersionProvider, SyncProtocolVersionProvider>();
+            registry.BindAsSingleton<IInterviewerSyncProtocolVersionProvider, InterviewerSyncProtocolVersionProvider>();
+            registry.BindAsSingleton<ISupervisorSyncProtocolVersionProvider, SupervisorSyncProtocolVersionProvider>();
 
             registry.BindToConstant<SyncPackagesProcessorBackgroundJobSetting>(() => this.syncPackagesProcessorBackgroundJobSetting);
             registry.Bind<InterviewDetailsBackgroundSchedulerTask>();
