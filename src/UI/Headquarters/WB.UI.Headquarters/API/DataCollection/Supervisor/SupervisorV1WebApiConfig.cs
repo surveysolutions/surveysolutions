@@ -25,6 +25,8 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor
             //
             //            config.TypedRoute("api/supervisor/v1", c => c.Action<InterviewerApiV2Controller>(x => x.Get()));
             config.TypedRoute("api/supervisor/v1/extended/latestversion", c => c.Action<SupervisorAppApiController>(x => x.GetLatestVersion()));
+
+            config.TypedRoute("api/supervisor/v1/tabletInfo", c => c.Action<SupervisorAppApiController>(x => x.PostTabletInformation()));
             //
             //
             //            config.TypedRoute("api/supervisor/v1/tabletInfo",
