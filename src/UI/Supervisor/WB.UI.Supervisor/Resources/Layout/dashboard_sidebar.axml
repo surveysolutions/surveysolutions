@@ -7,5 +7,6 @@
     android:layout_height="match_parent"
     android:layout_gravity="start"
     android:background="@android:color/white"
+    local:headerLayout="@layout/dashboard_sidebar_header"
     local:menu="@menu/dashboard_sidebar_menu" />
 <!--local:headerLayout="@layout/dashboard_navigation_header"-->
