@@ -1,11 +1,12 @@
-﻿using System.Threading.Tasks;
-using System.Timers;
+﻿using System;
+using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
 using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
 namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
 {
@@ -14,24 +15,36 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         private readonly IMvxNavigationService mvxNavigationService;
         private readonly IMvxMessenger messenger;
         private readonly IDashboardItemsAccessor dashboardItemsAccessor;
+        
         private int toBeAssignedItemsCount;
         private int outboxItemsCount;
         private int waitingForDecisionCount;
 
+        protected readonly IPrincipal Principal;
+
+        private DashboardViewModel dashboardViewModel;
+
         public DashboardMenuViewModel(IMvxNavigationService mvxNavigationService, 
             IMvxMessenger messenger,
-            IDashboardItemsAccessor dashboardItemsAccessor
-            )
+            IDashboardItemsAccessor dashboardItemsAccessor,
+            IPrincipal principal,
+            DashboardViewModel dashboardViewModel)
         {
             this.mvxNavigationService = mvxNavigationService;
             this.messenger = messenger;
             this.dashboardItemsAccessor = dashboardItemsAccessor;
+
+            this.Principal = principal ?? throw new ArgumentNullException(nameof(principal));
+            this.dashboardViewModel = dashboardViewModel;
         }
 
         public override Task Initialize()
         {
             messenger.Subscribe<SynchronizationCompletedMsg>(msg => RefreshCounters());
             RefreshCounters();
+
+            this.UserName = Principal.CurrentUserIdentity.Name;
+            this.UserEmail = Principal.CurrentUserIdentity.Email;
 
             return Task.CompletedTask;
         }
@@ -42,6 +55,9 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             this.WaitingForDecisionCount = dashboardItemsAccessor.WaitingForSupervisorActionCount();
             this.OutboxItemsCount = dashboardItemsAccessor.OutboxCount();
         }
+
+        public string UserName { get; set; }
+        public string UserEmail { get; set; }
 
         public int Counter { get; set; }
 
@@ -71,5 +87,14 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
 
         public IMvxCommand ShowOutboxItems =>
             new MvxAsyncCommand(async () => await mvxNavigationService.Navigate<OutboxViewModel>());
+
+
+        public IMvxCommand StartSync =>
+            new MvxCommand(async () => await StartSynchronization());
+
+        public async Task StartSynchronization()
+        {
+            await dashboardViewModel.SynchronizationCommand.ExecuteAsync();
+        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Reflection;
+using System.Security.Permissions;
 using System.Threading.Tasks;
 using Android.OS;
 using Android.Support.Design.Widget;

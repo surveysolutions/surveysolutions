@@ -37,12 +37,12 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         }
 
 
-        private IMvxCommand synchronizationCommand;
-        public IMvxCommand SynchronizationCommand
+        private IMvxAsyncCommand synchronizationCommand;
+        public IMvxAsyncCommand SynchronizationCommand
         {
             get
             {
-                return synchronizationCommand ?? (synchronizationCommand = new MvxCommand(this.RunSynchronization, () => !this.Synchronization.IsSynchronizationInProgress));
+                return synchronizationCommand ?? (synchronizationCommand = new MvxAsyncCommand(this.RunSynchronization, () => !this.Synchronization.IsSynchronizationInProgress));
             }
         }
 
@@ -55,16 +55,21 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
 
         public IMvxAsyncCommand ShowMenuViewModelCommand => new MvxAsyncCommand(async () => await viewModelNavigationService.NavigateToAsync<DashboardMenuViewModel>());
 
-        private void RunSynchronization()
+        private Task RunSynchronization()
         {
             if (this.viewModelNavigationService.HasPendingOperations)
             {
                 this.viewModelNavigationService.ShowWaitMessage();
-                return;
+                
             }
+            else
+            {
 
-            this.Synchronization.IsSynchronizationInProgress = true;
-            this.Synchronization.Synchronize();
+
+                this.Synchronization.IsSynchronizationInProgress = true;
+                this.Synchronization.Synchronize();
+            }
+            return Task.CompletedTask;
         }
 
         private Task NavigateToDiagnostics()
