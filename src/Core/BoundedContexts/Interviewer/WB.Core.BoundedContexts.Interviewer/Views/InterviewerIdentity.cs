@@ -29,5 +29,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         [PrimaryKey]
         public string Id { get; set; }
+
+        public string Email { get; set; }
     }
 }
