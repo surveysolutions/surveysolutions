@@ -94,13 +94,19 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxAsyncCommand(this.NavigateToDiagnostics);
 
         public IMvxCommand NavigateToMapsCommand => new MvxAsyncCommand(this.NavigateToMaps);
+        public IMvxCommand NavigateToOfflineSyncCommand => new MvxAsyncCommand(this.NavigateToOfflineSync);
+        private Task NavigateToOfflineSync()
+        {
+            this.Synchronization.CancelSynchronizationCommand.Execute();
+            return this.viewModelNavigationService.NavigateToAsync<OfflineInterviewerSyncViewModel>();
+        }
 
         private Task NavigateToMaps()
         {
             this.Synchronization.CancelSynchronizationCommand.Execute();
             return this.viewModelNavigationService.NavigateToAsync<MapsViewModel>();
         }
-
+        
         private bool isInProgress;
         public bool IsInProgress
         {

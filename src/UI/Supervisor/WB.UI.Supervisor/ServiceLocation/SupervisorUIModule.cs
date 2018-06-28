@@ -19,6 +19,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization;
+using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.MapService;
@@ -72,6 +73,7 @@ namespace WB.UI.Supervisor.ServiceLocation
             //registry.BindAsSingleton<ILastCreatedInterviewStorage, LastCreatedInterviewStorage>();
 
             registry.Bind<IDashboardItemsAccessor, DashboardItemsAccessor>();
+            BindOfflineServices(registry);
             registry.Bind<IInterviewerSelectorDialog, InterviewerSelectorDialog>();
             registry.Bind<IInterviewersListAccessor, InterviewersListAccessor>();
 
@@ -88,6 +90,11 @@ namespace WB.UI.Supervisor.ServiceLocation
 #endif
         }
 
+        private void BindOfflineServices(IIocRegistry registry)
+        {
+            registry.Bind<IHandleCommunicationMessage, SupervisorQuestionnaireHandler>();
+        }
+
         public Task Init(IServiceLocator serviceLocator)
         {
 #if !EXCLUDEEXTENSIONS
@@ -101,7 +108,6 @@ namespace WB.UI.Supervisor.ServiceLocation
                     .SkipValidationFor<RemoveFlagFromAnswerCommand>()
                     .SkipValidationFor<CommentAnswerCommand>()
             );
-
             return Task.CompletedTask;
         }
     }

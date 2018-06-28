@@ -13,6 +13,8 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
+using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
+using WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
@@ -47,6 +49,10 @@ namespace WB.Core.SharedKernels.Enumerator
 
             registry.Bind<NavigationState>();
             registry.Bind<AnswerNotifier>();
+
+            // offline sync
+            registry.Bind<IOfflineSyncClient, OfflineSyncClient>();
+            registry.BindAsSingleton<IPayloadSerializer, PayloadSerializer>();
 
             RegisterViewModels(registry);
         }

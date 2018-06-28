@@ -112,6 +112,7 @@ namespace WB.UI.Interviewer.ServiceLocation
             registry.Bind<CompanyLogoSynchronizer>();
             registry.Bind<LoadingViewModel>();
             registry.Bind<PhotoViewViewModel>();
+            registry.Bind<OfflineInterviewerSyncViewModel>();
 
 #if EXCLUDEEXTENSIONS
             registry.Bind<IAreaEditService, WB.UI.Shared.Enumerator.CustomServices.AreaEditor.DummyAreaEditService>();
