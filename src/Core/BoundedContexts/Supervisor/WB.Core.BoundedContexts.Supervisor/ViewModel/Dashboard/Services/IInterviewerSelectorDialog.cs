@@ -1,7 +1,9 @@
-﻿namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services
+﻿using WB.Core.SharedKernels.Enumerator.Views;
+
+namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services
 {
     public interface IInterviewerSelectorDialog
     {
-        void SelectInterviewer();
+        void SelectInterviewer(AssignmentDocument assignment);
     }
 }
