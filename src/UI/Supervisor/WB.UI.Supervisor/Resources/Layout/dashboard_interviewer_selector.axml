@@ -19,7 +19,18 @@
           local:MvxBind="Html Title;"/>
       </LinearLayout>
     </TableRow>
+    <TableRow>
+      <LinearLayout style="@style/VerticalFullWidthWrappingLayout">
+          <MvxRecyclerView
+              style="@style/FullWidthWrappingLayout"
+              android:id="@+id/interviewers_list"
+              android:scrollbars="vertical"
+              local:MvxItemTemplate="@layout/dashboard_interviewer_to_select"
+              local:MvxBind="ItemsSource UiItems" />
+      </LinearLayout>
+      </TableRow>
   </TableLayout>
+
   <LinearLayout style="@style/FullWidthWrappingLayout">
     <Button style="@style/Link_Button"
             local:MvxBind="Click CancelCommand; Text Localization('Interviewer_RelinkDevice_Cancel');" />
