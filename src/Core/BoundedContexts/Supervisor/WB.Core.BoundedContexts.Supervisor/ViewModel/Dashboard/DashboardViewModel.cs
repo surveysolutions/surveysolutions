@@ -55,6 +55,13 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
 
         public IMvxAsyncCommand ShowMenuViewModelCommand => new MvxAsyncCommand(async () => await viewModelNavigationService.NavigateToAsync<DashboardMenuViewModel>());
 
+        public IMvxCommand NavigateToOfflineSyncCommand => new MvxAsyncCommand(this.NavigateToOfflineSync);
+        private Task NavigateToOfflineSync()
+        {
+            this.Synchronization.CancelSynchronizationCommand.Execute();
+            return this.viewModelNavigationService.NavigateToAsync<OfflineSupervisorSyncViewModel>();
+        }
+
         private Task RunSynchronization()
         {
             if (this.viewModelNavigationService.HasPendingOperations)

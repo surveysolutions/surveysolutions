@@ -298,6 +298,7 @@
     <Compile Include="Activities\FinishInstallationActivity.cs" />
     <Compile Include="Activities\LoadingActivity.cs" />
     <Compile Include="Activities\MapsActivity.cs" />
+    <Compile Include="Activities\OfflineInterviewerSyncActitivy.cs" />
     <Compile Include="Activities\PrefilledQuestionsActivity.cs" />
     <Compile Include="Activities\PrefsActivity.cs" />
     <Compile Include="Activities\RelinkDeviceActivity.cs" />
@@ -539,6 +540,13 @@
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
+    <ItemGroup>
+    <AndroidResource Include="Resources\layout\offline_sync.axml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+
   <ItemGroup>
     <AndroidResource Include="Resources\layout\dashboard_assignments_tab.axml">
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>

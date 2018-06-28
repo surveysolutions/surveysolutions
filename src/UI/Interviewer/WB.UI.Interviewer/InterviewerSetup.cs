@@ -49,7 +49,7 @@ namespace WB.UI.Interviewer
         protected override void InitializeViewLookup()
         {
             base.InitializeViewLookup();
-
+            
             var viewModelViewLookup = new Dictionary<Type, Type>()
             {
                 {typeof(LoginViewModel), typeof(LoginActivity)},
@@ -64,6 +64,7 @@ namespace WB.UI.Interviewer
                 {typeof (PrefilledQuestionsViewModel), typeof (PrefilledQuestionsActivity)},
                 {typeof (MapsViewModel), typeof(MapsActivity) },
                 {typeof (PhotoViewViewModel), typeof(PhotoViewActivity) },
+                {typeof(OfflineInterviewerSyncViewModel), typeof(OfflineInterviewerSyncActitivy) }
 #if !EXCLUDEEXTENSIONS
                 {typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel), typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorActivity)}
 #endif

@@ -37,7 +37,7 @@
     <AndroidCreatePackagePerAbi>False</AndroidCreatePackagePerAbi>
     <AndroidSupportedAbis>armeabi-v7a;x86;arm64-v8a</AndroidSupportedAbis>
     <MandroidI18n>CJK,Mideast,Rare,West,Other</MandroidI18n>
-    <AndroidEnableMultiDex>False</AndroidEnableMultiDex>
+    <AndroidEnableMultiDex>true</AndroidEnableMultiDex>
     <DevInstrumentationEnabled>True</DevInstrumentationEnabled>
     <JavaMaximumHeapSize>1G</JavaMaximumHeapSize>
     <AotAssemblies>false</AotAssemblies>

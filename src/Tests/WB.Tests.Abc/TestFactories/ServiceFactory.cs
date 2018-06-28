@@ -9,6 +9,7 @@ using Ncqrs.Eventing.Storage;
 using NHibernate;
 using NSubstitute;
 using System.Linq;
+using System.Threading.Tasks;
 using NHibernate.Linq;
 using Quartz;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
@@ -86,6 +87,9 @@ using WB.Core.SharedKernels.Enumerator.Denormalizer;
 using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization;
+using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
+using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
+using WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -747,6 +751,52 @@ namespace WB.Tests.Abc.TestFactories
                 assignmentsImportFileConverter ?? AssignmentsImportFileConverter(userViewFactory: userViewFactory));
         }
 
+        public NearbyCommunicator NearbyConnectionManager(IRequestHandler requestHandler = null)
+        {
+            return new NearbyCommunicator(requestHandler ?? Mock.Of<IRequestHandler>(), Create.Fake.PayloadProvider(), new PayloadSerializer());
+        }
+
+        public NearbyConnectionsRequestHandler GoogleConnectionsRequestHandler()
+        {
+            return new NearbyConnectionsRequestHandler(new PayloadSerializer());
+        }
+
         private static IQueryable<TEntity> GetNhQueryable<TEntity>() => Mock.Of<IQueryable<TEntity>>(x => x.Provider == Mock.Of<INhQueryProvider>());
+
+    }
+
+    internal static class GoogleConnectionsRequestHandlerExtensions
+    {
+        public static IRequestHandler WithSampleEchoHandler(this IRequestHandler requestHandler)
+        {
+            requestHandler.RegisterHandler<PingMessage, PongMessage>(ping => Task.FromResult(new PongMessage() { Id = ping.Id })); // pre
+            return requestHandler;
+        }
+    }
+
+    public class PingPongMessage : ICommunicationMessage
+    {
+        public string Content { get; set; }
+
+        public Guid Id { get; set; }
+
+        public PingPongMessage(int size = 0)
+        {
+            Content = new string('*', size);
+        }
+    }
+
+    public class PingMessage : PingPongMessage
+    {
+        public PingMessage(int size = 0) : base(size)
+        {
+        }
+    }
+
+    public class PongMessage : PingPongMessage
+    {
+        public PongMessage(int size = 0) : base(size)
+        {
+        }
     }
 }
