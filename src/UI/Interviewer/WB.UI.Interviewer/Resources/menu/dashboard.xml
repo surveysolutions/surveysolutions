@@ -6,6 +6,10 @@
       android:id="@+id/menu_synchronization"
       local:showAsAction="always"
       android:icon="@drawable/dashboard_sync_icon"/>
+    <item
+        android:id="@+id/menu_offline_synchronization"
+        local:showAsAction="never"
+        android:icon="@drawable/dashboard_sync_icon"/>
   <item
       android:id="@+id/menu_search"
       local:showAsAction="never" />
