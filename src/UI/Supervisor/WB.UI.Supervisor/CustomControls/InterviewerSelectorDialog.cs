@@ -3,12 +3,15 @@ using Android.App;
 using Android.Support.V7.App;
 using Android.Views;
 using MvvmCross.Base;
+using MvvmCross.Droid.Support.V7.RecyclerView;
 using MvvmCross.Platforms.Android;
 using MvvmCross.Platforms.Android.Binding.BindingContext;
 using MvvmCross.Platforms.Android.Views;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Views;
+using WB.UI.Shared.Enumerator.Activities.Dashboard;
 
 namespace WB.UI.Supervisor.CustomControls
 {
@@ -32,10 +35,11 @@ namespace WB.UI.Supervisor.CustomControls
         public event EventHandler OnCanelSelection;
         public event EventHandler OnSelected;
 
-        public void SelectInterviewer()
+        public void SelectInterviewer(AssignmentDocument assignment)
         {
             this.viewModel = this.viewModelFactory.GetNew<InterviewerSelectorDialogViewModel>();
-            this.viewModel.Title = "Hello Supervisor";
+            this.viewModel.Init();
+            this.viewModel.Title = string.Format("Select responsible for assignment #{0}", assignment.Id);
             this.viewModel.OnCancel += ViewModel_OnCancel;
             this.viewModel.OnDone += ViewModel_OnDone;
 
@@ -46,6 +50,9 @@ namespace WB.UI.Supervisor.CustomControls
                 new MvxSimpleLayoutInflaterHolder(parentActivity.LayoutInflater), viewModel);
 
             var view = this.modalDialogBindingContext.BindingInflate(Resource.Layout.dashboard_interviewer_selector, null, false);
+            var recyclerView = view.FindViewById<MvxRecyclerView>(Resource.Id.interviewers_list);
+            recyclerView.HasFixedSize = true;
+            //recyclerView.Adapter = new RecyclerViewAdapter(this.modalDialogBindingContext);
 
             this.modalDialog = new AppCompatDialog(parentActivity);
             this.modalDialog.Window.RequestFeature(WindowFeatures.NoTitle);

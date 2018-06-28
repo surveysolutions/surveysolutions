@@ -70,6 +70,7 @@ namespace WB.UI.Supervisor.ServiceLocation
             registry.Bind<IDashboardItemsAccessor, DashboardItemsAccessor>();
             registry.Bind<IInterviewerSelectorDialog, InterviewerSelectorDialog>();
             registry.Bind<InterviewerSelectorDialogViewModel>();
+            registry.Bind<IInterviewersListAccessor, InterviewersListAccessor>();
            
 #if EXCLUDEEXTENSIONS
             registry.Bind<IAreaEditService, WB.UI.Shared.Enumerator.CustomServices.AreaEditor.DummyAreaEditService>();

@@ -33,7 +33,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
 
         private async Task SelectInterviewerAsync()
         {
-            this.interviewerSelectorDialog.SelectInterviewer();
+            this.interviewerSelectorDialog.SelectInterviewer(this.Assignment);
         }
     }
 }
