@@ -1,31 +1,29 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services
 {
     public class InterviewersListAccessor : IInterviewersListAccessor
     {
+        private readonly IPlainStorage<InterviewerDocument> interviewerViewRepository;
+
+        public InterviewersListAccessor(IPlainStorage<InterviewerDocument> interviewerViewRepository)
+        {
+            this.interviewerViewRepository = interviewerViewRepository;
+        }
+
         public List<InterviewerAssignInfo> GetInterviewers()
         {
-            return new List<InterviewerAssignInfo>
-            {
+            return interviewerViewRepository.LoadAll().Select(x =>
                 new InterviewerAssignInfo
                 {
-                    Login = "int1",
-                    Name = "Konstantin Konstantinopolskiy",
-                    AssingmentsCount = 120
-                },
-                new InterviewerAssignInfo
-                {
-                    Login = "int2",
-                    Name = "Vasya",
-                    AssingmentsCount = 0
-                },
-                new InterviewerAssignInfo
-                {
-                    Login = "interviewer12345",
-                    AssingmentsCount = 5
-                }
-            };
+                    Id = x.InterviewerId,
+                    Login = x.UserName,
+                    FullaName = x.FullaName
+                }).ToList();
         }
     }
 
@@ -37,7 +35,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services
     public class InterviewerAssignInfo
     {
         public string Login { get; set; }
-        public string Name { get; set; }
-        public int AssingmentsCount { get; set; } = 0;
+        public string FullaName { get; set; }
+        public Guid Id { get; set; }
     }
 }

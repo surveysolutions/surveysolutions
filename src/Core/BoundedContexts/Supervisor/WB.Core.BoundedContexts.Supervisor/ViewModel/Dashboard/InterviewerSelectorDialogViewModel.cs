@@ -51,8 +51,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             return interviewers.Select(x => new InterviewerToSelectViewModel
             {
                 Login = x.Login,
-                Name = x.Name,
-                AssingmentsCount = x.AssingmentsCount,
+                FullName = x.FullaName,
                 IsSelected = false
             });
         }
@@ -73,10 +72,16 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
 
     public class InterviewerToSelectViewModel : MvxViewModel
     {
+        private Guid id;
         private string login;
-        private string name;
-        private int assingmentsCount;
+        private string fullName;
         private bool isSelected;
+
+        public Guid Id
+        {
+            get => id;
+            set => this.RaiseAndSetIfChanged(ref this.id, value);
+        }
 
         public string Login
         {
@@ -84,16 +89,10 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             set => this.RaiseAndSetIfChanged(ref this.login, value);
         }
 
-        public string Name
+        public string FullName
         {
-            get => name;
-            set => this.RaiseAndSetIfChanged(ref this.name, value);
-        }
-
-        public int AssingmentsCount
-        {
-            get => assingmentsCount;
-            set => this.RaiseAndSetIfChanged(ref this.assingmentsCount, value);
+            get => fullName;
+            set => this.RaiseAndSetIfChanged(ref this.fullName, value);
         }
 
         public bool IsSelected
