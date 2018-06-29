@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection;
@@ -75,6 +76,7 @@ namespace WB.Enumerator.Native.WebInterview
                 identity.Id, identity.RosterVector, DateTime.UtcNow, answer));
         }
 
+        [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
         public void AnswerLinkedSingleOptionQuestion(string questionIdentity, decimal[] answer)
         {
             Identity identity = Identity.Parse(questionIdentity);
@@ -82,6 +84,7 @@ namespace WB.Enumerator.Native.WebInterview
                 identity.Id, identity.RosterVector, DateTime.UtcNow, answer));
         }
 
+        [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
         public void AnswerLinkedMultiOptionQuestion(string questionIdentity, decimal[][] answer)
         {
             Identity identity = Identity.Parse(questionIdentity);
@@ -110,12 +113,14 @@ namespace WB.Enumerator.Native.WebInterview
             this.ExecuteQuestionCommand(new AnswerNumericIntegerQuestionCommand(this.GetCallerInterview().Id, this.CommandResponsibleId, identity.Id, identity.RosterVector, DateTime.UtcNow, answer));
         }
 
+        [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
         public void AnswerDoubleQuestion(string questionIdenty, double answer)
         {
             Identity identity = Identity.Parse(questionIdenty);
             this.ExecuteQuestionCommand(new AnswerNumericRealQuestionCommand(this.GetCallerInterview().Id, this.CommandResponsibleId, identity.Id, identity.RosterVector, DateTime.UtcNow, answer));
         }
 
+        [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
         public void AnswerQRBarcodeQuestion(string questionIdenty, string text)
         {
             var identity = Identity.Parse(questionIdenty);
@@ -157,6 +162,7 @@ namespace WB.Enumerator.Native.WebInterview
         public abstract void CompleteInterview(CompleteInterviewRequest completeInterviewRequest);
 
         [ObserverNotAllowed]
+        [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
         public void SendNewComment(string questionIdentity, string comment)
         {
             var identity = Identity.Parse(questionIdentity);

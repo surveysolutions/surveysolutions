@@ -7,5 +7,5 @@
     android:layout_below="@+id/prefilledQuestions_questionnaireTitle_holder"
     android:scrollbars="vertical"
     hasFixedSize="false"
-    local:MvxTemplateSelector ="WB.UI.Shared.Enumerator.CustomControls.InterviewTemplateSelector, WB.UI.Shared.Enumerator"
+    local:MvxTemplateSelector="WB.UI.Shared.Enumerator.CustomControls.InterviewTemplateSelector, WB.UI.Shared.Enumerator"
     local:MvxBind="ItemsSource Items" />
