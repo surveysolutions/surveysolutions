@@ -1176,7 +1176,7 @@ namespace WB.Tests.Abc.TestFactories
 
         public TextQuestion TextQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
             string mask = null,
-            string variable = "text_question",
+            string variable = null,
             string validationMessage = null,
             string text = "Question T",
             QuestionScope scope = QuestionScope.Interviewer,
@@ -1195,7 +1195,7 @@ namespace WB.Tests.Abc.TestFactories
                 Mask = mask,
                 QuestionText = text,
                 QuestionType = QuestionType.Text,
-                StataExportCaption = variable,
+                StataExportCaption = variable ?? "vv" + Guid.NewGuid().ToString("N"),
                 QuestionScope = scope,
                 Featured = preFilled,
                 VariableLabel = label,

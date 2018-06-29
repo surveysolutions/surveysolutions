@@ -239,6 +239,8 @@
     <Compile Include="Activities\ActivityExtensions.cs" />
     <Compile Include="Activities\Dashboard\ExpandableViewHolder.cs" />
     <Compile Include="Activities\Dashboard\RecyclerViewAdapter.cs" />
+    <Compile Include="Activities\OverviewFragment.cs" />
+    <Compile Include="Activities\OverviewNodeDetailsFragment.cs" />
     <Compile Include="Activities\PhotoViewActivity.cs" />
     <Compile Include="Activities\BaseActivity.cs" />
     <Compile Include="Activities\BaseFragment.cs" />
@@ -287,7 +289,9 @@
     <Compile Include="CustomBindings\NumericDisableBinding.cs" />
     <Compile Include="CustomBindings\RecyclerViewScrollToPositionBinding.cs" />
     <Compile Include="CustomBindings\SignaturePadSettingsBinding.cs" />
+    <Compile Include="CustomBindings\TextViewAnswerStateBinding.cs" />
     <Compile Include="CustomBindings\TextViewOnDoneBinding.cs" />
+    <Compile Include="CustomBindings\TextViewOverviewStateTextColorBinding.cs" />
     <Compile Include="CustomBindings\ToParentGroupButtonBinding.cs" />
     <Compile Include="CustomBindings\GroupBackgroundColorBinding.cs" />
     <Compile Include="CustomBindings\ImageViewBitmapWithFallbackBinding.cs" />
@@ -309,6 +313,7 @@
     <Compile Include="CustomBindings\ViewGroupColorByInterviewStatusBinding.cs" />
     <Compile Include="CustomBindings\ViewGroupStatusBarColorByInterviewStatusBinding.cs" />
     <Compile Include="CustomBindings\ViewHideKeyboardOnClickBinding.cs" />
+    <Compile Include="CustomBindings\ViewOverviewNodeStateBinding.cs" />
     <Compile Include="CustomBindings\ViewPaddingLeftBinding.cs" />
     <Compile Include="CustomBindings\ViewTagBinding.cs" />
     <Compile Include="CustomBindings\ViewTransparentBinding.cs" />
@@ -316,6 +321,7 @@
     <Compile Include="CustomControls\FlowLayout.cs" />
     <Compile Include="CustomControls\InstantAutoComplete.cs" />
     <Compile Include="CustomControls\InterviewEntityAdapter.cs" />
+    <Compile Include="CustomControls\InterviewOverviewTemplateSelector.cs" />
     <Compile Include="CustomControls\InterviewTemplateSelector.cs" />
     <Compile Include="CustomControls\MaskedEditTextControl\MaskedEditText.cs" />
     <Compile Include="CustomControls\NumericEditText.cs" />
@@ -1365,7 +1371,85 @@
     <AndroidResource Include="Resources\drawable\img_placeholder.xml" />
   </ItemGroup>
   <ItemGroup>
+    <AndroidResource Include="Resources\layout\interview_overview_question.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\interview_overview.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\interview_overview_statictext.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\values\styles-interview-overview.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\interview_overview_section.axml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\interview_overview_group.axml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\overview_background_invalid.xml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\overview_background_unanswered.xml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\overview_background_answered.xml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\overview_background_commented.xml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\interview_overview_question_multimedia.axml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\interview_overview_question_audio.axml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
     <AndroidJavaLibrary Include="patch-applier.jar" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\interview_overview_node_details.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\interview_overview_node_details_error.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\interview_overview_node_details_warning.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\synchronization_panel.axml">

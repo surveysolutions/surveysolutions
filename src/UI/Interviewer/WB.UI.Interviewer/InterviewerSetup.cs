@@ -5,6 +5,7 @@ using System.Reflection;
 using Android.Support.V7.Widget;
 using Android.Widget;
 using Autofac;
+using Autofac.Features.ResolveAnything;
 using MvvmCross;
 using MvvmCross.Binding.Bindings.Target.Construction;
 using MvvmCross.IoC;
@@ -98,6 +99,7 @@ namespace WB.UI.Interviewer
                 };
 
             ContainerBuilder builder = new ContainerBuilder();
+            builder.RegisterSource(new AnyConcreteTypeNotAlreadyRegisteredSource());
             foreach (var module in modules)
             {
                 builder.RegisterModule(module.AsAutofac());

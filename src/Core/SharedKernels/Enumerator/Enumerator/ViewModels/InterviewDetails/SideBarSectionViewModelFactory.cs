@@ -34,7 +34,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             sideBarItem.Init(navigationState);
             return sideBarItem;
         }
-    }
 
- 
+        public ISideBarItem BuildOverviewItem(NavigationState navigationState, string interviewId)
+        {
+            var sideBarItem = this.serviceLocator.GetInstance<SideBarOverviewViewModel>();
+            sideBarItem.Init(navigationState, interviewId);
+            return sideBarItem;
+        }
+    }
 }

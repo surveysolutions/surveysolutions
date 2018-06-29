@@ -416,4 +416,7 @@ Contact support for assistance.</value>
   <data name="ReloadQuestionnaire" xml:space="preserve">
     <value>Reload questionnaire</value>
   </data>
+  <data name="Interview_Overview_NotAnswered" xml:space="preserve">
+    <value>Not answered</value>
+  </data>
 </root>

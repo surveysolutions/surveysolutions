@@ -2434,12 +2434,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 : optionTitle;
         }
 
-        public IEnumerable<Identity> GetUnderlyingInterviewerEntities(Identity sectionId)
+        public IEnumerable<Identity> GetUnderlyingInterviewerEntities(Identity sectionId = null)
         {
-            InterviewTreeGroup interviewTreeGroup = this.Tree.GetGroup(sectionId);
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
-            IEnumerable<IInterviewTreeNode> result = interviewTreeGroup.Children
-                     .Except(x => questionnaire.IsQuestion(x.Identity.Id) && !questionnaire.IsInterviewierQuestion(x.Identity.Id));
+            var targetList = sectionId != null
+                ? this.Tree.GetGroup(sectionId).Children
+                : this.Tree.GetAllNodesInEnumeratorOrder();
+
+            IEnumerable<IInterviewTreeNode> result = targetList.Except(x => (questionnaire.IsQuestion(x.Identity.Id) && !questionnaire.IsInterviewierQuestion(x.Identity.Id))
+                                                                 || questionnaire.IsVariable(x.Identity.Id)
+                                                     );
 
             return result.Select(x => x.Identity);
         }

@@ -17,6 +17,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
@@ -70,6 +71,8 @@ namespace WB.Core.SharedKernels.Enumerator
             registry.Bind<EnumerationStageViewModel>();
             registry.Bind<ReadOnlyQuestionViewModel>();
             registry.Bind<SideBarCompleteSectionViewModel>();
+            registry.Bind<SideBarOverviewViewModel>();
+            registry.Bind<OverviewViewModel>();
             registry.Bind<SideBarCoverSectionViewModel>();
             registry.Bind<SideBarSectionViewModel>();
             registry.Bind<SideBarSectionsViewModel>();

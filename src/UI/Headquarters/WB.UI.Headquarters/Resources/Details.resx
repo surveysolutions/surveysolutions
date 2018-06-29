@@ -156,4 +156,7 @@
   <data name="Duration" xml:space="preserve">
     <value>Duration</value>
   </data>
+  <data name="Overview">
+    <value>Overview</value>
+  </data>
 </root>

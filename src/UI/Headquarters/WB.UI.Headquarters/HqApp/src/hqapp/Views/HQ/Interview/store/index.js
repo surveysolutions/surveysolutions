@@ -3,11 +3,13 @@ import Vue from "vue"
 import webinterview from "~/webinterview/store"
 import filters from "./filters"
 import flags from "./flags"
+import overview from "./overview"
 
 const store = {
     modules:{
         filters,
-        flags
+        flags,
+        overview
     },
 
     actions: {
