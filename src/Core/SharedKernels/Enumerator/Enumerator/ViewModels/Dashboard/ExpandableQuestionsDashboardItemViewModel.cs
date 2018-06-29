@@ -76,19 +76,40 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         public string IdLabel
         {
             get => idLabel;
-            set => SetProperty(ref idLabel, value);
+            set
+            {
+                if (this.idLabel != value)
+                {
+                    this.idLabel = value;
+                    RaisePropertyChanged();
+                }
+            }
         }
 
         public string Title
         {
             get => title;
-            set => SetProperty(ref title, value);
+            set
+            {
+                if (this.title != value)
+                {
+                    this.title = value;
+                    RaisePropertyChanged();
+                }
+            }
         }
 
         public string SubTitle
         {
             get => subTitle;
-            set => SetProperty(ref subTitle, value);
+            set
+            {
+                if (this.subTitle != value)
+                {
+                    this.subTitle = value;
+                    this.RaisePropertyChanged();
+                }
+            }
         }
 
         protected void BindLocationAction(Guid? questionId, double? latitude, double? longtitude)
