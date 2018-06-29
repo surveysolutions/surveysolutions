@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
+using MvvmCross.Plugin.Messenger;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
@@ -17,18 +18,24 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         private readonly IViewModelNavigationService viewModelNavigationService;
         private Guid LastVisitedInterviewId { get; set; }
 
+        private readonly IMvxMessenger messenger;
+
         public SynchronizationViewModel Synchronization { get; set; }
         
         public string DashboardTitle => "dashboard title :)";
 
         public DashboardViewModel(IPrincipal principal, 
             IViewModelNavigationService viewModelNavigationService,
+            IMvxMessenger messenger,
             SynchronizationViewModel synchronization) 
             : base(principal, viewModelNavigationService)
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.Synchronization = synchronization;
             this.Synchronization.Init();
+
+            this.messenger = messenger;
+            messenger.Subscribe<SynchronizationCompletedMsg>(msg => SynchronizationCommand.Execute());
         }
 
         public override void Prepare(DashboardViewModelArgs parameter)
@@ -50,7 +57,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
 
         public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxAsyncCommand(this.NavigateToDiagnostics);
 
-        public IMvxCommand ShowDeafultListCommand => 
+        public IMvxCommand ShowDefaultListCommand => 
             new MvxAsyncCommand(async () => await viewModelNavigationService.NavigateToAsync<ToBeAssignedItemsViewModel>());
 
         public IMvxAsyncCommand ShowMenuViewModelCommand => new MvxAsyncCommand(async () => await viewModelNavigationService.NavigateToAsync<DashboardMenuViewModel>());

@@ -22,20 +22,16 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
 
         protected readonly IPrincipal Principal;
 
-        private DashboardViewModel dashboardViewModel;
-
         public DashboardMenuViewModel(IMvxNavigationService mvxNavigationService, 
             IMvxMessenger messenger,
             IDashboardItemsAccessor dashboardItemsAccessor,
-            IPrincipal principal,
-            DashboardViewModel dashboardViewModel)
+            IPrincipal principal)
         {
             this.mvxNavigationService = mvxNavigationService;
             this.messenger = messenger;
             this.dashboardItemsAccessor = dashboardItemsAccessor;
 
             this.Principal = principal ?? throw new ArgumentNullException(nameof(principal));
-            this.dashboardViewModel = dashboardViewModel;
         }
 
         public override Task Initialize()
@@ -90,11 +86,11 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
 
 
         public IMvxCommand StartSync =>
-            new MvxCommand(async () => await StartSynchronization());
+            new MvxCommand(StartSynchronization);
 
-        public async Task StartSynchronization()
+        public void StartSynchronization()
         {
-            await dashboardViewModel.SynchronizationCommand.ExecuteAsync();
+            this.messenger.Publish(new RequestSynchronizationMsg(this));
         }
     }
 }
