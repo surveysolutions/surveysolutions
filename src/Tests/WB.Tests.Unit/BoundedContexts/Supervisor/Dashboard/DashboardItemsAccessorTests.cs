@@ -50,7 +50,8 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Dashboard
             var viewModelFactory = new Mock<IInterviewViewModelFactory>();
             viewModelFactory.Setup(x => x.GetNew<SupervisorDashboardInterviewViewModel>())
                 .Returns(new SupervisorDashboardInterviewViewModel(Mock.Of<IServiceLocator>(),
-                    Mock.Of<IAuditLogService>()));
+                    Mock.Of<IAuditLogService>(),
+                    Mock.Of<IViewModelNavigationService>()));
 
             return new DashboardItemsAccessor(
 

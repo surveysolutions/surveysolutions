@@ -1798,6 +1798,12 @@ namespace WB.Tests.Abc.TestFactories
                 return this;
             }
 
+            public AssignmentDocumentBuilder WithTitle(string title)
+            {
+                this._entity.Title = title;
+                return this;
+            }
+
             public AssignmentDocumentBuilder WithResponsible(Guid responsibleId)
             {
                 this._entity.ResponsibleId = responsibleId;
