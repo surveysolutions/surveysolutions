@@ -53,6 +53,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
         public override void Prepare(LoadingViewModelArg arg)
         {
             this.interviewId = arg.InterviewId;
+            this.shouldReopen = arg.ShouldReopen;
         }
 
         public override async Task Initialize()
@@ -83,7 +84,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
 
                 this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
-                if (interview.Status == InterviewStatus.Completed)
+                if (interview.Status == InterviewStatus.Completed && this.shouldReopen)
                 {
                     this.loadingCancellationTokenSource.Token.ThrowIfCancellationRequested();
                     var restartInterviewCommand = new RestartInterviewCommand(this.interviewId,
@@ -119,6 +120,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
         }
 
         private string progressDescription;
+        private bool shouldReopen;
+
         public string ProgressDescription
         {
             get => this.progressDescription;

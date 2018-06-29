@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using WB.Core.BoundedContexts.Supervisor.Services;
+using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -56,14 +57,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services
 
             foreach (var interviewView in interviewsToAssign)
             {
-                var preffilledQuestions = this.identifyingQuestionsRepo
-                    .Where(x => x.InterviewId == interviewView.InterviewId)
-                    .OrderBy(x => x.SortIndex)
-                    .Select(fi => new PrefilledQuestion {Answer = fi.Answer?.Trim(), Question = fi.QuestionText})
-                    .ToList();
-
-                var dashboardItem = this.viewModelFactory.GetNew<InterviewDashboardItemViewModel>();
-                dashboardItem.Init(interviewView, preffilledQuestions);
+                var dashboardItem = ConvertInterviewToViewModel(interviewView);
 
                 yield return dashboardItem;
             }
@@ -82,14 +76,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services
 
             foreach (var interviewView in outboxInterviews)
             {
-                var preffilledQuestions = this.identifyingQuestionsRepo
-                    .Where(x => x.InterviewId == interviewView.InterviewId)
-                    .OrderBy(x => x.SortIndex)
-                    .Select(fi => new PrefilledQuestion { Answer = fi.Answer?.Trim(), Question = fi.QuestionText })
-                    .ToList();
-
-                var dashboardItem = this.viewModelFactory.GetNew<InterviewDashboardItemViewModel>();
-                dashboardItem.Init(interviewView, preffilledQuestions);
+                var dashboardItem = ConvertInterviewToViewModel(interviewView);
 
                 yield return dashboardItem;
             }
@@ -101,6 +88,19 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services
 
                 yield return dashboardItem;
             }
+        }
+
+        private SupervisorDashboardInterviewViewModel ConvertInterviewToViewModel(InterviewView interviewView)
+        {
+            var preffilledQuestions = this.identifyingQuestionsRepo
+                .Where(x => x.InterviewId == interviewView.InterviewId)
+                .OrderBy(x => x.SortIndex)
+                .Select(fi => new PrefilledQuestion {Answer = fi.Answer?.Trim(), Question = fi.QuestionText})
+                .ToList();
+
+            var dashboardItem = this.viewModelFactory.GetNew<SupervisorDashboardInterviewViewModel>();
+            dashboardItem.Init(interviewView, preffilledQuestions);
+            return dashboardItem;
         }
 
         private IReadOnlyCollection<InterviewView> GetOutboxInterviews()

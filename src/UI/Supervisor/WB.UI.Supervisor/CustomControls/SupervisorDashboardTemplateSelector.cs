@@ -2,13 +2,14 @@
 using MvvmCross.Droid.Support.V7.RecyclerView.ItemTemplates;
 using WB.Core.BoundedContexts.Supervisor.ViewModel;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard;
+using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 
 namespace WB.UI.Supervisor.CustomControls
 {
     public class SupervisorDashboardTemplateSelector : IMvxTemplateSelector
     {
-        private static readonly Type InterviewType = typeof(InterviewDashboardItemViewModel);
+        private static readonly Type InterviewType = typeof(SupervisorDashboardInterviewViewModel);
         private static readonly Type SubtitleType = typeof(DashboardSubTitleViewModel);
         private static readonly Type AssignmentType = typeof(SupervisorAssignmentDashboardItemViewModel);
 
