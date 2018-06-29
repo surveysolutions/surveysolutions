@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
@@ -67,6 +68,32 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             this.passwordHasher = passwordHasher;
         }
 
+        public override async Task Synchronize(IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken, SynchronizationStatistics statistics)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            await this.UploadInterviewsAsync(progress, statistics, cancellationToken);
+
+            cancellationToken.ThrowIfCancellationRequested();
+            await this.assignmentsSynchronizer.SynchronizeAssignmentsAsync(progress, statistics, cancellationToken);
+
+            cancellationToken.ThrowIfCancellationRequested();
+            await this.SyncronizeCensusQuestionnaires(progress, statistics, cancellationToken);
+
+            cancellationToken.ThrowIfCancellationRequested();
+            await this.CheckObsoleteQuestionnairesAsync(progress, statistics, cancellationToken);
+
+            cancellationToken.ThrowIfCancellationRequested();
+            await this.DownloadInterviewsAsync(statistics, progress, cancellationToken);
+
+            cancellationToken.ThrowIfCancellationRequested();
+            await this.logoSynchronizer.DownloadCompanyLogo(progress, cancellationToken);
+
+            cancellationToken.ThrowIfCancellationRequested();
+            await this.auditLogSynchronizer.SynchronizeAuditLogAsync(progress, statistics, cancellationToken);
+
+            cancellationToken.ThrowIfCancellationRequested();
+            await this.UpdateApplicationAsync(progress, cancellationToken);
+        }
 
         protected override async void CheckAfterStartSynchronization(CancellationToken cancellationToken)
         {

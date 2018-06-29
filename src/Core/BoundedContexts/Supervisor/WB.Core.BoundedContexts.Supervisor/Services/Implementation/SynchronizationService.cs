@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable.Implementation;
@@ -16,6 +17,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
         protected override string ApiVersion => "v1";
         protected override string ApiUrl => "api/supervisor/";
 
+        protected string InterviewersController => string.Concat(ApplicationUrl, "/interviewers");
+
         public SynchronizationService(IPrincipal principal, IRestService restService,
             ISupervisorSettings settings, ISupervisorSyncProtocolVersionProvider syncProtocolVersionProvider,
             IFileSystemAccessor fileSystemAccessor, ICheckVersionUriProvider checkVersionUriProvider, ILogger logger) :
@@ -29,6 +32,16 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
             return this.TryGetRestResponseOrThrowAsync(() =>
                 this.restService.GetAsync<SupervisorApiView>(url: string.Concat(this.UsersController, "/current"),
                     credentials: credentials ?? this.restCredentials, token: token));
+        }
+
+        public Task<List<InterviewerFullApiView>> GetInterviewersAsync(CancellationToken cancellationToken)
+        {
+            var response = this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<List<InterviewerFullApiView>>(
+                    url: this.InterviewersController, 
+                    credentials: this.restCredentials, 
+                    token: cancellationToken));
+
+            return response;
         }
 
         protected override string CanSynchronizeValidResponse => "158329303";

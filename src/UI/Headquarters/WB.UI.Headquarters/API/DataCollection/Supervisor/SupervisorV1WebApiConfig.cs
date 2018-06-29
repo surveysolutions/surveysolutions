@@ -90,6 +90,9 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor
             config.TypedRoute("api/supervisor/v1/interviews/{id:guid}/audio",
                 c => c.Action<InterviewsApiV1Controller>(x => x.PostAudio(Param.Any<PostFileRequest>())));
 
+            // INTERVIEWERS
+            config.TypedRoute("api/supervisor/v1/interviewers", c => c.Action<InterviewersApiController>(x => x.Get()));
+
         }
 
 #pragma warning restore 4014
