@@ -6,16 +6,24 @@
   <color name="colorPrimary">@android:color/darker_gray</color>
 
   <color name="errorTextColor">#e64a19</color>
+  <color name="commentsTextColor">#DF3DBF</color>
   <color name="warningTextColor">#F9BD07</color>
   <color name="disabledTextColor">#afafaf</color>
+  <color name="notAnsweredLabel">#4277A8</color>
+  <color name="overview_invalid_border">#F0D0C7</color>
+  <color name="overview_invalid_text">#c70000</color>
+  <color name="overview_invalid_background">#FCDAD1</color>
+  <color name="overview_unanswered_border">#D6D6D6</color>
+  <color name="overview_unanswered_background">#E1E1E1</color>
+  <color name="overview_commented_overlay">#4DE88AD3</color>
 
   <color name="sideBarPrefilledQuestionText">#FF747474</color>
-
 
   <color name="commentInterviewerTextColor">#FF747474</color>
   <color name="commentDetailsInterviewerTextColor">#FF000000</color>
   <color name="commentSupervisorTextColor">#FFF6D6D0</color>
   <color name="nonAnsweredBackground">#EEEFF0</color>
+  <color name="invalidAnsweredBackground">#FFF6D6D0</color>
 
   <color name="colorToolbarText">#FFFFFFFF</color>
   <color name="colorToolbarTransp">#BFFFFFFF</color>

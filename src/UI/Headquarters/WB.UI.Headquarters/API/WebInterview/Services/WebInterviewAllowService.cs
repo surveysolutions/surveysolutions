@@ -8,7 +8,6 @@ using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Enumerator.Native.WebInterview;
-using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.API.WebInterview.Services
 {

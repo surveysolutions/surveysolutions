@@ -3,7 +3,7 @@
        xmlns:local="http://schemas.android.com/apk/res-auto"
        android:shape="rectangle">
 
-  <solid android:color="#EEEFF0" />
+  <solid android:color="@color/nonAnsweredBackground" />
 
   <padding
     android:left="@dimen/Interview_Question_Answer_background_padding"

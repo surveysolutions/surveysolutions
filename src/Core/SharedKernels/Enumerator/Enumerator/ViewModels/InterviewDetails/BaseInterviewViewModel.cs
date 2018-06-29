@@ -17,6 +17,7 @@ using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
@@ -251,7 +252,30 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
         }
 
-        protected abstract MvxViewModel UpdateCurrentScreenViewModel(ScreenChangedEventArgs eventArgs);
+        protected virtual MvxViewModel UpdateCurrentScreenViewModel(ScreenChangedEventArgs eventArgs)
+        {
+            switch (this.navigationState.CurrentScreenType)
+            {
+                case ScreenType.Complete:
+                    var completeInterviewViewModel = this.interviewViewModelFactory.GetNew<CompleteInterviewViewModel>();
+                    completeInterviewViewModel.Configure(this.InterviewId, this.navigationState);
+                    return completeInterviewViewModel;
+                case ScreenType.Cover:
+                    var coverInterviewViewModel = this.interviewViewModelFactory.GetNew<CoverInterviewViewModel>();
+                    coverInterviewViewModel.Configure(this.InterviewId, this.navigationState);
+                    return coverInterviewViewModel;
+                case ScreenType.Group:
+                    var activeStageViewModel = this.interviewViewModelFactory.GetNew<EnumerationStageViewModel>();
+                    activeStageViewModel.Configure(this.InterviewId, this.navigationState, eventArgs.TargetGroup, eventArgs.AnchoredElementIdentity);
+                    return activeStageViewModel;
+                case ScreenType.Overview:
+                    var overviewViewModel = this.interviewViewModelFactory.GetNew<OverviewViewModel>();
+                    overviewViewModel.Configure(this.InterviewId);
+                    return overviewViewModel;
+                default:
+                    return null;
+            }
+        }
 
         private void UpdateGroupStatus(Identity groupIdentity)
         {

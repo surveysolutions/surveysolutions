@@ -5,7 +5,7 @@ import localStore from "./store"
 const Review = () => import(/* webpackChunkName: "review" */"./Review")
 const Cover = () => import(/* webpackChunkName: "review" */"~/webinterview/components/Cover")
 const ReviewSection = () => import(/* webpackChunkName: "review" */"./ReviewSection")
-
+const Overview = () => import(/* webpackChunkName: "review" */"./Overview")
 
 export default class ReviewComponent {
     constructor(rootStore) {
@@ -21,6 +21,19 @@ export default class ReviewComponent {
             children: [{
                     path: '',
                     component: Cover,
+                    props: {
+                        navigateToPrefilled: true,
+                        showHumburger: false
+                    },
+                    beforeEnter(to, from, next){
+                        self.changeSection(null)
+                        next()
+                    }
+                },                
+                {
+                    path: 'Overview',
+                    name: 'Overview',
+                    component: Overview,
                     props: {
                         navigateToPrefilled: true,
                         showHumburger: false
