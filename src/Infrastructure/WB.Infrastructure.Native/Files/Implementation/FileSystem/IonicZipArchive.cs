@@ -13,6 +13,7 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
         public IonicZipArchive(Stream outputStream, string password, CompressionLevel compressionLevel = CompressionLevel.BestSpeed, bool leaveOpen = false)
         {
             this.zipStream = new ZipOutputStream(outputStream, leaveOpen);
+            zipStream.EnableZip64 = Zip64Option.AsNecessary;
             zipStream.CompressionLevel = compressionLevel;
             
             if (!string.IsNullOrWhiteSpace(password))
@@ -29,7 +30,11 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
         public void CreateEntry(string path, byte[] content)
         {
             zipStream.PutNextEntry(path);
-            zipStream.Write(content, 0, content.Length);
+
+            if (content.Length != 0)
+            {
+                zipStream.Write(content, 0, content.Length);
+            }
         }
     }
 }
