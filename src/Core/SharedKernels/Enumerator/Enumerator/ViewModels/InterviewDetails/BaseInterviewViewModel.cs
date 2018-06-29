@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using MvvmCross.Base;
+using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using Newtonsoft.Json;
 using WB.Core.GenericSubdomains.Portable;
@@ -30,7 +31,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly GroupStateViewModel groupState;
         private readonly InterviewStateViewModel interviewState;
         private readonly CoverStateViewModel coverState;
-        private readonly IViewModelNavigationService viewModelNavigationService;
+        protected readonly IViewModelNavigationService viewModelNavigationService;
         protected readonly IInterviewViewModelFactory interviewViewModelFactory;
         private readonly IEnumeratorSettings enumeratorSettings;
         public static BaseInterviewViewModel CurrentInterviewScope;
@@ -321,6 +322,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private IReadOnlyCollection<string> availableLanguages;
         public override IReadOnlyCollection<string> AvailableLanguages => this.availableLanguages;
+
+        public IMvxCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () =>
+        {
+            await this.viewModelNavigationService.NavigateToDashboardAsync();
+            this.Dispose();
+        });
+
+        public IMvxCommand SignOutCommand => new MvxAsyncCommand(this.viewModelNavigationService.SignOutAndNavigateToLoginAsync);
+        public IMvxCommand NavigateToSettingsCommand => new MvxCommand(this.viewModelNavigationService.NavigateToSettings);
+        public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxAsyncCommand(this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>);
 
         public void NavigateToPreviousViewModel(Action navigateToIfHistoryIsEmpty)
             => this.navigationState.NavigateBack(navigateToIfHistoryIsEmpty);
