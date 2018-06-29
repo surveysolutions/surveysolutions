@@ -55,7 +55,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
         }
 
         [ApiBasicAuth(UserRoles.Supervisor)]
-        [System.Web.Http.HttpGet]
+        [HttpGet]
         [ApiNoCache]
         public virtual HttpResponseMessage CheckCompatibility(string deviceId, int deviceSyncProtocolVersion)
         {

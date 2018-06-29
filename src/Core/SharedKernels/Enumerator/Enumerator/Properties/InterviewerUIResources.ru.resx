@@ -765,4 +765,10 @@
   <data name="Dashboard_Assign" xml:space="preserve">
     <value>Назначить</value>
   </data>
+  <data name="Synchronization_Of_Interviewers" xml:space="preserve">
+    <value>Синхронизация интервьюверов</value>
+  </data>
+  <data name="Synchronization_Of_InterviewersFormat" xml:space="preserve">
+    <value>Синхронизация интервьюверов: {0} из {1}</value>
+  </data>
 </root>

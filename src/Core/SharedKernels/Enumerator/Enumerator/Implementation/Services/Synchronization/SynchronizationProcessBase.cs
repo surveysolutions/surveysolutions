@@ -29,19 +29,19 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         private readonly IInterviewerInterviewAccessor interviewFactory;
         private readonly IAudioFileStorage audioFileStorage;
         private readonly ITabletDiagnosticService diagnosticService;
-        private readonly IAuditLogSynchronizer auditLogSynchronizer;
+        protected readonly IAuditLogSynchronizer auditLogSynchronizer;
         private readonly ILiteEventBus eventBus;
         private readonly IEnumeratorEventStorage eventStore;
         private readonly IPlainStorage<InterviewFileView> imagesStorage;
         private readonly IPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage;
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
         private readonly ILogger logger;
-        private readonly CompanyLogoSynchronizer logoSynchronizer;
-        private readonly IAssignmentsSynchronizer assignmentsSynchronizer;
+        protected readonly CompanyLogoSynchronizer logoSynchronizer;
+        protected readonly IAssignmentsSynchronizer assignmentsSynchronizer;
         private readonly IQuestionnaireDownloader questionnaireDownloader;
         private readonly IPrincipal principal;
         private readonly IInterviewerQuestionnaireAccessor questionnairesAccessor;
-        private readonly ISynchronizationService synchronizationService;
+        protected readonly ISynchronizationService synchronizationService;
 
         protected SynchronizationProcessBase(ISynchronizationService synchronizationService,
             IPlainStorage<InterviewView> interviewViewRepository,
@@ -93,34 +93,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         protected override bool SendStatistics => true;
         protected override string SucsessDescription => InterviewerUIResources.Synchronization_Success_Description;
 
-        public override async Task Synchronize(IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken, SynchronizationStatistics statistics)
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-            await this.UploadInterviewsAsync(progress, statistics, cancellationToken);
 
-            cancellationToken.ThrowIfCancellationRequested();
-            await this.assignmentsSynchronizer.SynchronizeAssignmentsAsync(progress, statistics, cancellationToken);
-
-            cancellationToken.ThrowIfCancellationRequested();
-            await this.SyncronizeCensusQuestionnaires(progress, statistics, cancellationToken);
-
-            cancellationToken.ThrowIfCancellationRequested();
-            await this.CheckObsoleteQuestionnairesAsync(progress, statistics, cancellationToken);
-
-            cancellationToken.ThrowIfCancellationRequested();
-            await this.DownloadInterviewsAsync(statistics, progress, cancellationToken);
-
-            cancellationToken.ThrowIfCancellationRequested();
-            await this.logoSynchronizer.DownloadCompanyLogo(progress, cancellationToken);
-
-            cancellationToken.ThrowIfCancellationRequested();
-            await this.auditLogSynchronizer.SynchronizeAuditLogAsync(progress, statistics, cancellationToken);
-
-            cancellationToken.ThrowIfCancellationRequested();
-            await this.UpdateApplicationAsync(progress, cancellationToken);
-        }
-
-        private async Task UpdateApplicationAsync(IProgress<SyncProgressInfo> progress,
+        protected async Task UpdateApplicationAsync(IProgress<SyncProgressInfo> progress,
             CancellationToken cancellationToken)
         {
             if (!await this.synchronizationService.IsAutoUpdateEnabledAsync(cancellationToken))
@@ -168,7 +142,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             }
         }
 
-        private async Task CheckObsoleteQuestionnairesAsync(IProgress<SyncProgressInfo> progress,
+        protected async Task CheckObsoleteQuestionnairesAsync(IProgress<SyncProgressInfo> progress,
             SynchronizationStatistics statistics, CancellationToken cancellationToken)
         {
             progress.Report(new SyncProgressInfo
@@ -279,7 +253,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 }
         }
 
-        private async Task DownloadInterviewsAsync(SynchronizationStatistics statistics,
+        protected async Task DownloadInterviewsAsync(SynchronizationStatistics statistics,
             IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken)
         {
             var remoteInterviews = await this.synchronizationService.GetInterviewsAsync(cancellationToken);
@@ -405,7 +379,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             };
         }
 
-        private async Task UploadInterviewsAsync(IProgress<SyncProgressInfo> progress,
+        protected async Task UploadInterviewsAsync(IProgress<SyncProgressInfo> progress,
             SynchronizationStatistics statistics, CancellationToken cancellationToken)
         {
             var completedInterviews = GetInterviewsForUpload();
