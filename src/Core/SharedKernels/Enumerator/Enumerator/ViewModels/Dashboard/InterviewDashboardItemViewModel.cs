@@ -25,7 +25,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         private readonly IServiceLocator serviceLocator;
         private readonly IAuditLogService auditLogService;
 
-        private IViewModelNavigationService ViewModelNavigationService =>
+        protected IViewModelNavigationService ViewModelNavigationService =>
             serviceLocator.GetInstance<IViewModelNavigationService>();
 
         private IUserInteractionService UserInteractionService =>
@@ -37,12 +37,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         private IInterviewerInterviewAccessor InterviewerInterviewFactory =>
             serviceLocator.GetInstance<IInterviewerInterviewAccessor>();
 
-        private ILogger Logger => serviceLocator.GetInstance<ILoggerProvider>().GetForType(typeof(InterviewDashboardItemViewModel));
+        protected ILogger Logger => serviceLocator.GetInstance<ILoggerProvider>().GetForType(typeof(InterviewDashboardItemViewModel));
 
         public event EventHandler OnItemRemoved;
-        private bool isInterviewReadyToLoad = true;
+        protected bool isInterviewReadyToLoad = true;
         private QuestionnaireIdentity questionnaireIdentity;
-        private InterviewView interview;
+        protected InterviewView interview;
         private string assignmentIdLabel;
 
         public InterviewDashboardItemViewModel(IServiceLocator serviceLocator, IAuditLogService auditLogService) : base(serviceLocator)
@@ -65,7 +65,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
 
         public Guid InterviewId => this.interview.InterviewId;
 
-        private void BindActions()
+        protected virtual void BindActions()
         {
             Actions.Clear();
 
@@ -242,7 +242,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             this.OnItemRemoved.Invoke(this, EventArgs.Empty);
         }
 
-        public async Task LoadInterviewAsync()
+        public virtual async Task LoadInterviewAsync()
         {
             this.isInterviewReadyToLoad = false;
             try
@@ -261,7 +261,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
                 }
 
                 Logger.Warn($"Open Interview {this.interview.InterviewId} (key: {this.interview.InterviewKey}, assignment: {this.interview.Assignment}) at {DateTime.Now}");
-                await this.ViewModelNavigationService.NavigateToAsync<LoadingViewModel, LoadingViewModelArg>(new LoadingViewModelArg{ InterviewId = this.interview.InterviewId });
+                await this.ViewModelNavigationService.NavigateToAsync<LoadingViewModel, LoadingViewModelArg>(new LoadingViewModelArg
+                {
+                    InterviewId = this.interview.InterviewId,
+                    ShouldReopen = true
+                });
             }
             finally
             {
