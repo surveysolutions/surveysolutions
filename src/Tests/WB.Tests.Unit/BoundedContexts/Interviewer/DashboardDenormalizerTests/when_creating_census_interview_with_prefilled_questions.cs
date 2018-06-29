@@ -12,7 +12,7 @@ using WB.Tests.Abc.Storage;
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
 {
     [TestOf(typeof(InterviewDashboardEventHandler))]
-    internal class InterviewerDashboardEventHandlerTest
+    internal class InterviewDashboardEventHandlerTest
     {
         [Test]
         public void When_census_interview_created_Should_record_sort_index_for_prefilled_questions()
