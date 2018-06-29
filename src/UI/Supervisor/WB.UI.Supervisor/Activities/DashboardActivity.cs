@@ -45,7 +45,7 @@ namespace WB.UI.Supervisor.Activities
 
             if (bundle == null)
             {
-                ViewModel.ShowDeafultListCommand.Execute();
+                ViewModel.ShowDefaultListCommand.Execute();
                 ViewModel.ShowMenuViewModelCommand.Execute();
             }
         }
