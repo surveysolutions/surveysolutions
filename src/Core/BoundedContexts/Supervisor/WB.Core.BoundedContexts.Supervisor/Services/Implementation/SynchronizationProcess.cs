@@ -135,7 +135,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
                         Email = interviewer.Email,
                         PasswordHash = interviewer.PasswordHash,
                         PhoneNumber = interviewer.PhoneNumber,
-                        UserName = interviewer.UserName
+                        UserName = interviewer.UserName,
+                        FullaName = interviewer.FullName
                     };
                 }
                 else
