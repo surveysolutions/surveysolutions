@@ -26,7 +26,7 @@
               android:id="@+id/interviewers_list"
               android:scrollbars="vertical"
               local:MvxItemTemplate="@layout/dashboard_interviewer_to_select"
-              local:MvxBind="ItemsSource UiItems" />
+              local:MvxBind="ItemsSource UiItems; ItemClick SelectInterviewerCommand" />
       </LinearLayout>
       </TableRow>
   </TableLayout>
