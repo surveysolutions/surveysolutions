@@ -49,11 +49,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         public override IMvxCommand ReloadCommand => new MvxAsyncCommand(async () => await this.viewModelNavigationService.NavigateToInterviewAsync(this.InterviewId, this.navigationState.CurrentNavigationIdentity));
 
-        public IMvxCommand NavigateToDashboardCommand => new MvxAsyncCommand(this.NavigateToDashboard);
         public IMvxAsyncCommand ReloadQuestionnaireCommand => new MvxAsyncCommand(this.ReloadQuestionnaire, () => !this.IsInProgress);
-
-        public IMvxCommand NavigateToSettingsCommand => new MvxCommand(this.viewModelNavigationService.NavigateToSettings);
-        public IMvxCommand SignOutCommand => new MvxAsyncCommand(this.viewModelNavigationService.SignOutAndNavigateToLoginAsync);
 
         public override async Task NavigateBack()
         {
@@ -63,14 +59,11 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             }
             else
             {
-                await this.NavigateToDashboard();
+                Task ret;
+                await this.viewModelNavigationService.NavigateToDashboardAsync();
+                this.Dispose();
+                await ret;
             }
-        }
-
-        private async Task NavigateToDashboard()
-        {
-            await this.viewModelNavigationService.NavigateToDashboardAsync();
-            this.Dispose();
         }
 
         private async Task ReloadQuestionnaire()

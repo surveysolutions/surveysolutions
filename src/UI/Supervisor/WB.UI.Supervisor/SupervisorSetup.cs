@@ -49,6 +49,7 @@ namespace WB.UI.Supervisor
                 {typeof(FinishInstallationViewModel), typeof(FinishInstallationActivity)},
                 {typeof(DiagnosticsViewModel),typeof(DiagnosticsActivity) },
                 {typeof(DashboardViewModel),typeof(DashboardActivity) },
+                {typeof(SupervisorInterviewViewModel),typeof(InterviewActivity) },
 #if !EXCLUDEEXTENSIONS
                 {typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel), typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorActivity)}
 #endif
