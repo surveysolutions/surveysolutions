@@ -11,8 +11,12 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
 {
     public class SupervisorDashboardInterviewViewModel : InterviewDashboardItemViewModel
     {
-        public SupervisorDashboardInterviewViewModel(IServiceLocator serviceLocator, IAuditLogService auditLogService) : base(serviceLocator, auditLogService)
+        private readonly IViewModelNavigationService viewModelNavigationService;
+
+        public SupervisorDashboardInterviewViewModel(IServiceLocator serviceLocator, IAuditLogService auditLogService,
+            IViewModelNavigationService viewModelNavigationService) : base(serviceLocator, auditLogService)
         {
+            this.viewModelNavigationService = viewModelNavigationService;
         }
 
         protected override void BindActions()
@@ -40,7 +44,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
             try
             {
                 Logger.Warn($"Open Interview {this.interview.InterviewId} (key: {this.interview.InterviewKey}, assignment: {this.interview.Assignment}) at {DateTime.Now}");
-                await this.ViewModelNavigationService.NavigateToAsync<LoadingViewModel, LoadingViewModelArg>(new LoadingViewModelArg{ InterviewId = this.interview.InterviewId });
+                await viewModelNavigationService.NavigateToAsync<LoadingViewModel, LoadingViewModelArg>(new LoadingViewModelArg{ InterviewId = this.interview.InterviewId });
             }
             finally
             {
