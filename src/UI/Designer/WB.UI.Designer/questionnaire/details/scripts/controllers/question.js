@@ -135,7 +135,7 @@
                         var focusId = null;
                         switch ($state.params.property) {
                             case 'Title':
-                                focusId = 'edit-question-title';
+                                focusId = 'edit-question-title-highlight';
                                 break;
                             case 'VariableName':
                                 focusId = 'edit-question-variable-name';
@@ -155,6 +155,8 @@
                             case 'OptionsFilter':
                                 focusId = 'optionsFilterExpression';
                                 break;
+                            case 'Instructions':
+                                focusId = 'edit-question-instructions';
                             default:
                                 break;
                         }
