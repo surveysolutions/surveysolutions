@@ -753,4 +753,10 @@ Downloaded {3}%</value>
   <data name="Dashboard_Assign" xml:space="preserve">
     <value>Assign</value>
   </data>
+  <data name="Synchronization_Of_Interviewers" xml:space="preserve">
+    <value>Synchronization of interviewers</value>
+  </data>
+    <data name="Synchronization_Of_InterviewersFormat" xml:space="preserve">
+    <value>Synchronizing {0} of {1} interviewer(s)</value>
+  </data>
 </root>
