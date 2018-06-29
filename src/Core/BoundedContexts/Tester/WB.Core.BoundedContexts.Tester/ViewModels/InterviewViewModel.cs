@@ -59,10 +59,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             }
             else
             {
-                Task ret;
                 await this.viewModelNavigationService.NavigateToDashboardAsync();
                 this.Dispose();
-                await ret;
             }
         }
 
