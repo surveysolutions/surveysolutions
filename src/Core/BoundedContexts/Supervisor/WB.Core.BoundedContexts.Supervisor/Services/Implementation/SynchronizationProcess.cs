@@ -17,7 +17,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Views;
 
-namespace WB.Core.BoundedContexts.Supervisor.Services
+namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
 {
     public class SynchronizationProcess : SynchronizationProcessBase
     {
@@ -71,12 +71,12 @@ namespace WB.Core.BoundedContexts.Supervisor.Services
 
         protected override void UpdatePasswordOfResponsible(RestCredentials credentials)
         {
-            var localInterviewer = this.supervisorsPlainStorage.FirstOrDefault();
-            localInterviewer.PasswordHash = this.passwordHasher.Hash(credentials.Password);
-            localInterviewer.Token = credentials.Token;
+            var localSupervisor = this.supervisorsPlainStorage.FirstOrDefault();
+            localSupervisor.PasswordHash = this.passwordHasher.Hash(credentials.Password);
+            localSupervisor.Token = credentials.Token;
 
-            this.supervisorsPlainStorage.Store(localInterviewer);
-            this.principal.SignIn(localInterviewer.Name, credentials.Password, true);
+            this.supervisorsPlainStorage.Store(localSupervisor);
+            this.principal.SignIn(localSupervisor.Name, credentials.Password, true);
         }
 
         protected override int GetApplicationVersionCode()

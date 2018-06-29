@@ -26,6 +26,7 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
                                          ILitePublishedEventHandler<InterviewStatusChanged>,
                                          ILitePublishedEventHandler<InterviewHardDeleted>,
                                          ILitePublishedEventHandler<InterviewerAssigned>,
+                                         ILitePublishedEventHandler<SupervisorAssigned>,
                                          
 
                                          ILitePublishedEventHandler<TextQuestionAnswered>,
@@ -517,7 +518,22 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
             if (interviewView == null)
                 return;
 
-            interviewView.ResponsibleId = @event.Payload.InterviewerId.GetValueOrDefault();
+            if (@event.Payload.InterviewerId.HasValue)
+            {
+                interviewView.ResponsibleId = @event.Payload.InterviewerId.GetValueOrDefault();
+            }
+
+            interviewView.InterviewerAssignedDateTime = @event.Payload.AssignTime;
+            this.interviewViewRepository.Store(interviewView);
+        }
+
+        public void Handle(IPublishedEvent<SupervisorAssigned> @event)
+        {
+            InterviewView interviewView = this.interviewViewRepository.GetById(@event.EventSourceId.FormatGuid());
+            if (interviewView == null)
+                return;
+
+            interviewView.ResponsibleId = @event.Payload.SupervisorId;
             interviewView.InterviewerAssignedDateTime = @event.Payload.AssignTime;
             this.interviewViewRepository.Store(interviewView);
         }
