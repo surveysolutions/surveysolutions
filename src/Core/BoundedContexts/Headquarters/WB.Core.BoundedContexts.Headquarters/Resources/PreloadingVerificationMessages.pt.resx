@@ -126,10 +126,7 @@
   <data name="PL0004_FileWasntMappedRoster" xml:space="preserve">
     <value>Arquivo não pode ser mapeado para qualquer lista no questionário.</value>
   </data>
-  <data name="PL0005_QuestionDataTypeMismatch" xml:space="preserve">
-    <value>[PL0005] N/A</value>
-  </data>
-  <data name="PL0006_IdDublication" xml:space="preserve">
+    <data name="PL0006_IdDublication" xml:space="preserve">
     <value>Valores de Id duplicados encontrados.</value>
   </data>
   <data name="PL0007_ServiceColumnIsAbsent" xml:space="preserve">
@@ -141,25 +138,10 @@
   <data name="PL0009_RosterIdIsInconsistantWithRosterSizeQuestion" xml:space="preserve">
     <value>Lista Id é inconsistant com o tamanho de lista.</value>
   </data>
-  <data name="PL0010_UnsupportedLinkedQuestion" xml:space="preserve">
-    <value>Pergunta vinculada não é suportada no pré-carregamento de dados.</value>
-  </data>
-  <data name="PL0011_GeneralError" xml:space="preserve">
-    <value>Ocorreu um erro geral.</value>
-  </data>
-  <data name="PL0012_QuestionWasNotFound" xml:space="preserve">
-    <value>Pergunta não foi encontrada.</value>
-  </data>
-  <data name="PL0013_ValueIsNullOrEmpty" xml:space="preserve">
-    <value>Valor fornecido é nulo ou está vazio</value>
-  </data>
-  <data name="PL0014_ParsedValueIsNotAllowed" xml:space="preserve">
+    <data name="PL0014_ParsedValueIsNotAllowed" xml:space="preserve">
     <value>[PL0014] Valor da pergunta fornecido não é permitido.</value>
   </data>
-  <data name="PL0015_QuestionTypeIsIncorrect" xml:space="preserve">
-    <value>[PL0015] Tipo de pergunta não é correto.</value>
-  </data>
-  <data name="PL0016_ExpectedDateTimeNotParsed" xml:space="preserve">
+    <data name="PL0016_ExpectedDateTimeNotParsed" xml:space="preserve">
     <value>Valor da data ou Hora é inválido</value>
   </data>
   <data name="PL0017_ExpectedGpsNotParsed" xml:space="preserve">
@@ -174,23 +156,17 @@
   <data name="PL0022_AnswerIsIncorrectBecauseIsRosterSizeAndNegative" xml:space="preserve">
     <value>Questão de tamanho do lista não pode ter valores negativos.</value>
   </data>
-  <data name="PL0023_UnsupportedMultimediaQuestion" xml:space="preserve">
-    <value>Pergunta de imagens não é suportada no pré-carregamento de dados.</value>
-  </data>
-  <data name="PL0024_DataWasNotFound" xml:space="preserve">
+    <data name="PL0024_DataWasNotFound" xml:space="preserve">
     <value>O pré-carregamento de dados não foi encontrado.</value>
   </data>
-  <data name="PL0025_ResponsibleNameIsEmpty" xml:space="preserve">
-    <value>O nome do responsável não foi fornecido.</value>
-  </data>
-  <data name="PL0026_ResponsibleWasNotFound" xml:space="preserve">
-    <value>O Responsável fornecido não foi encontrado</value>
+    <data name="PL0026_ResponsibleWasNotFound" xml:space="preserve">
+    <value>O Responsável fornecido não foi encontrado.</value>
   </data>
   <data name="PL0027_ResponsibleIsLocked" xml:space="preserve">
-    <value>Responsável está bloqueado</value>
+    <value>Responsável está bloqueado.</value>
   </data>
   <data name="PL0028_UserIsNotSupervisorOrInterviewer" xml:space="preserve">
-    <value>O Usuário fornecido não é o Supervisor ou Entrevistador</value>
+    <value>O Usuário fornecido não é o Supervisor ou Entrevistador.</value>
   </data>
   <data name="PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40" xml:space="preserve">
     <value>Resposta na pergunta de tamanho do lista não pode ser superior a {0}.</value>
