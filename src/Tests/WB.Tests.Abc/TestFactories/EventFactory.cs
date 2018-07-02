@@ -371,7 +371,7 @@ namespace WB.Tests.Abc.TestFactories
         public SupervisorAssigned SupervisorAssigned(Guid userId, Guid supervisorId)
             => new SupervisorAssigned(userId, supervisorId);
 
-        public InterviewerAssigned InterviewerAssigned(Guid userId, Guid interviewerId, DateTime? assignTime)
+        public InterviewerAssigned InterviewerAssigned(Guid userId, Guid? interviewerId, DateTime? assignTime)
             => new InterviewerAssigned(userId, interviewerId, assignTime);
 
         public InterviewApproved InterviewApproved(Guid userId, string comment = null, DateTime? approveTime = null)

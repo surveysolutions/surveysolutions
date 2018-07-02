@@ -11,5 +11,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Views
         public string PasswordHash { get; set; }
         public string Name { get; set; }
         public Guid UserId { get; set; }
+        public string Email { get; set; }
     }
 }

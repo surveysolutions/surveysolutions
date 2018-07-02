@@ -4,7 +4,6 @@ using System.Linq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Verifier;
-using WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests;
 
 namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests.CascadingDropdownTests
 {

@@ -9,6 +9,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
     {
         List<Assignment> GetAssignments(Guid responsibleId);
 
+        List<Assignment> GetAssignmentsForSupervisor(Guid supervisorId);
+
         List<int> GetAllAssignmentIds(Guid responsibleId);
         
         Assignment GetAssignment(int id);

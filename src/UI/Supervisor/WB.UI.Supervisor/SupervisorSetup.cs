@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection;
 using Android.Widget;
 using Autofac;
-using HockeyApp.Android;
+using Autofac.Features.ResolveAnything;
 using MvvmCross;
 using MvvmCross.Binding.Bindings.Target.Construction;
 using MvvmCross.Converters;
@@ -12,6 +12,7 @@ using MvvmCross.IoC;
 using MvvmCross.Views;
 using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.BoundedContexts.Supervisor.ViewModel;
+using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure;
@@ -20,18 +21,19 @@ using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator;
+using WB.Core.SharedKernels.Enumerator.Denormalizer;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.UI.Supervisor.ServiceLocation;
 using WB.UI.Shared.Enumerator;
 using WB.UI.Shared.Enumerator.Converters;
+using WB.UI.Shared.Enumerator.CustomBindings;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Services.Internals;
 using WB.UI.Shared.Enumerator.Services.Logging;
 using WB.UI.Supervisor.Activities;
 using WB.UI.Supervisor.MvvmBindings;
 using WB.UI.Supervisor.Services.Implementation;
-using MvxIoCProvider = WB.UI.Shared.Enumerator.Autofac.MvxIoCProvider;
 
 namespace WB.UI.Supervisor
 {
@@ -46,6 +48,8 @@ namespace WB.UI.Supervisor
                 {typeof(LoginViewModel), typeof(LoginActivity)},
                 {typeof(FinishInstallationViewModel), typeof(FinishInstallationActivity)},
                 {typeof(DiagnosticsViewModel),typeof(DiagnosticsActivity) },
+                {typeof(DashboardViewModel),typeof(DashboardActivity) },
+                {typeof(SupervisorInterviewViewModel),typeof(InterviewActivity) },
 #if !EXCLUDEEXTENSIONS
                 {typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel), typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorActivity)}
 #endif
@@ -66,13 +70,13 @@ namespace WB.UI.Supervisor
         protected override void FillTargetFactories(IMvxTargetBindingFactoryRegistry registry)
         {
             registry.RegisterCustomBindingFactory<ImageView>("CompanyLogo", view => new ImageCompanyLogoBinding(view));
-
+            registry.RegisterCustomBindingFactory<ProgressBar>("ShowProgress", (view) => new ProgressBarIndeterminateBinding(view));
             base.FillTargetFactories(registry);
         }
 
         protected override IMvxIoCProvider CreateIocProvider()
         {
-            return new MvxIoCProvider(this.CreateAndInitializeIoc());
+            return new Shared.Enumerator.Autofac.MvxIoCProvider(this.CreateAndInitializeIoc());
         }
 
         private IContainer CreateAndInitializeIoc()
@@ -88,6 +92,7 @@ namespace WB.UI.Supervisor
                 };
 
             ContainerBuilder builder = new ContainerBuilder();
+            builder.RegisterSource(new AnyConcreteTypeNotAlreadyRegisteredSource());
             foreach (var module in modules)
             {
                 builder.RegisterModule(module.AsAutofac());
@@ -100,8 +105,10 @@ namespace WB.UI.Supervisor
                 .As<IRestServiceSettings>()
                 .As<IDeviceSettings>()
                 .As<ISupervisorSettings>()
-                .WithParameter("backupFolder", AndroidPathUtils.GetPathToSubfolderInExternalDirectory("Backup"))
-                .WithParameter("restoreFolder", AndroidPathUtils.GetPathToSubfolderInExternalDirectory("Restore"));
+                .WithParameter("backupFolder", AndroidPathUtils.GetPathToSupervisorSubfolderInExternalDirectory("Backup"))
+                .WithParameter("restoreFolder", AndroidPathUtils.GetPathToSupervisorSubfolderInExternalDirectory("Restore"));
+
+            builder.RegisterType<InterviewDashboardEventHandler>().SingleInstance();
 
             var container = builder.Build();
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(container));
@@ -132,7 +139,8 @@ namespace WB.UI.Supervisor
         {
             return base.GetViewModelAssemblies().Union(new[]
             {
-                typeof(SupervisorSetup).Assembly
+                typeof(SupervisorSetup).Assembly,
+                typeof(DashboardViewModel).Assembly
             });
         }
     }

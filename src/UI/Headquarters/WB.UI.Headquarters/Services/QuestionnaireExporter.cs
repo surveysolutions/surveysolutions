@@ -52,6 +52,7 @@ namespace WB.UI.Headquarters.Services
             if (questionnaire == null) return null;
             
             var title = questionnaire.Title.ToValidFileName();
+            var variable = questionnaire.VariableName ?? title;
 
             logger.Debug($"Begin export of questionnaire: {title} # {questionnaireIdentity}");
 
@@ -59,14 +60,14 @@ namespace WB.UI.Headquarters.Services
 
             using (IZipArchive zipArchive = new IonicZipArchive(output, String.Empty, CompressionLevel.BestCompression, true))
             {
-                string questionnaireFolderName = $"{title} ({questionnaireIdentity.QuestionnaireId.FormatGuid()})";
+                string questionnaireFolderName = $"{variable} ({questionnaireIdentity.QuestionnaireId.FormatGuid()})";
 
                 void PutEntry(string path, byte[] content) =>
                     zipArchive.CreateEntry($"{questionnaireFolderName}/{path}", content);
 
                 void PutTextFileEntry(string path, string content) => PutEntry(path, Encoding.UTF8.GetBytes(content));
 
-                PutTextFileEntry($"{title}.json", this.serializer.Serialize(questionnaire));
+                PutTextFileEntry($"{variable}.json", this.serializer.Serialize(questionnaire));
 
                 for (var attachmentIndex = 0; attachmentIndex < questionnaire.Attachments.Count; attachmentIndex++)
                 {
@@ -124,7 +125,7 @@ namespace WB.UI.Headquarters.Services
             return new File
             {
                 FileStream = output,
-                Filename = title + ".zip"
+                Filename = variable + ".zip"
             };
         }
     }

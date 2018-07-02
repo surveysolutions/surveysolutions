@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
+using WB.Core.SharedKernels.DataCollection.Views.Interview;
 
 namespace WB.UI.Headquarters.API.WebInterview.Services
 {
@@ -72,7 +73,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                     {
                         Id = searchResultId,
                         SectionId = node.Parent.Identity.ToString(),
-                        Sections = GetBreadcrumbs(node.Parents).ToList()
+                        Sections = node.GetBreadcrumbs().ToList()
                     };
                 }
 
@@ -127,35 +128,6 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
             this.GetFilteredNodes(Array.Empty<FilterOption>(), interview, stats).ToArray();
 
             return stats;
-        }
-
-        private IEnumerable<Link> GetBreadcrumbs(IEnumerable<IInterviewTreeNode> nodeParents)
-        {
-            foreach (var node in nodeParents)
-            {
-                var link = new Link() { Target = node.Identity.ToString() };
-
-                if (node is InterviewTreeSection section)
-                {
-                    link.Title = section.Title.ToString();
-                    yield return link;
-                    continue;
-                }
-
-                if (node is InterviewTreeRoster roster)
-                {
-                    link.Title = $@"{roster.Title} - {roster.RosterTitle}";
-                    yield return link;
-                    continue;
-                }
-
-                if (node is InterviewTreeGroup group)
-                {
-                    link.Title = @group.Title.ToString();
-                    yield return link;
-                    continue;
-                }
-            }
         }
 
         private static readonly Func<InterviewQuestionFilter, bool> FilteringRule = node => 

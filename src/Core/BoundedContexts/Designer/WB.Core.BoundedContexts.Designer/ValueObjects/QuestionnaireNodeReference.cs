@@ -46,6 +46,9 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
             }
         }
 
+        public static QuestionnaireEntityReference CreateForQuestionnaire(Guid guestionnaireId)
+            => new QuestionnaireEntityReference(QuestionnaireVerificationReferenceType.Questionnaire, guestionnaireId);
+
         public static QuestionnaireEntityReference CreateForGroup(Guid groupId)
             => new QuestionnaireEntityReference(QuestionnaireVerificationReferenceType.Group, groupId);
 
@@ -82,9 +85,11 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
             if (entity is IVariable)
                 result = CreateForVariable(entity.PublicKey);
             else if (entity is IGroup)
+            {
                 result = ((IGroup) entity).IsRoster
                     ? CreateForRoster(entity.PublicKey)
                     : CreateForGroup(entity.PublicKey);
+            }
             else if (entity is IQuestion)
                 result = CreateForQuestion(entity.PublicKey);
             else
