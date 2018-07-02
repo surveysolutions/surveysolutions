@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Web.Http;
+using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.UI.Headquarters.API.DataCollection.Interviewer.v3;
@@ -15,14 +16,20 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer
 
         public static void Register(HttpConfiguration config)
         {
+            config.TypedRoute("api/interviewer/v3/interviews", 
+                c => c.Action<InterviewsApiV3Controller>(x => x.Get()));
+            config.TypedRoute("api/interviewer/v3/interviews/{id:guid}", 
+                c => c.Action<InterviewsApiV3Controller>(x => x.Details(Param.Any<Guid>())));
             config.TypedRoute("api/interviewer/v3/interviews/{id:guid}",
-                c => c.Action<InterviewsApiV3Controller>(x => x.DetailsV3(Param.Any<Guid>())));
-
-            config.TypedRoute("api/interviewer/v3/interviews/{id:guid}",
-                c => c.Action<InterviewsApiV3Controller>(x => x.PostV3(Param.Any<InterviewPackageApiView>())));
-
+                c => c.Action<InterviewsApiV3Controller>(x => x.Post(Param.Any<InterviewPackageApiView>())));
             config.TypedRoute("api/interviewer/v3/interviews/CheckObsoleteInterviews",
                 c => c.Action<InterviewsApiV3Controller>(x => x.CheckObsoleteInterviews(Param.Any<List<ObsoletePackageCheck>>())));
+            config.TypedRoute("api/interviewer/v3/interviews/{id:guid}/logstate",
+                c => c.Action<InterviewsApiV3Controller>(x => x.LogInterviewAsSuccessfullyHandled(Param.Any<Guid>())));
+            config.TypedRoute("api/interviewer/v3/interviews/{id:guid}/image",
+                c => c.Action<InterviewsApiV3Controller>(x => x.PostImage(Param.Any<PostFileRequest>())));
+            config.TypedRoute("api/interviewer/v3/interviews/{id:guid}/audio",
+                c => c.Action<InterviewsApiV3Controller>(x => x.PostAudio(Param.Any<PostFileRequest>())));
         }
 
 #pragma warning restore 4014

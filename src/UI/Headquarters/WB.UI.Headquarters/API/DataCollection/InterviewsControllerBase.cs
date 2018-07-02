@@ -58,7 +58,6 @@ namespace WB.UI.Headquarters.API.DataCollection
             this.eventStore = eventStore;
         }
 
-        [WriteToSyncLog(SynchronizationLogType.GetInterviews)]
         public virtual HttpResponseMessage Get()
         {
             var resultValue = GetInProgressInterviewsForResponsible(this.authorizedUser.Id)
@@ -82,7 +81,6 @@ namespace WB.UI.Headquarters.API.DataCollection
         protected abstract IEnumerable<InterviewInformation> GetInProgressInterviewsForResponsible(Guid responsibleId);
 
         
-        [WriteToSyncLog(SynchronizationLogType.InterviewProcessed)]
         public virtual void LogInterviewAsSuccessfullyHandled(Guid id)
         {
             this.commandService.Execute(new MarkInterviewAsReceivedByInterviewer(id, this.authorizedUser.Id));
@@ -100,13 +98,13 @@ namespace WB.UI.Headquarters.API.DataCollection
                 Convert.FromBase64String(request.Data), request.ContentType);
         }
 
-        public virtual JsonResult<List<CommittedEvent>> DetailsV3(Guid id)
+        protected JsonResult<List<CommittedEvent>> DetailsV3(Guid id)
         {
             var allEvents = eventStore.Read(id, 0).ToList();
             return Json(allEvents, Infrastructure.Native.Storage.EventSerializerSettings.SyncronizationJsonSerializerSettings);
         }
 
-        public virtual HttpResponseMessage PostV3(InterviewPackageApiView package)
+        protected HttpResponseMessage PostV3(InterviewPackageApiView package)
         {
             if (string.IsNullOrEmpty(package.Events))
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Server cannot accept empty package content.");
