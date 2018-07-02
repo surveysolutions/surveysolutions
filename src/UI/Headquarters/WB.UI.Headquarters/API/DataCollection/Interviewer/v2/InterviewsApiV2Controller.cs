@@ -25,8 +25,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v2
     [ApiBasicAuth(new[] { UserRoles.Interviewer })]
     public class InterviewsApiV2Controller : InterviewerInterviewsControllerBase
     {
-        public InterviewsApiV2Controller(IImageFileStorage imageFileStorage, IAudioFileStorage audioFileStorage, IAuthorizedUser authorizedUser, IInterviewInformationFactory interviewsFactory, IInterviewPackagesService interviewPackagesService, ICommandService commandService, IMetaInfoBuilder metaBuilder, IJsonAllTypesSerializer synchronizationSerializer, IHeadquartersEventStore eventStore, IInterviewPackagesService packagesService) 
-            : base(imageFileStorage, audioFileStorage, authorizedUser, interviewsFactory, interviewPackagesService, commandService, metaBuilder, synchronizationSerializer, eventStore, packagesService)
+        public InterviewsApiV2Controller(IImageFileStorage imageFileStorage, IAudioFileStorage audioFileStorage, IAuthorizedUser authorizedUser, IInterviewInformationFactory interviewsFactory, IInterviewPackagesService packagesService, ICommandService commandService, IMetaInfoBuilder metaBuilder, IJsonAllTypesSerializer synchronizationSerializer, IHeadquartersEventStore eventStore) : base(imageFileStorage, audioFileStorage, authorizedUser, interviewsFactory, packagesService, commandService, metaBuilder, synchronizationSerializer, eventStore)
         {
         }
 
@@ -87,7 +86,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v2
                 Events = package.Events
             };
 
-            this.interviewPackagesService.StoreOrProcessPackage(interviewPackage);
+            this.packagesService.StoreOrProcessPackage(interviewPackage);
 
             return this.Ok ();
         }

@@ -27,11 +27,11 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
 
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IAndroidPackageReader androidPackageReader;
+        private readonly ITabletInformationService tabletInformationService;
         private readonly HqSignInManager signInManager;
-        protected readonly IUserViewFactory userViewFactory;
-        protected readonly ITabletInformationService tabletInformationService;
         private readonly ISupervisorSyncProtocolVersionProvider syncVersionProvider;
         private readonly IProductVersion productVersion;
+        private readonly IUserViewFactory userViewFactory;
 
         public SupervisorAppApiController(
             IFileSystemAccessor fileSystemAccessor,
@@ -45,9 +45,9 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
             this.fileSystemAccessor = fileSystemAccessor;
             this.androidPackageReader = androidPackageReader;
             this.tabletInformationService = tabletInformationService;
-            this.userViewFactory = userViewFactory;
             this.syncVersionProvider = syncVersionProvider;
             this.productVersion = productVersion;
+            this.userViewFactory = userViewFactory;
             this.signInManager = signInManager;
         }
 
@@ -87,9 +87,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
                 return this.Request.CreateResponse(HttpStatusCode.NotAcceptable);
             }
 
-            return this.authorizedUser.DeviceId != deviceId
-                ? this.Request.CreateResponse(HttpStatusCode.Forbidden)
-                : this.Request.CreateResponse(HttpStatusCode.OK, @"158329303");
+            return this.Request.CreateResponse(HttpStatusCode.OK, @"158329303");
         }
 
         private Version GetSupervisorVersionFromUserAgent(HttpRequestMessage request)
