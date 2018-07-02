@@ -48,6 +48,7 @@ using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
+using WB.Core.BoundedContexts.Supervisor.Services.Implementation;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.GenericSubdomains.Portable;
@@ -101,6 +102,8 @@ using WB.UI.Shared.Web.Captcha;
 using WB.UI.Shared.Web.Configuration;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 using AttachmentContent = WB.Core.BoundedContexts.Headquarters.Views.Questionnaire.AttachmentContent;
+using SynchronizationProcess = WB.Core.BoundedContexts.Interviewer.Services.SynchronizationProcess;
+using SynchronizationService = WB.Core.BoundedContexts.Interviewer.Implementation.Services.SynchronizationService;
 
 namespace WB.Tests.Abc.TestFactories
 {
@@ -316,6 +319,15 @@ namespace WB.Tests.Abc.TestFactories
             IEnumeratorSettings settings)
         {
             return new InterviewViewModelFactory(questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
+                interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
+                settings ?? Mock.Of<IEnumeratorSettings>());
+        }
+
+        public SupervisorInterviewViewModelFactory SupervisorInterviewViewModelFactory(IQuestionnaireStorage questionnaireRepository = null,
+            IStatefulInterviewRepository interviewRepository = null,
+            IEnumeratorSettings settings = null)
+        {
+            return new SupervisorInterviewViewModelFactory(questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 settings ?? Mock.Of<IEnumeratorSettings>());
         }

@@ -912,6 +912,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return new ReadOnlyCollection<Guid>(result.ToList());
         }
 
+        public IReadOnlyList<Guid> GetAllUnderlyingEntities(Guid groupId)
+        {
+            var result = GetChildEntityIds(groupId);
+            return new ReadOnlyCollection<Guid>(result.ToList());
+        }
+
         public IReadOnlyList<Guid> GetSubSectionsWithEnablementCondition(Guid groupId)
         {
             var result = GetChildEntityIds(groupId)

@@ -16,10 +16,14 @@ using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Denormalizer;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -88,7 +92,7 @@ namespace WB.UI.Supervisor
                 new EnumeratorUIModule(),
                 new EnumeratorSharedKernelModule(),
                 new SupervisorInfrastructureModule(),
-                new SupervisorUIModule(),
+                new SupervisorUiModule(),
                 };
 
             ContainerBuilder builder = new ContainerBuilder();
@@ -118,7 +122,7 @@ namespace WB.UI.Supervisor
             {
                 module.Init(serviceLocator).Wait();
             }
-
+           
             return container;
         }
 
