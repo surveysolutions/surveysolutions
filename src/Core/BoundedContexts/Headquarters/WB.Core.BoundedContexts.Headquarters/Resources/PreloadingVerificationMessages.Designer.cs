@@ -70,15 +70,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please, wait until previous import of assignments is completed.
-        /// </summary>
-        public static string HasAssignmentsToImport {
-            get {
-                return ResourceManager.GetString("HasAssignmentsToImport", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to [PL0002] N/A.
         /// </summary>
         public static string PL0002_MoreThenOneLevel {
@@ -102,15 +93,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         public static string PL0004_FileWasntMappedRoster {
             get {
                 return ResourceManager.GetString("PL0004_FileWasntMappedRoster", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to [PL0005] N/A.
-        /// </summary>
-        public static string PL0005_QuestionDataTypeMismatch {
-            get {
-                return ResourceManager.GetString("PL0005_QuestionDataTypeMismatch", resourceCulture);
             }
         }
         
@@ -151,56 +133,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Linked questions cannot be preloaded..
-        /// </summary>
-        public static string PL0010_UnsupportedLinkedQuestion {
-            get {
-                return ResourceManager.GetString("PL0010_UnsupportedLinkedQuestion", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to General error occurred..
-        /// </summary>
-        public static string PL0011_GeneralError {
-            get {
-                return ResourceManager.GetString("PL0011_GeneralError", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Question found in the uploaded file(s) that does not exist in the questionnaire.
-        /// </summary>
-        public static string PL0012_QuestionWasNotFound {
-            get {
-                return ResourceManager.GetString("PL0012_QuestionWasNotFound", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Provided value is null or empty.
-        /// </summary>
-        public static string PL0013_ValueIsNullOrEmpty {
-            get {
-                return ResourceManager.GetString("PL0013_ValueIsNullOrEmpty", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Provided question value not allowed..
         /// </summary>
         public static string PL0014_ParsedValueIsNotAllowed {
             get {
                 return ResourceManager.GetString("PL0014_ParsedValueIsNotAllowed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Type of question is not correct..
-        /// </summary>
-        public static string PL0015_QuestionTypeIsIncorrect {
-            get {
-                return ResourceManager.GetString("PL0015_QuestionTypeIsIncorrect", resourceCulture);
             }
         }
         
@@ -250,15 +187,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Picture question cannot be preloaded..
-        /// </summary>
-        public static string PL0023_UnsupportedMultimediaQuestion {
-            get {
-                return ResourceManager.GetString("PL0023_UnsupportedMultimediaQuestion", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Preloading data were not found..
         /// </summary>
         public static string PL0024_DataWasNotFound {
@@ -268,16 +196,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Responsible field was not provided for 1 or more observations.
-        /// </summary>
-        public static string PL0025_ResponsibleNameIsEmpty {
-            get {
-                return ResourceManager.GetString("PL0025_ResponsibleNameIsEmpty", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Responsible does not exist for 1 or more observations.
+        ///   Looks up a localized string similar to Responsible does not exist for 1 or more observations..
         /// </summary>
         public static string PL0026_ResponsibleWasNotFound {
             get {
@@ -286,7 +205,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Responsible is a locked user for 1 or more observations.
+        ///   Looks up a localized string similar to Responsible is a locked user for 1 or more observations..
         /// </summary>
         public static string PL0027_ResponsibleIsLocked {
             get {
@@ -295,7 +214,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to User is not Supervisor or Interviewer for 1 or more observations.
+        ///   Looks up a localized string similar to User is not Supervisor or Interviewer for 1 or more observations..
         /// </summary>
         public static string PL0028_UserIsNotSupervisorOrInterviewer {
             get {
@@ -385,33 +304,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Column cannot be mapped to non identifying question.
-        /// </summary>
-        public static string PL0037_ColumnIsNotIdentifying {
-            get {
-                return ResourceManager.GetString("PL0037_ColumnIsNotIdentifying", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Area question cannot be preloaded..
-        /// </summary>
-        public static string PL0038_UnsupportedAreaQuestion {
-            get {
-                return ResourceManager.GetString("PL0038_UnsupportedAreaQuestion", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Audio question cannot be preloaded..
-        /// </summary>
-        public static string PL0039_UnsupportedAudioQuestion {
-            get {
-                return ResourceManager.GetString("PL0039_UnsupportedAudioQuestion", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to File with questionnaire level data is missing..
         /// </summary>
         public static string PL0040_QuestionnaireDataIsNotFound {
@@ -421,7 +313,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Answered options count to multiple choice question can&apos;t be more than max allowed answers count.
+        ///   Looks up a localized string similar to Answered options count to multiple choice question can&apos;t be more than max allowed answers count..
         /// </summary>
         public static string PL0041_AnswerExceedsMaxAnswersCount {
             get {
@@ -439,43 +331,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Text list question {0} has non-unique items: {1}. Interview id: {2}.
-        /// </summary>
-        public static string PL0043_TextListAnswerHasDuplicatesInTexts {
-            get {
-                return ResourceManager.GetString("PL0043_TextListAnswerHasDuplicatesInTexts", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Text list question {0} has non-unique item codes: {1}. Interview id: {2}.
-        /// </summary>
-        public static string PL0044_TextListAnswerHasDuplicatesInCodes {
-            get {
-                return ResourceManager.GetString("PL0044_TextListAnswerHasDuplicatesInCodes", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Inconsistency detected between the number of records in the data file {0}, which has {1} records, and the trigger question {2}, which has {3} rows. Interview id: {4}.
-        /// </summary>
-        public static string PL0045_TextListAnswerHasDifferentAmountOfRecordsThanRosterFile {
-            get {
-                return ResourceManager.GetString("PL0045_TextListAnswerHasDifferentAmountOfRecordsThanRosterFile", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Inconsistency detected between the items lists in the data file {0} and question {1}. Items present in the text list and absent in the file: {2}. Rows from data file absent in text list question: {3}. Interview id: {4}.
-        /// </summary>
-        public static string PL0046_HasDifferentTextsInListAndRosterTitles {
-            get {
-                return ResourceManager.GetString("PL0046_HasDifferentTextsInListAndRosterTitles", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Required column {0} is missing.
+        ///   Looks up a localized string similar to Required column {0} is missing..
         /// </summary>
         public static string PL0047_ProtectedVariables_MissingColumn {
             get {
@@ -484,7 +340,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Protected variable is not found in provided questionnaire.
+        ///   Looks up a localized string similar to Protected variable is not found in provided questionnaire..
         /// </summary>
         public static string PL0048_ProtectedVariables_VariableNotFoundInQuestionnaire {
             get {
@@ -493,7 +349,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Variable has type that does not support protection.
+        ///   Looks up a localized string similar to Variable has type that does not support protection..
         /// </summary>
         public static string PL0049_ProtectedVariables_VariableNotSupportsProtection {
             get {
@@ -502,7 +358,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Negative value is not allowed for Categorical Multi select question.
+        ///   Looks up a localized string similar to Negative value is not allowed for Categorical Multi select question..
         /// </summary>
         public static string PL0050_CategoricalMulti_AnswerMustBeGreaterOrEqualThen1 {
             get {

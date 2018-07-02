@@ -126,10 +126,7 @@
   <data name="PL0004_FileWasntMappedRoster" xml:space="preserve">
     <value>Archivo no puede ser asignado a ninguna lista del cuestionario</value>
   </data>
-  <data name="PL0005_QuestionDataTypeMismatch" xml:space="preserve">
-    <value>[PL0005] N/A</value>
-  </data>
-  <data name="PL0006_IdDublication" xml:space="preserve">
+    <data name="PL0006_IdDublication" xml:space="preserve">
     <value>Se encontraron identificadores duplicados</value>
   </data>
   <data name="PL0007_ServiceColumnIsAbsent" xml:space="preserve">
@@ -141,25 +138,10 @@
   <data name="PL0009_RosterIdIsInconsistantWithRosterSizeQuestion" xml:space="preserve">
     <value>El identificador de lista es inconsistente con el tamaño de la lista</value>
   </data>
-  <data name="PL0010_UnsupportedLinkedQuestion" xml:space="preserve">
-    <value>No es posible que una pregunta enlazada sea precargada</value>
-  </data>
-  <data name="PL0011_GeneralError" xml:space="preserve">
-    <value>Ocurrió un error general</value>
-  </data>
-  <data name="PL0012_QuestionWasNotFound" xml:space="preserve">
-    <value>Se ha encontrado una pregunta en el archivo cargado que no existe en el cuestionario</value>
-  </data>
-  <data name="PL0013_ValueIsNullOrEmpty" xml:space="preserve">
-    <value>Valor provisto es nulo o vacío</value>
-  </data>
-  <data name="PL0014_ParsedValueIsNotAllowed" xml:space="preserve">
+    <data name="PL0014_ParsedValueIsNotAllowed" xml:space="preserve">
     <value>Valor de pregunta provisto no es permitido</value>
   </data>
-  <data name="PL0015_QuestionTypeIsIncorrect" xml:space="preserve">
-    <value>El tipo de pregunta es incorrecto</value>
-  </data>
-  <data name="PL0016_ExpectedDateTimeNotParsed" xml:space="preserve">
+    <data name="PL0016_ExpectedDateTimeNotParsed" xml:space="preserve">
     <value>Se han ingresado valores de fecha u hora no validos en la pregunta </value>
   </data>
   <data name="PL0017_ExpectedGpsNotParsed" xml:space="preserve">
@@ -174,23 +156,17 @@
   <data name="PL0022_AnswerIsIncorrectBecauseIsRosterSizeAndNegative" xml:space="preserve">
     <value>La pregunta que define el tamaño de la lista no puede contener un número negativo</value>
   </data>
-  <data name="PL0023_UnsupportedMultimediaQuestion" xml:space="preserve">
-    <value>No es posible que una pregunta de tipo imagen sea precargada</value>
-  </data>
-  <data name="PL0024_DataWasNotFound" xml:space="preserve">
+    <data name="PL0024_DataWasNotFound" xml:space="preserve">
     <value>Datos precargados no se encontraron</value>
   </data>
-  <data name="PL0025_ResponsibleNameIsEmpty" xml:space="preserve">
-    <value>Campo responsable inexistente en una o mas observaciones</value>
-  </data>
-  <data name="PL0026_ResponsibleWasNotFound" xml:space="preserve">
-    <value>No existe responsable para una o mas observaciones</value>
+    <data name="PL0026_ResponsibleWasNotFound" xml:space="preserve">
+    <value>No existe responsable para una o mas observaciones.</value>
   </data>
   <data name="PL0027_ResponsibleIsLocked" xml:space="preserve">
-    <value>El responsable de una o mas observaciones se encuentra bloqueado</value>
+    <value>El responsable de una o mas observaciones se encuentra bloqueado.</value>
   </data>
   <data name="PL0028_UserIsNotSupervisorOrInterviewer" xml:space="preserve">
-    <value>El usuario no es el Supervisor o Entrevistador en una o mas observaciones</value>
+    <value>El usuario no es el Supervisor o Entrevistador en una o mas observaciones.</value>
   </data>
   <data name="PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40" xml:space="preserve">
     <value>La respuesta a una pregunta que define el tamaño de la lista no puede ser mayor a {0}</value>
@@ -216,16 +192,7 @@
   <data name="PL0036_QuantityShouldBeGreaterThanMinus1" xml:space="preserve">
     <value>La cantidad debe ser mayor o igual a -1</value>
   </data>
-  <data name="PL0037_ColumnIsNotIdentifying" xml:space="preserve">
-    <value>La columna no pude ser enlazada con una pregunta no identificadora</value>
-  </data>
-  <data name="PL0038_UnsupportedAreaQuestion" xml:space="preserve">
-    <value>Pregunta que captura área no puede ser precargada</value>
-  </data>
-  <data name="PL0039_UnsupportedAudioQuestion" xml:space="preserve">
-    <value>Pregunta que captura un audio no puede ser precargada</value>
-  </data>
-  <data name="PL0040_QuestionnaireDataIsNotFound" xml:space="preserve">
+    <data name="PL0040_QuestionnaireDataIsNotFound" xml:space="preserve">
     <value>No se ha encontrado el archivo con los datos de nivel del cuestionario</value>
   </data>
 </root>
