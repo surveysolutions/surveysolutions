@@ -29,12 +29,11 @@ namespace WB.UI.Headquarters.API.DataCollection
         private readonly IImageFileStorage imageFileStorage;
         private readonly IAudioFileStorage audioFileStorage;
         private readonly IAuthorizedUser authorizedUser;
-        protected readonly IInterviewPackagesService interviewPackagesService;
+        protected readonly IInterviewPackagesService packagesService;
         protected readonly ICommandService commandService;
         protected readonly IMetaInfoBuilder metaBuilder;
         protected readonly IJsonAllTypesSerializer synchronizationSerializer;
         protected readonly IHeadquartersEventStore eventStore;
-        private readonly IInterviewPackagesService packagesService;
         protected readonly IInterviewInformationFactory interviewsFactory;
 
         protected InterviewsControllerBase(
@@ -42,23 +41,21 @@ namespace WB.UI.Headquarters.API.DataCollection
             IAudioFileStorage audioFileStorage,
             IAuthorizedUser authorizedUser,
             IInterviewInformationFactory interviewsFactory,
-            IInterviewPackagesService interviewPackagesService,
+            IInterviewPackagesService packagesService,
             ICommandService commandService,
             IMetaInfoBuilder metaBuilder,
             IJsonAllTypesSerializer synchronizationSerializer,
-            IHeadquartersEventStore eventStore, 
-            IInterviewPackagesService packagesService)
+            IHeadquartersEventStore eventStore)
         {
             this.imageFileStorage = imageFileStorage;
             this.audioFileStorage = audioFileStorage;
             this.authorizedUser = authorizedUser;
             this.interviewsFactory = interviewsFactory;
-            this.interviewPackagesService = interviewPackagesService;
+            this.packagesService = packagesService;
             this.commandService = commandService;
             this.metaBuilder = metaBuilder;
             this.synchronizationSerializer = synchronizationSerializer;
             this.eventStore = eventStore;
-            this.packagesService = packagesService;
         }
 
         [WriteToSyncLog(SynchronizationLogType.GetInterviews)]

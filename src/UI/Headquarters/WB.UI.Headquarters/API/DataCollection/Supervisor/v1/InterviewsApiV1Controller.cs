@@ -27,8 +27,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
     [ApiBasicAuth(new[] { UserRoles.Supervisor })]
     public class InterviewsApiV1Controller : SupervisorInterviewsControllerBase
     {
-        public InterviewsApiV1Controller(IHeadquartersEventStore eventStore, IInterviewPackagesService packagesService, IImageFileStorage imageFileStorage, IAudioFileStorage audioFileStorage, IAuthorizedUser authorizedUser, IInterviewInformationFactory interviewsFactory, IInterviewPackagesService interviewPackagesService, ICommandService commandService, IMetaInfoBuilder metaBuilder, IJsonAllTypesSerializer synchronizationSerializer) 
-            : base(imageFileStorage, audioFileStorage, authorizedUser, interviewsFactory, interviewPackagesService, commandService, metaBuilder, synchronizationSerializer)
+        public InterviewsApiV1Controller(IImageFileStorage imageFileStorage, IAudioFileStorage audioFileStorage, IAuthorizedUser authorizedUser, IInterviewInformationFactory interviewsFactory, IInterviewPackagesService packagesService, ICommandService commandService, IMetaInfoBuilder metaBuilder, IJsonAllTypesSerializer synchronizationSerializer, IHeadquartersEventStore eventStore) : base(imageFileStorage, audioFileStorage, authorizedUser, interviewsFactory, packagesService, commandService, metaBuilder, synchronizationSerializer, eventStore)
         {
         }
 
