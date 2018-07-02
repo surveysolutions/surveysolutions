@@ -28,8 +28,10 @@ using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Denormalizer;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.UI.Supervisor.ServiceLocation;
 using WB.UI.Shared.Enumerator;
+using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.Converters;
 using WB.UI.Shared.Enumerator.CustomBindings;
 using WB.UI.Shared.Enumerator.Services;
@@ -54,6 +56,7 @@ namespace WB.UI.Supervisor
                 {typeof(DiagnosticsViewModel),typeof(DiagnosticsActivity) },
                 {typeof(DashboardViewModel),typeof(DashboardActivity) },
                 {typeof(SupervisorInterviewViewModel),typeof(InterviewActivity) },
+                {typeof(CompleteInterviewViewModel), typeof (CompleteInterviewFragment)},
 #if !EXCLUDEEXTENSIONS
                 {typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel), typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorActivity)}
 #endif
