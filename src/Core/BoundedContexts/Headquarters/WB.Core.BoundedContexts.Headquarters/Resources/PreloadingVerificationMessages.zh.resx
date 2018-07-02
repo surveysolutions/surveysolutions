@@ -126,10 +126,7 @@
   <data name="PL0004_FileWasntMappedRoster" xml:space="preserve">
     <value>文件不能与问卷中的任何登记表相匹配。</value>
   </data>
-  <data name="PL0005_QuestionDataTypeMismatch" xml:space="preserve">
-    <value>[PL0005] N/A</value>
-  </data>
-  <data name="PL0006_IdDublication" xml:space="preserve">
+    <data name="PL0006_IdDublication" xml:space="preserve">
     <value>发现了重复的编号。</value>
   </data>
   <data name="PL0007_ServiceColumnIsAbsent" xml:space="preserve">
@@ -141,25 +138,10 @@
   <data name="PL0009_RosterIdIsInconsistantWithRosterSizeQuestion" xml:space="preserve">
     <value>登记表编号与登记表大小不一致。</value>
   </data>
-  <data name="PL0010_UnsupportedLinkedQuestion" xml:space="preserve">
-    <value>数据预加载不支持关联问题。</value>
-  </data>
-  <data name="PL0011_GeneralError" xml:space="preserve">
-    <value>发生了一般错误。</value>
-  </data>
-  <data name="PL0012_QuestionWasNotFound" xml:space="preserve">
-    <value>在问卷中不存在已上传文件中的问题</value>
-  </data>
-  <data name="PL0013_ValueIsNullOrEmpty" xml:space="preserve">
-    <value>提供的为空值</value>
-  </data>
-  <data name="PL0014_ParsedValueIsNotAllowed" xml:space="preserve">
+    <data name="PL0014_ParsedValueIsNotAllowed" xml:space="preserve">
     <value>[PL0014] 提供的问题数值不被允许。</value>
   </data>
-  <data name="PL0015_QuestionTypeIsIncorrect" xml:space="preserve">
-    <value>[PL0015] 问题类型不正确。</value>
-  </data>
-  <data name="PL0016_ExpectedDateTimeNotParsed" xml:space="preserve">
+    <data name="PL0016_ExpectedDateTimeNotParsed" xml:space="preserve">
     <value>无效的日期或时间数值。</value>
   </data>
   <data name="PL0017_ExpectedGpsNotParsed" xml:space="preserve">
@@ -174,16 +156,10 @@
   <data name="PL0022_AnswerIsIncorrectBecauseIsRosterSizeAndNegative" xml:space="preserve">
     <value>登记表大小问题不能有负值。</value>
   </data>
-  <data name="PL0023_UnsupportedMultimediaQuestion" xml:space="preserve">
-    <value>数据预加载不支持图片问题。</value>
-  </data>
-  <data name="PL0024_DataWasNotFound" xml:space="preserve">
+    <data name="PL0024_DataWasNotFound" xml:space="preserve">
     <value>未找到预加载数据</value>
   </data>
-  <data name="PL0025_ResponsibleNameIsEmpty" xml:space="preserve">
-    <value>没有提供负责人的名称</value>
-  </data>
-  <data name="PL0026_ResponsibleWasNotFound" xml:space="preserve">
+    <data name="PL0026_ResponsibleWasNotFound" xml:space="preserve">
     <value>没有找到提供的负责人</value>
   </data>
   <data name="PL0027_ResponsibleIsLocked" xml:space="preserve">
@@ -216,16 +192,7 @@
   <data name="PL0036_QuantityShouldBeGreaterThanMinus1" xml:space="preserve">
     <value>数量需大于等于-1</value>
   </data>
-  <data name="PL0037_ColumnIsNotIdentifying" xml:space="preserve">
-    <value>列未能与识别问题相匹配</value>
-  </data>
-  <data name="PL0038_UnsupportedAreaQuestion" xml:space="preserve">
-    <value>不能预加载面积问题</value>
-  </data>
-  <data name="PL0039_UnsupportedAudioQuestion" xml:space="preserve">
-    <value>不能预加载录音问题</value>
-  </data>
-  <data name="PL0040_QuestionnaireDataIsNotFound" xml:space="preserve">
+    <data name="PL0040_QuestionnaireDataIsNotFound" xml:space="preserve">
     <value>问卷模板层级的数据文件丢失。</value>
   </data>
   <data name="PL0030_GpsMandatoryFilds" xml:space="preserve">
@@ -236,17 +203,5 @@
   </data>
   <data name="PL0042_IdIsEmpty" xml:space="preserve">
     <value>Id一列没有包含任何值</value>
-  </data>
-  <data name="PL0043_TextListAnswerHasDuplicatesInTexts" xml:space="preserve">
-    <value>文本列表问题{0}包含非唯一项目：{1}。问卷编号：{2}</value>
-  </data>
-  <data name="PL0044_TextListAnswerHasDuplicatesInCodes" xml:space="preserve">
-    <value>文本列表问题{0}包含非唯一项目编号：{1}。问卷编号：{2}</value>
-  </data>
-  <data name="PL0045_TextListAnswerHasDifferentAmountOfRecordsThanRosterFile" xml:space="preserve">
-    <value>数据文件{0} 包含的记录不一致。数据文件 包含{1}个记录，触发问题{2}包含{3}个记录。问卷编号：{4}</value>
-  </data>
-  <data name="PL0046_HasDifferentTextsInListAndRosterTitles" xml:space="preserve">
-    <value>数据文件{0}和问题{1}中的项目列表之间存在不一致。出现在文本列表中但不存在于数据文件中的项目为：{2}。出现在数据文件中但不存在于文本列表中的项目为：{3}。问卷编号：{4}</value>
   </data>
 </root>

@@ -126,10 +126,7 @@
   <data name="PL0004_FileWasntMappedRoster" xml:space="preserve">
     <value>კითხვარში ფაილის მიბმა ნებისმიერ(არცერთ?) როსტერზე არ შეიძლება</value>
   </data>
-  <data name="PL0005_QuestionDataTypeMismatch" xml:space="preserve">
-    <value>[PL0005] არ არსებობს</value>
-  </data>
-  <data name="PL0006_IdDublication" xml:space="preserve">
+    <data name="PL0006_IdDublication" xml:space="preserve">
     <value>ნაპოვნია დუბლირებული ID</value>
   </data>
   <data name="PL0007_ServiceColumnIsAbsent" xml:space="preserve">
@@ -141,25 +138,10 @@
   <data name="PL0009_RosterIdIsInconsistantWithRosterSizeQuestion" xml:space="preserve">
     <value>როსტერის ID თავსებადი არ არის ზომასთან</value>
   </data>
-  <data name="PL0010_UnsupportedLinkedQuestion" xml:space="preserve">
-    <value>დაკავშირებული კითხვები არ შეიძლება წინასწარ იყოს ჩატვირთული</value>
-  </data>
-  <data name="PL0011_GeneralError" xml:space="preserve">
-    <value>წარმოიშვა საერთო შეცდომა</value>
-  </data>
-  <data name="PL0012_QuestionWasNotFound" xml:space="preserve">
-    <value>ატვირთულ ფაილ(ებ)ში ნაპოვნია კითხვა, რომელიც არ არსებობს კითხვარში</value>
-  </data>
-  <data name="PL0013_ValueIsNullOrEmpty" xml:space="preserve">
-    <value>მოცემული მნიშვნელობა 0-ია ან ცარიელია</value>
-  </data>
-  <data name="PL0014_ParsedValueIsNotAllowed" xml:space="preserve">
+    <data name="PL0014_ParsedValueIsNotAllowed" xml:space="preserve">
     <value>კითხვის მოცემული მნიშვნელობა არ არის დაშვებული</value>
   </data>
-  <data name="PL0015_QuestionTypeIsIncorrect" xml:space="preserve">
-    <value>კითხვის ტიპი არასწორია</value>
-  </data>
-  <data name="PL0016_ExpectedDateTimeNotParsed" xml:space="preserve">
+    <data name="PL0016_ExpectedDateTimeNotParsed" xml:space="preserve">
     <value>"date" კითხვაში შეყვანილია არასწორი დრო ან თარიღი</value>
   </data>
   <data name="PL0017_ExpectedGpsNotParsed" xml:space="preserve">
@@ -174,16 +156,10 @@
   <data name="PL0022_AnswerIsIncorrectBecauseIsRosterSizeAndNegative" xml:space="preserve">
     <value>კითხვას როსტერის ზომაზე არ შეიძლება უარყოფითი მნიშვნელობა ჰქონდეს</value>
   </data>
-  <data name="PL0023_UnsupportedMultimediaQuestion" xml:space="preserve">
-    <value>"Picture" კითხვა არ შეიძლება წინასწარ ჩატვირთული იყოს</value>
-  </data>
-  <data name="PL0024_DataWasNotFound" xml:space="preserve">
+    <data name="PL0024_DataWasNotFound" xml:space="preserve">
     <value>წინასწარ ჩამოტვირთული მონაცემები ვერ მოიძებნა</value>
   </data>
-  <data name="PL0025_ResponsibleNameIsEmpty" xml:space="preserve">
-    <value>პასუხისმგებელი ველი არ იქნა წარმოდგენილი ერთი ან მეტი დაკვირვებისთვის</value>
-  </data>
-  <data name="PL0026_ResponsibleWasNotFound" xml:space="preserve">
+    <data name="PL0026_ResponsibleWasNotFound" xml:space="preserve">
     <value>პასუხისმგებელი არ არსებობს ერთი ან მეტი დაკვირვებისთვის</value>
   </data>
   <data name="PL0027_ResponsibleIsLocked" xml:space="preserve">
@@ -215,14 +191,5 @@
   </data>
   <data name="PL0036_QuantityShouldBeGreaterThanMinus1" xml:space="preserve">
     <value>რაოდენობა მეტი ან ტოლი უნდა იყოს -1-ის</value>
-  </data>
-  <data name="PL0037_ColumnIsNotIdentifying" xml:space="preserve">
-    <value>სვეტი არ შეიძლება დაკავშირებული იყოს არაიდენტიფიცირებულ შეკითხვასთან</value>
-  </data>
-  <data name="PL0038_UnsupportedAreaQuestion" xml:space="preserve">
-    <value>კითხვა "Area" არ შეიძლება წინასწარ ჩატვირთული იყოს</value>
-  </data>
-  <data name="PL0039_UnsupportedAudioQuestion" xml:space="preserve">
-    <value>კითხვა "Audio" არ შეიძლება წინასწარ ჩატვირთული იყოს</value>
   </data>
 </root>
