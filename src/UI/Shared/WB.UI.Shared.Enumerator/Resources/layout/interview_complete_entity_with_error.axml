@@ -5,5 +5,5 @@
   <View style="@style/Interview_Entity_Divider" />
   <TextView
            style="@style/Interview_Complete_Screen_Statistics_Errors_Label"  android:layout_marginTop="@dimen/Interview_Entity_Title_margin_vertical"
-           local:MvxBind="Text EntityTitle" />
+           local:MvxBind="Html EntityTitle" />
 </LinearLayout>
