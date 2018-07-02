@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Modularity;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.MapService;
@@ -22,6 +23,7 @@ namespace WB.UI.Tester.ServiceLocation
             registry.Bind<IMapService, MapService>();
             registry.Bind<TesterSettings>();
             registry.Bind<PhotoViewViewModel>();
+            registry.BindAsSingleton<IInterviewViewModelFactory, InterviewViewModelFactory>();
 
 #if EXCLUDEEXTENSIONS
             registry.Bind<IAreaEditService, WB.UI.Shared.Enumerator.CustomServices.AreaEditor.DummyAreaEditService>();
