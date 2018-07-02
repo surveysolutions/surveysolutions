@@ -9,5 +9,10 @@ namespace WB.UI.Headquarters.Controllers
         {
             return View();
         }
+
+        public ActionResult Supervisor()
+        {
+            return View();
+        }
     }
 }

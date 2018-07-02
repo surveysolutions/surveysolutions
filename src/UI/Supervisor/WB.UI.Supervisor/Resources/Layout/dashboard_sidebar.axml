@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.NavigationView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:local="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/dashboard_sidebar_navigation"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_gravity="start"
+    android:background="@android:color/white"
+    local:headerLayout="@layout/dashboard_sidebar_header"
+    local:menu="@menu/dashboard_sidebar_menu" />
+<!--local:headerLayout="@layout/dashboard_navigation_header"-->

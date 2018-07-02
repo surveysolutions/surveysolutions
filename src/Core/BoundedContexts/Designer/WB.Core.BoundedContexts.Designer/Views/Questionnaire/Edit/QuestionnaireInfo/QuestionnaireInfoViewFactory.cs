@@ -48,13 +48,14 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
             {
                 QuestionnaireId = questionnaireId,
                 Title = questionnaireDocument.Title,
+                Variable = questionnaireDocument.VariableName,
                 Chapters = new List<ChapterInfoView>(),
                 IsPublic = questionnaireDocument.IsPublic
             };
 
             foreach (IGroup chapter in questionnaireDocument.Children.OfType<IGroup>())
             {
-                questionnaireInfoView.Chapters.Add(new ChapterInfoView()
+                questionnaireInfoView.Chapters.Add(new ChapterInfoView
                 {
                     ItemId = chapter.PublicKey.FormatGuid(),
                     Title = chapter.Title,
@@ -91,7 +92,16 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
             questionnaireInfoView.RostersCount = rostersCount;
 
             var listItem = this.questionnaires.GetById(questionnaireId);
-            var sharedPersons = listItem.SharedPersons.GroupBy(x => x.Email).Select(g => g.First()).ToList();
+            var sharedPersons = listItem.SharedPersons.GroupBy(x => x.Email).Select(g => g.First())
+                .Select(x => new SharedPersonView
+                {
+                    Email = x.Email,
+                    Login = this.accountsStorage.GetById(x.UserId.FormatGuid()).UserName,
+                    UserId = x.UserId,
+                    IsOwner = x.IsOwner,
+                    ShareType = x.ShareType
+                })
+                .ToList();
             
             if (questionnaireDocument.CreatedBy.HasValue &&
                 sharedPersons.All(x => x.UserId != questionnaireDocument.CreatedBy))
@@ -99,9 +109,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
                 var owner = this.accountsStorage.GetById(questionnaireDocument.CreatedBy.Value.FormatGuid());
                 if (owner != null)
                 {
-                    sharedPersons.Add(new SharedPerson
+                    sharedPersons.Add(new SharedPersonView
                     {
                         Email = owner.Email,
+                        Login = owner.UserName,
                         UserId = questionnaireDocument.CreatedBy.Value,
                         IsOwner = true
                     });

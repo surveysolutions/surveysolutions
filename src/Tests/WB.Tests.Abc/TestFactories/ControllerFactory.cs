@@ -19,7 +19,8 @@ using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Tests.Abc.Storage;
-using WB.UI.Headquarters.API.Interviewer;
+using WB.UI.Headquarters.API.DataCollection;
+using WB.UI.Headquarters.API.DataCollection.Interviewer;
 using WB.UI.Headquarters.Controllers;
 
 namespace WB.Tests.Abc.TestFactories
@@ -50,7 +51,7 @@ namespace WB.Tests.Abc.TestFactories
             ITabletInformationService tabletInformationService = null,
             IUserViewFactory userViewFactory = null,
             IAndroidPackageReader androidPackageReader = null,
-            ISyncProtocolVersionProvider syncVersionProvider = null,
+            IInterviewerSyncProtocolVersionProvider syncVersionProvider = null,
             IAuthorizedUser authorizedUser = null,
             IProductVersion productVersion = null,
             HqSignInManager signInManager = null,
@@ -63,7 +64,7 @@ namespace WB.Tests.Abc.TestFactories
                     tabletInformationService ?? Mock.Of<ITabletInformationService>(),
                     userViewFactory ?? Mock.Of<IUserViewFactory>(),
                     androidPackageReader ?? Mock.Of<IAndroidPackageReader>(),
-                    syncVersionProvider ?? Mock.Of<ISyncProtocolVersionProvider>(),
+                    syncVersionProvider ?? Mock.Of<IInterviewerSyncProtocolVersionProvider>(),
                     authorizedUser ?? Mock.Of<IAuthorizedUser>(),
                     productVersion ?? Mock.Of<IProductVersion>(),
                     signInManager ?? new HqSignInManager(Create.Storage.HqUserManager(), Mock.Of<IAuthenticationManager>()),
