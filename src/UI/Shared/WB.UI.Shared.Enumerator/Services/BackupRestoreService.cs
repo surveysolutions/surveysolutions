@@ -49,11 +49,13 @@ namespace WB.UI.Shared.Enumerator.Services
             if (!this.fileSystemAccessor.IsDirectoryExists(backupToFolderPath))
                 this.fileSystemAccessor.CreateDirectory(backupToFolderPath);
 
-            var backupTempFolder = $"temp-backup-{DateTime.Now:s}";
-            var backupFolderPath = this.fileSystemAccessor.CombinePath(backupToFolderPath, backupTempFolder);
+            var timestamp = $"{DateTime.Now:s}";
+            var backupFilePath = this.fileSystemAccessor.CombinePath(backupToFolderPath, $"backup-{timestamp}.zip");
 
-            var backupFileName = $"backup-{DateTime.Now:s}.zip";
-            var backupFilePath = this.fileSystemAccessor.CombinePath(backupFolderPath, backupFileName);
+            var backupTempFolder = this.fileSystemAccessor.CombinePath(backupToFolderPath,  $"temp-backup-{timestamp}");
+
+            if (!this.fileSystemAccessor.IsDirectoryExists(backupTempFolder))
+                this.fileSystemAccessor.CreateDirectory(backupTempFolder);
 
             try
             {
@@ -61,18 +63,22 @@ namespace WB.UI.Shared.Enumerator.Services
 
                 await Task.Run(() => this.BackupSqliteDbs()).ConfigureAwait(false);
 
-                this.fileSystemAccessor.CopyFileOrDirectory(this.privateStorage, backupFolderPath, false,
+                this.fileSystemAccessor.CopyFileOrDirectory(this.privateStorage, backupTempFolder, false,
                     new[] {".log", ".dll", ".back", ".info"});
 
-                var backupFolderFilesPath = this.fileSystemAccessor.CombinePath(backupFolderPath, "files");
+                var backupFolderFilesPath = this.fileSystemAccessor.CombinePath(backupTempFolder, "files");
 
                 await this.archiver.ZipDirectoryToFileAsync(backupFolderFilesPath, backupFilePath)
                     .ConfigureAwait(false);
             }
+            catch (Exception ex)
+            {
+                this.logger.Error(ex.Message, ex);
+            }
             finally
             {
                 this.Cleanup();
-                Directory.Delete(backupFolderPath, true);
+                Directory.Delete(backupTempFolder, true);
             }
 
             return backupFilePath;

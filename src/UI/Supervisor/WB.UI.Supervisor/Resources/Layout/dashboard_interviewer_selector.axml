@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+  xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:local="http://schemas.android.com/apk/res-auto"
+  android:paddingRight="@dimen/Interview_Entity_margin_right"
+  android:paddingLeft="@dimen/Interview_Entity_margin_left"
+  style="@style/FullWidthWrappingLayout">
+<LinearLayout style="@style/Audio_Dialog_Holder">
+  <TableLayout
+    style="@style/FullWidthWrappingLayout"
+    android:layout_width="match_parent"
+    android:layout_height="0dp"
+    android:layout_weight="1" 
+    android:stretchColumns="0">
+    <TableRow>
+      <LinearLayout style="@style/VerticalFullWidthWrappingLayout">
+        <TextView
+          style="@style/Interview_Question_Title_Base"
+          local:MvxBind="Html Title;"/>
+      </LinearLayout>
+    </TableRow>
+    <TableRow>
+      <LinearLayout style="@style/VerticalFullWidthWrappingLayout">
+          <MvxRecyclerView
+              style="@style/FullWidthWrappingLayout"
+              android:id="@+id/interviewers_list"
+              android:scrollbars="vertical"
+              local:MvxItemTemplate="@layout/dashboard_interviewer_to_select"
+              local:MvxBind="ItemsSource UiItems; ItemClick SelectInterviewerCommand" />
+      </LinearLayout>
+      </TableRow>
+  </TableLayout>
+
+  <LinearLayout style="@style/FullWidthWrappingLayout">
+    <Button style="@style/Link_Button"
+            local:MvxBind="Click CancelCommand; Text Localization('Interviewer_RelinkDevice_Cancel');" />
+    <Button
+      style="@style/Done_Button"
+      local:MvxBind="Click DoneCommand; Text Localization('Interviewer_Done');" />
+  </LinearLayout>
+</LinearLayout>
+</LinearLayout>

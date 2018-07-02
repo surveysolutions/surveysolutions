@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using FluentAssertions;
 using Ncqrs.Eventing;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerInterviewAccessorTests

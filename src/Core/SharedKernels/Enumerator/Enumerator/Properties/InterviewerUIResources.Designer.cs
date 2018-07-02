@@ -97,6 +97,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Assign.
+        /// </summary>
+        public static string Dashboard_Assign {
+            get {
+                return ResourceManager.GetString("Dashboard_Assign", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To collect: unlimited.
         /// </summary>
         public static string Dashboard_AssignmentCard_SubTitleCountdown_UnlimitedFormat {
@@ -1505,6 +1514,24 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Synchronization_Of_AssignmentsFormat {
             get {
                 return ResourceManager.GetString("Synchronization_Of_AssignmentsFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Synchronization of interviewers.
+        /// </summary>
+        public static string Synchronization_Of_Interviewers {
+            get {
+                return ResourceManager.GetString("Synchronization_Of_Interviewers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Synchronizing {0} of {1} interviewer(s).
+        /// </summary>
+        public static string Synchronization_Of_InterviewersFormat {
+            get {
+                return ResourceManager.GetString("Synchronization_Of_InterviewersFormat", resourceCulture);
             }
         }
         

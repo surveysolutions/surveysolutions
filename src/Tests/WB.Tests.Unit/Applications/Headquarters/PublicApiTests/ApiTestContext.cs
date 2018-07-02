@@ -17,8 +17,8 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Web.Api;
-using WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2;
 using WB.Tests.Abc.Storage;
+using WB.UI.Headquarters.API.DataCollection.Interviewer.v2;
 using WB.UI.Headquarters.API.PublicApi;
 using WB.UI.Headquarters.API.WebInterview;
 

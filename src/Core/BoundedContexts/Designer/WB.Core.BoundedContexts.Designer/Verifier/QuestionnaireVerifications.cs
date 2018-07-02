@@ -44,8 +44,10 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Critical<IComposite>("WB0058", VariableNameIsKeywords, VerificationMessages.WB0058_QuestionHasVariableNameReservedForServiceNeeds),
             Critical<IComposite>("WB0122", VariableNameHasSpecialCharacters, VerificationMessages.WB0122_VariableNameHasSpecialCharacters),
             Critical<IComposite>("WB0123", VariableNameStartWithDigitOrUnderscore, VerificationMessages.WB0123_VariableNameStartWithDigitOrUnderscore),
+            
             ErrorsByQuestionnaireEntitiesShareSameInternalId,
             ErrorsBySubstitutions,
+            ErrorsByInvalidQuestionnaireVariable,
             Warning(NotShared, "WB0227", VerificationMessages.WB0227_NotShared),
         };
 
@@ -64,6 +66,35 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             QuestionType.MultyOption,
             QuestionType.TextList
         };
+
+        
+        private IEnumerable<QuestionnaireVerificationMessage> ErrorsByInvalidQuestionnaireVariable(MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            var foundErrors = new List<QuestionnaireVerificationMessage>();
+
+            var reference = QuestionnaireEntityReference.CreateForQuestionnaire(questionnaire.PublicKey);
+            if (string.IsNullOrWhiteSpace(questionnaire.VariableName))
+                foundErrors.Add(QuestionnaireVerificationMessage.Error("WB0067", VerificationMessages.WB0067_VariableNameIsEmpty, reference));
+
+            if (VariableNameHasSpecialCharacters(questionnaire.Questionnaire.Questionnaire, questionnaire))
+                foundErrors.Add(QuestionnaireVerificationMessage.Error("WB0122", VerificationMessages.WB0122_VariableNameHasSpecialCharacters, reference));
+
+            if (VariableNameStartWithDigitOrUnderscore(questionnaire.Questionnaire.Questionnaire, questionnaire))
+                foundErrors.Add(QuestionnaireVerificationMessage.Error("WB0123", VerificationMessages.WB0123_VariableNameStartWithDigitOrUnderscore, reference));
+
+            if (VariableNameIsKeywords(questionnaire.Questionnaire.Questionnaire, questionnaire))
+                foundErrors.Add(QuestionnaireVerificationMessage.Error("WB0058", VerificationMessages.WB0058_QuestionHasVariableNameReservedForServiceNeeds, reference));
+
+            if (VariableNameEndWithUnderscore(questionnaire.Questionnaire.Questionnaire, questionnaire))
+                foundErrors.Add(QuestionnaireVerificationMessage.Error("WB0124", VerificationMessages.WB0124_VariableNameEndWithUnderscore, reference));
+
+            if (VariableNameHasConsecutiveUnderscores(questionnaire.Questionnaire.Questionnaire, questionnaire))
+                foundErrors.Add(QuestionnaireVerificationMessage.Error("WB0125", VerificationMessages.WB0125_VariableNameHasConsecutiveUnderscores, reference));
+
+            return foundErrors.Distinct(new QuestionnaireVerificationMessage.CodeAndReferencesAndTranslationComparer());
+        }
+
+
         private static bool VariableNameIsEmpty(IComposite entity, MultiLanguageQuestionnaireDocument questionnaire)
         {
             if (entity is IGroup && !questionnaire.Questionnaire.IsRoster(entity))

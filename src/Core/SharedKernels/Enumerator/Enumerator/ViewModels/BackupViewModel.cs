@@ -9,10 +9,11 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
-    public class BackupViewModel : MvxNotifyPropertyChanged
+    public class SendTabletInformationViewModel : MvxNotifyPropertyChanged
     {
         private readonly IBackupRestoreService backupRestoreService;
         private readonly ISynchronizationService synchronizationService;
@@ -28,7 +29,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private bool isInProgress;
         private string informationPackageFilePath;
 
-        public BackupViewModel(
+        public SendTabletInformationViewModel(
             IBackupRestoreService backupRestoreService,
             ISynchronizationService synchronizationService,
             ILogger logger, 

@@ -613,6 +613,9 @@
   <data name="GetLatestApp" xml:space="preserve">
     <value>Скачать последнюю версию</value>
   </data>
+  <data name="GetLatestSupervisorApp" xml:space="preserve">
+    <value>Скачать приложение Супервизора</value>
+  </data>
   <data name="InstallationInstruction" xml:space="preserve">
     <value>Инструкции установки</value>
   </data>
@@ -983,6 +986,12 @@
   <data name="DownloadPage_Welcome" xml:space="preserve">
     <value>Добро пожаловать на страницу загрузки</value>
   </data>
+  <data name="DownloadSupervisorPage_Welcome" xml:space="preserve">
+    <value>Добро пожаловать на страницу скачивания приложения Супервизора</value>
+  </data>  
+  <data name="DownloadSupervisorPage_PageTitle" xml:space="preserve">
+    <value>Скачивание приложения Супервизора</value>
+  </data>  
   <data name="DownloadPage_PageTitle" xml:space="preserve">
     <value>Скачивание приложения Интервьюер</value>
   </data>

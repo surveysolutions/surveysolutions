@@ -5,12 +5,13 @@ using NSubstitute;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
-using WB.Core.BoundedContexts.Interviewer.Services.Synchronization;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
 {
@@ -30,7 +31,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
             var mockOfViewModelNavigationService = new Mock<IViewModelNavigationService>();
             mockOfViewModelNavigationService.SetupGet(x => x.HasPendingOperations).Returns(true);
 
-            var mockOfSynchronizationViewModel = new Mock<SynchronizationViewModel>();
+            var mockOfSynchronizationViewModel = new Mock<SynchronizationViewModel>(Mock.Of<IMvxMessenger>());
             var viewModel = CreateDashboardViewModel(
                 viewModelNavigationService: mockOfViewModelNavigationService.Object,
                 synchronization: mockOfSynchronizationViewModel.Object);
@@ -68,7 +69,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
             => new CreateNewViewModel(
                 Substitute.For<IPlainStorage<QuestionnaireView>>(),
                 Substitute.For<IInterviewViewModelFactory>(),
-                Substitute.For<IAssignmentDocumentsStorage>(),
                 Substitute.For<IAssignmentDocumentsStorage>(),
                 Mock.Of<IViewModelNavigationService>()
             );

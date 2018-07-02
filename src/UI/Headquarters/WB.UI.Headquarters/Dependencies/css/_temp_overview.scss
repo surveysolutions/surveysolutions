@@ -1,0 +1,56 @@
+.overview-item {
+    position: relative;
+
+    color: #212121;
+}
+
+.overview-item.section {
+    border-top: 2px solid #dbdfe2; /*$gray-form;*/
+}
+
+.overview-item.section h6 {
+    font-size: 20px;
+    font-weight: bolder;
+    color: #b4b4b4;
+    text-transform: uppercase;
+}
+
+.overview-item.group {
+    border-top: 2px solid #dbdfe2; /*$gray-form;*/
+}
+
+.overview-item.group h6 {
+    font-size: medium;
+    color: #b4b4b4;
+    text-transform: uppercase;
+}
+
+.overview-item h6 {
+    font-size: 16px;
+    font-weight: lighter;
+}
+
+.overview-item .answer {
+    font-weight: bold;
+    font-size: 14px;
+}
+
+.overview-item .item-content {
+    padding: 10px 30px 10px 70px;
+}
+
+.overview-item.unanswered .item-content {
+    background-color: #e1e1e1;
+    padding-left: 30px;
+    margin-left: 40px;
+}
+
+.overview-item.invalid {
+    background-color: #fcdad1;
+    color: #c70000;
+}
+
+.overview-item.hasComment {
+    background-color: #f598ee;
+    opacity: 0.7;
+}

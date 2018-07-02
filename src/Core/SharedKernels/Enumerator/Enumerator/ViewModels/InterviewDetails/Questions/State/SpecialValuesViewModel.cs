@@ -164,7 +164,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private void RemoveSpecialValues()
         {
-            this.SpecialValues.ForEach(x => x.DisposeIfDisposable());
+            this.SpecialValues.ForEach(option =>
+            {
+                option.BeforeSelected -= this.SpecialValueSelected;
+                option.AnswerRemoved -= this.RemoveAnswerHandler;
+                option.DisposeIfDisposable();
+            });
             this.SpecialValues.Clear();
         }
 
