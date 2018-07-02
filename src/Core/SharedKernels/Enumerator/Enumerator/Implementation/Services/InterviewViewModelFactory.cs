@@ -15,7 +15,7 @@ using GroupViewModel = WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDeta
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
-    internal class InterviewViewModelFactory : IInterviewViewModelFactory
+    public class InterviewViewModelFactory : IInterviewViewModelFactory
     {
         private enum InterviewEntityType
         {
@@ -135,7 +135,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             if (!questionnaire.HasGroup(groupIdentity.Id))
                 throw new KeyNotFoundException($"Questionnaire {interview.QuestionnaireIdentity} has no group with id {groupIdentity.Id}. Interview id: {interviewId}.");
 
-            IReadOnlyList<Guid> groupWithoutNestedChildren = questionnaire.GetAllUnderlyingInterviewerEntities(groupIdentity.Id);
+            IReadOnlyList<Guid> groupWithoutNestedChildren = GetUnderlyingInterviewerEntities(groupIdentity, questionnaire);
 
             List<IInterviewEntityViewModel> viewmodels = groupWithoutNestedChildren
                 .Where(entityId => this.settings.ShowVariables || !questionnaire.HasVariable(entityId))
@@ -147,6 +147,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 .ToList();
 
             return viewmodels;
+        }
+
+        public virtual IReadOnlyList<Guid> GetUnderlyingInterviewerEntities(Identity groupIdentity, IQuestionnaire questionnaire)
+        {
+            return questionnaire.GetAllUnderlyingInterviewerEntities(groupIdentity.Id);
         }
 
         private static InterviewEntityType GetEntityModelType(Identity identity, IQuestionnaire questionnaire, IStatefulInterview interview)

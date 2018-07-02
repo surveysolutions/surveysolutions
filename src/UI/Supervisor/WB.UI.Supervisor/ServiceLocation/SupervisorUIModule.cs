@@ -13,6 +13,9 @@ using WB.Core.Infrastructure.CommandBus.Implementation;
 using WB.Core.Infrastructure.Implementation.Storage;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization;
@@ -29,7 +32,7 @@ using WB.UI.Supervisor.Services.Implementation;
 
 namespace WB.UI.Supervisor.ServiceLocation
 {
-    internal class SupervisorUIModule : IModule
+    internal class SupervisorUiModule : IModule
     {
         public void Load(IIocRegistry registry)
         {
@@ -61,16 +64,16 @@ namespace WB.UI.Supervisor.ServiceLocation
             registry.Bind<IQuestionnaireDownloader, QuestionnaireDownloader>();
             registry.Bind<IAssignmentsSynchronizer, AssignmentsSynchronizer>();
             registry.Bind<IAuditLogSynchronizer, AuditLogSynchronizer>();
-            registry.Bind<AttachmentsCleanupService>();
-            registry.Bind<CompanyLogoSynchronizer>();
             //registry.Bind<IMapSyncProvider, MapSyncProvider>();
             registry.Bind<IMapService, MapService>();
             //registry.BindAsSingleton<ILastCreatedInterviewStorage, LastCreatedInterviewStorage>();
 
             registry.Bind<IDashboardItemsAccessor, DashboardItemsAccessor>();
             registry.Bind<IInterviewerSelectorDialog, InterviewerSelectorDialog>();
-            registry.Bind<InterviewerSelectorDialogViewModel>();
             registry.Bind<IInterviewersListAccessor, InterviewersListAccessor>();
+
+            registry.BindAsSingleton<IInterviewViewModelFactory, SupervisorInterviewViewModelFactory>();
+
            
 #if EXCLUDEEXTENSIONS
             registry.Bind<IAreaEditService, WB.UI.Shared.Enumerator.CustomServices.AreaEditor.DummyAreaEditService>();
@@ -87,6 +90,14 @@ namespace WB.UI.Supervisor.ServiceLocation
 #if !EXCLUDEEXTENSIONS
             WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditService.RegisterLicence();
 #endif
+            
+            CommandRegistry.Configure<StatefulInterview, QuestionCommand>(configuration =>
+                configuration
+                    .ValidatedBy<SupervisorAnsweringValidator>()
+                    .SkipValidationFor<SetFlagToAnswerCommand>()
+                    .SkipValidationFor<RemoveFlagFromAnswerCommand>()
+                    .SkipValidationFor<CommentAnswerCommand>()
+            );
 
             return Task.CompletedTask;
         }
