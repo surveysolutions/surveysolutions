@@ -26,10 +26,10 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Interview.Overview
             }
 
             base.IsAnswered = treeQuestion.IsAnswered();
-            this.ErrorMessages = interview.GetFailedValidationMessages(treeQuestion.Identity, "")
+            this.ErrorMessages = interview.GetFailedValidationMessages(treeQuestion.Identity, string.Empty)
                 .Where(x => !string.IsNullOrEmpty(x)).ToList();
 
-            this.HasWarnings = interview.GetFailedWarningMessages(treeQuestion.Identity, "").Any();
+            this.HasWarnings = interview.GetFailedWarningMessages(treeQuestion.Identity, string.Empty).Any();
             HasComment = treeQuestion.AnswerComments.Count > 0;
         }
 
