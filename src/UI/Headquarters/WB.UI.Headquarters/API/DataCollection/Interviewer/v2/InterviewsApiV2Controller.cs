@@ -30,6 +30,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v2
         }
 
         [HttpGet]
+        [WriteToSyncLog(SynchronizationLogType.GetInterviews)]
         public override HttpResponseMessage Get() => base.Get();
 
         [HttpGet]
@@ -64,6 +65,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v2
             return response;
         }
 
+        [WriteToSyncLog(SynchronizationLogType.InterviewProcessed)]
         [HttpPost]
         public override void LogInterviewAsSuccessfullyHandled(Guid id) => base.LogInterviewAsSuccessfullyHandled(id);
 

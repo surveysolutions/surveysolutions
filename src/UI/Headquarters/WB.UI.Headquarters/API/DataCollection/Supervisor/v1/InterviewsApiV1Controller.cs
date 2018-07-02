@@ -32,20 +32,24 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
         }
 
         [HttpGet]
+        [WriteToSyncLog(SynchronizationLogType.GetInterviews)]
         public override HttpResponseMessage Get() => base.Get();
 
         [HttpGet]
         [WriteToSyncLog(SynchronizationLogType.GetInterviewV3)]
-        public override JsonResult<List<CommittedEvent>> DetailsV3(Guid id) => base.DetailsV3(id);
+        public JsonResult<List<CommittedEvent>> Details(Guid id) => base.DetailsV3(id);
 
         [WriteToSyncLog(SynchronizationLogType.PostInterviewV3)]
         [HttpPost]
-        public override HttpResponseMessage PostV3(InterviewPackageApiView package) => base.PostV3(package);
+        public HttpResponseMessage Post(InterviewPackageApiView package) => base.PostV3(package);
 
+        [WriteToSyncLog(SynchronizationLogType.InterviewProcessed)]
         [HttpPost]
         public override void LogInterviewAsSuccessfullyHandled(Guid id) => base.LogInterviewAsSuccessfullyHandled(id);
+
         [HttpPost]
         public override void PostImage(PostFileRequest request) => base.PostImage(request);
+
         [HttpPost]
         public override void PostAudio(PostFileRequest request) => base.PostAudio(request);
 

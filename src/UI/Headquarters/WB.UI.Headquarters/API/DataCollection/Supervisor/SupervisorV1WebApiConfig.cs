@@ -80,11 +80,11 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor
             config.TypedRoute("api/supervisor/v1/interviews", c => c.Action<InterviewsApiV1Controller>(x => x.Get()));
 
             config.TypedRoute("api/supervisor/v1/interviews/{id:guid}",
-                c => c.Action<InterviewsApiV1Controller>(x => x.DetailsV3(Param.Any<Guid>())));
+                c => c.Action<InterviewsApiV1Controller>(x => x.Details(Param.Any<Guid>())));
             config.TypedRoute("api/supervisor/v1/interviews/{id:guid}/logstate",
                 c => c.Action<InterviewsApiV1Controller>(x => x.LogInterviewAsSuccessfullyHandled(Param.Any<Guid>())));
             config.TypedRoute("api/supervisor/v1/interviews/{id:guid}",
-                c => c.Action<InterviewsApiV1Controller>(x => x.PostV3(Param.Any<InterviewPackageApiView>())));
+                c => c.Action<InterviewsApiV1Controller>(x => x.Post(Param.Any<InterviewPackageApiView>())));
             config.TypedRoute("api/supervisor/v1/interviews/{id:guid}/image",
                 c => c.Action<InterviewsApiV1Controller>(x => x.PostImage(Param.Any<PostFileRequest>())));
             config.TypedRoute("api/supervisor/v1/interviews/{id:guid}/audio",
