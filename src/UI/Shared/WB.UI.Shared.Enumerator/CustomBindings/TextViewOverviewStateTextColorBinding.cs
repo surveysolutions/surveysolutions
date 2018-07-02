@@ -23,11 +23,6 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
                 var color =  new Color(ContextCompat.GetColor(control.Context, Resource.Color.overview_invalid_text));
                 control.SetTextColor(color);
             }
-            else if (value == OverviewNodeState.Commented)
-            {
-                var color =  new Color(ContextCompat.GetColor(control.Context, Resource.Color.commentsTextColor));
-                control.SetTextColor(color);
-            }
         }
     }
 }
