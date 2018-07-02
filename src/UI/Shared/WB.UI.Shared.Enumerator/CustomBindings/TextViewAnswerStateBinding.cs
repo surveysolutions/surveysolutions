@@ -35,11 +35,6 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
                     colorid = Resource.Color.overview_invalid_text;
                     break;
                 }
-                case OverviewNodeState.Commented:
-                {
-                    colorid = Resource.Color.commentsTextColor;
-                    break;
-                }
             }
 
             if (colorid.HasValue)

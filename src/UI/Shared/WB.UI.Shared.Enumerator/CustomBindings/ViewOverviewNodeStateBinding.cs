@@ -17,9 +17,6 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
                 case OverviewNodeState.Answered:
                     control.SetBackgroundResource(Resource.Drawable.overview_background_answered);
                     break;
-                case OverviewNodeState.Commented:
-                    control.SetBackgroundResource(Resource.Drawable.overview_background_commented);
-                    break;
                 case OverviewNodeState.Invalid:
                     control.SetBackgroundResource(Resource.Drawable.overview_background_invalid);
                     break;
