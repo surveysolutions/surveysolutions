@@ -5,14 +5,16 @@ using Moq;
 using Ncqrs.Eventing.Storage;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
-using WB.Core.BoundedContexts.Interviewer.Implementation.Storage;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.WriteSide;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
 
@@ -26,7 +28,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
             var principal = Mock.Of<IInterviewerPrincipal>(x =>
                 x.CurrentUserIdentity == Mock.Of<IInterviewerUserIdentity>(y => y.UserId == Guid.Parse("22222222222222222222222222222222")));
 
-            eventStore = new Mock<IInterviewerEventStorage>();
+            eventStore = new Mock<IEnumeratorEventStorage>();
 
             inMemoryMultimediaViewRepository = new SqliteInmemoryStorage<InterviewMultimediaView>();
             inMemoryMultimediaViewRepository.Store(interviewMultimediaViews);
@@ -106,7 +108,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
         private static readonly Mock<IEventSourcedAggregateRootRepositoryWithCache> mockOfAggregateRootRepositoryWithCache = new Mock<IEventSourcedAggregateRootRepositoryWithCache>();
         private static readonly Mock<ISnapshotStoreWithCache> mockOfSnapshotStoreWithCache = new Mock<ISnapshotStoreWithCache>();
         private static InterviewerInterviewAccessor interviewerInterviewAccessor;
-        private static Mock<IInterviewerEventStorage> eventStore;
+        private static Mock<IEnumeratorEventStorage> eventStore;
         private static IPlainStorage<InterviewMultimediaView> inMemoryMultimediaViewRepository;
         private static IPlainStorage<InterviewFileView> inMemoryFileViewRepository;
     }

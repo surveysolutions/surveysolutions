@@ -33,6 +33,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog
         GetExtendedApk,
         GetApk,
         GetInterviewV3,
-        PostInterviewV3
+        PostInterviewV3,
+        CheckObsoleteInterviews,
+        GetSupervisorApk
     }
 }

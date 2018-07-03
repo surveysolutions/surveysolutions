@@ -6,7 +6,7 @@ using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 
-namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests.LongRosters
+namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests.LongRosters
 {
     internal class when_verifing_3_level_multichoice_roster : QuestionnaireVerifierTestsContext
     {

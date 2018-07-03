@@ -174,7 +174,16 @@ namespace WB.Tests.Abc
 
         public static IInterviewerPrincipal InterviewerPrincipal(string name, string pass)
         {
-            return Mock.Of<IInterviewerPrincipal>(p => p.CurrentUserIdentity == new InterviewerIdentity() { Name = "name", Password = "pass" });
+            var interviewerIdentity = new InterviewerIdentity() {Name = "name", Password = "pass"};
+            return InterviewerPrincipal(interviewerIdentity);
+        }
+
+        public static IInterviewerPrincipal InterviewerPrincipal(IInterviewerUserIdentity interviewerIdentity)
+        {
+            var interviewerPrincipal = new Mock<IInterviewerPrincipal>();
+            interviewerPrincipal.Setup(x => x.CurrentUserIdentity).Returns(interviewerIdentity);
+            interviewerPrincipal.As<IPrincipal>().Setup(x => x.CurrentUserIdentity).Returns(interviewerIdentity);
+            return interviewerPrincipal.Object;
         }
 
         public static IPlainStorageAccessor<TEntity> PlainStorageAccessorWithOneEntity<TEntity>(object id, TEntity entity)
@@ -238,6 +247,11 @@ namespace WB.Tests.Abc
         public static Mock<T> GetMock<T>(this IFixture fixture) where T : class
         {
             return fixture.Freeze<Mock<T>>();
+        }
+
+        public static IPrincipal Principal(string name, string pass)
+        {
+            return Mock.Of<IPrincipal>(p => p.CurrentUserIdentity == Mock.Of<IUserIdentity>(i => i.Name == "name" && i.Password == "pass"));
         }
     }
 }

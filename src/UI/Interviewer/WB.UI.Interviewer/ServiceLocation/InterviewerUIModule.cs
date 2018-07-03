@@ -3,7 +3,6 @@ using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
-using WB.Core.BoundedContexts.Interviewer.Services.Synchronization;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
@@ -11,15 +10,23 @@ using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.Implementation.Storage;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.CommandBus.Implementation;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.MapService;
+using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading;
+using WB.Core.SharedKernels.Enumerator.Views;
 using WB.UI.Interviewer.Implementations.Services;
 using WB.UI.Interviewer.Services;
 using WB.UI.Interviewer.Settings;
@@ -27,6 +34,7 @@ using WB.UI.Interviewer.ViewModel;
 using WB.UI.Shared.Enumerator.CustomServices;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Services.Internals;
+using WB.UI.Shared.Enumerator.Settings;
 
 namespace WB.UI.Interviewer.ServiceLocation
 {
@@ -37,6 +45,7 @@ namespace WB.UI.Interviewer.ServiceLocation
             registry.Bind<InterviewerMvxApplication>();
             registry.Bind<InterviewerAppStart>();
 
+            registry.Bind<ISideBarSectionViewModelsFactory, SideBarSectionViewModelFactory>();
             registry.Bind<IViewModelNavigationService, ViewModelNavigationService>();
             registry.Bind<ITabletDiagnosticService, TabletDiagnosticService>();
             registry.BindToRegisteredInterface<ISnapshotStore, ISnapshotStoreWithCache>();
@@ -48,6 +57,7 @@ namespace WB.UI.Interviewer.ServiceLocation
             registry.Bind<IInterviewUniqueKeyGenerator, InterviewerInterviewUniqueKeyGenerator>();
 
             registry.Bind<ISynchronizationService, SynchronizationService>();
+            registry.Bind<IInterviewerSynchronizationService, SynchronizationService>();
             registry.Bind<IAssignmentSynchronizationApi, SynchronizationService>();
             registry.Bind<IBattery, AndroidBattery>();
             registry.Bind<IDeviceOrientation, AndroidDeviceOrientation>();
@@ -55,7 +65,8 @@ namespace WB.UI.Interviewer.ServiceLocation
             registry.Bind<IArchivePatcherService, ArchivePatcherService>();
             registry.Bind<IInterviewFromAssignmentCreatorService, InterviewFromAssignmentCreatorService>();
 
-            registry.BindAsSingleton<ISyncProtocolVersionProvider, SyncProtocolVersionProvider>();
+            registry.BindAsSingleton<IInterviewerSyncProtocolVersionProvider, InterviewerSyncProtocolVersionProvider>();
+            registry.BindAsSingleton<ISupervisorSyncProtocolVersionProvider, SupervisorSyncProtocolVersionProvider>();
             registry.BindAsSingleton<IQuestionnaireContentVersionProvider, QuestionnaireContentVersionProvider>();
 
             registry.Bind<ISynchronizationProcess, SynchronizationProcess>();
@@ -69,6 +80,7 @@ namespace WB.UI.Interviewer.ServiceLocation
             registry.Bind<IViewModelNavigationService, ViewModelNavigationService>();
             registry.BindAsSingleton<ILastCreatedInterviewStorage, LastCreatedInterviewStorage>();
 
+            registry.BindAsSingleton<IInterviewViewModelFactory, InterviewViewModelFactory>();
 
             registry.BindAsSingleton<ICommandService, SequentialCommandService>();
 
@@ -76,7 +88,7 @@ namespace WB.UI.Interviewer.ServiceLocation
             registry.Bind<PrefilledQuestionsViewModel>();
             registry.Bind<InterviewViewModel>();
             registry.Bind<BackupRestoreViewModel>();
-            registry.Bind<BackupViewModel>();
+            registry.Bind<SendTabletInformationViewModel>();
             registry.Bind<BandwidthTestViewModel>();
             registry.Bind<CheckNewVersionViewModel>();
             registry.Bind<DiagnosticsViewModel>();
@@ -91,7 +103,7 @@ namespace WB.UI.Interviewer.ServiceLocation
             registry.Bind<CompletedInterviewsViewModel>();
             registry.Bind<RejectedInterviewsViewModel>();
             registry.Bind<StartedInterviewsViewModel>();
-            registry.Bind<AssignmentDashboardItemViewModel>();
+            registry.Bind<InterviewerAssignmentDashboardItemViewModel>();
             registry.Bind<CensusQuestionnaireDashboardItemViewModel>();
             registry.Bind<ExpandableQuestionsDashboardItemViewModel>();
             registry.Bind<InterviewDashboardItemViewModel>();

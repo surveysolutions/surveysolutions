@@ -106,10 +106,22 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             var questionnaireId = command.QuestionnaireId;
 
             this.UpdateQuestionnaireTitleIfNeed(questionnaireId, command.Title);
+            this.UpdateQuestionnaireVariableIfNeed(questionnaireId, command.Variable);
 
             this.AddQuestionnaireChangeItem(questionnaireId, command.ResponsibleId,
                 QuestionnaireActionType.Update,
                 QuestionnaireItemType.Questionnaire, command.QuestionnaireId, command.Title, aggregate.QuestionnaireDocument);
+        }
+
+        private void UpdateQuestionnaireVariableIfNeed(Guid questionnaireId, string variable)
+        {
+            var questionnaireStateTracker = this.questionnaireStateTrackerStorage.GetById(questionnaireId.FormatGuid());
+            questionnaireStateTracker.VariableState.TryGetValue(questionnaireId, out var variableInState);
+            if (variableInState == variable) 
+                return;
+
+            questionnaireStateTracker.VariableState[questionnaireId] = variable;
+            this.questionnaireStateTrackerStorage.Store(questionnaireStateTracker, questionnaireId.FormatGuid());
         }
 
         private void UpdateQuestionnaireTitleIfNeed(Guid questionnaireId, string title)

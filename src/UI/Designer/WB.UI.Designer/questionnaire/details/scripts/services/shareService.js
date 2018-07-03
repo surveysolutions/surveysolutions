@@ -4,14 +4,14 @@
         function($http, utils, commandService) {
             var shareService = {};
 
-            shareService.findUserByEmail = function(email) {
+            shareService.findUserByEmailOrLogin = function(emailOrLogin) {
                 var baseUrl = '../../account/findbyemail';
-                return $http.post(baseUrl, { email: email });
+                return $http.post(baseUrl, { emailOrLogin: emailOrLogin });
             };
 
-            shareService.shareWith = function(email, questionnaireId, shareType) {
+            shareService.shareWith = function(emailOrLogin, questionnaireId, shareType) {
                 return commandService.execute("AddSharedPersonToQuestionnaire", {
-                    email: email,
+                    emailOrLogin: emailOrLogin,
                     questionnaireId: questionnaireId,
                     shareType: shareType
                 });
@@ -24,9 +24,10 @@
                 });
             };
 
-            shareService.udpateQuestionnaire = function(questionnaireId, title, isPublic) {
+            shareService.udpateQuestionnaire = function(questionnaireId, title, variable, isPublic) {
                 return commandService.execute("UpdateQuestionnaire", {
                     title: title,
+                    variable: variable,
                     questionnaireId: questionnaireId,
                     isPublic: isPublic
                 });

@@ -69,6 +69,7 @@ namespace WB.UI.Shared.Enumerator
             registry.Bind<InterviewEntitiesListFragment>();
             registry.Bind<CompleteInterviewFragment>();
             registry.Bind<CoverInterviewFragment>();
+            registry.Bind<OverviewFragment>();
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)

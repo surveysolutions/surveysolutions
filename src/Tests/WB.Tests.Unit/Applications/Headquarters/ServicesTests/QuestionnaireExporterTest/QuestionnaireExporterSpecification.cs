@@ -234,6 +234,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.QuestionnaireExp
             Context();
 
             questionnaireDocument.Title = "SampleTitle";
+            questionnaireDocument.VariableName = "sample_title";
 
             fixture.Register(() => questionnaireDocument);
 
@@ -264,12 +265,12 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.QuestionnaireExp
         [Test]
         public void should_put_questionnaire_json_into_zip()
         {
-            AssertZipContainsFile(questionnaireDocument.Title + ".json");
+            AssertZipContainsFile(questionnaireDocument.VariableName + ".json");
         }
 
         [Test]
         public void should_put_questionnaire_json_content_into_zip() =>
-            Assert.That(GetTextContentFromZip(questionnaireDocument.Title + ".json"), Is.EqualTo(SerializedQuestionnaireDocument));
+            Assert.That(GetTextContentFromZip(questionnaireDocument.VariableName + ".json"), Is.EqualTo(SerializedQuestionnaireDocument));
 
         protected void AssertZipContainsFile(string path)
         {
@@ -279,7 +280,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ServicesTests.QuestionnaireExp
         }
 
         protected string GetQuestionnaireFolderName() =>
-            $"{questionnaireDocument.Title} ({questionnaireIdentity.QuestionnaireId.FormatGuid()})";
+            $"{questionnaireDocument.VariableName} ({questionnaireIdentity.QuestionnaireId.FormatGuid()})";
 
         protected ZipArchiveEntry GetEntry(string path = null)
             => zipArchive.GetEntry($"{GetQuestionnaireFolderName()}/{ path ?? string.Empty}");

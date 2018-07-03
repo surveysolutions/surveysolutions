@@ -1,0 +1,81 @@
+﻿@using WB.Core.GenericSubdomains.Portable.ServiceLocation
+@using WB.Core.Infrastructure.Versions
+@using WB.Core.SharedKernels.SurveyManagement.Web.Code
+@using WB.UI.Shared.Web.Extensions
+@model WB.Core.SharedKernels.SurveyManagement.Web.Models.LogOnModel
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@Pages.DownloadSupervisorPage_PageTitle</title>
+    @this.GenerateFavicon(Url.Content("~/Dependencies/img/identity/favicon-hq"))
+    <!-- cssLibs:css -->
+    <link rel="stylesheet" href="@Url.Content("~/Dependencies/build/libs.css")">
+    <!-- endinject -->
+    <!-- css_markup:css -->
+    <link rel="stylesheet" async href="@Url.Content("~/Dependencies/build/markup.css")">
+    <!-- endinject -->
+</head>
+<body>
+<main>
+    <div class="container-fluid">
+        <div class="row two-columns-form">
+            <div class="col-md-6 col-sm-6 col-xs-12 left-column">
+                <div class="centered-box-table">
+                    <div class="centered-box-table-cell">
+                        <div class="retina headquarter">Survey Solutions Headquarters</div>
+                        <p>
+                            @Pages.DownloadPage_Title
+                        </p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6 col-sm-6 col-xs-12 right-column">
+                <div class="centered-box-table">
+                    <div class="centered-box-table-cell">
+                        <div class="hq-apps-wrapper">
+                            <h2>@Pages.DownloadSupervisorPage_Welcome</h2>
+                            <div class="form-actions">
+                                <a href="@Url.HttpRouteUrl("DefaultApiWithAction", new {action = "GetLatestSupervisor", controller = "InterviewerSync"})" class="get-interviewer-app" id="dowload">
+                                    <span>@Pages.GetLatestSupervisorApp</span>
+                                    <span class="version">@Pages.DownloadPage_Version @(ServiceLocator.Current.GetInstance<IProductVersion>())</span>
+                                </a>
+                                
+                            </div>
+                            
+                        </div>
+                    </div>
+                </div>            
+            </div>
+        </div>
+    </div>
+</main> 
+    
+<footer class="footer">
+    <div class="container-fluid">
+        <div class="text-left">
+            &copy; @DateTime.Now.Year.ToString() <a href="http://www.worldbankgroup.org">@Pages.Layout_WorldBank</a>, @Pages.Layout_RightsReserved <a href="http://go.worldbank.org/OS6V7NIUD0">@Pages.Layout_Legal</a>.
+        </div>
+        <div class="text-left">
+            @(ServiceLocator.Current.GetInstance<IProductVersion>())
+            @if (AppSettings.IsDebugBuilded)
+            {
+                <span id="build-config">[.NET Debug]</span>
+            }
+            @if (HttpContext.Current.IsDebuggingEnabled)
+            {
+                <span id="compile-config" style="color: red">Web Debug</span>
+            }
+            <span>|</span>
+            <a href="@Url.Action("Index","Download")">@Common.GetInterviewerApp</a>
+        </div>
+    </div>
+</footer>
+
+</body>
+</html>

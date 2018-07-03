@@ -5,9 +5,9 @@ using System.Reflection;
 using Android.Support.V7.Widget;
 using Android.Widget;
 using Autofac;
+using Autofac.Features.ResolveAnything;
 using MvvmCross;
 using MvvmCross.Binding.Bindings.Target.Construction;
-using MvvmCross.Converters;
 using MvvmCross.IoC;
 using MvvmCross.Views;
 using WB.Core.BoundedContexts.Interviewer.Services;
@@ -22,10 +22,12 @@ using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.Enumerator;
+using WB.Core.SharedKernels.Enumerator.Denormalizer;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading;
 using WB.UI.Interviewer.Activities;
 using WB.UI.Interviewer.Activities.Dashboard;
-using WB.UI.Interviewer.Converters;
 using WB.UI.Interviewer.CustomBindings;
 using WB.UI.Interviewer.Infrastructure;
 using WB.UI.Interviewer.ServiceLocation;
@@ -33,6 +35,8 @@ using WB.UI.Interviewer.Settings;
 using WB.UI.Interviewer.ViewModel;
 using WB.UI.Shared.Enumerator;
 using WB.UI.Shared.Enumerator.Activities;
+using WB.UI.Shared.Enumerator.Converters;
+using WB.UI.Shared.Enumerator.CustomBindings;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Services.Internals;
 using WB.UI.Shared.Enumerator.Services.Logging;
@@ -69,26 +73,10 @@ namespace WB.UI.Interviewer
             container.AddAll(viewModelViewLookup);
         }
 
-        protected override void FillValueConverters(IMvxValueConverterRegistry registry)
-        {
-            base.FillValueConverters(registry);
-
-            registry.AddOrOverwrite("Localization", new InterviewerLocalizationValueConverter());
-            registry.AddOrOverwrite("StatusToDasboardBackground", new StatusToDasboardBackgroundConverter());
-            registry.AddOrOverwrite("InterviewStatusToColor", new InterviewStatusToColorConverter());
-            registry.AddOrOverwrite("InterviewStatusToDrawable", new InterviewStatusToDrawableConverter());
-            registry.AddOrOverwrite("InterviewStatusToButton", new InterviewStatusToButtonConverter());
-            registry.AddOrOverwrite("SynchronizationStatusToDrawable", new SynchronizationStatusToDrawableConverter());
-            registry.AddOrOverwrite("ValidationStyleBackground", new TextEditValidationStyleBackgroundConverter());
-            registry.AddOrOverwrite("IsSynchronizationFailOrCanceled", new IsSynchronizationFailOrCanceledConverter());
-            registry.AddOrOverwrite("SynchronizationStatusToTextColor", new SynchronizationStatusToTextColorConverter());
-        }
-
         protected override void FillTargetFactories(IMvxTargetBindingFactoryRegistry registry)
         {
             registry.RegisterCustomBindingFactory<TextView>("IsCurrentDashboardTab", (view) => new TextViewIsCurrentDashboardTabBinding(view));
             registry.RegisterCustomBindingFactory<ImageView>("CompanyLogo", view => new ImageCompanyLogoBinding(view));
-            registry.RegisterCustomBindingFactory<RecyclerView>("ScrollToPosition", view => new RecyclerViewScrollToPositionBinding(view));
 
             base.FillTargetFactories(registry);
         }
@@ -111,6 +99,7 @@ namespace WB.UI.Interviewer
                 };
 
             ContainerBuilder builder = new ContainerBuilder();
+            builder.RegisterSource(new AnyConcreteTypeNotAlreadyRegisteredSource());
             foreach (var module in modules)
             {
                 builder.RegisterModule(module.AsAutofac());
@@ -119,11 +108,15 @@ namespace WB.UI.Interviewer
 
             builder.RegisterType<NLogLogger>().As<ILogger>();
 
-            builder.RegisterType<InterviewerSettings>().As<IEnumeratorSettings>().As<IRestServiceSettings>().As<IInterviewerSettings>()
+            builder.RegisterType<InterviewerSettings>()
+                .As<IEnumeratorSettings>()
+                .As<IRestServiceSettings>()
+                .As<IInterviewerSettings>()
+                .As<IDeviceSettings>()
                 .WithParameter("backupFolder", AndroidPathUtils.GetPathToSubfolderInExternalDirectory("Backup"))
                 .WithParameter("restoreFolder", AndroidPathUtils.GetPathToSubfolderInExternalDirectory("Restore"));
 
-            builder.RegisterType<InterviewerDashboardEventHandler>().SingleInstance();
+            builder.RegisterType<InterviewDashboardEventHandler>().SingleInstance();
 
             var container = builder.Build();
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(container));

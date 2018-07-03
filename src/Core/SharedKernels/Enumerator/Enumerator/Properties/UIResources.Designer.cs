@@ -133,7 +133,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Perimeter:.
+        ///   Looks up a localized string similar to Length:.
         /// </summary>
         public static string AreaMap_LengthFormat {
             get {
@@ -183,6 +183,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string AreaMap_NoMapsFound {
             get {
                 return ResourceManager.GetString("AreaMap_NoMapsFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Perimeter:.
+        /// </summary>
+        public static string AreaMap_PerimeterFormat {
+            get {
+                return ResourceManager.GetString("AreaMap_PerimeterFormat", resourceCulture);
             }
         }
         
@@ -828,6 +837,60 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Overview.
+        /// </summary>
+        public static string Interview_Overview {
+            get {
+                return ResourceManager.GetString("Interview_Overview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Additional info.
+        /// </summary>
+        public static string Interview_Overview_AdditionalInfo {
+            get {
+                return ResourceManager.GetString("Interview_Overview_AdditionalInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Commentaries.
+        /// </summary>
+        public static string Interview_Overview_Comments {
+            get {
+                return ResourceManager.GetString("Interview_Overview_Comments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Overview.
+        /// </summary>
+        public static string Interview_Overview_Name {
+            get {
+                return ResourceManager.GetString("Interview_Overview_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not answered.
+        /// </summary>
+        public static string Interview_Overview_NotAnswered {
+            get {
+                return ResourceManager.GetString("Interview_Overview_NotAnswered", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Warning(s).
+        /// </summary>
+        public static string Interview_Overview_Warnings {
+            get {
+                return ResourceManager.GetString("Interview_Overview_Warnings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All {0} questions answered.
         /// </summary>
         public static string Interview_PreviousGroupNavigation_AnsweredQuestions {
@@ -1391,6 +1454,42 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string StaySignedInText {
             get {
                 return ResourceManager.GetString("StaySignedInText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Survey Solutions Supervisor.
+        /// </summary>
+        public static string Supervisor_ApplicationName {
+            get {
+                return ResourceManager.GetString("Supervisor_ApplicationName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Approve.
+        /// </summary>
+        public static string Supervisor_Complete_Approve_btn {
+            get {
+                return ResourceManager.GetString("Supervisor_Complete_Approve_btn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assign.
+        /// </summary>
+        public static string Supervisor_Complete_Assign_btn {
+            get {
+                return ResourceManager.GetString("Supervisor_Complete_Assign_btn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reject.
+        /// </summary>
+        public static string Supervisor_Complete_Reject_btn {
+            get {
+                return ResourceManager.GetString("Supervisor_Complete_Reject_btn", resourceCulture);
             }
         }
         

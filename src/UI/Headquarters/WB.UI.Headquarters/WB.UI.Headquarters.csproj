@@ -69,8 +69,8 @@
     <Reference Include="Antlr3.Runtime, Version=3.5.0.2, Culture=neutral, PublicKeyToken=eb42632606e9261f, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Antlr3.Runtime.3.5.1\lib\net40-client\Antlr3.Runtime.dll</HintPath>
     </Reference>
-    <Reference Include="AutoMapper, Version=6.2.2.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\AutoMapper.6.2.2\lib\net45\AutoMapper.dll</HintPath>
+    <Reference Include="AutoMapper, Version=7.0.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\AutoMapper.7.0.1\lib\net45\AutoMapper.dll</HintPath>
     </Reference>
     <Reference Include="CaptchaMvc, Version=2.5.0.0, Culture=neutral, PublicKeyToken=fe46ad421dd3b0e6, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\CaptchaMvc.Mvc5.1.5.0\lib\net45-full\CaptchaMvc.dll</HintPath>
@@ -277,6 +277,9 @@
       <HintPath>..\..\..\..\packages\System.Threading.Tasks.Extensions.4.4.0\lib\netstandard2.0\System.Threading.Tasks.Extensions.dll</HintPath>
     </Reference>
     <Reference Include="System.Transactions" />
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Helpers, Version=3.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -1756,6 +1759,7 @@
     <Content Include="Views\SurveySetup\UpgradeProgress.cshtml" />
     <Content Include="Views\SurveySetup\InterviewImportIsInProgress.cshtml" />
     <Content Include="Views\UnderConstruction\Index.cshtml" />
+    <Content Include="Views\Download\Supervisor.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -1775,11 +1779,30 @@
     <Compile Include="API\AdminSettingsController.cs" />
     <Compile Include="API\AssignmentsApiController.cs" />
     <Compile Include="API\AssignmentsUpgradeApiController.cs" />
+    <Compile Include="API\DataCollection\AttachmentsControllerBase.cs" />
+    <Compile Include="API\DataCollection\AssignmentsControllerBase.cs" />
+    <Compile Include="API\DataCollection\AuditLogControllerBase.cs" />
+    <Compile Include="API\DataCollection\Interviewer\InterviewerCommonWebApiConfig.cs" />
+    <Compile Include="API\DataCollection\Interviewer\InterviewerInterviewsControllerBase.cs" />
+    <Compile Include="API\DataCollection\Interviewer\InterviewerV3WebApiConfig.cs" />
+    <Compile Include="API\DataCollection\SettingsControllerBase.cs" />
+    <Compile Include="API\DataCollection\Supervisor\SupervisorInterviewsControllerBase.cs" />
+    <Compile Include="API\DataCollection\Supervisor\SupervisorV1WebApiConfig.cs" />
+    <Compile Include="API\DataCollection\Supervisor\v1\AssignmentsApiV1Controller.cs" />
+    <Compile Include="API\DataCollection\Supervisor\v1\AttachmentsApiV1Controller.cs" />
+    <Compile Include="API\DataCollection\Supervisor\v1\AuditLogApiV1Controller.cs" />
+    <Compile Include="API\DataCollection\Supervisor\v1\InterviewsApiV1Controller.cs" />
+    <Compile Include="API\DataCollection\Supervisor\v1\QuestionnairesApiV1Controller.cs" />
+    <Compile Include="API\DataCollection\Supervisor\v1\SettingsV1Controller.cs" />
+    <Compile Include="API\DataCollection\Supervisor\v1\InterviewersApiController.cs" />
+    <Compile Include="API\DataCollection\Supervisor\v1\TranslationsApiV1Controller.cs" />
+    <Compile Include="API\DataCollection\TranslationsControllerBase.cs" />
     <Compile Include="API\Helpers.cs" />
-    <Compile Include="API\Interviewer\v2\AssignmentsApiV2Controller.cs" />
-    <Compile Include="API\Interviewer\v2\AuditLogApiV2Controller.cs" />
-    <Compile Include="API\Interviewer\v2\MapsApiV2Controller.cs" />
-    <Compile Include="API\Interviewer\v3\InterviewsApiV3Controller.cs" />
+    <Compile Include="API\DataCollection\Interviewer\v2\AssignmentsApiV2Controller.cs" />
+    <Compile Include="API\DataCollection\Interviewer\v2\AuditLogApiV2Controller.cs" />
+    <Compile Include="API\DataCollection\Interviewer\InterviewerV2WebApiConfig.cs" />
+    <Compile Include="API\DataCollection\Interviewer\v2\MapsApiV2Controller.cs" />
+    <Compile Include="API\DataCollection\Interviewer\v3\InterviewsApiV3Controller.cs" />
     <Compile Include="API\PublicApi\AssignmentsController.cs" />
     <Compile Include="API\PublicApi\Models\QuestionApiView.cs" />
     <Compile Include="API\PublicApi\Models\InterviewApiStatistics.cs" />
@@ -1789,20 +1812,30 @@
     <Compile Include="API\PublicApi\Models\Statistics\QuestionDto.cs" />
     <Compile Include="API\PublicApi\Models\Statistics\SurveyStatisticsQuery.cs" />
     <Compile Include="API\ReportDataApiController.Dto.cs" />
+    <Compile Include="API\DataCollection\Supervisor\v1\SupervisorApiController.cs" />
+    <Compile Include="API\DataCollection\Supervisor\v1\DevicesApiV1Controller.cs" />
+    <Compile Include="API\DataCollection\Supervisor\v1\UsersApiController.cs" />
     <Compile Include="API\WebInterview\HqWebInterviewModule.cs" />
     <Compile Include="API\WebInterview\IReviewAllowedService.cs" />
     <Compile Include="API\WebInterview\IStatefullInterviewSearcher.cs" />
     <Compile Include="API\WebInterview\IWebInterviewAllowService.cs" />
     <Compile Include="API\WebInterview\LinksExportController.cs" />
+    <Compile Include="API\PagedApiResponse.cs" />
     <Compile Include="API\WebInterview\Pipeline\WebInterviewAuthorizeAttribute.cs" />
     <Compile Include="API\WebInterview\Pipeline\PlainSignalRTransactionManager.cs" />
     <Compile Include="API\WebInterview\Pipeline\WebInterviewStateManager.cs" />
     <Compile Include="API\WebInterview\SearchResults.cs" />
     <Compile Include="API\WebInterview\Services\HqWebInterviewInterviewEntityFactory.cs" />
+    <Compile Include="API\WebInterview\IInterviewOverviewService.cs" />
+    <Compile Include="API\WebInterview\Services\InterviewOverviewService.cs" />
     <Compile Include="API\WebInterview\Services\InterviewQuestionFilter.cs" />
+    <Compile Include="API\WebInterview\Services\Overview\OverviewWebGroupNode.cs" />
+    <Compile Include="API\WebInterview\Services\Overview\OverviewWebQuestionNode.cs" />
+    <Compile Include="API\WebInterview\Services\Overview\OverviewWebSectionNode.cs" />
     <Compile Include="API\WebInterview\Services\ReviewAllowedService.cs" />
     <Compile Include="API\WebInterview\Services\StatefullInterviewSearcher.cs" />
     <Compile Include="API\WebInterview\Services\WebInterviewAllowService.cs" />
+    <Compile Include="API\WebInterview\StatefullInterviewExtensions.cs" />
     <Compile Include="API\WebInterview\WebInterviewHub.cs" />
     <Compile Include="App_GlobalResources\BatchUpload.ar.designer.cs">
       <AutoGen>True</AutoGen>
@@ -1896,8 +1929,8 @@
     <Compile Include="API\PublicApi\IncludeOnlyPublicApiDocumentFilter.cs" />
     <Compile Include="API\PublicApi\ExportController.cs" />
     <Compile Include="API\InterviewerApkInfo.cs" />
-    <Compile Include="API\Interviewer\v2\SettingsV2Controller.cs" />
-    <Compile Include="API\Interviewer\v2\TranslationsApiV2Controller.cs" />
+    <Compile Include="API\DataCollection\Interviewer\v2\SettingsV2Controller.cs" />
+    <Compile Include="API\DataCollection\Interviewer\v2\TranslationsApiV2Controller.cs" />
     <Compile Include="API\MetricsController.cs" />
     <Compile Include="API\ProgressiveDownload.cs" />
     <Compile Include="API\ControlPanelApiController.cs" />
@@ -1905,17 +1938,17 @@
     <Compile Include="API\ExportSettingsApiController.cs" />
     <Compile Include="API\HealthCheckApiController.cs" />
     <Compile Include="API\InterviewerSyncController.cs" />
-    <Compile Include="API\Interviewer\DevicesControllerBase.cs" />
-    <Compile Include="API\Interviewer\InterviewerApiController.cs" />
-    <Compile Include="API\Interviewer\InterviewsControllerBase.cs" />
-    <Compile Include="API\Interviewer\QuestionnairesControllerBase.cs" />
-    <Compile Include="API\Interviewer\UsersControllerBase.cs" />
-    <Compile Include="API\Interviewer\v2\AttachmentsApiV2Controller.cs" />
-    <Compile Include="API\Interviewer\v2\DevicesApiV2Controller.cs" />
-    <Compile Include="API\Interviewer\v2\InterviewerApiV2Controller.cs" />
-    <Compile Include="API\Interviewer\v2\InterviewsApiV2Controller.cs" />
-    <Compile Include="API\Interviewer\v2\QuestionnairesApiV2Controller.cs" />
-    <Compile Include="API\Interviewer\v2\UsersApiV2Controller.cs" />
+    <Compile Include="API\DataCollection\DevicesControllerBase.cs" />
+    <Compile Include="API\DataCollection\Interviewer\InterviewerApiController.cs" />
+    <Compile Include="API\DataCollection\InterviewsControllerBase.cs" />
+    <Compile Include="API\DataCollection\QuestionnairesControllerBase.cs" />
+    <Compile Include="API\DataCollection\Interviewer\UsersControllerBase.cs" />
+    <Compile Include="API\DataCollection\Interviewer\v2\AttachmentsApiV2Controller.cs" />
+    <Compile Include="API\DataCollection\Interviewer\v2\DevicesApiV2Controller.cs" />
+    <Compile Include="API\DataCollection\Interviewer\v2\InterviewerApiV2Controller.cs" />
+    <Compile Include="API\DataCollection\Interviewer\v2\InterviewsApiV2Controller.cs" />
+    <Compile Include="API\DataCollection\Interviewer\v2\QuestionnairesApiV2Controller.cs" />
+    <Compile Include="API\DataCollection\Interviewer\v2\UsersApiV2Controller.cs" />
     <Compile Include="API\PublicApi\InterviewsController.cs" />
     <Compile Include="API\ProgressiveDownloadResult.cs" />
     <Compile Include="API\PublicApi\Models\Assignments.cs" />
@@ -2059,6 +2092,7 @@
     <Compile Include="Migrations\PlainStore\M001-100\M201804031536_MakeUserPreloadingOptionalFields.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M201805101216_AddProtectedVariables.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M201805311125_AddResponsibleIdIndexForAssignments.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M201806151438_AddQuestionnaireVariableToQuestionnaireBrowseItems.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201709081506_RemoveInterviewStatusTimespans.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201709071054_Remove_Readsideversions.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M024_DeleteInterviewEntitiesTable.cs" />
@@ -2096,6 +2130,9 @@
     <Compile Include="Migrations\ReadSide\M001-100\M201805121700_Add_categorical_pivot.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201805141156_AddIndexForInterviewStatusChangeHistory.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M201805141242_CreateSyncPackageTrackingTable.cs" />
+    <Compile Include="Migrations\ReadSide\M001-100\M201806191234_AddErrorsCountToInterviewSummary.cs" />
+    <Compile Include="Migrations\ReadSide\M001-100\M201806191240_FillErrorsCountInInterviewSummary.cs" />
+    <Compile Include="Migrations\ReadSide\M001-100\M201806271400_AddUniqueConstraintOnInterviewEntities.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\QuestionnaireEntityMigration.cs" />
     <Compile Include="Migrations\Users\M005_AddDeviceAppVersionToProfile.cs" />
     <Compile Include="Migrations\Users\M201709081340_RemovedUserDocumentAndRolesTables.cs" />
@@ -2453,6 +2490,18 @@
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug-ESRI|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>bin\WB.UI.Headquarters.XML</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <NoWarn>1591</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />

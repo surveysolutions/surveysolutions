@@ -10,7 +10,7 @@ using WB.Core.BoundedContexts.Designer.ValueObjects;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 
 
-namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests.Categorical
+namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests.Categorical
 {
     [TestFixture]
     internal class when_verifying_questionnaire_with_linked_question_that_has_filter_expression_referencing_itself : QuestionnaireVerifierTestsContext

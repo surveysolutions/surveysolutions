@@ -302,7 +302,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 if (selectedOptionIndex >= 0)
                 {
                     var answeredYesNoOption = @event.AnsweredOptions[selectedOptionIndex];
-                    option.YesAnswerCheckedOrder = answeredYesNoOption.Yes 
+                    option.YesAnswerCheckedOrder = answeredYesNoOption.Yes && this.areAnswersOrdered
                         ? orderedYesOptions.IndexOf(option.Value) + 1
                         : (int?)null;
                     option.AnswerCheckedOrder = orderedOptions.IndexOf(option.Value) + 1;

@@ -1,9 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
+using Autofac.Features.ResolveAnything;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.UI.Shared.Enumerator.Services.Internals;
 
@@ -33,6 +33,7 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
 
         public Task Init()
         {
+            containerBuilder.RegisterSource(new AnyConcreteTypeNotAlreadyRegisteredSource());
             var status = new UnderConstructionInfo();
             this.containerBuilder.Register((ctx, p) => status).SingleInstance();
 

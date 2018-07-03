@@ -63,6 +63,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         public List<Translation> Translations => this.Questionnaire.Translations;
         public string Title => this.Questionnaire.Title;
         public Guid PublicKey => this.Questionnaire.PublicKey;
+        public string VariableName => this.Questionnaire.VariableName;
 
         public T Find<T>(Guid publicKey) where T : class, IComposite
         {

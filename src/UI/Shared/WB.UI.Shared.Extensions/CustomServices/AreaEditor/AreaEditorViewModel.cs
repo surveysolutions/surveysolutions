@@ -211,7 +211,8 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                 this.Geometry = Geometry.FromJson(parameter.Geometry);
 
                 this.GeometryArea = GeometryEngine.AreaGeodetic(this.Geometry).ToString("#.##");
-                this.GeometryLength = GeometryEngine.LengthGeodetic(this.Geometry).ToString("#.##");
+                this.GeometryLengthLabel =
+                    $"{(this.requestedGeometryType == GeometryType.Polygon ? UIResources.AreaMap_PerimeterFormat : UIResources.AreaMap_LengthFormat)} {GeometryEngine.LengthGeodetic(this.Geometry):#.##} m";
             }
         }
 
@@ -408,7 +409,8 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                     try
                     {
                         this.GeometryArea = GetGeometryArea(geometry).ToString("#.##");
-                        this.GeometryLength = GetGeometryLenght(geometry).ToString("#.##");
+                        this.GeometryLengthLabel =
+                            $"{(this.requestedGeometryType == GeometryType.Polygon ? UIResources.AreaMap_PerimeterFormat : UIResources.AreaMap_LengthFormat)} {GetGeometryLenght(geometry):#.##} m";
                     }
                     catch
                     {
@@ -571,11 +573,11 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             set => this.RaiseAndSetIfChanged(ref this.geometryArea, value);
         }
 
-        private string geometryLength = "0";
-        public string GeometryLength
+        private string geometryLengthLabel = "";
+        public string GeometryLengthLabel
         {
-            get => this.geometryLength;
-            set => this.RaiseAndSetIfChanged(ref this.geometryLength, value);
+            get => this.geometryLengthLabel;
+            set => this.RaiseAndSetIfChanged(ref this.geometryLengthLabel, value);
         }
 
         private void BtnUndo()

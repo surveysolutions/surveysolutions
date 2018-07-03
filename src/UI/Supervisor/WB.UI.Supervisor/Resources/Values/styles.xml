@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <style name="Menu_Hint" parent="AppTheme">
+    <item name="android:textColor">@color/menu_hint_color</item>
+    <item name="android:fontFamily">Roboto</item>
+    <item name="android:textSize">@dimen/textsize_16</item>
+    <item name="android:textStyle">italic</item>
+  </style>
+
+  <style name="Menu_Hint_Bold" parent="Menu_Hint">
+    <item name="android:textStyle">italic|bold</item>
+  </style>
+</resources>
