@@ -21,6 +21,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         private int waitingForDecisionCount;
 
         protected readonly IPrincipal Principal;
+        private MvxSubscriptionToken messengerSubscribtion;
 
         public DashboardMenuViewModel(IMvxNavigationService mvxNavigationService, 
             IMvxMessenger messenger,
@@ -36,13 +37,25 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
 
         public override Task Initialize()
         {
-            messenger.Subscribe<SynchronizationCompletedMsg>(msg => RefreshCounters());
+            
             RefreshCounters();
 
             this.UserName = Principal.CurrentUserIdentity.Name;
             this.UserEmail = Principal.CurrentUserIdentity.Email;
 
             return Task.CompletedTask;
+        }
+
+        public override void ViewAppeared()
+        {
+            base.ViewAppeared();
+            messengerSubscribtion = messenger.Subscribe<SynchronizationCompletedMsg>(msg => RefreshCounters(), MvxReference.Strong);
+        }
+
+        public override void ViewDisappeared()
+        {
+            base.ViewDisappeared();
+            messengerSubscribtion.Dispose();
         }
 
         private void RefreshCounters()

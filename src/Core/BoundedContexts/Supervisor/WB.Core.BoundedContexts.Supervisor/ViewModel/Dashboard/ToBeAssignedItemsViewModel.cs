@@ -1,13 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using MvvmCross.Plugin.Messenger;
 using WB.Core.BoundedContexts.Supervisor.Properties;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
 {
-    public class ToBeAssignedItemsViewModel : ListViewModel
+    public class ToBeAssignedItemsViewModel : RefreshingAfterSyncListViewModel
     {
         private readonly IDashboardItemsAccessor dashboardItemsAccessor;
 

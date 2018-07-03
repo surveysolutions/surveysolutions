@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
 {
-    public class OutboxViewModel : ListViewModel
+    public class OutboxViewModel : RefreshingAfterSyncListViewModel
     {
         private readonly IDashboardItemsAccessor dashboardItemsAccessor;
 

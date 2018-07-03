@@ -18,31 +18,24 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         private readonly IViewModelNavigationService viewModelNavigationService;
         private Guid LastVisitedInterviewId { get; set; }
 
-        private readonly IMvxMessenger messenger;
-
         public SynchronizationViewModel Synchronization { get; set; }
         
         public string DashboardTitle => "dashboard title :)";
 
         public DashboardViewModel(IPrincipal principal, 
             IViewModelNavigationService viewModelNavigationService,
-            IMvxMessenger messenger,
             SynchronizationViewModel synchronization) 
             : base(principal, viewModelNavigationService)
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.Synchronization = synchronization;
             this.Synchronization.Init();
-
-            this.messenger = messenger;
-            //messenger.Subscribe<SynchronizationCompletedMsg>(msg => SynchronizationCommand.Execute());
         }
 
         public override void Prepare(DashboardViewModelArgs parameter)
         {
             this.LastVisitedInterviewId = parameter.InterviewId;
         }
-
 
         private IMvxAsyncCommand synchronizationCommand;
         public IMvxAsyncCommand SynchronizationCommand
@@ -67,12 +60,9 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             if (this.viewModelNavigationService.HasPendingOperations)
             {
                 this.viewModelNavigationService.ShowWaitMessage();
-                
             }
             else
             {
-
-
                 this.Synchronization.IsSynchronizationInProgress = true;
                 this.Synchronization.Synchronize();
             }

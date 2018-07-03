@@ -6,7 +6,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
 {
-    public class WaitingForSupervisorActionViewModel : ListViewModel
+    public class WaitingForSupervisorActionViewModel : RefreshingAfterSyncListViewModel
     {
         private readonly IDashboardItemsAccessor dashboardItemsAccessor;
 
