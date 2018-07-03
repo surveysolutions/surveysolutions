@@ -46,37 +46,37 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         public string Scope
         {
             get => this.scope;
-            set => MvxNotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref this.scope, value);
+            set => this.RaiseAndSetIfChanged( ref this.scope, value);
         }
 
         public DateTime WhenGenerated
         {
             get => this.whenGenerated;
-            set => MvxNotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref this.whenGenerated, value);
+            set => this.RaiseAndSetIfChanged( ref this.whenGenerated, value);
         }
 
         public bool IsPackageBuild
         {
             get => this.isPackageBuild;
-            set => MvxNotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref this.isPackageBuild, value);
+            set => this.RaiseAndSetIfChanged( ref this.isPackageBuild, value);
         }
 
         public bool IsPackageSendingAttemptCompleted
         {
             get => this.isPackageSendingAttemptCompleted;
-            set => MvxNotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref this.isPackageSendingAttemptCompleted, value);
+            set => this.RaiseAndSetIfChanged( ref this.isPackageSendingAttemptCompleted, value);
         }
 
         public string PackageSendingAttemptResponceText
         {
             get => this.packageSendingAttemptResponceText;
-            set => MvxNotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref this.packageSendingAttemptResponceText, value);
+            set => this.RaiseAndSetIfChanged( ref this.packageSendingAttemptResponceText, value);
         }
 
         public bool IsInProgress
         {
             get => this.isInProgress;
-            set => MvxNotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref this.isInProgress, value);
+            set => this.RaiseAndSetIfChanged( ref this.isInProgress, value);
         }
 
         private async Task CreateBackupAsync()

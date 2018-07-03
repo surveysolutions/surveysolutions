@@ -15,14 +15,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         private MvxObservableCollection<IDashboardItem> uiItems = new MvxObservableCollection<IDashboardItem>();
         public MvxObservableCollection<IDashboardItem> UiItems {
             get => this.uiItems;
-            protected set => MvxNotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref this.uiItems, value);
+            protected set => this.RaiseAndSetIfChanged( ref this.uiItems, value);
         }
 
         private int itemsCount;
         public int ItemsCount
         {
             get => this.itemsCount;
-            protected set => MvxNotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref this.itemsCount, value);
+            protected set => this.RaiseAndSetIfChanged( ref this.itemsCount, value);
         }
 
         protected Task UpdateUiItems() => Task.Run(() =>
