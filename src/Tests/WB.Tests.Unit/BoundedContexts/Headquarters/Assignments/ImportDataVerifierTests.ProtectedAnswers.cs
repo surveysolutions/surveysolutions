@@ -117,5 +117,28 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             errors.Should().Contain(x => x.Code == "PL0047");
         }
+
+        [Test]
+        public void when_protected_variable_in_different_caps()
+        {
+            var variableName = "multi";
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.MultyOptionsQuestion(variable: variableName));
+
+            var verifier = Create.Service.ImportDataVerifier();
+
+            var preloadingValue = Create.Entity.PreloadingValue(
+                ServiceColumns.ProtectedVariableNameColumn, variableName.ToUpper());
+
+            var preloadingRow = Create.Entity.PreloadingRow(preloadingValue);
+
+            var preloadedFile = Create.Entity.PreloadedFile(preloadedFileName, preloadingRow);
+
+            var errors = verifier.VerifyProtectedVariables(preloadedFileName, preloadedFile,
+                        Create.Entity.PlainQuestionnaire(questionnaire))
+                    .ToList();
+
+            Assert.That(errors, Is.Empty);
+        }
     }
 }
