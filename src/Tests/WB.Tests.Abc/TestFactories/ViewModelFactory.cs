@@ -388,5 +388,13 @@ namespace WB.Tests.Abc.TestFactories
                 mvxMainThreadDispatcher ?? Mock.Of<IMvxMainThreadDispatcher>(), 
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>());
         }
+
+        public SideBarCompleteSectionViewModel SideBarCompleteSectionViewModel()
+        {
+            return new SideBarCompleteSectionViewModel(Mock.Of<IMvxMessenger>(),
+                Create.ViewModel.DynamicTextViewModel(),
+                Mock.Of<InterviewStateViewModel>(),
+                Create.Entity.AnswerNotifier(Create.Service.LiteEventRegistry()));
+        }
     }
 }

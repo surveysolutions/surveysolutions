@@ -299,7 +299,7 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
 
         public void Handle(IPublishedEvent<InterviewStatusChanged> evnt)
         {
-            if(!this.IsInterviewCompletedOrRestarted(evnt.Payload.Status))
+            if(!this.IsInterviewStatusShouldBeHandled(evnt.Payload.Status))
                 return;
 
             InterviewView interviewView = this.interviewViewRepository.GetById(evnt.EventSourceId.FormatGuid());
@@ -318,9 +318,12 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
             this.interviewViewRepository.Store(interviewView);
         }
 
-        private bool IsInterviewCompletedOrRestarted(InterviewStatus status)
+        private bool IsInterviewStatusShouldBeHandled(InterviewStatus status)
         {
-            return status == InterviewStatus.Completed || status == InterviewStatus.Restarted || status == InterviewStatus.RejectedBySupervisor;
+            return status == InterviewStatus.Completed || 
+                   status == InterviewStatus.Restarted || 
+                   status == InterviewStatus.RejectedBySupervisor ||
+                status == InterviewStatus.ApprovedBySupervisor;
         }
 
         private void AnswerQuestion(Guid interviewId, Guid questionId, object answer, DateTime answerTimeUtc)

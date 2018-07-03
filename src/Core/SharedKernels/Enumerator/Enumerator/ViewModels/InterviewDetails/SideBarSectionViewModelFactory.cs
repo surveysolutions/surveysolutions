@@ -1,12 +1,13 @@
 ﻿using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
-    internal class SideBarSectionViewModelFactory : ISideBarSectionViewModelsFactory
+    public class SideBarSectionViewModelFactory : ISideBarSectionViewModelsFactory
     {
-        private readonly IServiceLocator serviceLocator;
+        protected readonly IServiceLocator serviceLocator;
 
         public SideBarSectionViewModelFactory(IServiceLocator serviceLocator)
         {
@@ -21,10 +22,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             return sideBarItem;
         }
 
-        public ISideBarItem BuildCompleteItem(NavigationState navigationState, string interviewId)
+        public virtual ISideBarItem BuildCompleteItem(NavigationState navigationState, string interviewId)
         {
             var sideBarItem = this.serviceLocator.GetInstance<SideBarCompleteSectionViewModel>();
-            sideBarItem.Init(navigationState, interviewId);
+            sideBarItem.Init(navigationState, interviewId, UIResources.Interview_Complete_Screen_Title);
             return sideBarItem;
         }
 

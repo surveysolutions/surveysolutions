@@ -620,4 +620,13 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="Interview_Overview_Comments" xml:space="preserve">
     <value>Commentaries</value>
   </data>
+  <data name="Supervisor_Complete_Approve_btn" xml:space="preserve">
+    <value>Approve</value>
+  </data>
+  <data name="Supervisor_Complete_Assign_btn" xml:space="preserve">
+    <value>Assign</value>
+  </data>
+  <data name="Supervisor_Complete_Reject_btn" xml:space="preserve">
+    <value>Reject</value>
+  </data>
 </root>
