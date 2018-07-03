@@ -53,9 +53,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.SideBarGroupState = interviewStateViewModel;
         }
 
-        public void Init(NavigationState navigationState, string interviewId)
+        public void Init(NavigationState navigationState, string interviewId, string itemText)
         {
-            this.Title.InitAsStatic(UIResources.Interview_Complete_Screen_Title);
+            this.Title.InitAsStatic(itemText);
             this.SideBarGroupState.Init(interviewId, null);
 
             this.navigationState = navigationState;

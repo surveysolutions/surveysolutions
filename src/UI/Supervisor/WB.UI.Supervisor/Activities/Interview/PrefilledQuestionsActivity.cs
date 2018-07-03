@@ -1,18 +1,16 @@
 using Android.App;
 using Android.Views;
-using Java.Interop;
 using WB.Core.BoundedContexts.Supervisor.ViewModel;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.UI.Shared.Enumerator.Activities;
 
-namespace WB.UI.Supervisor.Activities
+namespace WB.UI.Supervisor.Activities.Interview
 {
-    [Activity(Label = "",
-        Theme = "@style/BlueAppTheme",
+    [Activity(Label = "", Theme = "@style/BlueAppTheme",
         HardwareAccelerated = true,
         WindowSoftInputMode = SoftInput.StateAlwaysHidden | SoftInput.AdjustPan,
         ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
-    public class InterviewActivity : BaseInterviewActivity<SupervisorInterviewViewModel>
+    public class PrefilledQuestionsActivity : BasePrefilledQuestionsActivity<PrefilledQuestionsViewModel>
     {
         protected override int LanguagesMenuGroupId => Resource.Id.interview_languages;
         protected override int OriginalLanguageMenuItemId => Resource.Id.interview_language_original;
@@ -50,11 +48,5 @@ namespace WB.UI.Supervisor.Activities
                 InterviewerUIResources.MenuItem_Title_Language_Original
             },
         };
-
-        [Export("NavigateToApi")]
-        public void NavigateToApi(string navigateTo)
-        {
-            base.Navigate(navigateTo);
-        }
     }
 }

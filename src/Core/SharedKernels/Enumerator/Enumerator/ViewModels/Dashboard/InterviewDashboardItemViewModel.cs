@@ -193,6 +193,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
                 case InterviewStatus.RejectedBySupervisor:
                     return DashboardInterviewStatus.Rejected;
                 case InterviewStatus.Completed:
+                case InterviewStatus.ApprovedBySupervisor:
                     return DashboardInterviewStatus.Completed;
                 case InterviewStatus.Restarted:
                     return DashboardInterviewStatus.InProgress;

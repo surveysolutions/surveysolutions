@@ -1467,6 +1467,33 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Approve.
+        /// </summary>
+        public static string Supervisor_Complete_Approve_btn {
+            get {
+                return ResourceManager.GetString("Supervisor_Complete_Approve_btn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assign.
+        /// </summary>
+        public static string Supervisor_Complete_Assign_btn {
+            get {
+                return ResourceManager.GetString("Supervisor_Complete_Assign_btn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reject.
+        /// </summary>
+        public static string Supervisor_Complete_Reject_btn {
+            get {
+                return ResourceManager.GetString("Supervisor_Complete_Reject_btn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to You do not have any assignments on this device. Send tablet information, clear application&apos;s data and login by another account.
         /// </summary>
         public static string Synchronization_UserLinkedToAnotherDevice_Description {

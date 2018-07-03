@@ -28,7 +28,7 @@ namespace WB.Core.SharedKernels.Enumerator
         public void Load(IIocRegistry registry)
         {
             registry.BindAsSingleton<IEntitiesListViewModelFactory, EntitiesListViewModelFactory>();
-            registry.Bind<ISideBarSectionViewModelsFactory, SideBarSectionViewModelFactory>();
+           
             registry.Bind<IDynamicTextViewModelFactory, DynamicTextViewModelFactory>();
             registry.Bind<ISubstitutionTextFactory, SubstitutionTextFactory>();
             registry.Bind<ISubstitutionService, SubstitutionService>(); //.InScope(ctx => BaseInterviewViewModel.CurrentInterviewScope); 

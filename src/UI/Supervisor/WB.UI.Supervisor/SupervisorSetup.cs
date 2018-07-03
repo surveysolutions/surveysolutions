@@ -38,6 +38,7 @@ using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Services.Internals;
 using WB.UI.Shared.Enumerator.Services.Logging;
 using WB.UI.Supervisor.Activities;
+using WB.UI.Supervisor.Activities.Interview;
 using WB.UI.Supervisor.MvvmBindings;
 using WB.UI.Supervisor.Services.Implementation;
 
@@ -56,7 +57,7 @@ namespace WB.UI.Supervisor
                 {typeof(DiagnosticsViewModel),typeof(DiagnosticsActivity) },
                 {typeof(DashboardViewModel),typeof(DashboardActivity) },
                 {typeof(SupervisorInterviewViewModel),typeof(InterviewActivity) },
-                {typeof(CompleteInterviewViewModel), typeof (CompleteInterviewFragment)},
+                {typeof(SupervisorCompleteInterviewViewModel), typeof (SupervisorCompleteFragment)},
 #if !EXCLUDEEXTENSIONS
                 {typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel), typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorActivity)}
 #endif

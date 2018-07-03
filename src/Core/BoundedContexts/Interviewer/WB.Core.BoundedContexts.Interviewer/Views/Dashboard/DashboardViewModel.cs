@@ -62,7 +62,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.RejectedInterviews.OnItemsLoaded += this.OnItemsLoaded;
             this.CompletedInterviews.OnItemsLoaded += this.OnItemsLoaded;
             this.CreateNew.OnItemsLoaded += this.OnItemsLoaded;
-
         }
 
         public override void Prepare(DashboardViewModelArgs parameter)
