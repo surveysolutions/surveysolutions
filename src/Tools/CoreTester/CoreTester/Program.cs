@@ -31,6 +31,13 @@ namespace CoreTester
             public string Folder{ get; set; }
         }
 
+        [Verb("orphans", HelpText = "Remove orphan records from export files.")]
+        protected class RemoveOrphanInterviewRecordsOptions
+        {
+            [Option('c', "connection", Required = true, HelpText = "Connection string to DB")]
+            public string ConnectionString { get; set; }
+        }
+
         static int Main(string[] args)
         {
             var logger = LogManager.GetCurrentClassLogger();
@@ -39,11 +46,12 @@ namespace CoreTester
             try
             {
                 return Parser.Default
-                    .ParseArguments<CoreTestOptions, DumpDebugInformationOptions, CoreDebugOptions>(args)
+                    .ParseArguments<CoreTestOptions, DumpDebugInformationOptions, CoreDebugOptions, RemoveOrphanInterviewRecordsOptions>(args)
                     .MapResult(
                         (CoreTestOptions o) => RunCoreTestOptions(o),
                         (DumpDebugInformationOptions o) => RunDumpDebugInformationOptions(o),
                         (CoreDebugOptions o) => RunCoreDebugger(o),
+                        (RemoveOrphanInterviewRecordsOptions o) => RunOrphanInterviewRecordsRemover(o),
                         errs =>
                         {
                             foreach (var error in errs)
@@ -60,6 +68,28 @@ namespace CoreTester
                 logger.Error(e);
                 return 1;
             }
+        }
+
+        private static int RunOrphanInterviewRecordsRemover(RemoveOrphanInterviewRecordsOptions opts)
+        {
+            Console.WriteLine("++++++++++++++++++++++++++++++++++++++++++++");
+            Console.WriteLine($"started at {DateTime.Now}");
+            DbConnectionStringBuilder db = new DbConnectionStringBuilder {ConnectionString = opts.ConnectionString};
+            var serverName = db["Database"].ToString();
+            Console.WriteLine(serverName);
+            Console.WriteLine();
+
+            IKernel container = NinjectConfig.CreateKernel(opts.ConnectionString.Trim('"'));
+
+            RemoveOrphanInterviewRecords remover = container.Get<RemoveOrphanInterviewRecords>();
+
+            var runResult = remover.Run(serverName);
+
+            Console.WriteLine();
+            Console.WriteLine("Press Any key");
+            Console.ReadLine();
+
+            return runResult;
         }
 
         private static int RunCoreDebugger(CoreDebugOptions opts)

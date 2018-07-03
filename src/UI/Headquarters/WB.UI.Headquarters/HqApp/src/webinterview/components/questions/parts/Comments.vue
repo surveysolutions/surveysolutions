@@ -42,7 +42,7 @@
             }
         },
         props: {
-            isShowingAddCommentDialog: { type: Boolean, default: false },
+            isShowingAddCommentDialog: { type: Boolean, default: false }
         },
         methods: {
             getCommentTitle(comment) {

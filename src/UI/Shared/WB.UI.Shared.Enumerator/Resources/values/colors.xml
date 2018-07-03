@@ -6,16 +6,24 @@
   <color name="colorPrimary">@android:color/darker_gray</color>
 
   <color name="errorTextColor">#e64a19</color>
+  <color name="commentsTextColor">#DF3DBF</color>
   <color name="warningTextColor">#F9BD07</color>
   <color name="disabledTextColor">#afafaf</color>
+  <color name="notAnsweredLabel">#4277A8</color>
+  <color name="overview_invalid_border">#F0D0C7</color>
+  <color name="overview_invalid_text">#c70000</color>
+  <color name="overview_invalid_background">#FCDAD1</color>
+  <color name="overview_unanswered_border">#D6D6D6</color>
+  <color name="overview_unanswered_background">#E1E1E1</color>
+  <color name="overview_commented_overlay">#4DE88AD3</color>
 
   <color name="sideBarPrefilledQuestionText">#FF747474</color>
-
 
   <color name="commentInterviewerTextColor">#FF747474</color>
   <color name="commentDetailsInterviewerTextColor">#FF000000</color>
   <color name="commentSupervisorTextColor">#FFF6D6D0</color>
   <color name="nonAnsweredBackground">#EEEFF0</color>
+  <color name="invalidAnsweredBackground">#FFF6D6D0</color>
 
   <color name="colorToolbarText">#FFFFFFFF</color>
   <color name="colorToolbarTransp">#BFFFFFFF</color>
@@ -53,6 +61,39 @@
   <color name="dashboard_button_color_pressed">#E5E5E5</color>
   <color name="dashboard_questionnairelist_empty_text">#a3a3a3</color>
 
+    <color name="dashboard_completed_tab">#388e3c</color>
+    <color name="dashboard_in_progress_tab">#1976d2</color>
+    <color name="dashboard_rejected_tab">#e64a19</color>
+    <color name="dashboard_interview_title">#404040</color>
+
+  <color name="dashboard_interview_delimeter">#ebebeb</color>
+    <color name="dashboard_interview_background">#FFFFFF</color>
+    <color name="dashboard_new_tab">#6D6D6D</color>
+    <color name="dashboard_prefilled_question">#999999</color>
+    <color name="dashboard_in_progress_tab">#1976d2</color>
+
+    <color name="dashboard_border">#ECECEC</color>
+    <color name="dashboard_border_shadow">#C2C2C2</color>
+
+    <color name="dashboard_new_interview_status">#E9E9E9</color>
+    <color name="dashboard_main_color">#404040</color>
+
+    <color name="dashboard_interview_subtitle">#9e9e9e</color>
+
+    <color name="dashboard_new_tab">#6D6D6D</color>
+    <color name="dashboard_new_interview_status">#E9E9E9</color>
+    <color name="dashboard_no_interviews_text">#A7A7A7</color>
+    <color name="dashboard_synchronization_delimiter">#E3E3E3</color>
+    <color name="dashboard_synchronization_regular_title">#000000</color>
+    <color name="dashboard_synchronization_statistics_text">#FF747474</color>
+    <color name="dashboard_synchronization_fail_title">#96F45D28</color>
+    <color name="dashboard_border">#ECECEC</color>
+    <color name="dashboard_border_shadow">#C2C2C2</color>
+
+    <color name="dashboard_search_background_color">#F2F2F2</color>
+    <color name="dashboard_search_exit_color">#2A81CB</color>
+
+    
   <color name="previous_group_navigation_answered">#7AC16B</color>
   <color name="previous_group_navigation_unanswered">#2A81CB</color>
 

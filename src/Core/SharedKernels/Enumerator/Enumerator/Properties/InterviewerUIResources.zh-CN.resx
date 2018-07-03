@@ -1,0 +1,549 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AccountIsLockedOnServer" xml:space="preserve">
+    <value>您的账户已被锁定。请联系督导员。</value>
+  </data>
+  <data name="AccountIsNotAnInterviewer" xml:space="preserve">
+    <value>您的账户没有调查员权限。</value>
+  </data>
+  <data name="AccountIsNotApprovedOnServer" xml:space="preserve">
+    <value>您的账户未获批准。请联系督导员。</value>
+  </data>
+  <data name="ApplicationIncompatibleWithServer" xml:space="preserve">
+    <value>您的应用程序与服务器不兼容。请更新您的调查员应用程序。</value>
+  </data>
+  <data name="Dashboard_CompletedLinkText" xml:space="preserve">
+    <value>已完成({0})</value>
+  </data>
+  <data name="Dashboard_NewItemsLinkText" xml:space="preserve">
+    <value>新({0})</value>
+  </data>
+  <data name="Dashboard_NoInterviewsSyncButton" xml:space="preserve">
+    <value>同步</value>
+  </data>
+  <data name="Dashboard_NoInterviewsText" xml:space="preserve">
+    <value>同步以获取新任务或联系督导员获得进一步的指导</value>
+  </data>
+  <data name="Dashboard_NoInterviewsTitle" xml:space="preserve">
+    <value>您没有新任务</value>
+  </data>
+  <data name="Dashboard_NoNewItemsLinkText" xml:space="preserve">
+    <value>没有新任务</value>
+  </data>
+  <data name="Dashboard_Reinitialize_Interview_Message" xml:space="preserve">
+    <value>该调查已结束。您想要重新开始调查吗？</value>
+  </data>
+  <data name="Dashboard_RejectedLinkText" xml:space="preserve">
+    <value>驳回({0})</value>
+  </data>
+  <data name="Dashboard_RemoveInterviewQuestion" xml:space="preserve">
+    <value>您确定要删除这个调查{0}吗？</value>
+  </data>
+  <data name="Dashboard_StartedLinkText" xml:space="preserve">
+    <value>已开始({0})</value>
+  </data>
+  <data name="DashboardItem_AssignedOn" xml:space="preserve">
+    <value>已于{0}分配</value>
+  </data>
+  <data name="DashboardItem_CensusModeComment" xml:space="preserve">
+    <value>普查模式，已创建调查：{0}</value>
+  </data>
+  <data name="DashboardItem_CompletedOn" xml:space="preserve">
+    <value>已于{0}完成</value>
+  </data>
+  <data name="DashboardItem_CreatedOn" xml:space="preserve">
+    <value>已于{0}创建</value>
+  </data>
+  <data name="DashboardItem_NotStarted" xml:space="preserve">
+    <value>未开始</value>
+  </data>
+  <data name="DashboardItem_RejectedOn" xml:space="preserve">
+    <value>已于{0}驳回</value>
+  </data>
+  <data name="DashboardItem_StartedOn" xml:space="preserve">
+    <value>已于{0}开始</value>
+  </data>
+  <data name="DashboardItem_Title" xml:space="preserve">
+    <value>{0} (v{1})</value>
+  </data>
+  <data name="Diagnostics_Backup_Description" xml:space="preserve">
+    <value>收集到的所有数据将会以备份文件的形式保存在这台设备上。</value>
+  </data>
+  <data name="Diagnostics_Backup_Title" xml:space="preserve">
+    <value>备份收集到的所有信息</value>
+  </data>
+  <data name="Diagnostics_BackupDate_Title" xml:space="preserve">
+    <value>保存时间：</value>
+  </data>
+  <data name="Diagnostics_BackupFileLocation_Title" xml:space="preserve">
+    <value>备份文件位置：</value>
+  </data>
+  <data name="Diagnostics_BackupReady_Title" xml:space="preserve">
+    <value>数据已保存</value>
+  </data>
+  <data name="Diagnostics_BackupScope_Title" xml:space="preserve">
+    <value>范围：</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionAbsent_Title" xml:space="preserve">
+    <value>&lt;font color="red"&gt;没有网络连接&lt;/font&gt;</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionNotOK_Title" xml:space="preserve">
+    <value>网络连接&lt;font color="red"&gt;较差&lt;/font&gt;</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionOK_Title" xml:space="preserve">
+    <value>网络连接良好</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionToTheServerAbsent_Title" xml:space="preserve">
+    <value>&lt;font color="red"&gt;未连接到我们的服务器&lt;/font&gt;</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionType_Title" xml:space="preserve">
+    <value>连接类型：</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestNetworkName_Title" xml:space="preserve">
+    <value>网络名称：</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestPing_Title" xml:space="preserve">
+    <value>Ping：</value>
+  </data>
+  <data name="Diagnostics_CheckVersion_Description" xml:space="preserve">
+    <value>我们将在总部服务器上检查更新的版本</value>
+  </data>
+  <data name="Diagnostics_CheckVersion_Title" xml:space="preserve">
+    <value>版本：{0}。检查新版本</value>
+  </data>
+  <data name="Diagnostics_Delete" xml:space="preserve">
+    <value>删除</value>
+  </data>
+  <data name="Diagnostics_DownloadingPleaseWait" xml:space="preserve">
+    <value>下载中，请等待…</value>
+  </data>
+  <data name="Diagnostics_NewVersionAvaliable_Title" xml:space="preserve">
+    <value>存在新版本。您想要下载并更新应用程序吗？</value>
+  </data>
+  <data name="Diagnostics_NewVersionNumber_Title" xml:space="preserve">
+    <value>版本号：</value>
+  </data>
+  <data name="Diagnostics_No" xml:space="preserve">
+    <value>否</value>
+  </data>
+  <data name="Diagnostics_Restore_Description" xml:space="preserve">
+    <value>恢复保存的数据将替换这台设备上的所有当前任务</value>
+  </data>
+  <data name="Diagnostics_Restore_Title" xml:space="preserve">
+    <value>恢复</value>
+  </data>
+  <data name="Diagnostics_RestoreReady_Title" xml:space="preserve">
+    <value>找到保存的数据：</value>
+  </data>
+  <data name="Diagnostics_Send" xml:space="preserve">
+    <value>发送</value>
+  </data>
+  <data name="Diagnostics_Send_Description" xml:space="preserve">
+    <value>所有的应用程序和调查数据将收集到一个单一的存档文件。这最长需要10分钟。</value>
+  </data>
+  <data name="Diagnostics_Send_Title" xml:space="preserve">
+    <value>收集所有平板电脑信息并发送给总部。</value>
+  </data>
+  <data name="Diagnostics_Share_Description" xml:space="preserve">
+    <value>下面的所有信息将通过纯文本方式分享。可以通过电子邮件，谷歌Hangout或任何其他信息应用程序发送。</value>
+  </data>
+  <data name="Diagnostics_Share_Title" xml:space="preserve">
+    <value>分享所有的技术信息</value>
+  </data>
+  <data name="Diagnostics_TabletInformationReady_Title" xml:space="preserve">
+    <value>数据存档已准备好</value>
+  </data>
+  <data name="Diagnostics_TabletInformationScope_Title" xml:space="preserve">
+    <value>范围：</value>
+  </data>
+  <data name="Diagnostics_TabletInformationWhenGenerated_Title" xml:space="preserve">
+    <value>生成时间：</value>
+  </data>
+  <data name="Diagnostics_TestConnection_Description" xml:space="preserve">
+    <value>我们将检测到服务器的连接及速度。</value>
+  </data>
+  <data name="Diagnostics_TestConnection_Title" xml:space="preserve">
+    <value>测试到服务器的带宽</value>
+  </data>
+  <data name="Diagnostics_Title" xml:space="preserve">
+    <value>诊断</value>
+  </data>
+  <data name="Diagnostics_Update" xml:space="preserve">
+    <value>更新</value>
+  </data>
+  <data name="Diagnostics_YouHaveTheLatestVersionOfApplication" xml:space="preserve">
+    <value>您的应用程序是最新版。</value>
+  </data>
+  <data name="InternalServerError" xml:space="preserve">
+    <value>服务器错误。请联系支持团队：support@mysurvey.solutions。</value>
+  </data>
+  <data name="InvalidEndpoint" xml:space="preserve">
+    <value>督导员网址无效。请确保输入的网址是正确的。</value>
+  </data>
+  <data name="Login_FinishInstallation_Message" xml:space="preserve">
+    <value>这是在这台设备上第一次使用本程序，尚未设置用户名和域名。&lt;br /&gt;您需要有网络连接才能继续进行。</value>
+  </data>
+  <data name="Login_Online_Signin_Explanation_message" xml:space="preserve">
+    <value>如果您忘记了密码或者密码已重置，您可以尝试在线登录。</value>
+  </data>
+  <data name="Login_Online_SignIn_Failed" xml:space="preserve">
+    <value>远程服务器身份认证问题。请联系督导员或总部。</value>
+  </data>
+  <data name="Login_WrongPassword" xml:space="preserve">
+    <value>密码错误</value>
+  </data>
+  <data name="Maintenance" xml:space="preserve">
+    <value>Survey Solutions督导员网站正在维护中。Survey Solutions Designer网站正处于维护模式。</value>
+  </data>
+  <data name="MenuItem_Title_Dashboard" xml:space="preserve">
+    <value>任务面板</value>
+  </data>
+  <data name="MenuItem_Title_Diagnostics" xml:space="preserve">
+    <value>诊断</value>
+  </data>
+  <data name="MenuItem_Title_Login" xml:space="preserve">
+    <value>登录</value>
+  </data>
+  <data name="MenuItem_Title_Settings" xml:space="preserve">
+    <value>设置</value>
+  </data>
+  <data name="MenuItem_Title_SignOut" xml:space="preserve">
+    <value>注销</value>
+  </data>
+  <data name="NoNetwork" xml:space="preserve">
+    <value>没有网络连接。请检查网络设置。</value>
+  </data>
+  <data name="Prefs_AboutApplication" xml:space="preserve">
+    <value>关于应用程序</value>
+  </data>
+  <data name="Prefs_ApplicationVersionTitle" xml:space="preserve">
+    <value>应用程序版本：</value>
+  </data>
+  <data name="Prefs_BufferSizeSummary" xml:space="preserve">
+    <value>从（向）督导员应用程序收到（发送）数据的文件包字节</value>
+  </data>
+  <data name="Prefs_BufferSizeTitle" xml:space="preserve">
+    <value>通讯包大小</value>
+  </data>
+  <data name="Prefs_ConnectionSettings" xml:space="preserve">
+    <value>连接设置</value>
+  </data>
+  <data name="Prefs_DeviceIdTitle" xml:space="preserve">
+    <value>设备ID：</value>
+  </data>
+  <data name="Prefs_EndpointTitle" xml:space="preserve">
+    <value>督导员网址</value>
+  </data>
+  <data name="Prefs_GpsReceiveTimeoutSecSummary" xml:space="preserve">
+    <value>等待坐标的时间（秒）</value>
+  </data>
+  <data name="Prefs_GpsReceiveTimeoutSecTitle" xml:space="preserve">
+    <value>GPS接收超时</value>
+  </data>
+  <data name="Prefs_HttpResponseTimeoutSummary" xml:space="preserve">
+    <value>等待服务器响应的时间（秒）</value>
+  </data>
+  <data name="Prefs_HttpResponseTimeoutTitle" xml:space="preserve">
+    <value>服务器响应超时</value>
+  </data>
+  <data name="Prefs_InterviewSettings" xml:space="preserve">
+    <value>调查设置</value>
+  </data>
+  <data name="Prefs_Title" xml:space="preserve">
+    <value>设置</value>
+  </data>
+  <data name="RequestCanceledByUser" xml:space="preserve">
+    <value>请求被用户取消</value>
+  </data>
+  <data name="RequestTimeout" xml:space="preserve">
+    <value>连接到Survey Solutions督导员网站时超时。请检查网络连接。</value>
+  </data>
+  <data name="ServiceUnavailable" xml:space="preserve">
+    <value>未能连接到Survey Solutions督导员网站。请确保网站可用。</value>
+  </data>
+  <data name="Share_to_Title" xml:space="preserve">
+    <value>分享信息给..</value>
+  </data>
+  <data name="Synchronization_Cancel" xml:space="preserve">
+    <value>取消</value>
+  </data>
+  <data name="Synchronization_Download_Description_Format" xml:space="preserve">
+    <value>{1} {2}中的{0}已完成</value>
+  </data>
+  <data name="Synchronization_Download_Title" xml:space="preserve">
+    <value>更新任务</value>
+  </data>
+  <data name="Synchronization_Fail_State_DeletedInterviews_Format" xml:space="preserve">
+    <value>已删除{1}个任务中的{0}个</value>
+  </data>
+  <data name="Synchronization_Fail_State_NewInterviews_Format" xml:space="preserve">
+    <value>已下载{1}个新任务中的{0}个</value>
+  </data>
+  <data name="Synchronization_Fail_State_RejectedInterviews_Format" xml:space="preserve">
+    <value>已返回{1}个被驳回任务中的{0}个</value>
+  </data>
+  <data name="Synchronization_Fail_State_UploadedInterviews_Format" xml:space="preserve">
+    <value>已上传{1}个完成任务中的{0}个</value>
+  </data>
+  <data name="Synchronization_Fail_Title" xml:space="preserve">
+    <value>同步被中断，请重试。</value>
+  </data>
+  <data name="Synchronization_Fail_UnexpectedException" xml:space="preserve">
+    <value>意外错误</value>
+  </data>
+  <data name="Synchronization_Interviews" xml:space="preserve">
+    <value>调查</value>
+  </data>
+  <data name="Synchronization_LockedAssignments_Text" xml:space="preserve">
+    <value>同步完成之前任务被锁定</value>
+  </data>
+  <data name="Synchronization_Questionnaires" xml:space="preserve">
+    <value>调查问卷</value>
+  </data>
+  <data name="Synchronization_Success_Description" xml:space="preserve">
+    <value>所有任务已更新</value>
+  </data>
+  <data name="Synchronization_Success_State_DeletedInterviews_Format" xml:space="preserve">
+    <value>已删除{0}个调查</value>
+  </data>
+  <data name="Synchronization_Success_State_NewInterviews_Format" xml:space="preserve">
+    <value>已下载{0}个新调查</value>
+  </data>
+  <data name="Synchronization_Success_State_RejectedInterviews_Format" xml:space="preserve">
+    <value>已返回{0}个被驳回的调查</value>
+  </data>
+  <data name="Synchronization_Success_State_UploadedInterviews_Format" xml:space="preserve">
+    <value>已上传{0}个完成的调查</value>
+  </data>
+  <data name="Synchronization_Success_Title" xml:space="preserve">
+    <value>同步成功完成</value>
+  </data>
+  <data name="Synchronization_Upload_CompletedAssignments_Text" xml:space="preserve">
+    <value>已完成的任务</value>
+  </data>
+  <data name="Synchronization_Upload_Description_Format" xml:space="preserve">
+    <value>{1} {2}中的{0}已完成</value>
+  </data>
+  <data name="Synchronization_Upload_Interviews_Text" xml:space="preserve">
+    <value>调查</value>
+  </data>
+  <data name="Synchronization_Upload_Title_Format" xml:space="preserve">
+    <value>正在上传{0}</value>
+  </data>
+  <data name="Synchronization_UserAuthentication_Description" xml:space="preserve">
+    <value>准备同步</value>
+  </data>
+  <data name="Synchronization_UserAuthentication_Title" xml:space="preserve">
+    <value>用户认证</value>
+  </data>
+  <data name="Synchronization_UserLinkedToAnotherDevice_Status" xml:space="preserve">
+    <value>用户认证错误</value>
+  </data>
+  <data name="Synchronization_UserLinkedToAnotherDevice_Title" xml:space="preserve">
+    <value>您的账户已经被重新链接到另外一台平板电脑</value>
+  </data>
+  <data name="Synchronization_UserPassword_Update_Format" xml:space="preserve">
+    <value>认证问题。我们不能确认您的调查员账户（‘{0}’）。您的账户可能存在下列问题之一：密码与您输入的不一致、账户已被总部锁定或删除。请输入更新后的密码。如果还不能解决问题，请联系督导员或总部。</value>
+  </data>
+  <data name="Troubleshooting_Backup" xml:space="preserve">
+    <value>创建备份</value>
+  </data>
+  <data name="Troubleshooting_BackupErrorMessage" xml:space="preserve">
+    <value>出现错误，创建备份失败</value>
+  </data>
+  <data name="Troubleshooting_BackupWasSaved" xml:space="preserve">
+    <value>备份已保存到{0}</value>
+  </data>
+  <data name="Troubleshooting_CurrentVersion_CheckForUpdates" xml:space="preserve">
+    <value>版本：{0}。检查新版本</value>
+  </data>
+  <data name="Troubleshooting_InformationPackageIsSuccessfullySent" xml:space="preserve">
+    <value>信息包已成功发送</value>
+  </data>
+  <data name="Troubleshooting_InformationPackageSizeWarningFormat" xml:space="preserve">
+    <value>将通过网络发送大小为{0}的信息包。您确认发送吗？</value>
+  </data>
+  <data name="Troubleshooting_NewVerisonExist" xml:space="preserve">
+    <value>存在新版本。您想要下载并更新应用程序吗？</value>
+  </data>
+  <data name="Troubleshooting_NoNewVersion" xml:space="preserve">
+    <value>您的应用程序已是最新版</value>
+  </data>
+  <data name="Troubleshooting_Old_AreYouSureYouWantToRestore" xml:space="preserve">
+    <value>当前的所有数据将会被清除。您确定要继续恢复吗？如果是，请确保恢复数据存在于{0}。</value>
+  </data>
+  <data name="Troubleshooting_Old_CreatingInformationPackage" xml:space="preserve">
+    <value>创建信息包</value>
+  </data>
+  <data name="Troubleshooting_Old_InformationPackage" xml:space="preserve">
+    <value>信息包</value>
+  </data>
+  <data name="Troubleshooting_Old_InformationPackageIsSuccessfullySent" xml:space="preserve">
+    <value>信息包已成功发送</value>
+  </data>
+  <data name="Troubleshooting_Old_InformationPackageSizeWarningFormat" xml:space="preserve">
+    <value>将通过网络发送大小为{0}的信息包。您确认发送吗？</value>
+  </data>
+  <data name="Troubleshooting_Old_SendingInformationPackage" xml:space="preserve">
+    <value>正在发送信息包</value>
+  </data>
+  <data name="Troubleshooting_Old_SendingOfInformationPackageIsCanceled" xml:space="preserve">
+    <value>信息包发送已取消。原因：{0}</value>
+  </data>
+  <data name="Troubleshooting_Old_SendingOfInformationPackageIsCanceling" xml:space="preserve">
+    <value>取消中</value>
+  </data>
+  <data name="Troubleshooting_RestorationErrorMessage" xml:space="preserve">
+    <value>出现错误，未能恢复平板电脑。</value>
+  </data>
+  <data name="Troubleshooting_Restore" xml:space="preserve">
+    <value>从备份中恢复</value>
+  </data>
+  <data name="Troubleshooting_RestoreConfirmation" xml:space="preserve">
+    <value>当前的所有数据将会被清除。您确定要继续恢复吗？如果是，请确保恢复数据存在于{0}。</value>
+  </data>
+  <data name="Troubleshooting_RestoredSuccessfully" xml:space="preserve">
+    <value>平板电脑已成功恢复</value>
+  </data>
+  <data name="Troubleshooting_SendingOfInformationPackageErrorMessage" xml:space="preserve">
+    <value>信息包发送失败</value>
+  </data>
+  <data name="Troubleshooting_SendTabletInformation" xml:space="preserve">
+    <value>发送平板电脑信息</value>
+  </data>
+  <data name="Troubleshooting_Title" xml:space="preserve">
+    <value>排除故障</value>
+  </data>
+  <data name="Troubleshooting_Unknown_ErrorMessage" xml:space="preserve">
+    <value>检查版本时发生出错。请检查设置或稍后重试。</value>
+  </data>
+  <data name="Unauthorized" xml:space="preserve">
+    <value>您的用户名或密码不正确</value>
+  </data>
+  <data name="UnexpectedException" xml:space="preserve">
+    <value>异常错误</value>
+  </data>
+  <data name="UpgradeRequired" xml:space="preserve">
+    <value>应用程序的新版本已发布。请更新应用程序。</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>警告</value>
+  </data>
+</root>

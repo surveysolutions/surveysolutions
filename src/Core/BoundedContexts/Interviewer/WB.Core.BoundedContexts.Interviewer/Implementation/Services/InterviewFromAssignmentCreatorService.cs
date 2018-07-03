@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross;
 using MvvmCross.Plugin.Messenger;
-using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
@@ -13,7 +12,6 @@ using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.Messages;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
@@ -22,6 +20,8 @@ using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading;
+using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
@@ -102,7 +102,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 // This code is going to be removed after KP-9461. And according to research in KP-9513 we should reduce amount of dependencies in constructor
 
                 var userInteractionService = Mvx.Resolve<IUserInteractionService>();
-                Mvx.Resolve<ILoggerProvider>().GetFor<AssignmentDashboardItemViewModel>().Error(e.Message, e);
+                Mvx.Resolve<ILoggerProvider>().GetFor<InterviewerAssignmentDashboardItemViewModel>().Error(e.Message, e);
                 await userInteractionService.AlertAsync(string.Format(InterviewerUIResources.FailedToCreateInterview, e.Message), UIResources.Error);
             }
             finally

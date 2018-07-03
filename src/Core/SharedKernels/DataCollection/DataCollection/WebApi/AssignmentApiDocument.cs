@@ -19,6 +19,8 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
         public double? LocationLongitude { get; set; }
         public Guid? LocationQuestionId { get; set; }
 
+        public Guid ResponsibleId { get; set; }
+
         public DateTime CreatedAtUtc { get; set; }
         public List<string> ProtectedVariables { get; set; }
 

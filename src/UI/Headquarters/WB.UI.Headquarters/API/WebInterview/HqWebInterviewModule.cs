@@ -16,6 +16,7 @@ namespace WB.UI.Headquarters.API.WebInterview
         {
             registry.Bind<IWebInterviewInterviewEntityFactory, HqWebInterviewInterviewEntityFactory>();
             registry.Bind<IStatefullInterviewSearcher, StatefullInterviewSearcher>();
+            registry.Bind<IInterviewOverviewService, InterviewOverviewService>();
 
             foreach (var type in HubPipelineModules)
             {

@@ -4,13 +4,14 @@
     <GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
     <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
     <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
+    <Configurations>Debug;Release;Debug-ESRI</Configurations>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Autofac" Version="4.8.1" />
-    <PackageReference Include="MvvmCross.Plugin.File" Version="6.0.1" />
-    <PackageReference Include="MvvmCross.Plugin.Messenger" Version="6.0.1" />
-    <PackageReference Include="MvvmCross.Plugin.Network" Version="6.0.1" />
-    <PackageReference Include="MvvmCross.Plugin.WebBrowser" Version="6.0.1" />
+    <PackageReference Include="MvvmCross.Plugin.File" Version="6.1.2" />
+    <PackageReference Include="MvvmCross.Plugin.Messenger" Version="6.1.2" />
+    <PackageReference Include="MvvmCross.Plugin.Network" Version="6.1.2" />
+    <PackageReference Include="MvvmCross.Plugin.WebBrowser" Version="6.1.2" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="sqlite-net-pcl" Version="1.4.118" />
     <PackageReference Include="SQLitePCLRaw.bundle_green" Version="1.1.11" />
@@ -25,49 +26,7 @@
     <ProjectReference Include="..\..\..\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="Properties\InterviewerUIResources.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Update="Properties\InterviewerUIResources.es.resx">
-      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\InterviewerUIResources.fr.resx">
-      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\InterviewerUIResources.id-ID.resx">
-      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\InterviewerUIResources.km.resx">
-      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\InterviewerUIResources.pt.resx">
-      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\InterviewerUIResources.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>InterviewerUIResources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\InterviewerUIResources.ru.resx">
-      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
-    </EmbeddedResource>
-	<EmbeddedResource Update="Properties\InterviewerUIResources.ro.resx">
-      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\InterviewerUIResources.th-TH.resx">
-      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\InterviewerUIResources.uk-UA.resx">
-      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\InterviewerUIResources.vi-VN.resx">
-      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Update="Properties\InterviewerUIResources.zh-CN.resx">
-      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
-    </EmbeddedResource>
+    <Folder Include="Implementation\AuditLog\" />
+    <Folder Include="Implementation\Storage\" />
   </ItemGroup>
 </Project>

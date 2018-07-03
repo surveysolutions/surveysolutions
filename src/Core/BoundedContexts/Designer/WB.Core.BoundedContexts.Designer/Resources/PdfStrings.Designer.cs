@@ -439,7 +439,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to area.
+        ///   Looks up a localized string similar to geography.
         /// </summary>
         public static string QuestionType_Area {
             get {

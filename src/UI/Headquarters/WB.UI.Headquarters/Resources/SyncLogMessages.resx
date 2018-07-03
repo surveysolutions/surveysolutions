@@ -237,4 +237,7 @@
   <data name="PostPackageV3" xml:space="preserve">
     <value>&lt;b&gt;V3&lt;/b&gt; Upload interview: {0}</value>
   </data>
+  <data name="CheckObsoleteInterviews" xml:space="preserve">
+    <value>Check for obsolete interviews. Request: &lt;pre&gt;{0}&lt;/pre&gt;</value>
+  </data>
 </root>

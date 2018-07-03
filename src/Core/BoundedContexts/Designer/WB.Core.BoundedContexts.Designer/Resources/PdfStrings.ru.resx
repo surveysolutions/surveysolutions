@@ -172,7 +172,7 @@
     <value>идентифицирующий</value>
   </data>
   <data name="QuestionType_Area" xml:space="preserve">
-    <value>область</value>
+    <value>география</value>
   </data>
   <data name="QuestionType_Audio" xml:space="preserve">
     <value>аудио</value>
@@ -363,10 +363,10 @@
   <data name="MetadataAgreeToMakeThisQuestionnairePublic" xml:space="preserve">
     <value>Согласен, чтоб опросник был общедоступным</value>
   </data>
-    <data name="SpecialValues" xml:space="preserve">
+  <data name="SpecialValues" xml:space="preserve">
     <value>Специальные значения</value>
   </data>
-    <data name="SideBarMetadataBasicInfo" xml:space="preserve">
+  <data name="SideBarMetadataBasicInfo" xml:space="preserve">
     <value>Базовая информация</value>
   </data>
   <data name="SideBarMetadataSurveyDataInfo" xml:space="preserve">

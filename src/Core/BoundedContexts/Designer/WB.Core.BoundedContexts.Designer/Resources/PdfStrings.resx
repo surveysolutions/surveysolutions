@@ -175,7 +175,7 @@
     <value>identifying</value>
   </data>
   <data name="QuestionType_Area" xml:space="preserve">
-    <value>area</value>
+    <value>geography</value>
   </data>
   <data name="QuestionType_Audio" xml:space="preserve">
     <value>audio</value>

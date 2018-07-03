@@ -6,7 +6,7 @@ using Main.Core.Documents;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 
-namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
+namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 {
     class when_verifying_questionnaire_with_3_macros_having_same_name : QuestionnaireVerifierTestsContext
     {
