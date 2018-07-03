@@ -299,6 +299,7 @@
     <Compile Include="Activities\PrefsActivity.cs" />
     <Compile Include="CustomControls\InterviewerSelectorDialog.cs" />
     <Compile Include="CustomControls\SupervisorDashboardTemplateSelector.cs" />
+    <Compile Include="MvvmBindings\DrawerLockModeBinding.cs" />
     <Compile Include="MvvmBindings\ImageCompanyLogoBinding.cs" />
     <Compile Include="ServiceLocation\SupervisorInfrastructureModule.cs" />
     <Compile Include="Services\Implementation\CheckForExtendedVersionUriProvider.cs" />

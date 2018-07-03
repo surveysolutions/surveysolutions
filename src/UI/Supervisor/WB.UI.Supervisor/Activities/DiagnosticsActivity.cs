@@ -28,6 +28,15 @@ namespace WB.UI.Supervisor.Activities
         {
             switch (item.ItemId)
             {
+                case Resource.Id.menu_dashboard:
+                    this.ViewModel.NavigateToDashboardCommand.Execute();
+                    break;
+                case Resource.Id.menu_login:
+                    this.ViewModel.NavigateToLoginCommand.Execute();
+                    break;
+                case Resource.Id.menu_signout:
+                    this.ViewModel.SignOutCommand.Execute();
+                    break;
                 case Resource.Id.menu_settings:
                     Intent intent = new Intent(this, typeof(PrefsActivity));
                     this.StartActivity(intent);
@@ -43,9 +52,24 @@ namespace WB.UI.Supervisor.Activities
         {
             this.MenuInflater.Inflate(Resource.Menu.diagnostics, menu);
 
+            menu.LocalizeMenuItem(Resource.Id.menu_dashboard, InterviewerUIResources.MenuItem_Title_Dashboard);
+            menu.LocalizeMenuItem(Resource.Id.menu_login, InterviewerUIResources.MenuItem_Title_Login);
             menu.LocalizeMenuItem(Resource.Id.menu_settings, InterviewerUIResources.MenuItem_Title_Settings);
-            
+            menu.LocalizeMenuItem(Resource.Id.menu_signout, InterviewerUIResources.MenuItem_Title_SignOut);
+
+            if (this.ViewModel.IsAuthenticated)
+            {
+                HideMenuItem(menu, Resource.Id.menu_login);
+            }
+            else
+            {
+                HideMenuItem(menu, Resource.Id.menu_dashboard);
+                HideMenuItem(menu, Resource.Id.menu_signout);
+                HideMenuItem(menu, Resource.Id.menu_maps);
+            }
             return base.OnCreateOptionsMenu(menu);
         }
+
+        public void HideMenuItem(IMenu menu, int menuItemId) => menu.FindItem(menuItemId)?.SetVisible(false);
     }
 }
