@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Android.Support.V4.Widget;
 using Android.Widget;
 using Autofac;
 using Autofac.Features.ResolveAnything;
@@ -79,6 +80,7 @@ namespace WB.UI.Supervisor
         {
             registry.RegisterCustomBindingFactory<ImageView>("CompanyLogo", view => new ImageCompanyLogoBinding(view));
             registry.RegisterCustomBindingFactory<ProgressBar>("ShowProgress", (view) => new ProgressBarIndeterminateBinding(view));
+            registry.RegisterCustomBindingFactory<DrawerLayout>("Lock", (view) => new DrawerLockModeBinding(view));
             base.FillTargetFactories(registry);
         }
 
