@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Threading;
@@ -23,7 +24,6 @@ using Ninject.Web.Common.OwinHost;
 using Ninject.Web.Common.WebHost;
 using Ninject.Web.WebApi.OwinHost;
 using NLog;
-using Npgsql.Logging;
 using Owin;
 using Quartz;
 using StackExchange.Exceptional;
@@ -57,6 +57,7 @@ namespace WB.UI.Headquarters
         static Startup()
         {
             SetupNConfig();
+            CultureInfo.DefaultThreadCurrentCulture = new CultureInfo(@"en-US");
             //HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();
             //HibernatingRhinos.Profiler.Appender.EntityFramework.EntityFrameworkProfiler.Initialize();
              //NpgsqlLogManager.Provider = new NLogNpgsqlLoggingProvider();

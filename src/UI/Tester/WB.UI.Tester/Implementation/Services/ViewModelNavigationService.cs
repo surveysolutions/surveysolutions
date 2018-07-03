@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Android.Content;
 using MvvmCross.Navigation;
@@ -46,6 +47,12 @@ namespace WB.UI.Tester.Implementation.Services
             {
                 InterviewId = interviewId
             });
+
+        public override Task NavigateToFinishInstallationAsync()
+            => throw new NotImplementedException();
+
+        public override Task NavigateToMapsAsync()
+        => throw new NotImplementedException();
 
         public override Task NavigateToInterviewAsync(string interviewId, NavigationIdentity navigationIdentity)
             => this.navigationService.Navigate<InterviewViewModel, InterviewViewModelArgs>(new InterviewViewModelArgs

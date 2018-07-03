@@ -8,7 +8,9 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Enumerator.Denormalizer;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
@@ -54,7 +56,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
         public void should_clear_GPS_location_longitude() =>
             Assert.That(dashboardItem.LocationLongitude, Is.Null);
 
-        static InterviewerDashboardEventHandler denormalizer;
+        static InterviewDashboardEventHandler denormalizer;
         static IPublishedEvent<AnswersRemoved> @event;
         static InterviewView dashboardItem;
     }

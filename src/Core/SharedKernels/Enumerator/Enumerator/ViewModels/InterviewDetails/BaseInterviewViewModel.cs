@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using MvvmCross.Base;
+using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using Newtonsoft.Json;
 using WB.Core.GenericSubdomains.Portable;
@@ -17,6 +18,7 @@ using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
@@ -29,7 +31,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly GroupStateViewModel groupState;
         private readonly InterviewStateViewModel interviewState;
         private readonly CoverStateViewModel coverState;
-        private readonly IViewModelNavigationService viewModelNavigationService;
+        protected readonly IViewModelNavigationService viewModelNavigationService;
         protected readonly IInterviewViewModelFactory interviewViewModelFactory;
         private readonly IEnumeratorSettings enumeratorSettings;
         public static BaseInterviewViewModel CurrentInterviewScope;
@@ -216,7 +218,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             {
                 case ScreenType.Cover: return NavigationDirection.Previous;
                 case ScreenType.Complete: return NavigationDirection.Next;
-                case ScreenType.PrefieldScreen:
+                case ScreenType.Identifying:
                     switch (eventArgs.PreviousStage)
                     {
                         case ScreenType.Cover: return NavigationDirection.Next;
@@ -228,7 +230,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     {
                         case ScreenType.Cover: return NavigationDirection.Next;
                         case ScreenType.Complete: return NavigationDirection.Previous;
-                        case ScreenType.PrefieldScreen: return NavigationDirection.Next;
+                        case ScreenType.Identifying: return NavigationDirection.Next;
 
                         default:
                             var interview = this.interviewRepository.Get(this.InterviewId);
@@ -251,7 +253,30 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
         }
 
-        protected abstract MvxViewModel UpdateCurrentScreenViewModel(ScreenChangedEventArgs eventArgs);
+        protected virtual MvxViewModel UpdateCurrentScreenViewModel(ScreenChangedEventArgs eventArgs)
+        {
+            switch (this.navigationState.CurrentScreenType)
+            {
+                case ScreenType.Complete:
+                    var completeInterviewViewModel = this.interviewViewModelFactory.GetNew<CompleteInterviewViewModel>();
+                    completeInterviewViewModel.Configure(this.InterviewId, this.navigationState);
+                    return completeInterviewViewModel;
+                case ScreenType.Cover:
+                    var coverInterviewViewModel = this.interviewViewModelFactory.GetNew<CoverInterviewViewModel>();
+                    coverInterviewViewModel.Configure(this.InterviewId, this.navigationState);
+                    return coverInterviewViewModel;
+                case ScreenType.Group:
+                    var activeStageViewModel = this.interviewViewModelFactory.GetNew<EnumerationStageViewModel>();
+                    activeStageViewModel.Configure(this.InterviewId, this.navigationState, eventArgs.TargetGroup, eventArgs.AnchoredElementIdentity);
+                    return activeStageViewModel;
+                case ScreenType.Overview:
+                    var overviewViewModel = this.interviewViewModelFactory.GetNew<OverviewViewModel>();
+                    overviewViewModel.Configure(this.InterviewId);
+                    return overviewViewModel;
+                default:
+                    return null;
+            }
+        }
 
         private void UpdateGroupStatus(Identity groupIdentity)
         {
@@ -297,6 +322,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private IReadOnlyCollection<string> availableLanguages;
         public override IReadOnlyCollection<string> AvailableLanguages => this.availableLanguages;
+
+        public IMvxCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () =>
+        {
+            await this.viewModelNavigationService.NavigateToDashboardAsync();
+            this.Dispose();
+        });
+
+        public IMvxCommand SignOutCommand => new MvxAsyncCommand(this.viewModelNavigationService.SignOutAndNavigateToLoginAsync);
+        public IMvxCommand NavigateToSettingsCommand => new MvxCommand(this.viewModelNavigationService.NavigateToSettings);
+        public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxAsyncCommand(this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>);
 
         public void NavigateToPreviousViewModel(Action navigateToIfHistoryIsEmpty)
             => this.navigationState.NavigateBack(navigateToIfHistoryIsEmpty);

@@ -7,7 +7,7 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 
-namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
+namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 {
     internal class when_verifying_questionnaire_with_multi_question_with_not_unique_titles_and_values : QuestionnaireVerifierTestsContext
     {

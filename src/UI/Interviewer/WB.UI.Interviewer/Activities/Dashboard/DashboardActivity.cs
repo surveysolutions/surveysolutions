@@ -7,11 +7,15 @@ using Android.Support.V4.View;
 using Android.Support.V7.Widget;
 using Android.Views;
 using MvvmCross.Droid.Support.V4;
-using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
+using WB.Core.SharedKernels.Enumerator.Properties;
+using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
+using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 using WB.UI.Interviewer.Services;
 using WB.UI.Shared.Enumerator.Activities;
+using WB.UI.Shared.Enumerator.Services;
 using MvxFragmentStatePagerAdapter = WB.UI.Interviewer.CustomControls.MvxFragmentStatePagerAdapter;
 
 namespace WB.UI.Interviewer.Activities.Dashboard
@@ -21,11 +25,11 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         WindowSoftInputMode = SoftInput.StateHidden,
         HardwareAccelerated = true,
         ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
-    public class DashboardActivity : BaseActivity<DashboardViewModel>, ISyncBgService
+    public class DashboardActivity : BaseActivity<DashboardViewModel>, ISyncBgService, ISyncServiceHost
     {
         protected override int ViewResourceId => Resource.Layout.dashboard;
 
-        public SyncServiceBinder Binder { get; set; }
+        public ServiceBinder<SyncBgService> Binder { get; set; }
 
         private MvxFragmentStatePagerAdapter fragmentStatePagerAdapter;
         private ViewPager viewPager;
@@ -203,8 +207,8 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             return base.OnOptionsItemSelected(item);
         }
 
-        public void StartSync() => this.Binder.GetSyncService().StartSync();
+        public void StartSync() => this.Binder.GetService().StartSync();
 
-        public SyncProgressDto CurrentProgress => this.Binder.GetSyncService().CurrentProgress;
+        public SyncProgressDto CurrentProgress => this.Binder.GetService().CurrentProgress;
     }
 }

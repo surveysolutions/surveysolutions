@@ -34,8 +34,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
             reader.ReadHeader();
 
             Assert.That(reader.Context.HeaderRecord.Length, Is.EqualTo(2));
-            Assert.That(reader.Context.HeaderRecord[0], Is.EqualTo("interview__link"));
-            Assert.That(reader.Context.HeaderRecord[1], Is.EqualTo("id"));
+            Assert.That(reader.Context.HeaderRecord[0], Is.EqualTo("assignment__link"));
+            Assert.That(reader.Context.HeaderRecord[1], Is.EqualTo("assignment__id"));
 
             var isReaded = reader.Read();
             Assert.IsFalse(isReaded);
@@ -61,45 +61,11 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
             reader.ReadHeader();
             reader.Read();
             Assert.That(reader.Context.HeaderRecord.Length, Is.EqualTo(2));
-            Assert.That(reader.Context.HeaderRecord[0], Is.EqualTo("interview__link"));
-            Assert.That(reader.Context.HeaderRecord[1], Is.EqualTo("id"));
+            Assert.That(reader.Context.HeaderRecord[0], Is.EqualTo("assignment__link"));
+            Assert.That(reader.Context.HeaderRecord[1], Is.EqualTo("assignment__id"));
 
             Assert.That(reader.GetField(0), Is.EqualTo($"http://baseurl/{assignmentId}/Start"));
             Assert.That(reader.GetField(1), Is.EqualTo($"{assignmentId}"));
-        }
-
-        [Test]
-        [TestCase("header \t 1", "header  1")]
-        [TestCase("header \r 1", "header  1")]
-        [TestCase("header \n 1", "header  1")]
-        [TestCase("header \r\n 1", "header  1")]
-        [TestCase("header <br /> 1", "header  1")]
-        public void when_question_title_contains_not_allowed_characters_should_trim_it(string prefilledQuestionTitle, string expectedHeader)
-        {
-            var questionnaireId = Create.Entity.QuestionnaireIdentity();
-            var questionId = Create.Entity.Identity(Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"));
-            
-            var assignment = Create.Entity.Assignment(id: 5, questionnaireIdentity: questionnaireId, assigneeSupervisorId: Guid.NewGuid());
-            assignment.IdentifyingData.Add(Create.Entity.IdentifyingAnswer(assignment, answer: "bla", identity: questionId));
-
-            IAssignmentsService assignments = Create.Service.AssignmentService(assignment);
-
-            var questionnaires = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireId,
-                Create.Entity.QuestionnaireDocumentWithOneChapter(
-                    Create.Entity.TextQuestion(questionId.Id, text: prefilledQuestionTitle)));
-
-            var service = this.GetService(assignments, questionnaires);
-
-            // Act
-            byte[] ouptutBytes = service.Generate(questionnaireId, "http://baseurl");
-
-            // Assert
-            var reader = GetCsvReader(ouptutBytes);
-
-            reader.Read();
-            reader.ReadHeader();
-            Assert.That(reader.Context.HeaderRecord[2], Is.EqualTo(expectedHeader));
-            Assert.That(reader.Context.HeaderRecord[2], Is.EqualTo(expectedHeader));
         }
 
         private static CsvReader GetCsvReader(byte[] ouptutBytes)

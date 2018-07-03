@@ -1,4 +1,5 @@
 ﻿using MvvmCross;
+using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.GenericSubdomains.Portable.Tasks;
@@ -12,7 +13,7 @@ namespace WB.UI.Tester
 {
     public class TesterAppStart : MvxAppStart
     {
-        public TesterAppStart(IMvxApplication application) : base(application)
+        public TesterAppStart(IMvxApplication application, IMvxNavigationService navigationService) : base(application, navigationService)
         {
         }
 
@@ -23,6 +24,11 @@ namespace WB.UI.Tester
 
             Mvx.Resolve<IPlainStorage<TranslationInstance>>().RemoveAll();
 
+            base.Startup(hint);
+        }
+
+        protected override void NavigateToFirstViewModel(object hint = null)
+        {
             IPrincipal principal = Mvx.Resolve<IPrincipal>();
             IViewModelNavigationService viewModelNavigationService = Mvx.Resolve<IViewModelNavigationService>();
 
@@ -34,8 +40,6 @@ namespace WB.UI.Tester
             {
                 viewModelNavigationService.NavigateToLoginAsync().ConfigureAwait(false);
             }
-
-            base.Startup(hint);
         }
 
         private void ClearAttachmentStorage()

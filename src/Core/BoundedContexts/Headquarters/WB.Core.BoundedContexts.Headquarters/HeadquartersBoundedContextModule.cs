@@ -203,7 +203,8 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Unbind<ISupportedVersionProvider>();
             registry.Bind<ISupportedVersionProvider, SupportedVersionProvider>();
 
-            registry.BindAsSingleton<ISyncProtocolVersionProvider, SyncProtocolVersionProvider>();
+            registry.BindAsSingleton<IInterviewerSyncProtocolVersionProvider, InterviewerSyncProtocolVersionProvider>();
+            registry.BindAsSingleton<ISupervisorSyncProtocolVersionProvider, SupervisorSyncProtocolVersionProvider>();
 
             registry.BindToConstant<SyncPackagesProcessorBackgroundJobSetting>(() => this.syncPackagesProcessorBackgroundJobSetting);
             registry.Bind<InterviewDetailsBackgroundSchedulerTask>();
@@ -361,16 +362,26 @@ namespace WB.Core.BoundedContexts.Headquarters
                 .Handles<PauseInterviewCommand>(cmd => cmd.InterviewId, a => a.Pause)
                 .Handles<ResumeInterviewCommand>(cmd => cmd.InterviewId, a => a.Resume)
                 .Handles<OpenInterviewBySupervisorCommand>(cmd => cmd.InterviewId, a => a.OpenBySupevisor)
-                .Handles<CloseInterviewBySupervisorCommand>(cmd => cmd.InterviewId, a => a.CloseBySupevisor)
-                ;
-
-            CommandRegistry.Configure<StatefulInterview, InterviewCommand>(configuration => configuration.ValidatedBy<InterviewReceivedByInterviewerCommandValidator>()
+                .Handles<CloseInterviewBySupervisorCommand>(cmd => cmd.InterviewId, a => a.CloseBySupevisor);
+            
+            CommandRegistry.Configure<StatefulInterview, InterviewCommand>(configuration => 
+                configuration
+                .PostProcessBy<InterviewSummaryErrorsCountPostProcessor>()
+                    .SkipPostProcessFor<HardDeleteInterview>()
+                    .SkipPostProcessFor<DeleteInterviewCommand>()
+                    .SkipPostProcessFor<MarkInterviewAsReceivedByInterviewer>()
+                    .SkipPostProcessFor<AssignInterviewerCommand>()
+                    .SkipPostProcessFor<AssignSupervisorCommand>()
+                .ValidatedBy<InterviewReceivedByInterviewerCommandValidator>()
                     .SkipValidationFor<SynchronizeInterviewEventsCommand>()
                     .SkipValidationFor<MarkInterviewAsReceivedByInterviewer>()
                     .SkipValidationFor<AssignInterviewerCommand>()
                     .SkipValidationFor<AssignResponsibleCommand>()
                     .SkipValidationFor<AssignSupervisorCommand>()
+                    .SkipValidationFor<HardDeleteInterview>()
+                    .SkipValidationFor<DeleteInterviewCommand>()
             );
+
             CommandRegistry.Configure<StatefulInterview, SynchronizeInterviewEventsCommand>(configuration => configuration.ValidatedBy<SurveyManagementInterviewCommandValidator>());
             CommandRegistry.Configure<StatefulInterview, CreateInterview>(configuration => configuration.ValidatedBy<SurveyManagementInterviewCommandValidator>());
 

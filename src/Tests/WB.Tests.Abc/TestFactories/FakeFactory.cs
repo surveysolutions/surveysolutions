@@ -135,6 +135,8 @@ namespace WB.Tests.Abc.TestFactories
                 action();
                 return true;
             }
+
+            public override bool IsOnMainThread => true;
         }
 
         public IDataExportFileAccessor DataExportFileAccessor()
@@ -156,6 +158,8 @@ namespace WB.Tests.Abc.TestFactories
                 action.Invoke();
                 return true;
             }
+
+            public bool IsOnMainThread => true;
         }
         
 

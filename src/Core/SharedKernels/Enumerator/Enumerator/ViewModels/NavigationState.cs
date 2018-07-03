@@ -35,8 +35,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                         return NavigationIdentity.CreateForCompleteScreen();
                     case ScreenType.Cover:
                         return NavigationIdentity.CreateForCoverScreen();
-                    case ScreenType.PrefieldScreen:
+                    case ScreenType.Identifying:
                         return NavigationIdentity.CreateForPrefieldScreen();
+                    case ScreenType.Overview:
+                        return NavigationIdentity.CreateForOverviewScreen();
                     default:
                         return NavigationIdentity.CreateForGroup(this.CurrentGroup);
                 }
@@ -80,7 +82,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         private async Task NavigateToImpl(NavigationIdentity navigationItem)
         {
-            if (navigationItem.TargetScreen == ScreenType.PrefieldScreen)
+            if (navigationItem.TargetScreen == ScreenType.Identifying)
             {
                 await viewModelNavigationService.NavigateToPrefilledQuestionsAsync(InterviewId);
             }
@@ -109,7 +111,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         {
             var interview = this.interviewRepository.Get(this.InterviewId);
 
-            if (navigationIdentity.TargetScreen == ScreenType.Complete || navigationIdentity.TargetScreen == ScreenType.Cover || navigationIdentity.TargetScreen == ScreenType.PrefieldScreen)
+            if (navigationIdentity.TargetScreen == ScreenType.Complete || navigationIdentity.TargetScreen == ScreenType.Cover || navigationIdentity.TargetScreen == ScreenType.Identifying)
                 return true;
 
             return interview.HasGroup(navigationIdentity.TargetGroup) && interview.IsEnabled(navigationIdentity.TargetGroup);

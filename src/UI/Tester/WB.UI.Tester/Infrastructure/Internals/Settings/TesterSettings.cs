@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Android.App;
 using Android.Content;
 using Android.Preferences;
-using WB.Core.SharedKernels.Enumerator;
+using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.UI.Tester.Infrastructure.Internals.Settings
 {
@@ -74,6 +74,8 @@ namespace WB.UI.Tester.Infrastructure.Internals.Settings
                 return $"{Application.Context.PackageName}/{this.GetApplicationVersionName()} ({string.Join(" ", flags)})";
             }
         }
+
+        public Version GetSupportedQuestionnaireContentVersion() => null;
 
         public int GpsReceiveTimeoutSec
         {

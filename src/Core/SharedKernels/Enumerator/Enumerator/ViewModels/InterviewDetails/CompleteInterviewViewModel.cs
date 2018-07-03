@@ -6,8 +6,10 @@ using MvvmCross.Base;
 using MvvmCross.Commands;
 using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -36,7 +38,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             IEntitiesListViewModelFactory entitiesListViewModelFactory,
             ILastCompletionComments lastCompletionComments,
             InterviewStateViewModel interviewState,
-            DynamicTextViewModel dynamicTextViewModel)
+            DynamicTextViewModel dynamicTextViewModel,
+            ILogger logger)
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.commandService = commandService;
@@ -47,7 +50,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.InterviewState = interviewState;
             this.Name = dynamicTextViewModel;
+            this.logger = logger;
         }
+
+        private readonly ILogger logger;
 
         protected Guid interviewId;
 
@@ -76,6 +82,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 : UIResources.Interview_Complete_Entities_With_Errors;
 
             this.CompleteComment = lastCompletionComments.Get(this.interviewId);
+            this.CompleteCommentLabel = UIResources.Interview_Complete_Note_For_Supervisor;
         }
 
         public int AnsweredCount { get; set; }
@@ -108,6 +115,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
         }
 
+        public string CompleteCommentLabel { get; protected set; }
+
         private bool wasThisInterviewCompleted = false;
         public bool WasThisInterviewCompleted
         {
@@ -131,10 +140,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 comment: this.CompleteComment,
                 completeTime: DateTime.UtcNow);
 
-            await this.commandService.ExecuteAsync(completeInterview);
-            this.lastCompletionComments.Remove(interviewId);
+            try
+            {
+                await this.commandService.ExecuteAsync(completeInterview);
+                this.lastCompletionComments.Remove(interviewId);
 
-            await this.CloseInterviewAfterComplete();
+                await this.CloseInterviewAfterComplete();
+            }
+            catch (InterviewException e)
+            {
+                logger.Warn("Interview has unexpected status", e);
+            }
         }
 
         protected virtual async Task CloseInterviewAfterComplete()

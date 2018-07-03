@@ -10,13 +10,29 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Tests.Abc;
 
-namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
+namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 {
     [TestFixture]
     internal class ErrorsTests
     {
         private static readonly Guid Id1 = Guid.Parse("11111111111111111111111111111111");
         private static readonly Guid Id2 = Guid.Parse("22222222222222222222222222222222");
+
+        [TestCase("1variable", "WB0123")]
+        [TestCase("_variable", "WB0123")]
+        [TestCase("variableЙФЪ", "WB0122")]
+        [TestCase("variable_", "WB0124")]
+        [TestCase("vari__able", "WB0125")]
+        [TestCase(null, "WB0067")]
+        [TestCase("rowcode", "WB0058")]
+        public void questionnaire_variable_is_invalid(string variable, string errorCode)
+            => Create.QuestionnaireDocument(variable, Id.gA, "title", children: new IComposite[] {
+                    Create.Group(Id.gB, children: new IComposite[]
+                    {
+                        Create.TextQuestion(Id1)
+                    })
+                })
+                .ExpectError(errorCode);
 
         [Test]
         public void static_text_and_variable_with_the_same_id()
@@ -326,7 +342,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificat
 
             var result = verifier.CheckForErrors(Create.QuestionnaireView(questionnaire)).ToList();
 
-            result.Single().Code.Should().Be("WB0031");
+            result.ShouldContainCritical("WB0031");
         }
 
         [Test]

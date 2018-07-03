@@ -31,7 +31,6 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
     {
         [NUnit.Framework.OneTimeSetUp] public void context ()
         {
-            Context();
             var sessionFactory = IntegrationCreate.SessionFactory(connectionStringBuilder.ConnectionString, new[] { typeof(InterviewPackageMap), typeof(BrokenInterviewPackageMap) }, true);
             plainPostgresTransactionManager = new PlainPostgresTransactionManager(sessionFactory ?? Mock.Of<ISessionFactory>());
 

@@ -154,7 +154,7 @@
     <value>Desea continuar?</value>
   </data>
   <data name="DeleteConfirmMessageHQ" xml:space="preserve">
-    <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; entrevista (s) será eliminada. &lt;/ h3&gt; &lt;b&gt; ¡Nota! &lt;/ b&gt; Puede eliminar entrevistas solo con los siguientes estados: &lt;i&gt; {1} &lt;/ i&gt; y &lt;i&gt; {2} &lt;/ i&gt;.</value>
+    <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; entrevista (s) será eliminada. &lt;/ h3&gt; &lt;b&gt; ¡Nota! &lt;/ b&gt; Puede eliminar entrevistas que no haya recibido Interviewer solo con los siguientes estados: &lt;i&gt; {1} &lt;/ i&gt; y &lt;i&gt; {2} &lt;/ i&gt;.</value>
   </data>
   <data name="RejectConfirmMessage" xml:space="preserve">
     <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; entrevista (s) será rechazada. &lt;/ h3&gt; &lt;b&gt; ¡Nota! &lt;/ b&gt; Solo puede rechazar entrevistas con los siguientes estados: &lt;i&gt; {1} &lt;/ i&gt; y &lt;i&gt; {2} &lt;/ i&gt;.</value>
@@ -164,9 +164,6 @@
   </data>
   <data name="Tooltip_Filter_Assignment" xml:space="preserve">
     <value>ID de asignación. Haga clic en el campo para escribir el número de identificación completo.</value>
-  </data>
-  <data name="Tooltip_Filter_Questionnaire" xml:space="preserve">
-    <value>Versión del cuestionario. Seleccione una versión del cuestionario para ver sus entrevistas asociadas en el informe a la derecha. Seleccione "Todos los cuestionarios" para ver las entrevistas asociadas con cualquier cuestionario.</value>
   </data>
   <data name="Tooltip_Filter_Responsible" xml:space="preserve">
     <value>Usuario responsable. Haga clic en el campo para elegir un nombre de usuario ya sea seleccionándolo directamente o escribiendo en el filtro de  listas de nombres de usuario.</value>

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using System.Threading.Tasks;
 using Moq;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.DataCollection;
@@ -17,7 +18,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
 {
     internal class when_toggling_answer : YesNoQuestionViewModelTestsContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.OneTimeSetUp] public async Task context () {
             questionGuid = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             questionId = Create.Entity.Identity(questionGuid, Empty.RosterVector);
 
@@ -58,14 +59,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
                 filteredOptionsViewModel: filteredOptionsViewModel);
 
             viewModel.Init("blah", questionId, Create.Other.NavigationState());
-            BecauseOf();
+            await BecauseOf();
         }
 
-        public void BecauseOf()
+        public async Task BecauseOf()
         {
             Thread.Sleep(1);
             viewModel.Options.Second().YesSelected = true;
-            viewModel.ToggleAnswerAsync(viewModel.Options.Second()).WaitAndUnwrapException();
+            await viewModel.ToggleAnswerAsync(viewModel.Options.Second());
         }
 
         [NUnit.Framework.Test] public void should_send_command_to_service () => answeringMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.Is<AnswerYesNoQuestion>(c =>

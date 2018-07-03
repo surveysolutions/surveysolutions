@@ -59,12 +59,12 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview.Impl
 
         private void WriteHeaderRow(CsvWriter csvWriter, IQuestionnaire questionnaire, Assignment sampleAssignment)
         {
-            csvWriter.WriteField("interview__link");
-            csvWriter.WriteField("id");
+            csvWriter.WriteField("assignment__link");
+            csvWriter.WriteField("assignment__id");
 
             if (sampleAssignment != null)
             {
-                foreach (var questionItem in sampleAssignment.IdentifyingData.Select(x => questionnaire.GetQuestionTitle(x.Identity.Id)))
+                foreach (var questionItem in sampleAssignment.IdentifyingData.Select(x => questionnaire.GetQuestionVariableName(x.Identity.Id)))
                 {
                     csvWriter.WriteField(TitlesCleanupRegex.Replace(questionItem.RemoveHtmlTags(), ""));
                 }

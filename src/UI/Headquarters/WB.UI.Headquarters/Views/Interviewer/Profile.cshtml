@@ -99,28 +99,30 @@
                     <li>@string.Format(Pages.InterviewerProfile_FullNameFormat, Model.FullName)</li>
                     <li>@string.Format(Pages.InterviewerProfile_PhoneFormat, Model.Phone)</li>
                 }
-
+                
+            @if (!User.IsInRole(UserRoles.Interviewer.ToString()))
+            {
                 <li>
-                    @if (!User.IsInRole(UserRoles.Interviewer.ToString()))
+
+                    @if (!Model.IsArchived)
                     {
-                        if (!Model.IsArchived)
-                        {
-                            <a href="@Url.Action("Edit", new {Id = Model.InterviewerId})">@Pages.InterviewerProfile_Info</a>
-                        }
-                        else
-                        {
-                            if (authorizedUser.IsAdministrator)
-                            {
-                                <form action="@Url.Action("UnArchive", new {Id = Model.InterviewerId})" method="post">
-                                    <input class="btn btn-success" type="submit" value="@Pages.Unarchive"/>
-                                </form>
-                            }
-                        }
+                    <a href="@Url.Action("Edit", new {Id = Model.InterviewerId})">@Pages.InterviewerProfile_Info</a>
                     }
+                    else
+                    {
+                    if (authorizedUser.IsAdministrator)
+                    {
+                    <form action="@Url.Action("UnArchive", new {Id = Model.InterviewerId})" method="post">
+                        <input class="btn btn-success" type="submit" value="@Pages.Unarchive"/>
+                    </form>
+                    }
+                    }
+
                 </li>
-                <li>                            
+                <li>
                     <a href="@Url.Action("Index", "InterviewerAuditLog", new {Id = Model.InterviewerId})">@Pages.InterviewerProfile_ShowAuditLog</a>
                 </li>
+            }
             </ul>
         </div>
     </div>

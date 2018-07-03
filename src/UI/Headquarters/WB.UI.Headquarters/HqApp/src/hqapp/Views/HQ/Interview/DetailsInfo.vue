@@ -29,9 +29,11 @@
                         <li><span class="data-label">{{this.$t('Details.Status')}}</span> 
                             <span class="data">{{this.$config.model.statusName}}</span>
                             <button type="button" class="btn btn-link gray-action-unit" @click="showStatusesHistory">{{$t("Common.ShowStatusHistory")}}</button>
+                            
                         </li>
                         <li><span class="data-label">{{this.$t('Details.LastUpdated')}}:</span> 
                             <span class="data">{{lastUpdateDate}}</span>                            
+                            <button type="button" class="btn btn-link gray-action-unit" @click="showOverview">{{$t("Details.Overview")}}</button>
                         </li>
                     </ul>
                 </div>
@@ -121,7 +123,10 @@ export default {
     },
     showStatusesHistory() {
       this.$refs.statusesHistory.show();
-    }    
+    },
+    showOverview() {
+        this.$router.push({name: "Overview"})
+    }
   },
   
   computed: {

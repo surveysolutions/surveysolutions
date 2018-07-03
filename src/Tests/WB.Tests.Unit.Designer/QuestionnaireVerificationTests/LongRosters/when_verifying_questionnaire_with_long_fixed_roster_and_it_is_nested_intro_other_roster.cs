@@ -9,7 +9,7 @@ using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 
-namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests.LongRosters
+namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests.LongRosters
 {
     internal class when_verifying_questionnaire_with_long_fixed_roster_and_it_is_nested_intro_other_roster : QuestionnaireVerifierTestsContext
     {

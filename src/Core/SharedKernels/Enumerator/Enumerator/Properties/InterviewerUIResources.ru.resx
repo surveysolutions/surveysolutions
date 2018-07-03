@@ -1,0 +1,774 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="DashboardItem_CensusModeComment" xml:space="preserve">
+    <value>Census режим, Создано интервью: {0}</value>
+  </data>
+  <data name="DashboardItem_CompletedOn" xml:space="preserve">
+    <value>Закончено {0}</value>
+  </data>
+  <data name="DashboardItem_CreatedOn" xml:space="preserve">
+    <value>Cоздано {0}</value>
+  </data>
+  <data name="DashboardItem_NotStarted" xml:space="preserve">
+    <value>Не начатое</value>
+  </data>
+  <data name="DashboardItem_RejectedOn" xml:space="preserve">
+    <value>Отклонено {0}</value>
+  </data>
+  <data name="DashboardItem_StartedOn" xml:space="preserve">
+    <value>Начато {0}</value>
+  </data>
+  <data name="DashboardItem_Title" xml:space="preserve">
+    <value>{0} (v{1})</value>
+  </data>
+  <data name="Dashboard_CompletedLinkText" xml:space="preserve">
+    <value>Законченные ({0})</value>
+  </data>
+  <data name="Dashboard_NewItemsLinkText" xml:space="preserve">
+    <value>Новые ({0})</value>
+  </data>
+  <data name="Dashboard_NoInterviewsSyncButton" xml:space="preserve">
+    <value>Синхронизировать</value>
+  </data>
+  <data name="Dashboard_NoInterviewsText" xml:space="preserve">
+    <value>Синхронизируйтесь для получения новых заданий
+или свяжитесь с Вашим супервизором
+для дальнейших инструкций</value>
+  </data>
+  <data name="Maps_NoMapsText" xml:space="preserve">
+    <value>Синхронизируйтесь для получения новых карт
+или свяжитесь с Вашим супервизором
+для дальнейших инструкций</value>
+  </data>
+  <data name="Dashboard_NoInterviewsTitle" xml:space="preserve">
+    <value>У Вас нет новых заданий</value>
+  </data>
+  <data name="Dashboard_NoNewItemsLinkText" xml:space="preserve">
+    <value>Нет новых</value>
+  </data>
+  <data name="Dashboard_Reinitialize_Interview_Message" xml:space="preserve">
+    <value>Это интервью завершено. Хотите переоткрыть его?</value>
+  </data>
+  <data name="Dashboard_RejectedLinkText" xml:space="preserve">
+    <value>Отклоненные ({0})</value>
+  </data>
+  <data name="Dashboard_StartedLinkText" xml:space="preserve">
+    <value>Начатые ({0})</value>
+  </data>
+  <data name="Dashboard_AssignmentsTabTitle" xml:space="preserve">
+    <value>Создать</value>
+  </data>
+  <data name="Dashboard_Title" xml:space="preserve">
+    <value>{0} интервью для {1}</value>
+  </data>
+  <data name="Login_FinishInstallation_Message" xml:space="preserve">
+    <value>Это первый запуск приложения на этом устройстве. Пользователь и домен пока не заданы. &lt;br /&gt;Для продолжения работы необходимо подключение к сети</value>
+  </data>
+  <data name="Login_Online_SignIn_Failed" xml:space="preserve">
+    <value>Проблемы аутентификации с удаленным сервером. Пожалуйста обратитесь к Супервизору или Хедквотеру</value>
+  </data>
+  <data name="Synchronization_Download_Title" xml:space="preserve">
+    <value>Обновляем задания</value>
+  </data>
+  <data name="Synchronization_Fail_State_DeletedInterviews_Format" xml:space="preserve">
+    <value>{0} из {1} интервью удалено</value>
+  </data>
+  <data name="Synchronization_Success_State_DeletedInterviews_Format" xml:space="preserve">
+    <value>{0} интервью удалено</value>
+  </data>
+  <data name="Synchronization_UserPassword_Update_Format" xml:space="preserve">
+    <value>Проблемы аутентификации. Мы не можем подтвердить Вашу учетную запись интервьюера ('{0}'). 
+С Вашей учетной записью возможны следующие проблемы: пароль отличается от того что Вы вводили, учетная запись заблокирована или удалена Хедквотером.
+Пожалуйста введите Ваш обновленный пароль. Если проблема не будет решена, пожалуйста, обратитесь к Супервизору или Хедквотеру.</value>
+  </data>
+  <data name="AccountIsLockedOnServer" xml:space="preserve">
+    <value>Ваша учетная запись заблокирована. Обратитесь к Вашему супервизору.</value>
+  </data>
+  <data name="AccountIsNotAnInterviewer" xml:space="preserve">
+    <value>Вашей учетной записи не назначена роль интервьюера</value>
+  </data>
+  <data name="AccountIsNotApprovedOnServer" xml:space="preserve">
+    <value>Ваша учетная запись не подтверждена. Обратитесь к Вашему супервизору.</value>
+  </data>
+  <data name="ApplicationIncompatibleWithServer" xml:space="preserve">
+    <value>Ваше приложение не совместимо с приложением супервизора. Обновите Ваше приложение Interviewer.</value>
+  </data>
+  <data name="MenuItem_Title_Dashboard" xml:space="preserve">
+    <value>Опросники</value>
+  </data>
+  <data name="MenuItem_Title_Language" xml:space="preserve">
+    <value>Язык</value>
+  </data>
+  <data name="MenuItem_Title_Language_Original" xml:space="preserve">
+    <value>Исходный</value>
+  </data>
+  <data name="MenuItem_Title_Login" xml:space="preserve">
+    <value>Вход</value>
+  </data>
+  <data name="MenuItem_Title_Settings" xml:space="preserve">
+    <value>Настройки</value>
+  </data>
+  <data name="MenuItem_Title_SignOut" xml:space="preserve">
+    <value>Выход</value>
+  </data>
+  <data name="Dashboard_RemoveInterviewQuestion" xml:space="preserve">
+    <value>Вы уверены, что хотите удалить интервью {0}?</value>
+  </data>
+  <data name="HostUnreachable" xml:space="preserve">
+    <value>Невозможно подключиться к вашему серверу. Проверьте указанный адрес сайта и(или) настройки подключения к сети</value>
+  </data>
+  <data name="InternalServerError" xml:space="preserve">
+    <value>Произошла ошибка на сервере. Повторите попытку позже. Если ошибка повторяется, обратитесь в службу поддержки по адресу support@mysurvey.solutions</value>
+  </data>
+  <data name="InvalidEndpoint" xml:space="preserve">
+    <value>Адрес сайта Supervisor неверный. Убедитесь, что Вы ввели корректный url-адрес</value>
+  </data>
+  <data name="Login_Online_Signin_Explanation_message" xml:space="preserve">
+    <value>Вы можете попробовать войти онлайн, если Вы забыли пароль или он был изменен</value>
+  </data>
+  <data name="Login_WrongPassword" xml:space="preserve">
+    <value>Неверный пароль</value>
+  </data>
+  <data name="Maintenance" xml:space="preserve">
+    <value>Сайт Survey Solutions Supervisor находится на техническом обслуживании. Извините за доставленные неудобства</value>
+  </data>
+  <data name="NoNetwork" xml:space="preserve">
+    <value>Нет подключения к сети. Проверьте настройки сети</value>
+  </data>
+  <data name="Prefs_AboutApplication" xml:space="preserve">
+    <value>О приложении</value>
+  </data>
+  <data name="Prefs_ApplicationVersionTitle" xml:space="preserve">
+    <value>Версия приложения:</value>
+  </data>
+  <data name="Prefs_Title" xml:space="preserve">
+    <value>Настройки</value>
+  </data>
+  <data name="Synchronization_Fail_UnexpectedException" xml:space="preserve">
+    <value>Неизвестная ошибка</value>
+  </data>
+  <data name="Troubleshooting_Old_InformationPackage" xml:space="preserve">
+    <value>Информационный пакет</value>
+  </data>
+  <data name="Troubleshooting_Old_CreatingInformationPackage" xml:space="preserve">
+    <value>Создание информационного пакета</value>
+  </data>
+  <data name="Troubleshooting_Old_AreYouSureYouWantToRestore" xml:space="preserve">
+    <value>Все текущие данные будут стерты. Вы уверены, что хотите продолжить восстановление из резервной копии? Если да, то убедитесь, что резервная копия существует по пути {0}</value>
+  </data>
+  <data name="Troubleshooting_NoNewVersion" xml:space="preserve">
+    <value>У вас последняя версия приложения</value>
+  </data>
+  <data name="Troubleshooting_NewVerisonExist" xml:space="preserve">
+    <value>Найдена новая версия. Хотите ли Вы скачать новую версию и обновить приложение?</value>
+  </data>
+  <data name="Troubleshooting_InformationPackageSizeWarningFormat" xml:space="preserve">
+    <value>Информационный пакет размером {0} бужет отправлен по сети. Вы уверены, что хотите отправить его?
+</value>
+  </data>
+  <data name="Troubleshooting_InformationPackageIsSuccessfullySent" xml:space="preserve">
+    <value>Информационный пакет успешно отправлен</value>
+  </data>
+  <data name="Troubleshooting_CurrentVersion_CheckForUpdates" xml:space="preserve">
+    <value>Версия: {0}. Проверить наличие новой версии</value>
+  </data>
+  <data name="Troubleshooting_BackupWasSaved" xml:space="preserve">
+    <value>Резервная копия сохранена в файл {0}</value>
+  </data>
+  <data name="Troubleshooting_BackupErrorMessage" xml:space="preserve">
+    <value>Произошла неизвестная ошибка при создании резервной копии приложения</value>
+  </data>
+  <data name="Troubleshooting_Backup" xml:space="preserve">
+    <value>Создать резервную копию</value>
+  </data>
+  <data name="Synchronization_UserLinkedToAnotherDevice_Title" xml:space="preserve">
+    <value>Ваша учетная запись перепривязана к другому устройству</value>
+  </data>
+  <data name="Synchronization_UserLinkedToAnotherDevice_Status" xml:space="preserve">
+    <value>Ошибка аутентификации пользователя</value>
+  </data>
+  <data name="Synchronization_UserAuthentication_Title" xml:space="preserve">
+    <value>Аутентификации пользователя</value>
+  </data>
+  <data name="Synchronization_UserAuthentication_Description" xml:space="preserve">
+    <value>Подготовка к синхронизации</value>
+  </data>
+  <data name="Synchronization_Upload_Title_Format" xml:space="preserve">
+    <value>Отправка {0}</value>
+  </data>
+  <data name="Synchronization_Upload_Interviews_Text" xml:space="preserve">
+    <value>интервью</value>
+  </data>
+  <data name="Synchronization_Upload_Description_Format" xml:space="preserve">
+    <value>{0} из {1} {2} обработано</value>
+  </data>
+  <data name="Synchronization_Upload_CompletedAssignments_Text" xml:space="preserve">
+    <value>законченные интервью</value>
+  </data>
+  <data name="Synchronization_Success_State_UploadedInterviews_Format" xml:space="preserve">
+    <value>{0} законченных интервью отправлено</value>
+  </data>
+  <data name="Synchronization_Success_State_RejectedInterviews_Format" xml:space="preserve">
+    <value>{0} отклоненных интервью получено</value>
+  </data>
+  <data name="Synchronization_Success_State_NewInterviews_Format" xml:space="preserve">
+    <value>{0} новых интервью скачано</value>
+  </data>
+  <data name="Synchronization_Success_Description" xml:space="preserve">
+    <value>Были обновлены все назначения</value>
+  </data>
+  <data name="Synchronization_Questionnaires" xml:space="preserve">
+    <value>вопросники</value>
+  </data>
+  <data name="Synchronization_LockedAssignments_Text" xml:space="preserve">
+    <value>Интервью заблокированы до окончания синхронизации</value>
+  </data>
+  <data name="Synchronization_Interviews" xml:space="preserve">
+    <value>интервью</value>
+  </data>
+  <data name="Synchronization_Fail_Title" xml:space="preserve">
+    <value>Синхронизация оборвалась. Повторите попытку позже, пожалуйста</value>
+  </data>
+  <data name="Synchronization_Fail_State_UploadedInterviews_Format" xml:space="preserve">
+    <value>{0} из {1} законченных интервью отправлено</value>
+  </data>
+  <data name="Synchronization_Fail_State_RejectedInterviews_Format" xml:space="preserve">
+    <value>{0} из {1} отклоненных интервью получено</value>
+  </data>
+  <data name="Synchronization_Fail_State_NewInterviews_Format" xml:space="preserve">
+    <value>{0} из {1} новых интервью скачано</value>
+  </data>
+  <data name="Synchronization_Success_Title" xml:space="preserve">
+    <value>Синхронизация успешно завершена</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Предупреждение</value>
+  </data>
+  <data name="UpgradeRequired" xml:space="preserve">
+    <value>Выпущена новая версия приложения. Обновите приложение, пожалуйста</value>
+  </data>
+  <data name="UnexpectedException" xml:space="preserve">
+    <value>Неизвестная ошибка</value>
+  </data>
+  <data name="Unauthorized" xml:space="preserve">
+    <value>Логин или пароль введены неверно</value>
+  </data>
+  <data name="Troubleshooting_Unknown_ErrorMessage" xml:space="preserve">
+    <value>Произошла ошибка при проверки версий. Пожалуйста, проверьте настройки приложения и повторите попытку позже</value>
+  </data>
+  <data name="Troubleshooting_Title" xml:space="preserve">
+    <value>Устранение проблем</value>
+  </data>
+  <data name="Troubleshooting_SendTabletInformation" xml:space="preserve">
+    <value>Отправить информацию об устройстве</value>
+  </data>
+  <data name="Troubleshooting_SendingOfInformationPackageErrorMessage" xml:space="preserve">
+    <value>Отправка информации об устройстве была прервана</value>
+  </data>
+  <data name="Troubleshooting_RestoredSuccessfully" xml:space="preserve">
+    <value>Устройство было успешно восстановлено</value>
+  </data>
+  <data name="Troubleshooting_RestoreConfirmation" xml:space="preserve">
+    <value>Все текущие данные на устройстве будут стерты. Вы уверены, что хотите продолжить восстановление из резервной копии? Если Да, предварительно убедитесь, что данные для восстановления находятся в папке {0}</value>
+  </data>
+  <data name="Troubleshooting_Restore" xml:space="preserve">
+    <value>Восстановление из резервной копии</value>
+  </data>
+  <data name="Troubleshooting_RestorationErrorMessage" xml:space="preserve">
+    <value>Произошла неизвестная ошибка при восстановлении резервной копии приложения</value>
+  </data>
+  <data name="Troubleshooting_Old_SendingOfInformationPackageIsCanceling" xml:space="preserve">
+    <value>Отмена</value>
+  </data>
+  <data name="Troubleshooting_Old_SendingOfInformationPackageIsCanceled" xml:space="preserve">
+    <value>Отправка информации об устройстве отменена. Причина: {0}</value>
+  </data>
+  <data name="Troubleshooting_Old_SendingInformationPackage" xml:space="preserve">
+    <value>Отправка информации об устройстве</value>
+  </data>
+  <data name="Troubleshooting_Old_InformationPackageSizeWarningFormat" xml:space="preserve">
+    <value>Информационный пакет размером {0} бужет отправлен по сети. Вы уверены, что хотите отправить его?</value>
+  </data>
+  <data name="Troubleshooting_Old_InformationPackageIsSuccessfullySent" xml:space="preserve">
+    <value>Информационный пакет успешно отправлен</value>
+  </data>
+  <data name="Synchronization_Download_Description_Format" xml:space="preserve">
+    <value>{0} из {1} {2} обработано</value>
+  </data>
+  <data name="Prefs_BufferSizeSummary" xml:space="preserve">
+    <value>Количество байт на пакет при получении/отправке данных с устройства</value>
+  </data>
+  <data name="Prefs_BufferSizeTitle" xml:space="preserve">
+    <value>Размер пакета передачи данных</value>
+  </data>
+  <data name="Prefs_ConnectionSettings" xml:space="preserve">
+    <value>Настройки подключения</value>
+  </data>
+  <data name="Prefs_DeviceIdTitle" xml:space="preserve">
+    <value>ID устройства:</value>
+  </data>
+  <data name="Prefs_GpsReceiveTimeoutSecSummary" xml:space="preserve">
+    <value>Количество секунд для ожидания координаты</value>
+  </data>
+  <data name="Prefs_InterviewSettings" xml:space="preserve">
+    <value>Настройки интервью</value>
+  </data>
+  <data name="RequestCanceledByUser" xml:space="preserve">
+    <value>Запрос отменен пользователем</value>
+  </data>
+  <data name="RequestTimeout" xml:space="preserve">
+    <value>Время ожидания при подключении к веб-сайта обследования решения руководителя. Проверьте подключение к Интернету.</value>
+  </data>
+  <data name="Synchronization_Cancel" xml:space="preserve">
+    <value>Отменить</value>
+  </data>
+  <data name="ServiceUnavailable" xml:space="preserve">
+    <value>Невозможно подключиться к Survey Solutions Supervisor. Убедитесь, что сайт доступен.</value>
+  </data>
+  <data name="Prefs_HttpResponseTimeoutTitle" xml:space="preserve">
+    <value>Время ожидания ответа сервера</value>
+  </data>
+  <data name="Prefs_HttpResponseTimeoutSummary" xml:space="preserve">
+    <value>Количество секунд ожидания до ответа сервера</value>
+  </data>
+  <data name="Prefs_GpsReceiveTimeoutSecTitle" xml:space="preserve">
+    <value>Время ожидания получения GPS</value>
+  </data>
+  <data name="Prefs_EndpointTitle" xml:space="preserve">
+    <value>URL приложения Supervisor</value>
+  </data>
+  <data name="DashboardItem_AssignedOn" xml:space="preserve">
+    <value>Назначено {0}</value>
+  </data>
+  <data name="Diagnostics_Backup_Description" xml:space="preserve">
+    <value>Все собранные данные будут сохранены как резервная копия на этом устройстве.</value>
+  </data>
+  <data name="Diagnostics_Backup_Title" xml:space="preserve">
+    <value>Создать резервную копию собранной информации</value>
+  </data>
+  <data name="Diagnostics_CheckVersion_Description" xml:space="preserve">
+    <value>Мы проверим наличие новой версии на сервере</value>
+  </data>
+  <data name="Diagnostics_CheckVersion_Title" xml:space="preserve">
+    <value>Версия: {0}. Проверить наличие новой версии</value>
+  </data>
+  <data name="Diagnostics_Restore_Description" xml:space="preserve">
+    <value>Восстановление сохраненных данных приведет к замене всех текущих интервью на вашем устройстве</value>
+  </data>
+  <data name="Diagnostics_Restore_Title" xml:space="preserve">
+    <value>Восстановить данные из резервной копии</value>
+  </data>
+  <data name="Diagnostics_Send_Description" xml:space="preserve">
+    <value>Все собранные данные и информация о приложении будут собранны в единый архив. Операция может занять до 10 минут.</value>
+  </data>
+  <data name="Diagnostics_Send_Title" xml:space="preserve">
+    <value>Собрать и отправить на сервер информацию о приложении</value>
+  </data>
+  <data name="Diagnostics_Share_Description" xml:space="preserve">
+    <value>Информация будет собрана в текстовом виде. Она может быть отправлена по электроннй почте, при помощи программы Google hangouts или любым другим приложением по обмену сообщениями</value>
+  </data>
+  <data name="Diagnostics_Share_Title" xml:space="preserve">
+    <value>Передать техническую информацию</value>
+  </data>
+  <data name="Diagnostics_Title" xml:space="preserve">
+    <value>Диагностика</value>
+  </data>
+  <data name="MenuItem_Title_Diagnostics" xml:space="preserve">
+    <value>Диагностика</value>
+  </data>
+  <data name="Share_to_Title" xml:space="preserve">
+    <value>Передать техническую информацию при помощи..</value>
+  </data>
+  <data name="Diagnostics_TestConnection_Description" xml:space="preserve">
+    <value>Проверка подключения к серверу и его скорость</value>
+  </data>
+  <data name="Diagnostics_TestConnection_Title" xml:space="preserve">
+    <value>Проверить скорость соединения с сервером</value>
+  </data>
+  <data name="Diagnostics_Delete" xml:space="preserve">
+    <value>Удалить</value>
+  </data>
+  <data name="Diagnostics_Send" xml:space="preserve">
+    <value>Отправить</value>
+  </data>
+  <data name="Diagnostics_TabletInformationReady_Title" xml:space="preserve">
+    <value>Архив готов</value>
+  </data>
+  <data name="Diagnostics_TabletInformationScope_Title" xml:space="preserve">
+    <value>Объем:</value>
+  </data>
+  <data name="Diagnostics_TabletInformationWhenGenerated_Title" xml:space="preserve">
+    <value>Дата и время создания:</value>
+  </data>
+  <data name="Diagnostics_DownloadingPleaseWait" xml:space="preserve">
+    <value>Происходит загрузка, пожалуйста подождите...</value>
+  </data>
+  <data name="Diagnostics_NewVersionAvaliable_Title" xml:space="preserve">
+    <value>Существует более новая версия. Вы хотите загрузить и обновить приложение?</value>
+  </data>
+  <data name="Diagnostics_NewVersionNumber_Title" xml:space="preserve">
+    <value>Версия номер:</value>
+  </data>
+  <data name="Diagnostics_No" xml:space="preserve">
+    <value>Нет</value>
+  </data>
+  <data name="Diagnostics_Update" xml:space="preserve">
+    <value>Обновить</value>
+  </data>
+  <data name="Diagnostics_YouHaveTheLatestVersionOfApplication" xml:space="preserve">
+    <value>У вас установлена последняя версия приложения.</value>
+  </data>
+  <data name="Diagnostics_BackupDate_Title" xml:space="preserve">
+    <value>Дата и время создания резервной копии:</value>
+  </data>
+  <data name="Diagnostics_BackupFileLocation_Title" xml:space="preserve">
+    <value>Путь к файлу с резервной копией:</value>
+  </data>
+  <data name="Diagnostics_BackupReady_Title" xml:space="preserve">
+    <value>Данные сохранены</value>
+  </data>
+  <data name="Diagnostics_BackupScope_Title" xml:space="preserve">
+    <value>Объем:</value>
+  </data>
+  <data name="Diagnostics_RestoreReady_Title" xml:space="preserve">
+    <value>Сохраненные данные:</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionAbsent_Title" xml:space="preserve">
+    <value>&lt;font color="red"&gt;Соединение с интернетом отсутствует&lt;/font&gt;</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionNotOK_Title" xml:space="preserve">
+    <value>Соединение &lt;font color="red"&gt;плохое&lt;/font&gt;</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionOK_Title" xml:space="preserve">
+    <value>Соединение хорошее</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionType_Title" xml:space="preserve">
+    <value>Тип соединения:</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestNetworkName_Title" xml:space="preserve">
+    <value>Имя сети:</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestPing_Title" xml:space="preserve">
+    <value>Пинг:</value>
+  </data>
+  <data name="Diagnostics_ServerUrl" xml:space="preserve">
+    <value>Адрес сервера: </value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionToTheServerAbsent_Title" xml:space="preserve">
+    <value>&lt;font color="red"&gt;Соединение с нашим сервером отсутствует&lt;/font&gt;</value>
+  </data>
+  <data name="Troubleshooting_RestoreFolderIsEmpty" xml:space="preserve">
+    <value>Папка '{0}' пуста. Пожалуйста, положите данные, которые Вы хотите восстановить в эту папку.</value>
+  </data>
+  <data name="FinishInstallation_EndpointDiffers" xml:space="preserve">
+    <value>Адрес сайта Supervisor '{0}' отличается от сохранённого в настройках ('{1}'). Загрузить URL из настроек?</value>
+  </data>
+  <data name="Prefs_EventChunkSizeSummary" xml:space="preserve">
+    <value>Сколько событий может быть вычитанно за один запрос</value>
+  </data>
+  <data name="Prefs_EventChunkSizeTitle" xml:space="preserve">
+    <value>Количество событий в запросе</value>
+  </data>
+  <data name="Synchronization_Download_AttachmentsCleanup" xml:space="preserve">
+    <value>Удаление вложений</value>
+  </data>
+  <data name="Synchronization_Check_Obsolete_Questionnaires" xml:space="preserve">
+    <value>Проверка на наличие удалённых опросников</value>
+  </data>
+  <data name="Synchronization_Check_Obsolete_Questionnaires_Description" xml:space="preserve">
+    <value>Удаление {0} опросника из {1}</value>
+  </data>
+  <data name="NotSupportedServerSyncProtocolVersion" xml:space="preserve">
+    <value>Ваша версия приложения не поддерживается сервером. Пожалуйста, удалите приложение Interviewer  и поставьте заново в Вашего веб сайта Survey Solutions Headquarters</value>
+  </data>
+  <data name="Interview_Loading" xml:space="preserve">
+    <value>Открытие</value>
+  </data>
+  <data name="Interview_Loading_With_Percents" xml:space="preserve">
+    <value>Открытие... {0}%</value>
+  </data>
+  <data name="Synchronization_Fail_State_FailedToProcess_Format" xml:space="preserve">
+    <value>{0} интервью не синхронизировано из-за ошибки</value>
+  </data>
+  <data name="Synchronization_DoneWithErrors_Title" xml:space="preserve">
+    <value>Синхронизация завершена с ошибками</value>
+  </data>
+  <data name="FailedToLoadInterview" xml:space="preserve">
+    <value>Не удалось открыть интервью</value>
+  </data>
+  <data name="UnacceptableSSLCertificate" xml:space="preserve">
+    <value>Невозможно проверить сертификат. Проверьте адрес приложения Headquarters и верность текущей даты на устройстве</value>
+  </data>
+  <data name="Synchronization_DownloadingLogo" xml:space="preserve">
+    <value>Загрузка логотипа</value>
+  </data>
+  <data name="Synchronization_Done" xml:space="preserve">
+    <value>Завершить</value>
+  </data>
+  <data name="Dashboard_Start" xml:space="preserve">
+    <value>Начать</value>
+  </data>
+  <data name="Dashboard_CreateNewTabText" xml:space="preserve">
+    <value>Создать новое интервью используя шаблон</value>
+  </data>
+  <data name="Dashboard_StartedTabText" xml:space="preserve">
+    <value>Интервью которые были начаты, но не закончены 
+Вам нужно закончить их перед отправкой на сервер</value>
+  </data>
+  <data name="Dashboard_RejectedTabText" xml:space="preserve">
+    <value>Интервью которые были возвращены супервизором
+Вам необходимо учесть замечания супервизора на обложке интервью</value>
+  </data>
+  <data name="Dashboard_CompletedTabText" xml:space="preserve">
+    <value>Завершенные интервью будут загружены на сервер
+при следующей синхронизации</value>
+  </data>
+  <data name="Dashboard_QuestionnairesTabText" xml:space="preserve">
+    <value>Вы можете создать новое интервью используя пустой опросник</value>
+  </data>
+  <data name="Dashboard_Discard" xml:space="preserve">
+    <value>Удалить</value>
+  </data>
+  <data name="FailedToCreateInterview" xml:space="preserve">
+    <value>Не удалось создать интервью. Причина: {0}</value>
+  </data>
+  <data name="Dashboard_Open" xml:space="preserve">
+    <value>Открыть</value>
+  </data>
+  <data name="Dashboard_ShowLocation" xml:space="preserve">
+    <value>Показать на карте</value>
+  </data>
+  <data name="DashboardItem_AssignmentLeftComment" xml:space="preserve">
+    <value>{0} интервью</value>
+    <comment>осталось создать {0} интервью</comment>
+  </data>
+  <data name="DashboardItem_AssignmentCreatedComment" xml:space="preserve">
+    <value>Создано интервью: {0}</value>
+    <comment>Создано интервью: {0}</comment>
+  </data>
+  <data name="Synchronization_Of_AssignmentsFormat" xml:space="preserve">
+    <value>Синхронизация {0} из {1} заданий</value>
+    <comment>Синхронизация {0} из {1} заданий</comment>
+  </data>
+  <data name="Dashboard_AssignmentCard_SubTitleCountdownFormat" xml:space="preserve">
+    <value>Необходимо собрать: {0} интервью</value>
+  </data>
+  <data name="Dashboard_AssignmentCard_SubTitleSingleInterivew" xml:space="preserve">
+    <value>Задача с единственным интервью</value>
+  </data>
+  <data name="Dashboard_AssignmentCard_SubTitleCountdown_UnlimitedFormat" xml:space="preserve">
+    <value>Необходимо собрать: неограниченное</value>
+  </data>
+  <data name="Dashboard_Interview_QuestionsAnsweredFormat" xml:space="preserve">
+    <value>{0} вопросов(а) отвечено</value>
+  </data>
+  <data name="Dashboard_Interview_AssignmentLabelFormat" xml:space="preserve">
+    <value>Задача #{0}</value>
+  </data>
+  <data name="Dashboard_No_InterviewKey" xml:space="preserve">
+    <value>Без ключа</value>
+  </data>
+  <data name="Dashboard_CensusAssignment" xml:space="preserve">
+    <value>Цензус</value>
+  </data>
+  <data name="Dashboard_Reopen" xml:space="preserve">
+    <value>Переоткрыть</value>
+  </data>
+  <data name="Dashboard_ViewIssues" xml:space="preserve">
+    <value>Просмотреть
+проблемы</value>
+  </data>
+  <data name="Dashboard_StartNewInterview" xml:space="preserve">
+    <value>Начать новое интервью</value>
+  </data>
+  <data name="Maps_Title" xml:space="preserve">
+    <value>Карты</value>
+  </data>
+  <data name="MenuItem_Title_Maps" xml:space="preserve">
+    <value>Карты</value>
+  </data>
+  <data name="MapSyncProvider_SyncronizeMapsAsync_Checking_maps_on_server" xml:space="preserve">
+    <value>Проверка карт на сервере</value>
+  </data>
+  <data name="MapSyncProvider_SyncronizeMapsAsync_Map_synchronization_succesfuly_finished" xml:space="preserve">
+    <value>Синхронизация карт успешно завершена</value>
+  </data>
+  <data name="MapSyncProvider_SyncronizeMapsAsync_Map_sync_error" xml:space="preserve">
+    <value>Ошибка синхронизации карт</value>
+  </data>
+  <data name="MapSyncProvider_SyncronizeMapsAsync_Progress_Report_Format" xml:space="preserve">
+    <value>Обработка карты {0}, {1} из {2}. 
+Скачано {3}%</value>
+  </data>
+  <data name="Maps_Synchronization_Success_Description" xml:space="preserve">
+    <value>Карты успешно обновлены</value>
+  </data>
+  <data name="Synchronization_DownloadApplication" xml:space="preserve">
+    <value>Загрузка обновлений</value>
+    <comment>Загрузка обновлений</comment>
+  </data>
+  <data name="Synchronization_CheckNewVersionOfApplication" xml:space="preserve">
+    <value>Проверка обновлений</value>
+    <comment>Проверка обновлений</comment>
+  </data>
+  <data name="Synchronization_DownloadApplication_Description" xml:space="preserve">
+    <value>Загружено {0} из {1} при {2} ({3}%)</value>
+    <comment>Загружено {0} из {1} ({2}%)</comment>
+  </data>
+  <data name="Dashboard_SearchResult" xml:space="preserve">
+    <value>Найдено {0} элементов</value>
+    <comment>Найдено {0} элементов по введенному тексту</comment>
+  </data>
+  <data name="Dashboard_SearchWatermark" xml:space="preserve">
+    <value>Введите текст для поиска</value>
+    <comment>Введите текст для поиска</comment>
+  </data>
+  <data name="Dashboard_NotFoundSearchResult" xml:space="preserve">
+    <value>Ничего не найдено</value>
+    <comment>Ничего не найдено по введенному тексту</comment>
+  </data>
+  <data name="Dashboard_NeedTextForSearch" xml:space="preserve">
+    <value>Выполните поиск для отображения результатов</value>
+    <comment>Выполните поиск для отображения результатов</comment>
+  </data>
+  <data name="MenuItem_Title_Search" xml:space="preserve">
+    <value>Поиск</value>
+    <comment>Поиск</comment>
+  </data>
+  <data name="Dashboard_Search_ExitSearch" xml:space="preserve">
+    <value>Выйти из поиска</value>
+  </data>
+  <data name="Synchronization_UploadAuditLog" xml:space="preserve">
+    <value>Загрузка на хедквотер аудин информации</value>
+    <comment>Загрузка на хедквотер аудин информации</comment>
+  </data>
+  <data name="Synchronization_CheckForObsolete_Interviews" xml:space="preserve">
+    <value>Проверка устаревших интервью</value>
+  </data>
+  <data name="Dashboard_Assign" xml:space="preserve">
+    <value>Назначить</value>
+  </data>
+  <data name="Synchronization_Of_Interviewers" xml:space="preserve">
+    <value>Синхронизация интервьюверов</value>
+  </data>
+  <data name="Synchronization_Of_InterviewersFormat" xml:space="preserve">
+    <value>Синхронизация интервьюверов: {0} из {1}</value>
+  </data>
+</root>

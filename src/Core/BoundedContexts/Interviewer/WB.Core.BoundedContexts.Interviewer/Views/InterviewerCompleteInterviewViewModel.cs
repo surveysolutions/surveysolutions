@@ -1,8 +1,8 @@
 using System;
 using MvvmCross.Plugin.Messenger;
 using System.Threading.Tasks;
-using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
@@ -30,8 +30,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             IEntitiesListViewModelFactory entitiesListViewModelFactory,
             DynamicTextViewModel dynamicTextViewModel,
             ILastCompletionComments lastCompletionComments,
-            IAuditLogService auditLogService)
-            : base(viewModelNavigationService, commandService, principal, messenger, entitiesListViewModelFactory, lastCompletionComments,interviewState, dynamicTextViewModel)
+            IAuditLogService auditLogService,
+            ILogger logger)
+            : base(viewModelNavigationService, commandService, principal, messenger, 
+                entitiesListViewModelFactory, lastCompletionComments,interviewState, dynamicTextViewModel, logger)
         {
             this.interviewRepository = interviewRepository;
             this.auditLogService = auditLogService;

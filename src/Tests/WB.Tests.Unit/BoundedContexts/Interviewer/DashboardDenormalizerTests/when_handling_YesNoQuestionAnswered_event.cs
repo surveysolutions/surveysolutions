@@ -8,6 +8,8 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.Enumerator.Denormalizer;
+using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
 
@@ -49,7 +51,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
         public void should_interview_be_strated() =>
             interviewViewStorage.GetById(interviewId.FormatGuid())?.StartedDateTime.Should().NotBeNull();
 
-        private static InterviewerDashboardEventHandler denormalizer;
+        private static InterviewDashboardEventHandler denormalizer;
         private static IPublishedEvent<YesNoQuestionAnswered> @event;
         private static Guid interviewId;
         private static SqliteInmemoryStorage<InterviewView> interviewViewStorage;
