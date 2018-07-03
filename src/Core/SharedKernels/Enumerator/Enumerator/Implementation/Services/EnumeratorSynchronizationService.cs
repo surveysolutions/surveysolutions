@@ -32,10 +32,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         protected string AuditLogController => string.Concat(ApplicationUrl, "/auditlog");
         protected string DevicesController => string.Concat(ApplicationUrl, "/devices");
         protected string UsersController => string.Concat(ApplicationUrl, "/users");
-        protected string InterviewsController => string.Concat(ApplicationUrl, "/interviews");
-        protected virtual string InterviewDetailsController => string.Concat(ApplicationUrl, "/interviews");
-        protected virtual string InterviewUploadController => string.Concat(ApplicationUrl, "/interviews");
-        protected virtual string InterviewObsoleteCheck => string.Concat(ApplicationUrl, "/interviews/CheckObsoleteInterviews");
+        protected virtual string InterviewsController => string.Concat(ApplicationUrl, "/interviews");
 
         protected string QuestionnairesController => string.Concat(ApplicationUrl, "/questionnaires");
         protected string AssignmentsController => string.Concat(ApplicationUrl, "/assignments");
@@ -125,7 +122,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         public Task<List<Guid>> CheckObsoleteInterviewsAsync(List<ObsoletePackageCheck> checks, CancellationToken cancellationToken)
         {
             return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync<List<Guid>>(
-                url: this.InterviewObsoleteCheck,
+                url: string.Concat(InterviewsController, "/CheckObsoleteInterviews"),
                 request: checks,
                 credentials: this.restCredentials,
                 token: cancellationToken));
@@ -317,7 +314,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             {
                 return this.TryGetRestResponseOrThrowAsync(
                     () =>  this.restService.GetAsync<List<CommittedEvent>>(
-                        url: string.Concat(this.InterviewDetailsController, "/", interviewId),
+                        url: string.Concat(this.InterviewsController, "/", interviewId),
                         credentials: this.restCredentials,
                         onDownloadProgressChanged: ToDownloadProgressChangedEvent(onDownloadProgressChanged),
                         token: token));
@@ -336,7 +333,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         public Task UploadInterviewAsync(Guid interviewId, InterviewPackageApiView completedInterview, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token)
         {
             return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
-                url: string.Concat(this.InterviewUploadController, "/", interviewId),
+                url: string.Concat(this.InterviewsController, "/", interviewId),
                 request: completedInterview,
                 credentials: this.restCredentials,
                 token: token));
