@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:local="http://schemas.android.com/apk/res-auto"
+            style="@style/Interview_Complete_Screen_Scroll">
+    <LinearLayout
+        style="@style/Interview_QuestionWithDivider"
+        local:MvxBind="HideKeyboardOnClick .">
+    
+        <!--cut from ehre-->
+        <include layout="@layout/interview_complete_info" />
+        <LinearLayout style="@style/Interview_Question" android:orientation="vertical">
+            <LinearLayout style="@style/FullWidthWrappingLayout" android:orientation="horizontal">
+                <Button
+                    android:id="@+id/btnAssign"
+                    style="@style/Interview_Complete_Screen_Button"
+                    local:MvxBind="HideKeyboardOnClick .; 
+                         Click Assign; 
+                         Text Localization('Supervisor_Complete_Assign_btn');"/>
+            
+                <Button
+                    android:id="@+id/btnApprove"
+                    style="@style/Interview_Complete_Screen_Button"
+                    android:background="@drawable/group_completed"
+                    android:layout_marginLeft="@dimen/button_shadow_margin"
+                    local:MvxBind="HideKeyboardOnClick .; 
+                         Click Approve; 
+                         Text Localization('Supervisor_Complete_Approve_btn'); 
+                         "/>
+                <Button
+                    android:id="@+id/btnReject"
+                    style="@style/Interview_Complete_Screen_Button"
+                    android:layout_marginLeft="@dimen/button_shadow_margin"
+                    android:background="@drawable/group_with_invalid_answers"
+                    local:MvxBind="HideKeyboardOnClick .; 
+                         Click Reject; 
+                         Text Localization('Supervisor_Complete_Reject_btn');"/>
+            </LinearLayout>
+          
+            <TextView
+                style="@style/Interview_Complete_Screen_Text"
+                local:MvxBind="Text Localization('Interview_Complete_Consequences_Instrunction')" />
+
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

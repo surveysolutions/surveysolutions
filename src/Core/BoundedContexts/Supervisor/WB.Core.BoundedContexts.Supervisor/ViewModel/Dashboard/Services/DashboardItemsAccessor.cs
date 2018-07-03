@@ -123,7 +123,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services
 
         private IReadOnlyCollection<InterviewView> GetItemsWaitingForSupervisorAction()
         {
-            return this.interviews.Where(x => x.ResponsibleId == this.principal.CurrentUserIdentity.UserId);
+            return this.interviews.Where(x => x.ResponsibleId == this.principal.CurrentUserIdentity.UserId && 
+                                              x.Status != InterviewStatus.ApprovedBySupervisor);
         }
 
         private IEnumerable<AssignmentDocument> GetAssignmentsToAssign()

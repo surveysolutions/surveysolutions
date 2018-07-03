@@ -82,6 +82,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 : UIResources.Interview_Complete_Entities_With_Errors;
 
             this.CompleteComment = lastCompletionComments.Get(this.interviewId);
+            this.CompleteCommentLabel = UIResources.Interview_Complete_Note_For_Supervisor;
         }
 
         public int AnsweredCount { get; set; }
@@ -113,6 +114,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 this.lastCompletionComments.Store(this.interviewId, value);
             }
         }
+
+        public string CompleteCommentLabel { get; protected set; }
 
         private bool wasThisInterviewCompleted = false;
         public bool WasThisInterviewCompleted

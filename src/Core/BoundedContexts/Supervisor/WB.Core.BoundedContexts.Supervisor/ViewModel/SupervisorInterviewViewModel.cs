@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using MvvmCross.Commands;
+using MvvmCross.ViewModels;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -28,6 +29,19 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             else
             {
                 await this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
+            }
+        }
+
+        protected override MvxViewModel UpdateCurrentScreenViewModel(ScreenChangedEventArgs eventArgs)
+        {
+            switch (this.navigationState.CurrentScreenType)
+            {
+                case ScreenType.Complete:
+                    var completeInterviewViewModel = this.interviewViewModelFactory.GetNew<SupervisorCompleteInterviewViewModel>();
+                    completeInterviewViewModel.Configure(this.InterviewId, this.navigationState);
+                    return completeInterviewViewModel;
+                default:
+                    return base.UpdateCurrentScreenViewModel(eventArgs);
             }
         }
     }
