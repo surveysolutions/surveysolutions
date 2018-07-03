@@ -35,7 +35,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             this.Synchronization.Init();
 
             this.messenger = messenger;
-            messenger.Subscribe<SynchronizationCompletedMsg>(msg => SynchronizationCommand.Execute());
+            //messenger.Subscribe<SynchronizationCompletedMsg>(msg => SynchronizationCommand.Execute());
         }
 
         public override void Prepare(DashboardViewModelArgs parameter)
