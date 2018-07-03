@@ -95,18 +95,21 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         public override async Task Initialize()
         {
             await base.Initialize().ConfigureAwait(false);
-            if (!this.HasUser())
-            {
-                await this.viewModelNavigationService.NavigateToFinishInstallationAsync()
-                    .ConfigureAwait(false);
-                return;
-            }
+
+            if (!this.HasUser()) return;
 
             var companyLogo = this.logoStorage.GetById(CompanyLogo.StorageKey);
             this.CustomLogo = companyLogo?.File;
             this.IsUserValid = true;
             this.UserName = this.GetUserName();
             this.ErrorMessage = InterviewerUIResources.Login_WrongPassword;
+        }
+
+        public override async void ViewCreated()
+        {
+            if (this.HasUser()) return;
+
+            await this.viewModelNavigationService.NavigateToFinishInstallationAsync();
         }
 
         public byte[] CustomLogo { get; private set; }

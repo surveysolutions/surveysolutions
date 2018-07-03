@@ -22,10 +22,7 @@ namespace WB.UI.Interviewer.Activities
             this.SupportActionBar.SetDisplayHomeAsUpEnabled(true);
         }
 
-        protected override int ViewResourceId
-        {
-            get { return Resource.Layout.Diagnostics; }
-        }
+        protected override int ViewResourceId => Resource.Layout.Diagnostics;
 
         public override bool OnOptionsItemSelected(IMenuItem item)
         {
