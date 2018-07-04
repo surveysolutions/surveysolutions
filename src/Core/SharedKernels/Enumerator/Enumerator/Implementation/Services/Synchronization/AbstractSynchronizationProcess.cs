@@ -217,7 +217,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     this.UpdatePasswordOfResponsible(this.restCredentials);
                 }
 
-                await this.synchronizationService.CanSynchronizeAsync(token: cancellationToken, credentials: this.restCredentials);
+                await this.synchronizationService.CanSynchronizeAsync(this.restCredentials, cancellationToken);
 
                 CheckAfterStartSynchronization(cancellationToken);
 
