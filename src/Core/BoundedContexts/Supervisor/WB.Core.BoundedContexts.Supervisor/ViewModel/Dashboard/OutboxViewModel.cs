@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         protected override IEnumerable<IDashboardItem> GetUiItems()
         {
             var subtitle = viewModelFactory.GetNew<DashboardSubTitleViewModel>();
-            subtitle.Title = SupervisorDashboard.ToBeAssignedListSubtitle;
+            subtitle.Title = SupervisorDashboard.OutboxSubtitle;
 
             var dashboardItems = dashboardItemsAccessor.Outbox();
             
