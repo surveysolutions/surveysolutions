@@ -45,7 +45,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 .Returns(Task.FromResult("new token"));
 
             synchronizationServiceMock
-                .Setup(x => x.CanSynchronizeAsync(It.Is<RestCredentials>(r => r.Password == interviewerIdentity.Password), It.IsAny<CancellationToken>()))
+                .Setup(x => x.CanSynchronizeAsync(It.Is<RestCredentials>(r => r.Token == interviewerIdentity.Token), It.IsAny<CancellationToken>()))
                 .Throws(new SynchronizationException(type: SynchronizationExceptionType.Unauthorized, message: "", innerException: null));
 
             passwordHasherMock
