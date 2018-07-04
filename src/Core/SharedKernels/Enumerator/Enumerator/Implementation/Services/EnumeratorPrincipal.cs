@@ -15,8 +15,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         protected abstract IUserIdentity GetUserByName(string userName);
         protected abstract IUserIdentity GetUserById(string userId);
 
-        protected virtual void UpdatePasswordHash(IUserIdentity localUser, string password) { }
-
         public bool IsAuthenticated => this.currentUserIdentity != null;
 
         protected IUserIdentity currentUserIdentity;
@@ -33,8 +31,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
             if (localUser == null) return false;
 
-            this.UpdatePasswordHash(localUser, password);
-
             if (localUser.PasswordHash != null && this.passwordHasher.VerifyPassword(localUser.PasswordHash, password))
             {
                 this.currentUserIdentity = localUser;
@@ -49,8 +45,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
             var localUser = FindIdentityByUsername(userName); // db query
 
-            if (string.Equals(localUser.Password
-                              ?? localUser.PasswordHash, passwordHash, StringComparison.Ordinal))
+            if (string.Equals(localUser.PasswordHash, passwordHash, StringComparison.Ordinal))
             {
                 this.currentUserIdentity = localUser;
             }

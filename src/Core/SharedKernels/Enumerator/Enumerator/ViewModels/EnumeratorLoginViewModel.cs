@@ -90,7 +90,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         public abstract bool HasUser();
         public abstract string GetUserName();
-        public abstract void UpdateLocalUser(string token, string passwordHash);
+        public abstract void UpdateLocalUser(string userName, string token, string passwordHash);
 
         public override async Task Initialize()
         {
@@ -151,7 +151,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
                 restCredentials.Token = token;
 
-                this.UpdateLocalUser(token, this.passwordHasher.Hash(this.Password));
+                var passwordHash = this.passwordHasher.Hash(this.Password);
+                this.UpdateLocalUser(UserName, token, passwordHash);
 
                 await this.SignIn();
             }

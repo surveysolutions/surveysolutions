@@ -5,7 +5,7 @@ using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
-namespace WB.UI.Supervisor.Services.Implementation
+namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
 {
     public class SupervisorPrincipal : EnumeratorPrincipal, ISupervisorPrincipal
     {

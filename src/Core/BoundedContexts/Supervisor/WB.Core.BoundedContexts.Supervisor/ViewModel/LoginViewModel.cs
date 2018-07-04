@@ -12,34 +12,34 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 {
     public class LoginViewModel : EnumeratorLoginViewModel
     {
-        private readonly IPlainStorage<SupervisorIdentity> interviewersPlainStorage;
+        private readonly IPlainStorage<SupervisorIdentity> supervsorsPlainStorage;
 
         public LoginViewModel(
             IViewModelNavigationService viewModelNavigationService,
             IPrincipal principal,
             IPasswordHasher passwordHasher,
-            IPlainStorage<SupervisorIdentity> interviewersPlainStorage,
+            IPlainStorage<SupervisorIdentity> supervsorsPlainStorage,
             IPlainStorage<CompanyLogo> logoStorage,
             ISynchronizationService synchronizationService,
             ILogger logger,
             IAuditLogService auditLogService)
             : base(viewModelNavigationService, principal, passwordHasher, logoStorage, synchronizationService, logger, auditLogService)
         {
-            this.interviewersPlainStorage = interviewersPlainStorage;
+            this.supervsorsPlainStorage = supervsorsPlainStorage;
         }
 
-        public override bool HasUser() => this.interviewersPlainStorage.FirstOrDefault() != null;
+        public override bool HasUser() => this.supervsorsPlainStorage.FirstOrDefault() != null;
 
         public override string GetUserName()
-            => this.interviewersPlainStorage.FirstOrDefault().Name;
+            => this.supervsorsPlainStorage.FirstOrDefault().Name;
 
-        public override void UpdateLocalUser(string token, string passwordHash)
+        public override void UpdateLocalUser(string userName, string token, string passwordHash)
         {
-            var localSupervisor = this.interviewersPlainStorage.FirstOrDefault();
+            var localSupervisor = this.supervsorsPlainStorage.FirstOrDefault(x => x.Name.ToLower() == userName.ToLower());
             localSupervisor.Token = token;
             localSupervisor.PasswordHash = passwordHash;
 
-            this.interviewersPlainStorage.Store(localSupervisor);
+            this.supervsorsPlainStorage.Store(localSupervisor);
         }
     }
 }
