@@ -33,8 +33,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services
                     new InterviewerIdentity
                     {
                         Name = name,
-                        PasswordHash = passwordHash,
-                        Password = pass
+                        PasswordHash = passwordHash
                     }
                 });
         }
