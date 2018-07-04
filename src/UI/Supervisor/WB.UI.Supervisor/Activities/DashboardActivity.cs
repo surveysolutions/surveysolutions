@@ -43,7 +43,10 @@ namespace WB.UI.Supervisor.Activities
 
             if (bundle == null)
             {
-                ViewModel.ShowDefaultListCommand.Execute();
+                if (this.ViewModel.LastVisitedInterviewId.HasValue)
+                    this.ViewModel.ShowOutboxCommand.Execute();
+                else
+                    ViewModel.ShowDefaultListCommand.Execute();
                 ViewModel.ShowMenuViewModelCommand.Execute();
             }
         }
