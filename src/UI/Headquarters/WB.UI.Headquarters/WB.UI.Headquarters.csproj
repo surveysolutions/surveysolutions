@@ -1074,6 +1074,11 @@
     <EmbeddedResource Include="Resources\Troubleshooting.fr.resx">
       <DependentUpon>Troubleshooting.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\UnderConstruction.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>UnderConstruction.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\UnderConstruction.ru.resx" />
     <EmbeddedResource Include="Resources\UploadUsers.fr.resx" />
     <EmbeddedResource Include="Resources\UploadUsers.zh.resx" />
     <EmbeddedResource Include="Resources\UserPreloadingVerificationMessages.ar.resx" />
@@ -2391,6 +2396,11 @@
       <DependentUpon>Troubleshooting.resx</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="Resources\UnderConstruction.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UnderConstruction.resx</DependentUpon>
     </Compile>
     <Compile Include="Resources\UploadUsers.Designer.cs">
       <AutoGen>True</AutoGen>
