@@ -123,11 +123,20 @@
   <data name="Outbox" xml:space="preserve">
     <value>Исходящие</value>
   </data>
+  <data name="OutboxSubtitle" xml:space="preserve">
+    <value>Задания и интервью, которые будут отправлены с вашего устройства при следующей синхронизации </value>
+  </data>
   <data name="ToBeAssigned" xml:space="preserve">
     <value>Распределить задания</value>
   </data>
+  <data name="ToBeAssignedListSubtitle" xml:space="preserve">
+    <value>Задания которые необходимо распределить между членами вашей команды</value>
+  </data>
   <data name="WaitingForAction" xml:space="preserve">
     <value>Ожидают решения</value>
+  </data>
+  <data name="WaitingForSupervisorActionSubtitle" xml:space="preserve">
+    <value>Интревью которые ожидают вашего решения для завершения</value>
   </data>
   <data name="YourTeam" xml:space="preserve">
     <value>Команда</value>
