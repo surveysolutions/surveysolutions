@@ -105,7 +105,7 @@ namespace WB.UI.Headquarters.API
         [AllowAnonymous]
         public HttpResponseMessage GetLatestSupervisor()
         {
-            string pathToFile = this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(ClientApkInfo.Directory), ClientApkInfo.InterviewerFileName);
+            string pathToFile = this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(ClientApkInfo.Directory), ClientApkInfo.SupervisorFileName);
 
             return this.CheckFileAndResponse(pathToFile, ResponseSupervisorFileName);
         }
