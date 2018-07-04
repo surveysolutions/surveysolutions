@@ -1,20 +1,31 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Supervisor.Properties;
+using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.Services;
-using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
 {
-    public class OutboxViewModel : RefreshingAfterSyncListViewModel
+    public class OutboxViewModel : RefreshingAfterSyncListViewModel, IMvxViewModel<Guid?>
     {
         private readonly IDashboardItemsAccessor dashboardItemsAccessor;
         private readonly IInterviewViewModelFactory viewModelFactory;
+
+        private int? highLightedItemIndex;
+        public int? HighLightedItemIndex
+        {
+            get => highLightedItemIndex;
+            set => SetProperty(ref highLightedItemIndex, value);
+        }
+
+        private Guid? lastVisitedInterviewId;
+
+        public void Prepare(Guid? parameter) => this.lastVisitedInterviewId = parameter;
 
         public override async Task Initialize()
         {
@@ -36,9 +47,21 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             var subtitle = viewModelFactory.GetNew<DashboardSubTitleViewModel>();
             subtitle.Title = SupervisorDashboard.OutboxSubtitle;
 
-            var dashboardItems = dashboardItemsAccessor.Outbox();
-            
-            return subtitle.ToEnumerable().Concat(dashboardItems);
+            yield return subtitle;
+
+            var interviewIndex = 1;
+            foreach (var dashboardItem in this.dashboardItemsAccessor.Outbox())
+            {
+                if (dashboardItem is SupervisorDashboardInterviewViewModel interviewDashboardItem &&
+                    interviewDashboardItem.InterviewId == lastVisitedInterviewId)
+                {
+                    this.HighLightedItemIndex = interviewIndex;
+                }
+
+                interviewIndex++;
+
+                yield return dashboardItem;
+            }
         }
     }
 }
