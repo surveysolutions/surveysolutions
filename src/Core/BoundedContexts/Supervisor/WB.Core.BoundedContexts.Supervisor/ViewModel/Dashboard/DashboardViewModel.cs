@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
+using MvvmCross.Navigation;
 using MvvmCross.Plugin.Messenger;
+using MvvmCross.ViewModels;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
@@ -10,13 +12,14 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
 {
     public class DashboardViewModelArgs
     {
-        public Guid InterviewId { get; set; }
+        public Guid? InterviewId { get; set; }
     }
 
     public class DashboardViewModel : BaseViewModel<DashboardViewModelArgs>
     {
         private readonly IViewModelNavigationService viewModelNavigationService;
-        private Guid LastVisitedInterviewId { get; set; }
+        private readonly IMvxNavigationService mvxNavigationService;
+        public Guid? LastVisitedInterviewId { get; set; }
 
         public SynchronizationViewModel Synchronization { get; set; }
         
@@ -24,10 +27,12 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
 
         public DashboardViewModel(IPrincipal principal, 
             IViewModelNavigationService viewModelNavigationService,
+            IMvxNavigationService mvxNavigationService,
             SynchronizationViewModel synchronization) 
             : base(principal, viewModelNavigationService)
         {
             this.viewModelNavigationService = viewModelNavigationService;
+            this.mvxNavigationService = mvxNavigationService;
             this.Synchronization = synchronization;
             this.Synchronization.Init();
         }
@@ -52,6 +57,9 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
 
         public IMvxCommand ShowDefaultListCommand => 
             new MvxAsyncCommand(async () => await viewModelNavigationService.NavigateToAsync<ToBeAssignedItemsViewModel>());
+
+        public IMvxCommand ShowOutboxCommand =>
+            new MvxAsyncCommand(async () => await mvxNavigationService.Navigate<OutboxViewModel, Guid?>(this.LastVisitedInterviewId));
 
         public IMvxAsyncCommand ShowMenuViewModelCommand => new MvxAsyncCommand(async () => await viewModelNavigationService.NavigateToAsync<DashboardMenuViewModel>());
 
@@ -86,6 +94,35 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         {
             this.Synchronization.CancelSynchronizationCommand.Execute();
             return this.viewModelNavigationService.SignOutAndNavigateToLoginAsync();
+        }
+
+        protected override void InitFromBundle(IMvxBundle parameters)
+        {
+            base.InitFromBundle(parameters);
+            this.LoadFromBundle(parameters);
+        }
+
+        protected override void ReloadFromBundle(IMvxBundle parameters)
+        {
+            base.ReloadFromBundle(parameters);
+            this.LoadFromBundle(parameters);
+        }
+
+        private void LoadFromBundle(IMvxBundle parameters)
+        {
+            if (!parameters.Data.ContainsKey(nameof(LastVisitedInterviewId)) || parameters.Data[nameof(LastVisitedInterviewId)] == null) return;
+
+            if (Guid.TryParse(parameters.Data[nameof(LastVisitedInterviewId)], out var parsedLastVisitedId))
+                this.LastVisitedInterviewId = parsedLastVisitedId;
+        }
+
+        protected override void SaveStateToBundle(IMvxBundle bundle)
+        {
+            base.SaveStateToBundle(bundle);
+            if (this.LastVisitedInterviewId != null)
+            {
+                bundle.Data[nameof(LastVisitedInterviewId)] = this.LastVisitedInterviewId.ToString();
+            }
         }
     }
 }
