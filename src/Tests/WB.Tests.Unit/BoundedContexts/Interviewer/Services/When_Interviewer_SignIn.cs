@@ -43,7 +43,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services
         private InterviewerPrincipal principal;
         private const string hashedPassword = "hashedPassword";
         private const string password = "password";
-        private readonly string sha1HashedPassword = new PasswordHasher().Hash("password");
 
         [Test]
         public void Should_be_able_to_SignIn_using_PasswordHash()
@@ -58,21 +57,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services
             this.passwordHasher.Verify(ph => ph.VerifyPassword(hashedPassword, password), Times.Once);
         }
 
-        [Test]
-        public void Should_be_able_to_SignIn_using_oldPassword_and_store_new()
-        {
-            SetupInterviewerIdentity("Adams", sha1HashedPassword, null);
-
-            Assert.True(this.principal.SignIn("Adams", password, true));
-
-            this.interviewStorageMock.Verify(v => v.Store(
-                It.Is<InterviewerIdentity>(ii => ii.PasswordHash == hashedPassword 
-                && ii.Password == null)), Times.Once, "Store updated principal with null old password and new passwordHash");
-
-            this.passwordHasher.Verify(ph => ph.VerifyPassword(hashedPassword, password), Times.Once);
-            this.passwordHasher.Verify(ph => ph.Hash(password), Times.Once);
-        }
-        
         [Test]
         public void Should_not_be_able_to_SignIn_using_wrong_username()
         {
