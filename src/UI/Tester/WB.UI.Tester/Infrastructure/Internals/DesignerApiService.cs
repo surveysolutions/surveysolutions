@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Questionnaire.Api;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
+using WB.UI.Tester.Infrastructure.Internals.Security;
 using QuestionnaireListItem = WB.Core.BoundedContexts.Tester.Views.QuestionnaireListItem;
 
 namespace WB.UI.Tester.Infrastructure.Internals
@@ -27,7 +28,7 @@ namespace WB.UI.Tester.Infrastructure.Internals
         private RestCredentials RestCredentials => new RestCredentials
         {
             Login = this.principal.CurrentUserIdentity.Name,
-            Password = this.principal.CurrentUserIdentity.Password
+            Password = ((TesterUserIdentity)this.principal.CurrentUserIdentity).Password
         };
 
         public DesignerApiService(
