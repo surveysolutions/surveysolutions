@@ -66,7 +66,7 @@ namespace WB.UI.Interviewer
                 {typeof (PhotoViewViewModel), typeof(PhotoViewActivity) },
                 {typeof(OfflineInterviewerSyncViewModel), typeof(OfflineInterviewerSyncActitivy) }
 #if !EXCLUDEEXTENSIONS
-                {typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel), typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorActivity)}
+                ,{typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel), typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorActivity)}
 #endif
             };
 
