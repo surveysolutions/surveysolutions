@@ -237,6 +237,8 @@ h5{
 .default-text{
 	color: $gray_form !important;
 }
+.gray-font{
+	color: $gray_light;}
 .primary-text{
 	color: $blue !important;
 }
@@ -732,4 +734,7 @@ dl{
 }
 .always-visible-scroll{
 	overflow-y: scroll;
+}
+.padding-left-100{
+    padding-left: 100px;
 }
