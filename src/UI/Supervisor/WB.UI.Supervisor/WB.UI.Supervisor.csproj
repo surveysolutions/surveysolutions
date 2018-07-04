@@ -305,11 +305,9 @@
     <Compile Include="ServiceLocation\SupervisorInfrastructureModule.cs" />
     <Compile Include="Services\Implementation\CheckForExtendedVersionUriProvider.cs" />
     <Compile Include="Services\Implementation\CheckForVersionUriProvider.cs" />
-    <Compile Include="Services\Implementation\SupervisorPrincipal.cs" />
     <Compile Include="Services\Implementation\SupervisorSettings.cs" />
     <Compile Include="Services\Implementation\TabletDiagnosticService.cs" />
     <Compile Include="Services\Implementation\ViewModelNavigationService.cs" />
-    <Compile Include="Services\ISupervisorPrincipal.cs" />
     <Compile Include="SharedPreferences\SettingsNames.cs" />
     <Compile Include="SupervisorMvxApplication.cs" />
     <Compile Include="SupervisorApplication.cs" />
