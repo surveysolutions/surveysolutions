@@ -14,15 +14,14 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
-using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
 {
-    [TestOf(typeof(SupervisorCompleteInterviewViewModel))]
-    public class SupervisorCompleteInterviewViewModelTests
+    [TestOf(typeof(SupervisorResolveInterviewViewModel))]
+    public class SupervisorResolveInterviewViewModelTests
     {
         private readonly Guid InterviewId = Id.g1;
 
@@ -97,7 +96,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
             navigationService.Verify(x => x.NavigateToDashboardAsync(InterviewId.FormatGuid()));
         }
 
-        private SupervisorCompleteInterviewViewModel CreateViewModel(IViewModelNavigationService viewModelNavigationService = null,
+        private SupervisorResolveInterviewViewModel CreateViewModel(IViewModelNavigationService viewModelNavigationService = null,
             ICommandService commandService = null,
             IPrincipal principal = null,
             IMvxMessenger messenger = null,
@@ -109,7 +108,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
             IViewModelNavigationService navigationService = null,
             ILogger logger = null)
         {
-            return new SupervisorCompleteInterviewViewModel(
+            return new SupervisorResolveInterviewViewModel(
                 commandService ?? Create.Service.CommandService(),
                 principal ?? Mock.Of<IPrincipal>(x => x.IsAuthenticated == true && x.CurrentUserIdentity == Mock.Of<IUserIdentity>(y => y.UserId == Id.gA)),
                 messenger ?? Mock.Of<IMvxMessenger>(),
