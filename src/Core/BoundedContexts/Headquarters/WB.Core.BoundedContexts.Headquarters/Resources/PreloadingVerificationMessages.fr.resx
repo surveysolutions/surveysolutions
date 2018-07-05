@@ -126,10 +126,7 @@
   <data name="PL0004_FileWasntMappedRoster" xml:space="preserve">
     <value>Le fichier ne peut être représenté par aucun tableau dans le questionnaire.</value>
   </data>
-  <data name="PL0005_QuestionDataTypeMismatch" xml:space="preserve">
-    <value>[PL0005] N / A</value>
-  </data>
-  <data name="PL0006_IdDublication" xml:space="preserve">
+    <data name="PL0006_IdDublication" xml:space="preserve">
     <value>Valeurs ID en doublon trouvées.</value>
   </data>
   <data name="PL0007_ServiceColumnIsAbsent" xml:space="preserve">
@@ -141,25 +138,10 @@
   <data name="PL0009_RosterIdIsInconsistantWithRosterSizeQuestion" xml:space="preserve">
     <value>L'ID du tableau ne correspond pas à la taille du tableau.</value>
   </data>
-  <data name="PL0010_UnsupportedLinkedQuestion" xml:space="preserve">
-    <value>Les questions liées ne peuvent pas être préchargées.</value>
-  </data>
-  <data name="PL0011_GeneralError" xml:space="preserve">
-    <value>Une erreur générale s'est produite.</value>
-  </data>
-  <data name="PL0012_QuestionWasNotFound" xml:space="preserve">
-    <value>Question trouvée dans le (s) fichier (s) téléchargé (s) qui n'existe pas dans le questionnaire</value>
-  </data>
-  <data name="PL0013_ValueIsNullOrEmpty" xml:space="preserve">
-    <value>La valeur fournie est nulle ou vide</value>
-  </data>
-  <data name="PL0014_ParsedValueIsNotAllowed" xml:space="preserve">
+    <data name="PL0014_ParsedValueIsNotAllowed" xml:space="preserve">
     <value>La valeur de la question fournie n'est pas autorisée.</value>
   </data>
-  <data name="PL0015_QuestionTypeIsIncorrect" xml:space="preserve">
-    <value>Le type de question n'est pas correct.</value>
-  </data>
-  <data name="PL0016_ExpectedDateTimeNotParsed" xml:space="preserve">
+    <data name="PL0016_ExpectedDateTimeNotParsed" xml:space="preserve">
     <value>Date ou heure saisie est non valide dans la question de type date.</value>
   </data>
   <data name="PL0017_ExpectedGpsNotParsed" xml:space="preserve">
@@ -174,23 +156,17 @@
   <data name="PL0022_AnswerIsIncorrectBecauseIsRosterSizeAndNegative" xml:space="preserve">
     <value>La question sur la taille du tableau ne peut de valeurs négatives.</value>
   </data>
-  <data name="PL0023_UnsupportedMultimediaQuestion" xml:space="preserve">
-    <value>La question d'image ne peut pas être préchargée.</value>
-  </data>
-  <data name="PL0024_DataWasNotFound" xml:space="preserve">
+    <data name="PL0024_DataWasNotFound" xml:space="preserve">
     <value>Les données de préchargement n'ont pas été trouvées</value>
   </data>
-  <data name="PL0025_ResponsibleNameIsEmpty" xml:space="preserve">
-    <value>Le champ responsable n'a pas été fourni pour une ou plusieurs observations</value>
-  </data>
-  <data name="PL0026_ResponsibleWasNotFound" xml:space="preserve">
-    <value>Le responsable n'existe pas pour 1 ou plusieurs observations</value>
+    <data name="PL0026_ResponsibleWasNotFound" xml:space="preserve">
+    <value>Le responsable n'existe pas pour 1 ou plusieurs observations.</value>
   </data>
   <data name="PL0027_ResponsibleIsLocked" xml:space="preserve">
-    <value>Le Responsable est un utilisateur verrouillé pour 1 ou plusieurs observations</value>
+    <value>Le Responsable est un utilisateur verrouillé pour 1 ou plusieurs observations.</value>
   </data>
   <data name="PL0028_UserIsNotSupervisorOrInterviewer" xml:space="preserve">
-    <value>L'utilisateur n'est pas un Chef d'équipe ou un Enquêteur pour une ou plusieurs observations</value>
+    <value>L'utilisateur n'est pas un Chef d'équipe ou un Enquêteur pour une ou plusieurs observations.</value>
   </data>
   <data name="PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40" xml:space="preserve">
     <value>La réponse à la question sur la taille du tableau ne peut pas être supérieure à {0}.</value>
@@ -216,16 +192,7 @@
   <data name="PL0036_QuantityShouldBeGreaterThanMinus1" xml:space="preserve">
     <value>La quantité doit être supérieure ou égale à -1.</value>
   </data>
-  <data name="PL0037_ColumnIsNotIdentifying" xml:space="preserve">
-    <value>La colonne ne peut pas être mappée à une question non identifiant</value>
-  </data>
-  <data name="PL0038_UnsupportedAreaQuestion" xml:space="preserve">
-    <value>La question de surface ne peut pas être préchargée.</value>
-  </data>
-  <data name="PL0039_UnsupportedAudioQuestion" xml:space="preserve">
-    <value>La question audio ne peut pas être préchargée.</value>
-  </data>
-  <data name="PL0040_QuestionnaireDataIsNotFound" xml:space="preserve">
+    <data name="PL0040_QuestionnaireDataIsNotFound" xml:space="preserve">
     <value>Aucun fichier de préchargement trouvé avec des données du questionnaire.</value>
   </data>
   <data name="PL0030_GpsMandatoryFilds" xml:space="preserve">
@@ -236,21 +203,5 @@
   </data>
   <data name="PL0042_IdIsEmpty" xml:space="preserve">
     <value>La colonne Id est vide.</value>
-  </data>
-  <data name="PL0043_TextListAnswerHasDuplicatesInTexts" xml:space="preserve">
-    <value>La question de la liste de textes {0} comporte des éléments avec du texte en double: {1} pour l'identifiant de l'interview {2}</value>
-  </data>
-  <data name="PL0044_TextListAnswerHasDuplicatesInCodes" xml:space="preserve">
-    <value>La question de la liste de textes {0} comporte des éléments avec des codes en double: {1} pour l'identifiant de l'interview {2}</value>
-  </data>
-  <data name="PL0045_TextListAnswerHasDifferentAmountOfRecordsThanRosterFile" xml:space="preserve">
-    <value>Incohérence détectée entre le nombre d'éléments dans le répertoire et la question de la liste de textes {0}. La liste contient {1} éléments mais
-la question déclenchée {2} comporte {3} élément pour l'identifiant de l’interview
-: {4}</value>
-  </data>
-  <data name="PL0046_HasDifferentTextsInListAndRosterTitles" xml:space="preserve">
-    <value>Incohérence détectée entre les éléments de liste dans le tableau {0} et la question de liste de textes {1}. Éléments présents dans la liste de texte et
-absents de la liste: {2}. Éléments présents dans la liste, mais pas dans la
-question de la liste de texte: {3}. Identifiant de l'interview: {4}</value>
   </data>
 </root>

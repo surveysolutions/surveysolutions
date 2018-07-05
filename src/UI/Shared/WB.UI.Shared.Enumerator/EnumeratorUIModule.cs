@@ -1,4 +1,4 @@
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using MvvmCross.ViewModels;
 using Ncqrs.Eventing.Storage;
 using Plugin.Geolocator;
@@ -19,11 +19,14 @@ using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Utils;
+using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
+using WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.CustomServices;
+using WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Services.Internals;
 using WB.UI.Shared.Enumerator.Services.Internals.FileSystem;
@@ -69,10 +72,24 @@ namespace WB.UI.Shared.Enumerator
             registry.Bind<InterviewEntitiesListFragment>();
             registry.Bind<CompleteInterviewFragment>();
             registry.Bind<CoverInterviewFragment>();
+            registry.Bind<OverviewFragment>();
+
+            registry.BindAsSingleton<INearbyConnection, NearbyConnection>();
+            registry.BindAsSingleton<INearbyCommunicator, NearbyCommunicator>();
+            registry.BindAsSingleton<IRequestHandler, NearbyConnectionsRequestHandler>();
+            registry.BindAsSingleton<IPayloadProvider, PayloadProvider>();
         }
 
         public Task Init(IServiceLocator serviceLocator)
         {
+            var requestHandler = serviceLocator.GetInstance<IRequestHandler>();
+            var requestHandlers = serviceLocator.GetAllInstances<IHandleCommunicationMessage>();
+
+            foreach (var handler in requestHandlers)
+            {
+                handler.Register(requestHandler);
+            }
+
             SQLitePCL.raw.SetProvider(new SQLitePCL.SQLite3Provider_e_sqlite3());
             return Task.CompletedTask;
         }

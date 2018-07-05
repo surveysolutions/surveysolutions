@@ -1,6 +1,6 @@
 ﻿namespace WB.Core.SharedKernels.DataCollection
 {
-    public class SyncProtocolVersionProvider : ISyncProtocolVersionProvider
+    public class InterviewerSyncProtocolVersionProvider : IInterviewerSyncProtocolVersionProvider
     {
         public static readonly int ProtectedVariablesIntroduced = 7070;
 
@@ -8,5 +8,12 @@
         public int GetProtocolVersion() => 7080;
 
         public int GetLastNonUpdatableVersion() => 7000;
+    }
+
+    public class SupervisorSyncProtocolVersionProvider : ISupervisorSyncProtocolVersionProvider
+    {
+        public int GetProtocolVersion() => 1000;
+
+        public int GetLastNonUpdatableVersion() => 999;
     }
 }

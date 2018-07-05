@@ -79,7 +79,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
             eventContext.ShouldContainEvent<InterviewSynchronized>(@event => @event.InterviewData==interviewSynchronizationDto);
 
         [NUnit.Framework.Test] public void should_restore_2_rosters_from_the_sync_package () => 
-            interview.GetAllNodes().Count(x => x is InterviewTreeRoster).Should().Be(2);
+            interview.GetAllInterviewNodes().Count(x => x is InterviewTreeRoster).Should().Be(2);
 
         private static EventContext eventContext;
         private static StatefulInterview interview;

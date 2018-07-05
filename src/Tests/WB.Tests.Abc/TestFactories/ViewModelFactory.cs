@@ -319,6 +319,13 @@ namespace WB.Tests.Abc.TestFactories
                         liteEventRegistry,
                         interviewRepository: interviewsRepository), Mock.Of<CoverStateViewModel>()));
 
+            
+            Mock.Get(ServiceLocator.Current)
+                .Setup(locator => locator.GetInstance<SideBarOverviewViewModel>())
+                .Returns(() => new SideBarOverviewViewModel(mvxMessenger, Create.ViewModel.DynamicTextViewModel(
+                    liteEventRegistry,
+                    interviewRepository: interviewsRepository), Mock.Of<InterviewStateViewModel>()));
+
             Mock.Get(ServiceLocator.Current)
                 .Setup(locator => locator.GetInstance<SideBarCompleteSectionViewModel>())
                 .Returns(() => new SideBarCompleteSectionViewModel(mvxMessenger, Create.ViewModel.DynamicTextViewModel(
@@ -382,6 +389,14 @@ namespace WB.Tests.Abc.TestFactories
                 optionsViewModel ?? Mock.Of<FilteredOptionsViewModel>(), 
                 mvxMainThreadDispatcher ?? Mock.Of<IMvxMainThreadDispatcher>(), 
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>());
+        }
+
+        public SideBarCompleteSectionViewModel SideBarCompleteSectionViewModel()
+        {
+            return new SideBarCompleteSectionViewModel(Mock.Of<IMvxMessenger>(),
+                Create.ViewModel.DynamicTextViewModel(),
+                Mock.Of<InterviewStateViewModel>(),
+                Create.Entity.AnswerNotifier(Create.Service.LiteEventRegistry()));
         }
     }
 }

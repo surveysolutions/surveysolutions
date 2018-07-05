@@ -520,6 +520,9 @@ for further instructions</value>
   <data name="MenuItem_Title_Diagnostics" xml:space="preserve">
     <value>Diagnostics</value>
   </data>
+  <data name="MenuItem_Title_MapsSynchronization" xml:space="preserve">
+    <value>Maps Synchronization</value>
+  </data>
   <data name="MenuItem_Title_Maps" xml:space="preserve">
     <value>Maps</value>
   </data>
@@ -628,7 +631,7 @@ for further instructions</value>
   <data name="Synchronization_DownloadApplication" xml:space="preserve">
     <value>Downloading application updates</value>
   </data>
-    <data name="Synchronization_DownloadApplication_Description" xml:space="preserve">
+  <data name="Synchronization_DownloadApplication_Description" xml:space="preserve">
     <value>Received {0} of {1} at {2} ({3}%)</value>
   </data>
   <data name="Synchronization_CheckNewVersionOfApplication" xml:space="preserve">
@@ -747,7 +750,22 @@ Downloaded {3}%</value>
   <data name="Dashboard_Search_ExitSearch" xml:space="preserve">
     <value>Exit Search</value>
   </data>
-    <data name="Synchronization_CheckForObsolete_Interviews" xml:space="preserve">
+  <data name="Synchronization_CheckForObsolete_Interviews" xml:space="preserve">
     <value>Check for obsolete interviews</value>
+  </data>
+  <data name="Dashboard_Assign" xml:space="preserve">
+    <value>Assign</value>
+  </data>
+  <data name="Synchronization_Of_Interviewers" xml:space="preserve">
+    <value>Synchronization of interviewers</value>
+  </data>
+  <data name="Synchronization_Of_InterviewersFormat" xml:space="preserve">
+    <value>Synchronizing {0} of {1} interviewer(s)</value>
+  </data>
+  <data name="Prefs_AllowSyncWithHq" xml:space="preserve">
+    <value>Allow synchronization with Headquarters</value>
+  </data>
+  <data name="Prefs_AllowSyncWithHq_Summary" xml:space="preserve">
+    <value>Disable this setting if you want to synchronize only with mobile supervisor application</value>
   </data>
 </root>

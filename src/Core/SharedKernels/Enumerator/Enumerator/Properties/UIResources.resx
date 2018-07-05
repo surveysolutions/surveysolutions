@@ -545,7 +545,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="AreaMap_LengthFormat" xml:space="preserve">
     <value>Length:</value>
   </data>
-    <data name="AreaMap_PerimeterFormat" xml:space="preserve">
+  <data name="AreaMap_PerimeterFormat" xml:space="preserve">
     <value>Perimeter:</value>
   </data>
   <data name="AreaMap_Active_Map_Title" xml:space="preserve">
@@ -601,5 +601,32 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   </data>
   <data name="Interview_MaxAnswersCount" xml:space="preserve">
     <value>{0} out of {1} options selected</value>
+  </data>
+  <data name="Interview_Overview" xml:space="preserve">
+    <value>Overview</value>
+  </data>
+  <data name="Interview_Overview_Name" xml:space="preserve">
+    <value>Overview</value>
+  </data>
+  <data name="Interview_Overview_NotAnswered" xml:space="preserve">
+    <value>Not answered</value>
+  </data>
+  <data name="Interview_Overview_AdditionalInfo" xml:space="preserve">
+    <value>Additional info</value>
+  </data>
+  <data name="Interview_Overview_Warnings" xml:space="preserve">
+    <value>Warning(s)</value>
+  </data>
+  <data name="Interview_Overview_Comments" xml:space="preserve">
+    <value>Commentaries</value>
+  </data>
+  <data name="Supervisor_Complete_Approve_btn" xml:space="preserve">
+    <value>Approve</value>
+  </data>
+  <data name="Supervisor_Complete_Assign_btn" xml:space="preserve">
+    <value>Assign</value>
+  </data>
+  <data name="Supervisor_Complete_Reject_btn" xml:space="preserve">
+    <value>Reject</value>
   </data>
 </root>

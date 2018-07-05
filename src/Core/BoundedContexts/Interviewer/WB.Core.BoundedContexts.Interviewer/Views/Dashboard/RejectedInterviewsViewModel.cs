@@ -4,15 +4,17 @@ using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
+using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 {
     public class RejectedInterviewsViewModel : BaseInterviewsViewModel
     {
         public override GroupStatus InterviewStatus => GroupStatus.StartedInvalid;
-        protected override string TabTitle => InterviewerUIResources.Dashboard_RejectedLinkText;
-        protected override string TabDescription => InterviewerUIResources.Dashboard_RejectedTabText;
+        public override string TabTitle => InterviewerUIResources.Dashboard_RejectedLinkText;
+        public override string TabDescription => InterviewerUIResources.Dashboard_RejectedTabText;
         protected override Expression<Func<InterviewView, bool>> GetDbQuery()
         {
             var interviewerId = this.principal.CurrentUserIdentity.UserId;

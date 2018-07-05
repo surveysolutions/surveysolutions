@@ -554,7 +554,8 @@ namespace WB.Tests.Abc.TestFactories
             InterviewStatus? status = null,
             string questionaireTitle = null,
             int? assignmentId = null,
-            bool? canBeDeleted = null
+            bool? canBeDeleted = null,
+            Guid? responsibleId = null
             )
         {
             interviewId = interviewId ?? Guid.NewGuid();
@@ -564,10 +565,11 @@ namespace WB.Tests.Abc.TestFactories
                 InterviewId = interviewId.Value,
                 QuestionnaireId = questionnaireId,
                 LocationQuestionId = prefilledQuestionId,
-                QuestionnaireTitle = questionaireTitle,
-                Status = status ?? default(InterviewStatus),
+                QuestionnaireTitle = questionaireTitle ?? "Questionnaire ",
+                Status = status ?? InterviewStatus.InterviewerAssigned,
                 Assignment = assignmentId,
-                CanBeDeleted = canBeDeleted ?? true
+                CanBeDeleted = canBeDeleted ?? true,
+                ResponsibleId = responsibleId.GetValueOrDefault()
             };
         }
 
@@ -1176,7 +1178,7 @@ namespace WB.Tests.Abc.TestFactories
 
         public TextQuestion TextQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
             string mask = null,
-            string variable = "text_question",
+            string variable = null,
             string validationMessage = null,
             string text = "Question T",
             QuestionScope scope = QuestionScope.Interviewer,
@@ -1195,7 +1197,7 @@ namespace WB.Tests.Abc.TestFactories
                 Mask = mask,
                 QuestionText = text,
                 QuestionType = QuestionType.Text,
-                StataExportCaption = variable,
+                StataExportCaption = variable ?? "vv" + Guid.NewGuid().ToString("N"),
                 QuestionScope = scope,
                 Featured = preFilled,
                 VariableLabel = label,
@@ -1758,7 +1760,8 @@ namespace WB.Tests.Abc.TestFactories
             return result;
         }
 
-        public AssignmentDocumentBuilder AssignmentDocument(int id, int? quantity = null, int interviewsCount = 0, string questionnaireIdentity = null)
+        public AssignmentDocumentBuilder AssignmentDocument(int id, int? quantity = null,
+            int interviewsCount = 0, string questionnaireIdentity = null)
         {
             return new AssignmentDocumentBuilder(new AssignmentDocument
             {
@@ -1797,6 +1800,18 @@ namespace WB.Tests.Abc.TestFactories
                     this._entity.IdentifyingAnswers.Add(assignmentAnswer);
                 }
 
+                return this;
+            }
+
+            public AssignmentDocumentBuilder WithTitle(string title)
+            {
+                this._entity.Title = title;
+                return this;
+            }
+
+            public AssignmentDocumentBuilder WithResponsible(Guid responsibleId)
+            {
+                this._entity.ResponsibleId = responsibleId;
                 return this;
             }
 
