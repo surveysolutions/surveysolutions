@@ -451,16 +451,16 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                     {
                         case Esri.ArcGISRuntime.Geometry.GeometryType.Polygon:
                             var polygon = projectedGeometry as Polygon;
-                            var polygonCoordinates = polygon.Parts[0].Points.Select(x => $"{x.X.ToString(CultureInfo.InvariantCulture)},{x.Y.ToString(CultureInfo.InvariantCulture)}").ToList();
+                            var polygonCoordinates = polygon.Parts[0].Points.Select(coordinate => $"{coordinate.X.ToString(CultureInfo.InvariantCulture)},{coordinate.Y.ToString(CultureInfo.InvariantCulture)}").ToList();
                             coordinates = string.Join(";", polygonCoordinates);
                             break;
                         case Esri.ArcGISRuntime.Geometry.GeometryType.Point:
                             var point = projectedGeometry as MapPoint;
-                            coordinates = $"{point.X.ToString(CultureInfo.InvariantCulture)},{point.X.ToString(CultureInfo.InvariantCulture)}";
+                            coordinates = $"{point.X.ToString(CultureInfo.InvariantCulture)},{point.Y.ToString(CultureInfo.InvariantCulture)}";
                             break;
                         case Esri.ArcGISRuntime.Geometry.GeometryType.Polyline:
                             var polyline = projectedGeometry as Polyline;
-                            coordinates = string.Join(";", polyline.Parts[0].Points.Select(x => $"{x.X.ToString(CultureInfo.InvariantCulture)},{x.Y.ToString(CultureInfo.InvariantCulture)}").ToList());
+                            coordinates = string.Join(";", polyline.Parts[0].Points.Select(coordinate => $"{coordinate.X.ToString(CultureInfo.InvariantCulture)},{coordinate.Y.ToString(CultureInfo.InvariantCulture)}").ToList());
                             break;
                     }
                 }
