@@ -6,23 +6,23 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.UI.Headquarters.Code;
 
-namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v2
+namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
 {
-    [ApiBasicAuth(new[] { UserRoles.Interviewer })]
-    public class MapsApiV2Controller : MapsControllerBase
+    [ApiBasicAuth(new[] { UserRoles.Supervisor })]
+    public class MapsApiV1Controller : MapsControllerBase
     {
-        public MapsApiV2Controller(IMapStorageService mapRepository, IAuthorizedUser authorizedUser) : base(mapRepository, authorizedUser)
+        public MapsApiV1Controller(IMapStorageService mapRepository, IAuthorizedUser authorizedUser) : base(mapRepository, authorizedUser)
         {
+        }
+
+        protected override string[] GetMapsList()
+        {
+            return this.mapRepository.GetAllMapsForSupervisor(this.authorizedUser.Id);
         }
 
         [HttpGet]
         [WriteToSyncLog(SynchronizationLogType.GetMapList)]
         public override HttpResponseMessage GetMaps() => base.GetMaps();
-
-        protected override string[] GetMapsList()
-        {
-            return this.mapRepository.GetAllMapsForInterviewer(this.authorizedUser.UserName);
-        }
 
         [HttpGet]
         [WriteToSyncLog(SynchronizationLogType.GetMap)]

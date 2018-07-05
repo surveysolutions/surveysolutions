@@ -71,9 +71,9 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor
                 c => c.Action<AssignmentsApiV1Controller>(x => x.GetAssignmentsAsync(Param.Any<CancellationToken>())));
             config.TypedRoute("api/supervisor/v1/assignments/{id}",
                 c => c.Action<AssignmentsApiV1Controller>(x => x.GetAssignmentAsync(Param.Any<int>(), Param.Any<CancellationToken>())));
-            //            config.TypedRoute("api/supervisor/v1/maps", c => c.Action<MapsApiV2Controller>(x => x.GetMaps()));
-            //            config.TypedRoute("api/supervisor/v1/maps/{id}",
-            //                c => c.Action<MapsApiV2Controller>(x => x.GetMapContent((Param.Any<string>()))));
+            config.TypedRoute("api/supervisor/v1/maps", c => c.Action<MapsApiV1Controller>(x => x.GetMaps()));
+            config.TypedRoute("api/supervisor/v1/maps/{id}",
+                c => c.Action<MapsApiV1Controller>(x => x.GetMapContent((Param.Any<string>()))));
             config.TypedRoute("api/supervisor/v1/auditlog",
                 c => c.Action<AuditLogApiV1Controller>(x => x.Post(Param.Any<AuditLogEntitiesApiView>())));
 
