@@ -10,4 +10,45 @@
   <style name="Menu_Hint_Bold" parent="Menu_Hint">
     <item name="android:textStyle">italic|bold</item>
   </style>
+    
+    <style name="Interviewer_Selector_Holder" parent="VerticalFullWidthWrappingLayout">
+        <item name="android:background">@android:color/white</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:paddingTop">28dp</item>
+        <item name="android:paddingLeft">30dp</item>
+        <item name="android:paddingRight">10dp</item>
+    </style>
+
+    <style name="Interviewer_Selector_Title">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/question_title_text</item>
+        <item name="android:textSize">@dimen/textsize_18</item>
+        <item name="android:paddingTop">@dimen/Interview_Group_button_padding</item>
+        <item name="android:paddingBottom">@dimen/Interview_Group_button_padding</item>
+    </style>
+    
+    
+    <style name="Interviewer_Selector_Text">
+        <item name="android:textColor">@color/question_title_text</item>
+        <item name="android:textSize">@dimen/textsize_18</item>
+    </style>
+    
+    <style name="Interviewer_Selector_Button">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">@dimen/Interview_Group_button_padding</item>
+        <item name="android:layout_marginRight">@dimen/Interview_Question_InputButton_padding_horizontal</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:letterSpacing">0.1</item>
+        <item name="android:layout_gravity">center_vertical</item>
+    </style>
+    
+    <style name="Interviewer_Selector_Cancel_Button" parent="Interviewer_Selector_Button">
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+    </style>
+
+    <style name="Interviewer_Selector_Done_Button" parent="Interviewer_Selector_Button">
+        <item name="android:background">@drawable/default_input_button</item>
+    </style>
 </resources>

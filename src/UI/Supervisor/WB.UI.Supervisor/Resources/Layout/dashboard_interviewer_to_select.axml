@@ -2,10 +2,20 @@
 <LinearLayout 
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:local="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    >
     <TextView
-        style="@style/Interview_Question_Title_Base"
+        style="@style/Interviewer_Selector_Text"
+        android:layout_weight="1" 
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
         local:MvxBind="Html Login;"/>
+    <TextView
+        style="@style/Interviewer_Selector_Text"
+        android:layout_weight="1" 
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        local:MvxBind="Html FullName;"/>
 </LinearLayout>
