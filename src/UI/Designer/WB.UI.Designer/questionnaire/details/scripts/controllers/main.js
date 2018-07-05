@@ -257,7 +257,7 @@ angular.module('designerApp')
                 }
             };
 
-            $rootScope.navigateTo = function (reference, reload = false) {
+            $rootScope.navigateTo = function (reference, reload) {
                 if (reference.type.toLowerCase() === "questionnaire") {
                     $scope.verificationStatus.visible = false;
                     $scope.showShareInfo();
