@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
-using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services;
+using WB.Core.BoundedContexts.Supervisor.ViewModel.InterviewerSelector;
 using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
@@ -17,7 +17,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         public ICommand DoneCommand => new MvxCommand(this.Done);
         public ICommand CancelCommand => new MvxCommand(this.Cancel);
 
-        public event EventHandler OnDone;
+        public event EventHandler<InterviewerSelectedArgs> OnDone;
         public event EventHandler OnCancel;
 
         private MvxObservableCollection<InterviewerToSelectViewModel> uiItems = new MvxObservableCollection<InterviewerToSelectViewModel>();
@@ -50,6 +50,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         {
             return interviewers.Select(x => new InterviewerToSelectViewModel
             {
+                Id = x.Id,
                 Login = x.Login,
                 FullName = x.FullaName,
                 IsSelected = false
@@ -67,38 +68,16 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
 
         private void Cancel() => this.OnCancel?.Invoke(this, EventArgs.Empty);
 
-        private void Done() => this.OnDone?.Invoke(this, EventArgs.Empty);
-    }
-
-    public class InterviewerToSelectViewModel : MvxViewModel
-    {
-        private Guid id;
-        private string login;
-        private string fullName;
-        private bool isSelected;
-
-        public Guid Id
+        private void Done()
         {
-            get => id;
-            set => this.RaiseAndSetIfChanged(ref this.id, value);
-        }
-
-        public string Login
-        {
-            get => login;
-            set => this.RaiseAndSetIfChanged(ref this.login, value);
-        }
-
-        public string FullName
-        {
-            get => fullName;
-            set => this.RaiseAndSetIfChanged(ref this.fullName, value);
-        }
-
-        public bool IsSelected
-        {
-            get => isSelected;
-            set => this.RaiseAndSetIfChanged(ref this.isSelected, value);
+            if (selectedInterviewer == null)
+            {
+                this.OnCancel?.Invoke(this, EventArgs.Empty);
+            }
+            else
+            {
+                this.OnDone?.Invoke(this, new InterviewerSelectedArgs(selectedInterviewer.Id, selectedInterviewer.Login, selectedInterviewer.FullName));
+            }
         }
     }
 }
