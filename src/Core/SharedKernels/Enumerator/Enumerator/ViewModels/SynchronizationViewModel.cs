@@ -3,6 +3,7 @@ using System.Threading;
 using MvvmCross.Commands;
 using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Views;
 
@@ -17,7 +18,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.messenger = messenger;
         }
 
-        public ISyncBgService SyncBgService { get; set; }
+        public ISyncBgService<SyncProgressDto> SyncBgService { get; set; }
 
         public event EventHandler SyncCompleted;
 

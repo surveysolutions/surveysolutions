@@ -1,27 +1,28 @@
-﻿using Android.Content;
+﻿using Android.App;
+using Android.Content;
 using Android.OS;
 
 namespace WB.UI.Shared.Enumerator.Services
 {
-    public interface ISyncServiceHost
+    public interface ISyncServiceHost<T> where T : Service
     {
-        ServiceBinder<SyncBgService> Binder { get; set; }
+        ServiceBinder<T> Binder { get; set; }
     }
 
-    public class SyncServiceConnection : Java.Lang.Object, IServiceConnection
+    public class SyncServiceConnection<T> : Java.Lang.Object, IServiceConnection where T : Service
     {
-        readonly ISyncServiceHost syncServiceHost;
+        readonly ISyncServiceHost<T> syncServiceHost;
 
-        public SyncServiceConnection(ISyncServiceHost syncServiceHost)
+        public SyncServiceConnection(ISyncServiceHost<T> syncServiceHost)
         {
             this.syncServiceHost = syncServiceHost;
         }
 
         public void OnServiceConnected(ComponentName name, IBinder service)
         {
-            if (service is ServiceBinder<SyncBgService> demoServiceBinder)
+            if (service is ServiceBinder<T> serviceBinder)
             {
-                syncServiceHost.Binder = demoServiceBinder;
+                syncServiceHost.Binder = serviceBinder;
             }
         }
 

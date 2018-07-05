@@ -8,14 +8,16 @@ using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.MapSynchronization;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
+using WB.UI.Shared.Enumerator.Services;
 
 namespace WB.UI.Interviewer.Services
 {
     [Service]
     public class MapDownloadBackgroundService : Service
     {
-        private MapDownloadBackgroundServiceBinder binder;
+        private ServiceBinder<MapDownloadBackgroundService> binder;
         private Thread thread;
         private bool isSyncRunning;
 
@@ -59,7 +61,7 @@ namespace WB.UI.Interviewer.Services
 
         public override IBinder OnBind(Intent intent)
         {
-            this.binder = new MapDownloadBackgroundServiceBinder(this);
+            this.binder = new ServiceBinder<MapDownloadBackgroundService>(this);
             return this.binder;
         }
     }
