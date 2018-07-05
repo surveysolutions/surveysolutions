@@ -13,6 +13,6 @@ namespace WB.UI.Supervisor.Activities
             Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
     public class OfflineSupervisorSyncActitivy : GoogleApiConnectedActivity<OfflineSupervisorSyncViewModel>
     {
-        protected override int ViewResourceId => Resource.Layout.synchronize;
+        protected override int ViewResourceId => Resource.Layout.offline_sync;
     }
 }

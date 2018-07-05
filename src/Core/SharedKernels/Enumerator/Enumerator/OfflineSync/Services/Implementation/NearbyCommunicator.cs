@@ -3,6 +3,8 @@ using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
+using Humanizer;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Entities;
 
 namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
@@ -13,10 +15,17 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
         private readonly IRequestHandler requestHandler;
         private readonly IPayloadProvider payloadProvider;
 
-        private readonly ConcurrentDictionary<Guid, TaskCompletionSourceWithProgress> pending = new ConcurrentDictionary<Guid, TaskCompletionSourceWithProgress>();
-        private readonly ConcurrentDictionary<long, IncomingPayloadInfo> payloadsInfo = new ConcurrentDictionary<long, IncomingPayloadInfo>();
-        private readonly ConcurrentDictionary<long, IPayload> incomingPayloads = new ConcurrentDictionary<long, IPayload>();
-        private readonly ConcurrentDictionary<long, IPayload> outgoingPayloads = new ConcurrentDictionary<long, IPayload>();
+        private readonly ConcurrentDictionary<Guid, TaskCompletionSourceWithProgress> pending =
+            new ConcurrentDictionary<Guid, TaskCompletionSourceWithProgress>();
+
+        private readonly ConcurrentDictionary<long, IncomingPayloadInfo> payloadsInfo =
+            new ConcurrentDictionary<long, IncomingPayloadInfo>();
+
+        private readonly ConcurrentDictionary<long, IPayload> incomingPayloads =
+            new ConcurrentDictionary<long, IPayload>();
+
+        private readonly ConcurrentDictionary<long, IPayload> outgoingPayloads =
+            new ConcurrentDictionary<long, IPayload>();
 
         public NearbyCommunicator(IRequestHandler requestHandler,
             IPayloadProvider payloadProvider, IPayloadSerializer payloadSerializer)
@@ -26,7 +35,8 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             this.payloadSerializer = payloadSerializer;
         }
 
-        private (Guid id, IPayload message, IPayload info) PreparePayload(Guid correlationGuid, byte[] dataToSend, bool isRequest, string errorMessage = null)
+        private (Guid id, IPayload message, IPayload info) PreparePayload(Guid correlationGuid, byte[] dataToSend,
+            bool isRequest, string errorMessage = null)
         {
             var nearbyPayload = new NearbyPayload(correlationGuid, dataToSend, isRequest);
             var payloadBytes = payloadSerializer.ToPayload(nearbyPayload);
@@ -45,7 +55,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
 
             return (nearbyPayload.Id, outgoingPayload, infoPayload);
         }
-        
+
         public async Task<TResponse> SendAsync<TRequest, TResponse>(INearbyConnection connection, string endpoint,
             TRequest message, IProgress<CommunicationProgress> progress)
         {
@@ -54,7 +64,8 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             return this.payloadSerializer.FromPayload<TResponse>(responseBytes);
         }
 
-        private async Task<byte[]> SendAsync(INearbyConnection connection, string endpoint, byte[] message, IProgress<CommunicationProgress> progress = null)
+        private async Task<byte[]> SendAsync(INearbyConnection connection, string endpoint, byte[] message,
+            IProgress<CommunicationProgress> progress = null)
         {
             var payloads = PreparePayload(Guid.NewGuid(), message, true);
 
@@ -87,9 +98,11 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
         }
 
         [Conditional("DEBUG")]
-        private void Debug(string action, bool outgoing, string endpoint, object payloadId, PayloadType type, string message)
+        private void Debug(string action, bool outgoing, string endpoint, object payloadId, PayloadType type,
+            string message)
         {
-            System.Diagnostics.Debug.WriteLine($"[{action,-11}] {(outgoing ? "====>" : "<====")} {endpoint}[{payloadId.ToString()}] #{type.ToString()} {message}");
+            System.Diagnostics.Debug.WriteLine(
+                $"[{action,-11}] {(outgoing ? "====>" : "<====")} {endpoint}[{payloadId.ToString()}] #{type.ToString()} {message}");
         }
 
         public async Task RecievePayloadAsync(INearbyConnection nearbyConnection, string endpointId, IPayload payload)
@@ -111,7 +124,8 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             }
         }
 
-        public async void RecievePayloadTransferUpdate(INearbyConnection nearbyConnection, string endpoint, NearbyPayloadTransferUpdate update)
+        public async void RecievePayloadTransferUpdate(INearbyConnection nearbyConnection, string endpoint,
+            NearbyPayloadTransferUpdate update)
         {
             bool isIncoming = false;
             if (incomingPayloads.TryGetValue(update.Id, out var payload))
@@ -192,6 +206,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                             failure.SetCanceled();
                         }
                     }
+
                     break;
                 case TransferStatus.InProgress:
                     if (this.payloadsInfo.TryGetValue(update.Id, out var info))
@@ -205,15 +220,10 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                         {
                             pendingValue.Debounce();
 
-                            pendingValue.Progress?.Report(new CommunicationProgress
-                            {
-                                RecievedTotalBytes = isIncoming ? info.Size : -1,
-                                RecievedTransferedBytes = isIncoming ? update.BytesTransferred : -1,
-                                SendTotalBytes = isIncoming ? -1 : info.Size,
-                                SendTransferedBytes = isIncoming ? -1 : update.BytesTransferred
-                            });
+                            pendingValue.UpdateProgress(update.BytesTransferred, info.Size);
                         }
                     }
+
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
@@ -242,7 +252,6 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             // ReSharper disable once UnusedMember.Local - used by Newtonsoft json
             public IncomingPayloadInfo()
             {
-
             }
 
             public IncomingPayloadInfo(NearbyPayload nearbyPayload, byte[] payloadData, IPayload payload)
@@ -260,36 +269,56 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             public bool IsSuccess { get; set; } = true;
         }
 
-        public static TimeSpan MessageAwaitingTimeout = TimeSpan.FromSeconds(10);
+        public static TimeSpan MessageAwaitingTimeout = TimeSpan.FromSeconds(30);
 
         private struct TaskCompletionSourceWithProgress
         {
             private Timer timer;
             private readonly Stopwatch sw;
-            
+            private readonly EtaTransferRate etaHelper;
+            private readonly CommunicationProgress progressData; // = new CommunicationProgress();
+            private bool isCompleted;
+
             public TaskCompletionSourceWithProgress(IProgress<CommunicationProgress> progress) : this()
             {
                 TaskCompletionSource = new TaskCompletionSource<byte[]>();
                 Progress = progress;
+                progressData = new CommunicationProgress();
                 sw = Stopwatch.StartNew();
+                etaHelper = new EtaTransferRate();
                 Debounce();
+                isCompleted = false;
             }
 
             public void Debounce()
             {
                 sw.Restart();
                 this.timer?.Dispose();
-                this.timer = new Timer(SetCanceled, null,  (int)MessageAwaitingTimeout.TotalMilliseconds, Timeout.Infinite);
+                this.timer = new Timer(SetCanceled, null, (int) MessageAwaitingTimeout.TotalMilliseconds,
+                    Timeout.Infinite);
             }
 
             private void SetCanceled(object state)
             {
-                if (sw.Elapsed < MessageAwaitingTimeout)
+                if (isCompleted || sw.Elapsed < MessageAwaitingTimeout)
                 {
                     return;
                 }
+
                 TaskCompletionSource.TrySetCanceled();
                 this.timer?.Dispose();
+            }
+
+            public void UpdateProgress(long sendBytes, long totalBytes)
+            {
+                etaHelper.AddProgress(sendBytes, totalBytes);
+
+                progressData.TotalBytes = totalBytes;
+                progressData.TransferedBytes = sendBytes;
+                progressData.Eta = etaHelper.ETA;
+                progressData.Speed = etaHelper.AverageSpeed.Bytes().ToString("0.00");
+
+                Progress?.Report(progressData);
             }
 
             private TaskCompletionSource<byte[]> TaskCompletionSource { get; }
@@ -301,10 +330,12 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             public void SetCanceled()
             {
                 SetCanceled(null);
+                isCompleted = true;
             }
 
             public void SetResult(byte[] data)
             {
+                isCompleted = true;
                 TaskCompletionSource.TrySetResult(data);
             }
         }
