@@ -1,6 +1,4 @@
-﻿using WB.Core.BoundedContexts.Interviewer.Views;
-
-namespace WB.Core.BoundedContexts.Interviewer.Services
+﻿namespace WB.Core.SharedKernels.Enumerator.Services.MapSynchronization
 {
     public class MapSyncProgress
     {
@@ -10,7 +8,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         public string Title { get; set; }
         public string Description { get; set; }
         public int TotalMapsCount { get; set; }
-
 
         public MapSyncStatus Status { get; set; }
     }

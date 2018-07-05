@@ -22,7 +22,7 @@ namespace WB.UI.Supervisor.Activities
         HardwareAccelerated = true,
         ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
     [MvxActivityPresentation]
-    public class DashboardActivity : BaseActivity<DashboardViewModel>, ISyncBgService, ISyncServiceHost
+    public class DashboardActivity : BaseActivity<DashboardViewModel>, ISyncBgService<SyncProgressDto>, ISyncServiceHost<SyncBgService>
     {
         private ActionBarDrawerToggle drawerToggle;
         public DrawerLayout DrawerLayout { get; private set; }
@@ -66,7 +66,7 @@ namespace WB.UI.Supervisor.Activities
         protected override void OnStart()
         {
             base.OnStart();
-            this.BindService(new Intent(this, typeof(SyncBgService)), new SyncServiceConnection(this), Bind.AutoCreate);
+            this.BindService(new Intent(this, typeof(SyncBgService)), new SyncServiceConnection<SyncBgService>(this), Bind.AutoCreate);
         }
 
         protected override void OnViewModelSet()

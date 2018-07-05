@@ -1,4 +1,4 @@
-﻿namespace WB.Core.BoundedContexts.Interviewer.Views
+﻿namespace WB.Core.SharedKernels.Enumerator.Services.MapSynchronization
 {
     public enum MapSyncStatus
     {
