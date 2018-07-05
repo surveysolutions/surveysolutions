@@ -771,4 +771,10 @@
   <data name="Synchronization_Of_InterviewersFormat" xml:space="preserve">
     <value>Синхронизация интервьюверов: {0} из {1}</value>
   </data>
+  <data name="Prefs_AllowSyncWithHq" xml:space="preserve">
+    <value>Разрешить синхронизацию с Headquarters</value>
+  </data>
+  <data name="Prefs_AllowSyncWithHq_Summary" xml:space="preserve">
+    <value>Выключите эту настройку если приложение должно синхронизироваться только с мобильным приложением супервизора</value>
+  </data>
 </root>

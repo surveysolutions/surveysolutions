@@ -184,9 +184,6 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         {
             switch (item.ItemId)
             {
-                case Resource.Id.menu_synchronization:
-                    this.ViewModel.SynchronizationCommand.Execute();
-                    break;
                 case Resource.Id.menu_settings:
                     Intent intent = new Intent(this, typeof(PrefsActivity));
                     this.StartActivity(intent);

@@ -56,6 +56,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
                     principal: principal ?? Mock.Of<IInterviewerPrincipal>(),
                     synchronization: synchronization ?? Substitute.For<SynchronizationViewModel>(),
                     messenger: messenger ?? Mock.Of<IMvxMessenger>(),
+                    interviewerSettings: Mock.Of<IInterviewerSettings>(),
                     createNewViewModel: DashboardQuestionnairesViewModel(),
                     startedInterviewsViewModel: DashboardStartedInterviewsViewModel(),
                     completedInterviewsViewModel: DashboardCompletedInterviewsViewModel(),
