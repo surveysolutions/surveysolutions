@@ -384,6 +384,7 @@
     <Compile Include="Services\Internals\PortableJsonSerializer.cs" />
     <Compile Include="Services\Internals\PortableOldToNewAssemblyRedirectSerializationBinder.cs" />
     <Compile Include="Services\Internals\QRBarcodeScanService.cs" />
+    <Compile Include="Services\MapDownloadBackgroundService.cs" />
     <Compile Include="Services\MapService.cs" />
     <Compile Include="OfflineSync\Services\Implementation\NearbyConnection.cs" />
     <Compile Include="OfflineSync\Entities\OnConnectionLifecycleCallback.cs" />

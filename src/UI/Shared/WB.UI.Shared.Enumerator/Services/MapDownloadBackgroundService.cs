@@ -1,18 +1,15 @@
 ﻿using System;
 using System.Threading;
-using Android.OS;
 using Android.App;
 using Android.Content;
+using Android.OS;
 using MvvmCross;
-using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable.Tasks;
-using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.MapSynchronization;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
-using WB.UI.Shared.Enumerator.Services;
 
-namespace WB.UI.Interviewer.Services
+namespace WB.UI.Shared.Enumerator.Services
 {
     [Service]
     public class MapDownloadBackgroundService : Service
