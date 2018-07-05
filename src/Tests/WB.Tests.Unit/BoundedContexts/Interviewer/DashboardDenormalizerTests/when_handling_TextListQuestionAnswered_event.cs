@@ -7,6 +7,8 @@ using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.Enumerator.Denormalizer;
+using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
 
@@ -42,7 +44,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
         public void should_set_answer_time_as_start_date_for_interview() =>
             interviewViewStorage.GetById(interviewId.FormatGuid())?.StartedDateTime.Should().Be(answerTimeUtc);
 
-        private static InterviewerDashboardEventHandler denormalizer;
+        private static InterviewDashboardEventHandler denormalizer;
         private static IPublishedEvent<TextListQuestionAnswered> evnt;
         private static Guid interviewId = Guid.Parse("22222222222222222222222222222222");
         private static SqliteInmemoryStorage<InterviewView> interviewViewStorage;

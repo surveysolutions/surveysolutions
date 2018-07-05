@@ -720,15 +720,15 @@
   <data name="Maps_Synchronization_Success_Description" xml:space="preserve">
     <value>Карты успешно обновлены</value>
   </data>
-    <data name="Synchronization_DownloadApplication" xml:space="preserve">
+  <data name="Synchronization_DownloadApplication" xml:space="preserve">
     <value>Загрузка обновлений</value>
     <comment>Загрузка обновлений</comment>
   </data>
-    <data name="Synchronization_CheckNewVersionOfApplication" xml:space="preserve">
+  <data name="Synchronization_CheckNewVersionOfApplication" xml:space="preserve">
     <value>Проверка обновлений</value>
     <comment>Проверка обновлений</comment>
   </data>
-    <data name="Synchronization_DownloadApplication_Description" xml:space="preserve">
+  <data name="Synchronization_DownloadApplication_Description" xml:space="preserve">
     <value>Загружено {0} из {1} при {2} ({3}%)</value>
     <comment>Загружено {0} из {1} ({2}%)</comment>
   </data>
@@ -755,11 +755,29 @@
   <data name="Dashboard_Search_ExitSearch" xml:space="preserve">
     <value>Выйти из поиска</value>
   </data>
-    <data name="Synchronization_UploadAuditLog" xml:space="preserve">
+  <data name="Synchronization_UploadAuditLog" xml:space="preserve">
     <value>Загрузка на хедквотер аудин информации</value>
     <comment>Загрузка на хедквотер аудин информации</comment>
   </data>
-    <data name="Synchronization_CheckForObsolete_Interviews" xml:space="preserve">
+  <data name="Synchronization_CheckForObsolete_Interviews" xml:space="preserve">
     <value>Проверка устаревших интервью</value>
+  </data>
+  <data name="Dashboard_Assign" xml:space="preserve">
+    <value>Назначить</value>
+  </data>
+  <data name="Synchronization_Of_Interviewers" xml:space="preserve">
+    <value>Синхронизация интервьюверов</value>
+  </data>
+  <data name="Synchronization_Of_InterviewersFormat" xml:space="preserve">
+    <value>Синхронизация интервьюверов: {0} из {1}</value>
+  </data>
+    <data name="MenuItem_Title_MapsSynchronization" xml:space="preserve">
+    <value>Синхронизировать карты</value>
+  </data>
+  <data name="Prefs_AllowSyncWithHq" xml:space="preserve">
+    <value>Разрешить синхронизацию с Headquarters</value>
+  </data>
+  <data name="Prefs_AllowSyncWithHq_Summary" xml:space="preserve">
+    <value>Выключите эту настройку если приложение должно синхронизироваться только с мобильным приложением супервизора</value>
   </data>
 </root>

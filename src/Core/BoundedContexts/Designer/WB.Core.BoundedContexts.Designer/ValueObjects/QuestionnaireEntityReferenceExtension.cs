@@ -15,6 +15,17 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
             this QuestionnaireEntityReference reference,
             ReadOnlyQuestionnaireDocument questionnaireDocument)
         {
+            if (reference.Type == QuestionnaireVerificationReferenceType.Questionnaire)
+            {
+                return new QuestionnaireEntityExtendedReference
+                {
+                    ItemId = reference.Id.FormatGuid(),
+                    Type = QuestionnaireVerificationReferenceType.Questionnaire,
+                    Variable = questionnaireDocument.VariableName,
+                    Title = questionnaireDocument.Title
+                };
+            }
+
             if (reference.Type == QuestionnaireVerificationReferenceType.Attachment)
             {
                 var attachment = questionnaireDocument.Attachments.Single(x => x.AttachmentId == reference.Id);

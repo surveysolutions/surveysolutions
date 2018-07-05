@@ -8,7 +8,7 @@ using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 
-namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests.CascadingDropdownTests
+namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests.CascadingDropdownTests
 {
     internal class when_parent_cascading_question_missing_from_questionnaire : QuestionnaireVerifierTestsContext
     {

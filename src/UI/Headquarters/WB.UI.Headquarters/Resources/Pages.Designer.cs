@@ -385,6 +385,24 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Download Supervisor app.
+        /// </summary>
+        public static string DownloadSupervisorPage_PageTitle {
+            get {
+                return ResourceManager.GetString("DownloadSupervisorPage_PageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Welcome to Survey Solutions Supervisor download page.
+        /// </summary>
+        public static string DownloadSupervisorPage_Welcome {
+            get {
+                return ResourceManager.GetString("DownloadSupervisorPage_Welcome", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Save.
         /// </summary>
         public static string EditQuestion_Save {
@@ -489,6 +507,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string GetLatestAppExtendedDescription {
             get {
                 return ResourceManager.GetString("GetLatestAppExtendedDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Download latest Supervisor app.
+        /// </summary>
+        public static string GetLatestSupervisorApp {
+            get {
+                return ResourceManager.GetString("GetLatestSupervisorApp", resourceCulture);
             }
         }
         

@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
+using Autofac.Features.ResolveAnything;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.UI.Shared.Enumerator.Services.Internals;
 
@@ -32,6 +32,7 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
 
         public async Task Init()
         {
+            containerBuilder.RegisterSource(new AnyConcreteTypeNotAlreadyRegisteredSource());
             Container = containerBuilder.Build();
 
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(Container));

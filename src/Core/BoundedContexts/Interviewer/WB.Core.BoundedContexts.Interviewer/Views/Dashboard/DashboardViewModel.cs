@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
+using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.Messages;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -13,12 +14,14 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
+using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 {
     public class DashboardViewModel : BaseViewModel<DashboardViewModelArgs>, IDisposable
     {
         private readonly IViewModelNavigationService viewModelNavigationService;
+        private readonly IInterviewerSettings interviewerSettings;
         private readonly IPlainStorage<InterviewView> interviewsRepository;
         private readonly IAuditLogService auditLogService;
 
@@ -34,6 +37,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             IPrincipal principal,
             SynchronizationViewModel synchronization,
             IMvxMessenger messenger,
+            IInterviewerSettings interviewerSettings,
             CreateNewViewModel createNewViewModel,
             StartedInterviewsViewModel startedInterviewsViewModel,
             CompletedInterviewsViewModel completedInterviewsViewModel,
@@ -42,6 +46,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             IAuditLogService auditLogService): base (principal, viewModelNavigationService)
         {
             this.viewModelNavigationService = viewModelNavigationService;
+            this.interviewerSettings = interviewerSettings;
             this.interviewsRepository = interviewsRepository;
             this.auditLogService = auditLogService;
             this.Synchronization = synchronization;
@@ -61,7 +66,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.RejectedInterviews.OnItemsLoaded += this.OnItemsLoaded;
             this.CompletedInterviews.OnItemsLoaded += this.OnItemsLoaded;
             this.CreateNew.OnItemsLoaded += this.OnItemsLoaded;
-
         }
 
         public override void Prepare(DashboardViewModelArgs parameter)
@@ -74,6 +78,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.RefreshDashboard(this.LastVisitedInterviewId);
             this.SelectTypeOfInterviewsByInterviewId(this.LastVisitedInterviewId);
             return Task.CompletedTask;
+        }
+
+        public override void ViewAppeared()
+        {
+            base.ViewAppeared();
+            this.SynchronizationWithHqEnabled = this.interviewerSettings.AllowSyncWithHq;
+        }
+
+        public bool SynchronizationWithHqEnabled
+        {
+            get => synchronizationWithHqEnabled;
+            private set => SetProperty(ref synchronizationWithHqEnabled, value);
         }
 
         private Guid? LastVisitedInterviewId { set; get; }
@@ -94,13 +110,19 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxAsyncCommand(this.NavigateToDiagnostics);
 
         public IMvxCommand NavigateToMapsCommand => new MvxAsyncCommand(this.NavigateToMaps);
+        public IMvxCommand NavigateToOfflineSyncCommand => new MvxAsyncCommand(this.NavigateToOfflineSync);
+        private Task NavigateToOfflineSync()
+        {
+            this.Synchronization.CancelSynchronizationCommand.Execute();
+            return this.viewModelNavigationService.NavigateToAsync<OfflineInterviewerSyncViewModel>();
+        }
 
         private Task NavigateToMaps()
         {
             this.Synchronization.CancelSynchronizationCommand.Execute();
             return this.viewModelNavigationService.NavigateToAsync<MapsViewModel>();
         }
-
+        
         private bool isInProgress;
         public bool IsInProgress
         {
@@ -109,6 +131,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         }
 
         private GroupStatus typeOfInterviews;
+        private bool synchronizationWithHqEnabled;
+
         public GroupStatus TypeOfInterviews
         {
             get => this.typeOfInterviews;
@@ -221,7 +245,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.CompletedInterviews.OnItemsLoaded -= this.OnItemsLoaded;
             this.CreateNew.OnItemsLoaded -= this.OnItemsLoaded;
         }
-
 
         protected override void InitFromBundle(IMvxBundle parameters)
         {

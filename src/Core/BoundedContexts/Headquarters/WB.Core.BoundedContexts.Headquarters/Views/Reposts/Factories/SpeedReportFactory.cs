@@ -96,7 +96,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                                             .Average();
                 double? dbl = totalAvgDuration.HasValue ? new TimeSpan((long)totalAvgDuration.Value).TotalMinutes : (double?)null;
 
-                totalRow.SpeedByPeriod.Add(dbl.HasValue ? Math.Round(dbl.Value, 2) : (double?)null);
+                totalRow.SpeedByPeriod.Add(dbl.HasValue ? Math.Round(Math.Abs(dbl.Value), 2) : (double?)null);
             }
 
             return new SpeedByResponsibleReportView(rows, ranges.ColumnRangesLocal, usersCount)

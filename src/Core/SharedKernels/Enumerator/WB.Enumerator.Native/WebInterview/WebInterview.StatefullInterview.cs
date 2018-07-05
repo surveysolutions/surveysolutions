@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
@@ -49,7 +50,7 @@ namespace WB.Enumerator.Native.WebInterview
             return new InterviewInfo
             {
                 QuestionnaireTitle = IsReviewMode 
-                    ? string.Format(Enumerator.Native.Resources.WebInterview.QuestionnaireNameFormat, questionnaire.Title, questionnaire.Version) 
+                    ? string.Format(Resources.WebInterview.QuestionnaireNameFormat, questionnaire.Title, questionnaire.Version) 
                     : questionnaire.Title,
                 FirstSectionId = questionnaire.GetFirstSectionId().FormatGuid(),
                 InterviewKey = statefulInterview.GetInterviewKey().ToString(),
@@ -110,7 +111,8 @@ namespace WB.Enumerator.Native.WebInterview
 
             return result;
         }
-
+        
+        [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
         public PrefilledPageData GetPrefilledEntities()
         {
             var questionnaire = this.GetCallerQuestionnaire();
@@ -148,7 +150,6 @@ namespace WB.Enumerator.Native.WebInterview
             var questionarie = this.GetCallerQuestionnaire();
 
             var entities = ids
-                .Where(id => !questionarie.IsVariable(id.Id))
                 .Select(x => new InterviewEntityWithType
                 {
                     Identity = x.ToString(),
@@ -160,6 +161,7 @@ namespace WB.Enumerator.Native.WebInterview
             return entities;
         }
 
+        [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
         public SectionData GetFullSectionInfo(string sectionId)
         {
             var entities = GetSectionEntities(sectionId);
@@ -231,7 +233,7 @@ namespace WB.Enumerator.Native.WebInterview
             {
                 return NewButtonState(new ButtonState
                 {
-                    Title = Enumerator.Native.Resources.WebInterview.CompleteInterview,
+                    Title = Resources.WebInterview.CompleteInterview,
                     Type = ButtonType.Complete
                 }, statefulInterview.GetGroup(sectionIdentity));
             }
@@ -245,6 +247,7 @@ namespace WB.Enumerator.Native.WebInterview
             }, statefulInterview.GetGroup(nextSectionId));
         }
 
+        [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
         public BreadcrumbInfo GetBreadcrumbs(string sectionIdArg)
         {
             var sectionId = CallerSectionid ?? sectionIdArg;
@@ -345,7 +348,8 @@ namespace WB.Enumerator.Native.WebInterview
         }
 
         private static readonly Regex HtmlRemovalRegex = new Regex(Constants.HtmlRemovalPattern, RegexOptions.Compiled);
-        
+
+        [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
         public bool HasCoverPage()
         {
             var interview = this.GetCallerInterview();
@@ -356,6 +360,7 @@ namespace WB.Enumerator.Native.WebInterview
                 || !string.IsNullOrWhiteSpace(interview.SupervisorRejectComment);
         }
 
+        [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.sidebar.js")]
         public Sidebar GetSidebarChildSectionsOf(string[] parentIds)
         {
             var sectionId = CallerSectionid;
@@ -365,6 +370,7 @@ namespace WB.Enumerator.Native.WebInterview
             return this.interviewEntityFactory.GetSidebarChildSectionsOf(sectionId, interview, parentIds, IsReviewMode);
         }
 
+        [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @Combobox.vue")]
         public virtual DropdownItem[] GetTopFilteredOptionsForQuestion(string id, string filter, int count)
         {
             var questionIdentity = Identity.Parse(id);
@@ -414,7 +420,8 @@ namespace WB.Enumerator.Native.WebInterview
             };
             return completeInfo;
         }
-        
+
+        [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
         public CoverInfo GetCoverInfo()
         {
             var interview = this.GetCallerInterview();

@@ -6,6 +6,7 @@ using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
@@ -37,19 +38,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         public bool IsVersionCheckInProgress
         {
             get => this.isVersionCheckInProgress;
-            set => MvxNotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref this.isVersionCheckInProgress, value);
+            set => this.RaiseAndSetIfChanged( ref this.isVersionCheckInProgress, value);
         }
 
         public bool IsNewVersionAvaliable
         {
             get => this.isNewVersionAvaliable;
-            set => MvxNotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref this.isNewVersionAvaliable, value);
+            set => this.RaiseAndSetIfChanged( ref this.isNewVersionAvaliable, value);
         }
 
         public string CheckNewVersionResult
         {
             get => this.checkNewVersionResult;
-            set => MvxNotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref this.checkNewVersionResult, value);
+            set => this.RaiseAndSetIfChanged( ref this.checkNewVersionResult, value);
         }
 
         public string Version { get; set; }

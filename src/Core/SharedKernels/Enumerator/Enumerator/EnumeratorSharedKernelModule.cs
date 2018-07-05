@@ -13,10 +13,13 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
+using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
+using WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
@@ -26,9 +29,8 @@ namespace WB.Core.SharedKernels.Enumerator
     {
         public void Load(IIocRegistry registry)
         {
-            registry.BindAsSingleton<IInterviewViewModelFactory, InterviewViewModelFactory>();
             registry.BindAsSingleton<IEntitiesListViewModelFactory, EntitiesListViewModelFactory>();
-            registry.Bind<ISideBarSectionViewModelsFactory, SideBarSectionViewModelFactory>();
+           
             registry.Bind<IDynamicTextViewModelFactory, DynamicTextViewModelFactory>();
             registry.Bind<ISubstitutionTextFactory, SubstitutionTextFactory>();
             registry.Bind<ISubstitutionService, SubstitutionService>(); //.InScope(ctx => BaseInterviewViewModel.CurrentInterviewScope); 
@@ -42,11 +44,15 @@ namespace WB.Core.SharedKernels.Enumerator
             registry.Bind<IAsyncRunner, AsyncRunner>();
             registry.Bind<ICompositeCollectionInflationService, CompositeCollectionInflationService>();
             registry.BindAsSingleton<ILastCompletionComments, LastCompletionComments>();
-
+            
             registry.Bind<IAggregateRootCacheCleaner, DummyAggregateRootCacheCleaner>();
 
             registry.Bind<NavigationState>();
             registry.Bind<AnswerNotifier>();
+
+            // offline sync
+            registry.Bind<IOfflineSyncClient, OfflineSyncClient>();
+            registry.BindAsSingleton<IPayloadSerializer, PayloadSerializer>();
 
             RegisterViewModels(registry);
         }
@@ -70,6 +76,8 @@ namespace WB.Core.SharedKernels.Enumerator
             registry.Bind<EnumerationStageViewModel>();
             registry.Bind<ReadOnlyQuestionViewModel>();
             registry.Bind<SideBarCompleteSectionViewModel>();
+            registry.Bind<SideBarOverviewViewModel>();
+            registry.Bind<OverviewViewModel>();
             registry.Bind<SideBarCoverSectionViewModel>();
             registry.Bind<SideBarSectionViewModel>();
             registry.Bind<SideBarSectionsViewModel>();

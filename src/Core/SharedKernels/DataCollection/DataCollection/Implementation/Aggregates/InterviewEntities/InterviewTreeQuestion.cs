@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
@@ -185,7 +184,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public List<AnswerComment> AnswerComments { get; set; } = new List<AnswerComment>();
 
-        public SubstitutionText Title { get; private set; }
+        public sealed override SubstitutionText Title { get; protected set; }
 
         public SubstitutionText[] ValidationMessages { get; private set; }
 

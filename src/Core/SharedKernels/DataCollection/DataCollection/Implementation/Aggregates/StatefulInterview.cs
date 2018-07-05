@@ -488,20 +488,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public int CountInvalidEntitiesInInterviewForSupervisor() => this.GetInvalidEntitiesInInterviewForSupervisor().Count();
 
 
-        public int CountAllEnabledUnansweredQuestions() => 
-            this.GetEnabledNotHiddenQuestions().Count(question => !question.IsAnswered());
-        
         public int CountAllEnabledAnsweredQuestions()
             => this.GetEnabledNotHiddenQuestions().Count(question => question.IsAnswered());
         public int CountAllEnabledQuestions() => this.GetEnabledNotHiddenQuestions().Count();
         public int CountAllInvalidEntities() => this.GetAllInvalidEntitiesInInterview().Count();
 
-        public int CountEnabledSupervisorQuestions()
-            => this.GetEnabledNotHiddenQuestions().Count(question => question.IsSupervisors);
-
-        public int CountEnabledHiddenQuestions() => 
-            this.Tree.FindQuestions().Where(question => !question.IsDisabled()).Count(question => question.IsHidden);
-        
         public IEnumerable<Identity> GetAllInvalidEntitiesInInterview()
             => this.GetEnabledInvalidStaticTexts()
                 .Concat(this.GetEnabledInvalidQuestions(true).Select(question => question.Identity));
@@ -634,8 +625,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         public IEnumerable<InterviewTreeGroup> GetAllEnabledGroupsAndRosters()
             => this.Tree.GetAllNodesInEnumeratorOrder().OfType<InterviewTreeGroup>().Where(group => !group.IsDisabled());
-
-        public IEnumerable<IInterviewTreeNode> GetAllNodes() => this.Tree.GetAllNodesInEnumeratorOrder();
 
         public bool IsEntityValid(Identity identity)
         {

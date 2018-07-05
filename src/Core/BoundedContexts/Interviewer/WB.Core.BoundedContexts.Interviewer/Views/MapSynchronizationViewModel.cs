@@ -3,13 +3,17 @@ using System.Threading;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.MapSynchronization;
+using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
+using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views
 {
     public class MapSynchronizationViewModel : MvxNotifyPropertyChanged
     {
 
-        public IMapSyncBackgroundService MapSyncBackgroundService { get; set; }
+        public ISyncBgService<MapSyncProgressStatus> MapSyncBackgroundService { get; set; }
         public event EventHandler SyncCompleted;
 
         private SynchronizationStatus status;
@@ -114,7 +118,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.synchronizationCancellationTokenSource = new CancellationTokenSource();
             IsSynchronizationInfoShowed = true;
 
-            MapSyncBackgroundService.SyncMaps();
+            MapSyncBackgroundService.StartSync();
 
             var mapSyncProgressStatus = this.MapSyncBackgroundService.CurrentProgress;
             if (mapSyncProgressStatus != null)
