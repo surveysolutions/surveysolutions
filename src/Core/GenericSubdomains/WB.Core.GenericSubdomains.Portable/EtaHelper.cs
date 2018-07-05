@@ -3,6 +3,36 @@ using System.Diagnostics;
 
 namespace WB.Core.GenericSubdomains.Portable
 {
+    public class EtaTransferRate
+    {
+        private long? totalBytes;
+        private long bytesDone;
+        private readonly Stopwatch sw;
+        private readonly SimpleRunningAverage average;
+
+        public EtaTransferRate(long? totalBytes = null, int averageWindow = 5)
+        {
+            this.totalBytes = totalBytes;
+            sw = Stopwatch.StartNew();
+            this.average = new SimpleRunningAverage(averageWindow);
+        }
+
+        public void AddProgress(long sendBytes, long? totalBytes = null)
+        {
+            this.totalBytes = totalBytes;
+            var bytes = sendBytes - bytesDone;
+            var elapsed = sw.Elapsed.TotalSeconds;
+            var speed = bytes / elapsed; // bytes/second
+            
+            AverageSpeed = this.average.Add(speed);
+            bytesDone = sendBytes;
+            ETA = this.totalBytes != null ? TimeSpan.FromSeconds((this.totalBytes.Value - bytesDone) / AverageSpeed) : TimeSpan.Zero;
+        }
+
+        public TimeSpan ETA { get; private set; }
+        public double AverageSpeed { get; private set; }
+    }
+
     public class EtaHelper
     {
         private long totalItems;

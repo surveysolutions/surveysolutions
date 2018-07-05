@@ -33,7 +33,6 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             await StartAdvertising();
         }
         
-        
         protected override string GetServiceName()
         {
             var sup = supervisorStorage.FirstOrDefault();

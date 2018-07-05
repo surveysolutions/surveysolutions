@@ -21,9 +21,18 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
             return Task.FromResult(result);
         }
 
+        public Task<SendBigAmountOfDataResponse> Handle(SendBigAmountOfDataRequest request)
+        {
+            return Task.FromResult(new SendBigAmountOfDataResponse
+            {
+                Data = request.Data
+            });
+        }
+
         public void Register(IRequestHandler requestHandler)
         {
             requestHandler.RegisterHandler<GetQuestionnaireListRequest, GetQuestionnaireListResponse>(Handle);
+            requestHandler.RegisterHandler<SendBigAmountOfDataRequest, SendBigAmountOfDataResponse>(Handle);
         }
     }
 }

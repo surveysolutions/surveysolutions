@@ -1,5 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
+using Humanizer;
 using MvvmCross.Logging;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Entities;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels;
@@ -15,6 +18,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private readonly IOfflineSyncClient syncClient;
         private readonly IPlainStorage<InterviewerIdentity> interviewersPlainStorage;
         private readonly string serviceName;
+        private string status;
+        private string statusDetails;
 
         public OfflineInterviewerSyncViewModel(IPrincipal principal, 
             IViewModelNavigationService viewModelNavigationService, 
@@ -29,15 +34,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.interviewersPlainStorage = interviewersPlainStorage;
 
             this.serviceName = settings.Endpoint + "/";
+            SetStatus(ConnectionStatus.WaitingForGoogleApi);
         }
 
-        public InterviewerConnectionStatus Status { get; set; }
-        
-        public Task OnGoogleApiReady()
+        public async Task OnGoogleApiReady()
         {
-            return StartDiscovery();
+            SetStatus(ConnectionStatus.StartDiscovering);
+            await StartDiscovery();
+            SetStatus(ConnectionStatus.Discovering);
         }
-
 
         protected override string GetServiceName()
         {
@@ -48,31 +53,32 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         // just to test that communication is working
         protected override async void OnConnectionResult(string endpoint, NearbyConnectionResolution resolution)
         {
+            // SetStatus(ConnectionStatus.Sync, $"Connected to {endpoint} with status {resolution.IsSuccess}");
             base.OnConnectionResult(endpoint, resolution);
 
             if (resolution.IsSuccess)
             {
                 Log.Info("Sending first request");
                 var result = await syncClient.GetQuestionnaireList(endpoint);
+                SetStatus(ConnectionStatus.Sync, $"Send first payload to {endpoint}");
                 Log.Info("Sending second request");
                 var res2 = await syncClient.GetQuestionnaireList(endpoint);
+                SetStatus(ConnectionStatus.Sync, $"Send second payload to {endpoint}");
                 Log.Info("Sending third request");
                 var res3 = await syncClient.GetQuestionnaireList(endpoint);
+                SetStatus(ConnectionStatus.Sync, $"Send third payload to {endpoint}");
 
-                Log.Info("Sending 50 Mb");
-                var data = new byte[1024 * 1024 * 50 /* 50 Mb*/];
-
-                var res4 = await syncClient.SendBigData(endpoint, data);
+                SetStatus(ConnectionStatus.Sync, $"Sending 20 Mb data {endpoint}");
+                var data = new byte[1024 * 1024 * 20 /* 50 Mb*/];
+                
+                IProgress<CommunicationProgress> progress = new Progress<CommunicationProgress>(
+                    p =>
+                    {
+                        SetStatus(ConnectionStatus.Sync, $"Sending {data.Length.Bytes().ToString("0.00")} data {endpoint} {p.TransferedBytes} of {p.TotalBytes}. " +
+                                                         $"\r\nETA: {p.Eta:g} at {p.Speed}/s");
+                    });
+                var res4 = await syncClient.SendBigData(endpoint, data, progress);
             }
         }
-    }
-
-    public enum InterviewerConnectionStatus
-    {
-        WaitingForGoogleApi,
-        Discovering,
-        Connecting,
-        Sync,
-        Done
     }
 }
