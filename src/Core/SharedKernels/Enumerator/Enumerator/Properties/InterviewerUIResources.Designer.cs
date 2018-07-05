@@ -1095,6 +1095,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Maps Synchronization.
+        /// </summary>
+        public static string MenuItem_Title_MapsSynchronization {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_MapsSynchronization", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Search.
         /// </summary>
         public static string MenuItem_Title_Search {

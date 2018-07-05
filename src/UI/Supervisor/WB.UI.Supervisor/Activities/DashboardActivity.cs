@@ -10,6 +10,7 @@ using MvvmCross.Platforms.Android.Presenters.Attributes;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.MapSynchronization;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.Services;
@@ -22,13 +23,18 @@ namespace WB.UI.Supervisor.Activities
         HardwareAccelerated = true,
         ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
     [MvxActivityPresentation]
-    public class DashboardActivity : BaseActivity<DashboardViewModel>, ISyncBgService<SyncProgressDto>, ISyncServiceHost<SyncBgService>
+    public class DashboardActivity : BaseActivity<DashboardViewModel>, 
+        ISyncBgService<SyncProgressDto>, ISyncServiceHost<SyncBgService>,
+        ISyncBgService<MapSyncProgressStatus>, ISyncServiceHost<MapDownloadBackgroundService>
     {
         private ActionBarDrawerToggle drawerToggle;
+
         public DrawerLayout DrawerLayout { get; private set; }
         protected override int ViewResourceId => Resource.Layout.dashboard;
 
-        public ServiceBinder<SyncBgService> Binder { get; set; }
+        ServiceBinder<SyncBgService> ISyncServiceHost<SyncBgService>.Binder { get; set; }
+
+        ServiceBinder<MapDownloadBackgroundService> ISyncServiceHost<MapDownloadBackgroundService>.Binder { get; set; }
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -67,6 +73,7 @@ namespace WB.UI.Supervisor.Activities
         {
             base.OnStart();
             this.BindService(new Intent(this, typeof(SyncBgService)), new SyncServiceConnection<SyncBgService>(this), Bind.AutoCreate);
+            this.BindService(new Intent(this, typeof(MapDownloadBackgroundService)), new SyncServiceConnection<MapDownloadBackgroundService>(this), Bind.AutoCreate);
         }
 
         protected override void OnViewModelSet()
@@ -85,6 +92,7 @@ namespace WB.UI.Supervisor.Activities
             menu.LocalizeMenuItem(Resource.Id.menu_signout, InterviewerUIResources.MenuItem_Title_SignOut);
             menu.LocalizeMenuItem(Resource.Id.menu_settings, InterviewerUIResources.MenuItem_Title_Settings);
             menu.LocalizeMenuItem(Resource.Id.menu_diagnostics, InterviewerUIResources.MenuItem_Title_Diagnostics);
+            menu.LocalizeMenuItem(Resource.Id.menu_maps_synchronization, InterviewerUIResources.MenuItem_Title_MapsSynchronization);
             return base.OnCreateOptionsMenu(menu);
         }
 
@@ -94,6 +102,9 @@ namespace WB.UI.Supervisor.Activities
             {
                 case Resource.Id.menu_synchronization:
                     this.ViewModel.SynchronizationCommand.Execute();
+                    break;
+                case Resource.Id.menu_maps_synchronization:
+                    this.ViewModel.MapsSynchronizationCommand.Execute();
                     break;
                 case Resource.Id.menu_settings:
                     Intent intent = new Intent(this, typeof(PrefsActivity));
@@ -113,8 +124,12 @@ namespace WB.UI.Supervisor.Activities
             return base.OnOptionsItemSelected(item);
         }
 
-        public void StartSync() => this.Binder.GetService().StartSync();
+        void ISyncBgService<MapSyncProgressStatus>.StartSync() => ((ISyncServiceHost<MapDownloadBackgroundService>)this).Binder.GetService().SyncMaps();
 
-        public SyncProgressDto CurrentProgress => this.Binder.GetService().CurrentProgress;
+        void ISyncBgService<SyncProgressDto>.StartSync() => ((ISyncServiceHost<SyncBgService>)this).Binder.GetService().StartSync();
+
+        MapSyncProgressStatus ISyncBgService<MapSyncProgressStatus>.CurrentProgress => ((ISyncServiceHost<MapDownloadBackgroundService>)this).Binder.GetService().CurrentProgress;
+
+        SyncProgressDto ISyncBgService<SyncProgressDto>.CurrentProgress => ((ISyncServiceHost<SyncBgService>)this).Binder.GetService().CurrentProgress;
     }
 }
