@@ -6,8 +6,10 @@ using Android.Support.V4.Widget;
 using Android.Support.V7.App;
 using Android.Support.V7.Widget;
 using Android.Views;
+using MvvmCross;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard;
+using WB.Core.BoundedContexts.Supervisor.ViewModel.InterviewerSelector;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.MapSynchronization;
@@ -80,6 +82,12 @@ namespace WB.UI.Supervisor.Activities
         {
             base.OnViewModelSet();
             this.ViewModel.Synchronization.SyncBgService = this;
+        }
+
+        protected override void OnStop()
+        {
+            base.OnStop();
+            Mvx.Resolve<IInterviewerSelectorDialog>()?.CloseDialog();
         }
 
         public override void OnBackPressed() { }

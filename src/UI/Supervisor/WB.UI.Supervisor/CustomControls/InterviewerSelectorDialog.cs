@@ -8,10 +8,9 @@ using MvvmCross.Platforms.Android;
 using MvvmCross.Platforms.Android.Binding.BindingContext;
 using MvvmCross.Platforms.Android.Views;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard;
-using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services;
+using WB.Core.BoundedContexts.Supervisor.ViewModel.InterviewerSelector;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Views;
-using WB.UI.Shared.Enumerator.Activities.Dashboard;
 
 namespace WB.UI.Supervisor.CustomControls
 {
@@ -31,9 +30,14 @@ namespace WB.UI.Supervisor.CustomControls
             this.topActivity = topActivity;
         }
 
+        public event EventHandler Cancelled;
+        public event EventHandler<InterviewerSelectedArgs> Selected;
 
-        public event EventHandler OnCanelSelection;
-        public event EventHandler OnSelected;
+        public void CloseDialog()
+        {
+            this.HideDialog();
+            this.Cancelled?.Invoke(this, EventArgs.Empty);
+        }
 
         public void SelectInterviewer(AssignmentDocument assignment)
         {
@@ -52,7 +56,6 @@ namespace WB.UI.Supervisor.CustomControls
             var view = this.modalDialogBindingContext.BindingInflate(Resource.Layout.dashboard_interviewer_selector, null, false);
             var recyclerView = view.FindViewById<MvxRecyclerView>(Resource.Id.interviewers_list);
             recyclerView.HasFixedSize = true;
-            //recyclerView.Adapter = new RecyclerViewAdapter(this.modalDialogBindingContext);
 
             this.modalDialog = new AppCompatDialog(parentActivity);
             this.modalDialog.Window.RequestFeature(WindowFeatures.NoTitle);
@@ -64,27 +67,34 @@ namespace WB.UI.Supervisor.CustomControls
             this.modalDialog.Window.SetBackgroundDrawableResource(Android.Resource.Color.Transparent);
         }
 
-        private void ViewModel_OnDone(object sender, EventArgs e)
+        private void ViewModel_OnDone(object sender, InterviewerSelectedArgs e)
         {
             this.HideDialog();
-            this.OnSelected?.Invoke(sender, EventArgs.Empty);
+            this.Selected?.Invoke(sender, e);
         }
+
         private void ViewModel_OnCancel(object sender, EventArgs e)
         {
             this.HideDialog();
-            this.OnCanelSelection?.Invoke(sender, EventArgs.Empty);
+            this.Cancelled?.Invoke(sender, EventArgs.Empty);
         }
 
         private void HideDialog()
         {
-            this.modalDialog.Dismiss();
-            this.modalDialog.Dispose();
-            this.modalDialog = null;
+            if (this.modalDialog != null)
+            {
+                this.modalDialog.Dismiss();
+                this.modalDialog.Dispose();
+                this.modalDialog = null;
+            }
 
-            this.viewModel.OnDone -= this.ViewModel_OnDone;
-            this.viewModel.OnCancel -= this.ViewModel_OnCancel;
-            this.viewModel.DisposeIfDisposable();
-            this.viewModel = null;
+            if (this.viewModel != null)
+            {
+                this.viewModel.OnDone -= this.ViewModel_OnDone;
+                this.viewModel.OnCancel -= this.ViewModel_OnCancel;
+                this.viewModel.DisposeIfDisposable();
+                this.viewModel = null;
+            }
         }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Services;

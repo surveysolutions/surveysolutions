@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
 
-namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services
+namespace WB.Core.BoundedContexts.Supervisor.ViewModel.InterviewerSelector
 {
     public class InterviewersListAccessor : IInterviewersListAccessor
     {
@@ -25,17 +24,5 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services
                     FullaName = x.FullaName
                 }).ToList();
         }
-    }
-
-    public interface IInterviewersListAccessor
-    {
-        List<InterviewerAssignInfo> GetInterviewers();
-    }
-
-    public class InterviewerAssignInfo
-    {
-        public string Login { get; set; }
-        public string FullaName { get; set; }
-        public Guid Id { get; set; }
     }
 }

@@ -1,17 +1,21 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Main.Core.Entities.SubEntities;
 using MvvmCross.Commands;
-using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services;
+using WB.Core.BoundedContexts.Supervisor.ViewModel.InterviewerSelector;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 
-namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
+namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
 {
     public class SupervisorAssignmentDashboardItemViewModel : AssignmentDashboardItemViewModel
     {
-        private IInterviewerSelectorDialog interviewerSelectorDialog
-            => serviceLocator.GetInstance<IInterviewerSelectorDialog>();
+        private IInterviewerSelectorDialog interviewerSelectorDialog = null;
+        private IInterviewerSelectorDialog InterviewerSelectorDialog
+            => interviewerSelectorDialog ?? (interviewerSelectorDialog = serviceLocator.GetInstance<IInterviewerSelectorDialog>());
+
+        public event EventHandler<InterviewerChangedArgs> ResponsibleChanged;
 
         public SupervisorAssignmentDashboardItemViewModel(IServiceLocator serviceLocator) : base(serviceLocator)
         {
@@ -33,7 +37,32 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
 
         private async Task SelectInterviewerAsync()
         {
-            this.interviewerSelectorDialog.SelectInterviewer(this.Assignment);
+            this.InterviewerSelectorDialog.Selected += OnInterviewerSelected;
+            this.InterviewerSelectorDialog.Cancelled += OnSelectionCancelled;
+            this.InterviewerSelectorDialog.SelectInterviewer(this.Assignment);
+        }
+
+        private void OnSelectionCancelled(object sender, EventArgs e)
+        {
+            this.UnsubscribeDialog();
+        }
+
+        private void OnInterviewerSelected(object sender, InterviewerSelectedArgs e)
+        {
+            this.UnsubscribeDialog();
+
+            var interviewerChangedArgs = new InterviewerChangedArgs(Assignment.ResponsibleId, UserRoles.Supervisor, e.InterviewerId, UserRoles.Interviewer);
+
+            Assignment.ResponsibleId = e.InterviewerId;
+            AssignmentsRepository.Store(Assignment);
+
+            this.ResponsibleChanged?.Invoke(this, interviewerChangedArgs);
+        }
+
+        private void UnsubscribeDialog()
+        {
+            this.InterviewerSelectorDialog.Selected -= OnInterviewerSelected;
+            this.InterviewerSelectorDialog.Cancelled -= OnSelectionCancelled;
         }
     }
 }
