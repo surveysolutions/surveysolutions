@@ -37,7 +37,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             switch (this.navigationState.CurrentScreenType)
             {
                 case ScreenType.Complete:
-                    var completeInterviewViewModel = this.interviewViewModelFactory.GetNew<SupervisorCompleteInterviewViewModel>();
+                    var completeInterviewViewModel = this.interviewViewModelFactory.GetNew<SupervisorResolveInterviewViewModel>();
                     completeInterviewViewModel.Configure(this.InterviewId, this.navigationState);
                     return completeInterviewViewModel;
                 default:

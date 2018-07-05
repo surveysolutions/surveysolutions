@@ -16,16 +16,15 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 {
-    public class SupervisorCompleteInterviewViewModel : CompleteInterviewViewModel
+    public class SupervisorResolveInterviewViewModel : CompleteInterviewViewModel
     {
         private readonly ICommandService commandService;
         private readonly IPrincipal principal;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IViewModelNavigationService navigationService;
         private InterviewStatus status;
-        private Guid interviewResponsible;
 
-        public SupervisorCompleteInterviewViewModel(
+        public SupervisorResolveInterviewViewModel(
             ICommandService commandService, 
             IPrincipal principal, 
             IMvxMessenger messenger, 
@@ -62,7 +61,6 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 
             var interview = this.interviewRepository.Get(interviewId);
             this.status = interview.Status;
-            this.interviewResponsible = interview.CurrentResponsibleId;
         }
 
         public IMvxAsyncCommand Approve => new MvxAsyncCommand(async () =>
