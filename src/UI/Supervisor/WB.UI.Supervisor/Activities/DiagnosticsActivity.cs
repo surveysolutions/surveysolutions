@@ -65,7 +65,6 @@ namespace WB.UI.Supervisor.Activities
             {
                 HideMenuItem(menu, Resource.Id.menu_dashboard);
                 HideMenuItem(menu, Resource.Id.menu_signout);
-                HideMenuItem(menu, Resource.Id.menu_maps);
             }
             return base.OnCreateOptionsMenu(menu);
         }
