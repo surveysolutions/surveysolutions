@@ -771,6 +771,9 @@
   <data name="Synchronization_Of_InterviewersFormat" xml:space="preserve">
     <value>Синхронизация интервьюверов: {0} из {1}</value>
   </data>
+    <data name="MenuItem_Title_MapsSynchronization" xml:space="preserve">
+    <value>Синхронизировать карты</value>
+  </data>
   <data name="Prefs_AllowSyncWithHq" xml:space="preserve">
     <value>Разрешить синхронизацию с Headquarters</value>
   </data>
