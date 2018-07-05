@@ -122,7 +122,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public bool HasComments
         {
             get { return this.hasComments; }
-            private set { this.hasComments = value; this.RaisePropertyChanged(); }
+            set { this.hasComments = value; this.RaisePropertyChanged(); }
         }
 
         private bool isCommentInEditMode;

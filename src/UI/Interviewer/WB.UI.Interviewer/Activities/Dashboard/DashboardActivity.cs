@@ -10,8 +10,12 @@ using MvvmCross.Droid.Support.V4;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.SharedKernels.Enumerator.Properties;
+using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
+using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 using WB.UI.Interviewer.Services;
 using WB.UI.Shared.Enumerator.Activities;
+using WB.UI.Shared.Enumerator.Services;
 using MvxFragmentStatePagerAdapter = WB.UI.Interviewer.CustomControls.MvxFragmentStatePagerAdapter;
 
 namespace WB.UI.Interviewer.Activities.Dashboard
@@ -21,11 +25,11 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         WindowSoftInputMode = SoftInput.StateHidden,
         HardwareAccelerated = true,
         ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
-    public class DashboardActivity : BaseActivity<DashboardViewModel>, ISyncBgService
+    public class DashboardActivity : BaseActivity<DashboardViewModel>, ISyncBgService<SyncProgressDto>, ISyncServiceHost<SyncBgService>
     {
         protected override int ViewResourceId => Resource.Layout.dashboard;
 
-        public SyncServiceBinder Binder { get; set; }
+        public ServiceBinder<SyncBgService> Binder { get; set; }
 
         private MvxFragmentStatePagerAdapter fragmentStatePagerAdapter;
         private ViewPager viewPager;
@@ -147,7 +151,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         protected override void OnStart()
         {
             base.OnStart();
-            this.BindService(new Intent(this, typeof(SyncBgService)), new SyncServiceConnection(this), Bind.AutoCreate);
+            this.BindService(new Intent(this, typeof(SyncBgService)), new SyncServiceConnection<SyncBgService>(this), Bind.AutoCreate);
         }
 
         private void ViewPager_PageSelected(object sender, ViewPager.PageSelectedEventArgs e)
@@ -167,6 +171,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         {
             this.MenuInflater.Inflate(Resource.Menu.dashboard, menu);
 
+            menu.LocalizeMenuItem(Resource.Id.menu_offline_synchronization, "Offline Sync");
             menu.LocalizeMenuItem(Resource.Id.menu_search, InterviewerUIResources.MenuItem_Title_Search);
             menu.LocalizeMenuItem(Resource.Id.menu_signout, InterviewerUIResources.MenuItem_Title_SignOut);
             menu.LocalizeMenuItem(Resource.Id.menu_settings, InterviewerUIResources.MenuItem_Title_Settings);
@@ -179,9 +184,6 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         {
             switch (item.ItemId)
             {
-                case Resource.Id.menu_synchronization:
-                    this.ViewModel.SynchronizationCommand.Execute();
-                    break;
                 case Resource.Id.menu_settings:
                     Intent intent = new Intent(this, typeof(PrefsActivity));
                     this.StartActivity(intent);
@@ -191,6 +193,9 @@ namespace WB.UI.Interviewer.Activities.Dashboard
                     break;
                 case Resource.Id.menu_maps:
                     this.ViewModel.NavigateToMapsCommand.Execute();
+                    break;
+                case Resource.Id.menu_offline_synchronization:
+                    this.ViewModel.NavigateToOfflineSyncCommand.Execute();
                     break;
                 case Resource.Id.menu_signout:
                     this.ViewModel.SignOutCommand.Execute();
@@ -203,8 +208,8 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             return base.OnOptionsItemSelected(item);
         }
 
-        public void StartSync() => this.Binder.GetSyncService().StartSync();
+        public void StartSync() => this.Binder.GetService().StartSync();
 
-        public SyncProgressDto CurrentProgress => this.Binder.GetSyncService().CurrentProgress;
+        public SyncProgressDto CurrentProgress => this.Binder.GetService().CurrentProgress;
     }
 }

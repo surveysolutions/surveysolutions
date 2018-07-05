@@ -189,9 +189,6 @@
   <data name="Tooltip_Filter_ArchivedStatus" xml:space="preserve">
     <value>任务是否是活动的或已被归档的指示器</value>
   </data>
-  <data name="Tooltip_Filter_Questionnaire" xml:space="preserve">
-    <value>问卷的版本。选择一个问卷的版本以查看右边报告相应的访谈。选择“所有问卷”以查看和访谈有关的任何问卷。</value>
-  </data>
   <data name="Tooltip_Filter_Responsible" xml:space="preserve">
     <value>负责人。点击户名名字选定或进一步在过滤器中输入名字以选定一个负责人用户。</value>
   </data>

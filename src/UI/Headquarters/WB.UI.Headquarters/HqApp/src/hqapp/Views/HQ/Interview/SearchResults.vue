@@ -10,8 +10,7 @@
             </h2>
             <h2 v-else>
                 {{ $t("Details.NoSearchResults")}}
-            </h2>
-            
+            </h2>           
 
             <search-section-result 
                 v-for="(search, index) in searchResult.results"

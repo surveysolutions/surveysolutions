@@ -71,7 +71,7 @@ try {
 
         RunConfigTransform $ProjectDesigner $BuildConfiguration
         RunConfigTransform $ProjectHeadquarters $BuildConfiguration
-	RunConfigTransform $ProjectWebTester $BuildConfiguration
+        RunConfigTransform $ProjectWebTester $BuildConfiguration
 
         $ExtPackageName = 'WBCapi.Ext.apk'
         . "$scriptFolder\build-android-package.ps1" `
@@ -105,6 +105,20 @@ try {
             -ExcludeExtra $true | % { if (-not $_) { Exit } }
 
         CopyCapi -Project $ProjectHeadquarters -source $PackageName -cleanUp $false | % { if (-not $_) { Exit } }
+
+        $SuperPackageName = 'Supervisor.apk'
+        . "$scriptFolder\build-android-package.ps1" `
+            -VersionName $versionString `
+            -VersionCode $BuildNumber `
+            -BuildConfiguration $BuildConfiguration `
+            -KeystorePassword $KeystorePassword `
+            -KeystoreName 'WBCapi.keystore' `
+            -KeystoreAlias 'wbcapipublish' `
+            -CapiProject 'src\UI\Supervisor\WB.UI.Supervisor\WB.UI.Supervisor.csproj' `
+            -OutFileName $SuperPackageName `
+            -ExcludeExtra $false | % { if (-not $_) { Exit } }
+
+        CopyCapi -Project $ProjectHeadquarters -source $SuperPackageName -cleanUp $false | % { if (-not $_) { Exit } }
 
         BuildWebPackage $ProjectHeadquarters $BuildConfiguration | % { if (-not $_) { Exit } }
         BuildWebPackage $ProjectDesigner $BuildConfiguration | % { if (-not $_) { Exit } }

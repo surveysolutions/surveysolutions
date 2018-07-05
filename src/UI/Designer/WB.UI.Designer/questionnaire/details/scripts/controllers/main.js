@@ -258,7 +258,10 @@ angular.module('designerApp')
             };
 
             $rootScope.navigateTo = function (reference) {
-                if (reference.type.toLowerCase() === "macro") {
+                if (reference.type.toLowerCase() === "questionnaire") {
+                    $scope.verificationStatus.visible = false;
+                    $scope.showShareInfo();
+                } else if (reference.type.toLowerCase() === "macro") {
                     $scope.verificationStatus.visible = false;
                     $rootScope.$broadcast("openMacrosList", { focusOn: reference.itemId });
                 } else if (reference.type.toLowerCase() === "lookuptable") {

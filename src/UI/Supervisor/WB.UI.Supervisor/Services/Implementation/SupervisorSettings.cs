@@ -19,7 +19,7 @@ namespace WB.UI.Supervisor.Services.Implementation
         private readonly IPlainStorage<SupervisorIdentity> usersStorage;
 
         public SupervisorSettings(IPlainStorage<ApplicationSettingsView> settingsStorage,
-            ISyncProtocolVersionProvider syncProtocolVersionProvider,
+            ISupervisorSyncProtocolVersionProvider syncProtocolVersionProvider,
             IQuestionnaireContentVersionProvider questionnaireContentVersionProvider,
             IPlainStorage<SupervisorIdentity> usersStorage,
             IFileSystemAccessor fileSystemAccessor,

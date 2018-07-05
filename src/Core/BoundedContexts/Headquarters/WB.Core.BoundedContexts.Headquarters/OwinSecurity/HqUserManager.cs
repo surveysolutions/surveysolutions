@@ -163,7 +163,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
             return result;
         }
 
-        public virtual void LinkDeviceToInterviewer(Guid interviewerId, string deviceId, DateTime deviceRegistrationDate)
+        public virtual void LinkDeviceToInterviewerOrSupervisor(Guid interviewerId, string deviceId, DateTime deviceRegistrationDate)
         {
             var currentUser = this.FindById(interviewerId);
 
@@ -172,8 +172,11 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
                 throw new AuthenticationException(@"User not found or locked");
             }
 
-            if(!currentUser.IsInRole(UserRoles.Interviewer))
-                throw new AuthenticationException(@"Only interviewer can be linked to device");
+            if(!currentUser.IsInRole(UserRoles.Interviewer) && !currentUser.IsInRole(UserRoles.Supervisor))
+                throw new AuthenticationException(@"Only interviewer or supervisor can be linked to device");
+
+            if (currentUser.Profile == null)
+                currentUser.Profile = new HqUserProfile();
 
             currentUser.Profile.DeviceId = deviceId;
             currentUser.Profile.DeviceRegistrationDate = deviceRegistrationDate;

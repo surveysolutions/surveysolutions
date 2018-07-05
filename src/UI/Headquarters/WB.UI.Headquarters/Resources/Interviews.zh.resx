@@ -176,9 +176,6 @@
   <data name="Tooltip_Filter_Assignment" xml:space="preserve">
     <value>任务ID。点击相应区域输入完整的ID。</value>
   </data>
-  <data name="Tooltip_Filter_Questionnaire" xml:space="preserve">
-    <value>问卷的版本。选择一个问卷的版本以查看右边报告相应的访谈。选择“所有问卷”以查看和访谈有关的任何问卷。</value>
-  </data>
   <data name="Tooltip_Filter_Responsible" xml:space="preserve">
     <value>负责人用户。直接点选一个用户名或在筛选器中直接输入用户名，以选定某个用户。</value>
   </data>

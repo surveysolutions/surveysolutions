@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Microsoft.AspNet.SignalR.Hubs;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -11,6 +12,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.DataCollection.Views.Interview.Overview;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Models;
 using WB.UI.Headquarters.API.WebInterview.Pipeline;
@@ -26,6 +28,7 @@ namespace WB.UI.Headquarters.API.WebInterview
         private readonly IChangeStatusFactory changeStatusFactory;
         private readonly IInterviewFactory interviewFactory;
         private readonly IStatefullInterviewSearcher statefullInterviewSearcher;
+        private readonly IInterviewOverviewService overviewService;
 
         public WebInterviewHub(IStatefulInterviewRepository statefulInterviewRepository,
             ICommandService commandService,
@@ -38,7 +41,8 @@ namespace WB.UI.Headquarters.API.WebInterview
             IAuthorizedUser authorizedUser,
             IChangeStatusFactory changeStatusFactory,
             IInterviewFactory interviewFactory,
-            IStatefullInterviewSearcher statefullInterviewSearcher) : base(statefulInterviewRepository,
+            IStatefullInterviewSearcher statefullInterviewSearcher,
+            IInterviewOverviewService overviewService) : base(statefulInterviewRepository,
             commandService,
             questionnaireRepository,
             webInterviewNotificationService,
@@ -51,6 +55,7 @@ namespace WB.UI.Headquarters.API.WebInterview
             this.changeStatusFactory = changeStatusFactory;
             this.interviewFactory = interviewFactory;
             this.statefullInterviewSearcher = statefullInterviewSearcher;
+            this.overviewService = overviewService;
         }
 
         protected override bool IsReviewMode =>
@@ -80,6 +85,7 @@ namespace WB.UI.Headquarters.API.WebInterview
 
         protected override bool IsCurrentUserObserving => this.authorizedUser.IsObserving;
 
+        [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @filters.js")]
         public SearchResults Search(FilterOption[] flags, int skip = 0, int limit = 50)
         {
             var interview = GetCallerInterview();
@@ -87,6 +93,27 @@ namespace WB.UI.Headquarters.API.WebInterview
             return result;
         }
 
+        public PagedApiResponse<OverviewNode> Overview(int skip, int take = 100)
+        {
+            take = Math.Min(take, 100);
+
+            var interview = GetCallerInterview();
+            var overview = this.overviewService.GetOverview(interview).ToList();
+            var result = overview.Skip(skip).Take(take).ToList();
+
+            var isLastPage = skip + result.Count >= overview.Count;
+
+            return new PagedApiResponse<OverviewNode>
+            {
+                Items = result,
+                Count = result.Count,
+                IsLastPage = isLastPage,
+                Skip = skip,
+                Total = overview.Count
+            };
+        }
+
+        [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @filters.js")]
         public List<CommentedStatusHistoryView> GetStatusesHistory()
         {
             var statefulInterview = this.GetCallerInterview();
@@ -100,6 +127,7 @@ namespace WB.UI.Headquarters.API.WebInterview
             this.interviewFactory.SetFlagToQuestion(statefulInterview.Id, Identity.Parse(questionId), hasFlag);
         }
 
+        [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @flags.js")]
         public IEnumerable<string> GetFlags()
         {
             var statefulInterview = this.GetCallerInterview();
@@ -151,7 +179,7 @@ namespace WB.UI.Headquarters.API.WebInterview
                 }
             }
         }
-
+        
         public override InterviewInfo GetInterviewDetails()
         {
             var interviewDetails = base.GetInterviewDetails();

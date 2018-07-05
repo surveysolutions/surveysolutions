@@ -3,6 +3,7 @@ using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Supervisor.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.Enumerator.Denormalizer;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.UI.Supervisor.Activities;
@@ -17,6 +18,8 @@ namespace WB.UI.Supervisor
 
         protected override void Startup(object hint = null)
         {
+            Mvx.Resolve<InterviewDashboardEventHandler>();
+
             var logger = Mvx.Resolve<ILoggerProvider>().GetFor<SupervisorAppStart>();
             logger.Warn($"Application started. Version: {typeof(SplashActivity).Assembly.GetName().Version}");
 

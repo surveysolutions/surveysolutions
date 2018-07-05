@@ -5,6 +5,8 @@ using Ncqrs.Eventing.Storage;
 using NLog;
 using NLog.Config;
 using NLog.Targets;
+using WB.Core.BoundedContexts.Supervisor.Services;
+using WB.Core.BoundedContexts.Supervisor.Services.Implementation;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -13,8 +15,10 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Questionnaire.Translations;
@@ -54,23 +58,23 @@ namespace WB.UI.Supervisor.ServiceLocation
 
             registry.Bind<ILoggerProvider, NLogLoggerProvider>();
 
-            //registry.BindAsSingletonWithConstructorArgument<IQuestionnaireAssemblyAccessor, InterviewerQuestionnaireAssemblyAccessor>(
-            //    "pathToAssembliesDirectory", AndroidPathUtils.GetPathToSubfolderInLocalDirectory("assemblies"));
+            registry.BindAsSingletonWithConstructorArgument<IQuestionnaireAssemblyAccessor, InterviewerQuestionnaireAssemblyAccessor>(
+                "pathToAssembliesDirectory", AndroidPathUtils.GetPathToSubfolderInLocalDirectory("assemblies"));
             registry.Bind<ISerializer, PortableJsonSerializer>();
             registry.Bind<IInterviewAnswerSerializer, PortableInterviewAnswerJsonSerializer>();
             registry.Bind<IJsonAllTypesSerializer, PortableJsonAllTypesSerializer>();
 
-            //registry.BindAsSingleton<IPlainKeyValueStorage<QuestionnaireDocument>, QuestionnaireKeyValueStorage>();
+            registry.BindAsSingleton<IPlainKeyValueStorage<QuestionnaireDocument>, QuestionnaireKeyValueStorage>();
 
-            //registry.Bind<IInterviewerQuestionnaireAccessor, InterviewerQuestionnaireAccessor>();
-            //registry.Bind<IInterviewerInterviewAccessor, InterviewerInterviewAccessor>();
-            //registry.Bind<IInterviewEventStreamOptimizer, InterviewEventStreamOptimizer>();
+            registry.Bind<IInterviewerQuestionnaireAccessor, InterviewerQuestionnaireAccessor>();
+            registry.Bind<IInterviewerInterviewAccessor, InterviewerInterviewAccessor>();
+            registry.Bind<IInterviewEventStreamOptimizer, InterviewEventStreamOptimizer>();
             registry.Bind<IQuestionnaireTranslator, QuestionnaireTranslator>();
             registry.BindAsSingleton<IQuestionnaireStorage, QuestionnaireStorage>();
-            //registry.Bind<IAudioFileStorage, InterviewerAudioFileStorage>();
-            //registry.Bind<IImageFileStorage, InterviewerImageFileStorage>();
-            //registry.Bind<IAnswerToStringConverter, AnswerToStringConverter>();
-            //registry.BindAsSingleton<IAssignmentDocumentsStorage, AssignmentDocumentsStorage>();
+            registry.Bind<IAudioFileStorage, InterviewerAudioFileStorage>();
+            registry.Bind<IImageFileStorage, InterviewerImageFileStorage>();
+            registry.Bind<IAnswerToStringConverter, AnswerToStringConverter>();
+            registry.BindAsSingleton<IAssignmentDocumentsStorage, AssignmentDocumentsStorage>();
             registry.BindAsSingleton<IAuditLogService, EnumeratorAuditLogService>();
 
             registry.BindAsSingleton<IEnumeratorEventStorage, SqliteMultiFilesEventStorage>();

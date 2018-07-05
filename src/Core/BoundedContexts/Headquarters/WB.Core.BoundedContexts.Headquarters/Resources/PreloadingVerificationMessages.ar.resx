@@ -126,10 +126,7 @@
   <data name="PL0004_FileWasntMappedRoster" xml:space="preserve">
     <value>لا يمكن تعيين الملف إلى أي لائحة في الاستبيان.</value>
   </data>
-  <data name="PL0005_QuestionDataTypeMismatch" xml:space="preserve">
-    <value>[PL0002] N/A</value>
-  </data>
-  <data name="PL0006_IdDublication" xml:space="preserve">
+    <data name="PL0006_IdDublication" xml:space="preserve">
     <value>تم العثور على قيم معرف مكرر.</value>
   </data>
   <data name="PL0008_OrphanRosterRecord" xml:space="preserve">
@@ -138,25 +135,10 @@
   <data name="PL0009_RosterIdIsInconsistantWithRosterSizeQuestion" xml:space="preserve">
     <value>لا يتعارض معرف القائمة مع حجم القائمة.</value>
   </data>
-  <data name="PL0010_UnsupportedLinkedQuestion" xml:space="preserve">
-    <value>لا يمكن تحميل الأسئلة المرتبطة مسبقا.</value>
-  </data>
-  <data name="PL0011_GeneralError" xml:space="preserve">
-    <value>حدث خطأ عام.</value>
-  </data>
-  <data name="PL0012_QuestionWasNotFound" xml:space="preserve">
-    <value>السؤال الذي تم العثور عليه في الملف (الملفات) التي تم تحميلها والتي لا توجد في الاستبيان</value>
-  </data>
-  <data name="PL0013_ValueIsNullOrEmpty" xml:space="preserve">
-    <value>القيمة المقدمة صفر أو فارغة</value>
-  </data>
-  <data name="PL0014_ParsedValueIsNotAllowed" xml:space="preserve">
+    <data name="PL0014_ParsedValueIsNotAllowed" xml:space="preserve">
     <value>قيمة السؤال المقدمة غير مسموحة</value>
   </data>
-  <data name="PL0015_QuestionTypeIsIncorrect" xml:space="preserve">
-    <value>نوع السؤال غير صحيح</value>
-  </data>
-  <data name="PL0016_ExpectedDateTimeNotParsed" xml:space="preserve">
+    <data name="PL0016_ExpectedDateTimeNotParsed" xml:space="preserve">
     <value>تم إدخال قيمة التاريخ أو الوقت غير صالحة في سؤال التاريخ.</value>
   </data>
   <data name="PL0017_ExpectedGpsNotParsed" xml:space="preserve">
@@ -171,16 +153,10 @@
   <data name="PL0022_AnswerIsIncorrectBecauseIsRosterSizeAndNegative" xml:space="preserve">
     <value>لا يمكن أن يكون لحجم قائمة السؤال قيم سالبة</value>
   </data>
-  <data name="PL0023_UnsupportedMultimediaQuestion" xml:space="preserve">
-    <value>لا يمكن اعادة تحميل سؤال الصورة</value>
-  </data>
-  <data name="PL0024_DataWasNotFound" xml:space="preserve">
+    <data name="PL0024_DataWasNotFound" xml:space="preserve">
     <value>لم يتم العثور على بيانات التحميل المسبق</value>
   </data>
-  <data name="PL0025_ResponsibleNameIsEmpty" xml:space="preserve">
-    <value>الحقل المسؤول لم يقدم لواحد أو أكثر من الملاحظات</value>
-  </data>
-  <data name="PL0026_ResponsibleWasNotFound" xml:space="preserve">
+    <data name="PL0026_ResponsibleWasNotFound" xml:space="preserve">
     <value>المسؤول غير موجود لواحد أو أكثر من الملاحظات</value>
   </data>
   <data name="PL0027_ResponsibleIsLocked" xml:space="preserve">
@@ -216,16 +192,7 @@
   <data name="PL0036_QuantityShouldBeGreaterThanMinus1" xml:space="preserve">
     <value>يجب أن تكون الكمية أكبر من أو تساوي -1.</value>
   </data>
-  <data name="PL0037_ColumnIsNotIdentifying" xml:space="preserve">
-    <value>لا يمكن تعيين العامود الى أي سؤال غير محدد</value>
-  </data>
-  <data name="PL0038_UnsupportedAreaQuestion" xml:space="preserve">
-    <value>سؤال المنطقة لا يمكن إعادة تحميله</value>
-  </data>
-  <data name="PL0039_UnsupportedAudioQuestion" xml:space="preserve">
-    <value>لا يمكن إعادة تحميل السؤال الصوتي</value>
-  </data>
-  <data name="PL0040_QuestionnaireDataIsNotFound" xml:space="preserve">
+    <data name="PL0040_QuestionnaireDataIsNotFound" xml:space="preserve">
     <value>الملف مع البيانات على مستوى الاستبيان مفقود.</value>
   </data>
 </root>

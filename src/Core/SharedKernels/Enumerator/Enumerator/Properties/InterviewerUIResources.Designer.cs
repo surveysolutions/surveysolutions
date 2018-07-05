@@ -97,6 +97,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Assign.
+        /// </summary>
+        public static string Dashboard_Assign {
+            get {
+                return ResourceManager.GetString("Dashboard_Assign", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to To collect: unlimited.
         /// </summary>
         public static string Dashboard_AssignmentCard_SubTitleCountdown_UnlimitedFormat {
@@ -1086,6 +1095,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Maps Synchronization.
+        /// </summary>
+        public static string MenuItem_Title_MapsSynchronization {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_MapsSynchronization", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Search.
         /// </summary>
         public static string MenuItem_Title_Search {
@@ -1136,6 +1154,24 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Prefs_AboutApplication {
             get {
                 return ResourceManager.GetString("Prefs_AboutApplication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Allow synchronization with Headquarters.
+        /// </summary>
+        public static string Prefs_AllowSyncWithHq {
+            get {
+                return ResourceManager.GetString("Prefs_AllowSyncWithHq", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Disable this setting if you want to synchronize only with mobile supervisor application.
+        /// </summary>
+        public static string Prefs_AllowSyncWithHq_Summary {
+            get {
+                return ResourceManager.GetString("Prefs_AllowSyncWithHq_Summary", resourceCulture);
             }
         }
         
@@ -1505,6 +1541,24 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Synchronization_Of_AssignmentsFormat {
             get {
                 return ResourceManager.GetString("Synchronization_Of_AssignmentsFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Synchronization of interviewers.
+        /// </summary>
+        public static string Synchronization_Of_Interviewers {
+            get {
+                return ResourceManager.GetString("Synchronization_Of_Interviewers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Synchronizing {0} of {1} interviewer(s).
+        /// </summary>
+        public static string Synchronization_Of_InterviewersFormat {
+            get {
+                return ResourceManager.GetString("Synchronization_Of_InterviewersFormat", resourceCulture);
             }
         }
         

@@ -90,6 +90,13 @@ namespace WB.UI.Interviewer.Activities
                     this.UpdateSettings();
                 };
 
+                this.FindPreference(SettingsNames.AllowSyncWithHq).PreferenceChange += (sender, e) =>
+                {
+                    interviewerSettings.SetAllowSyncWithHq(ParseBooleanSettingsValue(e.NewValue, interviewerSettings.AllowSyncWithHq));
+                    this.UpdateSettings();
+                };
+
+
                 this.UpdateSettings();
             }
 
@@ -125,8 +132,12 @@ namespace WB.UI.Interviewer.Activities
                     UIResources.Prefs_ShowLocationOnMapSummary,
                     interviewerSettings.ShowLocationOnMap);
 
-
+                this.SetBooleanPreferenceTitleAndSummary(SettingsNames.AllowSyncWithHq, 
+                    InterviewerUIResources.Prefs_AllowSyncWithHq,
+                    InterviewerUIResources.Prefs_AllowSyncWithHq_Summary,
+                    interviewerSettings.AllowSyncWithHq);
             }
+
             private static bool ParseBooleanSettingsValue(object settingsValue, bool defaultValue)
             {
                 bool intValue;

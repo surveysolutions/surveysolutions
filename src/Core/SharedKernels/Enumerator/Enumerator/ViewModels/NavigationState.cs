@@ -37,6 +37,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                         return NavigationIdentity.CreateForCoverScreen();
                     case ScreenType.Identifying:
                         return NavigationIdentity.CreateForPrefieldScreen();
+                    case ScreenType.Overview:
+                        return NavigationIdentity.CreateForOverviewScreen();
                     default:
                         return NavigationIdentity.CreateForGroup(this.CurrentGroup);
                 }

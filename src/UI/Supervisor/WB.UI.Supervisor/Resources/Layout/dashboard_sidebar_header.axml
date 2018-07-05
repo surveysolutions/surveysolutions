@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:local="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dp"
+    android:layout_margin="10dp">
+    
+    <ImageView
+        android:id="@+id/supervisor_icon"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        
+        android:src="@drawable/icon" />
+    
+    <TextView
+        android:id="@+id/dashboard_supervisor_name"
+        local:MvxBind="Text UserName;"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/supervisor_icon"
+        android:layout_toLeftOf="@+id/sync_icon"
+        
+        android:textStyle="bold"
+        />
+
+    <TextView
+        android:id="@+id/dashboard_supervisor_email"
+        local:MvxBind="Text UserEmail"
+
+        android:layout_below="@+id/dashboard_supervisor_name"
+
+        android:layout_alignParentBottom="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+
+        android:layout_toRightOf="@+id/supervisor_icon"
+        android:layout_toLeftOf="@+id/sync_icon"
+        />
+
+    <ImageButton
+        android:id="@+id/sync_icon"
+        
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        local:srcCompat="@drawable/sidebar_sync_icon" 
+        local:MvxBind="Click StartSync"/>
+</RelativeLayout>

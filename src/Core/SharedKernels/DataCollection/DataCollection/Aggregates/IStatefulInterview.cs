@@ -139,16 +139,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         int CountAllEnabledAnsweredQuestions();
         int CountAllInvalidEntities();
 
-
-        [Obsolete("KP-10173: should be removed with new details")]
-        int CountEnabledSupervisorQuestions();
-
-        [Obsolete("KP-10173: should be removed with new details")]
-        int CountEnabledHiddenQuestions();
-
-        [Obsolete("KP-10173: should be removed with new details")]
-        int CountAllEnabledUnansweredQuestions();
-
         object GetVariableValueByOrDeeperRosterLevel(Guid variableId, RosterVector variableRosterVector);
 
         IEnumerable<Identity> GetInvalidEntitiesInInterview();
@@ -179,9 +169,10 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         string GetLinkedOptionTitle(Identity linkedQuestionIdentity, RosterVector option);
         
-        IEnumerable<Identity> GetUnderlyingInterviewerEntities(Identity sectionId);
+        IEnumerable<Identity> GetUnderlyingInterviewerEntities(Identity sectionId = null);
 
         IEnumerable<Identity> GetUnderlyingEntitiesForReview(Identity sectionId);
+
         IEnumerable<IInterviewTreeNode> GetAllInterviewNodes();
 
         IEnumerable<Identity> GetAllIdentitiesForEntityId(Guid id);
@@ -197,6 +188,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         InterviewKey GetInterviewKey();
 
         int? GetAssignmentId();
+
         bool IsParentOf(Identity parentIdentity, Identity childIdentity);
 
         bool IsAnswerProtected(Identity questionIdentity, decimal value);

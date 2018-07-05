@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireViewFacto
 
             var listItemStorage = Mock.Of<IPlainStorageAccessor<QuestionnaireListViewItem>>(i =>
                 i.GetById(questionnaireId.FormatGuid()) == listItem);
-            var factory = new QuestionnaireViewFactory(questionnaireStorage, listItemStorage);
+            var factory = new QuestionnaireViewFactory(questionnaireStorage, listItemStorage, Create.AccountRepository());
 
             var result = factory.HasUserAccessToQuestionnaire(questionnaireId, userId);
 

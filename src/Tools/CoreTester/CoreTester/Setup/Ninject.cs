@@ -10,7 +10,7 @@ using WB.Infrastructure.Native.Threading;
 
 namespace CoreTester.Setup
 {
-        public  class NinjectModuleAdapter<TModule> : NinjectModuleAdapter
+    public class NinjectModuleAdapter<TModule> : NinjectModuleAdapter
         where TModule : IModule
     {
         private readonly TModule module;
@@ -24,6 +24,8 @@ namespace CoreTester.Setup
         {
             this.module.Load(this);
         }
+
+        public override string Name => this.module.ToString();
     }
 
     public abstract class NinjectModuleAdapter : NinjectModule, IIocRegistry
@@ -123,7 +125,7 @@ namespace CoreTester.Setup
 
         public void BindToMethodInRequestScope<T>(Func<IModuleContext, T> func)
         {
-            throw new NotImplementedException();
+            this.Kernel.Bind<T>().ToMethod(ctx => func(new NinjectModuleContext(ctx))).InSingletonScope();
         }
 
         void IIocRegistry.BindToConstant<T>(Func<T> func)
@@ -163,14 +165,6 @@ namespace CoreTester.Setup
             return this.Kernel.GetBindings(typeof(T)).Any();
         }
 
-        public void BindToSelfInSingletonScopeWithConstructorArgument(Type[] types, string argumentName, Func<IModuleContext, object> argumentValueFunc)
-        {
-            this.Kernel.Bind(types)
-                .ToSelf()
-                .InSingletonScope()
-                .WithConstructorArgument(argumentName, c => argumentValueFunc(new NinjectModuleContext(c)));
-        }
-
         public void BindInIsolatedThreadScopeOrRequestScopeOrThreadScope<T>()
         {
             InIsolatedThreadScopeOrRequestScopeOrThreadScope(this.Kernel.Bind<T>().ToSelf());
@@ -196,6 +190,7 @@ namespace CoreTester.Setup
             return context => Thread.CurrentThread.AsIsolatedThread();
         }
     }
+
     public class NinjectModuleContext : IModuleContext
     {
         private readonly IContext context;
@@ -232,14 +227,20 @@ namespace CoreTester.Setup
             return context.Kernel.Get(type);
         }
 
-        public object GetServiceWithGenericType(Type type, Type genericType)
+        public object GetServiceWithGenericType(Type type, params Type[] genericType)
         {
-            return context.Kernel.GetService(type.MakeGenericType(genericType));
+            var generic = type.MakeGenericType(genericType);
+            return context.Kernel.GetService(generic);
         }
 
         public Type GetGenericArgument()
         {
             return context.GenericArguments[0];
+        }
+
+        public Type[] GetGenericArguments()
+        {
+            return context.GenericArguments;
         }
     }
 
