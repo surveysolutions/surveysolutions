@@ -520,6 +520,9 @@ for further instructions</value>
   <data name="MenuItem_Title_Diagnostics" xml:space="preserve">
     <value>Diagnostics</value>
   </data>
+  <data name="MenuItem_Title_MapsSynchronization" xml:space="preserve">
+    <value>Maps Synchronization</value>
+  </data>
   <data name="MenuItem_Title_Maps" xml:space="preserve">
     <value>Maps</value>
   </data>

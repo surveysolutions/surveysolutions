@@ -22,6 +22,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         public Guid? LastVisitedInterviewId { get; set; }
 
         public SynchronizationViewModel Synchronization { get; set; }
+        //public MapSynchronizationViewModel MapSynchronization { get; set; }
         
         public string DashboardTitle => "dashboard title :)";
 
@@ -51,6 +52,9 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             }
         }
 
+        public IMvxAsyncCommand MapsSynchronizationCommand
+            => new MvxAsyncCommand(this.RunMapsSynchronization, () => !this.Synchronization.IsSynchronizationInProgress);
+
         public IMvxCommand SignOutCommand => new MvxAsyncCommand(this.SignOut);
 
         public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxAsyncCommand(this.NavigateToDiagnostics);
@@ -71,6 +75,20 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         }
 
         private Task RunSynchronization()
+        {
+            if (this.viewModelNavigationService.HasPendingOperations)
+            {
+                this.viewModelNavigationService.ShowWaitMessage();
+            }
+            else
+            {
+                this.Synchronization.IsSynchronizationInProgress = true;
+                this.Synchronization.Synchronize();
+            }
+            return Task.CompletedTask;
+        }
+
+        private Task RunMapsSynchronization()
         {
             if (this.viewModelNavigationService.HasPendingOperations)
             {
