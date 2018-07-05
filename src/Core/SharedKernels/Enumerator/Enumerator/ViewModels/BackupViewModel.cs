@@ -108,17 +108,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.IsInProgress = false;
         }
 
-        private async Task SendBackupAsync()
+        private async Task SendBackupAsync(CancellationToken cancellationToken)
         {
             if (this.IsInProgress)
                 return;
 
             this.IsInProgress = true;
-            var cancellationTokenSource = new CancellationTokenSource();
 
             try
             {
-                await this.synchronizationService.SendBackupAsync(informationPackageFilePath, cancellationTokenSource.Token);
+                await this.synchronizationService.SendBackupAsync(informationPackageFilePath, cancellationToken);
                 this.PackageSendingAttemptResponceText = InterviewerUIResources.Troubleshooting_InformationPackageIsSuccessfullySent;
             }
             catch (SynchronizationException ex)
