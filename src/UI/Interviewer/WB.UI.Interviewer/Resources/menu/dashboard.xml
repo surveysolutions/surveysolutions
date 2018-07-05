@@ -2,10 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:local="http://schemas.android.com/apk/res-auto"
       android:id="@+id/menu">
-  <item
-      android:id="@+id/menu_synchronization"
-      local:showAsAction="always"
-      android:icon="@drawable/dashboard_sync_icon"/>
     <item
         android:id="@+id/menu_offline_synchronization"
         local:showAsAction="never"
