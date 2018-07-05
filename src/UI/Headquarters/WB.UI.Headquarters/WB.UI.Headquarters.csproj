@@ -1784,6 +1784,7 @@
     <Compile Include="API\DataCollection\Interviewer\InterviewerCommonWebApiConfig.cs" />
     <Compile Include="API\DataCollection\Interviewer\InterviewerInterviewsControllerBase.cs" />
     <Compile Include="API\DataCollection\Interviewer\InterviewerV3WebApiConfig.cs" />
+    <Compile Include="API\DataCollection\MapsControllerBase.cs" />
     <Compile Include="API\DataCollection\SettingsControllerBase.cs" />
     <Compile Include="API\DataCollection\Supervisor\SupervisorInterviewsControllerBase.cs" />
     <Compile Include="API\DataCollection\Supervisor\SupervisorV1WebApiConfig.cs" />
@@ -1791,6 +1792,7 @@
     <Compile Include="API\DataCollection\Supervisor\v1\AttachmentsApiV1Controller.cs" />
     <Compile Include="API\DataCollection\Supervisor\v1\AuditLogApiV1Controller.cs" />
     <Compile Include="API\DataCollection\Supervisor\v1\InterviewsApiV1Controller.cs" />
+    <Compile Include="API\DataCollection\Supervisor\v1\MapsApiV1Controller.cs" />
     <Compile Include="API\DataCollection\Supervisor\v1\QuestionnairesApiV1Controller.cs" />
     <Compile Include="API\DataCollection\Supervisor\v1\SettingsV1Controller.cs" />
     <Compile Include="API\DataCollection\Supervisor\v1\InterviewersApiController.cs" />
