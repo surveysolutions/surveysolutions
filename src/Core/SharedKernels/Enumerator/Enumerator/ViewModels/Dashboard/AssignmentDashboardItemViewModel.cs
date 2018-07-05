@@ -22,7 +22,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             this.serviceLocator = serviceLocator;
         }
 
-        private IAssignmentDocumentsStorage AssignmentsRepository
+        protected IAssignmentDocumentsStorage AssignmentsRepository
             => serviceLocator.GetInstance<IAssignmentDocumentsStorage>();
 
         protected int InterviewsLeftByAssignmentCount =>
