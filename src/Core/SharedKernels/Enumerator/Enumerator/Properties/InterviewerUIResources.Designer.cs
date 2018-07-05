@@ -1149,6 +1149,24 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Allow synchronization with Headquarters.
+        /// </summary>
+        public static string Prefs_AllowSyncWithHq {
+            get {
+                return ResourceManager.GetString("Prefs_AllowSyncWithHq", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Disable this setting if you want to synchronize only with mobile supervisor application.
+        /// </summary>
+        public static string Prefs_AllowSyncWithHq_Summary {
+            get {
+                return ResourceManager.GetString("Prefs_AllowSyncWithHq_Summary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Application version:.
         /// </summary>
         public static string Prefs_ApplicationVersionTitle {
