@@ -18,9 +18,8 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer
             config.TypedRoute(@"api/interviewer/extended", c => c.Action<InterviewerApiController>(x => x.GetExtended()));
             config.TypedRoute(@"api/interviewer/extended/patch/{deviceVersion}", c => c.Action<InterviewerApiController>(x => x.PatchExtended(Param.Any<int>())));
             config.TypedRoute(@"api/interviewer/extended/latestversion", c => c.Action<InterviewerApiController>(x => x.GetLatestExtendedVersion()));
-
-            config.TypedRoute(@"api/interviewer/tabletInfo", c => c.Action<InterviewerApiController>(x => x.PostTabletInformation()));
-            config.TypedRoute(@"api/interviewer/v3/tabletInfo", c => c.Action<InterviewerApiController>(x => x.PostTabletInformation()));
+            
+            config.TypedRoute(@"api/interviewer/v2/tabletInfo", c => c.Action<InterviewerApiController>(x => x.PostTabletInformation()));
 
             config.TypedRoute(@"api/interviewer/compatibility/{deviceid}/{deviceSyncProtocolVersion}",
                 c => c.Action<InterviewerApiController>(x => x.CheckCompatibility(Param.Any<string>(), Param.Any<int>())));
