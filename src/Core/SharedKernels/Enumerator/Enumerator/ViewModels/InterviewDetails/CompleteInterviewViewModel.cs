@@ -143,14 +143,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             try
             {
                 await this.commandService.ExecuteAsync(completeInterview);
-                this.lastCompletionComments.Remove(interviewId);
-
-                await this.CloseInterviewAfterComplete();
             }
             catch (InterviewException e)
             {
                 logger.Warn("Interview has unexpected status", e);
             }
+
+            this.lastCompletionComments.Remove(interviewId);
+            await this.CloseInterviewAfterComplete();
         }
 
         protected virtual async Task CloseInterviewAfterComplete()
