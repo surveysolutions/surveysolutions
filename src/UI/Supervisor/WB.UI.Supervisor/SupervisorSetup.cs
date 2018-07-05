@@ -59,7 +59,7 @@ namespace WB.UI.Supervisor
                 {typeof(DashboardViewModel),typeof(DashboardActivity) },
                 {typeof(SupervisorInterviewViewModel),typeof(InterviewActivity) },
                 {typeof(OfflineSupervisorSyncViewModel), typeof(OfflineSupervisorSyncActitivy) },
-                {typeof(SupervisorCompleteInterviewViewModel), typeof (SupervisorCompleteFragment)},
+                {typeof(SupervisorResolveInterviewViewModel), typeof (SupervisorCompleteFragment)},
 #if !EXCLUDEEXTENSIONS
                 {typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel), typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorActivity)}
 #endif
