@@ -5,24 +5,29 @@
   android:paddingRight="@dimen/Interview_Entity_margin_right"
   android:paddingLeft="@dimen/Interview_Entity_margin_left"
   style="@style/FullWidthWrappingLayout">
-<LinearLayout style="@style/Audio_Dialog_Holder">
+<LinearLayout style="@style/Interviewer_Selector_Holder">
   <TableLayout
     style="@style/FullWidthWrappingLayout"
-    android:layout_width="match_parent"
+    
     android:layout_height="0dp"
     android:layout_weight="1" 
     android:stretchColumns="0">
     <TableRow>
       <LinearLayout style="@style/VerticalFullWidthWrappingLayout">
         <TextView
-          style="@style/Interview_Question_Title_Base"
+          style="@style/Interviewer_Selector_Title"
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content"
           local:MvxBind="Html Title;"/>
       </LinearLayout>
     </TableRow>
     <TableRow>
-      <LinearLayout style="@style/VerticalFullWidthWrappingLayout">
+      <LinearLayout 
+          android:layout_width="match_parent"
+          android:layout_height="wrap_content">
           <MvxRecyclerView
-              style="@style/FullWidthWrappingLayout"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
               android:id="@+id/interviewers_list"
               android:scrollbars="vertical"
               local:MvxItemTemplate="@layout/dashboard_interviewer_to_select"
@@ -32,11 +37,12 @@
   </TableLayout>
 
   <LinearLayout style="@style/FullWidthWrappingLayout">
-    <Button style="@style/Link_Button"
+      <Button
+          style="@style/Interviewer_Selector_Done_Button"
+          local:MvxBind="Click DoneCommand; Text Localization('Interviewer_Done');" />
+
+      <Button style="@style/Interviewer_Selector_Cancel_Button"
             local:MvxBind="Click CancelCommand; Text Localization('Interviewer_RelinkDevice_Cancel');" />
-    <Button
-      style="@style/Done_Button"
-      local:MvxBind="Click DoneCommand; Text Localization('Interviewer_Done');" />
   </LinearLayout>
 </LinearLayout>
 </LinearLayout>
