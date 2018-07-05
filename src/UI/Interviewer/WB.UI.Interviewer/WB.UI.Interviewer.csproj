@@ -323,8 +323,6 @@
     <Compile Include="Services\CheckForVersionUriProvider.cs" />
     <Compile Include="Services\InterviewerInterviewUniqueKeyGenerator.cs" />
     <Compile Include="Services\MapDownloadBackgroundService.cs" />
-    <Compile Include="Services\MapDownloadBackgroundServiceBinder.cs" />
-    <Compile Include="Services\MapDownloadServiceConnection.cs" />
     <Compile Include="Settings\InterviewerSettings.cs" />
     <Compile Include="SharedPreferences\SettingsNames.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -540,13 +538,12 @@
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
-    <ItemGroup>
+  <ItemGroup>
     <AndroidResource Include="Resources\layout\offline_sync.axml">
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>
-
   <ItemGroup>
     <AndroidResource Include="Resources\layout\dashboard_assignments_tab.axml">
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
