@@ -9,6 +9,7 @@ using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.UI.Interviewer.ViewModel
 {

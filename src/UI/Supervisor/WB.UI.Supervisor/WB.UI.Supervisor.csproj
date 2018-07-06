@@ -296,6 +296,7 @@
     <Compile Include="Activities\LoadingActivity.cs" />
     <Compile Include="Activities\LoginActivity.cs" />
     <Compile Include="Activities\Interview\PrefilledQuestionsActivity.cs" />
+    <Compile Include="Activities\MapsActivity.cs" />
     <Compile Include="Activities\OfflineSupervisorSyncActitivy.cs" />
     <Compile Include="Activities\PrefsActivity.cs" />
     <Compile Include="CustomControls\InterviewerSelectorDialog.cs" />
@@ -557,6 +558,12 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\offline_sync.axml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\menu\maps.xml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

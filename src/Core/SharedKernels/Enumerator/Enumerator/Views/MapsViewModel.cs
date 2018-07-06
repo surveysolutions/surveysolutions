@@ -11,7 +11,7 @@ using WB.Core.SharedKernels.Enumerator.Services.MapService;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 
-namespace WB.Core.BoundedContexts.Interviewer.Views
+namespace WB.Core.SharedKernels.Enumerator.Views
 {
     public class MapsViewModel : BaseViewModel
     {

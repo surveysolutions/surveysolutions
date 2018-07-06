@@ -7,11 +7,10 @@ using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services.MapSynchronization;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Views;
-using WB.UI.Shared.Enumerator;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.Services;
 
-namespace WB.UI.Interviewer.Activities
+namespace WB.UI.Supervisor.Activities
 {
     [Activity(Theme = "@style/GrayAppTheme",
         WindowSoftInputMode = SoftInput.StateHidden,

@@ -26,6 +26,7 @@ using WB.Core.SharedKernels.Enumerator.Denormalizer;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading;
+using WB.Core.SharedKernels.Enumerator.Views;
 using WB.UI.Interviewer.Activities;
 using WB.UI.Interviewer.Activities.Dashboard;
 using WB.UI.Interviewer.CustomBindings;
