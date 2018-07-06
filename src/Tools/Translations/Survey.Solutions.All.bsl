@@ -204,7 +204,7 @@
             <li lc="ru" tx="Таблица поиска с ключом {0} пустая" ts="Translated" qs="ToReview" />
             <li lc="es" tx="Tabla de búsqueda con id {0} no tiene contenido" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="ID为{0}的查询表已存在" ts="Translated" qs="ToReview" />
-            <li lc="ar" tx="جدول البحث بهذا المعرف {0}  فارغ من المحتويات" er="" ts="Translated" qs="ToReview" />
+            <li lc="ar" tx="جدول البحث بهذا المعرف {0}  فارغ من المحتويات" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Une table de référence avec l'identifiant {0} n'a pas de contenu." er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
@@ -1007,21 +1007,21 @@
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.resx" nm="QuestionScope_Supervisor" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="supervisor" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="супервизор" er="" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="супервизор" ts="Translated" qs="ToReview" />
             <li lc="es" tx="supervisor" ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="监督员" er="" ts="Translated" qs="ToReview" />
+            <li lc="zh" tx="监督员" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="مشرف" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="superviseur" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.resx" nm="QuestionType_Area" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="area" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="область" ts="Translated" qs="ToReview" />
-            <li lc="es" tx="área" ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="范围" ts="Translated" qs="ToReview" />
-            <li lc="ar" tx="منطقة" ts="Translated" qs="ToReview" />
-            <li lc="fr" tx="superficie" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="geography" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="география" ts="Changed" qs="ToReview" />
+            <li lc="es" tx="área" ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="范围" ts="Changed" qs="ToReview" />
+            <li lc="ar" tx="منطقة" ts="Changed" qs="ToReview" />
+            <li lc="fr" tx="superficie" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\Resources\PdfStrings.resx" nm="QuestionType_Audio" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -3906,7 +3906,7 @@
             <li lc="nn-nn" tx="Log out" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Выйти" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="es" tx="Salir" ts="Translated" qs="ToReview" />
-            <li lc="fr" tx="Se déconnecter" er="" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Se déconnecter" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="注销" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تسجيل الخروج" ts="Translated" qs="ToReview" />
           </lis>
@@ -4039,6 +4039,12 @@
             <li lc="fr" tx="Restaurer" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="恢复" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="استعادة" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\AccountResources.resx" nm="ShowPassword" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Show Password" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Показать пароль" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\AccountResources.resx" nm="StaySignedIn" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -4599,11 +4605,11 @@
         </it>
         <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\NotificationResources.resx" nm="ConfirmationEmail" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Hello {0}, &lt;br/&gt;&#xA;&lt;br/&gt; &#xA;To complete the registration process click on this link:" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Hello {0}, &lt;br/&gt;&#xD;&#xA;&lt;br/&gt; &#xD;&#xA;To complete the registration process click on this link:" ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Здравствуйте, {0}, &lt;br/&gt; &lt;br/&gt; Чтобы завершить процесс регистрации, нажмите на эту ссылку:" ts="Changed" qs="ToReview" />
-            <li lc="es" tx="Hola {0}, para completar el proceso de registro de clic en el siguiente enlace:" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="Warning" />
-            <li lc="fr" tx="Bonjour{0}, Pour terminer le processus d'inscription, cliquez sur ce lien:" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="Warning" />
-            <li lc="zh" tx="{0}您好，请点击此关联完成注册：" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
+            <li lc="es" tx="Hola {0}, para completar el proceso de registro de clic en el siguiente enlace:" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="ToReview" />
+            <li lc="fr" tx="Bonjour{0}, Pour terminer le processus d'inscription, cliquez sur ce lien:" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="{0}您好，请点击此关联完成注册：" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
             <li lc="ar" tx="مرحبا {0}، لإكمال عملية التسجيل اضغط على هذا الرابط:" ts="Changed" qs="ToReview" />
           </lis>
         </it>
@@ -4769,52 +4775,52 @@
         </it>
         <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\PdfMessages.resx" nm="FailedToGenerate" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Failed to generate PDF.&#xA;Please reload the page and try again or contact support@mysurvey.solutions" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Ошибка генерации PDF.&#xD;&#xA;Пожалуйста, обновите страницу и попробуйте снова или обратитесь в службу поддержки support@mysurvey.solutions" ts="Translated" qs="ToReview" />
-            <li lc="es" tx="Error al generarPDF. Por favor recargue la pagina e intente nuevamente o contacte a support@mysurvey.solutions" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
-            <li lc="fr" tx="Impossible de générer un fichier PDF.&#xA; &#xA; Veuillez recharger la page et réessayer ou contacter support@mysurvey.solutions" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
-            <li lc="zh" tx="无法生成PDF。请重新加载此页再次尝试，或联系support@mysurvey.solutions" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
-            <li lc="ar" tx="فشل إنشاء PDF&#xD;&#xA;الرجاء إعادة تحميل الصفحة والمحاولة مرة أخرى أو التواصل على support@mysurvey.solutions " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
+            <li lc="nn-nn" tx="Failed to generate PDF.&#xD;&#xA;Please reload the page and try again or contact support@mysurvey.solutions" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Ошибка генерации PDF.&#xD;&#xA;Пожалуйста, обновите страницу и попробуйте снова или обратитесь в службу поддержки support@mysurvey.solutions" ts="Changed" qs="ToReview" />
+            <li lc="es" tx="Error al generarPDF. Por favor recargue la pagina e intente nuevamente o contacte a support@mysurvey.solutions" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="ToReview" />
+            <li lc="fr" tx="Impossible de générer un fichier PDF.&#xA; &#xA; Veuillez recharger la page et réessayer ou contacter support@mysurvey.solutions" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="无法生成PDF。请重新加载此页再次尝试，或联系support@mysurvey.solutions" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="ToReview" />
+            <li lc="ar" tx="فشل إنشاء PDF&#xD;&#xA;الرجاء إعادة تحميل الصفحة والمحاولة مرة أخرى أو التواصل على support@mysurvey.solutions " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\PdfMessages.resx" nm="Generate" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="PDF document generated {0} minute(s) ago.&#xA;Size: {1}Kb" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="PDF документ сгенерирован {0} минут(ы) назад.&#xD;&#xA;Размер: {1}Kb" ts="Translated" qs="ToReview" />
-            <li lc="es" tx="El archivo PDF ha sido generado hace {0} minutos. Tamaño: {1} Kb " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
-            <li lc="fr" tx="Document PDF généré il ya {0} minute (s).&#xA; &#xA; Taille: {1} Ko" ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="{0}分钟前已生成PDF文件。大小：{1}KB" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
-            <li lc="ar" tx="تم إنشاء وثيقة PDF {0} دقيقة (دقائق).&#xD;&#xA;الحجم: {1} ;كيلوبايت " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
+            <li lc="nn-nn" tx="PDF document generated {0} minute(s) ago.&#xD;&#xA;Size: {1}Kb" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="PDF документ сгенерирован {0} минут(ы) назад.&#xD;&#xA;Размер: {1}Kb" ts="Changed" qs="ToReview" />
+            <li lc="es" tx="El archivo PDF ha sido generado hace {0} minutos. Tamaño: {1} Kb " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Changed" qs="ToReview" />
+            <li lc="fr" tx="Document PDF généré il ya {0} minute (s).&#xA; &#xA; Taille: {1} Ko" ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="{0}分钟前已生成PDF文件。大小：{1}KB" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="ToReview" />
+            <li lc="ar" tx="تم إنشاء وثيقة PDF {0} دقيقة (دقائق).&#xD;&#xA;الحجم: {1} ;كيلوبايت " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\PdfMessages.resx" nm="GenerateLessMinute" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="PDF document generated less than a minute ago.&#xA;Size: {0}Kb" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="PDF документ сгенерирован меньше минуты назад.&#xD;&#xA;Размер: {0}Kb" ts="Translated" qs="ToReview" />
-            <li lc="es" tx="El archivo PDF ha sido generado hace menos de un minuto. Tamaño: {0} Kb" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
-            <li lc="fr" tx="Document PDF généré il y a moins d'une minute.&#xA; &#xA; Taille: {0} Ko" ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="就在刚刚已生成PDF问卷。大小：{0}KB" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
-            <li lc="ar" tx="تم إنشاء وثيقة PDF (دقائق).&#xD;&#xA;الحجم: {0} ;كيلوبايت " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
+            <li lc="nn-nn" tx="PDF document generated less than a minute ago.&#xD;&#xA;Size: {0}Kb" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="PDF документ сгенерирован меньше минуты назад.&#xD;&#xA;Размер: {0}Kb" ts="Changed" qs="ToReview" />
+            <li lc="es" tx="El archivo PDF ha sido generado hace menos de un minuto. Tamaño: {0} Kb" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="ToReview" />
+            <li lc="fr" tx="Document PDF généré il y a moins d'une minute.&#xA; &#xA; Taille: {0} Ko" ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="就在刚刚已生成PDF问卷。大小：{0}KB" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="ToReview" />
+            <li lc="ar" tx="تم إنشاء وثيقة PDF (دقائق).&#xD;&#xA;الحجم: {0} ;كيلوبايت " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\PdfMessages.resx" nm="GeneratingSuccess" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Your PDF is being generated.&#xA;Size: {0}Kb" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Ваш PDF создается.&#xD;&#xA;Размер: {0}Kb" ts="Translated" qs="ToReview" />
-            <li lc="es" tx="Su PDF está siendo generado. Tamaño {0}Kb" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
-            <li lc="fr" tx="Votre fichier PDF est en cours de génération.&#xA; &#xA; Taille: {0} Ko" ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="正在生成您的PDF文件。大小：{0}KB" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
-            <li lc="ar" tx="يتم إنشاء pdf الخاص بك. الحجم :{0} كيلوبيت" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Your PDF is being generated.&#xD;&#xA;Size: {0}Kb" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Ваш PDF создается.&#xD;&#xA;Размер: {0}Kb" ts="Changed" qs="ToReview" />
+            <li lc="es" tx="Su PDF está siendo generado. Tamaño {0}Kb" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="ToReview" />
+            <li lc="fr" tx="Votre fichier PDF est en cours de génération.&#xA; &#xA; Taille: {0} Ko" ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="正在生成您的PDF文件。大小：{0}KB" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="ToReview" />
+            <li lc="ar" tx="يتم إنشاء pdf الخاص بك. الحجم :{0} كيلوبيت" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\PdfMessages.resx" nm="PreparingToGenerate" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Preparing to generate your PDF.&#xA;Please wait..." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Подготовка к генерации PDF.&#xD;&#xA;Пожалуйста подождите..." ts="Translated" qs="ToReview" />
-            <li lc="es" tx="Favor genere su PDF. Por favor espere." er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
-            <li lc="fr" tx="Préparation pour générer votre PDF.&#xA; &#xA; S'il vous plaît, attendez..." ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="正在准备生成您的PDF文件。请耐心等待……" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="ar" tx="التحضير لتوليد PDF الخاص بك. &#xD;&#xD;&#xA;يرجى الإنتظار..." ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Preparing to generate your PDF.&#xD;&#xA;Please wait..." ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Подготовка к генерации PDF.&#xD;&#xA;Пожалуйста подождите..." ts="Changed" qs="ToReview" />
+            <li lc="es" tx="Favor genere su PDF. Por favor espere." er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="ToReview" />
+            <li lc="fr" tx="Préparation pour générer votre PDF.&#xA; &#xA; S'il vous plaît, attendez..." ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="正在准备生成您的PDF文件。请耐心等待……" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
+            <li lc="ar" tx="التحضير لتوليد PDF الخاص بك. &#xD;&#xD;&#xA;يرجى الإنتظار..." ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\PdfMessages.resx" nm="Retry" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -5154,12 +5160,12 @@
         </it>
         <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\QuestionnaireController.resx" nm="FoldersDescription" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="You can configure the structure of folders for public questionnaires page. For this click on folder by right button and then use one of the operations:&#xA;&lt;br/&gt;- &quot;Create SubFolder&quot; use for creating subfolder &#xA;&lt;br/&gt;- &quot;Rename&quot; to rename folder name&#xA;&lt;br/&gt;- &quot;Delete&quot; to delete folder with subfolders" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="You can configure the structure of folders for public questionnaires page. For this click on folder by right button and then use one of the operations:&#xD;&#xA;&lt;br/&gt;- &quot;Create SubFolder&quot; use for creating subfolder &#xD;&#xA;&lt;br/&gt;- &quot;Rename&quot; to rename folder name&#xD;&#xA;&lt;br/&gt;- &quot;Delete&quot; to delete folder with subfolders" ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Вы можете настроить структуру папок для страницы общих опросников. Для этого нажмите правую кнопку на папке, а затем используйте одну из следующих операций:&#xD;&#xA;&lt;br/&gt;- «Создать папку» для создания вложенной папки&#xD;&#xA;&lt;br/&gt;- «Изменить», чтобы переименовать название папки&#xD;&#xA;&lt;br/&gt;- «Удалить» для удаления папки с подпапками" ts="Changed" qs="ToReview" />
-            <li lc="es" tx="Puede configurar la estructura de las carpetas para la página de cuestionarios públicos. Para esto, haga clic en la carpeta con el botón derecho y luego use una de las operaciones: &lt;bar/&gt; - &quot;Uso de&quot; Crear carpeta &quot;&quot; para crear una subcarpeta&#xD;&#xA;&lt;br/&gt; - &quot;&quot; Editar &quot;&quot; para cambiar el nombre de la carpeta&#xD;&#xA;&lt;br/&gt; - &quot;&quot; Eliminar &quot;&quot; para eliminar la carpeta con subcarpetas" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="Warning" />
-            <li lc="zh" tx="您可以设置公共问卷页的文件夹结构。请右击文件夹并选择以下某个操作：&#xD;&#xA;&lt;br/&gt;-“创建文件夹”用来新建子文件夹&#xD;&#xA;&lt;br/&gt;-“编辑”用来重命名文件名&#xD;&#xA;&lt;br/&gt;-“移除”用来删除有子文件夹的文件夹" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="Warning" />
-            <li lc="ar" tx="يمكنك تكوين بنية المجلدات لصفحة الاستبيانات العامة. لهذا انقر على المجلد عن طريق الزر الأيمن ومن ثم استخدام واحدة من العمليات: &lt;br/&gt; - إنشاء مجلد &quot;لإنشاء مجلد فرعي &lt;br/&gt; - &quot;تعديل&quot; لإعادة تسمية اسم المجلد  &lt;br/&gt; - &quot;إزالة&quot; لحذف مجلد به مجلدات فرعية&#xD;&#xA;" er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Changed" qs="Warning" />
-            <li lc="fr" tx="Vous pouvez configurer la structure des dossiers pour l'onglet des questionnaires publics.Pour cela, cliquez droit sur le dossier , puis utilisez l'une des opérations:      &lt;br/&gt; - &quot; Créer un sous-dossier &quot; pour créer un sous-dossier&lt;br/&gt; - &quot; Renommer &quot; pour renommer le nom du dossier&#xA;" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
+            <li lc="es" tx="Puede configurar la estructura de las carpetas para la página de cuestionarios públicos. Para esto, haga clic en la carpeta con el botón derecho y luego use una de las operaciones: &lt;bar/&gt; - &quot;Uso de&quot; Crear carpeta &quot;&quot; para crear una subcarpeta&#xD;&#xA;&lt;br/&gt; - &quot;&quot; Editar &quot;&quot; para cambiar el nombre de la carpeta&#xD;&#xA;&lt;br/&gt; - &quot;&quot; Eliminar &quot;&quot; para eliminar la carpeta con subcarpetas" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="您可以设置公共问卷页的文件夹结构。请右击文件夹并选择以下某个操作：&#xD;&#xA;&lt;br/&gt;-“创建文件夹”用来新建子文件夹&#xD;&#xA;&lt;br/&gt;-“编辑”用来重命名文件名&#xD;&#xA;&lt;br/&gt;-“移除”用来删除有子文件夹的文件夹" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="ToReview" />
+            <li lc="ar" tx="يمكنك تكوين بنية المجلدات لصفحة الاستبيانات العامة. لهذا انقر على المجلد عن طريق الزر الأيمن ومن ثم استخدام واحدة من العمليات: &lt;br/&gt; - إنشاء مجلد &quot;لإنشاء مجلد فرعي &lt;br/&gt; - &quot;تعديل&quot; لإعادة تسمية اسم المجلد  &lt;br/&gt; - &quot;إزالة&quot; لحذف مجلد به مجلدات فرعية&#xD;&#xA;" er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Changed" qs="ToReview" />
+            <li lc="fr" tx="Vous pouvez configurer la structure des dossiers pour l'onglet des questionnaires publics.Pour cela, cliquez droit sur le dossier , puis utilisez l'une des opérations:      &lt;br/&gt; - &quot; Créer un sous-dossier &quot; pour créer un sous-dossier&lt;br/&gt; - &quot; Renommer &quot; pour renommer le nom du dossier&#xA;" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\UI\Designer\WB.UI.Designer\Resources\QuestionnaireController.resx" nm="FoldersManagement" rc="" dnt="false" nms="Translations.Designer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -5464,6 +5470,7 @@
             <li lc="ru" tx="Ответ записан. Продолжительность {0}" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="答案已接受。用时{0}" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Réponse acceptée. A pris {0} pour traiter" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Răspuns acceptat. Procesarea a durat {0} " ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="AnswerRecordedMsgDismiss" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -5472,6 +5479,7 @@
             <li lc="ru" tx="Скрыть" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="清除" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Rejeter" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Revocă" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="AreaMap_Active_Map_Title" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -5482,6 +5490,7 @@
             <li lc="fr" tx="Carte active :" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="活动的地图：" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="ar" tx="الخريطة النشطة:" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="HARTA ACTIVĂ:" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="AreaMap_AreaFormat" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -5492,6 +5501,7 @@
             <li lc="fr" tx="Superficie :" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="面积：" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="ar" tx="المنطقة:" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Zona:" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="AreaMap_Available_Maps_Title" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -5502,6 +5512,7 @@
             <li lc="fr" tx="Cartes disponibles sur l'appareil" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="设备上已有的地图" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="الخرائط المتوفرة على الجهاز" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="HĂRȚI DISPONIBILE PE DISPOZITIV" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="AreaMap_Cancel" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -5512,6 +5523,7 @@
             <li lc="fr" tx="Annuler" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="取消" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="إلغاء" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
+            <li lc="ro" tx="Anulare" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="AreaMap_Close" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -5522,6 +5534,7 @@
             <li lc="fr" tx="Fermer" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="关闭" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="إغلاق" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
+            <li lc="ro" tx="Închidere" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="AreaMap_Edit" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -5532,16 +5545,18 @@
             <li lc="fr" tx="Modifier" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="zh" tx="编辑" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تحرير" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Editare" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="AreaMap_LengthFormat" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Perimeter:" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Периметр:" ts="Translated" qs="ToReview" />
-            <li lc="es" tx="Perímetro:" ts="Translated" qs="ToReview" />
-            <li lc="fr" tx="Périmètre :" ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="周长：" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="ar" tx="محيط:" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Length:" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Длинна:" ts="Changed" qs="ToReview" />
+            <li lc="es" tx="Perímetro:" ts="Changed" qs="ToReview" />
+            <li lc="fr" tx="Périmètre :" ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="周长：" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
+            <li lc="ar" tx="محيط:" ts="Changed" qs="ToReview" />
+            <li lc="ro" tx="Perimetru:" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="AreaMap_Location" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -5552,12 +5567,14 @@
             <li lc="fr" tx="Emplacement" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="位置" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="الموقع" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Localizare" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="AreaMap_LocationOutOfBoundaries" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Your location is out of boundaries of the map" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Ваше местоположение вне границ карты" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Localizarea dvs. este în afara limitelor hărții" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="AreaMap_MapTitle" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -5568,6 +5585,7 @@
             <li lc="fr" tx="Carte" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="地图" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="خريطة" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Harta" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="AreaMap_NoChangesInfo" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -5578,6 +5596,7 @@
             <li lc="fr" tx="Aucun changement à sauvegarder" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="zh" tx="没有需要保存的更改" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="ar" tx="لم يتم إجراء أي تغييرات ليتم حفظها." ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Nu s-au făcut modificări pentru a fi salvate." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="AreaMap_NoMapsFound" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -5588,6 +5607,13 @@
             <li lc="fr" tx="Aucune carte retrouvée. Veuillez mettre à jour les cartes" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="找不到地图，请上传地图。" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="لم يتم العثور على خرائط. يرجى تحديث الخرائط" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Nu au fost găsite hărți. Vă rugăm să actualizați hărțile" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="AreaMap_PerimeterFormat" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Perimeter:" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Периметр:" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="AreaMap_Save" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -5598,6 +5624,7 @@
             <li lc="fr" tx="Sauvegarder" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="zh" tx="保存" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="حفظ" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Salvare" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="AreaMap_Undo" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -5608,6 +5635,7 @@
             <li lc="fr" tx="Annuler" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="撤销操作" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تراجع" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Anulare" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="AreaMap_Update_Maps" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -5618,6 +5646,7 @@
             <li lc="fr" tx="Mettre à jour les cartes" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="更新地图" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تحديث الخرائط" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Actualizare hărți" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="AreaMap_UpdateFailed" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -5628,6 +5657,7 @@
             <li lc="fr" tx="Mise à jour échouée" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="更新失败" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="فشل التحديث" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Actualizare eșuată" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="AreaMap_UpdateMaps" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -5638,6 +5668,7 @@
             <li lc="fr" tx="Mettre à jour les cartes" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="更新地图" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تحديث الخرائط" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Actualizare hărți" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="AssignmentN" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -5648,6 +5679,7 @@
             <li lc="fr" tx="Affectation #{0}" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="任务#{0}" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="ar" tx="مهمة #{0}" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Sarcina #{0}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Audio_Io_Exception_Message" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -5659,6 +5691,7 @@
             <li lc="fr" tx="Sauvegardedu fichier audio échoué. Vérifier que l'appareil dispose encore de stockage interne" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="不能写入音频文件。请确保设备在内部存储器中有剩余空间" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تعذر كتابة ملف صوتي. تأكد من أن الجهاز يحتوي على مساحة حرة على وحدة تخزين داخلية" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Nu s-a putut scrie fișierul audio. Asigurați-vă că dispozitivul are spațiu liber pe spațiul de stocare intern" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Audio_Unhandled_Exception_Message" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -5670,6 +5703,7 @@
             <li lc="fr" tx="Erreur inattendue survenue lors d'enregistrement audio" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="启动录音时出现预期外的异常" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="استثناء غير المتوقع خلال بدء التسجيل الصوتي" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Excepție neașteptată la pornirea înregistrării audio" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="AudioQuestion_DurationFormat" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -5681,6 +5715,7 @@
             <li lc="fr" tx="{0} d'enregistrement sonore" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="{0}的录音" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="{0} من التسجيل الصوتي" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="{0} din înregistrarea audio" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Cancel" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -5698,23 +5733,25 @@
             <li lc="zh-CN" tx="取消" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="取消" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="إلغاء" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
+            <li lc="ro" tx="Anulare" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Dashboard_EmptyQuestionnairesList" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="es" tx="Todavía no hay cuestionarios. Puede crear o editar sus cuestionarios en Survey Solutions Designer" ts="Translated" qs="ToReview" />
-            <li lc="fr" tx="Aucun masque disponible pour l'instant&#xA;&#xA;Vous pouvez créer ou modifier vos questionnaires dans au site Designer de Survey Solutioins" ts="Translated" qs="ToReview" />
-            <li lc="id-ID" tx="Belum ada kuesioner&#xD;&#xA;&#xD;&#xA;Anda dapat membuat atau menyunting kuesioner Anda pada Desainer Survey Solutions" ts="Translated" qs="ToReview" />
-            <li lc="km" tx="មិនមានកម្រងសំនូរទេ​&#xD;&#xA;អ្នកអាចបង្កើត ឬពិនិត្យកែ កម្រងសំនួររបស់អ្នក ក្នុង រៀបការបង្កើត Survey Solutions " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
-            <li lc="pt" tx="Questionário ainda não existe&#xD;&#xA;&#xD;&#xA;Pode criar ou editar seus questionários em Survey Solutions Designer" ts="Translated" qs="ToReview" />
-            <li lc="nn-nn" tx="No questionnaires yet&#xA;&#xA;You can create or edit your questionnaires in Survey Solutions Designer" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Опросники не обнаружены&#xD;&#xA;&#xD;&#xA;Вы можете создать или отредактировать свои опросники при помощи сервиса Survey Solutions Designer" ts="Translated" qs="ToReview" />
-            <li lc="th-TH" tx="ยังไม่มีแบบสอบถาม&#xD;&#xA;คุณสามารถสร้างหรือแก้ไขแบบสอบถามด้วย Survey Solutions Designer" ts="Translated" qs="ToReview" />
-            <li lc="uk-UA" tx="Питальники було не знайдено&#xD;&#xA;&#xD;&#xA;Ви можна створювати або редагувати питальники выкористовуючи Survey Solutions Designer" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Chưa có bộ câu hỏi nào&#xD;&#xA;Bạn có thể tạo hoặc chỉnh sửa bộ câu hỏi trong Survey Solutions Designer" ts="Translated" qs="ToReview" />
-            <li lc="zh-CN" tx="还没有调查问卷。&#xD;&#xA;&#xD;&#xA;您可以在Survey Solutions Designer创建或编辑您的调查问卷。" ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="暂时没有问卷，您可以在Survey Solutions Designer中创建或编辑问卷。" ts="Translated" qs="ToReview" />
-            <li lc="ar" tx="لا توجد استبيانات بعد&#xD;&#xA;&#xD;&#xD;&#xA;يمكنك إنشاء أو تحرير الاستبيانات الخاصة بك في مصمم Survey Solutions" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Todavía no hay cuestionarios. Puede crear o editar sus cuestionarios en Survey Solutions Designer" ts="Changed" qs="ToReview" />
+            <li lc="fr" tx="Aucun masque disponible pour l'instant&#xA;&#xA;Vous pouvez créer ou modifier vos questionnaires dans au site Designer de Survey Solutioins" ts="Changed" qs="ToReview" />
+            <li lc="id-ID" tx="Belum ada kuesioner&#xD;&#xA;&#xD;&#xA;Anda dapat membuat atau menyunting kuesioner Anda pada Desainer Survey Solutions" ts="Changed" qs="ToReview" />
+            <li lc="km" tx="មិនមានកម្រងសំនូរទេ​&#xD;&#xA;អ្នកអាចបង្កើត ឬពិនិត្យកែ កម្រងសំនួររបស់អ្នក ក្នុង រៀបការបង្កើត Survey Solutions " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Changed" qs="ToReview" />
+            <li lc="pt" tx="Questionário ainda não existe&#xD;&#xA;&#xD;&#xA;Pode criar ou editar seus questionários em Survey Solutions Designer" ts="Changed" qs="ToReview" />
+            <li lc="nn-nn" tx="No questionnaires yet&#xD;&#xA;&#xD;&#xA;You can create or edit your questionnaires in Survey Solutions Designer" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Опросники не обнаружены&#xD;&#xA;&#xD;&#xA;Вы можете создать или отредактировать свои опросники при помощи сервиса Survey Solutions Designer" ts="Changed" qs="ToReview" />
+            <li lc="th-TH" tx="ยังไม่มีแบบสอบถาม&#xD;&#xA;คุณสามารถสร้างหรือแก้ไขแบบสอบถามด้วย Survey Solutions Designer" ts="Changed" qs="ToReview" />
+            <li lc="uk-UA" tx="Питальники було не знайдено&#xD;&#xA;&#xD;&#xA;Ви можна створювати або редагувати питальники выкористовуючи Survey Solutions Designer" ts="Changed" qs="ToReview" />
+            <li lc="vi-VN" tx="Chưa có bộ câu hỏi nào&#xD;&#xA;Bạn có thể tạo hoặc chỉnh sửa bộ câu hỏi trong Survey Solutions Designer" ts="Changed" qs="ToReview" />
+            <li lc="zh-CN" tx="还没有调查问卷。&#xD;&#xA;&#xD;&#xA;您可以在Survey Solutions Designer创建或编辑您的调查问卷。" ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="暂时没有问卷，您可以在Survey Solutions Designer中创建或编辑问卷。" ts="Changed" qs="ToReview" />
+            <li lc="ar" tx="لا توجد استبيانات بعد&#xD;&#xA;&#xD;&#xD;&#xA;يمكنك إنشاء أو تحرير الاستبيانات الخاصة بك في مصمم Survey Solutions" ts="Changed" qs="ToReview" />
+            <li lc="ro" tx="Nu există chestionare&#xA;Puteți crea sau edita chestionare utilizând Survey Solutions Designer" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Dashboard_EmptySearchResult" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -5732,6 +5769,7 @@
             <li lc="zh-CN" tx="没有找到调查问卷" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="找不到问卷" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="لم يتم العثور على أية استبيانات" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Nu a fost găsit niciun chestionar" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Dashboard_LastEntryDate_Format" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -5749,6 +5787,7 @@
             <li lc="zh-CN" tx="{0:dd MMM HH:mm}" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="{0:dd MMM HH:mm}" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="{0:dd MMM HH:mm}" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="{0:dd MMM HH:mm}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Dashboard_MyQuestionnairesLinkText" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -5766,6 +5805,7 @@
             <li lc="zh-CN" tx="我的调查问卷" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="我的问卷" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="استبياناتي" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Chestionarele mele" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Dashboard_PublicQuestionnairesLinkText" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -5783,6 +5823,7 @@
             <li lc="zh-CN" tx="公共调查问卷" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="公开问卷" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="استبيان عام" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Chestionare publice" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Dashboard_ToolbarText" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -5800,6 +5841,7 @@
             <li lc="zh-CN" tx="调查问卷" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="问卷" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="ar" tx="الاستبيانات" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Chestionare" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="DateQuestion_Hint" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -5817,6 +5859,7 @@
             <li lc="zh-CN" tx="点击输入日期" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="点击输入日期" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="انقر لادخال التاريخ" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Apăsați pentru a înregistrarea datei" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Device_Does_Not_Support" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -5827,6 +5870,7 @@
             <li lc="fr" tx="Votre appareil ne prend pas en charge cette fonctionnalité" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="您的设备不支持此功能" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="لا يدعم جهازك هذه الوظيفة" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Dispozitivul dvs. nu acceptă această funcție" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="EndpointHint" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -5844,6 +5888,7 @@
             <li lc="zh-CN" tx="同步端点" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="同步断点" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="نقطة نهاية المزامنة" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Punct final de sincronizare" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="EndpointText" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -5861,6 +5906,7 @@
             <li lc="zh-CN" tx="网络服务端点：" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="zh" tx="网络服务端点：" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="ar" tx="نقطة نهاية خدمة ويب:" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Web Service Endpoint:" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Error" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -5871,6 +5917,7 @@
             <li lc="fr" tx="Erreur" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="错误" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="خطأ" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Eroare" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="ErrorMessage_AccountIsLockedOnServer" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -5888,6 +5935,7 @@
             <li lc="zh-CN" tx="您的账户已被锁定。请联系支持团队：support@mysurvey.solutions。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="zh" tx="您的用户账号被锁定。请联系support@mysurvey.solutions。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="ar" tx="تم قفل حساب المستخدم. يرجى الاتصال بفريق الدعم على support@mysurvey.solutions." ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Contul dvs. este blocat. Vă rugăm să contactați echipa de suport la support@mysurvey.solutions." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="ErrorMessage_AccountIsNotApprovedOnServer" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -5905,6 +5953,7 @@
             <li lc="zh-CN" tx="您的账户未获批准。请首先确认您的账户。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="zh" tx="您的账户尚未被批准。请先确认账户。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="ar" tx="لم تتم الموافقة على حسابك. الرجاء تأكيد حسابك أولا." ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Contul dvs. nu a fost aprobat. Vă rugăm să îl confirmați mai întâi." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="ErrorMessage_InternalServerError" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -5922,6 +5971,7 @@
             <li lc="zh-CN" tx="服务器错误。请联系支持团队：support@mysurvey.solutions。" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="服务器错误。请联系support@mysurvey.solutions." er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="ar" tx="خطأ في الخادم .الرجاء التواصل مع فريق الدعم عن طريقsupport@mysurvey.solutions" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Eroare de server. Vă rugăm să contactați echipa de suport la support@mysurvey.solutions." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="ErrorMessage_InvalidEndpoint" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -5939,6 +5989,7 @@
             <li lc="zh-CN" tx="提供的Survey Solutions Designer网址无效。请检查设置。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="zh" tx="提供的Survey Solutions Designer URL非法，请检查设置。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="ar" tx="عنوان مصمم Survey Solutions المقدم URL غير صالح. تحقق من الإعدادات." ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Adresa URL introdusă pentru Survey Solutions Designer nu este validă. Verificați setările." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="ErrorMessage_Maintenance" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -5956,6 +6007,7 @@
             <li lc="zh-CN" tx="Survey Solutions Designer网站正处于维护模式。抱歉给您带来不便。" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="Survey Solutions Designer的网站正在维护，很抱歉给您带来不便。" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="موقع مصمم Survey Solutions في وضع الصيانة الآن. آسف للإزعاج" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Site-ul Survey Solutions Designer este în mod mentenanță acum. Ne cerem scuze pentru inconvenient" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="ErrorMessage_RequestTimeout" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -5973,6 +6025,7 @@
             <li lc="zh-CN" tx="连接到Survey Solutions Designer网站时超时。请检查您的网络连接。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="zh" tx="到Survey Solutions Designer网站的连接已超时，请检查网络设置。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="ar" tx="انتهت المهلة عند الاتصال بموقع مصمم Survey Solutions. تحقق من اتصالك بالإنترنت." ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Eroare de conexiune la site-ul Survey Solutions Designer. Verificați conexiunea la Internet." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="ErrorMessage_ServiceUnavailable" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -5990,6 +6043,7 @@
             <li lc="zh-CN" tx="没有连接到Survey Solutions Designer网站。请确保网站是可用的。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="zh" tx="没有到问卷设计系统的连接。请确保网站可用。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="ar" tx="لا يوجد اتصال بمصمم Survey Solutions. يرجى التأكد من أن الموقع  متاح." ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Nu se poate conecta la Survey Solutions Designer. Verificați disponibilitatea site-ului." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="ErrorMessage_Unauthorized" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6007,6 +6061,7 @@
             <li lc="zh-CN" tx="您的用户名或密码不正确" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="您的帐号或密码错误" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="ar" tx="تسجيل الدخول أو كلمة المرور غير صحيحة" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Datele de autentificare sunt incorecte." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="ErrorMessage_UpgradeRequired" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6024,6 +6079,7 @@
             <li lc="zh-CN" tx="应用程序的新版本已发布，请更新应用程序。" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="zh" tx="应用程序已发布新版本，请更新。" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="ar" tx="تم إصدار نسخة جديدة من التطبيق. الرجاء تحديث التطبيق" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
+            <li lc="ro" tx="A fost lansată o nouă versiune a aplicației. Vă rugăm să actualizați aplicația." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="FilteredComboboxQuestion_Hint" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6041,6 +6097,7 @@
             <li lc="zh-CN" tx="点击输入文本" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="点击输入文本" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="انقر لادخال نص" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Apăsați pentru a introduce text" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="GpsQuestion_MissingPermissions" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6051,6 +6108,7 @@
             <li lc="fr" tx="Afin de répondre à cette question, l'appli Interviewer a besoin d'une autorisation pour d'accéder au service de localisation de l'appareil. Afin d'accorder autorisation, répondre au dialogue qui s'affiche lors de la prochaine tentative de réponse à cette question. Si un dialogue ne s'affiche pas, naviguer vers le menu Paramètrage d'Android et accorder cette autorisation à l'appli Interviewer." ts="Translated" qs="ToReview" />
             <li lc="zh" tx="为了回答此问题，应用程序需要访问您当前的设备位置。请重新尝试回答问题并准许访问。如未弹出请求对话框，请打开设置并允许程序访问设备位置。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="ar" tx="يحتاج التطبيق  لصلاحية استخدام موقع الجهاز الخالي من أجل الإجابة على هذا السؤال. أعد محاولة الإجابة عن السؤال والسماح بالوصول. إذا كنت لا ترى الصلاحيات المنبثقة انتقل إلى الإعدادات واسمح للتطبيق باستخدام الموقع." ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Aplicația trebuie să aibă permisiunea de a utiliza locația dispozitivului curent pentru a răspunde la această întrebare. Reîncercați răspunsul la întrebare și permiteți accesul. Dacă nu vedeți opțiunile de tip popup, accesați Setări și permiteți aplicației să utilizeze locația dispozitivului." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="GpsQuestion_Timeout" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6068,6 +6126,7 @@
             <li lc="zh-CN" tx="全球定位系统（GPS）无法确定您的位置。为排除故障，请尝试以下方法：确保您在户外、确保您的GPS已启用或更改您的GPS超时设置。" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="GPS无法定位您的位置。请尝试以下操作：确保您处于户外、确认GPS已打开、或更改GPS的超时设置" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تعذر على نظام تحديد المواقع العالمي تحديد موقعك. لتحري الخلل وإصلاحه، يرجى تجربة ما يلي: تأكد من أنك في الهواء الطلق، أو تأكد من تمكين نظام تحديد المواقع العالمي ، أو قم بتغيير إعدادات مهلة نظام تحديد المواقع العالمي" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="GPS-ul nu poate detecta localizarea. Pentru a depana, vă rugăm încercați următoarele: asigurați-vă că vă aflați în aer liber, confirmați că GPS-ul dvs. este activat sau modificați setarea de expirare a conexiunii GPS-ului." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="IntegerQuestion_Hint" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6085,6 +6144,7 @@
             <li lc="zh-CN" tx="点击输入数字" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="点击输入数字" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="انقر لادخال رقم " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
+            <li lc="ro" tx="Apăsați pentru a introduce numărul" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Comment_Interviewer_Caption" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6102,6 +6162,7 @@
             <li lc="zh-CN" tx="您的评论" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="您的评论" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تعليقك" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Comentariul dvs." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Complete_Answered" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6119,6 +6180,7 @@
             <li lc="zh-CN" tx="已回答" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="已回答" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تمت الاجابة" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Întrebări completate" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Complete_Button" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6136,6 +6198,7 @@
             <li lc="zh-CN" tx="完成" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="完成" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="مكتمل" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Finalizat" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Complete_Consequences_Instrunction" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6153,6 +6216,7 @@
             <li lc="zh-CN" tx="结束调查后，问卷将被标记为已完成，并将在下次同步时上传给督导员。" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="这个访谈在结束之后将会被标记成已完成，并在您下次同步时上传至督导员。" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="بعد الانتهاء من هذه المقابلة سيتم وضع علامة على أنها اكتملت وسيتم تحميلها إلى المشرف خلال المزامنة القادمة" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="După ce terminați interviul, acesta va avea statusul &quot;Finalizat&quot; și va fi trimis către supervizor la următoarea sincronizare." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Complete_Entities_With_Errors" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6163,6 +6227,7 @@
             <li lc="fr" tx="Entités avec erreurs" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="zh" tx="有错误的项目：" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="ar" tx="الصيغ التي بها أخطاء:" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Entitățile cu erori:" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Complete_Errors" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6180,6 +6245,7 @@
             <li lc="zh-CN" tx="错误" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="错误" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="خطأ (اخطاء)" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Eroare(erori)" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Complete_First_n_Entities_With_Errors" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6190,6 +6256,7 @@
             <li lc="fr" tx="Premières {0} entités avec erreurs" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="zh" tx="前{0}个有错误的项目：" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="ar" tx="أول {0} مادة/مواد تنطوي على أخطاء:" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Primele {0} entități cu erori:" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Complete_No" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6207,6 +6274,7 @@
             <li lc="zh-CN" tx="否" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="否" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="لا" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Fără" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Complete_Note_For_Supervisor" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6224,6 +6292,7 @@
             <li lc="zh-CN" tx="给督导员的说明" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="给督导员的说明" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="ar" tx="ملاحظة للمشرف" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Comentariu pentru supervizor" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Complete_Questions_Status" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6241,6 +6310,7 @@
             <li lc="zh-CN" tx="问题状态" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="问题状态" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="حالة الأسئلة:" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="ro" tx="Statusul întrebării" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Complete_Screen_Description" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6258,6 +6328,7 @@
             <li lc="zh-CN" tx="您即将完成这次调查" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="您即将完成这个访谈" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="ar" tx="أنت على وشك إكمال هذه المقابلة " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
+            <li lc="ro" tx="Sunteți pe punctul de a finaliza acest interviu" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Complete_Screen_DescriptionWithInterviewKey" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6268,6 +6339,7 @@
             <li lc="fr" tx="Vous êtes sur le point d'achever l'entretien {0}" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="您即将完成访谈{0}" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="أنت على وشك إتمام المقابلة {0}" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Sunteți pe punctul de a finaliza interviul {0}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Complete_Screen_Title" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6285,6 +6357,7 @@
             <li lc="zh-CN" tx="完成" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="完成" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="مكتمل" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Finalizat" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Complete_Unanswered" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6302,6 +6375,7 @@
             <li lc="zh-CN" tx="未回答" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="未回答" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="لم تتم الإجابة عنها" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Întrebări necompletate" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_CompleteScreen_ButtonText" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6319,6 +6393,7 @@
             <li lc="zh-CN" tx="转到完成屏幕" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="转到完成屏幕" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="لاكمال الشاشة" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Finalizați chestionarul" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Cover_First_n_Questions_With_Comments" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6329,6 +6404,7 @@
             <li lc="fr" tx="Premières {0} questions avec des commentaires" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="zh" tx="前{0}个有评论的问题" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="ar" tx="أول {0} مادة/مواد تنطوي على تعليقات:" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Primele {0} întrebări cu comentarii:" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Cover_Questions_With_Comments" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6339,6 +6415,7 @@
             <li lc="fr" tx="Questions avec des commentaires du chef d'équipe :" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="有督导员评论的问题" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="ar" tx="أسئلة مع تعليقات المشرف:" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Întrebări cu comentariile supervizorului:" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Cover_Screen_Title" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6349,6 +6426,7 @@
             <li lc="fr" tx="Page de garde" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="zh" tx="封面" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="غلاف" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Copertă" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Cover_Supervisor_Note" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6359,6 +6437,7 @@
             <li lc="fr" tx="Remarque du chef d'équipe :" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="zh" tx="督导员备注" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="ar" tx="ملاحظة المشرف: " ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Notă de supervizor:" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Group_AnsweredQuestions_Many" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6376,6 +6455,7 @@
             <li lc="zh-CN" tx="{0}个答案" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="{0}个答案" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="{0} إجابات" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="{0} răspunsuri" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Group_AnsweredQuestions_One" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6393,6 +6473,7 @@
             <li lc="zh-CN" tx="1个答案" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="一个答案" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="جواب واحد" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="un răspuns" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Group_InvalidAnswers_ManyFormat" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6410,6 +6491,7 @@
             <li lc="zh-CN" tx="{0}个错误" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="{0}个错误" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="{0} أخطاء" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="{0} erori" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Group_InvalidAnswers_One" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6427,6 +6509,7 @@
             <li lc="zh-CN" tx="1个错误" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="一个错误" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="خطأ واحد" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="o eroare" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Group_Status_CompletedFormat" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6444,6 +6527,7 @@
             <li lc="zh-CN" tx="本部分已完成：{0}" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="已完成的部分：{0}" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="اكتمل القسم: {0}" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Secțiune completă: {0}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Group_Status_NotStarted" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6461,6 +6545,7 @@
             <li lc="zh-CN" tx="本部分尚未开始" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="未开始的部分" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="لم يبدأ القسم" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Secțiune neîncepută" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Group_Status_StartedIncompleteFormat" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6478,6 +6563,7 @@
             <li lc="zh-CN" tx="本部分已开始：{0}" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="已开始的部分：{0}" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تم البدء بالقسم: {0}" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Secțiune începută: {0}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Group_Subgroups_ManyFormat" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6495,6 +6581,7 @@
             <li lc="zh-CN" tx="{0}个子部分" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="{0}个子模块" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="{0} أقسام فرعية" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="{0} sub-secțiuni" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Group_Subgroups_One" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6512,6 +6599,7 @@
             <li lc="zh-CN" tx="一个子部分" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="一个子模块" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="قسم فرعي واحد" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="o sub-secțiune" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Group_Subgroups_Zero" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6529,6 +6617,7 @@
             <li lc="zh-CN" tx="没有子部分" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="无子模块" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="لا يوجد اقسام فرعية" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="fără sub-secțiuni" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Headquarters_Comment_Caption" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6539,6 +6628,7 @@
             <li lc="fr" tx="Commentaire de la coordination :" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="zh" tx="总部评论" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تعليق المقرات الرئيسية" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Comentariul Headquarter-ului" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Instruction_ShowInstruction" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6550,6 +6640,7 @@
             <li lc="fr" tx="Montrer l'instruction" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="zh" tx="显示说明" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="إظهار التعليمات" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Arată instrucțiunile" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Instruction_Title" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6567,6 +6658,7 @@
             <li lc="zh-CN" tx="说明" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="说明" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تعليمات" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Instrucțiune" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Interviewer_Comment_Caption" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6577,6 +6669,7 @@
             <li lc="fr" tx="Commentaire de l'enquêteur" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="调查员说明" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="ar" tx="تعليق الباحث" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Comentariul anchetatorului" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_LinkedQuestion_Empty" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6594,12 +6687,14 @@
             <li lc="zh-CN" tx="回答完参照问题后选项才可用" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="回答关联问题后选项才可用" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="ar" tx="سوف تصبح الخيارات متاحة بعد الإجابة عن السؤال المشار إليه" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Opțiunile vor fi disponibile după ce răspundeți la întrebarea de referință" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_MaxAnswersCount" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="{0} out of {1} options selected" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="{0} из {1} опций выбрано" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="{0} din {1} opțiuni selectate" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_NextSection_ButtonText" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6617,6 +6712,7 @@
             <li lc="zh-CN" tx="下一部分" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="下一部分" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="القسم التالي" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Secțiunea următoare" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Other_Comment_Caption" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6627,6 +6723,43 @@
             <li lc="fr" tx="Commentaire de l'utilisateur" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="用户评论" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تعليق المستخدم" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Comentariul utilizatorului" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Overview" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Overview" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Обзор" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Overview_AdditionalInfo" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Additional info" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Дополнительная информация" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Overview_Comments" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Commentaries" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Комментарии" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Overview_Name" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Overview" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Обзор" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Overview_NotAnswered" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Not answered" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Не отвечен" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Overview_Warnings" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Warning(s)" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Ошибки" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_PreviousGroupNavigation_AnsweredQuestions" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6644,6 +6777,7 @@
             <li lc="zh-CN" tx="已回答全部{0}个问题" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="所有被回答的{0}个问题" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="كل {0} تم الإجابة على الأسئلة" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Toate cele {0} întrebări sunt completate" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_PreviousGroupNavigation_UnansweredQuestions" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6661,6 +6795,7 @@
             <li lc="zh-CN" tx="注意：{0}个问题没有回答" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="备注：{0}个问题未回答" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="ملاحظة: {0} الأسئلة غير مجابة" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Notă: {0} întrebări sunt necompletate" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Question_Cascading_NoMatchingValue" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6678,6 +6813,7 @@
             <li lc="zh-CN" tx="答案“{0}”未能匹配任何选项" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="答案&quot;{0}&quot;无法与任何选项匹配" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="الإجابة &quot;{0}&quot; لا تطابق أي خيار" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Răspunsul &quot;{0}&quot; nu corespunde niciunei opțiuni" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Question_Filter_MatchError" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6695,6 +6831,7 @@
             <li lc="zh-CN" tx="答案“{0}”未能匹配任何选项" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="答案&quot;{0}&quot;无法与任何选项匹配" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="الإجابة &quot;{0}&quot; لا تطابق أي خيار" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Răspunsul &quot;{0}&quot; nu corespunde niciunei opțiuni" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Question_Integer_EmptyValueError" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6712,6 +6849,7 @@
             <li lc="zh-CN" tx="不能保存空值" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="不能保存空值" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="لا يمكن حفظ القيمة الفارغة" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Valorile necompletate nu pot fi salvate" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Question_Integer_NegativeRosterSizeAnswer" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6729,6 +6867,7 @@
             <li lc="zh-CN" tx="答案“{0}”不正确，因为本问题的答案将用于设置名单项目的数量，而给出的答案为负值。" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="答案“{0}”不正确，因为本问题的答案将用于设置名单项目的数量，而给出的答案为负值。" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="الجواب '{0}' غير صحيح لأن السؤال يستخدم كحجم للقائمة والإجابة المحددة سلبية" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Răspunsul '{0}' este incorect deoarece întrebarea este folosită ca dimensiune a Listei și răspunsul specificat este negativ" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Question_Integer_ParsingError" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6746,6 +6885,7 @@
             <li lc="zh-CN" tx="输入的数值不能被解析为整数" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="输入的数值不能被解析为整数值" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="ar" tx="لا يمكن تحليل القيمة التي تم إدخالها كقيمة عدد صحيح" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Valoarea introdusă nu poate fi număr întreg" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Question_Integer_RosterSizeAnswerMoreThanMaxValue" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6763,6 +6903,7 @@
             <li lc="zh-CN" tx="答案“{0}”不正确，因为超过了名单项目的上限'{1}'。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="zh" tx="答案“{0}”不正确，因为超过了名单项目的上限‘{1}’。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="ar" tx="الجواب '{0}' غير صحيح لأن الإجابة أكبر من الحد الاعلى لللائحة '{1}'." ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Răspunsul '{0}' este incorect deoarece răspunsul este mai mare decât limita superioară a lui Listei '{1}'." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Question_List_Empty_Values_Are_Not_Allowed" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6780,6 +6921,7 @@
             <li lc="zh-CN" tx="不能是空值" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="不能是空值" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="لا يسمح بالقيم الفارغة" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Valorile necompletate nu sunt permise" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Question_Real_ParsingError" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6797,6 +6939,7 @@
             <li lc="zh-CN" tx="输入的数值不能被解析为小数" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="输入的数值不能被解析为十进制值" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="ar" tx="لا يمكن تحليل القيمة التي تم إدخالها كقيمة عشرية" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Valoarea introdusă nu poate fi număr zecimal" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Question_Text_Empty" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6807,6 +6950,7 @@
             <li lc="fr" tx="Réponse ne peux pas être vide" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="答案不应为空" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="يجب ان لا تكون الإجابة فارغة" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Răspunsul nu poate fi necompletat" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Question_Text_MaskError" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6824,6 +6968,7 @@
             <li lc="zh-CN" tx="请填写所有必需的数值" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="请输入必填值" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="ar" tx="يرجى ملء كل القيم المطلوبة" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Completați toate valorile necesare" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Questions_Area_SaveAnswer" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6834,6 +6979,7 @@
             <li lc="fr" tx="Appuyer afin de modifier la superficie" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="点击编辑面积" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="انقر لتعديل المنطقة" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Apăsați pentru a edita zona" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Questions_Audio_RecordNew" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6845,6 +6991,7 @@
             <li lc="fr" tx="Enregistrer maintenant" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="zh" tx="开始新记录" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="ar" tx="تسجيل جديد" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Înregistrare nouă" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Questions_Audio_SaveAnswer" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6856,6 +7003,7 @@
             <li lc="fr" tx="Appuyer pour faire un enregistrement sonore" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="点击记录语音" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="انقر لتسجيل صوت" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Apăsați pentru a înregistra sunetul" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Questions_Gps_SaveAnswer" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6873,12 +7021,14 @@
             <li lc="zh-CN" tx="点击记录GPS位置" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="点击记录GPS" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="انقر لتسجيل نظام تسجيل الموقع" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Apăsați pentru a înregistra localizarea GPS" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Questions_Integer_ProtectedValue" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="New answer to a protected question should be greater or equal to {0}" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Новый ответ на защищённый вопрос должен быть больше либо равен {0}" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Un răspuns nou la o întrebare protejată ar trebui să fie mai mare sau egal cu {0}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Questions_Multimedia_TapToTakePhoto" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6896,6 +7046,7 @@
             <li lc="zh-CN" tx="点击拍照" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="点击拍照" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="انقر لالتقاط صورة" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Apăsați pentru a face o fotografie" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Questions_QrBarcode_SaveAnswer" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6913,6 +7064,7 @@
             <li lc="zh-CN" tx="点击扫描条形码" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="点击扫描条形码" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="انقر لاخذ الشيفرة" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Apăsați pentru a prelua codul de bare" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Questions_RemoveRowFromRosterMessage" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6930,6 +7082,7 @@
             <li lc="zh-CN" tx="您确定要从每个相关的名单中删除{0}行吗？" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="zh" tx="您确定要从每个相关名单中删除{0}行吗？" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="ar" tx="هل تريد بالتأكيد إزالة {0} صف (صفوف) من كل القوائم ذات الصلة؟" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="ro" tx="Sigur doriți să eliminați {0} rânduri din fiecare Listă asociată?" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Questions_Timestamp_SaveAnswer" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6940,6 +7093,7 @@
             <li lc="fr" tx="Appuyer pour capter l'heure actuelle" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="点击记录当前时间" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="انقر لتسجيل الوقت الحالي" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Apăsați pentru a înregistra timpul curent" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_SignatureClear" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6948,6 +7102,7 @@
             <li lc="ru" tx="Очистить" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="清除" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Effacer" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Șterge" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_SignatureSignHere" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6956,6 +7111,7 @@
             <li lc="ru" tx="Подпись" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="在此签名" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Signez ici" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Semnează aici" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_Supervisor_Comment_Caption" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6966,6 +7122,7 @@
             <li lc="fr" tx="Commentaire du chef d'équipe" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="督导员评论" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تعليق المشرف" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Comentariu supervizor" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interview_TakeSignature" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6974,6 +7131,7 @@
             <li lc="ru" tx="Сохранить подпись" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="保存签名" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="signature du magasin" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Stocați semnătura" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interviewer_ApplicationName" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -6991,6 +7149,7 @@
             <li lc="zh-CN" tx="Survey Solutions调查员" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="Survey Solutions调查员" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="باحث Survey Solutions" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Survey Solutions Interviewer" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interviewer_AudioRecording" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -7002,6 +7161,7 @@
             <li lc="fr" tx="Enegistrement sonore" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="zh" tx="正在录音" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تسجيل صوتي" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Inregistrare audio" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interviewer_Diagnostics" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -7016,6 +7176,7 @@
             <li lc="fr" tx="Diagnostiques" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="诊断" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="التشخيص" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Diagnosticare" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interviewer_Done" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -7027,6 +7188,7 @@
             <li lc="fr" tx="Achevé" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="zh" tx="已完成" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="ar" tx="أنجز" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
+            <li lc="ro" tx="Efectuat" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interviewer_RelinkDevice_Cancel" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -7044,6 +7206,7 @@
             <li lc="zh-CN" tx="取消" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="取消" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="إلغاء" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
+            <li lc="ro" tx="Anulare" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interviewer_RelinkDevice_InterviewerLinkedToAnotherDeviceMessage" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -7061,6 +7224,7 @@
             <li lc="zh-CN" tx="您已经被分配到另外一台设备" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="您已经被分配到其他设备" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="أنت على وشك إكمال هذا المقابلة" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Sunteți deja autentificat pe alt dispozitiv" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interviewer_RelinkDevice_RelinkButtonText" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -7078,6 +7242,7 @@
             <li lc="zh-CN" tx="重新链接" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="重新连接" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="إعادة ربط" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Reautentificare" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interviewer_RelinkDevice_RelinkMessage" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -7095,6 +7260,7 @@
             <li lc="zh-CN" tx="如果您重新链接到这台设备 &lt;br/&gt; 旧设备上的所有数据将会丢失" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="如果您重新连接到这个设备上，&lt;br/&gt;旧设备的所有数据将会丢失" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="إذا تمت إعادة الربط إلى هذا الجهاز &lt;br/&gt; فسيتم فقد جميع البيانات الموجودة على الجهاز القديم" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Dacă vă reautentificați pe aceast dispozitiv &lt;br/&gt; toate datele de pe cel vechi se vor pierde" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Interviewer_TryOnlineLogin" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -7112,6 +7278,7 @@
             <li lc="zh-CN" tx="尝试在线登录" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="尝试在线登陆" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="حاول تسجيل الدخول عبر الانترنت" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Încercați să vă autentificați online" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="InterviewKey" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -7122,6 +7289,7 @@
             <li lc="fr" tx="Numéro d'entretien : {0}" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="问卷编号：{0}" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="مفتاح المقابلة: {0}" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Cheia Chestionarului: {0}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="LoginNameHint" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -7139,6 +7307,7 @@
             <li lc="zh-CN" tx="您的用户名" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="您的用户名" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تسجيل دخولك" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Utilizator" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="LoginText" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -7156,6 +7325,7 @@
             <li lc="zh-CN" tx="登录" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="登录" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تسجيل الدخول" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Intră în cont" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="LoginTitleText" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -7173,6 +7343,7 @@
             <li lc="zh-CN" tx="Survey Solutions问卷测试" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="Survey Solutions问卷测试器" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="اختبار Survey Solutions للاستبيان" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Survey Solutions Questionnaire Tester" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="MenuItem_Title_AreaCancel" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -7183,6 +7354,7 @@
             <li lc="fr" tx="Quitter l'éditeur de carte" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="退出地图编辑器" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="الخروج من محرر الخريطة" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Ieșire Editor Hărți" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="MenuItem_Title_AreaCancelEdit" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -7193,6 +7365,7 @@
             <li lc="fr" tx="Effacer tout" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="清除所有" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="امسح الكل" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Șterge tot" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Messages_WaitPendingOperation" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -7203,6 +7376,7 @@
             <li lc="fr" tx="Veuillez attendre la fin de l'opération en cours" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="请等待至当前操作完成" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="يرجى الانتظار حتى اكتمال العملية" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Așteptați până când operația curentă este finalizată" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="MissingPermission" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -7213,6 +7387,7 @@
             <li lc="fr" tx="L'appli Interviewer n'a pas assez d'autorisation pour exécuter l'action demandée" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="应用程序没有权限执行该操作" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="التطبيق ليس لديه أذونات كافية لتنفيذ الإجراء المطلوب" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Aplicația nu are permisiuni suficiente pentru a executa acțiunea solicitată" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="MissingPermissions_Camera" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -7223,6 +7398,7 @@
             <li lc="fr" tx="L'appli Interviewer doit avoir la permission d'utiliser la caméra pour répondre à cette question. Réessayez de répondre à la question et accordez les permissions. Si vous ne voyez pas les autorisations contextuelles, allez dans Paramètres d'Android et autorisez l'application à utiliser la caméra." ts="Translated" qs="ToReview" />
             <li lc="zh" tx="应用程序需要有权限使用相机才能回答此问题。请重新回答此问题并允许使用。如果没有看到权限弹出窗口，请在平板设置中允许程序使用相机。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="ar" tx="يحتاج التطبيق  لصلاحية استخدام الكاميرا من أجل الإجابة على هذا السؤال. أعد محاولة الإجابة عن السؤال والسماح بالوصول. إذا كنت لا ترى الصلاحيات المنبثقة انتقل إلى الإعدادات واسمح للتطبيق لاستخدام الكاميرا." ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Aplicația trebuie să aibă permisiunea de a folosi camera pentru a răspunde la această întrebare. Reîncercați răspunsul la întrebare și permiteți accesul. Dacă nu vedeți opțiunile de tip popup, accesați Setări și permiteți aplicației să folosească camera." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="MissingPermissions_Microphone" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -7233,6 +7409,7 @@
             <li lc="fr" tx="L'appli Interviewer doit avoir la permission d'utiliser le microphone pour répondre à cette question. Réessayez de répondre à la question et accordez les permissions. Si vous ne voyez pas les autorisations contextuelles, allez dans Paramètres d'Android et autorisez l'application à utiliser le microphone." ts="Translated" qs="ToReview" />
             <li lc="zh" tx="应用程序需要有权限使用麦克风才能回答此问题。请重新回答此问题并允许使用。如果没有看到权限弹出窗口，请在平板设置中允许程序使用麦克风。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="ar" tx="يحتاج التطبيق  لصلاحية استخدام المايكروفون  من أجل الإجابة على هذا السؤال. أعد محاولة الإجابة عن السؤال والسماح بالوصول. إذا كنت لا ترى الصلاحيات المنبثقة انتقل إلى الإعدادات واسمح للتطبيق لاستخدام المايكروفون." ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Aplicația trebuie să aibă permisiunea de a folosi microfonul pentru a răspunde la această întrebare. Reîncercați răspunsul la întrebare și permiteți accesul. Dacă nu vedeți opțiunile de tip popup, accesați Setări și permiteți aplicației să folosească microfonul." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="MissingPermissions_Storage" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -7243,6 +7420,7 @@
             <li lc="fr" tx="L'appli Interviewer doit avoir la permission d'utiliser le stockage interne pour répondre à cette question. Réessayez de répondre à la question et accordez les permissions. Si vous ne voyez pas les autorisations contextuelles, allez dans Paramètres d'Android et autorisez l'application à utiliser le stockage interne." ts="Translated" qs="ToReview" />
             <li lc="zh" tx="应用程序需要有权限使用存储才能回答此问题。请重新回答此问题并允许使用。如果没有看到权限弹出窗口，请在平板设置中允许程序使用存储。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="ar" tx="يحتاج التطبيق لديك لصلاحية استخدام مساحة التخزين  من أجل الإجابة على هذا السؤال. أعد محاولة الإجابة عن السؤال والسماح بالوصول. إذا كنت لا ترى الصلاحيات المنبثقة انتقل إلى الإعدادات واسمح للتطبيق لاستخدام مساحة التخزين." ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Aplicația trebuie să aibă permisiunea de a folosi spațiul de stocare pentru a răspunde la această întrebare. Reîncercați răspunsul la întrebare și permiteți accesul. Dacă nu vedeți opțiunile de tip popup, accesați Setări și permiteți aplicației să folosească spațiul de stocare." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Multimedia_PickFromGallery" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -7253,6 +7431,7 @@
             <li lc="fr" tx="Choisissez dans la galerie" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="从相册选择" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="اختر من المعرض" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Alegeți din galerie" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Multimedia_PictureSource" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -7263,6 +7442,7 @@
             <li lc="fr" tx="Sélectionner une modalité" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="选择一个选项" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="حدد اختيارا" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Selectați o opțiune" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Multimedia_TakePhoto" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -7273,6 +7453,7 @@
             <li lc="fr" tx="Prendre une photo" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="拍照" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="التقط صورة" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Faceți o fotografie" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="No" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -7290,6 +7471,7 @@
             <li lc="zh-CN" tx="否" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="否" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="لا" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Nu" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Ok" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -7300,6 +7482,7 @@
             <li lc="fr" tx="OK" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="zh" tx="好" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="حسنا" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Ok" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="PasswordHint" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -7317,6 +7500,7 @@
             <li lc="zh-CN" tx="密码" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="密码" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="كلمة المرور" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Parolă" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="PlayServicesLocationWatcher_Google_Play_Services_are_not_available" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -7334,6 +7518,7 @@
             <li lc="zh-CN" tx="Google Play服务不可用" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="无法获得Google Play服务" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="خدمات Google Play غير متوفرة" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Google Play nu este disponibil" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="PlayServicesLocationWatcher_Location_Client_not_started" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -7351,6 +7536,7 @@
             <li lc="zh-CN" tx="位置客户端未启动" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="定位客户端未启动" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="لم يبدأ موقع العميل" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Localizarea Clientului nu a început" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="PlayServicesLocationWatcher_You_cannot_start_MvxLocation_service_more_than_once" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -7368,6 +7554,7 @@
             <li lc="zh-CN" tx="您不能重复启动MvxLocation服务" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="您无法多次启动MvxLocation服务" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="لا يمكنك بدء تشغيل خدمة MvxLocation أكثر من مرة" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Puteți porni serviciul MvxLocation o singură dată" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="PrefilledQuestions_StartInterview" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -7385,6 +7572,7 @@
             <li lc="zh-CN" tx="开始" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="开始" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="ابدأ " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
+            <li lc="ro" tx="START" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Prefs_GpsDesiredAccuracySubTitle" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -7396,6 +7584,7 @@
             <li lc="fr" tx="Précision, en metres, des coordonnées GPS" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="精度（米）" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="عدد الأمتار لتحديد الدقة" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Numărul de metri necesari pentru a stabili acuratețea" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Prefs_GpsDesiredAccuracyTitle" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -7408,6 +7597,7 @@
             <li lc="fr" tx="Précision minime des questions GPS" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="GPS问题精度" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="الدقة المطلوبة لأسئلة نظام الملاحة GPS" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Acuratețe necesară pentru întrebările GPS" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Prefs_ShowLocationOnMap" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -7418,6 +7608,7 @@
             <li lc="fr" tx="Montrer l'emplacement sur la carte" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="在地图上显示位置" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="اظهار الموقع على الخريطة" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Afișare localizare pe hartă" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Prefs_ShowLocationOnMapSummary" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -7428,6 +7619,7 @@
             <li lc="fr" tx="Afficher la carte afin de montrer l'emplacement des questions GPS. Noter: la carte ne sera affichée qu'en cas de connexion internet" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="加载地图以显示GPS问题的位置" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تحميل الخريطة لإظهار الموقع الجغرافي للأسئلة" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Încărcați harta pentru a afișa localizarea pentru întrebările GPS" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Prefs_VibrateOnErrorSummary" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -7438,6 +7630,7 @@
             <li lc="fr" tx="La tablette va vibrer lorsqu'une réponse va à l'encontre d'une condition de validation" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="当一个问题没有通过校验时，平板电脑将会震动" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="سيهتز الجهاز اللوحي في حال عدم اجتياز الاجابة للتحقق من الصحة" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Tableta vibrează când un răspuns nu satisface condiția de validare" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Prefs_VibrateOnErrorTitle" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -7448,6 +7641,7 @@
             <li lc="fr" tx="Vibrer quand une réponse invalide est renseignée" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="在答案非法时震动" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="الاهتزاز عند إعطاء إجابة غير صالحة" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Vibrează când este dat un răspuns nevalid" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="RealQuestion_Hint" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -7465,6 +7659,7 @@
             <li lc="zh-CN" tx="点击输入小数" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="点击输入数字" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="انقر لادخال الابعاد" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Apăsați pentru a introduce zecimale" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="StaySignedInText" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -7482,6 +7677,31 @@
             <li lc="zh-CN" tx="保持登录状态" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="保持登录状态" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="استمر مسجلا للدخول" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Rămâneți autentificat" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Supervisor_ApplicationName" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Survey Solutions Supervisor" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Survey Solutions Supervisor" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Supervisor_Complete_Approve_btn" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Approve" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Утвердить" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Supervisor_Complete_Assign_btn" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Assign" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Назначить" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Supervisor_Complete_Reject_btn" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Reject" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Отклонить" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Synchronization_UserLinkedToAnotherDevice_Description" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -7499,6 +7719,7 @@
             <li lc="zh-CN" tx="您在这台设备上没有调查任务。请发送平板电脑信息、清除应用程序数据并使用另外一个账户登录。" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="您在这台设备上没有调查任务。请发送平板电脑信息、清除应用程序数据并使用另外一个账户登录" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="ليس لديك أية مهام على هذا الجهاز. إرسال معلومات الى الجهاز اللوحي، بيانات التطبيق واضحة وتسجيل الدخول عن طريق حساب آخر" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Nu aveți nicio sarcină alocată pe acest dispozitiv. Trimiteți informații despre tabletă, ștergeți datele aplicației și autentificați-vă cu alt cont" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="TextListQuestion_Hint" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -7516,6 +7737,7 @@
             <li lc="zh-CN" tx="点击输入新的项目" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="点击输入新的项目" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="انقر لادخال عنصر جديد" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Apăsați pentru a introduce un nou element" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="TextQuestion_Hint" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -7533,6 +7755,7 @@
             <li lc="zh-CN" tx="点击输入文本" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="点击输入文本" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="انقر لادخال نص" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Apăsați pentru a introduce text" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="TextQuestion_MaskHint" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -7550,6 +7773,7 @@
             <li lc="zh-CN" tx="点击输入文本（{0}）" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="点击输入文本 （{0}）" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="انقر لادخال نص ({0})" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Apăsați pentru a introduce text ({0})" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Validity_Answered_Invalid_ErrorCaption" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -7567,6 +7791,7 @@
             <li lc="zh-CN" tx="答案无效" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="答案无效‘" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="ar" tx="إجابة غير صالحة" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Răspunsul este invalid" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Validity_NotAnswered_InterviewException_ErrorCaption" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -7584,6 +7809,7 @@
             <li lc="zh-CN" tx="答案未保存" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="答案未被保存" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="ar" tx="لم يتم حفظ الإجابة" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Răspunsul nu a fost salvat" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="VariableEmptyValue" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -7594,6 +7820,7 @@
             <li lc="fr" tx="&lt;empty&gt;" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="&lt;空&gt;" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="&lt;فارغ&gt;" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="&lt;necompletat&gt;" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Version_Not_Supports" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -7604,6 +7831,7 @@
             <li lc="fr" tx="Votre appareil ne prend pas en charge cette fonctionnalité" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="您的程序版本不支持此功能" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="لا يدعم إصدار التطبيق الخاص بك هذه الوظيفة" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Versiunea dvs. de aplicație nu acceptă această funcție" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Warning" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -7612,6 +7840,7 @@
             <li lc="ru" tx="Предупреждение" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="警告" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Attention" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
+            <li lc="ro" tx="Avertizare" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Warnings" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -7620,6 +7849,7 @@
             <li lc="ru" tx="Предупреждения" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="警告" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Avertissements" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Avertizări" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx" nm="Yes" rc="" dnt="false" nms="Translations.Enumerator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -7637,6 +7867,7 @@
             <li lc="zh-CN" tx="是" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="是" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="نعم" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Da" ts="Translated" qs="ToReview" />
           </lis>
         </it>
       </items>
@@ -7925,12 +8156,12 @@
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\Interviews.resx" nm="ImportInterviews_GenericError" rc="" dnt="false" nms="Translations.Headquarters" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Error during import of interview with identifying questions {0}. InterviewerId {1}, QuestionnaireId {2}, Exception: {3}" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Произошла ошибка в процессе импорта назначения с ответами: {0}. Ответственный: {1}, Ошибка: {2}" er="The invariant text and the locale text contain string format items (e.g. &quot;{0}&quot;) that don't match." ts="Changed" qs="ErrorVerifier" />
-            <li lc="zh" tx="导入访谈失败：{0}。InterviewerId{1}, Exception:{2}" er="The invariant text and the locale text contain string format items (e.g. &quot;{0}&quot;) that don't match." ts="Changed" qs="ErrorVerifier" />
+            <li lc="nn-nn" tx="Error during import of assignment with answers: {0}. Responsible: {1}, Exception: {2}" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Произошла ошибка в процессе импорта назначения с ответами: {0}. Ответственный: {1}, Ошибка: {2}" er="The invariant text and the locale text contain string format items (e.g. &quot;{0}&quot;) that don't match." ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="导入访谈失败：{0}。InterviewerId{1}, Exception:{2}" er="The invariant text and the locale text contain string format items (e.g. &quot;{0}&quot;) that don't match." ts="Changed" qs="ToReview" />
             <li lc="es" tx="Error durante la importación de entrevista con las preguntas de identificación {0}. Identificado de entrevista {1}, Cuestionario {2}, Excepción: {3}" ts="Changed" qs="ToReview" />
             <li lc="fr" tx="Erreur lors de l'importation de l'entretien avec des questions d'identification {0}. EnquêteurId {1}, QuestionnaireId {2}, Exception: {3}" ts="Changed" qs="ToReview" />
-            <li lc="ar" tx="تم إنشاء وثيقة PDF (دقائق).&#xD;&#xA;الحجم: {1{;كيلوبايت " er="The invariant text and the locale text contain string format items (e.g. &quot;{0}&quot;) that don't match." ts="Changed" qs="ErrorVerifier" />
+            <li lc="ar" tx="تم إنشاء وثيقة PDF (دقائق).&#xD;&#xA;الحجم: {1{;كيلوبايت " er="The invariant text and the locale text contain string format items (e.g. &quot;{0}&quot;) that don't match." ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\Interviews.resx" nm="ImportInterviews_IncorrectDatafile" rc="" dnt="false" nms="Translations.Headquarters" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -7957,12 +8188,6 @@
           <lis>
             <li lc="nn-nn" tx="Password-protected archives are not supported" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Архивы защищенные паролем не поддерживаются" ts="Translated" qs="ToReview" />
-          </lis>
-        </it>
-        <it rn="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\PreloadingVerificationMessages.resx" nm="HasAssignmentsToImport" rc="" dnt="false" nms="Translations.Headquarters" bac="EmbeddedResource" hgt="0" wdt="0">
-          <lis>
-            <li lc="nn-nn" tx="Please, wait until previous import of assignments is completed" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Пожалуйста подождите пока завершится текущий процесс импорта назначений" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\PreloadingVerificationMessages.resx" nm="PL0002_MoreThenOneLevel" rc="" dnt="false" nms="Translations.Headquarters" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -7996,17 +8221,6 @@
             <li lc="es" tx="Archivo no puede ser asignado a ninguna lista del cuestionario" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="fr" tx="Le fichier ne peut être représenté par aucun tableau dans le questionnaire." ts="Translated" qs="ToReview" />
             <li lc="ar" tx="لا يمكن تعيين الملف إلى أي لائحة في الاستبيان." ts="Translated" qs="ToReview" />
-          </lis>
-        </it>
-        <it rn="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\PreloadingVerificationMessages.resx" nm="PL0005_QuestionDataTypeMismatch" rc="" dnt="false" nms="Translations.Headquarters" bac="EmbeddedResource" hgt="0" wdt="0">
-          <lis>
-            <li lc="pt" tx="[PL0005] N/A" ts="Translated" qs="ToReview" />
-            <li lc="nn-nn" tx="[PL0005] N/A" ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="[PL0005] N/A" ts="Translated" qs="ToReview" />
-            <li lc="es" tx="[PL0005] N/A" ts="Translated" qs="ToReview" />
-            <li lc="fr" tx="[PL0005] N / A" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="[PL0005] N/A" ts="Translated" qs="ToReview" />
-            <li lc="ar" tx="[PL0002] N/A" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\PreloadingVerificationMessages.resx" nm="PL0006_IdDublication" rc="" dnt="false" nms="Translations.Headquarters" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -8052,50 +8266,6 @@
             <li lc="ar" tx="لا يتعارض معرف القائمة مع حجم القائمة." ts="Translated" qs="ToReview" />
           </lis>
         </it>
-        <it rn="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\PreloadingVerificationMessages.resx" nm="PL0010_UnsupportedLinkedQuestion" rc="" dnt="false" nms="Translations.Headquarters" bac="EmbeddedResource" hgt="0" wdt="0">
-          <lis>
-            <li lc="pt" tx="Pergunta vinculada não é suportada no pré-carregamento de dados." ts="Translated" qs="ToReview" />
-            <li lc="nn-nn" tx="Linked questions cannot be preloaded." ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="数据预加载不支持关联问题。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="es" tx="No es posible que una pregunta enlazada sea precargada" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="fr" tx="Les questions liées ne peuvent pas être préchargées." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Ссылочные вопросы не могут быть предварительно загружены." ts="Translated" qs="ToReview" />
-            <li lc="ar" tx="لا يمكن تحميل الأسئلة المرتبطة مسبقا." ts="Translated" qs="ToReview" />
-          </lis>
-        </it>
-        <it rn="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\PreloadingVerificationMessages.resx" nm="PL0011_GeneralError" rc="" dnt="false" nms="Translations.Headquarters" bac="EmbeddedResource" hgt="0" wdt="0">
-          <lis>
-            <li lc="pt" tx="Ocorreu um erro geral." ts="Translated" qs="ToReview" />
-            <li lc="nn-nn" tx="General error occurred." ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="发生了一般错误。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="es" tx="Ocurrió un error general" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="fr" tx="Une erreur générale s'est produite." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Произошла общая ошибка." ts="Translated" qs="ToReview" />
-            <li lc="ar" tx="حدث خطأ عام." ts="Translated" qs="ToReview" />
-          </lis>
-        </it>
-        <it rn="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\PreloadingVerificationMessages.resx" nm="PL0012_QuestionWasNotFound" rc="" dnt="false" nms="Translations.Headquarters" bac="EmbeddedResource" hgt="0" wdt="0">
-          <lis>
-            <li lc="pt" tx="Pergunta não foi encontrada." er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="nn-nn" tx="Question found in the uploaded file(s) that does not exist in the questionnaire" ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="在问卷中不存在已上传文件中的问题" ts="Translated" qs="ToReview" />
-            <li lc="es" tx="Se ha encontrado una pregunta en el archivo cargado que no existe en el cuestionario" ts="Translated" qs="ToReview" />
-            <li lc="fr" tx="Question trouvée dans le (s) fichier (s) téléchargé (s) qui n'existe pas dans le questionnaire" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Вопрос, найденный в загруженном файле (файлах), не существует в опроснике" ts="Translated" qs="ToReview" />
-            <li lc="ar" tx="السؤال الذي تم العثور عليه في الملف (الملفات) التي تم تحميلها والتي لا توجد في الاستبيان" ts="Translated" qs="ToReview" />
-          </lis>
-        </it>
-        <it rn="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\PreloadingVerificationMessages.resx" nm="PL0013_ValueIsNullOrEmpty" rc="" dnt="false" nms="Translations.Headquarters" bac="EmbeddedResource" hgt="0" wdt="0">
-          <lis>
-            <li lc="pt" tx="Valor fornecido é nulo ou está vazio" ts="Translated" qs="ToReview" />
-            <li lc="nn-nn" tx="Provided value is null or empty" ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="提供的为空值" ts="Translated" qs="ToReview" />
-            <li lc="es" tx="Valor provisto es nulo o vacío" ts="Translated" qs="ToReview" />
-            <li lc="fr" tx="La valeur fournie est nulle ou vide" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Значение равно null или пустое" ts="Translated" qs="ToReview" />
-            <li lc="ar" tx="القيمة المقدمة صفر أو فارغة" ts="Translated" qs="ToReview" />
-          </lis>
-        </it>
         <it rn="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\PreloadingVerificationMessages.resx" nm="PL0014_ParsedValueIsNotAllowed" rc="" dnt="false" nms="Translations.Headquarters" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="pt" tx="[PL0014] Valor da pergunta fornecido não é permitido." ts="Translated" qs="ToReview" />
@@ -8105,17 +8275,6 @@
             <li lc="fr" tx="La valeur de la question fournie n'est pas autorisée." ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Значение не допускается в качестве ответа вопрос." ts="Translated" qs="ToReview" />
             <li lc="ar" tx="قيمة السؤال المقدمة غير مسموحة" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-          </lis>
-        </it>
-        <it rn="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\PreloadingVerificationMessages.resx" nm="PL0015_QuestionTypeIsIncorrect" rc="" dnt="false" nms="Translations.Headquarters" bac="EmbeddedResource" hgt="0" wdt="0">
-          <lis>
-            <li lc="pt" tx="[PL0015] Tipo de pergunta não é correto." ts="Translated" qs="ToReview" />
-            <li lc="nn-nn" tx="Type of question is not correct." ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="[PL0015] 问题类型不正确。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="es" tx="El tipo de pregunta es incorrecto" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="fr" tx="Le type de question n'est pas correct." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Тип вопроса неверен." ts="Translated" qs="ToReview" />
-            <li lc="ar" tx="نوع السؤال غير صحيح" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\PreloadingVerificationMessages.resx" nm="PL0016_ExpectedDateTimeNotParsed" rc="" dnt="false" nms="Translations.Headquarters" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -8173,21 +8332,10 @@
             <li lc="ar" tx="لا يمكن أن يكون لحجم قائمة السؤال قيم سالبة" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
-        <it rn="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\PreloadingVerificationMessages.resx" nm="PL0023_UnsupportedMultimediaQuestion" rc="" dnt="false" nms="Translations.Headquarters" bac="EmbeddedResource" hgt="0" wdt="0">
-          <lis>
-            <li lc="pt" tx="Pergunta de imagens não é suportada no pré-carregamento de dados." ts="Translated" qs="ToReview" />
-            <li lc="nn-nn" tx="Picture question cannot be preloaded." ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="数据预加载不支持图片问题。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="es" tx="No es posible que una pregunta de tipo imagen sea precargada" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="fr" tx="La question d'image ne peut pas être préchargée." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Вопрос с картинкой не может быть предварительно загружен." ts="Translated" qs="ToReview" />
-            <li lc="ar" tx="لا يمكن اعادة تحميل سؤال الصورة" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-          </lis>
-        </it>
         <it rn="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\PreloadingVerificationMessages.resx" nm="PL0024_DataWasNotFound" rc="" dnt="false" nms="Translations.Headquarters" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="pt" tx="O pré-carregamento de dados não foi encontrado." er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
-            <li lc="nn-nn" tx="Preloading data were not found" ts="Translated" qs="ToReview" />
+            <li lc="pt" tx="O pré-carregamento de dados não foi encontrado." er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
+            <li lc="nn-nn" tx="Preloading data were not found." ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Загруженные данные не обнаружены" ts="Changed" qs="ToReview" />
             <li lc="zh" tx="未找到预加载数据" ts="Changed" qs="ToReview" />
             <li lc="es" tx="Datos precargados no se encontraron" ts="Changed" qs="ToReview" />
@@ -8195,48 +8343,37 @@
             <li lc="ar" tx="لم يتم العثور على بيانات التحميل المسبق" ts="Changed" qs="ToReview" />
           </lis>
         </it>
-        <it rn="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\PreloadingVerificationMessages.resx" nm="PL0025_ResponsibleNameIsEmpty" rc="" dnt="false" nms="Translations.Headquarters" bac="EmbeddedResource" hgt="0" wdt="0">
-          <lis>
-            <li lc="pt" tx="O nome do responsável não foi fornecido." er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="nn-nn" tx="Responsible field was not provided for 1 or more observations" ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="没有提供负责人的名称" ts="Translated" qs="ToReview" />
-            <li lc="es" tx="Campo responsable inexistente en una o mas observaciones" ts="Translated" qs="ToReview" />
-            <li lc="fr" tx="Le champ responsable n'a pas été fourni pour une ou plusieurs observations" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Поле с ответственным не было указано " ts="Translated" qs="ToReview" />
-            <li lc="ar" tx="الحقل المسؤول لم يقدم لواحد أو أكثر من الملاحظات" ts="Translated" qs="ToReview" />
-          </lis>
-        </it>
         <it rn="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\PreloadingVerificationMessages.resx" nm="PL0026_ResponsibleWasNotFound" rc="" dnt="false" nms="Translations.Headquarters" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="pt" tx="O Responsável fornecido não foi encontrado" ts="Translated" qs="ToReview" />
-            <li lc="nn-nn" tx="Responsible does not exist for 1 or more observations" ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="没有找到提供的负责人" ts="Translated" qs="ToReview" />
-            <li lc="es" tx="No existe responsable para una o mas observaciones" ts="Translated" qs="ToReview" />
-            <li lc="fr" tx="Le responsable n'existe pas pour 1 ou plusieurs observations" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Ответственный не существует " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
-            <li lc="ar" tx="المسؤول غير موجود لواحد أو أكثر من الملاحظات" ts="Translated" qs="ToReview" />
+            <li lc="pt" tx="O Responsável fornecido não foi encontrado." ts="Changed" qs="ToReview" />
+            <li lc="nn-nn" tx="Responsible does not exist for 1 or more observations." ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="没有找到提供的负责人" ts="Changed" qs="ToReview" />
+            <li lc="es" tx="No existe responsable para una o mas observaciones" ts="Changed" qs="ToReview" />
+            <li lc="fr" tx="Le responsable n'existe pas pour 1 ou plusieurs observations" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Ответственный не существует ." er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Changed" qs="ToReview" />
+            <li lc="ar" tx="المسؤول غير موجود لواحد أو أكثر من الملاحظات" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\PreloadingVerificationMessages.resx" nm="PL0027_ResponsibleIsLocked" rc="" dnt="false" nms="Translations.Headquarters" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="pt" tx="Responsável está bloqueado" ts="Translated" qs="ToReview" />
-            <li lc="nn-nn" tx="Responsible is a locked user for 1 or more observations" ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="负责人被锁定" ts="Translated" qs="ToReview" />
-            <li lc="es" tx="El responsable de una o mas observaciones se encuentra bloqueado" ts="Translated" qs="ToReview" />
-            <li lc="fr" tx="Le Responsable est un utilisateur verrouillé pour 1 ou plusieurs observations" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Ответственный помечен заблокированный" ts="Translated" qs="ToReview" />
-            <li lc="ar" tx="المسؤول هو مستخدم مقفل لواحد أو أكثر من الملاحظات" ts="Translated" qs="ToReview" />
+            <li lc="pt" tx="Responsável está bloqueado." ts="Changed" qs="ToReview" />
+            <li lc="nn-nn" tx="Responsible is a locked user for 1 or more observations." ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="负责人被锁定" ts="Changed" qs="ToReview" />
+            <li lc="es" tx="El responsable de una o mas observaciones se encuentra bloqueado" ts="Changed" qs="ToReview" />
+            <li lc="fr" tx="Le Responsable est un utilisateur verrouillé pour 1 ou plusieurs observations" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Ответственный помечен заблокированный." ts="Changed" qs="ToReview" />
+            <li lc="ar" tx="المسؤول هو مستخدم مقفل لواحد أو أكثر من الملاحظات" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\PreloadingVerificationMessages.resx" nm="PL0028_UserIsNotSupervisorOrInterviewer" rc="" dnt="false" nms="Translations.Headquarters" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="pt" tx="O Usuário fornecido não é o Supervisor ou Entrevistador" ts="Translated" qs="ToReview" />
-            <li lc="nn-nn" tx="User is not Supervisor or Interviewer for 1 or more observations" ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="提供的用户不是督导员或调查员" ts="Translated" qs="ToReview" />
-            <li lc="es" tx="El usuario no es el Supervisor o Entrevistador en una o mas observaciones" ts="Translated" qs="ToReview" />
-            <li lc="fr" tx="L'utilisateur n'est pas un Chef d'équipe ou un Enquêteur pour une ou plusieurs observations" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Пользователь не является супервизором или интервьюером " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
-            <li lc="ar" tx="المستخدم ليس المشرف أو الباحث ل 1 أو أكثر من الملاحظات" ts="Translated" qs="ToReview" />
+            <li lc="pt" tx="O Usuário fornecido não é o Supervisor ou Entrevistador." ts="Changed" qs="ToReview" />
+            <li lc="nn-nn" tx="User is not Supervisor or Interviewer for 1 or more observations." ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="提供的用户不是督导员或调查员" ts="Changed" qs="ToReview" />
+            <li lc="es" tx="El usuario no es el Supervisor o Entrevistador en una o mas observaciones" ts="Changed" qs="ToReview" />
+            <li lc="fr" tx="L'utilisateur n'est pas un Chef d'équipe ou un Enquêteur pour une ou plusieurs observations" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Пользователь не является супервизором или интервьюером." er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Changed" qs="ToReview" />
+            <li lc="ar" tx="المستخدم ليس المشرف أو الباحث ل 1 أو أكثر من الملاحظات" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\PreloadingVerificationMessages.resx" nm="PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40" rc="" dnt="false" nms="Translations.Headquarters" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -8336,36 +8473,6 @@
             <li lc="ar" tx="يجب أن تكون الكمية أكبر من أو تساوي -1." ts="Translated" qs="ToReview" />
           </lis>
         </it>
-        <it rn="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\PreloadingVerificationMessages.resx" nm="PL0037_ColumnIsNotIdentifying" rc="" dnt="false" nms="Translations.Headquarters" bac="EmbeddedResource" hgt="0" wdt="0">
-          <lis>
-            <li lc="nn-nn" tx="Column cannot be mapped to non identifying question" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Колонка должна быть связана только с идентифицирующим вопросом" ts="Translated" qs="ToReview" />
-            <li lc="es" tx="La columna no pude ser enlazada con una pregunta no identificadora" ts="Translated" qs="ToReview" />
-            <li lc="fr" tx="La colonne ne peut pas être mappée à une question non identifiant" ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="列未能与识别问题相匹配" ts="Translated" qs="ToReview" />
-            <li lc="ar" tx="لا يمكن تعيين العامود الى أي سؤال غير محدد" ts="Translated" qs="ToReview" />
-          </lis>
-        </it>
-        <it rn="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\PreloadingVerificationMessages.resx" nm="PL0038_UnsupportedAreaQuestion" rc="" dnt="false" nms="Translations.Headquarters" bac="EmbeddedResource" hgt="0" wdt="0">
-          <lis>
-            <li lc="nn-nn" tx="Area question cannot be preloaded." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Воспрос измерения площади не может быть загружен." ts="Translated" qs="ToReview" />
-            <li lc="es" tx="Pregunta que captura área no puede ser precargada" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="fr" tx="La question de surface ne peut pas être préchargée." ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="不能预加载面积问题" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="ar" tx="سؤال المنطقة لا يمكن إعادة تحميله" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-          </lis>
-        </it>
-        <it rn="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\PreloadingVerificationMessages.resx" nm="PL0039_UnsupportedAudioQuestion" rc="" dnt="false" nms="Translations.Headquarters" bac="EmbeddedResource" hgt="0" wdt="0">
-          <lis>
-            <li lc="nn-nn" tx="Audio question cannot be preloaded." ts="Translated" qs="ToReview" />
-            <li lc="es" tx="Pregunta que captura un audio no puede ser precargada" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="fr" tx="La question audio ne peut pas être préchargée." ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="不能预加载录音问题" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="ru" tx="Звуковой вопрос не может быть предварительно загружен." ts="Translated" qs="ToReview" />
-            <li lc="ar" tx="لا يمكن إعادة تحميل السؤال الصوتي" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-          </lis>
-        </it>
         <it rn="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\PreloadingVerificationMessages.resx" nm="PL0040_QuestionnaireDataIsNotFound" rc="" dnt="false" nms="Translations.Headquarters" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="File with questionnaire level data is missing." ts="Translated" qs="ToReview" />
@@ -8378,10 +8485,10 @@
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\PreloadingVerificationMessages.resx" nm="PL0041_AnswerExceedsMaxAnswersCount" rc="" dnt="false" nms="Translations.Headquarters" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Answer to multiple choice question cannot contain more than {0} answers." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Количество отвеченных опций не может быть больше чем максимально разрешенное количство отвеченных опций" er="The invariant text and the locale text contain string format items (e.g. &quot;{0}&quot;) that don't match." ts="Changed" qs="ErrorVerifier" />
-            <li lc="zh" tx="多选题的答案不能包含超过 个答案。" er="The invariant text and the locale text contain string format items (e.g. &quot;{0}&quot;) that don't match." ts="Changed" qs="ErrorVerifier" />
-            <li lc="fr" tx="La question à choix multiple ne peut pas avoir plus de {0} réponses." ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Answered options count to multiple choice question can't be more than max allowed answers count." ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Количество отвеченных опций не может быть больше чем максимально разрешенное количство отвеченных опций." er="The invariant text and the locale text contain string format items (e.g. &quot;{0}&quot;) that don't match." ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="多选题的答案不能包含超过 个答案。" er="The invariant text and the locale text contain string format items (e.g. &quot;{0}&quot;) that don't match." ts="Changed" qs="ToReview" />
+            <li lc="fr" tx="La question à choix multiple ne peut pas avoir plus de {0} réponses." ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\PreloadingVerificationMessages.resx" nm="PL0042_IdIsEmpty" rc="" dnt="false" nms="Translations.Headquarters" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -8392,60 +8499,28 @@
             <li lc="fr" tx="La colonne Id est vide." ts="Translated" qs="ToReview" />
           </lis>
         </it>
-        <it rn="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\PreloadingVerificationMessages.resx" nm="PL0043_TextListAnswerHasDuplicatesInTexts" rc="" dnt="false" nms="Translations.Headquarters" bac="EmbeddedResource" hgt="0" wdt="0">
-          <lis>
-            <li lc="nn-nn" tx="Text list question {0} has non-unique items: {1}. Interview id: {2}" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Вопрос со списком {0} содержит неуникальные элементы: {1}. Код интервью: {2}" ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="文本列表问题{0}包含非唯一项目：{1}。问卷编号：{2}" ts="Translated" qs="ToReview" />
-            <li lc="fr" tx="La question de la liste de textes {0} comporte des éléments avec du texte en double: {1} pour l'identifiant de l'interview {2}" ts="Translated" qs="ToReview" />
-          </lis>
-        </it>
-        <it rn="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\PreloadingVerificationMessages.resx" nm="PL0044_TextListAnswerHasDuplicatesInCodes" rc="" dnt="false" nms="Translations.Headquarters" bac="EmbeddedResource" hgt="0" wdt="0">
-          <lis>
-            <li lc="nn-nn" tx="Text list question {0} has non-unique item codes: {1}. Interview id: {2}" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Вопрос со списком {0} содержит неуникальные коды: {1}. Код интервью: {2}" ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="文本列表问题{0}包含非唯一项目编号：{1}。问卷编号：{2}" ts="Translated" qs="ToReview" />
-            <li lc="fr" tx="La question de la liste de textes {0} comporte des éléments avec des codes en double: {1} pour l'identifiant de l'interview {2}" ts="Translated" qs="ToReview" />
-          </lis>
-        </it>
-        <it rn="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\PreloadingVerificationMessages.resx" nm="PL0045_TextListAnswerHasDifferentAmountOfRecordsThanRosterFile" rc="" dnt="false" nms="Translations.Headquarters" bac="EmbeddedResource" hgt="0" wdt="0">
-          <lis>
-            <li lc="nn-nn" tx="Inconsistency detected between the number of records in the data file {0}, which has {1} records, and the trigger question {2}, which has {3} rows. Interview id: {4}" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Несоответствие найдено между количеством записей в файле {0},  который содержит {1}  записей и вопросом-источником {2}, который содержит {3} строки. Код интервью: {4}" ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="数据文件{0} 包含的记录不一致。数据文件 包含{1}个记录，触发问题{2}包含{3}个记录。问卷编号：{4}" er="" ts="Changed" qs="ToReview" />
-            <li lc="fr" tx="Incohérence détectée entre le nombre d'éléments dans le répertoire et la question de la liste de textes {0}. La liste contient {1} éléments mais&#xA;la question déclenchée {2} comporte {3} élément pour l'identifiant de l’interview&#xA;: {4}" er="The invariant text and the locale text contain string format items (e.g. &quot;{0}&quot;) that don't match." ts="Translated" qs="ToReview" />
-          </lis>
-        </it>
-        <it rn="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\PreloadingVerificationMessages.resx" nm="PL0046_HasDifferentTextsInListAndRosterTitles" rc="" dnt="false" nms="Translations.Headquarters" bac="EmbeddedResource" hgt="0" wdt="0">
-          <lis>
-            <li lc="nn-nn" tx="Inconsistency detected between the items lists in the data file {0} and question {1}. Items present in the text list and absent in the file: {2}. Rows from data file absent in text list question: {3}. Interview id: {4}" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Несоответствие найдено между списком в файле с данными {0} и вопросом {1}. Элементы, присутствующие в списковом вопсрое и отсутствующие в файле: {2}. Строки из файла с данными, отсутствующие в списке: {3}. Код интервью: {4}" ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="数据文件{0}和问题{1}中的项目列表之间存在不一致。出现在文本列表中但不存在于数据文件中的项目为：{2}。出现在数据文件中但不存在于文本列表中的项目为：{3}。问卷编号：{4}" ts="Translated" qs="ToReview" />
-            <li lc="fr" tx="Incohérence détectée entre les éléments de liste dans le tableau {0} et la question de liste de textes {1}. Éléments présents dans la liste de texte et&#xA;absents de la liste: {2}. Éléments présents dans la liste, mais pas dans la&#xA;question de la liste de texte: {3}. Identifiant de l'interview: {4}" ts="Translated" qs="ToReview" />
-          </lis>
-        </it>
         <it rn="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\PreloadingVerificationMessages.resx" nm="PL0047_ProtectedVariables_MissingColumn" rc="" dnt="false" nms="Translations.Headquarters" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Required column {0} is missing" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Необходимая колонка {0} отсутствует" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Required column {0} is missing." ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Необходимая колонка {0} отсутствует." ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\PreloadingVerificationMessages.resx" nm="PL0048_ProtectedVariables_VariableNotFoundInQuestionnaire" rc="" dnt="false" nms="Translations.Headquarters" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Protected variable is not found in provided questionnaire" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Защищённая переменная не найдена в выбранном опроснике" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Protected variable is not found in provided questionnaire." ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Защищённая переменная не найдена в выбранном опроснике." ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\PreloadingVerificationMessages.resx" nm="PL0049_ProtectedVariables_VariableNotSupportsProtection" rc="" dnt="false" nms="Translations.Headquarters" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Variable has type that does not support protection" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Переменная имеет тип не поддерживающий защиту" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Variable has type that does not support protection." ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Переменная имеет тип не поддерживающий защиту." ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\PreloadingVerificationMessages.resx" nm="PL0050_CategoricalMulti_AnswerMustBeGreaterOrEqualThen1" rc="" dnt="false" nms="Translations.Headquarters" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Negative value is not allowed for Categorical Multi select question" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Ответ на мультиселект вопрос должен быть больше или равен 1" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Negative value is not allowed for Categorical Multi select question." ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Ответ на мультиселект вопрос должен быть больше или равен 1." ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\Resources\PreloadingVerificationMessages.resx" nm="PL0052_ColumnByTextListRosterSizeAnswerNotFound" rc="" dnt="false" nms="Translations.Headquarters" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -9292,6 +9367,7 @@
             <li lc="zh-CN" tx="您的账户已被锁定。请联系督导员。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="zh" tx="您的账户已被锁定。请联系督导员。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="ar" tx="تم قفل حساب المستخدم. يرجى الاتصال بالمشرف." ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Contul dvs. Este blocat. Contactați supervizorul." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="AccountIsNotAnInterviewer" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -9309,6 +9385,7 @@
             <li lc="zh-CN" tx="您的账户没有调查员权限。" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="您的账户没有调查员权限" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="لا يحتوي حسابك على دور الباحث" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Contul dvs nu are rol de anchetator." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="AccountIsNotApprovedOnServer" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -9326,6 +9403,7 @@
             <li lc="zh-CN" tx="您的账户未获批准。请联系督导员。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="zh" tx="您的账户未获批准。请联系督导员。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="ar" tx="لم تتم الموافقة على حسابك. يرجى الاتصال بالمشرف." ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Contul dvs. nu a fost aprobat. Contactați supervizorul." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="ApplicationIncompatibleWithServer" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -9343,6 +9421,7 @@
             <li lc="zh-CN" tx="您的应用程序与服务器不兼容。请更新您的调查员应用程序。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="zh" tx="您的应用程序与服务器不兼容。请更新调查员应用程序。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="ar" tx="تطبيقك غير متوافق مع الخادم. قم بتحديث تطبيق الباحث الخاص بك" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="ro" tx="Aplicația nu este compatibilă cu serverul. Actualizați aplicația Interviewer." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Dashboard_AssignmentCard_SubTitleCountdown_UnlimitedFormat" ns="{0} - number of interviews created" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -9353,6 +9432,7 @@
             <li lc="fr" tx="A collecter : illimité" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="待调查：不限数量" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="للجمع: غير محدود" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="De colectat: nelimitat" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Dashboard_AssignmentCard_SubTitleCountdownFormat" ns="{0} - number of interviews created&#xD;&#xA;    {1} - number of interviewer to be created by assignment" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -9363,6 +9443,7 @@
             <li lc="fr" tx="Reste à collecter : {0} entretiens" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="待调查：{0}个问卷" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="للجمع : {0} مقابلة (مقابلات)" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="De colectat: {0} chestionare" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Dashboard_AssignmentCard_SubTitleSingleInterivew" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -9373,6 +9454,7 @@
             <li lc="fr" tx="Un seul entretien à collecter" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="单个问卷任务" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="مهمة مقابلة واحدة" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Chetionar unic" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Dashboard_AssignmentsTabTitle" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -9385,6 +9467,7 @@
             <li lc="zh" tx="新建" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="انشاء جديد" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Crie um novo" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Creare Nou" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Dashboard_CensusAssignment" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -9395,6 +9478,7 @@
             <li lc="fr" tx="Mode recensement" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="普查" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="التعداد" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Recensământ" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Dashboard_CompletedLinkText" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -9412,17 +9496,19 @@
             <li lc="zh-CN" tx="已完成({0})" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="已完成（{0}）" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="مكتمل ({0})" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Finalizate ({0})" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Dashboard_CompletedTabText" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Completed interviews, will be uploaded during &#xA;your next synchronization" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Завершенные интервью будут загружены на сервер&#xD;&#xA;при следующей синхронизации" ts="Translated" qs="ToReview" />
-            <li lc="uk-UA" tx="Закінчені інтерв'ю, будуть завантажені на сервер &#xD;&#xA;при наступній синхронізації" ts="Translated" qs="ToReview" />
-            <li lc="es" tx="Las entrevistas completadas se cargarán durante tu próxima sincronización" ts="Translated" qs="ToReview" />
-            <li lc="fr" tx="Les entretiens marqués comme achevés seront envoyés lors de votre prochaine synchronisation." er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="zh" tx="已经完成的问卷将在下一次同步时上传到服务器" ts="Translated" qs="ToReview" />
-            <li lc="ar" tx="المقابلات المكتملة، سيتم تحميلها اثناء عملية التزامن القادمة" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Completed interviews, will be uploaded during &#xD;&#xA;your next synchronization" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Завершенные интервью будут загружены на сервер&#xD;&#xA;при следующей синхронизации" ts="Changed" qs="ToReview" />
+            <li lc="uk-UA" tx="Закінчені інтерв'ю, будуть завантажені на сервер &#xD;&#xA;при наступній синхронізації" ts="Changed" qs="ToReview" />
+            <li lc="es" tx="Las entrevistas completadas se cargarán durante tu próxima sincronización" ts="Changed" qs="ToReview" />
+            <li lc="fr" tx="Les entretiens marqués comme achevés seront envoyés lors de votre prochaine synchronisation." er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="已经完成的问卷将在下一次同步时上传到服务器" ts="Changed" qs="ToReview" />
+            <li lc="ar" tx="المقابلات المكتملة، سيتم تحميلها اثناء عملية التزامن القادمة" ts="Changed" qs="ToReview" />
+            <li lc="ro" tx="Chetionarele finalizate vor fi încărcate în timpul următoarei sincronizări" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Dashboard_CreateNewTabText" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -9435,6 +9521,7 @@
             <li lc="zh" tx="使用模板创建新问卷" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="انشاء مقابلة جديدة باستخدام القوالب" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Criar novas entrevistas usando modelos" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Creare chestionar nou utilizând șabloane" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Dashboard_Discard" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -9445,6 +9532,7 @@
             <li lc="fr" tx="Supprimer" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="放弃" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تجاهل" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Renunțare" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Dashboard_Interview_AssignmentLabelFormat" ns="{0} - is an assignment id" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -9455,6 +9543,7 @@
             <li lc="fr" tx="Affectation #{0}" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="任务编号#{0}" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="ar" tx="مهمة #{0}" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Sarcina #{0}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Dashboard_Interview_QuestionsAnsweredFormat" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -9465,6 +9554,7 @@
             <li lc="fr" tx="{0} question(s) renseignée(s)" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="已回答{0}个问题" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="{0}  إجابة (إجابات) تم الإجابة عليها" er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
+            <li lc="ro" tx="{0} întrebări răspunse" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Dashboard_NeedTextForSearch" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -9473,6 +9563,7 @@
             <li lc="ru" tx="Выполните поиск для отображения результатов" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="搜索以显示结果" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Exécuter la recherche pour afficher les résultats" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Efectuare căutare pentru afișare rezultate" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Dashboard_NewItemsLinkText" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -9490,6 +9581,7 @@
             <li lc="zh-CN" tx="新({0})" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="新（{0}）" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="جديد ({0})" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Item nou ({0})" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Dashboard_No_InterviewKey" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -9500,6 +9592,7 @@
             <li lc="fr" tx="Aucun numéro d'entretien" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="没有问卷主键" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="لا مفتاح المقابلة" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Cheie chestionar inexistentă" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Dashboard_NoInterviewsSyncButton" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -9517,23 +9610,25 @@
             <li lc="zh-CN" tx="同步" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="同步" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تزامن" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Sincronizare" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Dashboard_NoInterviewsText" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="es" tx="Sincronizar para obtener nuevas tareas o contactar a su supervisor para recibir más instrucciones" ts="Translated" qs="ToReview" />
-            <li lc="fr" tx="Synchroniser afin d'obtenir de nouvelles affectations, ou contacter votre superviseur pour des informations complémentaires" ts="Translated" qs="ToReview" />
-            <li lc="id-ID" tx="Sinkronkan untuk mendapatkan tugas baru &#xD;&#xA;atau hubungi penyelia Anda&#xD;&#xA;untuk instruksi lebih lanjut" ts="Translated" qs="ToReview" />
-            <li lc="km" tx="គ្រប់គ្រងរួម ដើម្បីធ្វើកិច្ចការថ្មី ឬទាក់ទង ប្រធានរបស់អ្នកសំរាប់ការណែនាំបន្ត។ " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
-            <li lc="pt" tx="Sincronizar para obter novo tarefas ou entrar em contato seu supervisor para mais instruções" ts="Translated" qs="ToReview" />
-            <li lc="nn-nn" tx="Synchronize to get new tasks&#xA;or contact your supervisor&#xA;for further instructions" ts="Translated" qs="ToReview" />
+            <li lc="es" tx="Sincronizar para obtener nuevas tareas o contactar a su supervisor para recibir más instrucciones" ts="Changed" qs="ToReview" />
+            <li lc="fr" tx="Synchroniser afin d'obtenir de nouvelles affectations, ou contacter votre superviseur pour des informations complémentaires" ts="Changed" qs="ToReview" />
+            <li lc="id-ID" tx="Sinkronkan untuk mendapatkan tugas baru &#xD;&#xA;atau hubungi penyelia Anda&#xD;&#xA;untuk instruksi lebih lanjut" ts="Changed" qs="ToReview" />
+            <li lc="km" tx="គ្រប់គ្រងរួម ដើម្បីធ្វើកិច្ចការថ្មី ឬទាក់ទង ប្រធានរបស់អ្នកសំរាប់ការណែនាំបន្ត។ " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Changed" qs="ToReview" />
+            <li lc="pt" tx="Sincronizar para obter novo tarefas ou entrar em contato seu supervisor para mais instruções" ts="Changed" qs="ToReview" />
+            <li lc="nn-nn" tx="Synchronize to get new tasks&#xD;&#xA;or contact your supervisor&#xD;&#xA;for further instructions" ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Синхронизируйтесь для получения новых заданий&#xD;&#xA;или свяжитесь с Вашим супервизором&#xD;&#xA;для дальнейших инструкций" ts="Changed" qs="ToReview" />
-            <li lc="th-TH" tx="ซิงโครไนส์เพื่อรับงานใหม่ หรือติดต่อ Supervisor เพื่อรับคำแนะนำเพิ่มเติม" ts="Translated" qs="ToReview" />
-            <li lc="uk-UA" tx="Синхронізуйтесь, щоб отримати нові призначення або зв'яжіться з вашим керівникомі, щоб отримати подальші інструкції" ts="Translated" qs="ToReview" />
-            <li lc="vi-VN" tx="Đồng bộ hóa để có nhiệm vụ mới hoặc liên hệ với giám sát của bạn để được hướng dẫn thêm" ts="Translated" qs="ToReview" />
-            <li lc="zh-CN" tx="同步以获取新任务或联系督导员获得进一步的指导" ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="同步以获取新任务或联系督导员获得进一步的指导" ts="Translated" qs="ToReview" />
-            <li lc="ar" tx="مزامنة للحصول على مهام جديدة أو اتصل بمشرفك للحصول على مزيد من التعليمات" ts="Translated" qs="ToReview" />
+            <li lc="th-TH" tx="ซิงโครไนส์เพื่อรับงานใหม่ หรือติดต่อ Supervisor เพื่อรับคำแนะนำเพิ่มเติม" ts="Changed" qs="ToReview" />
+            <li lc="uk-UA" tx="Синхронізуйтесь, щоб отримати нові призначення або зв'яжіться з вашим керівникомі, щоб отримати подальші інструкції" ts="Changed" qs="ToReview" />
+            <li lc="vi-VN" tx="Đồng bộ hóa để có nhiệm vụ mới hoặc liên hệ với giám sát của bạn để được hướng dẫn thêm" ts="Changed" qs="ToReview" />
+            <li lc="zh-CN" tx="同步以获取新任务或联系督导员获得进一步的指导" ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="同步以获取新任务或联系督导员获得进一步的指导" ts="Changed" qs="ToReview" />
+            <li lc="ar" tx="مزامنة للحصول على مهام جديدة أو اتصل بمشرفك للحصول على مزيد من التعليمات" ts="Changed" qs="ToReview" />
+            <li lc="ro" tx="Sincronizați pentru sarcini noi sau contactați supervizorul pentru instrucțiuni" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Dashboard_NoInterviewsTitle" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -9551,6 +9646,7 @@
             <li lc="zh-CN" tx="您没有新任务" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="您没有新任务" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="ليس لديك أية مهام جديدة" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Nu aveți sarcini noi" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Dashboard_NoNewItemsLinkText" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -9568,6 +9664,7 @@
             <li lc="zh-CN" tx="没有新任务" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="没有新任务" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="لا جديد" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Niciun item nou" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Dashboard_NotFoundSearchResult" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -9576,6 +9673,7 @@
             <li lc="ru" tx="Ничего не найдено" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="没找到" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="fr" tx="Aucun element trouvé" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
+            <li lc="ro" tx="Nimic găsit" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Dashboard_Open" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -9586,6 +9684,7 @@
             <li lc="fr" tx="Ouvrir" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="打开" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="افتح" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
+            <li lc="ro" tx="Deschidere" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Dashboard_QuestionnairesTabText" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -9598,23 +9697,25 @@
             <li lc="zh" tx="您可以使用任务创建新问卷" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="يمكنك إنشاء مقابلات جديدة باستخدام المهام" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Criar novas entrevistas usando tarefas" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Puteți crea noi chestionare utilizând sarcinile" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Dashboard_Reinitialize_Interview_Message" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="es" tx="Esta entrevista está completada. Desea reiniciar la entrevista?" ts="Changed" qs="ToReview" />
-            <li lc="fr" tx="Cet entretien est terminé. Vous voulez le réinitialiser afin d'y apporter des changements ?" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Cet entretien est terminé. Vous voulez le réinitialiser afin d'y apporter des changements ?" ts="Changed" qs="ToReview" />
             <li lc="id-ID" tx="Wawancara ini selesai. Apakah Anda ingin memulai kembali wawancara?" ts="Changed" qs="ToReview" />
-            <li lc="km" tx="ការសម្ភាសន៍បានបញ្ចប់។ តើអ្នកចងចាប់ផ្តើមសម្ភាសន៍ដែរឬទេ?​" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
+            <li lc="km" tx="ការសម្ភាសន៍បានបញ្ចប់។ តើអ្នកចងចាប់ផ្តើមសម្ភាសន៍ដែរឬទេ?​" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
             <li lc="pt" tx="Esta entrevista é concluída. Quer reiniciar a entrevista?" ts="Changed" qs="ToReview" />
-            <li lc="nn-nn" tx="This interview is completed. Do you want to restart the interview?" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="This interview is completed. Do you want to reopen the interview?" ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Это интервью завершено. Хотите переоткрыть его?" ts="Changed" qs="ToReview" />
-            <li lc="th-TH" tx="สัมภาษณ์เสร็จสมบูรณ์ ต้องการกลับไปแก้ไขเพิ่มเติมหรือไม่" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
+            <li lc="th-TH" tx="สัมภาษณ์เสร็จสมบูรณ์ ต้องการกลับไปแก้ไขเพิ่มเติมหรือไม่" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
             <li lc="uk-UA" tx="Це інтерв'ю було завершене. Ви бажаєте знову почати інтерв'ю?" ts="Changed" qs="ToReview" />
             <li lc="vi-VN" tx="Cuộc phỏng vấn đã hoàn thành. Bạn có muốn khởi động lại cuộc phỏng vấn này không?" ts="Changed" qs="ToReview" />
-            <li lc="zh-CN" tx="该调查已结束。您想要重新开始调查吗？" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
-            <li lc="zh" tx="该问卷已填写完成。您想要重新填写吗？" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
-            <li lc="ar" tx="اكتملت هذه المقابلة. هل تريد إعادة بدء المقابلة؟" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
+            <li lc="zh-CN" tx="该调查已结束。您想要重新开始调查吗？" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="该问卷已填写完成。您想要重新填写吗？" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
+            <li lc="ar" tx="اكتملت هذه المقابلة. هل تريد إعادة بدء المقابلة؟" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
+            <li lc="ro" tx="Acest interviu este finalizat. Doriți să redeschideți interviul?" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Dashboard_RejectedLinkText" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -9632,17 +9733,19 @@
             <li lc="zh-CN" tx="驳回({0})" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="已驳回（{0}）" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="مرفوض ({0})" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Respins ({0})" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Dashboard_RejectedTabText" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Interviews which have been rejected by supervisor&#xA;You need to resolve issues noted on cover" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Интервью которые были возвращены супервизором&#xD;&#xA;Вам необходимо учесть замечания супервизора на обложке интервью" ts="Translated" qs="ToReview" />
-            <li lc="uk-UA" tx="Інтерв'ю які були повернуті супервізором&#xD;&#xA;Вам необхідно прийняти до уваги зауваження супервізора на обкладинці інтерв'ю" ts="Translated" qs="ToReview" />
-            <li lc="es" tx="Entrevistas que han sido rechazadas por el supervisor. Necesita solventar los problemas indicados" ts="Translated" qs="ToReview" />
-            <li lc="fr" tx="Entretiens rejetés par le chef d'équipe. Vous devez résoudre les problèmes indiques sur la page de garde de l'entretien" ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="被督导员驳回的问卷&#xD;&#xA;您需要解决封面上标出的问题" ts="Translated" qs="ToReview" />
-            <li lc="ar" tx="المقابلات التي تم رفضها من قبل المشرف تحتاج إلى حل المشكلات التي تمت الإشارة إليها على الغلاف " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
+            <li lc="nn-nn" tx="Interviews which have been rejected by supervisor&#xD;&#xA;You need to resolve issues noted on cover" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Интервью которые были возвращены супервизором&#xD;&#xA;Вам необходимо учесть замечания супервизора на обложке интервью" ts="Changed" qs="ToReview" />
+            <li lc="uk-UA" tx="Інтерв'ю які були повернуті супервізором&#xD;&#xA;Вам необхідно прийняти до уваги зауваження супервізора на обкладинці інтерв'ю" ts="Changed" qs="ToReview" />
+            <li lc="es" tx="Entrevistas que han sido rechazadas por el supervisor. Necesita solventar los problemas indicados" ts="Changed" qs="ToReview" />
+            <li lc="fr" tx="Entretiens rejetés par le chef d'équipe. Vous devez résoudre les problèmes indiques sur la page de garde de l'entretien" ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="被督导员驳回的问卷&#xD;&#xA;您需要解决封面上标出的问题" ts="Changed" qs="ToReview" />
+            <li lc="ar" tx="المقابلات التي تم رفضها من قبل المشرف تحتاج إلى حل المشكلات التي تمت الإشارة إليها على الغلاف " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Changed" qs="ToReview" />
+            <li lc="ro" tx="Interviuri care au fost respinse de către supervizor&#xA;Trebuie să rezolvați problemele menționate pe copertă" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Dashboard_RemoveInterviewQuestion" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -9660,6 +9763,7 @@
             <li lc="zh-CN" tx="您确定要删除这个调查{0}吗？" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="zh" tx="您确定要删除问卷{0}吗？" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="ar" tx="هل تريد بالتأكيد حذف هذه المقابلة {0}؟" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="ro" tx="Sigur doriți să ștergeți acest chestionar {0}?" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Dashboard_Reopen" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -9670,6 +9774,7 @@
             <li lc="fr" tx="Rouvrir" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="重新打开" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="اعادة فتح" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Redeschidere" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Dashboard_Search_ExitSearch" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -9678,6 +9783,7 @@
             <li lc="ru" tx="Выйти из поиска" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="退出搜索" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Annuler la recherche" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Ieșire din Căutare" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Dashboard_SearchResult" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -9686,6 +9792,7 @@
             <li lc="ru" tx="Найдено {0} элементов" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="找到{0}个元素" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="{0} élément trouvé" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="{0} elemente găsite" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Dashboard_SearchWatermark" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -9694,6 +9801,7 @@
             <li lc="ru" tx="Введите текст для поиска" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="输入要搜索的文本" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Saisir le text a rechercher" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Introduceți text pentru căutare" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Dashboard_ShowLocation" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -9704,6 +9812,7 @@
             <li lc="fr" tx="Montrer la localisation" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="显示位置" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="اظهار الموقع" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Afișare localizare" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Dashboard_Start" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -9715,6 +9824,7 @@
             <li lc="fr" tx="Démarrer" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="zh" tx="开始" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="ابدأ" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
+            <li lc="ro" tx="Start" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Dashboard_StartedLinkText" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -9732,18 +9842,20 @@
             <li lc="zh-CN" tx="已开始({0})" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="已开始（{0}）" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="بدأت ({0})" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Începute ({0})" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Dashboard_StartedTabText" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Interviews which have been started but not completed&#xA;You need to complete it to be synchronized" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Интервью которые были начаты, но не закончены &#xD;&#xA;Вам нужно закончить их перед отправкой на сервер" ts="Translated" qs="ToReview" />
-            <li lc="uk-UA" tx="Інтерв'ю які були розпочаті, але не закінчені &#xD;&#xA;Вам потрібно закінчити їх перед відправкою на сервер" ts="Translated" qs="ToReview" />
-            <li lc="es" tx="Entrevistas que han sido comenzadas pero no completadas. Necesita completarlas para ser sincronizadas" ts="Translated" qs="ToReview" />
-            <li lc="fr" tx="Entretiens entamés mais pas achevés. Vous devez les achever afin de pouvoir les syncrhoniser" ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="已经开始但尚未完成的问卷&#xD;&#xA;您需要完成问卷才能同步" ts="Translated" qs="ToReview" />
-            <li lc="ar" tx="المقابلات التي بدأت ولكن لم تكتمل&#xD;&#xA;تحتاج إلى إكمالها لتكون متزامنة " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
-            <li lc="pt" tx="Entrevistas que foram iniciadas mas não concluídas &#xD;&#xA;Você precisa completá-lo para ser sincronizado" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Interviews which have been started but not completed&#xD;&#xA;You need to complete it to be synchronized" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Интервью которые были начаты, но не закончены &#xD;&#xA;Вам нужно закончить их перед отправкой на сервер" ts="Changed" qs="ToReview" />
+            <li lc="uk-UA" tx="Інтерв'ю які були розпочаті, але не закінчені &#xD;&#xA;Вам потрібно закінчити їх перед відправкою на сервер" ts="Changed" qs="ToReview" />
+            <li lc="es" tx="Entrevistas que han sido comenzadas pero no completadas. Necesita completarlas para ser sincronizadas" ts="Changed" qs="ToReview" />
+            <li lc="fr" tx="Entretiens entamés mais pas achevés. Vous devez les achever afin de pouvoir les syncrhoniser" ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="已经开始但尚未完成的问卷&#xD;&#xA;您需要完成问卷才能同步" ts="Changed" qs="ToReview" />
+            <li lc="ar" tx="المقابلات التي بدأت ولكن لم تكتمل&#xD;&#xA;تحتاج إلى إكمالها لتكون متزامنة " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Changed" qs="ToReview" />
+            <li lc="pt" tx="Entrevistas que foram iniciadas mas não concluídas &#xD;&#xA;Você precisa completá-lo para ser sincronizado" ts="Changed" qs="ToReview" />
+            <li lc="ro" tx="Chestionare care au fost începute, dar nu au fost finalizate&#xD;&#xA;Trebuie să le finalizați pentru a fi sincronizate" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Dashboard_StartNewInterview" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -9755,6 +9867,7 @@
             <li lc="zh" tx="开始填写新问卷" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="ar" tx="بدء مقابلة جديدة" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Iniciar nova entrevista" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Începere chestionar nou" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Dashboard_Title" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -9766,6 +9879,7 @@
             <li lc="fr" tx="{0} entretiens pour {1}" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="{1}的问卷共{0}个" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="{1} مقابلات ل  {0}" er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
+            <li lc="ro" tx="{0} sarcini pentru {1}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Dashboard_ViewIssues" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -9776,6 +9890,7 @@
             <li lc="fr" tx="Voir problèmes" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="查看问题" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="عرض المشكلات" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Vizualizare Probleme" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="DashboardItem_AssignedOn" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -9793,6 +9908,7 @@
             <li lc="zh-CN" tx="已于{0}分配" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="分配于{0}" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تم تعينه على {0}" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Alocat de {0}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="DashboardItem_AssignmentCreatedComment" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -9803,6 +9919,7 @@
             <li lc="fr" tx="Entretiens entamés : {0}" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="已创建的问卷：{0}" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="المقابلات التي تم إنشاؤها: {0}" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Chestionare create: {0}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="DashboardItem_AssignmentLeftComment" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -9813,6 +9930,7 @@
             <li lc="fr" tx="{0} entertien(s)" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="{0}个问卷" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="{0} مقابلة/مقابلات" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="{0} chestionare" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="DashboardItem_CensusModeComment" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -9830,6 +9948,7 @@
             <li lc="zh-CN" tx="普查模式，已创建调查：{0}" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="普查模式，已创建问卷：{0}" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="وضع التعداد، المقابلات التي تم إنشاؤها: {0}" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Mod recensământ, Chestionare create: {0}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="DashboardItem_CompletedOn" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -9847,6 +9966,7 @@
             <li lc="zh-CN" tx="已于{0}完成" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="完成于{0}" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="مكتمل في ({0})" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Finalizate de {0}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="DashboardItem_CreatedOn" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -9864,6 +9984,7 @@
             <li lc="zh-CN" tx="已于{0}创建" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="创建于{0}" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تم إنشاؤه على {0}" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Create de {0}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="DashboardItem_NotStarted" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -9881,6 +10002,7 @@
             <li lc="zh-CN" tx="未开始" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="未开始" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="لم يبدأ" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Neînceput" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="DashboardItem_RejectedOn" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -9898,6 +10020,7 @@
             <li lc="zh-CN" tx="已于{0}驳回" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="驳回于{0}" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تم الرفض على {0}" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Respins de {0}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="DashboardItem_StartedOn" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -9915,6 +10038,7 @@
             <li lc="zh-CN" tx="已于{0}开始" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="开始于{0}" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="بدأت على {0}" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Început de {0}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="DashboardItem_Title" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -9932,6 +10056,7 @@
             <li lc="zh-CN" tx="{0} (v{1})" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="{0}（版本{1}）" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="{0} (v{1})" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="{0} (v{1})" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Diagnostics_Backup_Description" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -9946,6 +10071,7 @@
             <li lc="fr" tx="Toutes les données receuillies sur cet appareil seront stockées dans un fichier de sauvegarde." ts="Translated" qs="ToReview" />
             <li lc="zh" tx="收集到的所有数据将以备份文件的形式保存在这台设备上。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="ar" tx="سيتم حفظ جميع البيانات التي تم جمعها إلى ملف النسخ الاحتياطي على هذا الجهاز." ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Toate datele colectate vor fi salvate în fișierul de backup de pe acest dispozitiv." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Diagnostics_Backup_Title" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -9960,6 +10086,7 @@
             <li lc="fr" tx="Sauvegarder toutes les informations collectées" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="备份收集到的所有信息" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="النسخ الاحتياطي لجميع المعلومات" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Realizare backup pentru informațiile colectate" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Diagnostics_BackupDate_Title" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -9974,6 +10101,7 @@
             <li lc="fr" tx="Date :" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="保存时间：" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="ar" tx="عند الحفظ" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="ro" tx="Data salvării:" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Diagnostics_BackupFileLocation_Title" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -9988,6 +10116,7 @@
             <li lc="fr" tx="Répertoire :" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="备份文件位置：" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="ar" tx="موقع ملف النسخ الاحتياطي:" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Calea fișierului backup:" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Diagnostics_BackupReady_Title" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10002,6 +10131,7 @@
             <li lc="fr" tx="Fichier de sauvegarde créé" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="数据已保存" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تم حفظ البيانات" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Date salvate" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Diagnostics_BackupScope_Title" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10016,6 +10146,7 @@
             <li lc="fr" tx="Taille :" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="范围：" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="ar" tx="نطاق:" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Scop:" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Diagnostics_BandwidthTestConnectionAbsent_Title" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10029,6 +10160,7 @@
             <li lc="es" tx="&lt;font color=&quot;red&quot;&gt;No hay conexión a internet&lt;/Font&gt;" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="&lt;font color=&quot;red&quot;&gt;Aucune connexion internet&lt;/font&gt;" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="&lt;font color=&quot;red&quot;&gt;没有网络连接&lt;/font&gt;" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="&lt;font color=&quot;red&quot;&gt;Fără conexiune la internet&lt;/font&gt;" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Diagnostics_BandwidthTestConnectionNotOK_Title" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10043,6 +10175,7 @@
             <li lc="fr" tx="Connexion est &lt;font color=&quot;red&quot;&gt;pas bien&lt;/font&gt;" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="网络连接&lt;font color=&quot;red&quot;&gt;较差&lt;/font&gt;" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="الاتصال &lt;font color=&quot;red&quot;&gt;غير جيد&lt;/font&gt;" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Conexiunea este &lt;font color=&quot;red&quot;&gt;slabă&lt;/font&gt;" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Diagnostics_BandwidthTestConnectionOK_Title" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10057,6 +10190,7 @@
             <li lc="fr" tx="Connexion est OK" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="网络连接良好" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="الاتصال على ما يرام" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Există conexiune la internet" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Diagnostics_BandwidthTestConnectionToTheServerAbsent_Title" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10070,6 +10204,7 @@
             <li lc="es" tx="&lt;font color=&quot;red&quot;&gt;No hay conexión con el servidor&lt;/font&gt;" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="&lt;font color=&quot;red&quot;&gt;Aucune connexion avec le serveur&lt;/font&gt;" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="&lt;font color=&quot;red&quot;&gt;未连接到服务器&lt;/font&gt;" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="&lt;font color=&quot;red&quot;&gt;Nu există conexiunea la server&lt;/font&gt;" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Diagnostics_BandwidthTestConnectionType_Title" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10084,6 +10219,7 @@
             <li lc="fr" tx="Type de connexion :" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="连接类型：" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="ar" tx="نوع الاتصال" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="ro" tx="Tipul conexiunii:" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Diagnostics_BandwidthTestNetworkName_Title" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10098,6 +10234,7 @@
             <li lc="fr" tx="Nom du réseau :" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="网络名称：" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="ar" tx="اسم الشبكة:" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Numele rețelei:" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Diagnostics_BandwidthTestPing_Title" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10112,6 +10249,7 @@
             <li lc="fr" tx="Ping :" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="Ping：" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="ar" tx="Ping:" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Ping:" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Diagnostics_CheckVersion_Description" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10126,6 +10264,7 @@
             <li lc="fr" tx="Nous allons voir si une version plus récente de l'appli Interviewer existe sur le serveur Headquarters" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="我们将检查服务器上的新版本" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="سوف نتحقق من الإصدار الأحدث على خادم hq" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Se va verifica ultima versiune a aplicației pe serverul HQ." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Diagnostics_CheckVersion_Title" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10140,6 +10279,7 @@
             <li lc="fr" tx="Version: {0}. Chercher une nouvelle version de l'appli Interviewer" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="zh" tx="版本：{0}。检查新版本" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="النسخة :{0} تحقق من النسخة الجديدة" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Versiune: {0}. Se verifică ultima versiune" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Diagnostics_Delete" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10154,6 +10294,7 @@
             <li lc="fr" tx="Supprimer" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="删除" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="حذف" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Ștergere" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Diagnostics_DownloadingPleaseWait" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10168,6 +10309,7 @@
             <li lc="fr" tx="Téléchargement en cours. Veuillez patienter ..." ts="Translated" qs="ToReview" />
             <li lc="zh" tx="下载中，请稍后…" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="ar" tx="جار التنزيل، يرجى الانتظار ..." ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Se descarcă, vă rugăm așteptați..." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Diagnostics_NewVersionAvaliable_Title" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10182,6 +10324,7 @@
             <li lc="fr" tx="Une nouvelle version existe. Voulez-vous la télécharger et mettre à jour l'appli Interviewer sur cet appareil ?" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="zh" tx="存在新版本。您想要下载并更新应用程序吗？" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="ar" tx="يوجد إصدار جديد. هل ترغب في تحميل وتحديث التطبيق؟" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="ro" tx="Există o nouă versiune. Doriți să o descărcați și să actualizați aplicația?" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Diagnostics_NewVersionNumber_Title" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10196,6 +10339,7 @@
             <li lc="fr" tx="Numéro de version :" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="版本号：" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="ar" tx="رقم النسخة" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="ro" tx="Numărul versiunii:" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Diagnostics_No" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10210,6 +10354,7 @@
             <li lc="fr" tx="Non" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="否" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="لا" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Nu" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Diagnostics_Restore_Description" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10224,6 +10369,7 @@
             <li lc="fr" tx="Restaurer depuis un fichier de sauvegarde aura comme conséquence de remplacer toute les affectations actuellement sur cet appareil." er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="zh" tx="恢复保存的数据将替换这台设备上的所有任务" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="عند استعادة البيانات المحفوظة فانها سوف تحل محل جميع المهام الحالية على هذا الجهاز" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Prin restaurarea datelor salvate se vor înlocui toate sarcinile de pe acest dispozivitv" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Diagnostics_Restore_Title" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10238,6 +10384,7 @@
             <li lc="fr" tx="Restaurer" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="恢复" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="استعادة" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="RESTAURARE" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Diagnostics_RestoreReady_Title" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10252,6 +10399,7 @@
             <li lc="fr" tx="Fichier de sauvegarde retrouvé" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="zh" tx="找到保存的数据：" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="ar" tx="تم العثور على البيانات المحفوظة:" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Date salvate găsite:" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Diagnostics_Send" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10266,6 +10414,7 @@
             <li lc="fr" tx="Envoyer" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="发送" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="ارسال" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Trimitere" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Diagnostics_Send_Description" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10280,6 +10429,7 @@
             <li lc="fr" tx="Toutes les données sur cet appareil--les données de l'appli comme les données entretiens--seront stockées dans un seul fichier d'achive. Ce processus peut prendre jusqu'à 10 minutes." ts="Translated" qs="ToReview" />
             <li lc="zh" tx="所有应用程序和调查数据将被收集到一个归档文件中。这最长需要10分钟。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="ar" tx="جميع بيانات التطبيق والمقابلة سيتم تجميعها في أرشيف واحد. قد يستغرق ذلك مدة تصل إلى 10 دقائق." ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Toate datele aplicației și chestionarelor vor fi stocate într-o singură arhivă. Acest proces poate dura până la 10 minute." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Diagnostics_Send_Title" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10294,6 +10444,7 @@
             <li lc="fr" tx="Compiler et envoyer vers Headquarters toutes les données sur cet appareil" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="收集所有平板电脑信息并发送给服务器" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="جمع و ارسال جميع معلومات الجهاز اللوحي الى المقر الرئيسي" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Colectarea și trimiterea datelor din tabletă către server" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Diagnostics_ServerUrl" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10304,6 +10455,7 @@
             <li lc="fr" tx="L'URL du serveur :" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="服务器地址：" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="ar" tx="عنوان URL للخادم" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="ro" tx="Server URL:" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Diagnostics_Share_Description" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10318,6 +10470,7 @@
             <li lc="fr" tx="Toutes les informations techniques seront mis dans un fichier texte simple qui pourrait être envoyée par courriel, Google Hangouts, ou tout autre appli de messagerie" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="已下所有信息将通过纯文本方式分享。可以通过电子邮件或任何其他信息应用程序发送" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="ستتم مشاركة جميع المعلومات أدناه كنص عادي. يمكن إرسالها عن طريق البريد الإلكتروني، Google Hangouts ، من أي تطبيق الرسائل الأخرى" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Toate informațiile de mai jos for fi distribuite ca text. Pot fi trimise prin email, Google Hangouts sau altă aplicație de messenger" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Diagnostics_Share_Title" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10332,6 +10485,7 @@
             <li lc="fr" tx="Partager toutes les informations techniques" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="分享所有的技术信息" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="مشاركة جميع المعلومات التقنية" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Distribuirea informațiilor tehnice" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Diagnostics_TabletInformationReady_Title" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10346,6 +10500,7 @@
             <li lc="fr" tx="Fichier d'archive disponible" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="数据存档已准备好" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="أرشيف البيانات جاهز" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Arhivarea datelor este completă" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Diagnostics_TabletInformationScope_Title" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10360,6 +10515,7 @@
             <li lc="fr" tx="Taille :" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="范围：" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="ar" tx="نطاق:" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Scop:" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Diagnostics_TabletInformationWhenGenerated_Title" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10374,6 +10530,7 @@
             <li lc="fr" tx="Fichier crée :" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="生成时间：" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="ar" tx="عند التوليد" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="ro" tx="Data generării:" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Diagnostics_TestConnection_Description" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10388,6 +10545,7 @@
             <li lc="fr" tx="Mesure la vitesse de connexion à partir de la communication entre l'appareil et le serveur" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="我们将检测到服务器的连接及速度" ts="Translated" qs="ToReview" />
             <li lc="ar" tx=" سوف نختبر الاتصال مع خادمنا وسرعته" er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
+            <li lc="ro" tx="Se va testa conexiunea cu serverul și viteza acesteia" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Diagnostics_TestConnection_Title" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10402,6 +10560,7 @@
             <li lc="fr" tx="Mesurer la vitesse de la connexion au serveur" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="测试到服务器的带宽" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="اختبار النطاق الترددي للخادم" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Lățimea de bandă a conexiunii cu serverul" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Diagnostics_Title" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10416,6 +10575,7 @@
             <li lc="fr" tx="Diagnostiques" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="诊断" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="التشخيص" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Diagnosticări" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Diagnostics_Update" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10430,6 +10590,7 @@
             <li lc="fr" tx="Mettre à jour" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="更新" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تحديث" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Actualizare" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Diagnostics_YouHaveTheLatestVersionOfApplication" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10444,6 +10605,7 @@
             <li lc="fr" tx="Vous detenez la plus récente version de l'appli Interviewer" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="zh" tx="您的应用程序是最新版本。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="ar" tx="لديك احدث نسخة من التطبيق" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="ro" tx="Aveți cea mai recentă versiune a aplicației." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="FailedToCreateInterview" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10454,6 +10616,7 @@
             <li lc="fr" tx="Echec de création d'entretien. Raison : {0}" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="创建问卷失败。原因：{0}" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="فشل إنشاء المقابلة. السبب: {0}" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Eșuare creare chestionar. Cauză: {0}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="FailedToLoadInterview" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10464,6 +10627,7 @@
             <li lc="fr" tx="Echec d'ouverture d'entretien." er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="zh" tx="打开问卷失败" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="فشل في فتح المقابلة" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Eșuare deschidere chestionar." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="FinishInstallation_EndpointDiffers" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10475,6 +10639,7 @@
             <li lc="fr" tx="L'adresse du serveur '{0}' diffère de celle fournise dans Paramètrage ('{1}'). Utiliser celle indiquée dans Paramètrage ?" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="服务器网址“{0}”与设置中提供的（“{1}”）不同。从设置中加载网址？" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="ar" tx="نقطة نهاية التزامن '{0}' مختلفة عن المقدمة في الإعدادات ('{1}'). هل تريد تحميل عنوانurl من الإعدادات؟" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="ro" tx="Endpoint-ul de sincronizare '{0}' este diferit de cel furnizat în Setări ('{1}'). Încărcați URL-ul din setări?" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="HostUnreachable" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10486,6 +10651,7 @@
             <li lc="es" tx="No es posible acezar a su servidor. Verifique la dirección del servidor o la configuración de la red" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="没有到服务器的互联网连接。请检查服务器网址和（或）网络设置" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="لا يوجد اتصال بالإنترنت إلى الخادم الخاص بك. تحقق من عنوان الخادم و (أو) إعدادات الشبكة" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Nu aveți acces prin Internet la serverul dvs. Verificați adresa serverului și (sau) setările de rețea" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="InternalServerError" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10503,6 +10669,7 @@
             <li lc="zh-CN" tx="服务器错误。请联系支持团队：support@mysurvey.solutions。" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="服务器错误。请联系支持团队support@mysurvey.solutions" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="ar" tx="خطأ في الخادم .الرجاء التواصل مع فريق الدعم عن طريقsupport@mysurvey.solutions" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Eroare de server.  Vă rugăm să contactați echipa de suport la support@mysurvey.solutions" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Interview_Loading" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10513,6 +10680,7 @@
             <li lc="fr" tx="Chargement en cours" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="正在加载" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="جار التحميل" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Încărcare" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Interview_Loading_With_Percents" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10523,6 +10691,7 @@
             <li lc="fr" tx="Chargement en cours ... {0}%" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="正在加载...{0}%" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="جار التحميل ... {0}٪" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Încărcare... {0}%" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="InvalidEndpoint" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10540,6 +10709,7 @@
             <li lc="zh-CN" tx="督导员网址无效。请确保输入的网址是正确的。" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="服务器网址无效。请确保输入的网址是正确的。" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="عنوان الموقع للمشرف غير فعال .تأكد من ادخال عنوان url صحيح " ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Site-ul de supervizor este incorect. Verificați dacă adresa URL introdusă este corectă" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Login_FinishInstallation_Message" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10557,6 +10727,7 @@
             <li lc="zh-CN" tx="这是在这台设备上第一次使用本程序，尚未设置用户名和域名。&lt;br /&gt;您需要有网络连接才能继续进行。" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="这是在此设备上第一次使用本程序。尚未设置用户名和服务器网址。&lt;br /&gt;您需要有网络连接才能继续。" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="هذا التمهيد الأول على هذا الجهاز. لم يتم تعيين المستخدم والنطاق بعد. &lt;br /&gt; تحتاج إلى اتصال بالإنترنت للمتابعة" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Aceasta este prima autentificare pe această tabletă. Utilizatorul și domeniul nu sunt setate.&lt;br /&gt;Aveți nevoie de conexiune la internet pentru a continua" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Login_Online_Signin_Explanation_message" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10574,6 +10745,7 @@
             <li lc="zh-CN" tx="如果您忘记了密码或者密码已重置，您可以尝试在线登录。" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="如果您忘记了密码或者密码已重置，您可以尝试在线登录" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="يمكنك محاولة تسجيل الدخول عبر الإنترنت إذا نسيت كلمة المرور أو تم إعادة تعيينها" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Puteți încerca să vă autentificați online dacă ați uitat parola sau a fost resetată" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Login_Online_SignIn_Failed" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10591,6 +10763,7 @@
             <li lc="zh-CN" tx="远程服务器身份认证问题。请联系督导员或总部。" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="远程服务器身份认证问题。请联系督导员" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="مشكلة المصادقة على الخادم المتحكم يرجى الاتصال بالمشرف" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Problemă de autentificare pe server. Contactați supervizorul." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Login_WrongPassword" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10608,6 +10781,7 @@
             <li lc="zh-CN" tx="密码错误" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="密码错误" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="خطأ في كلمة المرور" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Parolă incorectă" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Maintenance" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10625,14 +10799,16 @@
             <li lc="zh-CN" tx="Survey Solutions督导员网站正在维护中。Survey Solutions Designer网站正处于维护模式。" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="服务器正在维护中。抱歉给您带来不便。" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="الموقع الإلكتروني لمشرف Survey Solutions تحت  الصيانة. آسف للإزعاج" er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
+            <li lc="ro" tx="Site-ul Survey Solutions Supervisor este în mentenanță. Ne cerem scuze de inconvenient." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Maps_NoMapsText" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Synchronize to get maps&#xA;or contact your supervisor&#xA;for further instructions" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Синхронизируйтесь для получения новых карт&#xD;&#xA;или свяжитесь с Вашим супервизором&#xD;&#xA;для дальнейших инструкций" ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="同步以获得地图，或联系督导员获得进一步指导" ts="Translated" qs="ToReview" />
-            <li lc="fr" tx="Synchroniser pou avoir le resume des cartes. Contacter votre chef d'equipe pour plus d'instruction" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Synchronize to get maps&#xD;&#xA;or contact your supervisor&#xD;&#xA;for further instructions" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Синхронизируйтесь для получения новых карт&#xD;&#xA;или свяжитесь с Вашим супервизором&#xD;&#xA;для дальнейших инструкций" ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="同步以获得地图，或联系督导员获得进一步指导" ts="Changed" qs="ToReview" />
+            <li lc="fr" tx="Synchroniser pou avoir le resume des cartes. Contacter votre chef d'equipe pour plus d'instruction" ts="Changed" qs="ToReview" />
+            <li lc="ro" tx="Sincronizați pentru a obține hărți&#xD;&#xA;sau contactați supervizorul&#xD;&#xA;pentru instrucțiuni suplimentare" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Maps_Synchronization_Success_Description" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10641,6 +10817,7 @@
             <li lc="ru" tx="Карты успешно обновлены" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="全部地图均已同步" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Toutes les cartes sont synchronisees" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Toate hărțile au fost sincronizate" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Maps_Title" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10650,6 +10827,7 @@
             <li lc="zh" tx="地图" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="خرائط" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Cartes" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
+            <li lc="ro" tx="Hărți" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="MapSyncProvider_SyncronizeMapsAsync_Checking_maps_on_server" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10659,6 +10837,7 @@
             <li lc="zh" tx="正在检查服务器上的地图" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="التحقق من الخرائط على الخادم" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Control des cartes sur le serveur" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Verificarea hărților pe server" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="MapSyncProvider_SyncronizeMapsAsync_Map_sync_error" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10668,6 +10847,7 @@
             <li lc="zh" tx="地图同步错误" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="خطأ في مزامنة الخريطة" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Erreur de synchronisation des cartes" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Eroare de sincronizare a hărții" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="MapSyncProvider_SyncronizeMapsAsync_Map_synchronization_succesfuly_finished" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10677,15 +10857,17 @@
             <li lc="zh" tx="地图同步成功完成" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="انتهت مزامنة الخريطة بنجاح" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Synchronisation des cartes reussie" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Sincronizarea hărții a fost terminată cu succes" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="MapSyncProvider_SyncronizeMapsAsync_Progress_Report_Format" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Handling map {0}, {1} out of {2}.&#xA;Downloaded {3}%" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Handling map {0}, {1} out of {2}.&#xD;&#xA;Downloaded {3}%" ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Обработка карты {0}, {1} из {2}. &#xD;&#xA;Скачано {3}%" ts="Changed" qs="ToReview" />
             <li lc="zh" tx="正在处理地图{0}，{2}个中的{1}个。&#xD;&#xA;已下载{3}%" ts="Changed" qs="ToReview" />
-            <li lc="ar" tx="التعامل مع الخريطة {0}، {1} من {2}.&#xD;&#xD;&#xA;  تم تنزيل {3} من {4} ({5}٪) " er="The invariant text and the locale text contain string format items (e.g. &quot;{0}&quot;) that don't match." ts="Changed" qs="ErrorVerifier" />
-            <li lc="fr" tx="Manipulation de cartes {0}, {1} sur {2}. Telechargement {3}%" ts="Translated" qs="ToReview" />
+            <li lc="ar" tx="التعامل مع الخريطة {0}، {1} من {2}.&#xD;&#xD;&#xA;  تم تنزيل {3} من {4} ({5}٪) " er="The invariant text and the locale text contain string format items (e.g. &quot;{0}&quot;) that don't match." ts="Changed" qs="ToReview" />
+            <li lc="fr" tx="Manipulation de cartes {0}, {1} sur {2}. Telechargement {3}%" ts="Changed" qs="ToReview" />
+            <li lc="ro" tx="Manipularea hărților {0}, {1} din {2}.&#xD;&#xA;Descărcat {3}%" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="MenuItem_Title_Dashboard" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10703,6 +10885,7 @@
             <li lc="zh-CN" tx="任务面板" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="任务面板" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="لوحة التحكم" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Panou de control" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="MenuItem_Title_Diagnostics" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10716,6 +10899,7 @@
             <li lc="fr" tx="Diagnostiques" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="诊断" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="التشخيص" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Diagnosticări" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="MenuItem_Title_Language" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10726,6 +10910,7 @@
             <li lc="fr" tx="Langue" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="zh" tx="语言" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="اللغة" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Limba" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="MenuItem_Title_Language_Original" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10736,6 +10921,7 @@
             <li lc="fr" tx="Version originale" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="zh" tx="初始" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="ar" tx="أصلي" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Original" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="MenuItem_Title_Login" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10753,6 +10939,7 @@
             <li lc="zh-CN" tx="登录" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="登录" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="ar" tx="تسجيل الدخول" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Autentificare" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="MenuItem_Title_Maps" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10763,6 +10950,7 @@
             <li lc="zh" tx="地图" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="خرائط" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Cartes" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
+            <li lc="ro" tx="Hărți" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="MenuItem_Title_Search" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10771,6 +10959,7 @@
             <li lc="ru" tx="Поиск" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="搜索" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="fr" tx="Recherche" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
+            <li lc="ro" tx="Căutare" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="MenuItem_Title_Settings" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10788,6 +10977,7 @@
             <li lc="zh-CN" tx="设置" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="设置" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="الاعدادات" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Setări" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="MenuItem_Title_SignOut" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10805,6 +10995,7 @@
             <li lc="zh-CN" tx="注销" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="注销" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تسجيل خروج" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Ieșire din cont" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="NoNetwork" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10822,6 +11013,7 @@
             <li lc="zh-CN" tx="没有网络连接。请检查网络设置。" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="没有网络连接。请检查网络设置。" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="لا توجد شبكة. تحقق من إعدادات الشبكة" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Fără rețea. Verificați setările de rețea" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="NotSupportedServerSyncProtocolVersion" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10833,6 +11025,7 @@
             <li lc="fr" tx="Vous avez une mauvaise version de l'appli Interviewer. Veuillez installer la bonne version en : désinstallant la version actuelle; téléchargeant la bonne version du serveur, et installant cette nouvelle version" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="调查员应用程序的版本不兼容。请卸载并重新安装" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="لديك إصدار غير متوافق من تطبيق الباحث. من فضلك، إلغاء تثبيته وتثبيت مرة أخرى من المقر الخاص بك  في Survey Solutions" er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
+            <li lc="ro" tx="Versiunea aplicației Interviewer este incompatibilă. Vă rugăm dezinstalați și reinstalați aplicația de pe site-ul Survey Solutions Headquarters" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Prefs_AboutApplication" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10850,6 +11043,7 @@
             <li lc="zh-CN" tx="关于应用程序" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="关于应用程序" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="حول التطبيق" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Despre aplicație" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Prefs_ApplicationVersionTitle" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10867,6 +11061,7 @@
             <li lc="zh-CN" tx="应用程序版本：" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="zh" tx="应用程序版本：" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="ar" tx="نسخة التطبيق" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="ro" tx="Versiune aplicație:" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Prefs_BufferSizeSummary" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10884,6 +11079,7 @@
             <li lc="zh-CN" tx="从（向）督导员应用程序收到（发送）数据的文件包字节" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="数据包字节数" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="عدد وحدات البايت للحزمة من خلال استقبال / نقل البيانات من / إلى تطبيق المشرف" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Numărul de biți ale datelor primite/transmise de la/către supervizor" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Prefs_BufferSizeTitle" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10901,6 +11097,7 @@
             <li lc="zh-CN" tx="通讯包大小" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="通讯包大小" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="حجم حزمة الاتصال" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Dimensiunea pachetului de comunicare" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Prefs_ConnectionSettings" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10918,6 +11115,7 @@
             <li lc="zh-CN" tx="连接设置" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="连接设置" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="اعدادات الاتصال" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Setări de conexiune" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Prefs_DeviceIdTitle" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10935,6 +11133,7 @@
             <li lc="zh-CN" tx="设备ID：" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="zh" tx="设备编号：" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="ar" tx="هوية الجهاز" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="ro" tx="ID dispozitiv:" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Prefs_EndpointTitle" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10952,6 +11151,7 @@
             <li lc="zh-CN" tx="督导员网址" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="督导员网址" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="عنوان URL للمشرف" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Adresa URL a supervizorului" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Prefs_EventChunkSizeSummary" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10963,6 +11163,7 @@
             <li lc="fr" tx="Nombre d'évènements lisible pendant une requête" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="一次查询可以读取多少个事件" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="كم عدد الأحداث التي يمكن قراءتها باستعلام واحد" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Câte sarcini de lucru pot fi citite într-o singură interogare" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Prefs_EventChunkSizeTitle" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10973,6 +11174,7 @@
             <li lc="es" tx="Tamaño del fragmento del evento" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Taille de segment d'événement" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="事件块大小" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Dimensiunea sarcinii de lucru parțiale" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Prefs_GpsReceiveTimeoutSecSummary" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -10990,6 +11192,7 @@
             <li lc="zh-CN" tx="等待坐标的时间（秒）" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="等待坐标的时间（秒）" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="عدد الثواني للانتظار للإحداثيات" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Timp de așteptare (secunde) pentru recepționarea coordonatelor" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Prefs_GpsReceiveTimeoutSecTitle" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11007,6 +11210,7 @@
             <li lc="zh-CN" tx="GPS接收超时" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="GPS接收超时" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="نظام تحديد المواقع وصل الى انتهاء المهلة" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Timpul după care operația de recepționare a semnalului GPS eșuează" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Prefs_HttpResponseTimeoutSummary" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11024,6 +11228,7 @@
             <li lc="zh-CN" tx="等待服务器响应的时间（秒）" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="等待服务器响应的时间（秒）" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="عدد الثواني للانتظار حتى استجابة الخادم" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Timp de așteptare (secunde) pentru răspunsul din partea serverului" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Prefs_HttpResponseTimeoutTitle" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11041,6 +11246,7 @@
             <li lc="zh-CN" tx="服务器响应超时" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="服务器响应超时" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="مهلة استجابة الخادم انتهت" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Timpul de așteptare a unui răspuns de la Server a expirat" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Prefs_InterviewSettings" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11058,6 +11264,7 @@
             <li lc="zh-CN" tx="调查设置" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="调查设置" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="إعدادات المقابلة" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Setările chestionarului" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Prefs_Title" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11075,6 +11282,7 @@
             <li lc="zh-CN" tx="设置" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="设置" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="الاعدادات" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Setări" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="RequestCanceledByUser" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11092,6 +11300,7 @@
             <li lc="zh-CN" tx="请求被用户取消" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="请求被用户取消" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تم إلغاء الطلب من قبل المستخدم" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Cerere anulată de utilizator" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="RequestTimeout" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11109,6 +11318,7 @@
             <li lc="zh-CN" tx="连接到Survey Solutions督导员网站时超时。请检查网络连接。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="zh" tx="连接到服务器超时。请检查网络连接。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="ar" tx="انتهت المهلة عند الاتصال مع موقع مصمم Survey Solutions. تحقق من اتصالك بالإنترنت." ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Timpul de conectare la site-ul Survey Solutions Supervisor a expirat. Verficați conexiunea la internet." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="ServiceUnavailable" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11126,6 +11336,7 @@
             <li lc="zh-CN" tx="未能连接到Survey Solutions督导员网站。请确保网站可用。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="zh" tx="未能连接到服务器。请确保服务器可用。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="ar" tx="لا يوجد اتصال لمشرف Survey Solutions. يرجى التأكد من أن الموقع متاح." ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Nu aveți conexiune la site-ul Survey Solutions Supervisor. Asigurați-vă că adresa este disponibilă." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Share_to_Title" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11139,6 +11350,7 @@
             <li lc="zh" tx="分享信息给.." ts="Translated" qs="ToReview" />
             <li lc="ar" tx="مشاركة المعلومات مع....." ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Partager l'information avec…" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="ro" tx="Distribuirea informațiilor.." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Synchronization_Cancel" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11156,6 +11368,7 @@
             <li lc="zh-CN" tx="取消" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="取消" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="إلغاء" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
+            <li lc="ro" tx="Anulare" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Synchronization_Check_Obsolete_Questionnaires" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11167,6 +11380,7 @@
             <li lc="fr" tx="Recherche de masques obsolètes" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="检查过时的问卷模板" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تحقق من الاستبيانات الملغية" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Verificare chestionare neactuale" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Synchronization_Check_Obsolete_Questionnaires_Description" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11178,6 +11392,7 @@
             <li lc="fr" tx="Suppression de {0} questionnaire(s) sur {1}" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="正在删除{1}个问卷模板中的{0}个" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="إزالة {0} الاستبيان من {1}" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Ștergere {0} chestionare din {1}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Synchronization_CheckNewVersionOfApplication" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11186,6 +11401,7 @@
             <li lc="ru" tx="Проверка обновлений" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="正在检查应用程序更新" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Vérifier les mises à jour des logiciels " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
+            <li lc="ro" tx="Verificarea actualizărilor aplicațiilor" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Synchronization_Done" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11196,6 +11412,7 @@
             <li lc="fr" tx="Terminé" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="zh" tx="已完成" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="ar" tx="تم انجازه" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
+            <li lc="ro" tx="Efectuat" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Synchronization_DoneWithErrors_Title" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11206,6 +11423,7 @@
             <li lc="fr" tx="Synchronisation terminée avec des erreurs" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="同步已完成但有错误" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="اكتملت المزامنة مع وجود أخطاء" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Sincronizarea a fost finalizată cu erori" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Synchronization_Download_AttachmentsCleanup" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11217,6 +11435,7 @@
             <li lc="fr" tx="Supression de fichiers joints obsolètes" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="zh" tx="删除过时的附件。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="ar" tx="إزالة المرفقات الملغية" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="ro" tx="Ștergere atașamente neactuale." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Synchronization_Download_Description_Format" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11234,6 +11453,7 @@
             <li lc="zh-CN" tx="{1} {2}中的{0}已完成" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="{1}{2}中的{0}已完成" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="{2} {1} من {0}  مكتمل" er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
+            <li lc="ro" tx="{0} din {1} {2} realizate" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Synchronization_Download_Title" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11251,6 +11471,7 @@
             <li lc="zh-CN" tx="更新任务" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="正在更新任务" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تحديث المهام" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Actualizarea sarcinilor" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Synchronization_DownloadApplication" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11259,6 +11480,7 @@
             <li lc="ru" tx="Загрузка обновлений" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="正在下载应用程序更新" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Téléchargement des mise à jour des applications" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Descărcare actualizări aplicații" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Synchronization_DownloadApplication_Description" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11267,6 +11489,7 @@
             <li lc="ru" tx="Загружено {0} из {1} при {2} ({3}%)" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="以{2}收到{1}中的{0}({3}%)" ts="Translated" qs="ToReview" />
             <li lc="fr" tx="Reçu {0} sur {1} a {2} ({3}%)" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Recepționare {0} din {1} la {2} ({3}%)" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Synchronization_DownloadingLogo" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11277,6 +11500,7 @@
             <li lc="fr" tx="Téléchargement du logo" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="正在下载徽标" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تنزيل الشعار" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Descărcare siglă" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Synchronization_Fail_State_DeletedInterviews_Format" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11294,6 +11518,7 @@
             <li lc="zh-CN" tx="已删除{1}个任务中的{0}个" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="已删除{1}个问卷中的{0}个" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="{1} من {0} المقابلات المحذوفة" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="{0} din {1} chestionare șterse" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Synchronization_Fail_State_FailedToProcess_Format" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11304,6 +11529,7 @@
             <li lc="fr" tx="{0} entretien(s) pas synchronisé(s)" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="{0}个问卷同步失败" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="{0} فشل في مزامنة مقابلة/مقابلات" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="{0} chestionare nu au reușit sincronizarea" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Synchronization_Fail_State_NewInterviews_Format" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11321,6 +11547,7 @@
             <li lc="zh-CN" tx="已下载{1}个新任务中的{0}个" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="已下载{1}个新问卷中的{0}个" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="من {0} من  {1} المقابلات الجديدة التي تم تنزيلها" er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
+            <li lc="ro" tx="{0} din {1} chestionare noi descărcate" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Synchronization_Fail_State_RejectedInterviews_Format" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11338,6 +11565,7 @@
             <li lc="zh-CN" tx="已返回{1}个被驳回任务中的{0}个" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="已返回{1}个被驳回问卷中的{0}个" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="{1} من {0} المقابلات المرتجعة التي تم رفضها" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="{0} din {1} chestionare respinse și returnate de către supervizor" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Synchronization_Fail_State_UploadedInterviews_Format" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11355,6 +11583,7 @@
             <li lc="zh-CN" tx="已上传{1}个完成任务中的{0}个" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="已上传{1}个完成问卷中的{0}个" ts="Translated" qs="ToReview" />
             <li lc="ar" tx=" {1} من {0} المقابلات المكتملة التي تم تحميلها" er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
+            <li lc="ro" tx="{0} din {1} chestionare finalizare încarcate" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Synchronization_Fail_Title" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11372,6 +11601,7 @@
             <li lc="zh-CN" tx="同步被中断，请重试。" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="同步被中断，请重试" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تم إيقاف المزامنة، يرجى إعادة المحاولة" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Sincronizarea a fost întreruptă, vă rugăm reîncercați" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Synchronization_Fail_UnexpectedException" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11389,6 +11619,7 @@
             <li lc="zh-CN" tx="意外错误" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="异常" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="استثناء غير المتوقع" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Excepție neașteptată" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Synchronization_Interviews" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11406,6 +11637,7 @@
             <li lc="zh-CN" tx="调查" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="访谈" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="مقابلات" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="chestionare" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Synchronization_LockedAssignments_Text" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11423,6 +11655,7 @@
             <li lc="zh-CN" tx="同步完成之前任务被锁定" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="同步完成之前任务被锁定" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تم تأمين المهام حتى اكتمال المزامنة" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Sarcinile sunt blocate până sincronizarea va fi completă" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Synchronization_Of_AssignmentsFormat" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11433,6 +11666,7 @@
             <li lc="fr" tx="Synchronisation de {0} sur {1} affectation(s)" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="正在同步{1}个任务中的{0}个" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="مزامنة {0} من {1} التعيين (المهام)" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Sincronizare {0} din {1} sarcini" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Synchronization_Questionnaires" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11450,6 +11684,7 @@
             <li lc="zh-CN" tx="调查问卷" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="调查问卷" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="الاستبيانات" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="chestionare" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Synchronization_Success_Description" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11467,6 +11702,7 @@
             <li lc="zh-CN" tx="所有任务已更新" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="所有任务都已更新" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تم تحديث جميع المهام " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
+            <li lc="ro" tx="Toate sarcinile sunt actualizate" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Synchronization_Success_State_DeletedInterviews_Format" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11484,6 +11720,7 @@
             <li lc="zh-CN" tx="已删除{0}个调查" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="已删除{0}个问卷" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="{0} مقابلات تم حذفها" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="{0} chestionare șterse" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Synchronization_Success_State_NewInterviews_Format" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11501,6 +11738,7 @@
             <li lc="zh-CN" tx="已下载{0}个新调查" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="已下载{0}个新问卷" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="مقابلات جديدة تم تنزيلها {0}" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="{0} chestionare noi descărcate" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Synchronization_Success_State_RejectedInterviews_Format" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11518,6 +11756,7 @@
             <li lc="zh-CN" tx="已返回{0}个被驳回的调查" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="已返回{0}个被驳回的问卷" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="  {0} المقابلات المرتجعة التي تم رفضها" er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
+            <li lc="ro" tx="{0} chestionare respinse și returnate de către supervizor" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Synchronization_Success_State_UploadedInterviews_Format" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11535,6 +11774,7 @@
             <li lc="zh-CN" tx="已上传{0}个完成的调查" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="已上传{0}个完成的问卷" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تم تحميل المقابلات المكتملة {0}" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="{0} chestionare finalizate și încărcate" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Synchronization_Success_Title" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11552,6 +11792,7 @@
             <li lc="zh-CN" tx="同步成功完成" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="同步成功完成" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="اكتملت المزامنة بنجاح" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Sincronizare efectuată cu succes" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Synchronization_Upload_CompletedAssignments_Text" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11569,6 +11810,7 @@
             <li lc="zh-CN" tx="已完成的任务" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="已完成的任务" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="المهام المكتملة" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="sarcini finalizate" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Synchronization_Upload_Description_Format" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11586,6 +11828,7 @@
             <li lc="zh-CN" tx="{1} {2}中的{0}已完成" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="{1}{2}中的{0}已完成" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="من {1} {2} مكتمل {0}" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
+            <li lc="ro" tx="{0} din {1} {2} efectuate" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Synchronization_Upload_Interviews_Text" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11603,6 +11846,7 @@
             <li lc="zh-CN" tx="调查" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="访谈" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="مقابلات" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="chestionare" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Synchronization_Upload_Title_Format" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11620,12 +11864,14 @@
             <li lc="zh-CN" tx="正在上传{0}" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="正在上传{0}" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تم تحميل {0}" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Încărcare {0}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Synchronization_UploadAuditLog" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Upload audit information" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Загрузка на хедквотер аудин информации" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Încărcare informații de audit" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Synchronization_UserAuthentication_Description" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11643,6 +11889,7 @@
             <li lc="zh-CN" tx="准备同步" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="准备同步" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="التحضير للمزامنة" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Pregătire pentru sincronizare" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Synchronization_UserAuthentication_Title" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11660,6 +11907,7 @@
             <li lc="zh-CN" tx="用户认证" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="用户认证" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="مصادقة المستخدم" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Autentificare utilizator" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Synchronization_UserLinkedToAnotherDevice_Status" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11677,6 +11925,7 @@
             <li lc="zh-CN" tx="用户认证错误" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="用户认证错误" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="خطأ في مصادقة المستخدم" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Eroare de autentificare utilizator" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Synchronization_UserLinkedToAnotherDevice_Title" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11694,6 +11943,7 @@
             <li lc="zh-CN" tx="您的账户已经被重新链接到另外一台平板电脑" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="您的账户已经被重新关联到另外一台平板电脑" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تمت إعادة ربط حسابك بجهاز لوحي آخر" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Contul dvs. a fost realocat pe o altă tabletă" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Synchronization_UserPassword_Update_Format" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11711,6 +11961,7 @@
             <li lc="zh-CN" tx="认证问题。我们不能确认您的调查员账户（‘{0}’）。您的账户可能存在下列问题之一：密码与您输入的不一致、账户已被总部锁定或删除。请输入更新后的密码。如果还不能解决问题，请联系督导员或总部。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="zh" tx="认证问题。我们不能确认您的密码（‘{0}’）。您的账户密码与您输入的密码可能不一致或者您的账户可能已经被锁定或删除。请重新输入密码。如果问题依然存在，请联系督导员。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="ar" tx="مشكلة المصادقة. تعذر علينا تأكيد بيانات الاعتماد ('{0}'). قد يكون لحسابك كلمة مرور مختلفة؛ تكون مؤمنة أو محذوفة. من فضلك أعد إدخال الرمز السري. إذا استمرت المشكلة، اتصل بالمشرف." ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Problemă de autentificare. Datele de logare nu pot fi confirmate ('{0}'). Contul dvs. poate avea o altă parolă; poate fi șters sau blocat. Reintroduceți parola. Dacă problema persistă, contactați supervizorul" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Troubleshooting_Backup" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11728,6 +11979,7 @@
             <li lc="zh-CN" tx="创建备份" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="创建备份" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="انشاء نسخة احتياطية" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Creare copie de siguranță" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Troubleshooting_BackupErrorMessage" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11745,6 +11997,7 @@
             <li lc="zh-CN" tx="出现错误，创建备份失败" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="出现错误，创建备份失败" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="حدث خطأ ما ولم يتم إنشاء نسخة احتياطية" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Procesul de creare a copiei de siguranță nu s-a putut realiza" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Troubleshooting_BackupWasSaved" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11762,6 +12015,7 @@
             <li lc="zh-CN" tx="备份已保存到{0}" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="备份已保存到{0}" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تم حفظ النسخ الاحتياطي إلى {0}" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Copia de siguranța a fost salvată în {0}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Troubleshooting_CurrentVersion_CheckForUpdates" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11779,6 +12033,7 @@
             <li lc="zh-CN" tx="版本：{0}。检查新版本" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="版本：{0}。检查新版本" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="النسخة :{0} تحقق من النسخة الجديدة" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Versiune: {0}. Verificați pentru o nouă versiune" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Troubleshooting_InformationPackageIsSuccessfullySent" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11796,6 +12051,7 @@
             <li lc="zh-CN" tx="信息包已成功发送" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="信息包已成功发送" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تم إرسال حزمة المعلومات بنجاح" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Setul de informații a fost transmis cu succes" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Troubleshooting_InformationPackageSizeWarningFormat" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11813,6 +12069,7 @@
             <li lc="zh-CN" tx="将通过网络发送大小为{0}的信息包。您确认发送吗？" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="zh" tx="将通过网络发送大小为{0}的信息包。您确认发送吗？" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="ar" tx="سيتم إرسال حزمة المعلومات من الحجم {0} عبر الشبكة. هل تريد بالتأكيد إرسالها؟" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="ro" tx="Setul de informații de dimensiunea {0} va fi transmis prin rețea. Sunteți sigur că doriți să le transmiteți?" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Troubleshooting_NewVerisonExist" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11830,6 +12087,7 @@
             <li lc="zh-CN" tx="存在新版本。您想要下载并更新应用程序吗？" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="zh" tx="存在新版本。您想要下载并更新应用程序吗？" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="ar" tx="يوجد إصدار جديد. هل ترغب في تحميل وتحديث التطبيق؟" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="ro" tx="O nouă versiune este disponibilă. Doriți să descărcați și să actualizați aplicația?" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Troubleshooting_NoNewVersion" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11847,6 +12105,7 @@
             <li lc="zh-CN" tx="您的应用程序已是最新版" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="您的应用程序是最新版" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="لديك احدث نسخة من التطبيق" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Aveți instalată ultima versiune a aplicației" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Troubleshooting_Old_AreYouSureYouWantToRestore" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11864,6 +12123,7 @@
             <li lc="zh-CN" tx="当前的所有数据将会被清除。您确定要继续恢复吗？如果是，请确保恢复数据存在于{0}。" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="所有数据将被清除。您确定要继续恢复吗？如果是，请确保恢复数据保存在{0}。" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="سيتم مسح جميع البيانات الحالية. هل تريد بالتأكيد المتابعة للاستعادة. إذا كانت الإجابة بنعم، يرجى التأكد من استعادة البيانات في {0}" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Toate datele vor fi șterse. Sunteți sigur că doriți să restaurați? Dacă da, asigurați-vă că datele au fost încărcate la {0}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Troubleshooting_Old_CreatingInformationPackage" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11881,6 +12141,7 @@
             <li lc="zh-CN" tx="创建信息包" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="正在创建信息包" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="انشاء حزمة المعلومات" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Crearea setului de informații" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Troubleshooting_Old_InformationPackage" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11898,6 +12159,7 @@
             <li lc="zh-CN" tx="信息包" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="信息包" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="حزمة المعلومات" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Setul de informații" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Troubleshooting_Old_InformationPackageIsSuccessfullySent" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11915,6 +12177,7 @@
             <li lc="zh-CN" tx="信息包已成功发送" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="信息包已成功发送" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تم إرسال حزمة المعلومات بنجاح" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Setul de informații a fost transmis cu succes" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Troubleshooting_Old_InformationPackageSizeWarningFormat" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11932,6 +12195,7 @@
             <li lc="zh-CN" tx="将通过网络发送大小为{0}的信息包。您确认发送吗？" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="zh" tx="将通过网络发送大小为{0}的信息包。您确认发送吗？" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="ar" tx="سيتم إرسال حزمة المعلومات من الحجم {0} عبر الشبكة. هل تريد بالتأكيد إرسالها؟" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="ro" tx="Setul de informații de dimensiunea {0} va fi transmis prin rețea. Sunteți sigur că doriți să le tranmiteți?" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Troubleshooting_Old_SendingInformationPackage" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11949,6 +12213,7 @@
             <li lc="zh-CN" tx="正在发送信息包" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="正在发送信息包" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="ارسال حزمة البيانات" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Transmiterea setului de informații" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Troubleshooting_Old_SendingOfInformationPackageIsCanceled" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11966,6 +12231,7 @@
             <li lc="zh-CN" tx="信息包发送已取消。原因：{0}" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="信息包发送已取消。原因：{0}" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تم الغاء ارسال حزمة البياانت السبب : {0}" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Transmiterea setului de informații a fost anulată. Cauză: {0}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Troubleshooting_Old_SendingOfInformationPackageIsCanceling" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -11983,6 +12249,7 @@
             <li lc="zh-CN" tx="取消中" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="取消中" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="إلغاء" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Anulare" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Troubleshooting_RestorationErrorMessage" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -12000,6 +12267,7 @@
             <li lc="zh-CN" tx="出现错误，未能恢复平板电脑。" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="出现错误，未能恢复平板电脑" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="حدث خطأ ما ولم يتم استرجاعه" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="A apărut o păroblemă și tableta nu poate fi resetată." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Troubleshooting_Restore" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -12017,6 +12285,7 @@
             <li lc="zh-CN" tx="从备份中恢复" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="从备份中恢复" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="استعادة من النسخة الاحتياطية" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Restaurare din copia de siguranță" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Troubleshooting_RestoreConfirmation" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -12034,6 +12303,7 @@
             <li lc="zh-CN" tx="当前的所有数据将会被清除。您确定要继续恢复吗？如果是，请确保恢复数据存在于{0}。" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="所有数据将被清除。您确定要继续恢复吗？如果是，请确保恢复数据保存在{0}。" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="سيتم مسح جميع البيانات الحالية. هل تريد بالتأكيد المتابعة للاستعادة. إذا كانت الإجابة بنعم، يرجى التأكد من استعادة البيانات في {0}" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Toate datele vor fi șterse. Sunteți sigur că doriți să restaurați? Dacă da, asigurați-vă că datele au fost încărcate la {0}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Troubleshooting_RestoredSuccessfully" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -12051,6 +12321,7 @@
             <li lc="zh-CN" tx="平板电脑已成功恢复" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="平板电脑已成功恢复" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تمت استعادة الجهاز اللوحي بنجاح" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Tableta a fost restaurată cu succes." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Troubleshooting_RestoreFolderIsEmpty" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -12064,6 +12335,7 @@
             <li lc="fr" tx="Le répertoire '{0}' est vide. Veuillez mettre la sauvegarde à restaurer dans ce répertoire" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="zh" tx="文件夹“{0}”为空。 请把要恢复的备份放到文件夹中。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="ar" tx="المجلد '{0}' فارغ. الرجاء وضع النسخ الاحتياطي الذي تريد استعادته في المجلد." ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Folderul '{0}' este gol. Copiați fișierul copiei de siguranță pe care doriți să îl reîncărcați în folder." ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Troubleshooting_SendingOfInformationPackageErrorMessage" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -12081,6 +12353,7 @@
             <li lc="zh-CN" tx="信息包发送失败" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="发送信息包失败" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="فشل ارسال حزمة البيانات " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
+            <li lc="ro" tx="Transmiterea setului de informații a eșuat" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Troubleshooting_SendTabletInformation" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -12098,6 +12371,7 @@
             <li lc="zh-CN" tx="发送平板电脑信息" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="发送平板电脑信息" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="ارسال بيانات الجهاز اللوحي" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Trimiterea datelor tabletei" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Troubleshooting_Title" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -12115,6 +12389,7 @@
             <li lc="zh-CN" tx="排除故障" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="排除故障" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="ar" tx="استكشاف الأخطاء وإصلاحها" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Depanare" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Troubleshooting_Unknown_ErrorMessage" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -12132,6 +12407,7 @@
             <li lc="zh-CN" tx="检查版本时发生出错。请检查设置或稍后重试。" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="检查版本时发生出错。请检查设置或稍后重试。" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="حدث خطأ أثناء التحقق من الإصدار. الرجاء التحقق من الإعدادات أو إعادة المحاولة لاحقا" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Eroare apărută la verificarea versiunii. Vă rugăm verificați setările sau încercați mai târziu" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="UnacceptableSSLCertificate" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -12142,6 +12418,7 @@
             <li lc="fr" tx="Echec de vérification de l'URL ou du certificat de sécurité. Veuillez vérifiquer que l'adresse du serveur est valide, et que la date et heure sur la tablette sonte correctes." er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="zh" tx="验证目标网址的证书失败。请检查网址是否有效，以及您设备上的日期和时间是否正确" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="أخفق التحقق من الشهادة لعنوان URL المستهدف. يرجى التحقق مما إذا كان عنوان موقع المقر الرئيسي صالحا وأن جهازك يحتوي على التاريخ والوقت الحاليين" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Nu sa putut verifica certificatul pentru adresa URL vizată. Verificați dacă adresa site-ului Web al Headquarter-ului este validă, iar dispozitivul dvs. are o dată și o oră curente" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Unauthorized" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -12159,6 +12436,7 @@
             <li lc="zh-CN" tx="您的用户名或密码不正确" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="您的用户名或密码不正确" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="ar" tx="تسجيل الدخول أو كلمة المرور غير صحيحة" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Datele de autentificare sunt incorecte" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="UnexpectedException" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -12176,6 +12454,7 @@
             <li lc="zh-CN" tx="异常错误" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="错误" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="خطا غير متوقع" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Eroare neașteptată" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="UpgradeRequired" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -12193,6 +12472,7 @@
             <li lc="zh-CN" tx="应用程序的新版本已发布。请更新应用程序。" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="zh" tx="应用程序的新版本已发布。请更新应用程序" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="ar" tx="تم إصدار نسخة جديدة من التطبيق. من فضلك، تحديث التطبيق" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
+            <li lc="ro" tx="O nouă versiune este disponibilă. Vă rugăm să actualizați aplicația" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx" nm="Warning" rc="" dnt="false" nms="Translations.Interviewer" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -12210,6 +12490,7 @@
             <li lc="zh-CN" tx="警告" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="警告" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تحذير" ts="Translated" qs="ToReview" />
+            <li lc="ro" tx="Atenționare" ts="Translated" qs="ToReview" />
           </lis>
         </it>
       </items>
@@ -12993,7 +13274,7 @@
             <li lc="nn-nn" tx="Log out" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Выйти" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="es" tx="Salir" ts="Translated" qs="ToReview" />
-            <li lc="fr" tx="Se déconnecter" er="" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Se déconnecter" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="注销" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تسجيل الخروج" ts="Translated" qs="ToReview" />
           </lis>
@@ -13126,6 +13407,12 @@
             <li lc="fr" tx="Restaurer" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="恢复" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="استعادة" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Resources\AccountResources.resx" nm="ShowPassword" rc="" dnt="false" nms="WB.UI.Designer.Resources" cln="AccountResources" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Show Password" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Показать пароль" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\AccountResources.resx" nm="StaySignedIn" rc="" dnt="false" nms="WB.UI.Designer.Resources" cln="AccountResources" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -13688,10 +13975,10 @@
         <it rn="Resources\NotificationResources.resx" nm="ConfirmationEmail" rc="" dnt="false" nms="WB.UI.Designer.Resources" cln="NotificationResources" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="ru" tx="Здравствуйте, {0}, &lt;br/&gt; &lt;br/&gt; Чтобы завершить процесс регистрации, нажмите на эту ссылку:" ts="Changed" qs="ToReview" />
-            <li lc="nn-nn" tx="Hello {0}, &lt;br/&gt;&#xA;&lt;br/&gt; &#xA;To complete the registration process click on this link:" ts="Translated" qs="ToReview" />
-            <li lc="es" tx="Hola {0}, Para completar su registro de clic en el siguiente enlace:" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="Warning" />
-            <li lc="fr" tx="Bonjour {0}, Pour terminer le processus d'inscription, cliquez sur ce lien:" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="Warning" />
-            <li lc="zh" tx="{0}您好，请点击此关联完成注册过程：" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
+            <li lc="nn-nn" tx="Hello {0}, &lt;br/&gt;&#xD;&#xA;&lt;br/&gt; &#xD;&#xA;To complete the registration process click on this link:" ts="Changed" qs="ToReview" />
+            <li lc="es" tx="Hola {0}, Para completar su registro de clic en el siguiente enlace:" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="ToReview" />
+            <li lc="fr" tx="Bonjour {0}, Pour terminer le processus d'inscription, cliquez sur ce lien:" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="{0}您好，请点击此关联完成注册过程：" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
             <li lc="ar" tx="مرحبا {0}، لإكمال عملية التسجيل اضغط على هذا الرابط:" ts="Changed" qs="ToReview" />
           </lis>
         </it>
@@ -13897,52 +14184,52 @@
         </it>
         <it rn="Resources\PdfMessages.resx" nm="FailedToGenerate" rc="" dnt="false" nms="WB.UI.Designer.Resources" cln="PdfMessages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="ru" tx="Ошибка генерации PDF.&#xD;&#xA;Пожалуйста, обновите страницу и попробуйте снова или обратитесь в службу поддержки support@mysurvey.solutions" ts="Translated" qs="ToReview" />
-            <li lc="nn-nn" tx="Failed to generate PDF.&#xA;Please reload the page and try again or contact support@mysurvey.solutions" ts="Translated" qs="ToReview" />
-            <li lc="es" tx="Fallo al generar PDF. Favor recargue la página e intente nuevamente o contacte a support@mysurveys.solutions" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
-            <li lc="fr" tx="Impossible de générer un fichier PDF.&#xA; &#xA; Veuillez actualiers la page et réessayer, ou contacter support@mysurvey.solutions" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
-            <li lc="zh" tx="生成PDF文件失败。&#xD;&#xA;请重新载入页面并重试，或联系support@mysurvey.solutions" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
-            <li lc="ar" tx="فشل إنشاء PDF&#xD;&#xA;الرجاء إعادة تحميل الصفحة والمحاولة مرة أخرى أو الاتصال support@mysurvey.solutions " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
+            <li lc="ru" tx="Ошибка генерации PDF.&#xD;&#xA;Пожалуйста, обновите страницу и попробуйте снова или обратитесь в службу поддержки support@mysurvey.solutions" ts="Changed" qs="ToReview" />
+            <li lc="nn-nn" tx="Failed to generate PDF.&#xD;&#xA;Please reload the page and try again or contact support@mysurvey.solutions" ts="Changed" qs="ToReview" />
+            <li lc="es" tx="Fallo al generar PDF. Favor recargue la página e intente nuevamente o contacte a support@mysurveys.solutions" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="ToReview" />
+            <li lc="fr" tx="Impossible de générer un fichier PDF.&#xA; &#xA; Veuillez actualiers la page et réessayer, ou contacter support@mysurvey.solutions" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="生成PDF文件失败。&#xD;&#xA;请重新载入页面并重试，或联系support@mysurvey.solutions" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="ToReview" />
+            <li lc="ar" tx="فشل إنشاء PDF&#xD;&#xA;الرجاء إعادة تحميل الصفحة والمحاولة مرة أخرى أو الاتصال support@mysurvey.solutions " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\PdfMessages.resx" nm="Generate" rc="" dnt="false" nms="WB.UI.Designer.Resources" cln="PdfMessages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="ru" tx="PDF документ сгенерирован {0} минут(ы) назад.&#xD;&#xA;Размер: {1}Kb" ts="Translated" qs="ToReview" />
-            <li lc="nn-nn" tx="PDF document generated {0} minute(s) ago.&#xA;Size: {1}Kb" ts="Translated" qs="ToReview" />
-            <li lc="es" tx="documento PDF generado hace {0} minutos. Tamaño {1}Kb" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
-            <li lc="fr" tx="Document PDF généré il ya {0} minute (s).&#xA; &#xA; Taille: {1} Ko" ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="PDF文件生成于{0}分钟前。&#xD;&#xA;大小：{1}Kb" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
-            <li lc="ar" tx="تم إنشاء وثيقة PDF {0} دقيقة (دقائق).&#xD;&#xA;الحجم: {1} ;كيلوبايت " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
+            <li lc="ru" tx="PDF документ сгенерирован {0} минут(ы) назад.&#xD;&#xA;Размер: {1}Kb" ts="Changed" qs="ToReview" />
+            <li lc="nn-nn" tx="PDF document generated {0} minute(s) ago.&#xD;&#xA;Size: {1}Kb" ts="Changed" qs="ToReview" />
+            <li lc="es" tx="documento PDF generado hace {0} minutos. Tamaño {1}Kb" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="ToReview" />
+            <li lc="fr" tx="Document PDF généré il ya {0} minute (s).&#xA; &#xA; Taille: {1} Ko" ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="PDF文件生成于{0}分钟前。&#xD;&#xA;大小：{1}Kb" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="ToReview" />
+            <li lc="ar" tx="تم إنشاء وثيقة PDF {0} دقيقة (دقائق).&#xD;&#xA;الحجم: {1} ;كيلوبايت " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\PdfMessages.resx" nm="GenerateLessMinute" rc="" dnt="false" nms="WB.UI.Designer.Resources" cln="PdfMessages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="ru" tx="PDF документ сгенерирован меньше минуты назад.&#xD;&#xA;Размер: {0}Kb" ts="Translated" qs="ToReview" />
-            <li lc="nn-nn" tx="PDF document generated less than a minute ago.&#xA;Size: {0}Kb" ts="Translated" qs="ToReview" />
-            <li lc="es" tx="documento PDF generado hace menos de un minuto. Tamaño {0}Kb" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
-            <li lc="fr" tx="Document PDF généré il y a moins d'une minute.&#xA; &#xA; Taille: {0} Ko" ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="PDF文件生成于1分钟以内。&#xD;&#xA;大小：{0}Kb" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
-            <li lc="ar" tx="تم إنشاء وثيقة PDF (دقائق).&#xD;&#xA;الحجم: {0} ;كيلوبايت " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
+            <li lc="ru" tx="PDF документ сгенерирован меньше минуты назад.&#xD;&#xA;Размер: {0}Kb" ts="Changed" qs="ToReview" />
+            <li lc="nn-nn" tx="PDF document generated less than a minute ago.&#xD;&#xA;Size: {0}Kb" ts="Changed" qs="ToReview" />
+            <li lc="es" tx="documento PDF generado hace menos de un minuto. Tamaño {0}Kb" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="ToReview" />
+            <li lc="fr" tx="Document PDF généré il y a moins d'une minute.&#xA; &#xA; Taille: {0} Ko" ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="PDF文件生成于1分钟以内。&#xD;&#xA;大小：{0}Kb" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="ToReview" />
+            <li lc="ar" tx="تم إنشاء وثيقة PDF (دقائق).&#xD;&#xA;الحجم: {0} ;كيلوبايت " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\PdfMessages.resx" nm="GeneratingSuccess" rc="" dnt="false" nms="WB.UI.Designer.Resources" cln="PdfMessages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="ru" tx="Ваш PDF создается.&#xD;&#xA;Размер: {0}Kb" ts="Translated" qs="ToReview" />
-            <li lc="nn-nn" tx="Your PDF is being generated.&#xA;Size: {0}Kb" ts="Translated" qs="ToReview" />
-            <li lc="es" tx="Su archivo PDF está siendo generado. Tamaño {0}Kb" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
-            <li lc="fr" tx="Votre fichier PDF est en cours de génération.&#xA; &#xA; Taille: {0} Ko" ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="您的PDF文件正在生成。&#xD;&#xA;大小：{0}Kb" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
-            <li lc="ar" tx="يتم إنشاء pdf الخاص بك. الحجم :{0} كيلوبيت" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Ваш PDF создается.&#xD;&#xA;Размер: {0}Kb" ts="Changed" qs="ToReview" />
+            <li lc="nn-nn" tx="Your PDF is being generated.&#xD;&#xA;Size: {0}Kb" ts="Changed" qs="ToReview" />
+            <li lc="es" tx="Su archivo PDF está siendo generado. Tamaño {0}Kb" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="ToReview" />
+            <li lc="fr" tx="Votre fichier PDF est en cours de génération.&#xA; &#xA; Taille: {0} Ko" ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="您的PDF文件正在生成。&#xD;&#xA;大小：{0}Kb" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="ToReview" />
+            <li lc="ar" tx="يتم إنشاء pdf الخاص بك. الحجم :{0} كيلوبيت" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\PdfMessages.resx" nm="PreparingToGenerate" rc="" dnt="false" nms="WB.UI.Designer.Resources" cln="PdfMessages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="ru" tx="Подготовка к генерации PDF.&#xD;&#xA;Пожалуйста подождите..." ts="Translated" qs="ToReview" />
-            <li lc="nn-nn" tx="Preparing to generate your PDF.&#xA;Please wait..." ts="Translated" qs="ToReview" />
-            <li lc="es" tx="Preparando para generar su archivo PDF. Favor espere…" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="fr" tx="Préparation pour générer votre PDF.&#xA; &#xA; S'il vous plaît, attendez..." ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="正在准备生成您的PDF文件。&#xD;&#xA;请稍后..." er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
-            <li lc="ar" tx="التحضير لتوليد PDF الخاص بك. &#xD;&#xD;&#xA;يرجى الإنتظار..." ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Подготовка к генерации PDF.&#xD;&#xA;Пожалуйста подождите..." ts="Changed" qs="ToReview" />
+            <li lc="nn-nn" tx="Preparing to generate your PDF.&#xD;&#xA;Please wait..." ts="Changed" qs="ToReview" />
+            <li lc="es" tx="Preparando para generar su archivo PDF. Favor espere…" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
+            <li lc="fr" tx="Préparation pour générer votre PDF.&#xA; &#xA; S'il vous plaît, attendez..." ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="正在准备生成您的PDF文件。&#xD;&#xA;请稍后..." er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="ToReview" />
+            <li lc="ar" tx="التحضير لتوليد PDF الخاص بك. &#xD;&#xD;&#xA;يرجى الإنتظار..." ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\PdfMessages.resx" nm="Retry" rc="" dnt="false" nms="WB.UI.Designer.Resources" cln="PdfMessages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -14283,11 +14570,11 @@
         <it rn="Resources\QuestionnaireController.resx" nm="FoldersDescription" rc="" dnt="false" nms="WB.UI.Designer.Resources" cln="QuestionnaireController" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="ru" tx="Вы можете настроить структуру папок для страницы общих опросников. Для этого нажмите правую кнопку на папке, а затем используйте одну из следующих операций:&#xD;&#xA;&lt;br/&gt;- «Создать папку» для создания вложенной папки&#xD;&#xA;&lt;br/&gt;- «Изменить», чтобы переименовать название папки&#xD;&#xA;&lt;br/&gt;- «Удалить» для удаления папки с подпапками" ts="Changed" qs="ToReview" />
-            <li lc="nn-nn" tx="You can configure the structure of folders for public questionnaires page. For this click on folder by right button and then use one of the operations:&#xA;&lt;br/&gt;- &quot;Create SubFolder&quot; use for creating subfolder &#xA;&lt;br/&gt;- &quot;Rename&quot; to rename folder name&#xA;&lt;br/&gt;- &quot;Delete&quot; to delete folder with subfolders" ts="Translated" qs="ToReview" />
-            <li lc="es" tx="Puede configurar la estructura de las carpetas para la página de cuestionarios públicos. Para esto, haga clic en la carpeta con el botón derecho y luego use una de las operaciones: &lt;br/&gt; - &quot;Crear carpeta&quot; para crear una subcarpeta&#xD;&#xA;&lt;br/&gt; - &quot;Editar&quot; para cambiar el nombre de la carpeta&#xD;&#xA;&lt;br/&gt; - &quot;Eliminar&quot; para eliminar la carpeta con subcarpetas" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="Warning" />
-            <li lc="zh" tx="您可以设置公共问卷页的文件夹结构。请右击文件夹并选择以下某个操作：&#xD;&#xA;&lt;br/&gt;- &quot;&quot;新建文件夹&quot;&quot; 用来新建子文件夹 &#xD;&#xA;&lt;br/&gt;- &quot;&quot;编辑&quot;&quot; 用来重命名文件夹&#xD;&#xA;&lt;br/&gt;- &quot;&quot;删除&quot;&quot; 用来删除带子文件夹的文件夹" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="Warning" />
-            <li lc="ar" tx="يمكنك تكوين بنية المجلدات لصفحة الاستبيانات العامة. لهذا انقر على المجلد عن طريق الزر الأيمن ومن ثم استخدام واحدة من العمليات: &lt;br/&gt; - إنشاء مجلد &quot;لإنشاء مجلد فرعي &lt;br/&gt; - &quot;تعديل&quot; لإعادة تسمية اسم المجلد &lt;br/&gt; - &quot;إزالة&quot; لحذف مجلد به مجلدات فرعية" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="Warning" />
-            <li lc="fr" tx="Vous pouvez configurer la structure des dossiers pour la page des questionnaires publics.Pour cela, cliquez sur le dossier par le bouton droit, puis utilisez l'une des opérations:&#xA;&lt;br/&gt; - &quot; Créer un sous-dossier &quot; pour créer un sous-dossier&#xA;&lt;br/&gt; - &quot; Renommer &quot; pour renommer le nom du dossier&#xA;&lt;br/&gt; - &quot; Supprimer &quot; pour supprimer le dossier avec sous-dossiers " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
+            <li lc="nn-nn" tx="You can configure the structure of folders for public questionnaires page. For this click on folder by right button and then use one of the operations:&#xD;&#xA;&lt;br/&gt;- &quot;Create SubFolder&quot; use for creating subfolder &#xD;&#xA;&lt;br/&gt;- &quot;Rename&quot; to rename folder name&#xD;&#xA;&lt;br/&gt;- &quot;Delete&quot; to delete folder with subfolders" ts="Changed" qs="ToReview" />
+            <li lc="es" tx="Puede configurar la estructura de las carpetas para la página de cuestionarios públicos. Para esto, haga clic en la carpeta con el botón derecho y luego use una de las operaciones: &lt;br/&gt; - &quot;Crear carpeta&quot; para crear una subcarpeta&#xD;&#xA;&lt;br/&gt; - &quot;Editar&quot; para cambiar el nombre de la carpeta&#xD;&#xA;&lt;br/&gt; - &quot;Eliminar&quot; para eliminar la carpeta con subcarpetas" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="您可以设置公共问卷页的文件夹结构。请右击文件夹并选择以下某个操作：&#xD;&#xA;&lt;br/&gt;- &quot;&quot;新建文件夹&quot;&quot; 用来新建子文件夹 &#xD;&#xA;&lt;br/&gt;- &quot;&quot;编辑&quot;&quot; 用来重命名文件夹&#xD;&#xA;&lt;br/&gt;- &quot;&quot;删除&quot;&quot; 用来删除带子文件夹的文件夹" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="ToReview" />
+            <li lc="ar" tx="يمكنك تكوين بنية المجلدات لصفحة الاستبيانات العامة. لهذا انقر على المجلد عن طريق الزر الأيمن ومن ثم استخدام واحدة من العمليات: &lt;br/&gt; - إنشاء مجلد &quot;لإنشاء مجلد فرعي &lt;br/&gt; - &quot;تعديل&quot; لإعادة تسمية اسم المجلد &lt;br/&gt; - &quot;إزالة&quot; لحذف مجلد به مجلدات فرعية" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="ToReview" />
+            <li lc="fr" tx="Vous pouvez configurer la structure des dossiers pour la page des questionnaires publics.Pour cela, cliquez sur le dossier par le bouton droit, puis utilisez l'une des opérations:&#xA;&lt;br/&gt; - &quot; Créer un sous-dossier &quot; pour créer un sous-dossier&#xA;&lt;br/&gt; - &quot; Renommer &quot; pour renommer le nom du dossier&#xA;&lt;br/&gt; - &quot; Supprimer &quot; pour supprimer le dossier avec sous-dossiers " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\QuestionnaireController.resx" nm="FoldersManagement" rc="" dnt="false" nms="WB.UI.Designer.Resources" cln="QuestionnaireController" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -14691,6 +14978,12 @@
             <li lc="fr" tx="Fermer" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="关闭" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="اغلق" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
+          </lis>
+        </it>
+        <it rn="Resources\QuestionnaireEditor.resx" nm="CollaboratorsSettings" rc="" dnt="false" nms="WB.UI.Designer.Resources" cln="QuestionnaireEditor" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Collaborators" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Совместная работа" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\QuestionnaireEditor.resx" nm="CommentEditorResolve" rc="" dnt="false" nms="WB.UI.Designer.Resources" cln="QuestionnaireEditor" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -15188,6 +15481,12 @@
             <li lc="ar" tx="يرجى تأكيد الإجراء." ts="Translated" qs="ToReview" />
           </lis>
         </it>
+        <it rn="Resources\QuestionnaireEditor.resx" nm="GeometryType" rc="" dnt="false" nms="WB.UI.Designer.Resources" cln="QuestionnaireEditor" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Geometry type" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Тип геометрии" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
         <it rn="Resources\QuestionnaireEditor.resx" nm="GroupTitle" rc="" dnt="false" nms="WB.UI.Designer.Resources" cln="QuestionnaireEditor" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Title" ts="Translated" qs="ToReview" />
@@ -15299,10 +15598,10 @@
         </it>
         <it rn="Resources\QuestionnaireEditor.resx" nm="HelpNewComment" rc="" dnt="false" nms="WB.UI.Designer.Resources" cln="QuestionnaireEditor" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="add comment" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Добавьте комментарий" ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="添加注释" ts="Translated" qs="ToReview" />
-            <li lc="fr" tx="Ajouter un commentaire" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Add comment" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Добавьте комментарий" ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="添加注释" ts="Changed" qs="ToReview" />
+            <li lc="fr" tx="Ajouter un commentaire" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\QuestionnaireEditor.resx" nm="HelpSourceQuestion" rc="" dnt="false" nms="WB.UI.Designer.Resources" cln="QuestionnaireEditor" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -15587,10 +15886,10 @@
         </it>
         <it rn="Resources\QuestionnaireEditor.resx" nm="IsWarning" rc="" dnt="false" nms="WB.UI.Designer.Resources" cln="QuestionnaireEditor" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Is warning" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Предупреждение" ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="是否为" ts="Translated" qs="ToReview" />
-            <li lc="fr" tx="C'est avertissement" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Warning" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Предупреждение" ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="是否为" ts="Changed" qs="ToReview" />
+            <li lc="fr" tx="C'est avertissement" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\QuestionnaireEditor.resx" nm="LogOut" rc="" dnt="false" nms="WB.UI.Designer.Resources" cln="QuestionnaireEditor" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -15598,7 +15897,7 @@
             <li lc="nn-nn" tx="Log out" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Выход" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="es" tx="Salir" ts="Translated" qs="ToReview" />
-            <li lc="fr" tx="Se déconnecter" er="" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Se déconnecter" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="注销" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تسجيل الخروج" ts="Translated" qs="ToReview" />
           </lis>
@@ -15821,6 +16120,12 @@
             <li lc="fr" tx="S'il vous plait attendez" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
+        <it rn="Resources\QuestionnaireEditor.resx" nm="PublicAccessSettings" rc="" dnt="false" nms="WB.UI.Designer.Resources" cln="QuestionnaireEditor" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Public access" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Публичный доступ" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
         <it rn="Resources\QuestionnaireEditor.resx" nm="QuestionAddInstruction" rc="" dnt="false" nms="WB.UI.Designer.Resources" cln="QuestionnaireEditor" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Add Interviewer Instruction" ts="Translated" qs="ToReview" />
@@ -15997,6 +16302,12 @@
             <li lc="fr" tx="Vous devez lier cette question" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="您必须捆绑这个问题" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="يجب ربط هذا السؤال" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Resources\QuestionnaireEditor.resx" nm="QuestionnaireSettings" rc="" dnt="false" nms="WB.UI.Designer.Resources" cln="QuestionnaireEditor" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Questionnaire settings" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Настройки опросника" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\QuestionnaireEditor.resx" nm="QuestionnaireSummary" ns="Q, S, R are the first letters of the Question, Section and Roster. Keep values that are in {{}} without changes" rc="" dnt="false" nms="WB.UI.Designer.Resources" cln="QuestionnaireEditor" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -16433,12 +16744,12 @@
         </it>
         <it rn="Resources\QuestionnaireEditor.resx" nm="SettingsInviteCollaborators" rc="" dnt="false" nms="WB.UI.Designer.Resources" cln="QuestionnaireEditor" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Invite collaborators by e-mail:" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Пригласить участников по e-mail:" ts="Translated" qs="ToReview" />
-            <li lc="es" tx="Invitar colaboradores por correo electrónico" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="fr" tx="Inviter des collaborateurs par e-mail:" ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="通过E-mail邀请合作者" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="ar" tx="دعوة المتعاونين عن طريق البريد الإلكتروني:" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Invite collaborators by e-mail or login" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Пригласить участников по e-mail:" ts="Changed" qs="ToReview" />
+            <li lc="es" tx="Invitar colaboradores por correo electrónico" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
+            <li lc="fr" tx="Inviter des collaborateurs par e-mail:" ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="通过E-mail邀请合作者" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
+            <li lc="ar" tx="دعوة المتعاونين عن طريق البريد الإلكتروني:" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\QuestionnaireEditor.resx" nm="SettingsOwner" rc="" dnt="false" nms="WB.UI.Designer.Resources" cln="QuestionnaireEditor" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -16463,12 +16774,12 @@
         </it>
         <it rn="Resources\QuestionnaireEditor.resx" nm="SettingsProvideExistingEmail" rc="" dnt="false" nms="WB.UI.Designer.Resources" cln="QuestionnaireEditor" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Provide email of existing user" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Укажите email зарегистрированного пользователя" ts="Translated" qs="ToReview" />
-            <li lc="es" tx="Provea correo electrónico de usuario existente" ts="Translated" qs="ToReview" />
-            <li lc="fr" tx="Fournir un e-mail de l'utilisateur existant" ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="提供email或者已有的用户" ts="Translated" qs="ToReview" />
-            <li lc="ar" tx="تقديم بريد إلكتروني للمستخدم الحالي" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Provide email or login of existing user" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Укажите email зарегистрированного пользователя" ts="Changed" qs="ToReview" />
+            <li lc="es" tx="Provea correo electrónico de usuario existente" ts="Changed" qs="ToReview" />
+            <li lc="fr" tx="Fournir un e-mail de l'utilisateur existant" ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="提供email或者已有的用户" ts="Changed" qs="ToReview" />
+            <li lc="ar" tx="تقديم بريد إلكتروني للمستخدم الحالي" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\QuestionnaireEditor.resx" nm="SettingsProvideValidEmail" rc="" dnt="false" nms="WB.UI.Designer.Resources" cln="QuestionnaireEditor" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -16493,12 +16804,12 @@
         </it>
         <it rn="Resources\QuestionnaireEditor.resx" nm="SettingsQuestionnaireName" rc="" dnt="false" nms="WB.UI.Designer.Resources" cln="QuestionnaireEditor" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Questionnaire name:" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Имя опросника:" ts="Translated" qs="ToReview" />
-            <li lc="es" tx="Nombre de cuestionario:" ts="Translated" qs="ToReview" />
-            <li lc="fr" tx="Nom du questionnaire" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="zh" tx="文件名字：" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="ar" tx="اسم الاستبيان:" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Questionnaire name" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Имя опросника:" ts="Changed" qs="ToReview" />
+            <li lc="es" tx="Nombre de cuestionario:" ts="Changed" qs="ToReview" />
+            <li lc="fr" tx="Nom du questionnaire" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="文件名字：" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
+            <li lc="ar" tx="اسم الاستبيان:" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\QuestionnaireEditor.resx" nm="SettingsQuestionnaireSharing" rc="" dnt="false" nms="WB.UI.Designer.Resources" cln="QuestionnaireEditor" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -16509,6 +16820,12 @@
             <li lc="fr" tx="Créer ce questionnaire" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="生成此问卷" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="قم بإجراء هذا الاستبيان" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Resources\QuestionnaireEditor.resx" nm="SettingsQuestionnaireVariable" rc="" dnt="false" nms="WB.UI.Designer.Resources" cln="QuestionnaireEditor" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Questionnaire variable" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Переменная опросника" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\QuestionnaireEditor.resx" nm="SettingsRevokeAccess" rc="" dnt="false" nms="WB.UI.Designer.Resources" cln="QuestionnaireEditor" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -16543,12 +16860,12 @@
         </it>
         <it rn="Resources\QuestionnaireEditor.resx" nm="SettingsTitle" rc="" dnt="false" nms="WB.UI.Designer.Resources" cln="QuestionnaireEditor" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Questionnaire settings" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Настройки опросника" ts="Translated" qs="ToReview" />
-            <li lc="es" tx="Configuración de cuestionario" ts="Translated" qs="ToReview" />
-            <li lc="fr" tx="Paramètres du questionnaire" ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="问卷设置" ts="Translated" qs="ToReview" />
-            <li lc="ar" tx="إعدادات الاستبيان" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Settings" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Настройки опросника" ts="Changed" qs="ToReview" />
+            <li lc="es" tx="Configuración de cuestionario" ts="Changed" qs="ToReview" />
+            <li lc="fr" tx="Paramètres du questionnaire" ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="问卷设置" ts="Changed" qs="ToReview" />
+            <li lc="ar" tx="إعدادات الاستبيان" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\QuestionnaireEditor.resx" nm="SettingsVisibleToEveryone" rc="" dnt="false" nms="WB.UI.Designer.Resources" cln="QuestionnaireEditor" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -16573,12 +16890,12 @@
         </it>
         <it rn="Resources\QuestionnaireEditor.resx" nm="SettingsWhoHasAccess" rc="" dnt="false" nms="WB.UI.Designer.Resources" cln="QuestionnaireEditor" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Who has access:" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="У кого есть доступ:" ts="Translated" qs="ToReview" />
-            <li lc="es" tx="Quien tiene acceso:" ts="Translated" qs="ToReview" />
-            <li lc="fr" tx="Qui a accès:" ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="拥有访问权限的人：" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="ar" tx="من يمكنه الدخول" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="nn-nn" tx="who has access" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="У кого есть доступ:" ts="Changed" qs="ToReview" />
+            <li lc="es" tx="Quien tiene acceso:" ts="Changed" qs="ToReview" />
+            <li lc="fr" tx="Qui a accès:" ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="拥有访问权限的人：" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
+            <li lc="ar" tx="من يمكنه الدخول" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\QuestionnaireEditor.resx" nm="ShowList" rc="" dnt="false" nms="WB.UI.Designer.Resources" cln="QuestionnaireEditor" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -16751,7 +17068,7 @@
             <li lc="nn-nn" tx="{{count}} Comment threads:" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="{{count}} канал(ов) обсуждения:" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="{{count}}个评论：" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="fr" tx="{{Count}} fils de commentaires:" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="{{count}} fils de commentaires:" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\QuestionnaireEditor.resx" nm="SideBarCommentsTitle" rc="" dnt="false" nms="WB.UI.Designer.Resources" cln="QuestionnaireEditor" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -18496,7 +18813,7 @@
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="AssignedToMultipleEnumerators" ns="{0} - count of enumerators (always &gt; 1)" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Assigned to {0} enumerators" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Assigned to {0} interviewers" ts="Changed" qs="ToReview" />
             <li lc="zh" tx="已分配给{0}个调查员" ts="Changed" qs="ToReview" />
             <li lc="ka" tx="მიკუთვნებულია {0} აღმრიცხველს" ts="Changed" qs="ToReview" />
             <li lc="es" tx="Asignado a {0} enumeradores" ts="Changed" qs="ToReview" />
@@ -18518,7 +18835,7 @@
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="AssignedToSingleEnumerator" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Assigned to 1 enumerator" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Assigned to 1 interviewer" ts="Changed" qs="ToReview" />
             <li lc="zh" tx="已分配给1个调查员" ts="Changed" qs="ToReview" />
             <li lc="ka" tx="მიკუთვნებულია 1 აღმრიცხველს" ts="Changed" qs="ToReview" />
             <li lc="es" tx="Asignado a 1 enumerador" ts="Changed" qs="ToReview" />
@@ -19878,18 +20195,18 @@
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="UploadDescription" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Upload a file with identifying data to create new assignments.&#xA;Specify usernames for supervisors or enumerators to make batch assignments." ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Upload a file with identifying data to create new assignments.&#xD;&#xA;Specify usernames for supervisors or interviewers to make batch assignments." ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Создание множества заданий с помощью загрузки файла с обязательными идентифицирующими данными. Вы можете выборочно добавить ответственных для интервью (супервизоров и интервьюеров) по их именам." ts="Changed" qs="ToReview" />
             <li lc="ka" tx="ატვირთეთ ფაილი ადეკვატური მონაცემებით, რათა შეიქმნას ახალი დავალებები.&#xD;&#xD;&#xA;მიუთითეთ ზედამხედველების ან დამწერლების მომხმარებლის სახელები, რათა სურათების დავალებები გააკეთონ. " ts="Changed" qs="ToReview" />
-            <li lc="es" tx="Cargue un archivo con datos de identificación para crear nuevas asignaciones. Especifique nombres de usuario para supervisores o enumeradores para realizar asignaciones por lotes" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
-            <li lc="fr" tx="Importer un fichier avec des données d'identification pour créer de nouvelles affectations. Spécifiez les noms d'utilisateur pour les superviseurs ou les enquêteurs afin d'effectuer des affectations par lots." ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="上传包含识别数据的文件以创建新任务。给定督导员或调查员的用户名可以设置批量任务。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
+            <li lc="es" tx="Cargue un archivo con datos de identificación para crear nuevas asignaciones. Especifique nombres de usuario para supervisores o enumeradores para realizar asignaciones por lotes" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
+            <li lc="fr" tx="Importer un fichier avec des données d'identification pour créer de nouvelles affectations. Spécifiez les noms d'utilisateur pour les superviseurs ou les enquêteurs afin d'effectuer des affectations par lots." ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="上传包含识别数据的文件以创建新任务。给定督导员或调查员的用户名可以设置批量任务。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
             <li lc="ar" tx="تحميل ملف مع تحديد البيانات لإنشاء مهام جديدة.حدد أسماء المستخدمين للمشرفين أو العدادين للقيام بمهام الدفعات." ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\BatchUpload.resx" nm="Uploaded" rc="" dnt="false" nms="Resources" cln="BatchUpload" bac="Content" hgt="0" wdt="0">
           <lis>
-            <li lc="fr" tx="Importé" er="" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Importé" ts="Translated" qs="ToReview" />
             <li lc="pt" tx="Carregado" ts="Translated" qs="ToReview" />
             <li lc="nn-nn" tx="Uploaded" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Загружено" ts="Translated" qs="ToReview" />
@@ -20386,6 +20703,12 @@
             <li lc="ar" tx="تنزيل" ts="Translated" qs="ToReview" />
           </lis>
         </it>
+        <it rn="App_GlobalResources\Common.resx" nm="DownloadSupervisor" rc="" dnt="false" nms="Resources" cln="Common" bac="Content" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Download Supervisor app" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Скачать приложения Супервизор" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
         <it rn="App_GlobalResources\Common.resx" nm="ErrorsLog" rc="" dnt="false" nms="Resources" cln="Common" bac="Content" hgt="0" wdt="0">
           <lis>
             <li lc="fr" tx="Journal des erreurs" ts="Changed" qs="ToReview" />
@@ -20536,6 +20859,12 @@
             <li lc="ka" tx="შედეგები არ მოიძებნა" ts="Translated" qs="ToReview" />
             <li lc="es" tx="No se encontraron resultados" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="ar" tx="لم يتم العثور على نتائج" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="App_GlobalResources\Common.resx" nm="NothingSelected" rc="" dnt="false" nms="Resources" cln="Common" bac="Content" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Nothing selected" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Ничего не выбрано" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\Common.resx" nm="Ok" rc="" dnt="false" nms="Resources" cln="Common" bac="Content" hgt="0" wdt="0">
@@ -21019,7 +21348,7 @@
             <li lc="zh" tx="导入日期" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="ka" tx="მონაცემების იმპორტი" ts="Translated" qs="ToReview" />
             <li lc="es" tx="Importado en" ts="Translated" qs="ToReview" />
-            <li lc="fr" tx="Importé sur" er="" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Importé sur" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="المستوردة على" ts="Translated" qs="ToReview" />
           </lis>
         </it>
@@ -22301,7 +22630,7 @@
           <lis>
             <li lc="fr" tx="Voir le contenu de L'entretien" ts="Changed" qs="ToReview" />
             <li lc="pt" tx="Ver entrevista de conteúdo" ts="Changed" qs="ToReview" />
-            <li lc="nn-nn" tx="View interview content" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="View interview details" ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Просмотреть интервью" ts="Changed" qs="ToReview" />
             <li lc="zh" tx="查看访谈内容" ts="Changed" qs="ToReview" />
             <li lc="ka" tx="ინტერვიუს კონტენტის(შინაარსის) ნახვა" ts="Changed" qs="ToReview" />
@@ -22337,10 +22666,10 @@
         </it>
         <it rn="App_GlobalResources\Maps.resx" nm="MapLoadingInvalidFile" rc="" dnt="false" nms="Resources" cln="Maps" bac="Content" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Invalid file {0}" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Файл '{0}' содержит данные, которые не могут быть обработаны." er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
+            <li lc="nn-nn" tx="File '{0}' contains data system can't process." ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Файл '{0}' содержит данные, которые не могут быть обработаны." er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
             <li lc="zh" tx="无效的文件{0}" ts="Changed" qs="ToReview" />
-            <li lc="fr" tx="Fichier non valide {0}" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Fichier non valide {0}" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="App_GlobalResources\Maps.resx" nm="MapLoadingInvalidFilesError" rc="" dnt="false" nms="Resources" cln="Maps" bac="Content" hgt="0" wdt="0">
@@ -22442,7 +22771,7 @@
             <li lc="nn-nn" tx="Imported on" ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Дата изменения" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="Warning" />
             <li lc="es" tx="Importado en" ts="Changed" qs="ToReview" />
-            <li lc="fr" tx="Importé sur" er="" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Importé sur" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="导入于" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
             <li lc="ar" tx="المستوردة على" ts="Translated" qs="ToReview" />
           </lis>
@@ -24493,7 +24822,7 @@
             <li lc="es" tx="{{count}} Asignación (es) seleccionada (s)" ts="Changed" qs="ToReview" />
             <li lc="fr" tx="{{count}} Affectation sélectionnée" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="{{count}}个任务被选中" ts="Changed" qs="ToReview" />
-            <li lc="ar" tx="اختايار مهمة (مهام) {{count}}" er="" ts="Changed" qs="ToReview" />
+            <li lc="ar" tx="اختايار مهمة (مهام) {{count}}" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Assignments.resx" nm="AssignmentsSelected_plural" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Assignments" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -24511,7 +24840,7 @@
             <li lc="es" tx="Editar tamaño de la asignación {{assignmentId}}" ts="Changed" qs="ToReview" />
             <li lc="fr" tx="Modifier la taille pour l'affectation {{assignmentId}}" ts="Changed" qs="ToReview" />
             <li lc="zh" tx="为任务{{assignmentId}}编辑大小" ts="Changed" qs="ToReview" />
-            <li lc="ar" tx="تحرير الحجم للمهمة {{assignmentId}}" er="" ts="Changed" qs="ToReview" />
+            <li lc="ar" tx="تحرير الحجم للمهمة {{assignmentId}}" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Assignments.resx" nm="Count" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Assignments" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -24705,12 +25034,12 @@
         </it>
         <it rn="Resources\Assignments.resx" nm="Tooltip_Filter_Questionnaire" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Assignments" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Version of questionnaire. Select a questionnaire version to see its associated interviews in the report to the right. Select “All questionnaires” to see interviews associated with any questionnaire." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Версия опросника. Выберите версию опросника, чтобы посмотреть собранные по нему интервью. Выберите &quot;Все опросники&quot;, чтобы увидеть интервью по всем опросникам" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="es" tx="Versión del cuestionario. Seleccione una versión del cuestionario para ver sus entrevistas asociadas en el informe a la derecha. Seleccione &quot;Todos los cuestionarios&quot; para ver las entrevistas asociadas con cualquier cuestionario." ts="Translated" qs="ToReview" />
-            <li lc="fr" tx="Version du questionnaire. Sélectionnez une version du questionnaire pour voir les entretiens associées dans le rapport à droite. Sélectionnez &quot;Tous les questionnaires&quot; pour voir les entretiens associées à un questionnaire." er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
-            <li lc="zh" tx="问卷的版本。选择一个问卷的版本以查看右边报告相应的访谈。选择“所有问卷”以查看和访谈有关的任何问卷。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="ar" tx="نسخة الاستبيان. حدد نسخة استبيان لرؤية المقابلات المرتبطة بها في التقرير إلى اليمين. حدد &quot;جميع الاستبيانات&quot; لرؤية المقابلات المرتبطة بأي استبيان." ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Select a questionnaire to see its associated assignments. Select “All questionnaires” to see assignments associated with any questionnaire." ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Выберите опросник, чтобы посмотреть созданные по нему задания. Выберите &quot;Все опросники&quot;, чтобы увидеть задания по всем опросникам" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
+            <li lc="es" tx="Versión del cuestionario. Seleccione una versión del cuestionario para ver sus entrevistas asociadas en el informe a la derecha. Seleccione &quot;Todos los cuestionarios&quot; para ver las entrevistas asociadas con cualquier cuestionario." ts="Changed" qs="ToReview" />
+            <li lc="fr" tx="Version du questionnaire. Sélectionnez une version du questionnaire pour voir les entretiens associées dans le rapport à droite. Sélectionnez &quot;Tous les questionnaires&quot; pour voir les entretiens associées à un questionnaire." er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="问卷的版本。选择一个问卷的版本以查看右边报告相应的访谈。选择“所有问卷”以查看和访谈有关的任何问卷。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
+            <li lc="ar" tx="نسخة الاستبيان. حدد نسخة استبيان لرؤية المقابلات المرتبطة بها في التقرير إلى اليمين. حدد &quot;جميع الاستبيانات&quot; لرؤية المقابلات المرتبطة بأي استبيان." ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Assignments.resx" nm="Tooltip_Filter_Responsible" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Assignments" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -25184,12 +25513,18 @@
             <li lc="fr" tx="Aucun élément trouvé" ts="Translated" qs="ToReview" />
           </lis>
         </it>
+        <it rn="Resources\Details.resx" nm="Overview" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Details" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Overview" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Обзор" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
         <it rn="Resources\Details.resx" nm="Questionnaire" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Details" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Questionnaire: {{ name }}" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Опросник: {{ name }}" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="问卷模板：{{ name }}" ts="Translated" qs="ToReview" />
-            <li lc="fr" tx="Questionnaire: {{name}}" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Questionnaire: {{ name }}" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Details.resx" nm="Responsible" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Details" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -25208,7 +25543,7 @@
             <li lc="ru" tx="{{ count }} объект найден:" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="已找到{{ count }}项目：" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="ar" tx="{{ count }}العنصر الذي تم العثور عليه:" ts="Translated" qs="ToReview" />
-            <li lc="fr" tx="{{count}} élément trouvé:" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="{{ count }} élément trouvé:" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Details.resx" nm="SearchResult_Count_plural" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Details" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -25216,7 +25551,7 @@
             <li lc="nn-nn" tx="{{ count }} items found:" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="已找到{{ count }}项目：" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
             <li lc="ar" tx="{{ count }}العناصر التي تم العثور عليها:" ts="Translated" qs="ToReview" />
-            <li lc="fr" tx="{{count}} éléments trouvés:" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="{{ count }} éléments trouvés:" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Details.resx" nm="Status" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Details" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -25226,7 +25561,7 @@
             <li lc="es" tx="Estado : {{ name }}" ts="Changed" qs="ToReview" />
             <li lc="zh" tx="状态：{{ name }}" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="الحالة: {{ name }}" ts="Translated" qs="ToReview" />
-            <li lc="fr" tx="Statut: {{nom}}" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Statut: {{ name }}" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\DevicesInterviewers.resx" nm="LowStorage" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="DevicesInterviewers" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -26169,10 +26504,10 @@
             <li lc="ru" tx="Детальный лог действий" ts="Translated" qs="ToReview" />
           </lis>
         </it>
-        <it rn="Resources\InterviewerAuditRecord.resx" nm="DownloadCsvLog" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="InterviewerAuditRecord" bac="EmbeddedResource" hgt="0" wdt="0">
+        <it rn="Resources\InterviewerAuditRecord.resx" nm="DownloadTabLog" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="InterviewerAuditRecord" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Download complete log in CSV format" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Загрузить полный лог в CSV формате" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Download complete log in Tab format" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Загрузить полный лог в Tab формате" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\InterviewerAuditRecord.resx" nm="Login" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="InterviewerAuditRecord" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -26213,8 +26548,8 @@
         </it>
         <it rn="Resources\InterviewerAuditRecord.resx" nm="RocordsMissing" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="InterviewerAuditRecord" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Action log records are missing" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Аудит записи для интервьювера не найдены" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="No records yet" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Еще нет записей" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\InterviewerAuditRecord.resx" nm="ShowPrevious7Days" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="InterviewerAuditRecord" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -26291,38 +26626,38 @@
         </it>
         <it rn="Resources\Interviews.resx" nm="ApproveConfirmMessage" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Interviews" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="fr" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/b&gt; entrevue (s) seront approuvées. &lt;/h3&gt;               &#xA;&lt;b&gt; Remarque! &lt;/b&gt; Vous pouvez approuver des entretiens avec les statuts suivants uniquement: &lt;i&gt; {1} &lt;/i&gt; et &lt;i&gt; {2} &lt;/i&gt;. " ts="Translated" qs="ToReview" />
-            <li lc="pt" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; Interview(s) vai ser aprovado.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Nota!&lt;/b&gt; Você pode aprovar a entrevistas com o seguinte status somente: &lt;i&gt;{1}&lt;/i&gt; e &lt;i&gt;{2}&lt;/i&gt;." ts="Translated" qs="ToReview" />
-            <li lc="nn-nn" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) will be approved.&lt;/h3&gt;&#xA;&lt;b&gt;Note!&lt;/b&gt; You can approve interviews with the following statuses only: &lt;i&gt;{1}&lt;/i&gt; and &lt;i&gt;{2}&lt;/i&gt;." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; интервью будут утверждены.&lt;/h3&gt;&lt;b&gt;Внимание!&lt;/b&gt; Вы можете утвердить интервью имеющие следующие статусы: &lt;i&gt;{1}&lt;/i&gt; и &lt;i&gt;{2}&lt;/i&gt;." ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt;个访谈将通过审核。&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;注意！&lt;/b&gt;您只能通过审核处于以下状态的访谈： &lt;i&gt;{1}&lt;/i&gt;和&lt;i&gt;{2}&lt;/i&gt;。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="fr" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/b&gt; entrevue (s) seront approuvées. &lt;/h3&gt;               &#xD;&#xA;&lt;b&gt; Remarque! &lt;/b&gt; Vous pouvez approuver des entretiens avec les statuts suivants uniquement: &lt;i&gt; {1} &lt;/i&gt; et &lt;i&gt; {2} &lt;/i&gt;. " ts="Changed" qs="ToReview" />
+            <li lc="pt" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; Interview(s) vai ser aprovado.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Nota!&lt;/b&gt; Você pode aprovar a entrevistas com o seguinte status somente: &lt;i&gt;{1}&lt;/i&gt; e &lt;i&gt;{2}&lt;/i&gt;." ts="Changed" qs="ToReview" />
+            <li lc="nn-nn" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) will be approved.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Note!&lt;/b&gt; You can approve interviews with the following statuses only: &lt;i&gt;{1}&lt;/i&gt; and &lt;i&gt;{2}&lt;/i&gt;." ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; интервью будут утверждены.&lt;/h3&gt;&lt;b&gt;Внимание!&lt;/b&gt; Вы можете утвердить интервью имеющие следующие статусы: &lt;i&gt;{1}&lt;/i&gt; и &lt;i&gt;{2}&lt;/i&gt;." ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt;个访谈将通过审核。&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;注意！&lt;/b&gt;您只能通过审核处于以下状态的访谈： &lt;i&gt;{1}&lt;/i&gt;和&lt;i&gt;{2}&lt;/i&gt;。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
             <li lc="ka" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; ინტერვიუ (ებ) ი დამტკიცდება. &lt;/ h3&gt;&#xD;&#xA;&#xD;&#xA;&lt;b&gt; შენიშვნა! &lt;/ b&gt; ინტერვიუები შეგიძლიათ დაამტკიცოთ მხოლოდ შემდეგ სტატუსებიდან: &lt;i&gt; {1} &lt;/ i&gt; და &lt;i&gt; {2} &lt;/ i&gt;. " ts="Changed" qs="ToReview" />
-            <li lc="es" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; entrevista (s) será aprobada. &lt;/ h3&gt; &lt;b&gt; ¡Nota! &lt;/ b&gt; Solo puede aprobar entrevistas con los siguientes estados: &lt;i&gt; {1} &lt;/ i&gt; y &lt;i&gt; {2} &lt;/ i&gt;" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="ar" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; ستتم الموافقة على المقابلات (المقابلة). &lt;/ h3&gt;&lt;b&gt; ملاحظة! &lt;/ b&gt; يمكنك الموافقة على المقابلات مع الحالات التالية فقط: &lt;i&gt; {1} &lt;/ i&gt; و &lt;i&gt; {2} &lt;/ i&gt;. " ts="Translated" qs="ToReview" />
+            <li lc="es" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; entrevista (s) será aprobada. &lt;/ h3&gt; &lt;b&gt; ¡Nota! &lt;/ b&gt; Solo puede aprobar entrevistas con los siguientes estados: &lt;i&gt; {1} &lt;/ i&gt; y &lt;i&gt; {2} &lt;/ i&gt;" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
+            <li lc="ar" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; ستتم الموافقة على المقابلات (المقابلة). &lt;/ h3&gt;&lt;b&gt; ملاحظة! &lt;/ b&gt; يمكنك الموافقة على المقابلات مع الحالات التالية فقط: &lt;i&gt; {1} &lt;/ i&gt; و &lt;i&gt; {2} &lt;/ i&gt;. " ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Interviews.resx" nm="ApproveConfirmMessageHQ" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Interviews" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="fr" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/b&gt; entretien (s) seront approuvées. &lt;/h3&gt;  &#xA;&lt;b&gt; Remarque! &lt;/b&gt; Vous pouvez approuver des entretiens avec les états suivants uniquement: &lt;i&gt; {1} &lt;/i&gt; et &lt;i&gt; {2} &lt;/i&gt;." ts="Translated" qs="ToReview" />
-            <li lc="pt" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; Interview(s) vai ser aprovado.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Nota!&lt;/b&gt; Você pode aprovar entrevistas com somente o seguinte status: &lt;i&gt;{1}&lt;/i&gt;, &lt;i&gt;{2}&lt;/i&gt;." ts="Translated" qs="ToReview" />
-            <li lc="nn-nn" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) will be approved.&lt;/h3&gt;&#xA;&lt;b&gt;Note!&lt;/b&gt; You can approve interviews with the following status only: &lt;i&gt;{1}&lt;/i&gt; and &lt;i&gt;{2}&lt;/i&gt;." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; интервью будут утверждены.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Внимание!&lt;/b&gt; Вы можете утвердить интервью имеющие следующие статусы: &lt;i&gt;{1}&lt;/i&gt; и &lt;i&gt;{2}&lt;/i&gt;." ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt;个访谈将通过审核。&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;注意！&lt;/b&gt;您只能通过审核处于以下状态的访谈：&lt;i&gt;{1}&lt;/i&gt;, &lt;i&gt;{2}&lt;/i&gt;。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="fr" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/b&gt; entretien (s) seront approuvées. &lt;/h3&gt;  &#xD;&#xA;&lt;b&gt; Remarque! &lt;/b&gt; Vous pouvez approuver des entretiens avec les états suivants uniquement: &lt;i&gt; {1} &lt;/i&gt; et &lt;i&gt; {2} &lt;/i&gt;." ts="Changed" qs="ToReview" />
+            <li lc="pt" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; Interview(s) vai ser aprovado.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Nota!&lt;/b&gt; Você pode aprovar entrevistas com somente o seguinte status: &lt;i&gt;{1}&lt;/i&gt;, &lt;i&gt;{2}&lt;/i&gt;." ts="Changed" qs="ToReview" />
+            <li lc="nn-nn" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) will be approved.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Note!&lt;/b&gt; You can approve interviews with the following status only: &lt;i&gt;{1}&lt;/i&gt; and &lt;i&gt;{2}&lt;/i&gt;." ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; интервью будут утверждены.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Внимание!&lt;/b&gt; Вы можете утвердить интервью имеющие следующие статусы: &lt;i&gt;{1}&lt;/i&gt; и &lt;i&gt;{2}&lt;/i&gt;." ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt;个访谈将通过审核。&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;注意！&lt;/b&gt;您只能通过审核处于以下状态的访谈：&lt;i&gt;{1}&lt;/i&gt;, &lt;i&gt;{2}&lt;/i&gt;。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
             <li lc="ka" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; ინტერვიუ (ებ) ი დამტკიცდება. &lt;/ h3&gt;&#xD;&#xA;&#xD;&#xA;&lt;b&gt; შენიშვნა! &lt;/ b&gt; ინტერვიუები შეგიძლიათ დაამტკიცოთ მხოლოდ შემდეგ სტატუსიდან: &lt;i&gt; {1} &lt;/ i&gt; და &lt;i&gt; {2} &lt;/ i&gt;. " ts="Changed" qs="ToReview" />
-            <li lc="es" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; entrevista (s) será aprobada. &lt;/ h3&gt; &lt;b&gt; ¡Nota! &lt;/ b&gt; Solo puede aprobar entrevistas con el siguiente estado: &lt;i&gt; {1} &lt;/ i&gt; y &lt;i&gt; {2} &lt;/ i&gt;" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="ar" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; ستتم الموافقة على المقابلات (المقابلة). &lt;/ h3&gt;&lt;b&gt; ملاحظة! &lt;/ b&gt; يمكنك الموافقة على المقابلات مع الحالة التالية فقط: &lt;i&gt; {1} &lt;/ i&gt; و &lt;i&gt; {2} &lt;/ i&gt;. " ts="Translated" qs="ToReview" />
+            <li lc="es" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; entrevista (s) será aprobada. &lt;/ h3&gt; &lt;b&gt; ¡Nota! &lt;/ b&gt; Solo puede aprobar entrevistas con el siguiente estado: &lt;i&gt; {1} &lt;/ i&gt; y &lt;i&gt; {2} &lt;/ i&gt;" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
+            <li lc="ar" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; ستتم الموافقة على المقابلات (المقابلة). &lt;/ h3&gt;&lt;b&gt; ملاحظة! &lt;/ b&gt; يمكنك الموافقة على المقابلات مع الحالة التالية فقط: &lt;i&gt; {1} &lt;/ i&gt; و &lt;i&gt; {2} &lt;/ i&gt;. " ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Interviews.resx" nm="AssignConfirmMessage" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Interviews" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="fr" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/b&gt; entretien (s) sélectionnés pour la réaffectation. &lt;/h3&gt;&#xA;&lt;b&gt; Attention! &lt;/b&gt; Vous pouvez affecter des entretiens avec les états suivants uniquement: &lt;i&gt; {1} &lt;/i&gt;, &lt;i&gt; {2} (seulement à un autre enuêteur de la même équipe) &lt;/i&gt; et &lt;i&gt; {3} &lt;/i&gt;." ts="Translated" qs="ToReview" />
-            <li lc="pt" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; Interview(s) selecionado para reatribuir.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Nota!&lt;/b&gt; Você pode atribuir a entrevistas com o seguinte status somente: &lt;i&gt;{1}&lt;/i&gt;, &lt;i&gt;{2} (somente em outro entrevistador)&lt;/i&gt; e &lt;i&gt;{3}&lt;/i&gt;." ts="Translated" qs="ToReview" />
-            <li lc="nn-nn" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) selected for reassign.&lt;/h3&gt;&#xA;&lt;b&gt;Note!&lt;/b&gt; You can assign interviews with the following statuses only: &lt;i&gt;{1}&lt;/i&gt;, &lt;i&gt;{2} (only on another interviewer)&lt;/i&gt; and &lt;i&gt;{3}&lt;/i&gt;." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; интервью, выбраны для назначения.&lt;/h3&gt;&lt;b&gt;Внимание!&lt;/b&gt; Вы можете назначить интервью имеющие следующие статусы: &lt;i&gt;{1}&lt;/i&gt;, &lt;i&gt;{2} (только на другого интервьюера)&lt;/i&gt; и &lt;i&gt;{3}&lt;/i&gt;." ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt;个选中的访谈将被分配。&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;注意！&lt;/b&gt;您只能分配处于以下状态的访谈：&lt;i&gt;{1}&lt;/i&gt;、&lt;i&gt;{2}（只能分配给其他调查员）&lt;/i&gt;和&lt;i&gt;{3}&lt;/i&gt;。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="fr" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/b&gt; entretien (s) sélectionnés pour la réaffectation. &lt;/h3&gt;&#xD;&#xA;&lt;b&gt; Attention! &lt;/b&gt; Vous pouvez affecter des entretiens avec les états suivants uniquement: &lt;i&gt; {1} &lt;/i&gt;, &lt;i&gt; {2} (seulement à un autre enuêteur de la même équipe) &lt;/i&gt; et &lt;i&gt; {3} &lt;/i&gt;." ts="Changed" qs="ToReview" />
+            <li lc="pt" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; Interview(s) selecionado para reatribuir.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Nota!&lt;/b&gt; Você pode atribuir a entrevistas com o seguinte status somente: &lt;i&gt;{1}&lt;/i&gt;, &lt;i&gt;{2} (somente em outro entrevistador)&lt;/i&gt; e &lt;i&gt;{3}&lt;/i&gt;." ts="Changed" qs="ToReview" />
+            <li lc="nn-nn" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) selected for reassign.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Note!&lt;/b&gt; You can assign interviews with the following statuses only: &lt;i&gt;{1}&lt;/i&gt;, &lt;i&gt;{2} (only on another interviewer)&lt;/i&gt; and &lt;i&gt;{3}&lt;/i&gt;." ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; интервью, выбраны для назначения.&lt;/h3&gt;&lt;b&gt;Внимание!&lt;/b&gt; Вы можете назначить интервью имеющие следующие статусы: &lt;i&gt;{1}&lt;/i&gt;, &lt;i&gt;{2} (только на другого интервьюера)&lt;/i&gt; и &lt;i&gt;{3}&lt;/i&gt;." ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt;个选中的访谈将被分配。&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;注意！&lt;/b&gt;您只能分配处于以下状态的访谈：&lt;i&gt;{1}&lt;/i&gt;、&lt;i&gt;{2}（只能分配给其他调查员）&lt;/i&gt;和&lt;i&gt;{3}&lt;/i&gt;。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
             <li lc="ka" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; ინტერვიუ შერჩეულია დავალებისთვის (s). &lt;/ h3&gt;&#xD;&#xA;&#xD;&#xA;&lt;b&gt;Note!&lt;/b&gt; თქვენ შეგიძლიათ აირჩიოთ ინერვიუები მხოლოდ შემდეგი სტატუსებიდან: &lt;i&gt;{1}&lt;/i&gt;, &lt;i&gt;{2} (მხოლოდ სხვა ინტერვიუზე )&lt;/i&gt; and &lt;i&gt;{3}&lt;/i&gt;." ts="Changed" qs="ToReview" />
-            <li lc="es" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; entrevista (s) seleccionadas para reasignar. &lt;/ h3&gt; &lt;b&gt; ¡Nota! &lt;/ b&gt; Puede asignar entrevistas solo con los siguientes estados: &lt;i&gt; {1} &lt;/ i&gt;, &lt;i&gt; {2} (solo en otro entrevistador) &lt;/ i&gt; y &lt;i&gt; {3} &lt;/ i&gt;" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="ar" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt;المقابلات (المقابلة) التي تم اختيارها لإعادة تعيينها. &lt;/ h3&gt;&lt;b&gt; ملاحظة! &lt;/ b&gt; يمكنك تعيين مقابلات مع الحالات التالية فقط: &lt;i&gt; {1} &lt;/ i&gt; و &lt;i&gt; {2} (فقط على باحث اخر) &lt;/ i&gt; و &lt;i&gt; {3} &lt;/ I&gt;. " ts="Translated" qs="ToReview" />
+            <li lc="es" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; entrevista (s) seleccionadas para reasignar. &lt;/ h3&gt; &lt;b&gt; ¡Nota! &lt;/ b&gt; Puede asignar entrevistas solo con los siguientes estados: &lt;i&gt; {1} &lt;/ i&gt;, &lt;i&gt; {2} (solo en otro entrevistador) &lt;/ i&gt; y &lt;i&gt; {3} &lt;/ i&gt;" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
+            <li lc="ar" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt;المقابلات (المقابلة) التي تم اختيارها لإعادة تعيينها. &lt;/ h3&gt;&lt;b&gt; ملاحظة! &lt;/ b&gt; يمكنك تعيين مقابلات مع الحالات التالية فقط: &lt;i&gt; {1} &lt;/ i&gt; و &lt;i&gt; {2} (فقط على باحث اخر) &lt;/ i&gt; و &lt;i&gt; {3} &lt;/ I&gt;. " ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Interviews.resx" nm="Assignment" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Interviews" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -26350,13 +26685,13 @@
         </it>
         <it rn="Resources\Interviews.resx" nm="AssignToOtherTeamConfirmMessage" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Interviews" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) will be assigned.&lt;/h3&gt;&#xA;&lt;b&gt;Note!&lt;/b&gt; Only interviews that are not in status &lt;i&gt;{1}&lt;/i&gt; and &lt;i&gt;{2}&lt;/i&gt; could be reassigned." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; интервью будут назначены.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Внимание!&lt;/b&gt;Только интервью, которые не в статусе &lt;i&gt;{1}&lt;/i&gt; и &lt;i&gt;{2}&lt;/i&gt;, могут быть переназначены." ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt;个访谈将被分配。&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;注意！&lt;/b&gt;只有状态未处于&lt;i&gt;{1}&lt;/i&gt;和&lt;i&gt;{2}&lt;/i&gt;状态的问卷可以被重新分配。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="nn-nn" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) will be assigned.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Note!&lt;/b&gt; Only interviews that are not in status &lt;i&gt;{1}&lt;/i&gt; and &lt;i&gt;{2}&lt;/i&gt; could be reassigned." ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; интервью будут назначены.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Внимание!&lt;/b&gt;Только интервью, которые не в статусе &lt;i&gt;{1}&lt;/i&gt; и &lt;i&gt;{2}&lt;/i&gt;, могут быть переназначены." ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt;个访谈将被分配。&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;注意！&lt;/b&gt;只有状态未处于&lt;i&gt;{1}&lt;/i&gt;和&lt;i&gt;{2}&lt;/i&gt;状态的问卷可以被重新分配。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
             <li lc="ka" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; ინტერვიუ (s) ენიჭება. &lt;/ h3&gt;&#xD;&#xA;&#xD;&#xA;&lt;b&gt; შენიშვნა! &lt;/ b&gt; მხოლოდ ის ინტერვიუები რომელიც არ არის სტატუსში &lt;i&gt; {1} &lt;/ i&gt; და &lt;i&gt; {2} &lt;/ i&gt; შეიძლება მიენიჭოს. " ts="Changed" qs="ToReview" />
-            <li lc="es" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; entrevista (s) serán asignadas. &lt;/ h3&gt; &lt;b&gt; ¡Nota! &lt;/ b&gt; Solo las entrevistas que no están en el estado &lt;i&gt; {1} &lt;/ i&gt; y &lt;i&gt; {2} &lt;/ i&gt; podrían reasignarse." ts="Translated" qs="ToReview" />
-            <li lc="fr" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/b&gt; entretien (s) seront assignés. &lt;/h3&gt;&#xA;&lt;b&gt; Note! &lt;/b&gt; Seuls les entretiens qui ne sont pas dans l'état &lt;i&gt; {1} &lt;/i&gt; et &lt;i&gt; {2} &lt;/i&gt; peuvent être réaffectés.&#xA;" ts="Translated" qs="ToReview" />
-            <li lc="ar" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; سيتم تعيين مقابلة (مقابلات). &lt;/ h3&gt;&#xD;&#xD;&#xA;&lt;b&gt; ملاحظة! &lt;/ b&gt; يمكن فقط إعادة تعيين المقابلات التي ليست في وضع &lt;i&gt; {1} &lt;/ i&gt; و &lt;i&gt; {2} &lt;/ i&gt;." ts="Translated" qs="ToReview" />
+            <li lc="es" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; entrevista (s) serán asignadas. &lt;/ h3&gt; &lt;b&gt; ¡Nota! &lt;/ b&gt; Solo las entrevistas que no están en el estado &lt;i&gt; {1} &lt;/ i&gt; y &lt;i&gt; {2} &lt;/ i&gt; podrían reasignarse." ts="Changed" qs="ToReview" />
+            <li lc="fr" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/b&gt; entretien (s) seront assignés. &lt;/h3&gt;&#xD;&#xA;&lt;b&gt; Note! &lt;/b&gt; Seuls les entretiens qui ne sont pas dans l'état &lt;i&gt; {1} &lt;/i&gt; et &lt;i&gt; {2} &lt;/i&gt; peuvent être réaffectés.&#xD;&#xA;" ts="Changed" qs="ToReview" />
+            <li lc="ar" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; سيتم تعيين مقابلة (مقابلات). &lt;/ h3&gt;&#xD;&#xD;&#xA;&lt;b&gt; ملاحظة! &lt;/ b&gt; يمكن فقط إعادة تعيين المقابلات التي ليست في وضع &lt;i&gt; {1} &lt;/ i&gt; و &lt;i&gt; {2} &lt;/ i&gt;." ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Interviews.resx" nm="ChooseResponsible" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Interviews" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -26428,14 +26763,14 @@
         </it>
         <it rn="Resources\Interviews.resx" nm="DeleteConfirmMessageHQ" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Interviews" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="fr" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/b&gt; entretien (s) seront supprimés. &lt;/h3&gt;&#xA;&lt;b&gt; Attention! &lt;/b&gt; Vous ne pouvez supprimer les entretiens qu'avec les statuts suivants uniquement: &lt;i&gt; {1} &lt;/i&gt; et &lt;i&gt; {2} &lt;/i&gt;. " ts="Translated" qs="ToReview" />
-            <li lc="pt" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; Interview(s) será excluído.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Nota!&lt;/b&gt; Você pode excluir a entrevistas com o seguinte status somente: &lt;i&gt;{1}&lt;/i&gt; e &lt;i&gt;{2}&lt;/i&gt;." ts="Translated" qs="ToReview" />
-            <li lc="nn-nn" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) will be deleted.&lt;/h3&gt;&#xA;&lt;b&gt;Note!&lt;/b&gt; You can delete interviews with the following statuses only: &lt;i&gt;{1}&lt;/i&gt; and &lt;i&gt;{2}&lt;/i&gt;." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; интервью будут удалены.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Внимание!&lt;/b&gt; Вы можете удалить интервью имеющие следующие статусы: &lt;i&gt;{1}&lt;/i&gt; и &lt;i&gt;{2}&lt;/i&gt;." ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt;个访谈将被删除。&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;注意！&lt;/b&gt;您只能删除处于以下状态的访谈：&lt;i&gt;{1}&lt;/i&gt;和&lt;i&gt;{2}&lt;/i&gt;。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="ka" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; ინტერვიუ (s) წაიშლება. &lt;/ h3&gt;&#xD;&#xA;&#xD;&#xA;&lt;b&gt; შენიშვნა! &lt;/ b&gt; თქვენ შეგიძლიათ წაშალოთ  ინტერვიუები მხოლოდ შემდეგი სტატუსებით: &lt;i&gt; {1} &lt;/ i&gt; და &lt;i&gt; {2} &lt;/ i&gt;. " ts="Changed" qs="ToReview" />
-            <li lc="es" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; entrevista (s) será eliminada. &lt;/ h3&gt; &lt;b&gt; ¡Nota! &lt;/ b&gt; Puede eliminar entrevistas solo con los siguientes estados: &lt;i&gt; {1} &lt;/ i&gt; y &lt;i&gt; {2} &lt;/ i&gt;." ts="Translated" qs="ToReview" />
-            <li lc="ar" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; سيتم حذف المقابلات. &lt;/ h3&gt;&#xD;&#xD;&#xA;&lt;b&gt; ملاحظة! &lt;/ b&gt; يمكنك حذف المقابلات مع الحالات التالية فقط: &lt;i&gt; {1} &lt;/ i&gt; و &lt;i&gt; {2} &lt;/ i&gt;. " ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/b&gt; entretien (s) seront supprimés. &lt;/h3&gt;&#xD;&#xA;&lt;b&gt; Attention! &lt;/b&gt; Vous pouvez supprimer les interviews non reçues par Interviewer uniquement avec les statuts suivants: &lt;i&gt; {1} &lt;/i&gt; et &lt;i&gt; {2} &lt;/i&gt;. " ts="Changed" qs="ToReview" />
+            <li lc="pt" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; Interview(s) será excluído.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Nota!&lt;/b&gt; Você pode excluir entrevistas não recebidas pelo entrevistador com os seguintes status apenas: &lt;i&gt;{1}&lt;/i&gt; e &lt;i&gt;{2}&lt;/i&gt;." ts="Changed" qs="ToReview" />
+            <li lc="nn-nn" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) will be deleted.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Note!&lt;/b&gt; You can delete interviews not received by Interviewer with the following statuses only: &lt;i&gt;{1}&lt;/i&gt; and &lt;i&gt;{2}&lt;/i&gt;." ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; интервью будут удалены.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Внимание!&lt;/b&gt; Вы можете удалить интервью, которые не получены интервьюером, имеющие следующие статусы: &lt;i&gt;{1}&lt;/i&gt; и &lt;i&gt;{2}&lt;/i&gt;." ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt;个访谈将被删除。&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;注意！&lt;/b&gt;您可以删除只有以下状态的面试者未收到的面试：&lt;i&gt;{1}&lt;/i&gt;和&lt;i&gt;{2}&lt;/i&gt;。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
+            <li lc="ka" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; ინტერვიუ (s) წაიშლება. &lt;/ h3&gt;&#xD;&#xA;&#xD;&#xA;&lt;b&gt; შენიშვნა! &lt;/ b&gt; ინტერვიუერის მიერ არ მიიღოთ გასაუბრება მხოლოდ შემდეგ სტატუტებთან: &lt;i&gt; {1} &lt;/ i&gt; და &lt;i&gt; {2} &lt;/ i&gt;. " ts="Changed" qs="ToReview" />
+            <li lc="es" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; entrevista (s) será eliminada. &lt;/ h3&gt; &lt;b&gt; ¡Nota! &lt;/ b&gt; Puede eliminar entrevistas que no haya recibido Interviewer solo con los siguientes estados: &lt;i&gt; {1} &lt;/ i&gt; y &lt;i&gt; {2} &lt;/ i&gt;." ts="Changed" qs="ToReview" />
+            <li lc="ar" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; سيتم حذف المقابلات. &lt;/ h3&gt;&#xD;&#xD;&#xA;&lt;b&gt; ملاحظة! &lt;/ b&gt; يمكنك حذف المقابلات مع الحالات التالية فقط: &lt;i&gt; {1} &lt;/ i&gt; و &lt;i&gt; {2} &lt;/ i&gt;. " ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Interviews.resx" nm="Errors" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Interviews" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -26448,26 +26783,26 @@
         </it>
         <it rn="Resources\Interviews.resx" nm="RejectConfirmMessage" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Interviews" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="fr" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/b&gt; entretien (s) seront rejetés. &lt;/h3&gt;&#xA;&lt;b&gt; Attention! &lt;/b&gt; Vous ne pouvez rejeter les entretiens qu'avec les états suivants uniquement: &lt;i&gt; {1} &lt;/i&gt; et &lt;i&gt; {2} &lt;/i&gt;.&#xA;" ts="Translated" qs="ToReview" />
-            <li lc="pt" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; Interview(s) serão rejeitadas.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Nota!&lt;/b&gt; Você pode rejeitar a entrevistas com o seguinte status somente: &lt;i&gt;{1}&lt;/i&gt; e &lt;i&gt;{2}&lt;/i&gt;." ts="Translated" qs="ToReview" />
-            <li lc="nn-nn" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) will be rejected.&lt;/h3&gt;&#xA;&lt;b&gt;Note!&lt;/b&gt; You can reject interviews with the following statuses only: &lt;i&gt;{1}&lt;/i&gt; and &lt;i&gt;{2}&lt;/i&gt;." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; интервью, будут отклонены.&lt;/h3&gt;&lt;b&gt;Внимание!&lt;/b&gt; Вы можете отклонить интервью имеющие следующие статусы: &lt;i&gt;{1}&lt;/i&gt; и &lt;i&gt;{2}&lt;/i&gt;." ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt;个访谈将被驳回。&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;注意！&lt;/b&gt;您只能驳回处于以下状态的访谈：&lt;i&gt;{1}&lt;/i&gt;和&lt;i&gt;{2}&lt;/i&gt;。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="fr" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/b&gt; entretien (s) seront rejetés. &lt;/h3&gt;&#xD;&#xA;&lt;b&gt; Attention! &lt;/b&gt; Vous ne pouvez rejeter les entretiens qu'avec les états suivants uniquement: &lt;i&gt; {1} &lt;/i&gt; et &lt;i&gt; {2} &lt;/i&gt;.&#xD;&#xA;" ts="Changed" qs="ToReview" />
+            <li lc="pt" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; Interview(s) serão rejeitadas.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Nota!&lt;/b&gt; Você pode rejeitar a entrevistas com o seguinte status somente: &lt;i&gt;{1}&lt;/i&gt; e &lt;i&gt;{2}&lt;/i&gt;." ts="Changed" qs="ToReview" />
+            <li lc="nn-nn" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) will be rejected.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Note!&lt;/b&gt; You can reject interviews with the following statuses only: &lt;i&gt;{1}&lt;/i&gt; and &lt;i&gt;{2}&lt;/i&gt;." ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; интервью, будут отклонены.&lt;/h3&gt;&lt;b&gt;Внимание!&lt;/b&gt; Вы можете отклонить интервью имеющие следующие статусы: &lt;i&gt;{1}&lt;/i&gt; и &lt;i&gt;{2}&lt;/i&gt;." ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt;个访谈将被驳回。&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;注意！&lt;/b&gt;您只能驳回处于以下状态的访谈：&lt;i&gt;{1}&lt;/i&gt;和&lt;i&gt;{2}&lt;/i&gt;。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
             <li lc="ka" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; ინტერვიუ (ებ) ი უარყოფილი იქნება &lt;/ h3&gt;&#xD;&#xA;&#xD;&#xA;&lt;b&gt; შენიშვნა! &lt;/ b&gt; თქვენ შეგიძლიათ უარი ეთქვათ ინტერვიუებზე მხოლოდ შემდეგი სტატუსებით : &lt;i&gt; {1} &lt;/ i&gt; და &lt;i&gt; {2} &lt;/ i&gt;. " ts="Changed" qs="ToReview" />
             <li lc="es" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; entrevista (s) será rechazada. &lt;/ h3&gt; &lt;b&gt; ¡Nota! &lt;/ b&gt; Solo puede rechazar entrevistas con los siguientes estados: &lt;i&gt; {1} &lt;/ i&gt; y &lt;i&gt; {2} &lt;/ i&gt;." ts="Changed" qs="ToReview" />
-            <li lc="ar" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; سيتم رفض المقابلات. &lt;/ h3&gt;&#xD;&#xD;&#xA;&lt;b&gt; ملاحظة! &lt;/ b&gt; يمكنك رفض المقابلات مع الحالات التالية فقط: &lt;i&gt; {1} &lt;/ i&gt; و &lt;i&gt; {2} &lt;/ i&gt;. " ts="Translated" qs="ToReview" />
+            <li lc="ar" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; سيتم رفض المقابلات. &lt;/ h3&gt;&#xD;&#xD;&#xA;&lt;b&gt; ملاحظة! &lt;/ b&gt; يمكنك رفض المقابلات مع الحالات التالية فقط: &lt;i&gt; {1} &lt;/ i&gt; و &lt;i&gt; {2} &lt;/ i&gt;. " ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Interviews.resx" nm="RejectConfirmMessageHQ" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Interviews" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="fr" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/b&gt; entretien (s) seront rejetés. &lt;/h3&gt;&#xA;&lt;b&gt; Attention! &lt;/b&gt; Vous ne pouvez rejeter les entretiens qu'avec l'état suivant uniquement: &lt;i&gt; {1} &lt;/i&gt; et &lt;i&gt; {2} &lt;/i&gt;.&#xA;" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/b&gt; entretien (s) seront rejetés. &lt;/h3&gt;&#xD;&#xA;&lt;b&gt; Attention! &lt;/b&gt; Vous ne pouvez rejeter les entretiens qu'avec l'état suivant uniquement: &lt;i&gt; {1} &lt;/i&gt; et &lt;i&gt; {2} &lt;/i&gt;.&#xD;&#xA;" ts="Changed" qs="ToReview" />
             <li lc="pt" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; Interview(s) serão rejeitadas.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Nota!&lt;/b&gt; Você pode rejeitar a entrevistas com o seguinte status somente: &lt;i&gt;{1}&lt;/i&gt; e &lt;i&gt;{2}&lt;/i&gt;." ts="Changed" qs="ToReview" />
-            <li lc="nn-nn" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) will be rejected.&lt;/h3&gt;&#xA;&lt;b&gt;Note!&lt;/b&gt; You can reject interviews with the following status only: &lt;i&gt;{1}&lt;/i&gt; and &lt;i&gt;{2}&lt;/i&gt;." ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) will be rejected.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Note!&lt;/b&gt; You can reject interviews with the following status only: &lt;i&gt;{1}&lt;/i&gt; and &lt;i&gt;{2}&lt;/i&gt;." ts="Changed" qs="ToReview" />
             <li lc="ru" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; интервью, будут откачены.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Внимание!&lt;/b&gt; Вы можете отклонить интервью имеющие следующие статусы: &lt;i&gt;{1}&lt;/i&gt; и &lt;i&gt;{2}&lt;/i&gt;." ts="Changed" qs="ToReview" />
-            <li lc="zh" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt;个访谈将被驳回。&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;注意！&lt;/b&gt;您只能驳回处于以下状态的访谈：&lt;i&gt;{1}&lt;/i&gt;和&lt;i&gt;{2}&lt;/i&gt;。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
+            <li lc="zh" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt;个访谈将被驳回。&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;注意！&lt;/b&gt;您只能驳回处于以下状态的访谈：&lt;i&gt;{1}&lt;/i&gt;和&lt;i&gt;{2}&lt;/i&gt;。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
             <li lc="ka" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; ინტერვიუ (ებ) ი უარყოფილი იქნება &lt;/ h3&gt;&#xD;&#xA;&#xD;&#xA;&lt;b&gt; შენიშვნა! &lt;/ b&gt; თქვენ შეგიძლიათ უარყოთ ინტერვიუები მხოლოდ შემდეგი სტატუსით: &lt;i&gt; {1} &lt;/ i&gt; და &lt;i&gt; {2} &lt;/ i&gt;. " ts="Changed" qs="ToReview" />
             <li lc="es" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; entrevista (s) será rechazada. &lt;/ h3&gt; &lt;b&gt; ¡Tenga en cuenta! &lt;/ b&gt; Puede rechazar entrevistas solo con el siguiente estado: &lt;i&gt; {1} &lt;/ i&gt; y &lt;i&gt; {2} &lt;/ i&gt;." ts="Changed" qs="ToReview" />
-            <li lc="ar" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; سيتم رفض المقابلات. &lt;/ h3&gt;&#xD;&#xD;&#xA;&lt;b&gt; ملاحظة! &lt;/ b&gt; يمكنك رفض المقابلات مع الحالة التالية فقط: &lt;i&gt; {1} &lt;/ i&gt;و &lt;i&gt; {2} &lt;/ i&gt;. " er="" ts="Changed" qs="ToReview" />
+            <li lc="ar" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; سيتم رفض المقابلات. &lt;/ h3&gt;&#xD;&#xD;&#xA;&lt;b&gt; ملاحظة! &lt;/ b&gt; يمكنك رفض المقابلات مع الحالة التالية فقط: &lt;i&gt; {1} &lt;/ i&gt;و &lt;i&gt; {2} &lt;/ i&gt;. " ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Interviews.resx" nm="Tooltip_Filter_Assignment" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Interviews" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -26482,12 +26817,12 @@
         </it>
         <it rn="Resources\Interviews.resx" nm="Tooltip_Filter_Questionnaire" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Interviews" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Version of questionnaire. Select a questionnaire version to see its associated interviews in the report to the right. Select “All questionnaires” to see interviews associated with any questionnaire." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Версия опросника. Выберите версию опросника, чтобы посмотреть собранные по нему интервью. Выберите &quot;Все опросники&quot;, чтобы увидеть интервью по всем опросникам" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="es" tx="Versión del cuestionario. Seleccione una versión del cuestionario para ver sus entrevistas asociadas en el informe a la derecha. Seleccione &quot;Todos los cuestionarios&quot; para ver las entrevistas asociadas con cualquier cuestionario." ts="Translated" qs="ToReview" />
-            <li lc="fr" tx="Version du questionnaire. Sélectionnez une version du questionnaire pour voir ses entretiens associés dans le rapport situé à droite. Sélectionnez &quot;Tous les questionnaires&quot; pour voir les entretiens associés à un questionnaire donné." er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
-            <li lc="zh" tx="问卷的版本。选择一个问卷的版本以查看右边报告相应的访谈。选择“所有问卷”以查看和访谈有关的任何问卷。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="ar" tx="نسخة الاستبيان. حدد نسخة استبيان لرؤية المقابلات المرتبطة بها في التقرير إلى اليمين. حدد &quot;جميع الاستبيانات&quot; لرؤية المقابلات المرتبطة بأي استبيان." ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Select a questionnaire to see its associated interviews in the list. Select “All questionnaires” to see interviews associated with any questionnaire." ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Выберите опросник, чтобы посмотреть собранные по нему интервью. Выберите &quot;Все опросники&quot;, чтобы увидеть интервью по всем опросникам" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
+            <li lc="es" tx="Versión del cuestionario. Seleccione una versión del cuestionario para ver sus entrevistas asociadas en el informe a la derecha. Seleccione &quot;Todos los cuestionarios&quot; para ver las entrevistas asociadas con cualquier cuestionario." ts="Changed" qs="ToReview" />
+            <li lc="fr" tx="Version du questionnaire. Sélectionnez une version du questionnaire pour voir ses entretiens associés dans le rapport situé à droite. Sélectionnez &quot;Tous les questionnaires&quot; pour voir les entretiens associés à un questionnaire donné." er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="问卷的版本。选择一个问卷的版本以查看右边报告相应的访谈。选择“所有问卷”以查看和访谈有关的任何问卷。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
+            <li lc="ar" tx="نسخة الاستبيان. حدد نسخة استبيان لرؤية المقابلات المرتبطة بها في التقرير إلى اليمين. حدد &quot;جميع الاستبيانات&quot; لرؤية المقابلات المرتبطة بأي استبيان." ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Interviews.resx" nm="Tooltip_Filter_Responsible" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Interviews" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -26599,14 +26934,14 @@
         </it>
         <it rn="Resources\Interviews.resx" nm="UnapproveConfirmMessageHQ" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Interviews" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="fr" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/b&gt; entretien (s) ne seront pas approuvés. &lt;/h3&gt;&#xA;&lt;b&gt; Attention! &lt;/b&gt; Vous ne pouvez désapprouver que les entretiens qui ont l'état suivant uniquement: &lt;i&gt; {1} &lt;/i&gt;.&#xA;" ts="Translated" qs="ToReview" />
-            <li lc="pt" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; Interview(s) vai ser não aprovadas.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Nota!&lt;/b&gt; Você pode reprovar entrevistas com somente o seguinte status: &lt;i&gt;{1}&lt;/i&gt;." ts="Translated" qs="ToReview" />
-            <li lc="nn-nn" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) will be unapproved.&lt;/h3&gt;&#xA;&lt;b&gt;Note!&lt;/b&gt; You can unapprove interviews with the following status only: &lt;i&gt;{1}&lt;/i&gt;." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; интервью будет отклонены.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Внимание!&lt;/b&gt; Вы можете откатить интервью имеющие следующие статусы: &lt;i&gt;{1}&lt;/i&gt;." ts="Translated" qs="ToReview" />
-            <li lc="zh" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt;个访谈将被取消审核。&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;注意！&lt;/b&gt;您只能取消审核处于以下状态的访谈：&lt;i&gt;{1}&lt;/i&gt;。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
+            <li lc="fr" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/b&gt; entretien (s) ne seront pas approuvés. &lt;/h3&gt;&#xD;&#xA;&lt;b&gt; Attention! &lt;/b&gt; Vous ne pouvez désapprouver que les entretiens qui ont l'état suivant uniquement: &lt;i&gt; {1} &lt;/i&gt;.&#xD;&#xA;" ts="Changed" qs="ToReview" />
+            <li lc="pt" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; Interview(s) vai ser não aprovadas.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Nota!&lt;/b&gt; Você pode reprovar entrevistas com somente o seguinte status: &lt;i&gt;{1}&lt;/i&gt;." ts="Changed" qs="ToReview" />
+            <li lc="nn-nn" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interview(s) will be unapproved.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Note!&lt;/b&gt; You can unapprove interviews with the following status only: &lt;i&gt;{1}&lt;/i&gt;." ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; интервью будет отклонены.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Внимание!&lt;/b&gt; Вы можете откатить интервью имеющие следующие статусы: &lt;i&gt;{1}&lt;/i&gt;." ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt;个访谈将被取消审核。&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;注意！&lt;/b&gt;您只能取消审核处于以下状态的访谈：&lt;i&gt;{1}&lt;/i&gt;。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
             <li lc="ka" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; ინტერვიუ (s) დაუშვებელია. &lt;/ h3&gt;&#xD;&#xA;&#xD;&#xA;&lt;b&gt; შენიშვნა! &lt;/ b&gt; ინტერვიუები შეგიძლიათ შემდეგნაირად შეუძლებელია: &lt;i&gt; {1} &lt;/ i&gt;. " ts="Changed" qs="ToReview" />
-            <li lc="es" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; entrevista (s) no será aprobada. &lt;/ h3&gt; &lt;b&gt; ¡Tenga en cuenta! &lt;/ b&gt; Puede desaprobar las entrevistas con el siguiente estado solamente: &lt;i&gt; {1} &lt;/ i&gt;. " ts="Translated" qs="ToReview" />
-            <li lc="ar" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; سيتم إلغاء الموافقة على المقابلات.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Note!&lt;/b&gt;لا يمكنك الموافقة على المقابلات مع الحالة التالية فقط: &lt;i&gt;{1}&lt;/i&gt;." ts="Translated" qs="ToReview" />
+            <li lc="es" tx="&lt;h3&gt; &lt;b&gt; {0} &lt;/ b&gt; entrevista (s) no será aprobada. &lt;/ h3&gt; &lt;b&gt; ¡Tenga en cuenta! &lt;/ b&gt; Puede desaprobar las entrevistas con el siguiente estado solamente: &lt;i&gt; {1} &lt;/ i&gt;. " ts="Changed" qs="ToReview" />
+            <li lc="ar" tx="&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; سيتم إلغاء الموافقة على المقابلات.&lt;/h3&gt;&#xD;&#xA;&lt;b&gt;Note!&lt;/b&gt;لا يمكنك الموافقة على المقابلات مع الحالة التالية فقط: &lt;i&gt;{1}&lt;/i&gt;." ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\LimitsIndicator.resx" nm="InterviewsLeftFormat" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="LimitsIndicator" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -27192,6 +27527,18 @@
             <li lc="ar" tx="تنزيل التقرير ك......" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
+        <it rn="Resources\Pages.resx" nm="DownloadSupervisorPage_PageTitle" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Download Supervisor app" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Скачивание приложения Супервизора" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Resources\Pages.resx" nm="DownloadSupervisorPage_Welcome" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Welcome to Survey Solutions Supervisor download page" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Добро пожаловать на страницу скачивания приложения Супервизора" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
         <it rn="Resources\Pages.resx" nm="EditQuestion_Save" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="fr" tx="sauvegarder" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="Warning" />
@@ -27325,6 +27672,12 @@
             <li lc="zh" tx="当您需要高级的ESRI GIS功能时，请下载并安装带有ESRI GIS功能的调查员app。此安装包由于包含ESRI SDK，故体积更大需要更长时间下载。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
           </lis>
         </it>
+        <it rn="Resources\Pages.resx" nm="GetLatestSupervisorApp" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Download latest Supervisor app" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Скачать приложение Супервизора" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
         <it rn="Resources\Pages.resx" nm="GlobalSettings_DeleteMapConfirmation" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="nn-nn" tx="Do you want to delete map?" ts="Translated" qs="ToReview" />
@@ -27409,13 +27762,13 @@
         </it>
         <it rn="Resources\Pages.resx" nm="GlobalSettings_NotifyNoMarkersDialogText" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="fr" tx="Aucune coordonnées GPS à charger" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
+            <li lc="fr" tx="Aucune coordonnées GPS à charger" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
             <li lc="pt" tx="Não há nenhuma informações sobre pontos de geolocalização." ts="Changed" qs="ToReview" />
-            <li lc="nn-nn" tx="There is no any information about geolocation points." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Нет никакой информации об отметках геолокации" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
-            <li lc="zh" tx="没有关于位置点的信息。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
+            <li lc="nn-nn" tx="This questionnaire contains no GPS coordinates to show on the map for selected variable." ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Нет никакой информации об отметках геолокации" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="没有关于位置点的信息。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
             <li lc="ka" tx="გეოლოგიური ადგილმდებარეობის შესახებ ინფორმაცია არ არსებობს." ts="Changed" qs="ToReview" />
-            <li lc="es" tx="No hay información sobre los puntos de geo localización" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
+            <li lc="es" tx="No hay información sobre los puntos de geo localización" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
             <li lc="ar" tx="لا توجد أية معلومات حول نقاط تحديد الموقع الجغرافي." ts="Changed" qs="ToReview" />
           </lis>
         </it>
@@ -28092,22 +28445,22 @@
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerHq_RestartConfirm" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Please provide a comment if needed to restart an interview" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Please provide a comment if needed to reopen an interview" ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Комментарий" ts="Changed" qs="ToReview" />
             <li lc="ka" tx="გთხოვთ, გაითვალისწინოთ კომენტარი, თუ საჭიროა გასაუბრების ახლიდან დასაწყებად" ts="Changed" qs="ToReview" />
             <li lc="es" tx="Favor provea un comentario si desea reiniciar la entrevista" ts="Changed" qs="ToReview" />
-            <li lc="fr" tx="Veuillez fournir un commentaire si nécessaire pour redémarrer un entretien" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Veuillez fournir un commentaire si nécessaire pour redémarrer un entretien" ts="Changed" qs="ToReview" />
             <li lc="zh" tx="若打算重启一个访谈请提供备注" ts="Changed" qs="ToReview" />
             <li lc="ar" tx="يرجى تقديم تعليق إذا لزم الأمر لإعادة بدء المقابلة" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="InterviewerHq_RestartInterview" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Restart" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Reopen" ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Переоткрыть" ts="Changed" qs="ToReview" />
             <li lc="ka" tx="გადატვირთვა" ts="Changed" qs="ToReview" />
             <li lc="es" tx="Reiniciar" ts="Changed" qs="ToReview" />
-            <li lc="fr" tx="Redémarrer" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Redémarrer" ts="Changed" qs="ToReview" />
             <li lc="zh" tx="重新开始" ts="Changed" qs="ToReview" />
             <li lc="ar" tx="إعادة تشغيل" ts="Changed" qs="ToReview" />
           </lis>
@@ -30121,13 +30474,13 @@
         </it>
         <it rn="Resources\Pages.resx" nm="Supervisor_CreateText" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="This action will create individual user with supervisor rights,&#xA;        &lt;br&gt;to create several users you can use &lt;a href=&quot;{0}&quot; target=&quot;_blank&quot;&gt;user batch creation&lt;/a&gt;." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Это действие создаст индивидуального пользователя с правами супервизора&lt;br&gt;&#xD;&#xA;Чтобы создать нескольких пользователей сразу, воспользуйтесь функцией  &lt;a href=&quot;{0}&quot; target=&quot;_blank&quot;&gt;массового создания пользователей&lt;/a&gt;" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="zh" tx="这个动作将创建具有督导员权限的单个用户。&lt;br&gt;要创建多个用户，您可以使用&lt;a href=&quot;{0}&quot; target=&quot;_blank&quot;&gt;批量用户创建&lt;/a&gt;。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="ka" tx="ეს ქმედება ქმნის ინდივიდუალურ მომხმარებელს ზედამხედველის უფლებებით,&#xD;&#xD;&#xA;        &lt;br&gt; იმისათვის რომ შექმნათ რამოდენიმე მომხმარებელი გამოიყენეთ &lt;a href=&quot;{0}&quot; target=&quot;__blank&quot;&gt; მომხმარებლის სურათების შექმნა &lt;/a&gt;. " ts="Translated" qs="ToReview" />
-            <li lc="es" tx="Esta acción creará un usuario con privilegios de supervisor, &lt;bar&gt; para crear varios usuarios usted puede usar &lt;a href=&quot;{0}&quot; target=&quot;_blank&quot;&gt;creación en lote de usuarios&lt;/a&gt;." ts="Translated" qs="ToReview" />
-            <li lc="fr" tx="Cette action va créer un utilisateur individuel avec des droits de chef d'équipe, pour créer plusieurs utilisateurs, vous pouvez utiliser la &lt;a href=&quot;&quot;{0}&quot;&quot; target=&quot;&quot;_blank&quot;&quot;&gt; création par lots utilisateur &lt;/a&gt;." ts="Translated" qs="ToReview" />
-            <li lc="ar" tx="هذا الاجراء سوف ينشئ مستخدم فردي بحقوق مشرف,&#xD;&#xA;        &lt;br&gt;to create several users you can use &lt;a href=&quot;{0}&quot; target=&quot;_blank&quot;&gt;user batch creation&lt;/a&gt;." ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="This action will create individual user with supervisor rights,&#xD;&#xA;        &lt;br&gt;to create several users you can use &lt;a href=&quot;{0}&quot; target=&quot;_blank&quot;&gt;user batch creation&lt;/a&gt;." ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Это действие создаст индивидуального пользователя с правами супервизора&lt;br&gt;&#xD;&#xA;Чтобы создать нескольких пользователей сразу, воспользуйтесь функцией  &lt;a href=&quot;{0}&quot; target=&quot;_blank&quot;&gt;массового создания пользователей&lt;/a&gt;" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="这个动作将创建具有督导员权限的单个用户。&lt;br&gt;要创建多个用户，您可以使用&lt;a href=&quot;{0}&quot; target=&quot;_blank&quot;&gt;批量用户创建&lt;/a&gt;。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
+            <li lc="ka" tx="ეს ქმედება ქმნის ინდივიდუალურ მომხმარებელს ზედამხედველის უფლებებით,&#xD;&#xD;&#xA;        &lt;br&gt; იმისათვის რომ შექმნათ რამოდენიმე მომხმარებელი გამოიყენეთ &lt;a href=&quot;{0}&quot; target=&quot;__blank&quot;&gt; მომხმარებლის სურათების შექმნა &lt;/a&gt;. " ts="Changed" qs="ToReview" />
+            <li lc="es" tx="Esta acción creará un usuario con privilegios de supervisor, &lt;bar&gt; para crear varios usuarios usted puede usar &lt;a href=&quot;{0}&quot; target=&quot;_blank&quot;&gt;creación en lote de usuarios&lt;/a&gt;." ts="Changed" qs="ToReview" />
+            <li lc="fr" tx="Cette action va créer un utilisateur individuel avec des droits de chef d'équipe, pour créer plusieurs utilisateurs, vous pouvez utiliser la &lt;a href=&quot;&quot;{0}&quot;&quot; target=&quot;&quot;_blank&quot;&quot;&gt; création par lots utilisateur &lt;/a&gt;." ts="Changed" qs="ToReview" />
+            <li lc="ar" tx="هذا الاجراء سوف ينشئ مستخدم فردي بحقوق مشرف,&#xD;&#xA;        &lt;br&gt;to create several users you can use &lt;a href=&quot;{0}&quot; target=&quot;_blank&quot;&gt;user batch creation&lt;/a&gt;." ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Pages.resx" nm="Supervisor_LockWarning" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Pages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -31281,6 +31634,12 @@
             <li lc="es" tx="&lt;li&gt;&lt;b&gt;{0}&lt;/b&gt; [{1}]&lt;/li&gt;" ts="Translated" qs="ToReview" />
           </lis>
         </it>
+        <it rn="Resources\SyncLogMessages.resx" nm="CheckObsoleteInterviews" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="SyncLogMessages" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Check for obsolete interviews. Request: &lt;pre&gt;{0}&lt;/pre&gt;" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Проверка устаревших интервью. Запрос: &lt;pre&gt;{0}&lt;/pre&gt;" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
         <it rn="Resources\SyncLogMessages.resx" nm="DeleteInterviewPackage" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="SyncLogMessages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="fr" tx="&lt;li&gt;Supprimer l’entretien : &lt;a href=&quot;{3}&quot;&gt;{0}&lt;/a&gt;, Paquet : {1}, Indice de tri : {2}&lt;/li&gt;" ts="Translated" qs="ToReview" />
@@ -31446,6 +31805,12 @@
             <li lc="ka" tx="ჩამოტვირთეთ გასაუბრების პაკეტების სია. &lt;ul&gt; {1} &lt;/ ul&gt; ბოლო სინქრონიზაციის პაკეტი: &lt;b&gt; {0} &lt;/ b&gt;" ts="Translated" qs="ToReview" />
             <li lc="es" tx="Descargar lista de paquetes de entrevista. &lt;/bar&gt; &lt;ul&gt; {1} &lt;/ul&gt;Ultima sincronización de paquetes: &lt;b&gt;{0}&lt;/b&gt;" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تنزيل قائمة حزم المقابلة. &lt;/br&gt; &lt;ul&gt; {1} &lt;/ul&gt;اخر حزمة مزامنة: &lt;b&gt;{0}&lt;/b&gt;" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Resources\SyncLogMessages.resx" nm="GetInterviewPackageV3" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="SyncLogMessages" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="&lt;b&gt;V3&lt;/b&gt; Download interview package: {0}" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="&lt;b&gt;V3&lt;/b&gt; Скачивание пакета интервью: {0}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\SyncLogMessages.resx" nm="GetInterviews" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="SyncLogMessages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -31632,6 +31997,12 @@
             <li lc="ka" tx="ინტერვიუს ატვირთვა: {0}" ts="Translated" qs="ToReview" />
             <li lc="es" tx="Cargar entrevista: {0}" ts="Translated" qs="ToReview" />
             <li lc="ar" tx="تحميل المقابلة: {0}" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Resources\SyncLogMessages.resx" nm="PostPackageV3" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="SyncLogMessages" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="&lt;b&gt;V3&lt;/b&gt; Upload interview: {0}" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="&lt;b&gt;V3&lt;/b&gt; Загрузка интервью: {0}" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\SyncLogMessages.resx" nm="QuestionnaireAssemblyProcessed" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="SyncLogMessages" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -31971,13 +32342,13 @@
         </it>
         <it rn="Resources\Troubleshooting.resx" nm="MissingCensusInterviews_Instructions" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Troubleshooting" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="To locate an interview, please provide name of the questionnaire.&lt;br/&gt;&#xA;Select an interviewer and timeframe to narrow down your search result" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="To locate an interview, please provide name of the questionnaire.&lt;br/&gt;&#xD;&#xA;Select an interviewer and timeframe to narrow down your search result" ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Чтобы найти интервью, выберите название опросника.&lt;br/&gt;&#xD;&#xA;Выберите интервьюера и диапазон дат, чтобы ограничить результаты поиска" ts="Changed" qs="ToReview" />
-            <li lc="zh" tx="为了查找一个访谈，请提供问卷的名称。&lt;br&gt;选择调查员和时间范围以缩小搜索结果" ts="Translated" qs="ToReview" />
-            <li lc="ka" tx="ინტერვიუს მოსაძებნად, გთხოვთ, მოგვაწოდოთ კითხვარის დასახელება. &lt;br/&gt;&#xD;&#xD;&#xA;აირჩიეთ ინტერვიუერი და ვადები თქვენი ძიების რეზულტატის შესამცირებლად" ts="Translated" qs="ToReview" />
-            <li lc="es" tx="Para localizar una entrevista, favor ingrese el nombre del cuestionario. &lt;bar/&gt; Seleccione una entrevista y período para disminuir los resultados de su búsqueda" ts="Translated" qs="ToReview" />
-            <li lc="fr" tx="&quot;Pour trouver un entretien, veuillez indiquer le nom du questionnaire. &lt;br/&gt;&#xA;&#xA;&#xA;&#xA;Sélectionnez un enquêteur&#xA;et un temps pour affiner vos résultats de recherche. &quot;&#xA;&#xA;" er="" ts="Translated" qs="ToReview" />
-            <li lc="ar" tx="لتحديد موقع المقابلة، يرجى تقديم اسم الباحث. &lt;br/&gt;&#xD;&#xD;&#xA;حدد المقابلات والإطار الزمني لتضييق نتيجة البحث " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Translated" qs="Warning" />
+            <li lc="zh" tx="为了查找一个访谈，请提供问卷的名称。&lt;br&gt;选择调查员和时间范围以缩小搜索结果" ts="Changed" qs="ToReview" />
+            <li lc="ka" tx="ინტერვიუს მოსაძებნად, გთხოვთ, მოგვაწოდოთ კითხვარის დასახელება. &lt;br/&gt;&#xD;&#xD;&#xA;აირჩიეთ ინტერვიუერი და ვადები თქვენი ძიების რეზულტატის შესამცირებლად" ts="Changed" qs="ToReview" />
+            <li lc="es" tx="Para localizar una entrevista, favor ingrese el nombre del cuestionario. &lt;bar/&gt; Seleccione una entrevista y período para disminuir los resultados de su búsqueda" ts="Changed" qs="ToReview" />
+            <li lc="fr" tx="&quot;Pour trouver un entretien, veuillez indiquer le nom du questionnaire. &lt;br/&gt;&#xA;&#xA;&#xA;&#xA;Sélectionnez un enquêteur&#xA;et un temps pour affiner vos résultats de recherche. &quot;&#xA;&#xA;" ts="Changed" qs="ToReview" />
+            <li lc="ar" tx="لتحديد موقع المقابلة، يرجى تقديم اسم الباحث. &lt;br/&gt;&#xD;&#xD;&#xA;حدد المقابلات والإطار الزمني لتضييق نتيجة البحث " er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\Troubleshooting.resx" nm="MissingCensusInterviews_MoreThanOneInterviewsFound_Message_Format" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="Troubleshooting" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -32241,7 +32612,7 @@
             <li lc="nn-nn" tx="Approx {{estimatedTime}} left" ts="Translated" qs="ToReview" />
             <li lc="ru" tx="Предположительное время ожидания: {{estimatedTime}}" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="约剩余{{estimatedTime}}" ts="Translated" qs="ToReview" />
-            <li lc="fr" tx="Environ {{estiméTime}} à gauche" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Environ {{estimatedTime}} à gauche" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\UploadUsers.resx" nm="FullName" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="UploadUsers" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -32286,10 +32657,10 @@
         </it>
         <it rn="Resources\UploadUsers.resx" nm="ManualSupervisorCreateLink" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="UploadUsers" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="interviewer" ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="супервизора" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
-            <li lc="zh" tx="督导员" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Translated" qs="Warning" />
-            <li lc="fr" tx="interviewer" ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="supervisor" ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="супервизора" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="督导员" er="Inconsistent translation. The invariant text for this locale has been translated to different locale versions." ts="Changed" qs="ToReview" />
+            <li lc="fr" tx="interviewer" ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\UploadUsers.resx" nm="NoCreatedUsers" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="UploadUsers" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -32550,7 +32921,7 @@
         </it>
         <it rn="Resources\UserPreloadingVerificationMessages.resx" nm="PLU0005" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="UserPreloadingVerificationMessages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="fr" tx="Mauvais format de connexion" er="" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Mauvais format de connexion" ts="Translated" qs="ToReview" />
             <li lc="pt" tx=" Login deve ser entre 3 e 15 caracteres e conter apenas letras, dígitos e símbolo de sublinhado" er="Spacing error. The text either starts or ends with a space or contains two subsequent spaces." ts="Changed" qs="Warning" />
             <li lc="nn-nn" tx="Wrong login format" ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Неправильный формат имени пользователя" ts="Changed" qs="ToReview" />
@@ -32578,7 +32949,7 @@
         </it>
         <it rn="Resources\UserPreloadingVerificationMessages.resx" nm="PLU0006" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="UserPreloadingVerificationMessages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="fr" tx="Mauvais format de mot de passe" er="" ts="Translated" qs="ToReview" />
+            <li lc="fr" tx="Mauvais format de mot de passe" ts="Translated" qs="ToReview" />
             <li lc="pt" tx=" Senha deve conter pelo menos um número, uma letra maiúscula e um minúsculas caracteres. Comprimento deve ser entre 10 e 100 caracteres." er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="Warning" />
             <li lc="nn-nn" tx="Wrong password format" ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Неправильный формат пароля" ts="Changed" qs="ToReview" />
@@ -32627,7 +32998,7 @@
         <it rn="Resources\UserPreloadingVerificationMessages.resx" nm="PLU0008" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="UserPreloadingVerificationMessages" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
             <li lc="fr" tx="Le format du numéro de téléphone est invalide." er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="pt" tx=" Número de telefone é inválido" er="" ts="Changed" qs="ToReview" />
+            <li lc="pt" tx=" Número de telefone é inválido" ts="Changed" qs="ToReview" />
             <li lc="nn-nn" tx="Wrong phone number format" ts="Changed" qs="ToReview" />
             <li lc="ru" tx="Неправильный формат номера телефона" ts="Changed" qs="ToReview" />
             <li lc="zh" tx="电话号码无效" ts="Changed" qs="ToReview" />
@@ -32833,7 +33204,7 @@
         </it>
         <it rn="Resources\WebInterviewSetup.resx" nm="DownloadTitle" ns="{0} - count of interviews in file" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterviewSetup" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="ar" tx="تنزيل ({{count}})" er="" ts="Changed" qs="ToReview" />
+            <li lc="ar" tx="تنزيل ({{count}})" ts="Changed" qs="ToReview" />
             <li lc="es" tx="Descargar ({{count}})" ts="Changed" qs="ToReview" />
             <li lc="fr" tx="Télécharger ({{count}}) entretien" ts="Translated" qs="ToReview" />
             <li lc="nn-nn" tx="Download ({{count}})" ts="Changed" qs="ToReview" />
@@ -32896,7 +33267,7 @@
         </it>
         <it rn="Resources\WebInterviewSetup.resx" nm="StartInfo" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterviewSetup" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="ar" tx="البدء بالمقابلة الإلكترونية لـ {{name}}" er="" ts="Changed" qs="ToReview" />
+            <li lc="ar" tx="البدء بالمقابلة الإلكترونية لـ {{name}}" ts="Changed" qs="ToReview" />
             <li lc="es" tx="Inicio de la entrevista Web para {{name}}" ts="Changed" qs="ToReview" />
             <li lc="fr" tx="Début de l'entretien sur le Web pour {{name}}" ts="Changed" qs="ToReview" />
             <li lc="nn-nn" tx="Starting web interview for {{name}}" ts="Changed" qs="ToReview" />
@@ -33415,10 +33786,10 @@
         </it>
         <it rn="Resources\WebInterviewUI.resx" nm="CoverBrokenPackegeText" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterviewUI" bac="EmbeddedResource" hgt="0" wdt="0">
           <lis>
-            <li lc="nn-nn" tx="Attention! This interview has corrupted data, &lt;br /&gt;&#xA;only previous version of interview is available. &lt;br /&gt;&#xA;Contact support for assistance." ts="Translated" qs="ToReview" />
-            <li lc="ru" tx="Внимание! Это интервью содержит поврежденные данные, &lt;br /&gt;&#xD;&#xA;поэтому доступна только предыдущая версия. &lt;br /&gt;&#xD;&#xA;Oбратитесь в тех. поддержку за помощью" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="zh" tx="注意！这份问卷有损坏的数据，&lt;br /&gt;&#xD;&#xA;只有早期的问卷版本可用。&lt;br /&gt;&#xD;&#xA;联系支持获取帮助。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Translated" qs="Warning" />
-            <li lc="fr" tx="Attention! Cet entretien contient des données corrompues. &lt;br /&gt;&#xA;Seulement une version antérieure de cet entretien est disponible. &lt;br /&gt;&#xA;Veuillez vous approcher de l'équipe d'appui pour l'assistance." ts="Translated" qs="ToReview" />
+            <li lc="nn-nn" tx="Attention! This interview has corrupted data, &lt;br /&gt;&#xD;&#xA;only previous version of interview is available. &lt;br /&gt;&#xD;&#xA;Contact support for assistance." ts="Changed" qs="ToReview" />
+            <li lc="ru" tx="Внимание! Это интервью содержит поврежденные данные, &lt;br /&gt;&#xD;&#xA;поэтому доступна только предыдущая версия. &lt;br /&gt;&#xD;&#xA;Oбратитесь в тех. поддержку за помощью" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
+            <li lc="zh" tx="注意！这份问卷有损坏的数据，&lt;br /&gt;&#xD;&#xA;只有早期的问卷版本可用。&lt;br /&gt;&#xD;&#xA;联系支持获取帮助。" er="The invariant text and the locale text end with a different punctuation mark. " ts="Changed" qs="ToReview" />
+            <li lc="fr" tx="Attention! Cet entretien contient des données corrompues. &lt;br /&gt;&#xA;Seulement une version antérieure de cet entretien est disponible. &lt;br /&gt;&#xA;Veuillez vous approcher de l'équipe d'appui pour l'assistance." ts="Changed" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterviewUI.resx" nm="CoverBrokenPackegeTitle" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterviewUI" bac="EmbeddedResource" hgt="0" wdt="0">
@@ -33647,6 +34018,12 @@
             <li lc="ru" tx="Показать инструкцию" ts="Translated" qs="ToReview" />
             <li lc="ka" tx="ინსტრუქციის ჩვენება" ts="Translated" qs="ToReview" />
             <li lc="zh" tx="显示说明" ts="Translated" qs="ToReview" />
+          </lis>
+        </it>
+        <it rn="Resources\WebInterviewUI.resx" nm="Interview_Overview_NotAnswered" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterviewUI" bac="EmbeddedResource" hgt="0" wdt="0">
+          <lis>
+            <li lc="nn-nn" tx="Not answered" ts="Translated" qs="ToReview" />
+            <li lc="ru" tx="Не отвечен" ts="Translated" qs="ToReview" />
           </lis>
         </it>
         <it rn="Resources\WebInterviewUI.resx" nm="InterviewReceivedCantModify" rc="" dnt="false" nms="WB.UI.Headquarters.Resources" cln="WebInterviewUI" bac="EmbeddedResource" hgt="0" wdt="0">
