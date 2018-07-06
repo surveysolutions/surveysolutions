@@ -2,5 +2,8 @@
 {
     public class OkResponse : ICommunicationMessage
     {
+
     }
+
+    public class FailedResponse : ICommunicationMessage { }
 }

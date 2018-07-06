@@ -22,11 +22,12 @@ namespace WB.Core.GenericSubdomains.Portable
             this.totalBytes = totalBytes;
             var bytes = sendBytes - bytesDone;
             var elapsed = sw.Elapsed.TotalSeconds;
+            sw.Restart();
             var speed = bytes / elapsed; // bytes/second
             
             AverageSpeed = this.average.Add(speed);
             bytesDone = sendBytes;
-            ETA = this.totalBytes != null ? TimeSpan.FromSeconds((this.totalBytes.Value - bytesDone) / AverageSpeed) : TimeSpan.Zero;
+            ETA = this.totalBytes != null ? TimeSpan.FromSeconds((this.totalBytes.Value - sendBytes) / AverageSpeed) : TimeSpan.Zero;
         }
 
         public TimeSpan ETA { get; private set; }

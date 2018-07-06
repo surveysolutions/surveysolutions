@@ -7,23 +7,19 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
 {
     public class NearbyConnectionsRequestHandler : IRequestHandler
     {
-        private readonly IPayloadSerializer payloadSerializer;
-
         private readonly Dictionary<Type, Func<ICommunicationMessage, Task<ICommunicationMessage>>> handlers
             = new Dictionary<Type, Func<ICommunicationMessage, Task<ICommunicationMessage>>>();
-
-        public NearbyConnectionsRequestHandler(IPayloadSerializer payloadSerializer)
+        
+        public Task<ICommunicationMessage> Handle(ICommunicationMessage message)
         {
-            this.payloadSerializer = payloadSerializer;
-        }
+            // ReSharper disable once InconsistentlySynchronizedField - handlers initialization is only occure once during app start
+            if (handlers.TryGetValue(message.GetType(), out var handler))
+            {
+                return handler(message);
+            }
 
-        public async Task<byte[]> Handle(byte[] message)
-        {
-            var payload = this.payloadSerializer.FromPayload<ICommunicationMessage>(message);
-            
-            var response = await Handle(payload);
-
-            return payloadSerializer.ToPayload(response);
+            throw new ArgumentException(@"Cannot handle message of type: " + message.GetType().FullName,
+                nameof(message));
         }
 
         public void RegisterHandler<TReq, TResp>(Func<TReq, Task<TResp>> handler)
@@ -38,18 +34,6 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                     return result;
                 };
             }
-        }
-
-        public Task<ICommunicationMessage> Handle(ICommunicationMessage message)
-        {
-            // ReSharper disable once InconsistentlySynchronizedField - handlers initialization is only occure once during app start
-            if (handlers.TryGetValue(message.GetType(), out var handler))
-            {
-                return handler(message);
-            }
-
-            throw new ArgumentException(@"Cannot handle message of type: " + message.GetType().FullName,
-                nameof(message));
         }
     }
 }

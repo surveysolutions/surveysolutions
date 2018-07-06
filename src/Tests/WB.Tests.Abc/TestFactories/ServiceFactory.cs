@@ -758,7 +758,7 @@ namespace WB.Tests.Abc.TestFactories
 
         public NearbyConnectionsRequestHandler GoogleConnectionsRequestHandler()
         {
-            return new NearbyConnectionsRequestHandler(new PayloadSerializer());
+            return new NearbyConnectionsRequestHandler();
         }
 
         private static IQueryable<TEntity> GetNhQueryable<TEntity>() => Mock.Of<IQueryable<TEntity>>(x => x.Provider == Mock.Of<INhQueryProvider>());
@@ -770,6 +770,14 @@ namespace WB.Tests.Abc.TestFactories
         public static IRequestHandler WithSampleEchoHandler(this IRequestHandler requestHandler)
         {
             requestHandler.RegisterHandler<PingMessage, PongMessage>(ping => Task.FromResult(new PongMessage() { Id = ping.Id })); // pre
+            return requestHandler;
+        }
+
+        public static IRequestHandler WithHandler<TRes, TReq>(this IRequestHandler requestHandler, Func<TRes, Task<TReq>> ahandler)
+            where TReq : ICommunicationMessage
+            where TRes : ICommunicationMessage
+        {
+            requestHandler.RegisterHandler(ahandler);
             return requestHandler;
         }
     }
