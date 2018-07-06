@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
+using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Questionnaire.Api;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 
@@ -12,6 +13,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
     public partial class OfflineSynchronizationService
     {
+        private readonly IOfflineSyncClient syncClient;
+
+        public OfflineSynchronizationService(IOfflineSyncClient syncClient)
+        {
+            this.syncClient = syncClient;
+        }
+
         public Task UploadInterviewAsync(Guid interviewId, InterviewPackageApiView completedInterview,
             Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token)
         {
@@ -60,7 +68,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             throw new NotImplementedException();
         }
 
-        public Task SendSyncStatisticsAsync(SyncStatisticsApiView statistics, CancellationToken token,
+        public Task SendSyncStatisticsAsync(SyncStatisticsApiView statistics,
+            CancellationToken token,
             RestCredentials credentials)
         {
             throw new NotImplementedException();
@@ -88,7 +97,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public Task<bool> IsAutoUpdateEnabledAsync(CancellationToken token)
         {
-            throw new NotImplementedException();
+            return Task.FromResult(false);
         }
 
         public Task UploadAuditLogEntityAsync(AuditLogEntitiesApiView auditLogEntity,
@@ -100,7 +109,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         public Task<List<Guid>> CheckObsoleteInterviewsAsync(List<ObsoletePackageCheck> checks,
             CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.FromResult(new List<Guid>());
         }
     }
 }
