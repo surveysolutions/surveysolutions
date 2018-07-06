@@ -20,7 +20,7 @@ using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 {
-    public class CensusQuestionnaireDashboardItemViewModel : MvxNotifyPropertyChanged, IDashboardItem
+    public class CensusQuestionnaireDashboardItemViewModel : MvxNotifyPropertyChanged, IDashboardItem, IDisposable
     {
         private readonly ICommandService commandService;
         private readonly IInterviewerPrincipal principal;
@@ -103,5 +103,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         }
 
         private void RaiseStartingLongOperation() => this.messenger.Publish(new StartingLongOperationMessage(this));
+
+        public void Dispose()
+        {
+            interviewViewRepository?.Dispose();
+        }
     }
 }

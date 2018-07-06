@@ -273,5 +273,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
                 this.isInterviewReadyToLoad = true;
             }
         }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+            }
+
+            base.Dispose(disposing);
+        }
     }
 }

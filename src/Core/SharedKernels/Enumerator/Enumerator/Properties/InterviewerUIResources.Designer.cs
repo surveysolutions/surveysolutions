@@ -507,6 +507,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Responsible: {0}.
+        /// </summary>
+        public static string DashboardItem_Responsible {
+            get {
+                return ResourceManager.GetString("DashboardItem_Responsible", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Started on {0}.
         /// </summary>
         public static string DashboardItem_StartedOn {

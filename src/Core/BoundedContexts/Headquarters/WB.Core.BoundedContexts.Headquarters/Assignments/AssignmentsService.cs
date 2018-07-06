@@ -104,7 +104,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 Quantity = assignment.InterviewsNeeded,
                 CreatedAtUtc = assignment.CreatedAtUtc,
                 ProtectedVariables = assignment.ProtectedVariables,
-                ResponsibleId = assignment.ResponsibleId
+                ResponsibleId = assignment.ResponsibleId,
+                ResponsibleName = assignment.Responsible.Name
             };
 
             var assignmentIdentifyingData = assignment.IdentifyingData.ToLookup(id => id.Identity);

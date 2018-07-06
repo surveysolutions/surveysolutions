@@ -56,7 +56,9 @@ namespace WB.UI.Headquarters.API.DataCollection
                 {
                     Id = assignment.Id,
                     Quantity = assignment.InterviewsNeeded, // + assignment.InterviewsProvided,
-                    QuestionnaireId = assignment.QuestionnaireId
+                    QuestionnaireId = assignment.QuestionnaireId,
+                    ResponsibleId = assignment.ResponsibleId,
+                    ResponsibleName = assignment.Responsible.Name
                 });
             }
 
