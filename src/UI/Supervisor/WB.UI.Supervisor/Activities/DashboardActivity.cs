@@ -26,8 +26,7 @@ namespace WB.UI.Supervisor.Activities
         ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
     [MvxActivityPresentation]
     public class DashboardActivity : BaseActivity<DashboardViewModel>, 
-        ISyncBgService<SyncProgressDto>, ISyncServiceHost<SyncBgService>,
-        ISyncBgService<MapSyncProgressStatus>, ISyncServiceHost<MapDownloadBackgroundService>
+        ISyncBgService<SyncProgressDto>, ISyncServiceHost<SyncBgService>
     {
         private ActionBarDrawerToggle drawerToggle;
 
@@ -35,8 +34,6 @@ namespace WB.UI.Supervisor.Activities
         protected override int ViewResourceId => Resource.Layout.dashboard;
 
         ServiceBinder<SyncBgService> ISyncServiceHost<SyncBgService>.Binder { get; set; }
-
-        ServiceBinder<MapDownloadBackgroundService> ISyncServiceHost<MapDownloadBackgroundService>.Binder { get; set; }
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -75,7 +72,6 @@ namespace WB.UI.Supervisor.Activities
         {
             base.OnStart();
             this.BindService(new Intent(this, typeof(SyncBgService)), new SyncServiceConnection<SyncBgService>(this), Bind.AutoCreate);
-            this.BindService(new Intent(this, typeof(MapDownloadBackgroundService)), new SyncServiceConnection<MapDownloadBackgroundService>(this), Bind.AutoCreate);
         }
 
         protected override void OnViewModelSet()
@@ -100,7 +96,7 @@ namespace WB.UI.Supervisor.Activities
             menu.LocalizeMenuItem(Resource.Id.menu_signout, InterviewerUIResources.MenuItem_Title_SignOut);
             menu.LocalizeMenuItem(Resource.Id.menu_settings, InterviewerUIResources.MenuItem_Title_Settings);
             menu.LocalizeMenuItem(Resource.Id.menu_diagnostics, InterviewerUIResources.MenuItem_Title_Diagnostics);
-            menu.LocalizeMenuItem(Resource.Id.menu_maps_synchronization, InterviewerUIResources.MenuItem_Title_MapsSynchronization);
+            menu.LocalizeMenuItem(Resource.Id.menu_maps, InterviewerUIResources.MenuItem_Title_Maps);
             return base.OnCreateOptionsMenu(menu);
         }
 
@@ -111,8 +107,8 @@ namespace WB.UI.Supervisor.Activities
                 case Resource.Id.menu_synchronization:
                     this.ViewModel.SynchronizationCommand.Execute();
                     break;
-                case Resource.Id.menu_maps_synchronization:
-                    this.ViewModel.MapsSynchronizationCommand.Execute();
+                case Resource.Id.menu_maps:
+                    this.ViewModel.NavigateToMapsCommand.Execute();
                     break;
                 case Resource.Id.menu_settings:
                     Intent intent = new Intent(this, typeof(PrefsActivity));
@@ -132,11 +128,7 @@ namespace WB.UI.Supervisor.Activities
             return base.OnOptionsItemSelected(item);
         }
 
-        void ISyncBgService<MapSyncProgressStatus>.StartSync() => ((ISyncServiceHost<MapDownloadBackgroundService>)this).Binder.GetService().SyncMaps();
-
         void ISyncBgService<SyncProgressDto>.StartSync() => ((ISyncServiceHost<SyncBgService>)this).Binder.GetService().StartSync();
-
-        MapSyncProgressStatus ISyncBgService<MapSyncProgressStatus>.CurrentProgress => ((ISyncServiceHost<MapDownloadBackgroundService>)this).Binder.GetService().CurrentProgress;
 
         SyncProgressDto ISyncBgService<SyncProgressDto>.CurrentProgress => ((ISyncServiceHost<SyncBgService>)this).Binder.GetService().CurrentProgress;
     }

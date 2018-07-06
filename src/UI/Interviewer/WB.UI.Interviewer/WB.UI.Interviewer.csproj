@@ -375,12 +375,6 @@
     <AndroidResource Include="Resources\layout\loading.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
-    <AndroidResource Include="Resources\layout\maps.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\map_list_item.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
     <AndroidResource Include="Resources\layout\dashboard_search.axml">
       <SubType>Designer</SubType>
     </AndroidResource>

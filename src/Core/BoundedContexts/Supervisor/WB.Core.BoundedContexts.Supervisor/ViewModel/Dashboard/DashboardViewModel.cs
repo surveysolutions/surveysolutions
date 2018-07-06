@@ -6,6 +6,7 @@ using MvvmCross.ViewModels;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
 {
@@ -21,14 +22,13 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         public Guid? LastVisitedInterviewId { get; set; }
 
         public SynchronizationViewModel Synchronization { get; set; }
-        //public MapSynchronizationViewModel MapSynchronization { get; set; }
-        
+
         public string DashboardTitle => "dashboard title :)";
 
-        public DashboardViewModel(IPrincipal principal, 
+        public DashboardViewModel(IPrincipal principal,
             IViewModelNavigationService viewModelNavigationService,
             IMvxNavigationService mvxNavigationService,
-            SynchronizationViewModel synchronization) 
+            SynchronizationViewModel synchronization)
             : base(principal, viewModelNavigationService)
         {
             this.viewModelNavigationService = viewModelNavigationService;
@@ -43,51 +43,46 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         }
 
         private IMvxAsyncCommand synchronizationCommand;
+
         public IMvxAsyncCommand SynchronizationCommand
         {
             get
             {
-                return synchronizationCommand ?? (synchronizationCommand = new MvxAsyncCommand(this.RunSynchronization, () => !this.Synchronization.IsSynchronizationInProgress));
+                return synchronizationCommand ?? (synchronizationCommand = new MvxAsyncCommand(this.RunSynchronization,
+                           () => !this.Synchronization.IsSynchronizationInProgress));
             }
         }
-
-        public IMvxAsyncCommand MapsSynchronizationCommand
-            => new MvxAsyncCommand(this.RunMapsSynchronization, () => !this.Synchronization.IsSynchronizationInProgress);
 
         public IMvxCommand SignOutCommand => new MvxAsyncCommand(this.SignOut);
 
         public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxAsyncCommand(this.NavigateToDiagnostics);
 
-        public IMvxCommand ShowDefaultListCommand => 
-            new MvxAsyncCommand(async () => await viewModelNavigationService.NavigateToAsync<ToBeAssignedItemsViewModel>());
+        public IMvxCommand ShowDefaultListCommand =>
+            new MvxAsyncCommand(async () =>
+                await viewModelNavigationService.NavigateToAsync<ToBeAssignedItemsViewModel>());
 
         public IMvxCommand ShowOutboxCommand =>
-            new MvxAsyncCommand(async () => await mvxNavigationService.Navigate<OutboxViewModel, Guid?>(this.LastVisitedInterviewId));
+            new MvxAsyncCommand(async () =>
+                await mvxNavigationService.Navigate<OutboxViewModel, Guid?>(this.LastVisitedInterviewId));
 
-        public IMvxAsyncCommand ShowMenuViewModelCommand => new MvxAsyncCommand(async () => await viewModelNavigationService.NavigateToAsync<DashboardMenuViewModel>());
+        public IMvxAsyncCommand ShowMenuViewModelCommand => new MvxAsyncCommand(async () =>
+            await viewModelNavigationService.NavigateToAsync<DashboardMenuViewModel>());
 
         public IMvxCommand NavigateToOfflineSyncCommand => new MvxAsyncCommand(this.NavigateToOfflineSync);
+
         private Task NavigateToOfflineSync()
         {
             this.Synchronization.CancelSynchronizationCommand.Execute();
             return this.viewModelNavigationService.NavigateToAsync<OfflineSupervisorSyncViewModel>();
         }
 
-        private Task RunSynchronization()
+        public IMvxCommand NavigateToMapsCommand => new MvxAsyncCommand(() =>
         {
-            if (this.viewModelNavigationService.HasPendingOperations)
-            {
-                this.viewModelNavigationService.ShowWaitMessage();
-            }
-            else
-            {
-                this.Synchronization.IsSynchronizationInProgress = true;
-                this.Synchronization.Synchronize();
-            }
-            return Task.CompletedTask;
-        }
+            this.Synchronization.CancelSynchronizationCommand.Execute();
+            return this.viewModelNavigationService.NavigateToAsync<MapsViewModel>();
+        });
 
-        private Task RunMapsSynchronization()
+        private Task RunSynchronization()
         {
             if (this.viewModelNavigationService.HasPendingOperations)
             {
