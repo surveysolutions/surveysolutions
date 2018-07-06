@@ -19,7 +19,8 @@
                 hideInstructions: $i18next.t('HelpHideInstructions'),
                 isTimestamp: $i18next.t('HelpIsTimestamp'),
                 variableDescription: $i18next.t('HelpVariableDescription'),
-                newComment: $i18next.t('HelpNewComment')
+                newComment: $i18next.t('HelpNewComment'),
+                combobox:  $i18next.t('HelpCombobox')
             };
 
             helpService.getHelpMessage = function(key) {
