@@ -2,7 +2,7 @@
 
 namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Messages
 {
-    public class PostInterviewAudioRequest
+    public class PostInterviewAudioRequest : ICommunicationMessage
     {
         public Guid InterviewId { get; set; }
         public string FileName { get; set; }
