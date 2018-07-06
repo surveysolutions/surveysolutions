@@ -11,5 +11,11 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services
 
         Task<OkResponse> PostInterviewAsync(string endpoint, PostInterviewRequest package,
             IProgress<CommunicationProgress> progress = null);
+
+        Task<OkResponse> PostInterviewImageAsync(string endpoint, PostInterviewImageRequest postInterviewImageRequest,
+            IProgress<CommunicationProgress> progress = null);
+
+        Task<OkResponse> PostInterviewAudioAsync(string endpoint, PostInterviewAudioRequest postInterviewAudioRequest,
+            IProgress<CommunicationProgress> progress = null);
     }
 }

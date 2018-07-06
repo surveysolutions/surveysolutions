@@ -29,5 +29,19 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             return this.communicator.SendAsync<PostInterviewRequest, OkResponse>(this.nearbyConnection,
                 endpoint, package, progress);
         }
+
+        public Task<OkResponse> PostInterviewImageAsync(string endpoint, PostInterviewImageRequest postInterviewImageRequest,
+            IProgress<CommunicationProgress> progress = null)
+        {
+            return this.communicator.SendAsync<PostInterviewImageRequest, OkResponse>(this.nearbyConnection,
+                endpoint, postInterviewImageRequest, progress);
+        }
+
+        public Task<OkResponse> PostInterviewAudioAsync(string endpoint, PostInterviewAudioRequest postInterviewAudioRequest,
+            IProgress<CommunicationProgress> progress = null)
+        {
+            return this.communicator.SendAsync<PostInterviewAudioRequest, OkResponse>(this.nearbyConnection,
+                endpoint, postInterviewAudioRequest, progress);
+        }
     }
 }
