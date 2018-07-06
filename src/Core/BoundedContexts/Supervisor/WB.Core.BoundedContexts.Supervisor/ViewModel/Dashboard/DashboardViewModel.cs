@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.Navigation;
+using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -28,6 +29,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         public DashboardViewModel(IPrincipal principal,
             IViewModelNavigationService viewModelNavigationService,
             IMvxNavigationService mvxNavigationService,
+            IMvxMessenger messenger,
             SynchronizationViewModel synchronization)
             : base(principal, viewModelNavigationService)
         {
@@ -35,7 +37,13 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             this.mvxNavigationService = mvxNavigationService;
             this.Synchronization = synchronization;
             this.Synchronization.Init();
+
+            this.messenger = messenger;
+            messengerSubscribtion =
+                messenger.Subscribe<RequestSynchronizationMsg>(msg => SynchronizationCommand.Execute());
         }
+
+        private MvxSubscriptionToken messengerSubscribtion;
 
         public override void Prepare(DashboardViewModelArgs parameter)
         {
@@ -43,6 +51,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         }
 
         private IMvxAsyncCommand synchronizationCommand;
+        private readonly IMvxMessenger messenger;
 
         public IMvxAsyncCommand SynchronizationCommand
         {
@@ -93,6 +102,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
                 this.Synchronization.IsSynchronizationInProgress = true;
                 this.Synchronization.Synchronize();
             }
+
             return Task.CompletedTask;
         }
 
@@ -122,7 +132,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
 
         private void LoadFromBundle(IMvxBundle parameters)
         {
-            if (!parameters.Data.ContainsKey(nameof(LastVisitedInterviewId)) || parameters.Data[nameof(LastVisitedInterviewId)] == null) return;
+            if (!parameters.Data.ContainsKey(nameof(LastVisitedInterviewId)) ||
+                parameters.Data[nameof(LastVisitedInterviewId)] == null) return;
 
             if (Guid.TryParse(parameters.Data[nameof(LastVisitedInterviewId)], out var parsedLastVisitedId))
                 this.LastVisitedInterviewId = parsedLastVisitedId;
@@ -135,6 +146,11 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             {
                 bundle.Data[nameof(LastVisitedInterviewId)] = this.LastVisitedInterviewId.ToString();
             }
+        }
+
+        public void Dispose()
+        {
+            messengerSubscribtion.Dispose();
         }
     }
 }
