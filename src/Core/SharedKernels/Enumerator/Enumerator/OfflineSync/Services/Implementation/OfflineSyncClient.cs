@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
 
 namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
@@ -22,11 +23,11 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                 endpoint, new GetQuestionnaireListRequest(), progress);
         }
 
-        public Task<SendBigAmountOfDataResponse> SendBigData(string endpoint, byte[] data, IProgress<CommunicationProgress> progress = null)
+        public Task<OkResponse> PostInterviewAsync(string endpoint, PostInterviewRequest package,
+            IProgress<CommunicationProgress> progress = null)
         {
-            return this.communicator.SendAsync<SendBigAmountOfDataRequest, SendBigAmountOfDataResponse>(
-                this.nearbyConnection,
-                endpoint, new SendBigAmountOfDataRequest { Data = data }, progress);
+            return this.communicator.SendAsync<PostInterviewRequest, OkResponse>(this.nearbyConnection,
+                endpoint, package, progress);
         }
     }
 }
