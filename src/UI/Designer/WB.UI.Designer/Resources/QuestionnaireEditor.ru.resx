@@ -1131,4 +1131,7 @@
   <data name="SettingsQuestionnaireVariable" xml:space="preserve">
     <value>Переменная опросника</value>
   </data>
+  <data name="HelpCombobox" xml:space="preserve">
+    <value>Комбобокс - это комбинация выпадающего списка и однострочного текстового поля. Опции могут быть выбраны либо непостредственно из списка, либо набором значиния в поле</value>
+  </data>
 </root>
