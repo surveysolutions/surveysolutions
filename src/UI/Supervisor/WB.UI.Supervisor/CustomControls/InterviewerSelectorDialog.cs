@@ -14,7 +14,7 @@ using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.UI.Supervisor.CustomControls
 {
-    public class InterviewerSelectorDialog : IInterviewerSelectorDialog
+    public class InterviewerSelectorDialog : IInterviewerSelectorDialog, IDisposable
     {
         private readonly IInterviewViewModelFactory viewModelFactory;
         private readonly IMvxAndroidCurrentTopActivity topActivity;
@@ -95,6 +95,26 @@ namespace WB.UI.Supervisor.CustomControls
                 this.viewModel.DisposeIfDisposable();
                 this.viewModel = null;
             }
+        }
+        
+        private void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                HideDialog();
+                this.modalDialogBindingContext = null;
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        ~InterviewerSelectorDialog()
+        {
+            Dispose(false);
         }
     }
 }

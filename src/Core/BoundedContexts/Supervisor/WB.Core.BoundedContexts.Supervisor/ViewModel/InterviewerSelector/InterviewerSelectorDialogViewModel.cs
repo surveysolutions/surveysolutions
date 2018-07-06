@@ -5,10 +5,9 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.Supervisor.ViewModel.InterviewerSelector;
 using WB.Core.GenericSubdomains.Portable;
 
-namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
+namespace WB.Core.BoundedContexts.Supervisor.ViewModel.InterviewerSelector
 {
     public class InterviewerSelectorDialogViewModel : MvxViewModel
     {

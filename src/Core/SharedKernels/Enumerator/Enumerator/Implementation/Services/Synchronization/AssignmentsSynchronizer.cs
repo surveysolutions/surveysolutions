@@ -85,7 +85,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 var local = localAssignmentsLookup[remoteItem.Id].FirstOrDefault();
                 if (local == null)
                 {
-                    var remote = await this.synchronizationService.GetAssignmentAsync(remoteItem.Id, cancellationToken);
+                    AssignmentApiDocument remote = await this.synchronizationService.GetAssignmentAsync(remoteItem.Id, cancellationToken);
 
                     local = new AssignmentDocument
                     {
@@ -98,6 +98,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         LocationLatitude = remote.LocationLatitude,
                         LocationLongitude = remote.LocationLongitude,
                         ResponsibleId = remote.ResponsibleId,
+                        ResponsibleName = remote.ResponsibleName,
                         ReceivedDateUtc = remote.CreatedAtUtc,
                         ProtectedVariables = remote.ProtectedVariables?.Select(x => new AssignmentDocument.AssignmentProtectedVariable
                         {
@@ -122,6 +123,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 else
                 {
                     local.Quantity = remoteItem.Quantity;
+                    local.ResponsibleId = remoteItem.ResponsibleId;
+                    local.ResponsibleName = remoteItem.ResponsibleName;
                     var interviewsCount = this.interviewViewRepository.Count(x => x.CanBeDeleted && x.Assignment == local.Id);
                     local.CreatedInterviewsCount = interviewsCount;
                     this.assignmentsRepository.Store(local);
