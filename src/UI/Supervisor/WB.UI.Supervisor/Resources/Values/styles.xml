@@ -13,10 +13,10 @@
     
     <style name="Interviewer_Selector_Holder" parent="VerticalFullWidthWrappingLayout">
         <item name="android:background">@android:color/white</item>
-        <item name="android:paddingBottom">10dp</item>
-        <item name="android:paddingTop">28dp</item>
-        <item name="android:paddingLeft">30dp</item>
-        <item name="android:paddingRight">10dp</item>
+        <item name="android:paddingBottom">@dimen/Interviewer_Selector_Dialog_PaddingBottom</item>
+        <item name="android:paddingTop">@dimen/Interviewer_Selector_Dialog_PaddingTop</item>
+        <item name="android:paddingLeft">@dimen/Interviewer_Selector_Dialog_PaddingLeft</item>
+        <item name="android:paddingRight">@dimen/Interviewer_Selector_Dialog_PaddingRight</item>
     </style>
 
     <style name="Interviewer_Selector_Title">
