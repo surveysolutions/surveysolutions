@@ -194,13 +194,15 @@ namespace WB.Core.SharedKernels.Enumerator.Views
                 
                 using (connection.Lock())
                 {
-                    var committedEvents = connection
+                    var eventViews = connection
                         .Table<EventView>()
                         .Where(eventView
                             => eventView.EventSourceId == interviewId
                                && eventView.ExistsOnHq == null || eventView.ExistsOnHq == 0)
                         .OrderBy(x => x.EventSequence)
-                        .ToList()
+                        .ToList();
+
+                    var committedEvents = eventViews
                         .Select(x => ToCommitedEvent(x, eventSerializer))
                         .ToList();
                     return committedEvents;

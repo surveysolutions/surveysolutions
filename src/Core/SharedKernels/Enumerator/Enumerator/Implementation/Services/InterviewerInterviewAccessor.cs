@@ -98,6 +98,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             return this.BuildInterviewPackageOrNull(interview);
         }
 
+        public IReadOnlyCollection<CommittedEvent> GetPendingInteviewEvents(Guid interviewId)
+        {
+            List<CommittedEvent> storedEvents = this.eventStore.GetPendingEvents(interviewId);
+            return storedEvents.AsReadOnly();
+        }
+
         private InterviewPackageApiView BuildInterviewPackageOrNull(InterviewView interview)
         {
             AggregateRootEvent[] eventsToSend = this.BuildEventStreamOfLocalChangesToSend(interview.InterviewId);
