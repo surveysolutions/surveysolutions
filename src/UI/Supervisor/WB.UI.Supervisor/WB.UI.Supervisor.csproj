@@ -303,6 +303,7 @@
     <Compile Include="CustomControls\SupervisorDashboardTemplateSelector.cs" />
     <Compile Include="MvvmBindings\DrawerLockModeBinding.cs" />
     <Compile Include="MvvmBindings\ImageCompanyLogoBinding.cs" />
+    <Compile Include="MvvmBindings\SelectedBackgroundConverter.cs" />
     <Compile Include="ServiceLocation\SupervisorInfrastructureModule.cs" />
     <Compile Include="Services\Implementation\CheckForExtendedVersionUriProvider.cs" />
     <Compile Include="Services\Implementation\CheckForVersionUriProvider.cs" />

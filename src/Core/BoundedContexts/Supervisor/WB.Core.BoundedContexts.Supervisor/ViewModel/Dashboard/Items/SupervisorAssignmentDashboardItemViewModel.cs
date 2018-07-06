@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Supervisor.ViewModel.InterviewerSelector;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
+using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
 {
@@ -54,7 +55,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
         {
             this.InterviewerSelectorDialog.Selected += OnInterviewerSelected;
             this.InterviewerSelectorDialog.Cancelled += OnSelectionCancelled;
-            this.InterviewerSelectorDialog.SelectInterviewer(this.Assignment);
+            this.InterviewerSelectorDialog.SelectInterviewer(string.Format("Select responsible for assignment #{0}", this.Assignment.Id));
         }
 
         private void OnSelectionCancelled(object sender, EventArgs e)

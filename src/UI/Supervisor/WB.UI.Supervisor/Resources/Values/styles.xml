@@ -27,6 +27,10 @@
         <item name="android:paddingBottom">@dimen/Interview_Group_button_padding</item>
     </style>
     
+    <style name="Interviewer_Selector_Item">
+        <item name="android:paddingTop">@dimen/Interviewer_Selector_Item_Padding</item>
+        <item name="android:paddingBottom">@dimen/Interviewer_Selector_Item_Padding</item>
+    </style>
     
     <style name="Interviewer_Selector_Text">
         <item name="android:textColor">@color/question_title_text</item>
