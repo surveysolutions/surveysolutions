@@ -1,16 +1,26 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-using Newtonsoft.Json;
+﻿using System.Threading.Tasks;
+using Ncqrs.Eventing;
+using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
+using WB.Core.SharedKernels.Enumerator.Services;
 
 namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
 {
     public class SupervisorQuestionnaireHandler
         :   IHandleCommunicationMessage
     {
+        private readonly ILiteEventBus eventBus;
+        private readonly IEnumeratorEventStorage eventStore;
+        
+
+        public SupervisorQuestionnaireHandler(ILiteEventBus eventBus,
+            IEnumeratorEventStorage eventStorage)
+        {
+            this.eventBus = eventBus;
+            this.eventStore = eventStorage;
+        }
+
         public Task<GetQuestionnaireListResponse> Handle(GetQuestionnaireListRequest message)
         {
             var result = new GetQuestionnaireListResponse
@@ -31,8 +41,17 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
 
         public void Register(IRequestHandler requestHandler)
         {
+            requestHandler.RegisterHandler<PostInterviewRequest, OkResponse>(Handle);
             requestHandler.RegisterHandler<GetQuestionnaireListRequest, GetQuestionnaireListResponse>(Handle);
             requestHandler.RegisterHandler<SendBigAmountOfDataRequest, SendBigAmountOfDataResponse>(Handle);
+        }
+
+        private Task<OkResponse> Handle(PostInterviewRequest arg)
+        {
+            eventBus.PublishCommittedEvents(arg.Events);
+            eventStore.StoreEvents(new CommittedEventStream(arg.InterviewId, arg.Events));
+
+            return Task.FromResult(new OkResponse());
         }
     }
 }

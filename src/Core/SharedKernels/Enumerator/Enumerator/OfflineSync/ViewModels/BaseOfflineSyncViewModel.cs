@@ -60,6 +60,9 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
             Log.Trace("OnFound {0} - {1}", endpoint, info.EndpointName);
             await this.nearbyConnection.RequestConnection(this.principal.CurrentUserIdentity.Name, endpoint,
                 new NearbyConnectionLifeCycleCallback(OnInitiatedConnection, OnConnectionResult, OnDisconnected));
+
+            SetStatus(ConnectionStatus.Connecting,
+                $"Requested conection from endpoint: {info.EndpointName} [{endpoint}]");
         }
 
         protected virtual void OnDisconnected(string endpoint)
