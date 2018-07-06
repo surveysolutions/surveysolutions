@@ -1,7 +1,7 @@
 using System;
 using MvvmCross.ViewModels;
 
-namespace WB.Core.BoundedContexts.Interviewer.Views
+namespace WB.Core.SharedKernels.Enumerator.Views
 {
     public class MapItem : MvxNotifyPropertyChanged
     {

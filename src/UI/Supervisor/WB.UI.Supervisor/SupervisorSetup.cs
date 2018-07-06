@@ -30,6 +30,7 @@ using WB.Core.SharedKernels.Enumerator.Denormalizer;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
+using WB.Core.SharedKernels.Enumerator.Views;
 using WB.UI.Supervisor.ServiceLocation;
 using WB.UI.Shared.Enumerator;
 using WB.UI.Shared.Enumerator.Activities;
@@ -60,6 +61,7 @@ namespace WB.UI.Supervisor
                 {typeof(SupervisorInterviewViewModel),typeof(InterviewActivity) },
                 {typeof(OfflineSupervisorSyncViewModel), typeof(OfflineSupervisorSyncActitivy) },
                 {typeof(SupervisorResolveInterviewViewModel), typeof (SupervisorCompleteFragment)},
+                {typeof(MapsViewModel), typeof (MapsActivity)},
 #if !EXCLUDEEXTENSIONS
                 {typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel), typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorActivity)}
 #endif
