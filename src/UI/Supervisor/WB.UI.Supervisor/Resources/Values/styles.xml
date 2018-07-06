@@ -55,4 +55,38 @@
     <style name="Interviewer_Selector_Done_Button" parent="Interviewer_Selector_Button">
         <item name="android:background">@drawable/default_input_button</item>
     </style>
+
+    <style name="Sidebar_Header_Icon">
+        <item name="android:layout_width">48dp</item>
+        <item name="android:layout_height">48dp</item>
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:layout_alignParentTop">true</item>
+        <item name="android:src">@drawable/icon</item>
+    </style>
+    <style name="Sidebar_Header_Name">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:layout_alignParentTop">true</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="Sidebar_Header_Email">
+
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingLeft">10dp</item>
+
+    </style>
+    <style name="Sidebar_Header_Sync">
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_alignParentTop">true</item>
+
+        <item name="android:layout_width">48dp</item>
+        <item name="android:layout_height">48dp</item>
+        
+    </style>
+
 </resources>
