@@ -768,4 +768,7 @@ Downloaded {3}%</value>
   <data name="Prefs_AllowSyncWithHq_Summary" xml:space="preserve">
     <value>Disable this setting if you want to synchronize only with mobile supervisor application</value>
   </data>
+  <data name="DashboardItem_Responsible" xml:space="preserve">
+    <value>Responsible: {0}</value>
+  </data>
 </root>

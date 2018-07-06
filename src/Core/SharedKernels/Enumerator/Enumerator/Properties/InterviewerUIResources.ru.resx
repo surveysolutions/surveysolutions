@@ -771,7 +771,7 @@
   <data name="Synchronization_Of_InterviewersFormat" xml:space="preserve">
     <value>Синхронизация интервьюверов: {0} из {1}</value>
   </data>
-    <data name="MenuItem_Title_MapsSynchronization" xml:space="preserve">
+  <data name="MenuItem_Title_MapsSynchronization" xml:space="preserve">
     <value>Синхронизировать карты</value>
   </data>
   <data name="Prefs_AllowSyncWithHq" xml:space="preserve">
@@ -779,5 +779,8 @@
   </data>
   <data name="Prefs_AllowSyncWithHq_Summary" xml:space="preserve">
     <value>Выключите эту настройку если приложение должно синхронизироваться только с мобильным приложением супервизора</value>
+  </data>
+  <data name="DashboardItem_Responsible" xml:space="preserve">
+    <value>Ответственный: {0}</value>
   </data>
 </root>
