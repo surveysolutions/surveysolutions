@@ -1,5 +1,6 @@
 ﻿using Moq;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 using WB.Tests.Abc;
@@ -29,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AssignmentDashboardI
 
         AssignmentDashboardItemViewModel CreateViewModel()
         {
-            return new Mock<AssignmentDashboardItemViewModel>(Mock.Of<IServiceLocator>()).Object;
+            return new SupervisorAssignmentDashboardItemViewModel(Mock.Of<IServiceLocator>());
         }
     }
 }

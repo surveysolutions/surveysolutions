@@ -35,4 +35,6 @@
     <dimen name="Interviewer_Selector_Dialog_PaddingRight">10dp</dimen>
     <dimen name="Interviewer_Selector_Dialog_PaddingBottom">10dp</dimen>
     <dimen name="Interviewer_Selector_Dialog_PaddingLeft">30dp</dimen>
+    <dimen name="Interviewer_Selector_Item_Padding">10dp</dimen>
+    
 </resources>

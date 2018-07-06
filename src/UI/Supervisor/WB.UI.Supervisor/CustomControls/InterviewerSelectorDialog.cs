@@ -39,11 +39,11 @@ namespace WB.UI.Supervisor.CustomControls
             this.Cancelled?.Invoke(this, EventArgs.Empty);
         }
 
-        public void SelectInterviewer(AssignmentDocument assignment)
+        public void SelectInterviewer(string title)
         {
             this.viewModel = this.viewModelFactory.GetNew<InterviewerSelectorDialogViewModel>();
             this.viewModel.Init();
-            this.viewModel.Title = string.Format("Select responsible for assignment #{0}", assignment.Id);
+            this.viewModel.Title = title;
             this.viewModel.OnCancel += ViewModel_OnCancel;
             this.viewModel.OnDone += ViewModel_OnDone;
 
