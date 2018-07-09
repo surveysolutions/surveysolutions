@@ -61,7 +61,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 
             this.Name.InitAsStatic(InterviewDetails.Resolve);
 
-            this.CompleteCommentLabel = InterviewDetails.ResolveComment;
+            this.CommentLabel = InterviewDetails.ResolveComment;
 
             var interview = this.interviewRepository.Get(interviewId);
             this.status = interview.Status;
@@ -70,7 +70,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         public IMvxAsyncCommand Approve => new MvxAsyncCommand(async () =>
         {
             var command = new ApproveInterviewCommand(interviewId, this.principal.CurrentUserIdentity.UserId,
-                CompleteComment, DateTime.UtcNow);
+                Comment, DateTime.UtcNow);
             await this.commandService.ExecuteAsync(command);
             await this.navigationService.NavigateToDashboardAsync(interviewId.FormatGuid());
 
@@ -79,7 +79,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         public IMvxAsyncCommand Reject => new MvxAsyncCommand(async () =>
         {
             var command = new RejectInterviewCommand(interviewId, this.principal.CurrentUserIdentity.UserId,
-                CompleteComment, DateTime.UtcNow);
+                Comment, DateTime.UtcNow);
             await this.commandService.ExecuteAsync(command);
             await this.navigationService.NavigateToDashboardAsync(interviewId.FormatGuid());
         }, ApproveRejectAllowed);
