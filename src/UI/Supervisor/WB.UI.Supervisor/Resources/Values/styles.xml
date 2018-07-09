@@ -57,8 +57,8 @@
     </style>
 
     <style name="Sidebar_Header_Icon">
-        <item name="android:layout_width">48dp</item>
-        <item name="android:layout_height">48dp</item>
+        <item name="android:layout_width">@dimen/Sidebar_image_dimention</item>
+        <item name="android:layout_height">@dimen/Sidebar_image_dimention</item>
         <item name="android:layout_alignParentBottom">true</item>
         <item name="android:layout_alignParentLeft">true</item>
         <item name="android:layout_alignParentTop">true</item>
@@ -67,7 +67,7 @@
     <style name="Sidebar_Header_Name">
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingLeft">@dimen/Sidebar_header_padding</item>
         <item name="android:layout_alignParentTop">true</item>
         <item name="android:textStyle">bold</item>
     </style>
@@ -76,7 +76,7 @@
         <item name="android:layout_alignParentBottom">true</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
-        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingLeft">@dimen/Sidebar_header_padding</item>
 
     </style>
     <style name="Sidebar_Header_Sync">
@@ -84,8 +84,8 @@
         <item name="android:layout_alignParentRight">true</item>
         <item name="android:layout_alignParentTop">true</item>
 
-        <item name="android:layout_width">48dp</item>
-        <item name="android:layout_height">48dp</item>
+        <item name="android:layout_width">@dimen/Sidebar_image_dimention</item>
+        <item name="android:layout_height">@dimen/Sidebar_image_dimention</item>
         <item name="android:background">@null</item>
     </style>
 
