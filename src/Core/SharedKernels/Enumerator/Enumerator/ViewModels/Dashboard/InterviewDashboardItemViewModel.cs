@@ -190,6 +190,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         {
             switch (interviewStatus)
             {
+                case InterviewStatus.RejectedByHeadquarters:
                 case InterviewStatus.RejectedBySupervisor:
                     return DashboardInterviewStatus.Rejected;
                 case InterviewStatus.Completed:
@@ -200,8 +201,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
                 case InterviewStatus.InterviewerAssigned:
                     return startedDateTime.HasValue
                         ? DashboardInterviewStatus.InProgress
-                        : DashboardInterviewStatus.New; ;
-                        
+                        : DashboardInterviewStatus.New;
 
                 default:
                     throw new ArgumentException("Can't identify status for interview: {0}".FormatString(interviewStatus));
