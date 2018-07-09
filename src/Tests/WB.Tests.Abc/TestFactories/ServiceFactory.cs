@@ -50,6 +50,7 @@ using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.BoundedContexts.Supervisor.Services.Implementation;
+using WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSyncHandlers;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.GenericSubdomains.Portable;
@@ -770,11 +771,11 @@ namespace WB.Tests.Abc.TestFactories
                 Mock.Of<IPrincipal>());
         }
 
-        public SupervisorSyncHandler SupervisorQuestionnaireHandler(ILiteEventBus eventBus = null,
+        public SupervisorInterviewsHandler SupervisorQuestionnaireHandler(ILiteEventBus eventBus = null,
             IEnumeratorEventStorage eventStorage = null,
             IPlainStorage<InterviewView> interviews = null)
         {
-            return new SupervisorSyncHandler(
+            return new SupervisorInterviewsHandler(
                 eventBus ?? Mock.Of<ILiteEventBus>(),
                 eventStorage ?? Mock.Of<IEnumeratorEventStorage>(),
                 interviews ?? new InMemoryPlainStorage<InterviewView>());

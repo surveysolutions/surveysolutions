@@ -9,7 +9,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 
-namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
+namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSyncHandlers
 {
     public class SupervisorQuestionnairesHandler : IHandleCommunicationMessage
     {

@@ -4,6 +4,7 @@ using FluentAssertions;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Supervisor;
 using WB.Core.BoundedContexts.Supervisor.Services.Implementation;
+using WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSyncHandlers;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
 using WB.Core.SharedKernels.Enumerator.Utils;
@@ -13,8 +14,8 @@ using WB.Tests.Abc.Storage;
 
 namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
 {
-    [TestOf(typeof(SupervisorSyncHandler))]
-    public class SupervisorSyncHandlerTests
+    [TestOf(typeof(SupervisorInterviewsHandler))]
+    public class SupervisorInterviewsHandlerTests
     {
         [Test]
         public async Task CanSynchronize_should_check_assemblyFileVersion_for_compatibility()

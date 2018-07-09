@@ -14,16 +14,15 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.Views;
 
-namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
+namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSyncHandlers
 {
-    public class SupervisorSyncHandler
-        : IHandleCommunicationMessage
+    public class SupervisorInterviewsHandler : IHandleCommunicationMessage
     {
         private readonly ILiteEventBus eventBus;
         private readonly IEnumeratorEventStorage eventStore;
         private readonly IPlainStorage<InterviewView> interviews;
 
-        public SupervisorSyncHandler(ILiteEventBus eventBus, 
+        public SupervisorInterviewsHandler(ILiteEventBus eventBus, 
             IEnumeratorEventStorage eventStore, 
             IPlainStorage<InterviewView> interviews)
         {
@@ -32,19 +31,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
             this.interviews = interviews;
         }
 
-        public Task<SendBigAmountOfDataResponse> Handle(SendBigAmountOfDataRequest request)
-        {
-            return Task.FromResult(new SendBigAmountOfDataResponse
-            {
-                Data = request.Data
-            });
-        }
-
         public void Register(IRequestHandler requestHandler)
         {
-            requestHandler.RegisterHandler<PostInterviewRequest, OkResponse>(Handle);
-            requestHandler.RegisterHandler<SendBigAmountOfDataRequest, SendBigAmountOfDataResponse>(Handle);
             requestHandler.RegisterHandler<CanSynchronizeRequest, CanSynchronizeResponse>(Handle);
+            requestHandler.RegisterHandler<PostInterviewRequest, OkResponse>(Handle);
             requestHandler.RegisterHandler<GetInterviewsRequest, GetInterviewsResponse>(Handle);
             requestHandler.RegisterHandler<LogInterviewAsSuccessfullyHandledRequest, OkResponse>(Handle);
             requestHandler.RegisterHandler<GetInterviewDetailsRequest, GetInterviewDetailsResponse>(Handle);

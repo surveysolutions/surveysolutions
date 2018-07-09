@@ -2,6 +2,7 @@ using System.Threading.Tasks;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.BoundedContexts.Supervisor.Services.Implementation;
+using WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSyncHandlers;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.InterviewerSelector;
@@ -94,8 +95,11 @@ namespace WB.UI.Supervisor.ServiceLocation
 
         private void BindOfflineServices(IIocRegistry registry)
         {
-            registry.Bind<IHandleCommunicationMessage, SupervisorSyncHandler>();
+            registry.Bind<IHandleCommunicationMessage, DebugHandler>();
+
+            registry.Bind<IHandleCommunicationMessage, SupervisorInterviewsHandler>();
             registry.Bind<IHandleCommunicationMessage, SupervisorQuestionnairesHandler>();
+            registry.Bind<IHandleCommunicationMessage, SupervisorBinaryHandler>();
         }
 
         public Task Init(IServiceLocator serviceLocator)
