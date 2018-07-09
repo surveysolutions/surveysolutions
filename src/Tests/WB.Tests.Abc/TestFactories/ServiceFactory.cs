@@ -763,6 +763,10 @@ namespace WB.Tests.Abc.TestFactories
 
         private static IQueryable<TEntity> GetNhQueryable<TEntity>() => Mock.Of<IQueryable<TEntity>>(x => x.Provider == Mock.Of<INhQueryProvider>());
 
+        public OfflineSynchronizationService OfflineSynchronizationService(IOfflineSyncClient offlineSyncClient = null)
+        {
+            return new OfflineSynchronizationService(offlineSyncClient ?? Mock.Of<IOfflineSyncClient>());
+        }
     }
 
     internal static class GoogleConnectionsRequestHandlerExtensions

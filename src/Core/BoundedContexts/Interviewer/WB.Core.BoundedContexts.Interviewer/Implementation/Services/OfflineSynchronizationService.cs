@@ -14,17 +14,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
     {
         public Task<string> LoginAsync(LogonInfo logonInfo, RestCredentials credentials, CancellationToken? token = null)
         {
-            throw new NotImplementedException();
+            return Task.FromResult("offline sync token");
         }
 
         public Task<bool> HasCurrentUserDeviceAsync(RestCredentials credentials = null, CancellationToken? token = null)
         {
-            throw new NotImplementedException();
+            return Task.FromResult(true);
         }
 
         public Task CanSynchronizeAsync(RestCredentials credentials = null, CancellationToken? token = null)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
 
         public Task SendDeviceInfoAsync(DeviceInfoApiView info, CancellationToken? token = null)
