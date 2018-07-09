@@ -44,17 +44,23 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             throw new NotImplementedException();
         }
 
-        public Task<List<string>> GetAttachmentContentsAsync(QuestionnaireIdentity questionnaire,
+        public async Task<List<string>> GetAttachmentContentsAsync(QuestionnaireIdentity questionnaire,
             Action<decimal, long, long> onDownloadProgressChanged,
             CancellationToken token)
         {
-            throw new NotImplementedException();
+            var response = await syncClient.SendAsync<GetAttachmentContentsRequest, GetAttachmentContentsResponse>(
+                new GetAttachmentContentsRequest {QuestionnaireIdentity = questionnaire}, token);
+
+            return response.AttachmentContents;
         }
 
-        public Task<AttachmentContent> GetAttachmentContentAsync(string contentId,
+        public async Task<AttachmentContent> GetAttachmentContentAsync(string contentId,
             Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token)
         {
-            throw new NotImplementedException();
+            var response = await syncClient.SendAsync<GetAttachmentContentRequest, GetAttachmentContentResponse>(
+                new GetAttachmentContentRequest { ContentId = contentId }, token);
+
+            return response.Content;
         }
 
         public async Task<List<QuestionnaireIdentity>> GetServerQuestionnairesAsync(CancellationToken cancellationToken)
