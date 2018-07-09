@@ -1,10 +1,15 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
+using FluentAssertions;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Supervisor;
 using WB.Core.BoundedContexts.Supervisor.Services.Implementation;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
 using WB.Core.SharedKernels.Enumerator.Utils;
+using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Tests.Abc;
+using WB.Tests.Abc.Storage;
 
 namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
 {
@@ -30,6 +35,42 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             var response = await handler.Handle(new CanSynchronizeRequest(1));
 
             Assert.That(response, Has.Property(nameof(response.CanSyncronize)).False);
+        }
+
+        [Test]
+        public async Task GetInterviewsRequest_Should_filter_interviews_by_status_and_responsible()
+        {
+            var interviewerId = Id.gA;
+            var questionnaireId = Create.Entity.QuestionnaireIdentity().ToString();
+            var interviews = new SqliteInmemoryStorage<InterviewView>();
+            interviews.Store(Create.Entity.InterviewView(interviewId: Id.g1,responsibleId: interviewerId, status: InterviewStatus.Completed, questionnaireId: questionnaireId));
+            interviews.Store(Create.Entity.InterviewView(interviewId: Id.g2,responsibleId: interviewerId, status: InterviewStatus.RejectedBySupervisor, questionnaireId: questionnaireId));
+            interviews.Store(Create.Entity.InterviewView(interviewId: Id.g3,responsibleId: Id.gB, status: InterviewStatus.RejectedBySupervisor, questionnaireId: questionnaireId));
+            interviews.Store(Create.Entity.InterviewView(interviewId: Id.g4,responsibleId: interviewerId, status: InterviewStatus.RejectedByHeadquarters, questionnaireId: questionnaireId));
+            interviews.Store(Create.Entity.InterviewView(interviewId: Id.g5,responsibleId: interviewerId, status: InterviewStatus.InterviewerAssigned, questionnaireId: questionnaireId));
+
+            var handler = Create.Service.SupervisorQuestionnaireHandler(interviews: interviews);
+
+            // Act
+            var response = await handler.Handle(new GetInterviewsRequest(interviewerId));
+
+            response.Interviews.Select(x => x.Id).Should().BeEquivalentTo(Id.g2, Id.g5);
+        }
+
+        [Test]
+        public async Task LogInterviewAsSuccessfullyHandledRequest_Should_hide_interview_from_dashboard()
+        {
+            var interviews = new SqliteInmemoryStorage<InterviewView>();
+            interviews.Store(Create.Entity.InterviewView(status: InterviewStatus.RejectedBySupervisor, interviewId: Id.g1));
+
+            var handler = Create.Service.SupervisorQuestionnaireHandler(interviews: interviews);
+
+            // Act
+            var response = await handler.Handle(new LogInterviewAsSuccessfullyHandledRequest(Id.g1));
+
+            // Assert
+            interviews.Where(x => x.InterviewId == Id.g1).Count.Should().Be(0);
+            Assert.That(response, Is.Not.Null);
         }
     }
 }
