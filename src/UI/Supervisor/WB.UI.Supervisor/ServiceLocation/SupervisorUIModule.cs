@@ -94,7 +94,8 @@ namespace WB.UI.Supervisor.ServiceLocation
 
         private void BindOfflineServices(IIocRegistry registry)
         {
-            registry.Bind<IHandleCommunicationMessage, SupervisorQuestionnaireHandler>();
+            registry.Bind<IHandleCommunicationMessage, SupervisorSyncHandler>();
+            registry.Bind<IHandleCommunicationMessage, SupervisorQuestionnairesHandler>();
         }
 
         public Task Init(IServiceLocator serviceLocator)
