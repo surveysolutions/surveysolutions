@@ -1,17 +1,24 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Ncqrs.Eventing;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services;
+using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
+using WB.Core.SharedKernels.Enumerator.Utils;
 
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
     public partial class OfflineSynchronizationService : ISynchronizationService
     {
+        private static Version interviewerBoundedContextVersion;
+
         public Task<string> LoginAsync(LogonInfo logonInfo, RestCredentials credentials, CancellationToken? token = null)
         {
             return Task.FromResult("offline sync token");
@@ -22,9 +29,21 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return Task.FromResult(true);
         }
 
-        public Task CanSynchronizeAsync(RestCredentials credentials = null, CancellationToken? token = null)
+        public async Task CanSynchronizeAsync(RestCredentials credentials = null, CancellationToken? token = null)
         {
-            return Task.CompletedTask;
+            if (interviewerBoundedContextVersion == null)
+            {
+                interviewerBoundedContextVersion = 
+                    ReflectionUtils.GetAssemblyVersion(typeof(InterviewerBoundedContextAssemblyIndicator));
+            }
+
+            var request = new CanSynchronizeRequest(interviewerBoundedContextVersion.Revision);
+            var response = await this.syncClient.SendAsync<CanSynchronizeRequest, CanSynchronizeResponse>(request, 
+                token ?? CancellationToken.None);
+            if (!response.CanSyncronize)
+            {
+                throw new SynchronizationException(SynchronizationExceptionType.UpgradeRequired);
+            }
         }
 
         public Task SendDeviceInfoAsync(DeviceInfoApiView info, CancellationToken? token = null)
