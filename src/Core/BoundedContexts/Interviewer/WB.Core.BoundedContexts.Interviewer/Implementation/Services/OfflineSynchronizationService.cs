@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Net;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,9 +14,11 @@ using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Utils;
+using DownloadProgressChangedEventArgs = WB.Core.GenericSubdomains.Portable.Implementation.DownloadProgressChangedEventArgs;
 
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
+    [ExcludeFromCodeCoverage]
     public partial class OfflineSynchronizationService : ISynchronizationService
     {
         private static Version interviewerBoundedContextVersion;
@@ -57,7 +60,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return Task.CompletedTask;
         }
 
-        [ExcludeFromCodeCoverage]
         public async Task<byte[]> GetQuestionnaireAssemblyAsync(QuestionnaireIdentity questionnaire, Action<decimal, long, long> onDownloadProgressChanged,
             CancellationToken token)
         {
@@ -66,50 +68,57 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return response.Content;
         }
 
-        public Task<QuestionnaireApiView> GetQuestionnaireAsync(QuestionnaireIdentity questionnaire, Action<decimal, long, long> onDownloadProgressChanged,
+        public async Task<QuestionnaireApiView> GetQuestionnaireAsync(QuestionnaireIdentity questionnaire, Action<decimal, long, long> onDownloadProgressChanged,
             CancellationToken token)
         {
-            throw new NotImplementedException();
+            var response = await this.syncClient.SendAsync<GetQuestionnaireRequest, GetQuestionnaireResponse>(
+                new GetQuestionnaireRequest(questionnaire), token);
+            return new QuestionnaireApiView
+            {
+                QuestionnaireDocument = response.QuestionnaireDocument
+            };
         }
 
         public Task<List<QuestionnaireIdentity>> GetCensusQuestionnairesAsync(CancellationToken token)
         {
-            throw new NotImplementedException();
+            return Task.FromResult(new List<QuestionnaireIdentity>());
         }
 
         public Task LogQuestionnaireAsSuccessfullyHandledAsync(QuestionnaireIdentity questionnaire)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
 
         public Task LogQuestionnaireAssemblyAsSuccessfullyHandledAsync(QuestionnaireIdentity questionnaire)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
 
         public Task<byte[]> GetApplicationAsync(CancellationToken token, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged = null)
         {
-            throw new NotImplementedException();
+            return Task.FromResult<byte[]>(null);
         }
 
         public Task<byte[]> GetApplicationPatchAsync(CancellationToken token, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged = null)
         {
-            throw new NotImplementedException();
+            return Task.FromResult<byte[]>(null);
         }
 
         public Task<int?> GetLatestApplicationVersionAsync(CancellationToken token)
         {
-            throw new NotImplementedException();
+            return Task.FromResult<int?>(null);
         }
 
         public Task SendBackupAsync(string filePath, CancellationToken token)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
 
-        public Task<List<InterviewApiView>> GetInterviewsAsync(CancellationToken token)
+        public async Task<List<InterviewApiView>> GetInterviewsAsync(CancellationToken token)
         {
-            throw new NotImplementedException();
+            var response = await this.syncClient.SendAsync<GetInterviewsRequest, GetInterviewsResponse>(
+                new GetInterviewsRequest(this.principal.CurrentUserIdentity.UserId), token);
+            return null;
         }
 
         public Task LogInterviewAsSuccessfullyHandledAsync(Guid interviewId)
