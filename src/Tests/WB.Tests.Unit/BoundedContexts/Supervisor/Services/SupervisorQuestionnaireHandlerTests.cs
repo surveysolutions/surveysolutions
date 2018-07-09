@@ -1,7 +1,9 @@
 ﻿using System.Threading.Tasks;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Supervisor;
 using WB.Core.BoundedContexts.Supervisor.Services.Implementation;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
@@ -14,7 +16,8 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
         {
             var handler = Create.Service.SupervisorQuestionnaireHandler();
 
-            var response = await handler.Handle(new CanSynchronizeRequest(15));
+            var expectedVersion = ReflectionUtils.GetAssemblyVersion(typeof(SupervisorBoundedContextAssemblyIndicator));
+            var response = await handler.Handle(new CanSynchronizeRequest(expectedVersion.Revision));
 
             Assert.That(response, Has.Property(nameof(response.CanSyncronize)).True);
         }

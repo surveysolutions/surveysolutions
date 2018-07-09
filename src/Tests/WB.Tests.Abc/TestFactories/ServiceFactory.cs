@@ -73,6 +73,7 @@ using WB.Core.Infrastructure.Versions;
 using WB.Core.Infrastructure.WriteSide;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
@@ -768,9 +769,13 @@ namespace WB.Tests.Abc.TestFactories
             return new OfflineSynchronizationService(offlineSyncClient ?? Mock.Of<IOfflineSyncClient>());
         }
 
-        public SupervisorQuestionnaireHandler SupervisorQuestionnaireHandler(ILiteEventBus eventBus = null, IEnumeratorEventStorage eventStorage = null)
+        public SupervisorQuestionnaireHandler SupervisorQuestionnaireHandler(ILiteEventBus eventBus = null,
+            IEnumeratorEventStorage eventStorage = null,
+            IQuestionnaireAssemblyAccessor assemblyAccessor = null)
         {
-            return new SupervisorQuestionnaireHandler(eventBus ?? Mock.Of<ILiteEventBus>(), eventStorage ?? Mock.Of<IEnumeratorEventStorage>());
+            return new SupervisorQuestionnaireHandler(eventBus ?? Mock.Of<ILiteEventBus>(),
+                eventStorage ?? Mock.Of<IEnumeratorEventStorage>(),
+                assemblyAccessor ?? Mock.Of<IQuestionnaireAssemblyAccessor>());
         }
     }
 
