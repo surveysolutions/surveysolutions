@@ -2094,6 +2094,9 @@
     <Compile Include="Migrations\ReadSide\M001-100\M201805121700_Add_categorical_pivot.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201805141156_AddIndexForInterviewStatusChangeHistory.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M201805141242_CreateSyncPackageTrackingTable.cs" />
+    <Compile Include="Migrations\ReadSide\M001-100\M201806191234_AddErrorsCountToInterviewSummary.cs" />
+    <Compile Include="Migrations\ReadSide\M001-100\M201806191240_FillErrorsCountInInterviewSummary.cs" />
+    <Compile Include="Migrations\ReadSide\M001-100\M201806271400_AddUniqueConstraintOnInterviewEntities.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\QuestionnaireEntityMigration.cs" />
     <Compile Include="Migrations\Users\M005_AddDeviceAppVersionToProfile.cs" />
     <Compile Include="Migrations\Users\M201709081340_RemovedUserDocumentAndRolesTables.cs" />
