@@ -1,10 +1,12 @@
 ﻿using System.Threading.Tasks;
 using Ncqrs.Eventing;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
 
 namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
@@ -15,15 +17,20 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
         private readonly ILiteEventBus eventBus;
         private readonly IEnumeratorEventStorage eventStore;
         private readonly IQuestionnaireAssemblyAccessor questionnaireAssemblyAccessor;
+        private readonly IInterviewerQuestionnaireAccessor questionnaireAccessor;
+        private readonly ISerializer serializer;
 
         public SupervisorQuestionnaireHandler(ILiteEventBus eventBus,
             IEnumeratorEventStorage eventStorage,
-            IQuestionnaireAssemblyAccessor questionnaireAssemblyAccessor
-            )
+            IQuestionnaireAssemblyAccessor questionnaireAssemblyAccessor, 
+            ISerializer serializer, 
+            IInterviewerQuestionnaireAccessor questionnaireAccessor)
         {
             this.eventBus = eventBus;
             this.eventStore = eventStorage;
             this.questionnaireAssemblyAccessor = questionnaireAssemblyAccessor;
+            this.serializer = serializer;
+            this.questionnaireAccessor = questionnaireAccessor;
         }
 
         public Task<GetQuestionnaireListResponse> Handle(GetQuestionnaireListRequest message)
@@ -51,6 +58,17 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
             requestHandler.RegisterHandler<SendBigAmountOfDataRequest, SendBigAmountOfDataResponse>(Handle);
             requestHandler.RegisterHandler<CanSynchronizeRequest, CanSynchronizeResponse>(Handle);
             requestHandler.RegisterHandler<GetQuestionnaireAssemblyRequest, GetQuestionnaireAssemblyResponse>(Handle);
+            requestHandler.RegisterHandler<GetQuestionnaireRequest, GetQuestionnaireResponse>(Handle);
+        }
+
+        public Task<GetQuestionnaireResponse> Handle(GetQuestionnaireRequest arg)
+        {
+            var questionnaireDocument = this.questionnaireAccessor.GetQuestionnaire(arg.QuestionnaireId);
+            var serializedDocument = this.serializer.Serialize(questionnaireDocument);
+            return Task.FromResult(new GetQuestionnaireResponse
+            {
+                QuestionnaireDocument = serializedDocument
+            });
         }
 
         private Task<GetQuestionnaireAssemblyResponse> Handle(GetQuestionnaireAssemblyRequest arg)
