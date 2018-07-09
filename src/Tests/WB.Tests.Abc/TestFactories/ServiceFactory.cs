@@ -766,7 +766,8 @@ namespace WB.Tests.Abc.TestFactories
 
         public OfflineSynchronizationService OfflineSynchronizationService(IOfflineSyncClient offlineSyncClient = null)
         {
-            return new OfflineSynchronizationService(offlineSyncClient ?? Mock.Of<IOfflineSyncClient>());
+            return new OfflineSynchronizationService(offlineSyncClient ?? Mock.Of<IOfflineSyncClient>(),
+                Mock.Of<IPrincipal>());
         }
 
         public SupervisorQuestionnaireHandler SupervisorQuestionnaireHandler(ILiteEventBus eventBus = null,
