@@ -8,54 +8,28 @@
     
     <ImageView
         android:id="@+id/supervisor_icon"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        
-        android:src="@drawable/icon" />
+        style="@style/Sidebar_Header_Icon"/>
     
     <TextView
         android:id="@+id/dashboard_supervisor_name"
+        style="@style/Sidebar_Header_Name"
         local:MvxBind="Text UserName;"
 
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingLeft="10dp"
-
-        android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/supervisor_icon"
-        android:layout_toLeftOf="@+id/sync_icon"
-        
-        android:textStyle="bold"
-        />
+        android:layout_toLeftOf="@+id/sync_icon"/>
 
     <TextView
         android:id="@+id/dashboard_supervisor_email"
+        style="@style/Sidebar_Header_Email" 
         local:MvxBind="Text UserEmail"
 
         android:layout_below="@+id/dashboard_supervisor_name"
-
-        android:layout_alignParentBottom="true"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:paddingLeft="10dp"
-
         android:layout_toRightOf="@+id/supervisor_icon"
-        android:layout_toLeftOf="@+id/sync_icon"
-        />
+        android:layout_toLeftOf="@+id/sync_icon"/>
 
     <ImageButton
         android:id="@+id/sync_icon"
-        
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentTop="true"
-
-        android:layout_width="48dp"
-        android:layout_height="48dp"
-        local:srcCompat="@drawable/sidebar_sync_icon" 
+        style="@style/Sidebar_Header_Sync"
+        local:srcCompat="@drawable/synch_icon_round"
         local:MvxBind="Click StartSync"/>
 </RelativeLayout>
