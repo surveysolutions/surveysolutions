@@ -78,9 +78,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return response.Translations;
         }
 
-        public Task<CompanyLogoInfo> GetCompanyLogo(string storedClientEtag, CancellationToken cancellationToken)
+        public async Task<CompanyLogoInfo> GetCompanyLogo(string storedClientEtag, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var response = await syncClient.SendAsync<GetCompanyLogoRequest, GetCompanyLogoResponse>(
+                new GetCompanyLogoRequest
+                {
+                    Etag = storedClientEtag
+                }, cancellationToken);
+            return response.LogoInfo;
         }
 
         public Task SendSyncStatisticsAsync(SyncStatisticsApiView statistics,

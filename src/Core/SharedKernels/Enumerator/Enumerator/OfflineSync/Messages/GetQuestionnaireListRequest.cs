@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 
 namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Messages
@@ -26,5 +27,15 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Messages
     public class GetQuestionnaireTranslationResponse : ICommunicationMessage
     {
         public List<TranslationDto> Translations { get; set; }
+    }
+
+    public class GetCompanyLogoRequest : ICommunicationMessage
+    {
+        public string Etag { get; set; }
+    }
+
+    public class GetCompanyLogoResponse : ICommunicationMessage
+    {
+        public CompanyLogoInfo LogoInfo { get; set; }
     }
 }
