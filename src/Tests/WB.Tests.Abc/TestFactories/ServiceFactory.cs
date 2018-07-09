@@ -767,6 +767,11 @@ namespace WB.Tests.Abc.TestFactories
         {
             return new OfflineSynchronizationService(offlineSyncClient ?? Mock.Of<IOfflineSyncClient>());
         }
+
+        public SupervisorQuestionnaireHandler SupervisorQuestionnaireHandler(ILiteEventBus eventBus = null, IEnumeratorEventStorage eventStorage = null)
+        {
+            return new SupervisorQuestionnaireHandler(eventBus ?? Mock.Of<ILiteEventBus>(), eventStorage ?? Mock.Of<IEnumeratorEventStorage>());
+        }
     }
 
     internal static class GoogleConnectionsRequestHandlerExtensions
