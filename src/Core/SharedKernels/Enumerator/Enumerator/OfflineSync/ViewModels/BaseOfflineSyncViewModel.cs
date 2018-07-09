@@ -39,6 +39,29 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
             this.permissions = permissions;
             this.nearbyConnection = nearbyConnection;
             SetStatus(ConnectionStatus.WaitingForGoogleApi);
+            this.nearbyConnection.Events.Subscribe(HandleConnectionEvents);
+        }
+
+        protected void HandleConnectionEvents(INearbyEvent @event)
+        {
+            switch (@event)
+            {
+                case NearbyEvent.InitiatedConnection iniConnection:
+                    this.nearbyConnection.AcceptConnection(iniConnection.Endpoint);
+                    break;
+                case NearbyEvent.Connected connected:
+                    SetStatus(ConnectionStatus.Connected, "Connected to " + connected.Endpoint);
+                    Connected(connected.Endpoint);
+                    break;
+                case NearbyEvent.Disconnected disconnected:
+                    SetStatus(ConnectionStatus.Discovering, "Disconnected from " + disconnected.Endpoint);
+                    break;
+                case NearbyEvent.EndpointFound endpointFound:
+                    this.OnFound(endpointFound.Endpoint, endpointFound.EndpointInfo);
+                    break;
+                case NearbyEvent.EndpointLost endpointLost:
+                    break;
+            }
         }
 
         protected void SetStatus(ConnectionStatus connectionStatus, string details = null)
@@ -47,50 +70,60 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
             this.StatusDetails = details ?? String.Empty;
         }
 
-        private void OnLost(string endpoint)
+        protected virtual void Connected(string connectedEndpoint)
         {
-            Log.Trace("OnLost {0}", endpoint);
-            //SetStatus();
+
         }
+    
 
         protected virtual async void OnFound(string endpoint, NearbyDiscoveredEndpointInfo info)
         {
             SetStatus(ConnectionStatus.Connecting,
                 $"Found endpoint: {info.EndpointName} [{endpoint}]. Requesting conection");
             Log.Trace("OnFound {0} - {1}", endpoint, info.EndpointName);
-            await this.nearbyConnection.RequestConnection(this.principal.CurrentUserIdentity.Name, endpoint,
-                new NearbyConnectionLifeCycleCallback(OnInitiatedConnection, OnConnectionResult, OnDisconnected));
+            await this.nearbyConnection.RequestConnection(this.principal.CurrentUserIdentity.Name, endpoint);
 
             SetStatus(ConnectionStatus.Connecting,
                 $"Requested conection from endpoint: {info.EndpointName} [{endpoint}]");
         }
 
-        protected virtual void OnDisconnected(string endpoint)
-        {
-            Log.Trace("OnDisconnected {0}", endpoint);
-            // stop all network activity
-        }
+        //protected virtual void OnDisconnected(string endpoint)
+        //{
+        //    Log.Trace("OnDisconnected {0}", endpoint);
+        //    // stop all network activity
+        //}
 
-        protected virtual void OnConnectionResult(string endpoint, NearbyConnectionResolution resolution)
-        {
-            Log.Trace("OnConnectionResult {0}, Success: {1}, Code: {2}", endpoint, resolution.IsSuccess,
-                resolution.StatusCode);
-            SetStatus(ConnectionStatus.Connected, $"Connected to endpoint [{endpoint}]");
-        }
+        //protected virtual void OnConnectionResult(string endpoint, NearbyConnectionResolution resolution)
+        //{
+        //    Log.Trace("OnConnectionResult {0}, Success: {1}, Code: {2}", endpoint, resolution.IsSuccess,
+        //        resolution.StatusCode);
+        //    SetStatus(ConnectionStatus.Connected, $"Connected to endpoint [{endpoint}]");
+        //}
 
-        protected virtual async void OnInitiatedConnection(string endpoint, NearbyConnectionInfo info)
-        {
-            Log.Trace("OnInitiatedConnection {0} - {1}", endpoint, info.EndpointName);
-            SetStatus(ConnectionStatus.Connecting, $"Accepting connection from {info.EndpointName} [{endpoint}]");
-            await this.nearbyConnection.AcceptConnection(endpoint);
-        }
+        //protected virtual async void OnInitiatedConnection(string endpoint, NearbyConnectionInfo info)
+        //{
+        //    Log.Trace("OnInitiatedConnection {0} - {1}", endpoint, info.EndpointName);
+        //    SetStatus(ConnectionStatus.Connecting, $"Accepting connection from {info.EndpointName} [{endpoint}]");
+        //    await this.nearbyConnection.AcceptConnection(endpoint);
+        //}
 
         protected async Task StartDiscovery()
         {
             await permissions.AssureHasPermission(Permission.Location);
+
             SetStatus(ConnectionStatus.StartDiscovering, $"Starting discovery");
-            await this.nearbyConnection.StartDiscovery(GetServiceName(), OnFound, OnLost);
+            await this.nearbyConnection.StartDiscovery(GetServiceName());
             SetStatus(ConnectionStatus.Discovering, $"Searching for supervisor");
+        }
+
+        protected Task StopDiscovery()
+        {
+            return this.nearbyConnection.StopDiscovery();
+        }
+        
+        protected Task StopAdvertising()
+        {
+            return this.nearbyConnection.StopAdvertising();
         }
 
         protected abstract string GetServiceName();
@@ -102,12 +135,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
             Log.Trace("StartAdvertising");
 
             SetStatus(ConnectionStatus.StartAdvertising, $"Starting advertising");
-            var res = await this.nearbyConnection.StartAdvertising(GetServiceName(),
-                this.principal.CurrentUserIdentity.Name,
-                new NearbyConnectionLifeCycleCallback(
-                    OnConnection,
-                    OnConnectionResult,
-                    OnDisconnected));
+            await this.nearbyConnection.StartAdvertising(GetServiceName(), this.principal.CurrentUserIdentity.Name);
 
             SetStatus(ConnectionStatus.Advertising, "Waiting for interviewers connections");
         }
