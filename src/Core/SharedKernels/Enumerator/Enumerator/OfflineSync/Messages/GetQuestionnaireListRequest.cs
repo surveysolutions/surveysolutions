@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
+using WB.Core.SharedKernels.Questionnaire.Api;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 
 namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Messages
@@ -38,4 +39,27 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Messages
     {
         public CompanyLogoInfo LogoInfo { get; set; }
     }
+
+    public class GetAttachmentContentsRequest : ICommunicationMessage
+    {
+        public QuestionnaireIdentity QuestionnaireIdentity { get; set; }
+        
+    }
+
+    public class GetAttachmentContentsResponse : ICommunicationMessage
+    {
+        public List<string> AttachmentContents { get; set; }
+    }
+
+    public class GetAttachmentContentRequest : ICommunicationMessage
+    {
+        public string ContentId { get; set; }
+    }
+
+    public class GetAttachmentContentResponse : ICommunicationMessage
+    {
+        public AttachmentContent Content { get; set; }
+    }
+
+    
 }
