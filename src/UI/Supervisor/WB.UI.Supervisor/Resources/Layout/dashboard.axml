@@ -24,7 +24,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimaryDark"
-                local:layout_scrollFlags="enterAlways|scroll" />
+                local:layout_scrollFlags="enterAlways|scroll" >
+                <ImageButton style="@style/ToolbarIcon"
+                             local:MvxBind="Click SynchronizationCommand;"
+                             local:srcCompat="@drawable/synchronize_icon"/>
+            </android.support.v7.widget.Toolbar>
 
         </android.support.design.widget.AppBarLayout>
 
