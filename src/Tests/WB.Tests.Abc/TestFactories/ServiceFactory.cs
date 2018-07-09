@@ -771,11 +771,15 @@ namespace WB.Tests.Abc.TestFactories
 
         public SupervisorQuestionnaireHandler SupervisorQuestionnaireHandler(ILiteEventBus eventBus = null,
             IEnumeratorEventStorage eventStorage = null,
-            IQuestionnaireAssemblyAccessor assemblyAccessor = null)
+            IQuestionnaireAssemblyAccessor assemblyAccessor = null,
+            ISerializer serializer = null,
+            IInterviewerQuestionnaireAccessor questionnaireAccessor = null)
         {
             return new SupervisorQuestionnaireHandler(eventBus ?? Mock.Of<ILiteEventBus>(),
                 eventStorage ?? Mock.Of<IEnumeratorEventStorage>(),
-                assemblyAccessor ?? Mock.Of<IQuestionnaireAssemblyAccessor>());
+                assemblyAccessor ?? Mock.Of<IQuestionnaireAssemblyAccessor>(),
+                serializer ?? Mock.Of<ISerializer>(),
+                questionnaireAccessor ?? Mock.Of<IInterviewerQuestionnaireAccessor>());
         }
     }
 

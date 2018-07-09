@@ -6,6 +6,7 @@ using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Questionnaire.Api;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 
@@ -14,10 +15,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
     public partial class OfflineSynchronizationService
     {
         private readonly IOfflineSyncClient syncClient;
+        private readonly IPrincipal principal;
 
-        public OfflineSynchronizationService(IOfflineSyncClient syncClient)
+        public OfflineSynchronizationService(IOfflineSyncClient syncClient,
+            IPrincipal principal)
         {
             this.syncClient = syncClient;
+            this.principal = principal;
         }
 
         public Task UploadInterviewAsync(Guid interviewId, InterviewPackageApiView completedInterview,
