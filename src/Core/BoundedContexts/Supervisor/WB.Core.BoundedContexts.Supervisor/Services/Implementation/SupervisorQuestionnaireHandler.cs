@@ -4,6 +4,7 @@ using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Utils;
 
 namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
 {
@@ -44,6 +45,17 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
             requestHandler.RegisterHandler<PostInterviewRequest, OkResponse>(Handle);
             requestHandler.RegisterHandler<GetQuestionnaireListRequest, GetQuestionnaireListResponse>(Handle);
             requestHandler.RegisterHandler<SendBigAmountOfDataRequest, SendBigAmountOfDataResponse>(Handle);
+            requestHandler.RegisterHandler<CanSynchronizeRequest, CanSynchronizeResponse>(Handle);
+        }
+
+        public Task<CanSynchronizeResponse> Handle(CanSynchronizeRequest arg)
+        {
+            var expectedVersion = ReflectionUtils.GetAssemblyVersion(typeof(SupervisorBoundedContextAssemblyIndicator));
+
+            return Task.FromResult(new CanSynchronizeResponse
+            {
+                CanSyncronize = expectedVersion.Revision == arg.InterviewerBuildNumber
+            });
         }
 
         private Task<OkResponse> Handle(PostInterviewRequest arg)
