@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -32,6 +33,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly SpecialValuesViewModel specialValues;
         private Identity questionIdentity;
         private string interviewId;
+        private readonly Timer timer;
+        protected internal int ThrottlePeriod { get; set; } = Constants.ThrottlePeriod;
 
         public IQuestionStateViewModel QuestionState => this.questionState;
         public SpecialValuesViewModel SpecialValues => this.specialValues;
@@ -128,6 +131,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Answering = answering;
             this.liteEventRegistry = liteEventRegistry;
             this.specialValues = specialValues;
+
+            this.timer = new Timer(async _ => { await AnswerQuestion(); }, null, Timeout.Infinite, Timeout.Infinite);
         }
 
         public Identity Identity => this.questionIdentity;
@@ -187,7 +192,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private async void SpecialValueChanged(object sender, EventArgs eventArgs)
         {
             var selectedSpecialValue = (SingleOptionQuestionOptionViewModel)sender;
-            await SaveAnswer(selectedSpecialValue.Value, true);
+            await EnqueueSaveAnswer(selectedSpecialValue.Value, true);
         }
 
         private async void SpecialValueRemoved(object sender, EventArgs eventArgs)
@@ -211,11 +216,35 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 return;
             }
 
-            await SaveAnswer(this.Answer, specialValues.IsSpecialValueSelected(this.Answer));
+            await EnqueueSaveAnswer(this.Answer, specialValues.IsSpecialValueSelected(this.Answer));
         }
 
-        private async Task SaveAnswer(decimal? answeredOrSelectedValue, bool isSpecialValueSelected)
+        private void ResetTimer() {
+            timer.Change(ThrottlePeriod, Timeout.Infinite);
+        }
+
+        private decimal? answerOrSelectedValueToSave = null;
+        private bool isSpecialValueToSave = false;
+
+        private async Task EnqueueSaveAnswer(decimal? answeredOrSelectedValue, bool isSpecialValueSelected)
         {
+            this.answerOrSelectedValueToSave = answeredOrSelectedValue;
+            this.isSpecialValueToSave = isSpecialValueSelected;
+            if (this.ThrottlePeriod == 0)
+            {
+                await AnswerQuestion();
+            }
+            else
+            {
+                this.ResetTimer();
+            }
+        }
+
+        private async Task AnswerQuestion()
+        {
+            var answeredOrSelectedValue = this.answerOrSelectedValueToSave;
+            var isSpecialValueSelected = this.isSpecialValueToSave;
+
             if (ProtectedAnswer.HasValue && answeredOrSelectedValue < protectedAnswer)
             {
                 var message = string.Format(UIResources.Interview_Questions_Integer_ProtectedValue,

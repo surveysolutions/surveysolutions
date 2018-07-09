@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Threading;
@@ -57,6 +58,7 @@ namespace WB.UI.Headquarters
         static Startup()
         {
             SetupNConfig();
+            CultureInfo.DefaultThreadCurrentCulture = new CultureInfo(@"en-US");
             //HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();
             //HibernatingRhinos.Profiler.Appender.EntityFramework.EntityFrameworkProfiler.Initialize();
              //NpgsqlLogManager.Provider = new NLogNpgsqlLoggingProvider();
