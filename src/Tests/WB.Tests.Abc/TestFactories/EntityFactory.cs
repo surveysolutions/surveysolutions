@@ -1360,8 +1360,9 @@ namespace WB.Tests.Abc.TestFactories
             string translationIndex = null,
             TranslationType? type = null)
         {
-            return new WB.Core.SharedKernels.Enumerator.Views.TranslationInstance
+            return new TranslationInstance
             {
+                Id = Guid.NewGuid().ToString(),
                 Value = value,
                 TranslationId = tranlationId ?? Guid.NewGuid(),
                 QuestionnaireId = questionnaireId ?? Create.Entity.QuestionnaireIdentity().ToString(),

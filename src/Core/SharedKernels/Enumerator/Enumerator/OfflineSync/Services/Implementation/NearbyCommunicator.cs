@@ -244,10 +244,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                     throw new ArgumentOutOfRangeException();
             }
         }
-
-        public ObservableCollection<GetQuestionnaireListResponse> RemoteEndpoints { get; } =
-            new CovariantObservableCollection<GetQuestionnaireListResponse>();
-
+        
         private Task SendOverWire(INearbyConnection nearbyConnection, string endpoint, IPayload payload)
         {
             outgoingPayloads.AddOrUpdate(payload.Id, payload, (id, p) => payload);
