@@ -1,21 +1,20 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
-using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
 
 namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services
 {
+    /// <summary>
+    /// Used by interviewer only to communicate with connected supervisors
+    /// Connection endpoint is defined outside of client
+    /// </summary>
     public interface IOfflineSyncClient
     {
-        Task<GetQuestionnaireListResponse> GetQuestionnaireList(string endpoint, IProgress<CommunicationProgress> progress = null);
-
-        Task<OkResponse> PostInterviewAsync(string endpoint, PostInterviewRequest package,
-            IProgress<CommunicationProgress> progress = null);
-
-        Task<OkResponse> PostInterviewImageAsync(string endpoint, PostInterviewImageRequest postInterviewImageRequest,
-            IProgress<CommunicationProgress> progress = null);
-
-        Task<OkResponse> PostInterviewAudioAsync(string endpoint, PostInterviewAudioRequest postInterviewAudioRequest,
-            IProgress<CommunicationProgress> progress = null);
+        Task<TResponse> SendAsync<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken, IProgress<CommunicationProgress> progress = null)
+            where TRequest : ICommunicationMessage
+            where TResponse : ICommunicationMessage;
+        Task SendAsync<TRequest>(TRequest request, CancellationToken cancellationToken, IProgress<CommunicationProgress> progress = null) 
+            where TRequest : ICommunicationMessage;
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
 
@@ -15,32 +16,19 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             this.nearbyConnection = nearbyConnection;
         }
 
-        public Task<GetQuestionnaireListResponse> GetQuestionnaireList(string endpoint,
-            IProgress<CommunicationProgress> progress = null)
+        public static string Endpoint { get; set; }
+
+        public Task<TResponse> SendAsync<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken, IProgress<CommunicationProgress> progress = null) 
+            where TRequest : ICommunicationMessage
+            where TResponse : ICommunicationMessage
         {
-            return this.communicator.SendAsync<GetQuestionnaireListRequest, GetQuestionnaireListResponse>(this.nearbyConnection,
-                endpoint, new GetQuestionnaireListRequest(), progress);
+            return this.communicator.SendAsync<TRequest, TResponse>(this.nearbyConnection, Endpoint, request, progress);
         }
 
-        public Task<OkResponse> PostInterviewAsync(string endpoint, PostInterviewRequest package,
-            IProgress<CommunicationProgress> progress = null)
+        public async Task SendAsync<TRequest>(TRequest request, CancellationToken cancellationToken, IProgress<CommunicationProgress> progress = null)
+            where TRequest : ICommunicationMessage
         {
-            return this.communicator.SendAsync<PostInterviewRequest, OkResponse>(this.nearbyConnection,
-                endpoint, package, progress);
-        }
-
-        public Task<OkResponse> PostInterviewImageAsync(string endpoint, PostInterviewImageRequest postInterviewImageRequest,
-            IProgress<CommunicationProgress> progress = null)
-        {
-            return this.communicator.SendAsync<PostInterviewImageRequest, OkResponse>(this.nearbyConnection,
-                endpoint, postInterviewImageRequest, progress);
-        }
-
-        public Task<OkResponse> PostInterviewAudioAsync(string endpoint, PostInterviewAudioRequest postInterviewAudioRequest,
-            IProgress<CommunicationProgress> progress = null)
-        {
-            return this.communicator.SendAsync<PostInterviewAudioRequest, OkResponse>(this.nearbyConnection,
-                endpoint, postInterviewAudioRequest, progress);
+            await this.communicator.SendAsync<TRequest, OkResponse>(this.nearbyConnection, Endpoint, request, progress);
         }
     }
 }

@@ -6,6 +6,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services.OfflineSyn
 {
     public interface IInterviewsSynchronizer
     {
-        Task UploadPendingInterviews(string endpoint, IProgress<UploadProgress> progress, CancellationToken cancellationToken);
+        Task UploadPendingInterviews(IProgress<UploadProgress> progress, CancellationToken cancellationToken);
     }
 }
