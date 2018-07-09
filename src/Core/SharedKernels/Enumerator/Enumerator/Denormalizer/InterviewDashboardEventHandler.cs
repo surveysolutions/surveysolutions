@@ -27,7 +27,6 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
                                          ILitePublishedEventHandler<InterviewHardDeleted>,
                                          ILitePublishedEventHandler<InterviewerAssigned>,
                                          ILitePublishedEventHandler<SupervisorAssigned>,
-                                         
 
                                          ILitePublishedEventHandler<TextQuestionAnswered>,
                                          ILitePublishedEventHandler<MultipleOptionsQuestionAnswered>,
@@ -309,7 +308,7 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
             if (evnt.Payload.Status == InterviewStatus.Completed)
                 interviewView.CompletedDateTime = evnt.EventTimeStamp;
 
-            if (evnt.Payload.Status == InterviewStatus.RejectedBySupervisor)
+            if (evnt.Payload.Status == InterviewStatus.RejectedBySupervisor || evnt.Payload.Status == InterviewStatus.RejectedByHeadquarters)
                 interviewView.RejectedDateTime = evnt.EventTimeStamp;
 
             interviewView.Status = evnt.Payload.Status;
@@ -323,7 +322,8 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
             return status == InterviewStatus.Completed || 
                    status == InterviewStatus.Restarted || 
                    status == InterviewStatus.RejectedBySupervisor ||
-                status == InterviewStatus.ApprovedBySupervisor;
+                   status == InterviewStatus.ApprovedBySupervisor ||
+                   status == InterviewStatus.RejectedByHeadquarters;
         }
 
         private void AnswerQuestion(Guid interviewId, Guid questionId, object answer, DateTime answerTimeUtc)
