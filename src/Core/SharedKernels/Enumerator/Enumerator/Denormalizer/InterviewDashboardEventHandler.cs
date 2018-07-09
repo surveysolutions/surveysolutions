@@ -306,10 +306,10 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
                 return;
 
             if (evnt.Payload.Status == InterviewStatus.Completed)
-                interviewView.CompletedDateTime = evnt.EventTimeStamp;
+                interviewView.CompletedDateTime = evnt.Payload.UtcTime ?? evnt.EventTimeStamp;
 
             if (evnt.Payload.Status == InterviewStatus.RejectedBySupervisor || evnt.Payload.Status == InterviewStatus.RejectedByHeadquarters)
-                interviewView.RejectedDateTime = evnt.EventTimeStamp;
+                interviewView.RejectedDateTime = evnt.Payload.UtcTime ?? evnt.EventTimeStamp;
 
             interviewView.Status = evnt.Payload.Status;
             interviewView.LastInterviewerOrSupervisorComment = evnt.Payload.Comment;
