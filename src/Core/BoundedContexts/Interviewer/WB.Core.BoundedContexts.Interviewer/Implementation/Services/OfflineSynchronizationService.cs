@@ -114,10 +114,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return Task.CompletedTask;
         }
 
-        public async Task<List<InterviewApiView>> GetInterviewsAsync(CancellationToken token)
+        public Task<List<InterviewApiView>> GetInterviewsAsync(CancellationToken token)
         {
-            var response = await this.syncClient.SendAsync<GetInterviewsRequest, GetInterviewsResponse>(
-                new GetInterviewsRequest(this.principal.CurrentUserIdentity.UserId), token);
+            //var response = await this.syncClient.SendAsync<GetInterviewsRequest, GetInterviewsResponse>(
+            //    new GetInterviewsRequest(this.principal.CurrentUserIdentity.UserId), token);
             return null;
         }
 
