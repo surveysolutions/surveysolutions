@@ -104,9 +104,6 @@ namespace WB.UI.Supervisor.Activities
         {
             switch (item.ItemId)
             {
-                case Resource.Id.menu_synchronization:
-                    this.ViewModel.SynchronizationCommand.Execute();
-                    break;
                 case Resource.Id.menu_maps:
                     this.ViewModel.NavigateToMapsCommand.Execute();
                     break;

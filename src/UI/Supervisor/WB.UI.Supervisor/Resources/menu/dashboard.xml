@@ -3,10 +3,6 @@
     xmlns:local="http://schemas.android.com/apk/res-auto"
       android:id="@+id/menu">
   <item
-      android:id="@+id/menu_synchronization"
-      local:showAsAction="always"
-      android:icon="@drawable/dashboard_sync_icon"/>
-  <item
       android:id="@+id/menu_maps"
       local:showAsAction="never" />
   <item

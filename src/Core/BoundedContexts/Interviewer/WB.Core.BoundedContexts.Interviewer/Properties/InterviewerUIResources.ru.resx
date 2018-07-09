@@ -305,7 +305,7 @@
     <value>Ошибка аутентификации пользователя</value>
   </data>
   <data name="Synchronization_UserAuthentication_Title" xml:space="preserve">
-    <value>Аутентификации пользователя</value>
+    <value>Аутентификация пользователя</value>
   </data>
   <data name="Synchronization_UserAuthentication_Description" xml:space="preserve">
     <value>Подготовка к синхронизации</value>
