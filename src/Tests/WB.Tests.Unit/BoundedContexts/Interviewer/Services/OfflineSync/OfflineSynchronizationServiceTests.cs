@@ -43,7 +43,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.OfflineSync
 
             var clientMock = new Mock<IOfflineSyncClient>();
             clientMock.Setup(x => x.SendAsync<CanSynchronizeRequest, CanSynchronizeResponse>(
-                    It.Is<CanSynchronizeRequest>(r => r.InterviewerBuildNumber == v.Build), CancellationToken.None, null))
+                    It.Is<CanSynchronizeRequest>(r => r.InterviewerBuildNumber == v.Revision), CancellationToken.None, null))
                 .ReturnsAsync(new CanSynchronizeResponse
                 {
                     CanSyncronize = true
