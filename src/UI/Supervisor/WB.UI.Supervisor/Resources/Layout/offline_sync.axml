@@ -4,6 +4,12 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+      <Button
+        android:text="Restart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/restart" 
+        local:MvxBind="Click Restart;" />
     <TextView
         style="@style/Dashboard_Search_SearchResult"
         local:MvxBind="Text Status;" />
