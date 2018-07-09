@@ -17,16 +17,19 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor
         public static void Register(HttpConfiguration config)
         {
             config.TypedRoute(@"api/supervisor/compatibility/{deviceid}/{deviceSyncProtocolVersion}",
-                c => c.Action<SupervisorAppApiController>(x => x.CheckCompatibility(Param.Any<string>(), Param.Any<int>())));
+                c => c.Action<SupervisorApiController>(x => x.CheckCompatibility(Param.Any<string>(), Param.Any<int>())));
 
             config.TypedRoute(@"api/supervisor/v1/devices/info", c => c.Action<DevicesApiV1Controller>(x => x.Info(Param.Any<DeviceInfoApiView>())));
             config.TypedRoute(@"api/supervisor/v1/devices/statistics", c => c.Action<DevicesApiV1Controller>(x => x.Statistics(Param.Any<SyncStatisticsApiView>())));
             config.TypedRoute(@"api/supervisor/v1/devices/exception", c => c.Action<DevicesApiV1Controller>(x => x.UnexpectedException(Param.Any<UnexpectedExceptionApiView>())));
             //
             //            config.TypedRoute("api/supervisor/v1", c => c.Action<InterviewerApiV2Controller>(x => x.Get()));
-            config.TypedRoute("api/supervisor/v1/extended/latestversion", c => c.Action<SupervisorAppApiController>(x => x.GetLatestVersion()));
 
-            config.TypedRoute("api/supervisor/v1/tabletInfo", c => c.Action<SupervisorAppApiController>(x => x.PostTabletInformation()));
+            config.TypedRoute(@"api/supervisor/v1/extended", c => c.Action<SupervisorApiController>(x => x.GetSupervisor()));
+            config.TypedRoute(@"api/supervisor/v1/extended/patch/{deviceVersion}", c => c.Action<SupervisorApiController>(x => x.Patch(Param.Any<int>())));
+            config.TypedRoute("api/supervisor/v1/extended/latestversion", c => c.Action<SupervisorApiController>(x => x.GetLatestVersion()));
+
+            config.TypedRoute("api/supervisor/v1/tabletInfo", c => c.Action<SupervisorApiController>(x => x.PostTabletInformation()));
             //
             //
             //            config.TypedRoute("api/supervisor/v1/tabletInfo",
@@ -42,7 +45,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor
             config.TypedRoute("api/supervisor/v1/users/hasdevice", c => c.Action<UserApiController>(x => x.HasDevice()));
 
             config.TypedRoute("api/supervisor/compatibility/{deviceid}/{deviceSyncProtocolVersion}",
-                c => c.Action<SupervisorAppApiController>(x => x.CheckCompatibility(Param.Any<string>(), Param.Any<int>())));
+                c => c.Action<SupervisorApiController>(x => x.CheckCompatibility(Param.Any<string>(), Param.Any<int>())));
             config.TypedRoute("api/supervisor/v1/translations/{id}",
                 c => c.Action<TranslationsApiV1Controller>(x => x.Get(Param.Any<string>())));
             config.TypedRoute("api/supervisor/v1/companyLogo", c => c.Action<SettingsV1Controller>(x => x.CompanyLogo()));

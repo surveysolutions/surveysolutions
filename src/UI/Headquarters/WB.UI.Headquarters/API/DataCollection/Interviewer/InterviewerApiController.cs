@@ -30,9 +30,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer
         private const string PHYSICALAPPLICATIONFILENAME = "wbcapi.apk";
         private const string PHYSICALAPPLICATIONEXTENDEDFILENAME = "wbcapi.ext.apk";
         private const string PHYSICALPATHTOAPPLICATION = "~/Client/";
-
-        private const string PHYSICALSUPERVISORAPPLICATIONFILENAME = "supervisor.apk";
-
+        
         private readonly IFileSystemAccessor fileSystemAccessor;
         protected readonly ITabletInformationService tabletInformationService;
         protected readonly IUserViewFactory userViewFactory;
@@ -50,7 +48,6 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer
             WithoutMaps = 1,
             WithMaps = 2
         }
-
 
         public InterviewerApiController(
             IFileSystemAccessor fileSystemAccessor,
@@ -75,14 +72,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.assignmentsService = assignmentsService;
         }
-
-        [HttpGet]
-        [WriteToSyncLog(SynchronizationLogType.GetSupervisorApk)]
-        public virtual HttpResponseMessage GetSupervisor()
-        {
-            return this.HttpResponseMessage(PHYSICALSUPERVISORAPPLICATIONFILENAME, PHYSICALSUPERVISORAPPLICATIONFILENAME);
-        }
-
+        
         [HttpGet]
         [WriteToSyncLog(SynchronizationLogType.GetApk)]
         public virtual HttpResponseMessage Get()
