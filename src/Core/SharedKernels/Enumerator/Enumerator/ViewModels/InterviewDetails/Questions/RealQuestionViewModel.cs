@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Core.ViewModels;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -12,6 +13,7 @@ using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
@@ -31,7 +33,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private Identity questionIdentity;
         private string interviewId;
 
-        public IQuestionStateViewModel QuestionState => this.questionState;
+        private readonly Timer timer;
+        protected internal int ThrottlePeriod { get; set; } = Constants.ThrottlePeriod;
+
+        public IQuestionStateViewModel QuestionState => this.questionState; 
         public SpecialValuesViewModel SpecialValues => this.specialValues;
 
         public AnsweringViewModel Answering { get; }
@@ -56,8 +61,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public IMvxAsyncCommand RemoveAnswerCommand => new MvxAsyncCommand(this.RemoveAnswer);
 
         private readonly QuestionStateViewModel<NumericRealQuestionAnswered> questionState;
-
-     
 
         private async Task RemoveAnswer()
         {
@@ -99,6 +102,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionnaireRepository = questionnaireRepository;
             this.liteEventRegistry = liteEventRegistry;
             this.specialValues = specialValues;
+            this.timer = new Timer(async _ => { await SaveAnswer(); }, null, Timeout.Infinite, Timeout.Infinite);
         }
 
         public Identity Identity => this.questionIdentity;
@@ -143,7 +147,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private async void SpecialValueChanged(object sender, EventArgs eventArgs)
         {
             var selectedSpecialValue = (SingleOptionQuestionOptionViewModel)sender;
-            await SaveAnswer(selectedSpecialValue.Value, true);
+            await EnqueueSaveAnswer(selectedSpecialValue.Value, true);
         }
 
         private async void SpecialValueRemoved(object sender, EventArgs eventArgs)
@@ -167,11 +171,35 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
 
             var answeredOrSelectedValue = Convert.ToDecimal(this.Answer.Value);
-            await SaveAnswer(answeredOrSelectedValue, specialValues.IsSpecialValueSelected(answeredOrSelectedValue));
+            await EnqueueSaveAnswer(answeredOrSelectedValue, specialValues.IsSpecialValueSelected(answeredOrSelectedValue));
         }
 
-        private async Task SaveAnswer(decimal? answeredOrSelectedValue, bool isSpecialValueSelected)
+        private async Task EnqueueSaveAnswer(decimal answeredOrSelectedValue, bool isSpecialValueSelected)
         {
+            this.answeredOrSelectedValueToSave = answeredOrSelectedValue;
+            this.isSpecialValueSelectedToSave = isSpecialValueSelected;
+            if (this.ThrottlePeriod == 0)
+            {
+                await SaveAnswer();
+            }
+            else
+            {
+                this.ResetTimer();
+            }
+        }
+
+        private void ResetTimer() {
+            timer.Change(ThrottlePeriod, Timeout.Infinite);
+        }
+
+        decimal? answeredOrSelectedValueToSave = null;
+        bool isSpecialValueSelectedToSave = false;
+
+        private async Task SaveAnswer()
+        {
+            decimal? answeredOrSelectedValue = this.answeredOrSelectedValueToSave;
+            bool isSpecialValueSelected = this.isSpecialValueSelectedToSave;
+
             var command = new AnswerNumericRealQuestionCommand(
                 interviewId: Guid.Parse(this.interviewId),
                 userId: this.principal.CurrentUserIdentity.UserId,
@@ -179,7 +207,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 rosterVector: this.questionIdentity.RosterVector,
                 answerTime: DateTime.UtcNow,
                 answer: Convert.ToDouble(answeredOrSelectedValue.Value));
-
+            
             try
             {
                 await this.Answering.SendAnswerQuestionCommandAsync(command);
