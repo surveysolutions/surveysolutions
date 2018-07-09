@@ -36,25 +36,25 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services.OfflineSyn
             this.imagesStorage = imagesStorage;
         }
 
-        public async Task UploadPendingInterviews(string endpoint, IProgress<UploadProgress> progress, CancellationToken cancellationToken)
+        public async Task UploadPendingInterviews(IProgress<UploadProgress> progress, CancellationToken cancellationToken)
         {
             var interviews = this.interviewStorage.Where(interview => interview.Status == InterviewStatus.Completed).ToArray();
             for (int i = 0; i < interviews.Length; i++)
             {
                 var postedInterviewId = interviews[i].InterviewId;
 
-                await this.UploadImagesByCompletedInterviewAsync(endpoint, postedInterviewId, progress, cancellationToken);
-                await this.UploadAudioByCompletedInterviewAsync(endpoint, postedInterviewId, progress, cancellationToken);
+                await this.UploadImagesByCompletedInterviewAsync(postedInterviewId, progress, cancellationToken);
+                await this.UploadAudioByCompletedInterviewAsync(postedInterviewId, progress, cancellationToken);
 
                 var interviewPackage = this.interviewAccessor.GetPendingInteviewEvents(postedInterviewId);
-                await this.syncClient.PostInterviewAsync(endpoint, new PostInterviewRequest(postedInterviewId, interviewPackage)).ConfigureAwait(false);
+                await this.syncClient.SendAsync(new PostInterviewRequest(postedInterviewId, interviewPackage), cancellationToken);
                 this.interviewAccessor.RemoveInterview(postedInterviewId);
 
                 progress.Report(new UploadProgress(i + 1, interviews.Length));
             }
         }
 
-        private async Task UploadImagesByCompletedInterviewAsync(string endpoint, Guid interviewId, IProgress<UploadProgress> progress,
+        private async Task UploadImagesByCompletedInterviewAsync(Guid interviewId, IProgress<UploadProgress> progress,
             CancellationToken cancellationToken)
         {
             var imageViews = this.interviewMultimediaViewStorage.Where(image => image.InterviewId == interviewId);
@@ -64,17 +64,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services.OfflineSyn
                 cancellationToken.ThrowIfCancellationRequested();
                 var fileView = this.imagesStorage.GetById(imageView.FileId);
 
-                await this.syncClient.PostInterviewImageAsync(endpoint, new PostInterviewImageRequest(
+                await this.syncClient.SendAsync(new PostInterviewImageRequest(
                     imageView.InterviewId,
                     imageView.FileName,
-                    fileView.File)).ConfigureAwait(false);
+                    fileView.File), cancellationToken);
 
                 this.interviewMultimediaViewStorage.Remove(imageView.Id);
                 this.imagesStorage.Remove(fileView.Id);
             }
         }
 
-        private async Task UploadAudioByCompletedInterviewAsync(string endpoint, Guid interviewId, IProgress<UploadProgress> progress,
+        private async Task UploadAudioByCompletedInterviewAsync(Guid interviewId, IProgress<UploadProgress> progress,
             CancellationToken cancellationToken)
         {
             var audioFiles = this.audioFileStorage.GetBinaryFilesForInterview(interviewId);
@@ -84,11 +84,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services.OfflineSyn
                 cancellationToken.ThrowIfCancellationRequested();
                 var fileData = audioFile.GetData();
 
-                await this.syncClient.PostInterviewAudioAsync(endpoint, new PostInterviewAudioRequest(
+                await this.syncClient.SendAsync(new PostInterviewAudioRequest(
                     interviewId,
                     audioFile.FileName,
                     audioFile.ContentType,
-                    fileData)).ConfigureAwait(false);
+                    fileData), cancellationToken);
 
                 this.audioFileStorage.RemoveInterviewBinaryData(audioFile.InterviewId, audioFile.FileName);
             }
