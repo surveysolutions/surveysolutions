@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
+using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Questionnaire.Api;
@@ -56,15 +57,25 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             throw new NotImplementedException();
         }
 
-        public Task<List<QuestionnaireIdentity>> GetServerQuestionnairesAsync(CancellationToken cancellationToken)
+        public async Task<List<QuestionnaireIdentity>> GetServerQuestionnairesAsync(CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var response = await this.syncClient.SendAsync<GetQuestionnaireList.Request, GetQuestionnaireList.Response>(
+                   new GetQuestionnaireList.Request(), cancellationToken);
+
+            return response.Questionnaires;
         }
 
-        public Task<List<TranslationDto>> GetQuestionnaireTranslationAsync(QuestionnaireIdentity questionnaireIdentity,
+        public async Task<List<TranslationDto>> GetQuestionnaireTranslationAsync(QuestionnaireIdentity questionnaireIdentity,
             CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            var response = await this.syncClient
+                .SendAsync<GetQuestionnaireTranslationRequest, GetQuestionnaireTranslationResponse>(
+                    new GetQuestionnaireTranslationRequest
+                    {
+                        QuestionnaireIdentity = questionnaireIdentity
+                    }, cancellationToken);
+
+            return response.Translations;
         }
 
         public Task<CompanyLogoInfo> GetCompanyLogo(string storedClientEtag, CancellationToken cancellationToken)

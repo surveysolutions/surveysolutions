@@ -13,8 +13,8 @@ using WB.Tests.Abc.Storage;
 
 namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
 {
-    [TestOf(typeof(SupervisorQuestionnaireHandler))]
-    public class SupervisorQuestionnaireHandlerTests
+    [TestOf(typeof(SupervisorSyncHandler))]
+    public class SupervisorSyncHandlerTests
     {
         [Test]
         public async Task CanSynchronize_should_check_assemblyFileVersion_for_compatibility()

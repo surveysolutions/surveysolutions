@@ -770,18 +770,13 @@ namespace WB.Tests.Abc.TestFactories
                 Mock.Of<IPrincipal>());
         }
 
-        public SupervisorQuestionnaireHandler SupervisorQuestionnaireHandler(ILiteEventBus eventBus = null,
+        public SupervisorSyncHandler SupervisorQuestionnaireHandler(ILiteEventBus eventBus = null,
             IEnumeratorEventStorage eventStorage = null,
-            IQuestionnaireAssemblyAccessor assemblyAccessor = null,
-            ISerializer serializer = null,
-            IInterviewerQuestionnaireAccessor questionnaireAccessor = null,
             IPlainStorage<InterviewView> interviews = null)
         {
-            return new SupervisorQuestionnaireHandler(eventBus ?? Mock.Of<ILiteEventBus>(),
+            return new SupervisorSyncHandler(
+                eventBus ?? Mock.Of<ILiteEventBus>(),
                 eventStorage ?? Mock.Of<IEnumeratorEventStorage>(),
-                assemblyAccessor ?? Mock.Of<IQuestionnaireAssemblyAccessor>(),
-                serializer ?? Mock.Of<ISerializer>(),
-                questionnaireAccessor ?? Mock.Of<IInterviewerQuestionnaireAccessor>(),
                 interviews ?? new InMemoryPlainStorage<InterviewView>());
         }
     }
