@@ -1,73 +1,56 @@
-﻿using Humanizer;
-using System;
+﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
+using Humanizer;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Entities;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
+using WB.Core.SharedKernels.Enumerator.Utils;
 
 namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
 {
-    public class IncomingPackages
-    {
-        public Type type { get; set; }
-    }
-
     public class NearbyCommunicator : INearbyCommunicator
     {
-        private readonly IPayloadSerializer payloadSerializer;
-        private readonly IRequestHandler requestHandler;
+        public static TimeSpan MessageAwaitingTimeout = TimeSpan.FromSeconds(30);
+
+        private readonly ConcurrentDictionary<long, IPayload> incomingPayloads =
+            new ConcurrentDictionary<long, IPayload>();
+
+        private readonly ConcurrentDictionary<long, IPayload> outgoingPayloads =
+            new ConcurrentDictionary<long, IPayload>();
+
         private readonly IPayloadProvider payloadProvider;
-
-        private readonly ConcurrentDictionary<Guid, TaskCompletionSourceWithProgress> pending = new ConcurrentDictionary<Guid, TaskCompletionSourceWithProgress>();
+        private readonly IPayloadSerializer payloadSerializer;
         private readonly ConcurrentDictionary<long, IncomingPayloadInfo> payloadsInfo = new ConcurrentDictionary<long, IncomingPayloadInfo>();
-        private readonly ConcurrentDictionary<long, IPayload> incomingPayloads = new ConcurrentDictionary<long, IPayload>();
-        private readonly ConcurrentDictionary<long, IPayload> outgoingPayloads = new ConcurrentDictionary<long, IPayload>();
+        private readonly ConcurrentDictionary<Guid, TaskCompletionSourceWithProgress> pending = new ConcurrentDictionary<Guid, TaskCompletionSourceWithProgress>();
 
-        public ObservableCollection<IncomingPackages> IncomingPackagesList { get; set; } = new ObservableCollection<IncomingPackages>();
+        private readonly IRequestHandler requestHandler;
 
+        private readonly Subject<IncomingDataInfo> incomingDataInfo = new Subject<IncomingDataInfo>();
+        
         public NearbyCommunicator(IRequestHandler requestHandler,
             IPayloadProvider payloadProvider, IPayloadSerializer payloadSerializer)
         {
             this.requestHandler = requestHandler;
             this.payloadProvider = payloadProvider;
             this.payloadSerializer = payloadSerializer;
+            IncomingInfo = incomingDataInfo.AsObservable();
         }
 
-        private (Guid id, IPayload message, IPayload info) PreparePayload(Guid correlationGuid, 
-            ICommunicationMessage payload, bool isRequest, string errorMessage = null)
-        {
-            var nearbyPayload = new NearbyPayload(correlationGuid, payload, isRequest);
-            var payloadBytes = payloadSerializer.ToPayload(nearbyPayload);
-            var outgoingPayload = this.payloadProvider.AsStream(payloadBytes);
+        public IObservable<IncomingDataInfo> IncomingInfo { get; }
 
-            var info = new IncomingPayloadInfo(nearbyPayload, payloadBytes, outgoingPayload);
-             
-            if (errorMessage != null)
-            {
-                info.IsSuccess = false;
-                info.Message = errorMessage;
-            }
-
-            info.PayloadType = payload.GetType().FullName;
-
-            this.payloadsInfo.TryAdd(outgoingPayload.Id, info);
-
-            var infoPayload = this.payloadProvider.AsBytes(this.payloadSerializer.ToPayload(info));
-
-            return (nearbyPayload.Id, outgoingPayload, infoPayload);
-        }
-        
         public async Task<TResponse> SendAsync<TRequest, TResponse>(INearbyConnection connection, string endpoint,
             TRequest message, IProgress<CommunicationProgress> progress = null)
-                where TRequest: ICommunicationMessage
-                where TResponse: ICommunicationMessage
-        {   
+            where TRequest : ICommunicationMessage
+            where TResponse : ICommunicationMessage
+        {
             var payloads = PreparePayload(Guid.NewGuid(), message, true);
-            
+
             try
             {
                 var tsc = new TaskCompletionSourceWithProgress(progress);
@@ -90,7 +73,8 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                     case TResponse result:
                         return result;
                     default:
-                        throw new Exception($"Unexpected return type. Expected: {typeof(TResponse).FullName}. Gor: {response.GetType().FullName}");
+                        throw new Exception(
+                            $"Unexpected return type. Expected: {typeof(TResponse).FullName}. Gor: {response.GetType().FullName}");
                 }
             }
             catch (TaskCanceledException)
@@ -100,22 +84,6 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             }
         }
 
-        private Task SendOverWire(INearbyConnection nearbyConnection, string endpoint, IPayload payload)
-        {
-            outgoingPayloads.AddOrUpdate(payload.Id, payload, (id, p) => payload);
-            Debug("SEND", true, endpoint, payload.Id, payload.Type, "Send over wire");
-
-            return nearbyConnection.SendPayloadAsync(endpoint, payload);
-        }
-
-        [Conditional("DEBUG")]
-        private void Debug(string action, bool outgoing, string endpoint, object payloadId, PayloadType type,
-            string message)
-        {
-            System.Diagnostics.Debug.WriteLine(
-                $"[{action,-11}] {(outgoing ? "====>" : "<====")} {endpoint}[{payloadId.ToString()}] #{type.ToString()} {message}");
-        }
-
         public async Task RecievePayloadAsync(INearbyConnection nearbyConnection, string endpointId, IPayload payload)
         {
             incomingPayloads.GetOrAdd(payload.Id, payload);
@@ -123,14 +91,21 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             switch (payload.Type)
             {
                 case PayloadType.Bytes:
-                    var info = this.payloadSerializer.FromPayload<IncomingPayloadInfo>(payload.Bytes);
+                    var info = payloadSerializer.FromPayload<IncomingPayloadInfo>(payload.Bytes);
 
                     Debug("RECEIVE", false, endpointId, payload.Id, payload.Type, $"Info: {info.NearbyPayloadId}");
-                    this.payloadsInfo.TryAdd(info.PayloadId, info);
+                    payloadsInfo.TryAdd(info.PayloadId, info);
 
-                    this.IncomingPackagesList.Add(new IncomingPackages
+                    incomingDataInfo.OnNext(new IncomingDataInfo
                     {
-                        type = Type.GetType(info.PayloadType)
+                        Type = info.PayloadType,
+                        Endpoint = endpointId,
+                        Name = info.Name,
+                        BytesTransfered = 0,
+                        BytesPerSecond = 0,
+                        TotalBytes = info.Size,
+                        FlowDirection = DataFlowDirection.In,
+                        IsCompleted = false
                     });
 
                     break;
@@ -149,17 +124,11 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             if (incomingPayloads.TryGetValue(update.Id, out var payload))
             {
                 isIncoming = true;
-                if (update.Status != TransferStatus.InProgress)
-                {
-                    incomingPayloads.TryRemove(update.Id, out _);
-                }
+                if (update.Status != TransferStatus.InProgress) incomingPayloads.TryRemove(update.Id, out _);
             }
             else if (outgoingPayloads.TryGetValue(update.Id, out payload))
             {
-                if (update.Status != TransferStatus.InProgress)
-                {
-                    outgoingPayloads.TryRemove(update.Id, out _);
-                }
+                if (update.Status != TransferStatus.InProgress) outgoingPayloads.TryRemove(update.Id, out _);
             }
             else
             {
@@ -172,11 +141,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             {
                 case TransferStatus.Success:
                     // handle info package
-                    if (payload.Type == PayloadType.Bytes)
-                    {
-                        //if (isIncoming == false) return; // ignore outgoing success status for BYTES info payload
-                        return;
-                    }
+                    if (payload.Type == PayloadType.Bytes) return;
 
                     if (isIncoming)
                     {
@@ -195,73 +160,148 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                             {
                                 //TODO: HANDLE ERROR SEND AS RESPONSE IN INFO
                                 var errorResponse = PreparePayload(message.Id, new FailedResponse(), false, e.Message);
-                                
+
                                 await SendOverWire(nearbyConnection, endpoint, errorResponse.info);
                                 throw;
                             }
 
                             var responsePayload = PreparePayload(message.Id, response, false);
-                            
+
                             await SendOverWire(nearbyConnection, endpoint, responsePayload.info);
                             await SendOverWire(nearbyConnection, endpoint, responsePayload.message);
                         }
                         else
                         {
-                            if (pending.TryGetValue(message.Id, out var tsc))
-                            {
-                                tsc.SetResult(message.Payload);
-                            }
+                            if (pending.TryGetValue(message.Id, out var tsc)) tsc.SetResult(message.Payload);
                         }
+                    }
+
+                    if (payloadsInfo.TryGetValue(update.Id, out var payloadInfo))
+                    {
+                        incomingDataInfo.OnNext(new IncomingDataInfo
+                        {
+                            Type = payloadInfo.PayloadType,
+                            Endpoint = endpoint,
+                            Name = payloadInfo.Name,
+                            BytesTransfered = payloadInfo.Size,
+                            BytesPerSecond = 0,
+                            TotalBytes = payloadInfo.Size,
+                            FlowDirection = isIncoming ? DataFlowDirection.In : DataFlowDirection.Out,
+                            IsCompleted = false
+                        });
                     }
 
                     break;
                 case TransferStatus.Failure:
                     // TODO: revise what else need to be done in case of TransferFailure
-                    if (this.payloadsInfo.TryRemove(update.Id, out var failureInfo))
+                    if (payloadsInfo.TryRemove(update.Id, out var failureInfo))
                     {
-                        if (this.pending.TryRemove(failureInfo.NearbyPayloadId, out var failure))
+                        incomingDataInfo.OnNext(new IncomingDataInfo
                         {
+                            Type = failureInfo.PayloadType,
+                            Endpoint = endpoint,
+                            Name = failureInfo.Name,
+                            BytesTransfered = 0,
+                            BytesPerSecond = 0,
+                            TotalBytes = failureInfo.Size,
+                            FlowDirection = isIncoming ? DataFlowDirection.In : DataFlowDirection.Out,
+                            IsCompleted = true
+                        });
+
+                        if (pending.TryRemove(failureInfo.NearbyPayloadId, out var failure))
                             failure.SetCanceled();
-                        }
+
                     }
 
                     break;
                 case TransferStatus.InProgress:
-                    if (this.payloadsInfo.TryGetValue(update.Id, out var info))
+                {
+                    if (payloadsInfo.TryGetValue(update.Id, out var info))
                     {
-                        // TODO: NOTIFY ON PROGRESS
-                        // notify app about pending stream data with data
-                        // info.Size
-                        // update.BytesTransferred
-
-                        if (this.pending.TryGetValue(info.NearbyPayloadId, out var pendingValue))
+                        if (pending.TryGetValue(info.NearbyPayloadId, out var pendingValue))
                         {
                             pendingValue.Debounce();
 
                             pendingValue.UpdateProgress(update.BytesTransferred, info.Size);
                         }
+
+                        incomingDataInfo.OnNext(new IncomingDataInfo
+                        {
+                            Type = info.PayloadType,
+                            Endpoint = endpoint,
+                            Name = info.Name,
+                            BytesTransfered = update.BytesTransferred,
+                            BytesPerSecond = 0,
+                            TotalBytes = info.Size,
+                            FlowDirection = isIncoming ? DataFlowDirection.In : DataFlowDirection.Out,
+                            IsCompleted = false
+                        });
                     }
 
                     break;
+                }
                 default:
                     throw new ArgumentOutOfRangeException();
             }
         }
 
+        public ObservableCollection<GetQuestionnaireListResponse> RemoteEndpoints { get; } =
+            new CovariantObservableCollection<GetQuestionnaireListResponse>();
+
+        private Task SendOverWire(INearbyConnection nearbyConnection, string endpoint, IPayload payload)
+        {
+            outgoingPayloads.AddOrUpdate(payload.Id, payload, (id, p) => payload);
+            Debug("SEND", true, endpoint, payload.Id, payload.Type, "Send over wire");
+
+            return nearbyConnection.SendPayloadAsync(endpoint, payload);
+        }
+
+        [Conditional("DEBUG")]
+        private void Debug(string action, bool outgoing, string endpoint, object payloadId, PayloadType type,
+            string message)
+        {
+            System.Diagnostics.Debug.WriteLine(
+                $"[{action,-11}] {(outgoing ? "====>" : "<====")} {endpoint}[{payloadId}] #{type.ToString()} {message}");
+        }
+
+        private (Guid id, IPayload message, IPayload info) PreparePayload(Guid correlationGuid,
+            ICommunicationMessage payload, bool isRequest, string errorMessage = null)
+        {
+            var nearbyPayload = new NearbyPayload(correlationGuid, payload, isRequest);
+            var payloadBytes = payloadSerializer.ToPayload(nearbyPayload);
+            var outgoingPayload = payloadProvider.AsStream(payloadBytes);
+
+            var info = new IncomingPayloadInfo(nearbyPayload, payloadBytes, outgoingPayload);
+
+            if (errorMessage != null)
+            {
+                info.IsSuccess = false;
+                info.Message = errorMessage;
+            }
+
+            info.PayloadType = payload.GetType().FullName;
+
+            payloadsInfo.TryAdd(outgoingPayload.Id, info);
+
+            var infoPayload = payloadProvider.AsBytes(payloadSerializer.ToPayload(info));
+
+            return (nearbyPayload.Id, outgoingPayload, infoPayload);
+        }
+
         private class NearbyPayload
         {
-            public Guid Id { get; }
-
-            public bool IsRequest { get; }
-
-            public ICommunicationMessage Payload { get; set; }
-
             public NearbyPayload(Guid id, ICommunicationMessage payload, bool isRequest)
             {
                 Id = id;
                 Payload = payload;
                 IsRequest = isRequest;
             }
+
+            public Guid Id { get; }
+
+            public bool IsRequest { get; }
+
+            public ICommunicationMessage Payload { get; }
         }
 
         private class IncomingPayloadInfo
@@ -278,17 +318,15 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                 PayloadId = payload.Id;
             }
 
-            public long Size { get; set; }
-            public Guid NearbyPayloadId { get; set; }
+            public long Size { get; }
+            public Guid NearbyPayloadId { get; }
             public string PayloadType { get; set; }
             public string Name { get; set; }
-            public long PayloadId { get; set; }
+            public long PayloadId { get; }
             public string Message { get; set; }
 
             public bool IsSuccess { get; set; } = true;
         }
-
-        public static TimeSpan MessageAwaitingTimeout = TimeSpan.FromSeconds(30);
 
         private struct TaskCompletionSourceWithProgress
         {
@@ -312,20 +350,17 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             public void Debounce()
             {
                 sw.Restart();
-                this.timer?.Dispose();
-                this.timer = new Timer(SetCanceled, null, (int) MessageAwaitingTimeout.TotalMilliseconds,
+                timer?.Dispose();
+                timer = new Timer(SetCanceled, null, (int) MessageAwaitingTimeout.TotalMilliseconds,
                     Timeout.Infinite);
             }
 
             private void SetCanceled(object state)
             {
-                if (isCompleted || sw.Elapsed < MessageAwaitingTimeout)
-                {
-                    return;
-                }
+                if (isCompleted || sw.Elapsed < MessageAwaitingTimeout) return;
 
                 TaskCompletionSource.TrySetCanceled();
-                this.timer?.Dispose();
+                timer?.Dispose();
             }
 
             public void UpdateProgress(long sendBytes, long totalBytes)

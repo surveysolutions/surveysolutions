@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
@@ -9,11 +10,16 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
     {
         private readonly INearbyCommunicator communicator;
         private readonly INearbyConnection nearbyConnection;
+        
 
         public OfflineSyncClient(INearbyCommunicator communicator, INearbyConnection nearbyConnection)
         {
             this.communicator = communicator;
             this.nearbyConnection = nearbyConnection;
+            this.nearbyConnection.RemoteEndpoints.CollectionChanged += (sender, args) =>
+            {
+                Endpoint = this.nearbyConnection.RemoteEndpoints.FirstOrDefault()?.Enpoint;
+            };
         }
 
         public static string Endpoint { get; set; }

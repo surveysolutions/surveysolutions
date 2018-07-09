@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
+using MvvmCross.Commands;
 using MvvmCross.Logging;
 using WB.Core.BoundedContexts.Supervisor.Views;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
@@ -19,18 +21,28 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             IPermissionsService permissions,
             IEnumeratorSettings settings,
             IPlainStorage<SupervisorIdentity> supervisorStorage,
+            INearbyCommunicator communicator,
             INearbyConnection nearbyConnection)
             : base(principal, viewModelNavigationService, permissions, nearbyConnection)
         {
+            communicator.IncomingInfo.Subscribe(OnIncomingData);
             this.supervisorStorage = supervisorStorage;
             serviceName = settings.Endpoint + "/";// + identity.UserId;
         }
+
+        public IMvxAsyncCommand Restart => new MvxAsyncCommand(OnGoogleApiReady);
 
         public async Task OnGoogleApiReady()
         {
             Log.Trace("StartAdvertising");
 
+            await StopAdvertising();
             await StartAdvertising();
+        }
+
+        private void OnIncomingData(IncomingDataInfo dataInfo)
+        {
+            SetStatus(ConnectionStatus.Sync, dataInfo.ToString());
         }
         
         protected override string GetServiceName()

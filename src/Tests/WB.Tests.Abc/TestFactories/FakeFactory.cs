@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
+using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
 using Main.Core.Documents;
@@ -214,17 +216,17 @@ namespace WB.Tests.Abc.TestFactories
 
         internal abstract class FakeNearbyConnectionBase : INearbyConnection
         {
-            public Task StartDiscovery(string serviceName, Action<string, NearbyDiscoveredEndpointInfo> foundEndpoint, Action<string> lostEndpoint)
+            public Task StartDiscovery(string serviceName)
             {
                 throw new NotImplementedException();
             }
 
-            public Task<string> StartAdvertising(string serviceName, string name, NearbyConnectionLifeCycleCallback lifeCycleCallback)
+            public Task<string> StartAdvertising(string serviceName, string name)
             {
                 throw new NotImplementedException();
             }
 
-            public Task RequestConnection(string name, string endpoint, NearbyConnectionLifeCycleCallback lifeCycleCallback)
+            public Task RequestConnection(string name, string endpoint)
             {
                 throw new NotImplementedException();
             }
@@ -240,6 +242,18 @@ namespace WB.Tests.Abc.TestFactories
             }
 
             public virtual Task SendPayloadAsync(string to, IPayload payload)
+            {
+                throw new NotImplementedException();
+            }
+
+            public IObservable<INearbyEvent> Events { get; }// = new Subject<INearbyEvent>();
+            public ObservableCollection<RemoteEndpoint> RemoteEndpoints { get; } = new ObservableCollection<RemoteEndpoint>();
+            public Task StopDiscovery()
+            {
+                throw new NotImplementedException();
+            }
+
+            public Task StopAdvertising()
             {
                 throw new NotImplementedException();
             }
