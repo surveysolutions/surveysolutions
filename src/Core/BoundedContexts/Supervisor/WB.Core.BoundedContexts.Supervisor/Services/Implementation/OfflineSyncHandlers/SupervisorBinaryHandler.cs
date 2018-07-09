@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
         {
             requestHandler.RegisterHandler<GetCompanyLogoRequest, GetCompanyLogoResponse>(GetCompanyLogo);
         }
-
+        
         public Task<GetCompanyLogoResponse> GetCompanyLogo(GetCompanyLogoRequest request)
         {
             var existingLogo = logoStorage.GetById(CompanyLogo.StorageKey);
