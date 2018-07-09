@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Net;
-using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Ncqrs.Eventing;
@@ -11,7 +9,6 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
-using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using DownloadProgressChangedEventArgs = WB.Core.GenericSubdomains.Portable.Implementation.DownloadProgressChangedEventArgs;
@@ -114,21 +111,23 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return Task.CompletedTask;
         }
 
-        public Task<List<InterviewApiView>> GetInterviewsAsync(CancellationToken token)
+        public async Task<List<InterviewApiView>> GetInterviewsAsync(CancellationToken token)
         {
-            //var response = await this.syncClient.SendAsync<GetInterviewsRequest, GetInterviewsResponse>(
-            //    new GetInterviewsRequest(this.principal.CurrentUserIdentity.UserId), token);
-            return null;
+            var response = await this.syncClient.SendAsync<GetInterviewsRequest, GetInterviewsResponse>(
+                new GetInterviewsRequest(this.principal.CurrentUserIdentity.UserId), token);
+            return response.Interviews;
         }
 
         public Task LogInterviewAsSuccessfullyHandledAsync(Guid interviewId)
         {
-            throw new NotImplementedException();
+            return this.syncClient.SendAsync(new LogInterviewAsSuccessfullyHandledRequest(interviewId), CancellationToken.None);
         }
 
-        public Task<List<CommittedEvent>> GetInterviewDetailsAsync(Guid interviewId, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token)
+        public async Task<List<CommittedEvent>> GetInterviewDetailsAsync(Guid interviewId, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token)
         {
-            throw new NotImplementedException();
+            var response = await this.syncClient.SendAsync<GetInterviewDetailsRequest, GetInterviewDetailsResponse>(
+                new GetInterviewDetailsRequest(interviewId), token);
+            return response.Events;
         }
     }
 }

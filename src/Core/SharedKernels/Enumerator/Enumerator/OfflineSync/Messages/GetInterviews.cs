@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using WB.Core.SharedKernels.DataCollection.WebApi;
 
 namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Messages
 {
@@ -14,6 +16,6 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Messages
 
     public class GetInterviewsResponse : ICommunicationMessage
     {
-
+        public List<InterviewApiView> Interviews { get; set; }
     }
 }
