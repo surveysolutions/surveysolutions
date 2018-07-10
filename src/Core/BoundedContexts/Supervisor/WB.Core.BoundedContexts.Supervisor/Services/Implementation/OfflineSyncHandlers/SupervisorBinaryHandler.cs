@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
@@ -10,15 +12,24 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
     public class SupervisorBinaryHandler : IHandleCommunicationMessage
     {
         private readonly IPlainStorage<CompanyLogo> logoStorage;
+        private readonly IAudioFileStorage audioFileStorage;
+        private readonly IInterviewFileStorage imageFileStorage;
 
-        public SupervisorBinaryHandler(IPlainStorage<CompanyLogo> logoStorage)
+        public SupervisorBinaryHandler(IPlainStorage<CompanyLogo> logoStorage,
+            IAudioFileStorage audioFileStorage,
+            IInterviewFileStorage imageFileStorage)
         {
             this.logoStorage = logoStorage;
+            this.audioFileStorage = audioFileStorage;
+            this.imageFileStorage = imageFileStorage;
         }
 
         public void Register(IRequestHandler requestHandler)
         {
             requestHandler.RegisterHandler<GetCompanyLogoRequest, GetCompanyLogoResponse>(GetCompanyLogo);
+
+            requestHandler.RegisterHandler<UploadInterviewImageRequest, OkResponse>(UploadImage);
+            requestHandler.RegisterHandler<UploadInterviewAudioRequest, OkResponse>(UploadAudio);
         }
         
         public Task<GetCompanyLogoResponse> GetCompanyLogo(GetCompanyLogoRequest request)
@@ -48,6 +59,25 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                     HasCustomLogo = true
                 }
             });
+        }
+
+        private Task<OkResponse> UploadAudio(UploadInterviewAudioRequest request)
+        {
+            this.audioFileStorage.StoreInterviewBinaryData(request.InterviewAudio.InterviewId, 
+                request.InterviewAudio.FileName,
+                Convert.FromBase64String(request.InterviewAudio.Data), 
+                request.InterviewAudio.ContentType);
+
+            return Task.FromResult(new OkResponse());
+        }
+
+        private Task<OkResponse> UploadImage(UploadInterviewImageRequest request)
+        {
+            this.imageFileStorage.StoreInterviewBinaryData(request.InterviewImage.InterviewId, 
+                request.InterviewImage.FileName,
+                Convert.FromBase64String(request.InterviewImage.Data), 
+                null);
+            return Task.FromResult(new OkResponse());
         }
     }
 }

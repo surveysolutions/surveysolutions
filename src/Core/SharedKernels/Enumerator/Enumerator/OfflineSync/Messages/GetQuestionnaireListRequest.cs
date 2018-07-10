@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Questionnaire.Api;
@@ -94,6 +93,15 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Messages
 
     public class LogAssignmentAsHandledRequest : ICommunicationMessage {
         public int Id { get; set; }
+    }
+
+    public class UploadInterviewImageRequest : ICommunicationMessage
+    {
+        public PostFileApiView InterviewImage { get; set; }
+    }
+    public class UploadInterviewAudioRequest : ICommunicationMessage
+    {
+        public PostFileApiView InterviewAudio { get; set; }
     }
 
 }
