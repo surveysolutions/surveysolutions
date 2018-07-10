@@ -87,7 +87,7 @@
                 if (indexOfCurrentReference >= $scope.foundReferences.length) {
                     indexOfCurrentReference = 0;
                 }
-                $rootScope.navigateTo($scope.foundReferences[indexOfCurrentReference], true);
+                $rootScope.navigateTo($scope.foundReferences[indexOfCurrentReference]);
             };
 
             $scope.navigatePrev = function() {
@@ -95,7 +95,7 @@
                 if (indexOfCurrentReference < 0) {
                     indexOfCurrentReference = $scope.foundReferences.length - 1;
                 }
-                $rootScope.navigateTo($scope.foundReferences[indexOfCurrentReference], true);
+                $rootScope.navigateTo($scope.foundReferences[indexOfCurrentReference]);
             };
 
             $rootScope.$on('openMacrosList',
