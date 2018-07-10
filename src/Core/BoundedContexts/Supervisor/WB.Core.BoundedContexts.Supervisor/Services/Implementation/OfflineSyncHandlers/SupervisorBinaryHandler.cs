@@ -13,11 +13,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
     {
         private readonly IPlainStorage<CompanyLogo> logoStorage;
         private readonly IAudioFileStorage audioFileStorage;
-        private readonly IInterviewFileStorage imageFileStorage;
+        private readonly IImageFileStorage imageFileStorage;
 
         public SupervisorBinaryHandler(IPlainStorage<CompanyLogo> logoStorage,
             IAudioFileStorage audioFileStorage,
-            IInterviewFileStorage imageFileStorage)
+            IImageFileStorage imageFileStorage)
         {
             this.logoStorage = logoStorage;
             this.audioFileStorage = audioFileStorage;
