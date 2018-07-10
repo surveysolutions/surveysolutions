@@ -306,6 +306,9 @@
     <Compile Include="Activities\PrefsActivity.cs" />
     <Compile Include="Activities\RelinkDeviceActivity.cs" />
     <Compile Include="Activities\LoginActivity.cs" />
+    <Compile Include="Activities\SendToSupervisorActivity.cs" />
+    <Compile Include="Converters\InterviewerLocalizationValueConverter.cs" />
+    <Compile Include="Converters\TransferingStatusToTextColorConverter.cs" />
     <Compile Include="CustomBindings\ImageCompanyLogoBinding.cs" />
     <Compile Include="CustomBindings\TextViewIsCurrentDashboardTabBinding.cs" />
     <Compile Include="CustomBindings\ViewDrawableTargetBinding.cs" />
@@ -498,7 +501,6 @@
   </Choose>
   <ItemGroup>
     <Folder Include="Assets\" />
-    <Folder Include="Converters\" />
     <Folder Include="Resources\drawable-xxxhdpi\" />
   </ItemGroup>
   <ItemGroup>
@@ -545,6 +547,30 @@
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
       <SubType>Designer</SubType>
     </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\send_to_supervisor.axml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\menu\send_to_supervisor.xml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\values\send_to_supervisor.xml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\greenprogress.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\spinnerring.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

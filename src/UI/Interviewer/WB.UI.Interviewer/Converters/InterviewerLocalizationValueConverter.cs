@@ -1,10 +1,11 @@
 using System;
 using System.Globalization;
-using WB.Core.SharedKernels.Enumerator.Properties;
+using WB.Core.BoundedContexts.Interviewer.Properties;
+using WB.UI.Shared.Enumerator.Converters;
 
-namespace WB.UI.Shared.Enumerator.Converters
+namespace WB.UI.Interviewer.Converters
 {
-    public class EnumeratorLocalizationValueConverter : LocalizationValueConverter
+    public class InterviewerLocalizationValueConverter : EnumeratorLocalizationValueConverter
     {
         protected override string Convert(string value, Type targetType, object parameter, CultureInfo culture)
         {
