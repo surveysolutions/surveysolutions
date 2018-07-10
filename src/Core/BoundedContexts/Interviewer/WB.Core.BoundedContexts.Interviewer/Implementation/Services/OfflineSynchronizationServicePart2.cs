@@ -153,5 +153,28 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         {
             return Task.FromResult(new List<Guid>());
         }
+
+        public async Task<AssignmentApiDocument> GetAssignmentAsync(int id, CancellationToken cancellationToken)
+        {
+            var response = await
+                syncClient.SendAsync<GetAssignmentRequest, GetAssignmentResponse>(new GetAssignmentRequest { Id = id },
+                    cancellationToken);
+
+            return response.Assignment;
+        }
+
+        public Task LogAssignmentAsHandledAsync(int id, CancellationToken cancellationToken)
+        {
+            return syncClient.SendAsync(new LogAssignmentAsHandledRequest { Id = id }, cancellationToken);
+        }
+
+        public async Task<List<AssignmentApiView>> GetAssignmentsAsync(CancellationToken cancellationToken)
+        {
+            var response = await
+                syncClient.SendAsync<GetAssignmentsRequest, GetAssignmentsResponse>(new GetAssignmentsRequest { UserId = principal.CurrentUserIdentity.UserId },
+                    cancellationToken);
+
+            return response.Assignments;
+        }
     }
 }

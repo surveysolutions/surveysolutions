@@ -18,7 +18,6 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
@@ -55,7 +54,6 @@ namespace WB.UI.Supervisor.ServiceLocation
 
             registry.Bind<ISynchronizationService, SynchronizationService>();
             registry.Bind<ISupervisorSynchronizationService, SynchronizationService>();
-            registry.Bind<IAssignmentSynchronizationApi, SynchronizationService>();
             registry.Bind<IBattery, AndroidBattery>();
             registry.Bind<IDeviceOrientation, AndroidDeviceOrientation>();
             registry.Bind<IDeviceInformationService, DeviceInformationService>();
@@ -100,6 +98,8 @@ namespace WB.UI.Supervisor.ServiceLocation
             registry.Bind<IHandleCommunicationMessage, SupervisorInterviewsHandler>();
             registry.Bind<IHandleCommunicationMessage, SupervisorQuestionnairesHandler>();
             registry.Bind<IHandleCommunicationMessage, SupervisorBinaryHandler>();
+            registry.Bind<IHandleCommunicationMessage, SupervisorAuditLogHandler>();
+            registry.Bind<IHandleCommunicationMessage, SupervisorAssignmentsHandler>();
         }
 
         public Task Init(IServiceLocator serviceLocator)

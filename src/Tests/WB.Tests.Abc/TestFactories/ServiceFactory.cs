@@ -501,14 +501,14 @@ namespace WB.Tests.Abc.TestFactories
         }
 
         public IAssignmentsSynchronizer AssignmentsSynchronizer(
-            IAssignmentSynchronizationApi synchronizationService = null,
+            ISynchronizationService synchronizationService = null,
             IAssignmentDocumentsStorage assignmentsRepository = null,
             IQuestionnaireDownloader questionnaireDownloader = null,
             IQuestionnaireStorage questionnaireStorage = null,
             IPlainStorage<InterviewView> interviewViewRepository = null)
         {
             return new AssignmentsSynchronizer(
-                synchronizationService ?? Mock.Of<IAssignmentSynchronizationApi>(),
+                synchronizationService ?? Mock.Of<ISynchronizationService>(),
                 assignmentsRepository ?? Create.Storage.AssignmentDocumentsInmemoryStorage(),
                 questionnaireDownloader ?? Mock.Of<IQuestionnaireDownloader>(),
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),

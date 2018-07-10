@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
@@ -43,7 +44,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Messages
     public class GetAttachmentContentsRequest : ICommunicationMessage
     {
         public QuestionnaireIdentity QuestionnaireIdentity { get; set; }
-        
+
     }
 
     public class GetAttachmentContentsResponse : ICommunicationMessage
@@ -71,4 +72,28 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Messages
         public string InterviewKey { get; set; }
         public InterviewPackageApiView Interview { get; set; }
     }
+
+    public class GetAssignmentRequest : ICommunicationMessage
+    {
+        public int Id { get; set; }
+    }
+    public class GetAssignmentsRequest : ICommunicationMessage
+    {
+        public Guid UserId { get; set; }
+    }
+
+    public class GetAssignmentResponse : ICommunicationMessage
+    {
+        public AssignmentApiDocument Assignment { get; set; }
+    }
+
+    public class GetAssignmentsResponse : ICommunicationMessage
+    {
+        public List<AssignmentApiView> Assignments { get; set; }
+    }
+
+    public class LogAssignmentAsHandledRequest : ICommunicationMessage {
+        public int Id { get; set; }
+    }
+
 }

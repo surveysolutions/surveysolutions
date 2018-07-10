@@ -58,9 +58,10 @@ namespace WB.UI.Interviewer.ServiceLocation
             registry.BindAsSingletonWithConstructorArgument<IRestService, RestService>("restServicePointManager", null);
             registry.Bind<IInterviewUniqueKeyGenerator, InterviewerInterviewUniqueKeyGenerator>();
 
+            // registry.Bind<ISynchronizationService, OfflineSynchronizationService>();
             registry.Bind<ISynchronizationService, SynchronizationService>();
+
             registry.Bind<IInterviewerSynchronizationService, SynchronizationService>();
-            registry.Bind<IAssignmentSynchronizationApi, SynchronizationService>();
             registry.Bind<IBattery, AndroidBattery>();
             registry.Bind<IDeviceOrientation, AndroidDeviceOrientation>();
             registry.Bind<IDeviceInformationService, DeviceInformationService>();

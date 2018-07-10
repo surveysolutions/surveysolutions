@@ -37,6 +37,8 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         [Ignore]
         public List<AssignmentProtectedVariable> ProtectedVariables { get; set; } = new List<AssignmentProtectedVariable>();
 
+        public DateTime? ReceivedByInterviewerAt { get; set; }
+
         public class AssignmentAnswer
         {
             [PrimaryKey, AutoIncrement]

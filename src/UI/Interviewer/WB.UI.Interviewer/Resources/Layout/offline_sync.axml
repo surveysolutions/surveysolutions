@@ -10,6 +10,12 @@
         android:layout_height="wrap_content"
         android:id="@+id/restart" 
         local:MvxBind="Click Restart;" />
+        <Button
+        android:text="Sync"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/sync" 
+        local:MvxBind="Click Sync;" />        
     <TextView
         style="@style/Dashboard_Search_SearchResult"
         local:MvxBind="Text Status;" />
