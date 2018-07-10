@@ -10,6 +10,9 @@
       android:id="@+id/menu_search"
       local:showAsAction="never" />
   <item
+      android:id="@+id/menu_send"
+      local:showAsAction="never" />
+  <item
       android:id="@+id/menu_settings"
       local:showAsAction="never" />
   <item

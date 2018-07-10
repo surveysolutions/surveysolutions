@@ -16,6 +16,7 @@
     <PackageReference Include="sqlite-net-pcl" Version="1.4.118" />
     <PackageReference Include="SQLitePCLRaw.bundle_green" Version="1.1.11" />
     <PackageReference Include="SQLitePCLRaw.core" Version="1.1.11" />
+    <PackageReference Include="Xamarin.FFImageLoading" Version="2.4.3.840" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj" />
@@ -28,5 +29,23 @@
   <ItemGroup>
     <Folder Include="Implementation\AuditLog\" />
     <Folder Include="Implementation\Storage\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="FFImageLoading">
+      <HintPath>..\..\..\..\..\packages\Xamarin.FFImageLoading.2.4.3.840\lib\MonoAndroid10\FFImageLoading.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Properties\InterviewerUIResources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="Properties\InterviewerUIResources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>InterviewerUIResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 </Project>
