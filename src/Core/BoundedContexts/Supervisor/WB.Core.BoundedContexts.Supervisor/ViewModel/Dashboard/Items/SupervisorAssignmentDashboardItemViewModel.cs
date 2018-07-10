@@ -3,10 +3,12 @@ using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using MvvmCross.Base;
 using MvvmCross.Commands;
+using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.InterviewerSelector;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.Enumerator.Properties;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 using WB.Core.SharedKernels.Enumerator.Views;
 
@@ -17,8 +19,6 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
         private IInterviewerSelectorDialog interviewerSelectorDialog = null;
         private IInterviewerSelectorDialog InterviewerSelectorDialog
             => interviewerSelectorDialog ?? (interviewerSelectorDialog = serviceLocator.GetInstance<IInterviewerSelectorDialog>());
-
-        public event EventHandler<InterviewerChangedArgs> ResponsibleChanged;
 
         public SupervisorAssignmentDashboardItemViewModel(IServiceLocator serviceLocator) : base(serviceLocator)
         {
@@ -67,15 +67,13 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
         {
             this.UnsubscribeDialog();
 
-            var interviewerChangedArgs = new InterviewerChangedArgs(Assignment.ResponsibleId, UserRoles.Supervisor, e.InterviewerId, UserRoles.Interviewer);
-
             Assignment.ResponsibleId = e.InterviewerId;
             Assignment.ResponsibleName = e.Login;
             AssignmentsRepository.Store(Assignment);
 
             BindTitles();
 
-            this.ResponsibleChanged?.Invoke(this, interviewerChangedArgs);
+            serviceLocator.GetInstance<IMvxMessenger>().Publish(new DashboardChangedMsg(this));
         }
 
         private void UnsubscribeDialog()
@@ -94,7 +92,6 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
                 UnsubscribeDialog();
                 this.interviewerSelectorDialog.DisposeIfDisposable();
                 this.interviewerSelectorDialog = null;
-                this.ResponsibleChanged = null;
             }
 
             base.Dispose(disposing);

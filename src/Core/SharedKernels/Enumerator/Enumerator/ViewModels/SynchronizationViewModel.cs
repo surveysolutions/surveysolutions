@@ -145,7 +145,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         protected virtual void OnSyncCompleted()
         {
-            this.messenger.Publish(new SynchronizationCompletedMsg(this));
+            this.messenger.Publish(new DashboardChangedMsg(this));
             this.SyncCompleted?.Invoke(this, EventArgs.Empty);
         }
     }
