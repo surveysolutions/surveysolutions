@@ -767,8 +767,10 @@ namespace WB.Tests.Abc.TestFactories
 
         public OfflineSynchronizationService OfflineSynchronizationService(IOfflineSyncClient offlineSyncClient = null)
         {
-            return new OfflineSynchronizationService(offlineSyncClient ?? Mock.Of<IOfflineSyncClient>(),
-                Mock.Of<IInterviewerPrincipal>());
+            return new OfflineSynchronizationService(
+                offlineSyncClient ?? Mock.Of<IOfflineSyncClient>(),
+                Mock.Of<IInterviewerPrincipal>(),
+                Mock.Of<IPlainStorage<InterviewView>>());
         }
 
         public SupervisorInterviewsHandler SupervisorQuestionnaireHandler(ILiteEventBus eventBus = null,
@@ -778,7 +780,10 @@ namespace WB.Tests.Abc.TestFactories
             return new SupervisorInterviewsHandler(
                 eventBus ?? Mock.Of<ILiteEventBus>(),
                 eventStorage ?? Mock.Of<IEnumeratorEventStorage>(),
-                interviews ?? new InMemoryPlainStorage<InterviewView>());
+                interviews ?? new InMemoryPlainStorage<InterviewView>(),
+                new JsonAllTypesSerializer(),
+                Mock.Of<ICommandService>(), 
+                Mock.Of<ILogger>());
         }
     }
 

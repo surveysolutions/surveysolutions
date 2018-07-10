@@ -66,8 +66,9 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Messages
         public AuditLogEntitiesApiView AuditLogEntity { get; set; }
     }
 
-    public class UploadAuditLogEntityResponse : ICommunicationMessage
+    public class UploadInterviewRequest : ICommunicationMessage
     {
-
+        public string InterviewKey { get; set; }
+        public InterviewPackageApiView Interview { get; set; }
     }
 }
