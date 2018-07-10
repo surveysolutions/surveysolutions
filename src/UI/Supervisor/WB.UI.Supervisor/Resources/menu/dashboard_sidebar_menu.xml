@@ -6,9 +6,9 @@
     <item android:id="@+id/dashboard_your_team">
         <menu>
             <group android:checkableBehavior="single">
-                <item
+                <!--<item
                     android:id="@+id/dashboard_team_overview"
-                    android:title="Team overview" />
+                    android:title="Team overview" />-->
                 <item
                     android:id="@+id/dashboard_to_be_assigned"
                     android:title="Tasks to be assigned"
