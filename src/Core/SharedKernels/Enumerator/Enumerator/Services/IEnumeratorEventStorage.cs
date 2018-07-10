@@ -11,5 +11,6 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         void StoreEvents(CommittedEventStream events);
         int GetLastEventKnownToHq(Guid interviewId);
         List<CommittedEvent> GetPendingEvents(Guid interviewId);
+        bool HasEventsAfterSpecifiedSequenceWithAnyOfSpecifiedTypes(long sequence, Guid eventSourceId, params string[] typeNames);
     }
 }

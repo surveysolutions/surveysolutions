@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 
-namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
+namespace WB.Core.SharedKernels.DataCollection.Events
 {
     public static class EventsThatChangeAnswersStateProvider
     {
