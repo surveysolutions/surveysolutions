@@ -56,5 +56,8 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Synchronization
         Task<bool> IsAutoUpdateEnabledAsync(CancellationToken token);
         Task UploadAuditLogEntityAsync(AuditLogEntitiesApiView auditLogEntity, CancellationToken cancellationToken);
         Task<List<Guid>> CheckObsoleteInterviewsAsync(List<ObsoletePackageCheck> checks, CancellationToken cancellationToken);
+        Task<AssignmentApiDocument> GetAssignmentAsync(int id, CancellationToken cancellationToken);
+        Task<List<AssignmentApiView>> GetAssignmentsAsync(CancellationToken cancellationToken);
+        Task LogAssignmentAsHandledAsync(int id, CancellationToken cancellationToken);
     }
 }

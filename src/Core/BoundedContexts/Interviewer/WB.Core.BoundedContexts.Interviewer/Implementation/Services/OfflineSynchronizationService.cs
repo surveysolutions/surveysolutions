@@ -49,7 +49,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public Task SendDeviceInfoAsync(DeviceInfoApiView info, CancellationToken? token = null)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
 
         public Task LinkCurrentUserToDeviceAsync(RestCredentials credentials = null, CancellationToken? token = null)

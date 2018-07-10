@@ -10,7 +10,6 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -22,7 +21,7 @@ using DownloadProgressChangedEventArgs = WB.Core.GenericSubdomains.Portable.Impl
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
-    public abstract class EnumeratorSynchronizationService : ISynchronizationService, IAssignmentSynchronizationApi
+    public abstract class EnumeratorSynchronizationService : ISynchronizationService
     {
         protected abstract string ApiVersion { get; }
         protected abstract string ApiUrl { get; }
@@ -138,6 +137,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 url: this.AssignmentsController, credentials: this.restCredentials, token: cancellationToken));
 
             return response;
+        }
+
+        public Task LogAssignmentAsHandledAsync(int id, CancellationToken cancellationToken)
+        {
+            return Task.CompletedTask;
         }
 
         public Task<AssignmentApiDocument> GetAssignmentAsync(int id, CancellationToken cancellationToken)

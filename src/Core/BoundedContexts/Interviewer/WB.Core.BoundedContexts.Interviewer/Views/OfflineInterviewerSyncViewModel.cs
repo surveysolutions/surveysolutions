@@ -16,6 +16,7 @@ using WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views
 {
@@ -23,6 +24,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
     public class OfflineInterviewerSyncViewModel : BaseOfflineSyncViewModel, IOfflineSyncViewModel
     {
         private readonly IPlainStorage<InterviewerIdentity> interviewersPlainStorage;
+        private readonly ISynchronizationProcess synchronizationProcess;
+        private readonly ISynchronizationService synchronizationService;
         private readonly IOfflineSyncClient syncClient;
         private readonly string serviceName;
         
@@ -32,11 +35,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             IEnumeratorSettings settings,
             IPlainStorage<InterviewerIdentity> interviewersPlainStorage,
             INearbyConnection nearbyConnection,
-            IOfflineSyncClient syncClient) 
+            ISynchronizationProcess synchronizationProcess,
+            ISynchronizationService synchronizationService) 
             : base(principal, viewModelNavigationService, permissions, nearbyConnection)
         {
             this.interviewersPlainStorage = interviewersPlainStorage;
-            this.syncClient = syncClient;
+            this.synchronizationProcess = synchronizationProcess;
+            this.synchronizationService = synchronizationService;
+
 
             this.serviceName = settings.Endpoint + "/";
             SetStatus(ConnectionStatus.WaitingForGoogleApi);
@@ -51,18 +57,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         }
 
         public IMvxAsyncCommand Restart => new MvxAsyncCommand(OnGoogleApiReady);
+        public IMvxAsyncCommand Sync => new MvxAsyncCommand(Synchronize);
 
-        protected override async void Connected(string connectedEndpoint)
+        public Task Synchronize()
         {
-            var rng = new RNGCryptoServiceProvider();
-            var data = new byte[10 * 1024 * 1024];
-            rng.GetBytes(data);
-
-            var response = await syncClient.SendAsync<SendBigAmountOfDataRequest, SendBigAmountOfDataResponse>(
-                new SendBigAmountOfDataRequest()
+            return synchronizationProcess.SyncronizeAsync(new Progress<SyncProgressInfo>(o =>
                 {
-                    Data = data
-                }, CancellationToken.None);
+                    this.StatusDetails = o.Description + "\r\n" + this.StatusDetails;
+                }), CancellationToken.None);
         }
 
         protected override string GetServiceName()
@@ -70,17 +72,5 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             var user = this.interviewersPlainStorage.FirstOrDefault();
             return serviceName + user.SupervisorId;
         }
-
-        //// just to test that communication is working
-        //protected override async void OnConnectionResult(string endpoint, NearbyConnectionResolution resolution)
-        //{
-        //    // SetStatus(ConnectionStatus.Sync, $"Connected to {endpoint} with status {resolution.IsSuccess}");
-        //    base.OnConnectionResult(endpoint, resolution);
-
-        //    if (resolution.IsSuccess)
-        //    {
-               
-        //    }
-        //}
     }
 }

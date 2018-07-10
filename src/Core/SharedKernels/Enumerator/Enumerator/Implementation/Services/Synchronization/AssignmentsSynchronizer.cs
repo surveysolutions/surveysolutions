@@ -21,7 +21,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 {
     public class AssignmentsSynchronizer : IAssignmentsSynchronizer
     {
-        private readonly IAssignmentSynchronizationApi synchronizationService;
+        private readonly ISynchronizationService synchronizationService;
         private readonly IAssignmentDocumentsStorage assignmentsRepository;
         private readonly IQuestionnaireDownloader questionnaireDownloader;
         private readonly IQuestionnaireStorage questionnaireStorage;
@@ -29,7 +29,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         private readonly IInterviewAnswerSerializer answerSerializer;
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
 
-        public AssignmentsSynchronizer(IAssignmentSynchronizationApi synchronizationService,
+        public AssignmentsSynchronizer(ISynchronizationService synchronizationService,
             IAssignmentDocumentsStorage assignmentsRepository,
             IQuestionnaireDownloader questionnaireDownloader,
             IQuestionnaireStorage questionnaireStorage,
@@ -122,6 +122,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 }
                 else
                 {
+                    if (local.Quantity != remoteItem.Quantity || local.ResponsibleId != remoteItem.ResponsibleId)
+                    {
+                        local.ReceivedByInterviewerAt = null;
+                    }
+
                     local.Quantity = remoteItem.Quantity;
                     local.ResponsibleId = remoteItem.ResponsibleId;
                     local.ResponsibleName = remoteItem.ResponsibleName;
@@ -129,6 +134,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     local.CreatedInterviewsCount = interviewsCount;
                     this.assignmentsRepository.Store(local);
                 }
+
+                await this.synchronizationService.LogAssignmentAsHandledAsync(local.Id, cancellationToken);
             }
 
             progress.Report(new SyncProgressInfo
