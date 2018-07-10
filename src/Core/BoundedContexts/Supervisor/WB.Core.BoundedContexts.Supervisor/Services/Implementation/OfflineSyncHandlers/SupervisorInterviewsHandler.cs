@@ -22,8 +22,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
         private readonly IEnumeratorEventStorage eventStore;
         private readonly IPlainStorage<InterviewView> interviews;
 
-        public SupervisorInterviewsHandler(ILiteEventBus eventBus, 
-            IEnumeratorEventStorage eventStore, 
+        public SupervisorInterviewsHandler(ILiteEventBus eventBus,
+            IEnumeratorEventStorage eventStore,
             IPlainStorage<InterviewView> interviews)
         {
             this.eventBus = eventBus;

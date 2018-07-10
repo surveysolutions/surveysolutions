@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using AutoFixture;
 using Moq;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Supervisor.Services.Implementation;
 using WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSyncHandlers;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;

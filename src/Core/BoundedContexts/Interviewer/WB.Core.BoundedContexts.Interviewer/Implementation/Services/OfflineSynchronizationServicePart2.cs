@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Questionnaire.Api;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 
@@ -16,10 +16,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
     public partial class OfflineSynchronizationService
     {
         private readonly IOfflineSyncClient syncClient;
-        private readonly IPrincipal principal;
+        private readonly IInterviewerPrincipal principal;
 
-        public OfflineSynchronizationService(IOfflineSyncClient syncClient,
-            IPrincipal principal)
+        public OfflineSynchronizationService(
+            IOfflineSyncClient syncClient,
+            IInterviewerPrincipal principal)
         {
             this.syncClient = syncClient;
             this.principal = principal;
@@ -103,22 +104,22 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public Task SendUnexpectedExceptionAsync(UnexpectedExceptionApiView exception, CancellationToken token)
         {
-            throw new NotImplementedException();
+            return Task.CompletedTask;
         }
 
         public Task<List<MapView>> GetMapList(CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.FromResult(new List<MapView>());
         }
 
         public Task<RestStreamResult> GetMapContentStream(string mapName, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return Task.FromResult<RestStreamResult>(null);
         }
 
         public Task<Guid> GetCurrentSupervisor(CancellationToken token, RestCredentials credentials)
         {
-            throw new NotImplementedException();
+            return Task.FromResult(this.principal.CurrentUserIdentity.SupervisorId);
         }
 
         public Task<bool> IsAutoUpdateEnabledAsync(CancellationToken token)
@@ -126,10 +127,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return Task.FromResult(false);
         }
 
-        public Task UploadAuditLogEntityAsync(AuditLogEntitiesApiView auditLogEntity,
-            CancellationToken cancellationToken)
+        public Task UploadAuditLogEntityAsync(AuditLogEntitiesApiView auditLogEntity, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            return this.syncClient.SendAsync(new UploadAuditLogEntityRequest
+            {
+                AuditLogEntity = auditLogEntity
+            }, cancellationToken);
         }
 
         public Task<List<Guid>> CheckObsoleteInterviewsAsync(List<ObsoletePackageCheck> checks,
