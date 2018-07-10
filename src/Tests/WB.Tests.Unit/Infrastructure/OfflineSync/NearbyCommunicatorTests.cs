@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Threading;
 using System.Threading.Tasks;
 using NUnit.Framework;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation;
@@ -39,7 +40,7 @@ namespace WB.Tests.Unit.Infrastructure.OfflineSync
             var id = Guid.NewGuid();
 
             var response = await client.SendAsync<PingMessage, PongMessage>(clientCommunicator, "server", 
-                new PingMessage { Id = id }, null);
+                new PingMessage { Id = id }, null, CancellationToken.None);
 
             Assert.That(response.Id, Is.EqualTo(id), "Ensure that we indeed handle proper request");
         }
@@ -69,7 +70,7 @@ namespace WB.Tests.Unit.Infrastructure.OfflineSync
             Assert.ThrowsAsync<TaskCanceledException>(async () =>
             {
                 await client.SendAsync<PingMessage, PongMessage>(clientCommunicator, "server", 
-                    new PingMessage(), null);
+                    new PingMessage(), null, CancellationToken.None);
             });
         }
     }

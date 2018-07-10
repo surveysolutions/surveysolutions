@@ -45,7 +45,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
         public IObservable<IncomingDataInfo> IncomingInfo { get; }
 
         public async Task<TResponse> SendAsync<TRequest, TResponse>(INearbyConnection connection, string endpoint,
-            TRequest message, IProgress<CommunicationProgress> progress = null)
+            TRequest message, IProgress<CommunicationProgress> progress, CancellationToken cancellationToken)
             where TRequest : ICommunicationMessage
             where TResponse : ICommunicationMessage
         {
@@ -53,7 +53,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
 
             try
             {
-                var tsc = new TaskCompletionSourceWithProgress(progress);
+                var tsc = new TaskCompletionSourceWithProgress(progress, cancellationToken);
                 pending.TryAdd(payloads.id, tsc);
 
                 Debug("SEND.Message", true, endpoint, payloads.id, PayloadType.Bytes, "");
@@ -333,7 +333,8 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             private readonly CommunicationProgress progressData; // = new CommunicationProgress();
             private bool isCompleted;
 
-            public TaskCompletionSourceWithProgress(IProgress<CommunicationProgress> progress) : this()
+            public TaskCompletionSourceWithProgress(IProgress<CommunicationProgress> progress,
+                CancellationToken cancellationToken) : this()
             {
                 TaskCompletionSource = new TaskCompletionSource<ICommunicationMessage>();
                 Progress = progress;
@@ -342,6 +343,8 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                 etaHelper = new EtaTransferRate();
                 Debounce();
                 isCompleted = false;
+
+                cancellationToken.Register(SetCanceled);
             }
 
             public void Debounce()
