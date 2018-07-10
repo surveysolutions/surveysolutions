@@ -1,12 +1,14 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MvvmCross.Plugin.Messenger;
 using WB.Core.BoundedContexts.Supervisor.Properties;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.InterviewerSelector;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
@@ -16,12 +18,15 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
     {
         private readonly IDashboardItemsAccessor dashboardItemsAccessor;
         private readonly IInterviewViewModelFactory viewModelFactory;
+        private readonly IMvxMessenger messenger;
 
         public ToBeAssignedItemsViewModel(IDashboardItemsAccessor dashboardItemsAccessor,
-            IInterviewViewModelFactory viewModelFactory)
+            IInterviewViewModelFactory viewModelFactory,
+            IMvxMessenger messenger)
         {
             this.dashboardItemsAccessor = dashboardItemsAccessor;
             this.viewModelFactory = viewModelFactory;
+            this.messenger = messenger;
         }
 
         public override async Task Initialize()
@@ -41,23 +46,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
 
             var tasksToBeAssigned = this.dashboardItemsAccessor.TasksToBeAssigned().ToList();
 
-            foreach (var dashboardItem in tasksToBeAssigned)
-            {
-                var task = dashboardItem as SupervisorAssignmentDashboardItemViewModel;
-                if (task == null)
-                    continue;
-
-                task.ResponsibleChanged += OnResponsibleChanged;
-            }
-
             return subtitle.ToEnumerable().Concat(tasksToBeAssigned);
-        }
-
-        private void OnResponsibleChanged(object sender, InterviewerChangedArgs e)
-        {
-            var dashboardItem = (SupervisorAssignmentDashboardItemViewModel) sender;
-            dashboardItem.ResponsibleChanged -= OnResponsibleChanged;
-            this.UiItems.Remove(dashboardItem);
         }
     }
 }

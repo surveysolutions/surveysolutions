@@ -49,7 +49,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         public override void ViewAppeared()
         {
             base.ViewAppeared();
-            messengerSubscribtion = messenger.Subscribe<SynchronizationCompletedMsg>(msg => RefreshCounters(), MvxReference.Strong);
+            messengerSubscribtion = messenger.Subscribe<DashboardChangedMsg>(msg => RefreshCounters(), MvxReference.Strong);
         }
 
         public override void ViewDisappeared()
