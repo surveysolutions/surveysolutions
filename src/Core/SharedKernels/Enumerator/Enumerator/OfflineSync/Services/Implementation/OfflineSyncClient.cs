@@ -28,13 +28,13 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             where TRequest : ICommunicationMessage
             where TResponse : ICommunicationMessage
         {
-            return this.communicator.SendAsync<TRequest, TResponse>(this.nearbyConnection, Endpoint, request, progress);
+            return this.communicator.SendAsync<TRequest, TResponse>(this.nearbyConnection, Endpoint, request, progress, cancellationToken);
         }
 
         public async Task SendAsync<TRequest>(TRequest request, CancellationToken cancellationToken, IProgress<CommunicationProgress> progress = null)
             where TRequest : ICommunicationMessage
         {
-            await this.communicator.SendAsync<TRequest, OkResponse>(this.nearbyConnection, Endpoint, request, progress);
+            await this.communicator.SendAsync<TRequest, OkResponse>(this.nearbyConnection, Endpoint, request, progress, cancellationToken);
         }
     }
 }
