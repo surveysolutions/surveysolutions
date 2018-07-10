@@ -1,9 +1,18 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Main.Core.Events;
 using Ncqrs.Eventing;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus.Lite;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Events;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
@@ -21,14 +30,23 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
         private readonly ILiteEventBus eventBus;
         private readonly IEnumeratorEventStorage eventStore;
         private readonly IPlainStorage<InterviewView> interviews;
+        private readonly IJsonAllTypesSerializer serializer;
+        private readonly ILogger logger;
+        private readonly ICommandService commandService;
 
         public SupervisorInterviewsHandler(ILiteEventBus eventBus,
             IEnumeratorEventStorage eventStore,
-            IPlainStorage<InterviewView> interviews)
+            IPlainStorage<InterviewView> interviews,
+            IJsonAllTypesSerializer serializer,
+            ICommandService commandService,
+            ILogger logger)
         {
             this.eventBus = eventBus;
             this.eventStore = eventStore;
             this.interviews = interviews;
+            this.serializer = serializer;
+            this.logger = logger;
+            this.commandService = commandService;
         }
 
         public void Register(IRequestHandler requestHandler)
@@ -38,6 +56,84 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             requestHandler.RegisterHandler<GetInterviewsRequest, GetInterviewsResponse>(Handle);
             requestHandler.RegisterHandler<LogInterviewAsSuccessfullyHandledRequest, OkResponse>(Handle);
             requestHandler.RegisterHandler<GetInterviewDetailsRequest, GetInterviewDetailsResponse>(Handle);
+            requestHandler.RegisterHandler<UploadInterviewRequest, OkResponse>(UploadInterview);
+        }
+
+        private Task<OkResponse> UploadInterview(UploadInterviewRequest request)
+        {
+            var interview = request.Interview;
+           
+            var innerwatch = Stopwatch.StartNew();
+
+            try
+            {
+                var aggregateRootEvents = this.serializer.Deserialize<AggregateRootEvent[]>(interview.Events);
+
+                var firstEvent = aggregateRootEvents.FirstOrDefault();
+
+                if (firstEvent != null &&
+                    firstEvent.Payload.GetType() != typeof(SynchronizationMetadataApplied) &&
+                    eventStore.HasEventsAfterSpecifiedSequenceWithAnyOfSpecifiedTypes(firstEvent.EventSequence - 1,
+                        interview.InterviewId, EventsThatChangeAnswersStateProvider.GetTypeNames()))
+                {
+                    throw new InterviewException("Provided interview package is outdated. New answers were given to the interview while interviewer had interview on a tablet", 
+                        InterviewDomainExceptionType.PackageIsOudated);
+                }
+
+                // TODO: AssertPackageNotDuplicated(aggregateRootEvents);
+
+                var serializedEvents = aggregateRootEvents
+                    .Select(e => e.Payload)
+                    .ToArray();
+
+                this.logger.Debug($"Interview events by {interview.InterviewId} deserialized. Took {innerwatch.Elapsed:g}.");
+                innerwatch.Restart();
+
+                // TODO: bool shouldChangeSupervisorId = CheckIfInterviewerWasMovedToAnotherTeam(interview.ResponsibleId, serializedEvents, out Guid? newSupervisorId);
+
+                //if (shouldChangeSupervisorId && !newSupervisorId.HasValue)
+                //    throw new InterviewException("Can't move interview to a new team, because supervisor id is empty",
+                //        exceptionType: InterviewDomainExceptionType.CantMoveToUndefinedTeam);
+
+                this.commandService.Execute(new SynchronizeInterviewEventsCommand(
+                    interviewId: interview.InterviewId,
+                    userId: interview.MetaInfo.ResponsibleId,
+                    questionnaireId: interview.MetaInfo.TemplateId,
+                    questionnaireVersion: interview.MetaInfo.TemplateVersion,
+                    createdOnClient: interview.MetaInfo.CreatedOnClient ?? false,
+                    interviewStatus: (InterviewStatus) interview.MetaInfo.Status,
+                    interviewKey: InterviewKey.Parse(request.InterviewKey),
+                    synchronizedEvents: serializedEvents,
+                    newSupervisorId: (Guid?) null // TODO: KP-11585 shouldChangeSupervisorId ? newSupervisorId : null
+                ), null);
+
+               // RecordProcessedPackageInfo(aggregateRootEvents);
+            }
+            catch (Exception exception)
+            {
+                //this.logger.Error($"Interview events by {interview.InterviewId} processing failed. Reason: '{exception.Message}'", exception);
+
+                //var interviewException = exception as InterviewException;
+                //if (interviewException == null)
+                //{
+                //    interviewException = interviewException.UnwrapAllInnerExceptions()
+                //        .OfType<InterviewException>()
+                //        .FirstOrDefault();
+                //}
+
+                //var exceptionType = interviewException?.ExceptionType.ToString() ?? UnknownExceptionType;
+
+                
+
+               // this.logger.Debug($"Interview events by {interview.InterviewId} moved to broken packages. Took {innerwatch.Elapsed:g}.");
+                innerwatch.Restart();
+
+                throw;
+            }
+
+            innerwatch.Stop();
+
+            return Task.FromResult(new OkResponse());
         }
 
         public Task<GetInterviewDetailsResponse> Handle(GetInterviewDetailsRequest arg)

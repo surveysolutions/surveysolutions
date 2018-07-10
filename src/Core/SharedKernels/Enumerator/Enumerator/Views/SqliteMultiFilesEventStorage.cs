@@ -18,8 +18,7 @@ using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace WB.Core.SharedKernels.Enumerator.Views
 {
-    public class 
-        SqliteMultiFilesEventStorage : IEnumeratorEventStorage
+    public class SqliteMultiFilesEventStorage : IEnumeratorEventStorage
     {
         private SQLiteConnectionWithLock eventStoreInSingleFile;
         internal readonly Dictionary<Guid, SQLiteConnectionWithLock> connectionByEventSource = new Dictionary<Guid, SQLiteConnectionWithLock>();
@@ -210,6 +209,20 @@ namespace WB.Core.SharedKernels.Enumerator.Views
             }
 
             return new List<CommittedEvent>();
+        }
+
+        public bool HasEventsAfterSpecifiedSequenceWithAnyOfSpecifiedTypes(long sequence, Guid eventSourceId,
+            params string[] typeNames)
+        {
+            using (SQLiteConnectionWithLock connection = this.GetOrCreateConnection(eventSourceId))
+            {
+                var @event = connection
+                    .Table<EventView>()
+                    .FirstOrDefault(ev => ev.EventSequence > sequence 
+                                          && ev.EventSourceId == eventSourceId 
+                                          && typeNames.Contains(ev.EventType));
+                return @event != null;
+            }
         }
 
         public int GetLastEventKnownToHq(Guid interviewId)
