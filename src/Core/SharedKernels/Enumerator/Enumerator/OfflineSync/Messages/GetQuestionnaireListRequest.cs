@@ -61,5 +61,13 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Messages
         public AttachmentContent Content { get; set; }
     }
 
-    
+    public class UploadAuditLogEntityRequest : ICommunicationMessage
+    {
+        public AuditLogEntitiesApiView AuditLogEntity { get; set; }
+    }
+
+    public class UploadAuditLogEntityResponse : ICommunicationMessage
+    {
+
+    }
 }
