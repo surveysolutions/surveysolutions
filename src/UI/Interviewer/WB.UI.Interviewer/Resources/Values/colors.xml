@@ -19,6 +19,12 @@
   <color name="dashboard_synchronization_statistics_text">#FF747474</color>
   <color name="dashboard_synchronization_fail_title">#96F45D28</color>
 
+  <color name="sendtosupervisor_regular_text">#333333</color>
+  <color name="sendtosupervisor_abort_text">#df4813</color>
+  <color name="sendtosupervisor_complete_text">#1f9500</color>
+  <color name="sendtosupervisor_waitingdevice_text">#2a81cb</color>
+  <color name="sendtosupervisor_error_text">#e4512b</color>
+
   <color name="dashboard_search_background_color">#F2F2F2</color>
   <color name="dashboard_search_exit_color">#2A81CB</color>
   
