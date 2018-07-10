@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using Main.Core.Documents;
 using Moq;
 using MvvmCross.Base;
 using MvvmCross.Plugin.Messenger;
+using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard;
+using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items;
+using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -20,10 +24,12 @@ using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
+using WB.Core.SharedKernels.Enumerator.Views.Dashboard;
 
 namespace WB.Tests.Abc.TestFactories
 {
@@ -395,6 +401,25 @@ namespace WB.Tests.Abc.TestFactories
                 Create.ViewModel.DynamicTextViewModel(),
                 Mock.Of<InterviewStateViewModel>(),
                 Create.Entity.AnswerNotifier(Create.Service.LiteEventRegistry()));
+        }
+
+        public WaitingForSupervisorActionViewModel WaitingForSupervisorActionViewModel(
+            IDashboardItemsAccessor dashboardItemsAccessor = null,
+            IInterviewViewModelFactory viewModelFactory = null)
+            => new WaitingForSupervisorActionViewModel(dashboardItemsAccessor ?? Mock.Of<IDashboardItemsAccessor>(),
+                viewModelFactory ?? Create.Service.SupervisorInterviewViewModelFactory());
+
+        public SupervisorDashboardInterviewViewModel SupervisorDashboardInterviewViewModel(Guid interviewId)
+        {
+            var viewModel = new SupervisorDashboardInterviewViewModel(
+                Mock.Of<IServiceLocator>(),
+                Mock.Of<IAuditLogService>(),
+                Mock.Of<IViewModelNavigationService>());
+
+            viewModel.Init(Create.Entity.InterviewView(interviewId: interviewId,
+                questionnaireId: Create.Entity.QuestionnaireIdentity().ToString()), new List<PrefilledQuestion>());
+
+            return viewModel;
         }
     }
 }
