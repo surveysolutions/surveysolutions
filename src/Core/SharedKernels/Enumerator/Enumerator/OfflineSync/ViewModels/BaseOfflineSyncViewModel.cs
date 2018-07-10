@@ -67,7 +67,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
         protected void SetStatus(ConnectionStatus connectionStatus, string details = null)
         {
             this.Status = connectionStatus.ToString();
-            this.StatusDetails = details ?? String.Empty;
+            this.StatusDetails = details ?? String.Empty + "\r\n"+ this.StatusDetails;
         }
 
         protected virtual void Connected(string connectedEndpoint)
