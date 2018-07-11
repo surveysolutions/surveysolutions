@@ -32,7 +32,6 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.UI.Interviewer.Implementations.Services;
 using WB.UI.Interviewer.Services;
-using WB.UI.Interviewer.Settings;
 using WB.UI.Interviewer.ViewModel;
 using WB.UI.Shared.Enumerator.CustomServices;
 using WB.UI.Shared.Enumerator.Services;
@@ -67,6 +66,7 @@ namespace WB.UI.Interviewer.ServiceLocation
             
 
             registry.Bind<IInterviewerSynchronizationService, SynchronizationService>();
+            registry.Bind<IRemoteAuthorizationService, SynchronizationService>();
             registry.Bind<IBattery, AndroidBattery>();
             registry.Bind<IDeviceOrientation, AndroidDeviceOrientation>();
             registry.Bind<IDeviceInformationService, DeviceInformationService>();

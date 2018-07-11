@@ -71,7 +71,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
         private static readonly string userPasswordHash = "passwordHash";
         private static readonly string userToken = "new token";
 
-        static Mock<ISynchronizationService> synchronizationServiceMock = new Mock<ISynchronizationService>();
+        static Mock<IRemoteAuthorizationService> synchronizationServiceMock = new Mock<IRemoteAuthorizationService>();
         static Mock<IViewModelNavigationService> ViewModelNavigationServiceMock = new Mock<IViewModelNavigationService>();
         static Mock<IPlainStorage<InterviewerIdentity>> InterviewersPlainStorageMock = new Mock<IPlainStorage<InterviewerIdentity>>();
     }

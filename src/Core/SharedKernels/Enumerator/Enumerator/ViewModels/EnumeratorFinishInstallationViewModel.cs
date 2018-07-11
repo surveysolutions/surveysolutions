@@ -20,7 +20,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
     {
         protected readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IDeviceSettings deviceSettings;
-        private readonly ISynchronizationService synchronizationService;
+        private readonly IRemoteAuthorizationService synchronizationService;
         private readonly ILogger logger;
         private CancellationTokenSource cancellationTokenSource;
         private readonly IUserInteractionService userInteractionService;
@@ -30,8 +30,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             IViewModelNavigationService viewModelNavigationService,
             IPrincipal principal,
             IDeviceSettings deviceSettings,
-            ISynchronizationService synchronizationService,
-            ILogger logger, 
+            IRemoteAuthorizationService synchronizationService,
+            ILogger logger,
             IUserInteractionService userInteractionService) : base(principal, viewModelNavigationService)
         {
             this.viewModelNavigationService = viewModelNavigationService;
@@ -44,61 +44,102 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         protected override bool IsAuthenticationRequired => false;
 
         private string endpoint;
+
         public string Endpoint
         {
             get => this.endpoint;
-            set { this.endpoint = value; RaisePropertyChanged(); }
+            set
+            {
+                this.endpoint = value;
+                RaisePropertyChanged();
+            }
         }
 
         private string userName;
+
         public string UserName
         {
             get => this.userName;
-            set { this.userName = value; RaisePropertyChanged(); }
+            set
+            {
+                this.userName = value;
+                RaisePropertyChanged();
+            }
         }
 
         private string password;
+
         public string Password
         {
             get => this.password;
-            set { this.password = value; RaisePropertyChanged(); }
+            set
+            {
+                this.password = value;
+                RaisePropertyChanged();
+            }
         }
 
         private bool isEndpointValid;
+
         public bool IsEndpointValid
         {
             get => this.isEndpointValid;
-            set { this.isEndpointValid = value; RaisePropertyChanged(); }
+            set
+            {
+                this.isEndpointValid = value;
+                RaisePropertyChanged();
+            }
         }
 
         private bool isUserValid;
+
         public bool IsUserValid
         {
             get => this.isUserValid;
-            set { this.isUserValid = value; RaisePropertyChanged(); }
+            set
+            {
+                this.isUserValid = value;
+                RaisePropertyChanged();
+            }
         }
 
         private string errorMessage;
+
         public string ErrorMessage
         {
             get => this.errorMessage;
-            set { this.errorMessage = value; RaisePropertyChanged(); }
+            set
+            {
+                this.errorMessage = value;
+                RaisePropertyChanged();
+            }
         }
 
         private bool isInProgress;
+
         public bool IsInProgress
         {
             get => this.isInProgress;
-            set { this.isInProgress = value; RaisePropertyChanged(); }
+            set
+            {
+                this.isInProgress = value;
+                RaisePropertyChanged();
+            }
         }
 
         private IMvxAsyncCommand signInCommand;
+
         public IMvxAsyncCommand SignInCommand
         {
-            get { return this.signInCommand ?? (this.signInCommand = new MvxAsyncCommand(this.SignInAsync, () => !IsInProgress)); }
+            get
+            {
+                return this.signInCommand ??
+                       (this.signInCommand = new MvxAsyncCommand(this.SignInAsync, () => !IsInProgress));
+            }
         }
 
-        public IMvxAsyncCommand NavigateToDiagnosticsPageCommand => new MvxAsyncCommand(this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>);
+        public IMvxAsyncCommand NavigateToDiagnosticsPageCommand =>
+            new MvxAsyncCommand(this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>);
 
         public override void Prepare(FinishInstallationViewModelArg parameter)
         {
@@ -111,7 +152,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
             this.IsUserValid = true;
             this.IsEndpointValid = true;
-            this.Endpoint =  this.deviceSettings.Endpoint;
+            this.Endpoint = this.deviceSettings.Endpoint;
 
 #if DEBUG
             this.Endpoint = "http://192.168.88./headquarters";
@@ -150,9 +191,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         public async Task RefreshEndpoint()
         {
             var settingsEndpoint = this.deviceSettings.Endpoint;
-            if (!string.IsNullOrEmpty(settingsEndpoint) && !string.Equals(settingsEndpoint, this.endpoint, StringComparison.OrdinalIgnoreCase))
+            if (!string.IsNullOrEmpty(settingsEndpoint) &&
+                !string.Equals(settingsEndpoint, this.endpoint, StringComparison.OrdinalIgnoreCase))
             {
-                var message = string.Format(InterviewerUIResources.FinishInstallation_EndpointDiffers,  this.Endpoint, settingsEndpoint);
+                var message = string.Format(InterviewerUIResources.FinishInstallation_EndpointDiffers, this.Endpoint,
+                    settingsEndpoint);
                 if (await this.userInteractionService.ConfirmAsync(message, isHtml: false).ConfigureAwait(false))
                 {
                     this.Endpoint = settingsEndpoint;
@@ -183,7 +226,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             {
                 if (string.IsNullOrWhiteSpace(UserName))
                 {
-                    throw new SynchronizationException(SynchronizationExceptionType.Unauthorized, InterviewerUIResources.Login_WrongPassword);
+                    throw new SynchronizationException(SynchronizationExceptionType.Unauthorized,
+                        InterviewerUIResources.Login_WrongPassword);
                 }
 
                 var authToken = await this.synchronizationService.LoginAsync(new LogonInfo
@@ -194,12 +238,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
                 restCredentials.Token = authToken;
 
-                if (!await this.synchronizationService.HasCurrentUserDeviceAsync(credentials: restCredentials, token: cancellationTokenSource.Token).ConfigureAwait(false))
+                if (!await this.synchronizationService
+                    .HasCurrentUserDeviceAsync(credentials: restCredentials, token: cancellationTokenSource.Token)
+                    .ConfigureAwait(false))
                 {
-                    await this.synchronizationService.LinkCurrentUserToDeviceAsync(credentials: restCredentials, token: cancellationTokenSource.Token).ConfigureAwait(false);
+                    await this.synchronizationService
+                        .LinkCurrentUserToDeviceAsync(credentials: restCredentials,
+                            token: cancellationTokenSource.Token).ConfigureAwait(false);
                 }
 
-                await this.synchronizationService.CanSynchronizeAsync(credentials: restCredentials, token: cancellationTokenSource.Token).ConfigureAwait(false);
+                await this.synchronizationService
+                    .CanSynchronizeAsync(credentials: restCredentials, token: cancellationTokenSource.Token)
+                    .ConfigureAwait(false);
 
                 await this.SaveUserToLocalStorageAsync(restCredentials, cancellationTokenSource.Token);
 
@@ -225,6 +275,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                         await this.RelinkUserToAnotherDeviceAsync(restCredentials, cancellationTokenSource.Token);
                         break;
                 }
+
                 this.ErrorMessage = ex.Message;
             }
             catch (Exception ex)
