@@ -120,4 +120,7 @@
   <data name="Synchronization_UploadBrokenInterviewPackages" xml:space="preserve">
     <value>Загрузка на сервер битых интервью пакетов </value>
   </data>
+  <data name="Synchronization_UploadExceptions" xml:space="preserve">
+    <value>Загрузка ошибок с планшетов интревьюеров</value>
+  </data>
 </root>
