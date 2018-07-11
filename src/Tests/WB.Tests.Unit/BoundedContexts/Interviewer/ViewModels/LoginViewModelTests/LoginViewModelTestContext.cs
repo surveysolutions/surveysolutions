@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
             IPrincipal principal = null,
             IPasswordHasher passwordHasher = null,
             IPlainStorage<InterviewerIdentity> interviewersPlainStorage = null,
-            ISynchronizationService synchronizationService = null,
+            IRemoteAuthorizationService synchronizationService = null,
             ILogger logger = null)
         {
             return new LoginViewModel(
@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
                 passwordHasher ?? Mock.Of<IPasswordHasher>(),
                 interviewersPlainStorage ?? Mock.Of<IPlainStorage<InterviewerIdentity>>(),
                 new InMemoryPlainStorage<CompanyLogo>(), 
-                synchronizationService ?? Mock.Of<ISynchronizationService>(),
+                synchronizationService ?? Mock.Of<IRemoteAuthorizationService>(),
                 logger ?? Mock.Of<ILogger>(),
                 Mock.Of<IAuditLogService>());
         }
