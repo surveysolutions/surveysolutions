@@ -87,6 +87,9 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor
             config.TypedRoute("api/supervisor/v1/interviewerExceptions",
                 c => c.Action<InterviewerExceptionsApiV1Controller>(x => x.Post(Param.Any<List<InterviewerExceptionInfo>>())));
 
+            config.TypedRoute("api/supervisor/v1/interviewerTabletInfos",
+                c => c.Action<InterviewerDeviceInfoApiV1Controller>(x => x.Post(Param.Any<DeviceInfoApiView>())));
+
             config.TypedRoute("api/supervisor/v1/interviews", c => c.Action<InterviewsApiV1Controller>(x => x.Get()));
 
             config.TypedRoute("api/supervisor/v1/interviews/{id:guid}",

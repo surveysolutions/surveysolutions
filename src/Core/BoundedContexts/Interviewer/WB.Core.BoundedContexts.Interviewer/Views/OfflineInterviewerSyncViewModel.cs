@@ -55,7 +55,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 this.synchronizationMode.Set(SynchronizationMode.Offline);
                 var synchronizationProcess = Mvx.Resolve<ISynchronizationProcess>();
 
-                await synchronizationProcess.SyncronizeAsync(
+                await synchronizationProcess.SynchronizeAsync(
                     new Progress<SyncProgressInfo>(o =>
                     {
                         SetStatus(ConnectionStatus.Sync, o.Description);

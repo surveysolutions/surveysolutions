@@ -104,4 +104,9 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Messages
         public PostFileApiView InterviewAudio { get; set; }
     }
 
+    public class UploadDeviceInfoRequest : ICommunicationMessage
+    {
+        public Guid UserId { get; set; }
+        public DeviceInfoApiView DeviceInfo { get; set; }
+    }
 }
