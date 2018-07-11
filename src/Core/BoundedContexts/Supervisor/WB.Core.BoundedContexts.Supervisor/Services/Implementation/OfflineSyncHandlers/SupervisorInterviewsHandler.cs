@@ -59,7 +59,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             requestHandler.RegisterHandler<UploadInterviewRequest, OkResponse>(UploadInterview);
         }
 
-        private Task<OkResponse> UploadInterview(UploadInterviewRequest request)
+        public Task<OkResponse> UploadInterview(UploadInterviewRequest request)
         {
             var interview = request.Interview;
            
