@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reactive.Subjects;
@@ -10,6 +8,7 @@ using System.Threading.Tasks;
 using Android.Gms.Common.Apis;
 using Android.Gms.Nearby;
 using Android.Gms.Nearby.Connection;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Entities;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.UI.Shared.Enumerator.OfflineSync.Entities;
@@ -21,15 +20,22 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
     public class NearbyConnection : INearbyConnection
     {
         private readonly INearbyCommunicator communicator;
+        private readonly ILogger logger;
         private readonly Subject<INearbyEvent> events;
 
         private GoogleApiClient api;
 
-        public NearbyConnection(INearbyCommunicator communicator)
+        public NearbyConnection(INearbyCommunicator communicator, ILogger logger)
         {
             this.communicator = communicator;
+            this.logger = logger;
             events = new Subject<INearbyEvent>();
             Events = events;
+        }
+
+        private void Trace(string message)
+        {
+            logger.Info(message);
         }
 
         public Task StartDiscovery(string serviceName)
@@ -41,7 +47,7 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
 
         public async Task<string> StartAdvertising(string serviceName, string name)
         {
-            var result = await NearbyClass.Connections.StartAdvertisingAsync(api, name, serviceName,
+            var result = await NearbyClass.Connections.StartAdvertisingAsync(api,  name, serviceName,
                 new OnConnectionLifecycleCallback(
                     new NearbyConnectionLifeCycleCallback(OnInitiatedConnection, OnConnectionResult, OnDisconnected)),
                 new AdvertisingOptions(Strategy.P2pStar));
@@ -50,7 +56,7 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
 
         public Task RequestConnection(string name, string endpoint)
         {
-            Debug.WriteLine($"RequestConnection. {name} => {endpoint}");
+            Trace($"RequestConnection. {name} => {endpoint}");
 
             return NearbyClass.Connections.RequestConnectionAsync(api, name, endpoint,
                 new OnConnectionLifecycleCallback(
@@ -59,7 +65,7 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
 
         public Task AcceptConnection(string endpoint)
         {
-            Debug.WriteLine($"AcceptConnection. {endpoint}");
+            Trace($"AcceptConnection. {endpoint}");
 
             return NearbyClass.Connections.AcceptConnectionAsync(api, endpoint,
                 new OnPayloadCallback(new NearbyPayloadCallback(OnPayloadReceived, OnPayloadTransferUpdate)));
@@ -73,7 +79,7 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
         public Task SendPayloadAsync(string to, IPayload payload)
         {
             var send = payload as Payload;
-            Debug.WriteLine($"SendPayloadAsync. PayloadId: {send.Id}");
+            Trace($"SendPayloadAsync. PayloadId: {send?.Id ?? -1}");
             return NearbyClass.Connections.SendPayloadAsync(api, to, send.NearbyPayload);
         }
 
@@ -83,30 +89,36 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
 
         public Task StopDiscovery()
         {
+            Trace("Stop discovery");
             NearbyClass.Connections.StopDiscovery(api);
             return Task.CompletedTask;
         }
 
         public Task StopAdvertising()
         {
+            Trace("Stop advertising");
             NearbyClass.Connections.StopAdvertising(api);
             return Task.CompletedTask;
         }
 
         public void SetGoogleApiClient(GoogleApiClient apiClient)
         {
+            Trace("Google API SET");
             api = apiClient;
         }
 
         private void LostEndpoint(string endpoint)
         {
-            knownEnpoints.TryRemove(endpoint, out _);
+            knownEnpoints.TryRemove(endpoint, out var endpointInfo);
+
+            Trace($"Lost endpoint: {endpoint}. Name: {endpointInfo ?? "<unknown>"}");
             events.OnNext(new NearbyEvent.EndpointLost(endpoint));
         }
 
         private void FoundEndpoint(string endpoint, NearbyDiscoveredEndpointInfo endpointInfo)
         {
             knownEnpoints.TryAdd(endpoint, endpointInfo.EndpointName);
+            Trace($"Lost endpoint: {endpoint}. Name: {endpointInfo.EndpointName}");
             events.OnNext(new NearbyEvent.EndpointFound(endpoint, endpointInfo));
         }
 
@@ -115,6 +127,7 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
             events.OnNext(new NearbyEvent.Disconnected(endpoint));
 
             var exising = this.RemoteEndpoints.FirstOrDefault(re => re.Enpoint == endpoint);
+            Trace($"Disconnected from endpoint: {endpoint}. Name: {exising?.Name ?? "<unknown>"}");
 
             if (exising != null)
             {
@@ -135,10 +148,10 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
 
                 knownEnpoints.TryGetValue(endpoint, out var name);
 
+                Trace($"Connected to endpoint: {endpoint}. Name: {name}");
                 this.RemoteEndpoints.Add(new RemoteEndpoint{ Enpoint = endpoint, Name = name});
+                events.OnNext(new NearbyEvent.Connected(endpoint, resolution, name));
             }
-
-            events.OnNext(new NearbyEvent.Connected(endpoint, resolution));
         }
 
         private readonly ConcurrentDictionary<string, string> knownEnpoints = new ConcurrentDictionary<string, string>();
@@ -147,18 +160,18 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
         {
             knownEnpoints.TryAdd(endpoint, info.EndpointName);
             events.OnNext(new NearbyEvent.InitiatedConnection(endpoint, info));
+            Trace($"Initiated connection from endpoint: {endpoint}. Name: {info.EndpointName}");
         }
 
         private void OnPayloadTransferUpdate(string endpoint, NearbyPayloadTransferUpdate update)
         {
-            Debug.WriteLine(
-                $"OnPayloadTransferUpdate. PayloadId: {update.Id}. Transfer ({update.Status.ToString()}) {update.BytesTransferred} of {update.TotalBytes}");
+            Trace($"Payload transfer update {endpoint}. PayloadId: {update.Id}. Transfer ({update.Status.ToString()}) {update.BytesTransferred} of {update.TotalBytes}");
             communicator.RecievePayloadTransferUpdate(this, endpoint, update);
         }
 
         private async void OnPayloadReceived(string endpoint, IPayload payload)
         {
-            Debug.WriteLine($"OnPayloadReceived. PayloadId: {payload.Id}");
+            Trace($"OnPayloadReceived. PayloadId: {payload.Id}");
 
             await communicator.RecievePayloadAsync(this, endpoint, payload);
         }

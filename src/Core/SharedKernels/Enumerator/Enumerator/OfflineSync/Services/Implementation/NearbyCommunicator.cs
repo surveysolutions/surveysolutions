@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Concurrent;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
@@ -8,6 +7,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Humanizer;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Entities;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
 using WB.Core.SharedKernels.Enumerator.Utils;
@@ -26,6 +26,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
 
         private readonly IPayloadProvider payloadProvider;
         private readonly IPayloadSerializer payloadSerializer;
+        private readonly ILogger logger;
         private readonly ConcurrentDictionary<long, IncomingPayloadInfo> payloadsInfo = new ConcurrentDictionary<long, IncomingPayloadInfo>();
         private readonly ConcurrentDictionary<Guid, TaskCompletionSourceWithProgress> pending = new ConcurrentDictionary<Guid, TaskCompletionSourceWithProgress>();
 
@@ -33,12 +34,15 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
 
         private readonly Subject<IncomingDataInfo> incomingDataInfo = new Subject<IncomingDataInfo>();
         
-        public NearbyCommunicator(IRequestHandler requestHandler,
-            IPayloadProvider payloadProvider, IPayloadSerializer payloadSerializer)
+        public NearbyCommunicator(IRequestHandler requestHandler, 
+            IPayloadProvider payloadProvider, 
+            IPayloadSerializer payloadSerializer, 
+            ILogger logger)
         {
             this.requestHandler = requestHandler;
             this.payloadProvider = payloadProvider;
             this.payloadSerializer = payloadSerializer;
+            this.logger = logger;
             IncomingInfo = incomingDataInfo.AsObservable();
         }
 
@@ -253,12 +257,10 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             return nearbyConnection.SendPayloadAsync(endpoint, payload);
         }
 
-        [Conditional("DEBUG")]
         private void Debug(string action, bool outgoing, string endpoint, object payloadId, PayloadType type,
             string message)
         {
-            System.Diagnostics.Debug.WriteLine(
-                $"[{action,-11}] {(outgoing ? "====>" : "<====")} {endpoint}[{payloadId}] #{type.ToString()} {message}");
+            this.logger.Info($"[{action,-11}] {(outgoing ? "====>" : "<====")} {endpoint}[{payloadId}] #{type.ToString()} {message}");
         }
 
         private (Guid id, IPayload message, IPayload info) PreparePayload(Guid correlationGuid,
