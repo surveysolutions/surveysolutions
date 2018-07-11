@@ -786,8 +786,9 @@ namespace WB.Tests.Abc.TestFactories
                 interviews ?? new InMemoryPlainStorage<InterviewView>(),
                 serializer ?? new JsonAllTypesSerializer(),
                 commandService ?? Mock.Of<ICommandService>(), 
+                Mock.Of<ILogger>(),
                 Mock.Of<IPlainStorage<BrokenInterviewPackageView, int?>>(),
-                Mock.Of<ILogger>());
+                new SqliteInmemoryStorage<SuperivsorReceivedPackageLogEntry, int>());
         }
     }
 
