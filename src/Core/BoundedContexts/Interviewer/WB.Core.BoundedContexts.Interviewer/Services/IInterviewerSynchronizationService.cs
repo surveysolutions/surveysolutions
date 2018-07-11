@@ -7,7 +7,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 
 namespace WB.Core.BoundedContexts.Interviewer.Services
 {
-    public interface IInterviewerSynchronizationService : IRemoteAuthorizationService
+    public interface IInterviewerSynchronizationService : ISynchronizationService
     {
         Task<InterviewerApiView> GetInterviewerAsync(RestCredentials credentials = null, CancellationToken? token = null);
     }

@@ -23,14 +23,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private readonly IAuditLogService auditLogService;
         private readonly IPasswordHasher passwordHasher;
         private readonly IPlainStorage<CompanyLogo> logoStorage;
-        private readonly IRemoteAuthorizationService synchronizationService;
+        private readonly ISynchronizationService synchronizationService;
 
         protected EnumeratorLoginViewModel(
             IViewModelNavigationService viewModelNavigationService,
             IPrincipal principal,
             IPasswordHasher passwordHasher,
             IPlainStorage<CompanyLogo> logoStorage,
-            IRemoteAuthorizationService synchronizationService,
+            ISynchronizationService synchronizationService,
             ILogger logger,
             IAuditLogService auditLogService)
             : base(principal, viewModelNavigationService)

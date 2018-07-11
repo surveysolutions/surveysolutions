@@ -80,9 +80,8 @@ namespace WB.UI.Supervisor.ServiceLocation
             registry.Bind<IInterviewersListAccessor, InterviewersListAccessor>();
 
             registry.BindAsSingleton<IInterviewViewModelFactory, SupervisorInterviewViewModelFactory>();
-            registry.Bind<IRemoteAuthorizationService, SynchronizationService>();
 
-
+           
 #if EXCLUDEEXTENSIONS
             registry.Bind<IAreaEditService, WB.UI.Shared.Enumerator.CustomServices.AreaEditor.DummyAreaEditService>();
             registry.Bind<ICheckVersionUriProvider, CheckForExtendedVersionUriProvider>();

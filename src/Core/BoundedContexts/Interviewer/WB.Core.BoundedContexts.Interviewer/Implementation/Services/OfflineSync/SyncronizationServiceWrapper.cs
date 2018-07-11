@@ -44,6 +44,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return Service.LoginAsync(logonInfo, credentials, token);
         }
 
+        public Task<bool> HasCurrentUserDeviceAsync(RestCredentials credentials = null, CancellationToken? token = null)
+        {
+            return Service.HasCurrentUserDeviceAsync(credentials, token);
+        }
+
         public Task CanSynchronizeAsync(RestCredentials credentials = null, CancellationToken? token = null)
         {
             return Service.CanSynchronizeAsync(credentials, token);
@@ -52,6 +57,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         public Task SendDeviceInfoAsync(DeviceInfoApiView info, CancellationToken? token = null)
         {
             return Service.SendDeviceInfoAsync(info, token);
+        }
+
+        public Task LinkCurrentUserToDeviceAsync(RestCredentials credentials = null, CancellationToken? token = null)
+        {
+            return Service.LinkCurrentUserToDeviceAsync(credentials, token);
         }
 
         public Task<byte[]> GetQuestionnaireAssemblyAsync(QuestionnaireIdentity questionnaire, Action<decimal, long, long> onDownloadProgressChanged,

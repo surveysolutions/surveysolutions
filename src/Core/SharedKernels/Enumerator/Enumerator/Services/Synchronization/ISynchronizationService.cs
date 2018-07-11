@@ -11,20 +11,15 @@ using WB.Core.SharedKernels.Questionnaire.Translations;
 
 namespace WB.Core.SharedKernels.Enumerator.Services.Synchronization
 {
-    public interface IRemoteAuthorizationService
-    {
-        Task<string> LoginAsync(LogonInfo logonInfo, RestCredentials credentials, CancellationToken? token = null);
-        Task<bool> HasCurrentUserDeviceAsync(RestCredentials credentials = null, CancellationToken? token = null);
-        Task LinkCurrentUserToDeviceAsync(RestCredentials credentials = null, CancellationToken? token = null);
-        Task CanSynchronizeAsync(RestCredentials credentials = null, CancellationToken? token = null);
-    }
-
     public interface ISynchronizationService
     {
         Task<string> LoginAsync(LogonInfo logonInfo, RestCredentials credentials, CancellationToken? token = null);
+        Task<bool> HasCurrentUserDeviceAsync(RestCredentials credentials = null, CancellationToken? token = null);
+
         Task CanSynchronizeAsync(RestCredentials credentials = null, CancellationToken? token = null);
         Task SendDeviceInfoAsync(DeviceInfoApiView info, CancellationToken? token = null);
-        
+        Task LinkCurrentUserToDeviceAsync(RestCredentials credentials = null, CancellationToken? token = null);
+
         Task<byte[]> GetQuestionnaireAssemblyAsync(QuestionnaireIdentity questionnaire, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token);
         Task<QuestionnaireApiView> GetQuestionnaireAsync(QuestionnaireIdentity questionnaire, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token);
         Task<List<QuestionnaireIdentity>> GetCensusQuestionnairesAsync(CancellationToken token);
