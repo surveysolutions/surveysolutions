@@ -35,8 +35,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         private Guid? supervisorId;
         public Guid? SupervisorId
         {
-            get { return this.supervisorId; }
-            set { this.supervisorId = value.NullIfEmpty(); }
+            get => this.supervisorId;
+            set => this.supervisorId = value.NullIfEmpty();
         }
 
         public bool IsValid { get; set; }

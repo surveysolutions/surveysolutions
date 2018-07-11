@@ -2,15 +2,18 @@ using System;
 using System.Collections.Generic;
 using FluentAssertions;
 using Ncqrs.Eventing;
-using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
+using NUnit.Framework;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Tests.Abc;
 
-namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerInterviewAccessorTests
+namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.InterviewEventStreamOptimizerTests
 {
+    [TestOf(typeof(InterviewEventStreamOptimizer))]
     internal class when_removing_events_not_needed_to_be_sent
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [Test]
+        public void should_remove_calculated_events_but_leave_calculated_events_from_last_interview_completion()
+        {
             var firstCompletionCommitId = Guid.Parse("11111111111111111111111111111111");
             var lastCompletionCommitId = Guid.Parse("99999999999999999999999999999999");
 
@@ -69,13 +72,11 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
             };
 
             optimizer = Create.Service.InterviewEventStreamOptimizer();
-            BecauseOf();
-        }
 
-        public void BecauseOf() =>
+            // Act
             result = optimizer.RemoveEventsNotNeededToBeSent(eventStream);
 
-        [NUnit.Framework.Test] public void should_remove_calculated_events_but_leave_calculated_events_from_last_interview_completion () =>
+            // Assert
             result.Should().BeEquivalentTo(new[]
             {
                 questionAnswered,
@@ -100,27 +101,28 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
 
                 lastCompletion,
             });
+        }
 
-        private static InterviewEventStreamOptimizer optimizer;
-        private static IReadOnlyCollection<CommittedEvent> eventStream;
-        private static IReadOnlyCollection<CommittedEvent> result;
-        private static CommittedEvent questionAnswered;
-        private static CommittedEvent firstCompletion;
-        private static CommittedEvent lastAggregatedGroupsDisabled;
-        private static CommittedEvent lastAggregatedGroupsEnabled;
-        private static CommittedEvent lastAggregatedQuestionsDisabled;
-        private static CommittedEvent lastAggregatedQuestionsEnabled;
-        private static CommittedEvent lastAggregatedQuestionsInvalid;
-        private static CommittedEvent lastAggregatedQuestionsValid;
-        private static CommittedEvent lastAggregatedStaticTextsValid;
-        private static CommittedEvent lastAggregatedStaticTextsInvalid;
-        private static CommittedEvent lastAggregatedStaticTextsEnabled;
-        private static CommittedEvent lastAggregatedStaticTextsDisabled;
-        private static CommittedEvent lastAggregatedLinkedOptionsChanged;
-        private static CommittedEvent lastAggregatedVariablesDisabled;
-        private static CommittedEvent lastAggregatedVariablesEnabled;
-        private static CommittedEvent lastAggregatedVariablesValuesChanged;
-        private static CommittedEvent lastCompletion;
-        private static CommittedEvent lastAggregatedSubstitutionTitlesChanged;
+        private InterviewEventStreamOptimizer optimizer;
+        private IReadOnlyCollection<CommittedEvent> eventStream;
+        private IReadOnlyCollection<CommittedEvent> result;
+        private CommittedEvent questionAnswered;
+        private CommittedEvent firstCompletion;
+        private CommittedEvent lastAggregatedGroupsDisabled;
+        private CommittedEvent lastAggregatedGroupsEnabled;
+        private CommittedEvent lastAggregatedQuestionsDisabled;
+        private CommittedEvent lastAggregatedQuestionsEnabled;
+        private CommittedEvent lastAggregatedQuestionsInvalid;
+        private CommittedEvent lastAggregatedQuestionsValid;
+        private CommittedEvent lastAggregatedStaticTextsValid;
+        private CommittedEvent lastAggregatedStaticTextsInvalid;
+        private CommittedEvent lastAggregatedStaticTextsEnabled;
+        private CommittedEvent lastAggregatedStaticTextsDisabled;
+        private CommittedEvent lastAggregatedLinkedOptionsChanged;
+        private CommittedEvent lastAggregatedVariablesDisabled;
+        private CommittedEvent lastAggregatedVariablesEnabled;
+        private CommittedEvent lastAggregatedVariablesValuesChanged;
+        private CommittedEvent lastCompletion;
+        private CommittedEvent lastAggregatedSubstitutionTitlesChanged;
     }
 }

@@ -1947,7 +1947,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             }
             else
             {
-                propertiesInvariants.ThrowIfOtherInterviewerIsResponsible(command.UserId);
+                if (command.InterviewStatus == InterviewStatus.Completed)
+                {
+                    propertiesInvariants.ThrowIfOtherInterviewerIsResponsible(command.UserId);
+                }
+                else
+                {
+                    propertiesInvariants.ThrowIfOtherSupervisorIsResponsible(command.UserId);
+                }
 
                 if (this.properties.Status == InterviewStatus.Deleted)
                     this.Restore(command.UserId);
