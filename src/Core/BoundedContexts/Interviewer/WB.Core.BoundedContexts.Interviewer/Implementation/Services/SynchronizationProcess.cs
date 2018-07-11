@@ -26,7 +26,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
     {
         private readonly IInterviewerSettings interviewerSettings;
         private readonly IInterviewerPrincipal principal;
-        private readonly ISynchronizationService synchronizationService;
         private readonly IPlainStorage<InterviewerIdentity> interviewersPlainStorage;
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
         private readonly IPasswordHasher passwordHasher;
@@ -60,7 +59,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             assignmentsStorage, audioFileStorage, diagnosticService, auditLogSynchronizer, auditLogService,
             eventBus, eventStore)
         {
-            this.synchronizationService = synchronizationService;
             this.principal = principal;
             this.interviewerSettings = interviewerSettings;
             this.interviewersPlainStorage = interviewersPlainStorage;
