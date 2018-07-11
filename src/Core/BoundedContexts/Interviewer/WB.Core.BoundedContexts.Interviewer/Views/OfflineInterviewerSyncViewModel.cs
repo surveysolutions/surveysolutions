@@ -52,14 +52,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         {
             try
             {
-                this.synchronizationMode.Set(SynchronizationMode.Offline);
-                var synchronizationProcess = Mvx.Resolve<ISynchronizationProcess>();
+                using (new CommunicationSession())
+                {
+                    this.synchronizationMode.Set(SynchronizationMode.Offline);
+                    var synchronizationProcess = Mvx.Resolve<ISynchronizationProcess>();
 
                 await synchronizationProcess.SynchronizeAsync(
-                    new Progress<SyncProgressInfo>(o =>
-                    {
-                        SetStatus(ConnectionStatus.Sync, o.Description);
-                    }), CancellationToken.None);
+                        new Progress<SyncProgressInfo>(o => { SetStatus(ConnectionStatus.Sync, o.Description); }),
+                        CancellationToken.None);
+                }
             }
             finally
             {

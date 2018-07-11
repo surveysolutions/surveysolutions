@@ -299,13 +299,16 @@ namespace WB.Tests.Abc.TestFactories
                 var fromClient = clientsMap[from];
                 int delayIdx = 0;
 
-                // google services notify on outgoing progress
-                fromClient.RecievePayloadTransferUpdate(this, to, new NearbyPayloadTransferUpdate
+                if (payload.Type != PayloadType.Bytes)
                 {
-                    Status = TransferStatus.InProgress,
-                    BytesTransferred = 0,
-                    Id = payload.Id
-                });
+                    // google services notify on outgoing progress
+                    fromClient.RecievePayloadTransferUpdate(this, to, new NearbyPayloadTransferUpdate
+                    {
+                        Status = TransferStatus.InProgress,
+                        BytesTransferred = 0,
+                        Id = payload.Id
+                    });
+                }
 
                 fromClient.RecievePayloadTransferUpdate(this, to, new NearbyPayloadTransferUpdate
                 {
@@ -321,12 +324,15 @@ namespace WB.Tests.Abc.TestFactories
 
                 await NextDelay();
 
-                toClient.RecievePayloadTransferUpdate(this, from, new NearbyPayloadTransferUpdate
+                if (payload.Type != PayloadType.Bytes)
                 {
-                    Status = TransferStatus.InProgress,
-                    BytesTransferred = 0,
-                    Id = payload.Id
-                });
+                    toClient.RecievePayloadTransferUpdate(this, from, new NearbyPayloadTransferUpdate
+                    {
+                        Status = TransferStatus.InProgress,
+                        BytesTransferred = 0,
+                        Id = payload.Id
+                    });
+                }
 
                 await NextDelay();
 
