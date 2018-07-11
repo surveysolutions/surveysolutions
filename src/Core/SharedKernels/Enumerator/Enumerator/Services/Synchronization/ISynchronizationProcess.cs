@@ -7,7 +7,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Synchronization
 {
     public interface ISynchronizationProcess
     {
-        Task SyncronizeAsync(IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken);
+        Task SynchronizeAsync(IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken);
     }
 
     public class SyncProgressInfo

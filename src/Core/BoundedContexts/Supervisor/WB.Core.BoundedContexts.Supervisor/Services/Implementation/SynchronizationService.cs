@@ -19,8 +19,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
         protected override string ApiUrl => "api/supervisor/";
 
         protected string InterviewersController => string.Concat(ApplicationUrl, "/interviewers");
-        protected string BrokenInterviewPackagesController => string.Concat(ApplicationUrl, "/brokenInterviews");
         protected string ExceptionsController => string.Concat(ApplicationUrl, "/interviewerExceptions");
+        protected string BrokenInterviewPackagesController => string.Concat(ApplicationUrl, "/brokenInterviews");
+        protected string InterviewerTabletInfosController => string.Concat(ApplicationUrl, "/interviewerTabletInfos");
+
 
         public SynchronizationService(IPrincipal principal, IRestService restService,
             ISupervisorSettings settings, ISupervisorSyncProtocolVersionProvider syncProtocolVersionProvider,
@@ -62,6 +64,16 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
             return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
                 url: $"{this.ExceptionsController}",
                 request: exceptions,
+                credentials: this.restCredentials,
+                token: cancellationToken));
+        }
+
+        public Task UploadTabletInfoAsync(DeviceInfoApiView deviceInfoApiView,
+            CancellationToken cancellationToken)
+        {
+            return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
+                url: $"{this.InterviewerTabletInfosController}",
+                request: deviceInfoApiView,
                 credentials: this.restCredentials,
                 token: cancellationToken));
         }

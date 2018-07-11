@@ -7,6 +7,6 @@ namespace WB.Core.SharedKernels.Enumerator.Services.MapSynchronization
 {
     public interface IMapSyncProvider
     {
-        Task SyncronizeAsync(IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken);
+        Task SynchronizeAsync(IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken);
     }
 }

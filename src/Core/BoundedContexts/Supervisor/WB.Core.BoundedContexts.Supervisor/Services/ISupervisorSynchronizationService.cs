@@ -14,5 +14,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Services
         Task<List<InterviewerFullApiView>> GetInterviewersAsync(CancellationToken cancellationToken);
         Task UploadBrokenInterviewPackageAsync(BrokenInterviewPackageApiView brokenInterviewPackage, CancellationToken cancellationToken);
         Task UploadInterviewerExceptionsAsync(List<UnexpectedExceptionFromInterviewerView> exceptions, CancellationToken cancellationToken);
+        Task UploadTabletInfoAsync(DeviceInfoApiView deviceInfoApiView, CancellationToken cancellationToken);
     }
 }

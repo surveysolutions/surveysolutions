@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Supervisor.Properties;
 using WB.Core.BoundedContexts.Supervisor.Views;
 using WB.Core.SharedKernels.DataCollection.WebApi;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Views;
@@ -16,14 +17,17 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
         private readonly IPlainStorage<BrokenInterviewPackageView, int?> brokenInterviewPackageStorage;
         private readonly ISupervisorSynchronizationService synchronizationService;
         private readonly IPlainStorage<UnexpectedExceptionFromInterviewerView, int> unexpectedExceptionsStorage;
+        private readonly ITabletInfoService tabletInfoService;
 
         public TechInfoSynchronizer(IPlainStorage<BrokenInterviewPackageView, int?> brokenInterviewPackageStorage,
             ISupervisorSynchronizationService synchronizationService, 
-            IPlainStorage<UnexpectedExceptionFromInterviewerView, int> unexpectedExceptionsStorage)
+            IPlainStorage<UnexpectedExceptionFromInterviewerView, int> unexpectedExceptionsStorage,
+            ITabletInfoService tabletInfoService)
         {
             this.brokenInterviewPackageStorage = brokenInterviewPackageStorage;
             this.synchronizationService = synchronizationService;
             this.unexpectedExceptionsStorage = unexpectedExceptionsStorage;
+            this.tabletInfoService = tabletInfoService;
         }
 
         public async Task SynchronizeAsync(IProgress<SyncProgressInfo> progress, SynchronizationStatistics statistics, CancellationToken cancellationToken)
@@ -69,6 +73,17 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
             var exceptions = this.unexpectedExceptionsStorage.LoadAll().ToList();
             await this.synchronizationService.UploadInterviewerExceptionsAsync(exceptions, cancellationToken);
             this.unexpectedExceptionsStorage.RemoveAll();
+
+            while (true)
+            {
+                var tabletInfo = tabletInfoService.GetTopRecordForSync();
+                if (tabletInfo == null)
+                    break;
+                
+                await this.synchronizationService.UploadTabletInfoAsync(tabletInfo.DeviceInfo, cancellationToken);
+
+                tabletInfoService.Remove(tabletInfo.Id);
+            };
         }
     }
 }
