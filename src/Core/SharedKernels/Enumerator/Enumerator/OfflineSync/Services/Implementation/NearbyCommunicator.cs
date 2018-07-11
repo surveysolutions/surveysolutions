@@ -10,7 +10,6 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Entities;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
-using WB.Core.SharedKernels.Enumerator.Utils;
 
 namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
 {
@@ -18,17 +17,19 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
     {
         public static TimeSpan MessageAwaitingTimeout = TimeSpan.FromSeconds(30);
 
-        private readonly ConcurrentDictionary<long, IPayload> incomingPayloads =
-            new ConcurrentDictionary<long, IPayload>();
-
-        private readonly ConcurrentDictionary<long, IPayload> outgoingPayloads =
-            new ConcurrentDictionary<long, IPayload>();
-
         private readonly IPayloadProvider payloadProvider;
         private readonly IPayloadSerializer payloadSerializer;
+        private readonly IConnectionsApiLimits connectionsApiLimits;
         private readonly ILogger logger;
-        private readonly ConcurrentDictionary<long, IncomingPayloadInfo> payloadsInfo = new ConcurrentDictionary<long, IncomingPayloadInfo>();
+
+        /// in all dictionaries below:
+        ///     long - is the payload ID provided by Nearby runtime
+        ///     Guid - is our on correlation id
+        private readonly ConcurrentDictionary<long, PayloadHeader> headers = new ConcurrentDictionary<long, PayloadHeader>();
         private readonly ConcurrentDictionary<Guid, TaskCompletionSourceWithProgress> pending = new ConcurrentDictionary<Guid, TaskCompletionSourceWithProgress>();
+
+        private readonly ConcurrentDictionary<long, IPayload> incomingPayloads = new ConcurrentDictionary<long, IPayload>();
+        private readonly ConcurrentDictionary<long, IPayload> outgoingPayloads = new ConcurrentDictionary<long, IPayload>();
 
         private readonly IRequestHandler requestHandler;
 
@@ -37,17 +38,52 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
         public NearbyCommunicator(IRequestHandler requestHandler, 
             IPayloadProvider payloadProvider, 
             IPayloadSerializer payloadSerializer, 
+            IConnectionsApiLimits connectionsApiLimits,
             ILogger logger)
         {
             this.requestHandler = requestHandler;
             this.payloadProvider = payloadProvider;
             this.payloadSerializer = payloadSerializer;
+            this.connectionsApiLimits = connectionsApiLimits;
             this.logger = logger;
             IncomingInfo = incomingDataInfo.AsObservable();
         }
-
+        
+        /// <summary>
+        /// Subscribe for all incoming packages information
+        /// </summary>
         public IObservable<IncomingDataInfo> IncomingInfo { get; }
 
+        /// <summary>
+        /// Sending TRequest payload to remote endpoint and awaiting for TResponse response
+        /// </summary>
+        /// <remarks>
+        /// Each communication occure is two step process.
+        ///     1. Sending small <see cref="PayloadHeader">`header`</see> package. That describe intent of sender, message type and size
+        ///     2. Sending payload wrapped in internal <see cref="PayloadContent">NearbyPayload</see> wrapper
+        ///
+        /// Same steps occure in response.
+        ///
+        /// So sending one message generate following data flow:
+        ///
+        ///     A -- header  --> B
+        ///     A -- payload --> B
+        ///     B -- header  --> A
+        ///     B -- payload --> B
+        ///
+        /// In Nearby we use two types of messages: BYTES and STREAM
+        /// BYTES used for info/header messages
+        /// STREAM for message.
+        ///
+        /// </remarks>
+        /// <typeparam name="TRequest">ICommunicationMessage request</typeparam>
+        /// <typeparam name="TResponse">ICommunicationMessage response</typeparam>
+        /// <param name="connection">Connection established with Nearby</param>
+        /// <param name="endpoint">Remote destination endpoint</param>
+        /// <param name="message">Request to send</param>
+        /// <param name="progress">Progress track</param>
+        /// <param name="cancellationToken">Cancellation token</param>
+        /// <returns></returns>
         public async Task<TResponse> SendAsync<TRequest, TResponse>(INearbyConnection connection, string endpoint,
             TRequest message, IProgress<CommunicationProgress> progress, CancellationToken cancellationToken)
             where TRequest : ICommunicationMessage
@@ -58,15 +94,11 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             try
             {
                 var tsc = new TaskCompletionSourceWithProgress(progress, cancellationToken);
-                pending.TryAdd(payloads.id, tsc);
+                pending.TryAdd(payloads.CorrelationId, tsc);
 
-                Debug("SEND.Message", true, endpoint, payloads.id, PayloadType.Bytes, "");
-
-                // sending info about outgoing package
-                await SendOverWire(connection, endpoint, payloads.info);
-
-                // sending message package
-                await SendOverWire(connection, endpoint, payloads.message);
+                Log("SEND.Message", true, endpoint, payloads.CorrelationId, PayloadType.Bytes, "");
+                
+                await SendOverWire(connection, endpoint, payloads);
 
                 var response = await tsc.Task;
 
@@ -83,40 +115,45 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             }
             catch (TaskCanceledException)
             {
-                pending.TryRemove(payloads.id, out _);
+                pending.TryRemove(payloads.CorrelationId, out _);
                 throw;
             }
         }
 
-        public async Task RecievePayloadAsync(INearbyConnection nearbyConnection, string endpointId, IPayload payload)
+        public async Task RecievePayloadAsync(INearbyConnection nearbyConnection, string endpoint, IPayload payload)
         {
             incomingPayloads.GetOrAdd(payload.Id, payload);
 
             switch (payload.Type)
             {
                 case PayloadType.Bytes:
-                    var info = payloadSerializer.FromPayload<IncomingPayloadInfo>(payload.Bytes);
+                    var header = payloadSerializer.FromPayload<PayloadHeader>(payload.Bytes);
 
-                    Debug("RECEIVE", false, endpointId, payload.Id, payload.Type, $"Info: {info.NearbyPayloadId}");
-                    payloadsInfo.TryAdd(info.PayloadId, info);
+                    Log("RECEIVE", false, endpoint, payload.Id, payload.Type, $"Info: {header.CorrelationId}");
+                    headers.TryAdd(header.PayloadId, header);
 
                     incomingDataInfo.OnNext(new IncomingDataInfo
                     {
-                        Type = info.PayloadType,
-                        Endpoint = endpointId,
-                        Name = info.Name,
+                        Type = header.PayloadType,
+                        Endpoint = endpoint,
+                        Name = header.Name,
                         BytesTransfered = 0,
                         BytesPerSecond = 0,
-                        TotalBytes = info.Size,
+                        TotalBytes = header.Size,
                         FlowDirection = DataFlowDirection.In,
                         IsCompleted = false
                     });
 
+                    if (header.PayloadContent != null)
+                    {
+                        await HandlePayloadContent(nearbyConnection, endpoint, header.PayloadContent);
+                    }
+
                     break;
                 case PayloadType.Stream:
-                    Debug("RECEIVE", false, endpointId, payload.Id, payload.Type, $"Start reading");
+                    Log("RECEIVE", false, endpoint, payload.Id, payload.Type, $"Start reading");
                     await payload.ReadStreamAsync();
-                    Debug("RECEIVE", false, endpointId, payload.Id, payload.Type, $"Done reading");
+                    Log("RECEIVE", false, endpoint, payload.Id, payload.Type, $"Done reading");
                     break;
             }
         }
@@ -139,57 +176,31 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                 throw new ApplicationException("Recieve payload transfer update before RecievePayload call");
             }
 
-            Debug("UPDATE", isIncoming, endpoint, update.Id, payload.Type, update.Status.ToString());
+            Log("UPDATE", isIncoming, endpoint, update.Id, payload.Type, update.Status.ToString());
+            PayloadHeader header;
 
             switch (update.Status)
             {
                 case TransferStatus.Success:
-                    // handle info package
                     if (payload.Type == PayloadType.Bytes) return;
 
                     if (isIncoming)
                     {
                         var bytes = await payload.BytesFromStream;
-
-                        var message = payloadSerializer.FromPayload<NearbyPayload>(bytes);
-
-                        if (message.IsRequest)
-                        {
-                            ICommunicationMessage response;
-                            try
-                            {
-                                response = await requestHandler.Handle(message.Payload);
-                            }
-                            catch (Exception e)
-                            {
-                                //TODO: HANDLE ERROR SEND AS RESPONSE IN INFO
-                                var errorResponse = PreparePayload(message.Id, new FailedResponse(), false, e.Message);
-
-                                await SendOverWire(nearbyConnection, endpoint, errorResponse.info);
-                                throw;
-                            }
-
-                            var responsePayload = PreparePayload(message.Id, response, false);
-
-                            await SendOverWire(nearbyConnection, endpoint, responsePayload.info);
-                            await SendOverWire(nearbyConnection, endpoint, responsePayload.message);
-                        }
-                        else
-                        {
-                            if (pending.TryGetValue(message.Id, out var tsc)) tsc.SetResult(message.Payload);
-                        }
+                        var payloadContent = payloadSerializer.FromPayload<PayloadContent>(bytes);
+                        await HandlePayloadContent(nearbyConnection, endpoint, payloadContent);
                     }
-
-                    if (payloadsInfo.TryGetValue(update.Id, out var payloadInfo))
+                    
+                    if (headers.TryGetValue(update.Id, out header))
                     {
                         incomingDataInfo.OnNext(new IncomingDataInfo
                         {
-                            Type = payloadInfo.PayloadType,
+                            Type = header.PayloadType,
                             Endpoint = endpoint,
-                            Name = payloadInfo.Name,
-                            BytesTransfered = payloadInfo.Size,
+                            Name = header.Name,
+                            BytesTransfered = header.Size,
                             BytesPerSecond = 0,
-                            TotalBytes = payloadInfo.Size,
+                            TotalBytes = header.Size,
                             FlowDirection = isIncoming ? DataFlowDirection.In : DataFlowDirection.Out,
                             IsCompleted = false
                         });
@@ -198,45 +209,43 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                     break;
                 case TransferStatus.Failure:
                     // TODO: revise what else need to be done in case of TransferFailure
-                    if (payloadsInfo.TryRemove(update.Id, out var failureInfo))
+                    if (headers.TryRemove(update.Id, out header))
                     {
                         incomingDataInfo.OnNext(new IncomingDataInfo
                         {
-                            Type = failureInfo.PayloadType,
+                            Type = header.PayloadType,
                             Endpoint = endpoint,
-                            Name = failureInfo.Name,
+                            Name = header.Name,
                             BytesTransfered = 0,
                             BytesPerSecond = 0,
-                            TotalBytes = failureInfo.Size,
+                            TotalBytes = header.Size,
                             FlowDirection = isIncoming ? DataFlowDirection.In : DataFlowDirection.Out,
                             IsCompleted = true
                         });
 
-                        if (pending.TryRemove(failureInfo.NearbyPayloadId, out var failure))
+                        if (pending.TryRemove(header.CorrelationId, out var failure))
                             failure.SetCanceled();
-
                     }
 
                     break;
-                case TransferStatus.InProgress:
-                {
-                    if (payloadsInfo.TryGetValue(update.Id, out var info))
+                case TransferStatus.InProgress:{
+                    if (headers.TryGetValue(update.Id, out header))
                     {
-                        if (pending.TryGetValue(info.NearbyPayloadId, out var pendingValue))
+                        if (pending.TryGetValue(header.CorrelationId, out var pendingValue))
                         {
                             pendingValue.Debounce();
 
-                            pendingValue.UpdateProgress(update.BytesTransferred, info.Size);
+                            pendingValue.UpdateProgress(update.BytesTransferred, header.Size);
                         }
 
                         incomingDataInfo.OnNext(new IncomingDataInfo
                         {
-                            Type = info.PayloadType,
+                            Type = header.PayloadType,
                             Endpoint = endpoint,
-                            Name = info.Name,
+                            Name = header.Name,
                             BytesTransfered = update.BytesTransferred,
                             BytesPerSecond = 0,
-                            TotalBytes = info.Size,
+                            TotalBytes = header.Size,
                             FlowDirection = isIncoming ? DataFlowDirection.In : DataFlowDirection.Out,
                             IsCompleted = false
                         });
@@ -248,82 +257,153 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                     throw new ArgumentOutOfRangeException();
             }
         }
-        
-        private Task SendOverWire(INearbyConnection nearbyConnection, string endpoint, IPayload payload)
-        {
-            outgoingPayloads.AddOrUpdate(payload.Id, payload, (id, p) => payload);
-            Debug("SEND", true, endpoint, payload.Id, payload.Type, "Send over wire");
 
-            return nearbyConnection.SendPayloadAsync(endpoint, payload);
+        private async Task HandlePayloadContent(INearbyConnection nearbyConnection, string endpoint, PayloadContent payloadContent)//, byte[] bytes)
+        {
+            if (payloadContent.IsRequest)
+            {
+                ICommunicationMessage response;
+                try
+                {
+                    response = await requestHandler.Handle(payloadContent.Payload);
+                }
+                catch (Exception e)
+                {
+                    //TODO: HANDLE ERROR SEND AS RESPONSE IN INFO
+                    var errorResponse = PreparePayload(payloadContent.CorrelationId, new FailedResponse(), false, e.Message);
+
+                    await SendOverWire(nearbyConnection, endpoint, errorResponse);
+                    throw;
+                }
+
+                var responsePayload = PreparePayload(payloadContent.CorrelationId, response, false);
+                await SendOverWire(nearbyConnection, endpoint, responsePayload);
+            }
+            else
+            {
+                if (pending.TryGetValue(payloadContent.CorrelationId, out var tsc)) tsc.SetResult(payloadContent.Payload);
+            }
         }
 
-        private void Debug(string action, bool outgoing, string endpoint, object payloadId, PayloadType type,
+        private async Task SendOverWire(INearbyConnection nearbyConnection, string endpoint, Package package)
+        {
+            await SendOverWire(package.Header);
+            CommunicationSession.Current.BytesSend(package.HeaderBytes.LongLength);
+            CommunicationSession.Current.RequestsTotal += 1;
+
+            if (package.HeaderPayload.PayloadContent == null)
+            {
+                await SendOverWire(package.Content);
+                CommunicationSession.Current.BytesSend(package.PayloadContentBytes.LongLength);
+                CommunicationSession.Current.RequestsTotal += 1;
+            }
+
+            Task SendOverWire(IPayload payload)
+            {
+                outgoingPayloads.AddOrUpdate(payload.Id, payload, (id, p) => payload);
+                Log("SEND", true, endpoint, payload.Id, payload.Type, "Send over wire");
+
+                return nearbyConnection.SendPayloadAsync(endpoint, payload);
+            }
+        }
+        
+        private void Log(string action, bool outgoing, string endpoint, object payloadId, PayloadType type,
             string message)
         {
-            this.logger.Info($"[{action,-11}] {(outgoing ? "====>" : "<====")} {endpoint}[{payloadId}] #{type.ToString()} {message}");
+            var log = $"[{action,-11}] {(outgoing ? "====>" : "<====")} {endpoint}[{payloadId}] #{type.ToString()} {message}";
+            this.logger.Info(log);
+            Debug.WriteLine(log);
         }
 
-        private (Guid id, IPayload message, IPayload info) PreparePayload(Guid correlationGuid,
-            ICommunicationMessage payload, bool isRequest, string errorMessage = null)
+        private Package PreparePayload(Guid correlationId, ICommunicationMessage payload, bool isRequest, string errorMessage = null)
         {
-            var nearbyPayload = new NearbyPayload(correlationGuid, payload, isRequest);
-            var payloadBytes = payloadSerializer.ToPayload(nearbyPayload);
-            var outgoingPayload = payloadProvider.AsStream(payloadBytes);
+            var package = new Package();
+            package.CorrelationId = correlationId;
+            package.PayloadContent = new PayloadContent(correlationId, payload, isRequest);
+            package.PayloadContentBytes = payloadSerializer.ToPayload(package.PayloadContent);
+            package.Content = payloadProvider.AsStream(package.PayloadContentBytes);
 
-            var info = new IncomingPayloadInfo(nearbyPayload, payloadBytes, outgoingPayload);
-
+            package.HeaderPayload = new PayloadHeader(package.PayloadContent, package.PayloadContentBytes, package.Content);
+            
             if (errorMessage != null)
             {
-                info.IsSuccess = false;
-                info.Message = errorMessage;
+                package.HeaderPayload.IsSuccess = false;
+                package.HeaderPayload.Message = errorMessage;
             }
+            
+            package.HeaderBytes = payloadSerializer.ToPayload(package.HeaderPayload);
+            package.HeaderPayload.PayloadType = payload.GetType().FullName;
+            headers.TryAdd(package.Content.Id, package.HeaderPayload);
+            
+            if (package.CanFitIntoHeader(connectionsApiLimits.MaxBytesLength))
+            {
+                package.HeaderPayload.PayloadContent = package.PayloadContent;
 
-            info.PayloadType = payload.GetType().FullName;
-
-            payloadsInfo.TryAdd(outgoingPayload.Id, info);
-
-            var infoPayload = payloadProvider.AsBytes(payloadSerializer.ToPayload(info));
-
-            return (nearbyPayload.Id, outgoingPayload, infoPayload);
+                package.HeaderBytes = payloadSerializer.ToPayload(package.HeaderPayload);
+            }
+            
+            package.Header = payloadProvider.AsBytes(package.HeaderBytes);
+            
+            return package;
         }
 
-        private class NearbyPayload
+        private class Package
         {
-            public NearbyPayload(Guid id, ICommunicationMessage payload, bool isRequest)
+            public Guid CorrelationId { get; set; }
+            public IPayload Content { get; set; }
+            public IPayload Header { get; set; }
+            public PayloadContent PayloadContent { get; set; }
+            public byte[] PayloadContentBytes { get; set; }
+            public PayloadHeader HeaderPayload { get; set; }
+            public byte[] HeaderBytes { get; set; }
+            
+            public bool CanFitIntoHeader(long limit, long boundaryDelta = 1024)
             {
-                Id = id;
+                return boundaryDelta + PayloadContentBytes.LongLength + HeaderBytes.Length < limit;
+            }
+        }
+
+        private class PayloadContent
+        {
+            public PayloadContent(Guid correlationId, ICommunicationMessage payload, bool isRequest)
+            {
+                CorrelationId = correlationId;
                 Payload = payload;
                 IsRequest = isRequest;
+                SessionId = CommunicationSession.Current.SessionId;
             }
 
-            public Guid Id { get; }
+            public Guid CorrelationId { get; }
+            public Guid SessionId { get; }
 
             public bool IsRequest { get; }
 
             public ICommunicationMessage Payload { get; }
         }
 
-        private class IncomingPayloadInfo
+        private class PayloadHeader
         {
-            // ReSharper disable once UnusedMember.Local - used by Newtonsoft json
-            public IncomingPayloadInfo()
+            // ReSharper disable once UnusedMember.Local - used by Newtonsoft.Json
+            public PayloadHeader()
             {
             }
 
-            public IncomingPayloadInfo(NearbyPayload nearbyPayload, byte[] payloadData, IPayload payload)
+            public PayloadHeader(PayloadContent payloadContent, byte[] payloadData, IPayload payload)
             {
-                NearbyPayloadId = nearbyPayload.Id;
+                CorrelationId = payloadContent.CorrelationId;
+                SessionId = payloadContent.SessionId;
                 Size = payloadData.LongLength;
                 PayloadId = payload.Id;
             }
 
-            public long Size { get; }
-            public Guid NearbyPayloadId { get; }
+            public long Size { get; set; }
+            public Guid CorrelationId { get; set; }
+            public Guid SessionId { get; set; }
             public string PayloadType { get; set; }
             public string Name { get; set; }
-            public long PayloadId { get; }
+            public long PayloadId { get; set; }
             public string Message { get; set; }
-
+            public PayloadContent PayloadContent { get; set; }
             public bool IsSuccess { get; set; } = true;
         }
 

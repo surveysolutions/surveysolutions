@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reactive.Subjects;
@@ -36,6 +37,7 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
         private void Trace(string message)
         {
             logger.Info(message);
+            Debug.WriteLine("NearbyConnection - " + message);
         }
 
         public Task StartDiscovery(string serviceName)
