@@ -773,16 +773,18 @@ namespace WB.Tests.Abc.TestFactories
                 Mock.Of<IPlainStorage<InterviewView>>());
         }
 
-        public SupervisorInterviewsHandler SupervisorQuestionnaireHandler(ILiteEventBus eventBus = null,
+        public SupervisorInterviewsHandler SupervisorInterviewsHandler(ILiteEventBus eventBus = null,
             IEnumeratorEventStorage eventStorage = null,
-            IPlainStorage<InterviewView> interviews = null)
+            IPlainStorage<InterviewView> interviews = null,
+            ICommandService commandService = null,
+            IJsonAllTypesSerializer serializer = null)
         {
             return new SupervisorInterviewsHandler(
                 eventBus ?? Mock.Of<ILiteEventBus>(),
                 eventStorage ?? Mock.Of<IEnumeratorEventStorage>(),
                 interviews ?? new InMemoryPlainStorage<InterviewView>(),
-                new JsonAllTypesSerializer(),
-                Mock.Of<ICommandService>(), 
+                serializer ?? new JsonAllTypesSerializer(),
+                commandService ?? Mock.Of<ICommandService>(), 
                 Mock.Of<ILogger>());
         }
     }
