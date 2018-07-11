@@ -15,7 +15,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views
 {
-    public class OfflineInterviewerSyncViewModel : BaseOfflineSyncViewModel, IOfflineSyncViewModel
+    public class OfflineInterviewerSyncViewModel : BaseOfflineSyncViewModel
     {
         private readonly IPlainStorage<InterviewerIdentity> interviewersPlainStorage;
         private readonly ISynchronizationMode synchronizationMode;
@@ -37,7 +37,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             SetStatus(ConnectionStatus.WaitingForGoogleApi);
         }
 
-        public async Task OnGoogleApiReady()
+        protected override async Task OnGoogleApiReady()
         {
             SetStatus(ConnectionStatus.StartDiscovering);
             await StopDiscovery();

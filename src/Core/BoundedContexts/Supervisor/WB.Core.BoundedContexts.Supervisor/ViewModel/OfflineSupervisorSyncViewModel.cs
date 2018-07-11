@@ -11,7 +11,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 {
-    public class OfflineSupervisorSyncViewModel : BaseOfflineSyncViewModel, IOfflineSyncViewModel
+    public class OfflineSupervisorSyncViewModel : BaseOfflineSyncViewModel
     {
         private readonly IPlainStorage<SupervisorIdentity> supervisorStorage;
         private readonly string serviceName;
@@ -32,7 +32,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 
         public IMvxAsyncCommand Restart => new MvxAsyncCommand(OnGoogleApiReady);
 
-        public async Task OnGoogleApiReady()
+        protected override async Task OnGoogleApiReady()
         {
             Log.Trace("StartAdvertising");
 
