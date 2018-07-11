@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -38,6 +39,42 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Dashboard
 
             SupervisorDashboardInterviewViewModel model = (SupervisorDashboardInterviewViewModel)waitingForSupervisorAction.First();
             Assert.That(model.InterviewId, Is.EqualTo(Id.g1));
+        }
+
+        [Test]
+        public void when_IsWaitingForSupervisorActionInterview_and_interview_is_waiting_for_supervisor_action_then_should_be_true()
+        {
+            //arrange
+            var principal = Create.Service.Principal(Id.gA);
+
+            var interviews = Create.Storage.SqliteInmemoryStorage(
+                Create.Entity.InterviewView(interviewId: Id.g1, responsibleId: Id.gA, status: InterviewStatus.RejectedBySupervisor),
+                Create.Entity.InterviewView(interviewId: Id.g2, responsibleId: Id.gA, status: InterviewStatus.ApprovedBySupervisor));
+
+            var accessor = CreateItemsAccessor(interviews: interviews, principal: principal);
+
+            //act
+            var isWaitingForSupervisorActionInterview = accessor.IsWaitingForSupervisorActionInterview(Id.g1);
+            //assert
+            Assert.That(isWaitingForSupervisorActionInterview, Is.True);
+        }
+
+        [Test]
+        public void when_IsOutboxInterview_and_interview_is_in_outbox_then_should_be_true()
+        {
+            //arange
+            var principal = Create.Service.Principal(Id.gA);
+
+            var interviews = Create.Storage.SqliteInmemoryStorage(
+                Create.Entity.InterviewView(interviewId: Id.g1, responsibleId: Id.gA, status: InterviewStatus.ApprovedBySupervisor),
+                Create.Entity.InterviewView(interviewId: Id.g2, responsibleId: Id.gA, status: InterviewStatus.ApprovedBySupervisor));
+
+            var accessor = CreateItemsAccessor(interviews: interviews, principal: principal);
+
+            //act
+            var isOutboxInterview = accessor.IsOutboxInterview(Id.g1);
+            //assert
+            Assert.That(isOutboxInterview, Is.True);
         }
 
         private DashboardItemsAccessor CreateItemsAccessor(
