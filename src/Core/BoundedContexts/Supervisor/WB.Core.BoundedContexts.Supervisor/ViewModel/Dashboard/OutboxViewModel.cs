@@ -52,6 +52,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             var interviewIndex = 1;
             foreach (var dashboardItem in this.dashboardItemsAccessor.Outbox())
             {
+                yield return dashboardItem;
+
                 if (dashboardItem is SupervisorDashboardInterviewViewModel interviewDashboardItem &&
                     interviewDashboardItem.InterviewId == lastVisitedInterviewId)
                 {
@@ -59,8 +61,6 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
                 }
 
                 interviewIndex++;
-
-                yield return dashboardItem;
             }
         }
     }
