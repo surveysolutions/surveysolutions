@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading;
 using System.Web.Http;
@@ -82,6 +83,9 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor
 
             config.TypedRoute("api/supervisor/v1/brokenInterviews",
                 c => c.Action<BrokenInterviewPackageApiV1Controller>(x => x.Post(Param.Any<BrokenInterviewPackageApiView>())));
+
+            config.TypedRoute("api/supervisor/v1/interviewerExceptions",
+                c => c.Action<InterviewerExceptionsApiV1Controller>(x => x.Post(Param.Any<List<InterviewerExceptionInfo>>())));
 
             config.TypedRoute("api/supervisor/v1/interviews", c => c.Action<InterviewsApiV1Controller>(x => x.Get()));
 

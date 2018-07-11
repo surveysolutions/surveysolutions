@@ -61,11 +61,20 @@ namespace WB.Core.BoundedContexts.Supervisor.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Upload broken interview packages.
+        ///   Looks up a localized string similar to Uploading broken interview packages.
         /// </summary>
         internal static string Synchronization_UploadBrokenInterviewPackages {
             get {
                 return ResourceManager.GetString("Synchronization_UploadBrokenInterviewPackages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Uploading interviewer error messages.
+        /// </summary>
+        internal static string Synchronization_UploadExceptions {
+            get {
+                return ResourceManager.GetString("Synchronization_UploadExceptions", resourceCulture);
             }
         }
     }

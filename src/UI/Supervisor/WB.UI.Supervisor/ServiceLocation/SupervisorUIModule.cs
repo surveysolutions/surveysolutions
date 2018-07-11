@@ -69,7 +69,7 @@ namespace WB.UI.Supervisor.ServiceLocation
             registry.Bind<IQuestionnaireDownloader, QuestionnaireDownloader>();
             registry.Bind<IAssignmentsSynchronizer, AssignmentsSynchronizer>();
             registry.Bind<IAuditLogSynchronizer, AuditLogSynchronizer>();
-            registry.Bind<IBrokenInterviewPackageSynchronizer, BrokenInterviewPackageSynchronizer>();
+            registry.Bind<ITechInfoSynchronizer, TechInfoSynchronizer>();
             registry.Bind<IMapSyncProvider, MapSyncProvider>();
             registry.Bind<IMapService, MapService>();
             //registry.BindAsSingleton<ILastCreatedInterviewStorage, LastCreatedInterviewStorage>();
