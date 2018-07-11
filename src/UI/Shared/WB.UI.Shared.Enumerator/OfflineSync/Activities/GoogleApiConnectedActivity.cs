@@ -13,49 +13,54 @@ using AlertDialog = Android.Support.V7.App.AlertDialog;
 
 namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
 {
-    public abstract class GoogleApiConnectedActivity<TViewModel> 
-        : BaseActivity<TViewModel>
+    public abstract class GoogleApiConnectedActivity<TViewModel>
+        : BaseActivity<TViewModel>,
+            GoogleApiClient.IConnectionCallbacks, GoogleApiClient.IOnConnectionFailedListener
             where TViewModel : class, IMvxViewModel, IOfflineSyncViewModel
     {
         protected GoogleApiClient GoogleApi;
         protected TaskCompletionSource<bool> ApiConnected;
-        
+
         protected override void OnCreate(Bundle bundle)
         {
             this.GoogleApi = new GoogleApiClient.Builder(this)
-                .EnableAutoManage(this, result =>
-                {
-                    if (result.ErrorCode == ConnectionResult.ServiceVersionUpdateRequired)
-                    {
-                        new AlertDialog.Builder(this)
-                            .SetTitle("Google API services require update")
-                            .SetMessage("Offline synchronization require Google API Services . Please either update t")
-                            .SetNegativeButton("Do nothing", (arg, sender) => { })
-                            .SetPositiveButton("Open in Google Play", (arg, sender) =>
-                            {
-                                Dialog dialog = GoogleApiAvailability.Instance.GetErrorDialog(this,
-                                    GoogleApiAvailability.Instance.IsGooglePlayServicesAvailable(this), 1);
-                                dialog.Show();
-                            })
-                            .SetNeutralButton("Search Google for Google Plays services APK", (arg, sender) => { })
-                            .Create();
-                    }
+                //.EnableAutoManage(this), result =>
+                //{
+                //    if (result.ErrorCode == ConnectionResult.ServiceVersionUpdateRequired)
+                //    {
+                //        new AlertDialog.Builder(this)
+                //            .SetTitle("Google API services require update")
+                //            .SetMessage("Offline synchronization require Google API Services . Please either update t")
+                //            .SetNegativeButton("Do nothing", (arg, sender) => { })
+                //            .SetPositiveButton("Open in Google Play", (arg, sender) =>
+                //            {
+                //                Dialog dialog = GoogleApiAvailability.Instance.GetErrorDialog(this,
+                //                    GoogleApiAvailability.Instance.IsGooglePlayServicesAvailable(this), 1);
+                //                dialog.Show();
+                //            })
+                //            .SetNeutralButton("Search Google for Google Plays services APK", (arg, sender) => { })
+                //            .Create();
+                //    }
 
-                    if (result.HasResolution)
-                    {
-                        result.StartResolutionForResult(this, result.ErrorCode);
-                    }
+                //    if (result.HasResolution)
+                //    {
+                //        result.StartResolutionForResult(this, result.ErrorCode);
+                //    }
 
-                    this.ApiConnected.SetResult(false);
-                })
-                .AddConnectionCallbacks(() =>
-                {
-                    this.ApiConnected.SetResult(true);
-                    this.ViewModel.OnGoogleApiReady();
-                })
+                //    this.ApiConnected.SetResult(false);
+                //})
+                //.AddConnectionCallbacks(b =>
+                //{
+                //    this.ApiConnected.SetResult(true);
+                //}, i =>
+                //{
+
+                //})
+                .AddConnectionCallbacks(this)
+                .AddOnConnectionFailedListener(this)
                 .AddApi(NearbyClass.CONNECTIONS_API)
                 .Build();
-            
+
             var communicator = ServiceLocator.Current.GetInstance<INearbyConnection>();
 
             if (communicator is NearbyConnection gc)
@@ -72,11 +77,29 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
                     GoogleApiAvailability.Instance.GetErrorDialog(this, isGooglePlayServicesAvailable, 9000).Show();
                 }
             }
+            
+            RestoreGoogleApiConnectionIfNeeded();
+
+            base.OnCreate(bundle);
+        }
+
+        protected override void OnViewModelSet()
+        {
+            base.OnViewModelSet();
+            this.ViewModel.SetGoogleAwaiter(this.ApiConnected.Task);
+        }
+
+        private void RestoreGoogleApiConnectionIfNeeded()
+        {
+            if (GoogleApi.IsConnected) return;
 
             this.ApiConnected = new TaskCompletionSource<bool>();
             this.GoogleApi.Connect();
+        }
 
-            base.OnCreate(bundle);
+        public void OnConnected(Bundle connectionHint)
+        {
+            ApiConnected?.SetResult(true);
         }
 
         protected override void OnStart()
@@ -85,15 +108,25 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
             {
                 RestoreGoogleApiConnectionIfNeeded();
             }
+
             base.OnStart();
         }
-        
-        private void RestoreGoogleApiConnectionIfNeeded()
-        {
-            if (GoogleApi.IsConnected) return;
 
-            this.ApiConnected = new TaskCompletionSource<bool>();
-            this.GoogleApi.Connect();
+        protected override void OnStop()
+        {
+            GoogleApi?.Disconnect();
+
+            base.OnStop();
+        }
+
+        public void OnConnectionSuspended(int cause)
+        {
+            
+        }
+
+        public void OnConnectionFailed(ConnectionResult result)
+        {
+            ApiConnected?.SetResult(false);
         }
     }
 }
