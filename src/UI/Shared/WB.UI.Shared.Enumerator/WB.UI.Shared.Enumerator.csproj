@@ -369,6 +369,7 @@
     <Compile Include="EnumeratorUIModule.cs" />
     <Compile Include="Autofac\MvxIoCProvider.cs" />
     <Compile Include="OfflineSync\Services\Entities\Payload.cs" />
+    <Compile Include="OfflineSync\Services\Implementation\ConnectionsApiLimits.cs" />
     <Compile Include="OfflineSync\Services\Implementation\PayloadProvider.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

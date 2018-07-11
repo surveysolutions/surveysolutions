@@ -78,6 +78,7 @@ namespace WB.UI.Shared.Enumerator
             registry.BindAsSingleton<INearbyCommunicator, NearbyCommunicator>();
             registry.BindAsSingleton<IRequestHandler, NearbyConnectionsRequestHandler>();
             registry.BindAsSingleton<IPayloadProvider, PayloadProvider>();
+            registry.BindAsSingleton<IConnectionsApiLimits, ConnectionsApiLimits>();
         }
 
         public Task Init(IServiceLocator serviceLocator)

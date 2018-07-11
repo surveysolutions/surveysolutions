@@ -763,11 +763,11 @@ namespace WB.Tests.Abc.TestFactories
                 assignmentsImportFileConverter ?? AssignmentsImportFileConverter(userViewFactory: userViewFactory));
         }
 
-        public NearbyCommunicator NearbyConnectionManager(IRequestHandler requestHandler = null)
+        public NearbyCommunicator NearbyConnectionManager(IRequestHandler requestHandler = null, int maxBytesLength = 0)
         {
             return new NearbyCommunicator(requestHandler ?? Mock.Of<IRequestHandler>(), 
                 Create.Fake.PayloadProvider(), 
-                new PayloadSerializer(), Mock.Of<ILogger>());
+                new PayloadSerializer(), Mock.Of<IConnectionsApiLimits>( c => c.MaxBytesLength == maxBytesLength), Mock.Of<ILogger>());
         }
 
         public NearbyConnectionsRequestHandler GoogleConnectionsRequestHandler()

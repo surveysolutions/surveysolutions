@@ -27,6 +27,7 @@ namespace WB.Core.GenericSubdomains.Portable
             
             AverageSpeed = this.average.Add(speed);
             bytesDone = sendBytes;
+            if (AverageSpeed < 0.00001) return;
             ETA = this.totalBytes != null ? TimeSpan.FromSeconds((this.totalBytes.Value - sendBytes) / AverageSpeed) : TimeSpan.Zero;
         }
 
