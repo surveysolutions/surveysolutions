@@ -11,5 +11,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Services
     {
         Task<SupervisorApiView> GetSupervisorAsync(RestCredentials credentials = null, CancellationToken? token = null);
         Task<List<InterviewerFullApiView>> GetInterviewersAsync(CancellationToken cancellationToken);
+        Task UploadBrokenInterviewPackageAsync(BrokenInterviewPackageApiView brokenInterviewPackage, CancellationToken cancellationToken);
     }
 }
