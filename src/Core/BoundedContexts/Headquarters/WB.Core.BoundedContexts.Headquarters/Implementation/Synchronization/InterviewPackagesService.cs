@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 using Main.Core.Events;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
@@ -23,7 +22,6 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Enumerator.Native.WebInterview;
-using WB.Infrastructure.Native.Monitoring;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
 {
