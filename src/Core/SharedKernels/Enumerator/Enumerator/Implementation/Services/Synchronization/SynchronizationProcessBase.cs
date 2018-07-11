@@ -43,8 +43,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         private readonly IInterviewerQuestionnaireAccessor questionnairesAccessor;
         protected readonly ISynchronizationService synchronizationService;
 
-        protected SynchronizationProcessBase(
-            ISynchronizationService synchronizationService,
+        protected SynchronizationProcessBase(ISynchronizationService synchronizationService,
             IPlainStorage<InterviewView> interviewViewRepository,
             IPrincipal principal,
             ILogger logger,

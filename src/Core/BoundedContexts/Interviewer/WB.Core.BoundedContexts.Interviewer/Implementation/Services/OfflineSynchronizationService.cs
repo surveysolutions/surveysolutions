@@ -206,6 +206,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return Task.FromResult("offline sync token");
         }
 
+        public Task<bool> HasCurrentUserDeviceAsync(RestCredentials credentials = null, CancellationToken? token = null)
+        {
+            return Task.FromResult(true);
+        }
+
         public async Task CanSynchronizeAsync(RestCredentials credentials = null, CancellationToken? token = null)
         {
             if (interviewerBoundedContextVersion == null)
@@ -224,6 +229,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         }
 
         public Task SendDeviceInfoAsync(DeviceInfoApiView info, CancellationToken? token = null)
+        {
+            return Task.CompletedTask;
+        }
+
+        public Task LinkCurrentUserToDeviceAsync(RestCredentials credentials = null, CancellationToken? token = null)
         {
             return Task.CompletedTask;
         }

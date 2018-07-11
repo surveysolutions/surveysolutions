@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             IPasswordHasher passwordHasher,
             IPlainStorage<InterviewerIdentity> interviewersPlainStorage,
             IPlainStorage<CompanyLogo> logoStorage,
-            IRemoteAuthorizationService synchronizationService,
+            ISynchronizationService synchronizationService,
             ILogger logger,
             IAuditLogService auditLogService)
             : base(viewModelNavigationService, principal, passwordHasher, logoStorage, synchronizationService, logger, auditLogService)

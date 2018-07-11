@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
     public class RelinkDeviceViewModel : BaseViewModel<RelinkDeviceViewModelArg>
     {
         private readonly IViewModelNavigationService viewModelNavigationService;
-        private readonly IRemoteAuthorizationService synchronizationService;
+        private readonly ISynchronizationService synchronizationService;
         private readonly IPlainStorage<InterviewerIdentity> interviewersPlainStorage;
         private readonly IAuditLogService auditLogService;
         private const string StateKey = "interviewerIdentity";
@@ -28,7 +28,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public RelinkDeviceViewModel(
             IPrincipal principal,
             IViewModelNavigationService viewModelNavigationService,
-            IRemoteAuthorizationService synchronizationService,
+            ISynchronizationService synchronizationService,
             IPlainStorage<InterviewerIdentity> interviewersPlainStorage,
             IAuditLogService auditLogService)
             : base(principal, viewModelNavigationService)
