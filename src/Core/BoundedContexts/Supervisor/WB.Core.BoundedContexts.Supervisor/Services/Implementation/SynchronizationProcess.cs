@@ -31,7 +31,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
         private readonly IBrokenInterviewPackageSynchronizer brokenInterviewPackageSynchronizer;
         private readonly IPasswordHasher passwordHasher;
 
-        public SynchronizationProcess(ISupervisorSynchronizationService synchronizationService,
+        public SynchronizationProcess(
+            ISynchronizationService synchronizationService,
             IPlainStorage<SupervisorIdentity> supervisorsPlainStorage,
             IPlainStorage<InterviewView> interviewViewRepository,
             IPrincipal principal,

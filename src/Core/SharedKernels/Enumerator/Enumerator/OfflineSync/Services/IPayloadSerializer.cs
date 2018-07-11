@@ -1,6 +1,4 @@
-﻿using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
-
-namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services
+﻿namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services
 {
     public interface IPayloadSerializer
     {

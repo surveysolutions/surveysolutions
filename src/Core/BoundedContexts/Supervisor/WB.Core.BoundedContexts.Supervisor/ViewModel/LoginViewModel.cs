@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             IPasswordHasher passwordHasher,
             IPlainStorage<SupervisorIdentity> supervsorsPlainStorage,
             IPlainStorage<CompanyLogo> logoStorage,
-            ISynchronizationService synchronizationService,
+            IRemoteAuthorizationService synchronizationService,
             ILogger logger,
             IAuditLogService auditLogService)
             : base(viewModelNavigationService, principal, passwordHasher, logoStorage, synchronizationService, logger, auditLogService)
