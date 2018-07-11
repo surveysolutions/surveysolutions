@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Supervisor.Properties;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services;
@@ -10,7 +11,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
 {
-    public class WaitingForSupervisorActionViewModel : RefreshingAfterSyncListViewModel
+    public class WaitingForSupervisorActionViewModel : RefreshingAfterSyncListViewModel, IMvxViewModel<Guid?>
     {
         private readonly IDashboardItemsAccessor dashboardItemsAccessor;
         private readonly IInterviewViewModelFactory viewModelFactory;
@@ -51,6 +52,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             var interviewIndex = 1;
             foreach (var dashboardItem in this.dashboardItemsAccessor.WaitingForSupervisorAction())
             {
+                yield return dashboardItem;
+
                 if (dashboardItem is SupervisorDashboardInterviewViewModel interviewDashboardItem &&
                     interviewDashboardItem.InterviewId == lastVisitedInterviewId)
                 {
@@ -58,8 +61,6 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
                 }
 
                 interviewIndex++;
-
-                yield return dashboardItem;
             }
         }
     }

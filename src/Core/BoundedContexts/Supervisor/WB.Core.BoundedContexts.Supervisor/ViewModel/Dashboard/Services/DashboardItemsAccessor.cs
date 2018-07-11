@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -131,5 +132,16 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services
             return this.assignments.LoadAll().Where(x => x.ResponsibleId == this.principal.CurrentUserIdentity.UserId
                                                          && x.ReceivedByInterviewerAt == null);
         }
+
+        public bool IsWaitingForSupervisorActionInterview(Guid interviewId)
+            => this.interviews.Count(x => x.ResponsibleId == this.principal.CurrentUserIdentity.UserId &&
+                                        x.Status != InterviewStatus.ApprovedBySupervisor &&
+                                        x.InterviewId == interviewId) == 1;
+
+        public bool IsOutboxInterview(Guid interviewId)
+            => this.interviews.Count(x =>
+                   (x.ResponsibleId != this.principal.CurrentUserIdentity.UserId ||
+                    x.Status == InterviewStatus.ApprovedBySupervisor) &&
+                   x.InterviewId == interviewId) == 1;
     }
 }
