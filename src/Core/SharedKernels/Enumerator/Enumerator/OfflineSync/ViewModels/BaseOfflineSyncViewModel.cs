@@ -23,7 +23,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
         Advertising
     }
 
-    public abstract class BaseOfflineSyncViewModel : BaseViewModel
+    public abstract class BaseOfflineSyncViewModel : BaseViewModel, IOfflineSyncViewModel
     {
         private readonly IPermissionsService permissions;
         private readonly INearbyConnection nearbyConnection;
@@ -162,6 +162,20 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
         {
             get => statusDetails;
             set => SetProperty(ref statusDetails, value);
+        }
+
+        protected abstract Task OnGoogleApiReady();
+
+        public void SetGoogleAwaiter(Task<bool> apiConnected)
+        {
+            if (apiConnected.IsCompleted)
+            {
+                this.OnGoogleApiReady();
+            }
+            else
+            {
+                apiConnected.ContinueWith(async res => this.OnGoogleApiReady());
+            }
         }
     }
 }
