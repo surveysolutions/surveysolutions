@@ -33,6 +33,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
         private readonly ILiteEventBus eventBus;
         private readonly IEnumeratorEventStorage eventStore;
         private readonly IPlainStorage<InterviewView> interviews;
+        private readonly IPlainStorage<SuperivsorReceivedPackageLogEntry, int> receivedPackagesLog;
         private readonly IJsonAllTypesSerializer serializer;
         private readonly ILogger logger;
         private readonly ICommandService commandService;
@@ -43,14 +44,16 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             IPlainStorage<InterviewView> interviews,
             IJsonAllTypesSerializer serializer,
             ICommandService commandService,
+            ILogger logger, 
             IPlainStorage<BrokenInterviewPackageView, int?> brokenInterviewPackageStorage,
-            ILogger logger)
+            IPlainStorage<SuperivsorReceivedPackageLogEntry, int> receivedPackagesLog)
         {
             this.eventBus = eventBus;
             this.eventStore = eventStore;
             this.interviews = interviews;
             this.serializer = serializer;
             this.logger = logger;
+            this.receivedPackagesLog = receivedPackagesLog;
             this.commandService = commandService;
             this.brokenInterviewPackageStorage = brokenInterviewPackageStorage;
         }
@@ -86,7 +89,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                         InterviewDomainExceptionType.PackageIsOudated);
                 }
 
-                // TODO: AssertPackageNotDuplicated(aggregateRootEvents);
+                AssertPackageNotDuplicated(aggregateRootEvents);
 
                 var serializedEvents = aggregateRootEvents
                     .Select(e => e.Payload)
@@ -113,7 +116,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                     newSupervisorId: (Guid?) null // TODO: KP-11585 shouldChangeSupervisorId ? newSupervisorId : null
                 ), null);
 
-               // RecordProcessedPackageInfo(aggregateRootEvents);
+                RecordProcessedPackageInfo(aggregateRootEvents);
             }
             catch (Exception exception)
             {
@@ -155,6 +158,42 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             innerwatch.Stop();
 
             return Task.FromResult(new OkResponse());
+        }
+
+        
+        private void AssertPackageNotDuplicated(AggregateRootEvent[] aggregateRootEvents)
+        {
+            if (aggregateRootEvents.Length > 0)
+            {
+                var firstEvent = aggregateRootEvents[0];
+                var lastEvent = aggregateRootEvents[aggregateRootEvents.Length - 1];
+
+                var existingReceivedPackageLog = this.receivedPackagesLog.Where(
+                    x => x.FirstEventId == firstEvent.EventIdentifier &&
+                         x.FirstEventTimestamp == firstEvent.EventTimeStamp &&
+                         x.LastEventId == lastEvent.EventIdentifier &&
+                         x.LastEventTimestamp == lastEvent.EventTimeStamp).Count;
+
+                if (existingReceivedPackageLog > 0)
+                {
+                    throw new InterviewException("Package already received and processed",
+                        InterviewDomainExceptionType.DuplicateSyncPackage);
+                }
+            }
+        }
+
+        private void RecordProcessedPackageInfo(AggregateRootEvent[] aggregateRootEvents)
+        {
+            if (aggregateRootEvents.Length > 0)
+            {
+                this.receivedPackagesLog.Store(new SuperivsorReceivedPackageLogEntry
+                {
+                    FirstEventId = aggregateRootEvents[0].EventIdentifier,
+                    FirstEventTimestamp = aggregateRootEvents[0].EventTimeStamp,
+                    LastEventId = aggregateRootEvents.Last().EventIdentifier,
+                    LastEventTimestamp = aggregateRootEvents.Last().EventTimeStamp
+                });
+            }
         }
 
         public Task<GetInterviewDetailsResponse> Handle(GetInterviewDetailsRequest arg)
