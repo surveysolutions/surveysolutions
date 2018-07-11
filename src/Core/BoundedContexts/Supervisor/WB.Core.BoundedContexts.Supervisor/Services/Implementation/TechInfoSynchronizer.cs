@@ -68,6 +68,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
 
             var exceptions = this.unexpectedExceptionsStorage.LoadAll().ToList();
             await this.synchronizationService.UploadInterviewerExceptionsAsync(exceptions, cancellationToken);
+            this.unexpectedExceptionsStorage.RemoveAll();
         }
     }
 }
