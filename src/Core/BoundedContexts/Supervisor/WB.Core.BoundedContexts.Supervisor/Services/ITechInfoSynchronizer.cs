@@ -6,7 +6,7 @@ using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.BoundedContexts.Supervisor.Services
 {
-    public interface IBrokenInterviewPackageSynchronizer
+    public interface ITechInfoSynchronizer
     {
         Task SynchronizeAsync(IProgress<SyncProgressInfo> progress, SynchronizationStatistics statistics, CancellationToken cancellationToken);
     }

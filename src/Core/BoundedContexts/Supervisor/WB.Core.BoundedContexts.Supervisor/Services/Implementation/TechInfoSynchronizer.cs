@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Supervisor.Properties;
@@ -10,16 +11,19 @@ using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
 {
-    public class BrokenInterviewPackageSynchronizer : IBrokenInterviewPackageSynchronizer
+    public class TechInfoSynchronizer : ITechInfoSynchronizer
     {
         private readonly IPlainStorage<BrokenInterviewPackageView, int?> brokenInterviewPackageStorage;
         private readonly ISupervisorSynchronizationService synchronizationService;
+        private readonly IPlainStorage<UnexpectedExceptionFromInterviewerView, int> unexpectedExceptionsStorage;
 
-        public BrokenInterviewPackageSynchronizer(IPlainStorage<BrokenInterviewPackageView, int?> brokenInterviewPackageStorage,
-            ISupervisorSynchronizationService synchronizationService)
+        public TechInfoSynchronizer(IPlainStorage<BrokenInterviewPackageView, int?> brokenInterviewPackageStorage,
+            ISupervisorSynchronizationService synchronizationService, 
+            IPlainStorage<UnexpectedExceptionFromInterviewerView, int> unexpectedExceptionsStorage)
         {
             this.brokenInterviewPackageStorage = brokenInterviewPackageStorage;
             this.synchronizationService = synchronizationService;
+            this.unexpectedExceptionsStorage = unexpectedExceptionsStorage;
         }
 
         public async Task SynchronizeAsync(IProgress<SyncProgressInfo> progress, SynchronizationStatistics statistics, CancellationToken cancellationToken)
@@ -33,7 +37,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
             {
                 var brokenInterviewPackage = brokenInterviewPackageStorage.FirstOrDefault();
                 if (brokenInterviewPackage == null)
-                    return;
+                    break;
 
                 var brokenInterviewPackageApiView = new BrokenInterviewPackageApiView()
                 {
@@ -56,6 +60,14 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
 
                 brokenInterviewPackageStorage.Remove(brokenInterviewPackage.Id);
             };
+
+            progress.Report(new SyncProgressInfo
+            {
+                Title = SupervisorUIResources.Synchronization_UploadBrokenInterviewPackages
+            });
+
+            var exceptions = this.unexpectedExceptionsStorage.LoadAll().ToList();
+            await this.synchronizationService.UploadInterviewerExceptionsAsync(exceptions, cancellationToken);
         }
     }
 }

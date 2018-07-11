@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using WB.Core.BoundedContexts.Supervisor.Views;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
@@ -19,6 +20,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
 
         protected string InterviewersController => string.Concat(ApplicationUrl, "/interviewers");
         protected string BrokenInterviewPackagesController => string.Concat(ApplicationUrl, "/brokenInterviews");
+        protected string ExceptionsController => string.Concat(ApplicationUrl, "/interviewerExceptions");
 
         public SynchronizationService(IPrincipal principal, IRestService restService,
             ISupervisorSettings settings, ISupervisorSyncProtocolVersionProvider syncProtocolVersionProvider,
@@ -51,6 +53,15 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
             return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
                 url: $"{this.BrokenInterviewPackagesController}",
                 request: brokenInterviewPackage,
+                credentials: this.restCredentials,
+                token: cancellationToken));
+        }
+
+        public Task UploadInterviewerExceptionsAsync(List<UnexpectedExceptionFromInterviewerView> exceptions, CancellationToken cancellationToken)
+        {
+            return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
+                url: $"{this.ExceptionsController}",
+                request: exceptions,
                 credentials: this.restCredentials,
                 token: cancellationToken));
         }

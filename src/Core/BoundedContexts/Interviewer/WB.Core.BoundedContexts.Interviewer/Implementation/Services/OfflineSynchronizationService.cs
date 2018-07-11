@@ -139,8 +139,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public Task SendUnexpectedExceptionAsync(UnexpectedExceptionApiView exception, CancellationToken token)
         {
-            //TODO: Implement
-            return Task.CompletedTask;
+            return this.syncClient.SendAsync(new SendUnexpectedExceptionRequest(exception, this.principal.CurrentUserIdentity.UserId), token);
         }
 
         public Task<List<MapView>> GetMapList(CancellationToken cancellationToken)

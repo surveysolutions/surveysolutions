@@ -28,7 +28,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
         private readonly IPlainStorage<SupervisorIdentity> supervisorsPlainStorage;
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
         private readonly IPlainStorage<InterviewerDocument> interviewerViewRepository;
-        private readonly IBrokenInterviewPackageSynchronizer brokenInterviewPackageSynchronizer;
+        private readonly ITechInfoSynchronizer techInfoSynchronizer;
         private readonly IPasswordHasher passwordHasher;
 
         public SynchronizationProcess(
@@ -57,7 +57,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
             ILiteEventBus eventBus,
             IEnumeratorEventStorage eventStore,
             IPlainStorage<InterviewerDocument> interviewerViewRepository,
-            IBrokenInterviewPackageSynchronizer brokenInterviewPackageSynchronizer) : base(synchronizationService,
+            ITechInfoSynchronizer techInfoSynchronizer) : base(synchronizationService,
             interviewViewRepository, principal, logger,
             userInteractionService, questionnairesAccessor, interviewFactory, interviewMultimediaViewStorage,
             imagesStorage,
@@ -69,7 +69,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
             this.principal = principal;
             this.supervisorSettings = supervisorSettings;
             this.interviewerViewRepository = interviewerViewRepository;
-            this.brokenInterviewPackageSynchronizer = brokenInterviewPackageSynchronizer;
+            this.techInfoSynchronizer = techInfoSynchronizer;
             this.supervisorsPlainStorage = supervisorsPlainStorage;
             this.interviewViewRepository = interviewViewRepository;
             this.passwordHasher = passwordHasher;
@@ -97,7 +97,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
             await this.DownloadInterviewsAsync(statistics, progress, cancellationToken);
 
             cancellationToken.ThrowIfCancellationRequested();
-            await this.brokenInterviewPackageSynchronizer.SynchronizeAsync(progress, statistics, cancellationToken);
+            await this.techInfoSynchronizer.SynchronizeAsync(progress, statistics, cancellationToken);
 
             cancellationToken.ThrowIfCancellationRequested();
             await this.logoSynchronizer.DownloadCompanyLogo(progress, cancellationToken);
