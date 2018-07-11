@@ -9,7 +9,9 @@ using Android.Views;
 using MvvmCross;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard;
+using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.InterviewerSelector;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.MapSynchronization;
@@ -49,7 +51,14 @@ namespace WB.UI.Supervisor.Activities
             if (bundle == null)
             {
                 if (this.ViewModel.LastVisitedInterviewId.HasValue)
-                    this.ViewModel.ShowOutboxCommand.Execute();
+                {
+                    var dashboardItemAccessor = ServiceLocator.Current.GetInstance<IDashboardItemsAccessor>();
+
+                    if (dashboardItemAccessor.IsOutboxInterview(this.ViewModel.LastVisitedInterviewId.Value))
+                        this.ViewModel.ShowOutboxCommand.Execute();
+                    if(dashboardItemAccessor.IsWaitingForSupervisorActionInterview(this.ViewModel.LastVisitedInterviewId.Value))
+                        this.ViewModel.ShowWaitingSupervisorActionCommand.Execute();
+                }
                 else
                     ViewModel.ShowDefaultListCommand.Execute();
                 ViewModel.ShowMenuViewModelCommand.Execute();
