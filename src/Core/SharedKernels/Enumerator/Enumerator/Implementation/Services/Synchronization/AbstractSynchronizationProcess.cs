@@ -171,7 +171,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             };
         }
 
-        public async Task SyncronizeAsync(IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken)
+        public async Task SynchronizeAsync(IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken)
         {
             var statistics = new SynchronizationStatistics();
             try
@@ -369,7 +369,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 {
                     this.remoteLoginRequired = true;
                     this.restCredentials.Password = newPassword;
-                    await this.SyncronizeAsync(progress, cancellationToken);
+                    await this.SynchronizeAsync(progress, cancellationToken);
                 }
             }
         }

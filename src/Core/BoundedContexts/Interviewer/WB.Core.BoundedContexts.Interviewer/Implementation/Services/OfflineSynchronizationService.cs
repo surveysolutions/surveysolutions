@@ -230,7 +230,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public Task SendDeviceInfoAsync(DeviceInfoApiView info, CancellationToken? token = null)
         {
-            return Task.CompletedTask;
+            return this.syncClient.SendAsync(new UploadDeviceInfoRequest
+            {
+                UserId = principal.CurrentUserIdentity.UserId,
+                DeviceInfo = info
+            },token ?? CancellationToken.None);
         }
 
         public Task LinkCurrentUserToDeviceAsync(RestCredentials credentials = null, CancellationToken? token = null)
