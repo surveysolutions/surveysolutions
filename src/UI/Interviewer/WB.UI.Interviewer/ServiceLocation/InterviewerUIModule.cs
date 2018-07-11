@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
+using WB.Core.BoundedContexts.Interviewer.Implementation.Services.OfflineSync;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
@@ -58,8 +59,12 @@ namespace WB.UI.Interviewer.ServiceLocation
             registry.BindAsSingletonWithConstructorArgument<IRestService, RestService>("restServicePointManager", null);
             registry.Bind<IInterviewUniqueKeyGenerator, InterviewerInterviewUniqueKeyGenerator>();
 
-            // registry.Bind<ISynchronizationService, OfflineSynchronizationService>();
-            registry.Bind<ISynchronizationService, SynchronizationService>();
+            registry.Bind<OfflineSynchronizationService, OfflineSynchronizationService>();
+            registry.Bind<SynchronizationService, SynchronizationService>();
+
+            registry.BindAsSingleton<ISynchronizationMode, SynchronizationModeSelector>();
+            registry.Bind<ISynchronizationService, SyncronizationServiceWrapper>();
+            
 
             registry.Bind<IInterviewerSynchronizationService, SynchronizationService>();
             registry.Bind<IBattery, AndroidBattery>();

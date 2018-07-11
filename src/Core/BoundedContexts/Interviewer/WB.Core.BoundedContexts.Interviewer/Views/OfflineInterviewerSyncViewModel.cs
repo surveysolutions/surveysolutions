@@ -1,16 +1,11 @@
 ﻿using System;
-using System.Linq;
-using System.Security.Cryptography;
 using System.Threading;
 using System.Threading.Tasks;
-using Humanizer;
+using Autofac;
+using MvvmCross;
 using MvvmCross.Commands;
-using MvvmCross.Logging;
-using WB.Core.GenericSubdomains.Portable;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.DataCollection.WebApi;
-using WB.Core.SharedKernels.Enumerator.OfflineSync.Entities;
-using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
+using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
+using WB.Core.BoundedContexts.Interviewer.Implementation.Services.OfflineSync;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -20,29 +15,23 @@ using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views
 {
-
     public class OfflineInterviewerSyncViewModel : BaseOfflineSyncViewModel, IOfflineSyncViewModel
     {
         private readonly IPlainStorage<InterviewerIdentity> interviewersPlainStorage;
-        private readonly ISynchronizationProcess synchronizationProcess;
-        private readonly ISynchronizationService synchronizationService;
-        private readonly IOfflineSyncClient syncClient;
+        private readonly ISynchronizationMode synchronizationMode;
         private readonly string serviceName;
-        
-        public OfflineInterviewerSyncViewModel(IPrincipal principal, 
-            IViewModelNavigationService viewModelNavigationService, 
+
+        public OfflineInterviewerSyncViewModel(IPrincipal principal,
+            IViewModelNavigationService viewModelNavigationService,
             IPermissionsService permissions,
             IEnumeratorSettings settings,
             IPlainStorage<InterviewerIdentity> interviewersPlainStorage,
-            INearbyConnection nearbyConnection,
-            ISynchronizationProcess synchronizationProcess,
-            ISynchronizationService synchronizationService) 
+            ISynchronizationMode synchronizationMode,
+            INearbyConnection nearbyConnection)
             : base(principal, viewModelNavigationService, permissions, nearbyConnection)
         {
             this.interviewersPlainStorage = interviewersPlainStorage;
-            this.synchronizationProcess = synchronizationProcess;
-            this.synchronizationService = synchronizationService;
-
+            this.synchronizationMode = synchronizationMode;
 
             this.serviceName = settings.Endpoint + "/";
             SetStatus(ConnectionStatus.WaitingForGoogleApi);
@@ -59,12 +48,23 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public IMvxAsyncCommand Restart => new MvxAsyncCommand(OnGoogleApiReady);
         public IMvxAsyncCommand Sync => new MvxAsyncCommand(Synchronize);
 
-        public Task Synchronize()
+        public async Task Synchronize()
         {
-            return synchronizationProcess.SyncronizeAsync(new Progress<SyncProgressInfo>(o =>
-                {
-                    this.StatusDetails = o.Description + "\r\n" + this.StatusDetails;
-                }), CancellationToken.None);
+            try
+            {
+                this.synchronizationMode.Set(SynchronizationMode.Offline);
+                var synchronizationProcess = Mvx.Resolve<ISynchronizationProcess>();
+
+                await synchronizationProcess.SyncronizeAsync(
+                    new Progress<SyncProgressInfo>(o =>
+                    {
+                        SetStatus(ConnectionStatus.Sync, o.Description);
+                    }), CancellationToken.None);
+            }
+            finally
+            {
+                this.synchronizationMode.Set(SynchronizationMode.Online);
+            }
         }
 
         protected override string GetServiceName()
