@@ -80,6 +80,9 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor
             config.TypedRoute("api/supervisor/v1/auditlog",
                 c => c.Action<AuditLogApiV1Controller>(x => x.Post(Param.Any<AuditLogEntitiesApiView>())));
 
+            config.TypedRoute("api/supervisor/v1/brokenInterviews",
+                c => c.Action<BrokenInterviewPackageApiV1Controller>(x => x.Post(Param.Any<BrokenInterviewPackageApiView>())));
+
             config.TypedRoute("api/supervisor/v1/interviews", c => c.Action<InterviewsApiV1Controller>(x => x.Get()));
 
             config.TypedRoute("api/supervisor/v1/interviews/{id:guid}",

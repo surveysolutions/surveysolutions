@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Events;
 using Ncqrs.Eventing;
+using WB.Core.BoundedContexts.Supervisor.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -27,18 +28,22 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
 {
     public class SupervisorInterviewsHandler : IHandleCommunicationMessage
     {
+        public const string UnknownExceptionType = "Unexpected";
+
         private readonly ILiteEventBus eventBus;
         private readonly IEnumeratorEventStorage eventStore;
         private readonly IPlainStorage<InterviewView> interviews;
         private readonly IJsonAllTypesSerializer serializer;
         private readonly ILogger logger;
         private readonly ICommandService commandService;
+        private readonly IPlainStorage<BrokenInterviewPackageView, int?> brokenInterviewPackageStorage;
 
         public SupervisorInterviewsHandler(ILiteEventBus eventBus,
             IEnumeratorEventStorage eventStore,
             IPlainStorage<InterviewView> interviews,
             IJsonAllTypesSerializer serializer,
             ICommandService commandService,
+            IPlainStorage<BrokenInterviewPackageView, int?> brokenInterviewPackageStorage,
             ILogger logger)
         {
             this.eventBus = eventBus;
@@ -47,6 +52,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             this.serializer = serializer;
             this.logger = logger;
             this.commandService = commandService;
+            this.brokenInterviewPackageStorage = brokenInterviewPackageStorage;
         }
 
         public void Register(IRequestHandler requestHandler)
@@ -111,21 +117,36 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             }
             catch (Exception exception)
             {
-                //this.logger.Error($"Interview events by {interview.InterviewId} processing failed. Reason: '{exception.Message}'", exception);
+                this.logger.Error($"Interview events by {interview.InterviewId} processing failed. Reason: '{exception.Message}'", exception);
 
-                //var interviewException = exception as InterviewException;
-                //if (interviewException == null)
-                //{
-                //    interviewException = interviewException.UnwrapAllInnerExceptions()
-                //        .OfType<InterviewException>()
-                //        .FirstOrDefault();
-                //}
+                var interviewException = exception as InterviewException;
+                if (interviewException == null)
+                {
+                    interviewException = interviewException.UnwrapAllInnerExceptions()
+                        .OfType<InterviewException>()
+                        .FirstOrDefault();
+                }
 
-                //var exceptionType = interviewException?.ExceptionType.ToString() ?? UnknownExceptionType;
+                var exceptionType = interviewException?.ExceptionType.ToString() ?? UnknownExceptionType;
 
-                
+                this.brokenInterviewPackageStorage.Store(new BrokenInterviewPackageView
+                {
+                    InterviewId = interview.InterviewId,
+                    InterviewKey = request.InterviewKey,
+                    QuestionnaireId = interview.MetaInfo.TemplateId,
+                    QuestionnaireVersion = interview.MetaInfo.TemplateVersion,
+                    InterviewStatus = (InterviewStatus)interview.MetaInfo.Status,
+                    ResponsibleId = interview.MetaInfo.ResponsibleId,
+                    IncomingDate = DateTime.UtcNow,
+                    Events = interview.Events,
+                    PackageSize = interview.Events?.Length ?? 0,
+                    ProcessingDate = DateTime.UtcNow,
+                    ExceptionType = exceptionType,
+                    ExceptionMessage = exception.Message,
+                    ExceptionStackTrace = string.Join(Environment.NewLine, exception.UnwrapAllInnerExceptions().Select(ex => $"{ex.Message} {ex.StackTrace}"))
+                });
 
-               // this.logger.Debug($"Interview events by {interview.InterviewId} moved to broken packages. Took {innerwatch.Elapsed:g}.");
+                this.logger.Debug($"Interview events by {interview.InterviewId} moved to broken packages. Took {innerwatch.Elapsed:g}.");
                 innerwatch.Restart();
 
                 throw;
