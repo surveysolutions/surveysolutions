@@ -51,6 +51,7 @@ using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.BoundedContexts.Supervisor.Services.Implementation;
 using WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSyncHandlers;
+using WB.Core.BoundedContexts.Supervisor.Views;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.GenericSubdomains.Portable;
@@ -785,6 +786,7 @@ namespace WB.Tests.Abc.TestFactories
                 interviews ?? new InMemoryPlainStorage<InterviewView>(),
                 serializer ?? new JsonAllTypesSerializer(),
                 commandService ?? Mock.Of<ICommandService>(), 
+                Mock.Of<IPlainStorage<BrokenInterviewPackageView, int?>>(),
                 Mock.Of<ILogger>());
         }
     }

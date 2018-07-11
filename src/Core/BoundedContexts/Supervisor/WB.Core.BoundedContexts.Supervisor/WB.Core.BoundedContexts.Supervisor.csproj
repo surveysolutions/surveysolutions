@@ -28,6 +28,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
+    <Compile Update="Properties\SupervisorUIResources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>SupervisorUIResources.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -45,6 +50,10 @@
     <EmbeddedResource Update="Properties\SupervisorDashboard.resx">
       <LastGenOutput>SupervisorDashboard.Designer.cs</LastGenOutput>
       <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Properties\SupervisorUIResources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>SupervisorUIResources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
 

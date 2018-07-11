@@ -18,6 +18,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
         protected override string ApiUrl => "api/supervisor/";
 
         protected string InterviewersController => string.Concat(ApplicationUrl, "/interviewers");
+        protected string BrokenInterviewPackagesController => string.Concat(ApplicationUrl, "/brokenInterviews");
 
         public SynchronizationService(IPrincipal principal, IRestService restService,
             ISupervisorSettings settings, ISupervisorSyncProtocolVersionProvider syncProtocolVersionProvider,
@@ -42,6 +43,16 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
                     token: cancellationToken));
 
             return response;
+        }
+
+        public Task UploadBrokenInterviewPackageAsync(BrokenInterviewPackageApiView brokenInterviewPackage,
+            CancellationToken cancellationToken)
+        {
+            return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
+                url: $"{this.BrokenInterviewPackagesController}",
+                request: brokenInterviewPackage,
+                credentials: this.restCredentials,
+                token: cancellationToken));
         }
 
         protected override string CanSynchronizeValidResponse => "158329303";
