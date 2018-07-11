@@ -64,11 +64,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
 
         private Task<GetAttachmentContentsResponse> GetAttachmentContents(GetAttachmentContentsRequest request)
         {
-            var questionnsire = this.questionnairesAccessor.GetQuestionnaire(request.QuestionnaireIdentity);
+            var questionnaire = this.questionnairesAccessor.GetQuestionnaire(request.QuestionnaireIdentity);
 
             return Task.FromResult(new GetAttachmentContentsResponse
             {
-                AttachmentContents = questionnsire.Attachments.Select(a => a.ContentId).ToList()
+                AttachmentContents = questionnaire.Attachments.Select(a => a.ContentId).ToList()
             });
         }
 
@@ -84,7 +84,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
 
         public Task<GetQuestionnaireTranslationResponse> GetQuestionnaireTranslation(GetQuestionnaireTranslationRequest request)
         {
-            var storedTranslations = this.translationsStorage.Where(x => x.QuestionnaireId == request.QuestionnaireIdentity.ToString());
+            var identity = request.QuestionnaireIdentity.ToString();
+            var storedTranslations = this.translationsStorage.Where(x => x.QuestionnaireId == identity);
 
             return Task.FromResult(new GetQuestionnaireTranslationResponse
             {
