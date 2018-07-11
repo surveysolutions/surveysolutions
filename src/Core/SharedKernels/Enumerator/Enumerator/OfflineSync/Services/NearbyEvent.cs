@@ -40,11 +40,13 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services
         {
             public string Endpoint { get; }
             public NearbyConnectionResolution Resolution { get; }
+            public string Name { get; }
 
-            public Connected(string endpoint, NearbyConnectionResolution resolution)
+            public Connected(string endpoint, NearbyConnectionResolution resolution, string name)
             {
                 Endpoint = endpoint;
                 Resolution = resolution;
+                Name = name;
             }
         }
 

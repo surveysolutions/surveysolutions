@@ -765,7 +765,9 @@ namespace WB.Tests.Abc.TestFactories
 
         public NearbyCommunicator NearbyConnectionManager(IRequestHandler requestHandler = null)
         {
-            return new NearbyCommunicator(requestHandler ?? Mock.Of<IRequestHandler>(), Create.Fake.PayloadProvider(), new PayloadSerializer());
+            return new NearbyCommunicator(requestHandler ?? Mock.Of<IRequestHandler>(), 
+                Create.Fake.PayloadProvider(), 
+                new PayloadSerializer(), Mock.Of<ILogger>());
         }
 
         public NearbyConnectionsRequestHandler GoogleConnectionsRequestHandler()
