@@ -27,6 +27,16 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.OfflineSync
         }
 
         [Test]
+        public async Task should_always_bypass_device_link_test()
+        {
+            var service = Create.Service.OfflineSynchronizationService();
+
+            var hasDevice = await service.HasCurrentUserDeviceAsync();
+
+            Assert.That(hasDevice, Is.True);
+        }
+
+        [Test]
         public async Task should_pass_device_build_number_to_can_synchronize_method()
         {
             var v = ReflectionUtils.GetAssemblyVersion(typeof(InterviewerBoundedContextAssemblyIndicator));

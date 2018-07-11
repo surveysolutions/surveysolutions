@@ -31,8 +31,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
         private readonly ITechInfoSynchronizer techInfoSynchronizer;
         private readonly IPasswordHasher passwordHasher;
 
-        public SynchronizationProcess(
-            ISynchronizationService synchronizationService,
+        public SynchronizationProcess(ISupervisorSynchronizationService synchronizationService,
             IPlainStorage<SupervisorIdentity> supervisorsPlainStorage,
             IPlainStorage<InterviewView> interviewViewRepository,
             IPrincipal principal,
