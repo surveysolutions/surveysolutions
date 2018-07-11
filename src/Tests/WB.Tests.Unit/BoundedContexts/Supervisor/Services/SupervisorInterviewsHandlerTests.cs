@@ -5,13 +5,13 @@ using Main.Core.Events;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Supervisor;
-using WB.Core.BoundedContexts.Supervisor.Services.Implementation;
 using WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSyncHandlers;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
@@ -121,6 +121,45 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
                        c.InterviewKey.Equals(new InterviewKey(124)) &&
                        c.SynchronizedEvents[0].GetType() == typeof(InterviewCreated)
             ), null));
+        }
+
+        [Test]
+        public async Task UploadInterview_should_throw_interview_exception_when_same_sync_package_is_sent_twice()
+        {
+            var commandSerivce = new Mock<ICommandService>();
+            var serializer = new Mock<IJsonAllTypesSerializer>();
+
+            var packageEvents = new[]
+            {
+                Create.Event.AggregateRootEvent(Create.Event.InterviewCreated()),
+                Create.Event.AggregateRootEvent(Create.Event.InteviewCompleted())
+            };
+            var interviewId = packageEvents[0].EventSourceId;
+
+            var packageSerializedEvents = "test events";
+            serializer.Setup(x => x.Deserialize<AggregateRootEvent[]>(packageSerializedEvents))
+                .Returns(packageEvents);
+
+            var handler = Create.Service.SupervisorInterviewsHandler(commandService: commandSerivce.Object,
+                serializer: serializer.Object);
+
+            // Act
+            var request = new UploadInterviewRequest
+            {
+                Interview = new InterviewPackageApiView
+                {
+                    Events = packageSerializedEvents,
+                    InterviewId = interviewId,
+                    MetaInfo = new InterviewMetaInfo()
+                },
+                InterviewKey = "124"
+            };
+            await handler.UploadInterview(request);
+            async Task Act() => await handler.UploadInterview(request);
+
+            // assert
+            Assert.That(Act, Throws.Exception.TypeOf<InterviewException>()
+                .With.Property(nameof(InterviewException.ExceptionType)).EqualTo(InterviewDomainExceptionType.DuplicateSyncPackage));
         }
     }
 }
