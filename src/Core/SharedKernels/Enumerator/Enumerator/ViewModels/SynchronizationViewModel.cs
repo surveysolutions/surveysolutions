@@ -12,15 +12,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
     public class SynchronizationViewModel : MvxNotifyPropertyChanged
     {
         private readonly IMvxMessenger messenger;
+        private readonly ISynchronizationCompleteSource synchronizationCompleteSource;
 
-        public SynchronizationViewModel(IMvxMessenger messenger)
+        public SynchronizationViewModel(IMvxMessenger messenger, ISynchronizationCompleteSource synchronizationCompleteSource)
         {
             this.messenger = messenger;
+            this.synchronizationCompleteSource = synchronizationCompleteSource;
         }
 
         public ISyncBgService<SyncProgressDto> SyncBgService { get; set; }
 
-        public event EventHandler SyncCompleted;
 
         private bool hasUserAnotherDevice;
 
@@ -146,7 +147,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         protected virtual void OnSyncCompleted()
         {
             this.messenger.Publish(new DashboardChangedMsg(this));
-            this.SyncCompleted?.Invoke(this, EventArgs.Empty);
+            synchronizationCompleteSource.NotifyOnCompletedSynchronization(true);
         }
     }
 }

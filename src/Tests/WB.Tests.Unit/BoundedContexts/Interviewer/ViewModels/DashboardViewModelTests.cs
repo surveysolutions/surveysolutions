@@ -31,7 +31,9 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
             var mockOfViewModelNavigationService = new Mock<IViewModelNavigationService>();
             mockOfViewModelNavigationService.SetupGet(x => x.HasPendingOperations).Returns(true);
 
-            var mockOfSynchronizationViewModel = new Mock<SynchronizationViewModel>(Mock.Of<IMvxMessenger>());
+            var mockOfSynchronizationViewModel = new Mock<SynchronizationViewModel>(
+                Mock.Of<IMvxMessenger>(), new SynchronizationCompleteSource());
+
             var viewModel = CreateDashboardViewModel(
                 viewModelNavigationService: mockOfViewModelNavigationService.Object,
                 synchronization: mockOfSynchronizationViewModel.Object);
@@ -49,7 +51,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
             IInterviewerPrincipal principal = null,
             SynchronizationViewModel synchronization = null,
             IMvxMessenger messenger = null,
-            IPlainStorage<InterviewView> interviewsRepository = null)
+            IPlainStorage<InterviewView> interviewsRepository = null,
+            ISynchronizationCompleteSource synchronizationCompleteSource = null)
         {
             return new DashboardViewModel(
                     viewModelNavigationService: viewModelNavigationService ?? Mock.Of<IViewModelNavigationService>(),
@@ -62,9 +65,12 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
                     completedInterviewsViewModel: DashboardCompletedInterviewsViewModel(),
                     rejectedInterviewsViewModel: DashboardRejectedInterviewsViewModel(), 
                     interviewsRepository: interviewsRepository ?? Substitute.For<IPlainStorage<InterviewView>>(),
-                    auditLogService: Mock.Of<IAuditLogService>()
+                    auditLogService: Mock.Of<IAuditLogService>(),
+                    synchronizationCompleteSource: synchronizationCompleteSource ?? SyncCompleteSource
                 );
         }
+
+        private static ISynchronizationCompleteSource SyncCompleteSource = new SynchronizationCompleteSource();
 
         private static CreateNewViewModel DashboardQuestionnairesViewModel()
             => new CreateNewViewModel(
