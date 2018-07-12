@@ -123,12 +123,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                 this.logger.Error($"Interview events by {interview.InterviewId} processing failed. Reason: '{exception.Message}'", exception);
 
                 var interviewException = exception as InterviewException;
-                if (interviewException == null)
-                {
-                    interviewException = interviewException.UnwrapAllInnerExceptions()
-                        .OfType<InterviewException>()
-                        .FirstOrDefault();
-                }
+                interviewException = interviewException?.UnwrapAllInnerExceptions()
+                    .OfType<InterviewException>()
+                    .FirstOrDefault();
 
                 var exceptionType = interviewException?.ExceptionType.ToString() ?? UnknownExceptionType;
 
@@ -151,8 +148,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
 
                 this.logger.Debug($"Interview events by {interview.InterviewId} moved to broken packages. Took {innerwatch.Elapsed:g}.");
                 innerwatch.Restart();
-
-                throw;
             }
 
             innerwatch.Stop();

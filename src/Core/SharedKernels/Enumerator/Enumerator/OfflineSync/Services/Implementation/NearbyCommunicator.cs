@@ -280,7 +280,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                     var errorResponse = PreparePayload(payloadContent.CorrelationId, new FailedResponse(), false, e.Message);
 
                     await SendOverWire(nearbyConnection, endpoint, errorResponse);
-                    throw;
+                    return;
                 }
 
                 var responsePayload = PreparePayload(payloadContent.CorrelationId, response, false);

@@ -75,6 +75,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.CanConnect = true;
         }
 
+        protected override void Disconnected(string endpoint)
+        {
+            this.CanConnect = false;
+        }
+
         protected override string GetServiceName()
         {
             var user = this.interviewersPlainStorage.FirstOrDefault();
