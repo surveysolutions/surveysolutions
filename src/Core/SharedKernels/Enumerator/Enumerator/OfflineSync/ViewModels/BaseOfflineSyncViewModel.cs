@@ -171,5 +171,11 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
                 apiConnected.ContinueWith(async res => this.OnGoogleApiReady());
             }
         }
+
+        protected string NormalizeEndpoint(string endpoint)
+        {
+            var uri = new Uri(endpoint);
+            return uri.ToString().TrimEnd('/').ToLower();
+        }
     }
 }
