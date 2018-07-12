@@ -19,6 +19,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
             this.syncLogRepository = syncLogRepository;
         }
 
+        [HttpPost]
         public IHttpActionResult Post(List<InterviewerExceptionInfo> exceptions)
         {
             foreach (var exception in exceptions)
