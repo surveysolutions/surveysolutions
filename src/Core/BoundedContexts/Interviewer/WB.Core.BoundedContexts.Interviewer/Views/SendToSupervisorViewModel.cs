@@ -3,22 +3,15 @@ using System.Threading.Tasks;
 using Humanizer;
 using Humanizer.Bytes;
 using MvvmCross.Commands;
-using WB.Core.BoundedContexts.Interviewer.Properties;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Core.SharedKernels.Enumerator.Views;
+using InterviewerUIResources = WB.Core.BoundedContexts.Interviewer.Properties.InterviewerUIResources;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views
 {
-    public enum TransferingStatus
-    {
-        WaitingDevice = 1,
-        Failed,
-        Transferring,
-        CompletedWithErrors,
-        Completed,
-        Aborted
-    }
     public class SendToSupervisorViewModel : BaseViewModel
     {
         public SendToSupervisorViewModel(IPrincipal principal, 
@@ -90,7 +83,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
             var minLeft = TimeSpan.FromMinutes(10).Humanize();
 
-            this.NetworkInfo = string.Format(InterviewerUIResources.SendToSupervisor_NetworkInfo, kbPerSec, minLeft);
+            this.NetworkInfo = string.Format(UIResources.OfflineSync_NetworkInfo, kbPerSec, minLeft);
             this.ProgressInPercents = 33;
             this.TransferingStatus = TransferingStatus.CompletedWithErrors;
 

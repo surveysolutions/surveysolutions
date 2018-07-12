@@ -1,100 +1,11 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <resources>
-    <style name="SendToSupervisor_MainHolder" parent="AppTheme">
-        <item name="android:layout_width">440dp</item>
-        <item name="android:layout_marginLeft">38dp</item>
-        <item name="android:layout_marginTop">38dp</item>
-    </style>
-    <style name="SendToSupervisor_Title" parent="AppTheme">
-        <item name="android:paddingTop">38dp</item>
-        <item name="android:fontFamily">Roboto</item>
-        <item name="android:textSize">@dimen/textsize_24</item>
-        <item name="android:textColor">@color/sendtosupervisor_regular_text</item>
-    </style>
-    <style name="SendToSupervisor_ProgressTitle" parent="AppTheme">
-        <item name="android:paddingTop">26dp</item>
-        <item name="android:fontFamily">Roboto</item>
-        <item name="android:textSize">@dimen/textsize_18</item>
-        <item name="android:textColor">@color/sendtosupervisor_regular_text</item>
-        <item name="android:textStyle">bold</item>
-    </style>
-    <style name="SendToSupervisor_Cancel" parent="AppTheme">
-        <item name="android:paddingTop">38dp</item>
-        <item name="android:fontFamily">Roboto</item>
-        <item name="android:textSize">@dimen/textsize_14</item>
-        <item name="android:textColor">@color/sendtosupervisor_regular_text</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textAllCaps">true</item>
-        <item name="android:letterSpacing">0.1</item>
-    </style>
-    <style name="SendToSupervisor_BackToDashboard" parent="AppTheme">
-        <item name="android:layout_marginLeft">18dp</item>
-        <item name="android:fontFamily">Roboto</item>
-        <item name="android:textSize">@dimen/textsize_14</item>
-        <item name="android:textColor">@color/sendtosupervisor_regular_text</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textAllCaps">true</item>
-        <item name="android:letterSpacing">0.1</item>
-        <item name="android:gravity">center</item>
-    </style>
     <style name="SendToSupervisor_Note" parent="AppTheme">
         <item name="android:paddingTop">76dp</item>
         <item name="android:fontFamily">Roboto</item>
         <item name="android:textSize">@dimen/textsize_18</item>
-        <item name="android:textColor">@color/sendtosupervisor_regular_text</item>
+        <item name="android:textColor">@color/offline_sync_regular_text</item>
         <item name="android:textStyle">bold</item>
-    </style>
-    <style name="SendToSupervisor_SearchSupervisor" parent="AppTheme">
-        <item name="android:layout_height">match_parent</item>
-        <item name="android:layout_marginTop">48dp</item>
-        <item name="android:layout_marginLeft">24dp</item>
-        <item name="android:fontFamily">Roboto</item>
-        <item name="android:textSize">@dimen/textsize_18</item>
-        <item name="android:textColor">@color/sendtosupervisor_waitingdevice_text</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:gravity">center</item>
-    </style>
-    <style name="SendToSupervisor_InfinityProgress" parent="@android:style/Widget.ProgressBar.Large">
-        <item name="android:layout_marginTop">48dp</item>
-        <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">wrap_content</item>
-        <item name="android:indeterminateDrawable">@drawable/spinnerring</item>
-    </style>
-    <style name="SendToSupervisor_Abort" parent="AppTheme">
-        <item name="android:paddingTop">18dp</item>
-        <item name="android:layout_marginLeft">18dp</item>
-        <item name="android:fontFamily">Roboto</item>
-        <item name="android:textSize">@dimen/textsize_14</item>
-        <item name="android:textColor">@color/sendtosupervisor_abort_text</item>
-        <item name="android:textStyle">bold</item>
-        <item name="android:textAllCaps">true</item>
-        <item name="android:letterSpacing">0.1</item>
-    </style>
-    <style name="SendToSupervisor_ProgressStatus" parent="AppTheme">
-        <item name="android:paddingTop">45dp</item>
-        <item name="android:fontFamily">Roboto</item>
-        <item name="android:textSize">@dimen/textsize_24</item>
-        <item name="android:textColor">@color/sendtosupervisor_regular_text</item>
-    </style>
-    <style name="SendToSupervisor_NetworkInfo" parent="AppTheme">
-        <item name="android:paddingTop">18dp</item>
-        <item name="android:fontFamily">Roboto</item>
-        <item name="android:textSize">@dimen/textsize_18</item>
-        <item name="android:textColor">@color/sendtosupervisor_regular_text</item>
-        <item name="android:textStyle">bold</item>
-    </style>
-    <style name="SendToSupervisor_Progress" parent="@android:style/Widget.ProgressBar.Horizontal">
-        <item name="android:paddingTop">18dp</item>
-        <item name="android:progressDrawable">@drawable/greenprogress</item>
-    </style>
-    <style name="SendToSupervisor_Done" parent="AppTheme">
-        <item name="android:layout_marginTop">38dp</item>
-        <item name="android:background">@drawable/group_completed</item>
-        <item name="android:textSize">@dimen/textsize_12</item>
-        <item name="android:letterSpacing">0.05</item>
-        <item name="android:textAllCaps">true</item>
-        <item name="android:fontFamily">sans-serif-medium</item>
-        <item name="android:textStyle">normal</item>
     </style>
     <style name="SendToSupervisor_Retry" parent="AppTheme">
         <item name="android:background">@drawable/default_input_button</item>

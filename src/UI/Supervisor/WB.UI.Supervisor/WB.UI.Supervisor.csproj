@@ -306,6 +306,7 @@
     <Compile Include="CustomControls\SupervisorDashboardTemplateSelector.cs" />
     <Compile Include="MvvmBindings\DrawerLockModeBinding.cs" />
     <Compile Include="MvvmBindings\ImageCompanyLogoBinding.cs" />
+    <Compile Include="MvvmBindings\SupervisorLocalizationValueConverter.cs" />
     <Compile Include="MvvmBindings\SelectedBackgroundConverter.cs" />
     <Compile Include="ServiceLocation\SupervisorInfrastructureModule.cs" />
     <Compile Include="Services\Implementation\CheckForExtendedVersionUriProvider.cs" />
@@ -575,6 +576,11 @@
   <ItemGroup>
     <AndroidResource Include="Resources\xml\file_paths.xml">
       <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\offline_sync_device_item.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>

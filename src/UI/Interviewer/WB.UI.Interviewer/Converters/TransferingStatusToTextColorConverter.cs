@@ -1,7 +1,7 @@
 using System;
 using System.Globalization;
 using MvvmCross.Converters;
-using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.UI.Interviewer.Converters
 {
@@ -14,11 +14,11 @@ namespace WB.UI.Interviewer.Converters
                 case TransferingStatus.Failed:
                 case TransferingStatus.Aborted:
                 case TransferingStatus.CompletedWithErrors:
-                    return Resource.Color.sendtosupervisor_error_text;
+                    return Resource.Color.offline_sync_error_text;
                 case TransferingStatus.Completed:
-                    return Resource.Color.sendtosupervisor_complete_text;
+                    return Resource.Color.offline_sync_complete_text;
                 default:
-                    return Resource.Color.sendtosupervisor_regular_text;
+                    return Resource.Color.offline_sync_regular_text;
             }
         }
     }

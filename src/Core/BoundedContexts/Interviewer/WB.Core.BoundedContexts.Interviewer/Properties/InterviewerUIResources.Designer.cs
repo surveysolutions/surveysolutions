@@ -1284,33 +1284,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Abort.
-        /// </summary>
-        public static string SendToSupervisor_Abort {
-            get {
-                return ResourceManager.GetString("SendToSupervisor_Abort", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Back to dashboard.
-        /// </summary>
-        public static string SendToSupervisor_BackToDashboard {
-            get {
-                return ResourceManager.GetString("SendToSupervisor_BackToDashboard", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Cancel.
-        /// </summary>
-        public static string SendToSupervisor_Cancel {
-            get {
-                return ResourceManager.GetString("SendToSupervisor_Cancel", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Check that supervisor device has wifi and bluetooth turned on and you are withing couple of meters from it.
         /// </summary>
         public static string SendToSupervisor_CheckSupervisorDevice {
@@ -1325,15 +1298,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         public static string SendToSupervisor_ConnectionFailed {
             get {
                 return ResourceManager.GetString("SendToSupervisor_ConnectionFailed", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Done.
-        /// </summary>
-        public static string SendToSupervisor_Done {
-            get {
-                return ResourceManager.GetString("SendToSupervisor_Done", resourceCulture);
             }
         }
         
@@ -1362,16 +1326,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         public static string SendToSupervisor_MovingToSupervisorDevice {
             get {
                 return ResourceManager.GetString("SendToSupervisor_MovingToSupervisorDevice", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Range and network are acceptable. 
-        ///Speed: {0}, Time left: {1}.
-        /// </summary>
-        public static string SendToSupervisor_NetworkInfo {
-            get {
-                return ResourceManager.GetString("SendToSupervisor_NetworkInfo", resourceCulture);
             }
         }
         

@@ -629,4 +629,20 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="Supervisor_Complete_Reject_btn" xml:space="preserve">
     <value>Reject</value>
   </data>
+    <data name="OfflineSync_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+    <data name="OfflineSync_NetworkInfo" xml:space="preserve">
+    <value>Range and network are acceptable. 
+Speed: {0}, Time left: {1}</value>
+  </data>
+    <data name="OfflineSync_Abort" xml:space="preserve">
+    <value>Abort</value>
+  </data>
+    <data name="OfflineSync_BackToDashboard" xml:space="preserve">
+    <value>Back to dashboard</value>
+  </data>
+    <data name="OfflineSync_Done" xml:space="preserve">
+    <value>Done</value>
+  </data>
 </root>
