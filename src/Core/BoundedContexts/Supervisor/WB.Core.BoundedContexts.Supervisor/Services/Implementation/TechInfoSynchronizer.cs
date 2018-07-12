@@ -16,12 +16,12 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
     {
         private readonly IPlainStorage<BrokenInterviewPackageView, int?> brokenInterviewPackageStorage;
         private readonly ISupervisorSynchronizationService synchronizationService;
-        private readonly IPlainStorage<UnexpectedExceptionFromInterviewerView, int> unexpectedExceptionsStorage;
+        private readonly IPlainStorage<UnexpectedExceptionFromInterviewerView, int?> unexpectedExceptionsStorage;
         private readonly ITabletInfoService tabletInfoService;
 
         public TechInfoSynchronizer(IPlainStorage<BrokenInterviewPackageView, int?> brokenInterviewPackageStorage,
             ISupervisorSynchronizationService synchronizationService, 
-            IPlainStorage<UnexpectedExceptionFromInterviewerView, int> unexpectedExceptionsStorage,
+            IPlainStorage<UnexpectedExceptionFromInterviewerView, int?> unexpectedExceptionsStorage,
             ITabletInfoService tabletInfoService)
         {
             this.brokenInterviewPackageStorage = brokenInterviewPackageStorage;
