@@ -60,16 +60,23 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
         /// <remarks>
         /// Each communication occure is two step process.
         ///     1. Sending small <see cref="PayloadHeader">`header`</see> package. That describe intent of sender, message type and size
-        ///     2. Sending payload wrapped in internal <see cref="PayloadContent">NearbyPayload</see> wrapper
+        ///         a. If payload message is smaller then certain connections api limit, then embed payload in header
+        ///         b. if payload message is bigger then connection api lmimt, then:
+        ///             - Sending payload wrapped in internal <see cref="PayloadContent">NearbyPayload</see> wrapper
         ///
         /// Same steps occure in response.
         ///
-        /// So sending one message generate following data flow:
+        /// So sending one message generate following data flow, is case when all payloads bigger then limit:
         ///
         ///     A -- header  --> B
         ///     A -- payload --> B
         ///     B -- header  --> A
         ///     B -- payload --> B
+        ///
+        /// If fit in message size limit
+        ///
+        ///     A -- header with payload --> B
+        ///     B -- header with payload --> A
         ///
         /// In Nearby we use two types of messages: BYTES and STREAM
         /// BYTES used for info/header messages

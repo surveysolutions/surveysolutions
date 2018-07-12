@@ -14,10 +14,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
     public class SupervisorAssignmentsHandler : IHandleCommunicationMessage
     {
         private readonly IAssignmentDocumentsStorage assignmentDocumentsStorage;
+        private readonly IInterviewAnswerSerializer interviewAnswerSerializer;
         
-        public SupervisorAssignmentsHandler(IAssignmentDocumentsStorage assignmentDocumentsStorage)
+        public SupervisorAssignmentsHandler(IAssignmentDocumentsStorage assignmentDocumentsStorage, 
+            IInterviewAnswerSerializer interviewAnswerSerializer)
         {
             this.assignmentDocumentsStorage = assignmentDocumentsStorage;
+            this.interviewAnswerSerializer = interviewAnswerSerializer;
         }
 
         public void Register(IRequestHandler requestHandler)
@@ -35,7 +38,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             return OkResponse.Task;
         }
 
-        private Task<GetAssignmentsResponse> GetAssignments(GetAssignmentsRequest request)
+        public Task<GetAssignmentsResponse> GetAssignments(GetAssignmentsRequest request)
         {
             var assignments = this.assignmentDocumentsStorage.LoadAll(request.UserId);
 
@@ -52,7 +55,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             });
         }
 
-        private Task<GetAssignmentResponse> GetAssignment(GetAssignmentRequest request)
+        public Task<GetAssignmentResponse> GetAssignment(GetAssignmentRequest request)
         {
             var assignment = this.assignmentDocumentsStorage.GetById(request.Id);
 
@@ -75,7 +78,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                 var serializedAnswer = new AssignmentApiDocument.InterviewSerializedAnswer
                 {
                     Identity = answer.Identity,
-                    SerializedAnswer = answer.AnswerAsString
+                    SerializedAnswer = answer.SerializedAnswer // this.interviewAnswerSerializer.Serialize(answer)
                 };
                 
                 assignmentApiView.Answers.Add(serializedAnswer);
