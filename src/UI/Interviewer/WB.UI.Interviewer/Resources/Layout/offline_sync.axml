@@ -18,6 +18,9 @@
         local:MvxBind="Click Sync;" />        
     <TextView
         style="@style/Dashboard_Search_SearchResult"
+        local:MvxBind="Text Endpoint;" />    
+    <TextView
+        style="@style/Dashboard_Search_SearchResult"
         local:MvxBind="Text Status;" />
     <TextView
         style="@style/Dashboard_Search_SearchResult"
