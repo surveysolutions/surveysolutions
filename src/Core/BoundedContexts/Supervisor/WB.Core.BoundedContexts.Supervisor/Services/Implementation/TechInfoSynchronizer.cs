@@ -67,7 +67,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
 
             progress.Report(new SyncProgressInfo
             {
-                Title = SupervisorUIResources.Synchronization_UploadBrokenInterviewPackages
+                Title = SupervisorUIResources.Synchronization_UploadExceptions
             });
 
             var exceptions = this.unexpectedExceptionsStorage.LoadAll().ToList();
