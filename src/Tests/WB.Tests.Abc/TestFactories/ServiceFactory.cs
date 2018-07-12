@@ -790,7 +790,8 @@ namespace WB.Tests.Abc.TestFactories
             IEnumeratorEventStorage eventStorage = null,
             IPlainStorage<InterviewView> interviews = null,
             ICommandService commandService = null,
-            IJsonAllTypesSerializer serializer = null)
+            IJsonAllTypesSerializer serializer = null,
+            IPlainStorage<BrokenInterviewPackageView, int?> brokenInterviewStorage = null)
         {
             return new SupervisorInterviewsHandler(
                 eventBus ?? Mock.Of<ILiteEventBus>(),
@@ -799,7 +800,7 @@ namespace WB.Tests.Abc.TestFactories
                 serializer ?? new JsonAllTypesSerializer(),
                 commandService ?? Mock.Of<ICommandService>(), 
                 Mock.Of<ILogger>(),
-                Mock.Of<IPlainStorage<BrokenInterviewPackageView, int?>>(),
+                brokenInterviewStorage ?? Mock.Of<IPlainStorage<BrokenInterviewPackageView, int?>>(),
                 new SqliteInmemoryStorage<SuperivsorReceivedPackageLogEntry, int>());
         }
     }
