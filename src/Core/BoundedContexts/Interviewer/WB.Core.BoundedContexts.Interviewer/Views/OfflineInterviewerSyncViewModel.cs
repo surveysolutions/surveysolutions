@@ -5,6 +5,7 @@ using MvvmCross;
 using MvvmCross.Commands;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services.OfflineSync;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -36,11 +37,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.synchronizationMode = synchronizationMode;
             this.synchronizationCompleteSource = synchronizationCompleteSource;
 
-            this.serviceName = settings.Endpoint + "/";
+            this.serviceName = NormalizeEndpoint(settings.Endpoint);
             SetStatus(ConnectionStatus.WaitingForGoogleApi);
-            
         }
 
+        
         protected override async Task OnGoogleApiReady()
         {
             SetStatus(ConnectionStatus.StartDiscovering);
@@ -90,7 +91,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         protected override string GetServiceName()
         {
             var user = this.interviewersPlainStorage.FirstOrDefault();
-            return serviceName + user.SupervisorId;
+            return serviceName + user.SupervisorId.FormatGuid();
         }
 
         private bool canConnect;
