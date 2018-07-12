@@ -25,7 +25,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         private readonly IUserInteractionService userInteractionService;
         private readonly IPrincipal principal;
         private readonly IHttpStatistician httpStatistician;
-        private readonly IPasswordHasher passwordHasher;
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
         private readonly IAuditLogService auditLogService;
 
@@ -52,7 +51,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             this.httpStatistician = httpStatistician;
             this.userInteractionService = userInteractionService;
             this.principal = principal;
-            this.passwordHasher = passwordHasher;
             this.interviewViewRepository = interviewViewRepository;
             this.auditLogService = auditLogService;
         }

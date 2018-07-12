@@ -8,5 +8,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public Guid Id { get; set; }
         public QuestionnaireIdentity QuestionnaireIdentity { get; set; }
         public bool IsRejected { get; set; }
+        public Guid ResponsibleId { get; set; }
     }
 }

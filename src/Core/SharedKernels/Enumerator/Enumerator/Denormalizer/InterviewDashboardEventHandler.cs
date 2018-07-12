@@ -523,7 +523,7 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
 
             if (@event.Payload.InterviewerId.HasValue)
             {
-                interviewView.ResponsibleId = @event.Payload.InterviewerId.GetValueOrDefault();
+                interviewView.ResponsibleId = @event.Payload.InterviewerId.Value;
             }
 
             interviewView.InterviewerAssignedDateTime = @event.Payload.AssignTime;
