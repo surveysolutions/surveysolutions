@@ -55,6 +55,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
                     break;
                 case NearbyEvent.Disconnected disconnected:
                     SetStatus(ConnectionStatus.Discovering, "Disconnected from " + disconnected.Endpoint);
+                    Disconnected(disconnected.Endpoint);
                     break;
                 case NearbyEvent.EndpointFound endpointFound:
                     this.OnFound(endpointFound.Endpoint, endpointFound.EndpointInfo);
@@ -62,6 +63,11 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
                 case NearbyEvent.EndpointLost endpointLost:
                     break;
             }
+        }
+
+        protected virtual void Disconnected(string disconnectedEndpoint)
+        {
+            
         }
 
         protected void SetStatus(ConnectionStatus connectionStatus, string details = null)
