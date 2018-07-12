@@ -152,9 +152,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return Task.FromResult<RestStreamResult>(null);
         }
 
-        public Task<Guid> GetCurrentSupervisor(CancellationToken token, RestCredentials credentials)
+        public async Task<Guid> GetCurrentSupervisor(CancellationToken cancellationToken, RestCredentials credentials)
         {
-            return Task.FromResult<Guid>(this.principal.CurrentUserIdentity.SupervisorId);
+            var response = await this.syncClient.SendAsync<SupervisorIdRequest, SupervisorIdResponse>(
+                new SupervisorIdRequest(), cancellationToken);
+
+            return response.SupervisorId;
         }
 
         public Task<bool> IsAutoUpdateEnabledAsync(CancellationToken token)
