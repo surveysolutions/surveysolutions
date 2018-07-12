@@ -254,7 +254,7 @@
     <value>Работает на</value>
   </data>
   <data name="InterviewReceivedByInterviewer" xml:space="preserve">
-    <value>Нельзя модифицировать интервью полученное интервьюером на устройство</value>
+    <value>Нельзя модифицировать интервью, полученное устройством</value>
   </data>
   <data name="Filters_Title" xml:space="preserve">
     <value>Фильтр Вопросов</value>
