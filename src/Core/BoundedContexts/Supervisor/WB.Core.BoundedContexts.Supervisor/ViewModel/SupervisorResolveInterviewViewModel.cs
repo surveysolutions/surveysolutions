@@ -86,7 +86,9 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 
         private bool ApproveRejectAllowed()
         {
-            return this.status == InterviewStatus.Completed || this.status == InterviewStatus.RejectedByHeadquarters;
+            return this.status == InterviewStatus.Completed || 
+                   this.status == InterviewStatus.RejectedByHeadquarters || 
+                   this.status == InterviewStatus.RejectedBySupervisor;
         }
 
         public IMvxCommand Assign => new MvxCommand(SelectInterviewer);
