@@ -93,14 +93,11 @@ namespace WB.UI.Supervisor.ServiceLocation
 
         private void BindOfflineServices(IIocRegistry registry)
         {
-            registry.Bind<IHandleCommunicationMessage, DebugHandler>();
-
             registry.Bind<IHandleCommunicationMessage, SupervisorInterviewsHandler>();
             registry.Bind<IHandleCommunicationMessage, SupervisorQuestionnairesHandler>();
             registry.Bind<IHandleCommunicationMessage, SupervisorBinaryHandler>();
             registry.Bind<IHandleCommunicationMessage, SupervisorAuditLogHandler>();
             registry.Bind<IHandleCommunicationMessage, SupervisorAssignmentsHandler>();
-
             registry.Bind<IHandleCommunicationMessage, SupervisorTabletInfoHandler>();
         }
 
@@ -109,7 +106,11 @@ namespace WB.UI.Supervisor.ServiceLocation
 #if !EXCLUDEEXTENSIONS
             WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditService.RegisterLicence();
 #endif
-            
+            CommandRegistry
+                .Setup<StatefulInterview>()
+                .InitializesWith<SynchronizeInterviewEventsCommand>(command => command.InterviewId,
+                    aggregate => aggregate.SynchronizeInterviewEvents);
+
             CommandRegistry.Configure<StatefulInterview, QuestionCommand>(configuration =>
                 configuration
                     .ValidatedBy<SupervisorAnsweringValidator>()

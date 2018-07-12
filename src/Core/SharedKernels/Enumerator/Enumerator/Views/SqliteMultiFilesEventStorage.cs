@@ -214,7 +214,8 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         public bool HasEventsAfterSpecifiedSequenceWithAnyOfSpecifiedTypes(long sequence, Guid eventSourceId,
             params string[] typeNames)
         {
-            using (SQLiteConnectionWithLock connection = this.GetOrCreateConnection(eventSourceId))
+            var connection = this.GetOrCreateConnection(eventSourceId);
+            using (connection.Lock())
             {
                 var @event = connection
                     .Table<EventView>()
