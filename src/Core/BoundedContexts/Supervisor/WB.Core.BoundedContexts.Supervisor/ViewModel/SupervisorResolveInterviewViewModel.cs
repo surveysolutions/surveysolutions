@@ -74,7 +74,9 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             await this.commandService.ExecuteAsync(command);
             await this.navigationService.NavigateToDashboardAsync(interviewId.FormatGuid());
 
-        }, ApproveRejectAllowed);
+        }, () => this.status == InterviewStatus.Completed || 
+                 this.status == InterviewStatus.RejectedByHeadquarters ||
+                 this.status == InterviewStatus.RejectedBySupervisor);
 
         public IMvxAsyncCommand Reject => new MvxAsyncCommand(async () =>
         {
@@ -82,16 +84,10 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
                 Comment, DateTime.UtcNow);
             await this.commandService.ExecuteAsync(command);
             await this.navigationService.NavigateToDashboardAsync(interviewId.FormatGuid());
-        }, ApproveRejectAllowed);
+        }, () => this.status == InterviewStatus.Completed || 
+                 this.status == InterviewStatus.RejectedByHeadquarters);
 
-        private bool ApproveRejectAllowed()
-        {
-            return this.status == InterviewStatus.Completed || 
-                   this.status == InterviewStatus.RejectedByHeadquarters || 
-                   this.status == InterviewStatus.RejectedBySupervisor;
-        }
-
-        public IMvxCommand Assign => new MvxCommand(SelectInterviewer);
+        public IMvxCommand Assign => new MvxCommand(SelectInterviewer, () => this.status == InterviewStatus.RejectedBySupervisor);
 
         private void SelectInterviewer()
         {
