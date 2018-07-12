@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:local="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
@@ -18,15 +18,15 @@
 
     <LinearLayout android:orientation="vertical"
                   android:layout_height="wrap_content"
-                  style="@style/SendToSupervisor_MainHolder">
+                  style="@style/OfflineSync_MainHolder">
         <TextView
-            style="@style/SendToSupervisor_Title"
+            style="@style/OfflineSync_Title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             local:MvxBind="Text Title">
         </TextView>
         <TextView
-            style="@style/SendToSupervisor_ProgressTitle"
+            style="@style/OfflineSync_ProgressTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             local:MvxBind="Text ProgressTitle; TextColor TransferingStatusToTextColor(TransferingStatus)">
@@ -40,20 +40,20 @@
                           android:layout_width="match_parent"
                           android:layout_height="wrap_content">
 
-                <ProgressBar style="@style/SendToSupervisor_InfinityProgress"/>
+                <ProgressBar style="@style/OfflineSync_InfinityProgress"/>
 
-                <TextView style="@style/SendToSupervisor_SearchSupervisor"
+                <TextView style="@style/OfflineSync_SearchDevice"
                           android:layout_width="wrap_content"
                           local:MvxBind="Text Localization('SendToSupervisor_LookingForSupervisor')"/>
             </LinearLayout>
 
-            <TextView style="@style/SendToSupervisor_Cancel"
+            <TextView style="@style/OfflineSync_Cancel"
                       android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
                       local:MvxBind="Text Localization('SendToSupervisor_Cancel'); Click CancelCommand"/>
         </LinearLayout>
 
-        <TextView style="@style/SendToSupervisor_ProgressTitle"
+        <TextView style="@style/OfflineSync_ProgressTitle"
                   android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   local:MvxBind="Text Localization('SendToSupervisor_ConnectionFailed'); Visible EnumToString(TransferingStatus) == 'Failed'"/>
@@ -63,7 +63,7 @@
                       android:layout_height="wrap_content"
                       local:MvxBind="Visible Not(Or(EnumToString(TransferingStatus) == 'Failed', EnumToString(TransferingStatus) == 'WaitingDevice'))">
 
-            <TextView style="@style/SendToSupervisor_ProgressStatus"
+            <TextView style="@style/OfflineSync_ProgressStatus"
                       android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
                       local:MvxBind="Text ProgressStatus"/>
@@ -76,23 +76,23 @@
                 android:stretchColumns="0">
                 <TableRow>
                     <ProgressBar
-                        style="@style/SendToSupervisor_Progress"
+                        style="@style/OfflineSync_Progress"
                         android:layout_height="wrap_content"
                         android:layout_width="match_parent"
                         local:MvxBind="Progress ProgressInPercents"/>
 
-                    <TextView style="@style/SendToSupervisor_Abort"
+                    <TextView style="@style/OfflineSync_Abort"
                               android:layout_width="wrap_content"
                               android:layout_height="wrap_content"
-                              local:MvxBind="Text Localization('SendToSupervisor_Abort'); Click AbortCommand; Visible EnumToString(TransferingStatus) == 'Transferring'"/>
+                              local:MvxBind="Text Localization('OfflineSync_Abort'); Click AbortCommand; Visible EnumToString(TransferingStatus) == 'Transferring'"/>
                 </TableRow>
             </TableLayout>
-            <TextView style="@style/SendToSupervisor_NetworkInfo"
+            <TextView style="@style/OfflineSync_NetworkInfo"
                       android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
                       local:MvxBind="Text NetworkInfo; Visible EnumToString(TransferingStatus) == 'Transferring'"/>
 
-            <Button style="@style/SendToSupervisor_Done"
+            <Button style="@style/OfflineSync_Done"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     local:MvxBind="Text Localization('SendToSupervisor_Done'); Click DoneCommand; Visible EnumToString(TransferingStatus) == 'Completed'"/>
@@ -107,7 +107,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     local:MvxBind="Text Localization('SendToSupervisor_Retry'); Click RetryCommand"/>
-            <TextView style="@style/SendToSupervisor_BackToDashboard"
+            <TextView style="@style/OfflineSync_BackToDashboard"
                       android:layout_width="wrap_content"
                       android:layout_height="match_parent"
                       local:MvxBind="Text Localization('SendToSupervisor_BackToDashboard'); Click CancelCommand"/>

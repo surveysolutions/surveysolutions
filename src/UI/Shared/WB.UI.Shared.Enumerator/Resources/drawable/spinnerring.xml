@@ -12,7 +12,7 @@
               android:width="36dp" />
 
         <gradient android:type="sweep" android:useLevel="false"
-                  android:startColor="@color/sendtosupervisor_waitingdevice_text" android:centerColor="@color/sendtosupervisor_waitingdevice_text"
+                  android:startColor="@color/offline_sync_waitingdevice_text" android:centerColor="@color/offline_sync_waitingdevice_text"
                   android:endColor="#ffffffff" android:centerY="0.70" />
     </shape>
 
