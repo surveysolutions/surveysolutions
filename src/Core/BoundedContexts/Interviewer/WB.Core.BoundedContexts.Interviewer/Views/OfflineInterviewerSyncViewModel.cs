@@ -85,7 +85,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public bool CanConnect
         {
             get => canConnect;
-            set => SetProperty(ref canConnect, value);
+            set
+            {
+                SetProperty(ref canConnect, value);
+                this.RaisePropertyChanged(nameof(Sync));
+            }
         }
     }
 }
