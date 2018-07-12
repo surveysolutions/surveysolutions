@@ -38,12 +38,10 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             this.Synchronization = synchronization;
             this.Synchronization.Init();
 
-            this.messenger = messenger;
-            messengerSubscribtion =
-                messenger.Subscribe<RequestSynchronizationMsg>(msg => SynchronizationCommand.Execute());
+            messengerSubscribtion = messenger.Subscribe<RequestSynchronizationMsg>(msg => SynchronizationCommand.Execute());
         }
 
-        private MvxSubscriptionToken messengerSubscribtion;
+        private readonly MvxSubscriptionToken messengerSubscribtion;
 
         public override void Prepare(DashboardViewModelArgs parameter)
         {
@@ -51,16 +49,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         }
 
         private IMvxAsyncCommand synchronizationCommand;
-        private readonly IMvxMessenger messenger;
 
-        public IMvxAsyncCommand SynchronizationCommand
-        {
-            get
-            {
-                return synchronizationCommand ?? (synchronizationCommand = new MvxAsyncCommand(this.RunSynchronization,
-                           () => !this.Synchronization.IsSynchronizationInProgress));
-            }
-        }
+        public IMvxAsyncCommand SynchronizationCommand => synchronizationCommand ?? (synchronizationCommand = new MvxAsyncCommand(this.RunSynchronization));
 
         public IMvxCommand SignOutCommand => new MvxAsyncCommand(this.SignOut);
 
@@ -97,6 +87,9 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
 
         private Task RunSynchronization()
         {
+            if (this.Synchronization.IsSynchronizationInProgress)
+                return Task.CompletedTask;
+
             if (this.viewModelNavigationService.HasPendingOperations)
             {
                 this.viewModelNavigationService.ShowWaitMessage();
