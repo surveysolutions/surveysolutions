@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Autofac;
 using MvvmCross;
 using MvvmCross.Commands;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
@@ -20,7 +19,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private readonly IPlainStorage<InterviewerIdentity> interviewersPlainStorage;
         private readonly ISynchronizationMode synchronizationMode;
         private readonly string serviceName;
-
+        
         public OfflineInterviewerSyncViewModel(IPrincipal principal,
             IViewModelNavigationService viewModelNavigationService,
             IPermissionsService permissions,
@@ -46,7 +45,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         }
 
         public IMvxAsyncCommand Restart => new MvxAsyncCommand(OnGoogleApiReady);
-        public IMvxAsyncCommand Sync => new MvxAsyncCommand(Synchronize);
+        public IMvxAsyncCommand Sync => new MvxAsyncCommand(Synchronize, () => CanConnect);
 
         public async Task Synchronize()
         {
@@ -57,8 +56,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                     this.synchronizationMode.Set(SynchronizationMode.Offline);
                     var synchronizationProcess = Mvx.Resolve<ISynchronizationProcess>();
 
-                await synchronizationProcess.SynchronizeAsync(
-                        new Progress<SyncProgressInfo>(o => { SetStatus(ConnectionStatus.Sync, o.Description); }),
+                    await synchronizationProcess.SynchronizeAsync(
+                        new Progress<SyncProgressInfo>(o =>
+                        {
+                            SetStatus(ConnectionStatus.Sync, o.Description);
+                        }),
                         CancellationToken.None);
                 }
             }
@@ -68,10 +70,22 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             }
         }
 
+        protected override void Connected(string connectedEndpoint)
+        {
+            this.CanConnect = true;
+        }
+
         protected override string GetServiceName()
         {
             var user = this.interviewersPlainStorage.FirstOrDefault();
             return serviceName + user.SupervisorId;
+        }
+
+        private bool canConnect;
+        public bool CanConnect
+        {
+            get => canConnect;
+            set => SetProperty(ref canConnect, value);
         }
     }
 }
