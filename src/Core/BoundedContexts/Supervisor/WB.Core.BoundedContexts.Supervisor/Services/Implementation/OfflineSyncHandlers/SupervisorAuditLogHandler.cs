@@ -18,11 +18,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
     {
         private readonly IJsonAllTypesSerializer typesSerializer;
         private readonly IAuditLogService auditLogService;
-        private readonly IPlainStorage<UnexpectedExceptionFromInterviewerView, int> unexpectedExceptionsStorage;
+        private readonly IPlainStorage<UnexpectedExceptionFromInterviewerView, int?> unexpectedExceptionsStorage;
 
         public SupervisorAuditLogHandler(IAuditLogService auditLogService,
             IJsonAllTypesSerializer typesSerializer, 
-            IPlainStorage<UnexpectedExceptionFromInterviewerView, int> unexpectedExceptionsStorage)
+            IPlainStorage<UnexpectedExceptionFromInterviewerView, int?> unexpectedExceptionsStorage)
         {
             this.auditLogService = auditLogService;
             this.typesSerializer = typesSerializer;
