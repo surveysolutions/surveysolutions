@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.Logging;
 using WB.Core.BoundedContexts.Supervisor.Views;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -27,7 +28,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         {
             communicator.IncomingInfo.Subscribe(OnIncomingData);
             this.supervisorStorage = supervisorStorage;
-            serviceName = settings.Endpoint + "/";// + identity.UserId;
+            this.serviceName = NormalizeEndpoint(settings.Endpoint);
         }
 
         public IMvxAsyncCommand Restart => new MvxAsyncCommand(OnGoogleApiReady);
@@ -48,7 +49,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         protected override string GetServiceName()
         {
             var sup = supervisorStorage.FirstOrDefault();
-            return serviceName + sup.UserId;
+            return serviceName + sup.UserId.FormatGuid();
         }
     }
 }
