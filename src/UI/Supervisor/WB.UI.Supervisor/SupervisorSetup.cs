@@ -71,7 +71,7 @@ namespace WB.UI.Supervisor
         {
             base.FillValueConverters(registry);
 
-            registry.AddOrOverwrite("Localization", new EnumeratorLocalizationValueConverter());
+            registry.AddOrOverwrite("Localization", new SupervisorLocalizationValueConverter());
             registry.AddOrOverwrite("ValidationStyleBackground", new TextEditValidationStyleBackgroundConverter());
             registry.AddOrOverwrite("SelectedBg", new SelectedBackgroundConverter());
         }

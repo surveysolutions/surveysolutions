@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class SupervisorUIResources {
+    public class SupervisorUIResources {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Properties {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("WB.Core.BoundedContexts.Supervisor.Properties.SupervisorUIResources", typeof(SupervisorUIResources).Assembly);
@@ -51,7 +51,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Properties {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -61,9 +61,58 @@ namespace WB.Core.BoundedContexts.Supervisor.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to No sending devices detected.
+        ///Your device ID is &apos;{0}&apos;.
+        /// </summary>
+        public static string OfflineSync_NoDevicesDetectedFormat {
+            get {
+                return ResourceManager.GetString("OfflineSync_NoDevicesDetectedFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Receiving interviews.
+        /// </summary>
+        public static string OfflineSync_ReceivingInterviews {
+            get {
+                return ResourceManager.GetString("OfflineSync_ReceivingInterviews", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Receiving interviews
+        ///from another devices.
+        /// </summary>
+        public static string OfflineSync_ReceivingInterviewsFromDevices {
+            get {
+                return ResourceManager.GetString("OfflineSync_ReceivingInterviewsFromDevices", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interviews by {0}:
+        ///{1} of {2} transfered.
+        /// </summary>
+        public static string OfflineSync_TransferInterviewsFormat {
+            get {
+                return ResourceManager.GetString("OfflineSync_TransferInterviewsFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Waitnig for action from Interviewer devices.
+        /// </summary>
+        public static string OfflineSync_WaitingInterviewers {
+            get {
+                return ResourceManager.GetString("OfflineSync_WaitingInterviewers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Upload broken interview packages.
         ///   Looks up a localized string similar to Uploading broken interview packages.
         /// </summary>
-        internal static string Synchronization_UploadBrokenInterviewPackages {
+        public static string Synchronization_UploadBrokenInterviewPackages {
             get {
                 return ResourceManager.GetString("Synchronization_UploadBrokenInterviewPackages", resourceCulture);
             }

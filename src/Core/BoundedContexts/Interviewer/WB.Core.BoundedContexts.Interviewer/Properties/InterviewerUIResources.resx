@@ -756,9 +756,6 @@ Downloaded {3}%</value>
     <data name="SendToSupervisor_LookingForSupervisor" xml:space="preserve">
     <value>Looking for supervisor device</value>
   </data>
-    <data name="SendToSupervisor_Cancel" xml:space="preserve">
-    <value>Cancel</value>
-  </data>
     <data name="SendToSupervisor_MenuItem_Title" xml:space="preserve">
     <value>Move completed
 interviews</value>
@@ -769,23 +766,10 @@ interviews</value>
   <data name="SendToSupervisor_TransferedInterviews" xml:space="preserve">
     <value>{0} of {1} interviews transfered</value>
   </data>
-  <data name="SendToSupervisor_NetworkInfo" xml:space="preserve">
-    <value>Range and network are acceptable. 
-Speed: {0}, Time left: {1}</value>
-  </data>
-  <data name="SendToSupervisor_Abort" xml:space="preserve">
-    <value>Abort</value>
-  </data>
   <data name="SendToSupervisor_ConnectionFailed" xml:space="preserve">
     <value>Make sure both devices is in close proximity; WIFI and Bluetooth should be enabled on both devices; Supervisor application should be opened on Supervisor's device</value>
   </data>
   <data name="SendToSupervisor_Retry" xml:space="preserve">
     <value>Retry</value>
-  </data>
-  <data name="SendToSupervisor_BackToDashboard" xml:space="preserve">
-    <value>Back to dashboard</value>
-  </data>
-    <data name="SendToSupervisor_Done" xml:space="preserve">
-    <value>Done</value>
   </data>
 </root>

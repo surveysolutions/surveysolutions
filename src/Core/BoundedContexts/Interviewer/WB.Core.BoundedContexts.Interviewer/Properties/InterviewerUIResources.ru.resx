@@ -759,27 +759,9 @@
     <value>Загрузка на хедквотер аудин информации</value>
     <comment>Загрузка на хедквотер аудин информации</comment>
   </data>
-    <data name="SendToSupervisor_Done" xml:space="preserve">
-    <value>Завершить</value>
-    <comment>Завершить</comment>
-  </data>
-    <data name="SendToSupervisor_BackToDashboard" xml:space="preserve">
-    <value>К списку заданий</value>
-    <comment>К списку заданий</comment>
-  </data>
     <data name="SendToSupervisor_Retry" xml:space="preserve">
     <value>Повторить еще раз</value>
     <comment>Повторить еще раз</comment>
-  </data>
-    <data name="SendToSupervisor_Abort" xml:space="preserve">
-    <value>Прервать</value>
-    <comment>Отмена</comment>
-  </data>
-    <data name="SendToSupervisor_NetworkInfo" xml:space="preserve">
-    <value>Расстояние между устройствами и скорость сети в норме.
-Скорость: {0}, Осталось: {1}</value>
-    <comment>Range and network are acceptible. 
-Скорость: {0}, Осталось: {1}</comment>
   </data>
     <data name="SendToSupervisor_TransferedInterviews" xml:space="preserve">
     <value>{0} из {1} интервью переданы</value>
@@ -788,10 +770,6 @@
     <data name="SendToSupervisor_Note" xml:space="preserve">
     <value>Примечание: Эта операция может занять больше времени чем обычно, не выключайте ваше устройство</value>
     <comment>Примечание: Эта операция может занять времени больше чем обычно, не выключайте ваше устройство</comment>
-  </data>
-    <data name="SendToSupervisor_Cancel" xml:space="preserve">
-    <value>Отмена</value>
-    <comment>Отмена</comment>
   </data>
     <data name="SendToSupervisor_MovingToSupervisorDevice" xml:space="preserve">
     <value>Перемещение всех завершенных интервью на устройство супервизора</value>
