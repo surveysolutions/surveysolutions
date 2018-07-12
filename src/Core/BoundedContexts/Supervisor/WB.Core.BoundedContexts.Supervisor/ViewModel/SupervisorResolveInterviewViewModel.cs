@@ -24,8 +24,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         private readonly IPrincipal principal;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IViewModelNavigationService navigationService;
-        private InterviewStatus status;
-
+        
         public SupervisorResolveInterviewViewModel(
             ICommandService commandService, 
             IPrincipal principal, 
@@ -54,6 +53,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             this.navigationService = navigationService;
             this.interviewerSelectorDialog = interviewerSelectorDialog;
         }
+
+        private InterviewStatus status;
 
         public override void Configure(string interviewId, NavigationState navigationState)
         {
@@ -87,7 +88,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         }, () => this.status == InterviewStatus.Completed || 
                  this.status == InterviewStatus.RejectedByHeadquarters);
 
-        public IMvxCommand Assign => new MvxCommand(SelectInterviewer, () => this.status == InterviewStatus.RejectedBySupervisor);
+        public IMvxCommand Assign => new MvxCommand(SelectInterviewer, () => 
+            this.status == InterviewStatus.RejectedBySupervisor);
 
         private void SelectInterviewer()
         {
@@ -101,11 +103,13 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             this.UnsubscribeDialog();
         }
 
-        private void OnInterviewerSelected(object sender, InterviewerSelectedArgs e)
+        private async void OnInterviewerSelected(object sender, InterviewerSelectedArgs e)
         {
             this.UnsubscribeDialog();
             var command = new AssignInterviewerCommand(interviewId, this.principal.CurrentUserIdentity.UserId, e.InterviewerId, DateTime.UtcNow);
             this.commandService.Execute(command);
+
+            await this.navigationService.NavigateToDashboardAsync(interviewId.FormatGuid());
         }
 
         private void UnsubscribeDialog()
