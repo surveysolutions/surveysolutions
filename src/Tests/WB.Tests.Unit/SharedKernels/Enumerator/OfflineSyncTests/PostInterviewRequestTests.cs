@@ -5,6 +5,7 @@ using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation;
+using WB.Infrastructure.Native.Storage;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.OfflineSyncTests
@@ -15,7 +16,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.OfflineSyncTests
         [Test]
         public void should_be_able_to_serialize_and_deserialize_events()
         {
-            var serializer = new PayloadSerializer();
+            var serializer = new PayloadSerializer(new JsonAllTypesSerializer());
             InterviewCreated interviewCreated = Create.Event.InterviewCreated();
 
             PostInterviewRequest request = new PostInterviewRequest(Id.gA, new List<CommittedEvent>

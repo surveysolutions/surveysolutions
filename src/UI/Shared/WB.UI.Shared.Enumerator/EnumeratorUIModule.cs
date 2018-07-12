@@ -18,12 +18,14 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Implementation.Utils;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.CustomServices;
 using WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation;
@@ -73,6 +75,9 @@ namespace WB.UI.Shared.Enumerator
             registry.Bind<CompleteInterviewFragment>();
             registry.Bind<CoverInterviewFragment>();
             registry.Bind<OverviewFragment>();
+
+            registry.Bind<IAssignmentsSynchronizer, AssignmentsSynchronizer>();
+            registry.Bind<IAssignmentDocumentFromDtoBuilder, AssignmentDocumentFromDtoBuilder>();
 
             registry.BindAsSingleton<INearbyConnection, NearbyConnection>();
             registry.BindAsSingleton<INearbyCommunicator, NearbyCommunicator>();
