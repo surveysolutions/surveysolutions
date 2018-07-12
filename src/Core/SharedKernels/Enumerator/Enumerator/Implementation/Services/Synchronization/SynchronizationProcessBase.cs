@@ -253,7 +253,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 }
         }
 
-        protected async Task DownloadInterviewsAsync(SynchronizationStatistics statistics,
+        public async Task DownloadInterviewsAsync(SynchronizationStatistics statistics,
             IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken)
         {
             var remoteInterviews = await this.synchronizationService.GetInterviewsAsync(cancellationToken);
@@ -262,13 +262,17 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
             var localInterviews = this.interviewViewRepository.LoadAll();
 
-            var localInterviewIds = localInterviews.Select(interview => interview.InterviewId).ToList();
+            var localInterviewIds = localInterviews.Select(interview => interview.InterviewId).ToHashSet();
 
             var localInterviewsToRemove = localInterviews.Where(
                 interview => !remoteInterviewIds.Contains(interview.InterviewId) && !interview.CanBeDeleted);
 
-            var obsoleteInterviews = await this.FindObsoleteInterviewsAsync(localInterviewIds, progress, cancellationToken);
-            
+            IEnumerable<Guid> obsoleteInterviews = await this.FindObsoleteInterviewsAsync(localInterviewIds, progress, cancellationToken);
+            obsoleteInterviews = obsoleteInterviews.Concat(
+                remoteInterviews.Where(x => localInterviews.Any(local => local.InterviewId == x.Id && local.ResponsibleId != x.ResponsibleId))
+                    .Select(x => x.Id)
+            );
+
             var localInterviewIdsToRemove = localInterviewsToRemove.Select(interview => interview.InterviewId)
                                                                    .Concat(obsoleteInterviews)
                                                                    .ToList();
@@ -283,7 +287,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
         }
 
-        protected virtual Task<List<Guid>> FindObsoleteInterviewsAsync(List<Guid> localInterviewIds, 
+        protected virtual Task<List<Guid>> FindObsoleteInterviewsAsync(IEnumerable<Guid> localInterviewIds, 
             IProgress<SyncProgressInfo> progress, 
             CancellationToken cancellationToken)
         {

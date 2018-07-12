@@ -8,5 +8,6 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
         public Guid Id { get; set; }
         public QuestionnaireIdentity QuestionnaireIdentity { get; set; }
         public bool IsRejected { get; set; }
+        public Guid ResponsibleId { get; set; }
     }
 }

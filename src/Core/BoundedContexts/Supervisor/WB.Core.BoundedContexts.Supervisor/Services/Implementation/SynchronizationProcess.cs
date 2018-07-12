@@ -209,7 +209,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
             return Task.CompletedTask; // supervisor does not support census
         }
 
-        protected override Task<List<Guid>> FindObsoleteInterviewsAsync(List<Guid> localInterviewIds,
+        protected override Task<List<Guid>> FindObsoleteInterviewsAsync(IEnumerable<Guid> localInterviewIds,
             IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken)
         {
             return Task.FromResult(new List<Guid>());

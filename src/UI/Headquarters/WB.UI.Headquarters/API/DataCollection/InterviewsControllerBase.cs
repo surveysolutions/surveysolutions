@@ -61,11 +61,12 @@ namespace WB.UI.Headquarters.API.DataCollection
         public virtual HttpResponseMessage Get()
         {
             var resultValue = GetInProgressInterviewsForResponsible(this.authorizedUser.Id)
-                .Select(interview => new InterviewApiView()
+                .Select(interview => new InterviewApiView
                 {
                     Id = interview.Id,
                     QuestionnaireIdentity = interview.QuestionnaireIdentity,
-                    IsRejected = interview.IsRejected
+                    IsRejected = interview.IsRejected,
+                    ResponsibleId = interview.ResponsibleId
                 }).ToList();
 
             var response = this.Request.CreateResponse(resultValue);
