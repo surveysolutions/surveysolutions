@@ -24,6 +24,7 @@
             style="@style/ToolbarTitle"
             local:MvxBind="Text DashboardTitle;" />
         <ImageButton style="@style/ToolbarIcon"
+                     android:id="@+id/menu_synchronization"
                      local:MvxBind="Click SynchronizationCommand; Visible SynchronizationWithHqEnabled"
                      local:srcCompat="@drawable/synchronize_icon"/>
         
