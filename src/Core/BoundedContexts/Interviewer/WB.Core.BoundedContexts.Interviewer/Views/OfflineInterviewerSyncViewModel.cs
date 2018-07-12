@@ -11,6 +11,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views
 {
@@ -18,6 +19,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
     {
         private readonly IPlainStorage<InterviewerIdentity> interviewersPlainStorage;
         private readonly ISynchronizationMode synchronizationMode;
+        private readonly ISynchronizationCompleteSource synchronizationCompleteSource;
         private readonly string serviceName;
         
         public OfflineInterviewerSyncViewModel(IPrincipal principal,
@@ -26,14 +28,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             IEnumeratorSettings settings,
             IPlainStorage<InterviewerIdentity> interviewersPlainStorage,
             ISynchronizationMode synchronizationMode,
-            INearbyConnection nearbyConnection)
+            INearbyConnection nearbyConnection,
+            ISynchronizationCompleteSource synchronizationCompleteSource)
             : base(principal, viewModelNavigationService, permissions, nearbyConnection)
         {
             this.interviewersPlainStorage = interviewersPlainStorage;
             this.synchronizationMode = synchronizationMode;
+            this.synchronizationCompleteSource = synchronizationCompleteSource;
 
             this.serviceName = settings.Endpoint + "/";
             SetStatus(ConnectionStatus.WaitingForGoogleApi);
+            
         }
 
         protected override async Task OnGoogleApiReady()
@@ -62,6 +67,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                             SetStatus(ConnectionStatus.Sync, o.Description);
                         }),
                         CancellationToken.None);
+
+                    this.synchronizationCompleteSource.NotifyOnCompletedSynchronization(true);
                 }
             }
             finally

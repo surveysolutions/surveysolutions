@@ -6,6 +6,7 @@ using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Supervisor;
 using WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSyncHandlers;
+using WB.Core.BoundedContexts.Supervisor.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernel.Structures.Synchronization;
@@ -15,6 +16,7 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Tests.Abc;
@@ -140,8 +142,12 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             serializer.Setup(x => x.Deserialize<AggregateRootEvent[]>(packageSerializedEvents))
                 .Returns(packageEvents);
 
-            var handler = Create.Service.SupervisorInterviewsHandler(commandService: commandSerivce.Object,
-                serializer: serializer.Object);
+            var brokenStorageMock = new Mock<IPlainStorage<BrokenInterviewPackageView, int?>>();
+
+            var handler = Create.Service.SupervisorInterviewsHandler(
+                commandService: commandSerivce.Object,
+                serializer: serializer.Object,
+                brokenInterviewStorage: brokenStorageMock.Object);
 
             // Act
             var request = new UploadInterviewRequest
@@ -155,11 +161,12 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
                 InterviewKey = "124"
             };
             await handler.UploadInterview(request);
-            async Task Act() => await handler.UploadInterview(request);
+            await handler.UploadInterview(request);
 
             // assert
-            Assert.That(Act, Throws.Exception.TypeOf<InterviewException>()
-                .With.Property(nameof(InterviewException.ExceptionType)).EqualTo(InterviewDomainExceptionType.DuplicateSyncPackage));
+            brokenStorageMock.Verify(bs => bs.Store(It.Is<BrokenInterviewPackageView>(bpv =>
+                bpv.ExceptionType == InterviewDomainExceptionType.DuplicateSyncPackage.ToString()                
+            )), Times.Once);
         }
     }
 }
