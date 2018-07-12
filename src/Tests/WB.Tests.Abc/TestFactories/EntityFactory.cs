@@ -1776,7 +1776,7 @@ namespace WB.Tests.Abc.TestFactories
                 _entity = entity;
             }
 
-            public AssignmentDocumentBuilder WithAnswer(Identity identity, string answer, bool identifying = false)
+            public AssignmentDocumentBuilder WithAnswer(Identity identity, string answer, bool identifying = false, string serializedAnswer = null)
             {
                 this._entity.Answers = this._entity.Answers ?? new List<AssignmentDocument.AssignmentAnswer>();
                 this._entity.IdentifyingAnswers = this._entity.IdentifyingAnswers ?? new List<AssignmentDocument.AssignmentAnswer>();
@@ -1786,6 +1786,7 @@ namespace WB.Tests.Abc.TestFactories
                     AssignmentId = this._entity.Id,
                     AnswerAsString = answer,
                     IsIdentifying = identifying,
+                    SerializedAnswer = serializedAnswer,
                     Identity = identity
                 };
 

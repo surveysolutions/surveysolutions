@@ -79,7 +79,7 @@ namespace WB.UI.Interviewer.ServiceLocation
 
             registry.Bind<ISynchronizationProcess, SynchronizationProcess>();
             registry.Bind<IQuestionnaireDownloader, QuestionnaireDownloader>();
-            registry.Bind<IAssignmentsSynchronizer, AssignmentsSynchronizer>();
+            
             registry.Bind<IAuditLogSynchronizer, AuditLogSynchronizer>();
             registry.Bind<AttachmentsCleanupService>();
             registry.Bind<CompanyLogoSynchronizer>();

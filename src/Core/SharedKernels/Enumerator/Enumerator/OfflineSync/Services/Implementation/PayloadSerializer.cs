@@ -1,20 +1,17 @@
-﻿using System.IO;
+﻿using System.Diagnostics;
+using System.IO;
 using System.IO.Compression;
-using System.Text;
-using Newtonsoft.Json;
+using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
 {
     public class PayloadSerializer : IPayloadSerializer
     {
-        private readonly JsonSerializer serializer;
+        private readonly IJsonAllTypesSerializer serializer;
 
-        public PayloadSerializer()
+        public PayloadSerializer(IJsonAllTypesSerializer serializer)
         {
-            this.serializer = JsonSerializer.Create(new JsonSerializerSettings
-            {
-                TypeNameHandling = TypeNameHandling.All
-            });
+            this.serializer = serializer;
         }
 
         public T FromPayload<T>(byte[] payload)
@@ -25,10 +22,9 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                 {
                     using (var sr = new StreamReader(zip))
                     {
-                        using (var jsonTextReader = new JsonTextReader(sr))
-                        {
-                            return serializer.Deserialize<T>(jsonTextReader);
-                        }
+                        var json = sr.ReadToEnd();
+                        Debug.WriteLine("FromPayload: " + json);
+                        return this.serializer.Deserialize<T>(json);
                     }
                 }
             }
@@ -42,10 +38,9 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                 {
                     using (var sw = new StreamWriter(zip))
                     {
-                        using (var jsonWriter = new JsonTextWriter(sw))
-                        {
-                            serializer.Serialize(jsonWriter, message);
-                        }
+                        var json = this.serializer.Serialize(message);
+                        Debug.WriteLine("ToPayload: " + json);
+                        sw.Write(json);
                     }
                 }
 

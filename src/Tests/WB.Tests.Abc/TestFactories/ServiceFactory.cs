@@ -522,8 +522,9 @@ namespace WB.Tests.Abc.TestFactories
                 assignmentsRepository ?? Create.Storage.AssignmentDocumentsInmemoryStorage(),
                 questionnaireDownloader ?? Mock.Of<IQuestionnaireDownloader>(),
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
+                new AssignmentDocumentFromDtoBuilder( 
                 Mock.Of<IAnswerToStringConverter>(),
-                Mock.Of<IInterviewAnswerSerializer>(),
+                Mock.Of<IInterviewAnswerSerializer>()),
                 interviewViewRepository ?? Mock.Of<IPlainStorage<InterviewView>>());
         }
 
@@ -767,7 +768,7 @@ namespace WB.Tests.Abc.TestFactories
         {
             return new NearbyCommunicator(requestHandler ?? Mock.Of<IRequestHandler>(), 
                 Create.Fake.PayloadProvider(), 
-                new PayloadSerializer(), Mock.Of<IConnectionsApiLimits>( c => c.MaxBytesLength == maxBytesLength), Mock.Of<ILogger>());
+                new PayloadSerializer(new JsonAllTypesSerializer()), Mock.Of<IConnectionsApiLimits>( c => c.MaxBytesLength == maxBytesLength), Mock.Of<ILogger>());
         }
 
         public NearbyConnectionsRequestHandler GoogleConnectionsRequestHandler()
