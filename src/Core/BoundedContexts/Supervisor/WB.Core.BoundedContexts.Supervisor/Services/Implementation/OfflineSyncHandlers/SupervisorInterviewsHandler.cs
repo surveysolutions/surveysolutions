@@ -20,6 +20,7 @@ using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.Views;
@@ -38,6 +39,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
         private readonly ILogger logger;
         private readonly ICommandService commandService;
         private readonly IPlainStorage<BrokenInterviewPackageView, int?> brokenInterviewPackageStorage;
+        private readonly IPrincipal principal;
 
         public SupervisorInterviewsHandler(ILiteEventBus eventBus,
             IEnumeratorEventStorage eventStore,
@@ -46,7 +48,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             ICommandService commandService,
             ILogger logger, 
             IPlainStorage<BrokenInterviewPackageView, int?> brokenInterviewPackageStorage,
-            IPlainStorage<SuperivsorReceivedPackageLogEntry, int> receivedPackagesLog)
+            IPlainStorage<SuperivsorReceivedPackageLogEntry, int> receivedPackagesLog,
+            IPrincipal principal)
         {
             this.eventBus = eventBus;
             this.eventStore = eventStore;
@@ -56,6 +59,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             this.receivedPackagesLog = receivedPackagesLog;
             this.commandService = commandService;
             this.brokenInterviewPackageStorage = brokenInterviewPackageStorage;
+            this.principal = principal;
         }
 
         public void Register(IRequestHandler requestHandler)
@@ -98,11 +102,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                 this.logger.Debug($"Interview events by {interview.InterviewId} deserialized. Took {innerwatch.Elapsed:g}.");
                 innerwatch.Restart();
 
-                // TODO: bool shouldChangeSupervisorId = CheckIfInterviewerWasMovedToAnotherTeam(interview.ResponsibleId, serializedEvents, out Guid? newSupervisorId);
+                bool shouldChangeSupervisorId = CheckIfInterviewerWasMovedToAnotherTeam(serializedEvents, out Guid? newSupervisorId);
 
-                //if (shouldChangeSupervisorId && !newSupervisorId.HasValue)
-                //    throw new InterviewException("Can't move interview to a new team, because supervisor id is empty",
-                //        exceptionType: InterviewDomainExceptionType.CantMoveToUndefinedTeam);
+                if (shouldChangeSupervisorId && !newSupervisorId.HasValue)
+                    throw new InterviewException("Can't move interview to a new team, because supervisor id is empty",
+                        exceptionType: InterviewDomainExceptionType.CantMoveToUndefinedTeam);
 
                 this.commandService.Execute(new SynchronizeInterviewEventsCommand(
                     interviewId: interview.InterviewId,
@@ -113,7 +117,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                     interviewStatus: (InterviewStatus) interview.MetaInfo.Status,
                     interviewKey: InterviewKey.Parse(request.InterviewKey),
                     synchronizedEvents: serializedEvents,
-                    newSupervisorId: (Guid?) null // TODO: KP-11585 shouldChangeSupervisorId ? newSupervisorId : null
+                    newSupervisorId: shouldChangeSupervisorId ? newSupervisorId : null
                 ), null);
 
                 RecordProcessedPackageInfo(aggregateRootEvents);
@@ -155,7 +159,18 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             return Task.FromResult(new OkResponse());
         }
 
-        
+        private bool CheckIfInterviewerWasMovedToAnotherTeam(
+            WB.Core.Infrastructure.EventBus.IEvent[] interviewEvents, out Guid? newSupervisorId)
+        {
+            newSupervisorId = null;
+            SupervisorAssigned supervisorAssigned = interviewEvents.OfType<SupervisorAssigned>().LastOrDefault();
+            if (supervisorAssigned == null)
+                return false;
+            
+            newSupervisorId = principal.CurrentUserIdentity.UserId;
+            return newSupervisorId != supervisorAssigned.SupervisorId;
+        }
+
         private void AssertPackageNotDuplicated(AggregateRootEvent[] aggregateRootEvents)
         {
             if (aggregateRootEvents.Length > 0)
