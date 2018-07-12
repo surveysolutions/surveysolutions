@@ -74,7 +74,6 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
         {
 
         }
-    
 
         protected virtual async void OnFound(string endpoint, NearbyDiscoveredEndpointInfo info)
         {
@@ -86,33 +85,21 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
             SetStatus(ConnectionStatus.Connecting,
                 $"Requested conection from endpoint: {info.EndpointName} [{endpoint}]");
         }
-
-        //protected virtual void OnDisconnected(string endpoint)
-        //{
-        //    Log.Trace("OnDisconnected {0}", endpoint);
-        //    // stop all network activity
-        //}
-
-        //protected virtual void OnConnectionResult(string endpoint, NearbyConnectionResolution resolution)
-        //{
-        //    Log.Trace("OnConnectionResult {0}, Success: {1}, Code: {2}", endpoint, resolution.IsSuccess,
-        //        resolution.StatusCode);
-        //    SetStatus(ConnectionStatus.Connected, $"Connected to endpoint [{endpoint}]");
-        //}
-
-        //protected virtual async void OnInitiatedConnection(string endpoint, NearbyConnectionInfo info)
-        //{
-        //    Log.Trace("OnInitiatedConnection {0} - {1}", endpoint, info.EndpointName);
-        //    SetStatus(ConnectionStatus.Connecting, $"Accepting connection from {info.EndpointName} [{endpoint}]");
-        //    await this.nearbyConnection.AcceptConnection(endpoint);
-        //}
+        private string endpoint;
+        public string Endpoint
+        {
+            get => endpoint;
+            set => SetProperty(ref endpoint, value);
+        }
 
         protected async Task StartDiscovery()
         {
             await permissions.AssureHasPermission(Permission.Location);
 
             SetStatus(ConnectionStatus.StartDiscovering, $"Starting discovery");
-            await this.nearbyConnection.StartDiscovery(GetServiceName());
+            var serviceName = GetServiceName();
+            await this.nearbyConnection.StartDiscovery(serviceName);
+            Endpoint = serviceName;
             SetStatus(ConnectionStatus.Discovering, $"Searching for supervisor");
         }
 
@@ -135,8 +122,9 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
             Log.Trace("StartAdvertising");
 
             SetStatus(ConnectionStatus.StartAdvertising, $"Starting advertising");
-            await this.nearbyConnection.StartAdvertising(GetServiceName(), this.principal.CurrentUserIdentity.Name);
-
+            var serviceName = GetServiceName();
+            await this.nearbyConnection.StartAdvertising(serviceName, this.principal.CurrentUserIdentity.Name);
+            Endpoint = serviceName;
             SetStatus(ConnectionStatus.Advertising, "Waiting for interviewers connections");
         }
 

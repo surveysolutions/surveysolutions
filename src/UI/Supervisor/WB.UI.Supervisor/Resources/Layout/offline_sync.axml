@@ -10,6 +10,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/restart" 
         local:MvxBind="Click Restart;" />
+    <TextView style="@style/Dashboard_Search_SearchResult"
+              local:MvxBind="Text Endpoint"></TextView>
     <TextView
         style="@style/Dashboard_Search_SearchResult"
         local:MvxBind="Text Status;" />
