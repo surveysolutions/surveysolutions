@@ -109,13 +109,14 @@ namespace WB.UI.Headquarters.API.DataCollection
             if (string.IsNullOrEmpty(package.Events))
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Server cannot accept empty package content.");
 
+            var targetStatus = (InterviewStatus) package.MetaInfo.Status;
             var interviewPackage = new InterviewPackage
             {
                 InterviewId = package.InterviewId,
                 QuestionnaireId = package.MetaInfo.TemplateId,
                 QuestionnaireVersion = package.MetaInfo.TemplateVersion,
-                InterviewStatus = (InterviewStatus)package.MetaInfo.Status,
-                ResponsibleId = this.authorizedUser.Id,
+                InterviewStatus = targetStatus,
+                ResponsibleId =  targetStatus == InterviewStatus.Completed ? package.MetaInfo.ResponsibleId : this.authorizedUser.Id,
                 IsCensusInterview = package.MetaInfo.CreatedOnClient ?? false,
                 IncomingDate = DateTime.UtcNow,
                 Events = package.Events
