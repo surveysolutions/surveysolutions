@@ -28,6 +28,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.UI.Supervisor.ServiceLocation;
 using WB.UI.Shared.Enumerator;
+using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.Converters;
 using WB.UI.Shared.Enumerator.CustomBindings;
 using WB.UI.Shared.Enumerator.Services;
@@ -56,6 +57,7 @@ namespace WB.UI.Supervisor
                 {typeof(OfflineSupervisorSyncViewModel), typeof(OfflineSupervisorSyncActitivy) },
                 {typeof(SupervisorResolveInterviewViewModel), typeof (SupervisorCompleteFragment)},
                 {typeof(MapsViewModel), typeof (MapsActivity)},
+                {typeof(PhotoViewViewModel), typeof(PhotoViewActivity) },
 #if !EXCLUDEEXTENSIONS
                 {typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel), typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorActivity)}
 #endif
