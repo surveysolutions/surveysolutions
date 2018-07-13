@@ -1,9 +1,11 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Main.Core.Events;
 using Moq;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Supervisor;
 using WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSyncHandlers;
 using WB.Core.BoundedContexts.Supervisor.Views;
@@ -167,6 +169,73 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             brokenStorageMock.Verify(bs => bs.Store(It.Is<BrokenInterviewPackageView>(bpv =>
                 bpv.ExceptionType == InterviewDomainExceptionType.DuplicateSyncPackage.ToString()                
             )), Times.Once);
+        }
+
+        [Test]
+        public async Task UploadInterviewRequest_should_store_as_broken_interviewe_if_was_ArgumentException()
+        {
+            var serializer = new Mock<IJsonAllTypesSerializer>();
+            serializer.Setup(x => x.Deserialize<AggregateRootEvent[]>(It.IsAny<string>()))
+                .Throws(new ArgumentException("test"));
+
+            var brokenStorageMock = new Mock<IPlainStorage<BrokenInterviewPackageView, int?>>();
+
+            var handler = Create.Service.SupervisorInterviewsHandler(
+                serializer: serializer.Object,
+                brokenInterviewStorage: brokenStorageMock.Object);
+
+            // Act
+            var request = new UploadInterviewRequest
+            {
+                Interview = new InterviewPackageApiView()
+                {
+                    Events = "events",
+                    MetaInfo = new InterviewMetaInfo()
+                }
+            };
+            await handler.UploadInterview(request);
+
+            // assert
+            brokenStorageMock.Verify(bs => bs.Store(It.Is<BrokenInterviewPackageView>(bpv =>
+                bpv.ExceptionType == SupervisorInterviewsHandler.UnknownExceptionType                
+            )), Times.Once);
+        }
+
+        [Test]
+        public async Task UploadInterviewRequest_should_store_as_broken_interviewe_if_was_InterviewException_with_specified_type()
+        {
+            var interviewDomainExceptionType = InterviewDomainExceptionType.ExpessionCalculationError;
+            var serializer = new Mock<IJsonAllTypesSerializer>();
+            serializer.Setup(x => x.Deserialize<AggregateRootEvent[]>(It.IsAny<string>()))
+                .Throws(new InterviewException("test", interviewDomainExceptionType));
+
+            var brokenStorageMock = new Mock<IPlainStorage<BrokenInterviewPackageView, int?>>();
+
+            var handler = Create.Service.SupervisorInterviewsHandler(
+                serializer: serializer.Object,
+                brokenInterviewStorage: brokenStorageMock.Object);
+
+            // Act
+            var request = new UploadInterviewRequest
+            {
+                Interview = new InterviewPackageApiView()
+                {
+                    Events = "events",
+                    MetaInfo = new InterviewMetaInfo()
+                }
+            };
+            await handler.UploadInterview(request);
+
+            // assert
+            brokenStorageMock.Verify(bs => bs.Store(It.Is<BrokenInterviewPackageView>(bpv =>
+                bpv.ExceptionType == interviewDomainExceptionType.ToString()
+            )), Times.Once);
+        }
+
+        [Test]
+        public void UnknownExceptionType_are_equal_in_SupervisorInterviewsHandler_and_InterviewPackagesService()
+        {
+            Assert.AreEqual(SupervisorInterviewsHandler.UnknownExceptionType, InterviewPackagesService.UnknownExceptionType);
         }
     }
 }
