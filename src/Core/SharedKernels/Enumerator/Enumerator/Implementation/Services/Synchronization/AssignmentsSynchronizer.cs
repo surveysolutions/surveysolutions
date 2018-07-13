@@ -69,8 +69,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
             foreach (var remoteItem in remoteAssignments)
             {
-                processedAssignmentsCount++;
-
                 await this.questionnaireDownloader.DownloadQuestionnaireAsync(remoteItem.QuestionnaireId, cancellationToken, statistics);
 
                 IQuestionnaire questionnaire = this.questionnaireStorage.GetQuestionnaire(remoteItem.QuestionnaireId, null);
@@ -95,20 +93,28 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 }
                 else
                 {
-                    if (local.Quantity != remoteItem.Quantity || local.ResponsibleId != remoteItem.ResponsibleId)
+                    if (local.Quantity != remoteItem.Quantity)
                     {
                         local.ReceivedByInterviewerAt = null;
+                        local.Quantity = remoteItem.Quantity;
                     }
 
-                    local.Quantity = remoteItem.Quantity;
-                    local.ResponsibleId = remoteItem.ResponsibleId;
-                    local.ResponsibleName = remoteItem.ResponsibleName;
+                    if (local.OriginalResponsibleId != remoteItem.ResponsibleId)
+                    {
+                        local.ReceivedByInterviewerAt = null;
+                        local.ResponsibleId = remoteItem.ResponsibleId;
+                        local.OriginalResponsibleId = remoteItem.ResponsibleId;
+                        local.ResponsibleName = remoteItem.ResponsibleName;
+                    }
+
                     var interviewsCount = this.interviewViewRepository.Count(x => x.CanBeDeleted && x.Assignment == local.Id);
                     local.CreatedInterviewsCount = interviewsCount;
                     this.assignmentsRepository.Store(local);
                 }
 
                 await this.synchronizationService.LogAssignmentAsHandledAsync(local.Id, cancellationToken);
+
+                processedAssignmentsCount++;
             }
 
             progress.Report(new SyncProgressInfo
