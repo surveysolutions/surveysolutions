@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -29,6 +26,5 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                 SupervisorId = principal.CurrentUserIdentity.UserId
             });
         }
-
     }
 }
