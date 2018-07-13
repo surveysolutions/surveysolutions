@@ -76,8 +76,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             await this.navigationService.NavigateToDashboardAsync(interviewId.FormatGuid());
 
         }, () => this.status == InterviewStatus.Completed || 
-                 this.status == InterviewStatus.RejectedByHeadquarters ||
-                 this.status == InterviewStatus.RejectedBySupervisor);
+                 this.status == InterviewStatus.RejectedByHeadquarters /*||
+                 this.status == InterviewStatus.RejectedBySupervisor*/);
 
         public IMvxAsyncCommand Reject => new MvxAsyncCommand(async () =>
         {
