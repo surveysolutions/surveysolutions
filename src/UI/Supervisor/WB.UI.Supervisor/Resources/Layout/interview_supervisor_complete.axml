@@ -36,10 +36,6 @@
                          Text Localization('Supervisor_Complete_Reject_btn');"/>
             </LinearLayout>
           
-            <TextView
-                style="@style/Interview_Complete_Screen_Text"
-                local:MvxBind="Text Localization('Interview_Complete_Consequences_Instrunction')" />
-
         </LinearLayout>
     </LinearLayout>
 </ScrollView>
