@@ -73,6 +73,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             requestHandler.RegisterHandler<LogInterviewAsSuccessfullyHandledRequest, OkResponse>(Handle);
             requestHandler.RegisterHandler<GetInterviewDetailsRequest, GetInterviewDetailsResponse>(Handle);
             requestHandler.RegisterHandler<UploadInterviewRequest, OkResponse>(UploadInterview);
+            requestHandler.RegisterHandler<SupervisorIdRequest, SupervisorIdResponse>(GetSupervisorId);
         }
 
         public Task<OkResponse> UploadInterview(UploadInterviewRequest request)
@@ -251,6 +252,14 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             return Task.FromResult(new CanSynchronizeResponse
             {
                 CanSyncronize = true
+            });
+        }
+
+        private Task<SupervisorIdResponse> GetSupervisorId(SupervisorIdRequest request)
+        {
+            return Task.FromResult(new SupervisorIdResponse()
+            {
+                SupervisorId = principal.CurrentUserIdentity.UserId
             });
         }
 
