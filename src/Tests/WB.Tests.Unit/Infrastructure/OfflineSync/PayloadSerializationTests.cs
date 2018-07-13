@@ -30,13 +30,13 @@ namespace WB.Tests.Unit.Infrastructure.OfflineSync
             fixture.Register<WB.Core.Infrastructure.EventBus.IEvent>(() => Create.Event.TextQuestionAnswered());
             var serializer = new PayloadSerializer(new JsonAllTypesSerializer());
 
-            var deserializeMethod = serializer.GetType().GetMethod(nameof(PayloadSerializer.FromPayload));
+            var deserializeMethod = serializer.GetType().GetMethod(nameof(PayloadSerializer.FromPayloadAsync));
             if (deserializeMethod == null) throw new Exception();
 
             foreach (var messageType in messageTypes)
             {
                 var message = new SpecimenContext(fixture).Resolve(messageType);
-                var payload = serializer.ToPayload(message);
+                var payload = serializer.ToPayloadAsync(message);
 
                 var action = deserializeMethod.MakeGenericMethod(messageType);
 
