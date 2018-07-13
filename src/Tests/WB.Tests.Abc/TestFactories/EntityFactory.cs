@@ -1643,13 +1643,15 @@ namespace WB.Tests.Abc.TestFactories
             };
         }
 
-        public AssignmentApiDocumentBuilder AssignmentApiDocument(int id, int? quantity, QuestionnaireIdentity questionnaireIdentity = null)
+        public AssignmentApiDocumentBuilder AssignmentApiDocument(int id, int? quantity, QuestionnaireIdentity questionnaireIdentity = null,
+            Guid? responsibleId = null)
         {
             return new AssignmentApiDocumentBuilder(new AssignmentApiDocument
             {
                 Id = id,
                 Quantity = quantity,
-                QuestionnaireId = questionnaireIdentity
+                QuestionnaireId = questionnaireIdentity,
+                ResponsibleId = responsibleId ?? Guid.Empty
             });
         }
 
@@ -1757,13 +1759,15 @@ namespace WB.Tests.Abc.TestFactories
         }
 
         public AssignmentDocumentBuilder AssignmentDocument(int id, int? quantity = null,
-            int interviewsCount = 0, string questionnaireIdentity = null)
+            int interviewsCount = 0, string questionnaireIdentity = null, Guid? responsibleId = null, Guid? originalResponsibleId = null)
         {
             return new AssignmentDocumentBuilder(new AssignmentDocument
             {
                 Id = id,
                 Quantity = quantity,
-                QuestionnaireId = questionnaireIdentity
+                QuestionnaireId = questionnaireIdentity,
+                ResponsibleId = responsibleId ?? Guid.Empty,
+                OriginalResponsibleId = originalResponsibleId ?? Guid.Empty
             });
         }
 
