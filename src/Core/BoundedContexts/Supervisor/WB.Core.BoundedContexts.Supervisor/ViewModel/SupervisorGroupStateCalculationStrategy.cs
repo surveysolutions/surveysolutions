@@ -14,6 +14,9 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             GroupStatus status;
             var group = interview.GetGroup(groupIdentity);
 
+            if (group == null)
+                return GroupStatus.Completed;
+
             var countEnabledAnsweredQuestions = group.CountEnabledAnsweredQuestionsForSupervisor();
 
             if (group.HasUnansweredQuestionsForSupervisor())
