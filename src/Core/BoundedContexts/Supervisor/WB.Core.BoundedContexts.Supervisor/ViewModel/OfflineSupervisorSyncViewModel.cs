@@ -94,7 +94,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         {
             Log.Trace("StartAdvertising");
 
-            await StopAdvertising();
+            StopAdvertising();
             await StartAdvertising();
         }
 

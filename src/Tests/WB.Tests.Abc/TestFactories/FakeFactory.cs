@@ -216,7 +216,7 @@ namespace WB.Tests.Abc.TestFactories
 
         internal abstract class FakeNearbyConnectionBase : INearbyConnection
         {
-            public Task StartDiscovery(string serviceName)
+            public Task<NearbyStatus> StartDiscovery(string serviceName)
             {
                 throw new NotImplementedException();
             }
@@ -226,34 +226,34 @@ namespace WB.Tests.Abc.TestFactories
                 throw new NotImplementedException();
             }
 
-            public Task RequestConnection(string name, string endpoint)
+            public Task<NearbyStatus> RequestConnection(string name, string endpoint)
             {
                 throw new NotImplementedException();
             }
 
-            public Task AcceptConnection(string endpoint)
+            public Task<NearbyStatus> AcceptConnection(string endpoint)
             {
                 throw new NotImplementedException();
             }
 
-            public Task RejectConnection(string endpoint)
+            public Task<NearbyStatus> RejectConnection(string endpoint)
             {
                 throw new NotImplementedException();
             }
 
-            public virtual Task SendPayloadAsync(string to, IPayload payload)
+            public virtual Task<NearbyStatus> SendPayloadAsync(string to, IPayload payload)
             {
                 throw new NotImplementedException();
             }
 
             public IObservable<INearbyEvent> Events { get; }// = new Subject<INearbyEvent>();
             public ObservableCollection<RemoteEndpoint> RemoteEndpoints { get; } = new ObservableCollection<RemoteEndpoint>();
-            public Task StopDiscovery()
+            public void StopDiscovery()
             {
                 throw new NotImplementedException();
             }
 
-            public Task StopAdvertising()
+            public void StopAdvertising()
             {
                 throw new NotImplementedException();
             }
@@ -292,7 +292,7 @@ namespace WB.Tests.Abc.TestFactories
                 return this;
             }
 
-            public override async Task SendPayloadAsync(string to, IPayload payload)
+            public override async Task<NearbyStatus> SendPayloadAsync(string to, IPayload payload)
             {
                 var from = connectionMap[to];
                 var toClient = clientsMap[to];
@@ -353,6 +353,8 @@ namespace WB.Tests.Abc.TestFactories
                         }
                     }
                 }
+
+                return NearbyStatus.Ok;
             }
         }
 
