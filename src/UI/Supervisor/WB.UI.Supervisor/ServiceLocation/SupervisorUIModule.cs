@@ -102,7 +102,6 @@ namespace WB.UI.Supervisor.ServiceLocation
             registry.Bind<IHandleCommunicationMessage, SupervisorAuditLogHandler>();
             registry.Bind<IHandleCommunicationMessage, SupervisorAssignmentsHandler>();
             registry.Bind<IHandleCommunicationMessage, SupervisorTabletInfoHandler>();
-            registry.Bind<IHandleCommunicationMessage, SupervisorExtraInfoHandler>();
         }
 
         public Task Init(IServiceLocator serviceLocator)
