@@ -792,7 +792,8 @@ namespace WB.Tests.Abc.TestFactories
             IPlainStorage<InterviewView> interviews = null,
             ICommandService commandService = null,
             IJsonAllTypesSerializer serializer = null,
-            IPlainStorage<BrokenInterviewPackageView, int?> brokenInterviewStorage = null)
+            IPlainStorage<BrokenInterviewPackageView, int?> brokenInterviewStorage = null,
+            IPlainStorage<InterviewerDocument> interviewerViewRepository = null)
         {
             return new SupervisorInterviewsHandler(
                 eventBus ?? Mock.Of<ILiteEventBus>(),
@@ -803,7 +804,8 @@ namespace WB.Tests.Abc.TestFactories
                 Mock.Of<ILogger>(),
                 brokenInterviewStorage ?? Mock.Of<IPlainStorage<BrokenInterviewPackageView, int?>>(),
                 new SqliteInmemoryStorage<SuperivsorReceivedPackageLogEntry, int>(),
-                Mock.Of<IPrincipal>());
+                Mock.Of<IPrincipal>(),
+                interviewerViewRepository ?? Mock.Of<IPlainStorage<InterviewerDocument>>());
         }
 
         public SupervisorGroupStateCalculationStrategy SupervisorGroupStateCalculationStrategy()

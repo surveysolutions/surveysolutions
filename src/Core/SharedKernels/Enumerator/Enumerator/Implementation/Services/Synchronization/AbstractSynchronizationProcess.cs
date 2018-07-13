@@ -320,6 +320,16 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         });
                         auditLogService.Write(new SynchronizationFailedAuditLogEntity(ex));
                         break;
+                    case SynchronizationExceptionType.InterviewerFromDifferentTeam:
+                        progress.Report(new SyncProgressInfo
+                        {
+                            Title = InterviewerUIResources.UnexpectedException,
+                            Description = InterviewerUIResources.InterviewerFromDifferentTeam,
+                            Status = SynchronizationStatus.Fail,
+                            Statistics = statistics
+                        });
+                        auditLogService.Write(new SynchronizationFailedAuditLogEntity(ex));
+                        break;
                     default:
                         progress.Report(new SyncProgressInfo
                         {

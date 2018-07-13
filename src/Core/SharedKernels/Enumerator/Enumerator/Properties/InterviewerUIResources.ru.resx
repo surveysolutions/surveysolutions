@@ -616,6 +616,9 @@
   <data name="UnacceptableSSLCertificate" xml:space="preserve">
     <value>Невозможно проверить сертификат. Проверьте адрес приложения Headquarters и верность текущей даты на устройстве</value>
   </data>
+  <data name="InterviewerFromDifferentTeam" xml:space="preserve">
+    <value>Интервьюер принадлежит другой команде. Пожалуйста, синхронизируйтесь с Headquarters</value>
+  </data>
   <data name="Synchronization_DownloadingLogo" xml:space="preserve">
     <value>Загрузка логотипа</value>
   </data>
