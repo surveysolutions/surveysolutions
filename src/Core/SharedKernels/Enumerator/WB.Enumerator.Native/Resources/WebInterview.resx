@@ -233,7 +233,7 @@
     <value>The information on that interview has been recorded. No further actions are required</value>
   </data>
   <data name="InterviewReceivedByInterviewer" xml:space="preserve">
-    <value>Cannot modify interview that were received by device</value>
+    <value>Cannot modify interview that wes received by device</value>
   </data>
   <data name="Error_NotFound" xml:space="preserve">
     <value>Interview not found</value>
