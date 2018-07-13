@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items;
@@ -27,18 +28,25 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Dashboard
             var principal = Mock.Of<IPrincipal>(x => x.IsAuthenticated == true &&
                                                      x.CurrentUserIdentity == Mock.Of<IUserIdentity>(u => u.UserId == Id.gA));
 
-            interviews.Store(Create.Entity.InterviewView(interviewId: Id.g1, responsibleId: Id.gA, questionnaireId: Create.Entity.QuestionnaireIdentity().ToString()));
-            interviews.Store(Create.Entity.InterviewView(interviewId: Id.g2, responsibleId: Id.gB, questionnaireId: Create.Entity.QuestionnaireIdentity().ToString()));
+            interviews.Store(Create.Entity.InterviewView(interviewId: Id.g1, responsibleId: Id.gA, questionnaireId: Create.Entity.QuestionnaireIdentity().ToString(), status: InterviewStatus.RejectedBySupervisor));
+            interviews.Store(Create.Entity.InterviewView(interviewId: Id.g2, responsibleId: Id.gB, questionnaireId: Create.Entity.QuestionnaireIdentity().ToString(), status: InterviewStatus.Completed));
+            interviews.Store(Create.Entity.InterviewView(interviewId: Id.g3, responsibleId: Id.gA, questionnaireId: Create.Entity.QuestionnaireIdentity().ToString(), status: InterviewStatus.InterviewerAssigned));
+
+            interviews.Store(Create.Entity.InterviewView(interviewId: Id.g9, responsibleId: Id.gA, questionnaireId: Create.Entity.QuestionnaireIdentity().ToString(), status: InterviewStatus.ApprovedBySupervisor));
+            interviews.Store(Create.Entity.InterviewView(interviewId: Id.g10, responsibleId: Id.gB, questionnaireId: Create.Entity.QuestionnaireIdentity().ToString(), status: InterviewStatus.RejectedBySupervisor));
 
             var accessor = CreateItemsAccessor(interviews: interviews, principal: principal);
 
             // Act
-            List<IDashboardItem> waitingForSupervisorAction = accessor.WaitingForSupervisorAction().ToList();
+            IEnumerable<IDashboardItem> waitingForSupervisorAction = accessor.WaitingForSupervisorAction();
 
-            Assert.That(waitingForSupervisorAction, Has.Count.EqualTo(1));
 
-            SupervisorDashboardInterviewViewModel model = (SupervisorDashboardInterviewViewModel)waitingForSupervisorAction.First();
-            Assert.That(model.InterviewId, Is.EqualTo(Id.g1));
+            var items = waitingForSupervisorAction.Cast<SupervisorDashboardInterviewViewModel>().ToList();
+
+            Assert.That(items, Has.Count.EqualTo(3));
+            items.Should().ContainSingle(i => i.InterviewId == Id.g1);
+            items.Should().ContainSingle(i => i.InterviewId == Id.g2);
+            items.Should().ContainSingle(i => i.InterviewId == Id.g3);
         }
 
         [Test]
@@ -86,7 +94,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Dashboard
         {
             var viewModelFactory = new Mock<IInterviewViewModelFactory>();
             viewModelFactory.Setup(x => x.GetNew<SupervisorDashboardInterviewViewModel>())
-                .Returns(new SupervisorDashboardInterviewViewModel(Mock.Of<IServiceLocator>(),
+                .Returns(() => new SupervisorDashboardInterviewViewModel(Mock.Of<IServiceLocator>(),
                     Mock.Of<IAuditLogService>(),
                     Mock.Of<IViewModelNavigationService>()));
 
