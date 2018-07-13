@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using AutoFixture;
 using AutoFixture.Kernel;
 using Ncqrs.Eventing.ServiceModel.Bus;
@@ -16,7 +17,7 @@ namespace WB.Tests.Unit.Infrastructure.OfflineSync
     public class PayloadSerializationTests
     {
         [Test]
-        public void can_serialize_and_desirialize_all_communication_messages()
+        public async Task can_serialize_and_deserialize_all_communication_messages()
         {
             var communicationMessageType = typeof(ICommunicationMessage);
             var messageTypes = Assembly.GetAssembly(communicationMessageType)
@@ -36,11 +37,14 @@ namespace WB.Tests.Unit.Infrastructure.OfflineSync
             foreach (var messageType in messageTypes)
             {
                 var message = new SpecimenContext(fixture).Resolve(messageType);
-                var payload = serializer.ToPayloadAsync(message);
+                var payload = await serializer.ToPayloadAsync(message);
 
                 var action = deserializeMethod.MakeGenericMethod(messageType);
 
-                Assert.DoesNotThrow(() => action.Invoke(serializer, new object[] {payload}),
+                Assert.DoesNotThrowAsync(async () =>
+                    {
+                        await (Task) action.Invoke(serializer, new object[] {payload});
+                    },
                     $"Try to deserialize {messageType.Name} failed");
             }
         }
