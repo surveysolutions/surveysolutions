@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Ncqrs.Eventing;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -14,7 +15,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.OfflineSyncTests
     public class PostInterviewRequestTests
     {
         [Test]
-        public void should_be_able_to_serialize_and_deserialize_events()
+        public async Task should_be_able_to_serialize_and_deserialize_events()
         {
             var serializer = new PayloadSerializer(new JsonAllTypesSerializer());
             InterviewCreated interviewCreated = Create.Event.InterviewCreated();
@@ -24,10 +25,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.OfflineSyncTests
                 Create.Other.CommittedEvent(payload: interviewCreated, eventSourceId: Id.gA)
             });
             // Act
-            byte[] payload = serializer.ToPayload(request);
+            byte[] payload = await serializer.ToPayloadAsync(request);
             Assert.That(payload, Is.Not.Empty);
 
-            var deserialized = serializer.FromPayload<PostInterviewRequest>(payload);
+            var deserialized = await serializer.FromPayloadAsync<PostInterviewRequest>(payload);
 
             Assert.That(deserialized.InterviewId, Is.EqualTo(Id.gA));
             Assert.That(deserialized.Events, Has.Count.EqualTo(1));

@@ -1,10 +1,10 @@
-﻿using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
+﻿using System.Threading.Tasks;
 
 namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services
 {
     public interface IPayloadSerializer
     {
-        T FromPayload<T>(byte[] payload);
-        byte[] ToPayload<T>(T message);
+        Task<T> FromPayloadAsync<T>(byte[] payload);
+        Task<byte[]> ToPayloadAsync<T>(T message);
     }
 }
