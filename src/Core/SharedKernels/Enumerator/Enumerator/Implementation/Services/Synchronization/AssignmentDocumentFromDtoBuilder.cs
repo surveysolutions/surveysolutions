@@ -36,6 +36,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 LocationLongitude = remote.LocationLongitude,
                 ResponsibleId = remote.ResponsibleId,
                 ResponsibleName = remote.ResponsibleName,
+                OriginalResponsibleId = remote.ResponsibleId,
                 ReceivedDateUtc = remote.CreatedAtUtc,
                 ProtectedVariables = remote.ProtectedVariables?.Select(x => new AssignmentDocument.AssignmentProtectedVariable
                 {
