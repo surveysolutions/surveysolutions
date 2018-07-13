@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.ObjectModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.Logging;
@@ -12,6 +13,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
 namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 {
+    [ExcludeFromCodeCoverage()] // TODO: remove attribute when UI binding completed
     public class OfflineSupervisorSyncViewModel : BaseOfflineSyncViewModel
     {
         private readonly IInterviewViewModelFactory viewModelFactory;

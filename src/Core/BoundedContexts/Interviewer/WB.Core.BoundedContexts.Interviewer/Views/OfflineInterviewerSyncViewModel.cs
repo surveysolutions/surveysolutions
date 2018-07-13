@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross;
@@ -16,6 +17,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views
 {
+    [ExcludeFromCodeCoverage()] // TODO: remove attribute when UI binding completed
     public class OfflineInterviewerSyncViewModel : BaseOfflineSyncViewModel
     {
         private readonly IPlainStorage<InterviewerIdentity> interviewersPlainStorage;

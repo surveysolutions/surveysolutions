@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using MvvmCross.Logging;
 using Plugin.Permissions.Abstractions;
@@ -24,6 +25,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
         Error
     }
 
+    [ExcludeFromCodeCoverage()] // TODO: remove attribute when UI binding completed
     public abstract class BaseOfflineSyncViewModel : BaseViewModel, IOfflineSyncViewModel
     {
         private readonly IPermissionsService permissions;
