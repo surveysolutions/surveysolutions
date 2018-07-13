@@ -65,7 +65,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                     await synchronizationProcess.SynchronizeAsync(
                         new Progress<SyncProgressInfo>(o =>
                         {
-                            SetStatus(ConnectionStatus.Sync, o.Description);
+                            SetStatus(ConnectionStatus.Sync, o.Title + "\r\n" + o.Description);
                         }),
                         CancellationToken.None);
 

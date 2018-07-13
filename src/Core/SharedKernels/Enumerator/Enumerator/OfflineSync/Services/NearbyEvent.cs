@@ -28,12 +28,14 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services
 
         public class Disconnected : INearbyEvent
         {
-            public Disconnected(string endpoint)
+            public Disconnected(string endpoint, string name)
             {
                 Endpoint = endpoint;
+                Name = name;
             }
 
             public string Endpoint { get; }
+            public string Name { get; }
         }
 
         public class Connected : INearbyEvent

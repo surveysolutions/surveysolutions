@@ -126,9 +126,9 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
 
         protected virtual void OnDisconnected(string endpoint)
         {
-            events.OnNext(new NearbyEvent.Disconnected(endpoint));
-
             var exising = this.RemoteEndpoints.FirstOrDefault(re => re.Enpoint == endpoint);
+            events.OnNext(new NearbyEvent.Disconnected(endpoint, exising?.Name));
+
             Trace($"Disconnected from endpoint: {endpoint}. Name: {exising?.Name ?? "<unknown>"}");
 
             if (exising != null)
