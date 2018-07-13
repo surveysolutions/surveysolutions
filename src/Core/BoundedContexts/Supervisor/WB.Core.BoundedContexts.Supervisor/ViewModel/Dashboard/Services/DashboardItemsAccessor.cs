@@ -106,8 +106,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services
         private IReadOnlyCollection<InterviewView> GetOutboxInterviews()
         {
             return this.interviews.Where(x =>
-                x.ResponsibleId != this.principal.CurrentUserIdentity.UserId
-                || x.Status == InterviewStatus.ApprovedBySupervisor);
+                x.Status == InterviewStatus.ApprovedBySupervisor
+                || x.Status == InterviewStatus.RejectedBySupervisor && x.ResponsibleId != this.principal.CurrentUserIdentity.UserId);
         }
 
         private IEnumerable<AssignmentDocument> GetOutboxAssignments()
