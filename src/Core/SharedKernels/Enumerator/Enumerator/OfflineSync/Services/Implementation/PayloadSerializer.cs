@@ -1,22 +1,20 @@
 ﻿using System.IO;
 using System.IO.Compression;
-using Newtonsoft.Json;
+using System.Threading.Tasks;
+using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
 {
     public class PayloadSerializer : IPayloadSerializer
     {
-        private readonly JsonSerializer serializer;
+        private readonly IJsonAllTypesSerializer serializer;
 
-        public PayloadSerializer()
+        public PayloadSerializer(IJsonAllTypesSerializer serializer)
         {
-            this.serializer = JsonSerializer.Create(new JsonSerializerSettings
-            {
-                TypeNameHandling = TypeNameHandling.All
-            });
+            this.serializer = serializer;
         }
 
-        public T FromPayload<T>(byte[] payload)
+        public async Task<T> FromPayloadAsync<T>(byte[] payload)
         {
             using (var ms = new MemoryStream(payload))
             {
@@ -24,16 +22,14 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                 {
                     using (var sr = new StreamReader(zip))
                     {
-                        using (var jsonTextReader = new JsonTextReader(sr))
-                        {
-                            return serializer.Deserialize<T>(jsonTextReader);
-                        }
+                        var json = await sr.ReadToEndAsync();
+                        return this.serializer.Deserialize<T>(json);
                     }
                 }
             }
         }
 
-        public byte[] ToPayload<T>(T message)
+        public async Task<byte[]> ToPayloadAsync<T>(T message)
         {
             using (var ms = new MemoryStream())
             {
@@ -41,10 +37,8 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                 {
                     using (var sw = new StreamWriter(zip))
                     {
-                        using (var jsonWriter = new JsonTextWriter(sw))
-                        {
-                            serializer.Serialize(jsonWriter, message);
-                        }
+                        var json = this.serializer.Serialize(message);
+                        await sw.WriteAsync(json);
                     }
                 }
 
