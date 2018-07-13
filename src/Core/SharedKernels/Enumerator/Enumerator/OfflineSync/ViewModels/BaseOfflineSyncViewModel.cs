@@ -20,7 +20,8 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
         Sync,
         Done,
         Connected,
-        Advertising
+        Advertising,
+        Error
     }
 
     public abstract class BaseOfflineSyncViewModel : BaseViewModel, IOfflineSyncViewModel
@@ -47,7 +48,8 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
             switch (@event)
             {
                 case NearbyEvent.InitiatedConnection iniConnection:
-                    this.nearbyConnection.AcceptConnection(iniConnection.Endpoint);
+                    this.nearbyConnection.AcceptConnection(iniConnection.Endpoint)
+                        .ContinueWith(result => SetErrorOnResultIfNeeded(result.Result));
                     break;
                 case NearbyEvent.Connected connected:
                     SetStatus(ConnectionStatus.Connected, "Connected to " + connected.Name);
@@ -67,7 +69,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
 
         protected virtual void Disconnected(string disconnectedEndpoint)
         {
-            
+
         }
 
         protected virtual void SetStatus(ConnectionStatus connectionStatus, string details = null)
@@ -85,7 +87,9 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
         {
             SetStatus(ConnectionStatus.Connecting, $"Found {info.EndpointName}. Requesting conection");
             Log.Trace("OnFound {0} - {1}", endpointId, info.EndpointName);
-            await this.nearbyConnection.RequestConnection(this.principal.CurrentUserIdentity.Name, endpointId);
+            var result =  await this.nearbyConnection.RequestConnection(this.principal.CurrentUserIdentity.Name, endpointId);
+
+            if (!SetErrorOnResultIfNeeded(result)) return;
 
             SetStatus(ConnectionStatus.Connecting, $"Requested conection to {info.EndpointName}");
         }
@@ -102,19 +106,32 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
 
             SetStatus(ConnectionStatus.StartDiscovering, $"Starting discovery");
             var serviceName = GetServiceName();
-            await this.nearbyConnection.StartDiscovery(serviceName);
+            var result = await this.nearbyConnection.StartDiscovery(serviceName);
+
+            if (!SetErrorOnResultIfNeeded(result)) return;
+
             Endpoint = serviceName;
             SetStatus(ConnectionStatus.Discovering, $"Searching for supervisor");
         }
 
-        protected Task StopDiscovery()
+        private bool SetErrorOnResultIfNeeded(NearbyStatus status)
         {
-            return this.nearbyConnection.StopDiscovery();
+            if (status.IsSuccess == false)
+            {
+                SetStatus(ConnectionStatus.Error, status.StatusMessage + $" [{status.Status.ToString()}]");
+            }
+
+            return status.IsSuccess;
         }
-        
-        protected Task StopAdvertising()
+
+        protected void StopDiscovery()
         {
-            return this.nearbyConnection.StopAdvertising();
+            this.nearbyConnection.StopDiscovery();
+        }
+
+        protected void StopAdvertising()
+        {
+            this.nearbyConnection.StopAdvertising();
         }
 
         protected abstract string GetServiceName();
@@ -127,9 +144,16 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
 
             SetStatus(ConnectionStatus.StartAdvertising, $"Starting advertising");
             var serviceName = GetServiceName();
-            await this.nearbyConnection.StartAdvertising(serviceName, this.principal.CurrentUserIdentity.Name);
-            Endpoint = serviceName;
-            SetStatus(ConnectionStatus.Advertising, "Waiting for interviewers connections");
+            try
+            {
+                await this.nearbyConnection.StartAdvertising(serviceName, this.principal.CurrentUserIdentity.Name);
+                Endpoint = serviceName;
+                SetStatus(ConnectionStatus.Advertising, "Waiting for interviewers connections");
+            }
+            catch (NearbyConnectionException nce)
+            {
+                SetStatus(ConnectionStatus.Error, nce.Message);
+            }
         }
 
         protected virtual async void OnConnection(string endpointId, NearbyConnectionInfo info)
@@ -137,7 +161,9 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
             SetStatus(ConnectionStatus.Connecting, $"New incoming connection from {info.EndpointName}");
 
             Log.Trace("OnConnection from " + endpointId + " => " + info.EndpointName);
-            await this.nearbyConnection.AcceptConnection(endpointId);
+            var result = await this.nearbyConnection.AcceptConnection(endpointId);
+            if (!SetErrorOnResultIfNeeded(result)) return;
+
             Log.Trace("Accept connection from " + endpointId + " => " + info.EndpointName);
 
             SetStatus(ConnectionStatus.Connected, $"Connected to {info.EndpointName}");

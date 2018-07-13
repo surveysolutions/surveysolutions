@@ -10,6 +10,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Entities;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
+using WB.Core.SharedKernels.Enumerator.Utils;
 
 namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
 {
@@ -104,7 +105,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                 pending.TryAdd(payloads.CorrelationId, tsc);
 
                 Log("SEND.Message", true, endpoint, payloads.CorrelationId, PayloadType.Bytes, "");
-                
+
                 await SendOverWire(connection, endpoint, payloads);
 
                 var response = await tsc.Task;
@@ -119,6 +120,11 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                         throw new Exception(
                             $"Unexpected return type. Expected: {typeof(TResponse).FullName}. Gor: {response.GetType().FullName}");
                 }
+            }
+            catch (TimeoutException)
+            {
+                pending.TryRemove(payloads.CorrelationId, out _);
+                throw;
             }
             catch (TaskCanceledException)
             {
@@ -309,12 +315,18 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                 CommunicationSession.Current.RequestsTotal += 1;
             }
 
-            Task SendOverWire(IPayload payload)
+            async Task SendOverWire(IPayload payload)
             {
                 outgoingPayloads.AddOrUpdate(payload.Id, payload, (id, p) => payload);
                 Log("SEND", true, endpoint, payload.Id, payload.Type, "Send over wire");
 
-                return nearbyConnection.SendPayloadAsync(endpoint, payload);
+                var result = await nearbyConnection.SendPayloadAsync(endpoint, payload)
+                    .TimeoutAfter(TimeSpan.FromSeconds(30));
+
+                if(result.IsSuccess == false)
+                    Log("SEND-ERROR:", true, endpoint, payload.Id, payload.Type, result.Status.ToString() + " - " + result.StatusMessage);
+                else
+                    Log("SEND-OK", true, endpoint, payload.Id, payload.Type, "Send over wire");
             }
         }
         
