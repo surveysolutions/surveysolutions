@@ -779,11 +779,12 @@ namespace WB.Tests.Abc.TestFactories
 
         private static IQueryable<TEntity> GetNhQueryable<TEntity>() => Mock.Of<IQueryable<TEntity>>(x => x.Provider == Mock.Of<INhQueryProvider>());
 
-        public OfflineSynchronizationService OfflineSynchronizationService(IOfflineSyncClient offlineSyncClient = null)
+        public OfflineSynchronizationService OfflineSynchronizationService(IOfflineSyncClient offlineSyncClient = null, 
+            IInterviewerPrincipal interviewerPrincipal = null)
         {
             return new OfflineSynchronizationService(
                 offlineSyncClient ?? Mock.Of<IOfflineSyncClient>(),
-                Mock.Of<IInterviewerPrincipal>(),
+                interviewerPrincipal ?? Mock.Of<IInterviewerPrincipal>(),
                 Mock.Of<IPlainStorage<InterviewView>>());
         }
 
@@ -793,6 +794,7 @@ namespace WB.Tests.Abc.TestFactories
             ICommandService commandService = null,
             IJsonAllTypesSerializer serializer = null,
             IPlainStorage<BrokenInterviewPackageView, int?> brokenInterviewStorage = null,
+            IPrincipal principal = null,
             IPlainStorage<InterviewerDocument> interviewerViewRepository = null)
         {
             return new SupervisorInterviewsHandler(
@@ -804,7 +806,7 @@ namespace WB.Tests.Abc.TestFactories
                 Mock.Of<ILogger>(),
                 brokenInterviewStorage ?? Mock.Of<IPlainStorage<BrokenInterviewPackageView, int?>>(),
                 new SqliteInmemoryStorage<SuperivsorReceivedPackageLogEntry, int>(),
-                Mock.Of<IPrincipal>(),
+                principal ?? Mock.Of<IPrincipal>(),
                 interviewerViewRepository ?? Mock.Of<IPlainStorage<InterviewerDocument>>());
         }
 
