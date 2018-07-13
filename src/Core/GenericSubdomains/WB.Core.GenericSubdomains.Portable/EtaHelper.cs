@@ -19,16 +19,33 @@ namespace WB.Core.GenericSubdomains.Portable
 
         public void AddProgress(long sendBytes, long? totalBytes = null)
         {
+            sw.Stop();
             this.totalBytes = totalBytes;
-            var bytes = sendBytes - bytesDone;
+            var delta = sendBytes - bytesDone;
             var elapsed = sw.Elapsed.TotalSeconds;
-            sw.Restart();
-            var speed = bytes / elapsed; // bytes/second
+            
+            var speed = delta / elapsed; // bytes/second
             
             AverageSpeed = this.average.Add(speed);
             bytesDone = sendBytes;
-            if (AverageSpeed < 0.00001) return;
-            ETA = this.totalBytes != null ? TimeSpan.FromSeconds((this.totalBytes.Value - sendBytes) / AverageSpeed) : TimeSpan.Zero;
+
+            if (AverageSpeed > 0.0001)
+            {
+                if (this.totalBytes != null)
+                {
+                    var etaSeconds = (this.totalBytes.Value - sendBytes) / AverageSpeed;
+
+                    Debug.WriteLine($"ETA: {sendBytes} of {totalBytes ?? -1}. Delta: {delta} took {sw.ElapsedMilliseconds:0.00}ms. Left {this.totalBytes.Value - sendBytes}bytes. Eta: {etaSeconds:0.00}s with speed {speed:0.00} bytes/second");
+
+                    ETA = TimeSpan.FromSeconds(etaSeconds);
+                }
+                else
+                {
+                    ETA = TimeSpan.Zero;
+                }
+            }
+
+            sw.Restart();
         }
 
         public TimeSpan ETA { get; private set; }

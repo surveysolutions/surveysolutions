@@ -1,17 +1,19 @@
-﻿using System.Diagnostics;
-using System.IO;
+﻿using System.IO;
 using System.IO.Compression;
-using WB.Core.GenericSubdomains.Portable.Services;
+using Newtonsoft.Json;
 
 namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
 {
     public class PayloadSerializer : IPayloadSerializer
     {
-        private readonly IJsonAllTypesSerializer serializer;
+        private readonly JsonSerializer serializer;
 
-        public PayloadSerializer(IJsonAllTypesSerializer serializer)
+        public PayloadSerializer()
         {
-            this.serializer = serializer;
+            this.serializer = JsonSerializer.Create(new JsonSerializerSettings
+            {
+                TypeNameHandling = TypeNameHandling.All
+            });
         }
 
         public T FromPayload<T>(byte[] payload)
@@ -22,9 +24,10 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                 {
                     using (var sr = new StreamReader(zip))
                     {
-                        var json = sr.ReadToEnd();
-                        Debug.WriteLine("FromPayload: " + json);
-                        return this.serializer.Deserialize<T>(json);
+                        using (var jsonTextReader = new JsonTextReader(sr))
+                        {
+                            return serializer.Deserialize<T>(jsonTextReader);
+                        }
                     }
                 }
             }
@@ -38,9 +41,10 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                 {
                     using (var sw = new StreamWriter(zip))
                     {
-                        var json = this.serializer.Serialize(message);
-                        Debug.WriteLine("ToPayload: " + json);
-                        sw.Write(json);
+                        using (var jsonWriter = new JsonTextWriter(sw))
+                        {
+                            serializer.Serialize(jsonWriter, message);
+                        }
                     }
                 }
 

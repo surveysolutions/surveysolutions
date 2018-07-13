@@ -162,6 +162,10 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                     await payload.ReadStreamAsync();
                     Log("RECEIVE", false, endpoint, payload.Id, payload.Type, $"Done reading");
                     break;
+                case PayloadType.File:
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
 
