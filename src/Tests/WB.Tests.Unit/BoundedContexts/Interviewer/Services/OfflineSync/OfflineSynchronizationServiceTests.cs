@@ -4,6 +4,9 @@ using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Interviewer;
+using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
+using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
@@ -49,7 +52,10 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.OfflineSync
                     CanSyncronize = true
                 });
 
-            var service = Create.Service.OfflineSynchronizationService(clientMock.Object);
+            var interviewerPrincipal = new Mock<IInterviewerPrincipal>();
+            interviewerPrincipal.Setup(x => x.CurrentUserIdentity).Returns(new InterviewerIdentity() { Id = Guid.NewGuid().FormatGuid() });
+
+            var service = Create.Service.OfflineSynchronizationService(clientMock.Object, interviewerPrincipal.Object);
 
             await service.CanSynchronizeAsync(null, null);
         }
@@ -59,15 +65,19 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.OfflineSync
         {
             var v = ReflectionUtils.GetAssemblyVersion(typeof(InterviewerBoundedContextAssemblyIndicator));
 
-            var clientMock = new Mock<IOfflineSyncClient>();
+             var clientMock = new Mock<IOfflineSyncClient>();
             clientMock.Setup(x => x.SendAsync<CanSynchronizeRequest, CanSynchronizeResponse>(
                     It.IsAny<CanSynchronizeRequest>(), CancellationToken.None, null))
                 .ReturnsAsync(new CanSynchronizeResponse
                 {
-                    CanSyncronize = false
+                    CanSyncronize = false,
+                    Reason = SyncDeclineReason.UnexpectedClientVersion
                 });
 
-            var service = Create.Service.OfflineSynchronizationService(clientMock.Object);
+            var interviewerPrincipal = new Mock<IInterviewerPrincipal>();
+            interviewerPrincipal.Setup(x => x.CurrentUserIdentity).Returns(new InterviewerIdentity(){Id = Guid.NewGuid().FormatGuid()});
+
+            var service = Create.Service.OfflineSynchronizationService(clientMock.Object, interviewerPrincipal.Object);
 
             try
             {
