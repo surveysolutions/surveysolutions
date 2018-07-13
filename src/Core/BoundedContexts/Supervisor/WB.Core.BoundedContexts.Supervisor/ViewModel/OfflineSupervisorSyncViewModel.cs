@@ -4,19 +4,16 @@ using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.Logging;
 using WB.Core.BoundedContexts.Supervisor.Properties;
-using WB.Core.BoundedContexts.Supervisor.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 {
     public class OfflineSupervisorSyncViewModel : BaseOfflineSyncViewModel
     {
-        private readonly IPlainStorage<SupervisorIdentity> supervisorStorage;
         private readonly IInterviewViewModelFactory viewModelFactory;
         private readonly string serviceName;
 
@@ -24,14 +21,13 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             IViewModelNavigationService viewModelNavigationService,
             IPermissionsService permissions,
             IEnumeratorSettings settings,
-            IPlainStorage<SupervisorIdentity> supervisorStorage,
             INearbyCommunicator communicator,
             INearbyConnection nearbyConnection,
             IInterviewViewModelFactory viewModelFactory)
             : base(principal, viewModelNavigationService, permissions, nearbyConnection)
         {
             communicator.IncomingInfo.Subscribe(OnIncomingData);
-            this.supervisorStorage = supervisorStorage;
+            this.viewModelFactory = viewModelFactory;
             this.serviceName = NormalizeEndpoint(settings.Endpoint);
         }
 
@@ -70,23 +66,26 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             set => this.SetProperty(ref this.connectedDevices, value);
         }
 
-        public override void Prepare()
+        public override async Task Initialize()
         {
-            base.Prepare();
-
             this.Title = SupervisorUIResources.OfflineSync_ReceivingInterviewsFromDevices;
             this.ProgressTitle = string.Format(SupervisorUIResources.OfflineSync_NoDevicesDetectedFormat,
                 this.principal.CurrentUserIdentity.Name);
 
-            var vm1 = this.viewModelFactory.GetNew<ConnectedDeviceViewModel>();
-            vm1.Initialize().WaitAndUnwrapException();
-            var vm2 = this.viewModelFactory.GetNew<ConnectedDeviceViewModel>();
-            vm2.Initialize().WaitAndUnwrapException();
             this.ConnectedDevices = new ObservableCollection<ConnectedDeviceViewModel>(new[]
             {
-                vm1,
-                vm2
+                this.viewModelFactory.GetNew<ConnectedDeviceViewModel>(),
+                this.viewModelFactory.GetNew<ConnectedDeviceViewModel>()
             });
+
+            await this.ConnectedDevices[0].Initialize();
+            await this.ConnectedDevices[1].Initialize();
+        }
+
+        protected override void SetStatus(ConnectionStatus connectionStatus, string details = null)
+        {
+            base.SetStatus(connectionStatus, details);
+            this.ProgressTitle = $"{this.GetServiceName()}\r\n{this.Status}\r\n{this.StatusDetails}";
         }
 
         public IMvxAsyncCommand Restart => new MvxAsyncCommand(OnGoogleApiReady);
@@ -104,10 +103,6 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             SetStatus(ConnectionStatus.Sync, dataInfo.ToString());
         }
         
-        protected override string GetServiceName()
-        {
-            var sup = supervisorStorage.FirstOrDefault();
-            return serviceName + sup.UserId.FormatGuid();
-        }
+        protected override string GetServiceName() => serviceName + this.principal.CurrentUserIdentity.UserId.FormatGuid();
     }
 }
