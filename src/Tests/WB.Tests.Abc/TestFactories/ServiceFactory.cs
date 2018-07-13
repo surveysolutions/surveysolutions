@@ -801,7 +801,8 @@ namespace WB.Tests.Abc.TestFactories
                 commandService ?? Mock.Of<ICommandService>(), 
                 Mock.Of<ILogger>(),
                 brokenInterviewStorage ?? Mock.Of<IPlainStorage<BrokenInterviewPackageView, int?>>(),
-                new SqliteInmemoryStorage<SuperivsorReceivedPackageLogEntry, int>());
+                new SqliteInmemoryStorage<SuperivsorReceivedPackageLogEntry, int>(),
+                Mock.Of<IPrincipal>());
         }
     }
 
