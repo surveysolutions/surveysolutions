@@ -45,7 +45,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         protected override async Task OnGoogleApiReady()
         {
             SetStatus(ConnectionStatus.StartDiscovering);
-            await StopDiscovery();
+            StopDiscovery();
             await StartDiscovery();
             SetStatus(ConnectionStatus.Discovering);
         }

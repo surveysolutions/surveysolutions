@@ -40,67 +40,76 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
             Debug.WriteLine("NearbyConnection - " + message);
         }
 
-        public Task StartDiscovery(string serviceName)
+        public Task<NearbyStatus> StartDiscovery(string serviceName)
         {
             return NearbyClass.Connections.StartDiscoveryAsync(api, serviceName,
                 new OnDiscoveryCallback(FoundEndpoint, LostEndpoint),
-                new DiscoveryOptions(Strategy.P2pStar));
+                new DiscoveryOptions(Strategy.P2pStar)).ToConnectionStatus();
         }
 
         public async Task<string> StartAdvertising(string serviceName, string name)
         {
-            var result = await NearbyClass.Connections.StartAdvertisingAsync(api,  name, serviceName,
+            var result = await NearbyClass.Connections.StartAdvertisingAsync(api, name, serviceName,
                 new OnConnectionLifecycleCallback(
                     new NearbyConnectionLifeCycleCallback(OnInitiatedConnection, OnConnectionResult, OnDisconnected)),
                 new AdvertisingOptions(Strategy.P2pStar));
+
+            if (!result.Status.IsSuccess)
+            {
+                var status = result.Status.ToConnectionStatus();
+                throw new NearbyConnectionException("Failed to start advertising. " + status.StatusMessage, status.Status);
+            }
+
             return result.LocalEndpointName;
         }
 
-        public Task RequestConnection(string name, string endpoint)
+        public Task<NearbyStatus> RequestConnection(string name, string endpoint)
         {
             Trace($"RequestConnection. {name} => {endpoint}");
 
             return NearbyClass.Connections.RequestConnectionAsync(api, name, endpoint,
                 new OnConnectionLifecycleCallback(
-                    new NearbyConnectionLifeCycleCallback(OnInitiatedConnection, OnConnectionResult, OnDisconnected)));
+                    new NearbyConnectionLifeCycleCallback(
+                        OnInitiatedConnection, 
+                        OnConnectionResult, 
+                        OnDisconnected))).ToConnectionStatus();
         }
 
-        public Task AcceptConnection(string endpoint)
+        public Task<NearbyStatus> AcceptConnection(string endpoint)
         {
             Trace($"AcceptConnection. {endpoint}");
 
             return NearbyClass.Connections.AcceptConnectionAsync(api, endpoint,
-                new OnPayloadCallback(new NearbyPayloadCallback(OnPayloadReceived, OnPayloadTransferUpdate)));
+                new OnPayloadCallback(new NearbyPayloadCallback(OnPayloadReceived, OnPayloadTransferUpdate)))
+                .ToConnectionStatus();
         }
 
-        public Task RejectConnection(string endpoint)
+        public Task<NearbyStatus> RejectConnection(string endpoint)
         {
-            return NearbyClass.Connections.RejectConnectionAsync(api, endpoint);
+            return NearbyClass.Connections.RejectConnectionAsync(api, endpoint).ToConnectionStatus();
         }
 
-        public Task SendPayloadAsync(string to, IPayload payload)
+        public Task<NearbyStatus> SendPayloadAsync(string to, IPayload payload)
         {
             var send = payload as Payload;
             Trace($"SendPayloadAsync. PayloadId: {send?.Id ?? -1}");
-            return NearbyClass.Connections.SendPayloadAsync(api, to, send.NearbyPayload);
+            return NearbyClass.Connections.SendPayloadAsync(api, to, send.NearbyPayload).ToConnectionStatus();
         }
 
         public IObservable<INearbyEvent> Events { get; }
 
         public ObservableCollection<RemoteEndpoint> RemoteEndpoints { get; } = new ObservableCollection<RemoteEndpoint>();
 
-        public Task StopDiscovery()
+        public void StopDiscovery()
         {
             Trace("Stop discovery");
             NearbyClass.Connections.StopDiscovery(api);
-            return Task.CompletedTask;
         }
 
-        public Task StopAdvertising()
+        public void StopAdvertising()
         {
             Trace("Stop advertising");
             NearbyClass.Connections.StopAdvertising(api);
-            return Task.CompletedTask;
         }
 
         public void SetGoogleApiClient(GoogleApiClient apiClient)
@@ -151,7 +160,7 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
                 knownEnpoints.TryGetValue(endpoint, out var name);
 
                 Trace($"Connected to endpoint: {endpoint}. Name: {name}");
-                this.RemoteEndpoints.Add(new RemoteEndpoint{ Enpoint = endpoint, Name = name});
+                this.RemoteEndpoints.Add(new RemoteEndpoint { Enpoint = endpoint, Name = name });
                 events.OnNext(new NearbyEvent.Connected(endpoint, resolution, name));
             }
         }
