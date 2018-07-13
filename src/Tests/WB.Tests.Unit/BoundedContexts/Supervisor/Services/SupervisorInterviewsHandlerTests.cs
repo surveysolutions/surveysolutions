@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Supervisor;
 using WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSyncHandlers;
 using WB.Core.BoundedContexts.Supervisor.Views;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernel.Structures.Synchronization;
@@ -32,12 +33,32 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
         [Test]
         public async Task CanSynchronize_should_check_assemblyFileVersion_for_compatibility()
         {
-            var handler = Create.Service.SupervisorInterviewsHandler();
+            var userId = Guid.NewGuid();
+            var users = new Mock<IPlainStorage<InterviewerDocument>>();
+            users.Setup(x => x.GetById(userId.FormatGuid())).Returns(new InterviewerDocument());
+
+            var handler = Create.Service.SupervisorInterviewsHandler(interviewerViewRepository:users.Object);
 
             var expectedVersion = ReflectionUtils.GetAssemblyVersion(typeof(SupervisorBoundedContextAssemblyIndicator));
-            var response = await handler.Handle(new CanSynchronizeRequest(expectedVersion.Revision));
+            var response = await handler.Handle(new CanSynchronizeRequest(expectedVersion.Revision, userId));
 
             Assert.That(response, Has.Property(nameof(response.CanSyncronize)).True);
+        }
+
+        [Test]
+        public async Task CanSynchronize_should_check_UserId_for_Team_belonging()
+        {
+            var userId = Guid.NewGuid();
+            var users = new Mock<IPlainStorage<InterviewerDocument>>();
+            users.Setup(x => x.GetById(userId.FormatGuid())).Returns(new InterviewerDocument());
+
+            var handler = Create.Service.SupervisorInterviewsHandler(interviewerViewRepository: users.Object);
+
+            var expectedVersion = ReflectionUtils.GetAssemblyVersion(typeof(SupervisorBoundedContextAssemblyIndicator));
+            var response = await handler.Handle(new CanSynchronizeRequest(expectedVersion.Revision, Guid.NewGuid()));
+
+            Assert.That(response, Has.Property(nameof(response.CanSyncronize)).False);
+            Assert.AreEqual(response.Reason, SyncDeclineReason.NotATeamMember);
         }
 
         [Test]
@@ -45,7 +66,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
         {
             var handler = Create.Service.SupervisorInterviewsHandler();
 
-            var response = await handler.Handle(new CanSynchronizeRequest(1));
+            var response = await handler.Handle(new CanSynchronizeRequest(1, Guid.NewGuid()));
 
             Assert.That(response, Has.Property(nameof(response.CanSyncronize)).False);
         }

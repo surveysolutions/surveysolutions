@@ -930,6 +930,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Interviewer belongs to a different team. Please, sync with Headquarters website.
+        /// </summary>
+        public static string InterviewerFromDifferentTeam {
+            get {
+                return ResourceManager.GetString("InterviewerFromDifferentTeam", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Supervisor website address is invalid. Make sure that you entered correct url address.
         /// </summary>
         public static string InvalidEndpoint {

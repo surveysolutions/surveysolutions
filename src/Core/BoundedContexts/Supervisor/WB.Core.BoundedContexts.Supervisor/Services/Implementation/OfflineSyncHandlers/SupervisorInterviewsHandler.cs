@@ -40,6 +40,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
         private readonly ICommandService commandService;
         private readonly IPlainStorage<BrokenInterviewPackageView, int?> brokenInterviewPackageStorage;
         private readonly IPrincipal principal;
+        private readonly IPlainStorage<InterviewerDocument> interviewerViewRepository;
 
         public SupervisorInterviewsHandler(ILiteEventBus eventBus,
             IEnumeratorEventStorage eventStore,
@@ -49,7 +50,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             ILogger logger, 
             IPlainStorage<BrokenInterviewPackageView, int?> brokenInterviewPackageStorage,
             IPlainStorage<SuperivsorReceivedPackageLogEntry, int> receivedPackagesLog,
-            IPrincipal principal)
+            IPrincipal principal,
+            IPlainStorage<InterviewerDocument> interviewerViewRepository)
         {
             this.eventBus = eventBus;
             this.eventStore = eventStore;
@@ -60,6 +62,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             this.commandService = commandService;
             this.brokenInterviewPackageStorage = brokenInterviewPackageStorage;
             this.principal = principal;
+            this.interviewerViewRepository = interviewerViewRepository;
         }
 
         public void Register(IRequestHandler requestHandler)
@@ -226,9 +229,28 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
         {
             var expectedVersion = ReflectionUtils.GetAssemblyVersion(typeof(SupervisorBoundedContextAssemblyIndicator));
 
+            if (expectedVersion.Revision != arg.InterviewerBuildNumber)
+            {
+                return Task.FromResult(new CanSynchronizeResponse
+                {
+                    CanSyncronize = false,
+                    Reason = SyncDeclineReason.UnexpectedClientVersion
+                });
+            }
+
+            var user = interviewerViewRepository.GetById(arg.InterviewerId.FormatGuid());
+            if (user == null)
+            {
+                return Task.FromResult(new CanSynchronizeResponse
+                {
+                    CanSyncronize = false,
+                    Reason = SyncDeclineReason.NotATeamMember
+                });
+            }
+
             return Task.FromResult(new CanSynchronizeResponse
             {
-                CanSyncronize = expectedVersion.Revision == arg.InterviewerBuildNumber
+                CanSyncronize = true
             });
         }
 

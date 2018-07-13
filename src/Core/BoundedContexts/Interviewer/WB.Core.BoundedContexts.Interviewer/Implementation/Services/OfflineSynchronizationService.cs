@@ -222,12 +222,21 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                     ReflectionUtils.GetAssemblyVersion(typeof(InterviewerBoundedContextAssemblyIndicator));
             }
 
-            var request = new CanSynchronizeRequest(interviewerBoundedContextVersion.Revision);
+            var request = new CanSynchronizeRequest(interviewerBoundedContextVersion.Revision, this.principal.CurrentUserIdentity.UserId);
             var response = await this.syncClient.SendAsync<CanSynchronizeRequest, CanSynchronizeResponse>(request, 
                 token ?? CancellationToken.None);
+
             if (!response.CanSyncronize)
             {
-                throw new SynchronizationException(SynchronizationExceptionType.UpgradeRequired);
+                switch (response.Reason)
+                {
+                    case SyncDeclineReason.UnexpectedClientVersion :
+                        throw new SynchronizationException(SynchronizationExceptionType.UpgradeRequired);
+                    case SyncDeclineReason.NotATeamMember :
+                        throw new SynchronizationException(SynchronizationExceptionType.InterviewerFromDifferentTeam);
+                    default:
+                        throw new SynchronizationException(SynchronizationExceptionType.Unexpected);
+                }
             }
         }
 

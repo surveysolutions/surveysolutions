@@ -655,6 +655,9 @@ for further instructions</value>
   <data name="UnacceptableSSLCertificate" xml:space="preserve">
     <value>Failed to verify certificate for target URL. Please, check if Headquarters website address is valid and your device has corrent current date and time</value>
   </data>
+  <data name="InterviewerFromDifferentTeam" xml:space="preserve">
+    <value>Interviewer belongs to a different team. Please, sync with Headquarters website</value>
+  </data>
   <data name="Synchronization_DownloadingLogo" xml:space="preserve">
     <value>Downloading logo</value>
   </data>
