@@ -21,7 +21,10 @@ namespace WB.Enumerator.Native.WebInterview.Services
             this.autoMapper = autoMapper;
         }
 
-        public Sidebar GetSidebarChildSectionsOf(string currentSectionId, IStatefulInterview interview, string[] sectionIds, bool isReviewMode)
+        public Sidebar GetSidebarChildSectionsOf(string currentSectionId, 
+            IStatefulInterview interview, 
+            string[] sectionIds, 
+            bool isReviewMode)
         {
             Sidebar result = new Sidebar();
             HashSet<Identity> visibleSections = new HashSet<Identity>();
