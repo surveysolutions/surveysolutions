@@ -62,7 +62,6 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 
         private InterviewStatus status;
         private IStatefulInterview interview;
-        private Guid assignedTo;
 
         public override void Configure(string interviewId, NavigationState navigationState)
         {
@@ -74,7 +73,6 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 
             interview = this.interviewRepository.Get(interviewId);
             this.status = interview.Status;
-            this.assignedTo = interview.CurrentResponsibleId;
 
             var interviewKey = interview.GetInterviewKey()?.ToString();
             this.CompleteScreenTitle = string.IsNullOrEmpty(interviewKey)
