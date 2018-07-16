@@ -2,6 +2,8 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
 using WB.Core.SharedKernels.Enumerator.Utils;
 
@@ -12,7 +14,6 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
         private readonly INearbyCommunicator communicator;
         private readonly INearbyConnection nearbyConnection;
         
-
         public OfflineSyncClient(INearbyCommunicator communicator, INearbyConnection nearbyConnection)
         {
             this.communicator = communicator;
