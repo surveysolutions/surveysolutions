@@ -91,6 +91,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
             }
 
 
+            await UploadSynchronizationStatistics(progress, cancellationToken);
+        }
+
+        private async Task UploadSynchronizationStatistics(IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken)
+        {
             progress.Report(new SyncProgressInfo
             {
                 Title = SupervisorUIResources.Synchronization_UploadStatistics
@@ -103,7 +108,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
                 if (statisticToSend != null)
                 {
                     cancellationToken.ThrowIfCancellationRequested();
-                    var dto = new InterviewerSyncStatisticsDto
+                    var dto = new InterviewerSyncStatisticsApiView
                     {
                         InterviewerId = statisticToSend.InterviewerId,
                         UploadedInterviewsCount = statisticToSend.UploadedInterviewsCount,
