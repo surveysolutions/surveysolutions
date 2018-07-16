@@ -21,6 +21,7 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.Views;
@@ -147,6 +148,51 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
                 c.InterviewId == interviewId &&
                        c.InterviewKey.Equals(new InterviewKey(124)) &&
                        c.SynchronizedEvents[0].GetType() == typeof(InterviewCreated)
+            ), null));
+        }
+
+        [Test]
+        public async Task UploadInterview_should_apply_sync_packge_and_change_supervisor_if_team_changed()
+        {
+            var commandSerivce = new Mock<ICommandService>();
+            var serializer = new Mock<IJsonAllTypesSerializer>();
+
+            var packageEvents = new[]
+            {
+                Create.Event.AggregateRootEvent(Create.Event.InterviewCreated()),
+                Create.Event.AggregateRootEvent(Create.Event.SupervisorAssigned(Id.g1, Id.g2))
+            };
+            var interviewId = packageEvents[0].EventSourceId;
+
+            var packageSerializedEvents = "test events";
+            serializer.Setup(x => x.Deserialize<AggregateRootEvent[]>(packageSerializedEvents))
+                .Returns(packageEvents);
+
+            var principal = new Mock<IPrincipal>();
+            principal.Setup(x => x.CurrentUserIdentity).Returns(new SupervisorIdentity() {UserId = Id.g7});
+
+            var handler = Create.Service.SupervisorInterviewsHandler(commandService: commandSerivce.Object,
+                serializer: serializer.Object, principal:principal.Object);
+
+            // Act
+            var response = await handler.UploadInterview(new UploadInterviewRequest
+            {
+                Interview = new InterviewPackageApiView
+                {
+                    Events = packageSerializedEvents,
+                    InterviewId = interviewId,
+                    MetaInfo = new InterviewMetaInfo()
+                },
+                InterviewKey = "124"
+            });
+
+            // assert
+            Assert.That(response, Is.Not.Null);
+
+            commandSerivce.Verify(x => x.Execute(It.Is<SynchronizeInterviewEventsCommand>(c =>
+                c.InterviewId == interviewId &&
+                c.InterviewKey.Equals(new InterviewKey(124)) &&
+                c.SynchronizedEvents[0].GetType() == typeof(InterviewCreated)
             ), null));
         }
 
