@@ -123,6 +123,12 @@
   <data name="CompleteInterview" xml:space="preserve">
     <value>Interview {0} completed</value>
   </data>
+  <data name="ApproveInterview" xml:space="preserve">
+    <value>Interview {0} approved</value>
+  </data>
+  <data name="RejectInterview" xml:space="preserve">
+    <value>Interview {0} rejected</value>
+  </data>
   <data name="CreateInterviewFromAssignment" xml:space="preserve">
     <value>Interview {0} created from assignment {1}</value>
   </data>

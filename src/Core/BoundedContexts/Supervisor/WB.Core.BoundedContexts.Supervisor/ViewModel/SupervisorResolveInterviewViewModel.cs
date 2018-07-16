@@ -6,9 +6,11 @@ using WB.Core.BoundedContexts.Supervisor.ViewModel.InterviewerSelector;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
@@ -20,6 +22,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
     public class SupervisorResolveInterviewViewModel : CompleteInterviewViewModel
     {
         private readonly IInterviewerSelectorDialog interviewerSelectorDialog;
+        private readonly IAuditLogService auditLogService;
         private readonly ICommandService commandService;
         private readonly IPrincipal principal;
         private readonly IStatefulInterviewRepository interviewRepository;
@@ -36,7 +39,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             DynamicTextViewModel dynamicTextViewModel, 
             IViewModelNavigationService navigationService,
             ILogger logger,
-            IInterviewerSelectorDialog interviewerSelectorDialog) : 
+            IInterviewerSelectorDialog interviewerSelectorDialog,
+            IAuditLogService auditLogService) : 
                 base(navigationService,
                 commandService,
                 principal,
@@ -52,9 +56,11 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             this.interviewRepository = interviewRepository;
             this.navigationService = navigationService;
             this.interviewerSelectorDialog = interviewerSelectorDialog;
+            this.auditLogService = auditLogService;
         }
 
         private InterviewStatus status;
+        private IStatefulInterview interview;
 
         public override void Configure(string interviewId, NavigationState navigationState)
         {
@@ -64,7 +70,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 
             this.CommentLabel = InterviewDetails.ResolveComment;
 
-            var interview = this.interviewRepository.Get(interviewId);
+            interview = this.interviewRepository.Get(interviewId);
             this.status = interview.Status;
         }
 
@@ -73,8 +79,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             var command = new ApproveInterviewCommand(interviewId, this.principal.CurrentUserIdentity.UserId,
                 Comment, DateTime.UtcNow);
             await this.commandService.ExecuteAsync(command);
+            auditLogService.Write(new ApproveInterviewAuditLogEntity(this.interviewId, interview.GetInterviewKey().ToString()));
             await this.navigationService.NavigateToDashboardAsync(interviewId.FormatGuid());
-
         }, () => this.status == InterviewStatus.Completed || 
                  this.status == InterviewStatus.RejectedByHeadquarters /*||
                  this.status == InterviewStatus.RejectedBySupervisor*/);
@@ -84,6 +90,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             var command = new RejectInterviewCommand(interviewId, this.principal.CurrentUserIdentity.UserId,
                 Comment, DateTime.UtcNow);
             await this.commandService.ExecuteAsync(command);
+            auditLogService.Write(new RejectInterviewAuditLogEntity(this.interviewId, interview.GetInterviewKey().ToString()));
             await this.navigationService.NavigateToDashboardAsync(interviewId.FormatGuid());
         }, () => this.status == InterviewStatus.Completed || 
                  this.status == InterviewStatus.RejectedByHeadquarters);

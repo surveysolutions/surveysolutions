@@ -45,6 +45,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
+using WB.Core.BoundedContexts.Interviewer.Implementation.Services.OfflineSync;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
@@ -473,7 +474,8 @@ namespace WB.Tests.Abc.TestFactories
                 Mock.Of<IAuditLogSynchronizer>(),
                 Mock.Of<IAuditLogService>(),
                 eventBus ?? Mock.Of<IEventBus>(),
-                interviewerEventStorage ?? Mock.Of<IEnumeratorEventStorage>());
+                interviewerEventStorage ?? Mock.Of<IEnumeratorEventStorage>(),
+                Mock.Of<ISynchronizationMode>());
         }
 
         public SynchronizationService SynchronizationService(IPrincipal principal = null,
