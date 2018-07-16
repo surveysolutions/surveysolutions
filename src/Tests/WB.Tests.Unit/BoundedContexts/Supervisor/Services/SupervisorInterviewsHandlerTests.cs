@@ -192,7 +192,8 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             commandSerivce.Verify(x => x.Execute(It.Is<SynchronizeInterviewEventsCommand>(c =>
                 c.InterviewId == interviewId &&
                 c.InterviewKey.Equals(new InterviewKey(124)) &&
-                c.SynchronizedEvents[0].GetType() == typeof(InterviewCreated)
+                c.SynchronizedEvents[0].GetType() == typeof(InterviewCreated) &&
+                c.NewSupervisorId == Id.g7
             ), null));
         }
 
