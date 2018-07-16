@@ -35,6 +35,7 @@ using WB.UI.Shared.Enumerator.Services.Internals.FileSystem;
 
 namespace WB.UI.Shared.Enumerator
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class EnumeratorUIModule : IModule
     {
         public void Load(IIocRegistry registry)

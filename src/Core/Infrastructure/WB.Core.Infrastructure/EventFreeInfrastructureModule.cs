@@ -14,6 +14,7 @@ using WB.Core.Infrastructure.Modularity;
 
 namespace WB.Core.Infrastructure
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class EventFreeInfrastructureModule : IModule
     {
         public void Load(IIocRegistry registry)

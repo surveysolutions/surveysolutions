@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Threading.Tasks;
 using Main.Core.Documents;
 using Ncqrs.Eventing.Storage;
@@ -29,6 +30,7 @@ using IPrincipal = WB.Core.SharedKernels.Enumerator.Services.Infrastructure.IPri
 
 namespace WB.UI.Supervisor.ServiceLocation
 {
+    [ExcludeFromCodeCoverage]
     public class SupervisorInfrastructureModule : IModule
     {
         public void Load(IIocRegistry registry)

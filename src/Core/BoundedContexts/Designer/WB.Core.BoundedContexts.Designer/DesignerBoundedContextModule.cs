@@ -42,6 +42,7 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 
 namespace WB.Core.BoundedContexts.Designer
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class DesignerBoundedContextModule : IModule
     {
         private readonly ICompilerSettings compilerSettings;

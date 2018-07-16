@@ -12,6 +12,7 @@ using WB.Core.Infrastructure.WriteSide;
 
 namespace WB.Core.Infrastructure
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class InfrastructureModuleMobile : IModule
     {
         public void Load(IIocRegistry registry)
