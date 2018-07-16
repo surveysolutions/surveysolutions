@@ -193,6 +193,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return syncClient.SendAsync(new LogAssignmentAsHandledRequest { Id = id }, cancellationToken);
         }
 
+        public Task SendSyncCompletedAsync(CancellationToken cancellationToken)
+        {
+            return this.syncClient.SendAsync(new SyncCompletedRequest
+            {
+                InterviewerId = this.principal.CurrentUserIdentity.UserId
+            }, cancellationToken);
+        }
+
         public async Task<List<AssignmentApiView>> GetAssignmentsAsync(CancellationToken cancellationToken)
         {
             var response = await

@@ -27,12 +27,6 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
 
         public void Prepare(Guid? parameter) => this.lastVisitedInterviewId = parameter;
 
-        public override async Task Initialize()
-        {
-            await base.Initialize();
-            await this.UpdateUiItems();
-        }
-
         public WaitingForSupervisorActionViewModel(IDashboardItemsAccessor dashboardItemsAccessor,
             IInterviewViewModelFactory viewModelFactory)
         {
