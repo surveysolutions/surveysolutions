@@ -52,11 +52,12 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             RestCredentials credentials = null,
             bool forceNoCache = false,
             Dictionary<string, string> customHeaders = null,
-            CancellationToken? userCancellationToken = null)
+            CancellationToken? userCancellationToken = null,
+            IProgress<TransferProgress> progress = null)
         {
             var compressedJsonContent = this.CreateCompressedJsonContent(request);
             return this.ExecuteRequestAsync(url, method, queryString, compressedJsonContent, credentials, forceNoCache,
-                customHeaders, userCancellationToken);
+                customHeaders, userCancellationToken, progress);
         }
 
         private async Task<HttpResponseMessage> ExecuteRequestAsync(
@@ -67,7 +68,8 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             RestCredentials credentials = null,
             bool forceNoCache = false,
             Dictionary<string, string> customHeaders = null,
-            CancellationToken? userCancellationToken = null)
+            CancellationToken? userCancellationToken = null,
+            IProgress<TransferProgress> progress = null)
         {
             if (!this.IsValidHostAddress(this.restServiceSettings.Endpoint))
                 throw new RestException("Invalid URL", type: RestExceptionType.InvalidUrl);
@@ -127,6 +129,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
 
             try
             {
+
                 var httpResponseMessage = await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, linkedCancellationTokenSource.Token);
 
                 if (httpResponseMessage.IsSuccessStatusCode
@@ -215,8 +218,8 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             IProgress<TransferProgress> transferProgress, object request = null,
             RestCredentials credentials = null, CancellationToken? token = null)
         {
-            var response = this.ExecuteRequestAsync(url: url, credentials: credentials, method: HttpMethod.Post, request: request,
-                userCancellationToken: token);
+            var response = this.ExecuteRequestAsync(url: url, credentials: credentials, method: HttpMethod.Post,
+                request: request,progress: transferProgress, userCancellationToken: token);
 
             return this.ReceiveCompressedJsonWithProgressAsync<T>(response: response, token: token ?? default(CancellationToken),
                 transferProgress: transferProgress);
@@ -331,7 +334,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                 }
 
                 var buffer = new byte[this.restServiceSettings.BufferSize];
-                var downloadProgressChangedEventArgs = new TransferProgress()
+                var downloadProgressChangedEventArgs = new TransferProgress
                 {
                     TotalBytesToReceive = contentLength
                 };

@@ -64,8 +64,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 questionnairesAccessor: interviewerQuestionnaireAccessor
                 );
 
-            await downloader.DownloadQuestionnaireAsync(newCensusInterviewIdentities[0], CancellationToken.None, new SynchronizationStatistics());
-            await downloader.DownloadQuestionnaireAsync(newCensusInterviewIdentities[1], CancellationToken.None, new SynchronizationStatistics());
+            await downloader.DownloadQuestionnaireAsync(newCensusInterviewIdentities[0], new SynchronizationStatistics(), null, CancellationToken.None);
+            await downloader.DownloadQuestionnaireAsync(newCensusInterviewIdentities[1], new SynchronizationStatistics(), null, CancellationToken.None);
         }
 
         [Test]
