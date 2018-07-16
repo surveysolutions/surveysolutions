@@ -93,8 +93,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             auditLogService.Write(new ApproveInterviewAuditLogEntity(this.interviewId, interview.GetInterviewKey().ToString()));
             await this.navigationService.NavigateToDashboardAsync(interviewId.FormatGuid());
         }, () => this.status == InterviewStatus.Completed || 
-                 this.status == InterviewStatus.RejectedByHeadquarters /*||
-                 this.status == InterviewStatus.RejectedBySupervisor*/);
+                 this.status == InterviewStatus.RejectedByHeadquarters);
 
         public IMvxAsyncCommand Reject => new MvxAsyncCommand(async () =>
         {
