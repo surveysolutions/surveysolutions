@@ -31,13 +31,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         }
 
         public virtual async Task DownloadQuestionnaireAsync(QuestionnaireIdentity questionnaireIdentity,
-            CancellationToken cancellationToken, SynchronizationStatistics statistics)
+            SynchronizationStatistics statistics, IProgress<TransferProgress> transferProgress,
+            CancellationToken cancellationToken)
         {
             if (!this.questionnairesAccessor.IsQuestionnaireAssemblyExists(questionnaireIdentity))
             {
                 var questionnaireAssembly = await this.synchronizationService.GetQuestionnaireAssemblyAsync(
                     questionnaireIdentity,
-                    new Progress<TransferProgress>(),
+                    transferProgress,
                     cancellationToken);
 
                 await this.questionnairesAccessor.StoreQuestionnaireAssemblyAsync(questionnaireIdentity, questionnaireAssembly);
@@ -47,7 +48,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             if (!this.questionnairesAccessor.IsQuestionnaireExists(questionnaireIdentity))
             {
                 var contentIds = await this.synchronizationService.GetAttachmentContentsAsync(questionnaireIdentity,
-                    new Progress<TransferProgress>(),
+                    transferProgress,
                     cancellationToken);
 
                 foreach (var contentId in contentIds)
@@ -56,7 +57,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     if (!isExistContent)
                     {
                         var attachmentContent = await this.synchronizationService.GetAttachmentContentAsync(contentId,
-                            new Progress<TransferProgress>(),
+                            transferProgress,
                             cancellationToken);
 
                         this.attachmentContentStorage.Store(attachmentContent);
@@ -67,7 +68,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
                 var questionnaireApiView = await this.synchronizationService.GetQuestionnaireAsync(
                     questionnaireIdentity,
-                    new Progress<TransferProgress>(),
+                    transferProgress,
                     cancellationToken);
 
                 this.questionnairesAccessor.StoreQuestionnaire(questionnaireIdentity,

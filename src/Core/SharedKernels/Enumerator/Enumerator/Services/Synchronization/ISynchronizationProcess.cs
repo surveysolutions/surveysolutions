@@ -13,6 +13,15 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Synchronization
         Task SynchronizeAsync(IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken);
     }
 
+    public static class SyncProgressHelper
+    {
+        public static IProgress<TransferProgress> AsTransferReport(this IProgress<SyncProgressInfo> syncProgress)
+        {
+            return new Progress<TransferProgress>(data
+                => syncProgress?.Report(new SyncProgressInfo { TransferProgress = data }));
+        }
+    }
+
     public class SyncProgressInfo
     {
         public SyncProgressInfo()
