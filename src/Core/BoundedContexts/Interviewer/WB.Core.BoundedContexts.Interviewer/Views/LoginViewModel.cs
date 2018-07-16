@@ -32,7 +32,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public override string GetUserName()
             => this.interviewersPlainStorage.FirstOrDefault().Name;
 
-        public override void UpdateLocalUser(string token, string passwordHash)
+        public override void UpdateLocalUser(string userName, string token, string passwordHash)
         {
             var localInterviewer = this.interviewersPlainStorage.FirstOrDefault();
             localInterviewer.Token = token;

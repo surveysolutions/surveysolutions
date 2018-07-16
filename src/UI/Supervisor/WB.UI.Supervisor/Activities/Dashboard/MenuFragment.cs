@@ -1,18 +1,20 @@
 ﻿using System;
 using System.Reflection;
-using System.Security.Permissions;
 using System.Threading.Tasks;
 using Android.OS;
 using Android.Support.Design.Widget;
 using Android.Support.V4.Widget;
 using Android.Views;
 using Android.Widget;
+using MvvmCross.Base;
 using MvvmCross.Core;
 using MvvmCross.Droid.Support.V4;
+using MvvmCross.Navigation;
 using MvvmCross.Platforms.Android.Binding.BindingContext;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
 using WB.Core.BoundedContexts.Supervisor.Properties;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 
 namespace WB.UI.Supervisor.Activities.Dashboard
 {
@@ -24,6 +26,11 @@ namespace WB.UI.Supervisor.Activities.Dashboard
         private IMenuItem previousMenuItem;
         private DrawerLayout drawerLayout;
 
+        private IMvxNavigationService mvxNavigationService =>
+            ServiceLocator.Current.GetInstance<IMvxNavigationService>();
+        private IMvxMainThreadDispatcher mvxMainThreadDispatcher =>
+            ServiceLocator.Current.GetInstance<IMvxMainThreadDispatcher>();
+
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
             base.OnCreateView(inflater, container, savedInstanceState);
@@ -33,8 +40,7 @@ namespace WB.UI.Supervisor.Activities.Dashboard
             navigationView = view.FindViewById<NavigationView>(Resource.Id.dashboard_sidebar_navigation);
             navigationView.SetNavigationItemSelectedListener(this);
 
-            var tobeAssignedMenuItem = navigationView.Menu.FindItem(Resource.Id.dashboard_to_be_assigned);
-            previousMenuItem = tobeAssignedMenuItem.SetChecked(true);
+            mvxNavigationService.AfterNavigate += MenuFragment_AfterNavigate;
 
             LocalizeMenuItem(Resource.Id.dashboard_to_be_assigned, SupervisorDashboard.ToBeAssigned, nameof(ViewModel.ToBeAssignedItemsCount));
             LocalizeMenuItem(Resource.Id.dashboard_your_team, SupervisorDashboard.YourTeam);
@@ -43,6 +49,33 @@ namespace WB.UI.Supervisor.Activities.Dashboard
             LocalizeMenuItem(Resource.Id.dashboard_outbox, SupervisorDashboard.Outbox, nameof(ViewModel.OutboxItemsCount));
 
             return view;
+        }
+
+        public override void OnDestroyView()
+        {
+            mvxNavigationService.AfterNavigate -= MenuFragment_AfterNavigate;
+            base.OnDestroyView();
+        }
+
+        private void MenuFragment_AfterNavigate(object sender, MvvmCross.Navigation.EventArguments.NavigateEventArgs e)
+        {
+            int? menuItemId = null;
+            switch (e.ViewModel)
+            {
+                case OutboxViewModel outbox:
+                    menuItemId = Resource.Id.dashboard_outbox;
+                    break;
+                case ToBeAssignedItemsViewModel toBeAssignedItems:
+                    menuItemId = Resource.Id.dashboard_to_be_assigned;
+                    break;
+                case WaitingForSupervisorActionViewModel waitingForSupervisorAction:
+                    menuItemId = Resource.Id.dashboard_waiting_decision;
+                    break;
+            }
+
+            if (menuItemId.HasValue)
+                mvxMainThreadDispatcher.RequestMainThreadAction(() =>
+                    this.SelectMenuItem(navigationView.Menu.FindItem(menuItemId.Value)));
         }
 
         private void LocalizeMenuItem(int id, string title, string viewModelPropertyName = null)
@@ -86,21 +119,23 @@ namespace WB.UI.Supervisor.Activities.Dashboard
 
         public bool OnNavigationItemSelected(IMenuItem item)
         {
+            this.SelectMenuItem(item);
+            this.Navigate(item.ItemId);
+
+            return true;
+        }
+
+        private void SelectMenuItem(IMenuItem item)
+        {
             previousMenuItem?.SetChecked(false);
 
             item.SetCheckable(true);
             item.SetChecked(true);
 
             previousMenuItem = item;
-
-#pragma warning disable 4014
-            Navigate(item.ItemId);
-#pragma warning restore 4014
-
-            return true;
         }
 
-        private async Task Navigate(int itemId)
+        private async void Navigate(int itemId)
         {
             ((DashboardActivity)Activity).DrawerLayout.CloseDrawers();
             await Task.Delay(TimeSpan.FromMilliseconds(250));

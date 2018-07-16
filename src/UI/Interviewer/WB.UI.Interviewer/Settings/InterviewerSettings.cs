@@ -3,7 +3,6 @@ using System.Linq;
 using Android.App;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
-using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -68,17 +67,23 @@ namespace WB.UI.Interviewer.Settings
             CommunicationBufferSize = Application.Context.Resources.GetInteger(Resource.Integer.BufferSize),
             GpsResponseTimeoutInSec = Application.Context.Resources.GetInteger(Resource.Integer.GpsReceiveTimeoutSec),
             GpsDesiredAccuracy = Application.Context.Resources.GetInteger(Resource.Integer.GpsDesiredAccuracy),
-            VibrateOnError = Application.Context.Resources.GetBoolean(Resource.Boolean.VibrateOnError)
+            VibrateOnError = Application.Context.Resources.GetBoolean(Resource.Boolean.VibrateOnError),
+            AllowSyncWithHq = Application.Context.Resources.GetBoolean(Resource.Boolean.AllowSyncWithHq)
         };
 
         protected override EnumeratorSettingsView CurrentSettings => this.currentSettings;
 
         public override bool VibrateOnError => this.currentSettings.VibrateOnError ?? Application.Context.Resources.GetBoolean(Resource.Boolean.VibrateOnError);
+
         public override double GpsDesiredAccuracy => this.currentSettings.GpsDesiredAccuracy.GetValueOrDefault(Application.Context.Resources.GetInteger(Resource.Integer.GpsDesiredAccuracy));
+
         public override bool ShowLocationOnMap => this.currentSettings.ShowLocationOnMap.GetValueOrDefault(true);
+
         public override int GpsReceiveTimeoutSec => this.currentSettings.GpsResponseTimeoutInSec;
+
         public override int EventChunkSize => this.CurrentSettings.EventChunkSize.GetValueOrDefault(Application.Context.Resources.GetInteger(Resource.Integer.EventChunkSize));
 
+        public bool AllowSyncWithHq => this.currentSettings.AllowSyncWithHq.GetValueOrDefault(true);
 
         public void SetGpsResponseTimeout(int timeout)
         {
@@ -96,7 +101,6 @@ namespace WB.UI.Interviewer.Settings
             });
         }
 
-
         public void SetVibrateOnError(bool vibrateOnError)
         {
             this.SaveCurrentSettings(settings =>
@@ -110,11 +114,19 @@ namespace WB.UI.Interviewer.Settings
             this.SaveCurrentSettings(settings => settings.ShowLocationOnMap = showLocationOnMap);
         }
 
+        public void SetAllowSyncWithHq(bool allowSyncWithHq)
+        {
+            this.SaveCurrentSettings(settings =>
+            {
+                settings.AllowSyncWithHq = allowSyncWithHq;
+            });
+        }
+
         private void SaveCurrentSettings(Action<ApplicationSettingsView> onChanging)
         {
             var settings = this.currentSettings;
             onChanging(settings);
-            
+            SaveSettings(settings);
         }
 
         protected override void SaveSettings(EnumeratorSettingsView settings)

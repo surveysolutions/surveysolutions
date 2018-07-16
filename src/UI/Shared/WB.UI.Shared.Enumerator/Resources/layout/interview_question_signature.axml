@@ -3,7 +3,7 @@
   style="@style/Interview_QuestionWithDivider"
   local:MvxBind="HideKeyboardOnClick .; LongClick QuestionState.ShowCommentEditorCommand">
   <LinearLayout style="@style/Interview_Question_Answer"
-                local:MvxBind="BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered));">
+                local:MvxBind="BackgroundStyle QuestionLayoutStyleBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered, false));">
 
     <LinearLayout style="@style/VerticalFullWidthWrappingLayout">
       <TableLayout style="@style/FullWidthWrappingLayout"

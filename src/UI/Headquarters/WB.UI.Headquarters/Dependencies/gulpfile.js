@@ -78,6 +78,10 @@ const config = {
             file: "Index.cshtml",
             folder: '../Views/Download/'
         },
+		{
+            file: "Supervisor.cshtml",
+            folder: '../Views/Download/'
+        },
         {
             file: "_WebInterviewLayout.cshtml",
             folder: '../Views/WebInterview/'

@@ -1,8 +1,8 @@
-using System;
 using System.Threading;
 using MvvmCross.Commands;
 using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Views;
 
@@ -11,16 +11,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
     public class SynchronizationViewModel : MvxNotifyPropertyChanged
     {
         private readonly IMvxMessenger messenger;
+        private readonly ISynchronizationCompleteSource synchronizationCompleteSource;
 
-        public SynchronizationViewModel(IMvxMessenger messenger)
+        public SynchronizationViewModel(IMvxMessenger messenger, ISynchronizationCompleteSource synchronizationCompleteSource)
         {
             this.messenger = messenger;
+            this.synchronizationCompleteSource = synchronizationCompleteSource;
         }
 
-        public ISyncBgService SyncBgService { get; set; }
-
-        public event EventHandler SyncCompleted;
-
+        public ISyncBgService<SyncProgressDto> SyncBgService { get; set; }
+        
         private bool hasUserAnotherDevice;
 
         private bool isSynchronizationInfoShowed;
@@ -35,49 +35,49 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         public SynchronizationStatistics Statistics
         {
             get => statistics;
-            set => MvxNotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref this.statistics, value);
+            set => this.RaiseAndSetIfChanged(ref this.statistics, value);
         }
 
         public SynchronizationStatus Status
         {
             get => this.status;
-            set => MvxNotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref this.status, value);
+            set => this.RaiseAndSetIfChanged( ref this.status, value);
         }
 
         public bool SynchronizationErrorOccured
         {
             get => this.synchronizationErrorOccured;
-            set => MvxNotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref this.synchronizationErrorOccured, value);
+            set => this.RaiseAndSetIfChanged( ref this.synchronizationErrorOccured, value);
         }
 
         public bool IsSynchronizationInfoShowed
         {
             get => this.isSynchronizationInfoShowed;
-            set => MvxNotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref this.isSynchronizationInfoShowed, value);
+            set => this.RaiseAndSetIfChanged( ref this.isSynchronizationInfoShowed, value);
         }
 
         public bool IsSynchronizationInProgress
         {
             get => this.isSynchronizationInProgress;
-            set => MvxNotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref this.isSynchronizationInProgress, value);
+            set => this.RaiseAndSetIfChanged( ref this.isSynchronizationInProgress, value);
         }
 
         public bool HasUserAnotherDevice
         {
             get => this.hasUserAnotherDevice;
-            set => MvxNotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref this.hasUserAnotherDevice, value);
+            set => this.RaiseAndSetIfChanged( ref this.hasUserAnotherDevice, value);
         }
 
         public string ProcessOperation
         {
             get => this.processOperation;
-            set => MvxNotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref this.processOperation, value);
+            set => this.RaiseAndSetIfChanged( ref this.processOperation, value);
         }
 
         public string ProcessOperationDescription
         {
             get => this.processOperationDescription;
-            set => MvxNotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref this.processOperationDescription, value);
+            set => this.RaiseAndSetIfChanged( ref this.processOperationDescription, value);
         }
 
         public IMvxCommand CancelSynchronizationCommand => new MvxCommand(this.CancelSynchronizaion);
@@ -95,24 +95,27 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             if (this.synchronizationCancellationTokenSource != null && !this.synchronizationCancellationTokenSource.IsCancellationRequested)
                 this.synchronizationCancellationTokenSource.Cancel();
         }
-
+        
         private void ProgressOnProgressChanged(object sender, SyncProgressInfo syncProgressInfo)
         {
             this.InvokeOnMainThread(() =>
             {
-                this.IsSynchronizationInProgress = syncProgressInfo.IsRunning;
-                this.ProcessOperation = syncProgressInfo.Title;
-                this.ProcessOperationDescription = syncProgressInfo.Description;
-                this.Statistics = syncProgressInfo.Statistics;
-
-                this.Status = syncProgressInfo.Status;
-                this.SynchronizationErrorOccured = this.SynchronizationErrorOccured || syncProgressInfo.HasErrors;
-
-                this.HasUserAnotherDevice = syncProgressInfo.UserIsLinkedToAnotherDevice;
-
-                if (!syncProgressInfo.IsRunning)
+                if (syncProgressInfo.TransferProgress == null)
                 {
-                    this.OnSyncCompleted();
+                    this.IsSynchronizationInProgress = syncProgressInfo.IsRunning;
+                    this.ProcessOperation = syncProgressInfo.Title;
+                    this.ProcessOperationDescription = syncProgressInfo.Description;
+                    this.Statistics = syncProgressInfo.Statistics;
+
+                    this.Status = syncProgressInfo.Status;
+                    this.SynchronizationErrorOccured = this.SynchronizationErrorOccured || syncProgressInfo.HasErrors;
+
+                    this.HasUserAnotherDevice = syncProgressInfo.UserIsLinkedToAnotherDevice;
+
+                    if (!syncProgressInfo.IsRunning)
+                    {
+                        this.OnSyncCompleted();
+                    }
                 }
             });
         }
@@ -144,8 +147,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         protected virtual void OnSyncCompleted()
         {
-            this.messenger.Publish(new SynchronizationCompletedMsg(this));
-            this.SyncCompleted?.Invoke(this, EventArgs.Empty);
+            this.messenger.Publish(new DashboardChangedMsg(this));
+            synchronizationCompleteSource.NotifyOnCompletedSynchronization(true);
         }
     }
 }

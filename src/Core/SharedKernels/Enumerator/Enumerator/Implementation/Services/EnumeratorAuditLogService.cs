@@ -55,16 +55,19 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     Type = entity.Type,
                     Payload = entity,
                 };
-                var json = serializer.Serialize(auditLogEntityView);
-                auditLogStorage.Store(new AuditLogRecordView()
-                {
-                    Json = json
-                });
+
+                WriteAuditLogRecord(auditLogEntityView);
             }
             catch (Exception e)
             {
                 logger.Error("Error write to interviewer audit log", e);
             }
+        }
+
+        public void WriteAuditLogRecord(AuditLogEntityView auditLogEntityView)
+        {
+            var json = serializer.Serialize(auditLogEntityView);
+            auditLogStorage.Store(new AuditLogRecordView { Json = json });
         }
 
         public void UpdateLastSyncIndex(int id)

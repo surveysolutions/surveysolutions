@@ -11,7 +11,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         public string Title
         {
             get => this.title;
-            set => MvxNotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref this.title, value);
+            set => this.RaiseAndSetIfChanged( ref this.title, value);
         }
     }
 }

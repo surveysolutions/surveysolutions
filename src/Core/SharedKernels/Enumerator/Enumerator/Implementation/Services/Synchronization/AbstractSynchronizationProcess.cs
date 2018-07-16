@@ -7,6 +7,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Properties;
@@ -25,7 +26,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         private readonly IUserInteractionService userInteractionService;
         private readonly IPrincipal principal;
         private readonly IHttpStatistician httpStatistician;
-        private readonly IPasswordHasher passwordHasher;
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
         private readonly IAuditLogService auditLogService;
 
@@ -37,13 +37,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
         protected abstract string SucsessDescription { get; }
 
+        protected virtual SynchronizationType SynchronizationType => SynchronizationType.Online;
+
         protected AbstractSynchronizationProcess(
             ISynchronizationService synchronizationService, 
             ILogger logger,
             IHttpStatistician httpStatistician, 
             IUserInteractionService userInteractionService,
             IPrincipal principal,
-            IPasswordHasher passwordHasher, 
             IPlainStorage<InterviewView> interviewViewRepository,
             IAuditLogService auditLogService)
         {
@@ -52,7 +53,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             this.httpStatistician = httpStatistician;
             this.userInteractionService = userInteractionService;
             this.principal = principal;
-            this.passwordHasher = passwordHasher;
             this.interviewViewRepository = interviewViewRepository;
             this.auditLogService = auditLogService;
         }
@@ -171,12 +171,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             };
         }
 
-        public async Task SyncronizeAsync(IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken)
+        public async Task SynchronizeAsync(IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken)
         {
             var statistics = new SynchronizationStatistics();
             try
             {
-                auditLogService.Write(new SynchronizationStartedAuditLogEntity());
+                auditLogService.Write(new SynchronizationStartedAuditLogEntity(SynchronizationType));
 
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
@@ -217,7 +217,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     this.UpdatePasswordOfResponsible(this.restCredentials);
                 }
 
-                await this.synchronizationService.CanSynchronizeAsync(token: cancellationToken, credentials: this.restCredentials);
+                await this.synchronizationService.CanSynchronizeAsync(this.restCredentials, cancellationToken);
 
                 CheckAfterStartSynchronization(cancellationToken);
 
@@ -322,6 +322,16 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         });
                         auditLogService.Write(new SynchronizationFailedAuditLogEntity(ex));
                         break;
+                    case SynchronizationExceptionType.InterviewerFromDifferentTeam:
+                        progress.Report(new SyncProgressInfo
+                        {
+                            Title = InterviewerUIResources.UnexpectedException,
+                            Description = InterviewerUIResources.InterviewerFromDifferentTeam,
+                            Status = SynchronizationStatus.Fail,
+                            Statistics = statistics
+                        });
+                        auditLogService.Write(new SynchronizationFailedAuditLogEntity(ex));
+                        break;
                     default:
                         progress.Report(new SyncProgressInfo
                         {
@@ -369,7 +379,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 {
                     this.remoteLoginRequired = true;
                     this.restCredentials.Password = newPassword;
-                    await this.SyncronizeAsync(progress, cancellationToken);
+                    await this.SynchronizeAsync(progress, cancellationToken);
                 }
             }
         }

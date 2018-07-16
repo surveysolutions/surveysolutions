@@ -123,11 +123,20 @@
   <data name="Outbox" xml:space="preserve">
     <value>Outbox</value>
   </data>
+  <data name="OutboxSubtitle" xml:space="preserve">
+    <value>Interviews and assignments that are going to be sent from your device during next synchronization </value>
+  </data>
   <data name="ToBeAssigned" xml:space="preserve">
     <value>Tasks to assign</value>
   </data>
+  <data name="ToBeAssignedListSubtitle" xml:space="preserve">
+    <value>Assignments that should be assigned to your team members</value>
+  </data>
   <data name="WaitingForAction" xml:space="preserve">
     <value>Waiting for your action</value>
+  </data>
+  <data name="WaitingForSupervisorActionSubtitle" xml:space="preserve">
+    <value>Interviews that require your action to be resolved</value>
   </data>
   <data name="YourTeam" xml:space="preserve">
     <value>Your team</value>

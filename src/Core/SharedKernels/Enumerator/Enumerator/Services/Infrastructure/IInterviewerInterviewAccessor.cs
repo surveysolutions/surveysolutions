@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Ncqrs.Eventing;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 
 namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
@@ -8,6 +10,6 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
     {
         void RemoveInterview(Guid interviewId);
         InterviewPackageApiView GetInteviewEventsPackageOrNull(Guid interviewId);
-        Task CreateInterviewAsync(InterviewApiView info, InterviewerInterviewApiView details);
+        IReadOnlyCollection<CommittedEvent> GetPendingInteviewEvents(Guid interviewId);
     }
 }

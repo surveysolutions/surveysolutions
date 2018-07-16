@@ -56,7 +56,7 @@ namespace WB.UI.Shared.Enumerator.Services
 
         public async Task UpdateTheApp(CancellationToken cancellationToken, 
             bool continueIfNoPatch = true,
-            Action<Core.GenericSubdomains.Portable.Implementation.DownloadProgressChangedEventArgs> onDownloadProgressChanged = null)
+            IProgress<TransferProgress> onDownloadProgressChanged = null)
         {
             await this.permissions.AssureHasPermission(Permission.Storage);
 

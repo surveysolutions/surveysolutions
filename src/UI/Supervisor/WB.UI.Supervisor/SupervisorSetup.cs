@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Android.Support.V4.Widget;
 using Android.Widget;
 using Autofac;
 using Autofac.Features.ResolveAnything;
@@ -16,19 +17,15 @@ using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Denormalizer;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
+using WB.Core.SharedKernels.Enumerator.Views;
 using WB.UI.Supervisor.ServiceLocation;
 using WB.UI.Shared.Enumerator;
 using WB.UI.Shared.Enumerator.Activities;
@@ -57,7 +54,10 @@ namespace WB.UI.Supervisor
                 {typeof(DiagnosticsViewModel),typeof(DiagnosticsActivity) },
                 {typeof(DashboardViewModel),typeof(DashboardActivity) },
                 {typeof(SupervisorInterviewViewModel),typeof(InterviewActivity) },
-                {typeof(SupervisorCompleteInterviewViewModel), typeof (SupervisorCompleteFragment)},
+                {typeof(OfflineSupervisorSyncViewModel), typeof(OfflineSupervisorSyncActitivy) },
+                {typeof(SupervisorResolveInterviewViewModel), typeof (SupervisorCompleteFragment)},
+                {typeof(MapsViewModel), typeof (MapsActivity)},
+                {typeof(PhotoViewViewModel), typeof(PhotoViewActivity) },
 #if !EXCLUDEEXTENSIONS
                 {typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel), typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorActivity)}
 #endif
@@ -71,14 +71,16 @@ namespace WB.UI.Supervisor
         {
             base.FillValueConverters(registry);
 
-            registry.AddOrOverwrite("Localization", new EnumeratorLocalizationValueConverter());
+            registry.AddOrOverwrite("Localization", new SupervisorLocalizationValueConverter());
             registry.AddOrOverwrite("ValidationStyleBackground", new TextEditValidationStyleBackgroundConverter());
+            registry.AddOrOverwrite("SelectedBg", new SelectedBackgroundConverter());
         }
 
         protected override void FillTargetFactories(IMvxTargetBindingFactoryRegistry registry)
         {
             registry.RegisterCustomBindingFactory<ImageView>("CompanyLogo", view => new ImageCompanyLogoBinding(view));
             registry.RegisterCustomBindingFactory<ProgressBar>("ShowProgress", (view) => new ProgressBarIndeterminateBinding(view));
+            registry.RegisterCustomBindingFactory<DrawerLayout>("Lock", (view) => new DrawerLockModeBinding(view));
             base.FillTargetFactories(registry);
         }
 

@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:clickable="true"
-    android:focusableInTouchMode="true">
+    android:focusableInTouchMode="true"
+    local:MvxBind="Lock Synchronization.IsSynchronizationInProgress;">
 
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/overview_coordinator_layout"
@@ -23,7 +24,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimaryDark"
-                local:layout_scrollFlags="enterAlways|scroll" />
+                local:layout_scrollFlags="enterAlways|scroll" >
+                <ImageButton style="@style/ToolbarIcon"
+                             local:MvxBind="Click SynchronizationCommand;"
+                             local:srcCompat="@drawable/synchronize_icon"/>
+            </android.support.v7.widget.Toolbar>
 
         </android.support.design.widget.AppBarLayout>
 
@@ -34,7 +39,7 @@
 
             <ProgressBar style="@style/Dashboard_Progress_Indicator"
                          local:MvxBind="ShowProgress Synchronization.IsSynchronizationInProgress; Visibility VisibleOrInvisible(Synchronization.IsSynchronizationInProgress)" />
-            
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:orientation="vertical"
@@ -42,14 +47,22 @@
 
                 <include layout="@layout/synchronization_panel" />
 
-                <FrameLayout android:id="@+id/dashboard_content"
+                <FrameLayout android:layout_width="match_parent"
+                             android:layout_height="match_parent">
+                    <FrameLayout android:id="@+id/dashboard_content"
                              android:layout_width="match_parent"
                              android:layout_height="match_parent">
+                    </FrameLayout>
+                    <LinearLayout style="@style/Interview_GroupWithDivider"
+                                  local:MvxBind="Enabled Not(Synchronization.IsSynchronizationInProgress);
+                                 Clickable Synchronization.IsSynchronizationInProgress;"
+                                  android:layout_height="match_parent">
+                    </LinearLayout>
                 </FrameLayout>
             </LinearLayout>
 
         </FrameLayout>
-        
+
         <!--<android.support.design.widget.FloatingActionButton
             android:id="@+id/overview_floating_action_button"
             android:layout_width="wrap_content"
@@ -68,7 +81,7 @@
         android:layout_height="match_parent"
         android:layout_width="wrap_content"
         android:layout_gravity="left|start" />
-    
+
     <!--<android.support.design.widget.NavigationView
         android:id="@+id/nvView"
         android:layout_width="wrap_content"

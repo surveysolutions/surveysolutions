@@ -28,6 +28,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
         private readonly IPlainStorage<SupervisorIdentity> supervisorsPlainStorage;
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
         private readonly IPlainStorage<InterviewerDocument> interviewerViewRepository;
+        private readonly ITechInfoSynchronizer techInfoSynchronizer;
         private readonly IPasswordHasher passwordHasher;
 
         public SynchronizationProcess(ISupervisorSynchronizationService synchronizationService,
@@ -53,22 +54,28 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
             IAuditLogSynchronizer auditLogSynchronizer,
             IAuditLogService auditLogService,
             ILiteEventBus eventBus,
-            IEnumeratorEventStorage eventStore, 
-            IPlainStorage<InterviewerDocument> interviewerViewRepository) : base(synchronizationService, interviewViewRepository, principal, logger,
-            userInteractionService, questionnairesAccessor, interviewFactory, interviewMultimediaViewStorage, imagesStorage,
-            logoSynchronizer, cleanupService, passwordHasher, assignmentsSynchronizer, questionnaireDownloader, httpStatistician,
+            IEnumeratorEventStorage eventStore,
+            IPlainStorage<InterviewerDocument> interviewerViewRepository,
+            ITechInfoSynchronizer techInfoSynchronizer) : base(synchronizationService,
+            interviewViewRepository, principal, logger,
+            userInteractionService, questionnairesAccessor, interviewFactory, interviewMultimediaViewStorage,
+            imagesStorage,
+            logoSynchronizer, cleanupService, assignmentsSynchronizer, questionnaireDownloader,
+            httpStatistician,
             assignmentsStorage, audioFileStorage, diagnosticService, auditLogSynchronizer, auditLogService,
             eventBus, eventStore)
         {
             this.principal = principal;
             this.supervisorSettings = supervisorSettings;
             this.interviewerViewRepository = interviewerViewRepository;
+            this.techInfoSynchronizer = techInfoSynchronizer;
             this.supervisorsPlainStorage = supervisorsPlainStorage;
             this.interviewViewRepository = interviewViewRepository;
             this.passwordHasher = passwordHasher;
         }
 
-        public override async Task Synchronize(IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken, SynchronizationStatistics statistics)
+        public override async Task Synchronize(IProgress<SyncProgressInfo> progress,
+            CancellationToken cancellationToken, SynchronizationStatistics statistics)
         {
             cancellationToken.ThrowIfCancellationRequested();
             await this.UploadInterviewsAsync(progress, statistics, cancellationToken);
@@ -89,6 +96,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
             await this.DownloadInterviewsAsync(statistics, progress, cancellationToken);
 
             cancellationToken.ThrowIfCancellationRequested();
+            await this.techInfoSynchronizer.SynchronizeAsync(progress, statistics, cancellationToken);
+
+            cancellationToken.ThrowIfCancellationRequested();
             await this.logoSynchronizer.DownloadCompanyLogo(progress, cancellationToken);
 
             cancellationToken.ThrowIfCancellationRequested();
@@ -100,7 +110,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
 
         private ISupervisorSynchronizationService supervisorSyncService =>
             base.synchronizationService as ISupervisorSynchronizationService;
-        private async Task SyncronizeInterviewers(IProgress<SyncProgressInfo> progress, SynchronizationStatistics statistics, CancellationToken cancellationToken)
+
+        private async Task SyncronizeInterviewers(IProgress<SyncProgressInfo> progress,
+            SynchronizationStatistics statistics, CancellationToken cancellationToken)
         {
             var processedInterviewersCount = 0;
             progress.Report(new SyncProgressInfo
@@ -113,7 +125,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
             var remoteInterviewers = await this.supervisorSyncService.GetInterviewersAsync(cancellationToken);
             var localInterviewers = this.interviewerViewRepository.LoadAll();
 
-            var interviewersToRemove = localInterviewers.Select(x => x.InterviewerId).Except(remoteInterviewers.Select(x => x.Id)).ToList();
+            var interviewersToRemove = localInterviewers.Select(x => x.InterviewerId)
+                .Except(remoteInterviewers.Select(x => x.Id)).ToList();
             foreach (var interviewerId in interviewersToRemove)
             {
                 this.interviewViewRepository.Remove(interviewerId.FormatGuid());
@@ -146,14 +159,15 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
                     local.PhoneNumber = interviewer.PhoneNumber;
                     local.UserName = interviewer.UserName;
                 }
-                
+
                 this.interviewerViewRepository.Store(local);
 
                 processedInterviewersCount++;
 
                 progress.Report(new SyncProgressInfo
                 {
-                    Title = InterviewerUIResources.Synchronization_Of_InterviewersFormat.FormatString(processedInterviewersCount, remoteInterviewers.Count),
+                    Title = InterviewerUIResources.Synchronization_Of_InterviewersFormat.FormatString(
+                        processedInterviewersCount, remoteInterviewers.Count),
                     Statistics = statistics,
                     Status = SynchronizationStatus.Download
                 });
@@ -161,7 +175,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
 
             progress.Report(new SyncProgressInfo
             {
-                Title = InterviewerUIResources.Synchronization_Of_InterviewersFormat.FormatString(processedInterviewersCount, remoteInterviewers.Count),
+                Title = InterviewerUIResources.Synchronization_Of_InterviewersFormat.FormatString(
+                    processedInterviewersCount, remoteInterviewers.Count),
                 Statistics = statistics,
                 Status = SynchronizationStatus.Download
             });
@@ -170,7 +185,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
 
         protected override void CheckAfterStartSynchronization(CancellationToken cancellationToken)
         {
-
         }
 
         protected override void UpdatePasswordOfResponsible(RestCredentials credentials)
@@ -188,20 +202,23 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
             return supervisorSettings.GetApplicationVersionCode();
         }
 
-        protected override Task SyncronizeCensusQuestionnaires(IProgress<SyncProgressInfo> progress, SynchronizationStatistics statistics,
+        protected override Task SyncronizeCensusQuestionnaires(IProgress<SyncProgressInfo> progress,
+            SynchronizationStatistics statistics,
             CancellationToken cancellationToken)
         {
             return Task.CompletedTask; // supervisor does not support census
         }
 
-        protected override Task<List<Guid>> FindObsoleteInterviewsAsync(List<Guid> localInterviewIds, IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken)
+        protected override Task<List<Guid>> FindObsoleteInterviewsAsync(IEnumerable<Guid> localInterviewIds,
+            IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken)
         {
             return Task.FromResult(new List<Guid>());
         }
 
         protected override IReadOnlyCollection<InterviewView> GetInterviewsForUpload()
         {
-            return this.interviewViewRepository.Where(interview => interview.Status == InterviewStatus.ApprovedBySupervisor);
+            return this.interviewViewRepository.Where(interview =>
+                interview.Status == InterviewStatus.ApprovedBySupervisor);
         }
     }
 }

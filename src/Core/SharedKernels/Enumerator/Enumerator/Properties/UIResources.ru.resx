@@ -632,4 +632,26 @@
   <data name="Supervisor_Complete_Reject_btn" xml:space="preserve">
     <value>Отклонить</value>
   </data>
+    <data name="OfflineSync_Done" xml:space="preserve">
+    <value>Завершить</value>
+    <comment>Завершить</comment>
+  </data>
+    <data name="OfflineSync_BackToDashboard" xml:space="preserve">
+    <value>К списку заданий</value>
+    <comment>К списку заданий</comment>
+  </data>
+    <data name="OfflineSync_Abort" xml:space="preserve">
+    <value>Прервать</value>
+    <comment>Отмена</comment>
+  </data>
+    <data name="OfflineSync_NetworkInfo" xml:space="preserve">
+    <value>Расстояние между устройствами и скорость сети в норме.
+Скорость: {0}, Осталось: {1}</value>
+    <comment>Range and network are acceptible. 
+Скорость: {0}, Осталось: {1}</comment>
+  </data>
+    <data name="OfflineSync_Cancel" xml:space="preserve">
+    <value>Отмена</value>
+    <comment>Отмена</comment>
+  </data>
 </root>

@@ -55,7 +55,7 @@ namespace WB.UI.Supervisor.Services.Implementation
         protected override EnumeratorSettingsView CurrentSettings => this.currentSettings;
         public override int EventChunkSize => this.CurrentSettings.EventChunkSize.GetValueOrDefault(Application.Context.Resources.GetInteger(Resource.Integer.EventChunkSize));
         public override double GpsDesiredAccuracy => throw new NotImplementedException();
-        public override bool VibrateOnError => throw new NotImplementedException();
+        public override bool VibrateOnError => false;
         public override bool ShowLocationOnMap => throw new NotImplementedException();
         public override int GpsReceiveTimeoutSec => throw new NotImplementedException();
         public void SetGpsResponseTimeout(int timeout) => throw new NotImplementedException();

@@ -1360,8 +1360,9 @@ namespace WB.Tests.Abc.TestFactories
             string translationIndex = null,
             TranslationType? type = null)
         {
-            return new WB.Core.SharedKernels.Enumerator.Views.TranslationInstance
+            return new TranslationInstance
             {
+                Id = Guid.NewGuid().ToString(),
                 Value = value,
                 TranslationId = tranlationId ?? Guid.NewGuid(),
                 QuestionnaireId = questionnaireId ?? Create.Entity.QuestionnaireIdentity().ToString(),
@@ -1642,13 +1643,15 @@ namespace WB.Tests.Abc.TestFactories
             };
         }
 
-        public AssignmentApiDocumentBuilder AssignmentApiDocument(int id, int? quantity, QuestionnaireIdentity questionnaireIdentity = null)
+        public AssignmentApiDocumentBuilder AssignmentApiDocument(int id, int? quantity, QuestionnaireIdentity questionnaireIdentity = null,
+            Guid? responsibleId = null)
         {
             return new AssignmentApiDocumentBuilder(new AssignmentApiDocument
             {
                 Id = id,
                 Quantity = quantity,
-                QuestionnaireId = questionnaireIdentity
+                QuestionnaireId = questionnaireIdentity,
+                ResponsibleId = responsibleId ?? Guid.Empty
             });
         }
 
@@ -1756,13 +1759,15 @@ namespace WB.Tests.Abc.TestFactories
         }
 
         public AssignmentDocumentBuilder AssignmentDocument(int id, int? quantity = null,
-            int interviewsCount = 0, string questionnaireIdentity = null)
+            int interviewsCount = 0, string questionnaireIdentity = null, Guid? responsibleId = null, Guid? originalResponsibleId = null)
         {
             return new AssignmentDocumentBuilder(new AssignmentDocument
             {
                 Id = id,
                 Quantity = quantity,
-                QuestionnaireId = questionnaireIdentity
+                QuestionnaireId = questionnaireIdentity,
+                ResponsibleId = responsibleId ?? Guid.Empty,
+                OriginalResponsibleId = originalResponsibleId ?? Guid.Empty
             });
         }
 
@@ -1775,7 +1780,7 @@ namespace WB.Tests.Abc.TestFactories
                 _entity = entity;
             }
 
-            public AssignmentDocumentBuilder WithAnswer(Identity identity, string answer, bool identifying = false)
+            public AssignmentDocumentBuilder WithAnswer(Identity identity, string answer, bool identifying = false, string serializedAnswer = null)
             {
                 this._entity.Answers = this._entity.Answers ?? new List<AssignmentDocument.AssignmentAnswer>();
                 this._entity.IdentifyingAnswers = this._entity.IdentifyingAnswers ?? new List<AssignmentDocument.AssignmentAnswer>();
@@ -1785,6 +1790,7 @@ namespace WB.Tests.Abc.TestFactories
                     AssignmentId = this._entity.Id,
                     AnswerAsString = answer,
                     IsIdentifying = identifying,
+                    SerializedAnswer = serializedAnswer,
                     Identity = identity
                 };
 
