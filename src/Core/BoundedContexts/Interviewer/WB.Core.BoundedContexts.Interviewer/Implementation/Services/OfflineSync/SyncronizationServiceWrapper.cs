@@ -2,13 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Autofac.Features.Indexed;
 using Ncqrs.Eventing;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services.OfflineSync;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Questionnaire.Api;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 
@@ -64,16 +65,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return Service.LinkCurrentUserToDeviceAsync(credentials, token);
         }
 
-        public Task<byte[]> GetQuestionnaireAssemblyAsync(QuestionnaireIdentity questionnaire, Action<decimal, long, long> onDownloadProgressChanged,
+        public Task<byte[]> GetQuestionnaireAssemblyAsync(QuestionnaireIdentity questionnaire, IProgress<TransferProgress> transferProgress,
             CancellationToken token)
         {
-            return Service.GetQuestionnaireAssemblyAsync(questionnaire, onDownloadProgressChanged, token);
+            return Service.GetQuestionnaireAssemblyAsync(questionnaire, transferProgress, token);
         }
 
-        public Task<QuestionnaireApiView> GetQuestionnaireAsync(QuestionnaireIdentity questionnaire, Action<decimal, long, long> onDownloadProgressChanged,
+        public Task<QuestionnaireApiView> GetQuestionnaireAsync(QuestionnaireIdentity questionnaire, IProgress<TransferProgress> transferProgress,
             CancellationToken token)
         {
-            return Service.GetQuestionnaireAsync(questionnaire, onDownloadProgressChanged, token);
+            return Service.GetQuestionnaireAsync(questionnaire, transferProgress, token);
         }
 
         public Task<List<QuestionnaireIdentity>> GetCensusQuestionnairesAsync(CancellationToken token)
@@ -91,14 +92,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return Service.LogQuestionnaireAssemblyAsSuccessfullyHandledAsync(questionnaire);
         }
 
-        public Task<byte[]> GetApplicationAsync(CancellationToken token, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged = null)
+        public Task<byte[]> GetApplicationAsync(CancellationToken token, IProgress<TransferProgress> transferProgress = null)
         {
-            return Service.GetApplicationAsync(token, onDownloadProgressChanged);
+            return Service.GetApplicationAsync(token, transferProgress);
         }
 
-        public Task<byte[]> GetApplicationPatchAsync(CancellationToken token, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged = null)
+        public Task<byte[]> GetApplicationPatchAsync(CancellationToken token, IProgress<TransferProgress> transferProgress = null)
         {
-            return Service.GetApplicationPatchAsync(token, onDownloadProgressChanged);
+            return Service.GetApplicationPatchAsync(token, transferProgress);
         }
 
         public Task<int?> GetLatestApplicationVersionAsync(CancellationToken token)
@@ -121,39 +122,39 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return Service.LogInterviewAsSuccessfullyHandledAsync(interviewId);
         }
 
-        public Task<List<CommittedEvent>> GetInterviewDetailsAsync(Guid interviewId, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token)
+        public Task<List<CommittedEvent>> GetInterviewDetailsAsync(Guid interviewId, IProgress<TransferProgress> transferProgress, CancellationToken token)
         {
-            return Service.GetInterviewDetailsAsync(interviewId, onDownloadProgressChanged, token);
+            return Service.GetInterviewDetailsAsync(interviewId, transferProgress, token);
         }
 
         public Task UploadInterviewAsync(Guid interviewId, InterviewPackageApiView completedInterview,
-            Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token)
+            IProgress<TransferProgress> transferProgress, CancellationToken token)
         {
-            return Service.UploadInterviewAsync(interviewId, completedInterview, onDownloadProgressChanged, token);
+            return Service.UploadInterviewAsync(interviewId, completedInterview, transferProgress, token);
         }
 
-        public Task UploadInterviewImageAsync(Guid interviewId, string fileName, byte[] fileData, Action<decimal, long, long> onDownloadProgressChanged,
+        public Task UploadInterviewImageAsync(Guid interviewId, string fileName, byte[] fileData, IProgress<TransferProgress> transferProgress,
             CancellationToken token)
         {
-            return Service.UploadInterviewImageAsync(interviewId, fileName, fileData, onDownloadProgressChanged, token);
+            return Service.UploadInterviewImageAsync(interviewId, fileName, fileData, transferProgress, token);
         }
 
         public Task UploadInterviewAudioAsync(Guid interviewId, string fileName, string contentType, byte[] fileData,
-            Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token)
+            IProgress<TransferProgress> transferProgress, CancellationToken token)
         {
             return Service.UploadInterviewAudioAsync(interviewId, fileName, contentType, fileData,
-                onDownloadProgressChanged, token);
+                transferProgress, token);
         }
 
-        public Task<List<string>> GetAttachmentContentsAsync(QuestionnaireIdentity questionnaire, Action<decimal, long, long> onDownloadProgressChanged,
+        public Task<List<string>> GetAttachmentContentsAsync(QuestionnaireIdentity questionnaire, IProgress<TransferProgress> transferProgress,
             CancellationToken token)
         {
-            return Service.GetAttachmentContentsAsync(questionnaire, onDownloadProgressChanged, token);
+            return Service.GetAttachmentContentsAsync(questionnaire, transferProgress, token);
         }
 
-        public Task<AttachmentContent> GetAttachmentContentAsync(string contentId, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token)
+        public Task<AttachmentContent> GetAttachmentContentAsync(string contentId, IProgress<TransferProgress> transferProgress, CancellationToken token)
         {
-            return Service.GetAttachmentContentAsync(contentId, onDownloadProgressChanged, token);
+            return Service.GetAttachmentContentAsync(contentId, transferProgress, token);
         }
 
         public Task<List<QuestionnaireIdentity>> GetServerQuestionnairesAsync(CancellationToken cancellationToken)

@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
@@ -39,18 +40,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         }
 
         public Task UploadInterviewAsync(Guid interviewId, InterviewPackageApiView completedInterview,
-            Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token)
+            IProgress<TransferProgress> transferProgress, CancellationToken token)
         {
             var interviewKey = this.interviews.GetById(interviewId.FormatGuid())?.InterviewKey;
             return this.syncClient.SendAsync(new UploadInterviewRequest
             {
                 Interview = completedInterview,
                 InterviewKey = interviewKey
-            }, token);
+            },token, transferProgress);
         }
 
         public Task UploadInterviewImageAsync(Guid interviewId, string fileName, byte[] fileData,
-            Action<decimal, long, long> onDownloadProgressChanged,
+            IProgress<TransferProgress> transferProgress,
             CancellationToken token)
         {
             return this.syncClient.SendAsync(new UploadInterviewImageRequest
@@ -61,11 +62,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                     InterviewId = interviewId,
                     Data = Convert.ToBase64String(fileData)
                 },
-            }, token);
+            }, token, transferProgress);
         }
 
         public Task UploadInterviewAudioAsync(Guid interviewId, string fileName, string contentType, byte[] fileData,
-            Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token)
+            IProgress<TransferProgress> transferProgress, CancellationToken token)
         {
             return this.syncClient.SendAsync(new UploadInterviewAudioRequest
             {
@@ -76,24 +77,24 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                     ContentType = contentType,
                     Data = Convert.ToBase64String(fileData)
                 },
-            }, token);
+            }, token, transferProgress);
         }
 
         public async Task<List<string>> GetAttachmentContentsAsync(QuestionnaireIdentity questionnaire,
-            Action<decimal, long, long> onDownloadProgressChanged,
+            IProgress<TransferProgress> transferProgress,
             CancellationToken token)
         {
             var response = await syncClient.SendAsync<GetAttachmentContentsRequest, GetAttachmentContentsResponse>(
-                new GetAttachmentContentsRequest {QuestionnaireIdentity = questionnaire}, token);
+                new GetAttachmentContentsRequest {QuestionnaireIdentity = questionnaire}, token, transferProgress);
 
             return response.AttachmentContents;
         }
 
         public async Task<AttachmentContent> GetAttachmentContentAsync(string contentId,
-            Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token)
+            IProgress<TransferProgress> transferProgress, CancellationToken token)
         {
             var response = await syncClient.SendAsync<GetAttachmentContentRequest, GetAttachmentContentResponse>(
-                new GetAttachmentContentRequest { ContentId = contentId }, token);
+                new GetAttachmentContentRequest { ContentId = contentId }, token, transferProgress);
 
             return response.Content;
         }
@@ -106,8 +107,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return response.Questionnaires;
         }
 
-        public async Task<List<TranslationDto>> GetQuestionnaireTranslationAsync(QuestionnaireIdentity questionnaireIdentity,
-            CancellationToken cancellationToken)
+        public async Task<List<TranslationDto>> GetQuestionnaireTranslationAsync(
+            QuestionnaireIdentity questionnaireIdentity, CancellationToken cancellationToken)
         {
             var response = await this.syncClient
                 .SendAsync<GetQuestionnaireTranslationRequest, GetQuestionnaireTranslationResponse>(
@@ -253,19 +254,19 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return Task.CompletedTask;
         }
 
-        public async Task<byte[]> GetQuestionnaireAssemblyAsync(QuestionnaireIdentity questionnaire, Action<decimal, long, long> onDownloadProgressChanged,
+        public async Task<byte[]> GetQuestionnaireAssemblyAsync(QuestionnaireIdentity questionnaire, IProgress<TransferProgress> transferProgress,
             CancellationToken token)
         {
             var response = await this.syncClient.SendAsync<GetQuestionnaireAssemblyRequest, GetQuestionnaireAssemblyResponse>(
-                new GetQuestionnaireAssemblyRequest(questionnaire), token);
+                new GetQuestionnaireAssemblyRequest(questionnaire), token, transferProgress);
             return response.Content;
         }
 
-        public async Task<QuestionnaireApiView> GetQuestionnaireAsync(QuestionnaireIdentity questionnaire, Action<decimal, long, long> onDownloadProgressChanged,
+        public async Task<QuestionnaireApiView> GetQuestionnaireAsync(QuestionnaireIdentity questionnaire, IProgress<TransferProgress> transferProgress,
             CancellationToken token)
         {
             var response = await this.syncClient.SendAsync<GetQuestionnaireRequest, GetQuestionnaireResponse>(
-                new GetQuestionnaireRequest(questionnaire), token);
+                new GetQuestionnaireRequest(questionnaire), token, transferProgress);
             return new QuestionnaireApiView
             {
                 QuestionnaireDocument = response.QuestionnaireDocument
@@ -287,12 +288,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return Task.CompletedTask;
         }
 
-        public Task<byte[]> GetApplicationAsync(CancellationToken token, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged = null)
+        public Task<byte[]> GetApplicationAsync(CancellationToken token, IProgress<TransferProgress> transferProgress = null)
         {
             return Task.FromResult<byte[]>(null);
         }
 
-        public Task<byte[]> GetApplicationPatchAsync(CancellationToken token, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged = null)
+        public Task<byte[]> GetApplicationPatchAsync(CancellationToken token, IProgress<TransferProgress> transferProgress = null)
         {
             return Task.FromResult<byte[]>(null);
         }
@@ -319,10 +320,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return this.syncClient.SendAsync(new LogInterviewAsSuccessfullyHandledRequest(interviewId), CancellationToken.None);
         }
 
-        public async Task<List<CommittedEvent>> GetInterviewDetailsAsync(Guid interviewId, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token)
+        public async Task<List<CommittedEvent>> GetInterviewDetailsAsync(Guid interviewId, IProgress<TransferProgress> transferProgress, CancellationToken token)
         {
             var response = await this.syncClient.SendAsync<GetInterviewDetailsRequest, GetInterviewDetailsResponse>(
-                new GetInterviewDetailsRequest(interviewId), token);
+                new GetInterviewDetailsRequest(interviewId), token, transferProgress);
             return response.Events;
         }
     }

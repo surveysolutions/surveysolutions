@@ -50,7 +50,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services
                 .ReturnsAsync(new List<Guid>());
 
             List<CommittedEvent> interviewDetails = new List<CommittedEvent>();
-            syncService.Setup(x => x.GetInterviewDetailsAsync(reassingedInterviewId, It.IsAny<Action<decimal, long, long>>(), CancellationToken.None))
+            syncService.Setup(x => x.GetInterviewDetailsAsync(reassingedInterviewId, It.IsAny<IProgress<TransferProgress>>(), CancellationToken.None))
                 .ReturnsAsync(interviewDetails);
 
             var localInterviews = new InMemoryPlainStorage<InterviewView>();

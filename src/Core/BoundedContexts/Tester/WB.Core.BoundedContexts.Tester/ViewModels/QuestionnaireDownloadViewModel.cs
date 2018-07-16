@@ -241,7 +241,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         {
             return await this.designerApiService.GetQuestionnaireAsync(
                 questionnaireId: questionnaireId,
-                onDownloadProgressChanged: downloadProgress => progress.Report(string.Format(TesterUIResources.ImportQuestionnaire_DownloadProgress, downloadProgress)),
+                transferProgress: new Progress<TransferProgress>(downloadProgress => progress.Report(string.Format(TesterUIResources.ImportQuestionnaire_DownloadProgress, downloadProgress))),
                 token: cancellationToken);
         }
 
@@ -262,7 +262,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 {
                     var attachmentContent = await this.designerApiService.GetAttachmentContentAsync(
                         attachmentContentId,
-                        onDownloadProgressChanged: downloadProgress => progress.Report(string.Format(TesterUIResources.ImportQuestionnaireAttachments_DownloadProgress, downloadProgress)),
+                        new Progress<TransferProgress>(downloadProgress 
+                            => progress.Report(string.Format(
+                                TesterUIResources.ImportQuestionnaireAttachments_DownloadProgress, downloadProgress))),
                         token: cancellationToken);
 
                     this.attachmentContentStorage.Store(attachmentContent);

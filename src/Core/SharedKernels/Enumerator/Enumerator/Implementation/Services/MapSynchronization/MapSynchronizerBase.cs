@@ -62,7 +62,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
                 if (this.mapService.DoesMapExist(mapDescription.MapName))
                     continue;
 
-                void OnDownloadProgressChanged(DownloadProgressChangedEventArgs args)
+                void OnDownloadProgressChanged(TransferProgress args)
                 {
                     if (args.ProgressPercentage % 5 == 0)
                     {
@@ -89,7 +89,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
                         }
                         
                         var buffer = new byte[1024];
-                        var downloadProgressChangedEventArgs = new DownloadProgressChangedEventArgs()
+                        var downloadProgressChangedEventArgs = new TransferProgress()
                         {
                             TotalBytesToReceive = contentStreamResult.ContentLength
                         };
