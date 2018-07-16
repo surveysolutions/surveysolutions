@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
+using WB.Core.SharedKernels.Enumerator.Utils;
 
 namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
 {
@@ -24,14 +25,14 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
 
         public static string Endpoint { get; set; }
 
-        public Task<TResponse> SendAsync<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken, IProgress<CommunicationProgress> progress = null) 
+        public Task<TResponse> SendAsync<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken, IProgress<TransferProgress> progress = null) 
             where TRequest : ICommunicationMessage
             where TResponse : ICommunicationMessage
         {
             return this.communicator.SendAsync<TRequest, TResponse>(this.nearbyConnection, Endpoint, request, progress, cancellationToken);
         }
 
-        public async Task SendAsync<TRequest>(TRequest request, CancellationToken cancellationToken, IProgress<CommunicationProgress> progress = null)
+        public async Task SendAsync<TRequest>(TRequest request, CancellationToken cancellationToken, IProgress<TransferProgress> progress = null)
             where TRequest : ICommunicationMessage
         {
             await this.communicator.SendAsync<TRequest, OkResponse>(this.nearbyConnection, Endpoint, request, progress, cancellationToken);

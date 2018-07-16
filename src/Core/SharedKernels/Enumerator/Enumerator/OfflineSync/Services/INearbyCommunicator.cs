@@ -3,13 +3,14 @@ using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Entities;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
+using WB.Core.SharedKernels.Enumerator.Utils;
 
 namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services
 {
     public interface INearbyCommunicator
     {
         Task<TResponse> SendAsync<TRequest, TResponse>(INearbyConnection connection,
-            string endpoint, TRequest message, IProgress<CommunicationProgress> progress,
+            string endpoint, TRequest message, IProgress<TransferProgress> progress,
             CancellationToken cancellationToken)
             where TRequest : ICommunicationMessage
             where TResponse : ICommunicationMessage;

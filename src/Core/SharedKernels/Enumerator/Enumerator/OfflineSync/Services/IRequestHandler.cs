@@ -4,14 +4,6 @@ using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
 
 namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services
 {
-    public class CommunicationProgress
-    {
-        public TimeSpan Eta { get; set; }
-        public long TotalBytes { get; set; }
-        public long TransferedBytes { get; set; }
-        public string Speed { get; set; }
-    }
-
     public interface IRequestHandler
     {
         Task<ICommunicationMessage> Handle(ICommunicationMessage message);
