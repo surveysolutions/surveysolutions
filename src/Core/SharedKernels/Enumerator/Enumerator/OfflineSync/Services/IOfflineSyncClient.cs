@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
+using WB.Core.SharedKernels.Enumerator.Utils;
 
 namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services
 {
@@ -11,10 +12,10 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services
     /// </summary>
     public interface IOfflineSyncClient
     {
-        Task<TResponse> SendAsync<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken, IProgress<CommunicationProgress> progress = null)
+        Task<TResponse> SendAsync<TRequest, TResponse>(TRequest request, CancellationToken cancellationToken, IProgress<TransferProgress> progress = null)
             where TRequest : ICommunicationMessage
             where TResponse : ICommunicationMessage;
-        Task SendAsync<TRequest>(TRequest request, CancellationToken cancellationToken, IProgress<CommunicationProgress> progress = null) 
+        Task SendAsync<TRequest>(TRequest request, CancellationToken cancellationToken, IProgress<TransferProgress> progress = null) 
             where TRequest : ICommunicationMessage;
     }
 }

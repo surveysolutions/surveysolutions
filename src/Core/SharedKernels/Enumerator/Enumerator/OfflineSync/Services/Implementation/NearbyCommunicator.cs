@@ -93,7 +93,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
         /// <param name="cancellationToken">Cancellation token</param>
         /// <returns></returns>
         public async Task<TResponse> SendAsync<TRequest, TResponse>(INearbyConnection connection, string endpoint,
-            TRequest message, IProgress<CommunicationProgress> progress, CancellationToken cancellationToken)
+            TRequest message, IProgress<TransferProgress> progress, CancellationToken cancellationToken)
             where TRequest : ICommunicationMessage
             where TResponse : ICommunicationMessage
         {
@@ -435,15 +435,15 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             private Timer timer;
             private readonly Stopwatch sw;
             private readonly EtaTransferRate etaHelper;
-            private readonly CommunicationProgress progressData; // = new CommunicationProgress();
+            public TransferProgress ProgressData { get; }
             private bool isCompleted;
 
-            public TaskCompletionSourceWithProgress(IProgress<CommunicationProgress> progress,
+            public TaskCompletionSourceWithProgress(IProgress<TransferProgress> progress,
                 CancellationToken cancellationToken) : this()
             {
                 TaskCompletionSource = new TaskCompletionSource<ICommunicationMessage>();
                 Progress = progress;
-                progressData = new CommunicationProgress();
+                ProgressData = new TransferProgress();
                 sw = Stopwatch.StartNew();
                 etaHelper = new EtaTransferRate();
                 Debounce();
@@ -482,7 +482,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
 
             private TaskCompletionSource<ICommunicationMessage> TaskCompletionSource { get; }
 
-            public IProgress<CommunicationProgress> Progress { get; }
+            public IProgress<TransferProgress> Progress { get; }
 
             public Task<ICommunicationMessage> Task => TaskCompletionSource.Task;
 
