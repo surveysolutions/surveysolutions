@@ -48,8 +48,8 @@ namespace WB.UI.Headquarters.Controllers
         public ActionResult Index(Guid id, DateTime? startDateTime = null)
         {
             var userView = usersRepository.GetUser(new UserViewInputModel(id));
-            if (userView == null || !userView.IsInterviewer())
-                throw new InvalidOperationException($"Interviewer with id: {id} don't found");
+            if (userView == null || (!userView.IsInterviewer() && !userView.IsSupervisor()))
+                throw new InvalidOperationException($"User with id: {id} don't found");
 
             if (!startDateTime.HasValue)
                 startDateTime = DateTime.UtcNow.AddDays(1);
@@ -98,8 +98,8 @@ namespace WB.UI.Headquarters.Controllers
         public FileResult DownloadTabLog(Guid id)
         {
             var userView = usersRepository.GetUser(new UserViewInputModel(id));
-            if (userView == null || !userView.IsInterviewer())
-                throw new InvalidOperationException($"Interviewer with id: {id} don't found");
+            if (userView == null || (!userView.IsInterviewer() && !userView.IsSupervisor()))
+                throw new InvalidOperationException($"User with id: {id} don't found");
 
             var records = auditLogFactory.GetRecords(id);
 
@@ -153,6 +153,12 @@ namespace WB.UI.Headquarters.Controllers
                 case AuditLogEntityType.CompleteInterview:
                     var completeInterviewAuditLogEntity = record.GetEntity<CompleteInterviewAuditLogEntity>();
                     return InterviewerAuditRecord.CompleteInterview.FormatString(completeInterviewAuditLogEntity.InterviewKey);
+                case AuditLogEntityType.ApproveInterview:
+                    var approveInterviewAuditLogEntity = record.GetEntity<ApproveInterviewAuditLogEntity>();
+                    return InterviewerAuditRecord.ApproveInterview.FormatString(approveInterviewAuditLogEntity.InterviewKey);
+                case AuditLogEntityType.RejectInterview:
+                    var rejectInterviewAuditLogEntity = record.GetEntity<RejectInterviewAuditLogEntity>();
+                    return InterviewerAuditRecord.RejectInterview.FormatString(rejectInterviewAuditLogEntity.InterviewKey);
                 case AuditLogEntityType.DeleteInterview:
                     var deleteInterviewAuditLogEntity = record.GetEntity<DeleteInterviewAuditLogEntity>();
                     return InterviewerAuditRecord.DeleteInterview.FormatString(deleteInterviewAuditLogEntity.InterviewKey);

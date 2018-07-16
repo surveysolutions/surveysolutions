@@ -26,10 +26,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
 
         protected MapSyncProviderBase(IMapService mapService, ISynchronizationService synchronizationService, ILogger logger,
             IHttpStatistician httpStatistician, IUserInteractionService userInteractionService, IPrincipal principal,
-            IPasswordHasher passwordHasher, 
             IPlainStorage<InterviewView> interviewViewRepository, IAuditLogService auditLogService) 
             : base(synchronizationService, logger,
-            httpStatistician, userInteractionService, principal, passwordHasher, 
+            httpStatistician, userInteractionService, principal,  
             interviewViewRepository, auditLogService)
         {
             this.synchronizationService = synchronizationService;
