@@ -20,6 +20,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
     {
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IMvxNavigationService mvxNavigationService;
+        private readonly IMvxMessenger messenger;
         public Guid? LastVisitedInterviewId { get; set; }
 
         public SynchronizationViewModel Synchronization { get; set; }
@@ -35,6 +36,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.mvxNavigationService = mvxNavigationService;
+            this.messenger = messenger;
             this.Synchronization = synchronization;
             this.Synchronization.Init();
 
@@ -43,12 +45,14 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
 
         private readonly MvxSubscriptionToken messengerSubscribtion;
 
+
         public override void Prepare(DashboardViewModelArgs parameter)
         {
             this.LastVisitedInterviewId = parameter.InterviewId;
         }
 
         private IMvxAsyncCommand synchronizationCommand;
+        private IDisposable offlineSynchronizationToken;
 
         public IMvxAsyncCommand SynchronizationCommand => synchronizationCommand ?? (synchronizationCommand = new MvxAsyncCommand(this.RunSynchronization));
 
@@ -148,6 +152,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         public void Dispose()
         {
             messengerSubscribtion.Dispose();
+            offlineSynchronizationToken?.Dispose();
         }
     }
 }

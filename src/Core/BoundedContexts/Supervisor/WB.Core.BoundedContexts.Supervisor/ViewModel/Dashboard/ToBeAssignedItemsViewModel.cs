@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using MvvmCross.Plugin.Messenger;
 using WB.Core.BoundedContexts.Supervisor.Properties;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services;
@@ -18,21 +17,17 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
     {
         private readonly IDashboardItemsAccessor dashboardItemsAccessor;
         private readonly IInterviewViewModelFactory viewModelFactory;
-        private readonly IMvxMessenger messenger;
 
         public ToBeAssignedItemsViewModel(IDashboardItemsAccessor dashboardItemsAccessor,
-            IInterviewViewModelFactory viewModelFactory,
-            IMvxMessenger messenger)
+            IInterviewViewModelFactory viewModelFactory)
         {
             this.dashboardItemsAccessor = dashboardItemsAccessor;
             this.viewModelFactory = viewModelFactory;
-            this.messenger = messenger;
         }
 
         public override async Task Initialize()
         {
             await base.Initialize();
-            await this.UpdateUiItems();
         }
 
         public string TabTitle => SupervisorDashboard.ToBeAssigned;

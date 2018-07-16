@@ -35,21 +35,18 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             this.Principal = principal ?? throw new ArgumentNullException(nameof(principal));
         }
 
-        public override Task Initialize()
+        public override async Task Initialize()
         {
-            
-            RefreshCounters();
-
+            await base.Initialize();
             this.UserName = Principal.CurrentUserIdentity.Name;
             this.UserEmail = Principal.CurrentUserIdentity.Email;
-
-            return Task.CompletedTask;
         }
 
         public override void ViewAppeared()
         {
             base.ViewAppeared();
             messengerSubscribtion = messenger.Subscribe<DashboardChangedMsg>(msg => RefreshCounters(), MvxReference.Strong);
+            RefreshCounters();
         }
 
         public override void ViewDisappeared()

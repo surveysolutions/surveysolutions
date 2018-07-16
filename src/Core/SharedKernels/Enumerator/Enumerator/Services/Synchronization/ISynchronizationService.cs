@@ -61,5 +61,6 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Synchronization
         Task<AssignmentApiDocument> GetAssignmentAsync(int id, CancellationToken cancellationToken);
         Task<List<AssignmentApiView>> GetAssignmentsAsync(CancellationToken cancellationToken);
         Task LogAssignmentAsHandledAsync(int id, CancellationToken cancellationToken);
+        Task SendSyncCompletedAsync(CancellationToken cancellationToken);
     }
 }

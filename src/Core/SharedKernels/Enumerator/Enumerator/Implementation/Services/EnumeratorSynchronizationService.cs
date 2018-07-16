@@ -144,6 +144,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             return Task.CompletedTask;
         }
 
+        public Task SendSyncCompletedAsync(CancellationToken cancellationToken)
+        {
+            return Task.CompletedTask;
+        }
+
         public Task<AssignmentApiDocument> GetAssignmentAsync(int id, CancellationToken cancellationToken)
         {
             var response = this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<AssignmentApiDocument>(

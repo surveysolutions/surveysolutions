@@ -97,6 +97,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 
             cancellationToken.ThrowIfCancellationRequested();
             await this.UpdateApplicationAsync(progress, cancellationToken);
+
+            cancellationToken.ThrowIfCancellationRequested();
+            await this.synchronizationService.SendSyncCompletedAsync(cancellationToken);
         }
 
         protected override SynchronizationType SynchronizationType
