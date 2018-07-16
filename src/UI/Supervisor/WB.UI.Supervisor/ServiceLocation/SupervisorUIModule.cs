@@ -100,6 +100,7 @@ namespace WB.UI.Supervisor.ServiceLocation
             registry.Bind<IHandleCommunicationMessage, SupervisorQuestionnairesHandler>();
             registry.Bind<IHandleCommunicationMessage, SupervisorBinaryHandler>();
             registry.Bind<IHandleCommunicationMessage, SupervisorAuditLogHandler>();
+            registry.Bind<IHandleCommunicationMessage, SupervisorSyncStatisticsHandler>();
             registry.Bind<IHandleCommunicationMessage, SupervisorAssignmentsHandler>();
             registry.Bind<IHandleCommunicationMessage, SupervisorTabletInfoHandler>();
         }

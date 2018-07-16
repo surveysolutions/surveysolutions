@@ -22,6 +22,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
         protected string ExceptionsController => string.Concat(ApplicationUrl, "/interviewerExceptions");
         protected string BrokenInterviewPackagesController => string.Concat(ApplicationUrl, "/brokenInterviews");
         protected string InterviewerTabletInfosController => string.Concat(ApplicationUrl, "/interviewerTabletInfos");
+        protected string InterviewerStatisticsController => string.Concat(ApplicationUrl, "/interviewerStatistics");
 
 
         public SynchronizationService(IPrincipal principal, IRestService restService,
@@ -74,6 +75,15 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
             return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
                 url: $"{this.InterviewerTabletInfosController}",
                 request: deviceInfoApiView,
+                credentials: this.restCredentials,
+                token: cancellationToken));
+        }
+
+        public Task UploadInterviewerSyncStatistic(InterviewerSyncStatisticsDto statisticToSend, CancellationToken cancellationToken)
+        {
+            return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
+                url: $"{this.InterviewerStatisticsController}",
+                request: statisticToSend,
                 credentials: this.restCredentials,
                 token: cancellationToken));
         }
