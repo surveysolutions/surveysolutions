@@ -61,6 +61,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Interview {0} approved.
+        /// </summary>
+        public static string ApproveInterview {
+            get {
+                return ResourceManager.GetString("ApproveInterview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Interview {0} closed.
         /// </summary>
         public static string CloseInterview {
@@ -156,6 +165,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string PageTitle {
             get {
                 return ResourceManager.GetString("PageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interview {0} rejected.
+        /// </summary>
+        public static string RejectInterview {
+            get {
+                return ResourceManager.GetString("RejectInterview", resourceCulture);
             }
         }
         

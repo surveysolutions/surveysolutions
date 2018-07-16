@@ -120,7 +120,8 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
                 dynamicTextViewModel ?? Create.ViewModel.DynamicTextViewModel(),
                 navigationService ?? Mock.Of<IViewModelNavigationService>(),
                 logger ?? Mock.Of<ILogger>(),
-                Mock.Of<IInterviewerSelectorDialog>()
+                Mock.Of<IInterviewerSelectorDialog>(),
+                Mock.Of<IAuditLogService>()
             );
         }
     }
