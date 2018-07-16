@@ -79,7 +79,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
                 token: cancellationToken));
         }
 
-        public Task UploadInterviewerSyncStatistic(InterviewerSyncStatisticsDto statisticToSend, CancellationToken cancellationToken)
+        public Task UploadInterviewerSyncStatistic(InterviewerSyncStatisticsApiView statisticToSend, CancellationToken cancellationToken)
         {
             return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
                 url: $"{this.InterviewerStatisticsController}",
