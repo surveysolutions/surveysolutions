@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.WebApi;
@@ -67,9 +68,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             var localAssignmentsLookup = this.assignmentsRepository.LoadAll().ToLookup(la => la.Id);
             var processedAssignmentsCount = 0;
 
+            IProgress<TransferProgress> transferProgress = progress.AsTransferReport();
+
             foreach (var remoteItem in remoteAssignments)
             {
-                await this.questionnaireDownloader.DownloadQuestionnaireAsync(remoteItem.QuestionnaireId, cancellationToken, statistics);
+                await this.questionnaireDownloader.DownloadQuestionnaireAsync(remoteItem.QuestionnaireId, statistics, transferProgress, cancellationToken);
 
                 IQuestionnaire questionnaire = this.questionnaireStorage.GetQuestionnaire(remoteItem.QuestionnaireId, null);
 

@@ -336,16 +336,17 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public Task UploadInterviewAsync(Guid interviewId, InterviewPackageApiView completedInterview, IProgress<TransferProgress> transferProgress, CancellationToken token)
         {
-            return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
+            return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync<InterviewPackageApiView>(
                 url: string.Concat(this.InterviewsController, "/", interviewId),
                 request: completedInterview,
+                transferProgress: transferProgress,
                 credentials: this.restCredentials,
                 token: token));
         }
 
         public Task UploadInterviewImageAsync(Guid interviewId, string fileName, byte[] fileData, IProgress<TransferProgress> transferProgress, CancellationToken token)
         {
-            return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
+            return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync<PostFileRequest>(
                 url: string.Concat(this.InterviewsController, "/", interviewId, "/image"),
                 request: new PostFileRequest
                 {
@@ -353,6 +354,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     FileName = fileName,
                     Data = Convert.ToBase64String(fileData)
                 },
+                transferProgress: transferProgress,
                 credentials: this.restCredentials,
                 token: token));
         }
@@ -360,7 +362,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         public Task UploadInterviewAudioAsync(Guid interviewId, string fileName, string contentType, byte[] fileData, IProgress<TransferProgress> transferProgress,
             CancellationToken token)
         {
-            return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
+            return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync<PostFileRequest>(
                 url: string.Concat(this.InterviewsController, "/", interviewId, "/audio"),
                 request: new PostFileRequest
                 {
@@ -369,6 +371,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     ContentType = contentType,
                     Data = Convert.ToBase64String(fileData)
                 },
+                transferProgress: transferProgress,
                 credentials: this.restCredentials,
                 token: token));
         }
