@@ -55,7 +55,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             IPlainStorage<InterviewFileView> imagesStorage,
             CompanyLogoSynchronizer logoSynchronizer,
             AttachmentsCleanupService cleanupService,
-            IPasswordHasher passwordHasher,
             IAssignmentsSynchronizer assignmentsSynchronizer,
             IQuestionnaireDownloader questionnaireDownloader,
             IHttpStatistician httpStatistician,
@@ -66,7 +65,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             IAuditLogService auditLogService,
             ILiteEventBus eventBus,
             IEnumeratorEventStorage eventStore) : base(synchronizationService, logger,
-            httpStatistician, userInteractionService, principal, passwordHasher, 
+            httpStatistician, userInteractionService, principal,  
             interviewViewRepository, auditLogService)
         {
             this.synchronizationService = synchronizationService;
