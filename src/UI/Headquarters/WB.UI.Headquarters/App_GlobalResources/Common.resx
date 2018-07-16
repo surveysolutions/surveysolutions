@@ -267,6 +267,9 @@
   <data name="Download" xml:space="preserve">
     <value>Download</value>
   </data>
+  <data name="DownloadSupervisor" xml:space="preserve">
+    <value>Download Supervisor app</value>
+  </data>
   <data name="Open" xml:space="preserve">
     <value>Open</value>
   </data>

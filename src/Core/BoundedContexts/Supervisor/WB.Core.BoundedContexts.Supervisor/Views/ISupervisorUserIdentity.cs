@@ -2,8 +2,5 @@
 
 namespace WB.Core.BoundedContexts.Supervisor.Views
 {
-    public interface ISupervisorUserIdentity : IUserIdentity
-    {
-        string Email { get; }
-    }
+    public interface ISupervisorUserIdentity : IUserIdentity{}
 }

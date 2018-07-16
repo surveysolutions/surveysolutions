@@ -15,5 +15,7 @@
         CloseInterview,
         DeleteInterview,
         CompleteInterview,
+        ApproveInterview,
+        RejectInterview,
     }
 }

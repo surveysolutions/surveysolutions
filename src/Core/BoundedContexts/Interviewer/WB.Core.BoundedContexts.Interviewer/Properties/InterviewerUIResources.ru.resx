@@ -305,7 +305,7 @@
     <value>Ошибка аутентификации пользователя</value>
   </data>
   <data name="Synchronization_UserAuthentication_Title" xml:space="preserve">
-    <value>Аутентификации пользователя</value>
+    <value>Аутентификация пользователя</value>
   </data>
   <data name="Synchronization_UserAuthentication_Description" xml:space="preserve">
     <value>Подготовка к синхронизации</value>
@@ -758,5 +758,39 @@
   <data name="Synchronization_UploadAuditLog" xml:space="preserve">
     <value>Загрузка на хедквотер аудин информации</value>
     <comment>Загрузка на хедквотер аудин информации</comment>
+  </data>
+    <data name="SendToSupervisor_Retry" xml:space="preserve">
+    <value>Повторить еще раз</value>
+    <comment>Повторить еще раз</comment>
+  </data>
+    <data name="SendToSupervisor_TransferedInterviews" xml:space="preserve">
+    <value>{0} из {1} интервью переданы</value>
+    <comment>{0} из {1} интервью переданы</comment>
+  </data>
+    <data name="SendToSupervisor_Note" xml:space="preserve">
+    <value>Примечание: Эта операция может занять больше времени чем обычно, не выключайте ваше устройство</value>
+    <comment>Примечание: Эта операция может занять времени больше чем обычно, не выключайте ваше устройство</comment>
+  </data>
+    <data name="SendToSupervisor_MovingToSupervisorDevice" xml:space="preserve">
+    <value>Перемещение всех завершенных интервью на устройство супервизора</value>
+    <comment>Перемещение всех завершенных интервью на устройство супервизора</comment>
+  </data>
+    <data name="SendToSupervisor_LookingForSupervisor" xml:space="preserve">
+    <value>Поиск устройства супервизора</value>
+    <comment>Поиск устройства супервизора</comment>
+  </data>
+    <data name="SendToSupervisor_CheckSupervisorDevice" xml:space="preserve">
+    <value>Проверьте что на устройстве супервизора включен wifi и bluetooth и вы находитесь в нескольких шагах от него</value>
+    <comment>Проверьте что на устройстве супервизора включен wifi и bluetooth и вы находитесь в нескольких шагах от него</comment>
+  </data>
+    <data name="SendToSupervisor_MenuItem_Title" xml:space="preserve">
+    <value>Перенести завершенные
+интервью</value>
+    <comment>Перенести завершенные
+интервью</comment>
+  </data>
+    <data name="SendToSupervisor_ConnectionFailed" xml:space="preserve">
+    <value>Убедитесь что оба устройсва находятся близко друг к другу; WIFI and Bluetooth дожны быть включены на обох устройствах; Приложение Supervisor дложно быть открыто на устройстве супервизора</value>
+    <comment>Убедитесь что оба устройсва находятся близко друг к другу; WIFI and Bluetooth дожны быть включены на обох устройствах; Приложение Supervisor дложно быть открыто на устройстве супервизора</comment>
   </data>
 </root>

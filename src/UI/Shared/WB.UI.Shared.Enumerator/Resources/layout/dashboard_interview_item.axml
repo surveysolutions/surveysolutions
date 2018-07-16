@@ -84,6 +84,15 @@
       app:layout_constraintLeft_toLeftOf="@+id/title"
       app:layout_constraintRight_toRightOf="@+id/right_guideline"
       app:layout_constraintTop_toBottomOf="@+id/title" />
+      
+     <TextView
+          android:id="@+id/responsible"
+          app:MvxBind="Text Responsible; TextColor InterviewStatusToColor(Status);"
+      
+          style="@style/Dashboard_InterviewItem_SubTitle"
+          app:layout_constraintLeft_toLeftOf="@+id/subtitle"
+          app:layout_constraintRight_toRightOf="@+id/right_guideline"
+          app:layout_constraintTop_toBottomOf="@+id/subtitle" />
 
     <TextView android:id="@+id/assignmentId"
         app:MvxBind="Text AssignmentIdLabel"
@@ -99,7 +108,7 @@
         
         app:layout_constraintLeft_toLeftOf="@+id/left_guideline"
         app:layout_constraintRight_toRightOf="@+id/right_guideline"
-        app:layout_constraintTop_toBottomOf="@+id/subtitle"
+        app:layout_constraintTop_toBottomOf="@+id/responsible"
         style="@style/dashboard_prefilledQuestion_container"/>
 
     <ImageView app:MvxBind="Visible And(HasExpandedView, Not(IsExpanded));"

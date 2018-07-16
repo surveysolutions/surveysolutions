@@ -1,7 +1,9 @@
 ﻿using System;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web.Hosting;
 using System.Web.Http;
@@ -15,11 +17,12 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection;
 using WB.UI.Headquarters.Code;
+using WB.UI.Headquarters.Resources;
 using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
 {
-    public class SupervisorAppApiController : ApiController
+    public class SupervisorApiController : ApiController
     {
         private const string RESPONSEAPPLICATIONFILENAME = "supervisor.apk";
         private const string PHYSICALAPPLICATIONFILENAME = "supervisor.apk";
@@ -33,7 +36,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
         private readonly IProductVersion productVersion;
         private readonly IUserViewFactory userViewFactory;
 
-        public SupervisorAppApiController(
+        public SupervisorApiController(
             IFileSystemAccessor fileSystemAccessor,
             IAndroidPackageReader androidPackageReader, 
             ITabletInformationService tabletInformationService, 
@@ -49,6 +52,32 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
             this.productVersion = productVersion;
             this.userViewFactory = userViewFactory;
             this.signInManager = signInManager;
+        }
+
+        [HttpGet]
+        [WriteToSyncLog(SynchronizationLogType.GetSupervisorApk)]
+        public virtual HttpResponseMessage GetSupervisor()
+        {
+            return this.HttpResponseMessage(PHYSICALAPPLICATIONFILENAME, RESPONSEAPPLICATIONFILENAME);
+        }
+
+        private HttpResponseMessage HttpResponseMessage(string appName, string responseFileName)
+        {
+            string pathToInterviewerApp = this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(PHYSICALPATHTOAPPLICATION), appName);
+
+            if (!this.fileSystemAccessor.IsFileExists(pathToInterviewerApp))
+                return this.Request.CreateErrorResponse(HttpStatusCode.NotFound, TabletSyncMessages.FileWasNotFound);
+
+            Stream fileStream = new FileStream(pathToInterviewerApp, FileMode.Open, FileAccess.Read);
+            var response = new ProgressiveDownload(this.Request).ResultMessage(fileStream,
+                @"application/vnd.android.package-archive");
+
+            response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue(@"attachment")
+            {
+                FileName = responseFileName
+            };
+
+            return response;
         }
 
         [HttpGet]
@@ -138,6 +167,25 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
                 user: user);
 
             return this.Request.CreateResponse(HttpStatusCode.OK);
+        }
+
+        private HttpResponseMessage GetPatchFile(string fileName)
+        {
+            string pathToInterviewerPatch = this.fileSystemAccessor.CombinePath(
+                HostingEnvironment.MapPath(PHYSICALPATHTOAPPLICATION), fileName);
+
+            if (!this.fileSystemAccessor.IsFileExists(pathToInterviewerPatch))
+                return this.Request.CreateErrorResponse(HttpStatusCode.NotFound, TabletSyncMessages.FileWasNotFound);
+
+            Stream fileStream = new FileStream(pathToInterviewerPatch, FileMode.Open, FileAccess.Read);
+            return new ProgressiveDownload(this.Request).ResultMessage(fileStream, @"application/octet-stream");
+        }
+
+        [HttpGet]
+        [WriteToSyncLog(SynchronizationLogType.GetSupervisorApkPatch)]
+        public virtual HttpResponseMessage Patch(int deviceVersion)
+        {
+            return GetPatchFile($@"Supervisor.{deviceVersion}.delta");
         }
     }
 }

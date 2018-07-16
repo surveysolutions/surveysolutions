@@ -1,9 +1,9 @@
 namespace WB.Core.SharedKernels.Enumerator.Services.Synchronization
 {
-    public interface ISyncBgService
+    public interface ISyncBgService<T>
     {
         void StartSync();
 
-        SyncProgressDto CurrentProgress { get; }
+        T CurrentProgress { get; }
     }
 }

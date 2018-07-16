@@ -27,7 +27,6 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
                                          ILitePublishedEventHandler<InterviewHardDeleted>,
                                          ILitePublishedEventHandler<InterviewerAssigned>,
                                          ILitePublishedEventHandler<SupervisorAssigned>,
-                                         
 
                                          ILitePublishedEventHandler<TextQuestionAnswered>,
                                          ILitePublishedEventHandler<MultipleOptionsQuestionAnswered>,
@@ -307,10 +306,10 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
                 return;
 
             if (evnt.Payload.Status == InterviewStatus.Completed)
-                interviewView.CompletedDateTime = evnt.EventTimeStamp;
+                interviewView.CompletedDateTime = evnt.Payload.UtcTime ?? evnt.EventTimeStamp;
 
-            if (evnt.Payload.Status == InterviewStatus.RejectedBySupervisor)
-                interviewView.RejectedDateTime = evnt.EventTimeStamp;
+            if (evnt.Payload.Status == InterviewStatus.RejectedBySupervisor || evnt.Payload.Status == InterviewStatus.RejectedByHeadquarters)
+                interviewView.RejectedDateTime = evnt.Payload.UtcTime ?? evnt.EventTimeStamp;
 
             interviewView.Status = evnt.Payload.Status;
             interviewView.LastInterviewerOrSupervisorComment = evnt.Payload.Comment;
@@ -323,7 +322,8 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
             return status == InterviewStatus.Completed || 
                    status == InterviewStatus.Restarted || 
                    status == InterviewStatus.RejectedBySupervisor ||
-                status == InterviewStatus.ApprovedBySupervisor;
+                   status == InterviewStatus.ApprovedBySupervisor ||
+                   status == InterviewStatus.RejectedByHeadquarters;
         }
 
         private void AnswerQuestion(Guid interviewId, Guid questionId, object answer, DateTime answerTimeUtc)
@@ -523,7 +523,7 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
 
             if (@event.Payload.InterviewerId.HasValue)
             {
-                interviewView.ResponsibleId = @event.Payload.InterviewerId.GetValueOrDefault();
+                interviewView.ResponsibleId = @event.Payload.InterviewerId.Value;
             }
 
             interviewView.InterviewerAssignedDateTime = @event.Payload.AssignTime;

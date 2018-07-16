@@ -255,6 +255,9 @@
   <data name="Download" xml:space="preserve">
     <value>Скачать</value>
   </data>
+    <data name="DownloadSupervisor" xml:space="preserve">
+    <value>Скачать приложения Супервизор</value>
+  </data>
   <data name="Open" xml:space="preserve">
     <value>Открыть</value>
   </data>

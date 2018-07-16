@@ -174,7 +174,7 @@ namespace WB.Tests.Abc
 
         public static IInterviewerPrincipal InterviewerPrincipal(string name, string pass)
         {
-            var interviewerIdentity = new InterviewerIdentity() {Name = "name", Password = "pass"};
+            var interviewerIdentity = new InterviewerIdentity() {Name = "name", PasswordHash = "pass"};
             return InterviewerPrincipal(interviewerIdentity);
         }
 
@@ -251,7 +251,7 @@ namespace WB.Tests.Abc
 
         public static IPrincipal Principal(string name, string pass)
         {
-            return Mock.Of<IPrincipal>(p => p.CurrentUserIdentity == Mock.Of<IUserIdentity>(i => i.Name == "name" && i.Password == "pass"));
+            return Mock.Of<IPrincipal>(p => p.CurrentUserIdentity == Mock.Of<IUserIdentity>(i => i.Name == "name" && i.PasswordHash == "pass"));
         }
     }
 }

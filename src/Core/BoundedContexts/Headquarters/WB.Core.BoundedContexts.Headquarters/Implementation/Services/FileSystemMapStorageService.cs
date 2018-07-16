@@ -202,7 +202,22 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             userMapsStorage.Store(userMappings.Select(x => Tuple.Create(x, (object)x)));
         }
 
-        public string[] GetAllMapsForUser(string userName)
+        public string[] GetAllMapsForSupervisor(Guid supervisorId)
+        {
+            var interviewerNames = this.userStorage.Users
+                .Where(x => supervisorId == x.Profile.SupervisorId && x.IsArchived == false)
+                .Select(x => x.UserName)
+                .ToArray();
+
+            return userMapsStorage.Query(q =>
+            {
+                return q.Where(x => interviewerNames.Contains(x.UserName))
+                        .Select(y => y.Map)
+                        .Distinct();
+            }).ToArray();
+        }
+
+        public string[] GetAllMapsForInterviewer(string userName)
         {
             return userMapsStorage.Query(q =>
             {

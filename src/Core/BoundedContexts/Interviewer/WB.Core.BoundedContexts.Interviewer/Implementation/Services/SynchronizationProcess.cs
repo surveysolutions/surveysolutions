@@ -2,15 +2,17 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
+using WB.Core.BoundedContexts.Interviewer.Implementation.Services.OfflineSync;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
-using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -25,8 +27,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
     public class SynchronizationProcess : SynchronizationProcessBase
     {
         private readonly IInterviewerSettings interviewerSettings;
+        private readonly ISynchronizationMode synchronizationMode;
         private readonly IInterviewerPrincipal principal;
-        private readonly ISynchronizationService synchronizationService;
         private readonly IPlainStorage<InterviewerIdentity> interviewersPlainStorage;
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
         private readonly IPasswordHasher passwordHasher;
@@ -54,15 +56,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             IAuditLogSynchronizer auditLogSynchronizer,
             IAuditLogService auditLogService,
             ILiteEventBus eventBus,
-            IEnumeratorEventStorage eventStore) : base(synchronizationService, interviewViewRepository, principal, logger,
+            IEnumeratorEventStorage eventStore,
+            ISynchronizationMode synchronizationMode) : base(synchronizationService, interviewViewRepository, principal, logger,
             userInteractionService, questionnairesAccessor, interviewFactory, interviewMultimediaViewStorage, imagesStorage,
-            logoSynchronizer, cleanupService, passwordHasher, assignmentsSynchronizer, questionnaireDownloader, httpStatistician,
+            logoSynchronizer, cleanupService, assignmentsSynchronizer, questionnaireDownloader, httpStatistician,
             assignmentsStorage, audioFileStorage, diagnosticService, auditLogSynchronizer, auditLogService,
             eventBus, eventStore)
         {
-            this.synchronizationService = synchronizationService;
             this.principal = principal;
             this.interviewerSettings = interviewerSettings;
+            this.synchronizationMode = synchronizationMode;
             this.interviewersPlainStorage = interviewersPlainStorage;
             this.interviewViewRepository = interviewViewRepository;
             this.passwordHasher = passwordHasher;
@@ -93,6 +96,22 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 
             cancellationToken.ThrowIfCancellationRequested();
             await this.UpdateApplicationAsync(progress, cancellationToken);
+
+            cancellationToken.ThrowIfCancellationRequested();
+            await this.synchronizationService.SendSyncCompletedAsync(cancellationToken);
+        }
+
+        protected override SynchronizationType SynchronizationType
+        {
+            get
+            {
+                var mode = synchronizationMode.GetMode();
+                if (mode == SynchronizationMode.Offline)
+                    return SynchronizationType.Offline;
+                if (mode == SynchronizationMode.Online)
+                    return SynchronizationType.Online;
+                throw new ArgumentException($"Unknown synchronization mode: {mode}");
+            }
         }
 
         protected override async void CheckAfterStartSynchronization(CancellationToken cancellationToken)
@@ -113,7 +132,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             this.principal.SignInWithHash(localInterviewer.Name, localInterviewer.PasswordHash, true);
         }
 
-
         protected override void UpdatePasswordOfResponsible(RestCredentials credentials)
         {
             var localInterviewer = this.interviewersPlainStorage.FirstOrDefault();
@@ -133,6 +151,5 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         {
             return this.interviewViewRepository.Where(interview => interview.Status == InterviewStatus.Completed);
         }
-
     }
 }

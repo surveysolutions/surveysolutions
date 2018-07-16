@@ -2,8 +2,11 @@
 {
     public class SynchronizationStartedAuditLogEntity : BaseAuditLogEntity
     {
-        public SynchronizationStartedAuditLogEntity() : base(AuditLogEntityType.SynchronizationStarted)
+        public SynchronizationType SynchronizationType { get; }
+
+        public SynchronizationStartedAuditLogEntity(SynchronizationType synchronizationType) : base(AuditLogEntityType.SynchronizationStarted)
         {
+            SynchronizationType = synchronizationType;
         }
     }
 }

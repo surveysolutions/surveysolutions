@@ -22,7 +22,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             this.serviceLocator = serviceLocator;
         }
 
-        private IAssignmentDocumentsStorage AssignmentsRepository
+        protected IAssignmentDocumentsStorage AssignmentsRepository
             => serviceLocator.GetInstance<IAssignmentDocumentsStorage>();
 
         protected int InterviewsLeftByAssignmentCount =>
@@ -43,7 +43,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             BindActions();
         }
 
-        private void BindTitles()
+        protected virtual void BindTitles()
         {
             Title = string.Format(InterviewerUIResources.DashboardItem_Title, Assignment.Title, questionnaireIdentity.Version);
             IdLabel = "#" + Assignment.Id;
@@ -97,6 +97,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             AssignmentsRepository.Store(Assignment);
             
             BindTitles();
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+            }
+
+            base.Dispose(disposing);
         }
     }
 }

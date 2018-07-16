@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout 
+    xmlns:local="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView style="@style/OfflineSync_ProgressStatus"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              local:MvxBind="Text ProgressStatus"/>
+
+    <TableLayout
+        style="@style/FullWidthWrappingLayout"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:stretchColumns="0">
+        <TableRow>
+            <ProgressBar
+                style="@style/OfflineSync_Progress"
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                local:MvxBind="Progress ProgressInPercents"/>
+
+            <TextView style="@style/OfflineSync_Abort"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      local:MvxBind="Text Localization('OfflineSync_Abort'); Click AbortCommand; Visible EnumToString(TransferingStatus) == 'Transferring'"/>
+        </TableRow>
+    </TableLayout>
+    <TextView style="@style/OfflineSync_NetworkInfo"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              local:MvxBind="Text NetworkInfo"/>
+</LinearLayout>

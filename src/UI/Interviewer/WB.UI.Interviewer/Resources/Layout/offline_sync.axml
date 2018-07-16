@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:local="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <Button
+        android:text="Restart"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/restart" 
+        local:MvxBind="Click Restart;" />
+        <Button
+        android:text="Sync"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/sync" 
+        local:MvxBind="Click Sync;" />        
+    <TextView
+        style="@style/Dashboard_Search_SearchResult"
+        local:MvxBind="Text Endpoint;" />    
+    <TextView
+        style="@style/Dashboard_Search_SearchResult"
+        local:MvxBind="Text Status;" />
+    <TextView
+        style="@style/Dashboard_Search_SearchResult"
+        local:MvxBind="Text StatusDetails;" />
+</LinearLayout>

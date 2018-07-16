@@ -8,13 +8,12 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
-using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.API.DataCollection
 {
-    public abstract class AssignmentsControllerBase : ApiController, IAssignmentSynchronizationApi
+    public abstract class AssignmentsControllerBase : ApiController
     {
         private readonly IAuthorizedUser authorizedUser;
         private readonly IAssignmentsService assignmentsService;
@@ -56,7 +55,9 @@ namespace WB.UI.Headquarters.API.DataCollection
                 {
                     Id = assignment.Id,
                     Quantity = assignment.InterviewsNeeded, // + assignment.InterviewsProvided,
-                    QuestionnaireId = assignment.QuestionnaireId
+                    QuestionnaireId = assignment.QuestionnaireId,
+                    ResponsibleId = assignment.ResponsibleId,
+                    ResponsibleName = assignment.Responsible.Name
                 });
             }
 

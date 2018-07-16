@@ -98,7 +98,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
 
             this.sw = new Stopwatch();
             sw.Start();
-            await viewModel.SyncronizeAsync(Mock.Of<IProgress<SyncProgressInfo>>(), CancellationToken.None);
+            await viewModel.SynchronizeAsync(Mock.Of<IProgress<SyncProgressInfo>>(), CancellationToken.None);
             sw.Stop();
         }
 

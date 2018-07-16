@@ -19,7 +19,6 @@ using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Enumerator.Native.Questionnaire;
 using WB.Tests.Abc;
-using DownloadProgressChangedEventArgs = WB.Core.GenericSubdomains.Portable.Implementation.DownloadProgressChangedEventArgs;
 
 namespace WB.Tests.Unit.Applications.Headquarters
 {
@@ -65,7 +64,10 @@ namespace WB.Tests.Unit.Applications.Headquarters
             var zipUtilsMock = Mock.Of<IStringCompressor>(_ => _.DecompressString<QuestionnaireDocument>(It.IsAny<string>()) == new QuestionnaireDocument(new List<IComposite>()));
 
             var restServiceMock = new Mock<IRestService>();
-            restServiceMock.Setup(x => x.GetAsync<QuestionnaireCommunicationPackage>(It.IsAny<string>(), It.IsAny<Action<DownloadProgressChangedEventArgs>>(), It.IsAny<object>(), It.IsAny<RestCredentials>(), It.IsAny<CancellationToken?>()))
+            restServiceMock.Setup(x => x.GetAsync<QuestionnaireCommunicationPackage>(It.IsAny<string>(),
+                    It.IsAny<IProgress<TransferProgress>>(),
+                    It.IsAny<object>(), 
+                    It.IsAny<RestCredentials>(), It.IsAny<CancellationToken?>()))
                 .Returns(Task.FromResult(new QuestionnaireCommunicationPackage()));
 
             var service = CreateIQuestionnaireImportService(commandService: commandService.Object,
@@ -93,7 +95,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
             var mockOfRestService = new Mock<IRestService>();
             mockOfRestService.Setup(x =>
                 x.DownloadFileAsync(It.IsAny<string>(), null, It.IsAny<RestCredentials>(), null, null)).Returns(Task.FromResult(new RestFile(new byte[] { 1 }, "image/png", "content id", 0, "file.png", HttpStatusCode.OK)));
-            mockOfRestService.Setup(x => x.GetAsync<QuestionnaireCommunicationPackage>(It.IsAny<string>(), It.IsAny<Action<DownloadProgressChangedEventArgs>>(), It.IsAny<object>(), It.IsAny<RestCredentials>(), It.IsAny<CancellationToken?>()))
+            mockOfRestService.Setup(x => x.GetAsync<QuestionnaireCommunicationPackage>(It.IsAny<string>(), It.IsAny<IProgress<TransferProgress>>(), It.IsAny<object>(), It.IsAny<RestCredentials>(), It.IsAny<CancellationToken?>()))
                 .Returns(Task.FromResult(new QuestionnaireCommunicationPackage()));
 
             var mockOfAttachmentContentService = new Mock<IAttachmentContentService>();
@@ -137,7 +139,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
             var mockOfRestService = new Mock<IRestService>();
             mockOfRestService.Setup(x =>
                 x.DownloadFileAsync(It.IsAny<string>(), null, It.IsAny<RestCredentials>(), null, null)).Returns(Task.FromResult(new RestFile(new byte[] { 1 }, "image/png", "content id", 0, "file.png", HttpStatusCode.OK)));
-            mockOfRestService.Setup(x => x.GetAsync<QuestionnaireCommunicationPackage>(It.IsAny<string>(), It.IsAny<Action<DownloadProgressChangedEventArgs>>(), It.IsAny<object>(), It.IsAny<RestCredentials>(), It.IsAny<CancellationToken?>()))
+            mockOfRestService.Setup(x => x.GetAsync<QuestionnaireCommunicationPackage>(It.IsAny<string>(), It.IsAny<IProgress<TransferProgress>>(), It.IsAny<object>(), It.IsAny<RestCredentials>(), It.IsAny<CancellationToken?>()))
                 .Returns(Task.FromResult(new QuestionnaireCommunicationPackage()));
 
             void SetupLookupQuery((Guid id, string content) lookup)
@@ -145,7 +147,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
                 mockOfRestService
                     .Setup(x => x.GetAsync<QuestionnaireLookupTable>(
                         It.Is<string>(s => s.EndsWith(lookup.id.ToString())), 
-                        It.IsAny<Action<DownloadProgressChangedEventArgs>>(), It.IsAny<object>(), It.IsAny<RestCredentials>(), It.IsAny<CancellationToken?>()))
+                        It.IsAny<IProgress<TransferProgress>>(), It.IsAny<object>(), It.IsAny<RestCredentials>(), It.IsAny<CancellationToken?>()))
                     .Returns(Task.FromResult(new QuestionnaireLookupTable
                     {
                         Content = lookup.content,
@@ -183,7 +185,7 @@ namespace WB.Tests.Unit.Applications.Headquarters
 
             service
                 .Setup(x => x.GetAsync<QuestionnaireCommunicationPackage>(It.IsAny<string>(),
-                        It.IsAny<Action<DownloadProgressChangedEventArgs>>(),
+                        It.IsAny<IProgress<TransferProgress>>(),
                         It.IsAny<object>(),
                         It.IsAny<RestCredentials>(),
                         It.IsAny<CancellationToken?>()))

@@ -39,7 +39,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             var inProgressInterviews =  this.reader.Query(interviews =>
                 interviews.Where(interview => interview.ResponsibleId == interviewerId && 
                                               (interview.Status == InterviewStatus.InterviewerAssigned || interview.Status == InterviewStatus.RejectedBySupervisor))
-                    .Select(x => new {x.InterviewId, x.QuestionnaireId, x.QuestionnaireVersion, x.WasRejectedBySupervisor})
+                    .Select(x => new {x.InterviewId, x.QuestionnaireId, x.QuestionnaireVersion, x.WasRejectedBySupervisor, x.ResponsibleId})
                     .ToList());
 
             var deletedQuestionnaires = this.questionnaireBrowseViewFactory.Load(new QuestionnaireBrowseInputModel()
@@ -55,7 +55,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 {
                     Id = interview.InterviewId,
                     QuestionnaireIdentity = new QuestionnaireIdentity(interview.QuestionnaireId, interview.QuestionnaireVersion),
-                    IsRejected = interview.WasRejectedBySupervisor
+                    IsRejected = interview.WasRejectedBySupervisor,
+                    ResponsibleId = interview.ResponsibleId
                 });
         }
 
@@ -74,7 +75,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                             (interview.Status == InterviewStatus.InterviewerAssigned || interview.Status == InterviewStatus.RejectedBySupervisor || interview.Status == InterviewStatus.RejectedByHeadquarters)
                         )
                     )
-                    .Select(x => new { x.InterviewId, x.QuestionnaireId, x.QuestionnaireVersion, x.WasRejectedBySupervisor })
+                    .Select(x => new
+                    {
+                        x.InterviewId,
+                        x.QuestionnaireId,
+                        x.QuestionnaireVersion,
+                        x.WasRejectedBySupervisor,
+                        x.ResponsibleId
+                    })
                     .ToList());
 
             var deletedQuestionnaires = this.questionnaireBrowseViewFactory.Load(new QuestionnaireBrowseInputModel()
@@ -90,7 +98,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 {
                     Id = interview.InterviewId,
                     QuestionnaireIdentity = new QuestionnaireIdentity(interview.QuestionnaireId, interview.QuestionnaireVersion),
-                    IsRejected = interview.WasRejectedBySupervisor
+                    IsRejected = interview.WasRejectedBySupervisor,
+                    ResponsibleId = interview.ResponsibleId
                 });
         }
 

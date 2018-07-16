@@ -81,8 +81,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     this.entitiesListViewModelFactory.MaxNumberOfEntities)
                 : UIResources.Interview_Complete_Entities_With_Errors;
 
-            this.CompleteComment = lastCompletionComments.Get(this.interviewId);
-            this.CompleteCommentLabel = UIResources.Interview_Complete_Note_For_Supervisor;
+            this.Comment = lastCompletionComments.Get(this.interviewId);
+            this.CommentLabel = UIResources.Interview_Complete_Note_For_Supervisor;
         }
 
         public int AnsweredCount { get; set; }
@@ -105,17 +105,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
         }
 
-        public string CompleteComment
+        public string Comment
         {
-            get => completeComment;
+            get => comment;
             set
             {
-                completeComment = value;
+                comment = value;
                 this.lastCompletionComments.Store(this.interviewId, value);
             }
         }
 
-        public string CompleteCommentLabel { get; protected set; }
+        public string CommentLabel { get; protected set; }
 
         private bool wasThisInterviewCompleted = false;
         public bool WasThisInterviewCompleted
@@ -124,7 +124,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             set => this.RaiseAndSetIfChanged(ref this.wasThisInterviewCompleted, value);
         }
 
-        private string completeComment;
+        private string comment;
 
         private async Task CompleteInterviewAsync()
         {
@@ -137,20 +137,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             var completeInterview = new CompleteInterviewCommand(
                 interviewId: this.interviewId,
                 userId: this.principal.CurrentUserIdentity.UserId,
-                comment: this.CompleteComment,
+                comment: this.Comment,
                 completeTime: DateTime.UtcNow);
 
             try
             {
                 await this.commandService.ExecuteAsync(completeInterview);
-                this.lastCompletionComments.Remove(interviewId);
-
-                await this.CloseInterviewAfterComplete();
             }
             catch (InterviewException e)
             {
                 logger.Warn("Interview has unexpected status", e);
             }
+
+            this.lastCompletionComments.Remove(interviewId);
+            await this.CloseInterviewAfterComplete();
         }
 
         protected virtual async Task CloseInterviewAfterComplete()

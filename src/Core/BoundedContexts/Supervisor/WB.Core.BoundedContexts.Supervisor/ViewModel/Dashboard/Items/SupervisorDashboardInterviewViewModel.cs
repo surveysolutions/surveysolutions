@@ -51,5 +51,15 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
                 this.isInterviewReadyToLoad = true;
             }
         }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                // release managed resources here
+            }
+
+            base.Dispose(disposing);
+        }
     }
 }

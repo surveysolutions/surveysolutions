@@ -119,23 +119,24 @@
   </resheader>
   <data name="CloseInterview" xml:space="preserve">
     <value>Интервью {0} закрыто</value>
-    <comment>Интервью {0} закрыто</comment>
   </data>
   <data name="CompleteInterview" xml:space="preserve">
     <value>Интервью {0} завершено</value>
-    <comment>Интервью {0} завершено</comment>
+  </data>
+  <data name="ApproveInterview" xml:space="preserve">
+    <value>Интервью {0} подтверждено</value>
+  </data>
+  <data name="RejectInterview" xml:space="preserve">
+    <value>Интервью {0} отклонено</value>
   </data>
   <data name="CreateInterviewFromAssignment" xml:space="preserve">
     <value>Интервью {0} создано для задания {1}</value>
-    <comment>Интервью {0} создано для задания {1}</comment>
   </data>
   <data name="DeleteInterview" xml:space="preserve">
     <value>Интервью {0} удалено</value>
-    <comment>Интервью {0} удалено</comment>
   </data>
   <data name="OpenInterview" xml:space="preserve">
     <value>Интервью {0} открыто</value>
-    <comment>Интервью {0} открыто</comment>
   </data>
   <data name="Login" xml:space="preserve">
     <value>Пользователь  {0} залогинился в приложение</value>
@@ -155,7 +156,7 @@
     <comment>Показать преведущие 7 дней</comment>
   </data>
   <data name="SynchronizationStarted" xml:space="preserve">
-    <value>Синхронизация начата</value>
+    <value>Синхронизация начата ({0})</value>
     <comment>Синхронизация начата</comment>
   </data>
   <data name="SynchronizationCompleted" xml:space="preserve">
