@@ -1284,6 +1284,79 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Check that supervisor device has wifi and bluetooth turned on and you are withing couple of meters from it.
+        /// </summary>
+        public static string SendToSupervisor_CheckSupervisorDevice {
+            get {
+                return ResourceManager.GetString("SendToSupervisor_CheckSupervisorDevice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Make sure both devices is in close proximity; WIFI and Bluetooth should be enabled on both devices; Supervisor application should be opened on Supervisor&apos;s device.
+        /// </summary>
+        public static string SendToSupervisor_ConnectionFailed {
+            get {
+                return ResourceManager.GetString("SendToSupervisor_ConnectionFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Looking for supervisor device.
+        /// </summary>
+        public static string SendToSupervisor_LookingForSupervisor {
+            get {
+                return ResourceManager.GetString("SendToSupervisor_LookingForSupervisor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Move completed
+        ///interviews.
+        /// </summary>
+        public static string SendToSupervisor_MenuItem_Title {
+            get {
+                return ResourceManager.GetString("SendToSupervisor_MenuItem_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Moving all completed interviews to supervisor device.
+        /// </summary>
+        public static string SendToSupervisor_MovingToSupervisorDevice {
+            get {
+                return ResourceManager.GetString("SendToSupervisor_MovingToSupervisorDevice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Note: This action will take more time than usual, do not turn of this device.
+        /// </summary>
+        public static string SendToSupervisor_Note {
+            get {
+                return ResourceManager.GetString("SendToSupervisor_Note", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Retry.
+        /// </summary>
+        public static string SendToSupervisor_Retry {
+            get {
+                return ResourceManager.GetString("SendToSupervisor_Retry", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} of {1} interviews transfered.
+        /// </summary>
+        public static string SendToSupervisor_TransferedInterviews {
+            get {
+                return ResourceManager.GetString("SendToSupervisor_TransferedInterviews", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No connection to the Survey Solutions Supervisor. Please make sure that the website is available..
         /// </summary>
         public static string ServiceUnavailable {
@@ -1325,15 +1398,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         public static string Synchronization_Check_Obsolete_Questionnaires_Description {
             get {
                 return ResourceManager.GetString("Synchronization_Check_Obsolete_Questionnaires_Description", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Check for obsolete interviews.
-        /// </summary>
-        public static string Synchronization_CheckForObsolete_Interviews {
-            get {
-                return ResourceManager.GetString("Synchronization_CheckForObsolete_Interviews", resourceCulture);
             }
         }
         

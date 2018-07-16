@@ -1,4 +1,4 @@
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using MvvmCross.ViewModels;
 using Ncqrs.Eventing.Storage;
 using Plugin.Geolocator;
@@ -18,18 +18,24 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Implementation.Utils;
+using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
+using WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.CustomServices;
+using WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Services.Internals;
 using WB.UI.Shared.Enumerator.Services.Internals.FileSystem;
 
 namespace WB.UI.Shared.Enumerator
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class EnumeratorUIModule : IModule
     {
         public void Load(IIocRegistry registry)
@@ -70,10 +76,27 @@ namespace WB.UI.Shared.Enumerator
             registry.Bind<CompleteInterviewFragment>();
             registry.Bind<CoverInterviewFragment>();
             registry.Bind<OverviewFragment>();
+
+            registry.Bind<IAssignmentsSynchronizer, AssignmentsSynchronizer>();
+            registry.Bind<IAssignmentDocumentFromDtoBuilder, AssignmentDocumentFromDtoBuilder>();
+
+            registry.BindAsSingleton<INearbyConnection, NearbyConnection>();
+            registry.BindAsSingleton<INearbyCommunicator, NearbyCommunicator>();
+            registry.BindAsSingleton<IRequestHandler, NearbyConnectionsRequestHandler>();
+            registry.BindAsSingleton<IPayloadProvider, PayloadProvider>();
+            registry.BindAsSingleton<IConnectionsApiLimits, ConnectionsApiLimits>();
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
+            var requestHandler = serviceLocator.GetInstance<IRequestHandler>();
+            var requestHandlers = serviceLocator.GetAllInstances<IHandleCommunicationMessage>();
+
+            foreach (var handler in requestHandlers)
+            {
+                handler.Register(requestHandler);
+            }
+
             SQLitePCL.raw.SetProvider(new SQLitePCL.SQLite3Provider_e_sqlite3());
             return Task.CompletedTask;
         }

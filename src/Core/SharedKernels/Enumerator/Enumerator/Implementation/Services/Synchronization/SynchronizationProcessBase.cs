@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Humanizer;
 using Ncqrs.Eventing;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -54,7 +55,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             IPlainStorage<InterviewFileView> imagesStorage,
             CompanyLogoSynchronizer logoSynchronizer,
             AttachmentsCleanupService cleanupService,
-            IPasswordHasher passwordHasher,
             IAssignmentsSynchronizer assignmentsSynchronizer,
             IQuestionnaireDownloader questionnaireDownloader,
             IHttpStatistician httpStatistician,
@@ -65,7 +65,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             IAuditLogService auditLogService,
             ILiteEventBus eventBus,
             IEnumeratorEventStorage eventStore) : base(synchronizationService, logger,
-            httpStatistician, userInteractionService, principal, passwordHasher, 
+            httpStatistician, userInteractionService, principal,  
             interviewViewRepository, auditLogService)
         {
             this.synchronizationService = synchronizationService;
@@ -114,7 +114,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 Stopwatch sw = null;
                 try
                 {
-                    await this.diagnosticService.UpdateTheApp(cancellationToken, false, downloadProgress =>
+                    await this.diagnosticService.UpdateTheApp(cancellationToken, false, new Progress<TransferProgress>(downloadProgress =>
                     {
                         if (sw == null) sw = Stopwatch.StartNew();
                         if (downloadProgress.ProgressPercentage % 1 != 0) return;
@@ -133,7 +133,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                                 (int) downloadProgress.ProgressPercentage),
                             Status = SynchronizationStatus.Download
                         });
-                    });
+                    }));
                 }
                 catch (Exception exc)
                 {
@@ -203,6 +203,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             statistics.TotalNewInterviewsCount = interviews.Count(interview => !interview.IsRejected);
             statistics.TotalRejectedInterviewsCount = interviews.Count(interview => interview.IsRejected);
 
+            IProgress<TransferProgress> transferProgress = progress.AsTransferReport();
+
             foreach (var interview in interviews)
                 try
                 {
@@ -215,12 +217,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                             InterviewerUIResources.Synchronization_Interviews)
                     });
 
-                    await this.questionnaireDownloader.DownloadQuestionnaireAsync(interview.QuestionnaireIdentity, cancellationToken, statistics);
+                    await this.questionnaireDownloader.DownloadQuestionnaireAsync(interview.QuestionnaireIdentity, statistics, transferProgress, cancellationToken);
 
                     List<CommittedEvent> interviewDetails = await this.synchronizationService.GetInterviewDetailsAsync(
-                        interview.Id,
-                        (progressPercentage, bytesReceived, totalBytesToReceive) => { },
-                        cancellationToken);
+                        interview.Id, transferProgress, cancellationToken);
 
                     if (interviewDetails == null)
                     {
@@ -253,7 +253,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 }
         }
 
-        protected async Task DownloadInterviewsAsync(SynchronizationStatistics statistics,
+        public async Task DownloadInterviewsAsync(SynchronizationStatistics statistics,
             IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken)
         {
             var remoteInterviews = await this.synchronizationService.GetInterviewsAsync(cancellationToken);
@@ -262,13 +262,17 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
             var localInterviews = this.interviewViewRepository.LoadAll();
 
-            var localInterviewIds = localInterviews.Select(interview => interview.InterviewId).ToList();
+            var localInterviewIds = localInterviews.Select(interview => interview.InterviewId).ToHashSet();
 
             var localInterviewsToRemove = localInterviews.Where(
                 interview => !remoteInterviewIds.Contains(interview.InterviewId) && !interview.CanBeDeleted);
 
-            var obsoleteInterviews = await this.FindObsoleteInterviewsAsync(localInterviewIds, progress, cancellationToken);
-            
+            IEnumerable<Guid> obsoleteInterviews = await this.FindObsoleteInterviewsAsync(localInterviewIds, progress, cancellationToken);
+            obsoleteInterviews = obsoleteInterviews.Concat(
+                remoteInterviews.Where(x => localInterviews.Any(local => local.InterviewId == x.Id && local.ResponsibleId != x.ResponsibleId))
+                    .Select(x => x.Id)
+            );
+
             var localInterviewIdsToRemove = localInterviewsToRemove.Select(interview => interview.InterviewId)
                                                                    .Concat(obsoleteInterviews)
                                                                    .ToList();
@@ -283,7 +287,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
         }
 
-        protected virtual Task<List<Guid>> FindObsoleteInterviewsAsync(List<Guid> localInterviewIds, 
+        protected virtual Task<List<Guid>> FindObsoleteInterviewsAsync(IEnumerable<Guid> localInterviewIds, 
             IProgress<SyncProgressInfo> progress, 
             CancellationToken cancellationToken)
         {
@@ -332,6 +336,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             var notExistingLocalCensusQuestionnaireIdentities = remoteCensusQuestionnaireIdentities
                 .Except(localCensusQuestionnaireIdentities).ToList();
 
+            var transferProgress = progress.AsTransferReport();
+
             foreach (var censusQuestionnaireIdentity in notExistingLocalCensusQuestionnaireIdentities)
             {
                 cancellationToken.ThrowIfCancellationRequested();
@@ -344,7 +350,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         InterviewerUIResources.Synchronization_Questionnaires)
                 });
 
-                await this.questionnaireDownloader.DownloadQuestionnaireAsync(censusQuestionnaireIdentity, cancellationToken, statistics);
+                await this.questionnaireDownloader.DownloadQuestionnaireAsync(censusQuestionnaireIdentity, statistics, transferProgress, cancellationToken);
 
                 processedQuestionnaires++;
             }
@@ -385,7 +391,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             var completedInterviews = GetInterviewsForUpload();
 
             statistics.TotalCompletedInterviewsCount = completedInterviews.Count;
-
+            var transferProgress = progress.AsTransferReport();
             foreach (var completedInterview in completedInterviews)
             {
                 cancellationToken.ThrowIfCancellationRequested();
@@ -411,7 +417,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         await this.synchronizationService.UploadInterviewAsync(
                             completedInterview.InterviewId,
                             interviewPackage,
-                            (progressPercentage, bytesReceived, totalBytesToReceive) => { },
+                            transferProgress,
                             cancellationToken);
                     }
                     else
@@ -442,6 +448,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             CancellationToken cancellationToken)
         {
             var imageViews = this.interviewMultimediaViewStorage.Where(image => image.InterviewId == interviewId);
+            var transferProgress = progress.AsTransferReport();
 
             foreach (var imageView in imageViews)
             {
@@ -451,7 +458,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     imageView.InterviewId,
                     imageView.FileName,
                     fileView.File,
-                    (progressPercentage, bytesReceived, totalBytesToReceive) => { },
+                    transferProgress,
                     cancellationToken);
                 this.interviewMultimediaViewStorage.Remove(imageView.Id);
                 this.imagesStorage.Remove(fileView.Id);
@@ -462,6 +469,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             CancellationToken cancellationToken)
         {
             var audioFiles = this.audioFileStorage.GetBinaryFilesForInterview(interviewId);
+            var transferProgress = progress.AsTransferReport();
 
             foreach (var audioFile in audioFiles)
             {
@@ -472,7 +480,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     audioFile.FileName,
                     audioFile.ContentType,
                     fileData,
-                    (progressPercentage, bytesReceived, totalBytesToReceive) => { },
+                    transferProgress,
                     cancellationToken);
                 this.audioFileStorage.RemoveInterviewBinaryData(audioFile.InterviewId, audioFile.FileName);
             }

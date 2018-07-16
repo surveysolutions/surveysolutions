@@ -1,5 +1,4 @@
 using System;
-using System.Threading;
 using System.Threading.Tasks;
 using Esri.ArcGISRuntime;
 using Plugin.Permissions.Abstractions;
@@ -40,27 +39,15 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 
         public static void RegisterLicence()
         {
-            var isSupportedDevice = IsSupportedDevice();
-            if (isSupportedDevice)
-                ArcGISRuntimeEnvironment.SetLicense("runtimeadvanced,1000,rud000017554,none,6PAZ0H4AH409L50JT147");
+            ArcGISRuntimeEnvironment.SetLicense("runtimeadvanced,1000,rud000017554,none,6PAZ0H4AH409L50JT147");
         }
 
         public async Task<AreaEditResult> EditAreaAsync(WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Area area, WB.Core.SharedKernels.Questionnaire.Documents.GeometryType? geometryType)
         {
-            var isSupportedDevice = IsSupportedDevice();
-            if (!isSupportedDevice)
-                throw new NotSupportedException("This functionality is not available for this device");
-
             await this.permissions.AssureHasPermission(Permission.Location);
             await this.permissions.AssureHasPermission(Permission.Storage);
 
             return await this.EditAreaImplAsync(area, geometryType);
-        }
-
-        private static bool IsSupportedDevice()
-        {
-            bool is64Bit = IntPtr.Size == 8;
-            return !is64Bit;
         }
 
         private async Task<AreaEditResult> EditAreaImplAsync(WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Area area, WB.Core.SharedKernels.Questionnaire.Documents.GeometryType? geometryType)

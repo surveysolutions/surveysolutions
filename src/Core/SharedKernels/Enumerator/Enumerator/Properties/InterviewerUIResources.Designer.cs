@@ -507,6 +507,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Responsible: {0}.
+        /// </summary>
+        public static string DashboardItem_Responsible {
+            get {
+                return ResourceManager.GetString("DashboardItem_Responsible", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Started on {0}.
         /// </summary>
         public static string DashboardItem_StartedOn {
@@ -921,6 +930,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Interviewer belongs to a different team. Please, sync with Headquarters website.
+        /// </summary>
+        public static string InterviewerFromDifferentTeam {
+            get {
+                return ResourceManager.GetString("InterviewerFromDifferentTeam", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Supervisor website address is invalid. Make sure that you entered correct url address.
         /// </summary>
         public static string InvalidEndpoint {
@@ -1095,6 +1113,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Maps Synchronization.
+        /// </summary>
+        public static string MenuItem_Title_MapsSynchronization {
+            get {
+                return ResourceManager.GetString("MenuItem_Title_MapsSynchronization", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Search.
         /// </summary>
         public static string MenuItem_Title_Search {
@@ -1145,6 +1172,24 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Prefs_AboutApplication {
             get {
                 return ResourceManager.GetString("Prefs_AboutApplication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Allow synchronization with Headquarters.
+        /// </summary>
+        public static string Prefs_AllowSyncWithHq {
+            get {
+                return ResourceManager.GetString("Prefs_AllowSyncWithHq", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Disable this setting if you want to synchronize only with mobile supervisor application.
+        /// </summary>
+        public static string Prefs_AllowSyncWithHq_Summary {
+            get {
+                return ResourceManager.GetString("Prefs_AllowSyncWithHq_Summary", resourceCulture);
             }
         }
         
@@ -1680,7 +1725,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Authentication problem. We were unable to confirm your credentials (&apos;{0}&apos;). Your account may have a different password; be locked or deleted. Please re-enter your password. If the problem persists, contact your Supervisor..
+        ///   Looks up a localized string similar to Authentication problem. We were unable to confirm your credentials &apos;{0}&apos;. Your account may have a different password, be locked or deleted. Please re-enter your password. If the problem persists, contact your Supervisor or Headquarters..
         /// </summary>
         public static string Synchronization_UserPassword_Update_Format {
             get {

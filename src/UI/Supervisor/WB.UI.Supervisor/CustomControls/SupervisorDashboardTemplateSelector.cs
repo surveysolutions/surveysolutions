@@ -1,7 +1,5 @@
 ﻿using System;
 using MvvmCross.Droid.Support.V7.RecyclerView.ItemTemplates;
-using WB.Core.BoundedContexts.Supervisor.ViewModel;
-using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 

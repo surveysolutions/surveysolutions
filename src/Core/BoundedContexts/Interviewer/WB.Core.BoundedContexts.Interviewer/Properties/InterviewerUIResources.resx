@@ -747,4 +747,29 @@ Downloaded {3}%</value>
   <data name="Dashboard_Search_ExitSearch" xml:space="preserve">
     <value>Exit Search</value>
   </data>
+    <data name="SendToSupervisor_MovingToSupervisorDevice" xml:space="preserve">
+    <value>Moving all completed interviews to supervisor device</value>
+  </data>
+    <data name="SendToSupervisor_CheckSupervisorDevice" xml:space="preserve">
+    <value>Check that supervisor device has wifi and bluetooth turned on and you are withing couple of meters from it</value>
+  </data>
+    <data name="SendToSupervisor_LookingForSupervisor" xml:space="preserve">
+    <value>Looking for supervisor device</value>
+  </data>
+    <data name="SendToSupervisor_MenuItem_Title" xml:space="preserve">
+    <value>Move completed
+interviews</value>
+  </data>
+  <data name="SendToSupervisor_Note" xml:space="preserve">
+    <value>Note: This action will take more time than usual, do not turn of this device</value>
+  </data>
+  <data name="SendToSupervisor_TransferedInterviews" xml:space="preserve">
+    <value>{0} of {1} interviews transfered</value>
+  </data>
+  <data name="SendToSupervisor_ConnectionFailed" xml:space="preserve">
+    <value>Make sure both devices is in close proximity; WIFI and Bluetooth should be enabled on both devices; Supervisor application should be opened on Supervisor's device</value>
+  </data>
+  <data name="SendToSupervisor_Retry" xml:space="preserve">
+    <value>Retry</value>
+  </data>
 </root>

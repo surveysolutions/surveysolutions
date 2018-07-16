@@ -8,6 +8,8 @@ using Moq;
 using Ncqrs.Eventing;
 using NSubstitute;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
+using WB.Core.BoundedContexts.Supervisor.Views;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
@@ -58,5 +60,17 @@ namespace WB.Tests.Abc.TestFactories
         public Stream TabDelimitedTextStream(string[] headers, params string[][] cells)
             => new MemoryStream(Encoding.UTF8.GetBytes(string.Join(Environment.NewLine,
                 new[] { headers }.Union(cells).Select(x => string.Join(TabExportFile.Delimiter, x)))));
+
+        public SupervisorIdentity SupervisorIdentity(string id = null,
+            string userName = null,
+            string passwordHash = null)
+        {
+            return new SupervisorIdentity
+            {
+                Id = id ?? Guid.NewGuid().FormatGuid(),
+                Name = userName ?? "name",
+                PasswordHash = passwordHash ?? "pswdHash"
+            };
+        }
     }
 }

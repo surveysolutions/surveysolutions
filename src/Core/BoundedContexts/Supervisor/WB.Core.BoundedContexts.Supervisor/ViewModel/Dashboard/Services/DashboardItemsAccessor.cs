@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -106,14 +106,14 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services
         private IReadOnlyCollection<InterviewView> GetOutboxInterviews()
         {
             return this.interviews.Where(x =>
-                x.ResponsibleId != this.principal.CurrentUserIdentity.UserId
-                || x.Status == InterviewStatus.ApprovedBySupervisor);
+                x.Status == InterviewStatus.ApprovedBySupervisor
+                || x.Status == InterviewStatus.RejectedBySupervisor && x.ResponsibleId != this.principal.CurrentUserIdentity.UserId);
         }
 
         private IEnumerable<AssignmentDocument> GetOutboxAssignments()
         {
             return this.assignments.LoadAll()
-                .Where(x => x.ResponsibleId != this.principal.CurrentUserIdentity.UserId);
+                .Where(x => x.ResponsibleId != this.principal.CurrentUserIdentity.UserId && x.ReceivedByInterviewerAt == null);
         }
 
         public int OutboxCount()
@@ -123,13 +123,23 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services
 
         private IReadOnlyCollection<InterviewView> GetItemsWaitingForSupervisorAction()
         {
-            return this.interviews.Where(x => x.ResponsibleId == this.principal.CurrentUserIdentity.UserId && 
-                                              x.Status != InterviewStatus.ApprovedBySupervisor);
+            var itemsWaitingForSupervisorAction = this.interviews.Where(x => 
+                x.Status == InterviewStatus.Completed ||
+                (x.Status == InterviewStatus.RejectedBySupervisor || x.Status == InterviewStatus.InterviewerAssigned || x.Status == InterviewStatus.SupervisorAssigned) && 
+                x.ResponsibleId == this.principal.CurrentUserIdentity.UserId);
+            return itemsWaitingForSupervisorAction;
         }
 
         private IEnumerable<AssignmentDocument> GetAssignmentsToAssign()
         {
-            return this.assignments.LoadAll().Where(x => x.ResponsibleId == this.principal.CurrentUserIdentity.UserId);
+            return this.assignments.LoadAll().Where(x => x.ResponsibleId == this.principal.CurrentUserIdentity.UserId
+                                                         && x.ReceivedByInterviewerAt == null);
         }
+
+        public bool IsWaitingForSupervisorActionInterview(Guid interviewId)
+            => this.GetItemsWaitingForSupervisorAction().Any(x => x.InterviewId == interviewId);
+
+        public bool IsOutboxInterview(Guid interviewId)
+            => GetOutboxInterviews().Any(x => x.InterviewId == interviewId);
     }
 }

@@ -31,10 +31,16 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
             {
                 throw new ArgumentNullException(nameof(serviceType));
             }
+
             var enumerableType = typeof(IEnumerable<>).MakeGenericType(serviceType);
 
             object instance = container.Resolve(enumerableType);
-            return ((IEnumerable)instance).Cast<object>(); 
+            return ((IEnumerable) instance).Cast<object>();
+        }
+
+        public ILifetimeScope CreateChildContainer(Action<ContainerBuilder> @override)
+        {
+            return this.container.BeginLifetimeScope(@override);
         }
     }
 }

@@ -1,33 +1,42 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <resources>
-  <dimen name="Splash_Logo_size">300dp</dimen>
-  <dimen name="Splash_Logo_padding">200dp</dimen>
+    <dimen name="Splash_Logo_size">300dp</dimen>
+    <dimen name="Splash_Logo_padding">200dp</dimen>
 
-  <dimen name="Login_Holder_width">328dp</dimen>
-  <dimen name="Login_Element_width">320dp</dimen>
-  <dimen name="Login_Element_margin_vertical_normal">16dp</dimen>
-  <dimen name="Login_Input_marginBottom">8dp</dimen>
-  <dimen name="Login_Input_padding">10dp</dimen>
-  <dimen name="Login_Input_border_width">1dp</dimen>
-  <dimen name="Login_ErrorMessage_Padding">32dp</dimen>
-  <dimen name="Login_ErrorMessage_marginBottom">24dp</dimen>
-  <dimen name="Login_Password_Editor_marginBottom">24dp</dimen>
-  <dimen name="Login_Troubleshooting_Button_marginLeft">24dp</dimen>
-  <dimen name="Login_Footer_paddingBottom">36dp</dimen>
-  <dimen name="Login_Button_padding">10dp</dimen>
+    <dimen name="Login_Holder_width">328dp</dimen>
+    <dimen name="Login_Element_width">320dp</dimen>
+    <dimen name="Login_Element_margin_vertical_normal">16dp</dimen>
+    <dimen name="Login_Input_marginBottom">8dp</dimen>
+    <dimen name="Login_Input_padding">10dp</dimen>
+    <dimen name="Login_Input_border_width">1dp</dimen>
+    <dimen name="Login_ErrorMessage_Padding">32dp</dimen>
+    <dimen name="Login_ErrorMessage_marginBottom">24dp</dimen>
+    <dimen name="Login_Password_Editor_marginBottom">24dp</dimen>
+    <dimen name="Login_Troubleshooting_Button_marginLeft">24dp</dimen>
+    <dimen name="Login_Footer_paddingBottom">36dp</dimen>
+    <dimen name="Login_Button_padding">10dp</dimen>
   
-  <dimen name="Troubleshooting_padding">36dp</dimen>
-  <dimen name="Troubleshooting_double_padding">88dp</dimen>
-  <dimen name="Diagnostics_Title_padding">15dp</dimen>
-  <dimen name="Diagnostics_Description_LineSpacing">6dp</dimen>
-  <dimen name="Diagnostics_SubsectionValue_padding">10dp</dimen>
-  <dimen name="Troubleshooting_Element_width">320dp</dimen>
-  <dimen name="Troubleshooting_Button_marginBottom">16dp</dimen>
+    <dimen name="Troubleshooting_padding">36dp</dimen>
+    <dimen name="Troubleshooting_double_padding">88dp</dimen>
+    <dimen name="Diagnostics_Title_padding">15dp</dimen>
+    <dimen name="Diagnostics_Description_LineSpacing">6dp</dimen>
+    <dimen name="Diagnostics_SubsectionValue_padding">10dp</dimen>
+    <dimen name="Troubleshooting_Element_width">320dp</dimen>
+    <dimen name="Troubleshooting_Button_marginBottom">16dp</dimen>
 
-  <dimen name="Relink_Message_marginBottom">28dp</dimen>
-  <dimen name="Relink_FormContainer_marginTop">16dp</dimen>
-  <dimen name="Relink_FormContainer_marginBottom">42dp</dimen>
-  <dimen name="Relink_FormContainer_Width">400dp</dimen>
-  <dimen name="Loading_Progress_padding">50dp</dimen>
-  <dimen name="Loading_Progress_font_size">50dp</dimen>
+    <dimen name="Relink_Message_marginBottom">28dp</dimen>
+    <dimen name="Relink_FormContainer_marginTop">16dp</dimen>
+    <dimen name="Relink_FormContainer_marginBottom">42dp</dimen>
+    <dimen name="Relink_FormContainer_Width">400dp</dimen>
+    <dimen name="Loading_Progress_padding">50dp</dimen>
+    <dimen name="Loading_Progress_font_size">50dp</dimen>
+    
+    <dimen name="Interviewer_Selector_Dialog_PaddingTop">28dp</dimen>
+    <dimen name="Interviewer_Selector_Dialog_PaddingRight">10dp</dimen>
+    <dimen name="Interviewer_Selector_Dialog_PaddingBottom">10dp</dimen>
+    <dimen name="Interviewer_Selector_Dialog_PaddingLeft">30dp</dimen>
+    <dimen name="Interviewer_Selector_Item_Padding">10dp</dimen>
+    
+    <dimen name="Sidebar_header_padding">10dp</dimen>
+    <dimen name="Sidebar_image_dimention">48dp</dimen>
 </resources>

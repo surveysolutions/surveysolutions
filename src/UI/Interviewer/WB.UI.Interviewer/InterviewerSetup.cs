@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Android.Support.V7.Widget;
 using Android.Widget;
 using Autofac;
 using Autofac.Features.ResolveAnything;
 using MvvmCross;
 using MvvmCross.Binding.Bindings.Target.Construction;
+using MvvmCross.Converters;
 using MvvmCross.IoC;
 using MvvmCross.Views;
 using WB.Core.BoundedContexts.Interviewer.Services;
@@ -20,14 +20,15 @@ using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Denormalizer;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading;
+using WB.Core.SharedKernels.Enumerator.Views;
 using WB.UI.Interviewer.Activities;
 using WB.UI.Interviewer.Activities.Dashboard;
+using WB.UI.Interviewer.Converters;
 using WB.UI.Interviewer.CustomBindings;
 using WB.UI.Interviewer.Infrastructure;
 using WB.UI.Interviewer.ServiceLocation;
@@ -35,8 +36,6 @@ using WB.UI.Interviewer.Settings;
 using WB.UI.Interviewer.ViewModel;
 using WB.UI.Shared.Enumerator;
 using WB.UI.Shared.Enumerator.Activities;
-using WB.UI.Shared.Enumerator.Converters;
-using WB.UI.Shared.Enumerator.CustomBindings;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Services.Internals;
 using WB.UI.Shared.Enumerator.Services.Logging;
@@ -49,12 +48,13 @@ namespace WB.UI.Interviewer
         protected override void InitializeViewLookup()
         {
             base.InitializeViewLookup();
-
+            
             var viewModelViewLookup = new Dictionary<Type, Type>()
             {
                 {typeof(LoginViewModel), typeof(LoginActivity)},
                 {typeof(FinishInstallationViewModel), typeof(FinishInstallationActivity)},
                 {typeof(DashboardViewModel), typeof(DashboardActivity)},
+                {typeof(SendToSupervisorViewModel), typeof(SendToSupervisorActivity)},
                 {typeof(DashboardSearchViewModel), typeof(DashboardSearchActivity)},
                 {typeof(DiagnosticsViewModel),typeof(DiagnosticsActivity) },
                 {typeof(LoadingViewModel),typeof(LoadingActivity) },
@@ -64,8 +64,9 @@ namespace WB.UI.Interviewer
                 {typeof (PrefilledQuestionsViewModel), typeof (PrefilledQuestionsActivity)},
                 {typeof (MapsViewModel), typeof(MapsActivity) },
                 {typeof (PhotoViewViewModel), typeof(PhotoViewActivity) },
+                {typeof(OfflineInterviewerSyncViewModel), typeof(OfflineInterviewerSyncActitivy) }
 #if !EXCLUDEEXTENSIONS
-                {typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel), typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorActivity)}
+                ,{typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel), typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorActivity)}
 #endif
             };
 
@@ -80,7 +81,15 @@ namespace WB.UI.Interviewer
 
             base.FillTargetFactories(registry);
         }
-        
+
+        protected override void FillValueConverters(IMvxValueConverterRegistry registry)
+        {
+            base.FillValueConverters(registry);
+
+            registry.AddOrOverwrite("Localization", new InterviewerLocalizationValueConverter());
+        }
+
+
         protected override IMvxIoCProvider CreateIocProvider()
         {
             return new MvxIoCProvider(this.CreateAndInitializeIoc());
