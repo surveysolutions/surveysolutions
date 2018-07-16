@@ -120,27 +120,27 @@
   <data name="Synchronization_UploadBrokenInterviewPackages" xml:space="preserve">
     <value>Загрузка на сервер битых интервью пакетов </value>
   </data>
-    <data name="OfflineSync_ReceivingInterviewsFromDevices" xml:space="preserve">
+  <data name="OfflineSync_ReceivingInterviewsFromDevices" xml:space="preserve">
     <value>Получение интервью
 с других устройств</value>
     <comment>Получение итревью
 с других устройств</comment>
   </data>
-    <data name="OfflineSync_ReceivingInterviews" xml:space="preserve">
+  <data name="OfflineSync_ReceivingInterviews" xml:space="preserve">
     <value>Получение интервью</value>
     <comment>Получение интервью</comment>
   </data>
-    <data name="OfflineSync_NoDevicesDetectedFormat" xml:space="preserve">
+  <data name="OfflineSync_NoDevicesDetectedFormat" xml:space="preserve">
     <value>Передающих устройств не найдено.
 Идентификатор Вашего устройства - '{0}'</value>
     <comment>Передающих устройств не найдено.
 Идентификатор Вашего устройства - '{0}'</comment>
   </data>
-    <data name="OfflineSync_WaitingInterviewers" xml:space="preserve">
+  <data name="OfflineSync_WaitingInterviewers" xml:space="preserve">
     <value>Ожидание действий от устройств интервьюверов</value>
     <comment>Ожидание действий от устройств интервьюверов</comment>
   </data>
-    <data name="OfflineSync_TransferInterviewsFormat" xml:space="preserve">
+  <data name="OfflineSync_TransferInterviewsFormat" xml:space="preserve">
     <value>Интервью от {0}:
 {1} из {2} получено
 </value>
@@ -150,5 +150,11 @@
   </data>
   <data name="Synchronization_UploadExceptions" xml:space="preserve">
     <value>Загрузка ошибок с планшетов интревьюеров</value>
+  </data>
+  <data name="Synchronization_UploadStatistics" xml:space="preserve">
+    <value>Загрузка статистк синхронизаций интервьюеров</value>
+  </data>
+  <data name="Synchronization_UploadStatisticsStats" xml:space="preserve">
+    <value>Загружено {0} из {1}</value>
   </data>
 </root>

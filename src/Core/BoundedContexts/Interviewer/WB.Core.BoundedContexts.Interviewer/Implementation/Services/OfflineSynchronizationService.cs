@@ -133,8 +133,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             CancellationToken token,
             RestCredentials credentials)
         {
-            //TODO: Implement
-            return Task.CompletedTask;
+            return this.syncClient.SendAsync(new SyncStatisticsRequest(statistics, this.principal.CurrentUserIdentity.UserId), token);
         }
 
         public Task SendUnexpectedExceptionAsync(UnexpectedExceptionApiView exception, CancellationToken token)
