@@ -2,7 +2,7 @@
 
 namespace WB.Core.SharedKernels.DataCollection.WebApi
 {
-    public class InterviewerSyncStatisticsDto
+    public class InterviewerSyncStatisticsApiView
     {
         public Guid InterviewerId { get; set; }
 

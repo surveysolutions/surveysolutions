@@ -19,7 +19,8 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
             this.deviceSyncInfoRepository = deviceSyncInfo ?? throw new ArgumentNullException(nameof(deviceSyncInfo));
         }
 
-        public void Post(InterviewerSyncStatisticsDto statistics)
+        [HttpPost]
+        public void Post(InterviewerSyncStatisticsApiView statistics)
         {
             var deviceInfo = this.deviceSyncInfoRepository.GetLastByInterviewerId(statistics.InterviewerId);
             deviceInfo.Statistics = new SyncStatistics
