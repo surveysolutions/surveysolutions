@@ -64,7 +64,6 @@ namespace WB.UI.Supervisor.ServiceLocation
 
             registry.BindAsSingleton<IPlainKeyValueStorage<QuestionnaireDocument>, QuestionnaireKeyValueStorage>();
 
-            registry.Bind<IInterviewerQuestionnaireAccessor, InterviewerQuestionnaireAccessor>();
             registry.Bind<IInterviewerInterviewAccessor, InterviewerInterviewAccessor>();
             registry.Bind<IInterviewEventStreamOptimizer, InterviewEventStreamOptimizer>();
             registry.Bind<IQuestionnaireTranslator, QuestionnaireTranslator>();
@@ -72,6 +71,7 @@ namespace WB.UI.Supervisor.ServiceLocation
             registry.Bind<IAudioFileStorage, InterviewerAudioFileStorage>();
             registry.Bind<IImageFileStorage, InterviewerImageFileStorage>();
             registry.Bind<IAnswerToStringConverter, AnswerToStringConverter>();
+            registry.Bind<IInterviewerQuestionnaireAccessor, SupervisorQuestionnaireAccessor>();
             registry.BindAsSingleton<IAssignmentDocumentsStorage, AssignmentDocumentsStorage>();
             registry.BindAsSingleton<IAuditLogService, EnumeratorAuditLogService>();
             registry.BindAsSingleton<ITabletInfoService, TabletInfoService>();

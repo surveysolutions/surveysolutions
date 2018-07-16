@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.BoundedContexts.Supervisor.Views;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
@@ -19,20 +19,20 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
         private readonly IAttachmentContentStorage attachmentContentStorage;
         private readonly IQuestionnaireAssemblyAccessor questionnaireAssemblyAccessor;
         private readonly IPlainStorage<TranslationInstance> translationsStorage;
-        private readonly ISerializer serializer;
+        private readonly IPlainStorage<RawQuestionnaireDocumentView> rawQuestionnaireDocumentStorage;
 
         public SupervisorQuestionnairesHandler(
             IInterviewerQuestionnaireAccessor questionnairesAccessor,
             IQuestionnaireAssemblyAccessor questionnaireAssemblyAccessor,
             IPlainStorage<TranslationInstance> translationsStorage,
-            IAttachmentContentStorage attachmentContentStorage,
-            ISerializer serializer)
+            IPlainStorage<RawQuestionnaireDocumentView> rawQuestionnaireDocumentStorage,
+            IAttachmentContentStorage attachmentContentStorage)
         {
             this.questionnairesAccessor = questionnairesAccessor;
             this.questionnaireAssemblyAccessor = questionnaireAssemblyAccessor;
             this.translationsStorage = translationsStorage;
+            this.rawQuestionnaireDocumentStorage = rawQuestionnaireDocumentStorage;
             this.attachmentContentStorage = attachmentContentStorage;
-            this.serializer = serializer;
         }
 
         public void Register(IRequestHandler requestHandler)
@@ -74,11 +74,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
 
         public Task<GetQuestionnaireResponse> GetQuestionnaire(GetQuestionnaireRequest arg)
         {
-            var questionnaireDocument = this.questionnairesAccessor.GetQuestionnaire(arg.QuestionnaireId);
-            var serializedDocument = this.serializer.Serialize(questionnaireDocument);
+            var serializedDocument = this.rawQuestionnaireDocumentStorage.GetById(arg.QuestionnaireId.ToString());
+            
             return Task.FromResult(new GetQuestionnaireResponse
             {
-                QuestionnaireDocument = serializedDocument
+                QuestionnaireDocument = serializedDocument.Document
             });
         }
 
