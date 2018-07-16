@@ -109,7 +109,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Upload broken interview packages.
         ///   Looks up a localized string similar to Uploading broken interview packages.
         /// </summary>
         public static string Synchronization_UploadBrokenInterviewPackages {
@@ -121,9 +120,27 @@ namespace WB.Core.BoundedContexts.Supervisor.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Uploading interviewer error messages.
         /// </summary>
-        internal static string Synchronization_UploadExceptions {
+        public static string Synchronization_UploadExceptions {
             get {
                 return ResourceManager.GetString("Synchronization_UploadExceptions", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Uploading interviewers synchronization statistics.
+        /// </summary>
+        public static string Synchronization_UploadStatistics {
+            get {
+                return ResourceManager.GetString("Synchronization_UploadStatistics", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Uploaded {0} of {1}.
+        /// </summary>
+        public static string Synchronization_UploadStatisticsStats {
+            get {
+                return ResourceManager.GetString("Synchronization_UploadStatisticsStats", resourceCulture);
             }
         }
     }

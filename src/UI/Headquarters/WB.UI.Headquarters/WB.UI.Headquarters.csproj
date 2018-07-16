@@ -1794,6 +1794,7 @@
     <Compile Include="API\DataCollection\Supervisor\v1\InterviewerDeviceInfoApiV1Controller.cs" />
     <Compile Include="API\DataCollection\Supervisor\v1\BrokenInterviewPackageApiV1Controller.cs" />
     <Compile Include="API\DataCollection\Supervisor\v1\InterviewerExceptionsApiV1Controller.cs" />
+    <Compile Include="API\DataCollection\Supervisor\v1\InterviewerStatisticsApiV1Controller.cs" />
     <Compile Include="API\DataCollection\Supervisor\v1\InterviewsApiV1Controller.cs" />
     <Compile Include="API\DataCollection\Supervisor\v1\MapsApiV1Controller.cs" />
     <Compile Include="API\DataCollection\Supervisor\v1\QuestionnairesApiV1Controller.cs" />
