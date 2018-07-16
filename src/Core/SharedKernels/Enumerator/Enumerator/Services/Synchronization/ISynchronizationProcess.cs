@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.SharedKernels.Enumerator.Services.Synchronization
@@ -22,6 +23,8 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Synchronization
         public SynchronizationStatus Status { get; set; }
         public SynchronizationStatistics Statistics { get; set; }
         public bool UserIsLinkedToAnotherDevice { get; set; }
+
+        public TransferProgress TransferProgress { get; set; }
 
         public bool HasErrors => this.Statistics.FailedToUploadInterviwesCount != 0 || 
                                  this.Statistics.FailedToCreateInterviewsCount != 0;
