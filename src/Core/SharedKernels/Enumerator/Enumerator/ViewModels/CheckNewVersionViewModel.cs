@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
+using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -73,11 +74,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 this.CheckNewVersionResult = InterviewerUIResources.Diagnostics_DownloadingPleaseWait;
 
                 await this.tabletDiagnosticService.UpdateTheApp(this.cancellationTokenSource.Token, true,
-                    progress =>
+                    new Progress<TransferProgress>(progress =>
                     {
                         this.CheckNewVersionResult = InterviewerUIResources.Diagnostics_DownloadingPleaseWait
                                                      + $" ({(int)progress.ProgressPercentage}%)";
-                    });
+                    }));
 
                 this.CheckNewVersionResult = null;
             }

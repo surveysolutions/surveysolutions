@@ -1,5 +1,7 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
+using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -35,7 +37,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             {
                 var questionnaireAssembly = await this.synchronizationService.GetQuestionnaireAssemblyAsync(
                     questionnaireIdentity,
-                    (progressPercentage, bytesReceived, totalBytesToReceive) => { },
+                    new Progress<TransferProgress>(),
                     cancellationToken);
 
                 await this.questionnairesAccessor.StoreQuestionnaireAssemblyAsync(questionnaireIdentity, questionnaireAssembly);
@@ -45,7 +47,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             if (!this.questionnairesAccessor.IsQuestionnaireExists(questionnaireIdentity))
             {
                 var contentIds = await this.synchronizationService.GetAttachmentContentsAsync(questionnaireIdentity,
-                    (progressPercentage, bytesReceived, totalBytesToReceive) => { },
+                    new Progress<TransferProgress>(),
                     cancellationToken);
 
                 foreach (var contentId in contentIds)
@@ -54,7 +56,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     if (!isExistContent)
                     {
                         var attachmentContent = await this.synchronizationService.GetAttachmentContentAsync(contentId,
-                            (progressPercentage, bytesReceived, totalBytesToReceive) => { },
+                            new Progress<TransferProgress>(),
                             cancellationToken);
 
                         this.attachmentContentStorage.Store(attachmentContent);
@@ -65,7 +67,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
                 var questionnaireApiView = await this.synchronizationService.GetQuestionnaireAsync(
                     questionnaireIdentity,
-                    (progressPercentage, bytesReceived, totalBytesToReceive) => { },
+                    new Progress<TransferProgress>(),
                     cancellationToken);
 
                 this.questionnairesAccessor.StoreQuestionnaire(questionnaireIdentity,

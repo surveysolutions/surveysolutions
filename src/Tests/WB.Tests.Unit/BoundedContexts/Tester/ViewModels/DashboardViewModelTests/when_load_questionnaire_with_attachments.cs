@@ -41,13 +41,13 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
             mockOfAttachmentContentStorage.Setup(_ => _.Exists("5")).Returns(true);
 
             mockOfDesignerApiService
-                .Setup(_ => _.GetQuestionnaireAsync(selectedQuestionnaire.Id, Moq.It.IsAny<Action<DownloadProgressChangedEventArgs>>(), Moq.It.IsAny<CancellationToken>()))
+                .Setup(_ => _.GetQuestionnaireAsync(selectedQuestionnaire.Id, Moq.It.IsAny<IProgress<TransferProgress>>(), Moq.It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult(downloadedQuestionnaire));
             mockOfDesignerApiService
-                .Setup(_ => _.GetAttachmentContentAsync("1", Moq.It.IsAny<Action<DownloadProgressChangedEventArgs>>(), Moq.It.IsAny<CancellationToken>()))
+                .Setup(_ => _.GetAttachmentContentAsync("1", Moq.It.IsAny<IProgress<TransferProgress>>(), Moq.It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult(Create.Entity.AttachmentContent_Enumerator("1")));
             mockOfDesignerApiService
-                .Setup(_ => _.GetAttachmentContentAsync("2", Moq.It.IsAny<Action<DownloadProgressChangedEventArgs>>(), Moq.It.IsAny<CancellationToken>()))
+                .Setup(_ => _.GetAttachmentContentAsync("2", Moq.It.IsAny<IProgress<TransferProgress>>(), Moq.It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult(Create.Entity.AttachmentContent_Enumerator("2")));
 
 
@@ -63,7 +63,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
         public void Because() => viewModel.LoadQuestionnaireCommand.Execute(selectedQuestionnaire);
 
         [Test] public void should_be_downloaded_questionnaire () => 
-            mockOfDesignerApiService.Verify(_ => _.GetQuestionnaireAsync(selectedQuestionnaire.Id, Moq.It.IsAny<Action<DownloadProgressChangedEventArgs>>(), Moq.It.IsAny<CancellationToken>()), Times.Once);
+            mockOfDesignerApiService.Verify(_ => _.GetQuestionnaireAsync(selectedQuestionnaire.Id, Moq.It.IsAny<IProgress<TransferProgress>>(), Moq.It.IsAny<CancellationToken>()), Times.Once);
 
         [Test] public void should_store_attachment_1_to_local_storage () =>
             mockOfAttachmentContentStorage.Verify(_ => _.Store(Moq.It.Is<AttachmentContentEnumerable>(ac => ac.Id == "1")), Times.Once);

@@ -5,8 +5,8 @@ using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
-using Humanizer;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Entities;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
@@ -255,13 +255,14 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                             pendingValue.UpdateProgress(update.BytesTransferred, header.Size);
                         }
 
+                        
                         incomingDataInfo.OnNext(new IncomingDataInfo
                         {
                             Type = header.PayloadType,
                             Endpoint = endpoint,
                             Name = header.Name,
                             BytesTransfered = update.BytesTransferred,
-                            BytesPerSecond = 0,
+                            BytesPerSecond = pendingValue.ProgressData?.Speed ?? 0,
                             TotalBytes = header.Size,
                             FlowDirection = isIncoming ? DataFlowDirection.In : DataFlowDirection.Out,
                             IsCompleted = false
@@ -305,13 +306,13 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
         private async Task SendOverWire(INearbyConnection nearbyConnection, string endpoint, Package package)
         {
             await SendOverWire(package.Header);
-            CommunicationSession.Current.BytesSend(package.HeaderBytes.LongLength);
+            // CommunicationSession.Current.BytesSend(package.HeaderBytes.LongLength);
             CommunicationSession.Current.RequestsTotal += 1;
 
             if (package.HeaderPayload.PayloadContent == null)
             {
                 await SendOverWire(package.Content);
-                CommunicationSession.Current.BytesSend(package.PayloadContentBytes.LongLength);
+                // CommunicationSession.Current.BytesSend(package.PayloadContentBytes.LongLength);
                 CommunicationSession.Current.RequestsTotal += 1;
             }
 
@@ -472,12 +473,12 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             {
                 etaHelper.AddProgress(sendBytes, totalBytes);
 
-                progressData.TotalBytes = totalBytes;
-                progressData.TransferedBytes = sendBytes;
-                progressData.Eta = etaHelper.ETA;
-                progressData.Speed = etaHelper.AverageSpeed.Bytes().ToString("0.00");
+                ProgressData.TotalBytesToReceive = totalBytes;
+                ProgressData.BytesReceived = sendBytes;
+                ProgressData.Eta = etaHelper.ETA;
+                ProgressData.Speed = etaHelper.AverageSpeed;//.Bytes().ToString("0.00");
 
-                Progress?.Report(progressData);
+                Progress?.Report(ProgressData);
             }
 
             private TaskCompletionSource<ICommunicationMessage> TaskCompletionSource { get; }
