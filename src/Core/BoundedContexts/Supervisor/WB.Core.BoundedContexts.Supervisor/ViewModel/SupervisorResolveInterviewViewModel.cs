@@ -11,6 +11,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
@@ -72,6 +73,12 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 
             interview = this.interviewRepository.Get(interviewId);
             this.status = interview.Status;
+            
+            var interviewKey = interview.GetInterviewKey()?.ToString();
+            this.CompleteScreenTitle = string.IsNullOrEmpty(interviewKey)
+                ? UIResources.Interview_Complete_Screen_Description
+                : string.Format(UIResources.Interview_Complete_Screen_DescriptionWithInterviewKey, interviewKey);
+
         }
 
         public IMvxAsyncCommand Approve => new MvxAsyncCommand(async () =>
