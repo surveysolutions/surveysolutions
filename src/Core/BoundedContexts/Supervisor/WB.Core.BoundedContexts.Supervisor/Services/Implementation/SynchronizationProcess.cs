@@ -60,7 +60,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
             interviewViewRepository, principal, logger,
             userInteractionService, questionnairesAccessor, interviewFactory, interviewMultimediaViewStorage,
             imagesStorage,
-            logoSynchronizer, cleanupService, passwordHasher, assignmentsSynchronizer, questionnaireDownloader,
+            logoSynchronizer, cleanupService, assignmentsSynchronizer, questionnaireDownloader,
             httpStatistician,
             assignmentsStorage, audioFileStorage, diagnosticService, auditLogSynchronizer, auditLogService,
             eventBus, eventStore)
