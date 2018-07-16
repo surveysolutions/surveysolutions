@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
+using Humanizer;
 using Moq;
 using MvvmCross.Plugin.Messenger;
 using NUnit.Framework;
@@ -11,6 +13,7 @@ using WB.Core.BoundedContexts.Supervisor.ViewModel.InterviewerSelector;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -109,6 +112,34 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
             navigationService.Verify(x => x.NavigateToDashboardAsync(InterviewId.FormatGuid()));
             auditLogService.Verify(x => x.Write(It.Is<RejectInterviewAuditLogEntity>(c => c.InterviewKey == interviewKey.ToString())));
         }
+
+        [Test]
+        public void should_allow_supervisor_assigned_only_in_appropriate_status([Values]InterviewStatus status)
+        {
+            var allowedStatuses = new[]
+                {InterviewStatus.SupervisorAssigned, InterviewStatus.RejectedBySupervisor};
+
+            var interview = Mock.Of<IStatefulInterview>(x => x.Status == status);
+            var interviewRepository = new Mock<IStatefulInterviewRepository>();
+            interviewRepository.Setup(x => x.Get(It.IsAny<string>()))
+                .Returns(interview);
+
+            var viewModel = CreateViewModel(interviewRepository: interviewRepository.Object);
+
+            // Act
+            viewModel.Configure(Id.g1.FormatGuid(), Create.Other.NavigationState(interviewRepository.Object));
+
+            // Assert
+            if (allowedStatuses.Contains(status))
+            {
+                Assert.That(viewModel.Assign.CanExecute(), Is.True);
+            }
+            else
+            {
+                Assert.That(viewModel.Assign.CanExecute(), Is.False);
+            }
+        }
+
 
         private SupervisorResolveInterviewViewModel CreateViewModel(IViewModelNavigationService viewModelNavigationService = null,
             ICommandService commandService = null,
