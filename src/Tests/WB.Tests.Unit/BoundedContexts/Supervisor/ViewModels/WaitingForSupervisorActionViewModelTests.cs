@@ -12,7 +12,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
     internal class WaitingForSupervisorActionViewModelTests
     {
         [Test]
-        public async Task when_getting_ui_items_and_view_model_has_last_visited_interview_id_then_view_model_should_have_specified_HighLightedItemIndex()
+        public void when_getting_ui_items_and_view_model_has_last_visited_interview_id_then_view_model_should_have_specified_HighLightedItemIndex()
         {
             //arrange
             var interviewId = Guid.Parse("11111111111111111111111111111111");
@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
             var viewModel = Create.ViewModel.WaitingForSupervisorActionViewModel(dashboardItemsAccessor);
             viewModel.Prepare(interviewId);
             //act
-            await viewModel.Initialize();
+            viewModel.ViewAppeared();
             //assert
             Assert.That(viewModel.HighLightedItemIndex, Is.EqualTo(2));
         }

@@ -1,5 +1,6 @@
 ﻿using MvvmCross.Plugin.Messenger;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 
@@ -14,7 +15,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         {
             base.ViewAppeared();
             messengerSubscribtion = messenger.Subscribe<DashboardChangedMsg>(msg => UpdateUiItems(), MvxReference.Strong);
-            UpdateUiItems();
+            UpdateUiItems().WaitAndUnwrapException();
         }
 
         public override void ViewDisappeared()
