@@ -66,7 +66,7 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
 
         public void OnConnected(Bundle connectionHint)
         {
-            ApiConnected?.SetResult(true);
+            ApiConnected?.TrySetResult(true);
         }
 
         protected override void OnStart()
@@ -93,7 +93,7 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
 
         public void OnConnectionFailed(ConnectionResult result)
         {
-            ApiConnected?.SetResult(false);
+            ApiConnected?.TrySetResult(false);
         }
     }
 }
