@@ -12,7 +12,10 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
@@ -56,14 +59,18 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
         {
             var commandService = new Mock<ICommandService>();
             var navigationService = new Mock<IViewModelNavigationService>();
+            var auditLogService = new Mock<IAuditLogService>();
             
             var interview = Create.AggregateRoot.StatefulInterview(interviewId: InterviewId);
+            var interviewKey = Create.Entity.InterviewKey(5);
+            interview.Apply(Create.Event.InterviewKeyAssigned(interviewKey));
             interview.Complete(Id.gA, "", DateTime.UtcNow);
 
             var statefulInterviewRepository = Setup.StatefulInterviewRepository(interview);
             var viewModel = CreateViewModel(interviewRepository: statefulInterviewRepository,
                 commandService: commandService.Object,
-                navigationService: navigationService.Object);
+                navigationService: navigationService.Object,
+                auditLogService: auditLogService.Object);
             viewModel.Configure(InterviewId.FormatGuid(), Create.Other.NavigationState(statefulInterviewRepository));
 
             // Act
@@ -72,6 +79,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
             // Assert
             commandService.Verify(x => x.ExecuteAsync(It.Is<ApproveInterviewCommand>(c => c.InterviewId == InterviewId), null, CancellationToken.None));
             navigationService.Verify(x => x.NavigateToDashboardAsync(InterviewId.FormatGuid()));
+            auditLogService.Verify(x => x.Write(It.Is<ApproveInterviewAuditLogEntity>(c => c.InterviewKey == interviewKey.ToString())));
         }
 
         [Test]
@@ -79,14 +87,18 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
         {
             var commandService = new Mock<ICommandService>();
             var navigationService = new Mock<IViewModelNavigationService>();
-            
+            var auditLogService = new Mock<IAuditLogService>();
+
             var interview = Create.AggregateRoot.StatefulInterview(interviewId: InterviewId);
+            var interviewKey = Create.Entity.InterviewKey(5);
+            interview.Apply(Create.Event.InterviewKeyAssigned(interviewKey));
             interview.Complete(Id.gA, "", DateTime.UtcNow);
 
             var statefulInterviewRepository = Setup.StatefulInterviewRepository(interview);
             var viewModel = CreateViewModel(interviewRepository: statefulInterviewRepository,
                 commandService: commandService.Object,
-                navigationService: navigationService.Object);
+                navigationService: navigationService.Object,
+                auditLogService: auditLogService.Object);
             viewModel.Configure(InterviewId.FormatGuid(), Create.Other.NavigationState(statefulInterviewRepository));
 
             // Act
@@ -95,6 +107,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
             // Assert
             commandService.Verify(x => x.ExecuteAsync(It.Is<RejectInterviewCommand>(c => c.InterviewId == InterviewId), null, CancellationToken.None));
             navigationService.Verify(x => x.NavigateToDashboardAsync(InterviewId.FormatGuid()));
+            auditLogService.Verify(x => x.Write(It.Is<RejectInterviewAuditLogEntity>(c => c.InterviewKey == interviewKey.ToString())));
         }
 
         private SupervisorResolveInterviewViewModel CreateViewModel(IViewModelNavigationService viewModelNavigationService = null,
@@ -107,7 +120,8 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
             InterviewStateViewModel interviewState = null,
             DynamicTextViewModel dynamicTextViewModel = null,
             IViewModelNavigationService navigationService = null,
-            ILogger logger = null)
+            ILogger logger = null,
+            IAuditLogService auditLogService = null)
         {
             return new SupervisorResolveInterviewViewModel(
                 commandService ?? Create.Service.CommandService(),
@@ -121,7 +135,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
                 navigationService ?? Mock.Of<IViewModelNavigationService>(),
                 logger ?? Mock.Of<ILogger>(),
                 Mock.Of<IInterviewerSelectorDialog>(),
-                Mock.Of<IAuditLogService>()
+                auditLogService ?? Mock.Of<IAuditLogService>()
             );
         }
     }
