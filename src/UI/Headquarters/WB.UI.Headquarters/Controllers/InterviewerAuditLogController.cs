@@ -166,8 +166,8 @@ namespace WB.UI.Headquarters.Controllers
                     //var relinkAuditLogEntity = record.GetEntity<RelinkAuditLogEntity>();
                     return InterviewerAuditRecord.Relink;
                 case AuditLogEntityType.SynchronizationStarted:
-                    //var synchronizationStartedAuditLogEntity = record.GetEntity<SynchronizationStartedAuditLogEntity>();
-                    return InterviewerAuditRecord.SynchronizationStarted;
+                    var synchronizationStartedAuditLogEntity = record.GetEntity<SynchronizationStartedAuditLogEntity>();
+                    return InterviewerAuditRecord.SynchronizationStarted.FormatString(synchronizationStartedAuditLogEntity.SynchronizationType);
                 case AuditLogEntityType.SynchronizationCanceled:
                     //var synchronizationCanceledAuditLogEntity = record.GetEntity<SynchronizationCanceledAuditLogEntity>();
                     return InterviewerAuditRecord.SynchronizationCanceled;

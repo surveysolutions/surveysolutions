@@ -277,7 +277,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sync started.
+        ///   Looks up a localized string similar to Sync started ({0}).
         /// </summary>
         public static string SynchronizationStarted {
             get {

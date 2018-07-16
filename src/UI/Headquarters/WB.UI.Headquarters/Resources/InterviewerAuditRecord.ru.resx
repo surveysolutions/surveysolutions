@@ -155,7 +155,7 @@
     <comment>Показать преведущие 7 дней</comment>
   </data>
   <data name="SynchronizationStarted" xml:space="preserve">
-    <value>Синхронизация начата</value>
+    <value>Синхронизация начата ({0})</value>
     <comment>Синхронизация начата</comment>
   </data>
   <data name="SynchronizationCompleted" xml:space="preserve">

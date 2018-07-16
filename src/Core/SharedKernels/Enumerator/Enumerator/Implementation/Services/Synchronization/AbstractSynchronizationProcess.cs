@@ -7,6 +7,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Properties;
@@ -36,13 +37,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
         protected abstract string SucsessDescription { get; }
 
+        protected virtual SynchronizationType SynchronizationType => SynchronizationType.Online;
+
         protected AbstractSynchronizationProcess(
             ISynchronizationService synchronizationService, 
             ILogger logger,
             IHttpStatistician httpStatistician, 
             IUserInteractionService userInteractionService,
             IPrincipal principal,
-            IPasswordHasher passwordHasher, 
             IPlainStorage<InterviewView> interviewViewRepository,
             IAuditLogService auditLogService)
         {
@@ -174,7 +176,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             var statistics = new SynchronizationStatistics();
             try
             {
-                auditLogService.Write(new SynchronizationStartedAuditLogEntity());
+                auditLogService.Write(new SynchronizationStartedAuditLogEntity(SynchronizationType));
 
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();

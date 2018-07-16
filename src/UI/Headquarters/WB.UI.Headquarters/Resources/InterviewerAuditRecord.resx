@@ -190,6 +190,6 @@
     <value>Sync failed</value>
   </data>
   <data name="SynchronizationStarted" xml:space="preserve">
-    <value>Sync started</value>
+    <value>Sync started ({0})</value>
   </data>
 </root>
