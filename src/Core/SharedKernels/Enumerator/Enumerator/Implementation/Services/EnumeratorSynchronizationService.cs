@@ -446,9 +446,18 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         public Task<int?> GetLatestApplicationVersionAsync(CancellationToken token)
         {
             return this.TryGetRestResponseOrThrowAsync(async () =>
-                await this.restService.GetAsync<int?>(
-                    url: string.Concat(this.checkVersionUriProvider.CheckVersionUrl, "latestversion"),
-                    credentials: this.restCredentials, token: token).ConfigureAwait(false));
+            {
+                try
+                {
+                    return await this.restService.GetAsync<int?>(
+                        url: string.Concat(this.checkVersionUriProvider.CheckVersionUrl, "latestversion"),
+                        credentials: this.restCredentials, token: token).ConfigureAwait(false);
+                }
+                catch (RestException rest) when (rest.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return null;
+                }
+            });
         }
 
         public Task SendBackupAsync(string filePath, CancellationToken token)
