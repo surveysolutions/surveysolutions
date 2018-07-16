@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.Infrastructure.OfflineSync
                     serializedAnswer: answerSerializer.Serialize(textAnswer))
                 .Build());
 
-            var handler = new SupervisorAssignmentsHandler(documentStorage, answerSerializer);
+            var handler = new SupervisorAssignmentsHandler(documentStorage);
 
             // act
             var assignmentDocument = await handler.GetAssignment(new GetAssignmentRequest{Id = 1});

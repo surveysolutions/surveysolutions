@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
@@ -14,13 +13,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
     public class SupervisorAssignmentsHandler : IHandleCommunicationMessage
     {
         private readonly IAssignmentDocumentsStorage assignmentDocumentsStorage;
-        private readonly IInterviewAnswerSerializer interviewAnswerSerializer;
-        
-        public SupervisorAssignmentsHandler(IAssignmentDocumentsStorage assignmentDocumentsStorage, 
-            IInterviewAnswerSerializer interviewAnswerSerializer)
+
+        public SupervisorAssignmentsHandler(IAssignmentDocumentsStorage assignmentDocumentsStorage)
         {
             this.assignmentDocumentsStorage = assignmentDocumentsStorage;
-            this.interviewAnswerSerializer = interviewAnswerSerializer;
         }
 
         public void Register(IRequestHandler requestHandler)
@@ -78,7 +74,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                 var serializedAnswer = new AssignmentApiDocument.InterviewSerializedAnswer
                 {
                     Identity = answer.Identity,
-                    SerializedAnswer = answer.SerializedAnswer // this.interviewAnswerSerializer.Serialize(answer)
+                    SerializedAnswer = answer.SerializedAnswer
                 };
                 
                 assignmentApiView.Answers.Add(serializedAnswer);
