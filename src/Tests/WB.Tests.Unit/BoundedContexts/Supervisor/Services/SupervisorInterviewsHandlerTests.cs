@@ -95,7 +95,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
         }
 
         [Test]
-        public async Task LogInterviewAsSuccessfullyHandledRequest_Should_hide_interview_from_dashboard()
+        public async Task LogInterviewAsSuccessfullyHandledRequest_Should_not_delete_interview()
         {
             var interviews = new SqliteInmemoryStorage<InterviewView>();
             interviews.Store(Create.Entity.InterviewView(status: InterviewStatus.RejectedBySupervisor, interviewId: Id.g1));
@@ -106,7 +106,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             var response = await handler.Handle(new LogInterviewAsSuccessfullyHandledRequest(Id.g1));
 
             // Assert
-            interviews.Where(x => x.InterviewId == Id.g1).Count.Should().Be(0);
+            interviews.Where(x => x.InterviewId == Id.g1).Count.Should().Be(1);
             Assert.That(response, Is.Not.Null);
         }
 
