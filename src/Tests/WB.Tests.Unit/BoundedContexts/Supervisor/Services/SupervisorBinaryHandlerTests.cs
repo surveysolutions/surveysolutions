@@ -1,10 +1,10 @@
 ﻿using System.Threading.Tasks;
 using AutoFixture;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Supervisor.Services.Implementation;
 using WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSyncHandlers;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
+using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Tests.Abc;
@@ -40,7 +40,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
 
             var handler = fixture.Create<SupervisorBinaryHandler>();
 
-            var response =await handler.GetCompanyLogo(new GetCompanyLogoRequest() {Etag = "11"});
+            var response = await handler.GetCompanyLogo(new GetCompanyLogoRequest() { Etag = "11" });
 
             Assert.That(response.LogoInfo.Etag, Is.EqualTo("Sd"));
             Assert.That(response.LogoInfo.HasCustomLogo, Is.EqualTo(true));
@@ -66,7 +66,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
 
             var handler = fixture.Create<SupervisorBinaryHandler>();
 
-            var response =await handler.GetCompanyLogo(new GetCompanyLogoRequest() {Etag = "match" });
+            var response = await handler.GetCompanyLogo(new GetCompanyLogoRequest() { Etag = "match" });
 
             Assert.That(response.LogoInfo.Etag, Is.EqualTo("match"));
             Assert.That(response.LogoInfo.HasCustomLogo, Is.EqualTo(true));
@@ -81,7 +81,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
 
             var handler = fixture.Create<SupervisorBinaryHandler>();
 
-            var response =await handler.GetCompanyLogo(new GetCompanyLogoRequest() {Etag = "non_existing" });
+            var response = await handler.GetCompanyLogo(new GetCompanyLogoRequest() { Etag = "non_existing" });
 
             Assert.That(response.LogoInfo.Etag, Is.Null);
             Assert.That(response.LogoInfo.HasCustomLogo, Is.EqualTo(false));
