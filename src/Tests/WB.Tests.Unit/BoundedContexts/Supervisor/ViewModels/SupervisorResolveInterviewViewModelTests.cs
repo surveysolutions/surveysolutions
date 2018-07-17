@@ -162,7 +162,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
         }
 
         [Test]
-        public void should_not_allow_approve_and_reject_for_rejected_interview()
+        public void when_configure_and_interview_was_rejected_then_approve_and_reject_commands_should_not_be_executable()
         {
             var commandService = new Mock<ICommandService>();
             var navigationService = new Mock<IViewModelNavigationService>();
@@ -182,7 +182,6 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
             viewModel.Configure(InterviewId.FormatGuid(), Create.Other.NavigationState(statefulInterviewRepository));
             
             // Assert
-            viewModel.Approve.CanExecute().Should().BeFalse();
             viewModel.Reject.CanExecute().Should().BeFalse();
         }
 
