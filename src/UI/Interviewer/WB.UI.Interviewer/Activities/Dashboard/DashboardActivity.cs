@@ -169,9 +169,8 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         {
             this.MenuInflater.Inflate(Resource.Menu.dashboard, menu);
 
-            menu.LocalizeMenuItem(Resource.Id.menu_offline_synchronization, "Offline Sync");
+            menu.LocalizeMenuItem(Resource.Id.menu_offline_synchronization, Core.BoundedContexts.Interviewer.Properties.InterviewerUIResources.SendToSupervisor_MenuItem_Title);
             menu.LocalizeMenuItem(Resource.Id.menu_search, InterviewerUIResources.MenuItem_Title_Search);
-            menu.LocalizeMenuItem(Resource.Id.menu_send, Core.BoundedContexts.Interviewer.Properties.InterviewerUIResources.SendToSupervisor_MenuItem_Title);
             menu.LocalizeMenuItem(Resource.Id.menu_signout, InterviewerUIResources.MenuItem_Title_SignOut);
             menu.LocalizeMenuItem(Resource.Id.menu_settings, InterviewerUIResources.MenuItem_Title_Settings);
             menu.LocalizeMenuItem(Resource.Id.menu_diagnostics, InterviewerUIResources.MenuItem_Title_Diagnostics);
@@ -189,9 +188,6 @@ namespace WB.UI.Interviewer.Activities.Dashboard
                     break;
                 case Resource.Id.menu_diagnostics:
                     this.ViewModel.NavigateToDiagnosticsPageCommand.Execute();
-                    break;
-                case Resource.Id.menu_send:
-                    this.ViewModel.SendToSupervisorCommand.Execute();
                     break;
                 case Resource.Id.menu_maps:
                     this.ViewModel.NavigateToMapsCommand.Execute();

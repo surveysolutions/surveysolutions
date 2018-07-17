@@ -644,14 +644,16 @@
     <value>Прервать</value>
     <comment>Отмена</comment>
   </data>
-    <data name="OfflineSync_NetworkInfo" xml:space="preserve">
-    <value>Расстояние между устройствами и скорость сети в норме.
-Скорость: {0}, Осталось: {1}</value>
-    <comment>Range and network are acceptible. 
-Скорость: {0}, Осталось: {1}</comment>
-  </data>
     <data name="OfflineSync_Cancel" xml:space="preserve">
     <value>Отмена</value>
     <comment>Отмена</comment>
+  </data>
+    <data name="OfflineSync_InstallPlayServices" xml:space="preserve">
+    <value>Должны быть установлены Google Play Services.</value>
+    <comment>Должны быть установлены Google Play Services.</comment>
+  </data>
+    <data name="OfflineSync_DeviceNotSupported" xml:space="preserve">
+    <value>Это устройство не поддерживается.</value>
+    <comment>Это устройство не поддерживается.</comment>
   </data>
 </root>
