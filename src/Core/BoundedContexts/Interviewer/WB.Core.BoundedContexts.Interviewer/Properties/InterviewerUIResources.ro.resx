@@ -612,7 +612,7 @@ pentru instrucțiuni suplimentare</value>
     <value>{0} interviuri noi descărcate</value>
   </data>
   <data name="Synchronization_Success_State_RejectedInterviews_Format" xml:space="preserve">
-    <value>{0 interviuri respinse și returnate de către controlor</value>
+    <value>{0} interviuri respinse și returnate de către controlor</value>
   </data>
   <data name="Synchronization_Success_State_UploadedInterviews_Format" xml:space="preserve">
     <value>{0} interviuri finalizate și încărcate</value>
