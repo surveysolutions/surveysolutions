@@ -262,6 +262,11 @@ namespace WB.Tests.Abc.TestFactories
             {
                 throw new NotImplementedException();
             }
+
+            public void StopAll()
+            {
+                throw new NotImplementedException();
+            }
         }
 
         internal class FakeNearbyConnection : FakeNearbyConnectionBase
