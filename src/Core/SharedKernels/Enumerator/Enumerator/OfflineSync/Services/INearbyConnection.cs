@@ -18,5 +18,6 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services
         ObservableCollection<RemoteEndpoint> RemoteEndpoints { get; }
         void StopDiscovery();
         void StopAdvertising();
+        void StopAll();
     }
 }
