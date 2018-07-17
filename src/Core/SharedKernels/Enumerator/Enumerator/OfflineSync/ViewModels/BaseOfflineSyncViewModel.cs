@@ -128,11 +128,13 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
 
         protected void StopDiscovery()
         {
+            this.nearbyConnection.StopAllEndpoint();
             this.nearbyConnection.StopDiscovery();
         }
 
         protected void StopAdvertising()
         {
+            this.nearbyConnection.StopAllEndpoint();
             this.nearbyConnection.StopAdvertising();
         }
 
