@@ -118,13 +118,13 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="AccountIsLockedOnServer" xml:space="preserve">
-    <value>Contul dvs. Este blocat. Contactați supervizorul.</value>
+    <value>Contul dvs. Este blocat. Contactați controlorul.</value>
   </data>
   <data name="AccountIsNotAnInterviewer" xml:space="preserve">
-    <value>Contul dvs nu are rol de anchetator.</value>
+    <value>Contul dvs nu are rol de anchetator</value>
   </data>
   <data name="AccountIsNotApprovedOnServer" xml:space="preserve">
-    <value>Contul dvs. nu a fost aprobat. Contactați supervizorul.</value>
+    <value>Contul dvs. nu a fost aprobat. Contactați controlorul.</value>
   </data>
   <data name="ApplicationIncompatibleWithServer" xml:space="preserve">
     <value>Aplicația nu este compatibilă cu serverul. Actualizați aplicația Interviewer.</value>
@@ -133,13 +133,13 @@
     <value>Alocat de {0}</value>
   </data>
   <data name="DashboardItem_AssignmentCreatedComment" xml:space="preserve">
-    <value>Chestionare create: {0}</value>
+    <value>Interviuri create: {0}</value>
   </data>
   <data name="DashboardItem_AssignmentLeftComment" xml:space="preserve">
-    <value>{0} chestionare</value>
+    <value>{0} interviu(ri)</value>
   </data>
   <data name="DashboardItem_CensusModeComment" xml:space="preserve">
-    <value>Mod recensământ, Chestionare create: {0}</value>
+    <value>Mod Recensământ, Interviuri create: {0}</value>
   </data>
   <data name="DashboardItem_CompletedOn" xml:space="preserve">
     <value>Finalizate de {0}</value>
@@ -160,16 +160,16 @@
     <value>{0} (v{1})</value>
   </data>
   <data name="Dashboard_AssignmentCard_SubTitleCountdownFormat" xml:space="preserve">
-    <value>De colectat: {0} chestionare</value>
+    <value>De colectat: {0} interviuri</value>
   </data>
   <data name="Dashboard_AssignmentCard_SubTitleCountdown_UnlimitedFormat" xml:space="preserve">
     <value>De colectat: nelimitat</value>
   </data>
   <data name="Dashboard_AssignmentCard_SubTitleSingleInterivew" xml:space="preserve">
-    <value>Chetionar unic</value>
+    <value>Interviu alocat o singură dată</value>
   </data>
   <data name="Dashboard_AssignmentsTabTitle" xml:space="preserve">
-    <value>Creare Nou</value>
+    <value>Creare interviu nou</value>
   </data>
   <data name="Dashboard_CensusAssignment" xml:space="preserve">
     <value>Recensământ</value>
@@ -178,16 +178,16 @@
     <value>Finalizate ({0})</value>
   </data>
   <data name="Dashboard_CompletedTabText" xml:space="preserve">
-    <value>Chetionarele finalizate vor fi încărcate în timpul următoarei sincronizări</value>
+    <value>Interviurile finalizate vor fi încărcate în timpul următoarei sincronizări</value>
   </data>
   <data name="Dashboard_CreateNewTabText" xml:space="preserve">
-    <value>Creare chestionar nou utilizând șabloane</value>
+    <value>Creare interviu nou utilizând șabloane</value>
   </data>
   <data name="Dashboard_Discard" xml:space="preserve">
     <value>Renunțare</value>
   </data>
   <data name="Dashboard_Interview_AssignmentLabelFormat" xml:space="preserve">
-    <value>Sarcina #{0}</value>
+    <value>Interviul alocat #{0}</value>
   </data>
   <data name="Dashboard_Interview_QuestionsAnsweredFormat" xml:space="preserve">
     <value>{0} întrebări răspunse</value>
@@ -202,10 +202,10 @@
     <value>Sincronizare</value>
   </data>
   <data name="Dashboard_NoInterviewsText" xml:space="preserve">
-    <value>Sincronizați pentru sarcini noi sau contactați supervizorul pentru instrucțiuni</value>
+    <value>Sincronizați pentru noi alocări sau contactați controlorul pentru instrucțiuni</value>
   </data>
   <data name="Dashboard_NoInterviewsTitle" xml:space="preserve">
-    <value>Nu aveți sarcini noi</value>
+    <value>Nu aveți alocări noi</value>
   </data>
   <data name="Dashboard_NoNewItemsLinkText" xml:space="preserve">
     <value>Niciun item nou</value>
@@ -214,13 +214,13 @@
     <value>Nimic găsit</value>
   </data>
   <data name="Dashboard_No_InterviewKey" xml:space="preserve">
-    <value>Cheie chestionar inexistentă</value>
+    <value>Cheie interviu inexistentă</value>
   </data>
   <data name="Dashboard_Open" xml:space="preserve">
     <value>Deschidere</value>
   </data>
   <data name="Dashboard_QuestionnairesTabText" xml:space="preserve">
-    <value>Puteți crea noi chestionare utilizând sarcinile</value>
+    <value>Puteți crea interviuri noi utilizând alocările existente</value>
   </data>
   <data name="Dashboard_Reinitialize_Interview_Message" xml:space="preserve">
     <value>Acest interviu este finalizat. Doriți să redeschideți interviul?</value>
@@ -229,11 +229,11 @@
     <value>Respins ({0})</value>
   </data>
   <data name="Dashboard_RejectedTabText" xml:space="preserve">
-    <value>Interviuri care au fost respinse de către supervizor
+    <value>Interviuri care au fost respinse de către controlor
 Trebuie să rezolvați problemele menționate pe copertă</value>
   </data>
   <data name="Dashboard_RemoveInterviewQuestion" xml:space="preserve">
-    <value>Sigur doriți să ștergeți acest chestionar {0}?</value>
+    <value>Sigur doriți să ștergeți acest interviu {0}?</value>
   </data>
   <data name="Dashboard_Reopen" xml:space="preserve">
     <value>Redeschidere</value>
@@ -257,14 +257,14 @@ Trebuie să rezolvați problemele menționate pe copertă</value>
     <value>Începute ({0})</value>
   </data>
   <data name="Dashboard_StartedTabText" xml:space="preserve">
-    <value>Chestionare care au fost începute, dar nu au fost finalizate
+    <value>Interviuri începute, dar nefinalizate
 Trebuie să le finalizați pentru a fi sincronizate</value>
   </data>
   <data name="Dashboard_StartNewInterview" xml:space="preserve">
-    <value>Începere chestionar nou</value>
+    <value>Începere interviu nou</value>
   </data>
   <data name="Dashboard_Title" xml:space="preserve">
-    <value>{0} sarcini pentru {1}</value>
+    <value>{0} interviuri alocate pentru {1}</value>
   </data>
   <data name="Dashboard_ViewIssues" xml:space="preserve">
     <value>Vizualizare Probleme</value>
@@ -273,7 +273,7 @@ Trebuie să le finalizați pentru a fi sincronizate</value>
     <value>Data salvării:</value>
   </data>
   <data name="Diagnostics_BackupFileLocation_Title" xml:space="preserve">
-    <value>Calea fișierului backup:</value>
+    <value>Calea fișierului copiei de siguranță:</value>
   </data>
   <data name="Diagnostics_BackupReady_Title" xml:space="preserve">
     <value>Date salvate</value>
@@ -282,22 +282,22 @@ Trebuie să le finalizați pentru a fi sincronizate</value>
     <value>Scop:</value>
   </data>
   <data name="Diagnostics_Backup_Description" xml:space="preserve">
-    <value>Toate datele colectate vor fi salvate în fișierul de backup de pe acest dispozitiv.</value>
+    <value>Toate datele colectate vor fi salvate în fișierul de copie de siguranță de pe acest dispozitiv.</value>
   </data>
   <data name="Diagnostics_Backup_Title" xml:space="preserve">
-    <value>Realizare backup pentru informațiile colectate</value>
+    <value>Realizare copie de siguranță pentru informațiile colectate</value>
   </data>
   <data name="Diagnostics_BandwidthTestConnectionAbsent_Title" xml:space="preserve">
-    <value>&lt;font color="red"&gt;Fără conexiune la internet&lt;/font&gt;</value>
+    <value>&lt;font color='red'&gt;Fără conexiune la internet&lt;/font&gt;</value>
   </data>
   <data name="Diagnostics_BandwidthTestConnectionNotOK_Title" xml:space="preserve">
-    <value>Conexiunea este &lt;font color="red"&gt;slabă&lt;/font&gt;</value>
+    <value>Conexiunea este &lt;font color='red'&gt;slabă&lt;/font&gt;</value>
   </data>
   <data name="Diagnostics_BandwidthTestConnectionOK_Title" xml:space="preserve">
     <value>Există conexiune la internet</value>
   </data>
   <data name="Diagnostics_BandwidthTestConnectionToTheServerAbsent_Title" xml:space="preserve">
-    <value>&lt;font color="red"&gt;Nu există conexiunea la server&lt;/font&gt;</value>
+    <value>&lt;font color='red'&gt;Nu există conexiunea la server&lt;/font&gt;</value>
   </data>
   <data name="Diagnostics_BandwidthTestConnectionType_Title" xml:space="preserve">
     <value>Tipul conexiunii:</value>
@@ -333,16 +333,16 @@ Trebuie să le finalizați pentru a fi sincronizate</value>
     <value>Date salvate găsite:</value>
   </data>
   <data name="Diagnostics_Restore_Description" xml:space="preserve">
-    <value>Prin restaurarea datelor salvate se vor înlocui toate sarcinile de pe acest dispozivitv</value>
+    <value>Prin recuperarea datelor salvate se vor înlocui toate interviurile alocate de pe acest dispozitiv</value>
   </data>
   <data name="Diagnostics_Restore_Title" xml:space="preserve">
-    <value>RESTAURARE</value>
+    <value>RECUPERARE</value>
   </data>
   <data name="Diagnostics_Send" xml:space="preserve">
     <value>Trimitere</value>
   </data>
   <data name="Diagnostics_Send_Description" xml:space="preserve">
-    <value>Toate datele aplicației și chestionarelor vor fi stocate într-o singură arhivă. Acest proces poate dura până la 10 minute.</value>
+    <value>Toate datele aplicației și interviurile vor fi stocate într-o singură arhivă. Acest proces poate dura până la 10 minute.</value>
   </data>
   <data name="Diagnostics_Send_Title" xml:space="preserve">
     <value>Colectarea și trimiterea datelor din tabletă către server</value>
@@ -351,7 +351,7 @@ Trebuie să le finalizați pentru a fi sincronizate</value>
     <value>Server URL:</value>
   </data>
   <data name="Diagnostics_Share_Description" xml:space="preserve">
-    <value>Toate informațiile de mai jos for fi distribuite ca text. Pot fi trimise prin email, Google Hangouts sau altă aplicație de messenger</value>
+    <value>Toate informațiile de mai jos vor fi distribuite ca text. Pot fi trimise prin email, Google Hangouts sau altă aplicație de messenger</value>
   </data>
   <data name="Diagnostics_Share_Title" xml:space="preserve">
     <value>Distribuirea informațiilor tehnice</value>
@@ -381,10 +381,10 @@ Trebuie să le finalizați pentru a fi sincronizate</value>
     <value>Aveți cea mai recentă versiune a aplicației.</value>
   </data>
   <data name="FailedToCreateInterview" xml:space="preserve">
-    <value>Eșuare creare chestionar. Cauză: {0}</value>
+    <value>Eșuare creare interviu. Cauză: {0}</value>
   </data>
   <data name="FailedToLoadInterview" xml:space="preserve">
-    <value>Eșuare deschidere chestionar.</value>
+    <value>Eșuare deschidere interviu</value>
   </data>
   <data name="FinishInstallation_EndpointDiffers" xml:space="preserve">
     <value>Endpoint-ul de sincronizare '{0}' este diferit de cel furnizat în Setări ('{1}'). Încărcați URL-ul din setări?</value>
@@ -402,22 +402,22 @@ Trebuie să le finalizați pentru a fi sincronizate</value>
     <value>Încărcare... {0}%</value>
   </data>
   <data name="InvalidEndpoint" xml:space="preserve">
-    <value>Site-ul de supervizor este incorect. Verificați dacă adresa URL introdusă este corectă</value>
+    <value>Site-ul de controlor este incorect. Verificați dacă adresa URL introdusă este corectă</value>
   </data>
   <data name="Login_FinishInstallation_Message" xml:space="preserve">
     <value>Aceasta este prima autentificare pe această tabletă. Utilizatorul și domeniul nu sunt setate.&lt;br /&gt;Aveți nevoie de conexiune la internet pentru a continua</value>
   </data>
   <data name="Login_Online_Signin_Explanation_message" xml:space="preserve">
-    <value>Puteți încerca să vă autentificați online dacă ați uitat parola sau a fost resetată</value>
+    <value>Puteți încerca să vă autentificați online dacă ați uitat parola sau dacă a fost resetată</value>
   </data>
   <data name="Login_Online_SignIn_Failed" xml:space="preserve">
-    <value>Problemă de autentificare pe server. Contactați supervizorul.</value>
+    <value>Problemă de conectare pe server. Contactați controlorul</value>
   </data>
   <data name="Login_WrongPassword" xml:space="preserve">
     <value>Parolă incorectă</value>
   </data>
   <data name="Maintenance" xml:space="preserve">
-    <value>Site-ul Survey Solutions Supervisor este în mentenanță. Ne cerem scuze de inconvenient.</value>
+    <value>Site-ul Survey Solutions Supervisor este în mentenanță. Ne cerem scuze de inconvenient</value>
   </data>
   <data name="MapSyncProvider_SyncronizeMapsAsync_Checking_maps_on_server" xml:space="preserve">
     <value>Verificarea hărților pe server</value>
@@ -434,7 +434,7 @@ Descărcat {3}%</value>
   </data>
   <data name="Maps_NoMapsText" xml:space="preserve">
     <value>Sincronizați pentru a obține hărți
-sau contactați supervizorul
+sau contactați controlorul
 pentru instrucțiuni suplimentare</value>
   </data>
   <data name="Maps_Synchronization_Success_Description" xml:space="preserve">
@@ -456,7 +456,7 @@ pentru instrucțiuni suplimentare</value>
     <value>Original</value>
   </data>
   <data name="MenuItem_Title_Login" xml:space="preserve">
-    <value>Autentificare</value>
+    <value>Conectare</value>
   </data>
   <data name="MenuItem_Title_Maps" xml:space="preserve">
     <value>Hărți</value>
@@ -483,7 +483,7 @@ pentru instrucțiuni suplimentare</value>
     <value>Versiune aplicație:</value>
   </data>
   <data name="Prefs_BufferSizeSummary" xml:space="preserve">
-    <value>Numărul de biți ale datelor primite/transmise de la/către supervizor</value>
+    <value>Numărul de biți ale datelor primite/transmise de la/către controlor</value>
   </data>
   <data name="Prefs_BufferSizeTitle" xml:space="preserve">
     <value>Dimensiunea pachetului de comunicare</value>
@@ -495,7 +495,7 @@ pentru instrucțiuni suplimentare</value>
     <value>ID dispozitiv:</value>
   </data>
   <data name="Prefs_EndpointTitle" xml:space="preserve">
-    <value>Adresa URL a supervizorului</value>
+    <value>Adresa URL a controlorului</value>
   </data>
   <data name="Prefs_EventChunkSizeSummary" xml:space="preserve">
     <value>Câte sarcini de lucru pot fi citite într-o singură interogare</value>
@@ -516,7 +516,7 @@ pentru instrucțiuni suplimentare</value>
     <value>Timpul de așteptare a unui răspuns de la Server a expirat</value>
   </data>
   <data name="Prefs_InterviewSettings" xml:space="preserve">
-    <value>Setările chestionarului</value>
+    <value>Setările interviului</value>
   </data>
   <data name="Prefs_Title" xml:space="preserve">
     <value>Setări</value>
@@ -525,7 +525,7 @@ pentru instrucțiuni suplimentare</value>
     <value>Cerere anulată de utilizator</value>
   </data>
   <data name="RequestTimeout" xml:space="preserve">
-    <value>Timpul de conectare la site-ul Survey Solutions Supervisor a expirat. Verficați conexiunea la internet.</value>
+    <value>Timpul de conectare la site-ul Survey Solutions Supervisor a expirat. Verificați conexiunea la internet.</value>
   </data>
   <data name="ServiceUnavailable" xml:space="preserve">
     <value>Nu aveți conexiune la site-ul Survey Solutions Supervisor. Asigurați-vă că adresa este disponibilă.</value>
@@ -567,22 +567,22 @@ pentru instrucțiuni suplimentare</value>
     <value>{0} din {1} {2} realizate</value>
   </data>
   <data name="Synchronization_Download_Title" xml:space="preserve">
-    <value>Actualizarea sarcinilor</value>
+    <value>Actualizarea interviurilor alocate</value>
   </data>
   <data name="Synchronization_Fail_State_DeletedInterviews_Format" xml:space="preserve">
-    <value>{0} din {1} chestionare șterse</value>
+    <value>{0} din {1} interviuri șterse</value>
   </data>
   <data name="Synchronization_Fail_State_FailedToProcess_Format" xml:space="preserve">
-    <value>{0} chestionare nu au reușit sincronizarea</value>
+    <value>{0} interviuri nu au reușit sincronizarea</value>
   </data>
   <data name="Synchronization_Fail_State_NewInterviews_Format" xml:space="preserve">
-    <value>{0} din {1} chestionare noi descărcate</value>
+    <value>{0} din {1} interviuri noi descărcate</value>
   </data>
   <data name="Synchronization_Fail_State_RejectedInterviews_Format" xml:space="preserve">
-    <value>{0} din {1} chestionare respinse și returnate de către supervizor</value>
+    <value>{0} din {1} interviuri respinse și returnate de către controlor</value>
   </data>
   <data name="Synchronization_Fail_State_UploadedInterviews_Format" xml:space="preserve">
-    <value>{0} din {1} chestionare finalizare încarcate</value>
+    <value>{0} din {1} interviuri finalizate încărcate</value>
   </data>
   <data name="Synchronization_Fail_Title" xml:space="preserve">
     <value>Sincronizarea a fost întreruptă, vă rugăm reîncercați</value>
@@ -591,31 +591,31 @@ pentru instrucțiuni suplimentare</value>
     <value>Excepție neașteptată</value>
   </data>
   <data name="Synchronization_Interviews" xml:space="preserve">
-    <value>chestionare</value>
+    <value>interviuri</value>
   </data>
   <data name="Synchronization_LockedAssignments_Text" xml:space="preserve">
-    <value>Sarcinile sunt blocate până sincronizarea va fi completă</value>
+    <value>Interviurile alocate sunt blocate până când sincronizarea va fi completă</value>
   </data>
   <data name="Synchronization_Of_AssignmentsFormat" xml:space="preserve">
-    <value>Sincronizare {0} din {1} sarcini</value>
+    <value>Sincronizare {0} din {1} interviuri alocate</value>
   </data>
   <data name="Synchronization_Questionnaires" xml:space="preserve">
     <value>chestionare</value>
   </data>
   <data name="Synchronization_Success_Description" xml:space="preserve">
-    <value>Toate sarcinile sunt actualizate</value>
+    <value>Toate interviurile alocate sunt actualizate</value>
   </data>
   <data name="Synchronization_Success_State_DeletedInterviews_Format" xml:space="preserve">
-    <value>{0} chestionare șterse</value>
+    <value>{0} interviuri șterse</value>
   </data>
   <data name="Synchronization_Success_State_NewInterviews_Format" xml:space="preserve">
-    <value>{0} chestionare noi descărcate</value>
+    <value>{0} interviuri noi descărcate</value>
   </data>
   <data name="Synchronization_Success_State_RejectedInterviews_Format" xml:space="preserve">
-    <value>{0} chestionare respinse și returnate de către supervizor</value>
+    <value>{0 interviuri respinse și returnate de către controlor</value>
   </data>
   <data name="Synchronization_Success_State_UploadedInterviews_Format" xml:space="preserve">
-    <value>{0} chestionare finalizate și încărcate</value>
+    <value>{0} interviuri finalizate și încărcate</value>
   </data>
   <data name="Synchronization_Success_Title" xml:space="preserve">
     <value>Sincronizare efectuată cu succes</value>
@@ -624,13 +624,13 @@ pentru instrucțiuni suplimentare</value>
     <value>Încărcare informații de audit</value>
   </data>
   <data name="Synchronization_Upload_CompletedAssignments_Text" xml:space="preserve">
-    <value>sarcini finalizate</value>
+    <value>interviuri alocate finalizate</value>
   </data>
   <data name="Synchronization_Upload_Description_Format" xml:space="preserve">
     <value>{0} din {1} {2} efectuate</value>
   </data>
   <data name="Synchronization_Upload_Interviews_Text" xml:space="preserve">
-    <value>chestionare</value>
+    <value>interviuri</value>
   </data>
   <data name="Synchronization_Upload_Title_Format" xml:space="preserve">
     <value>Încărcare {0}</value>
@@ -648,7 +648,7 @@ pentru instrucțiuni suplimentare</value>
     <value>Contul dvs. a fost realocat pe o altă tabletă</value>
   </data>
   <data name="Synchronization_UserPassword_Update_Format" xml:space="preserve">
-    <value>Problemă de autentificare. Datele de logare nu pot fi confirmate ('{0}'). Contul dvs. poate avea o altă parolă; poate fi șters sau blocat. Reintroduceți parola. Dacă problema persistă, contactați supervizorul</value>
+    <value>Problemă de autentificare. Datele de logare nu pot fi confirmate ('{0}'). Contul dvs. poate avea o altă parolă; poate fi șters sau blocat. Reintroduceți parola. Dacă problema persistă, contactați controlorul.</value>
   </data>
   <data name="Troubleshooting_Backup" xml:space="preserve">
     <value>Creare copie de siguranță</value>
@@ -687,7 +687,7 @@ pentru instrucțiuni suplimentare</value>
     <value>Setul de informații a fost transmis cu succes</value>
   </data>
   <data name="Troubleshooting_Old_InformationPackageSizeWarningFormat" xml:space="preserve">
-    <value>Setul de informații de dimensiunea {0} va fi transmis prin rețea. Sunteți sigur că doriți să le tranmiteți?</value>
+    <value>Setul de informații de dimensiunea {0} va fi transmis prin rețea. Sunteți sigur că doriți să le transmiteți?</value>
   </data>
   <data name="Troubleshooting_Old_SendingInformationPackage" xml:space="preserve">
     <value>Transmiterea setului de informații</value>
@@ -699,16 +699,16 @@ pentru instrucțiuni suplimentare</value>
     <value>Anulare</value>
   </data>
   <data name="Troubleshooting_RestorationErrorMessage" xml:space="preserve">
-    <value>A apărut o păroblemă și tableta nu poate fi resetată.</value>
+    <value>A apărut o problemă și tableta nu poate fi resetată.</value>
   </data>
   <data name="Troubleshooting_Restore" xml:space="preserve">
-    <value>Restaurare din copia de siguranță</value>
+    <value>Recuperare din copia de siguranță</value>
   </data>
   <data name="Troubleshooting_RestoreConfirmation" xml:space="preserve">
-    <value>Toate datele vor fi șterse. Sunteți sigur că doriți să restaurați? Dacă da, asigurați-vă că datele au fost încărcate la {0}</value>
+    <value>Toate datele vor fi șterse. Sunteți sigur că doriți să resetați? Dacă da, asigurați-vă că datele au fost încărcate la {0}</value>
   </data>
   <data name="Troubleshooting_RestoredSuccessfully" xml:space="preserve">
-    <value>Tableta a fost restaurată cu succes.</value>
+    <value>Tableta a fost resetată cu succes.</value>
   </data>
   <data name="Troubleshooting_RestoreFolderIsEmpty" xml:space="preserve">
     <value>Folderul '{0}' este gol. Copiați fișierul copiei de siguranță pe care doriți să îl reîncărcați în folder.</value>
@@ -726,7 +726,7 @@ pentru instrucțiuni suplimentare</value>
     <value>Eroare apărută la verificarea versiunii. Vă rugăm verificați setările sau încercați mai târziu</value>
   </data>
   <data name="UnacceptableSSLCertificate" xml:space="preserve">
-    <value>Nu sa putut verifica certificatul pentru adresa URL vizată. Verificați dacă adresa site-ului Web al Headquarter-ului este validă, iar dispozitivul dvs. are o dată și o oră curente</value>
+    <value>Nu s-a putut verifica certificatul pentru adresa URL vizată. Verificați dacă adresa site-ului Web al Headquaters (RINS) este validă, iar dispozitivul dvs. are o dată și o oră curente</value>
   </data>
   <data name="Unauthorized" xml:space="preserve">
     <value>Datele de autentificare sunt incorecte</value>
