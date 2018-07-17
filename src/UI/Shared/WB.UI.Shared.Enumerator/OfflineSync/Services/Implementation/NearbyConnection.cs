@@ -88,6 +88,7 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
 
         public Task<NearbyStatus> StartDiscovery(string serviceName)
         {
+            Debug.WriteLine("Start discovery for " + serviceName);
             return NearbyClass.Connections.StartDiscoveryAsync(api, serviceName,
                     new OnDiscoveryCallback(FoundEndpoint, LostEndpoint),
                     new DiscoveryOptions(Strategy.P2pStar))
@@ -97,11 +98,15 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
 
         public void StopAllEndpoint()
         {
-            NearbyClass.Connections.StopAllEndpoints(api);
+            Debug.WriteLine("StopAllEndpoints");
+            if(api.IsConnected)
+                NearbyClass.Connections.StopAllEndpoints(api);
         }
 
         public async Task<string> StartAdvertising(string serviceName, string name)
         {
+            Debug.WriteLine("Start advertising for " + serviceName + " as " + name);
+
             var result = await NearbyClass.Connections.StartAdvertisingAsync(api, name, serviceName,
                 new OnConnectionLifecycleCallback(
                     new NearbyConnectionLifeCycleCallback(OnInitiatedConnection, OnConnectionResult, OnDisconnected)),
@@ -215,22 +220,28 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
         public void StopDiscovery()
         {
             Trace("Stop discovery");
-            NearbyClass.Connections.StopDiscovery(api);
+            if (api.IsConnected)
+                NearbyClass.Connections.StopDiscovery(api);
         }
 
         public void StopAdvertising()
         {
             Trace("Stop advertising");
-            NearbyClass.Connections.StopAdvertising(api);
+            if (api.IsConnected)
+                NearbyClass.Connections.StopAdvertising(api);
         }
 
         public void StopAll()
         {
-            this.StopAdvertising();
-            this.StopDiscovery();
-            this.StopAllEndpoint();
-            this.RemoteEndpoints.Clear();
-            this.knownEnpoints.Clear();
+            try
+            {
+                this.StopAdvertising();
+                this.StopDiscovery();
+                this.StopAllEndpoint();
+                this.RemoteEndpoints.Clear();
+                this.knownEnpoints.Clear();
+            }
+            catch { /* om om om */}
         }
 
         public void SetGoogleApiClient(GoogleApiClient apiClient)
