@@ -1,4 +1,7 @@
-﻿@model WB.UI.Shared.Web.Controllers.UnderConstructionController.UnderConstructionModel
+﻿@using System.Web.Configuration
+@using WB.UI.Designer.Resources
+@using WB.UI.Shared.Web.Extensions
+@model WB.UI.Shared.Web.Controllers.UnderConstructionController.UnderConstructionModel
 
 @{
     Layout = "";    
@@ -9,17 +12,51 @@
     <title>@Model.Title</title>
     <meta name='viewport' content='width=device-width, initial-scale=1.0'>
     <meta http-equiv='refresh' content='30' />
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    @Styles.Render("~/under-construction")
+    @Scripts.Render("~/simplepage")
+
+    @this.GenerateFavicon(Url.Content("~/Content/identity/favicon-designer"))
 </head>
-<body>
-    <div id='page' class='container-fluid'>
-        <div id='main'>
-            <h2>@Model.Message</h2>
-        </div>
+<body data-gr-c-s-loaded="true" class="modal-open under-construction">
+<div class="container-wb-list">
+    <div class="header-wb-list">
+        <header class="clearfix">
+            <a class="navbar-brand" href='@Url.Action("Index", "Questionnaire")'></a>
+            <nav>
+                <a class="btn btn-default" target="_blank" href="@WebConfigurationManager.AppSettings["DesignerHelpUrl"]">@AccountResources.Help</a>
+            </nav>
+        </header>
+        <section class="container-fluid ">
+            <div class="under-construction-content">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="page-header extra-margin-bottom">
+                            <h1>@UnderConstruction.ServerOnMaintenance</h1>
+                            <div class="row">
+                                <div class="col-sm-8">
+                                    <p class="text-muted  extra-margin-bottom">@*If you think this is an error or it is distrupting your work contact <a href="#" class="text-muted">our support</a>*@</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-5">
+                        <div class="padding-left-100">
+                            <h2>@Model.Message</h2>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </div>
-    <div class='row-fluid' id='footer-block'>
-    </div>
-    <script type='text/javascript'>
-        setTimeout(function () { document.location.reload(true); }, 1000 * 30);
-    </script>
+</div>
+
+<script type='text/javascript'>
+    setTimeout(function () { document.location.reload(true); }, 1000 * 30);
+</script>
 </body>
 </html>
