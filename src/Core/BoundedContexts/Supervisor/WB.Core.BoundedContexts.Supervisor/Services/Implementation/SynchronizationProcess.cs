@@ -154,7 +154,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
                 .Except(remoteInterviewers.Select(x => x.Id)).ToList();
             foreach (var interviewerId in interviewersToRemove)
             {
-                this.interviewViewRepository.Remove(interviewerId.FormatGuid());
+                this.interviewerViewRepository.Remove(interviewerId.FormatGuid());
             }
 
             processedInterviewersCount += interviewersToRemove.Count;
