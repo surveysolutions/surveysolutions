@@ -85,6 +85,10 @@ const config = {
         {
             file: "_WebInterviewLayout.cshtml",
             folder: '../Views/WebInterview/'
+        },       
+		{
+            file: "Index.cshtml",
+            folder: '../Views/UnderConstruction/'
         },
         {
             file: "InterviewLayout.cshtml",
