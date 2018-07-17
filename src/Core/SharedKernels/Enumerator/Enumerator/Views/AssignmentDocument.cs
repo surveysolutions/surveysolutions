@@ -28,7 +28,6 @@ namespace WB.Core.SharedKernels.Enumerator.Views
 
         public int? CreatedInterviewsCount { get; set; }
 
-
         [Ignore]
         public List<AssignmentAnswer> Answers { get; set; }
 

@@ -1769,7 +1769,8 @@ namespace WB.Tests.Abc.TestFactories
                 Quantity = quantity,
                 QuestionnaireId = questionnaireIdentity,
                 ResponsibleId = responsibleId ?? Guid.Empty,
-                OriginalResponsibleId = originalResponsibleId ?? Guid.Empty
+                OriginalResponsibleId = originalResponsibleId ?? Guid.Empty,
+                CreatedInterviewsCount = interviewsCount
             });
         }
 

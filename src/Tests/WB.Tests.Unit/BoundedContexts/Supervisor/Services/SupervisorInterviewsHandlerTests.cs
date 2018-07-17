@@ -4,11 +4,13 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Main.Core.Events;
 using Moq;
+using Ncqrs.Eventing;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Supervisor;
 using WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSyncHandlers;
 using WB.Core.BoundedContexts.Supervisor.Views;
+using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -190,6 +192,37 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             brokenStorageMock.Verify(bs => bs.Store(It.Is<BrokenInterviewPackageView>(bpv =>
                 bpv.ExceptionType == InterviewDomainExceptionType.DuplicateSyncPackage.ToString()                
             )), Times.Once);
+        }
+
+        [Test]
+        public async Task UploadInterview_should_update_quantity_on_assignment_when_interview_received()
+        {
+            var assignmentId = 1;
+            var existingInterviews = new InMemoryPlainStorage<InterviewView>();
+            existingInterviews.Store(Create.Entity.InterviewView(assignmentId: assignmentId, interviewId: Id.g1));
+            existingInterviews.Store(Create.Entity.InterviewView(assignmentId: assignmentId, interviewId: Id.g2, status: InterviewStatus.RejectedBySupervisor));
+
+            var assignments = Create.Storage.AssignmentDocumentsInmemoryStorage();
+            assignments.Store(Create.Entity.AssignmentDocument(assignmentId).Build());
+
+            var handler =  Create.Service.SupervisorInterviewsHandler(
+                interviews: existingInterviews,
+                assignments: assignments);
+            // Act
+            await handler.UploadInterview(new UploadInterviewRequest
+            {
+                InterviewKey = Create.Entity.InterviewKey().ToString(),
+                Interview = new InterviewPackageApiView
+                {
+                    InterviewId = Id.g2,
+                    Events = "",
+                    MetaInfo = new InterviewMetaInfo()
+                }
+            });
+
+            // Assert
+            var assignmentDocument = assignments.GetById(assignmentId);
+            Assert.That(assignmentDocument, Has.Property(nameof(assignmentDocument.CreatedInterviewsCount)).EqualTo(2));
         }
 
         [Test]
