@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AssignmentDashboardI
             // Assrt
             Assert.That(viewModel, Has.Property(nameof(viewModel.Title)).EqualTo("Questionnaire title (v7)"));
             Assert.That(viewModel, Has.Property(nameof(viewModel.IdLabel)).EqualTo("#12"));
-            Assert.That(viewModel, Has.Property(nameof(viewModel.SubTitle)).EqualTo("To collect: 3 interview(s)"));
+            Assert.That(viewModel, Has.Property(nameof(viewModel.SubTitle)).EqualTo("To collect: 2 interview(s)"));
         }
 
         AssignmentDashboardItemViewModel CreateViewModel()
