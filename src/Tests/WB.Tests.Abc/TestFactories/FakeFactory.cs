@@ -246,6 +246,11 @@ namespace WB.Tests.Abc.TestFactories
                 throw new NotImplementedException();
             }
 
+            public void StopAllEndpoint()
+            {
+                throw new NotImplementedException();
+            }
+
             public IObservable<INearbyEvent> Events { get; }// = new Subject<INearbyEvent>();
             public ObservableCollection<RemoteEndpoint> RemoteEndpoints { get; } = new ObservableCollection<RemoteEndpoint>();
             public void StopDiscovery()
