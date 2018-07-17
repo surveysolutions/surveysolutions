@@ -1951,10 +1951,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 {
                     propertiesInvariants.ThrowIfOtherInterviewerIsResponsible(command.UserId);
                 }
-                else
-                {
-                    propertiesInvariants.ThrowIfOtherSupervisorIsResponsible(command.UserId);
-                }
 
                 if (this.properties.Status == InterviewStatus.Deleted)
                     this.Restore(command.UserId);

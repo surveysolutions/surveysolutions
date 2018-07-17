@@ -175,23 +175,5 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                     };
             }
         }
-
-        public void ThrowIfOtherSupervisorIsResponsible(Guid commandUserId)
-        {
-            if (this.InterviewProperties.SupervisorId != commandUserId)
-            {
-                throw new InterviewException(
-                    $"Supervisor is not responsible for the interview anymore",
-                    InterviewDomainExceptionType.OtherUserIsResponsible) 
-                {
-                    Data =
-                    {
-                        {ExceptionKeys.InterviewId, this.InterviewProperties.Id},
-                        {ExceptionKeys.UserId, commandUserId},
-                        {ExceptionKeys.SupervisorId, this.InterviewProperties.SupervisorId}
-                    }
-                };
-            }
-        }
     }
 }

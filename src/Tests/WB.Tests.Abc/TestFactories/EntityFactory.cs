@@ -64,6 +64,8 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
+using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog;
+using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Utils;
@@ -2150,6 +2152,45 @@ namespace WB.Tests.Abc.TestFactories
                 ColValue = col,
                 Count = count
             };
+        }
+
+        public AuditLogEntityFactory AuditLogEntity => new AuditLogEntityFactory();
+
+        public class AuditLogEntityFactory
+        {
+            private readonly Random rnd;
+            private readonly JsonAllTypesSerializer serializer;
+
+            public AuditLogEntityFactory()
+            {
+                this.rnd = new Random();
+                this.serializer = new JsonAllTypesSerializer();
+            }
+
+            public LogoutAuditLogEntity LogoutAuditLogEntity(string userName) 
+                => new LogoutAuditLogEntity(userName);
+
+            public CloseInterviewAuditLogEntity CloseInterviewAuditLogEntity(Guid? interviewId = null, string interviewKey = null) 
+                => new CloseInterviewAuditLogEntity(interviewId ?? Guid.NewGuid(), interviewKey ?? new InterviewKey(rnd.Next()).ToString());
+
+            public AuditLogEntityApiView AuditLogEntitiesApiView(
+                IAuditLogEntity entity, 
+                int? id = null, 
+                Guid? responsibleId = null, 
+                string responsible = null,
+                DateTime? dateTime = null, 
+                DateTime? dateTimeUtc = null) =>
+                new AuditLogEntityApiView
+                {
+                    Id = id ?? rnd.Next(),
+                    Type = entity.Type,
+                    PayloadType = entity.GetType().Name,
+                    ResponsibleId = responsibleId ?? Guid.NewGuid(),
+                    Payload = serializer.Serialize(entity),
+                    ResponsibleName = responsible ?? Guid.NewGuid().ToString(),
+                    Time = dateTime ?? DateTime.Now,
+                    TimeUtc = dateTimeUtc ?? DateTime.UtcNow
+                };
         }
     }
 }

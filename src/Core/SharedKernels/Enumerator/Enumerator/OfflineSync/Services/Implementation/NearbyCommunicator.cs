@@ -306,13 +306,11 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
         private async Task SendOverWire(INearbyConnection nearbyConnection, string endpoint, Package package)
         {
             await SendOverWire(package.Header);
-            // CommunicationSession.Current.BytesSend(package.HeaderBytes.LongLength);
             CommunicationSession.Current.RequestsTotal += 1;
 
             if (package.HeaderPayload.PayloadContent == null)
             {
                 await SendOverWire(package.Content);
-                // CommunicationSession.Current.BytesSend(package.PayloadContentBytes.LongLength);
                 CommunicationSession.Current.RequestsTotal += 1;
             }
 
