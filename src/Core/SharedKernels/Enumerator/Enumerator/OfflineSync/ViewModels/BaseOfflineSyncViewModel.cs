@@ -55,7 +55,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
                     break;
                 case NearbyEvent.Connected connected:
                     SetStatus(ConnectionStatus.Connected, "Connected to " + connected.Name);
-                    Connected(connected.Endpoint);
+                    Connected(connected.Endpoint, connected.Name);
                     break;
                 case NearbyEvent.Disconnected disconnected:
                     SetStatus(ConnectionStatus.Discovering, "Disconnected from " + disconnected.Name ?? disconnected.Endpoint);
@@ -80,10 +80,12 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
             this.StatusDetails = details ?? String.Empty;
         }
 
-        protected virtual void Connected(string connectedEndpoint)
+        protected virtual void Connected(string connectedEndpoint, string connectedTo)
         {
 
         }
+
+        protected virtual void OnError(string errorMessage, ConnectionStatusCode errorCode) { }
 
         protected virtual async void OnFound(string endpointId, NearbyDiscoveredEndpointInfo info)
         {
@@ -120,6 +122,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
         {
             if (status.IsSuccess == false)
             {
+                this.OnError(status.StatusMessage, status.Status);
                 SetStatus(ConnectionStatus.Error, status.StatusMessage + $" [{status.Status.ToString()}]");
             }
 
@@ -201,7 +204,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
                 apiConnected.ContinueWith(async res => this.OnGoogleApiReady());
             }
         }
-
+        
         protected string NormalizeEndpoint(string endpoint)
         {
             var uri = new Uri(endpoint);

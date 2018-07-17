@@ -1,16 +1,34 @@
 ﻿using System.Threading.Tasks;
+using Android.Content;
 using Android.Gms.Common;
 using Android.Gms.Common.Apis;
 using Android.Gms.Nearby;
 using Android.OS;
+using Android.Widget;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation;
 
 namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
 {
+    public class CancelDialogHandler : Java.Lang.Object, IDialogInterfaceOnCancelListener
+    {
+        private readonly Activity activity;
+
+        public CancelDialogHandler(Activity activity)
+        {
+            this.activity = activity;
+        }
+        public void OnCancel(IDialogInterface dialog)
+        {
+            this.activity.Finish();
+            Toast.MakeText(this.activity, UIResources.OfflineSync_InstallPlayServices, ToastLength.Short).Show();
+        }
+    }
+
     public abstract class GoogleApiConnectedActivity<TViewModel>
         : BaseActivity<TViewModel>,
             GoogleApiClient.IConnectionCallbacks, GoogleApiClient.IOnConnectionFailedListener
@@ -18,68 +36,74 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
     {
         protected GoogleApiClient GoogleApi;
         protected TaskCompletionSource<bool> ApiConnected;
+        const int RequestCodeRecoverPlayServices = 1001;
         private INearbyConnection communicator;
 
-        protected override void OnCreate(Bundle bundle)
+        protected override void OnResume()
         {
-            this.GoogleApi = new GoogleApiClient.Builder(this)
-                .AddConnectionCallbacks(this)
-                .AddOnConnectionFailedListener(this)
-                .AddApi(NearbyClass.CONNECTIONS_API)
-                .Build();
+            base.OnResume();
 
-            this.communicator = ServiceLocator.Current.GetInstance<INearbyConnection>();
+            if (!this.CheckPlayServices()) return;
 
-            if (this.communicator is NearbyConnection gc)
-            {
-                gc.SetGoogleApiClient(this.GoogleApi);
-            }
-
-            var isGooglePlayServicesAvailable = GoogleApiAvailability.Instance.IsGooglePlayServicesAvailable(this);
-
-            if (isGooglePlayServicesAvailable != ConnectionResult.Success)
-            {
-                if (GoogleApiAvailability.Instance.IsUserResolvableError(isGooglePlayServicesAvailable))
-                {
-                    GoogleApiAvailability.Instance.GetErrorDialog(this, isGooglePlayServicesAvailable, 9000).Show();
-                }
-            }
-            
-            RestoreGoogleApiConnectionIfNeeded();
-
-            base.OnCreate(bundle);
+            this.RestoreGoogleApiConnectionIfNeeded();
         }
 
-        protected override void OnViewModelSet()
+        /// <summary>
+        /// Check the device to make sure it has the Google Play Services APK.
+        /// If it doesn't, display a dialog that allows users to download the APK from the Google Play Store 
+        /// or enable it in the device's system settings.
+        /// </summary>
+        /// <returns></returns>
+        private bool CheckPlayServices()
         {
-            base.OnViewModelSet();
-            this.ViewModel.SetGoogleAwaiter(this.ApiConnected.Task);
+            GoogleApiAvailability apiAvailability = GoogleApiAvailability.Instance;
+            int resultCode = apiAvailability.IsGooglePlayServicesAvailable(this);
+            if (resultCode == ConnectionResult.Success) return true;
+
+            if (apiAvailability.IsUserResolvableError(resultCode))
+                apiAvailability.GetErrorDialog(this, resultCode, RequestCodeRecoverPlayServices, new CancelDialogHandler(this)).Show();
+            else
+            {
+                this.Finish();
+                Toast.MakeText(this, UIResources.OfflineSync_DeviceNotSupported, ToastLength.Long).Show();
+            }
+
+            return false;
         }
 
         private void RestoreGoogleApiConnectionIfNeeded()
         {
-            if (GoogleApi.IsConnected) return;
+            if (this.GoogleApi == null)
+            {
+                this.GoogleApi = new GoogleApiClient.Builder(this)
+                    .AddConnectionCallbacks(this)
+                    .AddOnConnectionFailedListener(this)
+                    .AddApi(NearbyClass.CONNECTIONS_API)
+                    .Build();
+
+                this.communicator = ServiceLocator.Current.GetInstance<INearbyConnection>();
+                if (this.communicator is NearbyConnection gc)
+                {
+                    gc.SetGoogleApiClient(this.GoogleApi);
+                }
+            }
+
+            if (this.GoogleApi.IsConnected) return;
 
             this.ApiConnected = new TaskCompletionSource<bool>();
             this.GoogleApi.Connect();
-        }
 
-        public void OnConnected(Bundle connectionHint)
-        {
-            ApiConnected?.TrySetResult(true);
-        }
-
-        protected override void OnStart()
-        {
-            if (!GoogleApi.IsConnected && !GoogleApi.IsConnecting)
-            {
-                RestoreGoogleApiConnectionIfNeeded();
-            }
-
-            base.OnStart();
+            this.ViewModel.SetGoogleAwaiter(this.ApiConnected.Task);
         }
 
         protected override void OnStop()
+        {
+            this.GoogleApi?.Disconnect();
+
+            base.OnStop();
+        }
+
+        public void OnConnected(Bundle connectionHint)
         {
             try { 
             this.communicator?.StopAll();
@@ -96,7 +120,7 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
 
         public void OnConnectionFailed(ConnectionResult result)
         {
-            ApiConnected?.TrySetResult(false);
+            this.ApiConnected?.TrySetResult(false);
         }
     }
 }
