@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Android.App;
 using Android.Gms.Common;
 using Android.Gms.Common.Apis;
 using Android.Gms.Nearby;
@@ -19,6 +18,7 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
     {
         protected GoogleApiClient GoogleApi;
         protected TaskCompletionSource<bool> ApiConnected;
+        private INearbyConnection communicator;
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -28,9 +28,9 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
                 .AddApi(NearbyClass.CONNECTIONS_API)
                 .Build();
 
-            var communicator = ServiceLocator.Current.GetInstance<INearbyConnection>();
+            this.communicator = ServiceLocator.Current.GetInstance<INearbyConnection>();
 
-            if (communicator is NearbyConnection gc)
+            if (this.communicator is NearbyConnection gc)
             {
                 gc.SetGoogleApiClient(this.GoogleApi);
             }
@@ -81,6 +81,7 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
 
         protected override void OnStop()
         {
+            this.communicator?.StopAllEndpoint();
             GoogleApi?.Disconnect();
 
             base.OnStop();

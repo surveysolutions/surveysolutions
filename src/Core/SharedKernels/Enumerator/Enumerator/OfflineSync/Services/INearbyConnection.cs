@@ -13,7 +13,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services
         Task<NearbyStatus> AcceptConnection(string endpoint);
         Task<NearbyStatus> RejectConnection(string endpoint);
         Task<NearbyStatus> SendPayloadAsync(string to, IPayload payload);
-
+        void StopAllEndpoint();
         IObservable<INearbyEvent> Events { get; }
         ObservableCollection<RemoteEndpoint> RemoteEndpoints { get; }
         void StopDiscovery();
