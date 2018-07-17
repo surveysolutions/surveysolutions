@@ -199,7 +199,7 @@
     <value>Pentru utilizatorii cu rol de controlor, coloana “supervisor” trebuie să fie necompletată</value>
   </data>
   <data name="PLU0012" xml:space="preserve">
-    <value>Numele complet {0} are lungimea incorectă</value>
+    <value>Numele complet are lungimea incorectă</value>
   </data>
   <data name="PLU0012Description" xml:space="preserve">
     <value>Numele complet {0} este în format incorect</value>
@@ -217,7 +217,7 @@
     <value>Nu trebuie să conțină mai mult de 15 caractere</value>
   </data>
   <data name="PLU0014" xml:space="preserve">
-    <value>Numele complet {0} are caractere nevalide</value>
+    <value>Numele complet are caractere nevalide</value>
   </data>
   <data name="PLU0014Description" xml:space="preserve">
     <value>Numele '{0}' are caractere nevalide</value>

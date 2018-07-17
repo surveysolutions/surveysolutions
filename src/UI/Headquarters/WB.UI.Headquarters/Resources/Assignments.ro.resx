@@ -262,9 +262,9 @@
     <value>Neactualizat număr {{count}}</value>
   </data>
   <data name="UpgradeProgressNumbers" xml:space="preserve">
-    <value>Actualizarea datelor {{prelucrate}} din {numărul total}}</value>
+    <value>Actualizarea datelor {{processed}} din {{totalCount}}</value>
   </data>
   <data name="UpgradeProgressTitle" xml:space="preserve">
-    <value>Actualizarea interviurilor alocate de la {{de la}} la {{to}}</value>
+    <value>Actualizarea interviurilor alocate de la {{from}} la {{to}}</value>
   </data>
 </root>
