@@ -354,14 +354,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             }
         }
 
-        private bool CheckIfInterviewerWasMovedToAnotherTeam(Guid interviewerId,
+        private bool CheckIfInterviewerWasMovedToAnotherTeam(Guid responsibleId,
             IEvent[] interviewEvents, out Guid? newSupervisorId)
         {
             newSupervisorId = null;
             SupervisorAssigned supervisorAssigned = interviewEvents.OfType<SupervisorAssigned>().LastOrDefault();
             if (supervisorAssigned == null)
                 return false;
-            HqUser interviewer = userRepository.FindByIdAsync(interviewerId).Result;
+            HqUser interviewer = userRepository.FindByIdAsync(responsibleId).Result;
             newSupervisorId = interviewer.Profile.SupervisorId;
             return newSupervisorId != supervisorAssigned.SupervisorId;
         }
