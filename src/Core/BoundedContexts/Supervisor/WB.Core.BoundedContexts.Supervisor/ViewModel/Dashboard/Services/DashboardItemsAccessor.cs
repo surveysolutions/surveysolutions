@@ -107,7 +107,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services
         {
             return this.interviews.Where(x =>
                 x.Status == InterviewStatus.ApprovedBySupervisor
-                || x.Status == InterviewStatus.RejectedBySupervisor && x.ResponsibleId != this.principal.CurrentUserIdentity.UserId);
+                || x.ResponsibleId != this.principal.CurrentUserIdentity.UserId && 
+                (x.Status == InterviewStatus.RejectedBySupervisor || x.Status == InterviewStatus.RejectedByHeadquarters));
         }
 
         private IEnumerable<AssignmentDocument> GetOutboxAssignments()
@@ -125,7 +126,10 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services
         {
             var itemsWaitingForSupervisorAction = this.interviews.Where(x => 
                 x.Status == InterviewStatus.Completed ||
-                (x.Status == InterviewStatus.RejectedBySupervisor || x.Status == InterviewStatus.InterviewerAssigned || x.Status == InterviewStatus.SupervisorAssigned) && 
+                (x.Status == InterviewStatus.RejectedBySupervisor || 
+                 x.Status == InterviewStatus.InterviewerAssigned || 
+                 x.Status == InterviewStatus.SupervisorAssigned || 
+                 x.Status == InterviewStatus.RejectedByHeadquarters) && 
                 x.ResponsibleId == this.principal.CurrentUserIdentity.UserId);
             return itemsWaitingForSupervisorAction;
         }
