@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reactive.Subjects;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Android.Gms.Common.Apis;
 using Android.Gms.Nearby;
@@ -40,11 +41,58 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
             Debug.WriteLine("NearbyConnection - " + message);
         }
 
+        private void LogNonSuccesfulResult(Statuses result, ActionArgs args, [CallerMemberName] string method = null)
+        {
+            if (!result.IsSuccess)
+            {
+                (string key, string data)[] FromStatuses(Statuses status)
+                {
+                    return new[]
+                    {
+                        ("method", method),
+                        ("StatusCode", status.StatusCode.ToString()),
+                        ("StatusMessage", status.StatusMessage),
+                        ("HasResolution", status.HasResolution.ToString()),
+                        ("ResolutionPackage", status.HasResolution ? result.Resolution.CreatorPackage : "no"),
+                        ("IsCanceled", status.IsCanceled.ToString()),
+                        ("IsInterrupted", status.IsInterrupted.ToString()),
+                        ("ConnectionStatusCode", status.Status.ToString())
+                    };
+                }
+
+                var exception = new Exception();
+
+                foreach (var exceptionData in args.Data.Concat(FromStatuses(result)))
+                {
+                    exception.Data[exceptionData.key] = exceptionData.data;
+                }
+
+                logger.Error("Non successful result", exception);
+            }
+        }
+
+        private class ActionArgs
+        {
+            public (string key, string data)[] Data { get; }
+
+            public ActionArgs(params (string key, string data)[] data)
+            {
+                this.Data = data;
+            }
+        }
+
         public Task<NearbyStatus> StartDiscovery(string serviceName)
         {
             return NearbyClass.Connections.StartDiscoveryAsync(api, serviceName,
-                new OnDiscoveryCallback(FoundEndpoint, LostEndpoint),
-                new DiscoveryOptions(Strategy.P2pStar)).ToConnectionStatus();
+                    new OnDiscoveryCallback(FoundEndpoint, LostEndpoint),
+                    new DiscoveryOptions(Strategy.P2pStar))
+                .ToConnectionStatus(s => LogNonSuccesfulResult(s, 
+                    new ActionArgs((nameof(serviceName), serviceName))));
+        }
+
+        public void StopAllEndpoint()
+        {
+            NearbyClass.Connections.StopAllEndpoints(api);
         }
 
         public async Task<string> StartAdvertising(string serviceName, string name)
@@ -53,6 +101,10 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
                 new OnConnectionLifecycleCallback(
                     new NearbyConnectionLifeCycleCallback(OnInitiatedConnection, OnConnectionResult, OnDisconnected)),
                 new AdvertisingOptions(Strategy.P2pStar));
+
+            LogNonSuccesfulResult(result.Status, 
+                new ActionArgs((nameof(serviceName), serviceName), 
+                    (nameof(name), name)));
 
             if (!result.Status.IsSuccess)
             {
@@ -70,9 +122,12 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
             return NearbyClass.Connections.RequestConnectionAsync(api, name, endpoint,
                 new OnConnectionLifecycleCallback(
                     new NearbyConnectionLifeCycleCallback(
-                        OnInitiatedConnection, 
-                        OnConnectionResult, 
-                        OnDisconnected))).ToConnectionStatus();
+                        OnInitiatedConnection,
+                        OnConnectionResult,
+                        OnDisconnected)))
+                .ToConnectionStatus(status => 
+                    LogNonSuccesfulResult(status, 
+                        new ActionArgs(("name", name), ("endpoint", endpoint))));
         }
 
         public Task<NearbyStatus> AcceptConnection(string endpoint)
@@ -81,19 +136,29 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
 
             return NearbyClass.Connections.AcceptConnectionAsync(api, endpoint,
                 new OnPayloadCallback(new NearbyPayloadCallback(OnPayloadReceived, OnPayloadTransferUpdate)))
-                .ToConnectionStatus();
+                .ToConnectionStatus(status => 
+                    LogNonSuccesfulResult(status, new ActionArgs(("endpoint", endpoint))));
         }
 
         public Task<NearbyStatus> RejectConnection(string endpoint)
         {
-            return NearbyClass.Connections.RejectConnectionAsync(api, endpoint).ToConnectionStatus();
+            return NearbyClass.Connections.RejectConnectionAsync(api, endpoint)
+                .ToConnectionStatus(status => LogNonSuccesfulResult(status, 
+                    new ActionArgs(("endpoint", endpoint))));
         }
 
         public Task<NearbyStatus> SendPayloadAsync(string to, IPayload payload)
         {
-            var send = payload as Payload;
-            Trace($"SendPayloadAsync. PayloadId: {send?.Id ?? -1}");
-            return NearbyClass.Connections.SendPayloadAsync(api, to, send.NearbyPayload).ToConnectionStatus();
+            if (payload is Payload send)
+            {
+                Trace($"SendPayloadAsync. PayloadId: {send.Id}");
+
+                return NearbyClass.Connections.SendPayloadAsync(api, to, send.NearbyPayload)
+                    .ToConnectionStatus(status => 
+                        LogNonSuccesfulResult(status, new ActionArgs(("to", to))));
+            }
+
+            throw new NotImplementedException("Cannot handle payload of type: " + payload.GetType().FullName);
         }
 
         public IObservable<INearbyEvent> Events { get; }
