@@ -79,7 +79,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This section is under construction or undergoing scheduled maintenance..
+        ///   Looks up a localized string similar to This server is under construction or undergoing scheduled maintenance..
         /// </summary>
         public static string PageTitle {
             get {
