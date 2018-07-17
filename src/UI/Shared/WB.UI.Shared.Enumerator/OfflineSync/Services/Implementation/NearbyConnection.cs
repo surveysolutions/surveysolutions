@@ -7,9 +7,11 @@ using System.Linq;
 using System.Reactive.Subjects;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
+using Android.Bluetooth;
 using Android.Gms.Common.Apis;
 using Android.Gms.Nearby;
 using Android.Gms.Nearby.Connection;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Entities;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
@@ -45,6 +47,8 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
         {
             if (!result.IsSuccess)
             {
+                var nearbyStatus = result.ToConnectionStatus();
+
                 (string key, string data)[] FromStatuses(Statuses status)
                 {
                     return new[]
@@ -52,6 +56,7 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
                         ("method", method),
                         ("StatusCode", status.StatusCode.ToString()),
                         ("StatusMessage", status.StatusMessage),
+                        ("StatusCodeName", nearbyStatus.Status.ToString()),
                         ("HasResolution", status.HasResolution.ToString()),
                         ("ResolutionPackage", status.HasResolution ? result.Resolution.CreatorPackage : "no"),
                         ("IsCanceled", status.IsCanceled.ToString()),
@@ -86,7 +91,7 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
             return NearbyClass.Connections.StartDiscoveryAsync(api, serviceName,
                     new OnDiscoveryCallback(FoundEndpoint, LostEndpoint),
                     new DiscoveryOptions(Strategy.P2pStar))
-                .ToConnectionStatus(s => LogNonSuccesfulResult(s, 
+                .ToConnectionStatus(s => LogNonSuccesfulResult(s,
                     new ActionArgs((nameof(serviceName), serviceName))));
         }
 
@@ -102,8 +107,8 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
                     new NearbyConnectionLifeCycleCallback(OnInitiatedConnection, OnConnectionResult, OnDisconnected)),
                 new AdvertisingOptions(Strategy.P2pStar));
 
-            LogNonSuccesfulResult(result.Status, 
-                new ActionArgs((nameof(serviceName), serviceName), 
+            LogNonSuccesfulResult(result.Status,
+                new ActionArgs((nameof(serviceName), serviceName),
                     (nameof(name), name)));
 
             if (!result.Status.IsSuccess)
@@ -115,19 +120,61 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
             return result.LocalEndpointName;
         }
 
-        public Task<NearbyStatus> RequestConnection(string name, string endpoint)
-        {
-            Trace($"RequestConnection. {name} => {endpoint}");
+        private readonly NamedLocker locker = new NamedLocker();
 
-            return NearbyClass.Connections.RequestConnectionAsync(api, name, endpoint,
-                new OnConnectionLifecycleCallback(
-                    new NearbyConnectionLifeCycleCallback(
-                        OnInitiatedConnection,
-                        OnConnectionResult,
-                        OnDisconnected)))
-                .ToConnectionStatus(status => 
-                    LogNonSuccesfulResult(status, 
-                        new ActionArgs(("name", name), ("endpoint", endpoint))));
+        public async Task<NearbyStatus> RequestConnection(string name, string endpoint)
+        {
+            return await locker.RunWithLock(endpoint, async () =>
+            {
+                async Task<NearbyStatus> RequestConnectionInternal()
+                {
+                    Debug.WriteLine($"RequestConnection internal. {name} at {endpoint}");
+                    var nearbyStatus = await NearbyClass.Connections.RequestConnectionAsync(api, name, endpoint,
+                            new OnConnectionLifecycleCallback(
+                                new NearbyConnectionLifeCycleCallback(
+                                    OnInitiatedConnection,
+                                    OnConnectionResult,
+                                    OnDisconnected)))
+                        .ToConnectionStatus(status =>
+                            LogNonSuccesfulResult(status,
+                                new ActionArgs(("name", name), ("endpoint", endpoint))));
+
+                    Debug.WriteLine($"RequestConnection internal. {name} at {endpoint}. Result {nearbyStatus.Status.ToString()}");
+
+                    return nearbyStatus;
+                }
+
+                if (RemoteEndpoints.Any(re => re.Enpoint == endpoint))
+                {
+                    return new NearbyStatus
+                    {
+                        IsSuccess = true,
+                        Status = ConnectionStatusCode.StatusOk
+                    };
+                }
+
+                Trace($"RequestConnection. {name} => {endpoint}");
+
+                var result = await RequestConnectionInternal();
+
+                if (result.Status == ConnectionStatusCode.StatusBluetoothError)
+                {
+                    var mBluetoothAdapter = BluetoothAdapter.DefaultAdapter;
+                    if (mBluetoothAdapter.IsEnabled)
+                    {
+                        mBluetoothAdapter.Disable();
+
+                        result = await RequestConnectionInternal();
+                    }
+                }
+
+                if (result.Status == ConnectionStatusCode.StatusAlreadyConnectedToEndpoint)
+                {
+                    this.OnConnectionResult(endpoint, new NearbyConnectionResolution { IsSuccess = true });
+                }
+
+                return result;
+            });
         }
 
         public Task<NearbyStatus> AcceptConnection(string endpoint)
@@ -136,14 +183,14 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
 
             return NearbyClass.Connections.AcceptConnectionAsync(api, endpoint,
                 new OnPayloadCallback(new NearbyPayloadCallback(OnPayloadReceived, OnPayloadTransferUpdate)))
-                .ToConnectionStatus(status => 
+                .ToConnectionStatus(status =>
                     LogNonSuccesfulResult(status, new ActionArgs(("endpoint", endpoint))));
         }
 
         public Task<NearbyStatus> RejectConnection(string endpoint)
         {
             return NearbyClass.Connections.RejectConnectionAsync(api, endpoint)
-                .ToConnectionStatus(status => LogNonSuccesfulResult(status, 
+                .ToConnectionStatus(status => LogNonSuccesfulResult(status,
                     new ActionArgs(("endpoint", endpoint))));
         }
 
@@ -154,7 +201,7 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
                 Trace($"SendPayloadAsync. PayloadId: {send.Id}");
 
                 return NearbyClass.Connections.SendPayloadAsync(api, to, send.NearbyPayload)
-                    .ToConnectionStatus(status => 
+                    .ToConnectionStatus(status =>
                         LogNonSuccesfulResult(status, new ActionArgs(("to", to))));
             }
 
@@ -177,6 +224,15 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
             NearbyClass.Connections.StopAdvertising(api);
         }
 
+        public void StopAll()
+        {
+            this.StopAdvertising();
+            this.StopDiscovery();
+            this.StopAllEndpoint();
+            this.RemoteEndpoints.Clear();
+            this.knownEnpoints.Clear();
+        }
+
         public void SetGoogleApiClient(GoogleApiClient apiClient)
         {
             Trace("Google API SET");
@@ -185,17 +241,20 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
 
         private void LostEndpoint(string endpoint)
         {
-            knownEnpoints.TryRemove(endpoint, out var endpointInfo);
+            if(knownEnpoints.TryRemove(endpoint, out var endpointInfo)) {
 
-            Trace($"Lost endpoint: {endpoint}. Name: {endpointInfo ?? "<unknown>"}");
-            events.OnNext(new NearbyEvent.EndpointLost(endpoint));
+                Trace($"Lost endpoint: {endpoint}. Name: {endpointInfo ?? "<unknown>"}");
+                events.OnNext(new NearbyEvent.EndpointLost(endpoint));
+            }
         }
 
         private void FoundEndpoint(string endpoint, NearbyDiscoveredEndpointInfo endpointInfo)
         {
-            knownEnpoints.TryAdd(endpoint, endpointInfo.EndpointName);
-            Trace($"Lost endpoint: {endpoint}. Name: {endpointInfo.EndpointName}");
-            events.OnNext(new NearbyEvent.EndpointFound(endpoint, endpointInfo));
+            if (knownEnpoints.TryAdd(endpoint, endpointInfo.EndpointName))
+            {
+                Trace($"Lost endpoint: {endpoint}. Name: {endpointInfo.EndpointName}");
+                events.OnNext(new NearbyEvent.EndpointFound(endpoint, endpointInfo));
+            }
         }
 
         protected virtual void OnDisconnected(string endpoint)
