@@ -8,12 +8,14 @@ using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Tests.Abc;
+using WB.Tests.Abc.Storage;
 
 namespace WB.Tests.Unit.BoundedContexts.Supervisor.Dashboard
 {
@@ -23,7 +25,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Dashboard
         [Test]
         public void should_show_interviews_and_assignments_assigned_to_supervisor_in_waiting_for_decision_list()
         {
-            var interviews = new InMemoryPlainStorage<InterviewView>();
+            var interviews = new SqliteInmemoryStorage<InterviewView>();
 
             var principal = Mock.Of<IPrincipal>(x => x.IsAuthenticated == true &&
                                                      x.CurrentUserIdentity == Mock.Of<IUserIdentity>(u => u.UserId == Id.gA));
@@ -31,6 +33,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Dashboard
             interviews.Store(Create.Entity.InterviewView(interviewId: Id.g1, responsibleId: Id.gA, questionnaireId: Create.Entity.QuestionnaireIdentity().ToString(), status: InterviewStatus.RejectedBySupervisor));
             interviews.Store(Create.Entity.InterviewView(interviewId: Id.g2, responsibleId: Id.gB, questionnaireId: Create.Entity.QuestionnaireIdentity().ToString(), status: InterviewStatus.Completed));
             interviews.Store(Create.Entity.InterviewView(interviewId: Id.g3, responsibleId: Id.gA, questionnaireId: Create.Entity.QuestionnaireIdentity().ToString(), status: InterviewStatus.InterviewerAssigned));
+            interviews.Store(Create.Entity.InterviewView(interviewId: Id.g4, responsibleId: Id.gA, questionnaireId: Create.Entity.QuestionnaireIdentity().ToString(), status: InterviewStatus.RejectedByHeadquarters));
 
             interviews.Store(Create.Entity.InterviewView(interviewId: Id.g9, responsibleId: Id.gA, questionnaireId: Create.Entity.QuestionnaireIdentity().ToString(), status: InterviewStatus.ApprovedBySupervisor));
             interviews.Store(Create.Entity.InterviewView(interviewId: Id.g10, responsibleId: Id.gB, questionnaireId: Create.Entity.QuestionnaireIdentity().ToString(), status: InterviewStatus.RejectedBySupervisor));
@@ -43,10 +46,46 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Dashboard
 
             var items = waitingForSupervisorAction.Cast<SupervisorDashboardInterviewViewModel>().ToList();
 
+            Assert.That(items, Has.Count.EqualTo(4));
+            items.Should().ContainSingle(i => i.InterviewId == Id.g1, $"Should contain interview in {InterviewStatus.RejectedBySupervisor} status and responsible supervisor");
+            items.Should().ContainSingle(i => i.InterviewId == Id.g2, $"Should contain interview in {InterviewStatus.Completed} status");
+            items.Should().ContainSingle(i => i.InterviewId == Id.g3, $"Should contain interview in {InterviewStatus.InterviewerAssigned} status and responsible supervisor");
+            items.Should().ContainSingle(i => i.InterviewId == Id.g4, $"Should contain interview in {InterviewStatus.RejectedByHeadquarters} status and responsible supervisor");
+        }
+
+        [Test]
+        public void should_put_items_in_outbox()
+        {
+            var interviews = new SqliteInmemoryStorage<InterviewView>();
+
+            var currentSupervisorId = Id.gA;
+            var interviewerId = Id.gB;
+            var principal = Mock.Of<IPrincipal>(x => x.IsAuthenticated == true &&
+                                                     x.CurrentUserIdentity == Mock.Of<IUserIdentity>(u => u.UserId == currentSupervisorId));
+
+            interviews.Store(Create.Entity.InterviewView(interviewId: Id.g1, responsibleId: interviewerId, questionnaireId: Create.Entity.QuestionnaireIdentity().ToString(), status: InterviewStatus.ApprovedBySupervisor));
+            interviews.Store(Create.Entity.InterviewView(interviewId: Id.g2, responsibleId: interviewerId, questionnaireId: Create.Entity.QuestionnaireIdentity().ToString(), status: InterviewStatus.RejectedBySupervisor));
+            interviews.Store(Create.Entity.InterviewView(interviewId: Id.g3, responsibleId: interviewerId, questionnaireId: Create.Entity.QuestionnaireIdentity().ToString(), status: InterviewStatus.RejectedByHeadquarters));
+            
+            interviews.Store(Create.Entity.InterviewView(interviewId: Id.g9, responsibleId: currentSupervisorId, questionnaireId: Create.Entity.QuestionnaireIdentity().ToString(), status: InterviewStatus.RejectedBySupervisor));
+            interviews.Store(Create.Entity.InterviewView(interviewId: Id.g10, responsibleId: currentSupervisorId, questionnaireId: Create.Entity.QuestionnaireIdentity().ToString(), status: InterviewStatus.RejectedByHeadquarters));
+
+            var accessor = CreateItemsAccessor(interviews: interviews, principal: principal);
+
+            // Act
+            var outbox = accessor.Outbox().ToList();
+
+            // Assert
+            var itemsCount = outbox.Count;
+            var repositoryCount = accessor.OutboxCount();
+            Assert.AreEqual(itemsCount, repositoryCount);
+
+            var items = outbox.Cast<SupervisorDashboardInterviewViewModel>().ToList();
+
             Assert.That(items, Has.Count.EqualTo(3));
-            items.Should().ContainSingle(i => i.InterviewId == Id.g1);
-            items.Should().ContainSingle(i => i.InterviewId == Id.g2);
-            items.Should().ContainSingle(i => i.InterviewId == Id.g3);
+            items.Should().ContainSingle(i => i.InterviewId == Id.g1, $"Should contain interview in {InterviewStatus.ApprovedBySupervisor} status ");
+            items.Should().ContainSingle(i => i.InterviewId == Id.g2, $"Should contain interview in {InterviewStatus.RejectedBySupervisor} status");
+            items.Should().ContainSingle(i => i.InterviewId == Id.g3, $"Should contain interview in {InterviewStatus.RejectedByHeadquarters} status ");
         }
 
         [Test]
@@ -101,7 +140,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Dashboard
             return new DashboardItemsAccessor(
 
                 interviews ?? new InMemoryPlainStorage<InterviewView>(),
-                assignments ?? Mock.Of<IAssignmentDocumentsStorage>(),
+                assignments ?? Mock.Of<IAssignmentDocumentsStorage>(x => x.LoadAll() == new List<AssignmentDocument>()),
                 principal ?? Mock.Of<IPrincipal>(),
                 identifyingQuestionsRepo ?? new InMemoryPlainStorage<PrefilledQuestionView>(),
                 viewModelFactory.Object
