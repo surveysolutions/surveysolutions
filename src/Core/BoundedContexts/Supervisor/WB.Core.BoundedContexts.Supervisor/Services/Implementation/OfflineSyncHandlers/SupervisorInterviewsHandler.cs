@@ -238,7 +238,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
 
         public Task<OkResponse> Handle(LogInterviewAsSuccessfullyHandledRequest arg)
         {
-            this.interviews.Remove(arg.InterviewId.FormatGuid());
             return Task.FromResult(new OkResponse());
         }
 
