@@ -29,6 +29,20 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             }
         }
 
+        public async Task<string> PayloadJsonFromBytes(byte[] payload)
+        {
+            using (var ms = new MemoryStream(payload))
+            {
+                using (var zip = new GZipStream(ms, CompressionMode.Decompress))
+                {
+                    using (var sr = new StreamReader(zip))
+                    {
+                        return await sr.ReadToEndAsync();
+                    }
+                }
+            }
+        }
+
         public async Task<byte[]> ToPayloadAsync<T>(T message)
         {
             using (var ms = new MemoryStream())

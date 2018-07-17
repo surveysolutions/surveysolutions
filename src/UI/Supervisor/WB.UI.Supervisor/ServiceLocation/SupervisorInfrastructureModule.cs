@@ -45,7 +45,7 @@ namespace WB.UI.Supervisor.ServiceLocation
             var fileTarget = new FileTarget("logFile")
             {
                 FileName = fileName,
-                Layout = "${longdate}[${logger}][${level}][${message}][${onexception:${exception:format=toString,Data}|${stacktrace}}]"
+                Layout = "${longdate}[${logger}][${level}][${message}][${onexception:${exception:format=toString,Data:exceptionDataSeparator=\r\n}|${stacktrace}}]"
             };
 
             var config = new LoggingConfiguration();
