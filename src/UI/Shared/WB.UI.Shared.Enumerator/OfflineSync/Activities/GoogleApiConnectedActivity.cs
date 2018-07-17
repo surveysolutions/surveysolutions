@@ -99,6 +99,7 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
 
         protected override void OnStop()
         {
+            this.communicator?.StopAll();
             this.GoogleApi?.Disconnect();
 
             base.OnStop();
@@ -106,12 +107,7 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
 
         public void OnConnected(Bundle connectionHint)
         {
-            try { 
-            this.communicator?.StopAll();
-            } catch { }
-            GoogleApi?.Disconnect();
-
-            base.OnStop();
+            this.ApiConnected?.TrySetResult(true);
         }
 
         public void OnConnectionSuspended(int cause)
