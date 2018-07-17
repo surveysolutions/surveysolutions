@@ -235,7 +235,7 @@
     <value>Responsabili DTS </value>
   </data>
   <data name="ObserversCountDescription" xml:space="preserve">
-    <value>Responsabil DTS</value>
+    <value>Responsabil DTS ({0})</value>
   </data>
   <data name="ObserversEmail" xml:space="preserve">
     <value>E-mail responsabil DTS</value>

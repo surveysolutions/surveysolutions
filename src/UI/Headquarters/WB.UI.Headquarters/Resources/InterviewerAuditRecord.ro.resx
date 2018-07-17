@@ -190,6 +190,6 @@
     <value>Sincronizarea a eșuat</value>
   </data>
   <data name="SynchronizationStarted" xml:space="preserve">
-    <value>Sincronizarea a început</value>
+    <value>Sincronizarea a început ({0})</value>
   </data>
 </root>
