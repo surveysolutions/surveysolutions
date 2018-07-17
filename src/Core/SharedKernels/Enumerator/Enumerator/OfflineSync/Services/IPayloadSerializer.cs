@@ -6,6 +6,5 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services
     {
         Task<T> FromPayloadAsync<T>(byte[] payload);
         Task<byte[]> ToPayloadAsync<T>(T message);
-        Task<string> PayloadJsonFromBytes(byte[] payload);
     }
 }
