@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FluentAssertions;
-using Humanizer;
 using Moq;
 using MvvmCross.Plugin.Messenger;
 using NUnit.Framework;
@@ -15,7 +14,6 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
@@ -140,6 +138,53 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
             }
         }
 
+        [Test]
+        public void should_include_supervisor_questions_in_counters()
+        {
+            var interview = Mock.Of<IStatefulInterview>(
+                x => x.CountActiveAnsweredQuestionsInInterviewForSupervisor() == 3
+                     && x.CountInvalidEntitiesInInterviewForSupervisor() == 2 
+                     && x.CountActiveQuestionsInInterviewForSupervisor() == 8
+            );
+            var interviewRepository = new Mock<IStatefulInterviewRepository>();
+            interviewRepository.Setup(x => x.Get(It.IsAny<string>()))
+                .Returns(interview);
+
+            var viewModel = CreateViewModel(interviewRepository: interviewRepository.Object);
+
+            // Act
+            viewModel.Configure(Id.g1.FormatGuid(), Create.Other.NavigationState(interviewRepository.Object));
+
+            // Assert
+            Assert.That(viewModel, Has.Property(nameof(viewModel.ErrorsCount)).EqualTo(2));
+            Assert.That(viewModel, Has.Property(nameof(viewModel.AnsweredCount)).EqualTo(3));
+            Assert.That(viewModel, Has.Property(nameof(viewModel.UnansweredCount)).EqualTo(5));
+        }
+
+        [Test]
+        public void should_not_allow_approve_and_reject_for_rejected_interview()
+        {
+            var commandService = new Mock<ICommandService>();
+            var navigationService = new Mock<IViewModelNavigationService>();
+            var auditLogService = new Mock<IAuditLogService>();
+
+            var interview = Create.AggregateRoot.StatefulInterview(interviewId: InterviewId);
+            var interviewKey = Create.Entity.InterviewKey(5);
+            interview.Apply(Create.Event.InterviewKeyAssigned(interviewKey));
+            interview.Complete(Id.gA, "", DateTime.UtcNow);
+            interview.Reject(Id.gA, "", DateTime.UtcNow);
+
+            var statefulInterviewRepository = Setup.StatefulInterviewRepository(interview);
+            var viewModel = CreateViewModel(interviewRepository: statefulInterviewRepository,
+                commandService: commandService.Object,
+                navigationService: navigationService.Object,
+                auditLogService: auditLogService.Object);
+            viewModel.Configure(InterviewId.FormatGuid(), Create.Other.NavigationState(statefulInterviewRepository));
+            
+            // Assert
+            viewModel.Approve.CanExecute().Should().BeFalse();
+            viewModel.Reject.CanExecute().Should().BeFalse();
+        }
 
         private SupervisorResolveInterviewViewModel CreateViewModel(IViewModelNavigationService viewModelNavigationService = null,
             ICommandService commandService = null,

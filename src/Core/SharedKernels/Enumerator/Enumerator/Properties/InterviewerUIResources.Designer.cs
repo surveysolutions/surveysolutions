@@ -1581,6 +1581,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Synchronization of Supervisor details.
+        /// </summary>
+        public static string Synchronization_Of_Supervisor_details {
+            get {
+                return ResourceManager.GetString("Synchronization_Of_Supervisor_details", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to questionnaires.
         /// </summary>
         public static string Synchronization_Questionnaires {

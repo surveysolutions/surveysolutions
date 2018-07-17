@@ -62,7 +62,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             foreach (var entity in request.AuditLogEntity.Entities)
             {
                 var type = AuditLogTypeMap[entity.PayloadType];
-
+                
                 auditLogService.WriteAuditLogRecord(new AuditLogEntityView
                 {
                     Type = entity.Type,
@@ -74,7 +74,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                 });
             }
 
-            return Task.FromResult(new OkResponse());
+            return OkResponse.Task;
         }
     }
 }

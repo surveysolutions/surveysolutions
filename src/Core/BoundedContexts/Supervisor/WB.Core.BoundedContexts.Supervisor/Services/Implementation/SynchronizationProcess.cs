@@ -84,6 +84,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
             await this.assignmentsSynchronizer.SynchronizeAssignmentsAsync(progress, statistics, cancellationToken);
 
             cancellationToken.ThrowIfCancellationRequested();
+            await this.SyncronizeSupervisor(progress, statistics, cancellationToken);
+
+            cancellationToken.ThrowIfCancellationRequested();
             await this.SyncronizeInterviewers(progress, statistics, cancellationToken);
 
             cancellationToken.ThrowIfCancellationRequested();
@@ -106,6 +109,28 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
 
             cancellationToken.ThrowIfCancellationRequested();
             await this.UpdateApplicationAsync(progress, cancellationToken);
+        }
+
+        private async Task SyncronizeSupervisor(IProgress<SyncProgressInfo> progress, 
+            SynchronizationStatistics statistics, CancellationToken cancellationToken)
+        {
+            progress.Report(new SyncProgressInfo
+            {
+                Title = InterviewerUIResources.Synchronization_Of_Supervisor_details,
+                Statistics = statistics,
+                Status = SynchronizationStatus.Download
+            });
+
+            var localSupervisor = this.supervisorsPlainStorage.FirstOrDefault();
+            var supervisor = await this.supervisorSyncService.GetSupervisorAsync(token:cancellationToken);
+
+            if (localSupervisor.Email != supervisor.Email)
+            {
+                localSupervisor.Email = supervisor.Email;
+                this.supervisorsPlainStorage.Store(localSupervisor);
+
+                principal.SignInWithHash(localSupervisor.Name, localSupervisor.PasswordHash, true);
+            }
         }
 
         private ISupervisorSynchronizationService supervisorSyncService =>

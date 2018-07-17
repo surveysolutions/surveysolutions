@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using MvvmCross.Commands;
 using MvvmCross.Plugin.Messenger;
 using WB.Core.BoundedContexts.Supervisor.Properties;
@@ -79,6 +80,9 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
                 ? UIResources.Interview_Complete_Screen_Description
                 : string.Format(UIResources.Interview_Complete_Screen_DescriptionWithInterviewKey, interviewKey);
 
+            base.AnsweredCount = interview.CountActiveAnsweredQuestionsInInterviewForSupervisor();
+            base.ErrorsCount = interview.CountInvalidEntitiesInInterviewForSupervisor();
+            base.UnansweredCount = interview.CountActiveQuestionsInInterviewForSupervisor() - base.AnsweredCount;
         }
 
         public IMvxAsyncCommand Approve => new MvxAsyncCommand(async () =>
@@ -89,8 +93,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             auditLogService.Write(new ApproveInterviewAuditLogEntity(this.interviewId, interview.GetInterviewKey().ToString()));
             await this.navigationService.NavigateToDashboardAsync(interviewId.FormatGuid());
         }, () => this.status == InterviewStatus.Completed || 
-                 this.status == InterviewStatus.RejectedByHeadquarters /*||
-                 this.status == InterviewStatus.RejectedBySupervisor*/);
+                 this.status == InterviewStatus.RejectedByHeadquarters);
 
         public IMvxAsyncCommand Reject => new MvxAsyncCommand(async () =>
         {

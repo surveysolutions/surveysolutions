@@ -17,6 +17,11 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             if (group == null)
                 return GroupStatus.Completed;
 
+            if (group.CountEnabledInvalidQuestionsAndStaticTextsForSupervisor() > 0)
+            {
+                return GroupStatus.StartedInvalid;
+            }
+
             var countEnabledAnsweredQuestions = group.CountEnabledAnsweredQuestionsForSupervisor();
 
             if (group.HasUnansweredQuestionsForSupervisor())

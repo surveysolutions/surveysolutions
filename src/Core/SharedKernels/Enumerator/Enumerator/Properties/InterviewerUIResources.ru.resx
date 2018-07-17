@@ -771,6 +771,9 @@
   <data name="Synchronization_Of_Interviewers" xml:space="preserve">
     <value>Синхронизация интервьюверов</value>
   </data>
+  <data name="Synchronization_Of_Supervisor_details" xml:space="preserve">
+    <value>Синхронизация деталей супервизора</value>
+   </data>
   <data name="Synchronization_Of_InterviewersFormat" xml:space="preserve">
     <value>Синхронизация интервьюверов: {0} из {1}</value>
   </data>

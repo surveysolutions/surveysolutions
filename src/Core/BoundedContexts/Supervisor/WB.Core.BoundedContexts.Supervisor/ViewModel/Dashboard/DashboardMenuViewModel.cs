@@ -23,6 +23,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         protected readonly IPrincipal Principal;
         private MvxSubscriptionToken messengerSubscribtion;
 
+        private MvxSubscriptionToken syncMessengerSubscribtion;
+
         public DashboardMenuViewModel(IMvxNavigationService mvxNavigationService, 
             IMvxMessenger messenger,
             IDashboardItemsAccessor dashboardItemsAccessor,
@@ -38,8 +40,6 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         public override async Task Initialize()
         {
             await base.Initialize();
-            this.UserName = Principal.CurrentUserIdentity.Name;
-            this.UserEmail = Principal.CurrentUserIdentity.Email;
         }
 
         public override void ViewAppeared()
@@ -60,10 +60,26 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             this.ToBeAssignedItemsCount = dashboardItemsAccessor.TasksToBeAssignedCount();
             this.WaitingForDecisionCount = dashboardItemsAccessor.WaitingForSupervisorActionCount();
             this.OutboxItemsCount = dashboardItemsAccessor.OutboxCount();
+
+            this.UserName = Principal.CurrentUserIdentity.Name;
+            this.UserEmail = Principal.CurrentUserIdentity.Email;
         }
 
-        public string UserName { get; set; }
-        public string UserEmail { get; set; }
+        private string userName;
+
+        public string UserName
+        {
+            get => userName;
+            set => SetProperty(ref userName, value);
+        }
+
+        private string userEmail;
+
+        public string UserEmail
+        {
+            get => userEmail;
+            set => SetProperty(ref userEmail, value);
+        }
 
         public int Counter { get; set; }
 
