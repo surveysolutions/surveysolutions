@@ -88,7 +88,11 @@
                     <td data-bind="text: IncomingDate" nowrap></td>
                     <td data-bind="text: ProcessingDate" nowrap></td>
                     <td nowrap style="text-align: right">
-                        <a data-bind="text: $root.formatBytes(PackageSize()), attr: {href: downloadPackageUrl + '/' + Id()}" target="_blank" >
+                        <a data-bind="text: $root.formatBytes(PackageSize()), attr: {href: downloadPackageUrl + '/' + Id()}" target="_blank">
+                        </a>
+                        /
+                        <a data-bind="attr: {href: downloadPackageUrl + '/' + Id() + '?format=json'}" target="_blank">
+                            json
                         </a>
                     </td>
                     <td data-bind="text: ExceptionType" nowrap></td>
