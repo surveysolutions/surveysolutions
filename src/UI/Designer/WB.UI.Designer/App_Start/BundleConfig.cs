@@ -56,6 +56,12 @@ namespace WB.UI.Designer
                     "~/Content/plugins/ui.fancytree.min.css",
                     "~/Content/plugins/jquery.contextMenu.min.css"
                 }));
+            bundles.Add(
+                new StyleBundle("~/under-construction").Include( new [] {
+                    "~/questionnaire/content/designer-start/bootstrap-custom.css",
+                    "~/Content/designer-list.css",
+                    "~/Content/under-construction.css"
+                }));
         }
     }
 }
