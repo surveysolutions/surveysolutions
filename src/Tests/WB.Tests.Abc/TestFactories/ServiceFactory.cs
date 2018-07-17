@@ -10,6 +10,7 @@ using NHibernate;
 using NSubstitute;
 using System.Linq;
 using System.Threading.Tasks;
+using Main.Core.Events;
 using NHibernate.Linq;
 using Quartz;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
@@ -797,24 +798,33 @@ namespace WB.Tests.Abc.TestFactories
             IJsonAllTypesSerializer serializer = null,
             IPlainStorage<BrokenInterviewPackageView, int?> brokenInterviewStorage = null,
             IPrincipal principal = null,
-            IPlainStorage<InterviewerDocument> interviewerViewRepository = null)
+            IPlainStorage<InterviewerDocument> interviewerViewRepository = null,
+            IAssignmentDocumentsStorage assignments = null)
         {
             return new SupervisorInterviewsHandler(
                 eventBus ?? Mock.Of<ILiteEventBus>(),
                 eventStorage ?? Mock.Of<IEnumeratorEventStorage>(),
                 interviews ?? new InMemoryPlainStorage<InterviewView>(),
-                serializer ?? new JsonAllTypesSerializer(),
+                serializer ?? Mock.Of<IJsonAllTypesSerializer>(s => s.Deserialize<AggregateRootEvent[]>(It.IsAny<string>()) == new AggregateRootEvent[]{}),// new JsonAllTypesSerializer(),
                 commandService ?? Mock.Of<ICommandService>(), 
                 Mock.Of<ILogger>(),
                 brokenInterviewStorage ?? Mock.Of<IPlainStorage<BrokenInterviewPackageView, int?>>(),
                 new SqliteInmemoryStorage<SuperivsorReceivedPackageLogEntry, int>(),
                 principal ?? Mock.Of<IPrincipal>(),
-                interviewerViewRepository ?? Mock.Of<IPlainStorage<InterviewerDocument>>());
+                interviewerViewRepository ?? Mock.Of<IPlainStorage<InterviewerDocument>>(),
+                assignments ?? Create.Storage.AssignmentDocumentsInmemoryStorage());
         }
 
         public SupervisorGroupStateCalculationStrategy SupervisorGroupStateCalculationStrategy()
         {
             return new SupervisorGroupStateCalculationStrategy();
+        }
+
+        public SupervisorAssignmentsHandler SupervisorAssignmentsHandler(
+            IAssignmentDocumentsStorage assignmentDocumentsStorage = null)
+        {
+            return new SupervisorAssignmentsHandler(assignmentDocumentsStorage ??
+                                                    Create.Storage.AssignmentDocumentsInmemoryStorage());
         }
     }
 

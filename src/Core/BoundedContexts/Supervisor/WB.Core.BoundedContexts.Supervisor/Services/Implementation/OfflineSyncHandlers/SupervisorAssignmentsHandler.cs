@@ -38,17 +38,18 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
         {
             var assignments = this.assignmentDocumentsStorage.LoadAll(request.UserId);
 
-            return Task.FromResult(new GetAssignmentsResponse
+            var result = new GetAssignmentsResponse
             {
                 Assignments = assignments.Select(ass => new AssignmentApiView
                 {
                     Id = ass.Id,
                     ResponsibleId = ass.ResponsibleId,
                     ResponsibleName = ass.ResponsibleName,
-                    Quantity = ass.Quantity,
+                    Quantity = ass.Quantity.HasValue ? ass.Quantity - ass.CreatedInterviewsCount : ass.Quantity,
                     QuestionnaireId = QuestionnaireIdentity.Parse(ass.QuestionnaireId)
                 }).ToList()
-            });
+            };
+            return Task.FromResult(result);
         }
 
         public Task<GetAssignmentResponse> GetAssignment(GetAssignmentRequest request)
