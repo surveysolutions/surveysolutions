@@ -117,7 +117,7 @@ namespace WB.UI.Headquarters.API.DataCollection
                 QuestionnaireId = package.MetaInfo.TemplateId,
                 QuestionnaireVersion = package.MetaInfo.TemplateVersion,
                 InterviewStatus = targetStatus,
-                ResponsibleId =  targetStatus == InterviewStatus.Completed ? package.MetaInfo.ResponsibleId : this.authorizedUser.Id,
+                ResponsibleId =  package.MetaInfo.ResponsibleId,
                 IsCensusInterview = package.MetaInfo.CreatedOnClient ?? false,
                 IncomingDate = DateTime.UtcNow,
                 Events = package.Events
