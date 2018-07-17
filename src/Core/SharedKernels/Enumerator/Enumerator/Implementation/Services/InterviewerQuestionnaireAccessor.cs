@@ -98,7 +98,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             });
         }
 
-        public void RemoveQuestionnaire(QuestionnaireIdentity questionnaireIdentity)
+        public virtual void RemoveQuestionnaire(QuestionnaireIdentity questionnaireIdentity)
         {
             var questionnaireId = questionnaireIdentity.ToString();
             
