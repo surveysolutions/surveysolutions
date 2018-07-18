@@ -91,7 +91,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services
             IAuditLogSynchronizer auditLogSynchronizer = null, 
             IAuditLogService auditLogService = null, 
             ILiteEventBus eventBus = null, 
-            IEnumeratorEventStorage eventStore = null)
+            IEnumeratorEventStorage eventStore = null,
+            IPlainStorage<InterviewSequenceView, Guid> interviewSequenceViewRepository = null)
         {
             return new TestSynchronizationProcess(
                 synchronizationService ?? Create.Service.SynchronizationService(),
@@ -115,12 +116,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services
                 auditLogSynchronizer ?? Mock.Of<IAuditLogSynchronizer>(),
                 auditLogService ?? Mock.Of<IAuditLogService>(),
                 eventBus ?? Create.Service.LiteEventBus(),
-                eventStore ?? Mock.Of<IEnumeratorEventStorage>());
+                eventStore ?? Mock.Of<IEnumeratorEventStorage>(),
+                interviewSequenceViewRepository ?? Mock.Of<IPlainStorage<InterviewSequenceView, Guid>>());
         }
 
         private class TestSynchronizationProcess : SynchronizationProcessBase
         {
-            public TestSynchronizationProcess(ISynchronizationService synchronizationService, IPlainStorage<InterviewView> interviewViewRepository, IPrincipal principal, ILogger logger, IUserInteractionService userInteractionService, IInterviewerQuestionnaireAccessor questionnairesAccessor, IInterviewerInterviewAccessor interviewFactory, IPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage, IPlainStorage<InterviewFileView> imagesStorage, CompanyLogoSynchronizer logoSynchronizer, AttachmentsCleanupService cleanupService, IPasswordHasher passwordHasher, IAssignmentsSynchronizer assignmentsSynchronizer, IQuestionnaireDownloader questionnaireDownloader, IHttpStatistician httpStatistician, IAssignmentDocumentsStorage assignmentsStorage, IAudioFileStorage audioFileStorage, ITabletDiagnosticService diagnosticService, IAuditLogSynchronizer auditLogSynchronizer, IAuditLogService auditLogService, ILiteEventBus eventBus, IEnumeratorEventStorage eventStore) : base(synchronizationService, interviewViewRepository, principal, logger, userInteractionService, questionnairesAccessor, interviewFactory, interviewMultimediaViewStorage, imagesStorage, logoSynchronizer, cleanupService, assignmentsSynchronizer, questionnaireDownloader, httpStatistician, assignmentsStorage, audioFileStorage, diagnosticService, auditLogSynchronizer, auditLogService, eventBus, eventStore)
+            public TestSynchronizationProcess(ISynchronizationService synchronizationService, IPlainStorage<InterviewView> interviewViewRepository, IPrincipal principal, ILogger logger, IUserInteractionService userInteractionService, IInterviewerQuestionnaireAccessor questionnairesAccessor, IInterviewerInterviewAccessor interviewFactory, IPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage, IPlainStorage<InterviewFileView> imagesStorage, CompanyLogoSynchronizer logoSynchronizer, AttachmentsCleanupService cleanupService, IPasswordHasher passwordHasher, IAssignmentsSynchronizer assignmentsSynchronizer, IQuestionnaireDownloader questionnaireDownloader, IHttpStatistician httpStatistician, IAssignmentDocumentsStorage assignmentsStorage, IAudioFileStorage audioFileStorage, ITabletDiagnosticService diagnosticService, IAuditLogSynchronizer auditLogSynchronizer, IAuditLogService auditLogService, ILiteEventBus eventBus, IEnumeratorEventStorage eventStore, IPlainStorage<InterviewSequenceView, Guid> interviewSequenceViewRepository) : base(synchronizationService, interviewViewRepository, principal, logger, userInteractionService, questionnairesAccessor, interviewFactory, interviewMultimediaViewStorage, imagesStorage, logoSynchronizer, cleanupService, assignmentsSynchronizer, questionnaireDownloader, httpStatistician, assignmentsStorage, audioFileStorage, diagnosticService, auditLogSynchronizer, auditLogService, eventBus, eventStore, interviewSequenceViewRepository)
             {
             }
 
