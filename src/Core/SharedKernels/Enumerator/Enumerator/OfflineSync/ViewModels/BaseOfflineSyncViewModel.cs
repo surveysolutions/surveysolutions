@@ -131,13 +131,13 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
 
         protected void StopDiscovery()
         {
-            this.nearbyConnection.StopAllEndpoint();
+            //this.nearbyConnection.StopAllEndpoint();
             this.nearbyConnection.StopDiscovery();
         }
-
+            
         protected void StopAdvertising()
         {
-            this.nearbyConnection.StopAllEndpoint();
+            //this.nearbyConnection.StopAllEndpoint();
             this.nearbyConnection.StopAdvertising();
         }
 
@@ -162,6 +162,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
                 SetStatus(ConnectionStatus.Error, nce.Message);
             }
         }
+
 
         protected virtual async void OnConnection(string endpointId, NearbyConnectionInfo info)
         {

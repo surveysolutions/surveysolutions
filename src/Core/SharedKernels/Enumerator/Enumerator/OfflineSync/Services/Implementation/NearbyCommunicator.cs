@@ -267,8 +267,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
 
                                 pendingValue.UpdateProgress(update.BytesTransferred, header.Size);
                             }
-
-
+                            
                             incomingDataInfo.OnNext(new IncomingDataInfo
                             {
                                 Type = header.PayloadType,

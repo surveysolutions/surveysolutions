@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Humanizer;
 using MvvmCross;
 using MvvmCross.Commands;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
@@ -87,6 +88,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         {
             get => this.progressInPercents;
             set => this.SetProperty(ref this.progressInPercents, value);
+        }
+
+        private string progressDescription;
+        public string ProgressDescription
+        {
+            get => this.progressDescription;
+            set => this.SetProperty(ref this.progressDescription, value);
         }
 
         private TransferingStatus transferingStatus;
@@ -187,6 +195,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         private async Task SynchronizeAsync()
         {
+            if (this.synchronizationCancellationTokenSource != null)
+            {
+                return;
+            }
+
             this.synchronizationCancellationTokenSource = new CancellationTokenSource();
 
             try
@@ -199,9 +212,23 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                     await synchronizationProcess.SynchronizeAsync(
                         new Progress<SyncProgressInfo>(o =>
                         {
-                            this.ProgressStatus = o.Title;
-                            this.ProgressStatusDescription = o.Description;
-                            this.ProgressInPercents = o.TransferProgress?.Percent ?? 0;
+                            if (o.TransferProgress == null)
+                            {
+                                this.ProgressStatus = o.Title;
+                                this.ProgressStatusDescription = o.Description;
+                                this.progressDescription = string.Empty;
+                            }
+                            else
+                            {
+                                this.ProgressInPercents = o.TransferProgress?.Percent ?? 0;
+                                string speed = null;
+                                if (o.TransferProgress.Speed.HasValue)
+                                {
+                                    speed = o.TransferProgress.Speed.Value.Bytes().ToString("0.00") + "/s. ";
+                                }
+
+                                this.progressDescription = $"{speed ?? ""} in {o.TransferProgress.Eta.Humanize()}";
+                            }
 
                             if(o.HasErrors) this.OnTerminateTransferring();
                             if(!o.IsRunning && !o.HasErrors) this.OnComplete();
@@ -214,6 +241,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             finally
             {
                 this.synchronizationMode.Set(SynchronizationMode.Online);
+                synchronizationCancellationTokenSource = null;
             }
         }
     }

@@ -101,7 +101,7 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
         {
             this.communicator?.StopAll();
             this.GoogleApi?.Disconnect();
-
+            
             base.OnStop();
         }
 
@@ -118,6 +118,16 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
         public void OnConnectionFailed(ConnectionResult result)
         {
             this.ApiConnected?.TrySetResult(false);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                this.GoogleApi?.Dispose();
+            }
+
+            base.Dispose(disposing);
         }
     }
 }

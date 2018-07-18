@@ -11,7 +11,7 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
         {
             var status = await statuses;
             logAction?.Invoke(status);
-            return status.ToConnectionStatus();
+            return status?.ToConnectionStatus();
         }
 
         public static NearbyStatus ToConnectionStatus(this Statuses statuses)
