@@ -36,6 +36,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         private readonly IPlainStorage<InterviewFileView> imagesStorage;
         private readonly IPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage;
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
+        private readonly IPlainStorage<InterviewSequenceView, Guid> interviewSequenceViewRepository;
         private readonly ILogger logger;
         protected readonly CompanyLogoSynchronizer logoSynchronizer;
         protected readonly IAssignmentsSynchronizer assignmentsSynchronizer;
@@ -64,7 +65,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             IAuditLogSynchronizer auditLogSynchronizer,
             IAuditLogService auditLogService,
             ILiteEventBus eventBus,
-            IEnumeratorEventStorage eventStore) : base(synchronizationService, logger,
+            IEnumeratorEventStorage eventStore,
+            IPlainStorage<InterviewSequenceView, Guid> interviewSequenceViewRepository) : base(synchronizationService, logger,
             httpStatistician, userInteractionService, principal,  
             interviewViewRepository, auditLogService)
         {
@@ -87,6 +89,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             this.auditLogSynchronizer = auditLogSynchronizer;
             this.eventBus = eventBus;
             this.eventStore = eventStore;
+            this.interviewSequenceViewRepository = interviewSequenceViewRepository;
         }
 
         
@@ -231,6 +234,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     eventBus.PublishCommittedEvents(interviewDetails);
                     eventStore.StoreEvents(new CommittedEventStream(interview.Id, interviewDetails));
 
+                    if (interview.Sequence.HasValue)
+                        interviewSequenceViewRepository.Store(new InterviewSequenceView() { Id = interview.Id, Sequence = interview.Sequence.Value });
+
                     await this.synchronizationService.LogInterviewAsSuccessfullyHandledAsync(interview.Id);
 
                     if (interview.IsRejected)
@@ -257,37 +263,41 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken)
         {
             var remoteInterviews = await this.synchronizationService.GetInterviewsAsync(cancellationToken);
-
-            var remoteInterviewIds = remoteInterviews.Select(interview => interview.Id);
+            var remoteInterviewWithSequence = remoteInterviews.ToDictionary(k => k.Id, v => v.Sequence);
 
             var localInterviews = this.interviewViewRepository.LoadAll();
-
             var localInterviewIds = localInterviews.Select(interview => interview.InterviewId).ToHashSet();
 
             var localInterviewsToRemove = localInterviews.Where(
-                interview => !remoteInterviewIds.Contains(interview.InterviewId) && !interview.CanBeDeleted);
+                interview => !remoteInterviewWithSequence.ContainsKey(interview.InterviewId) && !interview.CanBeDeleted);
 
-            IEnumerable<Guid> obsoleteInterviews = await this.FindObsoleteInterviewsAsync(localInterviewIds, progress, cancellationToken);
-            obsoleteInterviews = obsoleteInterviews.Concat(
-                remoteInterviews.Where(x => localInterviews.Any(local => local.InterviewId == x.Id && local.ResponsibleId != x.ResponsibleId))
-                    .Select(x => x.Id)
-            );
+            IEnumerable<Guid> obsoleteInterviews = await this.FindObsoleteInterviewsAsync(localInterviews, remoteInterviews, progress, cancellationToken);
 
             var localInterviewIdsToRemove = localInterviewsToRemove.Select(interview => interview.InterviewId)
                                                                    .Concat(obsoleteInterviews)
                                                                    .ToList();
 
             var remoteInterviewsToCreate = remoteInterviews
-                .Where(interview => !localInterviewIds.Contains(interview.Id) || obsoleteInterviews.Contains(interview.Id))
+                .Where(interview => (!localInterviewIds.Contains(interview.Id) && IsNeedDownloadBySequenceValue(interview)) || obsoleteInterviews.Contains(interview.Id))
                 .ToList();
 
             this.RemoveInterviews(localInterviewIdsToRemove, statistics, progress);
 
             await this.CreateInterviewsAsync(remoteInterviewsToCreate, statistics, progress, cancellationToken);
-
         }
 
-        protected virtual Task<List<Guid>> FindObsoleteInterviewsAsync(IEnumerable<Guid> localInterviewIds, 
+        private bool IsNeedDownloadBySequenceValue(InterviewApiView interview)
+        {
+            if (!interview.Sequence.HasValue)
+                return true;
+            var interviewSequenceView = interviewSequenceViewRepository.GetById(interview.Id);
+            if (interviewSequenceView == null)
+                return true;
+            return interviewSequenceView.Sequence < interview.Sequence;
+        }
+
+        protected virtual async Task<List<Guid>> FindObsoleteInterviewsAsync(IEnumerable<InterviewView> localInterviews,
+            IEnumerable<InterviewApiView> remoteInterviews, 
             IProgress<SyncProgressInfo> progress, 
             CancellationToken cancellationToken)
         {
@@ -296,13 +306,20 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 Title = InterviewerUIResources.Synchronization_CheckForObsolete_Interviews
             });
 
-            var lastKnownEventsWithInterviewIds = localInterviewIds.Select(x => new ObsoletePackageCheck
+            var lastKnownEventsWithInterviewIds = localInterviews.Select(x => new ObsoletePackageCheck
                 {
-                    InterviewId = x,
-                    SequenceOfLastReceivedEvent = this.eventStore.GetLastEventKnownToHq(x)
+                    InterviewId = x.InterviewId,
+                    SequenceOfLastReceivedEvent = this.eventStore.GetLastEventKnownToHq(x.InterviewId)
                 }).Where(x => x.SequenceOfLastReceivedEvent > 0)
                 .ToList();
-            return this.synchronizationService.CheckObsoleteInterviewsAsync(lastKnownEventsWithInterviewIds, cancellationToken);
+            var obsoleteInterviews = await this.synchronizationService.CheckObsoleteInterviewsAsync(lastKnownEventsWithInterviewIds, cancellationToken);
+
+            obsoleteInterviews = obsoleteInterviews.Concat(
+                remoteInterviews.Where(x => localInterviews.Any(local => local.InterviewId == x.Id && local.ResponsibleId != x.ResponsibleId))
+                    .Select(x => x.Id)
+            ).ToList();
+
+            return obsoleteInterviews;
         }
 
         private void RemoveInterviews(List<Guid> interviewIds, SynchronizationStatistics statistics,
