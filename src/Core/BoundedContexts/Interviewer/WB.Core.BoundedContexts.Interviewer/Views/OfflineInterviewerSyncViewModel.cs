@@ -1,20 +1,19 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Humanizer;
 using MvvmCross;
 using MvvmCross.Commands;
+using Plugin.Permissions.Abstractions;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services.OfflineSync;
+using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Entities;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels;
 using WB.Core.SharedKernels.Enumerator.Services;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.Views;
@@ -25,27 +24,23 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
     [ExcludeFromCodeCoverage()] // TODO: remove attribute when UI binding completed
     public class OfflineInterviewerSyncViewModel : BaseOfflineSyncViewModel
     {
-        private readonly IPlainStorage<InterviewerIdentity> interviewersPlainStorage;
+        private readonly IInterviewerPrincipal principal;
         private readonly ISynchronizationMode synchronizationMode;
         private readonly ISynchronizationCompleteSource synchronizationCompleteSource;
-        private readonly string serviceName;
         private CancellationTokenSource synchronizationCancellationTokenSource;
 
-        public OfflineInterviewerSyncViewModel(IPrincipal principal,
+        public OfflineInterviewerSyncViewModel(IInterviewerPrincipal principal,
             IViewModelNavigationService viewModelNavigationService,
             IPermissionsService permissions,
             IEnumeratorSettings settings,
-            IPlainStorage<InterviewerIdentity> interviewersPlainStorage,
             ISynchronizationMode synchronizationMode,
             INearbyConnection nearbyConnection,
             ISynchronizationCompleteSource synchronizationCompleteSource)
-            : base(principal, viewModelNavigationService, permissions, nearbyConnection)
+            : base(principal, viewModelNavigationService, permissions, nearbyConnection, settings)
         {
-            this.interviewersPlainStorage = interviewersPlainStorage;
+            this.principal = principal;
             this.synchronizationMode = synchronizationMode;
             this.synchronizationCompleteSource = synchronizationCompleteSource;
-
-            this.serviceName = NormalizeEndpoint(settings.Endpoint);
         }
 
         private string title;
@@ -152,6 +147,23 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             await StartDiscovery();
         }
 
+        private async Task StartDiscovery()
+        {
+            await this.permissions.AssureHasPermission(Permission.Location);
+
+            SetStatus(ConnectionStatus.StartDiscovering, $"Starting discovery");
+            var serviceName = this.GetServiceName();
+            var result = await this.nearbyConnection.StartDiscovery(serviceName);
+
+            if (!SetErrorOnResultIfNeeded(result)) return;
+        }
+
+        private void StopDiscovery()
+        {
+            this.nearbyConnection.StopAllEndpoint();
+            this.nearbyConnection.StopDiscovery();
+        }
+
         protected override async void Connected(string connectedEndpoint, string connectedTo)
         {
             this.Title = string.Format(InterviewerUIResources.SendToSupervisor_MovingToSupervisorFormat, connectedTo);
@@ -184,14 +196,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         {
             this.ProgressTitle = InterviewerUIResources.SendToSupervisor_SyncCompleted;
             this.TransferingStatus = TransferingStatus.Completed;
-            this.StopAdvertising();
+            this.StopDiscovery();
         }
 
-        protected override string GetServiceName()
-        {
-            var user = this.interviewersPlainStorage.FirstOrDefault();
-            return serviceName + user.SupervisorId.FormatGuid();
-        }
+        protected override string GetDeviceIdentification() => this.principal.CurrentUserIdentity.SupervisorId.FormatGuid();
 
         private async Task SynchronizeAsync()
         {
