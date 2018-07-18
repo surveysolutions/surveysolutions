@@ -180,8 +180,9 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
                 navigationService: navigationService.Object,
                 auditLogService: auditLogService.Object);
             viewModel.Configure(InterviewId.FormatGuid(), Create.Other.NavigationState(statefulInterviewRepository));
-            
+
             // Assert
+            viewModel.Approve.CanExecute().Should().BeFalse();
             viewModel.Reject.CanExecute().Should().BeFalse();
         }
 
