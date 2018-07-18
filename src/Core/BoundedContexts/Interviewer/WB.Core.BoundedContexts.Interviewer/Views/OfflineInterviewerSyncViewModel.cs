@@ -160,7 +160,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         private void StopDiscovery()
         {
-            this.nearbyConnection.StopAllEndpoint();
+            //this.nearbyConnection.StopAllEndpoint();
             this.nearbyConnection.StopDiscovery();
         }
 
