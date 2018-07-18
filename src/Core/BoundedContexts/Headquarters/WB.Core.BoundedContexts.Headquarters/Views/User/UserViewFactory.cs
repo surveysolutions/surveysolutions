@@ -188,7 +188,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                     FullName = x.FullName,
                     UserName = x.UserName,
                     PhoneNumber = x.PhoneNumber,
-                    PasswordHash = x.PasswordHash
+                    PasswordHash = x.PasswordHash,
+                    IsLockedByHeadquarters = x.IsLockedByHeadquaters,
+                    IsLockedBySupervisor = x.IsLockedBySupervisor
                 });
             };
 
