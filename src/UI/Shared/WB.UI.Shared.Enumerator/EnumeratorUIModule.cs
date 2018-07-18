@@ -121,7 +121,7 @@ namespace WB.UI.Shared.Enumerator
 
             var config = new LoggingConfiguration();
             config.AddTarget("logFile", fileTarget);
-            config.LoggingRules.Add(new LoggingRule("*", LogLevel.Warn, fileTarget));
+            config.LoggingRules.Add(new LoggingRule("*", LogLevel.Trace, fileTarget));
 
             #if DEBUG
             var androidTarget = new ConsoleTarget("android")
