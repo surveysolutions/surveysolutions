@@ -756,8 +756,7 @@
     <value>Выйти из поиска</value>
   </data>
   <data name="Synchronization_UploadAuditLog" xml:space="preserve">
-    <value>Загрузка на хедквотер аудин информации</value>
-    <comment>Загрузка на хедквотер аудин информации</comment>
+    <value>Загрузка на хедквотер аудит информации</value>
   </data>
     <data name="SendToSupervisor_Retry" xml:space="preserve">
     <value>Повторить еще раз</value>
