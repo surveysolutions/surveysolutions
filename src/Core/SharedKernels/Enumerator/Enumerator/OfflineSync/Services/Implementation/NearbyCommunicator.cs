@@ -107,7 +107,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                 var tsc = new TaskCompletionSourceWithProgress(progress, cancellationToken);
                 pending.TryAdd(payloads.CorrelationId, tsc);
 
-                Log("SEND.Message", true, endpoint, payloads.CorrelationId, PayloadType.Bytes, "");
+                Trace("SEND.Message", true, endpoint, payloads.CorrelationId, PayloadType.Bytes, "");
 
                 await SendOverWire(connection, endpoint, payloads);
 
@@ -154,7 +154,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                 case PayloadType.Bytes:
                     var header = await payloadSerializer.FromPayloadAsync<PayloadHeader>(payload.Bytes);
 
-                    Log("RECEIVE", false, endpoint, payload.Id, payload.Type, $"Info: {header.CorrelationId}");
+                    Trace("RECEIVE", false, endpoint, payload.Id, payload.Type, $"Info: {header.CorrelationId}");
                     headers.TryAdd(header.PayloadId, header);
 
                     incomingDataInfo.OnNext(new IncomingDataInfo
@@ -176,9 +176,9 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
 
                     break;
                 case PayloadType.Stream:
-                    Log("RECEIVE", false, endpoint, payload.Id, payload.Type, $"Start reading");
+                    Trace("RECEIVE", false, endpoint, payload.Id, payload.Type, $"Start reading");
                     await payload.ReadStreamAsync();
-                    Log("RECEIVE", false, endpoint, payload.Id, payload.Type, $"Done reading");
+                    Trace("RECEIVE", false, endpoint, payload.Id, payload.Type, $"Done reading");
                     break;
                 case PayloadType.File:
                     break;
@@ -205,7 +205,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                 throw new ApplicationException("Recieve payload transfer update before RecievePayload call");
             }
 
-            Log("UPDATE", isIncoming, endpoint, update.Id, payload.Type, update.Status.ToString());
+            Trace("UPDATE", isIncoming, endpoint, update.Id, payload.Type, update.Status.ToString());
             PayloadHeader header;
 
             switch (update.Status)
@@ -336,24 +336,23 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             async Task SendOverWire(IPayload payload)
             {
                 outgoingPayloads.AddOrUpdate(payload.Id, payload, (id, p) => payload);
-                Log("SEND", true, endpoint, payload.Id, payload.Type, "Send over wire");
+                Trace("SEND", true, endpoint, payload.Id, payload.Type, "Send over wire");
 
                 var result = await nearbyConnection.SendPayloadAsync(endpoint, payload)
                     .TimeoutAfter(TimeSpan.FromSeconds(30));
 
                 if (result.IsSuccess == false)
-                    Log("SEND-ERROR:", true, endpoint, payload.Id, payload.Type, result.Status.ToString() + " - " + result.StatusMessage);
+                    Trace("SEND-ERROR:", true, endpoint, payload.Id, payload.Type, result.Status.ToString() + " - " + result.StatusMessage);
                 else
-                    Log("SEND-OK", true, endpoint, payload.Id, payload.Type, "Send over wire");
+                    Trace("SEND-OK", true, endpoint, payload.Id, payload.Type, "Send over wire");
             }
         }
 
-        private void Log(string action, bool outgoing, string endpoint, object payloadId, PayloadType type,
+        private void Trace(string action, bool outgoing, string endpoint, object payloadId, PayloadType type,
             string message)
         {
             var log = $"[{action,-11}] {(outgoing ? "====>" : "<====")} {endpoint}[{payloadId}] #{type.ToString()} {message}";
-            this.logger.Info(log);
-            Debug.WriteLine(log);
+            this.logger.Trace(log);
         }
 
         private async Task<Package> PreparePayload(Guid correlationId, ICommunicationMessage payload, bool isRequest, string errorMessage = null)

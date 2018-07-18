@@ -1,6 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System.IO;
+using System.Threading.Tasks;
 using MvvmCross.ViewModels;
 using Ncqrs.Eventing.Storage;
+using NLog;
+using NLog.Config;
+using NLog.Targets;
 using Plugin.Geolocator;
 using Plugin.Geolocator.Abstractions;
 using Plugin.Media;
@@ -32,6 +36,7 @@ using WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Services.Internals;
 using WB.UI.Shared.Enumerator.Services.Internals.FileSystem;
+using WB.UI.Shared.Enumerator.Services.Logging;
 
 namespace WB.UI.Shared.Enumerator
 {
@@ -85,6 +90,8 @@ namespace WB.UI.Shared.Enumerator
             registry.BindAsSingleton<IRequestHandler, NearbyConnectionsRequestHandler>();
             registry.BindAsSingleton<IPayloadProvider, PayloadProvider>();
             registry.BindAsSingleton<IConnectionsApiLimits, ConnectionsApiLimits>();
+
+            SetupLoggingFacility(registry);
         }
 
         public Task Init(IServiceLocator serviceLocator)
@@ -99,6 +106,37 @@ namespace WB.UI.Shared.Enumerator
 
             SQLitePCL.raw.SetProvider(new SQLitePCL.SQLite3Provider_e_sqlite3());
             return Task.CompletedTask;
+        }
+
+
+        private void SetupLoggingFacility(IIocRegistry registry)
+        {
+            var pathToLocalDirectory = AndroidPathUtils.GetPathToInternalDirectory();
+            var fileName = Path.Combine(pathToLocalDirectory, "Logs", "${shortdate}.log");
+            var fileTarget = new FileTarget("logFile")
+            {
+                FileName = fileName,
+                Layout = "${longdate}[${logger}][${level}][${message}][${onexception:${exception:format=toString,Data:exceptionDataSeparator=\r\n}|${stacktrace}}]"
+            };
+
+            var config = new LoggingConfiguration();
+            config.AddTarget("logFile", fileTarget);
+            config.LoggingRules.Add(new LoggingRule("*", LogLevel.Warn, fileTarget));
+
+            #if DEBUG
+            var androidTarget = new ConsoleTarget("android")
+            {
+                Layout =
+                    "[${logger:shortName=true}][${level}][${message}][${onexception:${exception:format=toString,Data}|${stacktrace}}]"
+            };
+
+            config.AddTarget("android", androidTarget);
+            config.LoggingRules.Add(new LoggingRule("*", LogLevel.Trace, androidTarget));
+            #endif
+
+            registry.Bind<ILoggerProvider, NLogLoggerProvider>();
+
+            LogManager.Configuration = config;
         }
     }
 }

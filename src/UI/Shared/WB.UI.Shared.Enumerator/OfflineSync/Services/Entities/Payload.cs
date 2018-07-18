@@ -53,5 +53,10 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Entities
                 tsc.SetResult(ms.ToArray());
             }
         }
+
+        public override string ToString()
+        {
+            return $"#{Id} of type {Type.ToString()}.";
+        }
     }
 }

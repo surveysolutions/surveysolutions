@@ -3,9 +3,6 @@ using System.IO;
 using System.Threading.Tasks;
 using Main.Core.Documents;
 using Ncqrs.Eventing.Storage;
-using NLog;
-using NLog.Config;
-using NLog.Targets;
 using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.BoundedContexts.Supervisor.Services.Implementation;
 using WB.Core.GenericSubdomains.Portable.Implementation;
@@ -25,7 +22,6 @@ using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Services.Internals;
-using WB.UI.Shared.Enumerator.Services.Logging;
 using IPrincipal = WB.Core.SharedKernels.Enumerator.Services.Infrastructure.IPrincipal;
 
 namespace WB.UI.Supervisor.ServiceLocation
@@ -41,22 +37,8 @@ namespace WB.UI.Supervisor.ServiceLocation
 
             var pathToLocalDirectory = AndroidPathUtils.GetPathToInternalDirectory();
 
-            var fileName = Path.Combine(pathToLocalDirectory, "Logs", "${shortdate}.log");
-            var fileTarget = new FileTarget("logFile")
-            {
-                FileName = fileName,
-                Layout = "${longdate}[${logger}][${level}][${message}][${onexception:${exception:format=toString,Data:exceptionDataSeparator=\r\n}|${stacktrace}}]"
-            };
-
-            var config = new LoggingConfiguration();
-            config.AddTarget("logFile", fileTarget);
-            config.LoggingRules.Add(new LoggingRule("*", LogLevel.Warn, fileTarget));
-            LogManager.Configuration = config;
-
             registry.BindAsSingletonWithConstructorArgument<IBackupRestoreService, BackupRestoreService>(
                 "privateStorage", pathToLocalDirectory);
-
-            registry.Bind<ILoggerProvider, NLogLoggerProvider>();
 
             registry.BindAsSingletonWithConstructorArgument<IQuestionnaireAssemblyAccessor, InterviewerQuestionnaireAssemblyAccessor>(
                 "pathToAssembliesDirectory", AndroidPathUtils.GetPathToSubfolderInLocalDirectory("assemblies"));
