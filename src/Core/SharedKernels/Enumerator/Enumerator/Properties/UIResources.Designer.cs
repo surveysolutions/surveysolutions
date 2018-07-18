@@ -1359,6 +1359,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This device is not supported..
+        /// </summary>
+        public static string OfflineSync_DeviceNotSupported {
+            get {
+                return ResourceManager.GetString("OfflineSync_DeviceNotSupported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Done.
         /// </summary>
         public static string OfflineSync_Done {
@@ -1368,8 +1377,16 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Range and network are acceptable. 
-        ///Speed: {0}, Time left: {1}.
+        ///   Looks up a localized string similar to Google Play Services must be installed..
+        /// </summary>
+        public static string OfflineSync_InstallPlayServices {
+            get {
+                return ResourceManager.GetString("OfflineSync_InstallPlayServices", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Speed: {0}, Time left: {1}.
         /// </summary>
         public static string OfflineSync_NetworkInfo {
             get {

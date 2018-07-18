@@ -1,0 +1,413 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AnswerIsInvalid" xml:space="preserve">
+    <value>Răspunsul este nevalid</value>
+  </data>
+  <data name="AnswerWasNotSaved" xml:space="preserve">
+    <value>Răspunsul nu a fost salvat</value>
+  </data>
+  <data name="AreaRecord" xml:space="preserve">
+    <value>Editaƫi zona</value>
+  </data>
+  <data name="AudioClickRecord" xml:space="preserve">
+    <value>Click pentru înregistrare audio</value>
+  </data>
+  <data name="AudioInitializationFailed" xml:space="preserve">
+    <value>Iniƫializarea înregistrarii audio a eşuat</value>
+  </data>
+  <data name="AudioRecording" xml:space="preserve">
+    <value>Înregistrare audio</value>
+  </data>
+  <data name="AudioRecordingDuration" xml:space="preserve">
+    <value>{{humanizedLength}} ({{formattedLength}}) înregistrare audio</value>
+  </data>
+  <data name="AudioRecordNew" xml:space="preserve">
+    <value>Înregistrare nouă</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Anulare</value>
+  </data>
+  <data name="ClickToAnswer" xml:space="preserve">
+    <value>Faceƫi Click pentru a răspunde</value>
+  </data>
+  <data name="CloseInterviewMessage" xml:space="preserve">
+    <value>&lt;p&gt;Interviul Web suportă un singur tab activ .&lt;/p&gt;&lt;p&gt;Vă rog reîncărcaƫi această pagină pentru a continua utilizând acest tab sau închideƫi-l.&lt;/p&gt;</value>
+  </data>
+  <data name="CloseInterviewTitle" xml:space="preserve">
+    <value>Acest interviu este deschis în altă filă sau browser.</value>
+  </data>
+  <data name="Comment" xml:space="preserve">
+    <value>Comentariu</value>
+  </data>
+  <data name="CommentAdd" xml:space="preserve">
+    <value>Adaugare comentariu</value>
+  </data>
+  <data name="CommentAdmin" xml:space="preserve">
+    <value>Comentariu Admin</value>
+  </data>
+  <data name="CommentEnter" xml:space="preserve">
+    <value>Introducere comentariu</value>
+  </data>
+  <data name="CommentHeadquarters" xml:space="preserve">
+    <value>Comentariu RINS</value>
+  </data>
+  <data name="CommentHide" xml:space="preserve">
+    <value>Ascundere comentariu</value>
+  </data>
+  <data name="CommentInterviewer" xml:space="preserve">
+    <value>Comentariu anchetator</value>
+  </data>
+  <data name="CommentPost" xml:space="preserve">
+    <value>Post</value>
+  </data>
+  <data name="CommentPosting" xml:space="preserve">
+    <value>Postare…</value>
+  </data>
+  <data name="CommentSupervisor" xml:space="preserve">
+    <value>Comentariu controlor</value>
+  </data>
+  <data name="CommentYours" xml:space="preserve">
+    <value>Comentariul dvs.</value>
+  </data>
+  <data name="Complete" xml:space="preserve">
+    <value>Finalizat</value>
+  </data>
+  <data name="CompleteAbout" xml:space="preserve">
+    <value>Sunteți pe punctul de a încheia acest interviu</value>
+  </data>
+  <data name="CompleteErrors" xml:space="preserve">
+    <value>Întrebări cu erori:</value>
+  </data>
+  <data name="CompleteFirstErrors" xml:space="preserve">
+    <value>Primele {{count}} entități cu erori:</value>
+  </data>
+  <data name="CompleteNoteToSupervisor" xml:space="preserve">
+    <value>Notă pentru controlor</value>
+  </data>
+  <data name="CompleteQuestionsAnswered" xml:space="preserve">
+    <value>Răspunse</value>
+  </data>
+  <data name="CompleteQuestionsStatus" xml:space="preserve">
+    <value>Starea întrebărilor:</value>
+  </data>
+  <data name="CompleteQuestionsUnanswered" xml:space="preserve">
+    <value>Fără răspuns</value>
+  </data>
+  <data name="ConfirmRosterRemove" xml:space="preserve">
+    <value>Sigur doriți să eliminați lista de articole asociate?</value>
+  </data>
+  <data name="ConnectionLostMessage" xml:space="preserve">
+    <value>Reîncărcați pagina pentru a restabili conexiunea și continuați acest interviu.</value>
+  </data>
+  <data name="ConnectionLostTitle" xml:space="preserve">
+    <value>Conexiunea la server este pierdută.</value>
+  </data>
+  <data name="Cover" xml:space="preserve">
+    <value>Copertă</value>
+  </data>
+  <data name="CoverBrokenPackegeText" xml:space="preserve">
+    <value>Atenție! Acest formular de interviu a corupt datele, &lt;br /&gt;
+doar versiunea anterioară a interviului este disponibilă. &lt;br /&gt;
+Contactați echipa de suport pentru asistență.</value>
+  </data>
+  <data name="CoverBrokenPackegeTitle" xml:space="preserve">
+    <value>Eroare: Acest interviu este corupt</value>
+  </data>
+  <data name="CoverComments" xml:space="preserve">
+    <value>Întrebări cu comentarii:</value>
+  </data>
+  <data name="CoverFirstComments" xml:space="preserve">
+    <value>Primele {{count}} entități cu comentarii:</value>
+  </data>
+  <data name="CoverSupervisorNote" xml:space="preserve">
+    <value>Notă controlor:</value>
+  </data>
+  <data name="DecimalCannotParse" xml:space="preserve">
+    <value>Valoarea introdusă nu poate fi considerată ca valoare zecimală</value>
+  </data>
+  <data name="DecimalEnter" xml:space="preserve">
+    <value>Introduceți număr zecimal</value>
+  </data>
+  <data name="DecimalTooBig" xml:space="preserve">
+    <value>Valoarea introdusă este prea mare. Sunt permise mai puțin de 15 cifre</value>
+  </data>
+  <data name="Disconnected" xml:space="preserve">
+    <value>Deconectat</value>
+  </data>
+  <data name="Done" xml:space="preserve">
+    <value>Terminat</value>
+  </data>
+  <data name="EnterDate" xml:space="preserve">
+    <value>Introducere dată</value>
+  </data>
+  <data name="Error" xml:space="preserve">
+    <value>Eroare</value>
+  </data>
+  <data name="Error_plural" xml:space="preserve">
+    <value>Erori</value>
+  </data>
+  <data name="GPSError" xml:space="preserve">
+    <value>Localizarea nu a putut fi determinată din cauza unei erori necunoscute (Code: {{strErrorCode}}).</value>
+  </data>
+  <data name="GPSNotAvailable" xml:space="preserve">
+    <value>Browserul dvs. nu acceptă recepțioarea Geolocation</value>
+  </data>
+  <data name="GPSPermissionDenied" xml:space="preserve">
+    <value>Acest site web nu are permisiunea de a utiliza API-ul Geolocation</value>
+  </data>
+  <data name="GPSPositionUnavailable" xml:space="preserve">
+    <value>Localizarea curentă nu a putut fi determinată.</value>
+  </data>
+  <data name="GPSRecord" xml:space="preserve">
+    <value>Înregistrare GPS</value>
+  </data>
+  <data name="GPSTimeout" xml:space="preserve">
+    <value>Localizarea curentă nu a putut fi determinată în intervalul de timp specificat.</value>
+  </data>
+  <data name="Help" xml:space="preserve">
+    <value>Ajutor</value>
+  </data>
+  <data name="Instruction" xml:space="preserve">
+    <value>Instrucțiuni</value>
+  </data>
+  <data name="InstructionShow" xml:space="preserve">
+    <value>Afișare instrucțiuni</value>
+  </data>
+  <data name="Interview_Overview_NotAnswered" xml:space="preserve">
+    <value>Nu a fost răspuns</value>
+  </data>
+  <data name="InterviewReceivedCantModify" xml:space="preserve">
+    <value>Interviul este recepționat de anchetator și nu poate fi modificat</value>
+  </data>
+  <data name="Loading" xml:space="preserve">
+    <value>Se încarcă…</value>
+  </data>
+  <data name="LoadingQuestionnaire" xml:space="preserve">
+    <value>Încărcarea chestionarului, vă rugăm așteptați…</value>
+  </data>
+  <data name="LoadingWait" xml:space="preserve">
+    <value>Încărcare, vă rugăm așteptați</value>
+  </data>
+  <data name="Network" xml:space="preserve">
+    <value>Rețea</value>
+  </data>
+  <data name="No" xml:space="preserve">
+    <value>Nu</value>
+  </data>
+  <data name="NoResultsFound" xml:space="preserve">
+    <value>Nici un rezultat găsit</value>
+  </data>
+  <data name="NumberCannotBeLessThanProtected" xml:space="preserve">
+    <value>Valoarea introdusă nu poate fi mai mică decât răspunsul protejat</value>
+  </data>
+  <data name="NumberCannotParse" xml:space="preserve">
+    <value>Valoarea introdusă nu poate fi considerată ca valoare întregă</value>
+  </data>
+  <data name="NumberEnter" xml:space="preserve">
+    <value>Introducere număr</value>
+  </data>
+  <data name="NumberRosterError" xml:space="preserve">
+    <value>Răspunsul '{{answer}}' este incorect deoarece întrebarea este utilizată ca dimensiune a listei, iar răspunsul dat este negativ</value>
+  </data>
+  <data name="NumberRosterRemoveConfirm" xml:space="preserve">
+    <value>Sigur doriți să elliminați rândul(urile) {{amountOfRostersToRemove}} din fiecare listă asociată?</value>
+  </data>
+  <data name="NumberRosterUpperBound" xml:space="preserve">
+    <value>Răspunsul '{{answer}}' este incorect deoarece acesta este mai mare decât limita superioară a Listei {{answerMaxValue}}.</value>
+  </data>
+  <data name="OptionsAvailableAfterAnswer" xml:space="preserve">
+    <value>Opțiunile vor fi disponibile după ce răspundeți la întrebarea la care se face referire</value>
+  </data>
+  <data name="PhotoIsNotImage" xml:space="preserve">
+    <value>Numai fișiere de tip imagine pot fi încărcate</value>
+  </data>
+  <data name="PhotoTooBig" xml:space="preserve">
+    <value>Imaginea este prea mare pentru a fi încărcată. Vă rugăm să alegeți o imagine mai mică de 30 Mb</value>
+  </data>
+  <data name="PhotoUpload" xml:space="preserve">
+    <value>Încarcare poză</value>
+  </data>
+  <data name="ProgressText" xml:space="preserve">
+    <value>{{progress}}% Complet</value>
+  </data>
+  <data name="QuestionUnsupported" xml:space="preserve">
+    <value>Tip de întrebare neacceptat</value>
+  </data>
+  <data name="RecordCurrentTime" xml:space="preserve">
+    <value>Înregistrare oră curentă</value>
+  </data>
+  <data name="Reload" xml:space="preserve">
+    <value>Reîncărcare</value>
+  </data>
+  <data name="ReloadQuestionnaire" xml:space="preserve">
+    <value>Reîncărcare chestionar</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Căutare</value>
+  </data>
+  <data name="SessionTimeoutMessage" xml:space="preserve">
+    <value>Reîncărcați pagina pentru a continua acest interviu.</value>
+  </data>
+  <data name="SessionTimeoutMessageTitle" xml:space="preserve">
+    <value>Sesiunea a expirat deoarece nu s-a făcut nici o acțiune timp de 15 minute.</value>
+  </data>
+  <data name="SessionTimeoutTitle" xml:space="preserve">
+    <value>Sesiunea a expirat</value>
+  </data>
+  <data name="ShowOnMap" xml:space="preserve">
+    <value>Afișare pe hartă</value>
+  </data>
+  <data name="SlowConnection" xml:space="preserve">
+    <value>Conexiunea la rețea este lentă</value>
+  </data>
+  <data name="SwitchingLanguage" xml:space="preserve">
+    <value>Schimbarea limbii. Vă rugăm așteptați...</value>
+  </data>
+  <data name="TextEnter" xml:space="preserve">
+    <value>Introduceți text</value>
+  </data>
+  <data name="TextEnterMasked" xml:space="preserve">
+    <value>Introduceți text {{userFriendlyMask}}</value>
+  </data>
+  <data name="TextEnterNewItem" xml:space="preserve">
+    <value>Introduceți un element nou</value>
+  </data>
+  <data name="TextRequired" xml:space="preserve">
+    <value>Vă rugăm, completați toate valorile necesare</value>
+  </data>
+  <data name="ToggleNavigation" xml:space="preserve">
+    <value>Comutare navigare</value>
+  </data>
+  <data name="WarningsHeader" xml:space="preserve">
+    <value>Avertismente</value>
+  </data>
+  <data name="WebInterview" xml:space="preserve">
+    <value>Interviu Web</value>
+  </data>
+  <data name="WebTesterSessionOver" xml:space="preserve">
+    <value>Sesiunea de testare s-a încheiat</value>
+  </data>
+  <data name="WebTesterSessionOverMessage" xml:space="preserve">
+    <value>Închideți această pagină. Puteți deschide una nouă prin revenirea la site-ul Designer</value>
+  </data>
+  <data name="Yes" xml:space="preserve">
+    <value>Da</value>
+  </data>
+</root>

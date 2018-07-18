@@ -3,25 +3,18 @@
     xmlns:local="http://schemas.android.com/apk/res-auto"
       android:id="@+id/menu">
     <item
-        android:id="@+id/menu_offline_synchronization"
-        local:showAsAction="never"
-        android:icon="@drawable/dashboard_sync_icon"/>
-  <item
-      android:id="@+id/menu_search"
-      local:showAsAction="never" />
-  <item
-      android:id="@+id/menu_send"
-      local:showAsAction="never" />
-  <item
-      android:id="@+id/menu_settings"
-      local:showAsAction="never" />
-  <item
-      android:id="@+id/menu_diagnostics"
-      local:showAsAction="never" />
-  <item
-      android:id="@+id/menu_maps"
-      local:showAsAction="never" />
-  <item
-      android:id="@+id/menu_signout"
-      local:showAsAction="never" />
+        android:id="@+id/menu_search"
+        local:showAsAction="never" />
+    <item
+        android:id="@+id/menu_settings"
+        local:showAsAction="never" />
+    <item
+        android:id="@+id/menu_diagnostics"
+        local:showAsAction="never" />
+    <item
+        android:id="@+id/menu_maps"
+        local:showAsAction="never" />
+    <item
+        android:id="@+id/menu_signout"
+        local:showAsAction="never" />
 </menu>

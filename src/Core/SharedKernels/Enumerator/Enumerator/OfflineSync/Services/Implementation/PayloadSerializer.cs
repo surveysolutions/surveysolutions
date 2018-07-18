@@ -28,7 +28,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                 }
             }
         }
-
+        
         public async Task<byte[]> ToPayloadAsync<T>(T message)
         {
             using (var ms = new MemoryStream())

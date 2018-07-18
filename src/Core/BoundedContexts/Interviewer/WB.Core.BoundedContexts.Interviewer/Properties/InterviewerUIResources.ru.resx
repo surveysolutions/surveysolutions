@@ -756,16 +756,11 @@
     <value>Выйти из поиска</value>
   </data>
   <data name="Synchronization_UploadAuditLog" xml:space="preserve">
-    <value>Загрузка на хедквотер аудин информации</value>
-    <comment>Загрузка на хедквотер аудин информации</comment>
+    <value>Загрузка на хедквотер аудит информации</value>
   </data>
     <data name="SendToSupervisor_Retry" xml:space="preserve">
     <value>Повторить еще раз</value>
     <comment>Повторить еще раз</comment>
-  </data>
-    <data name="SendToSupervisor_TransferedInterviews" xml:space="preserve">
-    <value>{0} из {1} интервью переданы</value>
-    <comment>{0} из {1} интервью переданы</comment>
   </data>
     <data name="SendToSupervisor_Note" xml:space="preserve">
     <value>Примечание: Эта операция может занять больше времени чем обычно, не выключайте ваше устройство</value>
@@ -792,5 +787,35 @@
     <data name="SendToSupervisor_ConnectionFailed" xml:space="preserve">
     <value>Убедитесь что оба устройсва находятся близко друг к другу; WIFI and Bluetooth дожны быть включены на обох устройствах; Приложение Supervisor дложно быть открыто на устройстве супервизора</value>
     <comment>Убедитесь что оба устройсва находятся близко друг к другу; WIFI and Bluetooth дожны быть включены на обох устройствах; Приложение Supervisor дложно быть открыто на устройстве супервизора</comment>
+  </data>
+    <data name="SendToSupervisor_MovingToSupervisorFormat" xml:space="preserve">
+    <value>Перемещение всех завершенных интервью супервизору '{0}'</value>
+    <comment>Перемещение всех завершенных интервью супервизору '{0}'</comment>
+  </data>
+    <data name="SendToSupervisor_TransferInProgress" xml:space="preserve">
+    <value>Процесс передачи данных</value>
+    <comment>Процесс передачи данных</comment>
+  </data>
+    <data name="SendToSupervisor_SupervisorNotFound" xml:space="preserve">
+    <value>Передача данных не начата.
+Устройство супервизора не найдено</value>
+    <comment>Передача данных не начата.
+Устройство супервизора не найдено</comment>
+  </data>
+    <data name="SendToSupervisor_TransferWasAborted" xml:space="preserve">
+    <value>Передача данных была отменена</value>
+    <comment>Передача данных была отменена</comment>
+  </data>
+    <data name="SendToSupervisor_SyncCompleted" xml:space="preserve">
+    <value>Передача завершена. Все завершенные интервью теперь находятся на другом устройстве</value>
+    <comment>Передача завершена. Все завершенные интервью теперь находятся на другом устройстве</comment>
+  </data>
+    <data name="SendToSupervisor_SupervisorTerminateTransfering" xml:space="preserve">
+    <value>Передача была прервана на втором устройстве.</value>
+    <comment>Передача была прервана на втором устройстве.</comment>
+  </data>
+    <data name="SendToSupervisor_SomeInterviewsOnSupervisor" xml:space="preserve">
+    <value>Некоторые интервью теперь находятся на другом устройстве</value>
+    <comment>Некоторые интервью теперь находятся на другом устройстве</comment>
   </data>
 </root>

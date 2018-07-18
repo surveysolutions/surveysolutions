@@ -34,11 +34,11 @@ namespace WB.UI.Tester
 
             if (principal.IsAuthenticated)
             {
-                viewModelNavigationService.NavigateToDashboardAsync().ConfigureAwait(false);
+                viewModelNavigationService.NavigateToDashboardAsync().WaitAndUnwrapException();
             }
             else
             {
-                viewModelNavigationService.NavigateToLoginAsync().ConfigureAwait(false);
+                viewModelNavigationService.NavigateToLoginAsync().WaitAndUnwrapException();
             }
         }
 

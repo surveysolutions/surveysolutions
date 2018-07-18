@@ -120,9 +120,14 @@ namespace WB.UI.Shared.Enumerator.Services
         public async Task StoreAssemblyAsync(QuestionnaireIdentity questionnaireIdentity, byte[] assembly)
         {
             string assemblyFileName = this.GetAssemblyFileName(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
+            var path = this.fileSystemAccessor.CombinePath(this.pathToStore, assemblyFileName);
 
-            var assemblyFile = this.fileSystemAccessor.OpenOrCreateFile(this.fileSystemAccessor.CombinePath(this.pathToStore, assemblyFileName), false);
-            using (assemblyFile)
+            if (this.fileSystemAccessor.IsFileExists(path))
+            {
+                this.fileSystemAccessor.DeleteFile(path);
+            }
+
+            using (var assemblyFile = this.fileSystemAccessor.OpenOrCreateFile(path, false))
             {
                 await assemblyFile.WriteAsync(assembly, 0, assembly.Length);
             }

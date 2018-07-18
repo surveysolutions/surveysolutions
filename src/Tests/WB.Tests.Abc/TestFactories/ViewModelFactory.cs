@@ -7,6 +7,7 @@ using MvvmCross.Plugin.Messenger;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services;
+using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -23,12 +24,14 @@ using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
+using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Enumerator.Views.Dashboard;
 
 namespace WB.Tests.Abc.TestFactories
@@ -409,15 +412,22 @@ namespace WB.Tests.Abc.TestFactories
             => new WaitingForSupervisorActionViewModel(dashboardItemsAccessor ?? Mock.Of<IDashboardItemsAccessor>(),
                 viewModelFactory ?? Create.Service.SupervisorInterviewViewModelFactory());
 
-        public SupervisorDashboardInterviewViewModel SupervisorDashboardInterviewViewModel(Guid interviewId)
+        public SupervisorDashboardInterviewViewModel SupervisorDashboardInterviewViewModel(Guid? interviewId = null,
+            IPrincipal principal = null,
+            IPlainStorage<InterviewerDocument> interviewers = null)
         {
             var viewModel = new SupervisorDashboardInterviewViewModel(
                 Mock.Of<IServiceLocator>(),
                 Mock.Of<IAuditLogService>(),
-                Mock.Of<IViewModelNavigationService>());
+                Mock.Of<IViewModelNavigationService>(),
+                principal ?? Mock.Of<IPrincipal>(x => x.CurrentUserIdentity == Create.Other.SupervisorIdentity(null, null, null)),
+                interviewers ?? new InMemoryPlainStorage<InterviewerDocument>());
 
-            viewModel.Init(Create.Entity.InterviewView(interviewId: interviewId,
-                questionnaireId: Create.Entity.QuestionnaireIdentity().ToString()), new List<PrefilledQuestion>());
+            if (interviewId.HasValue)
+            {
+                viewModel.Init(Create.Entity.InterviewView(interviewId: interviewId,
+                    questionnaireId: Create.Entity.QuestionnaireIdentity().ToString()), new List<PrefilledQuestion>());
+            }
 
             return viewModel;
         }
