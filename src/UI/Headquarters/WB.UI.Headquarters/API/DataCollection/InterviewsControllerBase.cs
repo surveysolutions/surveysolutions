@@ -70,7 +70,7 @@ namespace WB.UI.Headquarters.API.DataCollection
                 }).ToList();
 
             var response = this.Request.CreateResponse(resultValue);
-            response.Headers.CacheControl = new CacheControlHeaderValue()
+            response.Headers.CacheControl = new CacheControlHeaderValue
             {
                 Public = false,
                 NoCache = true
