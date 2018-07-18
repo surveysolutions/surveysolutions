@@ -134,6 +134,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             }
             catch (Exception inner)
             {
+                this.logger.Verbose("Got exception. " + inner.ToString());
                 if (payloads != null)
                 {
                     pending.TryRemove(payloads.CorrelationId, out _);
