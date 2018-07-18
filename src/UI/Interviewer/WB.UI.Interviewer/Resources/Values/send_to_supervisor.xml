@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <resources>
     <style name="SendToSupervisor_Note" parent="AppTheme">
-        <item name="android:paddingTop">76dp</item>
+        <item name="android:layout_marginTop">@dimen/SendToSupervisor_Note_MarginTop</item>
         <item name="android:fontFamily">Roboto</item>
         <item name="android:textSize">@dimen/textsize_18</item>
         <item name="android:textColor">@color/offline_sync_regular_text</item>
@@ -16,6 +16,6 @@
         <item name="android:textStyle">normal</item>
     </style>
     <style name="SendToSupervisor_Navigation" parent="AppTheme">
-        <item name="android:layout_marginTop">38dp</item>
+        <item name="android:layout_marginTop">@dimen/SendToSupervisor_Navigation_MarginTop</item>
     </style>
 </resources>
