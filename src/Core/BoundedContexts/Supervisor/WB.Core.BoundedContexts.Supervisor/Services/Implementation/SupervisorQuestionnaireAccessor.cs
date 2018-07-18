@@ -40,5 +40,12 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
 
             base.StoreQuestionnaire(questionnaireIdentity, questionnaireDocument, census, translationDtos);
         }
+
+        public override void RemoveQuestionnaire(QuestionnaireIdentity questionnaireIdentity)
+        {
+            this.rawQuestionnaireDocuments.Remove(questionnaireIdentity.ToString());
+
+            base.RemoveQuestionnaire(questionnaireIdentity);
+        }
     }
 }

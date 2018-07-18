@@ -19,8 +19,8 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
             var dashboardItemsAccessor = Mock.Of<IDashboardItemsAccessor>(x =>
                 x.WaitingForSupervisorAction() == new[]
                 {
-                    Create.ViewModel.SupervisorDashboardInterviewViewModel(Guid.NewGuid()),
-                    Create.ViewModel.SupervisorDashboardInterviewViewModel(interviewId)
+                    Create.ViewModel.SupervisorDashboardInterviewViewModel(Guid.NewGuid(), null, null),
+                    Create.ViewModel.SupervisorDashboardInterviewViewModel(interviewId, null, null)
                 });
             var viewModel = Create.ViewModel.WaitingForSupervisorActionViewModel(dashboardItemsAccessor);
             viewModel.Prepare(interviewId);

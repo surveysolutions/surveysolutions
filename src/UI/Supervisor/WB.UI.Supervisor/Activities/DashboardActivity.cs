@@ -101,7 +101,6 @@ namespace WB.UI.Supervisor.Activities
         {
             this.MenuInflater.Inflate(Resource.Menu.dashboard, menu);
 
-            menu.LocalizeMenuItem(Resource.Id.menu_offline_synchronization, "Offline Sync");
             menu.LocalizeMenuItem(Resource.Id.menu_signout, InterviewerUIResources.MenuItem_Title_SignOut);
             menu.LocalizeMenuItem(Resource.Id.menu_settings, InterviewerUIResources.MenuItem_Title_Settings);
             menu.LocalizeMenuItem(Resource.Id.menu_diagnostics, InterviewerUIResources.MenuItem_Title_Diagnostics);
@@ -122,9 +121,6 @@ namespace WB.UI.Supervisor.Activities
                     break;
                 case Resource.Id.menu_diagnostics:
                     this.ViewModel.NavigateToDiagnosticsPageCommand.Execute();
-                    break;
-                case Resource.Id.menu_offline_synchronization:
-                    this.ViewModel.NavigateToOfflineSyncCommand.Execute();
                     break;
                 case Resource.Id.menu_signout:
                     this.ViewModel.SignOutCommand.Execute();

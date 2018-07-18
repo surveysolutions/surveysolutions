@@ -108,7 +108,9 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services
             return this.interviews.Where(x =>
                 x.Status == InterviewStatus.ApprovedBySupervisor
                 || x.ResponsibleId != this.principal.CurrentUserIdentity.UserId && 
-                (x.Status == InterviewStatus.RejectedBySupervisor || x.Status == InterviewStatus.RejectedByHeadquarters));
+                (x.Status == InterviewStatus.RejectedBySupervisor || 
+                 x.Status == InterviewStatus.RejectedByHeadquarters ||
+                 x.Status == InterviewStatus.InterviewerAssigned));
         }
 
         private IEnumerable<AssignmentDocument> GetOutboxAssignments()

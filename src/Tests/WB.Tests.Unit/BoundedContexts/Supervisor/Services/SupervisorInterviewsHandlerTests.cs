@@ -4,11 +4,13 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Main.Core.Events;
 using Moq;
+using Ncqrs.Eventing;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Supervisor;
 using WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSyncHandlers;
 using WB.Core.BoundedContexts.Supervisor.Views;
+using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -19,6 +21,7 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.Views;
@@ -92,7 +95,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
         }
 
         [Test]
-        public async Task LogInterviewAsSuccessfullyHandledRequest_Should_hide_interview_from_dashboard()
+        public async Task LogInterviewAsSuccessfullyHandledRequest_Should_not_delete_interview()
         {
             var interviews = new SqliteInmemoryStorage<InterviewView>();
             interviews.Store(Create.Entity.InterviewView(status: InterviewStatus.RejectedBySupervisor, interviewId: Id.g1));
@@ -103,7 +106,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             var response = await handler.Handle(new LogInterviewAsSuccessfullyHandledRequest(Id.g1));
 
             // Assert
-            interviews.Where(x => x.InterviewId == Id.g1).Count.Should().Be(0);
+            interviews.Where(x => x.InterviewId == Id.g1).Count.Should().Be(1);
             Assert.That(response, Is.Not.Null);
         }
 
@@ -149,6 +152,52 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
         }
 
         [Test]
+        public async Task UploadInterview_should_apply_sync_packge_and_change_supervisor_if_team_changed()
+        {
+            var commandSerivce = new Mock<ICommandService>();
+            var serializer = new Mock<IJsonAllTypesSerializer>();
+
+            var packageEvents = new[]
+            {
+                Create.Event.AggregateRootEvent(Create.Event.InterviewCreated()),
+                Create.Event.AggregateRootEvent(Create.Event.SupervisorAssigned(Id.g1, Id.g2))
+            };
+            var interviewId = packageEvents[0].EventSourceId;
+
+            var packageSerializedEvents = "test events";
+            serializer.Setup(x => x.Deserialize<AggregateRootEvent[]>(packageSerializedEvents))
+                .Returns(packageEvents);
+
+            var principal = new Mock<IPrincipal>();
+            principal.Setup(x => x.CurrentUserIdentity).Returns(new SupervisorIdentity() {UserId = Id.g7});
+
+            var handler = Create.Service.SupervisorInterviewsHandler(commandService: commandSerivce.Object,
+                serializer: serializer.Object, principal:principal.Object);
+
+            // Act
+            var response = await handler.UploadInterview(new UploadInterviewRequest
+            {
+                Interview = new InterviewPackageApiView
+                {
+                    Events = packageSerializedEvents,
+                    InterviewId = interviewId,
+                    MetaInfo = new InterviewMetaInfo()
+                },
+                InterviewKey = "124"
+            });
+
+            // assert
+            Assert.That(response, Is.Not.Null);
+
+            commandSerivce.Verify(x => x.Execute(It.Is<SynchronizeInterviewEventsCommand>(c =>
+                c.InterviewId == interviewId &&
+                c.InterviewKey.Equals(new InterviewKey(124)) &&
+                c.SynchronizedEvents[0].GetType() == typeof(InterviewCreated) &&
+                c.NewSupervisorId == Id.g7
+            ), null));
+        }
+
+        [Test]
         public async Task UploadInterview_should_throw_interview_exception_when_same_sync_package_is_sent_twice()
         {
             var commandSerivce = new Mock<ICommandService>();
@@ -190,6 +239,37 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             brokenStorageMock.Verify(bs => bs.Store(It.Is<BrokenInterviewPackageView>(bpv =>
                 bpv.ExceptionType == InterviewDomainExceptionType.DuplicateSyncPackage.ToString()                
             )), Times.Once);
+        }
+
+        [Test]
+        public async Task UploadInterview_should_update_quantity_on_assignment_when_interview_received()
+        {
+            var assignmentId = 1;
+            var existingInterviews = new InMemoryPlainStorage<InterviewView>();
+            existingInterviews.Store(Create.Entity.InterviewView(assignmentId: assignmentId, interviewId: Id.g1));
+            existingInterviews.Store(Create.Entity.InterviewView(assignmentId: assignmentId, interviewId: Id.g2, status: InterviewStatus.RejectedBySupervisor));
+
+            var assignments = Create.Storage.AssignmentDocumentsInmemoryStorage();
+            assignments.Store(Create.Entity.AssignmentDocument(assignmentId).Build());
+
+            var handler =  Create.Service.SupervisorInterviewsHandler(
+                interviews: existingInterviews,
+                assignments: assignments);
+            // Act
+            await handler.UploadInterview(new UploadInterviewRequest
+            {
+                InterviewKey = Create.Entity.InterviewKey().ToString(),
+                Interview = new InterviewPackageApiView
+                {
+                    InterviewId = Id.g2,
+                    Events = "",
+                    MetaInfo = new InterviewMetaInfo()
+                }
+            });
+
+            // Assert
+            var assignmentDocument = assignments.GetById(assignmentId);
+            Assert.That(assignmentDocument, Has.Property(nameof(assignmentDocument.CreatedInterviewsCount)).EqualTo(2));
         }
 
         [Test]
