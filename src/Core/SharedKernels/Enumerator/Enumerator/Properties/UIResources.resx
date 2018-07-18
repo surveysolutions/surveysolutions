@@ -641,6 +641,9 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
     <data name="OfflineSync_Done" xml:space="preserve">
     <value>Done</value>
   </data>
+    <data name="OfflineSync_NetworkInfo" xml:space="preserve">
+    <value>Speed: {0}, Time left: {1}</value>
+  </data>
     <data name="OfflineSync_InstallPlayServices" xml:space="preserve">
     <value>Google Play Services must be installed.</value>
   </data>
