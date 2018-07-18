@@ -216,7 +216,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                             {
                                 this.ProgressStatus = o.Title;
                                 this.ProgressStatusDescription = o.Description;
-                                this.progressDescription = string.Empty;
+                                this.ProgressDescription = string.Empty;
                             }
                             else
                             {
@@ -227,7 +227,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                                     speed = o.TransferProgress.Speed.Value.Bytes().ToString("0.00") + "/s. ";
                                 }
 
-                                this.progressDescription = $"{speed ?? ""} in {o.TransferProgress.Eta.Humanize()}";
+                                this.ProgressDescription = $"{speed ?? ""} in {o.TransferProgress.Eta.Humanize()}";
                             }
 
                             if(o.HasErrors) this.OnTerminateTransferring();

@@ -78,6 +78,11 @@
                       android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
                       local:MvxBind="Text ProgressStatusDescription"/>
+            
+            <TextView style="@style/OfflineSync_HeaderText"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      local:MvxBind="Text ProgressDescription"/>
 
             <TableLayout
                 style="@style/FullWidthWrappingLayout"
