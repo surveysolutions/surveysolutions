@@ -565,7 +565,7 @@ namespace WB.Tests.Abc.TestFactories
             {
                 Id = interviewId.FormatGuid(),
                 InterviewId = interviewId.Value,
-                QuestionnaireId = questionnaireId,
+                QuestionnaireId = questionnaireId ?? Create.Entity.QuestionnaireIdentity().ToString(),
                 LocationQuestionId = prefilledQuestionId,
                 QuestionnaireTitle = questionaireTitle ?? "Questionnaire ",
                 Status = status ?? InterviewStatus.InterviewerAssigned,

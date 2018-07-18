@@ -12,6 +12,7 @@ using WB.Core.BoundedContexts.Supervisor.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
@@ -71,6 +72,12 @@ namespace WB.Tests.Abc.TestFactories
                 Name = userName ?? "name",
                 PasswordHash = passwordHash ?? "pswdHash"
             };
+        }
+
+        public IPrincipal SupervisorPrincipal()
+        {
+            return Mock.Of<IPrincipal>(x => x.IsAuthenticated == true &&
+                                            x.CurrentUserIdentity == Create.Other.SupervisorIdentity(null, null, null));
         }
     }
 }
