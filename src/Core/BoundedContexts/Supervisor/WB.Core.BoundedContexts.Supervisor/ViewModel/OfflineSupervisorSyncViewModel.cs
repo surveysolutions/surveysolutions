@@ -120,7 +120,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 
         protected void StopAdvertising()
         {
-            this.nearbyConnection.StopAllEndpoint();
+            //this.nearbyConnection.StopAllEndpoint();
             this.nearbyConnection.StopAdvertising();
         }
 
