@@ -30,13 +30,13 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Dashboard
             var principal = Mock.Of<IPrincipal>(x => x.IsAuthenticated == true &&
                                                      x.CurrentUserIdentity == Mock.Of<IUserIdentity>(u => u.UserId == Id.gA));
 
-            interviews.Store(Create.Entity.InterviewView(interviewId: Id.g1, responsibleId: Id.gA, questionnaireId: Create.Entity.QuestionnaireIdentity().ToString(), status: InterviewStatus.RejectedBySupervisor));
-            interviews.Store(Create.Entity.InterviewView(interviewId: Id.g2, responsibleId: Id.gB, questionnaireId: Create.Entity.QuestionnaireIdentity().ToString(), status: InterviewStatus.Completed));
-            interviews.Store(Create.Entity.InterviewView(interviewId: Id.g3, responsibleId: Id.gA, questionnaireId: Create.Entity.QuestionnaireIdentity().ToString(), status: InterviewStatus.InterviewerAssigned));
-            interviews.Store(Create.Entity.InterviewView(interviewId: Id.g4, responsibleId: Id.gA, questionnaireId: Create.Entity.QuestionnaireIdentity().ToString(), status: InterviewStatus.RejectedByHeadquarters));
+            interviews.Store(Create.Entity.InterviewView(interviewId: Id.g1, responsibleId: Id.gA, status: InterviewStatus.RejectedBySupervisor));
+            interviews.Store(Create.Entity.InterviewView(interviewId: Id.g2, responsibleId: Id.gB, status: InterviewStatus.Completed));
+            interviews.Store(Create.Entity.InterviewView(interviewId: Id.g3, responsibleId: Id.gA, status: InterviewStatus.InterviewerAssigned));
+            interviews.Store(Create.Entity.InterviewView(interviewId: Id.g4, responsibleId: Id.gA, status: InterviewStatus.RejectedByHeadquarters));
 
-            interviews.Store(Create.Entity.InterviewView(interviewId: Id.g9, responsibleId: Id.gA, questionnaireId: Create.Entity.QuestionnaireIdentity().ToString(), status: InterviewStatus.ApprovedBySupervisor));
-            interviews.Store(Create.Entity.InterviewView(interviewId: Id.g10, responsibleId: Id.gB, questionnaireId: Create.Entity.QuestionnaireIdentity().ToString(), status: InterviewStatus.RejectedBySupervisor));
+            interviews.Store(Create.Entity.InterviewView(interviewId: Id.g9, responsibleId: Id.gA, status: InterviewStatus.ApprovedBySupervisor));
+            interviews.Store(Create.Entity.InterviewView(interviewId: Id.g10, responsibleId: Id.gB, status: InterviewStatus.RejectedBySupervisor));
 
             var accessor = CreateItemsAccessor(interviews: interviews, principal: principal);
 
@@ -63,13 +63,13 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Dashboard
             var principal = Mock.Of<IPrincipal>(x => x.IsAuthenticated == true &&
                                                      x.CurrentUserIdentity == Mock.Of<IUserIdentity>(u => u.UserId == currentSupervisorId));
 
-            interviews.Store(Create.Entity.InterviewView(interviewId: Id.g1, responsibleId: interviewerId, questionnaireId: Create.Entity.QuestionnaireIdentity().ToString(), status: InterviewStatus.ApprovedBySupervisor));
-            interviews.Store(Create.Entity.InterviewView(interviewId: Id.g2, responsibleId: interviewerId, questionnaireId: Create.Entity.QuestionnaireIdentity().ToString(), status: InterviewStatus.RejectedBySupervisor));
-            interviews.Store(Create.Entity.InterviewView(interviewId: Id.g3, responsibleId: interviewerId, questionnaireId: Create.Entity.QuestionnaireIdentity().ToString(), status: InterviewStatus.RejectedByHeadquarters));
-            interviews.Store(Create.Entity.InterviewView(interviewId: Id.g4, responsibleId: interviewerId, questionnaireId: Create.Entity.QuestionnaireIdentity().ToString(), status: InterviewStatus.InterviewerAssigned));
+            interviews.Store(Create.Entity.InterviewView(interviewId: Id.g1, responsibleId: interviewerId, status: InterviewStatus.ApprovedBySupervisor));
+            interviews.Store(Create.Entity.InterviewView(interviewId: Id.g2, responsibleId: interviewerId, status: InterviewStatus.RejectedBySupervisor));
+            interviews.Store(Create.Entity.InterviewView(interviewId: Id.g3, responsibleId: interviewerId, status: InterviewStatus.RejectedByHeadquarters));
+            interviews.Store(Create.Entity.InterviewView(interviewId: Id.g4, responsibleId: interviewerId, status: InterviewStatus.InterviewerAssigned));
             
-            interviews.Store(Create.Entity.InterviewView(interviewId: Id.g9, responsibleId: currentSupervisorId, questionnaireId: Create.Entity.QuestionnaireIdentity().ToString(), status: InterviewStatus.RejectedBySupervisor));
-            interviews.Store(Create.Entity.InterviewView(interviewId: Id.g10, responsibleId: currentSupervisorId, questionnaireId: Create.Entity.QuestionnaireIdentity().ToString(), status: InterviewStatus.RejectedByHeadquarters));
+            interviews.Store(Create.Entity.InterviewView(interviewId: Id.g9, responsibleId: currentSupervisorId, status: InterviewStatus.RejectedBySupervisor));
+            interviews.Store(Create.Entity.InterviewView(interviewId: Id.g10, responsibleId: currentSupervisorId, status: InterviewStatus.RejectedByHeadquarters));
 
             var accessor = CreateItemsAccessor(interviews: interviews, principal: principal);
 
@@ -130,14 +130,17 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Dashboard
             IPlainStorage<InterviewView> interviews = null,
             IAssignmentDocumentsStorage assignments = null,
             IPrincipal principal = null,
-            IPlainStorage<PrefilledQuestionView> identifyingQuestionsRepo = null
+            IPlainStorage<PrefilledQuestionView> identifyingQuestionsRepo = null,
+            IPlainStorage<InterviewerDocument> interviewers = null
             )
         {
             var viewModelFactory = new Mock<IInterviewViewModelFactory>();
             viewModelFactory.Setup(x => x.GetNew<SupervisorDashboardInterviewViewModel>())
                 .Returns(() => new SupervisorDashboardInterviewViewModel(Mock.Of<IServiceLocator>(),
                     Mock.Of<IAuditLogService>(),
-                    Mock.Of<IViewModelNavigationService>()));
+                    Mock.Of<IViewModelNavigationService>(),
+                    Create.Other.SupervisorPrincipal(),
+                    interviewers ?? Mock.Of<IPlainStorage<InterviewerDocument>>(x => x.GetById(It.IsAny<string>()) == new InterviewerDocument())));
 
             return new DashboardItemsAccessor(
 

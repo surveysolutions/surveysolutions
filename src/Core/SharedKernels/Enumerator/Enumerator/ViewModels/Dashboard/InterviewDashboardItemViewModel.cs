@@ -124,7 +124,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             this.IsExpanded = false;
         }
 
-        private void BindTitles()
+        protected virtual void BindTitles()
         {
             if (string.IsNullOrWhiteSpace(interview.QuestionnaireTitle)) // only to support existing clients
             {
@@ -142,7 +142,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             var comment = GetInterviewCommentByStatus(interview);
             var dateComment = GetInterviewDateCommentByStatus(interview);
 
-            this.SubTitle = $"{dateComment}\n{comment}";
+            string separator = !string.IsNullOrEmpty(comment) ? Environment.NewLine : string.Empty;
+            this.SubTitle = $"{dateComment}{separator}{comment}";
             
             this.AssignmentIdLabel = interview.Assignment.HasValue
                 ? InterviewerUIResources.Dashboard_Interview_AssignmentLabelFormat.FormatString(interview.Assignment)
@@ -272,6 +273,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             {
                 this.isInterviewReadyToLoad = true;
             }
+        }
+
+        
+        private string responsible;
+        public string Responsible
+        {
+            get => responsible;
+            set => this.SetProperty(ref this.responsible, value);
         }
 
         protected override void Dispose(bool disposing)
