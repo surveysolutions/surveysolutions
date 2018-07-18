@@ -777,7 +777,7 @@ namespace WB.Tests.Abc.TestFactories
 
         public NearbyConnectionsRequestHandler GoogleConnectionsRequestHandler()
         {
-            return new NearbyConnectionsRequestHandler();
+            return new NearbyConnectionsRequestHandler(Mock.Of<ILogger>());
         }
 
         private static IQueryable<TEntity> GetNhQueryable<TEntity>() => Mock.Of<IQueryable<TEntity>>(x => x.Provider == Mock.Of<INhQueryProvider>());
