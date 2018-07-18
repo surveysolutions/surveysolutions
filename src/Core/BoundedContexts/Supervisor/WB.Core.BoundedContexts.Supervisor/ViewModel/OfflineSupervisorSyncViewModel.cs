@@ -4,8 +4,10 @@ using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.Logging;
+using Plugin.Permissions.Abstractions;
 using WB.Core.BoundedContexts.Supervisor.Properties;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.Enumerator.OfflineSync.Entities;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -17,7 +19,6 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
     public class OfflineSupervisorSyncViewModel : BaseOfflineSyncViewModel
     {
         private readonly IInterviewViewModelFactory viewModelFactory;
-        private readonly string serviceName;
 
         public OfflineSupervisorSyncViewModel(IPrincipal principal,
             IViewModelNavigationService viewModelNavigationService,
@@ -26,11 +27,10 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             INearbyCommunicator communicator,
             INearbyConnection nearbyConnection,
             IInterviewViewModelFactory viewModelFactory)
-            : base(principal, viewModelNavigationService, permissions, nearbyConnection)
+            : base(principal, viewModelNavigationService, permissions, nearbyConnection, settings)
         {
             communicator.IncomingInfo.Subscribe(OnIncomingData);
             this.viewModelFactory = viewModelFactory;
-            this.serviceName = NormalizeEndpoint(settings.Endpoint);
         }
 
         private string title;
@@ -86,8 +86,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 
         protected override void SetStatus(ConnectionStatus connectionStatus, string details = null)
         {
-            base.SetStatus(connectionStatus, details);
-            this.ProgressTitle = $"{this.GetServiceName()}\r\n{this.Status}\r\n{this.StatusDetails}";
+            this.ProgressTitle = $"{this.GetServiceName()}\r\n{connectionStatus.ToString()}\r\n{details ?? String.Empty}";
         }
 
         public IMvxAsyncCommand Restart => new MvxAsyncCommand(OnGoogleApiReady);
@@ -96,8 +95,33 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         {
             Log.Trace("StartAdvertising");
 
-            StopAdvertising();
-            await StartAdvertising();
+            this.StopAdvertising();
+            await this.StartAdvertising();
+        }
+
+        protected async Task StartAdvertising()
+        {
+            await this.permissions.AssureHasPermission(Permission.Location);
+
+            Log.Trace("StartAdvertising");
+
+            SetStatus(ConnectionStatus.StartAdvertising, $"Starting advertising");
+            var serviceName = this.GetServiceName();
+            try
+            {
+                await this.nearbyConnection.StartAdvertising(serviceName, this.principal.CurrentUserIdentity.Name);
+                SetStatus(ConnectionStatus.Advertising, "Waiting for interviewers connections");
+            }
+            catch (NearbyConnectionException nce)
+            {
+                SetStatus(ConnectionStatus.Error, nce.Message);
+            }
+        }
+
+        protected void StopAdvertising()
+        {
+            //this.nearbyConnection.StopAllEndpoint();
+            this.nearbyConnection.StopAdvertising();
         }
 
         private void OnIncomingData(IncomingDataInfo dataInfo)
@@ -105,6 +129,6 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             SetStatus(ConnectionStatus.Sync, dataInfo.ToString());
         }
         
-        protected override string GetServiceName() => serviceName + this.principal.CurrentUserIdentity.UserId.FormatGuid();
+        protected override string GetDeviceIdentification() => this.principal.CurrentUserIdentity.UserId.FormatGuid();    
     }
 }

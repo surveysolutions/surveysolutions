@@ -41,6 +41,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
         private readonly IPlainStorage<BrokenInterviewPackageView, int?> brokenInterviewPackageStorage;
         private readonly IPrincipal principal;
         private readonly IPlainStorage<InterviewerDocument> interviewerViewRepository;
+        private readonly IAssignmentDocumentsStorage assignmentsStorage;
 
         public SupervisorInterviewsHandler(ILiteEventBus eventBus,
             IEnumeratorEventStorage eventStore,
@@ -50,8 +51,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             ILogger logger, 
             IPlainStorage<BrokenInterviewPackageView, int?> brokenInterviewPackageStorage,
             IPlainStorage<SuperivsorReceivedPackageLogEntry, int> receivedPackagesLog,
+
             IPrincipal principal,
-            IPlainStorage<InterviewerDocument> interviewerViewRepository)
+            IPlainStorage<InterviewerDocument> interviewerViewRepository,
+            IAssignmentDocumentsStorage assignmentsStorage)
         {
             this.eventBus = eventBus;
             this.eventStore = eventStore;
@@ -63,6 +66,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             this.brokenInterviewPackageStorage = brokenInterviewPackageStorage;
             this.principal = principal;
             this.interviewerViewRepository = interviewerViewRepository;
+            this.assignmentsStorage = assignmentsStorage;
         }
 
         public void Register(IRequestHandler requestHandler)
@@ -125,6 +129,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                 ), null);
 
                 RecordProcessedPackageInfo(aggregateRootEvents);
+                UpdateAssignmentQuantityByInterview(interview.InterviewId);
             }
             catch (Exception exception)
             {
@@ -161,6 +166,17 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             innerwatch.Stop();
 
             return Task.FromResult(new OkResponse());
+        }
+
+        private void UpdateAssignmentQuantityByInterview(Guid interviewId)
+        {
+            var interviewView = this.interviews.GetById(interviewId.FormatGuid());
+            if (interviewView?.Assignment != null)
+            {
+                var assignment = this.assignmentsStorage.GetById(interviewView.Assignment.Value);
+                assignment.CreatedInterviewsCount = this.interviews.Count(x => x.Assignment == interviewView.Assignment);
+                this.assignmentsStorage.Store(assignment);
+            }
         }
 
         private bool CheckIfInterviewerWasMovedToAnotherTeam(
@@ -222,7 +238,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
 
         public Task<OkResponse> Handle(LogInterviewAsSuccessfullyHandledRequest arg)
         {
-            this.interviews.Remove(arg.InterviewId.FormatGuid());
             return Task.FromResult(new OkResponse());
         }
 

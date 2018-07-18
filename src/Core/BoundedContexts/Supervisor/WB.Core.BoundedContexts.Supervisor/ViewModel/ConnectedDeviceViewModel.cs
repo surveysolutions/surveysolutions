@@ -51,7 +51,6 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 
             var minLeft = TimeSpan.FromMinutes(10).Humanize();
 
-            this.NetworkInfo = string.Format(UIResources.OfflineSync_NetworkInfo, kbPerSec, minLeft);
             this.ProgressInPercents = 33;
             this.TransferingStatus = TransferingStatus.Transferring;
 

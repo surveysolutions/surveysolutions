@@ -87,8 +87,7 @@
       
      <TextView
           android:id="@+id/responsible"
-          app:MvxBind="Text Responsible; TextColor InterviewStatusToColor(Status);"
-      
+          app:MvxBind="Visible Responsible; Text Responsible; TextColor InterviewStatusToColor(Status);"
           style="@style/Dashboard_InterviewItem_SubTitle"
           app:layout_constraintLeft_toLeftOf="@+id/subtitle"
           app:layout_constraintRight_toRightOf="@+id/right_guideline"
