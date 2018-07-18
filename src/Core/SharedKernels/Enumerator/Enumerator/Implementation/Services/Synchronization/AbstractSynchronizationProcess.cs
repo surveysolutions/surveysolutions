@@ -66,6 +66,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
         protected Task<string> GetNewPasswordAsync()
         {
+            if (SynchronizationType == SynchronizationType.Offline)
+                return Task.FromResult((string)null);
+
             var message =
                 InterviewerUIResources.Synchronization_UserPassword_Update_Format.FormatString(this.principal
                     .CurrentUserIdentity.Name);
@@ -300,6 +303,15 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         break;
                     case SynchronizationExceptionType.Unauthorized:
                         this.shouldUpdatePasswordOfResponsible = true;
+                        break;
+                    case SynchronizationExceptionType.UserLocked:
+                        progress.Report(new SyncProgressInfo
+                        {
+                            Title = InterviewerUIResources.Synchronization_Fail_Title,
+                            Description = InterviewerUIResources.Unauthorized,
+                            Status = SynchronizationStatus.Fail,
+                            Statistics = statistics
+                        });
                         break;
                     case SynchronizationExceptionType.UserLinkedToAnotherDevice:
                         progress.Report(new SyncProgressInfo
