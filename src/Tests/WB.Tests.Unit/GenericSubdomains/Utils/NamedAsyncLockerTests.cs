@@ -9,42 +9,7 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils
     public class NamedAsyncLockerTests
     {
         private class CounterHolder  { public long Value { get; set; } }
-
-        [Test()]
-        public void ensure_that_without_lock_test_will_fail()
-        {
-            Assert.ThrowsAsync<Exception>(async () =>
-            {
-                var counter = new CounterHolder();
-                var iterations = 1000;
-
-                var tasks = new[]
-                {
-                    Task.Run(async () => await NotLockedRunner()),
-                    Task.Run(async () => await NotLockedRunner()),
-                    Task.Run(async () => await NotLockedRunner()),
-                    Task.Run(async () => await NotLockedRunner()),
-                    Task.Run(async () => await NotLockedRunner())
-                };
-
-                await Task.WhenAll(tasks);
-
-                async Task NotLockedRunner()
-                {
-                    while (counter.Value < iterations)
-                    {
-                        var result = counter.Value++;
-                        await Task.Delay(TimeSpan.FromMilliseconds(0.1));
-
-                        if (counter.Value - 1 != result)
-                        {
-                            throw new Exception();
-                        }
-                    }
-                }
-            });
-        }
-
+        
         [Test]
         public async Task should_not_allow_more_then_one_parallel_execution_for_same_name()
         {
