@@ -656,4 +656,8 @@
     <value>Это устройство не поддерживается.</value>
     <comment>Это устройство не поддерживается.</comment>
   </data>
+    <data name="OfflineSync_NetworkInfo" xml:space="preserve">
+    <value>Скорость: {0}, Осталось: {1}</value>
+    <comment>Скорость: {0}, Осталось: {1}</comment>
+  </data>
 </root>

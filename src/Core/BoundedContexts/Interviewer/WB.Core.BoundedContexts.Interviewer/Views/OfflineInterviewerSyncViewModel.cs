@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Humanizer;
+using Humanizer.Bytes;
+using Humanizer.Localisation;
 using MvvmCross;
 using MvvmCross.Commands;
 using Plugin.Permissions.Abstractions;
@@ -13,6 +16,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Entities;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
@@ -85,11 +89,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             set => this.SetProperty(ref this.progressInPercents, value);
         }
 
-        private string progressDescription;
-        public string ProgressDescription
+        private string networkInfo;
+        public string NetworkInfo
         {
-            get => this.progressDescription;
-            set => this.SetProperty(ref this.progressDescription, value);
+            get => this.networkInfo;
+            set => this.SetProperty(ref this.networkInfo, value);
         }
 
         private TransferingStatus transferingStatus;
@@ -151,7 +155,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         {
             await this.permissions.AssureHasPermission(Permission.Location);
 
-            SetStatus(ConnectionStatus.StartDiscovering, $"Starting discovery");
             var serviceName = this.GetServiceName();
             var result = await this.nearbyConnection.StartDiscovery(serviceName);
 
@@ -224,18 +227,21 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                             {
                                 this.ProgressStatus = o.Title;
                                 this.ProgressStatusDescription = o.Description;
-                                this.ProgressDescription = string.Empty;
+                                this.NetworkInfo = string.Empty;
                             }
                             else
                             {
                                 this.ProgressInPercents = o.TransferProgress?.Percent ?? 0;
-                                string speed = null;
+
                                 if (o.TransferProgress.Speed.HasValue)
                                 {
-                                    speed = o.TransferProgress.Speed.Value.Bytes().ToString("0.00") + "/s. ";
-                                }
+                                    var receivedBytes = ByteSize.FromBytes(o.TransferProgress.Speed.Value);
+                                    var measurementInterval = TimeSpan.FromSeconds(1);
+                                    var transferingSpeed = receivedBytes.Per(measurementInterval).Humanize("#.##");
 
-                                this.ProgressDescription = $"{speed ?? ""} in {o.TransferProgress.Eta.Humanize()}";
+                                    this.NetworkInfo = string.Format(UIResources.OfflineSync_NetworkInfo, transferingSpeed,
+                                        o.TransferProgress.Eta.Humanize(minUnit: TimeUnit.Second));
+                                }
                             }
 
                             if(o.HasErrors) this.OnTerminateTransferring();

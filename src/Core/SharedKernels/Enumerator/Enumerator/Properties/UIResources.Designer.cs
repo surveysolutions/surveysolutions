@@ -1386,6 +1386,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Speed: {0}, Time left: {1}.
+        /// </summary>
+        public static string OfflineSync_NetworkInfo {
+            get {
+                return ResourceManager.GetString("OfflineSync_NetworkInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ok.
         /// </summary>
         public static string Ok {
