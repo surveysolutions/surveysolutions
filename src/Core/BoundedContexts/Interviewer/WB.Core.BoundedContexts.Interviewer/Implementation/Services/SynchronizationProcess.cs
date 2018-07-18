@@ -57,11 +57,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             IAuditLogService auditLogService,
             ILiteEventBus eventBus,
             IEnumeratorEventStorage eventStore,
-            ISynchronizationMode synchronizationMode) : base(synchronizationService, interviewViewRepository, principal, logger,
+            ISynchronizationMode synchronizationMode,
+            IPlainStorage<InterviewSequenceView, Guid> interviewSequenceViewRepository) : base(synchronizationService, interviewViewRepository, principal, logger,
             userInteractionService, questionnairesAccessor, interviewFactory, interviewMultimediaViewStorage, imagesStorage,
             logoSynchronizer, cleanupService, assignmentsSynchronizer, questionnaireDownloader, httpStatistician,
             assignmentsStorage, audioFileStorage, diagnosticService, auditLogSynchronizer, auditLogService,
-            eventBus, eventStore)
+            eventBus, eventStore, interviewSequenceViewRepository)
         {
             this.principal = principal;
             this.interviewerSettings = interviewerSettings;

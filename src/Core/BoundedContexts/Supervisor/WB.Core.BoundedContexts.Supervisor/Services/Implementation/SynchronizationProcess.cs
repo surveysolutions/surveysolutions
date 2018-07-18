@@ -10,6 +10,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Properties;
@@ -56,14 +57,15 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
             ILiteEventBus eventBus,
             IEnumeratorEventStorage eventStore,
             IPlainStorage<InterviewerDocument> interviewerViewRepository,
-            ITechInfoSynchronizer techInfoSynchronizer) : base(synchronizationService,
+            ITechInfoSynchronizer techInfoSynchronizer,
+            IPlainStorage<InterviewSequenceView, Guid> interviewSequenceViewRepository) : base(synchronizationService,
             interviewViewRepository, principal, logger,
             userInteractionService, questionnairesAccessor, interviewFactory, interviewMultimediaViewStorage,
             imagesStorage,
             logoSynchronizer, cleanupService, assignmentsSynchronizer, questionnaireDownloader,
             httpStatistician,
             assignmentsStorage, audioFileStorage, diagnosticService, auditLogSynchronizer, auditLogService,
-            eventBus, eventStore)
+            eventBus, eventStore, interviewSequenceViewRepository)
         {
             this.principal = principal;
             this.supervisorSettings = supervisorSettings;
@@ -234,7 +236,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
             return Task.CompletedTask; // supervisor does not support census
         }
 
-        protected override Task<List<Guid>> FindObsoleteInterviewsAsync(IEnumerable<Guid> localInterviewIds,
+        protected override Task<List<Guid>> FindObsoleteInterviewsAsync(IEnumerable<InterviewView> localInterviews,
+            IEnumerable<InterviewApiView> remoteInterviews,
             IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken)
         {
             return Task.FromResult(new List<Guid>());

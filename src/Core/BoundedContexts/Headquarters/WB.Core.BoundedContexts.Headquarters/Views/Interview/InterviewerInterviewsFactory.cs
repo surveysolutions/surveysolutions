@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -19,17 +20,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly IInterviewPackagesService incomingSyncPackagesQueue;
+        private readonly IEventStore eventStore;
 
         public InterviewerInterviewsFactory(
             IQueryableReadSideRepositoryReader<InterviewSummary> reader,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IStatefulInterviewRepository statefulInterviewRepository,
-            IInterviewPackagesService incomingSyncPackagesQueue)
+            IInterviewPackagesService incomingSyncPackagesQueue,
+            IEventStore eventStore)
         {
             this.reader = reader;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.statefulInterviewRepository = statefulInterviewRepository;
             this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
+            this.eventStore = eventStore;
         }
 
         public IEnumerable<InterviewInformation> GetInProgressInterviewsForInterviewer(Guid interviewerId)
@@ -48,16 +52,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 PageSize = int.MaxValue
             }).Items.Where(questionnaire => questionnaire.IsDeleted);
 
-            return inProgressInterviews.Where(
-                interview => !deletedQuestionnaires.Any(deletedQuestionnaire => deletedQuestionnaire.QuestionnaireId == interview.QuestionnaireId && deletedQuestionnaire.Version == interview.QuestionnaireVersion)
-                && !processigPackages.Any(filename => filename.Contains(interview.InterviewId.FormatGuid())))
+            var filteredInterviews = inProgressInterviews.Where(
+                    interview => !deletedQuestionnaires.Any(deletedQuestionnaire => deletedQuestionnaire.QuestionnaireId == interview.QuestionnaireId && deletedQuestionnaire.Version == interview.QuestionnaireVersion)
+                                 && !processigPackages.Any(filename => filename.Contains(interview.InterviewId.FormatGuid())))
                 .Select(interview => new InterviewInformation
                 {
                     Id = interview.InterviewId,
                     QuestionnaireIdentity = new QuestionnaireIdentity(interview.QuestionnaireId, interview.QuestionnaireVersion),
                     IsRejected = interview.WasRejectedBySupervisor,
-                    ResponsibleId = interview.ResponsibleId
-                });
+                    ResponsibleId = interview.ResponsibleId,
+                    Sequence = eventStore.GetLastEventSequence(interview.InterviewId)
+                }).ToList();
+            
+            return filteredInterviews;
         }
 
         public IEnumerable<InterviewInformation> GetInProgressInterviewsForSupervisor(Guid supervisorId)
@@ -91,7 +98,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 PageSize = int.MaxValue
             }).Items.Where(questionnaire => questionnaire.IsDeleted);
 
-            return inProgressInterviews.Where(
+            var filteredInterviews = inProgressInterviews.Where(
                     interview => !deletedQuestionnaires.Any(deletedQuestionnaire => deletedQuestionnaire.QuestionnaireId == interview.QuestionnaireId && deletedQuestionnaire.Version == interview.QuestionnaireVersion)
                                  && !processigPackages.Any(filename => filename.Contains(interview.InterviewId.FormatGuid())))
                 .Select(interview => new InterviewInformation
@@ -99,8 +106,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     Id = interview.InterviewId,
                     QuestionnaireIdentity = new QuestionnaireIdentity(interview.QuestionnaireId, interview.QuestionnaireVersion),
                     IsRejected = interview.WasRejectedBySupervisor,
-                    ResponsibleId = interview.ResponsibleId
-                });
+                    ResponsibleId = interview.ResponsibleId,
+                    Sequence = eventStore.GetLastEventSequence(interview.InterviewId)
+                }).ToList();
+
+            return filteredInterviews;
         }
 
         public IEnumerable<InterviewInformation> GetInterviewsByIds(Guid[] interviewIds)
