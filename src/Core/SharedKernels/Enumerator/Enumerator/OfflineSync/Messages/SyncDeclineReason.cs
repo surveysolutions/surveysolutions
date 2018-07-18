@@ -4,6 +4,8 @@
     {
         Unknown = 0,
         UnexpectedClientVersion = 1,
-        NotATeamMember = 2
+        NotATeamMember = 2,
+        InvalidLoginToken = 3,
+        UserIsLocked = 4
     }
 }
