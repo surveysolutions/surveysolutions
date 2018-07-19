@@ -21,6 +21,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Infrastructure.Native.Monitoring;
+using WB.Infrastructure.Native.Resources;
 using WB.Infrastructure.Native.Storage.Postgre.DbMigrations;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
@@ -106,25 +107,26 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             registry.BindToMethod<ITransactionManagerProviderManager>(context => context.Get<TransactionManagerProvider>());
         }
 
-        public override Task Init(IServiceLocator serviceLocator)
+        public override Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
             if (runInitAndMigrations)
             {
                 try
                 {
+                    status.Message = Modules.InitializingDb;
                     DatabaseManagement.InitDatabase(this.connectionString, this.schemaName);
+
+                    status.Message = Modules.MigrateDb;
+                    DbMigrationsRunner.MigrateToLatest(this.connectionString, this.schemaName, this.dbUpgradeSettings);
                 }
                 catch (Exception exc)
                 {
-                    LogManager.GetLogger("maigration", typeof(PostgresReadSideModule))
-                        .Fatal(exc, "Error during db initialization.");
+                    LogManager.GetLogger("maigration", typeof(PostgresReadSideModule)).Fatal(exc, "Error during db initialization.");
                     throw new InitializationException(Subsystem.Database, null, exc);
                 }
-
-                DbMigrationsRunner.MigrateToLatest(this.connectionString, this.schemaName, this.dbUpgradeSettings);
             }
 
-            return base.Init(serviceLocator);
+            return base.Init(serviceLocator, status);
         }
 
         private object GetEntityIdentifierColumnName(IModuleContext context)

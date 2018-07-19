@@ -181,7 +181,7 @@ namespace WB.UI.WebTester
             typeof(WebInterviewConnectionsCounter)
         };
 
-        public Task Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
             return Task.CompletedTask;
         }

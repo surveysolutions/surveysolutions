@@ -305,7 +305,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IInterviewReportDataRepository, InterviewReportDataRepository>();
         }
 
-        public Task Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
             CommandRegistry
                 .Setup<Questionnaire>()
