@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Reactive.Subjects;
+using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using Plugin.Permissions.Abstractions;
 using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.SharedKernels.Enumerator.OfflineSync.Entities;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Tests.Abc;
 
@@ -86,6 +89,39 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
             vm.DoneCommand.Execute();
             //assert
             viewModelNavigationService.Verify(x => x.NavigateToDashboardAsync(null), Times.Once);
+        }
+
+        [Test]
+        public void when_connected_to_supervisor_then_should_sync_process_started()
+        {
+            //arrange
+            var nearbyConnection = new Mock<INearbyConnection>();
+            var events = new Subject<INearbyEvent>();
+            nearbyConnection.SetupGet(x => x.Events).Returns(events);
+            var syncProcess = new Mock<ISynchronizationProcess>();
+            Setup.InstanceToMockedServiceLocator(syncProcess.Object);
+
+            var vm = Create.ViewModel.OfflineInterviewerSyncViewModel(nearbyConnection: nearbyConnection.Object);
+            //act
+            events.OnNext(new NearbyEvent.Connected(It.IsAny<string>(), It.IsAny<NearbyConnectionResolution>(),
+                It.IsAny<string>()));
+            //assert
+            Assert.That(vm.TransferingStatus, Is.EqualTo(TransferingStatus.Transferring));
+            syncProcess.Verify(x=>x.SynchronizeAsync(It.IsAny<IProgress<SyncProgressInfo>>(), It.IsAny<CancellationToken>()), Times.Once);
+        }
+
+        [Test]
+        public void when_disconnected_from_supervisor_then_transfering_status_should_be_CompletedWithErrors()
+        {
+            //arrange
+            var nearbyConnection = new Mock<INearbyConnection>();
+            var events = new Subject<INearbyEvent>();
+            nearbyConnection.SetupGet(x => x.Events).Returns(events);
+            var vm = Create.ViewModel.OfflineInterviewerSyncViewModel(nearbyConnection: nearbyConnection.Object);
+            //act
+            events.OnNext(new NearbyEvent.Disconnected(It.IsAny<string>(), It.IsAny<string>()));
+            //assert
+            Assert.That(vm.TransferingStatus, Is.EqualTo(TransferingStatus.CompletedWithErrors));
         }
     }
 }

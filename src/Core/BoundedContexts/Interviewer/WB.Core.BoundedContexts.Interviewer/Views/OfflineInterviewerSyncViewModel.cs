@@ -12,6 +12,7 @@ using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services.OfflineSync;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Entities;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels;
@@ -246,7 +247,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 using (new CommunicationSession())
                 {
                     this.synchronizationMode.Set(SynchronizationMode.Offline);
-                    var synchronizationProcess = Mvx.Resolve<ISynchronizationProcess>();
+                    var synchronizationProcess = ServiceLocator.Current.GetInstance<ISynchronizationProcess>();
 
                     await synchronizationProcess.SynchronizeAsync(
                         new Progress<SyncProgressInfo>(o =>
