@@ -174,10 +174,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
                         PasswordHash = interviewer.PasswordHash,
                         PhoneNumber = interviewer.PhoneNumber,
                         UserName = interviewer.UserName,
-                        FullaName = interviewer.FullName,
-                        Token = interviewer.Token,
-                        IsLockedBySupervisor = interviewer.IsLockedBySupervisor,
-                        IsLockedByHeadquarters = interviewer.IsLockedByHeadquarters
+                        FullaName = interviewer.FullName
                     };
                 }
                 else
@@ -186,9 +183,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
                     local.PasswordHash = interviewer.PasswordHash;
                     local.PhoneNumber = interviewer.PhoneNumber;
                     local.UserName = interviewer.UserName;
-                    local.Token = interviewer.Token;
-                    local.IsLockedBySupervisor = interviewer.IsLockedBySupervisor;
-                    local.IsLockedByHeadquarters = interviewer.IsLockedByHeadquarters;
                 }
 
                 this.interviewerViewRepository.Store(local);
