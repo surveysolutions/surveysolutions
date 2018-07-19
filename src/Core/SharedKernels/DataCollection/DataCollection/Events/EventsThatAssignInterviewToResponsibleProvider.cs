@@ -8,7 +8,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events
     {
         private static string[] eventNames;
 
-        public static string[] GetInterviewerOrSupervisorTypeNames()
+        public static string[] GetTypeNames()
         {
             if (eventNames == null)
             {
