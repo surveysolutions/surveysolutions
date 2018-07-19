@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,7 +24,6 @@ using InterviewerUIResources = WB.Core.BoundedContexts.Interviewer.Properties.In
 
 namespace WB.Core.BoundedContexts.Interviewer.Views
 {
-    [ExcludeFromCodeCoverage()] // TODO: remove attribute when UI binding completed
     public class OfflineInterviewerSyncViewModel : BaseOfflineSyncViewModel
     {
         private readonly IInterviewerPrincipal principal;
