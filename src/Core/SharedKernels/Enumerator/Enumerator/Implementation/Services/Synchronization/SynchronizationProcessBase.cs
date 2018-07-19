@@ -233,6 +233,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
                     eventBus.PublishCommittedEvents(interviewDetails);
                     eventStore.StoreEvents(new CommittedEventStream(interview.Id, interviewDetails));
+                    MarkInterviewAsReceivedFromHeadquarters(interview);
 
                     if (interview.Sequence.HasValue)
                         interviewSequenceViewRepository.Store(new InterviewSequenceView() { Id = interview.Id, Sequence = interview.Sequence.Value });
@@ -257,6 +258,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         $"Failed to create interview {interview.Id}, interviewer {this.principal.CurrentUserIdentity.Name}",
                         exception);
                 }
+        }
+
+        private void MarkInterviewAsReceivedFromHeadquarters(InterviewApiView interview)
+        {
+            var dashboardItem = this.interviewViewRepository.GetById(interview.Id.FormatGuid());
+            dashboardItem.CanBeDeleted = false;
+            this.interviewViewRepository.Store(dashboardItem);
         }
 
         public async Task DownloadInterviewsAsync(SynchronizationStatistics statistics,

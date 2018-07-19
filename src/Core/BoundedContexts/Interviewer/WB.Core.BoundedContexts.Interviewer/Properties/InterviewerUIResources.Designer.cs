@@ -1302,6 +1302,33 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Connected to supervisor&apos;s device.
+        /// </summary>
+        public static string SendToSupervisor_DeviceConnectionAccepted {
+            get {
+                return ResourceManager.GetString("SendToSupervisor_DeviceConnectionAccepted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Waiting for connection approval from supervisor.
+        /// </summary>
+        public static string SendToSupervisor_DeviceConnectionAccepting {
+            get {
+                return ResourceManager.GetString("SendToSupervisor_DeviceConnectionAccepting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Supervisor&apos;s device found. Requesting connection.
+        /// </summary>
+        public static string SendToSupervisor_DeviceFound {
+            get {
+                return ResourceManager.GetString("SendToSupervisor_DeviceFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Looking for supervisor device.
         /// </summary>
         public static string SendToSupervisor_LookingForSupervisor {
@@ -1390,6 +1417,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         public static string SendToSupervisor_SyncCompleted {
             get {
                 return ResourceManager.GetString("SendToSupervisor_SyncCompleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Transfer is complete. {0} interview(s) failed to synchronize.
+        /// </summary>
+        public static string SendToSupervisor_SyncCompletedWithErrorsFormat {
+            get {
+                return ResourceManager.GetString("SendToSupervisor_SyncCompletedWithErrorsFormat", resourceCulture);
             }
         }
         

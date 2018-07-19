@@ -117,12 +117,6 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="ContactUsLinkText" xml:space="preserve">
-    <value>our support</value>
-  </data>
-  <data name="ContactUsPhrase" xml:space="preserve">
-    <value>If you think this is an error or it is distrupting your work contact {0}</value>
-  </data>
   <data name="PageTitle" xml:space="preserve">
     <value>This server is under construction or undergoing scheduled maintenance.</value>
   </data>

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
-using MvvmCross.Logging;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Entities;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -10,20 +9,6 @@ using WB.Core.SharedKernels.Enumerator.ViewModels;
 
 namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
 {
-    public enum ConnectionStatus
-    {
-        WaitingForGoogleApi,
-        StartDiscovering,
-        StartAdvertising,
-        Discovering,
-        Connecting,
-        Sync,
-        Done,
-        Connected,
-        Advertising,
-        Error
-    }
-
     [ExcludeFromCodeCoverage()] // TODO: remove attribute when UI binding completed
     public abstract class BaseOfflineSyncViewModel : BaseViewModel, IOfflineSyncViewModel
     {
@@ -40,63 +25,60 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
             this.permissions = permissions;
             this.nearbyConnection = nearbyConnection;
             this.settings = settings;
-            SetStatus(ConnectionStatus.WaitingForGoogleApi);
             this.nearbyConnection.Events.Subscribe(HandleConnectionEvents);
         }
 
-        protected void HandleConnectionEvents(INearbyEvent @event)
+        protected async void HandleConnectionEvents(INearbyEvent @event)
         {
             switch (@event)
             {
+                case NearbyEvent.EndpointFound endpointFound:
+                    await this.RequestConnectionAsync(endpointFound.Endpoint, endpointFound.EndpointInfo.EndpointName);
+                    break;
                 case NearbyEvent.InitiatedConnection iniConnection:
-                    this.nearbyConnection.AcceptConnection(iniConnection.Endpoint)
-                        .ContinueWith(result => SetErrorOnResultIfNeeded(result.Result));
+                    await this.InitializeConnectionAsync(iniConnection.Endpoint, iniConnection.Info.EndpointName);
                     break;
                 case NearbyEvent.Connected connected:
-                    SetStatus(ConnectionStatus.Connected, "Connected to " + connected.Name);
-                    Connected(connected.Endpoint, connected.Name);
+                    this.OnDeviceConnected(connected.Endpoint);
                     break;
                 case NearbyEvent.Disconnected disconnected:
-                    SetStatus(ConnectionStatus.Discovering, "Disconnected from " + disconnected.Name ?? disconnected.Endpoint);
-                    Disconnected(disconnected.Endpoint);
-                    break;
-                case NearbyEvent.EndpointFound endpointFound:
-                    this.OnFound(endpointFound.Endpoint, endpointFound.EndpointInfo);
+                    this.OnDeviceDisconnected(disconnected.Endpoint);
                     break;
                 case NearbyEvent.EndpointLost endpointLost:
                     break;
             }
         }
 
-        protected virtual void Disconnected(string disconnectedEndpoint) { }
-
-        protected virtual void SetStatus(ConnectionStatus connectionStatus, string details = null) { }
-
-        protected virtual void Connected(string connectedEndpoint, string connectedTo) { }
-
-        protected virtual void OnError(string errorMessage, ConnectionStatusCode errorCode) { }
-
-        protected virtual async void OnFound(string endpointId, NearbyDiscoveredEndpointInfo info)
+        private async Task InitializeConnectionAsync(string endpoint, string name)
         {
-            SetStatus(ConnectionStatus.Connecting, $"Found {info.EndpointName}. Requesting conection");
-            Log.Trace("OnFound {0} - {1}", endpointId, info.EndpointName);
-            var result =  await this.nearbyConnection.RequestConnection(this.principal.CurrentUserIdentity.Name, endpointId);
+            this.OnDeviceConnectionAccepting(name);
+            var connectionStatus = await this.nearbyConnection.AcceptConnection(endpoint);
 
-            if (!SetErrorOnResultIfNeeded(result)) return;
-
-            SetStatus(ConnectionStatus.Connecting, $"Requested conection to {info.EndpointName}");
+            if(!connectionStatus.IsSuccess)
+                this.OnConnectionError(connectionStatus.StatusMessage, connectionStatus.Status);
+            else
+                this.OnDeviceConnectionAccepted(name);
         }
 
-        protected bool SetErrorOnResultIfNeeded(NearbyStatus status)
+        private async Task RequestConnectionAsync(string endpoint, string name)
         {
-            if (status.IsSuccess == false)
-            {
-                this.OnError(status.StatusMessage, status.Status);
-                SetStatus(ConnectionStatus.Error, status.StatusMessage + $" [{status.Status.ToString()}]");
-            }
+            this.OnDeviceFound(name);
 
-            return status.IsSuccess;
+            var connectionStatus = await this.nearbyConnection.RequestConnection(this.principal.CurrentUserIdentity.Name, endpoint);
+
+            if (!connectionStatus.IsSuccess)
+                this.OnConnectionError(connectionStatus.StatusMessage, connectionStatus.Status);
+            else
+                this.OnDeviceConnectionRequested(name);
         }
+
+        protected virtual void OnDeviceFound(string name) { }
+        protected virtual void OnDeviceConnectionRequested(string name) { }
+        protected virtual void OnDeviceConnectionAccepting(string name) { }
+        protected virtual void OnDeviceConnectionAccepted(string name) { }
+        protected virtual void OnDeviceConnected(string name) { }
+        protected virtual void OnDeviceDisconnected(string name) { }
+        protected virtual void OnConnectionError(string errorMessage, ConnectionStatusCode errorCode) { }
 
         protected string GetServiceName()
         {
@@ -106,19 +88,6 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
         }
 
         protected abstract string GetDeviceIdentification();
-
-        protected virtual async void OnConnection(string endpointId, NearbyConnectionInfo info)
-        {
-            SetStatus(ConnectionStatus.Connecting, $"New incoming connection from {info.EndpointName}");
-
-            Log.Trace("OnConnection from " + endpointId + " => " + info.EndpointName);
-            var result = await this.nearbyConnection.AcceptConnection(endpointId);
-            if (!SetErrorOnResultIfNeeded(result)) return;
-
-            Log.Trace("Accept connection from " + endpointId + " => " + info.EndpointName);
-
-            SetStatus(ConnectionStatus.Connected, $"Connected to {info.EndpointName}");
-        }
 
         protected abstract Task OnGoogleApiReady();
 

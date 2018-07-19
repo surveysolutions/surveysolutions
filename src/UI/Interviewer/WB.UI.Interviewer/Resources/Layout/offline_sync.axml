@@ -50,7 +50,7 @@
 
                 <TextView style="@style/OfflineSync_SearchDevice"
                           android:layout_width="wrap_content"
-                          local:MvxBind="Text Localization('SendToSupervisor_LookingForSupervisor')"/>
+                          local:MvxBind="Text ConnectionStatus"/>
             </LinearLayout>
 
             <TextView style="@style/OfflineSync_Cancel"

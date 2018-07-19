@@ -61,24 +61,6 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to our support.
-        /// </summary>
-        public static string ContactUsLinkText {
-            get {
-                return ResourceManager.GetString("ContactUsLinkText", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to If you think this is an error or it is distrupting your work contact {0}.
-        /// </summary>
-        public static string ContactUsPhrase {
-            get {
-                return ResourceManager.GetString("ContactUsPhrase", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to This server is under construction or undergoing scheduled maintenance..
         /// </summary>
         public static string PageTitle {

@@ -1157,6 +1157,7 @@
     <EmbeddedResource Include="Resources\UnderConstruction.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>UnderConstruction.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\UnderConstruction.ru.resx" />
     <EmbeddedResource Include="Resources\UploadUsers.fr.resx" />

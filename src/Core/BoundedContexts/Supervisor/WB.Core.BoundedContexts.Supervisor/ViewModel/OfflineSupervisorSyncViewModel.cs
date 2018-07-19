@@ -15,6 +15,20 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
 namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 {
+    public enum ConnectionStatus
+    {
+        WaitingForGoogleApi,
+        StartDiscovering,
+        StartAdvertising,
+        Disconnected,
+        Connecting,
+        Sync,
+        Done,
+        Connected,
+        Advertising,
+        Error
+    }
+
     [ExcludeFromCodeCoverage()] // TODO: remove attribute when UI binding completed
     public class OfflineSupervisorSyncViewModel : BaseOfflineSyncViewModel
     {
@@ -29,8 +43,11 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             IInterviewViewModelFactory viewModelFactory)
             : base(principal, viewModelNavigationService, permissions, nearbyConnection, settings)
         {
+
+            SetStatus(ConnectionStatus.WaitingForGoogleApi);
             communicator.IncomingInfo.Subscribe(OnIncomingData);
             this.viewModelFactory = viewModelFactory;
+
         }
 
         private string title;
@@ -84,10 +101,15 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             await this.ConnectedDevices[1].Initialize();
         }
 
-        protected override void SetStatus(ConnectionStatus connectionStatus, string details = null)
-        {
-            this.ProgressTitle = $"{this.GetServiceName()}\r\n{connectionStatus.ToString()}\r\n{details ?? String.Empty}";
-        }
+        private void SetStatus(ConnectionStatus connectionStatus, string details = null) 
+            => this.ProgressTitle = $"{this.GetServiceName()}\r\n{connectionStatus.ToString()}\r\n{details ?? String.Empty}";
+
+        protected override void OnDeviceConnected(string name) => SetStatus(ConnectionStatus.Connected, "Connected to " + name);
+        protected override void OnDeviceDisconnected(string name) => SetStatus(ConnectionStatus.Disconnected, "Disconnected from " + name);
+
+        protected override void OnDeviceFound(string name) => SetStatus(ConnectionStatus.Connecting, $"Found {name}. Requesting conection");
+
+        protected override void OnDeviceConnectionRequested(string name) => SetStatus(ConnectionStatus.Connecting, $"Requested conection to {name}");
 
         public IMvxAsyncCommand Restart => new MvxAsyncCommand(OnGoogleApiReady);
 
