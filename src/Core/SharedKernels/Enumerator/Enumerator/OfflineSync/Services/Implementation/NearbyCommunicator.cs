@@ -305,8 +305,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                         {
                             ErrorMessage = e.Message,
                             Error = e.ToString(),
-                            Endpoint = endpoint,
-                            FailedPayload = JsonConvert.SerializeObject(payloadContent)
+                            Endpoint = endpoint
                         }, false, e.Message);
 
                     await SendOverWire(nearbyConnection, endpoint, errorResponse);
@@ -357,6 +356,8 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
 
         private async Task<Package> PreparePayload(Guid correlationId, ICommunicationMessage payload, bool isRequest, string errorMessage = null)
         {
+            var sw = Stopwatch.StartNew();
+
             var package = new Package();
             package.CorrelationId = correlationId;
             package.PayloadContent = new PayloadContent(correlationId, payload, isRequest);
@@ -383,7 +384,8 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             }
 
             package.Header = payloadProvider.AsBytes(package.HeaderBytes);
-
+            sw.Stop();
+            logger.Verbose("Took " + sw.ElapsedMilliseconds + "ms");
             return package;
         }
 

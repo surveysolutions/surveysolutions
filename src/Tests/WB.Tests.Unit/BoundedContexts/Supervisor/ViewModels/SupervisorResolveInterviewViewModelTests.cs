@@ -115,7 +115,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
         public void should_allow_supervisor_assigned_only_in_appropriate_status([Values]InterviewStatus status)
         {
             var allowedStatuses = new[]
-                {InterviewStatus.SupervisorAssigned, InterviewStatus.RejectedBySupervisor};
+                {InterviewStatus.SupervisorAssigned, InterviewStatus.RejectedBySupervisor, InterviewStatus.InterviewerAssigned};
 
             var interview = Mock.Of<IStatefulInterview>(x => x.Status == status);
             var interviewRepository = new Mock<IStatefulInterviewRepository>();

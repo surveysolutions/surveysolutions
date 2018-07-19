@@ -818,7 +818,7 @@
     <value>Некоторые интервью теперь находятся на другом устройстве</value>
     <comment>Некоторые интервью теперь находятся на другом устройстве</comment>
   </data>
-    <data name="SendToSupervisor_SyncCompletedWithErrors" xml:space="preserve">
+    <data name="SendToSupervisor_SyncCompletedWithErrorsFormat" xml:space="preserve">
     <value>Передача завершена. {0} интервью не синхронизировано из-за ошибки</value>
     <comment>Передача завершена. {0} интервью не передано из-за ошибки</comment>
   </data>

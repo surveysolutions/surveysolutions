@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Utils;
@@ -27,15 +28,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
     {
         private readonly IOfflineSyncClient syncClient;
         private readonly IInterviewerPrincipal principal;
+        private readonly IInterviewerQuestionnaireAccessor questionnaireAccessor;
         private readonly IPlainStorage<InterviewView> interviews;
 
         public OfflineSynchronizationService(
             IOfflineSyncClient syncClient,
             IInterviewerPrincipal principal,
+            IInterviewerQuestionnaireAccessor questionnaireAccessor,
             IPlainStorage<InterviewView> interviews)
         {
             this.syncClient = syncClient;
             this.principal = principal;
+            this.questionnaireAccessor = questionnaireAccessor;
             this.interviews = interviews;
         }
 
@@ -101,8 +105,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public async Task<List<QuestionnaireIdentity>> GetServerQuestionnairesAsync(CancellationToken cancellationToken)
         {
-            var response = await this.syncClient.SendAsync<GetQuestionnaireList.Request, GetQuestionnaireList.Response>(
-                new GetQuestionnaireList.Request(), cancellationToken);
+            var localQuestionnaires = questionnaireAccessor.GetAllQuestionnaireIdentities();
+
+            var response = await this.syncClient.SendAsync<GetQuestionnaireListRequest, GetQuestionnaireListResponse>(
+                new GetQuestionnaireListRequest
+                {
+                    Questionnaires = localQuestionnaires
+                }, cancellationToken);
 
             return response.Questionnaires;
         }

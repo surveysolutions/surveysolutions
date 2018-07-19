@@ -109,7 +109,6 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services
                 x.Status == InterviewStatus.ApprovedBySupervisor
                 || x.ResponsibleId != this.principal.CurrentUserIdentity.UserId && 
                 (x.Status == InterviewStatus.RejectedBySupervisor || 
-                 x.Status == InterviewStatus.RejectedByHeadquarters ||
                  x.Status == InterviewStatus.InterviewerAssigned));
         }
 
@@ -127,11 +126,11 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services
         private IReadOnlyCollection<InterviewView> GetItemsWaitingForSupervisorAction()
         {
             var itemsWaitingForSupervisorAction = this.interviews.Where(x => 
-                x.Status == InterviewStatus.Completed ||
+                x.Status == InterviewStatus.Completed || x.Status == InterviewStatus.RejectedByHeadquarters ||
                 (x.Status == InterviewStatus.RejectedBySupervisor || 
                  x.Status == InterviewStatus.InterviewerAssigned || 
-                 x.Status == InterviewStatus.SupervisorAssigned || 
-                 x.Status == InterviewStatus.RejectedByHeadquarters) && 
+                 x.Status == InterviewStatus.SupervisorAssigned 
+                 ) && 
                 x.ResponsibleId == this.principal.CurrentUserIdentity.UserId);
             return itemsWaitingForSupervisorAction;
         }

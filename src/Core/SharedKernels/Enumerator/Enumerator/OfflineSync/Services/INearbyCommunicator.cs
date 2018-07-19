@@ -15,8 +15,8 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services
             where TRequest : ICommunicationMessage
             where TResponse : ICommunicationMessage;
         
-        Task RecievePayloadAsync(INearbyConnection nearbyConnection, string endpoint, IPayload payload);
-        void RecievePayloadTransferUpdate(INearbyConnection nearbyConnection, string endpoint, NearbyPayloadTransferUpdate update);
+        Task RecievePayloadAsync(INearbyConnection connection, string endpoint, IPayload payload);
+        void RecievePayloadTransferUpdate(INearbyConnection connection, string endpoint, NearbyPayloadTransferUpdate update);
 
         IObservable<IncomingDataInfo> IncomingInfo { get; }
     }
