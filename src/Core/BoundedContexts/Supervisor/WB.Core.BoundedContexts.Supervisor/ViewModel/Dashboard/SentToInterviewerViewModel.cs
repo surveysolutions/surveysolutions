@@ -10,33 +10,28 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
 {
-    public class ToBeAssignedItemsViewModel : RefreshingAfterSyncListViewModel
+    public class SentToInterviewerViewModel : RefreshingAfterSyncListViewModel
     {
         private readonly IDashboardItemsAccessor dashboardItemsAccessor;
         private readonly IInterviewViewModelFactory viewModelFactory;
 
-        public ToBeAssignedItemsViewModel(IDashboardItemsAccessor dashboardItemsAccessor,
+        public SentToInterviewerViewModel(IDashboardItemsAccessor dashboardItemsAccessor,
             IInterviewViewModelFactory viewModelFactory)
         {
             this.dashboardItemsAccessor = dashboardItemsAccessor;
             this.viewModelFactory = viewModelFactory;
         }
 
-        public override async Task Initialize()
-        {
-            await base.Initialize();
-        }
-
         public string TabTitle => SupervisorDashboard.ToBeAssigned;
 
-        public override GroupStatus InterviewStatus => GroupStatus.NotStarted;
+        public override GroupStatus InterviewStatus => GroupStatus.Started;
 
         protected override IEnumerable<IDashboardItem> GetUiItems()
         {
             var subtitle = viewModelFactory.GetNew<DashboardSubTitleViewModel>();
-            subtitle.Title = SupervisorDashboard.ToBeAssignedListSubtitle;
+            subtitle.Title = SupervisorDashboard.SentToInterviewerSubtitle;
 
-            var tasksToBeAssigned = this.dashboardItemsAccessor.TasksToBeAssigned().ToList();
+            var tasksToBeAssigned = this.dashboardItemsAccessor.GetSentToInterviewerItems();
 
             return subtitle.ToEnumerable().Concat(tasksToBeAssigned);
         }

@@ -68,6 +68,9 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             new MvxAsyncCommand(async () =>
                 await mvxNavigationService.Navigate<OutboxViewModel, Guid?>(this.LastVisitedInterviewId));
 
+        public IMvxAsyncCommand ShowSentCommand => 
+            new MvxAsyncCommand(async () => await mvxNavigationService.Navigate<SentToInterviewerViewModel>());
+
         public IMvxCommand ShowWaitingSupervisorActionCommand =>
             new MvxAsyncCommand(async () =>
                 await mvxNavigationService.Navigate<WaitingForSupervisorActionViewModel, Guid?>(this.LastVisitedInterviewId));

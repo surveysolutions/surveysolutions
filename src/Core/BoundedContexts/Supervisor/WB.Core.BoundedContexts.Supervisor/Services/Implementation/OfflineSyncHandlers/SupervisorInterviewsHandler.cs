@@ -242,6 +242,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
 
         public Task<OkResponse> Handle(LogInterviewAsSuccessfullyHandledRequest arg)
         {
+            var interview = this.interviews.GetById(arg.InterviewId.FormatGuid());
+            interview.ReceivedByInterviewerAtUtc = DateTime.UtcNow;
+            this.interviews.Store(interview);
             return Task.FromResult(new OkResponse());
         }
 

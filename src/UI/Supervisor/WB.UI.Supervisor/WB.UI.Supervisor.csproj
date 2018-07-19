@@ -308,6 +308,7 @@
     <Compile Include="MvvmBindings\ImageCompanyLogoBinding.cs" />
     <Compile Include="MvvmBindings\SupervisorLocalizationValueConverter.cs" />
     <Compile Include="MvvmBindings\SelectedBackgroundConverter.cs" />
+    <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="ServiceLocation\SupervisorInfrastructureModule.cs" />
     <Compile Include="Services\Implementation\CheckForExtendedVersionUriProvider.cs" />
     <Compile Include="Services\Implementation\CheckForVersionUriProvider.cs" />
@@ -319,7 +320,6 @@
     <Compile Include="SupervisorApplication.cs" />
     <Compile Include="SupervisorAppStart.cs" />
     <Compile Include="LinkerPleaseInclude.cs" />
-    <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="ServiceLocation\SupervisorUIModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SupervisorSetup.cs" />
