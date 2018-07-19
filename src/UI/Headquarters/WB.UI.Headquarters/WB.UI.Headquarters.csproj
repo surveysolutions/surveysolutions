@@ -1154,6 +1154,11 @@
       <DependentUpon>Troubleshooting.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\Troubleshooting.ro.resx" />
+    <EmbeddedResource Include="Resources\UnderConstruction.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>UnderConstruction.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\UnderConstruction.ru.resx" />
     <EmbeddedResource Include="Resources\UploadUsers.fr.resx" />
     <EmbeddedResource Include="Resources\UploadUsers.ro.resx" />
     <EmbeddedResource Include="Resources\UploadUsers.zh.resx" />
@@ -1842,6 +1847,7 @@
     <Content Include="Views\Reports\SurveyStatistics.cshtml" />
     <Content Include="Views\SurveySetup\UpgradeProgress.cshtml" />
     <Content Include="Views\SurveySetup\InterviewImportIsInProgress.cshtml" />
+    <Content Include="Views\UnderConstruction\Index.cshtml" />
     <Content Include="Views\Download\Supervisor.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
@@ -2555,6 +2561,11 @@
       <DependentUpon>Troubleshooting.resx</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="Resources\UnderConstruction.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UnderConstruction.resx</DependentUpon>
     </Compile>
     <Compile Include="Resources\UploadUsers.Designer.cs">
       <AutoGen>True</AutoGen>
