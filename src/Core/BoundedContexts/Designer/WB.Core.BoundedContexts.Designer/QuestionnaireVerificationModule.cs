@@ -13,7 +13,7 @@ namespace WB.Core.BoundedContexts.Designer
             registry.Bind<IQuestionnaireVerifier, QuestionnaireVerifier>();
         }
 
-        public Task Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
             return Task.CompletedTask;
         }
