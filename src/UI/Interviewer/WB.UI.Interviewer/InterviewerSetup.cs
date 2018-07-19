@@ -130,10 +130,14 @@ namespace WB.UI.Interviewer
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(container));
 
             var serviceLocator = ServiceLocator.Current;
+
+            var status = new UnderConstructionInfo();
+            status.Status = UnderConstructionStatus.Running;
             foreach (var module in modules)
             {
-                module.Init(serviceLocator).Wait();
+                module.Init(serviceLocator, status).Wait();
             }
+            status.Status = UnderConstructionStatus.Finished;
 
             return container;
         }

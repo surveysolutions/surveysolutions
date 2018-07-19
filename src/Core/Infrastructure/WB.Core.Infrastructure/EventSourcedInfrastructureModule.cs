@@ -20,7 +20,7 @@ namespace WB.Core.Infrastructure
             registry.BindAsSingleton<ISnapshotStore, InMemoryCachedSnapshotStore>();
         }
 
-        public Task Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
             return Task.CompletedTask;
         }
