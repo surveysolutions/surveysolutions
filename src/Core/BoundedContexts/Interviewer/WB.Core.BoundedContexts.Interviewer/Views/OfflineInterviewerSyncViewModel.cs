@@ -96,6 +96,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             set => this.SetProperty(ref this.networkInfo, value);
         }
 
+        private string connectionStatus;
+        public string ConnectionStatus
+        {
+            get => this.connectionStatus;
+            set => this.SetProperty(ref this.connectionStatus, value);
+        }
+
         private TransferingStatus transferingStatus;
         public TransferingStatus TransferingStatus
         {
@@ -105,16 +112,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         public override Task Initialize()
         {
-            this.ReInitialize();
+            this.BindTitlesAndStatuses();
 
             return base.Initialize();
         }
 
-        private void ReInitialize()
+        private void BindTitlesAndStatuses()
         {
             this.TransferingStatus = TransferingStatus.WaitingDevice;
             this.Title = InterviewerUIResources.SendToSupervisor_MovingToSupervisorDevice;
             this.ProgressTitle = InterviewerUIResources.SendToSupervisor_CheckSupervisorDevice;
+            this.ConnectionStatus = InterviewerUIResources.SendToSupervisor_LookingForSupervisor;
         }
 
         public IMvxCommand CancelCommand => new MvxCommand(Cancel);
@@ -141,7 +149,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         private async Task Retry()
         {
-            this.ReInitialize();
+            this.BindTitlesAndStatuses();
             await OnGoogleApiReady();
         }
 
@@ -155,28 +163,22 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         {
             await this.permissions.AssureHasPermission(Permission.Location);
 
-            var serviceName = this.GetServiceName();
-            var result = await this.nearbyConnection.StartDiscovery(serviceName);
-
-            if (!SetErrorOnResultIfNeeded(result)) return;
+            var discoveryStatus = await this.nearbyConnection.StartDiscovery(this.GetServiceName());
+            if (!discoveryStatus.IsSuccess)
+                this.OnConnectionError(discoveryStatus.StatusMessage, discoveryStatus.Status);
         }
 
-        private void StopDiscovery()
-        {
-            //this.nearbyConnection.StopAllEndpoint();
-            this.nearbyConnection.StopDiscovery();
-        }
+        private void StopDiscovery() => this.nearbyConnection.StopDiscovery();
 
-        protected override async void Connected(string connectedEndpoint, string connectedTo)
+        protected override async void OnDeviceConnected(string name)
         {
-            this.Title = string.Format(InterviewerUIResources.SendToSupervisor_MovingToSupervisorFormat, connectedTo);
             this.ProgressTitle = InterviewerUIResources.SendToSupervisor_TransferInProgress;
             this.TransferingStatus = TransferingStatus.Transferring;
 
             await this.SynchronizeAsync();
         }
 
-        protected override void Disconnected(string endpoint)
+        protected override void OnDeviceDisconnected(string name)
         {
             if (new[] {TransferingStatus.Completed, TransferingStatus.Aborted}.Contains(this.TransferingStatus)) return;
 
@@ -189,16 +191,39 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.TransferingStatus = TransferingStatus.CompletedWithErrors;
         }
 
-        protected override void OnError(string errorMessage, ConnectionStatusCode errorCode)
+        protected override void OnConnectionError(string errorMessage, ConnectionStatusCode errorCode)
         {
+            this.StopDiscovery();
+
             this.ProgressTitle = InterviewerUIResources.SendToSupervisor_SupervisorNotFound;
             this.TransferingStatus = TransferingStatus.Failed;
         }
 
-        private void OnComplete()
+        protected override void OnDeviceFound(string name)
         {
-            this.ProgressTitle = InterviewerUIResources.SendToSupervisor_SyncCompleted;
-            this.TransferingStatus = TransferingStatus.Completed;
+            this.Title = string.Format(InterviewerUIResources.SendToSupervisor_MovingToSupervisorFormat, name);
+            this.ConnectionStatus = InterviewerUIResources.SendToSupervisor_DeviceFound;
+        }
+
+        protected override void OnDeviceConnectionAccepting(string name)
+            => this.ConnectionStatus = InterviewerUIResources.SendToSupervisor_DeviceConnectionAccepting;
+
+        protected override void OnDeviceConnectionAccepted(string name)
+            => this.ConnectionStatus = InterviewerUIResources.SendToSupervisor_DeviceConnectionAccepted;
+
+        private void OnComplete(int failedInterviewsCount)
+        {
+            if (failedInterviewsCount > 0)
+            {
+                this.ProgressTitle = string.Format(InterviewerUIResources.SendToSupervisor_SyncCompletedWithErrorsFormat, failedInterviewsCount);
+                this.TransferingStatus = TransferingStatus.CompletedWithErrors;
+            }
+            else
+            {
+                this.ProgressTitle = InterviewerUIResources.SendToSupervisor_SyncCompleted;
+                this.TransferingStatus = TransferingStatus.Completed;
+            }
+            
             this.StopDiscovery();
         }
 
@@ -244,8 +269,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                                 }
                             }
 
-                            if(o.HasErrors) this.OnTerminateTransferring();
-                            if(!o.IsRunning && !o.HasErrors) this.OnComplete();
+                            if(!o.IsRunning) this.OnComplete(o.Statistics.FailedInterviewsCount);
                         }),
                         this.synchronizationCancellationTokenSource.Token);
 

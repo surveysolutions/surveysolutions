@@ -26,9 +26,11 @@
                 android:background="?attr/colorPrimaryDark"
                 local:layout_scrollFlags="enterAlways|scroll" >
                 <ImageButton style="@style/ToolbarIcon"
+                             android:id="@+id/synchronize_with_hq"
                              local:MvxBind="Click NavigateToOfflineSyncCommand;"
                              local:srcCompat="@drawable/receive_interviews_icon"/>
                 <ImageButton style="@style/ToolbarIcon"
+                             android:id="@+id/synchronize_offline"
                              local:MvxBind="Click SynchronizationCommand;"
                              local:srcCompat="@drawable/synchronize_icon"/>
             </android.support.v7.widget.Toolbar>
