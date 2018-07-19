@@ -140,6 +140,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                     .OfType<InterviewException>()
                     .FirstOrDefault();
 
+                if (interviewException != null && interviewException.ExceptionType == InterviewDomainExceptionType.QuestionnaireIsMissing)
+                {
+                    throw;
+                }
                 var exceptionType = interviewException?.ExceptionType.ToString() ?? UnknownExceptionType;
 
                 this.brokenInterviewPackageStorage.Store(new BrokenInterviewPackageView
