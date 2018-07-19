@@ -762,6 +762,15 @@ Downloaded {3}%</value>
     <data name="SendToSupervisor_TransferWasAborted" xml:space="preserve">
     <value>Transfer was aborted</value>
   </data>
+    <data name="SendToSupervisor_DeviceFound" xml:space="preserve">
+    <value>Supervisor's device found. Requesting connection</value>
+  </data>
+    <data name="SendToSupervisor_DeviceConnectionAccepting" xml:space="preserve">
+    <value>Waiting for connection approval from supervisor</value>
+  </data>
+    <data name="SendToSupervisor_DeviceConnectionAccepted" xml:space="preserve">
+    <value>Connected to supervisor's device</value>
+  </data>
     <data name="SendToSupervisor_SupervisorNotFound" xml:space="preserve">
     <value>Transfer did not started.
 Supervisor device can not be located</value>
@@ -774,6 +783,9 @@ Supervisor device can not be located</value>
   </data>
     <data name="SendToSupervisor_SyncCompleted" xml:space="preserve">
     <value>Transfer is complete. All completed interviews are now on another device</value>
+  </data>
+    <data name="SendToSupervisor_SyncCompletedWithErrorsFormat" xml:space="preserve">
+    <value>Transfer is complete. {0} interview(s) failed to synchronize</value>
   </data>
     <data name="SendToSupervisor_LookingForSupervisor" xml:space="preserve">
     <value>Looking for supervisor device</value>
