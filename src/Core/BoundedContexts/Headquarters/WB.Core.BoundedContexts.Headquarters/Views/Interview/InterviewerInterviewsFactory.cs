@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
+using WB.Core.SharedKernels.DataCollection.Events;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -20,14 +21,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IStatefulInterviewRepository statefulInterviewRepository;
         private readonly IInterviewPackagesService incomingSyncPackagesQueue;
-        private readonly IEventStore eventStore;
+        private readonly IHeadquartersEventStore eventStore;
 
         public InterviewerInterviewsFactory(
             IQueryableReadSideRepositoryReader<InterviewSummary> reader,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IStatefulInterviewRepository statefulInterviewRepository,
             IInterviewPackagesService incomingSyncPackagesQueue,
-            IEventStore eventStore)
+            IHeadquartersEventStore eventStore)
         {
             this.reader = reader;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
@@ -61,7 +62,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     QuestionnaireIdentity = new QuestionnaireIdentity(interview.QuestionnaireId, interview.QuestionnaireVersion),
                     IsRejected = interview.WasRejectedBySupervisor,
                     ResponsibleId = interview.ResponsibleId,
-                    Sequence = eventStore.GetLastEventSequence(interview.InterviewId)
+                    Sequence = eventStore.GetMaxEventSequenceWithAnyOfSpecifiedTypes(interview.InterviewId, EventsThatChangeAnswersStateProvider.GetTypeNames()) ?? 0
                 }).ToList();
             
             return filteredInterviews;
@@ -107,7 +108,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     QuestionnaireIdentity = new QuestionnaireIdentity(interview.QuestionnaireId, interview.QuestionnaireVersion),
                     IsRejected = interview.WasRejectedBySupervisor,
                     ResponsibleId = interview.ResponsibleId,
-                    Sequence = eventStore.GetLastEventSequence(interview.InterviewId)
+                    Sequence = eventStore.GetMaxEventSequenceWithAnyOfSpecifiedTypes(interview.InterviewId, EventsThatChangeAnswersStateProvider.GetTypeNames()) ?? 0
                 }).ToList();
 
             return filteredInterviews;
