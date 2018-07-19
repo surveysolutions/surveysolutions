@@ -20,4 +20,10 @@ namespace WB.UI.Supervisor.Activities.Dashboard
     public class DashboardOutboxFragment : RecyclerViewFragment<OutboxViewModel>
     {
     }
+
+    [MvxFragmentPresentation(typeof(SentToInterviewerViewModel), Resource.Id.dashboard_content,
+        ActivityHostViewModelType = typeof(DashboardViewModel))]
+    public class DashboardSentFragment : RecyclerViewFragment<SentToInterviewerViewModel>
+    {
+    }
 }

@@ -18,6 +18,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         
         private int toBeAssignedItemsCount;
         private int outboxItemsCount;
+        private int sentToInterviewerCount;
         private int waitingForDecisionCount;
 
         protected readonly IPrincipal Principal;
@@ -60,6 +61,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             this.ToBeAssignedItemsCount = dashboardItemsAccessor.TasksToBeAssignedCount();
             this.WaitingForDecisionCount = dashboardItemsAccessor.WaitingForSupervisorActionCount();
             this.OutboxItemsCount = dashboardItemsAccessor.OutboxCount();
+            this.SentToInterviewerCount = dashboardItemsAccessor.SentToInterviewerCount();
 
             this.UserName = Principal.CurrentUserIdentity.Name;
             this.UserEmail = Principal.CurrentUserIdentity.Email;
@@ -95,6 +97,12 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             set => SetProperty(ref outboxItemsCount, value);
         }
 
+        public int SentToInterviewerCount
+        {
+            get => sentToInterviewerCount;
+            set => SetProperty(ref sentToInterviewerCount, value);
+        }
+
         public int WaitingForDecisionCount
         {
             get => waitingForDecisionCount;
@@ -110,6 +118,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         public IMvxCommand ShowOutboxItems =>
             new MvxAsyncCommand(async () => await mvxNavigationService.Navigate<OutboxViewModel>());
 
+        public IMvxCommand ShowSentItems => 
+            new MvxAsyncCommand(async () => await mvxNavigationService.Navigate<SentToInterviewerViewModel>());
 
         public IMvxCommand StartSync =>
             new MvxCommand(StartSynchronization);

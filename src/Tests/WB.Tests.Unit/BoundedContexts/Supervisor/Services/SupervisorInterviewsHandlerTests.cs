@@ -106,7 +106,9 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             var response = await handler.Handle(new LogInterviewAsSuccessfullyHandledRequest(Id.g1));
 
             // Assert
-            interviews.Where(x => x.InterviewId == Id.g1).Count.Should().Be(1);
+            var interviewView = interviews.GetById(Id.g1.FormatGuid());
+            interviewView.Should().Should().NotBeNull();
+            interviewView.ReceivedByInterviewerAtUtc.Should().BeWithin(TimeSpan.FromSeconds(3)).Before(DateTime.UtcNow);
             Assert.That(response, Is.Not.Null);
         }
 
