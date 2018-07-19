@@ -232,6 +232,23 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             }
         }
 
+        public int? GetMaxEventSequenceWithAnyOfSpecifiedTypes(Guid eventSourceId, params string[] typeNames)
+        {
+            using (var connection = new NpgsqlConnection(this.connectionSettings.ConnectionString))
+            {
+                connection.Open();
+                var command = connection.CreateCommand();
+                command.CommandText = $@"select MAX(eventsequence) from {tableNameWithSchema} where
+                                        eventsourceid = :eventSourceId
+                                        and eventtype = ANY(:eventTypes)
+                                        limit 1";
+                command.Parameters.AddWithValue("eventSourceId", NpgsqlDbType.Uuid, eventSourceId);
+                command.Parameters.AddWithValue("eventTypes", NpgsqlDbType.Array | NpgsqlDbType.Text, typeNames);
+                var scalar = command.ExecuteScalar();
+                return scalar == DBNull.Value ? null : (int?) scalar;
+            }
+        }
+
         private IEnumerable<CommittedEvent> ReadEventsBatch(int processed)
         {
             using (NpgsqlConnection conn = new NpgsqlConnection(this.connectionSettings.ConnectionString))
