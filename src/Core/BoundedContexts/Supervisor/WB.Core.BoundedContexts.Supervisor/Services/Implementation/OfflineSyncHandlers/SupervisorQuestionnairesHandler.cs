@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Supervisor.Views;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.Repositories;
@@ -20,24 +21,27 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
         private readonly IQuestionnaireAssemblyAccessor questionnaireAssemblyAccessor;
         private readonly IPlainStorage<TranslationInstance> translationsStorage;
         private readonly IPlainStorage<RawQuestionnaireDocumentView> rawQuestionnaireDocumentStorage;
+        private readonly IPlainStorage<ObsoleteQuestionnaire> obsoleteQuestionnairesStorage;
 
         public SupervisorQuestionnairesHandler(
             IInterviewerQuestionnaireAccessor questionnairesAccessor,
             IQuestionnaireAssemblyAccessor questionnaireAssemblyAccessor,
             IPlainStorage<TranslationInstance> translationsStorage,
             IPlainStorage<RawQuestionnaireDocumentView> rawQuestionnaireDocumentStorage,
-            IAttachmentContentStorage attachmentContentStorage)
+            IAttachmentContentStorage attachmentContentStorage, 
+            IPlainStorage<ObsoleteQuestionnaire> obsoleteQuestionnairesStorage)
         {
             this.questionnairesAccessor = questionnairesAccessor;
             this.questionnaireAssemblyAccessor = questionnaireAssemblyAccessor;
             this.translationsStorage = translationsStorage;
             this.rawQuestionnaireDocumentStorage = rawQuestionnaireDocumentStorage;
             this.attachmentContentStorage = attachmentContentStorage;
+            this.obsoleteQuestionnairesStorage = obsoleteQuestionnairesStorage;
         }
 
         public void Register(IRequestHandler requestHandler)
         {
-            requestHandler.RegisterHandler<GetQuestionnaireList.Request, GetQuestionnaireList.Response>(GetList);
+            requestHandler.RegisterHandler<GetQuestionnaireListRequest, GetQuestionnaireListResponse>(GetList);
             requestHandler.RegisterHandler<GetQuestionnaireAssemblyRequest, GetQuestionnaireAssemblyResponse>(GetQuestionnaireAssembly);
             requestHandler.RegisterHandler<GetQuestionnaireRequest, GetQuestionnaireResponse>(GetQuestionnaire);
             requestHandler.RegisterHandler<GetQuestionnaireTranslationRequest, GetQuestionnaireTranslationResponse>(GetQuestionnaireTranslation);
@@ -100,11 +104,17 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             });
         }
 
-        public Task<GetQuestionnaireList.Response> GetList(GetQuestionnaireList.Request arg)
+        public Task<GetQuestionnaireListResponse> GetList(GetQuestionnaireListRequest arg)
         {
-            return Task.FromResult(new GetQuestionnaireList.Response
+            var obsolete = obsoleteQuestionnairesStorage.LoadAll().Select(q => QuestionnaireIdentity.Parse(q.Id));
+
+            var response = this.questionnairesAccessor.GetAllQuestionnaireIdentities()
+                .Union(arg.Questionnaires)
+                .Except(obsolete).ToList();
+
+            return Task.FromResult(new GetQuestionnaireListResponse
             {
-                Questionnaires = this.questionnairesAccessor.GetAllQuestionnaireIdentities()
+                Questionnaires = response
             });
         }
 

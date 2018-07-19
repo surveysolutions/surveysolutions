@@ -27,6 +27,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
         private readonly IPrincipal principal;
         private readonly IPlainStorage<SupervisorIdentity> supervisorsPlainStorage;
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
+        private readonly IPlainStorage<ObsoleteQuestionnaire> obsoleteQuestionnairesStorage;
         private readonly IPlainStorage<InterviewerDocument> interviewerViewRepository;
         private readonly ITechInfoSynchronizer techInfoSynchronizer;
         private readonly IPasswordHasher passwordHasher;
@@ -56,7 +57,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
             ILiteEventBus eventBus,
             IEnumeratorEventStorage eventStore,
             IPlainStorage<InterviewerDocument> interviewerViewRepository,
-            ITechInfoSynchronizer techInfoSynchronizer) : base(synchronizationService,
+            ITechInfoSynchronizer techInfoSynchronizer, IPlainStorage<ObsoleteQuestionnaire> obsoleteQuestionnairesStorage) : base(synchronizationService,
             interviewViewRepository, principal, logger,
             userInteractionService, questionnairesAccessor, interviewFactory, interviewMultimediaViewStorage,
             imagesStorage,
@@ -69,6 +70,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
             this.supervisorSettings = supervisorSettings;
             this.interviewerViewRepository = interviewerViewRepository;
             this.techInfoSynchronizer = techInfoSynchronizer;
+            this.obsoleteQuestionnairesStorage = obsoleteQuestionnairesStorage;
             this.supervisorsPlainStorage = supervisorsPlainStorage;
             this.interviewViewRepository = interviewViewRepository;
             this.passwordHasher = passwordHasher;
@@ -93,6 +95,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
             await this.SyncronizeCensusQuestionnaires(progress, statistics, cancellationToken);
 
             cancellationToken.ThrowIfCancellationRequested();
+            await this.DownloadObsoleteQuestionnairesListAsync(progress, statistics, cancellationToken);
+
+            cancellationToken.ThrowIfCancellationRequested();
             await this.CheckObsoleteQuestionnairesAsync(progress, statistics, cancellationToken);
 
             cancellationToken.ThrowIfCancellationRequested();
@@ -109,6 +114,21 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
 
             cancellationToken.ThrowIfCancellationRequested();
             await this.UpdateApplicationAsync(progress, cancellationToken);
+        }
+
+        private async Task DownloadObsoleteQuestionnairesListAsync(IProgress<SyncProgressInfo> progress, SynchronizationStatistics statistics, CancellationToken cancellationToken)
+        {
+            progress.Report(new SyncProgressInfo
+            {
+                Title = InterviewerUIResources.Synchronization_Check_Obsolete_Questionnaires,
+                Statistics = statistics,
+                Status = SynchronizationStatus.Download
+            });
+
+            var obsoleteQuestionnairesList = await this.supervisorSyncService.GetListOfObsoleteQuestionnairesIds(cancellationToken);
+
+            this.obsoleteQuestionnairesStorage
+                .Store(obsoleteQuestionnairesList.Select(id => new ObsoleteQuestionnaire{ Id = id }));
         }
 
         private async Task SyncronizeSupervisor(IProgress<SyncProgressInfo> progress, 
