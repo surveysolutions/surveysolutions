@@ -381,6 +381,7 @@ namespace WB.Core.BoundedContexts.Headquarters
                     .SkipValidationFor<AssignSupervisorCommand>()
                     .SkipValidationFor<HardDeleteInterview>()
                     .SkipValidationFor<DeleteInterviewCommand>()
+                    .SkipValidationFor<MoveInterviewToTeam>()
             );
 
             CommandRegistry.Configure<StatefulInterview, SynchronizeInterviewEventsCommand>(configuration => configuration.ValidatedBy<SurveyManagementInterviewCommandValidator>());
