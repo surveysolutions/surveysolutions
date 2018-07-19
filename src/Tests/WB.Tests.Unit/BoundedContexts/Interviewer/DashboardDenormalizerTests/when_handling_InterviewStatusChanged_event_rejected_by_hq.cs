@@ -2,7 +2,6 @@
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -28,7 +27,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
 
             var interviewViewStorage = new SqliteInmemoryStorage<InterviewView>();
             interviewViewStorage.Store(Create.Entity.InterviewView(interviewId: interviewId,
-                questionnaireId: questionnaireIdentity.ToString()));
+                questionnaireId: questionnaireIdentity.ToString(),
+                receivedByInterviewerAt: DateTime.UtcNow));
 
             var plainQuestionnaireRepository = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(
                 questionnaireId: questionnaireIdentity.QuestionnaireId,
@@ -49,6 +49,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
 
             Assert.That(interviewView.RejectedDateTime, Is.EqualTo(eventTime.UtcDateTime));
             Assert.That(interviewView.Status, Is.EqualTo(InterviewStatus.RejectedByHeadquarters));
+            Assert.That(interviewView.ReceivedByInterviewerAtUtc, Is.Null);
         }
     }
 }

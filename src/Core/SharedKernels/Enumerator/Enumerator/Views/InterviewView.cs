@@ -37,5 +37,7 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         public string QuestionnaireTitle { get; set; }
 
         public string InterviewKey { get; set; }
+
+        public DateTime? ReceivedByInterviewerAtUtc { get; set; }
     }
 }

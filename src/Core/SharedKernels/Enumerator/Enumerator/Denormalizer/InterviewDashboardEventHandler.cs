@@ -317,6 +317,7 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
                 interviewView.CanBeDeleted = false;
             }
 
+            interviewView.ReceivedByInterviewerAtUtc = null;
             interviewView.Status = evnt.Payload.Status;
             interviewView.LastInterviewerOrSupervisorComment = evnt.Payload.Comment;
 
@@ -541,6 +542,8 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
             }
 
             interviewView.InterviewerAssignedDateTime = @event.Payload.AssignTime;
+            interviewView.ReceivedByInterviewerAtUtc = null;
+
             this.interviewViewRepository.Store(interviewView);
         }
 

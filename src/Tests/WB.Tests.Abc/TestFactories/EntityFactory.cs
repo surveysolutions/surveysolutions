@@ -557,7 +557,8 @@ namespace WB.Tests.Abc.TestFactories
             string questionaireTitle = null,
             int? assignmentId = null,
             bool? canBeDeleted = null,
-            Guid? responsibleId = null
+            Guid? responsibleId = null,
+            DateTime? receivedByInterviewerAt = null
             )
         {
             interviewId = interviewId ?? Guid.NewGuid();
@@ -571,7 +572,8 @@ namespace WB.Tests.Abc.TestFactories
                 Status = status ?? InterviewStatus.InterviewerAssigned,
                 Assignment = assignmentId,
                 CanBeDeleted = canBeDeleted ?? true,
-                ResponsibleId = responsibleId.GetValueOrDefault()
+                ResponsibleId = responsibleId.GetValueOrDefault(),
+                ReceivedByInterviewerAtUtc = receivedByInterviewerAt
             };
         }
 
