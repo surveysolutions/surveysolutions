@@ -834,4 +834,8 @@
     <value>Соединение с супервизором установлено</value>
     <comment>Соединение с супервизором установлено</comment>
   </data>
+    <data name="SendToSupervisor_SyncCompletedWithErrorsFormat" xml:space="preserve">
+    <value>Передача завершена. {0} интервью не удалось синхронизировать</value>
+    <comment>Передача завершена. {0} интервью не были отправлены</comment>
+  </data>
 </root>
