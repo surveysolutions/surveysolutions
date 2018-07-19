@@ -7,5 +7,6 @@ namespace WB.UI.Supervisor.SharedPreferences
         public const string HttpResponseTimeout = "HttpResponseTimeout";
         public const string BufferSize = "BufferSize";
         public const string EventChunkSize = "EventChunkSize";
+        public const string ShowLocationOnMap = "ShowLocationOnMap";
     }
 }
