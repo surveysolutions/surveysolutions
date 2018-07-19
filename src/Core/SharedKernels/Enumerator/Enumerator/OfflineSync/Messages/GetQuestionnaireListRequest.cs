@@ -7,19 +7,16 @@ using WB.Core.SharedKernels.Questionnaire.Translations;
 
 namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Messages
 {
-    public class GetQuestionnaireList
+    public class GetQuestionnaireListRequest : ICommunicationMessage
     {
-        public class Request : ICommunicationMessage
-        {
-
-        }
-
-        public class Response : ICommunicationMessage
-        {
-            public List<QuestionnaireIdentity> Questionnaires { get; set; } = new List<QuestionnaireIdentity>();
-        }
+        public List<QuestionnaireIdentity> Questionnaires { get; set; } = new List<QuestionnaireIdentity>();
     }
 
+    public class GetQuestionnaireListResponse : ICommunicationMessage
+    {
+        public List<QuestionnaireIdentity> Questionnaires { get; set; } = new List<QuestionnaireIdentity>();
+    }
+    
     public class GetQuestionnaireTranslationRequest : ICommunicationMessage
     {
         public QuestionnaireIdentity QuestionnaireIdentity { get; set; }
@@ -91,7 +88,8 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Messages
         public List<AssignmentApiView> Assignments { get; set; }
     }
 
-    public class LogAssignmentAsHandledRequest : ICommunicationMessage {
+    public class LogAssignmentAsHandledRequest : ICommunicationMessage
+    {
         public int Id { get; set; }
     }
 

@@ -3,4 +3,5 @@
   <integer name="HttpResponseTimeout">1200</integer>
   <integer name="BufferSize">4096</integer>
   <integer name="EventChunkSize">1000</integer>
+    <bool name="ShowLocationOnMap">true</bool>
 </resources>

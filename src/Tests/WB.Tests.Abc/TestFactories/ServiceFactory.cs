@@ -428,6 +428,9 @@ namespace WB.Tests.Abc.TestFactories
                 storage ?? Mock.Of<IPlainStorage<SupervisorIdentity>>(),
                 passwordHasher ?? Mock.Of<IPasswordHasher>());
 
+        public IInterviewerPrincipal InterviewerPrincipal(Guid userId)
+            => Mock.Of<IInterviewerPrincipal>(x => x.IsAuthenticated == true && x.CurrentUserIdentity == Mock.Of<IInterviewerUserIdentity>(u => u.UserId == userId));
+
         public IPrincipal Principal(Guid userId)
             => Mock.Of<IPrincipal>(x => x.IsAuthenticated == true && x.CurrentUserIdentity == Mock.Of<IUserIdentity>(u => u.UserId == userId));
 
@@ -783,12 +786,15 @@ namespace WB.Tests.Abc.TestFactories
 
         private static IQueryable<TEntity> GetNhQueryable<TEntity>() => Mock.Of<IQueryable<TEntity>>(x => x.Provider == Mock.Of<INhQueryProvider>());
 
-        public OfflineSynchronizationService OfflineSynchronizationService(IOfflineSyncClient offlineSyncClient = null, 
-            IInterviewerPrincipal interviewerPrincipal = null)
+        public OfflineSynchronizationService OfflineSynchronizationService(
+            IOfflineSyncClient offlineSyncClient = null, 
+            IInterviewerPrincipal interviewerPrincipal = null,
+            IInterviewerQuestionnaireAccessor questionnaireAccessor = null)
         {
             return new OfflineSynchronizationService(
                 offlineSyncClient ?? Mock.Of<IOfflineSyncClient>(),
                 interviewerPrincipal ?? Mock.Of<IInterviewerPrincipal>(),
+                Mock.Of< IInterviewerQuestionnaireAccessor>(),
                 Mock.Of<IPlainStorage<InterviewView>>());
         }
 

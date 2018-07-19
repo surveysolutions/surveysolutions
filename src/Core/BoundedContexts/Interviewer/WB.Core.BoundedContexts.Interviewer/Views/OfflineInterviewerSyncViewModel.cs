@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,6 +12,7 @@ using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services.OfflineSync;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Entities;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels;
@@ -25,13 +25,14 @@ using InterviewerUIResources = WB.Core.BoundedContexts.Interviewer.Properties.In
 
 namespace WB.Core.BoundedContexts.Interviewer.Views
 {
-    [ExcludeFromCodeCoverage()] // TODO: remove attribute when UI binding completed
     public class OfflineInterviewerSyncViewModel : BaseOfflineSyncViewModel
     {
+        private static object syncLockObject = new Object();
+
         private readonly IInterviewerPrincipal principal;
         private readonly ISynchronizationMode synchronizationMode;
         private readonly ISynchronizationCompleteSource synchronizationCompleteSource;
-        private CancellationTokenSource synchronizationCancellationTokenSource;
+        private static CancellationTokenSource synchronizationCancellationTokenSource;
 
         public OfflineInterviewerSyncViewModel(IInterviewerPrincipal principal,
             IViewModelNavigationService viewModelNavigationService,
@@ -141,7 +142,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private void Abort()
         {
             if (!synchronizationCancellationTokenSource?.IsCancellationRequested == true)
-                this.synchronizationCancellationTokenSource.Cancel();
+                synchronizationCancellationTokenSource.Cancel();
 
             this.ProgressTitle = InterviewerUIResources.SendToSupervisor_TransferWasAborted;
             this.TransferingStatus = TransferingStatus.Aborted;
@@ -231,19 +232,22 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         private async Task SynchronizeAsync()
         {
-            if (this.synchronizationCancellationTokenSource != null)
+            lock (syncLockObject)
             {
-                return;
-            }
+                if (synchronizationCancellationTokenSource != null)
+                {
+                    return;
+                }
 
-            this.synchronizationCancellationTokenSource = new CancellationTokenSource();
+                synchronizationCancellationTokenSource = new CancellationTokenSource();
+            }
 
             try
             {
                 using (new CommunicationSession())
                 {
                     this.synchronizationMode.Set(SynchronizationMode.Offline);
-                    var synchronizationProcess = Mvx.Resolve<ISynchronizationProcess>();
+                    var synchronizationProcess = ServiceLocator.Current.GetInstance<ISynchronizationProcess>();
 
                     await synchronizationProcess.SynchronizeAsync(
                         new Progress<SyncProgressInfo>(o =>
@@ -271,7 +275,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
                             if(!o.IsRunning) this.OnComplete(o.Statistics.FailedInterviewsCount);
                         }),
-                        this.synchronizationCancellationTokenSource.Token);
+                        synchronizationCancellationTokenSource.Token);
 
                     this.synchronizationCompleteSource.NotifyOnCompletedSynchronization(true);
                 }

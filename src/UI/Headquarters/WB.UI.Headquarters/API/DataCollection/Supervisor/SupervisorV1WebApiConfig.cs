@@ -90,6 +90,9 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor
             config.TypedRoute("api/supervisor/v1/interviewerStatistics",
                 c => c.Action<InterviewerStatisticsApiV1Controller>(x => x.Post(Param.Any<InterviewerSyncStatisticsApiView>())));
 
+            config.TypedRoute("api/supervisor/v1/obsoleteQuestionnaires",
+                c => c.Action<QuestionnairesApiV1Controller>(x => x.GetObsoleteQuestionnaireList()));
+
             config.TypedRoute("api/supervisor/v1/interviewerTabletInfos",
                 c => c.Action<InterviewerDeviceInfoApiV1Controller>(x => x.Post(Param.Any<DeviceInfoApiView>())));
 

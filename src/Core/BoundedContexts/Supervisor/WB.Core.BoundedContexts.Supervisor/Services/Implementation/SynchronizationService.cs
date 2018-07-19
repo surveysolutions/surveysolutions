@@ -6,6 +6,7 @@ using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -23,6 +24,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
         protected string BrokenInterviewPackagesController => string.Concat(ApplicationUrl, "/brokenInterviews");
         protected string InterviewerTabletInfosController => string.Concat(ApplicationUrl, "/interviewerTabletInfos");
         protected string InterviewerStatisticsController => string.Concat(ApplicationUrl, "/interviewerStatistics");
+        protected string GetListOfObsoleteQuestionnairesController => string.Concat(ApplicationUrl, "/obsoleteQuestionnaires");
 
 
         public SynchronizationService(IPrincipal principal, IRestService restService,
@@ -54,7 +56,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
             CancellationToken cancellationToken)
         {
             return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
-                url: $"{this.BrokenInterviewPackagesController}",
+                url: this.BrokenInterviewPackagesController,
                 request: brokenInterviewPackage,
                 credentials: this.restCredentials,
                 token: cancellationToken));
@@ -63,7 +65,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
         public Task UploadInterviewerExceptionsAsync(List<UnexpectedExceptionFromInterviewerView> exceptions, CancellationToken cancellationToken)
         {
             return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
-                url: $"{this.ExceptionsController}",
+                url: this.ExceptionsController,
                 request: exceptions,
                 credentials: this.restCredentials,
                 token: cancellationToken));
@@ -73,7 +75,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
             CancellationToken cancellationToken)
         {
             return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
-                url: $"{this.InterviewerTabletInfosController}",
+                url: this.InterviewerTabletInfosController,
                 request: deviceInfoApiView,
                 credentials: this.restCredentials,
                 token: cancellationToken));
@@ -82,8 +84,16 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
         public Task UploadInterviewerSyncStatistic(InterviewerSyncStatisticsApiView statisticToSend, CancellationToken cancellationToken)
         {
             return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
-                url: $"{this.InterviewerStatisticsController}",
+                url: this.InterviewerStatisticsController,
                 request: statisticToSend,
+                credentials: this.restCredentials,
+                token: cancellationToken));
+        }
+
+        public Task<List<string>> GetListOfObsoleteQuestionnairesIds(CancellationToken cancellationToken)
+        {
+            return this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<List<string>>(
+                url: this.GetListOfObsoleteQuestionnairesController,              
                 credentials: this.restCredentials,
                 token: cancellationToken));
         }

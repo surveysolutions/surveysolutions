@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using AutoFixture;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSyncHandlers;
+using WB.Core.BoundedContexts.Supervisor.Views;
 using WB.Core.BoundedContexts.Tester.Services;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -31,10 +34,57 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             var handler = fixture.Create<SupervisorQuestionnairesHandler>();
 
             //act
-            await handler.GetList(new GetQuestionnaireList.Request());
+            await handler.GetList(new GetQuestionnaireListRequest());
 
             //assert
             accessor.Verify(s => s.GetAllQuestionnaireIdentities(), Times.Once);
+        }
+
+        [Test]
+        public async Task GetQuestionnaireList_call_will_not_delete_questionnaire_that_present_on_in_and_not_known_as_deleted()
+        {
+            var obsoleteQuestionnaireId = Create.Entity.QuestionnaireIdentity(Id.g1, 1);
+            var commonQuestionnaireEveryoneAwareOff = Create.Entity.QuestionnaireIdentity(Id.g1, 2);
+            var unknownBySupersivorQuestionnaire = Create.Entity.QuestionnaireIdentity(Id.g1, 3);
+
+            var questionnairesOnInterviewer = new List<QuestionnaireIdentity>
+            {
+                obsoleteQuestionnaireId,
+                commonQuestionnaireEveryoneAwareOff,
+                unknownBySupersivorQuestionnaire,
+            };
+
+            var knownBySupervisorObsoleteQuestionnaires = new List<QuestionnaireIdentity>
+            {
+                obsoleteQuestionnaireId,
+            };
+
+            var knownBySupervisorQuestionnaires = new List<QuestionnaireIdentity>
+            {
+                commonQuestionnaireEveryoneAwareOff,
+            };
+            
+            var accessor = fixture.Freeze<Mock<IInterviewerQuestionnaireAccessor>>();
+            var obsoletes = new InMemoryPlainStorage<ObsoleteQuestionnaire>();
+
+            obsoletes.Store(knownBySupervisorObsoleteQuestionnaires.Select(o => new ObsoleteQuestionnaire {Id = o.Id}));
+
+            accessor.Setup(ac => ac.GetAllQuestionnaireIdentities()).Returns(knownBySupervisorQuestionnaires);
+
+            fixture.Register<IPlainStorage<ObsoleteQuestionnaire>>(() => obsoletes);
+
+            var handler = fixture.Create<SupervisorQuestionnairesHandler>();
+
+            //act
+            var response = await handler.GetList(new GetQuestionnaireListRequest
+            {
+                Questionnaires = questionnairesOnInterviewer
+            });
+
+            //assert
+            Assert.That(response.Questionnaires, Has.None.EqualTo(obsoleteQuestionnaireId.ToString()), "Should not return to IN known obsolete questionnaire");
+            Assert.That(response.Questionnaires, Has.One.EqualTo(commonQuestionnaireEveryoneAwareOff));
+            Assert.That(response.Questionnaires, Has.One.EqualTo(unknownBySupersivorQuestionnaire), "Should return known by IN questionnaire even if it's new to SV");
         }
 
         [Test]
@@ -59,7 +109,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             {
                 QuestionnaireIdentity = questionnaireId
             });
-          
+
             Assert.That(response.Translations, Has.Count.EqualTo(2));
             Assert.That(response.Translations, Has.None.Property(nameof(TranslationInstance.Value)).EqualTo("3"));
         }
