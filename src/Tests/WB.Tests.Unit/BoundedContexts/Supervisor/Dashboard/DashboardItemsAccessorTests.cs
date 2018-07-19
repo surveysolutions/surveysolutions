@@ -8,7 +8,6 @@ using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -34,6 +33,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Dashboard
             interviews.Store(Create.Entity.InterviewView(interviewId: Id.g2, responsibleId: Id.gB, status: InterviewStatus.Completed));
             interviews.Store(Create.Entity.InterviewView(interviewId: Id.g3, responsibleId: Id.gA, status: InterviewStatus.InterviewerAssigned));
             interviews.Store(Create.Entity.InterviewView(interviewId: Id.g4, responsibleId: Id.gA, status: InterviewStatus.RejectedByHeadquarters));
+            interviews.Store(Create.Entity.InterviewView(interviewId: Id.g5, responsibleId: Id.gB, status: InterviewStatus.RejectedByHeadquarters));
 
             interviews.Store(Create.Entity.InterviewView(interviewId: Id.g9, responsibleId: Id.gA, status: InterviewStatus.ApprovedBySupervisor));
             interviews.Store(Create.Entity.InterviewView(interviewId: Id.g10, responsibleId: Id.gB, status: InterviewStatus.RejectedBySupervisor));
@@ -46,11 +46,12 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Dashboard
 
             var items = waitingForSupervisorAction.Cast<SupervisorDashboardInterviewViewModel>().ToList();
 
-            Assert.That(items, Has.Count.EqualTo(4));
+            Assert.That(items, Has.Count.EqualTo(5));
             items.Should().ContainSingle(i => i.InterviewId == Id.g1, $"Should contain interview in {InterviewStatus.RejectedBySupervisor} status and responsible supervisor");
             items.Should().ContainSingle(i => i.InterviewId == Id.g2, $"Should contain interview in {InterviewStatus.Completed} status");
             items.Should().ContainSingle(i => i.InterviewId == Id.g3, $"Should contain interview in {InterviewStatus.InterviewerAssigned} status and responsible supervisor");
             items.Should().ContainSingle(i => i.InterviewId == Id.g4, $"Should contain interview in {InterviewStatus.RejectedByHeadquarters} status and responsible supervisor");
+            items.Should().ContainSingle(i => i.InterviewId == Id.g5, $"Should contain interview in {InterviewStatus.RejectedByHeadquarters} status and responsible interviewer");
         }
 
         [Test]
@@ -65,9 +66,9 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Dashboard
 
             interviews.Store(Create.Entity.InterviewView(interviewId: Id.g1, responsibleId: interviewerId, status: InterviewStatus.ApprovedBySupervisor));
             interviews.Store(Create.Entity.InterviewView(interviewId: Id.g2, responsibleId: interviewerId, status: InterviewStatus.RejectedBySupervisor));
-            interviews.Store(Create.Entity.InterviewView(interviewId: Id.g3, responsibleId: interviewerId, status: InterviewStatus.RejectedByHeadquarters));
             interviews.Store(Create.Entity.InterviewView(interviewId: Id.g4, responsibleId: interviewerId, status: InterviewStatus.InterviewerAssigned));
             
+            interviews.Store(Create.Entity.InterviewView(interviewId: Id.g8, responsibleId: interviewerId, status: InterviewStatus.RejectedByHeadquarters));
             interviews.Store(Create.Entity.InterviewView(interviewId: Id.g9, responsibleId: currentSupervisorId, status: InterviewStatus.RejectedBySupervisor));
             interviews.Store(Create.Entity.InterviewView(interviewId: Id.g10, responsibleId: currentSupervisorId, status: InterviewStatus.RejectedByHeadquarters));
 
@@ -83,10 +84,9 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Dashboard
 
             var items = outbox.Cast<SupervisorDashboardInterviewViewModel>().ToList();
 
-            Assert.That(items, Has.Count.EqualTo(4));
+            Assert.That(items, Has.Count.EqualTo(3));
             items.Should().ContainSingle(i => i.InterviewId == Id.g1, $"Should contain interview in {InterviewStatus.ApprovedBySupervisor} status ");
             items.Should().ContainSingle(i => i.InterviewId == Id.g2, $"Should contain interview in {InterviewStatus.RejectedBySupervisor} status");
-            items.Should().ContainSingle(i => i.InterviewId == Id.g3, $"Should contain interview in {InterviewStatus.RejectedByHeadquarters} status ");
             items.Should().ContainSingle(i => i.InterviewId == Id.g4, $"Should contain interview in {InterviewStatus.InterviewerAssigned} status ");
         }
 
