@@ -84,7 +84,10 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
             else
             {
                 var interviewer = this.interviewers.GetById(this.interview.ResponsibleId.FormatGuid());
-                Responsible = string.Format(InterviewerUIResources.DashboardItem_Responsible, interviewer.UserName);
+                if (interviewer != null)
+                {
+                    Responsible = string.Format(InterviewerUIResources.DashboardItem_Responsible, interviewer.UserName);
+                }
             }
         }
     }
