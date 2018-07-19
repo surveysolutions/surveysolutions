@@ -105,7 +105,7 @@ namespace WB.UI.Supervisor.ServiceLocation
             registry.Bind<IHandleCommunicationMessage, SupervisorTabletInfoHandler>();
         }
 
-        public Task Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
 #if !EXCLUDEEXTENSIONS
             WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditService.RegisterLicence();
