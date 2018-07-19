@@ -785,12 +785,15 @@ namespace WB.Tests.Abc.TestFactories
 
         private static IQueryable<TEntity> GetNhQueryable<TEntity>() => Mock.Of<IQueryable<TEntity>>(x => x.Provider == Mock.Of<INhQueryProvider>());
 
-        public OfflineSynchronizationService OfflineSynchronizationService(IOfflineSyncClient offlineSyncClient = null, 
-            IInterviewerPrincipal interviewerPrincipal = null)
+        public OfflineSynchronizationService OfflineSynchronizationService(
+            IOfflineSyncClient offlineSyncClient = null, 
+            IInterviewerPrincipal interviewerPrincipal = null,
+            IInterviewerQuestionnaireAccessor questionnaireAccessor = null)
         {
             return new OfflineSynchronizationService(
                 offlineSyncClient ?? Mock.Of<IOfflineSyncClient>(),
                 interviewerPrincipal ?? Mock.Of<IInterviewerPrincipal>(),
+                Mock.Of< IInterviewerQuestionnaireAccessor>(),
                 Mock.Of<IPlainStorage<InterviewView>>());
         }
 
