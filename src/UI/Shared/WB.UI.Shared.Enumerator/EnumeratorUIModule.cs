@@ -94,7 +94,7 @@ namespace WB.UI.Shared.Enumerator
             SetupLoggingFacility(registry);
         }
 
-        public Task Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
             var requestHandler = serviceLocator.GetInstance<IRequestHandler>();
             var requestHandlers = serviceLocator.GetAllInstances<IHandleCommunicationMessage>();

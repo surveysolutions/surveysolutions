@@ -4,6 +4,7 @@ using Ncqrs.Eventing.Storage;
 using NLog;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Modularity;
+using WB.Infrastructure.Native.Resources;
 using WB.Infrastructure.Native.Storage.Postgre.DbMigrations;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 
@@ -26,16 +27,19 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             registry.BindToMethod<IEventStore>(context => context.Get<IHeadquartersEventStore>());
         }
 
-        public Task Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
             try
             {
+                status.Message = Modules.InitializingDb;
                 DatabaseManagement.InitDatabase(this.eventStoreSettings.ConnectionString, this.eventStoreSettings.SchemaName);
+
+                status.Message = Modules.MigrateDb;
                 DbMigrationsRunner.MigrateToLatest(this.eventStoreSettings.ConnectionString, this.eventStoreSettings.SchemaName, this.dbUpgradeSettings);
             }
             catch (Exception exc)
             {
-                LogManager.GetLogger("maigration", typeof(PostgresWriteSideModule)).Fatal(exc, "Error during db initialization.");
+                LogManager.GetLogger("migration", typeof(PostgresWriteSideModule)).Fatal(exc, "Error during db initialization.");
                 throw;
             }
 

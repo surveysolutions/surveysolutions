@@ -139,7 +139,7 @@ namespace WB.Core.SharedKernels.Enumerator
             registry.BindGeneric(typeof(QuestionStateViewModel<>));
         }
 
-        public Task Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
             CommandRegistry
                 .Setup<StatefulInterview>()
