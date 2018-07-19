@@ -12,7 +12,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         {
             if (aggregate.ReceivedByInterviewer)
                 throw new InterviewException(
-                    $"Can't modify Interview on server, because it received by interviewer",
+                    Enumerator.Native.Resources.WebInterview.InterviewReceivedByInterviewer,
                     InterviewDomainExceptionType.InterviewRecievedByDevice)
                 {
                     Data =
