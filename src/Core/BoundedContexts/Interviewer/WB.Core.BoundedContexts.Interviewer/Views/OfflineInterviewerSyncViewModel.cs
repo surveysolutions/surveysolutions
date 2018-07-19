@@ -26,10 +26,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 {
     public class OfflineInterviewerSyncViewModel : BaseOfflineSyncViewModel
     {
+        private static object syncLockObject = new Object();
+
         private readonly IInterviewerPrincipal principal;
         private readonly ISynchronizationMode synchronizationMode;
         private readonly ISynchronizationCompleteSource synchronizationCompleteSource;
-        private CancellationTokenSource synchronizationCancellationTokenSource;
+        private static CancellationTokenSource synchronizationCancellationTokenSource;
 
         public OfflineInterviewerSyncViewModel(IInterviewerPrincipal principal,
             IViewModelNavigationService viewModelNavigationService,
@@ -139,7 +141,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private void Abort()
         {
             if (!synchronizationCancellationTokenSource?.IsCancellationRequested == true)
-                this.synchronizationCancellationTokenSource.Cancel();
+                synchronizationCancellationTokenSource.Cancel();
 
             this.ProgressTitle = InterviewerUIResources.SendToSupervisor_TransferWasAborted;
             this.TransferingStatus = TransferingStatus.Aborted;
@@ -229,12 +231,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         private async Task SynchronizeAsync()
         {
-            if (this.synchronizationCancellationTokenSource != null)
+            lock (syncLockObject)
             {
-                return;
-            }
+                if (synchronizationCancellationTokenSource != null)
+                {
+                    return;
+                }
 
-            this.synchronizationCancellationTokenSource = new CancellationTokenSource();
+                synchronizationCancellationTokenSource = new CancellationTokenSource();
+            }
 
             try
             {
@@ -269,7 +274,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
                             if(!o.IsRunning) this.OnComplete(o.Statistics.FailedInterviewsCount);
                         }),
-                        this.synchronizationCancellationTokenSource.Token);
+                        synchronizationCancellationTokenSource.Token);
 
                     this.synchronizationCompleteSource.NotifyOnCompletedSynchronization(true);
                 }
