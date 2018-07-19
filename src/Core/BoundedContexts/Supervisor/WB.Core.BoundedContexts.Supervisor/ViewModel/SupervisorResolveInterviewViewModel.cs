@@ -107,7 +107,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 
         public IMvxCommand Assign => new MvxCommand(SelectInterviewer, () => 
             this.status == InterviewStatus.RejectedBySupervisor || 
-            this.status == InterviewStatus.SupervisorAssigned);
+            this.status == InterviewStatus.SupervisorAssigned || 
+            this.status == InterviewStatus.InterviewerAssigned);
 
         private void SelectInterviewer()
         {
