@@ -4,6 +4,9 @@ using Main.Core.Documents;
 using Moq;
 using MvvmCross.Base;
 using MvvmCross.Plugin.Messenger;
+using WB.Core.BoundedContexts.Interviewer.Implementation.Services.OfflineSync;
+using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
+using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services;
@@ -21,6 +24,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator;
+using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -430,6 +434,24 @@ namespace WB.Tests.Abc.TestFactories
             }
 
             return viewModel;
+        }
+
+        public OfflineInterviewerSyncViewModel OfflineInterviewerSyncViewModel(IInterviewerPrincipal principal = null,
+            IViewModelNavigationService viewModelNavigationService = null,
+            IPermissionsService permissions = null,
+            IEnumeratorSettings settings = null,
+            ISynchronizationMode synchronizationMode = null,
+            INearbyConnection nearbyConnection = null,
+            ISynchronizationCompleteSource synchronizationCompleteSource = null)
+        {
+            return new OfflineInterviewerSyncViewModel(
+                principal ?? Mock.Of<IInterviewerPrincipal>(),
+                viewModelNavigationService ?? Mock.Of<IViewModelNavigationService>(),
+                permissions ?? Mock.Of<IPermissionsService>(),
+                settings ?? Mock.Of<IEnumeratorSettings>(),
+                synchronizationMode ?? Mock.Of<ISynchronizationMode>(),
+                nearbyConnection ?? Create.Fake.GoogleConnection(),
+                synchronizationCompleteSource ?? Mock.Of<ISynchronizationCompleteSource>());
         }
     }
 }
