@@ -5,6 +5,6 @@ namespace WB.Core.Infrastructure.Modularity
 {
     public interface IInitModule
     {
-        Task Init(IServiceLocator serviceLocator);
+        Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status);
     }
 }
