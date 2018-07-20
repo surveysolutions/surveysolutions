@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.Reactive.Linq;
+using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable;
@@ -32,6 +34,8 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
 
         private readonly IRequestHandler requestHandler;
 
+        private readonly Subject<IncomingDataInfo> incomingDataInfo = new Subject<IncomingDataInfo>();
+
         public NearbyCommunicator(IRequestHandler requestHandler,
             IPayloadProvider payloadProvider,
             IPayloadSerializer payloadSerializer,
@@ -43,6 +47,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             this.payloadSerializer = payloadSerializer;
             this.connectionsApiLimits = connectionsApiLimits;
             this.logger = logger;
+            IncomingInfo = incomingDataInfo.AsObservable();
         }
 
         /// <summary>
@@ -150,6 +155,17 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                 case PayloadType.Bytes:
                     var header = await payloadSerializer.FromPayloadAsync<PayloadHeader>(payload.Bytes);
                     headers.TryAdd(header.PayloadId, header);
+                    incomingDataInfo.OnNext(new IncomingDataInfo
+                    {
+                        Type = header.PayloadType,
+                        Endpoint = endpoint,
+                        Name = header.Name,
+                        BytesTransfered = 0,
+                        BytesPerSecond = 0,
+                        TotalBytes = header.Size,
+                        FlowDirection = DataFlowDirection.In,
+                        IsCompleted = false
+                    });
                     
                     if (header.PayloadContent != null)
                     {
@@ -196,10 +212,23 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                     {
                         var bytes = await payload.BytesFromStream;
                         var payloadContent = await payloadSerializer.FromPayloadAsync<PayloadContent>(bytes);
-
+                        await HandlePayloadContent(connection, endpoint, payloadContent, CancellationToken.None);
                         logger.Verbose($"[{connection.GetEndpointName(endpoint) ?? endpoint}] #{payloadContent.CorrelationId} Incoming message - {payloadContent.Payload.GetType()}");
 
-                        await HandlePayloadContent(connection, endpoint, payloadContent, CancellationToken.None);
+                        if (headers.TryGetValue(update.Id, out header))
+                        {
+                            incomingDataInfo.OnNext(new IncomingDataInfo
+                            {
+                                Type = header.PayloadType,
+                                Endpoint = endpoint,
+                                Name = header.Name,
+                                BytesTransfered = header.Size,
+                                BytesPerSecond = 0,
+                                TotalBytes = header.Size,
+                                FlowDirection = DataFlowDirection.In,
+                                IsCompleted = false
+                            });
+                        }
                     }
 
                     break;
@@ -207,6 +236,18 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                     // TODO: revise what else need to be done in case of TransferFailure
                     if (headers.TryRemove(update.Id, out header))
                     {
+                        incomingDataInfo.OnNext(new IncomingDataInfo
+                        {
+                            Type = header.PayloadType,
+                            Endpoint = endpoint,
+                            Name = header.Name,
+                            BytesTransfered = 0,
+                            BytesPerSecond = 0,
+                            TotalBytes = header.Size,
+                            FlowDirection = isIncoming ? DataFlowDirection.In : DataFlowDirection.Out,
+                            IsCompleted = true
+                        });
+
                         if (pending.TryRemove(header.CorrelationId, out var failure))
                             failure.SetCanceled();
                     }
@@ -221,6 +262,18 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                                 pendingValue.Debounce();
                                 pendingValue.UpdateProgress(update.BytesTransferred, header.Size);
                             }
+                            
+                            incomingDataInfo.OnNext(new IncomingDataInfo
+                            {
+                                Type = header.PayloadType,
+                                Endpoint = endpoint,
+                                Name = header.Name,
+                                BytesTransfered = update.BytesTransferred,
+                                BytesPerSecond = pendingValue.ProgressData?.Speed ?? 0,
+                                TotalBytes = header.Size,
+                                FlowDirection = isIncoming ? DataFlowDirection.In : DataFlowDirection.Out,
+                                IsCompleted = false
+                            });
                         }
 
                         break;
