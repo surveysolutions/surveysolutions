@@ -124,7 +124,11 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
                 apiClientFactory.GoogleApiClient = this.GoogleApi;
             }
 
-            if (this.GoogleApi.IsConnected) return;
+            if (this.GoogleApi.IsConnected)
+            {
+                this.ViewModel.OnGoogleApiReady();
+                return;
+            }
 
             this.GoogleApi.Connect();
         }
