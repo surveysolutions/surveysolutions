@@ -164,7 +164,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             };
             var interviewId = packageEvents[0].EventSourceId;
 
-            var packageSerializedEvents = "test events";
+            var packageSerializedEvents = "test events"; ApproveInterviewCommand
             serializer.Setup(x => x.Deserialize<AggregateRootEvent[]>(packageSerializedEvents))
                 .Returns(packageEvents);
 

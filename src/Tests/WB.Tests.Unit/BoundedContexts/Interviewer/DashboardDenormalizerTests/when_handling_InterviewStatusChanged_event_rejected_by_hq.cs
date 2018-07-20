@@ -21,9 +21,9 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
 
             var questionnaireIdentity = new QuestionnaireIdentity(Guid.Parse("33333333333333333333333333333333"), 1);
             var questionId = Guid.Parse("11111111111111111111111111111111");
-            var eventTime = DateTime.UtcNow;
+            var eventTime = DateTimeOffset.Now;
 
-            var @event = Create.Event.InterviewStatusChanged(InterviewStatus.RejectedByHeadquarters, utcTime: eventTime)
+            var @event = Create.Event.InterviewStatusChanged(InterviewStatus.RejectedByHeadquarters, originDate: eventTime)
                 .ToPublishedEvent(interviewId);
 
             var interviewViewStorage = new SqliteInmemoryStorage<InterviewView>();
