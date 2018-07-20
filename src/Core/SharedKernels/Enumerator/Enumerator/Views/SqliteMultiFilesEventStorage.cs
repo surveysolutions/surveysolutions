@@ -226,6 +226,20 @@ namespace WB.Core.SharedKernels.Enumerator.Views
             }
         }
 
+        public int GetLastSequenceForEvents(Guid eventSourceId, params string[] typeNames)
+        {
+            var connection = this.GetOrCreateConnection(eventSourceId);
+            using (connection.Lock())
+            {
+                var sequence = connection
+                    .Table<EventView>()
+                    .Where(ev => ev.EventSourceId == eventSourceId
+                                 && typeNames.Contains(ev.EventType))
+                    .Max(ev => ev.EventSequence);
+                return sequence;
+            }
+        }
+
         public int GetLastEventKnownToHq(Guid interviewId)
         {
             var connection = this.GetOrCreateConnection(interviewId);
