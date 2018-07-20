@@ -68,6 +68,20 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
             }
         }
 
+        protected override void OnPause()
+        {
+            this.communicator?.StopAll();
+            this.GoogleApi?.Disconnect();
+            if (this.bluetoothReceiver != null)
+            {
+                UnregisterReceiver(this.bluetoothReceiver);
+                bluetoothReceiver.BluetoothDisabled -= OnBluetoothDisabled;
+                bluetoothReceiver = null;
+            }
+
+            base.OnPause();
+        }
+
         private void OnBluetoothDisabled(object sender, EventArgs e)
         {
             this.UnregisterReceiver(this.bluetoothReceiver);
@@ -121,20 +135,6 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
             this.GoogleApi.Connect();
 
             this.ViewModel.SetGoogleAwaiter(this.ApiConnected.Task);
-        }
-
-        protected override void OnStop()
-        {
-            this.communicator?.StopAll();
-            this.GoogleApi?.Disconnect();
-            if (this.bluetoothReceiver != null)
-            {
-                UnregisterReceiver(this.bluetoothReceiver);
-                bluetoothReceiver.BluetoothDisabled -= OnBluetoothDisabled;
-                bluetoothReceiver = null;
-            }
-
-            base.OnStop();
         }
 
         public void OnConnected(Bundle connectionHint)

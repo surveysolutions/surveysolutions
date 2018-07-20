@@ -87,23 +87,6 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                     };
                 }
 
-                async Task<NearbyStatus> RequestConnectionInternal()
-                {
-                    try
-                    {
-                        return await this.connectionClient.RequestConnectionAsync(name, endpoint, cancellationToken);
-                    }
-                    catch (Exception)
-                    {
-                        return new NearbyStatus
-                        {
-                            IsCanceled = true,
-                            IsSuccess = false,
-                            Status = ConnectionStatusCode.StatusError
-                        };
-                    }
-                }
-
                 if (RemoteEndpoints.Any(re => re.Enpoint == endpoint))
                 {
                     this.logger.Verbose($"({name}, {endpoint}) Already connected. EXIT");
@@ -114,13 +97,20 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                     };
                 }
 
-                var result = await RequestConnectionInternal();
-
-                //if (result.Status == ConnectionStatusCode.StatusBluetoothError)
-                //{
-                //    this.logger.Verbose($"({name}, {endpoint}) DISABLING BLUETOOTH");
-                //    result = await RequestConnectionInternal();
-                //}
+                NearbyStatus result;
+                try
+                {
+                   result = await this.connectionClient.RequestConnectionAsync(name, endpoint, cancellationToken);
+                }
+                catch (Exception)
+                {
+                    result = new NearbyStatus
+                    {
+                        IsCanceled = true,
+                        IsSuccess = false,
+                        Status = ConnectionStatusCode.StatusError
+                    };
+                }
 
                 if (result.Status == ConnectionStatusCode.StatusAlreadyConnectedToEndpoint)
                 {
@@ -133,7 +123,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                     pendingRequestConnections.TryAdd(endpoint, true);
                 }
 
-                this.logger.Verbose($"({name}, {endpoint}) => {result.Status.ToString()}");
+                this.logger.Verbose($"({name}, {endpoint}) => RequestConnectionAsync ended {result.Status.ToString()}");
                 return result;
             });
         }
