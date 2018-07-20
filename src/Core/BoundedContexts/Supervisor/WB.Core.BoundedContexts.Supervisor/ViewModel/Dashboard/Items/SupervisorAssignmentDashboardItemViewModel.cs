@@ -67,8 +67,11 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
         {
             this.UnsubscribeDialog();
 
+            if (Assignment.ResponsibleId != e.InterviewerId)
+                Assignment.ReceivedByInterviewerAt = null;
             Assignment.ResponsibleId = e.InterviewerId;
             Assignment.ResponsibleName = e.Login;
+
             AssignmentsRepository.Store(Assignment);
 
             auditLogService.Write(new AssignResponsibleToAssignmentAuditLogEntity(Assignment.Id, e.InterviewerId, e.Login));
