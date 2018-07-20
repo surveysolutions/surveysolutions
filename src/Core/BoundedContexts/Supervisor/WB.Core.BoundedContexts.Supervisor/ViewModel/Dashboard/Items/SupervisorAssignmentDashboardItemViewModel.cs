@@ -24,13 +24,6 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
         {
         }
 
-        private string responsible;
-        public string Responsible
-        {
-            get => responsible;
-            set => this.RaiseAndSetIfChanged(ref this.responsible, value);
-        }
-
         protected override void BindTitles()
         {
             base.BindTitles();
