@@ -10,7 +10,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services
     {
         static string ToMessage(string endpoint, object message, Type responseType)
         {
-            return $"Error while sending <{message.GetType().Name}, {responseType.Name}> to endpoint '{endpoint}'";
+            return $"Error while sending <{message?.GetType().Name ?? "unknown"}, {responseType.Name}> to endpoint '{endpoint}'";
         }
 
         public CommunicationException(
@@ -35,7 +35,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services
             this.Data["responseType"] = responseType.Name;
             this.Data["endpoint"] = endpoint;
 
-            var remote = connection.RemoteEndpoints.SingleOrDefault(r => r.Enpoint == endpoint);
+            var remote = connection.RemoteEndpoints?.SingleOrDefault(r => r.Enpoint == endpoint);
             if (remote != null)
             {
                 this.Data["remote"] = remote.Name;

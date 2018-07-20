@@ -3,7 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 
 namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Entities
 {
-    [ExcludeFromCodeCoverage]
+    [ExcludeFromCodeCoverage] // because instantiated from UI projects
     public class NearbyConnectionLifeCycleCallback
     {
         public NearbyConnectionLifeCycleCallback(
