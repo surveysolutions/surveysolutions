@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable;
@@ -13,15 +12,6 @@ using WB.Core.SharedKernels.Enumerator.Utils;
 
 namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
 {
-    public static class ConnectionExtenstions
-    {
-        public static string GetEndpointName(this INearbyConnection connection, string endpoint)
-        {
-            return connection?.RemoteEndpoints.SingleOrDefault(re => re.Enpoint == endpoint)?.Name ?? "";
-        }
-    }
-
-
     public class NearbyCommunicator : INearbyCommunicator
     {
         public static TimeSpan MessageAwaitingTimeout = TimeSpan.FromSeconds(30);
