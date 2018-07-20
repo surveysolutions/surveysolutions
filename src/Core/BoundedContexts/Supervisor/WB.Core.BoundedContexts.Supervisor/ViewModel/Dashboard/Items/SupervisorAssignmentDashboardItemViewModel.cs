@@ -7,7 +7,10 @@ using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.InterviewerSelector;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog;
+using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator.Properties;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 using WB.Core.SharedKernels.Enumerator.Views;
@@ -16,12 +19,16 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
 {
     public class SupervisorAssignmentDashboardItemViewModel : AssignmentDashboardItemViewModel
     {
-        private IInterviewerSelectorDialog interviewerSelectorDialog = null;
-        private IInterviewerSelectorDialog InterviewerSelectorDialog
-            => interviewerSelectorDialog ?? (interviewerSelectorDialog = serviceLocator.GetInstance<IInterviewerSelectorDialog>());
+        private IInterviewerSelectorDialog interviewerSelectorDialog;
+        private readonly IAuditLogService auditLogService;
 
-        public SupervisorAssignmentDashboardItemViewModel(IServiceLocator serviceLocator) : base(serviceLocator)
+        public SupervisorAssignmentDashboardItemViewModel(IServiceLocator serviceLocator, 
+            IInterviewerSelectorDialog interviewerSelectorDialog,
+            IAuditLogService auditLogService) 
+            : base(serviceLocator)
         {
+            this.interviewerSelectorDialog = interviewerSelectorDialog;
+            this.auditLogService = auditLogService;
         }
 
         protected override void BindTitles()
@@ -46,9 +53,9 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
 
         private async Task SelectInterviewerAsync()
         {
-            this.InterviewerSelectorDialog.Selected += OnInterviewerSelected;
-            this.InterviewerSelectorDialog.Cancelled += OnSelectionCancelled;
-            this.InterviewerSelectorDialog.SelectInterviewer(string.Format("Select responsible for assignment #{0}", this.Assignment.Id));
+            this.interviewerSelectorDialog.Selected += OnInterviewerSelected;
+            this.interviewerSelectorDialog.Cancelled += OnSelectionCancelled;
+            this.interviewerSelectorDialog.SelectInterviewer(string.Format("Select responsible for assignment #{0}", this.Assignment.Id));
         }
 
         private void OnSelectionCancelled(object sender, EventArgs e)
@@ -64,6 +71,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
             Assignment.ResponsibleName = e.Login;
             AssignmentsRepository.Store(Assignment);
 
+            auditLogService.Write(new AssignResponsibleToAssignmentAuditLogEntity(Assignment.Id, e.InterviewerId, e.Login));
+
             BindTitles();
 
             serviceLocator.GetInstance<IMvxMessenger>().Publish(new DashboardChangedMsg(this));
@@ -71,11 +80,11 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
 
         private void UnsubscribeDialog()
         {
-            if (this.InterviewerSelectorDialog==null)
+            if (this.interviewerSelectorDialog==null)
                 return;
 
-            this.InterviewerSelectorDialog.Selected -= OnInterviewerSelected;
-            this.InterviewerSelectorDialog.Cancelled -= OnSelectionCancelled;
+            this.interviewerSelectorDialog.Selected -= OnInterviewerSelected;
+            this.interviewerSelectorDialog.Cancelled -= OnSelectionCancelled;
         }
 
         protected override void Dispose(bool disposing)

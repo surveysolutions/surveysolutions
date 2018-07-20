@@ -126,6 +126,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         {
             this.UnsubscribeDialog();
             var command = new AssignInterviewerCommand(interviewId, this.principal.CurrentUserIdentity.UserId, e.InterviewerId);
+            auditLogService.Write(new AssignResponsibleToInterviewAuditLogEntity(interviewId, interview.GetInterviewKey().ToString(), e.InterviewerId, e.Login));
             this.commandService.Execute(command);
 
             await this.navigationService.NavigateToDashboardAsync(interviewId.FormatGuid());

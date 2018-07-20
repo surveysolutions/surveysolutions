@@ -70,6 +70,24 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Assign responsible {0} to assignment #{1}.
+        /// </summary>
+        public static string AssignResponsibleToAssignment {
+            get {
+                return ResourceManager.GetString("AssignResponsibleToAssignment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assign responsible {0} to interview {1}.
+        /// </summary>
+        public static string AssignResponsibleToInterview {
+            get {
+                return ResourceManager.GetString("AssignResponsibleToInterview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Interview {0} closed.
         /// </summary>
         public static string CloseInterview {
