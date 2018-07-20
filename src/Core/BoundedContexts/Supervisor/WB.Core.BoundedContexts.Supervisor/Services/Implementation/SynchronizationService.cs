@@ -24,7 +24,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
         protected string BrokenInterviewPackagesController => string.Concat(ApplicationUrl, "/brokenInterviews");
         protected string InterviewerTabletInfosController => string.Concat(ApplicationUrl, "/interviewerTabletInfos");
         protected string InterviewerStatisticsController => string.Concat(ApplicationUrl, "/interviewerStatistics");
-        protected string GetListOfObsoleteQuestionnairesController => string.Concat(ApplicationUrl, "/obsoleteQuestionnaires");
+        protected string GetListOfDeletedQuestionnairesController => string.Concat(ApplicationUrl, "/deletedQuestionnairesList");
 
 
         public SynchronizationService(IPrincipal principal, IRestService restService,
@@ -90,10 +90,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
                 token: cancellationToken));
         }
 
-        public Task<List<string>> GetListOfObsoleteQuestionnairesIds(CancellationToken cancellationToken)
+        public Task<List<string>> GetListOfDeletedQuestionnairesIds(CancellationToken cancellationToken)
         {
             return this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<List<string>>(
-                url: this.GetListOfObsoleteQuestionnairesController,              
+                url: this.GetListOfDeletedQuestionnairesController,              
                 credentials: this.restCredentials,
                 token: cancellationToken));
         }
