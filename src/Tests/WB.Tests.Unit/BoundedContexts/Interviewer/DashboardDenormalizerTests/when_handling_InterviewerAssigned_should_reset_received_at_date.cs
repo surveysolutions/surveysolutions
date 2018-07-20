@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
             var denormalizer = Create.Service.DashboardDenormalizer(interviewViewRepository: interviewViewStorage);
 
             // Act 
-            denormalizer.Handle(Create.PublishedEvent.InterviewerAssigned(interviewId: Id.g1, assignTime: DateTime.UtcNow));
+            denormalizer.Handle(Create.PublishedEvent.InterviewerAssigned(interviewId: Id.g1));
 
             // Assert
             var changedItem = interviewViewStorage.GetById(Id.g1.FormatGuid());
