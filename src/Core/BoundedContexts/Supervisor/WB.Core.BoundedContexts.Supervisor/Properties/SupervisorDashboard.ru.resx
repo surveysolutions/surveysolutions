@@ -126,6 +126,12 @@
   <data name="OutboxSubtitle" xml:space="preserve">
     <value>Задания и интервью, которые будут отправлены с Вашего устройства при следующей синхронизации </value>
   </data>
+  <data name="SentToInterviewer" xml:space="preserve">
+    <value>Отправлено интервьюерам</value>
+  </data>
+  <data name="SentToInterviewerSubtitle" xml:space="preserve">
+    <value>Задания и интервью, которые уже отправлены на устройства интервьюеров</value>
+  </data>
   <data name="ToBeAssigned" xml:space="preserve">
     <value>Распределить задания</value>
   </data>

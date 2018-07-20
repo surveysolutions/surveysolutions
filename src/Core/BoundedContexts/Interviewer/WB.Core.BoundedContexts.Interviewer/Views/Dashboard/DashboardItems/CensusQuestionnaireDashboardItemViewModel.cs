@@ -93,7 +93,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                 interviewerIdentity.UserId, this.questionnaireIdentity, 
                 new List<InterviewAnswer>(),
                 new List<string>(),
-                DateTime.UtcNow,
                 interviewerIdentity.SupervisorId,
                 interviewerIdentity.UserId,
                 keyGenerator.Get(),

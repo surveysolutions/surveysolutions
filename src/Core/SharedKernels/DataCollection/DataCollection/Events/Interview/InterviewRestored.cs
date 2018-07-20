@@ -5,7 +5,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
     public class InterviewRestored : InterviewActiveEvent
     {
-        public InterviewRestored(Guid userId)
-            : base(userId) {}
+        public InterviewRestored(Guid userId, DateTimeOffset originDate)
+            : base(userId, originDate) {}
     }
 }

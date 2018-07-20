@@ -81,7 +81,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                     new QuestionnaireIdentity(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version),
                     answers,
                     protectedVariables,
-                    DateTime.UtcNow,
                     interviewerIdentity.SupervisorId,
                     interviewerIdentity.UserId,
                     interviewKey,

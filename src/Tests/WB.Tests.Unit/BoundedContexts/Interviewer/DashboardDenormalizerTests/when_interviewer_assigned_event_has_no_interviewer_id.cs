@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
 
             var denormalizer = Create.Service.DashboardDenormalizer(interviewViewRepository: interviewViewStorage.Object);
 
-            var assignTime = DateTime.Now;
+            var assignTime = DateTimeOffset.Now;
             var interviewerAssigned = Create.Event.InterviewerAssigned(Id.gA, null, assignTime);
 
             // Act 
@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
 
             // Assert
             Assert.That(dashboardItem.ResponsibleId, Is.EqualTo(supervisorId));
-            Assert.That(dashboardItem.InterviewerAssignedDateTime, Is.EqualTo(assignTime));
+            Assert.That(dashboardItem.InterviewerAssignedDateTime, Is.EqualTo(assignTime.UtcDateTime));
             interviewViewStorage.Verify(x => x.Store(dashboardItem));
         }
     }

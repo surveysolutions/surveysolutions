@@ -88,7 +88,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         public IMvxAsyncCommand Approve => new MvxAsyncCommand(async () =>
         {
             var command = new ApproveInterviewCommand(interviewId, this.principal.CurrentUserIdentity.UserId,
-                Comment, DateTime.UtcNow);
+                Comment);
             await this.commandService.ExecuteAsync(command);
             auditLogService.Write(new ApproveInterviewAuditLogEntity(this.interviewId, interview.GetInterviewKey().ToString()));
             await this.navigationService.NavigateToDashboardAsync(interviewId.FormatGuid());
@@ -98,7 +98,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         public IMvxAsyncCommand Reject => new MvxAsyncCommand(async () =>
         {
             var command = new RejectInterviewCommand(interviewId, this.principal.CurrentUserIdentity.UserId,
-                Comment, DateTime.UtcNow);
+                Comment);
             await this.commandService.ExecuteAsync(command);
             auditLogService.Write(new RejectInterviewAuditLogEntity(this.interviewId, interview.GetInterviewKey().ToString()));
             await this.navigationService.NavigateToDashboardAsync(interviewId.FormatGuid());
@@ -125,7 +125,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         private async void OnInterviewerSelected(object sender, InterviewerSelectedArgs e)
         {
             this.UnsubscribeDialog();
-            var command = new AssignInterviewerCommand(interviewId, this.principal.CurrentUserIdentity.UserId, e.InterviewerId, DateTime.UtcNow);
+            var command = new AssignInterviewerCommand(interviewId, this.principal.CurrentUserIdentity.UserId, e.InterviewerId);
             this.commandService.Execute(command);
 
             await this.navigationService.NavigateToDashboardAsync(interviewId.FormatGuid());

@@ -33,7 +33,7 @@ namespace WB.Tests.Integration.InterviewTests.AudioQuestion
             using (var eventContext = new EventContext())
             {
 
-                interview.AnswerAudioQuestion(Guid.NewGuid(), audioId, RosterVector.Empty, DateTime.Now, "some.mp3", new TimeSpan(0, 1, 20));
+                interview.AnswerAudioQuestion(Guid.NewGuid(), audioId, RosterVector.Empty, DateTimeOffset.Now, "some.mp3", new TimeSpan(0, 1, 20));
 
                 var validStaticTexts = eventContext.GetSingleEvent<StaticTextsDeclaredValid>().StaticTexts;
 

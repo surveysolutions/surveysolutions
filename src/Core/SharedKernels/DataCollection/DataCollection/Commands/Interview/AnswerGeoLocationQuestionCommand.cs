@@ -12,9 +12,9 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
         public double Altitude { get; private set; }
 
         public AnswerGeoLocationQuestionCommand(Guid interviewId, Guid userId, Guid questionId, decimal[] rosterVector,
-            DateTime answerTime, double latitude, double longitude, double accuracy, double altitude, 
+            double latitude, double longitude, double accuracy, double altitude, 
             DateTimeOffset timestamp)
-            : base(interviewId, userId, questionId, rosterVector, answerTime)
+            : base(interviewId, userId, questionId, rosterVector)
         {
             this.Latitude = latitude;
             this.Longitude = longitude;

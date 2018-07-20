@@ -7,8 +7,9 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
     {
         public DateTime Answer { get; private set; }
 
-        public AnswerDateTimeQuestionCommand(Guid interviewId, Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, DateTime answer)
-            : base(interviewId, userId, questionId, rosterVector, answerTime)
+        public AnswerDateTimeQuestionCommand(Guid interviewId, Guid userId, Guid questionId, decimal[] rosterVector, 
+            DateTime answer)
+            : base(interviewId, userId, questionId, rosterVector)
         {
             this.Answer = answer;
         }

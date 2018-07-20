@@ -199,7 +199,7 @@ namespace WB.UI.Headquarters.API.PublicApi
         private HttpResponseMessage CommentAnswer(Guid id, Identity questionIdentity, string comment)
         {
             var command = new CommentAnswerCommand(id, this.authorizedUser.Id, questionIdentity.Id,
-                questionIdentity.RosterVector, DateTime.UtcNow, comment);
+                questionIdentity.RosterVector, comment);
 
             return this.TryExecuteCommand(command);
         }
@@ -228,7 +228,7 @@ namespace WB.UI.Headquarters.API.PublicApi
             if(!userInfo.Roles.Contains(UserRoles.Interviewer))
                 return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, "User is not an interviewer.");
             
-            return this.TryExecuteCommand(new AssignResponsibleCommand(id, this.authorizedUser.Id, userInfo.PublicKey, userInfo.Supervisor.Id, DateTime.UtcNow));
+            return this.TryExecuteCommand(new AssignResponsibleCommand(id, this.authorizedUser.Id, userInfo.PublicKey, userInfo.Supervisor.Id));
         }
 
         /// <summary>
@@ -245,7 +245,7 @@ namespace WB.UI.Headquarters.API.PublicApi
         {
             this.GetQuestionnaireIdByInterviewOrThrow(id);
             
-            return this.TryExecuteCommand(new ApproveInterviewCommand(id, this.authorizedUser.Id, comment, DateTime.UtcNow));
+            return this.TryExecuteCommand(new ApproveInterviewCommand(id, this.authorizedUser.Id, comment));
         }
 
         /// <summary>
@@ -262,7 +262,7 @@ namespace WB.UI.Headquarters.API.PublicApi
         {
             this.GetQuestionnaireIdByInterviewOrThrow(id);
             
-            return this.TryExecuteCommand(new RejectInterviewCommand(id, this.authorizedUser.Id, comment, DateTime.UtcNow));
+            return this.TryExecuteCommand(new RejectInterviewCommand(id, this.authorizedUser.Id, comment));
         }
 
         /// <summary>

@@ -79,7 +79,7 @@ namespace WB.UI.Headquarters.API.WebInterview
         [ObserverNotAllowed]
         public override void CompleteInterview(CompleteInterviewRequest completeInterviewRequest)
         {
-            var command = new CompleteInterviewCommand(this.GetCallerInterview().Id, this.CommandResponsibleId, completeInterviewRequest.Comment, DateTime.UtcNow);
+            var command = new CompleteInterviewCommand(this.GetCallerInterview().Id, this.CommandResponsibleId, completeInterviewRequest.Comment);
             this.commandService.Execute(command);
         }
 
@@ -139,7 +139,7 @@ namespace WB.UI.Headquarters.API.WebInterview
         {
             if (this.authorizedUser.IsSupervisor)
             {
-                var command = new ApproveInterviewCommand(this.GetCallerInterview().Id, this.CommandResponsibleId, comment, DateTime.UtcNow);
+                var command = new ApproveInterviewCommand(this.GetCallerInterview().Id, this.CommandResponsibleId, comment);
                 this.commandService.Execute(command);
             }
             else if (this.authorizedUser.IsHeadquarter || this.authorizedUser.IsAdministrator)
@@ -156,12 +156,12 @@ namespace WB.UI.Headquarters.API.WebInterview
             {
                 if (assignTo.HasValue)
                 {
-                    var command = new RejectInterviewToInterviewerCommand(this.CommandResponsibleId, this.GetCallerInterview().Id, assignTo.Value, comment, DateTime.UtcNow);
+                    var command = new RejectInterviewToInterviewerCommand(this.CommandResponsibleId, this.GetCallerInterview().Id, assignTo.Value, comment);
                     this.commandService.Execute(command);
                 }
                 else
                 {
-                    var command = new RejectInterviewCommand(this.GetCallerInterview().Id, this.CommandResponsibleId, comment, DateTime.UtcNow);
+                    var command = new RejectInterviewCommand(this.GetCallerInterview().Id, this.CommandResponsibleId, comment);
                     this.commandService.Execute(command);
                 }
             }

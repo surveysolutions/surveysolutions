@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using Moq;
@@ -21,6 +22,27 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Dashboard
     [TestOf(typeof(DashboardItemsAccessor))]
     public class DashboardItemsAccessorTests
     {
+        [Test]
+        public void should_show_items_with_filled_received_at_date_in_the_sent_box()
+        {
+             var interviews = new SqliteInmemoryStorage<InterviewView>();
+
+            var principal = Mock.Of<IPrincipal>(x => x.IsAuthenticated == true &&
+                                                     x.CurrentUserIdentity == Mock.Of<IUserIdentity>(u => u.UserId == Id.gA));
+
+            interviews.Store(Create.Entity.InterviewView(interviewId: Id.g1, receivedByInterviewerAt: DateTime.UtcNow));
+
+            var accessor = CreateItemsAccessor(interviews: interviews, principal: principal);
+
+            // Act
+            var waitingForSupervisorAction = accessor.GetSentToInterviewerItems();
+
+            var items = waitingForSupervisorAction.Cast<SupervisorDashboardInterviewViewModel>().ToList();
+
+            Assert.That(items, Has.Count.EqualTo(1));
+            items.Should().ContainSingle(i => i.InterviewId == Id.g1, $"Should contain interview in {InterviewStatus.RejectedBySupervisor} status and responsible supervisor");
+        }
+
         [Test]
         public void should_show_interviews_and_assignments_assigned_to_supervisor_in_waiting_for_decision_list()
         {
@@ -67,7 +89,8 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Dashboard
             interviews.Store(Create.Entity.InterviewView(interviewId: Id.g1, responsibleId: interviewerId, status: InterviewStatus.ApprovedBySupervisor));
             interviews.Store(Create.Entity.InterviewView(interviewId: Id.g2, responsibleId: interviewerId, status: InterviewStatus.RejectedBySupervisor));
             interviews.Store(Create.Entity.InterviewView(interviewId: Id.g4, responsibleId: interviewerId, status: InterviewStatus.InterviewerAssigned));
-            
+
+            interviews.Store(Create.Entity.InterviewView(interviewId: Id.g7, responsibleId: interviewerId, status: InterviewStatus.RejectedBySupervisor, receivedByInterviewerAt: DateTime.UtcNow));
             interviews.Store(Create.Entity.InterviewView(interviewId: Id.g8, responsibleId: interviewerId, status: InterviewStatus.RejectedByHeadquarters));
             interviews.Store(Create.Entity.InterviewView(interviewId: Id.g9, responsibleId: currentSupervisorId, status: InterviewStatus.RejectedBySupervisor));
             interviews.Store(Create.Entity.InterviewView(interviewId: Id.g10, responsibleId: currentSupervisorId, status: InterviewStatus.RejectedByHeadquarters));
