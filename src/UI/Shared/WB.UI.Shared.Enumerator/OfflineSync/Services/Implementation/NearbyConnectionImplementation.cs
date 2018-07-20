@@ -39,6 +39,8 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
 
         public async Task<NearbyStatus> StartDiscoveryAsync(string serviceName, CancellationToken cancellationToken)
         {
+            this.logger.Verbose($"{serviceName} ENTER");
+
             var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
 
             var result = await NearbyClass.Connections.StartDiscoveryAsync(Api, serviceName,
@@ -47,11 +49,13 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
                 .ToConnectionStatus(s => LogNonSuccesfulResult(s,
                     new ActionArgs((nameof(serviceName), serviceName))));
 
+            this.logger.Verbose($"{serviceName} EXIT. Result: {result.Status.ToString()}");
             return result;
         }
 
         public async Task<string> StartAdvertisingAsync(string serviceName, string name, CancellationToken cancellationToken)
         {
+            this.logger.Verbose($"{serviceName}, {name} ENTER");
             var cts = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
 
             var result = await NearbyClass.Connections.StartAdvertisingAsync(Api, name, serviceName,
