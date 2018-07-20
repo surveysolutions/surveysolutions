@@ -2,17 +2,23 @@
 
 <resources>
 
-  <dimen name="textsize_10">9sp</dimen>
-  <dimen name="textsize_12">10sp</dimen>
-  <dimen name="textsize_14">10sp</dimen>
-  <dimen name="textsize_16">11sp</dimen>
-  <dimen name="textsize_18">12sp</dimen>
-  <dimen name="textsize_20">14sp</dimen>
-  <dimen name="textsize_22">15sp</dimen>
-  <dimen name="textsize_24">16sp</dimen>
-  <dimen name="textsize_28">18sp</dimen>
-  <dimen name="textsize_30">20sp</dimen>
+    <dimen name="textsize_10">9sp</dimen>
+    <dimen name="textsize_12">10sp</dimen>
+    <dimen name="textsize_14">10sp</dimen>
+    <dimen name="textsize_16">11sp</dimen>
+    <dimen name="textsize_18">12sp</dimen>
+    <dimen name="textsize_20">14sp</dimen>
+    <dimen name="textsize_22">15sp</dimen>
+    <dimen name="textsize_24">16sp</dimen>
+    <dimen name="textsize_28">18sp</dimen>
+    <dimen name="textsize_30">20sp</dimen>
 
-  <dimen name="button_corners_radius">6dp</dimen>
+    <dimen name="button_corners_radius">6dp</dimen>
+
+    <dimen name="OfflineSync_MainHolder_LayoutWidth">280dp</dimen>
+    <dimen name="OfflineSync_Base_MarginTop">28dp</dimen>
+    <dimen name="OfflineSync_Small_MarginTop">12dp</dimen>
+    <dimen name="OfflineSync_Small_MarginLeft">12dp</dimen>
+    <dimen name="OfflineSync_Spinner_Size">26dp</dimen>
 
 </resources>

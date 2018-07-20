@@ -31,6 +31,5 @@
   <dimen name="Loading_Progress_padding">50dp</dimen>
   <dimen name="Loading_Progress_font_size">50dp</dimen>
 
-  <dimen name="SendToSupervisor_Navigation_MarginTop">38dp</dimen>
   <dimen name="SendToSupervisor_Note_MarginTop">76dp</dimen>
 </resources>
