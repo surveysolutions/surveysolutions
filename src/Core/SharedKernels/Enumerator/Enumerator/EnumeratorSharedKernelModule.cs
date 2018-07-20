@@ -54,6 +54,7 @@ namespace WB.Core.SharedKernels.Enumerator
             // offline sync
             registry.Bind<IOfflineSyncClient, OfflineSyncClient>();
             registry.BindAsSingleton<IPayloadSerializer, PayloadSerializer>();
+            registry.BindAsSingleton<INearbyConnection, NearbyConnection>();
 
             registry.BindAsSingleton<ISynchronizationCompleteSource, SynchronizationCompleteSource>();
 

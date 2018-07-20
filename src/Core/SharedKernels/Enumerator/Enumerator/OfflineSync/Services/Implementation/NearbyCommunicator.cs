@@ -103,13 +103,13 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
          
             try
             {
-                payloads = await PreparePayload(Guid.NewGuid(), message, true);
+                payloads = await PreparePayload(endpoint, Guid.NewGuid(), message, true);
                 var tsc = new TaskCompletionSourceWithProgress(progress, cancellationToken);
                 pending.TryAdd(payloads.CorrelationId, tsc);
 
                 Trace("SEND.Message", true, endpoint, payloads.CorrelationId, PayloadType.Bytes, "");
 
-                await SendOverWire(connection, endpoint, payloads);
+                await SendOverWire(connection, endpoint, payloads, cancellationToken);
 
                 var response = await tsc.Task;
 
@@ -154,6 +154,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             {
                 case PayloadType.Bytes:
                     var header = await payloadSerializer.FromPayloadAsync<PayloadHeader>(payload.Bytes);
+                    this.pending.TryGetValue(header.CorrelationId, out var taskSource);
 
                     Trace("RECEIVE", false, endpoint, payload.Id, payload.Type, $"Info: {header.CorrelationId}");
                     headers.TryAdd(header.PayloadId, header);
@@ -172,7 +173,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
 
                     if (header.PayloadContent != null)
                     {
-                        await HandlePayloadContent(nearbyConnection, endpoint, header.PayloadContent);
+                        await HandlePayloadContent(nearbyConnection, endpoint, header.PayloadContent, CancellationToken.None);
                     }
 
                     break;
@@ -188,8 +189,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             }
         }
 
-        public async void RecievePayloadTransferUpdate(INearbyConnection nearbyConnection, string endpoint,
-            NearbyPayloadTransferUpdate update)
+        public async void RecievePayloadTransferUpdate(INearbyConnection nearbyConnection, string endpoint, NearbyPayloadTransferUpdate update)
         {
             var isIncoming = false;
             if (incomingPayloads.TryGetValue(update.Id, out var payload))
@@ -218,7 +218,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                     {
                         var bytes = await payload.BytesFromStream;
                         var payloadContent = await payloadSerializer.FromPayloadAsync<PayloadContent>(bytes);
-                        await HandlePayloadContent(nearbyConnection, endpoint, payloadContent);
+                        await HandlePayloadContent(nearbyConnection, endpoint, payloadContent, CancellationToken.None);
                     }
 
                     if (headers.TryGetValue(update.Id, out header))
@@ -289,7 +289,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             }
         }
 
-        private async Task HandlePayloadContent(INearbyConnection nearbyConnection, string endpoint, PayloadContent payloadContent)//, byte[] bytes)
+        private async Task HandlePayloadContent(INearbyConnection nearbyConnection, string endpoint, PayloadContent payloadContent, CancellationToken cancellationToken)
         {
             if (payloadContent.IsRequest)
             {
@@ -300,7 +300,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                 }
                 catch (Exception e)
                 {
-                    var errorResponse = await PreparePayload(payloadContent.CorrelationId, 
+                    var errorResponse = await PreparePayload(endpoint, payloadContent.CorrelationId, 
                         new FailedResponse
                         {
                             ErrorMessage = e.Message,
@@ -308,12 +308,12 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                             Endpoint = endpoint
                         }, false, e.Message);
 
-                    await SendOverWire(nearbyConnection, endpoint, errorResponse);
+                    await SendOverWire(nearbyConnection, endpoint, errorResponse, cancellationToken);
                     return;
                 }
 
-                var responsePayload = await PreparePayload(payloadContent.CorrelationId, response, false);
-                await SendOverWire(nearbyConnection, endpoint, responsePayload);
+                var responsePayload = await PreparePayload(endpoint, payloadContent.CorrelationId, response, false);
+                await SendOverWire(nearbyConnection, endpoint, responsePayload, cancellationToken);
             }
             else
             {
@@ -321,7 +321,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             }
         }
 
-        private async Task SendOverWire(INearbyConnection nearbyConnection, string endpoint, Package package)
+        private async Task SendOverWire(INearbyConnection nearbyConnection, string endpoint, Package package, CancellationToken cancellationToken)
         {
             await SendOverWire(package.Header);
             CommunicationSession.Current.RequestsTotal += 1;
@@ -337,7 +337,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                 outgoingPayloads.AddOrUpdate(payload.Id, payload, (id, p) => payload);
                 Trace("SEND", true, endpoint, payload.Id, payload.Type, "Send over wire");
 
-                var result = await nearbyConnection.SendPayloadAsync(endpoint, payload)
+                var result = await nearbyConnection.SendPayloadAsync(endpoint, payload, cancellationToken)
                     .TimeoutAfter(TimeSpan.FromSeconds(30));
 
                 if (result.IsSuccess == false)
@@ -354,7 +354,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             this.logger.Trace(log);
         }
 
-        private async Task<Package> PreparePayload(Guid correlationId, ICommunicationMessage payload, bool isRequest, string errorMessage = null)
+        private async Task<Package> PreparePayload(string endpoint, Guid correlationId, ICommunicationMessage payload, bool isRequest, string errorMessage = null)
         {
             var sw = Stopwatch.StartNew();
 
@@ -362,7 +362,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             package.CorrelationId = correlationId;
             package.PayloadContent = new PayloadContent(correlationId, payload, isRequest);
             package.PayloadContentBytes = await payloadSerializer.ToPayloadAsync(package.PayloadContent);
-            package.Content = payloadProvider.AsStream(package.PayloadContentBytes);
+            package.Content = payloadProvider.AsStream(package.PayloadContentBytes, endpoint);
 
             package.HeaderPayload = new PayloadHeader(package.PayloadContent, package.PayloadContentBytes, package.Content);
 
@@ -383,7 +383,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                 package.HeaderBytes = await payloadSerializer.ToPayloadAsync(package.HeaderPayload);
             }
 
-            package.Header = payloadProvider.AsBytes(package.HeaderBytes);
+            package.Header = payloadProvider.AsBytes(package.HeaderBytes, endpoint);
             sw.Stop();
             logger.Verbose("Took " + sw.ElapsedMilliseconds + "ms");
             return package;

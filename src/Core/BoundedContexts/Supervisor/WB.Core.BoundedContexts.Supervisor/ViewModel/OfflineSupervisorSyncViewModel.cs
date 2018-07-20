@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.Logging;
@@ -115,9 +116,9 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 
         protected override async Task OnGoogleApiReady()
         {
+            this.cancellationTokenSource = new CancellationTokenSource();
             Log.Trace("StartAdvertising");
 
-            this.StopAdvertising();
             await this.StartAdvertising();
         }
 
@@ -131,19 +132,13 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             var serviceName = this.GetServiceName();
             try
             {
-                await this.nearbyConnection.StartAdvertising(serviceName, this.principal.CurrentUserIdentity.Name);
+                await this.nearbyConnection.StartAdvertisingAsync(serviceName, this.principal.CurrentUserIdentity.Name, cancellationTokenSource.Token);
                 SetStatus(ConnectionStatus.Advertising, "Waiting for interviewers connections");
             }
             catch (NearbyConnectionException nce)
             {
                 SetStatus(ConnectionStatus.Error, nce.Message);
             }
-        }
-
-        protected void StopAdvertising()
-        {
-            //this.nearbyConnection.StopAllEndpoint();
-            this.nearbyConnection.StopAdvertising();
         }
 
         private void OnIncomingData(IncomingDataInfo dataInfo)
