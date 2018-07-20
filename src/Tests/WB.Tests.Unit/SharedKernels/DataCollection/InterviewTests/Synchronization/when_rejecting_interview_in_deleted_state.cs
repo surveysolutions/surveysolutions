@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Synchronizat
             var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(Guid.NewGuid(), _ => true);
 
             interview = CreateInterview(questionnaireRepository: questionnaireRepository);
-            interview.Apply(new InterviewStatusChanged(InterviewStatus.Deleted, null));
+            interview.Apply(new InterviewStatusChanged(InterviewStatus.Deleted, null, DateTimeOffset.Now));
 
             eventContext = new EventContext();
             BecauseOf();
