@@ -203,6 +203,12 @@ namespace WB.UI.Headquarters.Controllers
                 case AuditLogEntityType.OpenApplication:
                     //var openApplicationAuditLogEntity = record.GetEntity<OpenApplicationAuditLogEntity>();
                     return InterviewerAuditRecord.OpenApplication;
+                case AuditLogEntityType.AssignResponsibleToInterview:
+                    var assignResponsibleAuditLogEntity = record.GetEntity<AssignResponsibleToInterviewAuditLogEntity>();
+                    return InterviewerAuditRecord.AssignResponsibleToInterview.FormatString(assignResponsibleAuditLogEntity.ResponsibleName, assignResponsibleAuditLogEntity.InterviewKey);
+                case AuditLogEntityType.AssignResponsibleToAssignment:
+                    var assignResponsibleToAssignmentAuditLogEntity = record.GetEntity<AssignResponsibleToAssignmentAuditLogEntity>();
+                    return InterviewerAuditRecord.AssignResponsibleToAssignment.FormatString(assignResponsibleToAssignmentAuditLogEntity.ResponsibleName, assignResponsibleToAssignmentAuditLogEntity.AssignmentId);
                 default:
                     throw new ArgumentException("Unknown audit record type: " + record.Type);
             }

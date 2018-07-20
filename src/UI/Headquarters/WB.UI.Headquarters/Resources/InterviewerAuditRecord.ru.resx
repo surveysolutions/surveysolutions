@@ -210,4 +210,14 @@
     <value>Лог действий</value>
     <comment>Лог действий</comment>
   </data>
+    <data name="AssignResponsibleToInterview" xml:space="preserve">
+    <value>Назначен ответственный {0} на интервью {1}</value>
+    <comment>Назначен ответственный {0} на интервью {1}</comment>
+  </data>
+    <data name="AssignResponsibleToAssignment" xml:space="preserve">
+    <value>Назначен ответственный {0} на задачу №{1}
+</value>
+    <comment>Назначен ответственный {0} на задачу №{1}
+</comment>
+  </data>
 </root>
