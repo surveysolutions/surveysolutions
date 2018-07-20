@@ -15,12 +15,12 @@ using WB.UI.Shared.Enumerator.OfflineSync.Entities;
 
 namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
 {
-    public class NearbyConnectionClientImplementation : INearbyConnectionClient
+    public class NearbyConnectionClient : INearbyConnectionClient
     {
         private readonly IGoogleApiClientFactory apiClientFactory;
         private readonly ILogger logger;
 
-        public NearbyConnectionClientImplementation(ILogger logger, IGoogleApiClientFactory apiClientFactory)
+        public NearbyConnectionClient(ILogger logger, IGoogleApiClientFactory apiClientFactory)
         {
             this.logger = logger;
             this.apiClientFactory = apiClientFactory;
