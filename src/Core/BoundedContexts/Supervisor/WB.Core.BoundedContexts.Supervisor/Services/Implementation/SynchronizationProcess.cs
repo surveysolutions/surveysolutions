@@ -28,7 +28,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
         private readonly IPrincipal principal;
         private readonly IPlainStorage<SupervisorIdentity> supervisorsPlainStorage;
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
-        private readonly IPlainStorage<ObsoleteQuestionnaire> obsoleteQuestionnairesStorage;
+        private readonly IPlainStorage<DeletedQuestionnaire> deletedQuestionnairesStorage;
         private readonly IPlainStorage<InterviewerDocument> interviewerViewRepository;
         private readonly ITechInfoSynchronizer techInfoSynchronizer;
         private readonly IPasswordHasher passwordHasher;
@@ -59,7 +59,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
             IEnumeratorEventStorage eventStore,
             IPlainStorage<InterviewerDocument> interviewerViewRepository,
             ITechInfoSynchronizer techInfoSynchronizer,
-            IPlainStorage<ObsoleteQuestionnaire> obsoleteQuestionnairesStorage,
+            IPlainStorage<DeletedQuestionnaire> deletedQuestionnairesStorage,
             IPlainStorage<InterviewSequenceView, Guid> interviewSequenceViewRepository) : base(synchronizationService,
             interviewViewRepository, principal, logger,
             userInteractionService, questionnairesAccessor, interviewFactory, interviewMultimediaViewStorage,
@@ -73,7 +73,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
             this.supervisorSettings = supervisorSettings;
             this.interviewerViewRepository = interviewerViewRepository;
             this.techInfoSynchronizer = techInfoSynchronizer;
-            this.obsoleteQuestionnairesStorage = obsoleteQuestionnairesStorage;
+            this.deletedQuestionnairesStorage = deletedQuestionnairesStorage;
             this.supervisorsPlainStorage = supervisorsPlainStorage;
             this.interviewViewRepository = interviewViewRepository;
             this.passwordHasher = passwordHasher;
@@ -98,7 +98,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
             await this.SyncronizeCensusQuestionnaires(progress, statistics, cancellationToken);
 
             cancellationToken.ThrowIfCancellationRequested();
-            await this.DownloadObsoleteQuestionnairesListAsync(progress, statistics, cancellationToken);
+            await this.DownloadDeletedQuestionnairesListAsync(progress, statistics, cancellationToken);
 
             cancellationToken.ThrowIfCancellationRequested();
             await this.CheckObsoleteQuestionnairesAsync(progress, statistics, cancellationToken);
@@ -119,7 +119,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
             await this.UpdateApplicationAsync(progress, cancellationToken);
         }
 
-        private async Task DownloadObsoleteQuestionnairesListAsync(IProgress<SyncProgressInfo> progress, SynchronizationStatistics statistics, CancellationToken cancellationToken)
+        private async Task DownloadDeletedQuestionnairesListAsync(IProgress<SyncProgressInfo> progress, SynchronizationStatistics statistics, CancellationToken cancellationToken)
         {
             progress.Report(new SyncProgressInfo
             {
@@ -128,10 +128,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
                 Status = SynchronizationStatus.Download
             });
 
-            var obsoleteQuestionnairesList = await this.supervisorSyncService.GetListOfObsoleteQuestionnairesIds(cancellationToken);
+            var deletedQuestionnairesList = await this.supervisorSyncService.GetListOfDeletedQuestionnairesIds(cancellationToken);
 
-            this.obsoleteQuestionnairesStorage
-                .Store(obsoleteQuestionnairesList.Select(id => new ObsoleteQuestionnaire{ Id = id }));
+            this.deletedQuestionnairesStorage
+                .Store(deletedQuestionnairesList.Select(id => new DeletedQuestionnaire{ Id = id }));
         }
 
         private async Task SyncronizeSupervisor(IProgress<SyncProgressInfo> progress, 
