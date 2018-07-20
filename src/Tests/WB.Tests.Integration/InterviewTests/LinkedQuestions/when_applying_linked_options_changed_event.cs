@@ -31,11 +31,11 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
             var interview = SetupStatefullInterview(questionnaireDocument);
 
             interview.AnswerTextListQuestion(userId: userId, questionId: textListQuestionId,
-                answerTime: DateTime.Now, rosterVector: new decimal[0],
+                originDate: DateTimeOffset.Now, rosterVector: new decimal[0],
                 answers: new[] {new Tuple<decimal, string>(1, "a"), new Tuple<decimal, string>(2, "b"), new Tuple<decimal, string>(3, "c") });
 
             interview.AnswerTextListQuestion(userId: userId, questionId: textListQuestionId,
-                answerTime: DateTime.Now, rosterVector: new decimal[0],
+                originDate: DateTimeOffset.Now, rosterVector: new decimal[0],
                 answers: new[] { new Tuple<decimal, string>(1, "a"), new Tuple<decimal, string>(3, "c") });
 
             Assert.DoesNotThrow(() => interview.Apply(Abc.Create.Event.LinkedOptionsChanged(new [] {

@@ -17,10 +17,10 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
         [Test]
         public void when_pause_command_arrived_just_after_resume_Should_cancel_resume()
         {
-            var firstCommandDate = new DateTime(2007, 10, 17, 10, 0, 0);
+            var firstCommandDate = new DateTimeOffset(new DateTime(2007, 10, 17, 10, 0, 0));
 
             var now = firstCommandDate.Add(trackingSettings.DelayBeforeCommandPublish).AddSeconds(10);
-            var clock = Mock.Of<IClock>(x => x.UtcNow() == now);
+            var clock = Mock.Of<IClock>(x => x.UtcNow() == now.UtcDateTime);
             IPauseResumeQueue queue = CreateQueue(clock);
 
             // Act
@@ -54,11 +54,11 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
         [Test]
         public void when_command_is_waiting_if_it_might_be_cancelled_It_should_not_be_returned_for_publishing_or_deleted()
         {
-            var commandDate = new DateTime(2007, 10, 17, 10, 0, 0);
+            var commandDate = new DateTimeOffset(new DateTime(2007, 10, 17, 10, 0, 0));
 
             var now = commandDate.Add(trackingSettings.DelayBeforeCommandPublish).AddSeconds(-1);
             var clock = new Mock<IClock>();
-            clock.Setup(x => x.UtcNow()).Returns(now);
+            clock.Setup(x => x.UtcNow()).Returns(now.UtcDateTime);
             IPauseResumeQueue queue = CreateQueue(clock.Object);
 
             // Act
@@ -70,7 +70,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
             Assert.That(forPublish, Is.Empty);
 
             // Should be returned when it is waited enough
-            clock.Setup(x => x.UtcNow()).Returns(commandDate.Add(trackingSettings.DelayBeforeCommandPublish).AddSeconds(1));
+            clock.Setup(x => x.UtcNow()).Returns(commandDate.Add(trackingSettings.DelayBeforeCommandPublish).AddSeconds(1).UtcDateTime);
 
             var forPublish1 = queue.DeQueueForPublish();
             Assert.That(forPublish1, Has.Count.EqualTo(1));

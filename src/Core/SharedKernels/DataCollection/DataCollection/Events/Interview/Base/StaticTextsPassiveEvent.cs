@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 
 namespace WB.Core.SharedKernels.DataCollection.Events.Interview.Base
 {
@@ -6,7 +7,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview.Base
     {
         public Identity[] StaticTexts { get; private set; }
 
-        protected StaticTextsPassiveEvent(Identity[] staticTexts)
+        protected StaticTextsPassiveEvent(Identity[] staticTexts, DateTimeOffset originDate) : base(originDate)
         {
             this.StaticTexts = staticTexts.ToArray();
         }

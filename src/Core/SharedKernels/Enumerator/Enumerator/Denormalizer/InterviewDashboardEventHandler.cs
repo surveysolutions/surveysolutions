@@ -317,6 +317,7 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
                 interviewView.CanBeDeleted = false;
             }
 
+            interviewView.ReceivedByInterviewerAtUtc = null;
             interviewView.Status = evnt.Payload.Status;
             interviewView.LastInterviewerOrSupervisorComment = evnt.Payload.Comment;
 
@@ -411,37 +412,37 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
 
         public void Handle(IPublishedEvent<TextQuestionAnswered> evnt)
         {
-            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer, evnt.Payload.AnswerTimeUtc);
+            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer, evnt.Payload.OriginDate?.UtcDateTime ?? evnt.Payload.AnswerTimeUtc.Value);
         }
         
         public void Handle(IPublishedEvent<MultipleOptionsQuestionAnswered> evnt)
         {
-            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.SelectedValues, evnt.Payload.AnswerTimeUtc);
+            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.SelectedValues, evnt.Payload.OriginDate?.UtcDateTime ?? evnt.Payload.AnswerTimeUtc.Value);
         }
 
         public void Handle(IPublishedEvent<SingleOptionQuestionAnswered> evnt)
         {
-            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.SelectedValue, evnt.Payload.AnswerTimeUtc);
+            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.SelectedValue, evnt.Payload.OriginDate?.UtcDateTime ?? evnt.Payload.AnswerTimeUtc.Value);
         }
 
         public void Handle(IPublishedEvent<NumericRealQuestionAnswered> evnt)
         {
-            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer, evnt.Payload.AnswerTimeUtc);
+            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer, evnt.Payload.OriginDate?.UtcDateTime ?? evnt.Payload.AnswerTimeUtc.Value);
         }
 
         public void Handle(IPublishedEvent<NumericIntegerQuestionAnswered> evnt)
         {
-            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer, evnt.Payload.AnswerTimeUtc);
+            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer, evnt.Payload.OriginDate?.UtcDateTime ?? evnt.Payload.AnswerTimeUtc.Value);
         }
 
         public void Handle(IPublishedEvent<DateTimeQuestionAnswered> evnt)
         {
-            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer, evnt.Payload.AnswerTimeUtc);
+            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer, evnt.Payload.OriginDate?.UtcDateTime ?? evnt.Payload.AnswerTimeUtc.Value);
         }
 
         public void Handle(IPublishedEvent<YesNoQuestionAnswered> evnt)
         {
-            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.AnsweredOptions, evnt.Payload.AnswerTimeUtc);
+            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.AnsweredOptions, evnt.Payload.OriginDate?.UtcDateTime ?? evnt.Payload.AnswerTimeUtc.Value);
         }
 
         public void Handle(IPublishedEvent<GeoLocationQuestionAnswered> evnt)
@@ -449,32 +450,38 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
             this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId,
                 new GeoPosition(evnt.Payload.Latitude, evnt.Payload.Longitude,
                     evnt.Payload.Accuracy, evnt.Payload.Altitude,
-                    evnt.Payload.Timestamp), evnt.Payload.AnswerTimeUtc);
+                    evnt.Payload.Timestamp), 
+                evnt.Payload.OriginDate?.UtcDateTime ?? evnt.Payload.AnswerTimeUtc.Value);
         }
 
         public void Handle(IPublishedEvent<QRBarcodeQuestionAnswered> evnt)
         {
-            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer, evnt.Payload.AnswerTimeUtc);
+            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answer, 
+                evnt.Payload.OriginDate?.UtcDateTime ?? evnt.Payload.AnswerTimeUtc.Value);
         }
 
         public void Handle(IPublishedEvent<TextListQuestionAnswered> evnt)
         {
-            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answers, evnt.Payload.AnswerTimeUtc);
+            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Answers,
+                evnt.Payload.OriginDate?.UtcDateTime ?? evnt.Payload.AnswerTimeUtc.Value);
         }
 
         public void Handle(IPublishedEvent<PictureQuestionAnswered> evnt)
         {
-            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.PictureFileName, evnt.Payload.AnswerTimeUtc);
+            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.PictureFileName,
+                evnt.Payload.OriginDate?.UtcDateTime ?? evnt.Payload.AnswerTimeUtc.Value);
         }
 
         public void Handle(IPublishedEvent<MultipleOptionsLinkedQuestionAnswered> evnt)
         {
-            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.SelectedRosterVectors, evnt.Payload.AnswerTimeUtc);
+            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.SelectedRosterVectors,
+                evnt.Payload.OriginDate?.UtcDateTime ?? evnt.Payload.AnswerTimeUtc.Value);
         }
 
         public void Handle(IPublishedEvent<SingleOptionLinkedQuestionAnswered> evnt)
         {
-            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.SelectedRosterVector, evnt.Payload.AnswerTimeUtc);
+            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.SelectedRosterVector,
+                evnt.Payload.OriginDate?.UtcDateTime ?? evnt.Payload.AnswerTimeUtc.Value);
         }
 
         public void Handle(IPublishedEvent<AnswersRemoved> evnt)
@@ -503,7 +510,8 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
         public void Handle(IPublishedEvent<AreaQuestionAnswered> evnt)
         {
             this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, new Area(evnt.Payload.Geometry, evnt.Payload.MapName, evnt.Payload.NumberOfPoints,
-                evnt.Payload.AreaSize, evnt.Payload.Length, evnt.Payload.Coordinates, evnt.Payload.DistanceToEditor), evnt.Payload.AnswerTimeUtc);
+                evnt.Payload.AreaSize, evnt.Payload.Length, evnt.Payload.Coordinates, evnt.Payload.DistanceToEditor),
+                evnt.Payload.OriginDate?.UtcDateTime ?? evnt.Payload.AnswerTimeUtc.Value);
         }
 
         public void Handle(IPublishedEvent<InterviewKeyAssigned> @event)
@@ -518,7 +526,8 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
 
         public void Handle(IPublishedEvent<AudioQuestionAnswered> evnt)
         {
-            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Length, evnt.Payload.AnswerTimeUtc);
+            this.AnswerQuestion(evnt.EventSourceId, evnt.Payload.QuestionId, evnt.Payload.Length, 
+                evnt.Payload.OriginDate?.UtcDateTime ?? evnt.Payload.AnswerTimeUtc.Value);
         }
 
         public void Handle(IPublishedEvent<InterviewerAssigned> @event)
@@ -533,6 +542,8 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
             }
 
             interviewView.InterviewerAssignedDateTime = @event.Payload.AssignTime;
+            interviewView.ReceivedByInterviewerAtUtc = null;
+
             this.interviewViewRepository.Store(interviewView);
         }
 

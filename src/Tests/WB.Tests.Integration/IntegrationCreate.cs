@@ -163,7 +163,6 @@ namespace WB.Tests.Integration
                 questionnaireId: questionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"),
                 version: 1,
                 answers:new List<InterviewAnswer>(),
-                answersTime: new DateTime(2012, 12, 20),
                 supervisorId: new Guid("D222D222D222D222D222D222D222D222")));
 
             return interview;
@@ -186,7 +185,7 @@ namespace WB.Tests.Integration
                 questionnaireId: questionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"),
                 version: 1,
                 answers: preloadedData.Answers,
-                answersTime: new DateTime(2012, 12, 20),
+                //answersTime: new DateTime(2012, 12, 20),
                 supervisorId: Guid.NewGuid(),
                 interviewerId: Guid.NewGuid(),
                 interviewKey: Create.Entity.InterviewKey()));
@@ -226,7 +225,7 @@ namespace WB.Tests.Integration
                 questionnaireId: questionnaireIdentity?.QuestionnaireId ?? new Guid("B000B000B000B000B000B000B000B000"),
                 version: questionnaireIdentity?.Version ?? 1,
                 answers: answersOnPrefilledQuestions ?? new List<InterviewAnswer>(),
-                answersTime: new DateTime(2012, 12, 20),
+                //answersTime: new DateTime(2012, 12, 20),
                 supervisorId: Guid.NewGuid(),
                 interviewerId: Guid.NewGuid(),
                 interviewKey: Create.Entity.InterviewKey()));

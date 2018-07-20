@@ -2,7 +2,6 @@
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -21,14 +20,15 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
 
             var questionnaireIdentity = new QuestionnaireIdentity(Guid.Parse("33333333333333333333333333333333"), 1);
             var questionId = Guid.Parse("11111111111111111111111111111111");
-            var eventTime = DateTime.UtcNow;
+            var eventTime = DateTimeOffset.Now;
 
-            var @event = Create.Event.InterviewStatusChanged(InterviewStatus.RejectedByHeadquarters, utcTime: eventTime)
+            var @event = Create.Event.InterviewStatusChanged(InterviewStatus.RejectedByHeadquarters, originDate: eventTime)
                 .ToPublishedEvent(interviewId);
 
             var interviewViewStorage = new SqliteInmemoryStorage<InterviewView>();
             interviewViewStorage.Store(Create.Entity.InterviewView(interviewId: interviewId,
-                questionnaireId: questionnaireIdentity.ToString()));
+                questionnaireId: questionnaireIdentity.ToString(),
+                receivedByInterviewerAt: DateTime.UtcNow));
 
             var plainQuestionnaireRepository = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(
                 questionnaireId: questionnaireIdentity.QuestionnaireId,
@@ -47,8 +47,9 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
             // Assert
             var interviewView = interviewViewStorage.GetById(interviewId.FormatGuid());
 
-            Assert.That(interviewView.RejectedDateTime, Is.EqualTo(eventTime));
+            Assert.That(interviewView.RejectedDateTime, Is.EqualTo(eventTime.UtcDateTime));
             Assert.That(interviewView.Status, Is.EqualTo(InterviewStatus.RejectedByHeadquarters));
+            Assert.That(interviewView.ReceivedByInterviewerAtUtc, Is.Null);
         }
     }
 }
