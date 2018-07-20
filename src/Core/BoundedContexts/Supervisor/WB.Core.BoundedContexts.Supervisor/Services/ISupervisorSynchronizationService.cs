@@ -19,6 +19,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Services
         Task UploadInterviewerSyncStatistic(InterviewerSyncStatisticsApiView statisticToSend,
             CancellationToken cancellationToken);
 
-        Task<List<string>> GetListOfObsoleteQuestionnairesIds(CancellationToken cancellationToken);
+        Task<List<string>> GetListOfDeletedQuestionnairesIds(CancellationToken cancellationToken);
     }
 }

@@ -26,7 +26,7 @@ namespace WB.UI.Headquarters.API.DataCollection
         protected readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IQuestionnaireAssemblyAccessor questionnareAssemblyFileAccessor;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
-        private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> readsideRepositoryWriter;
+        private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireRepository;
         private readonly ISerializer serializer;
 
         protected QuestionnairesControllerBase(
@@ -34,13 +34,13 @@ namespace WB.UI.Headquarters.API.DataCollection
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             ISerializer serializer, 
             IQuestionnaireStorage questionnaireStorage, 
-            IPlainStorageAccessor<QuestionnaireBrowseItem> readsideRepositoryWriter)
+            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireRepository)
         {
             this.questionnareAssemblyFileAccessor = questionnareAssemblyFileAccessor;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.serializer = serializer;
             this.questionnaireStorage = questionnaireStorage;
-            this.readsideRepositoryWriter = readsideRepositoryWriter;
+            this.questionnaireRepository = questionnaireRepository;
         }
 
         public virtual HttpResponseMessage List()
@@ -106,7 +106,7 @@ namespace WB.UI.Headquarters.API.DataCollection
         public virtual HttpResponseMessage Get(Guid id, int version, long contentVersion)
         {
             var questionnaireDocumentVersioned = this.questionnaireStorage.GetQuestionnaireDocument(id, version);
-            var questionnaireBrowseItem = this.readsideRepositoryWriter.GetById(new QuestionnaireIdentity(id, version).ToString());
+            var questionnaireBrowseItem = this.questionnaireRepository.GetById(new QuestionnaireIdentity(id, version).ToString());
 
             if (questionnaireDocumentVersioned == null || questionnaireBrowseItem==null)
                 throw new HttpResponseException(HttpStatusCode.NotFound);
