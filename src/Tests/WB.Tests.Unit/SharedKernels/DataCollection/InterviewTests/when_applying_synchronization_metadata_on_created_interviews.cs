@@ -92,7 +92,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         [NUnit.Framework.Test] public void should_interview_in_status_RejectedBySupervisor_be_allowed_to_change_on_RejectedBySupervisor_recheck_this_one () =>
             interviewStatusesWhichWasChangedWithoutException[InterviewStatus.RejectedBySupervisor].Should().BeEquivalentTo(new[]
             {
-                InterviewStatus.InterviewerAssigned, InterviewStatus.Completed, InterviewStatus.RejectedBySupervisor
+                InterviewStatus.InterviewerAssigned, InterviewStatus.Completed, InterviewStatus.RejectedBySupervisor, InterviewStatus.ApprovedBySupervisor, 
             });
 
         [NUnit.Framework.Test] public void should_interview_in_status_ApprovedBySupervisor_be_allowed_to_change_on_RejectedBySupervisor_recheck_this_one () =>
