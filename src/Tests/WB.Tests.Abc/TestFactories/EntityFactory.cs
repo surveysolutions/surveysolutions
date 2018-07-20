@@ -577,6 +577,11 @@ namespace WB.Tests.Abc.TestFactories
             };
         }
 
+        public InterviewSequenceView InterviewSequenceView(Guid id, int sequence)
+        {
+            return new InterviewSequenceView() {Id = id, Sequence = sequence};
+        }
+
         public DataExportVariable LabeledVariable(string variableName = "var", string label = "lbl", Guid? questionId = null, params VariableValueLabel[] variableValueLabels)
             => new DataExportVariable(variableName, label, questionId, variableValueLabels, ExportValueType.Unknown);
 
