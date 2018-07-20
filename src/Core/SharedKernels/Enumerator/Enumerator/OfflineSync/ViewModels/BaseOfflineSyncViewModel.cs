@@ -10,7 +10,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels;
 namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
 {
     [ExcludeFromCodeCoverage()] // TODO: remove attribute when UI binding completed
-    public abstract class BaseOfflineSyncViewModel : BaseViewModel, IOfflineSyncViewModel
+    public abstract class BaseOfflineSyncViewModel : BaseViewModel
     {
         protected readonly IPermissionsService permissions;
         protected readonly INearbyConnection nearbyConnection;

@@ -25,7 +25,7 @@ using InterviewerUIResources = WB.Core.BoundedContexts.Interviewer.Properties.In
 
 namespace WB.Core.BoundedContexts.Interviewer.Views
 {
-    public class OfflineInterviewerSyncViewModel : BaseOfflineSyncViewModel
+    public class OfflineInterviewerSyncViewModel : BaseOfflineSyncViewModel, IOfflineSyncViewModel
     {
         private static object syncLockObject = new Object();
 

@@ -1,5 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Android.App;
+using Android.Bluetooth;
 using Android.Content;
 using Android.Gms.Common;
 using Android.Gms.Common.Apis;
@@ -8,10 +10,13 @@ using Android.OS;
 using Android.Widget;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation;
+using Debug = System.Diagnostics.Debug;
 
 namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
 {
@@ -39,12 +44,35 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
         protected TaskCompletionSource<bool> ApiConnected;
         const int RequestCodeRecoverPlayServices = 1001;
         private INearbyConnection communicator;
+        private BluetoothReceiver bluetoothReceiver;
 
         protected override void OnResume()
         {
             base.OnResume();
 
             if (!this.CheckPlayServices()) return;
+
+            var mBluetoothAdapter = BluetoothAdapter.DefaultAdapter;
+            if (mBluetoothAdapter.IsEnabled)
+            {
+                bluetoothReceiver = new BluetoothReceiver();
+                IntentFilter filter = new IntentFilter(BluetoothAdapter.ActionStateChanged);
+                RegisterReceiver(bluetoothReceiver, filter);
+                bluetoothReceiver.BluetoothDisabled += OnBluetoothDisabled;
+
+                BluetoothAdapter.DefaultAdapter.Disable();
+            }
+            else
+            {
+                this.RestoreGoogleApiConnectionIfNeeded();
+            }
+        }
+
+        private void OnBluetoothDisabled(object sender, EventArgs e)
+        {
+            this.UnregisterReceiver(this.bluetoothReceiver);
+            this.bluetoothReceiver.BluetoothDisabled -= OnBluetoothDisabled;
+            this.bluetoothReceiver = null;
 
             this.RestoreGoogleApiConnectionIfNeeded();
         }
@@ -101,7 +129,13 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
         {
             this.communicator?.StopAll();
             this.GoogleApi?.Disconnect();
-            
+            if (this.bluetoothReceiver != null)
+            {
+                UnregisterReceiver(this.bluetoothReceiver);
+                bluetoothReceiver.BluetoothDisabled -= OnBluetoothDisabled;
+                bluetoothReceiver = null;
+            }
+
             base.OnStop();
         }
 
