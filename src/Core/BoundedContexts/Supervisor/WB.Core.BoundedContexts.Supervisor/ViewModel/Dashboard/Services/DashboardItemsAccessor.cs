@@ -116,8 +116,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services
         private IEnumerable<AssignmentDocument> GetOutboxAssignments()
         {
             return this.assignments.LoadAll()
-                .Where(x => x.ReceivedByInterviewerAt == null &&
-                            x.ResponsibleId != this.principal.CurrentUserIdentity.UserId &&
+                .Where(x => x.ResponsibleId != this.principal.CurrentUserIdentity.UserId &&
                             x.ReceivedByInterviewerAt == null);
         }
 
