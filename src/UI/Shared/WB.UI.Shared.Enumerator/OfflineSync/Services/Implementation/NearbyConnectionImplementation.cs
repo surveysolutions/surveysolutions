@@ -45,6 +45,7 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
 
             var result = await NearbyClass.Connections.StartDiscoveryAsync(Api, serviceName,
                     new OnDiscoveryCallback(OnFoundEndpoint, OnLostEndpoint, cancellationToken), new DiscoveryOptions(Strategy.P2pStar))
+                .TimeoutAfter(TimeSpan.FromSeconds(30))
                 .AsCancellableTask(cts)
                 .ToConnectionStatus(s => LogNonSuccesfulResult(s,
                     new ActionArgs((nameof(serviceName), serviceName))));
@@ -163,6 +164,7 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
 
         public void StopAll()
         {
+            this.logger.Verbose();
             this.StopAdvertising();
             this.StopDiscovery();
             this.StopAllEndpoint();
