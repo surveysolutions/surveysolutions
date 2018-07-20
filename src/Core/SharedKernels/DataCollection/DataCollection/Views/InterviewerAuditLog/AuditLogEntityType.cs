@@ -17,5 +17,7 @@
         CompleteInterview,
         ApproveInterview,
         RejectInterview,
+        AssignResponsibleToInterview,
+        AssignResponsibleToAssignment,
     }
 }

@@ -156,6 +156,12 @@
   <data name="OpenApplication" xml:space="preserve">
     <value>Application opened</value>
   </data>
+  <data name="AssignResponsibleToInterview" xml:space="preserve">
+    <value>Assign responsible {0} to interview {1}</value>
+  </data>
+  <data name="AssignResponsibleToAssignment" xml:space="preserve">
+    <value>Assign responsible {0} to assignment #{1}</value>
+  </data>
   <data name="OpenInterview" xml:space="preserve">
     <value>Interview {0} opened</value>
   </data>
