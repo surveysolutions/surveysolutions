@@ -21,7 +21,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
         private readonly IQuestionnaireAssemblyAccessor questionnaireAssemblyAccessor;
         private readonly IPlainStorage<TranslationInstance> translationsStorage;
         private readonly IPlainStorage<RawQuestionnaireDocumentView> rawQuestionnaireDocumentStorage;
-        private readonly IPlainStorage<ObsoleteQuestionnaire> obsoleteQuestionnairesStorage;
+        private readonly IPlainStorage<DeletedQuestionnaire> deletedQuestionnairesStorage;
 
         public SupervisorQuestionnairesHandler(
             IInterviewerQuestionnaireAccessor questionnairesAccessor,
@@ -29,14 +29,14 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             IPlainStorage<TranslationInstance> translationsStorage,
             IPlainStorage<RawQuestionnaireDocumentView> rawQuestionnaireDocumentStorage,
             IAttachmentContentStorage attachmentContentStorage, 
-            IPlainStorage<ObsoleteQuestionnaire> obsoleteQuestionnairesStorage)
+            IPlainStorage<DeletedQuestionnaire> deletedQuestionnairesStorage)
         {
             this.questionnairesAccessor = questionnairesAccessor;
             this.questionnaireAssemblyAccessor = questionnaireAssemblyAccessor;
             this.translationsStorage = translationsStorage;
             this.rawQuestionnaireDocumentStorage = rawQuestionnaireDocumentStorage;
             this.attachmentContentStorage = attachmentContentStorage;
-            this.obsoleteQuestionnairesStorage = obsoleteQuestionnairesStorage;
+            this.deletedQuestionnairesStorage = deletedQuestionnairesStorage;
         }
 
         public void Register(IRequestHandler requestHandler)
@@ -106,11 +106,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
 
         public Task<GetQuestionnaireListResponse> GetList(GetQuestionnaireListRequest arg)
         {
-            var obsolete = obsoleteQuestionnairesStorage.LoadAll().Select(q => QuestionnaireIdentity.Parse(q.Id));
+            var deleted = deletedQuestionnairesStorage.LoadAll().Select(q => QuestionnaireIdentity.Parse(q.Id));
 
             var response = this.questionnairesAccessor.GetAllQuestionnaireIdentities()
                 .Union(arg.Questionnaires)
-                .Except(obsolete).ToList();
+                .Except(deleted).ToList();
 
             return Task.FromResult(new GetQuestionnaireListResponse
             {
