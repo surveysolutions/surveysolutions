@@ -51,7 +51,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             ILogger logger, 
             IPlainStorage<BrokenInterviewPackageView, int?> brokenInterviewPackageStorage,
             IPlainStorage<SuperivsorReceivedPackageLogEntry, int> receivedPackagesLog,
-
             IPrincipal principal,
             IPlainStorage<InterviewerDocument> interviewerViewRepository,
             IAssignmentDocumentsStorage assignmentsStorage)
@@ -296,6 +295,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                 Id = x.InterviewId,
                 IsRejected = x.Status == InterviewStatus.RejectedBySupervisor,
                 QuestionnaireIdentity = QuestionnaireIdentity.Parse(x.QuestionnaireId),
+                Sequence = eventStore.GetLastSequenceForEvents(x.InterviewId, EventsThatAssignInterviewToResponsibleProvider.GetTypeNames())
             }).ToList();
 
             return Task.FromResult(new GetInterviewsResponse
