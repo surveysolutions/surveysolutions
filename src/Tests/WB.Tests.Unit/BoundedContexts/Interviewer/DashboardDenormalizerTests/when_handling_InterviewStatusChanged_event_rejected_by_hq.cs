@@ -47,7 +47,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
             // Assert
             var interviewView = interviewViewStorage.GetById(interviewId.FormatGuid());
 
-            Assert.That(interviewView.RejectedDateTime, Is.EqualTo(eventTime));
+            Assert.That(interviewView.RejectedDateTime, Is.EqualTo(eventTime.UtcDateTime));
             Assert.That(interviewView.Status, Is.EqualTo(InterviewStatus.RejectedByHeadquarters));
         }
     }
