@@ -114,7 +114,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 
         public IMvxAsyncCommand Restart => new MvxAsyncCommand(OnGoogleApiReady);
 
-        protected override async Task OnGoogleApiReady()
+        public override async Task OnGoogleApiReady()
         {
             this.cancellationTokenSource = new CancellationTokenSource();
             Log.Trace("StartAdvertising");

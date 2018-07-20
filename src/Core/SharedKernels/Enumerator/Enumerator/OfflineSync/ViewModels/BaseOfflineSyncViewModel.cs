@@ -57,7 +57,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
             this.OnDeviceConnectionAccepting(name);
             var connectionStatus = await this.nearbyConnection.AcceptConnectionAsync(endpoint, cancellationTokenSource.Token);
 
-            if(!connectionStatus.IsSuccess)
+            if (!connectionStatus.IsSuccess)
                 this.OnConnectionError(connectionStatus.StatusMessage, connectionStatus.Status);
             else
                 this.OnDeviceConnectionAccepted(name);
@@ -92,18 +92,6 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
 
         protected abstract string GetDeviceIdentification();
 
-        protected abstract Task OnGoogleApiReady();
-
-        public void SetGoogleAwaiter(Task<bool> apiConnected)
-        {
-            if (apiConnected.IsCompleted)
-            {
-                this.OnGoogleApiReady();
-            }
-            else
-            {
-                apiConnected.ContinueWith(res => this.OnGoogleApiReady());
-            }
-        }
+        public abstract Task OnGoogleApiReady();
     }
 }
