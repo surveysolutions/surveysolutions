@@ -19,6 +19,6 @@
     <dimen name="OfflineSync_Base_MarginTop">28dp</dimen>
     <dimen name="OfflineSync_Small_MarginTop">12dp</dimen>
     <dimen name="OfflineSync_Small_MarginLeft">12dp</dimen>
-    <dimen name="OfflineSync_Spinner_Size">26dp</dimen>
+    <dimen name="OfflineSync_Spinner_Size">36dp</dimen>
 
 </resources>
