@@ -12,13 +12,13 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Entities
             
         }
 
-        public NearbyPayloadCallback(Action<string, IPayload> onPayloadReceived, Action<string, NearbyPayloadTransferUpdate> onPayloadTransferUpdate)
+        public NearbyPayloadCallback(Action<IPayload> onPayloadReceived, Action<NearbyPayloadTransferUpdate> onPayloadTransferUpdate)
         {
             OnPayloadReceived = onPayloadReceived;
             OnPayloadTransferUpdate = onPayloadTransferUpdate;
         }
 
-        public Action<string, IPayload> OnPayloadReceived { get; set; }
-        public Action<string, NearbyPayloadTransferUpdate> OnPayloadTransferUpdate { get; set; }
+        public Action<IPayload> OnPayloadReceived { get; set; }
+        public Action<NearbyPayloadTransferUpdate> OnPayloadTransferUpdate { get; set; }
     }
 }

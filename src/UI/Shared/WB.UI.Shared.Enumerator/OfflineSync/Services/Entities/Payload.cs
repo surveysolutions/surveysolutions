@@ -9,9 +9,10 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Entities
     [ExcludeFromCodeCoverage]
     public class Payload : IPayload
     {
-        public Payload(Android.Gms.Nearby.Connection.Payload payload)
+        public Payload(Android.Gms.Nearby.Connection.Payload payload, string endpoint)
         {
             this.NearbyPayload = payload;
+            Endpoint = endpoint;
 
             switch (payload.PayloadType)
             {
@@ -21,6 +22,8 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Entities
             }
         }
 
+        public string Endpoint { get; }
+
         public byte[] Bytes => NearbyPayload.AsBytes();
         public long Id => NearbyPayload.Id;
         public Stream Stream => NearbyPayload.AsStream().AsInputStream();
@@ -29,14 +32,14 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Entities
         public Android.Gms.Nearby.Connection.Payload NearbyPayload { get; }
 
 
-        public static IPayload FromStream(Stream stream)
+        public static IPayload FromStream(string endpoint, Stream stream)
         {
-            return new Payload(Android.Gms.Nearby.Connection.Payload.FromStream(stream));
+            return new Payload(Android.Gms.Nearby.Connection.Payload.FromStream(stream), endpoint);
         }
 
-        public static IPayload FromBytes(byte[] bytes)
+        public static IPayload FromBytes(string endpoint, byte[] bytes)
         {
-            return new Payload(Android.Gms.Nearby.Connection.Payload.FromBytes(bytes));
+            return new Payload(Android.Gms.Nearby.Connection.Payload.FromBytes(bytes), endpoint);
         }
 
         private TaskCompletionSource<byte[]> tsc = null;

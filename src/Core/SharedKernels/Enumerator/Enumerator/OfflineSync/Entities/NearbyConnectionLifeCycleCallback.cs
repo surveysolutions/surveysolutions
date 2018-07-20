@@ -7,8 +7,8 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Entities
     public class NearbyConnectionLifeCycleCallback
     {
         public NearbyConnectionLifeCycleCallback(
-            Action<string, NearbyConnectionInfo> onConnectionInitiated, 
-            Action<string, NearbyConnectionResolution> onConnectionResult, 
+            Action<NearbyConnectionInfo> onConnectionInitiated, 
+            Action<NearbyConnectionResolution> onConnectionResult, 
             Action<string> onDisconnected)
         {
             OnConnectionInitiated = onConnectionInitiated;
@@ -16,8 +16,8 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Entities
             OnDisconnected = onDisconnected;
         }
 
-        public Action<string, NearbyConnectionInfo> OnConnectionInitiated { get; set; }
-        public Action<string, NearbyConnectionResolution> OnConnectionResult { get; set; }
+        public Action<NearbyConnectionInfo> OnConnectionInitiated { get; set; }
+        public Action<NearbyConnectionResolution> OnConnectionResult { get; set; }
         public Action<string> OnDisconnected { get; set; }
     }
 }

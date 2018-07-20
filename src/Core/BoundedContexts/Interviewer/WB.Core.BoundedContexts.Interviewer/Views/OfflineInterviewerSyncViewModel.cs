@@ -151,25 +151,30 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private async Task Retry()
         {
             this.BindTitlesAndStatuses();
+            this.nearbyConnection.StopAll();
             await OnGoogleApiReady();
         }
 
         protected override async Task OnGoogleApiReady()
         {
-            this.StopDiscovery();
             await StartDiscovery();
         }
 
         private async Task StartDiscovery()
         {
+            this.cancellationTokenSource?.Cancel();
+            this.cancellationTokenSource = new CancellationTokenSource();
             await this.permissions.AssureHasPermission(Permission.Location);
 
-            var discoveryStatus = await this.nearbyConnection.StartDiscovery(this.GetServiceName());
+            var discoveryStatus = await this.nearbyConnection.StartDiscoveryAsync(this.GetServiceName(), cancellationTokenSource.Token);
             if (!discoveryStatus.IsSuccess)
                 this.OnConnectionError(discoveryStatus.StatusMessage, discoveryStatus.Status);
         }
 
-        private void StopDiscovery() => this.nearbyConnection.StopDiscovery();
+        private void StopDiscovery()
+        {
+            this.nearbyConnection.StopDiscovery();
+        }
 
         protected override async void OnDeviceConnected(string name)
         {
@@ -240,6 +245,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 }
 
                 synchronizationCancellationTokenSource = new CancellationTokenSource();
+                this.cancellationTokenSource = CancellationTokenSource.CreateLinkedTokenSource(synchronizationCancellationTokenSource.Token);
             }
 
             try
