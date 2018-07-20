@@ -6,11 +6,9 @@ using System.Web.Http;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
-using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Headquarters.Code;
 
@@ -19,21 +17,21 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
     [ApiBasicAuth(UserRoles.Supervisor)]
     public class QuestionnairesApiV1Controller : QuestionnairesControllerBase
     {
-        private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> readsideRepositoryWriter;
+        private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireRepository;
 
         public QuestionnairesApiV1Controller(
             IQuestionnaireAssemblyAccessor questionnareAssemblyFileAccessor,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             ISerializer serializer,
             IQuestionnaireStorage questionnaireStorage,
-            IPlainStorageAccessor<QuestionnaireBrowseItem> readsideRepositoryWriter) : base(
+            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireRepository) : base(
             questionnaireStorage: questionnaireStorage,
-            readsideRepositoryWriter: readsideRepositoryWriter,
+            questionnaireRepository: questionnaireRepository,
             questionnareAssemblyFileAccessor: questionnareAssemblyFileAccessor,
             questionnaireBrowseViewFactory: questionnaireBrowseViewFactory,
             serializer: serializer)
         {
-            this.readsideRepositoryWriter = readsideRepositoryWriter;
+            this.questionnaireRepository = questionnaireRepository;
         }
 
         [HttpGet]
@@ -52,9 +50,9 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
         public override HttpResponseMessage GetAttachments(Guid id, int version) => base.GetAttachments(id, version);
 
         [HttpGet]
-        public List<string> GetObsoleteQuestionnaireList()
+        public List<string> GetDeletedQuestionnaireList()
         {
-            var list = readsideRepositoryWriter.Query(_ => _.Where(q => q.IsDeleted == true).ToList())
+            var list = questionnaireRepository.Query(_ => _.Where(q => q.IsDeleted == true).ToList())
                 .Select(l => l.Id).ToList();
             return list;
         }

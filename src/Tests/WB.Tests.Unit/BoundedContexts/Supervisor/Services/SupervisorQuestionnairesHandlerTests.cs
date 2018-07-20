@@ -43,20 +43,20 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
         [Test]
         public async Task GetQuestionnaireList_call_will_not_delete_questionnaire_that_present_on_in_and_not_known_as_deleted()
         {
-            var obsoleteQuestionnaireId = Create.Entity.QuestionnaireIdentity(Id.g1, 1);
+            var deletedQuestionnaireId = Create.Entity.QuestionnaireIdentity(Id.g1, 1);
             var commonQuestionnaireEveryoneAwareOff = Create.Entity.QuestionnaireIdentity(Id.g1, 2);
             var unknownBySupersivorQuestionnaire = Create.Entity.QuestionnaireIdentity(Id.g1, 3);
 
             var questionnairesOnInterviewer = new List<QuestionnaireIdentity>
             {
-                obsoleteQuestionnaireId,
+                deletedQuestionnaireId,
                 commonQuestionnaireEveryoneAwareOff,
                 unknownBySupersivorQuestionnaire,
             };
 
-            var knownBySupervisorObsoleteQuestionnaires = new List<QuestionnaireIdentity>
+            var knownBySupervisorDeletedQuestionnaires = new List<QuestionnaireIdentity>
             {
-                obsoleteQuestionnaireId,
+                deletedQuestionnaireId,
             };
 
             var knownBySupervisorQuestionnaires = new List<QuestionnaireIdentity>
@@ -65,13 +65,13 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             };
             
             var accessor = fixture.Freeze<Mock<IInterviewerQuestionnaireAccessor>>();
-            var obsoletes = new InMemoryPlainStorage<ObsoleteQuestionnaire>();
+            var deleted = new InMemoryPlainStorage<DeletedQuestionnaire>();
 
-            obsoletes.Store(knownBySupervisorObsoleteQuestionnaires.Select(o => new ObsoleteQuestionnaire {Id = o.Id}));
+            deleted.Store(knownBySupervisorDeletedQuestionnaires.Select(o => new DeletedQuestionnaire {Id = o.Id}));
 
             accessor.Setup(ac => ac.GetAllQuestionnaireIdentities()).Returns(knownBySupervisorQuestionnaires);
 
-            fixture.Register<IPlainStorage<ObsoleteQuestionnaire>>(() => obsoletes);
+            fixture.Register<IPlainStorage<DeletedQuestionnaire>>(() => deleted);
 
             var handler = fixture.Create<SupervisorQuestionnairesHandler>();
 
@@ -82,7 +82,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             });
 
             //assert
-            Assert.That(response.Questionnaires, Has.None.EqualTo(obsoleteQuestionnaireId.ToString()), "Should not return to IN known obsolete questionnaire");
+            Assert.That(response.Questionnaires, Has.None.EqualTo(deletedQuestionnaireId.ToString()), "Should not return to IN known to be deleted questionnaire");
             Assert.That(response.Questionnaires, Has.One.EqualTo(commonQuestionnaireEveryoneAwareOff));
             Assert.That(response.Questionnaires, Has.One.EqualTo(unknownBySupersivorQuestionnaire), "Should return known by IN questionnaire even if it's new to SV");
         }

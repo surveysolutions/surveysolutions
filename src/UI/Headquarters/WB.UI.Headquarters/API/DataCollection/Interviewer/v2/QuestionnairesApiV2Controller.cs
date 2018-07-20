@@ -26,9 +26,9 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v2
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             ISerializer serializer,
             IQuestionnaireStorage questionnaireStorage,
-            IPlainStorageAccessor<QuestionnaireBrowseItem> readsideRepositoryWriter) : base(
+            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireRepository) : base(
                 questionnaireStorage: questionnaireStorage,
-                readsideRepositoryWriter: readsideRepositoryWriter,
+                questionnaireRepository: questionnaireRepository,
                 questionnareAssemblyFileAccessor: questionnareAssemblyFileAccessor,
                 questionnaireBrowseViewFactory: questionnaireBrowseViewFactory,
                 serializer: serializer)
