@@ -263,6 +263,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                                 this.ProgressStatus = o.Title;
                                 this.ProgressStatusDescription = o.Description;
                                 this.NetworkInfo = string.Empty;
+                                this.ProgressInPercents = 0;
                             }
                             else
                             {
