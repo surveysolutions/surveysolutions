@@ -42,10 +42,10 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
                     await this.InitializeConnectionAsync(iniConnection.Endpoint, iniConnection.Info.EndpointName);
                     break;
                 case NearbyEvent.Connected connected:
-                    this.OnDeviceConnected(connected.Endpoint);
+                    this.OnDeviceConnected(connected.Name);
                     break;
                 case NearbyEvent.Disconnected disconnected:
-                    this.OnDeviceDisconnected(disconnected.Endpoint);
+                    this.OnDeviceDisconnected(disconnected.Name);
                     break;
                 case NearbyEvent.EndpointLost endpointLost:
                     break;

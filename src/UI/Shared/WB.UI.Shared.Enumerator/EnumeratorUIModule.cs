@@ -90,7 +90,7 @@ namespace WB.UI.Shared.Enumerator
             registry.BindAsSingleton<IPayloadProvider, PayloadProvider>();
             registry.BindAsSingleton<IConnectionsApiLimits, ConnectionsApiLimits>();
             registry.BindAsSingleton<IGoogleApiClientFactory, GoogleApiClientFactory>();
-            registry.BindAsSingleton<INearbyConnectionClient, NearbyConnectionClientImplementation>();
+            registry.BindAsSingleton<INearbyConnectionClient, NearbyConnectionClient>();
 
             SetupLoggingFacility(registry);
         }

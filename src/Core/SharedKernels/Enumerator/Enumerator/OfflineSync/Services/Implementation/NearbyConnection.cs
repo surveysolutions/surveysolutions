@@ -141,7 +141,8 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
         public async Task<NearbyStatus> SendPayloadAsync(string to, IPayload payload,
             CancellationToken cancellationToken)
         {
-            return await this.connectionClient.SendPayloadAsync(to, payload, cancellationToken);
+            var result = await this.connectionClient.SendPayloadAsync(to, payload, cancellationToken);
+            return result;
         }
 
         public IObservable<INearbyEvent> Events { get; }
@@ -253,8 +254,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
 
         private void OnPayloadTransferUpdate(object sender, NearbyPayloadTransferUpdate update)
         {
-            this.logger.Verbose(
-                $"({update.Endpoint}, payloadId: {update.Id}, status: {update.Status.ToString()}, {update.BytesTransferred} of {update.TotalBytes}");
+            this.logger.Verbose($"({update.Endpoint}, payloadId: {update.Id}, status: {update.Status.ToString()}, {update.BytesTransferred} of {update.TotalBytes}");
             communicator.RecievePayloadTransferUpdate(this, update.Endpoint, update);
         }
 
