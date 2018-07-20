@@ -17,7 +17,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
     {
         public static string GetEndpointName(this INearbyConnection connection, string endpoint)
         {
-            return connection.RemoteEndpoints.SingleOrDefault(re => re.Enpoint == endpoint)?.Name;
+            return connection?.RemoteEndpoints.SingleOrDefault(re => re.Enpoint == endpoint)?.Name ?? "";
         }
     }
 
