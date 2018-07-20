@@ -24,6 +24,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Entities;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace WB.Tests.Abc.TestFactories
@@ -254,7 +255,7 @@ namespace WB.Tests.Abc.TestFactories
             }
 
             public IObservable<INearbyEvent> Events { get; } = new Subject<INearbyEvent>();
-            public ObservableCollection<RemoteEndpoint> RemoteEndpoints { get; }
+            public ObservableCollection<RemoteEndpoint> RemoteEndpoints { get; } = new CovariantObservableCollection<RemoteEndpoint>();
             public void StopDiscovery()
             {
                 throw new NotImplementedException();

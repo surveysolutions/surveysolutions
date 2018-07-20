@@ -6,6 +6,7 @@ using Moq;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
+using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation;
 using WB.Tests.Abc;
@@ -81,6 +82,29 @@ namespace WB.Tests.Unit.Infrastructure.OfflineSync
                 await client.SendAsync<PingMessage, PongMessage>(clientCommunicator, "server",
                     new PingMessage(), null, CancellationToken.None);
             });
+        }
+
+        [Test]
+        public void should_throw_communication_exception_if_failed_response_recieved()
+        {
+            // setup server
+            var serverhandler = Create.Service.GoogleConnectionsRequestHandler()
+                .WithHandler<PingMessage, PongMessage>(ping => throw new Exception());
+
+            var server = Create.Service.NearbyConnectionManager(serverhandler);
+
+            // client
+            var client = Create.Service.NearbyConnectionManager();
+
+            var clientCommunicator = Create.Fake.GoogleConnection()
+                .WithTwoWayClientServerConnectionMap(server, client);
+
+            // act
+            var id = Guid.NewGuid();
+
+            Assert.ThrowsAsync<CommunicationException>(async () => await client.SendAsync<PingMessage, PongMessage>(clientCommunicator, "server",
+                new PingMessage { Id = id }, null, CancellationToken.None));
+
         }
     }
 }
