@@ -38,11 +38,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 foreach (var interviewStatus in Enum.GetValues(typeof (InterviewStatus)).Cast<InterviewStatus>())
                 {
                     var interview = Create.AggregateRoot.Interview(questionnaireRepository: questionnaireRepository);
-                    interview.Apply(new InterviewStatusChanged(originalInterviewStatus, ""));
+                    interview.Apply(new InterviewStatusChanged(originalInterviewStatus, "", DateTimeOffset.Now));
                     try
                     {
                         interview.CreateInterviewFromSynchronizationMetadata(interview.EventSourceId, userId, questionnaireId,1, interviewStatus, null, "", null, null,
-                            false, false);
+                            false, false, DateTimeOffset.Now);
                         exceptionByStatuses.Add(interviewStatus);
                     }
                     catch {}
