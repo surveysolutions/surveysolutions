@@ -30,7 +30,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
     }
 
     [ExcludeFromCodeCoverage()] // TODO: remove attribute when UI binding completed
-    public class OfflineSupervisorSyncViewModel : BaseOfflineSyncViewModel
+    public class OfflineSupervisorSyncViewModel : BaseOfflineSyncViewModel, IOfflineSyncViewModel
     {
         private readonly IInterviewViewModelFactory viewModelFactory;
 
@@ -151,6 +151,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             SetStatus(ConnectionStatus.Sync, dataInfo.ToString());
         }
         
-        protected override string GetDeviceIdentification() => this.principal.CurrentUserIdentity.UserId.FormatGuid();    
+        protected override string GetDeviceIdentification() => this.principal.CurrentUserIdentity.UserId.FormatGuid();
+
+        public IMvxCommand CancelCommand => new MvxCommand(() => {});
     }
 }
