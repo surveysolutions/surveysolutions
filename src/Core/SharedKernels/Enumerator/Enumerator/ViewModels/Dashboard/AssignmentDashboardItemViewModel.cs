@@ -99,6 +99,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             BindTitles();
         }
 
+        private string responsible;
+        public string Responsible
+        {
+            get => responsible;
+            set => SetProperty(ref this.responsible, value);
+        }
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)
