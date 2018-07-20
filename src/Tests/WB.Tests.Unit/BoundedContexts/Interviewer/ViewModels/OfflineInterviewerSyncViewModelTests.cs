@@ -57,8 +57,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
             //assert
             Assert.That(vm.TransferingStatus, Is.EqualTo(TransferingStatus.WaitingDevice));
             permissions.Verify(x => x.AssureHasPermission(Permission.Location), Times.Once());
-            nearbyConnection.Verify(x => x.StopDiscovery(), Times.Once);
-            nearbyConnection.Verify(x => x.StartDiscovery(It.IsAny<string>()), Times.Once);
+            nearbyConnection.Verify(x => x.StopAll(), Times.Once);
+            nearbyConnection.Verify(x => x.StartDiscoveryAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()), Times.Once);
         }
 
         [Test]

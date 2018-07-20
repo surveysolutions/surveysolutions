@@ -111,10 +111,8 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
                     .Build();
 
                 this.communicator = ServiceLocator.Current.GetInstance<INearbyConnection>();
-                if (this.communicator is NearbyConnection gc)
-                {
-                    gc.SetGoogleApiClient(this.GoogleApi);
-                }
+                var apiClientFactory = ServiceLocator.Current.GetInstance<IGoogleApiClientFactory>();
+                apiClientFactory.GoogleApiClient = this.GoogleApi;
             }
 
             if (this.GoogleApi.IsConnected) return;
@@ -159,6 +157,8 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
             if (disposing)
             {
                 this.GoogleApi?.Dispose();
+                this.GoogleApi = null;
+                ServiceLocator.Current.GetInstance<IGoogleApiClientFactory>().GoogleApiClient = null;
             }
 
             base.Dispose(disposing);

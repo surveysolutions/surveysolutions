@@ -372,6 +372,9 @@
     <Compile Include="OfflineSync\Services\Entities\Payload.cs" />
     <Compile Include="OfflineSync\Services\Implementation\ConnectionsApiLimits.cs" />
     <Compile Include="OfflineSync\Services\Implementation\ConnectionStatusHelper.cs" />
+    <Compile Include="OfflineSync\Services\Implementation\GoogleApiClientFactory.cs" />
+    <Compile Include="OfflineSync\Services\Implementation\IGoogleApiClientFactory.cs" />
+    <Compile Include="OfflineSync\Services\Implementation\NearbyConnectionImplementation.cs" />
     <Compile Include="OfflineSync\Services\Implementation\PayloadProvider.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

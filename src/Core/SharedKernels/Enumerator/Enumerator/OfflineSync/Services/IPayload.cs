@@ -6,6 +6,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services
 {
     public interface IPayload
     {
+        string Endpoint { get;  }
         byte[] Bytes { get; }
         long Id { get; }
         Stream Stream { get; }

@@ -85,11 +85,12 @@ namespace WB.UI.Shared.Enumerator
             registry.Bind<IAssignmentsSynchronizer, AssignmentsSynchronizer>();
             registry.Bind<IAssignmentDocumentFromDtoBuilder, AssignmentDocumentFromDtoBuilder>();
 
-            registry.BindAsSingleton<INearbyConnection, NearbyConnection>();
             registry.BindAsSingleton<INearbyCommunicator, NearbyCommunicator>();
             registry.BindAsSingleton<IRequestHandler, NearbyConnectionsRequestHandler>();
             registry.BindAsSingleton<IPayloadProvider, PayloadProvider>();
             registry.BindAsSingleton<IConnectionsApiLimits, ConnectionsApiLimits>();
+            registry.BindAsSingleton<IGoogleApiClientFactory, GoogleApiClientFactory>();
+            registry.BindAsSingleton<INearbyConnectionClient, NearbyConnectionClientImplementation>();
 
             SetupLoggingFacility(registry);
         }

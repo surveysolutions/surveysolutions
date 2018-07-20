@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Entities;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
@@ -28,6 +29,8 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
             this.nearbyConnection.Events.Subscribe(HandleConnectionEvents);
         }
 
+        protected CancellationTokenSource cancellationTokenSource = null;
+
         protected async void HandleConnectionEvents(INearbyEvent @event)
         {
             switch (@event)
@@ -52,7 +55,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
         private async Task InitializeConnectionAsync(string endpoint, string name)
         {
             this.OnDeviceConnectionAccepting(name);
-            var connectionStatus = await this.nearbyConnection.AcceptConnection(endpoint);
+            var connectionStatus = await this.nearbyConnection.AcceptConnectionAsync(endpoint, cancellationTokenSource.Token);
 
             if(!connectionStatus.IsSuccess)
                 this.OnConnectionError(connectionStatus.StatusMessage, connectionStatus.Status);
@@ -64,7 +67,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
         {
             this.OnDeviceFound(name);
 
-            var connectionStatus = await this.nearbyConnection.RequestConnection(this.principal.CurrentUserIdentity.Name, endpoint);
+            var connectionStatus = await this.nearbyConnection.RequestConnectionAsync(this.principal.CurrentUserIdentity.Name, endpoint, cancellationTokenSource.Token);
 
             if (!connectionStatus.IsSuccess)
                 this.OnConnectionError(connectionStatus.StatusMessage, connectionStatus.Status);
@@ -99,7 +102,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
             }
             else
             {
-                apiConnected.ContinueWith(async res => this.OnGoogleApiReady());
+                apiConnected.ContinueWith(res => this.OnGoogleApiReady());
             }
         }
     }

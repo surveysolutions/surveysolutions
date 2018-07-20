@@ -191,23 +191,25 @@ namespace WB.Tests.Abc.TestFactories
         {
             private static long IdSource = 0;
 
-            public IPayload AsBytes(byte[] bytes)
+            public IPayload AsBytes(byte[] bytes, string endpoint)
             {
                 return new Payload
                 {
                     Bytes = bytes,
                     Type = PayloadType.Bytes,
-                    Id = Interlocked.Increment(ref IdSource)
+                    Id = Interlocked.Increment(ref IdSource),
+                    Endpoint = endpoint
                 };
             }
 
-            public IPayload AsStream(byte[] bytes)
+            public IPayload AsStream(byte[] bytes, string endpoint)
             {
                 return new Payload
                 {
                     Stream = new MemoryStream(bytes),
                     Id = Interlocked.Increment(ref IdSource),
-                    Type = PayloadType.Stream
+                    Type = PayloadType.Stream,
+                    Endpoint = endpoint
                 };
             }
         }
@@ -216,32 +218,32 @@ namespace WB.Tests.Abc.TestFactories
 
         internal abstract class FakeNearbyConnectionBase : INearbyConnection
         {
-            public Task<NearbyStatus> StartDiscovery(string serviceName)
+            public Task<NearbyStatus> StartDiscoveryAsync(string serviceName, CancellationToken cancellationToken)
             {
                 throw new NotImplementedException();
             }
 
-            public Task<string> StartAdvertising(string serviceName, string name)
+            public Task<string> StartAdvertisingAsync(string serviceName, string name, CancellationToken cancellationToken)
             {
                 throw new NotImplementedException();
             }
 
-            public Task<NearbyStatus> RequestConnection(string name, string endpoint)
+            public Task<NearbyStatus> RequestConnectionAsync(string name, string endpoint, CancellationToken cancellationToken)
             {
                 throw new NotImplementedException();
             }
 
-            public Task<NearbyStatus> AcceptConnection(string endpoint)
+            public Task<NearbyStatus> AcceptConnectionAsync(string endpoint, CancellationToken cancellationToken)
             {
                 throw new NotImplementedException();
             }
 
-            public Task<NearbyStatus> RejectConnection(string endpoint)
+            public Task<NearbyStatus> RejectConnectionAsync(string endpoint, CancellationToken cancellationToken)
             {
                 throw new NotImplementedException();
             }
 
-            public virtual Task<NearbyStatus> SendPayloadAsync(string to, IPayload payload)
+            public virtual Task<NearbyStatus> SendPayloadAsync(string to, IPayload payload, CancellationToken cancellationToken)
             {
                 throw new NotImplementedException();
             }
@@ -251,8 +253,8 @@ namespace WB.Tests.Abc.TestFactories
                 throw new NotImplementedException();
             }
 
-            public IObservable<INearbyEvent> Events => new Subject<INearbyEvent>();
-            public ObservableCollection<RemoteEndpoint> RemoteEndpoints { get; } = new ObservableCollection<RemoteEndpoint>();
+            public IObservable<INearbyEvent> Events { get; } = new Subject<INearbyEvent>();
+            public ObservableCollection<RemoteEndpoint> RemoteEndpoints { get; }
             public void StopDiscovery()
             {
                 throw new NotImplementedException();
@@ -302,7 +304,7 @@ namespace WB.Tests.Abc.TestFactories
                 return this;
             }
 
-            public override async Task<NearbyStatus> SendPayloadAsync(string to, IPayload payload)
+            public override async Task<NearbyStatus> SendPayloadAsync(string to, IPayload payload, CancellationToken cancellationToken)
             {
                 var from = connectionMap[to];
                 var toClient = clientsMap[to];
@@ -370,6 +372,7 @@ namespace WB.Tests.Abc.TestFactories
 
         internal class Payload : IPayload
         {
+            public string Endpoint { get; set; }
             public byte[] Bytes { get; set; }
             public long Id { get; set; }
             public Stream Stream { get; set;  }
