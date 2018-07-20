@@ -99,14 +99,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
             {
                 Create.Entity.AnsweredYesNoOption(3m, true),
                 Create.Entity.AnsweredYesNoOption(4m, true),
-            }, DateTime.Now));
+            }));
             interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(Guid.NewGuid(), question1Id, RosterVector.Empty, new[]
             {
                 Create.Entity.AnsweredYesNoOption(3m, true),
                 Create.Entity.AnsweredYesNoOption(1m, true),
                 Create.Entity.AnsweredYesNoOption(4m, true),
                 Create.Entity.AnsweredYesNoOption(2m, true),
-            }, DateTime.Now));
+            }));
 
             var interviewRepository = Create.Fake.StatefulInterviewRepositoryWith(interview);
 
@@ -185,14 +185,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
             {
                 Create.Entity.AnsweredYesNoOption(3m, true),
                 Create.Entity.AnsweredYesNoOption(4m, true),
-            }, DateTime.Now));
+            }));
             interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(Guid.NewGuid(), question1Id, RosterVector.Empty, new[]
             {
                 Create.Entity.AnsweredYesNoOption(3m, true),
                 Create.Entity.AnsweredYesNoOption(1m, true),
                 Create.Entity.AnsweredYesNoOption(4m, true),
                 Create.Entity.AnsweredYesNoOption(2m, true),
-            }, DateTime.Now));
+            }));
 
             var interviewRepository = Create.Fake.StatefulInterviewRepositoryWith(interview);
             

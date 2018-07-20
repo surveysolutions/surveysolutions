@@ -14,7 +14,6 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
             QuestionnaireIdentity questionnaireId,
             List<InterviewAnswer> answers,
             List<string> protectedVariables,
-            DateTime answersTime,
             Guid supervisorId,
             Guid? interviewerId,
             InterviewKey interviewKey,
@@ -25,7 +24,6 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
             this.QuestionnaireId = questionnaireId;
             this.Answers = answers;
             this.ProtectedVariables = protectedVariables ?? new List<string>();
-            this.AnswersTime = answersTime;
             this.SupervisorId = supervisorId;
             this.InterviewerId = interviewerId;
             this.InterviewKey = interviewKey;
@@ -41,6 +39,5 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
 
         public InterviewKey InterviewKey { get; private set; }
         public int? AssignmentId { get; }
-        public DateTime AnswersTime { get; private set; }
     }
 }

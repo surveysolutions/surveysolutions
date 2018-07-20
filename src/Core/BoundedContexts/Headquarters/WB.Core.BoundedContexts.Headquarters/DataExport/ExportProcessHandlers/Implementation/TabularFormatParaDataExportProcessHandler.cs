@@ -102,6 +102,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers.
                 writer.WriteField("responsible");
                 writer.WriteField("role");
                 writer.WriteField("timestamp");
+                writer.WriteField("offset");
                 writer.WriteField("parameters");
                 writer.NextRecord();
 
@@ -119,16 +120,17 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers.
                         var paradata = paradataReader.Query(_ => _.FirstOrDefault());
                         for (int i = 0; i < paradata.Records.Count; i++)
                         {
-                            var evnt = paradata.Records[i];
+                            var record = paradata.Records[i];
                             writer.WriteField(interviewId.Id);
                             writer.WriteField(i + 1);
-                            writer.WriteField(evnt.Action);
-                            writer.WriteField(evnt.OriginatorName);
-                            writer.WriteField(evnt.OriginatorRole);
-                            writer.WriteField(evnt.Timestamp?.ToString("s", CultureInfo.InvariantCulture) ?? "");
+                            writer.WriteField(record.Action);
+                            writer.WriteField(record.OriginatorName);
+                            writer.WriteField(record.OriginatorRole);
+                            writer.WriteField(record.Timestamp?.ToString("s", CultureInfo.InvariantCulture) ?? "");
+                            writer.WriteField(record.Offset != null ? record.Offset.Value.ToString() : "");
 
                             writer.WriteField(String.Join("||",
-                                evnt.Parameters.Values.Select(Utils.RemoveNewLine)));
+                                record.Parameters.Values.Select(Utils.RemoveNewLine)));
                             
                             writer.NextRecord();
                         }

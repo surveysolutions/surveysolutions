@@ -99,8 +99,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
                 var command = new RemoveAnswerCommand(Guid.Parse(this.interviewId),
                     this.principal.CurrentUserIdentity.UserId,
-                    this.questionIdentity,
-                    DateTime.UtcNow);
+                    this.questionIdentity);
 
                 await this.Answering.SendRemoveAnswerCommandAsync(command);
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
@@ -294,7 +293,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 userId: this.principal.CurrentUserIdentity.UserId,
                 questionId: this.questionIdentity.Id,
                 rosterVector: this.questionIdentity.RosterVector,
-                answerTime: DateTime.UtcNow,
                 answer: (int) answeredOrSelectedValue);
 
             try

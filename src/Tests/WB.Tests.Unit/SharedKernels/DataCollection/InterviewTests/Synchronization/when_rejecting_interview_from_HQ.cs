@@ -27,15 +27,15 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Synchronizat
                     comments: new[] {answerComment})
             };
 
-            synchronizationTime = DateTime.Now;
+            synchronizationTime = DateTimeOffset.Now;
 
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.TextQuestion(commentedQuestionId));
 
             interview = Setup.StatefulInterview(questionnaire);
 
-            interview.AssignInterviewer(supervisorId, userId, DateTime.Now);
+            interview.AssignInterviewer(supervisorId, userId, DateTimeOffset.Now);
             interview.Apply(Create.Event.InterviewStatusChanged(status: InterviewStatus.Completed));
-            interview.Approve(userId, string.Empty, DateTime.Now);
+            interview.Approve(userId, string.Empty, DateTimeOffset.Now);
 
             eventContext = new EventContext();
             BecauseOf();
@@ -51,11 +51,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Synchronizat
             @event.Status == interviewSynchronizationDto.Status &&
             @event.Comment == rejectComment);
 
-        [NUnit.Framework.Test] public void should_apply_answer_comments () => eventContext.ShouldContainEvent<AnswerCommented>(@event => 
+        [NUnit.Framework.Test] public void should_apply_answer_comments () =>  eventContext.ShouldContainEvent<AnswerCommented>(@event => 
             @event.UserId == answerComment.UserId &&
             @event.Comment == answerComment.Text &&
             @event.QuestionId == commentedQuestionId &&
-            @event.CommentTime == answerComment.Date
+            @event.OriginDate == answerComment.Date
         );
 
         static Interview interview;
@@ -66,7 +66,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Synchronizat
         private static InterviewSynchronizationDto interviewSynchronizationDto ;
         private static string rejectComment;
         private static Guid commentedQuestionId;
-        private static DateTime synchronizationTime ;
+        private static DateTimeOffset synchronizationTime ;
         private static CommentSynchronizationDto answerComment;
     }
 }
