@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Android.App;
 using Android.Bluetooth;
 using Android.Content;
@@ -10,13 +9,10 @@ using Android.OS;
 using Android.Widget;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;
-using WB.Core.SharedKernels.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation;
-using Debug = System.Diagnostics.Debug;
 
 namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
 {
@@ -41,7 +37,6 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
             where TViewModel : class, IMvxViewModel, IOfflineSyncViewModel
     {
         protected GoogleApiClient GoogleApi;
-        protected TaskCompletionSource<bool> ApiConnected;
         const int RequestCodeRecoverPlayServices = 1001;
         private INearbyConnection communicator;
         private BluetoothReceiver bluetoothReceiver;
@@ -131,25 +126,20 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
 
             if (this.GoogleApi.IsConnected) return;
 
-            this.ApiConnected = new TaskCompletionSource<bool>();
             this.GoogleApi.Connect();
-
-            this.ViewModel.SetGoogleAwaiter(this.ApiConnected.Task);
         }
 
         public void OnConnected(Bundle connectionHint)
         {
-            this.ApiConnected?.TrySetResult(true);
+            this.ViewModel.OnGoogleApiReady();
         }
 
         public void OnConnectionSuspended(int cause)
         {
-            
         }
 
         public void OnConnectionFailed(ConnectionResult result)
         {
-            this.ApiConnected?.TrySetResult(false);
         }
 
         protected override void Dispose(bool disposing)
