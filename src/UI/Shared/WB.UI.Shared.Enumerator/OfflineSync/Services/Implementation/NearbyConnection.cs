@@ -87,7 +87,6 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
 
             cts = new CancellationTokenSource();
 
-            DisableBluetooth();
             var result = await NearbyClass.Connections.StartDiscoveryAsync(api, serviceName,
                     new OnDiscoveryCallback(FoundEndpoint, LostEndpoint),
                     new DiscoveryOptions(Strategy.P2pStar))
@@ -203,10 +202,10 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
 
                 var result = await RequestConnectionInternal();
 
+                this.logger.Verbose($"({name}, {endpoint}) RequestConnectionInternal ended with status: {result.Status}. IsSuccess = {result.IsSuccess}.");
+
                 if (result.Status == ConnectionStatusCode.StatusBluetoothError)
                 {
-                    this.logger.Verbose($"({name}, {endpoint}) DISABLING BLUETOOTH");
-                    DisableBluetooth();
                     result = await RequestConnectionInternal();
                 }
 
@@ -221,19 +220,9 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
                     pendingRequestConnections.TryAdd(endpoint, true);
                 }
 
-                this.logger.Verbose($"({name}, {endpoint}) => {result.Status.ToString()}");
+                this.logger.Verbose($"({name}, {endpoint}) => {result.Status}");
                 return result;
             });
-        }
-
-        private void DisableBluetooth()
-        {
-            logger.Verbose();
-            var mBluetoothAdapter = BluetoothAdapter.DefaultAdapter;
-            if (mBluetoothAdapter.IsEnabled)
-            {
-                mBluetoothAdapter.Disable();
-            }
         }
 
         public async Task<NearbyStatus> AcceptConnection(string endpoint)
