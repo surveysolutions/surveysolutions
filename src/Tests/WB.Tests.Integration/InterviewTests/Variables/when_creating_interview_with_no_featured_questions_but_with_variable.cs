@@ -28,7 +28,7 @@ namespace WB.Tests.Integration.InterviewTests.Variables
 
             interview = SetupStatefullInterviewWithExpressionStorageWithoutCreate(questionnaire);
 
-            command = Create.Command.CreateInterview(Guid.Empty, userId, questionnaireIdentity, DateTime.Now, responsibleSupervisorId, null, null, null);
+            command = Create.Command.CreateInterview(Guid.Empty, userId, questionnaireIdentity, responsibleSupervisorId, null, null, null);
             BecauseOf();
         }
 

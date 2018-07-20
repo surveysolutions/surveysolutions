@@ -147,7 +147,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.userId,
                 this.questionIdentity.Id,
                 this.questionIdentity.RosterVector,
-                DateTime.UtcNow,
                 selectedValues);
 
             try

@@ -47,6 +47,7 @@ namespace WB.UI.Supervisor.Activities.Dashboard
             LocalizeMenuItem(Resource.Id.dashboard_collected_interviews, SupervisorDashboard.CollectedInterviews);
             LocalizeMenuItem(Resource.Id.dashboard_waiting_decision, SupervisorDashboard.WaitingForAction, nameof(ViewModel.WaitingForDecisionCount));
             LocalizeMenuItem(Resource.Id.dashboard_outbox, SupervisorDashboard.Outbox, nameof(ViewModel.OutboxItemsCount));
+            LocalizeMenuItem(Resource.Id.dashboard_sent, SupervisorDashboard.SentToInterviewer, nameof(ViewModel.SentToInterviewerCount));
 
             return view;
         }
@@ -62,14 +63,17 @@ namespace WB.UI.Supervisor.Activities.Dashboard
             int? menuItemId = null;
             switch (e.ViewModel)
             {
-                case OutboxViewModel outbox:
+                case OutboxViewModel _:
                     menuItemId = Resource.Id.dashboard_outbox;
                     break;
-                case ToBeAssignedItemsViewModel toBeAssignedItems:
+                case ToBeAssignedItemsViewModel _:
                     menuItemId = Resource.Id.dashboard_to_be_assigned;
                     break;
-                case WaitingForSupervisorActionViewModel waitingForSupervisorAction:
+                case WaitingForSupervisorActionViewModel _:
                     menuItemId = Resource.Id.dashboard_waiting_decision;
+                    break;
+                case SentToInterviewerViewModel _:
+                    menuItemId = Resource.Id.dashboard_sent;
                     break;
             }
 
@@ -150,6 +154,9 @@ namespace WB.UI.Supervisor.Activities.Dashboard
                     break;
                 case Resource.Id.dashboard_outbox:
                     ViewModel.ShowOutboxItems.Execute();
+                    break;
+                case Resource.Id.dashboard_sent:
+                    ViewModel.ShowSentItems.Execute();
                     break;
             }
         }

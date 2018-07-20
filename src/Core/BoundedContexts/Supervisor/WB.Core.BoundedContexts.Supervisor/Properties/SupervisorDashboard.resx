@@ -126,6 +126,12 @@
   <data name="OutboxSubtitle" xml:space="preserve">
     <value>Interviews and assignments that are going to be sent from your device during next synchronization </value>
   </data>
+  <data name="SentToInterviewer" xml:space="preserve">
+    <value>Sent to interviewer</value>
+  </data>
+  <data name="SentToInterviewerSubtitle" xml:space="preserve">
+    <value>Assignments and interviews that are on interviewer devices</value>
+  </data>
   <data name="ToBeAssigned" xml:space="preserve">
     <value>Tasks to assign</value>
   </data>

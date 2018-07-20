@@ -40,7 +40,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 
                 var interview = SetupInterviewWithExpressionStorage(questionnaireDocument, new List<object>
                 {
-                    Abc.Create.Event.QuestionsEnabled(new []
+                    Abc.Create.Event.QuestionsEnabled(DateTimeOffset.Now, new []
                     {
                         Abc.Create.Identity(questionAId),
                         Abc.Create.Identity(questionBId),

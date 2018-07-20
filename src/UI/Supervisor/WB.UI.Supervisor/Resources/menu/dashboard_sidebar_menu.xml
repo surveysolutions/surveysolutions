@@ -25,6 +25,10 @@
                 <item
                     android:id="@+id/dashboard_outbox"
                     android:title="Tasks to be assigned" />
+                <item
+                    android:id="@+id/dashboard_sent"
+                    android:title="Sent to interviewer" 
+                />
             </group>
         </menu>
     </item>

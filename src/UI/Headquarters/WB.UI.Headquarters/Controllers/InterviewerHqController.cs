@@ -106,7 +106,6 @@ namespace WB.UI.Headquarters.Controllers
                 assignment.QuestionnaireId,
                 assignment.Answers.ToList(),
                 assignment.ProtectedVariables,
-                DateTime.UtcNow,
                 interviewer.Supervisor.Id,
                 interviewer.PublicKey,
                 this.keyGenerator.Get(),

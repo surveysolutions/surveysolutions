@@ -14,9 +14,10 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
 
         public int? NumberOfPoints { set; get; }
 
-        public AnswerGeographyQuestionCommand(Guid interviewId, Guid userId, Guid questionId, decimal[] rosterVector, 
-            DateTime answerTime, string geometry, string mapName, double? area,string coordinates , double? length, double? distanceToEditor, int? numberOfPoints)
-            : base(interviewId, userId, questionId, rosterVector, answerTime)
+        public AnswerGeographyQuestionCommand(Guid interviewId, Guid userId, Guid questionId, decimal[] rosterVector,
+            string geometry, string mapName, double? area,string coordinates, 
+            double? length, double? distanceToEditor, int? numberOfPoints)
+            : base(interviewId, userId, questionId, rosterVector)
         {
             this.Geometry = geometry;
             this.MapName = mapName;

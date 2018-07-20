@@ -7,12 +7,10 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
     {
         public Guid? InterviewerId { get; private set; }
         public Guid SupervisorId { get; private set; }
-        public DateTime MoveUtcTime { get; private set; }
         
-        public MoveInterviewToTeam(Guid interviewId, Guid userId, Guid supervisorId, Guid? interviewerId, DateTime moveUtcTime)
+        public MoveInterviewToTeam(Guid interviewId, Guid userId, Guid supervisorId, Guid? interviewerId)
             : base(interviewId, userId)
         {
-            this.MoveUtcTime = moveUtcTime;
             this.InterviewerId = interviewerId;
             this.SupervisorId = supervisorId;
         }

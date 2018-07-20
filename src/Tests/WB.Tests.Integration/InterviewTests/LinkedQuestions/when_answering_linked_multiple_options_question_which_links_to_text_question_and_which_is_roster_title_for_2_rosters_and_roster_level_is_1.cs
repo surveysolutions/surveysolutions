@@ -66,7 +66,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
                 {
                     linkedOption1Vector, linkedOption2Vector, linkedOption3Vector
                 })
-            }));
+            }, DateTimeOffset.Now));
 
             eventContext = new EventContext();
             BecauseOf();

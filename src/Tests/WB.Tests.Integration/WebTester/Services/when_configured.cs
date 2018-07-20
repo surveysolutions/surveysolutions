@@ -39,7 +39,6 @@ namespace WB.Tests.Integration.WebTester.Services
                 Create.Entity.QuestionnaireIdentity(questionnaire.PublicKey, 1),
                 new List<InterviewAnswer>(),
                 new List<string>(), 
-                DateTime.UtcNow,
                 Guid.NewGuid(),
                 null,
                 Create.Entity.InterviewKey(),
