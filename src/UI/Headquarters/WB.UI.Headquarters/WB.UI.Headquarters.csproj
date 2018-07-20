@@ -728,6 +728,7 @@
     <Content Include="Dependencies\img\icon-mic-1x.png" />
     <Content Include="Dependencies\img\icon-mic-2x.png" />
     <Content Include="Dependencies\img\language.png" />
+    <Content Include="Dependencies\img\logo_under_constraction.jpg" />
     <Content Include="Dependencies\img\padlock-1dp.png" />
     <Content Include="Dependencies\img\padlock-3dp.png" />
     <Content Include="App_GlobalResources\Maps.resx">
