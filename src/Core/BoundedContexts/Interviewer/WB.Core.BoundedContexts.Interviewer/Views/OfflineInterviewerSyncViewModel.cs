@@ -155,7 +155,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             await OnGoogleApiReady();
         }
 
-        protected override async Task OnGoogleApiReady()
+        public override async Task OnGoogleApiReady()
         {
             await StartDiscovery();
         }
