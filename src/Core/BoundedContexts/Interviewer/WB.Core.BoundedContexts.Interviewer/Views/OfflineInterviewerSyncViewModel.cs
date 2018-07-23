@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -201,7 +202,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         {
             this.StopDiscovery();
 
-            this.ProgressTitle = InterviewerUIResources.SendToSupervisor_SupervisorNotFound;
+            if (errorCode == ConnectionStatusCode.StatusBluetoothError)
+            {
+                this.ProgressTitle = InterviewerUIResources.SendToSupervisor_BluetoothError;
+            }
+            else
+            {
+                this.ProgressTitle = InterviewerUIResources.SendToSupervisor_SupervisorNotFound;
+            }
+
             this.TransferingStatus = TransferingStatus.Failed;
         }
 
@@ -219,6 +228,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         private void OnComplete(int failedInterviewsCount)
         {
+            System.Diagnostics.Trace.Write(">>> OnComplete");
             if (failedInterviewsCount > 0)
             {
                 this.ProgressTitle = string.Format(InterviewerUIResources.SendToSupervisor_SyncCompletedWithErrorsFormat, failedInterviewsCount);
