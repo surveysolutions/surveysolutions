@@ -153,13 +153,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         {
             this.BindTitlesAndStatuses();
             this.nearbyConnection.StopAll();
-            await OnGoogleApiReady();
+            await this.StartSynchronization.ExecuteAsync();
         }
 
-        public override async Task OnGoogleApiReady()
-        {
-            await StartDiscovery();
-        }
+        public IMvxAsyncCommand StartSynchronization => new MvxAsyncCommand(StartDiscovery);
 
         private async Task StartDiscovery()
         {
