@@ -8,6 +8,6 @@ namespace WB.Core.SharedKernels.Enumerator.Views
     {
         [PrimaryKey]
         public Guid Id { get; set; }
-        public int Sequence { get; set; }
+        public int ReceivedFromServerSequence { get; set; }
     }
 }
