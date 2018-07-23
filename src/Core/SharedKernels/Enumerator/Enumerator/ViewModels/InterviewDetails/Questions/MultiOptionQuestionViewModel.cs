@@ -248,14 +248,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
             catch (InterviewException ex)
             {
-                var optionsToReset = PreviousOptionsToReset.Except(selectedOptionsToSave).Union(selectedOptionsToSave.Except(PreviousOptionsToReset));
-
-                foreach (var optionToReset in optionsToReset)
-                {
-                    var option = this.GetOptionByValue(optionToReset);
-                    if (option!=null)
-                        option.Checked = !option.Checked;    
-                }
+                ResetUiOptions();
                 this.QuestionState.Validity.ProcessException(ex);
             }
         }
@@ -272,11 +265,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
 
             PreviousOptionsToReset = null;
-        }
-
-        private MultiOptionQuestionOptionViewModel GetOptionByValue(int value)
-        {
-            return this.Options.FirstOrDefault(x => x.Value == value);
         }
 
         public async Task ToggleAnswerAsync(MultiOptionQuestionOptionViewModelBase changedModel)
