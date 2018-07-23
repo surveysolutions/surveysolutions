@@ -102,14 +102,14 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
          
             try
             {
-                payload = await PreparePayload(endpoint, Guid.NewGuid(), message, true);
+                payload = await PreparePayload(endpoint, Guid.NewGuid(), message, true).ConfigureAwait(false);
                 var tsc = new TaskCompletionSourceWithProgress(progress, cancellationToken);
                 pending.TryAdd(payload.CorrelationId, tsc);
 
                 logger.Verbose($"[{connection.GetEndpointName(endpoint) ?? endpoint}] #{payload.CorrelationId} - {typeof(TRequest).Name} => {typeof(TResponse).Name}");
 
-                await SendOverWire(connection, endpoint, payload, cancellationToken);
-                var response = await tsc.Task;
+                await SendOverWire(connection, endpoint, payload, cancellationToken).ConfigureAwait(false);
+                var response = await tsc.Task.ConfigureAwait(false);
 
                 logger.Verbose($"[{connection.GetEndpointName(endpoint) ?? endpoint}] #{payload.CorrelationId} - {typeof(TRequest).Name} => {response.GetType().Name}");
 
@@ -134,7 +134,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             }
             catch (Exception inner)
             {
-                this.logger.Verbose("Got exception. " + inner.ToString());
+                this.logger.Verbose("Got exception. " + inner);
                 if (payload != null)
                 {
                     pending.TryRemove(payload.CorrelationId, out _);
