@@ -1,10 +1,13 @@
-﻿@using WB.Core.GenericSubdomains.Portable.ServiceLocation
+﻿@using WB.Core.BoundedContexts.Headquarters.Services
+@using WB.Core.GenericSubdomains.Portable.ServiceLocation
 @using WB.Core.Infrastructure.Versions
 @using WB.Core.SharedKernels.SurveyManagement.Web.Code
+@using WB.UI.Headquarters.Code
 @using WB.UI.Shared.Web.Extensions
-@model WB.Core.SharedKernels.SurveyManagement.Web.Models.LogOnModel
+@model WB.UI.Headquarters.Models.DownloadModel
 @{
     Layout = null;
+    var qRCodeHelper = ServiceLocator.Current.GetInstance<IQRCodeHelper>();
 }
 <!DOCTYPE html>
 <html>
@@ -45,7 +48,12 @@
                                     <span>@Pages.GetLatestApp</span>
                                     <span class="version">@Pages.DownloadPage_Version @(ServiceLocator.Current.GetInstance<IProductVersion>())</span>
                                 </a>
-                                <p><b class="error-text">Caution:</b>
+                                @if (qRCodeHelper.SupportQRCodeGeneration())
+                                {
+                                    <img id="download-qr" alt="QR Code" width="250" height="250" src="@Model.QRBase64Apk"/>
+                                }
+                                <p>
+                                    <b class="error-text">Caution:</b>
                                     @Pages.GetEsriExtraDescription
                                 </p>
                             </div>
@@ -91,11 +99,15 @@
     function changeTarget(chkbox)
     {
         var link = document.getElementById('dowload');  // changed where this is done!
+        var qr = document.getElementById('download-qr');
         if( chkbox.checked )
         {
-            link.href="@Url.HttpRouteUrl("DefaultApiWithAction", new { action = "GetLatestVersion", controller = "InterviewerSync" })"; 
+            link.href = "@Url.HttpRouteUrl("DefaultApiWithAction", new { action = "GetLatestVersion", controller = "InterviewerSync" })";
+            qr.src = "@Model.QRBase64Apk";
+             
         } else {
-            link.href="@Url.HttpRouteUrl("DefaultApiWithAction", new { action = "GetLatestExtendedVersion", controller = "InterviewerSync" })";     
+            link.href = "@Url.HttpRouteUrl("DefaultApiWithAction", new { action = "GetLatestExtendedVersion", controller = "InterviewerSync" })";     
+            qr.src = "@Model.QRBase64ApkWithMaps";
         }
     }
 </script>

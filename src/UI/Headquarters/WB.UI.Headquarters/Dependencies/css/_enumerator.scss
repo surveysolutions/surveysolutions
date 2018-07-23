@@ -1,4 +1,5 @@
 .enumerators{
+    position: relative;
     .table-wrapper{
         margin-left: -15px;
         max-width: 1210px;
@@ -69,31 +70,8 @@
         margin-left: -15px;
     }
 }
-@media (max-width: $screen-md-min){
-    .enumerators{
-        .table-wrapper{
-            margin-left: 0;
-        }
-        .detailed-statistics-block .table{
-            margin: 0;
-        }
-    }
-}
-@media (max-width: $screen-sm-min){
-    .enumerators {
-        .table-interviews{
-            display: none;
-        }
-        .screen-small-resolution{
-            padding: 0;
-        }
-    }
-}
-@media only screen and (max-width: 840px){
-    .interviews-information .number-information{
-        width: 50%;
-    }
-}
+
+
 .graphic-wrapper{
     display: flex;
     flex-direction: row;
@@ -284,7 +262,48 @@
         }
     }
 }
+.qrcode-wrapper{
+    position: absolute;
+    display: block;
+    top: 35px;
+    right: 40px;
+    width: 200px;
+    img{
+        width: 100%;
+        height: auto;
+    }
+}
+@media (max-width: $screen-md-min){
+    .enumerators{
+        .table-wrapper{
+            margin-left: 0;
+        }
+        .detailed-statistics-block .table{
+            margin: 0;
+        }
+    }
+}
+@media only screen and (max-width: 1050px){
+    .qrcode-wrapper{
+        position: relative;
+        top: 0;
+        right: 0;
+    }
+}
+@media only screen and (max-width: 840px){
+    .interviews-information .number-information{
+        width: 50%;
+    }
+}
 @media (max-width: $screen-sm-min){
+    .enumerators {
+        .table-interviews{
+            display: none;
+        }
+        .screen-small-resolution{
+            padding: 0;
+        }
+    }
     .graphic-wrapper{
         display: block;
         height: auto;
