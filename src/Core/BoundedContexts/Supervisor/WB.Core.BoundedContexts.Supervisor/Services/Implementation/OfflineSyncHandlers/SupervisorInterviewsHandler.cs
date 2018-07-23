@@ -296,6 +296,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                 Id = x.InterviewId,
                 IsRejected = x.Status == InterviewStatus.RejectedBySupervisor,
                 QuestionnaireIdentity = QuestionnaireIdentity.Parse(x.QuestionnaireId),
+                ResponsibleId = x.ResponsibleId,
                 Sequence = eventStore.GetMaxSequenceForAnyEvent(x.InterviewId, EventsThatAssignInterviewToResponsibleProvider.GetTypeNames())
             }).ToList();
 
