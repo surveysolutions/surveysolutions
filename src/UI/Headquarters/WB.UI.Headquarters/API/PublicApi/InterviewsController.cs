@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
+using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
@@ -38,6 +39,7 @@ namespace WB.UI.Headquarters.API.PublicApi
         private readonly ICommandService commandService;
         private readonly IAuthorizedUser authorizedUser;
         private readonly IStatefullInterviewSearcher statefullInterviewSearcher;
+        private readonly IInterviewDiagnosticsFactory diagnosticsFactory;
 
         public InterviewsController(ILogger logger,
             IAllInterviewsFactory allInterviewsViewFactory,
@@ -48,7 +50,8 @@ namespace WB.UI.Headquarters.API.PublicApi
             IQuestionnaireStorage questionnaireStorage,
             ICommandService commandService,
             IAuthorizedUser authorizedUser,
-            IStatefullInterviewSearcher statefullInterviewSearcher) : base(logger)
+            IStatefullInterviewSearcher statefullInterviewSearcher,
+            IInterviewDiagnosticsFactory diagnosticsFactory) : base(logger)
         {
             this.allInterviewsViewFactory = allInterviewsViewFactory;
             this.interviewHistoryViewFactory = interviewHistoryViewFactory;
@@ -59,6 +62,7 @@ namespace WB.UI.Headquarters.API.PublicApi
             this.commandService = commandService;
             this.authorizedUser = authorizedUser;
             this.statefullInterviewSearcher = statefullInterviewSearcher;
+            this.diagnosticsFactory = diagnosticsFactory;
         }
 
 
@@ -123,6 +127,7 @@ namespace WB.UI.Headquarters.API.PublicApi
             }
 
             var statistics = this.statefullInterviewSearcher.GetStatistics(interview);
+            var diagnosticsInfo = diagnosticsFactory.GetById(id);
 
             return new InterviewApiStatistics
             {
@@ -134,7 +139,17 @@ namespace WB.UI.Headquarters.API.PublicApi
                 NotFlagged = statistics[FilterOption.NotFlagged],
                 WithComments = statistics[FilterOption.WithComments],
                 ForInterviewer = statistics[FilterOption.ForInterviewer],
-                ForSupervisor = statistics[FilterOption.ForSupervisor]
+                ForSupervisor = statistics[FilterOption.ForSupervisor],
+
+                InterviewId = diagnosticsInfo.InterviewId,
+                InterviewKey = diagnosticsInfo.InterviewKey,
+                Status = diagnosticsInfo.Status.ToString(),
+                ResponsibleId = diagnosticsInfo.ResponsibleId,
+                ResponsibleName = diagnosticsInfo.ResponsibleName,
+                NumberOfInterviewers = diagnosticsInfo.NumberOfInterviewers,
+                NumberRejectionsBySupervisor = diagnosticsInfo.NumberRejectionsBySupervisor,
+                NumberRejectionsByHq = diagnosticsInfo.NumberRejectionsByHq,
+                InterviewDuration = diagnosticsInfo.InterviewDuration != null ? new TimeSpan(diagnosticsInfo.InterviewDuration.Value) : (TimeSpan?)null
             };
         }
 
@@ -199,7 +214,7 @@ namespace WB.UI.Headquarters.API.PublicApi
         private HttpResponseMessage CommentAnswer(Guid id, Identity questionIdentity, string comment)
         {
             var command = new CommentAnswerCommand(id, this.authorizedUser.Id, questionIdentity.Id,
-                questionIdentity.RosterVector, DateTime.UtcNow, comment);
+                questionIdentity.RosterVector, comment);
 
             return this.TryExecuteCommand(command);
         }
@@ -228,7 +243,7 @@ namespace WB.UI.Headquarters.API.PublicApi
             if(!userInfo.Roles.Contains(UserRoles.Interviewer))
                 return this.Request.CreateErrorResponse(HttpStatusCode.NotAcceptable, "User is not an interviewer.");
             
-            return this.TryExecuteCommand(new AssignResponsibleCommand(id, this.authorizedUser.Id, userInfo.PublicKey, userInfo.Supervisor.Id, DateTime.UtcNow));
+            return this.TryExecuteCommand(new AssignResponsibleCommand(id, this.authorizedUser.Id, userInfo.PublicKey, userInfo.Supervisor.Id));
         }
 
         /// <summary>
@@ -245,7 +260,7 @@ namespace WB.UI.Headquarters.API.PublicApi
         {
             this.GetQuestionnaireIdByInterviewOrThrow(id);
             
-            return this.TryExecuteCommand(new ApproveInterviewCommand(id, this.authorizedUser.Id, comment, DateTime.UtcNow));
+            return this.TryExecuteCommand(new ApproveInterviewCommand(id, this.authorizedUser.Id, comment));
         }
 
         /// <summary>
@@ -262,7 +277,7 @@ namespace WB.UI.Headquarters.API.PublicApi
         {
             this.GetQuestionnaireIdByInterviewOrThrow(id);
             
-            return this.TryExecuteCommand(new RejectInterviewCommand(id, this.authorizedUser.Id, comment, DateTime.UtcNow));
+            return this.TryExecuteCommand(new RejectInterviewCommand(id, this.authorizedUser.Id, comment));
         }
 
         /// <summary>

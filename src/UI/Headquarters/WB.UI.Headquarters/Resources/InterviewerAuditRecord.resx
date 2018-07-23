@@ -123,6 +123,12 @@
   <data name="CompleteInterview" xml:space="preserve">
     <value>Interview {0} completed</value>
   </data>
+  <data name="ApproveInterview" xml:space="preserve">
+    <value>Interview {0} approved</value>
+  </data>
+  <data name="RejectInterview" xml:space="preserve">
+    <value>Interview {0} rejected</value>
+  </data>
   <data name="CreateInterviewFromAssignment" xml:space="preserve">
     <value>Interview {0} created from assignment {1}</value>
   </data>
@@ -149,6 +155,12 @@
   </data>
   <data name="OpenApplication" xml:space="preserve">
     <value>Application opened</value>
+  </data>
+  <data name="AssignResponsibleToInterview" xml:space="preserve">
+    <value>Assign responsible {0} to interview {1}</value>
+  </data>
+  <data name="AssignResponsibleToAssignment" xml:space="preserve">
+    <value>Assign responsible {0} to assignment #{1}</value>
   </data>
   <data name="OpenInterview" xml:space="preserve">
     <value>Interview {0} opened</value>
@@ -190,6 +202,6 @@
     <value>Sync failed</value>
   </data>
   <data name="SynchronizationStarted" xml:space="preserve">
-    <value>Sync started</value>
+    <value>Sync started ({0})</value>
   </data>
 </root>

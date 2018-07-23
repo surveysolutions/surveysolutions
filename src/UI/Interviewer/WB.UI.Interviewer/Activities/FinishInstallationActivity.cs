@@ -35,13 +35,6 @@ namespace WB.UI.Interviewer.Activities
             }
         }
 
-        protected override void OnResume()
-        {
-            base.OnResume();
-
-            this.ViewModel.RefreshEndpoint().WaitAndUnwrapException();
-        }
-
         public override bool OnCreateOptionsMenu(IMenu menu)
         {
             this.MenuInflater.Inflate(Resource.Menu.finish, menu);

@@ -5,12 +5,14 @@ using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Views;
+using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
@@ -134,6 +136,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             {
                 this.UserName = state.Data[StateKey];
             }
+        }
+
+        public override void ViewAppeared()
+        {
+            base.ViewAppeared();
+
+#pragma warning disable 4014
+            RefreshEndpoint(); // It is handing if awaited
+#pragma warning restore 4014
         }
 
         public async Task RefreshEndpoint()

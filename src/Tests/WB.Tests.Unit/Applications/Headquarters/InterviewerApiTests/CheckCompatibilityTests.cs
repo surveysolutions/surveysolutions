@@ -10,7 +10,8 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Tests.Abc;
-using WB.UI.Headquarters.API.Interviewer;
+using WB.UI.Headquarters.API.DataCollection;
+using WB.UI.Headquarters.API.DataCollection.Interviewer;
 
 namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
 {
@@ -20,8 +21,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
         [Test]
         public void when_no_assignments_and_device_has_protocol_version_7060_Should_allow_to_synchronize()
         {
-            var syncProtocolVersionProvider = Mock.Of<ISyncProtocolVersionProvider>(x =>
-                x.GetProtocolVersion() == SyncProtocolVersionProvider.ProtectedVariablesIntroduced);
+            var syncProtocolVersionProvider = Mock.Of<IInterviewerSyncProtocolVersionProvider>(x =>
+                x.GetProtocolVersion() == InterviewerSyncProtocolVersionProvider.ProtectedVariablesIntroduced);
 
             var productVersion = Mock.Of<IProductVersion>(x => x.ToString() == "18.06.0.0 (build 0)");
 
@@ -46,8 +47,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
         [Test]
         public void when_assignment_has_protected_questions_and_client_doesnt_support_Should_require_upgrade()
         {
-            var syncProtocolVersionProvider = Mock.Of<ISyncProtocolVersionProvider>(x =>
-                x.GetProtocolVersion() == SyncProtocolVersionProvider.ProtectedVariablesIntroduced);
+            var syncProtocolVersionProvider = Mock.Of<IInterviewerSyncProtocolVersionProvider>(x =>
+                x.GetProtocolVersion() == InterviewerSyncProtocolVersionProvider.ProtectedVariablesIntroduced);
 
             var productVersion = Mock.Of<IProductVersion>(x => x.ToString() == "18.06.0.0 (build 0)");
 

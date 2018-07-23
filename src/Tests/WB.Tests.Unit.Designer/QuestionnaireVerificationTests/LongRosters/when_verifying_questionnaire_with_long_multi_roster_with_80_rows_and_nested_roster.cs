@@ -8,7 +8,7 @@ using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 
-namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests.LongRosters
+namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests.LongRosters
 {
     internal class when_verifying_questionnaire_with_long_multi_roster_with_79_rows_and_it_is_nested_intro_other_roster : QuestionnaireVerifierTestsContext
     {

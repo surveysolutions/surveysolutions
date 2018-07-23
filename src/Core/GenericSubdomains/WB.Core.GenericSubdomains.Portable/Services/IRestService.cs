@@ -16,14 +16,14 @@ namespace WB.Core.GenericSubdomains.Portable.Services
 
         Task PostAsync(string url, object request = null, RestCredentials credentials = null, CancellationToken? token = null);
 
-        Task<T> GetAsync<T>(string url, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged = null,
+        Task<T> GetAsync<T>(string url, IProgress<TransferProgress> transferProgress = null,
             object queryString = null, RestCredentials credentials = null, CancellationToken? token = null);
 
-        Task<T> PostAsync<T>(string url, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged = null,
+        Task<T> PostAsync<T>(string url, IProgress<TransferProgress> transferProgress = null,
             object request = null, RestCredentials credentials = null, CancellationToken? token = null);
 
         Task<RestFile> DownloadFileAsync(string url,
-            Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged = null,
+            IProgress<TransferProgress> transferProgress = null,
             RestCredentials credentials = null, 
             CancellationToken? token = null, 
             Dictionary<string, string> customHeaders = null);

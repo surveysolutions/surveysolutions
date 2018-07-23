@@ -6,4 +6,5 @@
   <integer name="GpsDesiredAccuracy">50</integer>
   <integer name="EventChunkSize">1000</integer>
   <bool name="VibrateOnError">true</bool>
+  <bool name="AllowSyncWithHq">true</bool>
 </resources>

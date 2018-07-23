@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:local="http://schemas.android.com/apk/res-auto"
+              android:id="@+id/main_content"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+  <LinearLayout style="@style/Dashboard_NewTab_NoInterviewsPanel"
+                android:paddingTop="@dimen/Dashboard_Tab_Frame_paddingTop"
+                local:MvxBind="Visible Not(GreaterThan(ItemsCount, 0));">
+    <TextView style="@style/Dashboard_NewTab_NoInterviewsTitle"
+              local:MvxBind="Text Localization('Dashboard_NoInterviewsTitle')" />
+
+    <TextView style="@style/Dashboard_NoInterviewsText"
+              local:MvxBind="Text Localization('Dashboard_NoInterviewsText')" />
+
+    <Button style="@style/Dashboard_NewTab_NoInterviewsSyncButton"
+            local:MvxBind="Text Localization('Dashboard_NoInterviewsSyncButton');
+                               Visible SynchronizationWithHqEnabled;
+                               Click SynchronizationCommand;" />
+  </LinearLayout>
+  <MvxRecyclerView
+    style="@style/FullWidthWrappingLayout"
+    android:id="@+id/dashboard_tab_recycler"
+    android:scrollbars="vertical"
+    local:MvxTemplateSelector="WB.UI.Interviewer.CustomControls.InterviewerDashboardTemplateSelector, WB.UI.Interviewer"
+    local:MvxBind="ItemsSource UiItems" />
+</LinearLayout>

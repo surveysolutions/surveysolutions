@@ -1,46 +1,53 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 
 <resources>
-  <dimen name="zero">0dp</dimen>
-  <dimen name="one">1dp</dimen>
-  <dimen name="button_shadow_margin">4dp</dimen>
+    <dimen name="zero">0dp</dimen>
+    <dimen name="one">1dp</dimen>
+    <dimen name="Zero">0dp</dimen>
 
-  <dimen name="Theme_ProgressBar_height">16dip</dimen>
-  <dimen name="Theme_SeekBar_height">13dip</dimen>
-  <dimen name="Theme_SeekBar_padding">16dip</dimen>
-  <dimen name="Theme_Button_min_height">48dip</dimen>
-  <dimen name="Theme_Button_min_width">64dip</dimen>
-  
-  <dimen name="ListStyle_Divider_height">1dp</dimen>
+    <dimen name="button_shadow_margin">4dp</dimen>
 
-  <dimen name="Toolbar_margin_horizontal">25dp</dimen>
-  <dimen name="IconSize">24dp</dimen>
+    <dimen name="Theme_ProgressBar_height">16dip</dimen>
+    <dimen name="Theme_SeekBar_height">13dip</dimen>
+    <dimen name="Theme_SeekBar_padding">16dip</dimen>
+    <dimen name="Theme_Button_min_height">48dip</dimen>
+    <dimen name="Theme_Button_min_width">64dip</dimen>
 
+    <dimen name="ListStyle_Divider_height">1dp</dimen>
 
-  <dimen name="PrefilledQuestions_QuestionnaireTitle_textsize">36dp</dimen>
-  <dimen name="PrefilledQuestions_QuestionnaireTitle_Holder_height">240dp</dimen>
-  <dimen name="PrefilledQuestions_StartButton_Holder_height">110dp</dimen>
+    <dimen name="Toolbar_margin_horizontal">25dp</dimen>
+    <dimen name="IconSize">24dp</dimen>
 
-  <dimen name="Interview_Question_List_Editor_margin_right">24dp</dimen>
-  <dimen name="Interview_Question_List_Editor_margin_left">14dp</dimen>
-  <dimen name="Interview_Question_List_Editor_padding">0dp</dimen>
-  <dimen name="Interview_Question_List_Editor_border">0dp</dimen>
-  <dimen name="Interview_Question_List_DeleteButton_width">24dp</dimen>
-  <dimen name="Interview_Question_List_DeleteButton_height">24dp</dimen>
+    <dimen name="PrefilledQuestions_QuestionnaireTitle_textsize">36dp</dimen>
+    <dimen name="PrefilledQuestions_QuestionnaireTitle_Holder_height">240dp</dimen>
+    <dimen name="PrefilledQuestions_StartButton_Holder_height">110dp</dimen>
 
-  <dimen name="Zero">0dp</dimen>
+    <dimen name="Interview_Question_List_Editor_margin_right">24dp</dimen>
+    <dimen name="Interview_Question_List_Editor_margin_left">14dp</dimen>
+    <dimen name="Interview_Question_List_Editor_padding">0dp</dimen>
+    <dimen name="Interview_Question_List_Editor_border">0dp</dimen>
+    <dimen name="Interview_Question_List_DeleteButton_width">24dp</dimen>
+    <dimen name="Interview_Question_List_DeleteButton_height">24dp</dimen>
+
     <dimen name="DefaultIconSize">24dp</dimen>
 
-  <dimen name="Interview_Question_Text_DeleteButton_width">24dp</dimen>
-  <dimen name="Interview_Question_Text_DeleteButton_height">24dp</dimen>
-  <dimen name="Interview_Question_Answer_FilteredComboBox_padding">10dp</dimen>
-  <dimen name="Interview_Question_Answer_FilteredComboBox_verticalOffset">6dp</dimen>
-  <dimen name="Interview_Group_button_padding">17dp</dimen>
-  <dimen name="Interview_Confirmation_EditText_margin">16dp</dimen>
+    <dimen name="Interview_Question_Text_DeleteButton_width">24dp</dimen>
+    <dimen name="Interview_Question_Text_DeleteButton_height">24dp</dimen>
+    <dimen name="Interview_Question_Answer_FilteredComboBox_padding">10dp</dimen>
+    <dimen name="Interview_Question_Answer_FilteredComboBox_verticalOffset">6dp</dimen>
+    <dimen name="Interview_Group_button_padding">17dp</dimen>
+    <dimen name="Interview_Confirmation_EditText_margin">16dp</dimen>
 
-  <dimen name="Interview_Readonly_Question_Answer_layout_height">50dp</dimen>
-  <dimen name="Interview_Readonly_Question_Answer_margin_left">14dp</dimen>
-  <dimen name="Interview_Readonly_Question_Answer_padding">14dp</dimen>
-  <dimen name="Interview_Readonly_Question_Icon_margin_top">14dp</dimen>
-  <dimen name="Interview_Readonly_Question_Layout_margin_bottom">40dp</dimen>
+    <dimen name="Interview_Readonly_Question_Answer_layout_height">50dp</dimen>
+    <dimen name="Interview_Readonly_Question_Answer_margin_left">14dp</dimen>
+    <dimen name="Interview_Readonly_Question_Answer_padding">14dp</dimen>
+    <dimen name="Interview_Readonly_Question_Icon_margin_top">14dp</dimen>
+    <dimen name="Interview_Readonly_Question_Layout_margin_bottom">40dp</dimen>
+
+    <dimen name="Interview_Overview_unanswered_background_padding">26dp</dimen>
+    <dimen name="Interview_Overview_background_padding_outer">36dp</dimen>
+    <dimen name="Interview_Overview_background_padding_inner">6dp</dimen>
+    <dimen name="Interview_Overview_Answer_margin_top">6dp</dimen>
+    <dimen name="Interview_Overview_left_margin">42dp</dimen>
+    <dimen name="Interview_Overview_top_margin">15dp</dimen>
 </resources>

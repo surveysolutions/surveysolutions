@@ -6,5 +6,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
     {
         void SetVibrateOnError(bool vibrate);
         void SetShowLocationOnMap(bool showLocationOnMap);
+        void SetAllowSyncWithHq(bool allowSyncWithHq);
+        bool AllowSyncWithHq { get; }
     }
 }

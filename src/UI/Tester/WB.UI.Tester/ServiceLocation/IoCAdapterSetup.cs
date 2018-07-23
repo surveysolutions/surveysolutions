@@ -23,7 +23,7 @@ namespace WB.UI.Tester.ServiceLocation
                : AndroidPathUtils.GetPathToExternalDirectory();
 
             AutofacKernel kernel = new AutofacKernel();
-
+            
             kernel.Load(
                 new NcqrsModule(),
                 new InfrastructureModuleMobile(),

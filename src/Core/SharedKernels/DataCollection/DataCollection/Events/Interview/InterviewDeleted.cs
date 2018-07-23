@@ -5,7 +5,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
     public class InterviewDeleted : InterviewActiveEvent
     {
-        public InterviewDeleted(Guid userId)
-            : base(userId) {}
+        public InterviewDeleted(Guid userId, DateTimeOffset originDate)
+            : base(userId, originDate) {}
     }
 }

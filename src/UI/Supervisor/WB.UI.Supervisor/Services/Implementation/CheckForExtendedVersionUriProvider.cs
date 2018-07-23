@@ -4,6 +4,6 @@ namespace WB.UI.Supervisor.Services.Implementation
 {
     public class CheckForExtendedVersionUriProvider : ICheckVersionUriProvider
     {
-        public string CheckVersionUrl { get; } = "api/supervisor/extended/";
+        public string CheckVersionUrl { get; } = "api/supervisor/v1/extended/";
     }
 }

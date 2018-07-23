@@ -413,7 +413,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to List  question cannot be filled by supervisor..
+        ///   Looks up a localized string similar to List question cannot be filled by supervisor..
         /// </summary>
         public static string WB0040_TextListQuestionCannotBeFilledBySupervisor {
             get {

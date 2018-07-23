@@ -16,6 +16,7 @@ namespace WB.UI.Headquarters.API.WebInterview
         {
             registry.Bind<IWebInterviewInterviewEntityFactory, HqWebInterviewInterviewEntityFactory>();
             registry.Bind<IStatefullInterviewSearcher, StatefullInterviewSearcher>();
+            registry.Bind<IInterviewOverviewService, InterviewOverviewService>();
 
             foreach (var type in HubPipelineModules)
             {
@@ -33,7 +34,7 @@ namespace WB.UI.Headquarters.API.WebInterview
             typeof(WebInterviewConnectionsCounter)
         };
 
-        public Task Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
             return Task.CompletedTask;
         }

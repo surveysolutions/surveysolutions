@@ -173,7 +173,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 userId: this.principal.CurrentUserIdentity.UserId,
                 questionId: this.questionIdentity.Id,
                 rosterVector: this.questionIdentity.RosterVector,
-                answerTime: DateTime.UtcNow,
                 answers: answers);
 
             try

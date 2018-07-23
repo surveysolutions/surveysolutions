@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Questionnaire.Api;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.Api.Designer;
+using WB.UI.Tester.Infrastructure.Internals.Security;
 using QuestionnaireListItem = WB.Core.BoundedContexts.Tester.Views.QuestionnaireListItem;
 
 namespace WB.UI.Tester.Infrastructure.Internals
@@ -27,7 +28,7 @@ namespace WB.UI.Tester.Infrastructure.Internals
         private RestCredentials RestCredentials => new RestCredentials
         {
             Login = this.principal.CurrentUserIdentity.Name,
-            Password = this.principal.CurrentUserIdentity.Password
+            Password = ((TesterUserIdentity)this.principal.CurrentUserIdentity).Password
         };
 
         public DesignerApiService(
@@ -68,26 +69,26 @@ namespace WB.UI.Tester.Infrastructure.Internals
             return serverQuestionnaires.ToReadOnlyCollection();
         }
 
-        public async Task<Questionnaire> GetQuestionnaireAsync(string questionnaireId, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged, CancellationToken token)
+        public async Task<Questionnaire> GetQuestionnaireAsync(string questionnaireId, IProgress<TransferProgress> transferProgress, CancellationToken token)
         {
             Questionnaire downloadedQuestionnaire = null;
 
             downloadedQuestionnaire = await this.restService.GetAsync<Questionnaire>(
                 url: $"{this.apiPrefix}/questionnaires/{questionnaireId}",
                 credentials: this.RestCredentials,
-                onDownloadProgressChanged: onDownloadProgressChanged, token: token);
+                transferProgress: transferProgress, token: token);
 
             return downloadedQuestionnaire;
         }
 
         public async Task<AttachmentContent> GetAttachmentContentAsync(string attachmentContentId,
-            Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged, 
+            IProgress<TransferProgress> transferProgress, 
             CancellationToken token)
         {
             var restFile = await this.restService.DownloadFileAsync(
                 url: $"{this.apiPrefix}/attachment/{attachmentContentId}",
                 credentials: this.RestCredentials,
-                onDownloadProgressChanged: onDownloadProgressChanged,
+                transferProgress: transferProgress,
                 token: token).ConfigureAwait(false);
 
             var attachmentContent = new AttachmentContent()

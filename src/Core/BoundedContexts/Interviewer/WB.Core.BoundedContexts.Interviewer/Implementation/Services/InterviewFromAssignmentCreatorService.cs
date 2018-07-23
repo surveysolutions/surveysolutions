@@ -20,6 +20,8 @@ using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading;
+using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
@@ -79,7 +81,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                     new QuestionnaireIdentity(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version),
                     answers,
                     protectedVariables,
-                    DateTime.UtcNow,
                     interviewerIdentity.SupervisorId,
                     interviewerIdentity.UserId,
                     interviewKey,
@@ -100,7 +101,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 // This code is going to be removed after KP-9461. And according to research in KP-9513 we should reduce amount of dependencies in constructor
 
                 var userInteractionService = Mvx.Resolve<IUserInteractionService>();
-                Mvx.Resolve<ILoggerProvider>().GetFor<AssignmentDashboardItemViewModel>().Error(e.Message, e);
+                Mvx.Resolve<ILoggerProvider>().GetFor<InterviewerAssignmentDashboardItemViewModel>().Error(e.Message, e);
                 await userInteractionService.AlertAsync(string.Format(InterviewerUIResources.FailedToCreateInterview, e.Message), UIResources.Error);
             }
             finally

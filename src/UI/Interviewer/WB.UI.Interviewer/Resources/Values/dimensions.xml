@@ -23,47 +23,13 @@
   <dimen name="Diagnostics_SubsectionValue_padding">10dp</dimen>
   <dimen name="Troubleshooting_Element_width">320dp</dimen>
   <dimen name="Troubleshooting_Button_marginBottom">16dp</dimen>
-
-  <dimen name="Dashboard_Layout_border_width">1dp</dimen>
-  <dimen name="Dashboard_Layout_border_radius">3dp</dimen>
-  <dimen name="Dashboard_TabMenu_marginTop">30dp</dimen>
-  <dimen name="Dashboard_TabMenu_marginBottom">20dp</dimen>
-  <dimen name="Dashboard_TabMenu_tab_marginLeft">32dp</dimen>
-  <dimen name="Dashboard_TabMenu_tab_padding">12dp</dimen>
-  <dimen name="Dashboard_Items_space">2dp</dimen>
-
-  <dimen name="Dashboard_SearchView_SearchView_padding">2dp</dimen>
-  <dimen name="Dashboard_SearchView_SearchView_height">60dp</dimen>
-  <dimen name="Dashboard_SearchView_DeleteButton_size">36dp</dimen>
-  <dimen name="Dashboard_SearchView_SearchButton_size">36dp</dimen>
-
-  <dimen name="dashboard_card_base_margin">14dp</dimen>
-  <dimen name="dashboard_card_duo_margin">28dp</dimen>
   
-  <dimen name="Dashboard_InterviewItem_StatusPanel_width">14dp</dimen>
-  <dimen name="Dashboard_InterviewItem_StatusPanel_margin">1dp</dimen>
-  <dimen name="Dashboard_InterviewItem_InformationBlock_margin">14dp</dimen>
-  <dimen name="Dashboard_InterviewItem_Title_marginRight">40dp</dimen>
-  <dimen name="Dashboard_InterviewItem_Comment_lines_margin">8dp</dimen>
-  <dimen name="Dashboard_InterviewItem_CreateButton_marginTop">26dp</dimen>
-  <dimen name="Dashboard_InterviewItem_CreateButton_marginBottom">20dp</dimen>
-  <dimen name="Dashboard_InterviewItem_PrefilledQuestions_marginTop">18dp</dimen>
-  <dimen name="Dashboard_NoInterviewsTitle_marginTop">40dp</dimen>
-  <dimen name="Dashboard_NoInterviewsText_marginTop">30dp</dimen>
-  <dimen name="Dashboard_InterviewItem_RemoveInterviewButton_paddingTop">8dp</dimen>
-
-  <dimen name="Dashboard_Synchronization_Divider_Height">3dp</dimen>
-
-  <dimen name="Dashboard_Synchronization_Statistics_Height">180dp</dimen>
-  <dimen name="Dashboard_Synchronization_Statistics_Width">350dp</dimen>
-  
-  <dimen name="Dashboard_Card_CornerRadius">4dp</dimen>
-  <dimen name="Dashboard_Card_Elevation">2dp</dimen>
-
   <dimen name="Relink_Message_marginBottom">28dp</dimen>
   <dimen name="Relink_FormContainer_marginTop">16dp</dimen>
   <dimen name="Relink_FormContainer_marginBottom">42dp</dimen>
   <dimen name="Relink_FormContainer_Width">400dp</dimen>
   <dimen name="Loading_Progress_padding">50dp</dimen>
   <dimen name="Loading_Progress_font_size">50dp</dimen>
+
+  <dimen name="SendToSupervisor_Note_MarginTop">76dp</dimen>
 </resources>

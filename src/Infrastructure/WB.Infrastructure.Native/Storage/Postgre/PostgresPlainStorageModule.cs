@@ -16,6 +16,7 @@ using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
 using WB.Infrastructure.Native.Monitoring;
+using WB.Infrastructure.Native.Resources;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
 
@@ -56,19 +57,21 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             registry.Bind(typeof(IPlainStorageAccessor<>), typeof(PostgresPlainStorageRepository<>));
         }
 
-        public Task Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
             try
             {
+                status.Message = Modules.InitializingDb;
                 DatabaseManagement.InitDatabase(this.settings.ConnectionString, this.settings.SchemaName);
+
+                status.Message = Modules.MigrateDb;
+                DbMigrations.DbMigrationsRunner.MigrateToLatest(this.settings.ConnectionString, this.settings.SchemaName, this.settings.DbUpgradeSettings);
             }
             catch (Exception exc)
             {
                 LogManager.GetLogger("maigration", typeof(PostgresPlainStorageModule)).Fatal(exc, "Error during db initialization.");
                 throw;
             }
-
-            DbMigrations.DbMigrationsRunner.MigrateToLatest(this.settings.ConnectionString, this.settings.SchemaName, this.settings.DbUpgradeSettings);
 
             return Task.CompletedTask;
         }

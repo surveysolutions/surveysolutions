@@ -213,7 +213,7 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
              roster: roster,
              variableName: variable,
              rosterVector:evnt.Payload.RosterVector,
-             timestamp: evnt.Payload.CommentTime);
+             timestamp: evnt.Payload.OriginDate?.UtcDateTime ?? evnt.Payload.CommentTime.Value);
 
             this.interviewCommentariesStorage.Store(interviewCommentaries, evnt.EventSourceId);
         }

@@ -19,6 +19,9 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
         public double? LocationLongitude { get; set; }
         public Guid? LocationQuestionId { get; set; }
 
+        public Guid ResponsibleId { get; set; }
+        public string ResponsibleName { get; set; }
+
         public DateTime CreatedAtUtc { get; set; }
         public List<string> ProtectedVariables { get; set; }
 
@@ -40,5 +43,11 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
         public QuestionnaireIdentity QuestionnaireId { get; set; }
 
         public int? Quantity { get; set; }
+
+        [JsonProperty("rid")]
+        public Guid ResponsibleId { get; set; }
+
+        [JsonProperty("rname")]
+        public string ResponsibleName { get; set; }
     }
 }
