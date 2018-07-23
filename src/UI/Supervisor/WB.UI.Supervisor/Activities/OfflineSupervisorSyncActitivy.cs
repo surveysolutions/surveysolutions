@@ -1,6 +1,7 @@
 ﻿using Android.App;
 using Android.Views;
 using WB.Core.BoundedContexts.Supervisor.ViewModel;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.UI.Shared.Enumerator.OfflineSync.Activities;
 
 namespace WB.UI.Supervisor.Activities

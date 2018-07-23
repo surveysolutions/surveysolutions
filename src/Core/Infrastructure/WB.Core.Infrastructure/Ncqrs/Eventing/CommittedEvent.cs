@@ -13,7 +13,6 @@ namespace Ncqrs.Eventing
     public class CommittedEvent : IPublishableEvent
     {
         public long GlobalSequence { get; private set; }
-        private readonly WB.Core.Infrastructure.EventBus.IEvent _payload;
         private readonly int _eventSequence;
         private readonly Guid _eventIdentifier;
         private readonly DateTime _eventTimeStamp;
@@ -28,7 +27,7 @@ namespace Ncqrs.Eventing
 
         public string Origin => this._origin;
 
-        public WB.Core.Infrastructure.EventBus.IEvent Payload => this._payload;
+        public WB.Core.Infrastructure.EventBus.IEvent Payload { get; }
 
         public Guid EventIdentifier => this._eventIdentifier;
 
@@ -64,7 +63,7 @@ namespace Ncqrs.Eventing
             WB.Core.Infrastructure.EventBus.IEvent payload)            
         {
             GlobalSequence = globalSequence;
-            _payload = payload;
+            Payload = payload;
             _commitId = commitId;
             _origin = origin;
             _eventSourceId = eventSourceId;

@@ -55,6 +55,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
                 Id = supervisor.Id.FormatGuid(),
                 UserId = supervisor.Id,
                 Name = this.UserName,
+                Email = supervisor.Email,
                 PasswordHash = this.passwordHasher.Hash(this.Password),
                 Token = credentials.Token
             };

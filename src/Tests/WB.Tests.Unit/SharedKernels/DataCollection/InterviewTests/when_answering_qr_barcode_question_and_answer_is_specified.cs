@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         }
 
         public void BecauseOf() =>
-            interview.AnswerQRBarcodeQuestion(userId: userId, questionId: questionId, answerTime: answerTime,
+            interview.AnswerQRBarcodeQuestion(userId: userId, questionId: questionId, originDate: answerTime,
                                               rosterVector: propagationVector, answer: answer);
 
         [NUnit.Framework.OneTimeTearDown] public void CleanUp()
@@ -55,7 +55,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             eventContext.GetSingleEvent<QRBarcodeQuestionAnswered>().RosterVector.Should().BeEquivalentTo(propagationVector);
 
         [NUnit.Framework.Test] public void should_raise_QRBarcodeQuestionAnswered_event_with_AnswerTime_equal_to_answerTime () =>
-            eventContext.GetSingleEvent<QRBarcodeQuestionAnswered>().AnswerTimeUtc.Should().Be(answerTime);
+            eventContext.GetSingleEvent<QRBarcodeQuestionAnswered>().AnswerTimeUtc.Should().Be(answerTime.UtcDateTime);
 
         [NUnit.Framework.Test] public void should_raise_QRBarcodeQuestionAnswered_event_with_Answer_equal_to_answer () =>
             eventContext.GetSingleEvent<QRBarcodeQuestionAnswered>().Answer.Should().Be(answer);
@@ -65,7 +65,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static Guid userId = Guid.Parse("FFFFFFFFFFFFFFFFFFFFFF1111111111");
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");
         private static decimal[] propagationVector = new decimal[0];
-        private static DateTime answerTime = DateTime.Now;
+        private static DateTimeOffset answerTime = DateTimeOffset.Now;
         private static string answer = "some answer here";
     }
 }

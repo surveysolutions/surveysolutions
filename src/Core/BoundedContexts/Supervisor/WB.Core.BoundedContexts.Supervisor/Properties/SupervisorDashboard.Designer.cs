@@ -88,6 +88,24 @@ namespace WB.Core.BoundedContexts.Supervisor.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Sent to interviewer.
+        /// </summary>
+        public static string SentToInterviewer {
+            get {
+                return ResourceManager.GetString("SentToInterviewer", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assignments and interviews that are on interviewer devices.
+        /// </summary>
+        public static string SentToInterviewerSubtitle {
+            get {
+                return ResourceManager.GetString("SentToInterviewerSubtitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Tasks to assign.
         /// </summary>
         public static string ToBeAssigned {

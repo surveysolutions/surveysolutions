@@ -98,5 +98,15 @@
     <item name="android:textColor">@color/color_white_10_percent_transparent</item>
     <item name="textAllCaps">false</item>
   </style>
+    
+    <style name="ToolbarIcon">
+        <item name="android:layout_width">@dimen/Dashboard_SearchView_SearchButton_size</item>
+        <item name="android:layout_height">@dimen/Dashboard_SearchView_SearchButton_size</item>
+        <item name="android:layout_gravity">right</item>
+        <item name="android:background">?android:attr/selectableItemBackgroundBorderless</item>
+        <item name="android:scaleType">fitXY</item>
+        <item name="android:layout_marginLeft">@dimen/button_shadow_margin</item>
+        <item name="android:layout_marginRight">@dimen/button_shadow_margin</item>
+    </style>
 
 </resources>

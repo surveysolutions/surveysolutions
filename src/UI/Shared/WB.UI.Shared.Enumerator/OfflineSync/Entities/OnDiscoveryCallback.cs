@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using Android.Gms.Nearby.Connection;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Entities;
 
@@ -6,21 +7,24 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Entities
 {
     internal class OnDiscoveryCallback : EndpointDiscoveryCallback
     {
-        private readonly Action<string, NearbyDiscoveredEndpointInfo> foundEndpoint;
+        private readonly Action<NearbyDiscoveredEndpointInfo> foundEndpoint;
         private readonly Action<string> lostEndpoint;
+        private readonly CancellationToken cancellationToken;
 
-
-        public OnDiscoveryCallback(Action<string, NearbyDiscoveredEndpointInfo> foundEndpoint, Action<string> lostEndpoint)
+        public OnDiscoveryCallback(Action<NearbyDiscoveredEndpointInfo> foundEndpoint, Action<string> lostEndpoint, CancellationToken cancellationToken)
         {
             this.foundEndpoint = foundEndpoint;
             this.lostEndpoint = lostEndpoint;
+            this.cancellationToken = cancellationToken;
         }
 
-        public override void OnEndpointFound(string endpointId, DiscoveredEndpointInfo info)
+        public override void OnEndpointFound(string endpoint, DiscoveredEndpointInfo info)
         {
-            foundEndpoint(endpointId, new NearbyDiscoveredEndpointInfo
+            foundEndpoint(new NearbyDiscoveredEndpointInfo
             {
-                EndpointName = info.EndpointName
+                Endpoint = endpoint,
+                EndpointName = info.EndpointName,
+                CancellationToken = cancellationToken
             });
         }
 

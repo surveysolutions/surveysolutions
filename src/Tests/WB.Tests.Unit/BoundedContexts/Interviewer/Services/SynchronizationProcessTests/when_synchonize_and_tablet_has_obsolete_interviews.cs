@@ -7,12 +7,14 @@ using Moq;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
@@ -49,7 +51,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 });
             var serverEvents = new List<CommittedEvent>();
 
-            syncService.Setup(x => x.GetInterviewDetailsAsync(obsoleteInterviewId, It.IsAny<Action<decimal, long, long>>(), CancellationToken.None))
+            syncService.Setup(x => x.GetInterviewDetailsAsync(obsoleteInterviewId, It.IsAny<IProgress<TransferProgress>>(), CancellationToken.None))
                 .ReturnsAsync(serverEvents);
 
             var localInterviewsStorage = new InMemoryPlainStorage<InterviewView>();

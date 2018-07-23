@@ -18,6 +18,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         InternalServerError,
         UserLinkedToAnotherDevice,
         NotSupportedServerSyncProtocolVersion,
-        UnacceptableSSLCertificate
+        UnacceptableSSLCertificate,
+        InterviewerFromDifferentTeam
     }
 }

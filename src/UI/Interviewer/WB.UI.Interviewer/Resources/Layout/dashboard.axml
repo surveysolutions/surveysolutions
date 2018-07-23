@@ -24,8 +24,13 @@
             style="@style/ToolbarTitle"
             local:MvxBind="Text DashboardTitle;" />
         <ImageButton style="@style/ToolbarIcon"
+                     android:id="@+id/menu_synchronization"
                      local:MvxBind="Click SynchronizationCommand; Visible SynchronizationWithHqEnabled"
                      local:srcCompat="@drawable/synchronize_icon"/>
+        <ImageButton style="@style/ToolbarIcon"
+                     android:id="@+id/menu_offline_synchronization"
+                     local:MvxBind="Click NavigateToOfflineSyncCommand; Visible Not(SynchronizationWithHqEnabled)"
+                     local:srcCompat="@drawable/synchronize_offline_icon"/>
         
     </android.support.v7.widget.Toolbar>
     <android.support.design.widget.TabLayout

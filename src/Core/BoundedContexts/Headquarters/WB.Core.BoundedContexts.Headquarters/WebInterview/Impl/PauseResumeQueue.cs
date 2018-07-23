@@ -57,7 +57,7 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview.Impl
         {
             List<TimestampedInterviewCommand> result = new List<TimestampedInterviewCommand>();
 
-            var commandToBePublished = commands.Where(x => (clock.UtcNow() - x.Value.UtcTime).Duration() > trackingSettings.DelayBeforeCommandPublish).ToList();
+            var commandToBePublished = commands.Where(x => (clock.UtcNow() - x.Value.OriginDate.UtcDateTime).Duration() > trackingSettings.DelayBeforeCommandPublish).ToList();
 
             foreach (var commandToBeAdded in commandToBePublished)
             {
@@ -81,7 +81,7 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview.Impl
         {
             return result.FirstOrDefault(x =>
                 x.InterviewId == commandToBeAdded.Value.InterviewId &&
-                (x.UtcTime - commandToBeAdded.Value.UtcTime).Duration() < this.trackingSettings.PauseResumeGracePeriod &&
+                (x.OriginDate - commandToBeAdded.Value.OriginDate).Duration() < this.trackingSettings.PauseResumeGracePeriod &&
                 counterCommands[commandToBeAdded.Value.GetType()] == x.GetType());
         }
     }

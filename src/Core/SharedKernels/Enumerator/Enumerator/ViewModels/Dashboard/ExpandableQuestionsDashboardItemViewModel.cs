@@ -10,7 +10,7 @@ using WB.Core.SharedKernels.Enumerator.Views.Dashboard;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
 {
-    public class ExpandableQuestionsDashboardItemViewModel : MvxNotifyPropertyChanged, IDashboardItem
+    public class ExpandableQuestionsDashboardItemViewModel : MvxNotifyPropertyChanged, IDashboardItem, IDisposable
     {
         private readonly IServiceLocator serviceLocator;
         private string idLabel;
@@ -125,6 +125,31 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
 
                 Label = InterviewerUIResources.Dashboard_ShowLocation
             });
+        }
+
+        private void ReleaseUnmanagedResources()
+        {
+            // release unmanaged resources here
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            ReleaseUnmanagedResources();
+            if (disposing)
+            {
+                // release managed resources here
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
+        }
+
+        ~ExpandableQuestionsDashboardItemViewModel()
+        {
+            Dispose(false);
         }
     }
 }

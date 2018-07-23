@@ -1,8 +1,9 @@
-﻿using MvvmCross.ViewModels;
+﻿using System;
+using MvvmCross.ViewModels;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
 {
-    public class DashboardSubTitleViewModel : MvxNotifyPropertyChanged, IDashboardItem
+    public class DashboardSubTitleViewModel : MvxNotifyPropertyChanged, IDashboardItem, IDisposable
     {
         private string title;
 
@@ -15,5 +16,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         public bool HasExpandedView => false;
         
         public bool IsExpanded { get; set; }
+
+
+        public void Dispose()
+        {
+        }
     }
 }

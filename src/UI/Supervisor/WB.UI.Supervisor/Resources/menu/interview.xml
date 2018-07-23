@@ -20,8 +20,6 @@
   <item
       android:id="@+id/menu_diagnostics"
       local:showAsAction="never" />
-  <item android:id="@+id/menu_maps"
-          local:showAsAction="never" />
   <item
       android:id="@+id/menu_signout"
       local:showAsAction="never" />

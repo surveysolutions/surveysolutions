@@ -1,4 +1,3 @@
-using System;
 using System.Threading;
 using MvvmCross.Commands;
 using MvvmCross.Plugin.Messenger;
@@ -12,16 +11,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
     public class SynchronizationViewModel : MvxNotifyPropertyChanged
     {
         private readonly IMvxMessenger messenger;
+        private readonly ISynchronizationCompleteSource synchronizationCompleteSource;
 
-        public SynchronizationViewModel(IMvxMessenger messenger)
+        public SynchronizationViewModel(IMvxMessenger messenger, ISynchronizationCompleteSource synchronizationCompleteSource)
         {
             this.messenger = messenger;
+            this.synchronizationCompleteSource = synchronizationCompleteSource;
         }
 
         public ISyncBgService<SyncProgressDto> SyncBgService { get; set; }
-
-        public event EventHandler SyncCompleted;
-
+        
         private bool hasUserAnotherDevice;
 
         private bool isSynchronizationInfoShowed;
@@ -96,24 +95,27 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             if (this.synchronizationCancellationTokenSource != null && !this.synchronizationCancellationTokenSource.IsCancellationRequested)
                 this.synchronizationCancellationTokenSource.Cancel();
         }
-
+        
         private void ProgressOnProgressChanged(object sender, SyncProgressInfo syncProgressInfo)
         {
             this.InvokeOnMainThread(() =>
             {
-                this.IsSynchronizationInProgress = syncProgressInfo.IsRunning;
-                this.ProcessOperation = syncProgressInfo.Title;
-                this.ProcessOperationDescription = syncProgressInfo.Description;
-                this.Statistics = syncProgressInfo.Statistics;
-
-                this.Status = syncProgressInfo.Status;
-                this.SynchronizationErrorOccured = this.SynchronizationErrorOccured || syncProgressInfo.HasErrors;
-
-                this.HasUserAnotherDevice = syncProgressInfo.UserIsLinkedToAnotherDevice;
-
-                if (!syncProgressInfo.IsRunning)
+                if (syncProgressInfo.TransferProgress == null)
                 {
-                    this.OnSyncCompleted();
+                    this.IsSynchronizationInProgress = syncProgressInfo.IsRunning;
+                    this.ProcessOperation = syncProgressInfo.Title;
+                    this.ProcessOperationDescription = syncProgressInfo.Description;
+                    this.Statistics = syncProgressInfo.Statistics;
+
+                    this.Status = syncProgressInfo.Status;
+                    this.SynchronizationErrorOccured = this.SynchronizationErrorOccured || syncProgressInfo.HasErrors;
+
+                    this.HasUserAnotherDevice = syncProgressInfo.UserIsLinkedToAnotherDevice;
+
+                    if (!syncProgressInfo.IsRunning)
+                    {
+                        this.OnSyncCompleted();
+                    }
                 }
             });
         }
@@ -145,8 +147,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         protected virtual void OnSyncCompleted()
         {
-            this.messenger.Publish(new SynchronizationCompletedMsg(this));
-            this.SyncCompleted?.Invoke(this, EventArgs.Empty);
+            this.messenger.Publish(new DashboardChangedMsg(this));
+            synchronizationCompleteSource.NotifyOnCompletedSynchronization(true);
         }
     }
 }

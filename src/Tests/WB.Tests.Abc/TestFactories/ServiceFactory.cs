@@ -10,6 +10,7 @@ using NHibernate;
 using NSubstitute;
 using System.Linq;
 using System.Threading.Tasks;
+using Main.Core.Events;
 using NHibernate.Linq;
 using Quartz;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
@@ -26,6 +27,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
+using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles;
@@ -45,11 +47,15 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
+using WB.Core.BoundedContexts.Interviewer.Implementation.Services.OfflineSync;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.BoundedContexts.Supervisor.Services.Implementation;
+using WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSyncHandlers;
+using WB.Core.BoundedContexts.Supervisor.ViewModel;
+using WB.Core.BoundedContexts.Supervisor.Views;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.GenericSubdomains.Portable;
@@ -73,6 +79,7 @@ using WB.Core.Infrastructure.Versions;
 using WB.Core.Infrastructure.WriteSide;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
@@ -406,7 +413,11 @@ namespace WB.Tests.Abc.TestFactories
                 Mock.Of<IQuestionnaireExportStructureStorage>(_
                     => _.GetQuestionnaireExportStructure(It.IsAny<QuestionnaireIdentity>()) ==
                        questionnaireExportStructure),
-                Mock.Of<IProductVersion>());
+                Mock.Of<IProductVersion>(),
+                Mock.Of<IInterviewsExporter>(),
+                Mock.Of<CommentsExporter>(),
+                Mock.Of<InterviewActionsExporter>(),
+                Mock.Of<DiagnosticsExporter>());
 
         public InterviewerPrincipal InterviewerPrincipal(IPlainStorage<InterviewerIdentity> interviewersPlainStorage,
             IPasswordHasher passwordHasher)
@@ -415,6 +426,18 @@ namespace WB.Tests.Abc.TestFactories
                 interviewersPlainStorage ?? Mock.Of<IPlainStorage<InterviewerIdentity>>(),
                 passwordHasher ?? Mock.Of<IPasswordHasher>());
         }
+
+        public SupervisorPrincipal SupervisorPrincipal(IPlainStorage<SupervisorIdentity> storage,
+            IPasswordHasher passwordHasher)
+            => new SupervisorPrincipal(
+                storage ?? Mock.Of<IPlainStorage<SupervisorIdentity>>(),
+                passwordHasher ?? Mock.Of<IPasswordHasher>());
+
+        public IInterviewerPrincipal InterviewerPrincipal(Guid userId)
+            => Mock.Of<IInterviewerPrincipal>(x => x.IsAuthenticated == true && x.CurrentUserIdentity == Mock.Of<IInterviewerUserIdentity>(u => u.UserId == userId));
+
+        public IPrincipal Principal(Guid userId)
+            => Mock.Of<IPrincipal>(x => x.IsAuthenticated == true && x.CurrentUserIdentity == Mock.Of<IUserIdentity>(u => u.UserId == userId));
 
         public SynchronizationProcess SynchronizationProcess(
             IPlainStorage<InterviewView> interviewViewRepository = null,
@@ -460,7 +483,9 @@ namespace WB.Tests.Abc.TestFactories
                 Mock.Of<IAuditLogSynchronizer>(),
                 Mock.Of<IAuditLogService>(),
                 eventBus ?? Mock.Of<IEventBus>(),
-                interviewerEventStorage ?? Mock.Of<IEnumeratorEventStorage>());
+                interviewerEventStorage ?? Mock.Of<IEnumeratorEventStorage>(),
+                Mock.Of<ISynchronizationMode>(),
+                Mock.Of<IPlainStorage<InterviewSequenceView, Guid>>());
         }
 
         public SynchronizationService SynchronizationService(IPrincipal principal = null,
@@ -499,19 +524,20 @@ namespace WB.Tests.Abc.TestFactories
         }
 
         public IAssignmentsSynchronizer AssignmentsSynchronizer(
-            IAssignmentSynchronizationApi synchronizationService = null,
+            ISynchronizationService synchronizationService = null,
             IAssignmentDocumentsStorage assignmentsRepository = null,
             IQuestionnaireDownloader questionnaireDownloader = null,
             IQuestionnaireStorage questionnaireStorage = null,
             IPlainStorage<InterviewView> interviewViewRepository = null)
         {
             return new AssignmentsSynchronizer(
-                synchronizationService ?? Mock.Of<IAssignmentSynchronizationApi>(),
+                synchronizationService ?? Mock.Of<ISynchronizationService>(),
                 assignmentsRepository ?? Create.Storage.AssignmentDocumentsInmemoryStorage(),
                 questionnaireDownloader ?? Mock.Of<IQuestionnaireDownloader>(),
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
+                new AssignmentDocumentFromDtoBuilder( 
                 Mock.Of<IAnswerToStringConverter>(),
-                Mock.Of<IInterviewAnswerSerializer>(),
+                Mock.Of<IInterviewAnswerSerializer>()),
                 interviewViewRepository ?? Mock.Of<IPlainStorage<InterviewView>>());
         }
 
@@ -576,6 +602,18 @@ namespace WB.Tests.Abc.TestFactories
                 interviewStatuses ?? new TestInMemoryWriter<InterviewSummary>(),
                 Mock.Of<ILogger>(),
                 Mock.Of<ISessionProvider>());
+        }
+
+        public DiagnosticsExporter DiagnisticsExporter(ICsvWriter csvWriter = null,
+            IFileSystemAccessor fileSystemAccessor = null,
+            IInterviewDiagnosticsFactory diagnosticsFactory = null)
+        {
+            return new DiagnosticsExporter(new InterviewDataExportSettings(),
+                fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
+                csvWriter ?? Mock.Of<ICsvWriter>(),
+                Mock.Of<ILogger>(),
+                diagnosticsFactory ?? Mock.Of<IInterviewDiagnosticsFactory>(),
+                Create.Service.TransactionManagerProvider());
         }
 
         public InterviewStatusTimeSpanDenormalizer InterviewStatusTimeSpanDenormalizer()
@@ -644,7 +682,8 @@ namespace WB.Tests.Abc.TestFactories
                 deviceSyncInfoRepository ?? Mock.Of<IDeviceSyncInfoRepository>(),
                 interviewerVersionReader ?? Mock.Of<IInterviewerVersionReader>(),
                 interviewFactory ?? Mock.Of<IInterviewFactory>(),
-                Mock.Of<IAuthorizedUser>());
+                Mock.Of<IAuthorizedUser>(),
+                Mock.Of<IQRCodeHelper>());
         }
 
         public StatefullInterviewSearcher StatefullInterviewSearcher()
@@ -751,18 +790,67 @@ namespace WB.Tests.Abc.TestFactories
                 assignmentsImportFileConverter ?? AssignmentsImportFileConverter(userViewFactory: userViewFactory));
         }
 
-        public NearbyCommunicator NearbyConnectionManager(IRequestHandler requestHandler = null)
+        public NearbyCommunicator NearbyConnectionManager(IRequestHandler requestHandler = null, int maxBytesLength = 0)
         {
-            return new NearbyCommunicator(requestHandler ?? Mock.Of<IRequestHandler>(), Create.Fake.PayloadProvider(), new PayloadSerializer());
+            return new NearbyCommunicator(requestHandler ?? Mock.Of<IRequestHandler>(), 
+                Create.Fake.PayloadProvider(), 
+                new PayloadSerializer(new JsonAllTypesSerializer()), Mock.Of<IConnectionsApiLimits>( c => c.MaxBytesLength == maxBytesLength), Mock.Of<ILogger>());
         }
 
         public NearbyConnectionsRequestHandler GoogleConnectionsRequestHandler()
         {
-            return new NearbyConnectionsRequestHandler(new PayloadSerializer());
+            return new NearbyConnectionsRequestHandler(Mock.Of<ILogger>());
         }
 
         private static IQueryable<TEntity> GetNhQueryable<TEntity>() => Mock.Of<IQueryable<TEntity>>(x => x.Provider == Mock.Of<INhQueryProvider>());
 
+        public OfflineSynchronizationService OfflineSynchronizationService(
+            IOfflineSyncClient offlineSyncClient = null, 
+            IInterviewerPrincipal interviewerPrincipal = null,
+            IInterviewerQuestionnaireAccessor questionnaireAccessor = null)
+        {
+            return new OfflineSynchronizationService(
+                offlineSyncClient ?? Mock.Of<IOfflineSyncClient>(),
+                interviewerPrincipal ?? Mock.Of<IInterviewerPrincipal>(),
+                Mock.Of< IInterviewerQuestionnaireAccessor>(),
+                Mock.Of<IPlainStorage<InterviewView>>());
+        }
+
+        public SupervisorInterviewsHandler SupervisorInterviewsHandler(ILiteEventBus eventBus = null,
+            IEnumeratorEventStorage eventStorage = null,
+            IPlainStorage<InterviewView> interviews = null,
+            ICommandService commandService = null,
+            IJsonAllTypesSerializer serializer = null,
+            IPlainStorage<BrokenInterviewPackageView, int?> brokenInterviewStorage = null,
+            IPrincipal principal = null,
+            IPlainStorage<InterviewerDocument> interviewerViewRepository = null,
+            IAssignmentDocumentsStorage assignments = null)
+        {
+            return new SupervisorInterviewsHandler(
+                eventBus ?? Mock.Of<ILiteEventBus>(),
+                eventStorage ?? Mock.Of<IEnumeratorEventStorage>(),
+                interviews ?? new InMemoryPlainStorage<InterviewView>(),
+                serializer ?? Mock.Of<IJsonAllTypesSerializer>(s => s.Deserialize<AggregateRootEvent[]>(It.IsAny<string>()) == new AggregateRootEvent[]{}),// new JsonAllTypesSerializer(),
+                commandService ?? Mock.Of<ICommandService>(), 
+                Mock.Of<ILogger>(),
+                brokenInterviewStorage ?? Mock.Of<IPlainStorage<BrokenInterviewPackageView, int?>>(),
+                new SqliteInmemoryStorage<SuperivsorReceivedPackageLogEntry, int>(),
+                principal ?? Mock.Of<IPrincipal>(),
+                interviewerViewRepository ?? Mock.Of<IPlainStorage<InterviewerDocument>>(),
+                assignments ?? Create.Storage.AssignmentDocumentsInmemoryStorage());
+        }
+
+        public SupervisorGroupStateCalculationStrategy SupervisorGroupStateCalculationStrategy()
+        {
+            return new SupervisorGroupStateCalculationStrategy();
+        }
+
+        public SupervisorAssignmentsHandler SupervisorAssignmentsHandler(
+            IAssignmentDocumentsStorage assignmentDocumentsStorage = null)
+        {
+            return new SupervisorAssignmentsHandler(assignmentDocumentsStorage ??
+                                                    Create.Storage.AssignmentDocumentsInmemoryStorage());
+        }
     }
 
     internal static class GoogleConnectionsRequestHandlerExtensions
@@ -770,6 +858,14 @@ namespace WB.Tests.Abc.TestFactories
         public static IRequestHandler WithSampleEchoHandler(this IRequestHandler requestHandler)
         {
             requestHandler.RegisterHandler<PingMessage, PongMessage>(ping => Task.FromResult(new PongMessage() { Id = ping.Id })); // pre
+            return requestHandler;
+        }
+
+        public static IRequestHandler WithHandler<TRes, TReq>(this IRequestHandler requestHandler, Func<TRes, Task<TReq>> ahandler)
+            where TReq : ICommunicationMessage
+            where TRes : ICommunicationMessage
+        {
+            requestHandler.RegisterHandler(ahandler);
             return requestHandler;
         }
     }

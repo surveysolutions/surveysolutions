@@ -61,6 +61,33 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Interview {0} approved.
+        /// </summary>
+        public static string ApproveInterview {
+            get {
+                return ResourceManager.GetString("ApproveInterview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assign responsible {0} to assignment #{1}.
+        /// </summary>
+        public static string AssignResponsibleToAssignment {
+            get {
+                return ResourceManager.GetString("AssignResponsibleToAssignment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assign responsible {0} to interview {1}.
+        /// </summary>
+        public static string AssignResponsibleToInterview {
+            get {
+                return ResourceManager.GetString("AssignResponsibleToInterview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Interview {0} closed.
         /// </summary>
         public static string CloseInterview {
@@ -156,6 +183,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string PageTitle {
             get {
                 return ResourceManager.GetString("PageTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interview {0} rejected.
+        /// </summary>
+        public static string RejectInterview {
+            get {
+                return ResourceManager.GetString("RejectInterview", resourceCulture);
             }
         }
         
@@ -277,7 +313,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Sync started.
+        ///   Looks up a localized string similar to Sync started ({0}).
         /// </summary>
         public static string SynchronizationStarted {
             get {

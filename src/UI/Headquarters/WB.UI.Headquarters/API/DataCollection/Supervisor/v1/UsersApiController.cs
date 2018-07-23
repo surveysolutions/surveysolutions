@@ -37,6 +37,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
             return new SupervisorApiView()
             {
                 Id = user.PublicKey,
+                Email = user.Email
             };
         }
 

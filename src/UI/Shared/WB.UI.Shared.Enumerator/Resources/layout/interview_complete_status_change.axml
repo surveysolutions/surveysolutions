@@ -6,7 +6,6 @@
       style="@style/Interview_QuestionWithDivider"
       local:MvxBind="HideKeyboardOnClick .">
     
-    <!--cut from ehre-->
     <include layout="@layout/interview_complete_info" />
     <LinearLayout style="@style/Interview_Question" android:orientation="vertical">
 

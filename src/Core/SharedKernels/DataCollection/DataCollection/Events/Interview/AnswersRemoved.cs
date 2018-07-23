@@ -5,12 +5,15 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
     public class AnswersRemoved : QuestionsPassiveEvent
     {
-        public DateTime? RemoveTime { get; private set; }
+        public DateTime? RemoveTime { get; set; }
 
-        public AnswersRemoved(Identity[] questions, DateTime? removeTime)
-            : base(questions)
+        public AnswersRemoved(Identity[] questions, DateTimeOffset originDate)
+            : base(questions, originDate)
         {
-            this.RemoveTime = removeTime;
+            if (originDate != default(DateTimeOffset))
+            {
+                this.RemoveTime = originDate.UtcDateTime;
+            }
         }
     }
 }

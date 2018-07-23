@@ -747,4 +747,63 @@ Downloaded {3}%</value>
   <data name="Dashboard_Search_ExitSearch" xml:space="preserve">
     <value>Exit Search</value>
   </data>
+  <data name="SendToSupervisor_MovingToSupervisorDevice" xml:space="preserve">
+    <value>Moving all completed interviews to supervisor device</value>
+  </data>
+  <data name="SendToSupervisor_MovingToSupervisorFormat" xml:space="preserve">
+    <value>Moving all completed interviews to '{0}'</value>
+  </data>
+  <data name="SendToSupervisor_CheckSupervisorDevice" xml:space="preserve">
+    <value>Check that supervisor device has wifi and bluetooth turned on and you are withing couple of meters from it</value>
+  </data>
+  <data name="SendToSupervisor_TransferInProgress" xml:space="preserve">
+    <value>Transfer in progress</value>
+  </data>
+  <data name="SendToSupervisor_TransferWasAborted" xml:space="preserve">
+    <value>Transfer was aborted</value>
+  </data>
+  <data name="SendToSupervisor_DeviceFound" xml:space="preserve">
+    <value>Supervisor's device found. Requesting connection</value>
+  </data>
+  <data name="SendToSupervisor_DeviceConnectionAccepting" xml:space="preserve">
+    <value>Waiting for connection approval from supervisor</value>
+  </data>
+  <data name="SendToSupervisor_DeviceConnectionAccepted" xml:space="preserve">
+    <value>Connected to supervisor's device</value>
+  </data>
+  <data name="SendToSupervisor_SupervisorNotFound" xml:space="preserve">
+    <value>Transfer did not started.
+Supervisor device can not be located</value>
+  </data>
+  <data name="SendToSupervisor_SupervisorTerminateTransfering" xml:space="preserve">
+    <value>Transfer was aborted on second device.</value>
+  </data>
+  <data name="SendToSupervisor_SomeInterviewsOnSupervisor" xml:space="preserve">
+    <value>Some interviews are now on another device</value>
+  </data>
+  <data name="SendToSupervisor_SyncCompleted" xml:space="preserve">
+    <value>Transfer is complete. All completed interviews are now on another device</value>
+  </data>
+  <data name="SendToSupervisor_SyncCompletedWithErrorsFormat" xml:space="preserve">
+    <value>Transfer is complete. {0} interview(s) failed to synchronize</value>
+  </data>
+  <data name="SendToSupervisor_LookingForSupervisor" xml:space="preserve">
+    <value>Looking for supervisor device</value>
+  </data>
+  <data name="SendToSupervisor_MenuItem_Title" xml:space="preserve">
+    <value>Move completed
+interviews</value>
+  </data>
+  <data name="SendToSupervisor_Note" xml:space="preserve">
+    <value>Note: This action will take more time than usual, do not turn of this device</value>
+  </data>
+  <data name="SendToSupervisor_ConnectionFailed" xml:space="preserve">
+    <value>Make sure both devices is in close proximity; WIFI and Bluetooth should be enabled on both devices; Supervisor application should be opened on Supervisor's device</value>
+  </data>
+  <data name="SendToSupervisor_Retry" xml:space="preserve">
+    <value>Retry</value>
+  </data>
+  <data name="SendToSupervisor_BluetoothError" xml:space="preserve">
+    <value>Bluetooth state cannot be determined by the application. Please reboot both Interviewer and Supervisor devices and try synchronization again</value>
+  </data>
 </root>

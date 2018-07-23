@@ -194,7 +194,7 @@
     <value>{0} интервью удалено</value>
   </data>
   <data name="Synchronization_UserPassword_Update_Format" xml:space="preserve">
-    <value>Проблемы аутентификации. Мы не можем подтвердить Вашу учетную запись интервьюера ('{0}'). 
+    <value>Проблемы аутентификации. Мы не можем подтвердить Вашу учетную запись '{0}'. 
 С Вашей учетной записью возможны следующие проблемы: пароль отличается от того что Вы вводили, учетная запись заблокирована или удалена Хедквотером.
 Пожалуйста введите Ваш обновленный пароль. Если проблема не будет решена, пожалуйста, обратитесь к Супервизору или Хедквотеру.</value>
   </data>
@@ -616,6 +616,9 @@
   <data name="UnacceptableSSLCertificate" xml:space="preserve">
     <value>Невозможно проверить сертификат. Проверьте адрес приложения Headquarters и верность текущей даты на устройстве</value>
   </data>
+  <data name="InterviewerFromDifferentTeam" xml:space="preserve">
+    <value>Интервьюер принадлежит другой команде. Пожалуйста, синхронизируйтесь с Headquarters</value>
+  </data>
   <data name="Synchronization_DownloadingLogo" xml:space="preserve">
     <value>Загрузка логотипа</value>
   </data>
@@ -768,10 +771,13 @@
   <data name="Synchronization_Of_Interviewers" xml:space="preserve">
     <value>Синхронизация интервьюверов</value>
   </data>
+  <data name="Synchronization_Of_Supervisor_details" xml:space="preserve">
+    <value>Синхронизация деталей супервизора</value>
+   </data>
   <data name="Synchronization_Of_InterviewersFormat" xml:space="preserve">
     <value>Синхронизация интервьюверов: {0} из {1}</value>
   </data>
-    <data name="MenuItem_Title_MapsSynchronization" xml:space="preserve">
+  <data name="MenuItem_Title_MapsSynchronization" xml:space="preserve">
     <value>Синхронизировать карты</value>
   </data>
   <data name="Prefs_AllowSyncWithHq" xml:space="preserve">
@@ -779,5 +785,8 @@
   </data>
   <data name="Prefs_AllowSyncWithHq_Summary" xml:space="preserve">
     <value>Выключите эту настройку если приложение должно синхронизироваться только с мобильным приложением супервизора</value>
+  </data>
+  <data name="DashboardItem_Responsible" xml:space="preserve">
+    <value>Ответственный: {0}</value>
   </data>
 </root>

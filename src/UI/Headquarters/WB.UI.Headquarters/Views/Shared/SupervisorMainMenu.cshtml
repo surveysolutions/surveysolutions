@@ -29,8 +29,8 @@
         <a href="javascript:void(0);" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"
            title="@User.Identity.Name">@User.Identity.Name<span class="caret"></span></a>
         <ul class="dropdown-menu">
+            <li>@Html.ActionLink(Common.DownloadSupervisor, "Supervisor", "Download", new { area = string.Empty }, null)</li>
             <li>@Html.ActionLink(Common.Logoff, "LogOff", "Account", new { area = string.Empty }, null)</li>
-            <li>@Html.ActionLink(Common.Download, "Supervisor", "Download", new { area = string.Empty }, null)</li>
         </ul>
     </li>
     @Html.Partial("LimitsIndicator")

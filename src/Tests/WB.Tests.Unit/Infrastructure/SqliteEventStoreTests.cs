@@ -37,6 +37,21 @@ namespace WB.Tests.Unit.Infrastructure
         }
 
         [Test]
+        public void should_check_that_HasEventsAfterSpecifiedSequenceWithAnyOfSpecifiedTypes()
+        {
+            var eventSourceId = Id.gA;
+
+            sqliteEventStorage.Store(new UncommittedEventStream(null,
+                new List<UncommittedEvent> {
+                    Create.Other.UncommittedEvent(eventSourceId, Create.Event.TextQuestionAnswered(), sequence: 1),
+                    Create.Other.UncommittedEvent(eventSourceId, Create.Event.TextQuestionAnswered(), sequence: 2)
+                }));
+
+            var hasChanged = sqliteEventStorage.HasEventsAfterSpecifiedSequenceWithAnyOfSpecifiedTypes(1, eventSourceId, typeof(TextQuestionAnswered).Name);
+            Assert.That(hasChanged, Is.True);
+        }
+
+        [Test]
         public void Should_be_able_to_store_events()
         {
             var eventSourceId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");

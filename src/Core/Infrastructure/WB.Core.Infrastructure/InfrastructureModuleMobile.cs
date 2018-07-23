@@ -12,6 +12,7 @@ using WB.Core.Infrastructure.WriteSide;
 
 namespace WB.Core.Infrastructure
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class InfrastructureModuleMobile : IModule
     {
         public void Load(IIocRegistry registry)
@@ -30,7 +31,7 @@ namespace WB.Core.Infrastructure
             registry.BindAsSingleton<IAggregateLock, AggregateLock>();
         }
 
-        public Task Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
             return Task.CompletedTask;
         }
