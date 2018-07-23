@@ -93,6 +93,24 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             var response = await handler.Handle(new GetInterviewsRequest(interviewerId));
 
             response.Interviews.Select(x => x.Id).Should().BeEquivalentTo(Id.g2, Id.g5);
+            response.Interviews.Select(x => x.ResponsibleId).Should().BeEquivalentTo(interviewerId, interviewerId);
+        }
+
+        [Test]
+        public async Task GetInterviewsRequest_Should_return_responsible_in_response()
+        {
+            var responsibleId = Id.g1;
+            var questionnaireId = Create.Entity.QuestionnaireIdentity().ToString();
+
+            var interviews = new SqliteInmemoryStorage<InterviewView>();
+            interviews.Store(Create.Entity.InterviewView(interviewId: Id.g1, responsibleId: responsibleId, status: InterviewStatus.RejectedBySupervisor, questionnaireId: questionnaireId));
+
+            var handler = Create.Service.SupervisorInterviewsHandler(interviews: interviews);
+
+            // Act
+            var response = await handler.Handle(new GetInterviewsRequest(responsibleId));
+
+            response.Interviews.Select(x => x.ResponsibleId).Should().BeEquivalentTo(responsibleId);
         }
 
         [Test]
