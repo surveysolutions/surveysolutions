@@ -179,7 +179,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.ProgressTitle = InterviewerUIResources.SendToSupervisor_TransferInProgress;
             this.TransferingStatus = TransferingStatus.Transferring;
 
-            await this.SynchronizeAsync();
+            await this.SynchronizeAsync().ConfigureAwait(false);
         }
 
         protected override void OnDeviceDisconnected(string name)
@@ -289,7 +289,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
                             if(!o.IsRunning) this.OnComplete(o.Statistics.FailedInterviewsCount);
                         }),
-                        synchronizationCancellationTokenSource.Token);
+                        synchronizationCancellationTokenSource.Token).ConfigureAwait(false);
 
                     this.synchronizationCompleteSource.NotifyOnCompletedSynchronization(true);
                 }
