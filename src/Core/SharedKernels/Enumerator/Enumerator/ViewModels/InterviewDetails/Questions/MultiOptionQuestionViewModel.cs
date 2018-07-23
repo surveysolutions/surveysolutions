@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -188,26 +189,33 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly Timer timer;
         protected internal int ThrottlePeriod { get; set; } = Constants.ThrottlePeriod;
         private List<int> previousOptionsToReset = null;
+        private List<int> PreviousOptionsToReset
+        {
+            get => previousOptionsToReset ?? new List<int>();
+            set => this.previousOptionsToReset = value;
+        }
+
         private List<int> selectedOptionsToSave = null;
 
         private async Task SaveAnswer()
         {
+            if (this.userInteraction.HasPendingUserInterations)
+            {
+                await this.userInteraction.WaitPendingUserInteractionsAsync();
+                ResetUiOptions();
+                return;
+            }
+
             if (this.isRosterSizeQuestion)
             {
-                var itemsToDelete = previousOptionsToReset.Except(selectedOptionsToSave).ToList();
+                var itemsToDelete = PreviousOptionsToReset.Except(selectedOptionsToSave).ToList();
                 if (itemsToDelete.Any())
                 {
                     var amountOfRostersToRemove = itemsToDelete.Count;
                     var message = string.Format(UIResources.Interview_Questions_RemoveRowFromRosterMessage, amountOfRostersToRemove);
                     if (!await this.userInteraction.ConfirmAsync(message))
                     {
-                        foreach (var itemToDelete in itemsToDelete)
-                        {
-                            var option = this.GetOptionByValue(itemToDelete);
-                            if (option!=null)
-                                option.Checked = true;    
-                        }
-                    
+                        ResetUiOptions();
                         return;
                     }
                 }
@@ -225,7 +233,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             try
             {
                 await this.Answering.SendAnswerQuestionCommandAsync(command);
-
+                PreviousOptionsToReset = null;
+                
                 if (selectedValues.Length == this.maxAllowedAnswers)
                 {
                     this.Options.Where(o => !o.Checked).ForEach(o => o.CanBeChecked = false);
@@ -239,7 +248,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
             catch (InterviewException ex)
             {
-                var optionsToReset = previousOptionsToReset.Except(selectedOptionsToSave).Union(selectedOptionsToSave.Except(previousOptionsToReset));
+                var optionsToReset = PreviousOptionsToReset.Except(selectedOptionsToSave).Union(selectedOptionsToSave.Except(PreviousOptionsToReset));
 
                 foreach (var optionToReset in optionsToReset)
                 {
@@ -249,6 +258,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 }
                 this.QuestionState.Validity.ProcessException(ex);
             }
+        }
+
+        private void ResetUiOptions()
+        {
+            var interview = this.interviewRepository.Get(this.interviewId.FormatGuid());
+            var answer = interview.GetMultiOptionQuestion(this.Identity)?.GetAnswer();
+            if (answer == null) return;
+
+            foreach (var option in Options)
+            {
+                option.Checked = answer.CheckedValues.Contains(option.Value);
+            }
+
+            PreviousOptionsToReset = null;
         }
 
         private MultiOptionQuestionOptionViewModel GetOptionByValue(int value)
@@ -266,9 +289,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (previousOptionsToReset == null)
             {
                 var toggledOptionValue = (changedModel as MultiOptionQuestionOptionViewModel).Value;
-                previousOptionsToReset = allSelectedOptions.Except(toggledOptionValue.ToEnumerable()).ToList();
+                PreviousOptionsToReset = allSelectedOptions.Except(toggledOptionValue.ToEnumerable()).ToList();
                 if (!changedModel.Checked)
-                    previousOptionsToReset.Add(toggledOptionValue);
+                    PreviousOptionsToReset.Add(toggledOptionValue);
             }
 
             if (this.maxAllowedAnswers.HasValue && allSelectedOptions.Count > this.maxAllowedAnswers)
