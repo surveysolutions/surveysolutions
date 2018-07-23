@@ -28,7 +28,8 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer
             return new InterviewerApiView()
             {
                 Id = user.PublicKey,
-                SupervisorId = user.Supervisor.Id
+                SupervisorId = user.Supervisor.Id,
+                SecurityStamp = user.SecurityStamp
             };
         }
         

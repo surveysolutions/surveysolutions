@@ -198,7 +198,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
                         PhoneNumber = interviewer.PhoneNumber,
                         UserName = interviewer.UserName,
                         FullaName = interviewer.FullName,
-                        Token = interviewer.Token,
+                        SecurityStamp = interviewer.SecurityStamp,
                         IsLockedBySupervisor = interviewer.IsLockedBySupervisor,
                         IsLockedByHeadquarters = interviewer.IsLockedByHeadquarters
                     };
@@ -209,7 +209,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
                     local.PasswordHash = interviewer.PasswordHash;
                     local.PhoneNumber = interviewer.PhoneNumber;
                     local.UserName = interviewer.UserName;
-                    local.Token = interviewer.Token;
+                    local.SecurityStamp = interviewer.SecurityStamp;
                     local.IsLockedBySupervisor = interviewer.IsLockedBySupervisor;
                     local.IsLockedByHeadquarters = interviewer.IsLockedByHeadquarters;
                 }

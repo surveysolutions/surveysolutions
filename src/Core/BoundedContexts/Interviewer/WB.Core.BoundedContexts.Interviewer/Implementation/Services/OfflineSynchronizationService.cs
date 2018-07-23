@@ -241,7 +241,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
             var request = new CanSynchronizeRequest(interviewerBoundedContextVersion.Revision, 
                 this.principal.CurrentUserIdentity.UserId,
-                this.principal.CurrentUserIdentity.PasswordHash);
+                this.principal.CurrentUserIdentity.SecurityStamp);
 
             var response = await this.syncClient.SendAsync<CanSynchronizeRequest, CanSynchronizeResponse>(request, 
                 token ?? CancellationToken.None);
