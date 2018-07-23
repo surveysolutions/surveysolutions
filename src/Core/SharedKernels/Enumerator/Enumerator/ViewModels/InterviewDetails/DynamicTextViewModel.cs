@@ -37,12 +37,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         protected Identity identity;
         private bool isRoster;
 
+        private bool isInstructions = false;
+
         public void InitAsStatic(string textWithoutSubstitutions)
         {
             if (textWithoutSubstitutions == null) throw new ArgumentNullException(nameof(textWithoutSubstitutions));
 
             this.HtmlText = textWithoutSubstitutions;
             this.PlainText = textWithoutSubstitutions;
+        }
+
+        public void InitAsInstructions(string interviewId, Identity entityIdentity)
+        {
+            isInstructions = true;
+            this.Init(interviewId, entityIdentity);
         }
 
         public void Init(string interviewId, Identity entityIdentity)
@@ -106,11 +114,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             var interview = this.interviewRepository.Get(this.interviewId);
 
-            var titleText = interview.GetBrowserReadyTitleHtml(this.identity) ?? "";
+            if (isInstructions)
+            {
+                this.HtmlText = interview.GetBrowserReadyInstructionsHtml(this.identity) ?? "";
+            }
+            else
+            {
+                var titleText = interview.GetBrowserReadyTitleHtml(this.identity) ?? "";
 
-            this.HtmlText = this.isRoster
-                ? $"{titleText} - {interview.GetRosterTitle(this.identity) ?? this.substitutionService.DefaultSubstitutionText}"
-                : titleText;
+                this.HtmlText = this.isRoster
+                    ? $"{titleText} - {interview.GetRosterTitle(this.identity) ?? this.substitutionService.DefaultSubstitutionText}"
+                    : titleText;
+            }
 
             this.PlainText = RemoveHtmlTags(this.HtmlText);
         }
