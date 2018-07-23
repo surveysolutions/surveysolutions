@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items;
+using WB.Core.SharedKernels.DataCollection.Events;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -186,5 +187,12 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services
 
         public bool IsOutboxInterview(Guid interviewId)
             => GetOutboxInterviews().Any(x => x.InterviewId == interviewId);
+
+        public bool IsSentToInterviewer(Guid interviewId)
+        {
+            var sentToInterviewerInterviews = this.GetSentToInterviewerInterviews();
+
+            return sentToInterviewerInterviews.Any(x => x.InterviewId == interviewId);
+        }
     }
 }
