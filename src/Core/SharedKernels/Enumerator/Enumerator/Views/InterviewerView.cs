@@ -18,5 +18,7 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         public string Token { get; set; }
         public bool IsLockedByHeadquarters { get; set; }
         public bool IsLockedBySupervisor { get; set; }
+
+        public string SecurityStamp { get; set; }
     }
 }

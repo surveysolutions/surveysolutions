@@ -60,7 +60,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 SupervisorId = interviewer.SupervisorId,
                 Name = this.UserName,
                 PasswordHash = this.passwordHasher.Hash(this.Password),
-                Token = credentials.Token
+                Token = credentials.Token,
+                SecurityStamp = interviewer.SecurityStamp
             };
 
             this.interviewersPlainStorage.Store(interviewerIdentity);

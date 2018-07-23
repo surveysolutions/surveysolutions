@@ -4,16 +4,16 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Messages
 {
     public class CanSynchronizeRequest : ICommunicationMessage
     {
-        public CanSynchronizeRequest(int build, Guid interviewerId, string passwordHash)
+        public CanSynchronizeRequest(int build, Guid interviewerId, string secutrityStamp)
         {
             this.InterviewerBuildNumber = build;
             this.InterviewerId = interviewerId;
-            this.PasswordHash = passwordHash;
+            this.SecurityStamp = secutrityStamp;
         }
 
         public int InterviewerBuildNumber { get; set; }
         public Guid InterviewerId { set; get; }
-        public string PasswordHash { get; set; }
+        public string SecurityStamp { get; set; }
     }
 
     public class CanSynchronizeResponse : ICommunicationMessage
