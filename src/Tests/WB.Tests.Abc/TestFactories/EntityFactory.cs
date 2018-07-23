@@ -579,7 +579,7 @@ namespace WB.Tests.Abc.TestFactories
 
         public InterviewSequenceView InterviewSequenceView(Guid id, int sequence)
         {
-            return new InterviewSequenceView() {Id = id, Sequence = sequence};
+            return new InterviewSequenceView() {Id = id, ReceivedFromServerSequence = sequence};
         }
 
         public DataExportVariable LabeledVariable(string variableName = "var", string label = "lbl", Guid? questionId = null, params VariableValueLabel[] variableValueLabels)

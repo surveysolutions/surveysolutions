@@ -67,7 +67,7 @@ namespace WB.UI.Headquarters.API.DataCollection
                     QuestionnaireIdentity = interview.QuestionnaireIdentity,
                     IsRejected = interview.IsRejected,
                     ResponsibleId = interview.ResponsibleId,
-                    Sequence = interview.Sequence
+                    Sequence = interview.LastEventSequence
                 }).ToList();
 
             var response = this.Request.CreateResponse(resultValue);
