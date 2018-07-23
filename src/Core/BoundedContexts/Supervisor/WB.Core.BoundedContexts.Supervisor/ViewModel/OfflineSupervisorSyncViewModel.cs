@@ -112,15 +112,11 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 
         protected override void OnDeviceConnectionRequested(string name) => SetStatus(ConnectionStatus.Connecting, $"Requested conection to {name}");
 
-        public IMvxAsyncCommand Restart => new MvxAsyncCommand(OnGoogleApiReady);
-
-        public override async Task OnGoogleApiReady()
+        public IMvxAsyncCommand StartSynchronization => new MvxAsyncCommand(() =>
         {
             this.cancellationTokenSource = new CancellationTokenSource();
-            Log.Trace("StartAdvertising");
-
-            await this.StartAdvertising();
-        }
+            return this.StartAdvertising();
+        });
 
         protected async Task StartAdvertising()
         {
