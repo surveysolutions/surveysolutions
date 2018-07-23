@@ -91,7 +91,5 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
         }
 
         protected abstract string GetDeviceIdentification();
-
-        public abstract Task OnGoogleApiReady();
     }
 }
