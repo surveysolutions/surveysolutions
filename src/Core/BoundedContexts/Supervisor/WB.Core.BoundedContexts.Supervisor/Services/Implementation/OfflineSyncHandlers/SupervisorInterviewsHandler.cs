@@ -270,6 +270,24 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                     Reason = SyncDeclineReason.NotATeamMember
                 });
             }
+            
+            if (user.PasswordHash != arg.PasswordHash)
+            {
+                return Task.FromResult(new CanSynchronizeResponse
+                {
+                    CanSyncronize = false,
+                    Reason = SyncDeclineReason.InvalidPassword
+                });
+            }
+
+            if (user.IsLockedByHeadquarters || user.IsLockedBySupervisor)
+            {
+                return Task.FromResult(new CanSynchronizeResponse
+                {
+                    CanSyncronize = false,
+                    Reason = SyncDeclineReason.UserIsLocked
+                });
+            }
 
             return Task.FromResult(new CanSynchronizeResponse
             {
