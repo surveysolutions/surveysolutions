@@ -18,5 +18,6 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services
         bool IsOutboxInterview(Guid interviewId);
         IEnumerable<IDashboardItem> GetSentToInterviewerItems();
         int SentToInterviewerCount();
+        bool IsSentToInterviewer(Guid interviewId);
     }
 }
