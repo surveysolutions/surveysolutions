@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using Ncqrs.Spec;
 using WB.Core.Infrastructure.EventBus;
@@ -52,6 +53,12 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
        static StatefulInterview interview;
 
-       static readonly IEvent[] eventsToPublish = new IEvent[] { new AnswersDeclaredInvalid(new Identity[0]), new GroupsEnabled(new Identity[0]) };
+       static readonly IEvent[] eventsToPublish = new IEvent[]
+       {
+           new AnswersDeclaredInvalid(
+               new Identity[0].ToDictionary<Identity, Identity, IReadOnlyList<FailedValidationCondition>>(question => question, question => new List<FailedValidationCondition>()), 
+               DateTimeOffset.Now),
+           new GroupsEnabled(new Identity[0], DateTimeOffset.Now)
+       };
     }
 }

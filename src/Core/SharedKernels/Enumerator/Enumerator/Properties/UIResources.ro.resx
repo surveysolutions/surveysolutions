@@ -163,7 +163,7 @@
     <value>Salvare</value>
   </data>
   <data name="AreaMap_Undo" xml:space="preserve">
-    <value>Anulare</value>
+    <value>Revenire</value>
   </data>
   <data name="AreaMap_UpdateFailed" xml:space="preserve">
     <value>Actualizare eșuată</value>
@@ -175,7 +175,7 @@
     <value>Actualizare hărți</value>
   </data>
   <data name="AssignmentN" xml:space="preserve">
-    <value>Sarcina #{0}</value>
+    <value>Interviul alocat #{0}</value>
   </data>
   <data name="AudioQuestion_DurationFormat" xml:space="preserve">
     <value>{0} din înregistrarea audio</value>
@@ -191,6 +191,7 @@
   </data>
   <data name="Dashboard_EmptyQuestionnairesList" xml:space="preserve">
     <value>Nu există chestionare
+
 Puteți crea sau edita chestionare utilizând Survey Solutions Designer</value>
   </data>
   <data name="Dashboard_EmptySearchResult" xml:space="preserve">
@@ -230,7 +231,7 @@ Puteți crea sau edita chestionare utilizând Survey Solutions Designer</value>
     <value>Contul dvs. nu a fost aprobat. Vă rugăm să îl confirmați mai întâi.</value>
   </data>
   <data name="ErrorMessage_InternalServerError" xml:space="preserve">
-    <value>Eroare de server. Vă rugăm să contactați echipa de suport la support@mysurvey.solutions.</value>
+    <value>Eroare de server. Vă rugăm să contactați echipa de suport la support@mysurvey.solutions</value>
   </data>
   <data name="ErrorMessage_InvalidEndpoint" xml:space="preserve">
     <value>Adresa URL introdusă pentru Survey Solutions Designer nu este validă. Verificați setările.</value>
@@ -245,10 +246,10 @@ Puteți crea sau edita chestionare utilizând Survey Solutions Designer</value>
     <value>Nu se poate conecta la Survey Solutions Designer. Verificați disponibilitatea site-ului.</value>
   </data>
   <data name="ErrorMessage_Unauthorized" xml:space="preserve">
-    <value>Datele de autentificare sunt incorecte.</value>
+    <value>Numele de utilizator sau parola sunt incorecte</value>
   </data>
   <data name="ErrorMessage_UpgradeRequired" xml:space="preserve">
-    <value>A fost lansată o nouă versiune a aplicației. Vă rugăm să actualizați aplicația.</value>
+    <value>A fost lansată o nouă versiune a aplicației. Vă rugăm să actualizați aplicația</value>
   </data>
   <data name="FilteredComboboxQuestion_Hint" xml:space="preserve">
     <value>Apăsați pentru a introduce text</value>
@@ -257,7 +258,7 @@ Puteți crea sau edita chestionare utilizând Survey Solutions Designer</value>
     <value>Aplicația trebuie să aibă permisiunea de a utiliza locația dispozitivului curent pentru a răspunde la această întrebare. Reîncercați răspunsul la întrebare și permiteți accesul. Dacă nu vedeți opțiunile de tip popup, accesați Setări și permiteți aplicației să utilizeze locația dispozitivului.</value>
   </data>
   <data name="GpsQuestion_Timeout" xml:space="preserve">
-    <value>GPS-ul nu poate detecta localizarea. Pentru a depana, vă rugăm încercați următoarele: asigurați-vă că vă aflați în aer liber, confirmați că GPS-ul dvs. este activat sau modificați setarea de expirare a conexiunii GPS-ului.</value>
+    <value>GPS-ul nu poate detecta localizarea. Pentru a depana, vă rugăm încercați următoarele: asigurați-vă că vă aflați în aer liber, confirmați că GPS-ul dvs. este activat sau modificați setarea de expirare a conexiunii GPS-ului</value>
   </data>
   <data name="IntegerQuestion_Hint" xml:space="preserve">
     <value>Apăsați pentru a introduce numărul</value>
@@ -266,7 +267,7 @@ Puteți crea sau edita chestionare utilizând Survey Solutions Designer</value>
     <value>Survey Solutions Interviewer</value>
   </data>
   <data name="Interviewer_AudioRecording" xml:space="preserve">
-    <value>Inregistrare audio</value>
+    <value>Înregistrare audio</value>
   </data>
   <data name="Interviewer_Diagnostics" xml:space="preserve">
     <value>Diagnosticare</value>
@@ -290,10 +291,10 @@ Puteți crea sau edita chestionare utilizând Survey Solutions Designer</value>
     <value>Încercați să vă autentificați online</value>
   </data>
   <data name="InterviewKey" xml:space="preserve">
-    <value>Cheia Chestionarului: {0}</value>
+    <value>Cheia interviului: {0}</value>
   </data>
   <data name="Interview_Comment_Interviewer_Caption" xml:space="preserve">
-    <value>Comentariul dvs.</value>
+    <value>Comentariul dvs</value>
   </data>
   <data name="Interview_CompleteScreen_ButtonText" xml:space="preserve">
     <value>Finalizați chestionarul</value>
@@ -305,7 +306,7 @@ Puteți crea sau edita chestionare utilizând Survey Solutions Designer</value>
     <value>Finalizat</value>
   </data>
   <data name="Interview_Complete_Consequences_Instrunction" xml:space="preserve">
-    <value>După ce terminați interviul, acesta va avea statusul "Finalizat" și va fi trimis către supervizor la următoarea sincronizare.</value>
+    <value>După ce terminați interviul, acesta va avea statusul 'Finalizat' și va fi trimis către controlor la următoarea sincronizare</value>
   </data>
   <data name="Interview_Complete_Entities_With_Errors" xml:space="preserve">
     <value>Entitățile cu erori:</value>
@@ -320,7 +321,7 @@ Puteți crea sau edita chestionare utilizând Survey Solutions Designer</value>
     <value>Fără</value>
   </data>
   <data name="Interview_Complete_Note_For_Supervisor" xml:space="preserve">
-    <value>Comentariu pentru supervizor</value>
+    <value>Comentariu pentru controlor</value>
   </data>
   <data name="Interview_Complete_Questions_Status" xml:space="preserve">
     <value>Statusul întrebării</value>
@@ -341,13 +342,13 @@ Puteți crea sau edita chestionare utilizând Survey Solutions Designer</value>
     <value>Primele {0} întrebări cu comentarii:</value>
   </data>
   <data name="Interview_Cover_Questions_With_Comments" xml:space="preserve">
-    <value>Întrebări cu comentariile supervizorului:</value>
+    <value>Întrebări cu comentariile controlorului:</value>
   </data>
   <data name="Interview_Cover_Screen_Title" xml:space="preserve">
     <value>Copertă</value>
   </data>
   <data name="Interview_Cover_Supervisor_Note" xml:space="preserve">
-    <value>Notă de supervizor:</value>
+    <value>Nota controlorului:</value>
   </data>
   <data name="Interview_Group_AnsweredQuestions_Many" xml:space="preserve">
     <value>{0} răspunsuri</value>
@@ -380,7 +381,7 @@ Puteți crea sau edita chestionare utilizând Survey Solutions Designer</value>
     <value>fără sub-secțiuni</value>
   </data>
   <data name="Interview_Headquarters_Comment_Caption" xml:space="preserve">
-    <value>Comentariul Headquarter-ului</value>
+    <value>Comentariul RINS</value>
   </data>
   <data name="Interview_Instruction_ShowInstruction" xml:space="preserve">
     <value>Arată instrucțiunile</value>
@@ -437,10 +438,10 @@ Puteți crea sau edita chestionare utilizând Survey Solutions Designer</value>
     <value>Apăsați pentru a înregistra timpul curent</value>
   </data>
   <data name="Interview_Question_Cascading_NoMatchingValue" xml:space="preserve">
-    <value>Răspunsul "{0}" nu corespunde niciunei opțiuni</value>
+    <value>Răspunsul '{0}' nu corespunde niciunei opțiuni</value>
   </data>
   <data name="Interview_Question_Filter_MatchError" xml:space="preserve">
-    <value>Răspunsul "{0}" nu corespunde niciunei opțiuni</value>
+    <value>Răspunsul '{0}' nu corespunde niciunei opțiuni</value>
   </data>
   <data name="Interview_Question_Integer_EmptyValueError" xml:space="preserve">
     <value>Valorile necompletate nu pot fi salvate</value>
@@ -473,7 +474,7 @@ Puteți crea sau edita chestionare utilizând Survey Solutions Designer</value>
     <value>Semnează aici</value>
   </data>
   <data name="Interview_Supervisor_Comment_Caption" xml:space="preserve">
-    <value>Comentariu supervizor</value>
+    <value>Comentariu controlor</value>
   </data>
   <data name="Interview_TakeSignature" xml:space="preserve">
     <value>Stocați semnătura</value>
@@ -563,7 +564,7 @@ Puteți crea sau edita chestionare utilizând Survey Solutions Designer</value>
     <value>Rămâneți autentificat</value>
   </data>
   <data name="Synchronization_UserLinkedToAnotherDevice_Description" xml:space="preserve">
-    <value>Nu aveți nicio sarcină alocată pe acest dispozitiv. Trimiteți informații despre tabletă, ștergeți datele aplicației și autentificați-vă cu alt cont</value>
+    <value>Nu aveți niciun interviu alocat pe acest dispozitiv. Trimiteți informații despre tabletă, ștergeți datele aplicației și autentificați-vă cu alt cont</value>
   </data>
   <data name="TextListQuestion_Hint" xml:space="preserve">
     <value>Apăsați pentru a introduce un nou element</value>
@@ -575,7 +576,7 @@ Puteți crea sau edita chestionare utilizând Survey Solutions Designer</value>
     <value>Apăsați pentru a introduce text ({0})</value>
   </data>
   <data name="Validity_Answered_Invalid_ErrorCaption" xml:space="preserve">
-    <value>Răspunsul este invalid</value>
+    <value>Răspunsul este nevalid</value>
   </data>
   <data name="Validity_NotAnswered_InterviewException_ErrorCaption" xml:space="preserve">
     <value>Răspunsul nu a fost salvat</value>
@@ -594,5 +595,38 @@ Puteți crea sau edita chestionare utilizând Survey Solutions Designer</value>
   </data>
   <data name="Yes" xml:space="preserve">
     <value>Da</value>
+  </data>
+  <data name="AreaMap_PerimeterFormat" xml:space="preserve">
+    <value>Perimetru:</value>
+  </data>
+  <data name="Interview_Overview" xml:space="preserve">
+    <value>Prezentare generală</value>
+  </data>
+  <data name="Interview_Overview_AdditionalInfo" xml:space="preserve">
+    <value>Informații suplimentare</value>
+  </data>
+  <data name="Interview_Overview_Comments" xml:space="preserve">
+    <value>Comentarii</value>
+  </data>
+  <data name="Interview_Overview_Name" xml:space="preserve">
+    <value>Prezentare generală</value>
+  </data>
+  <data name="Interview_Overview_NotAnswered" xml:space="preserve">
+    <value>Fără răspuns</value>
+  </data>
+  <data name="Interview_Overview_Warnings" xml:space="preserve">
+    <value>Atenționări</value>
+  </data>
+  <data name="Supervisor_ApplicationName" xml:space="preserve">
+    <value>Controlor Survey Solutions</value>
+  </data>
+  <data name="Supervisor_Complete_Approve_btn" xml:space="preserve">
+    <value>Aprobare</value>
+  </data>
+  <data name="Supervisor_Complete_Assign_btn" xml:space="preserve">
+    <value>Alocare</value>
+  </data>
+  <data name="Supervisor_Complete_Reject_btn" xml:space="preserve">
+    <value>Respingere</value>
   </data>
 </root>

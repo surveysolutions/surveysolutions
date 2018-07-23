@@ -682,6 +682,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to A combo-box is a combination of a drop-down list and a single-line editable textbox. Options could be selected either by typing a value or its part or selecting a value from the list.
+        /// </summary>
+        public static string HelpCombobox {
+            get {
+                return ResourceManager.GetString("HelpCombobox", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A logical expression that activates(deactivates) the current item depending on the answers on the other questions..
         /// </summary>
         public static string HelpConditionExpression {

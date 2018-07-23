@@ -1,0 +1,73 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+    <style name="OfflineSync_HeaderText" parent="AppTheme">
+        <item name="android:fontFamily">Roboto</item>
+        <item name="android:textSize">@dimen/textsize_24</item>
+        <item name="android:textColor">@color/offline_sync_regular_text</item>
+    </style>
+    <style name="OfflineSync_SubTitleText" parent="AppTheme">
+        <item name="android:fontFamily">Roboto</item>
+        <item name="android:textSize">@dimen/textsize_18</item>
+        <item name="android:textColor">@color/offline_sync_regular_text</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="OfflineSync_Hyperlink" parent="AppTheme">
+        <item name="android:fontFamily">Roboto</item>
+        <item name="android:textSize">@dimen/textsize_14</item>
+        <item name="android:textColor">@color/offline_sync_regular_text</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:letterSpacing">0.1</item>
+    </style>
+
+    <style name="OfflineSync_MainHolder" parent="AppTheme">
+        <item name="android:layout_width">@dimen/OfflineSync_MainHolder_LayoutWidth</item>
+        <item name="android:layout_marginLeft">@dimen/OfflineSync_Base_MarginTop</item>
+        <item name="android:layout_marginTop">@dimen/OfflineSync_Base_MarginTop</item>
+    </style>
+    <style name="OfflineSync_Title" parent="OfflineSync_HeaderText">
+    </style>
+    <style name="OfflineSync_ProgressTitle" parent="OfflineSync_SubTitleText">
+        <item name="android:paddingTop">26dp</item>
+    </style>
+    <style name="OfflineSync_Cancel" parent="OfflineSync_Hyperlink">
+        <item name="android:paddingTop">@dimen/OfflineSync_Base_MarginTop</item>
+    </style>
+    <style name="OfflineSync_BackToDashboard" parent="OfflineSync_Hyperlink">
+        <item name="android:layout_marginLeft">@dimen/OfflineSync_Small_MarginLeft</item>
+        <item name="android:gravity">center</item>
+    </style>
+    <style name="OfflineSync_SearchDevice" parent="OfflineSync_SubTitleText">
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:layout_marginTop">@dimen/OfflineSync_Base_MarginTop</item>
+        <item name="android:layout_marginLeft">24dp</item>
+        <item name="android:gravity">center_vertical|left|start</item>
+        <item name="android:textColor">@color/offline_sync_waitingdevice_text</item>
+    </style>
+    <style name="OfflineSync_InfinityProgress" parent="@android:style/Widget.ProgressBar.Large">
+        <item name="android:layout_marginTop">@dimen/OfflineSync_Base_MarginTop</item>
+        <item name="android:layout_width">@dimen/OfflineSync_Spinner_Size</item>
+        <item name="android:layout_height">@dimen/OfflineSync_Spinner_Size</item>
+        <item name="android:indeterminateDrawable">@drawable/spinnerring</item>
+    </style>
+    <style name="OfflineSync_Abort" parent="OfflineSync_Hyperlink">
+        <item name="android:layout_marginTop">@dimen/OfflineSync_Small_MarginTop</item>
+        <item name="android:layout_marginLeft">@dimen/OfflineSync_Small_MarginLeft</item>
+        <item name="android:textColor">@color/offline_sync_abort_text</item>
+    </style>
+    <style name="OfflineSync_Progress" parent="@android:style/Widget.ProgressBar.Horizontal">
+        <item name="android:layout_marginTop">@dimen/OfflineSync_Small_MarginTop</item>
+        <item name="android:progressDrawable">@drawable/greenprogress</item>
+    </style>
+    <style name="OfflineSync_Done" parent="Interview_Previous_Group_Navigation_Button">
+        <item name="android:layout_marginTop">@dimen/OfflineSync_Base_MarginTop</item>
+        <item name="android:layout_marginLeft">0dp</item>
+        <item name="android:background">@drawable/group_completed</item>
+    </style>
+    <style name="OfflineSync_ProgressStatus" parent="OfflineSync_HeaderText">
+        <item name="android:layout_marginTop">@dimen/OfflineSync_Base_MarginTop</item>
+    </style>
+    <style name="OfflineSync_NetworkInfo" parent="OfflineSync_SubTitleText">
+        <item name="android:layout_marginTop">@dimen/OfflineSync_Small_MarginTop</item>
+    </style>
+</resources>

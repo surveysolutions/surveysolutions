@@ -124,7 +124,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             this.IsExpanded = false;
         }
 
-        private void BindTitles()
+        protected virtual void BindTitles()
         {
             if (string.IsNullOrWhiteSpace(interview.QuestionnaireTitle)) // only to support existing clients
             {
@@ -142,7 +142,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             var comment = GetInterviewCommentByStatus(interview);
             var dateComment = GetInterviewDateCommentByStatus(interview);
 
-            this.SubTitle = $"{dateComment}\n{comment}";
+            string separator = !string.IsNullOrEmpty(comment) ? Environment.NewLine : string.Empty;
+            this.SubTitle = $"{dateComment}{separator}{comment}";
             
             this.AssignmentIdLabel = interview.Assignment.HasValue
                 ? InterviewerUIResources.Dashboard_Interview_AssignmentLabelFormat.FormatString(interview.Assignment)
@@ -190,6 +191,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         {
             switch (interviewStatus)
             {
+                case InterviewStatus.RejectedByHeadquarters:
                 case InterviewStatus.RejectedBySupervisor:
                     return DashboardInterviewStatus.Rejected;
                 case InterviewStatus.Completed:
@@ -200,8 +202,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
                 case InterviewStatus.InterviewerAssigned:
                     return startedDateTime.HasValue
                         ? DashboardInterviewStatus.InProgress
-                        : DashboardInterviewStatus.New; ;
-                        
+                        : DashboardInterviewStatus.New;
 
                 default:
                     throw new ArgumentException("Can't identify status for interview: {0}".FormatString(interviewStatus));
@@ -272,6 +273,23 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             {
                 this.isInterviewReadyToLoad = true;
             }
+        }
+
+        
+        private string responsible;
+        public string Responsible
+        {
+            get => responsible;
+            set => this.SetProperty(ref this.responsible, value);
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+            }
+
+            base.Dispose(disposing);
         }
     }
 }

@@ -265,17 +265,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         #region Command handlers
 
 
-        public void Complete(Guid userId, string comment, DateTime completeTime)
+        public void Complete(Guid userId, string comment, DateTimeOffset originDate)
         {
-            Complete(userId, comment, completeTime, true);
+            Complete(userId, comment, originDate, true);
         }
 
-        public void CompleteWithoutFirePassiveEvents(Guid userId, string comment, DateTime completeTime)
+        public void CompleteWithoutFirePassiveEvents(Guid userId, string comment, DateTimeOffset originDate)
         {
-            Complete(userId, comment, completeTime, false);
+            Complete(userId, comment, originDate, false);
         }
 
-        private void Complete(Guid userId, string comment, DateTime completeTime, bool isNeedFirePassiveEvents)
+        private void Complete(Guid userId, string comment, DateTimeOffset originDate, bool isNeedFirePassiveEvents)
         {
             var propertiesInvariants = new InterviewPropertiesInvariants(this.properties);
 
@@ -289,15 +289,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 this.ApplyPassiveEvents(treeDifference);
             }
 
-            this.ApplyEvent(new InterviewCompleted(userId, completeTime, comment));
-            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Completed, comment, previousStatus: this.properties.Status, utcTime: DateTime.UtcNow));
+            this.ApplyEvent(new InterviewCompleted(userId, originDate, comment));
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.Completed, comment, previousStatus: this.properties.Status, originDate: originDate));
 
             var becomesValid = !(this.HasInvalidAnswers() || this.HasInvalidStaticTexts);
             if (this.properties.IsValid != becomesValid)
             {
                 this.ApplyEvent(becomesValid
-                    ? new InterviewDeclaredValid()
-                    : new InterviewDeclaredInvalid() as IEvent);
+                    ? new InterviewDeclaredValid(originDate)
+                    : new InterviewDeclaredInvalid(originDate) as IEvent);
             }
         }
 
@@ -320,18 +320,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 command.SynchronizedInterview.InterviewerAssignedDateTime,
                 true,
                 command.CreatedOnClient,
+                command.OriginDate,
                 questionnaire.IsUsingExpressionStorage()
             );
             
             if (command.SynchronizedInterview.Language != null)
-                this.ApplyEvent(new TranslationSwitched(command.SynchronizedInterview.Language, command.UserId));
+                this.ApplyEvent(new TranslationSwitched(command.SynchronizedInterview.Language, command.UserId, originDate:command.OriginDate));
             
             var synchronizedInterviewInterviewKey = command.SynchronizedInterview.InterviewKey;
             if (synchronizedInterviewInterviewKey != null)
             {
-                this.ApplyEvent(new InterviewKeyAssigned(synchronizedInterviewInterviewKey));
+                this.ApplyEvent(new InterviewKeyAssigned(synchronizedInterviewInterviewKey, command.OriginDate));
             }
-            this.ApplyEvent(new InterviewSynchronized(command.SynchronizedInterview));
+            this.ApplyEvent(new InterviewSynchronized(command.SynchronizedInterview, command.OriginDate));
         }
 
         public void CreateInterviewFromSnapshot(CreateInterviewFromSnapshotCommand command)
@@ -353,13 +354,14 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 command.SynchronizedInterview.InterviewerAssignedDateTime,
                 true,
                 command.SynchronizedInterview.CreatedOnClient,
+                command.OriginDate,
                 questionnaire.IsUsingExpressionStorage()
             );
 
             if (command.SynchronizedInterview.Language != null)
-                this.ApplyEvent(new TranslationSwitched(command.SynchronizedInterview.Language, command.UserId));
+                this.ApplyEvent(new TranslationSwitched(command.SynchronizedInterview.Language, command.UserId, command.OriginDate));
 
-            this.ApplyEvent(new InterviewSynchronized(command.SynchronizedInterview));
+            this.ApplyEvent(new InterviewSynchronized(command.SynchronizedInterview, command.OriginDate));
 
             this.UpdateTreeWithDependentChanges(this.Tree, questionnaire, entityIdentity: null);
         }
@@ -907,7 +909,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             if (Status == InterviewStatus.InterviewerAssigned || Status == InterviewStatus.RejectedBySupervisor)
             {
-                ApplyEvent(new InterviewPaused(command.UserId, command.LocalTime, command.UtcTime));
+                ApplyEvent(new InterviewPaused(command.UserId, command.OriginDate));
             }
         }
 
@@ -915,7 +917,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         {
             if (Status == InterviewStatus.InterviewerAssigned || Status == InterviewStatus.RejectedBySupervisor)
             {
-                ApplyEvent(new InterviewResumed(command.UserId, command.LocalTime, command.UtcTime));
+                ApplyEvent(new InterviewResumed(command.UserId, command.OriginDate));
             }
         }
 
@@ -924,7 +926,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var invariants = new InterviewPropertiesInvariants(properties);
             invariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.InterviewerAssigned, InterviewStatus.SupervisorAssigned, InterviewStatus.Completed, InterviewStatus.RejectedBySupervisor, InterviewStatus.RejectedByHeadquarters);
 
-            ApplyEvent(new InterviewClosedBySupervisor(command.UserId, command.LocalTime));
+            ApplyEvent(new InterviewClosedBySupervisor(command.UserId, command.OriginDate));
         }
 
         public void OpenBySupevisor(OpenInterviewBySupervisorCommand command)
@@ -932,7 +934,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var invariants = new InterviewPropertiesInvariants(properties);
             invariants.ThrowIfInterviewStatusIsNotOneOfExpected(InterviewStatus.InterviewerAssigned, InterviewStatus.SupervisorAssigned, InterviewStatus.Completed, InterviewStatus.RejectedBySupervisor, InterviewStatus.RejectedByHeadquarters);
 
-            ApplyEvent(new InterviewOpenedBySupervisor(command.UserId, command.LocalTime));
+            ApplyEvent(new InterviewOpenedBySupervisor(command.UserId, command.OriginDate));
         }
     }
 }

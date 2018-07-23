@@ -70,7 +70,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             progressInfo.Setup(pi => pi.Report(It.IsAny<SyncProgressInfo>()))
                 .Callback<SyncProgressInfo>(spi => totalDeletedInterviewsCount = spi.Statistics.TotalDeletedInterviewsCount);
 
-            await viewModel.SyncronizeAsync(progressInfo.Object, CancellationToken.None);
+            await viewModel.SynchronizeAsync(progressInfo.Object, CancellationToken.None);
 
             mockOFInterviewAccessor.Verify(_ => _.RemoveInterview(interviewId), Times.Once);
             Assert.That(totalDeletedInterviewsCount, Is.EqualTo(1));

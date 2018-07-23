@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Humanizer;
 using Ncqrs.Eventing;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -35,6 +36,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         private readonly IPlainStorage<InterviewFileView> imagesStorage;
         private readonly IPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage;
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
+        private readonly IPlainStorage<InterviewSequenceView, Guid> interviewSequenceViewRepository;
         private readonly ILogger logger;
         protected readonly CompanyLogoSynchronizer logoSynchronizer;
         protected readonly IAssignmentsSynchronizer assignmentsSynchronizer;
@@ -54,7 +56,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             IPlainStorage<InterviewFileView> imagesStorage,
             CompanyLogoSynchronizer logoSynchronizer,
             AttachmentsCleanupService cleanupService,
-            IPasswordHasher passwordHasher,
             IAssignmentsSynchronizer assignmentsSynchronizer,
             IQuestionnaireDownloader questionnaireDownloader,
             IHttpStatistician httpStatistician,
@@ -64,8 +65,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             IAuditLogSynchronizer auditLogSynchronizer,
             IAuditLogService auditLogService,
             ILiteEventBus eventBus,
-            IEnumeratorEventStorage eventStore) : base(synchronizationService, logger,
-            httpStatistician, userInteractionService, principal, passwordHasher, 
+            IEnumeratorEventStorage eventStore,
+            IPlainStorage<InterviewSequenceView, Guid> interviewSequenceViewRepository) : base(synchronizationService, logger,
+            httpStatistician, userInteractionService, principal,  
             interviewViewRepository, auditLogService)
         {
             this.synchronizationService = synchronizationService;
@@ -87,6 +89,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             this.auditLogSynchronizer = auditLogSynchronizer;
             this.eventBus = eventBus;
             this.eventStore = eventStore;
+            this.interviewSequenceViewRepository = interviewSequenceViewRepository;
         }
 
         
@@ -114,7 +117,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 Stopwatch sw = null;
                 try
                 {
-                    await this.diagnosticService.UpdateTheApp(cancellationToken, false, downloadProgress =>
+                    await this.diagnosticService.UpdateTheApp(cancellationToken, false, new Progress<TransferProgress>(downloadProgress =>
                     {
                         if (sw == null) sw = Stopwatch.StartNew();
                         if (downloadProgress.ProgressPercentage % 1 != 0) return;
@@ -133,7 +136,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                                 (int) downloadProgress.ProgressPercentage),
                             Status = SynchronizationStatus.Download
                         });
-                    });
+                    }));
                 }
                 catch (Exception exc)
                 {
@@ -203,6 +206,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             statistics.TotalNewInterviewsCount = interviews.Count(interview => !interview.IsRejected);
             statistics.TotalRejectedInterviewsCount = interviews.Count(interview => interview.IsRejected);
 
+            IProgress<TransferProgress> transferProgress = progress.AsTransferReport();
+
             foreach (var interview in interviews)
                 try
                 {
@@ -215,12 +220,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                             InterviewerUIResources.Synchronization_Interviews)
                     });
 
-                    await this.questionnaireDownloader.DownloadQuestionnaireAsync(interview.QuestionnaireIdentity, cancellationToken, statistics);
+                    await this.questionnaireDownloader.DownloadQuestionnaireAsync(interview.QuestionnaireIdentity, statistics, transferProgress, cancellationToken);
 
                     List<CommittedEvent> interviewDetails = await this.synchronizationService.GetInterviewDetailsAsync(
-                        interview.Id,
-                        (progressPercentage, bytesReceived, totalBytesToReceive) => { },
-                        cancellationToken);
+                        interview.Id, transferProgress, cancellationToken);
 
                     if (interviewDetails == null)
                     {
@@ -230,6 +233,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
                     eventBus.PublishCommittedEvents(interviewDetails);
                     eventStore.StoreEvents(new CommittedEventStream(interview.Id, interviewDetails));
+                    MarkInterviewAsReceivedFromHeadquarters(interview);
+
+                    if (interview.Sequence.HasValue)
+                        interviewSequenceViewRepository.Store(new InterviewSequenceView() { Id = interview.Id, ReceivedFromServerSequence = interview.Sequence.Value });
 
                     await this.synchronizationService.LogInterviewAsSuccessfullyHandledAsync(interview.Id);
 
@@ -253,37 +260,52 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 }
         }
 
-        protected async Task DownloadInterviewsAsync(SynchronizationStatistics statistics,
+        private void MarkInterviewAsReceivedFromHeadquarters(InterviewApiView interview)
+        {
+            var dashboardItem = this.interviewViewRepository.GetById(interview.Id.FormatGuid());
+            dashboardItem.CanBeDeleted = false;
+            this.interviewViewRepository.Store(dashboardItem);
+        }
+
+        public async Task DownloadInterviewsAsync(SynchronizationStatistics statistics,
             IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken)
         {
             var remoteInterviews = await this.synchronizationService.GetInterviewsAsync(cancellationToken);
-
-            var remoteInterviewIds = remoteInterviews.Select(interview => interview.Id);
+            var remoteInterviewWithSequence = remoteInterviews.ToDictionary(k => k.Id, v => v.Sequence);
 
             var localInterviews = this.interviewViewRepository.LoadAll();
-
-            var localInterviewIds = localInterviews.Select(interview => interview.InterviewId).ToList();
+            var localInterviewIds = localInterviews.Select(interview => interview.InterviewId).ToHashSet();
 
             var localInterviewsToRemove = localInterviews.Where(
-                interview => !remoteInterviewIds.Contains(interview.InterviewId) && !interview.CanBeDeleted);
+                interview => !remoteInterviewWithSequence.ContainsKey(interview.InterviewId) && !interview.CanBeDeleted);
 
-            var obsoleteInterviews = await this.FindObsoleteInterviewsAsync(localInterviewIds, progress, cancellationToken);
-            
+            IEnumerable<Guid> obsoleteInterviews = await this.FindObsoleteInterviewsAsync(localInterviews, remoteInterviews, progress, cancellationToken);
+
             var localInterviewIdsToRemove = localInterviewsToRemove.Select(interview => interview.InterviewId)
                                                                    .Concat(obsoleteInterviews)
                                                                    .ToList();
 
             var remoteInterviewsToCreate = remoteInterviews
-                .Where(interview => !localInterviewIds.Contains(interview.Id) || obsoleteInterviews.Contains(interview.Id))
+                .Where(interview => (!localInterviewIds.Contains(interview.Id) && ShouldBeDownloadedBasedOnEventSequence(interview)) || obsoleteInterviews.Contains(interview.Id))
                 .ToList();
 
             this.RemoveInterviews(localInterviewIdsToRemove, statistics, progress);
 
             await this.CreateInterviewsAsync(remoteInterviewsToCreate, statistics, progress, cancellationToken);
-
         }
 
-        protected virtual Task<List<Guid>> FindObsoleteInterviewsAsync(List<Guid> localInterviewIds, 
+        private bool ShouldBeDownloadedBasedOnEventSequence(InterviewApiView interview)
+        {
+            if (!interview.Sequence.HasValue)
+                return true;
+            var interviewSequenceView = interviewSequenceViewRepository.GetById(interview.Id);
+            if (interviewSequenceView == null)
+                return true;
+            return interviewSequenceView.ReceivedFromServerSequence < interview.Sequence;
+        }
+
+        protected virtual async Task<List<Guid>> FindObsoleteInterviewsAsync(IEnumerable<InterviewView> localInterviews,
+            IEnumerable<InterviewApiView> remoteInterviews, 
             IProgress<SyncProgressInfo> progress, 
             CancellationToken cancellationToken)
         {
@@ -292,13 +314,20 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 Title = InterviewerUIResources.Synchronization_CheckForObsolete_Interviews
             });
 
-            var lastKnownEventsWithInterviewIds = localInterviewIds.Select(x => new ObsoletePackageCheck
+            var lastKnownEventsWithInterviewIds = localInterviews.Select(x => new ObsoletePackageCheck
                 {
-                    InterviewId = x,
-                    SequenceOfLastReceivedEvent = this.eventStore.GetLastEventKnownToHq(x)
+                    InterviewId = x.InterviewId,
+                    SequenceOfLastReceivedEvent = this.eventStore.GetLastEventKnownToHq(x.InterviewId)
                 }).Where(x => x.SequenceOfLastReceivedEvent > 0)
                 .ToList();
-            return this.synchronizationService.CheckObsoleteInterviewsAsync(lastKnownEventsWithInterviewIds, cancellationToken);
+            var obsoleteInterviews = await this.synchronizationService.CheckObsoleteInterviewsAsync(lastKnownEventsWithInterviewIds, cancellationToken);
+
+            obsoleteInterviews = obsoleteInterviews.Concat(
+                remoteInterviews.Where(x => localInterviews.Any(local => local.InterviewId == x.Id && local.ResponsibleId != x.ResponsibleId))
+                    .Select(x => x.Id)
+            ).ToList();
+
+            return obsoleteInterviews;
         }
 
         private void RemoveInterviews(List<Guid> interviewIds, SynchronizationStatistics statistics,
@@ -332,6 +361,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             var notExistingLocalCensusQuestionnaireIdentities = remoteCensusQuestionnaireIdentities
                 .Except(localCensusQuestionnaireIdentities).ToList();
 
+            var transferProgress = progress.AsTransferReport();
+
             foreach (var censusQuestionnaireIdentity in notExistingLocalCensusQuestionnaireIdentities)
             {
                 cancellationToken.ThrowIfCancellationRequested();
@@ -344,7 +375,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         InterviewerUIResources.Synchronization_Questionnaires)
                 });
 
-                await this.questionnaireDownloader.DownloadQuestionnaireAsync(censusQuestionnaireIdentity, cancellationToken, statistics);
+                await this.questionnaireDownloader.DownloadQuestionnaireAsync(censusQuestionnaireIdentity, statistics, transferProgress, cancellationToken);
 
                 processedQuestionnaires++;
             }
@@ -385,7 +416,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             var completedInterviews = GetInterviewsForUpload();
 
             statistics.TotalCompletedInterviewsCount = completedInterviews.Count;
-
+            var transferProgress = progress.AsTransferReport();
             foreach (var completedInterview in completedInterviews)
             {
                 cancellationToken.ThrowIfCancellationRequested();
@@ -411,7 +442,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         await this.synchronizationService.UploadInterviewAsync(
                             completedInterview.InterviewId,
                             interviewPackage,
-                            (progressPercentage, bytesReceived, totalBytesToReceive) => { },
+                            transferProgress,
                             cancellationToken);
                     }
                     else
@@ -442,6 +473,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             CancellationToken cancellationToken)
         {
             var imageViews = this.interviewMultimediaViewStorage.Where(image => image.InterviewId == interviewId);
+            var transferProgress = progress.AsTransferReport();
 
             foreach (var imageView in imageViews)
             {
@@ -451,7 +483,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     imageView.InterviewId,
                     imageView.FileName,
                     fileView.File,
-                    (progressPercentage, bytesReceived, totalBytesToReceive) => { },
+                    transferProgress,
                     cancellationToken);
                 this.interviewMultimediaViewStorage.Remove(imageView.Id);
                 this.imagesStorage.Remove(fileView.Id);
@@ -462,6 +494,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             CancellationToken cancellationToken)
         {
             var audioFiles = this.audioFileStorage.GetBinaryFilesForInterview(interviewId);
+            var transferProgress = progress.AsTransferReport();
 
             foreach (var audioFile in audioFiles)
             {
@@ -472,7 +505,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     audioFile.FileName,
                     audioFile.ContentType,
                     fileData,
-                    (progressPercentage, bytesReceived, totalBytesToReceive) => { },
+                    transferProgress,
                     cancellationToken);
                 this.audioFileStorage.RemoveInterviewBinaryData(audioFile.InterviewId, audioFile.FileName);
             }

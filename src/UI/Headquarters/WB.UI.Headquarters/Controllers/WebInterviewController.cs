@@ -216,7 +216,7 @@ namespace WB.UI.Headquarters.Controllers
             if (lastCreatedInterview != statefulInterview.Id.FormatGuid())
             {
                 this.pauseResumeQueue.EnqueueResume(new ResumeInterviewCommand(statefulInterview.Id,
-                    statefulInterview.CurrentResponsibleId, DateTime.Now, DateTime.UtcNow));
+                    statefulInterview.CurrentResponsibleId));
             }
         }
 
@@ -342,7 +342,6 @@ namespace WB.UI.Headquarters.Controllers
                 assignment.QuestionnaireId,
                 assignment.Answers.ToList(),
                 assignment.ProtectedVariables,
-                DateTime.UtcNow,
                 interviewer.Supervisor.Id,
                 interviewer.PublicKey,
                 this.keyGenerator.Get(),

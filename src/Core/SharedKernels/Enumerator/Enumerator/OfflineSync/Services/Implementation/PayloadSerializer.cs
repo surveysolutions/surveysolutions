@@ -1,28 +1,49 @@
-﻿using System.Text;
-using Newtonsoft.Json;
+﻿using System.IO;
+using System.IO.Compression;
+using System.Threading.Tasks;
+using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
 {
     public class PayloadSerializer : IPayloadSerializer
     {
-        private readonly JsonSerializerSettings serializerSettings;
+        private readonly IJsonAllTypesSerializer serializer;
 
-        public PayloadSerializer()
+        public PayloadSerializer(IJsonAllTypesSerializer serializer)
         {
-            this.serializerSettings = new JsonSerializerSettings {TypeNameHandling = TypeNameHandling.All};
+            this.serializer = serializer;
         }
 
-        public T FromPayload<T>(byte[] payload)
+        public async Task<T> FromPayloadAsync<T>(byte[] payload)
         {
-            var json = Encoding.UTF8.GetString(payload);
-            return JsonConvert.DeserializeObject<T>(json, this.serializerSettings);
+            using (var ms = new MemoryStream(payload))
+            {
+                using (var zip = new GZipStream(ms, CompressionMode.Decompress))
+                {
+                    using (var sr = new StreamReader(zip))
+                    {
+                        var json = await sr.ReadToEndAsync();
+                        return this.serializer.Deserialize<T>(json);
+                    }
+                }
+            }
         }
-
         
-        public byte[] ToPayload<T>(T message)
+        public async Task<byte[]> ToPayloadAsync<T>(T message)
         {
-            var json = JsonConvert.SerializeObject(message, serializerSettings);
-            return Encoding.UTF8.GetBytes(json);
+            using (var ms = new MemoryStream())
+            {
+                using (var zip = new GZipStream(ms, CompressionLevel.Optimal))
+                {
+                    using (var sw = new StreamWriter(zip))
+                    {
+                        var json = this.serializer.Serialize(message);
+                        await sw.WriteAsync(json);
+                    }
+                }
+
+                return ms.ToArray();
+            }
         }
     }
 }

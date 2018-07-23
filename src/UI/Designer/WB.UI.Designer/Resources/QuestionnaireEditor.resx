@@ -1123,4 +1123,7 @@
   <data name="QuestionnaireSettings" xml:space="preserve">
     <value>Questionnaire settings</value>
   </data>
+  <data name="HelpCombobox" xml:space="preserve">
+    <value>A combo-box is a combination of a drop-down list and a single-line editable textbox. Options could be selected either by typing a value or its part or selecting a value from the list</value>
+  </data>
 </root>

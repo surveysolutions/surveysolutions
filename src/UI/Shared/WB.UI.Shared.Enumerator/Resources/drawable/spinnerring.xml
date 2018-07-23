@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<animated-rotate xmlns:android="http://schemas.android.com/apk/res/android"
+                 android:pivotX="50%"
+                 android:pivotY="50%" >
+
+    <shape android:innerRadiusRatio="4" 
+           android:shape="ring"
+           android:thicknessRatio="5.333"
+           android:useLevel="false" >
+
+        <gradient android:type="sweep" android:useLevel="false"
+                  android:startColor="@color/offline_sync_waitingdevice_text" android:centerColor="@color/offline_sync_waitingdevice_text"
+                  android:endColor="#ffffffff" android:centerY="0.70" />
+    </shape>
+
+</animated-rotate>

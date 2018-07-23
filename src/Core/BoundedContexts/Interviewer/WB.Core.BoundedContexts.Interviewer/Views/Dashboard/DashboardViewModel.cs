@@ -43,14 +43,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             CompletedInterviewsViewModel completedInterviewsViewModel,
             RejectedInterviewsViewModel rejectedInterviewsViewModel,
             IPlainStorage<InterviewView> interviewsRepository,
-            IAuditLogService auditLogService): base (principal, viewModelNavigationService)
+            IAuditLogService auditLogService,
+            ISynchronizationCompleteSource synchronizationCompleteSource): base (principal, viewModelNavigationService)
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.interviewerSettings = interviewerSettings;
             this.interviewsRepository = interviewsRepository;
             this.auditLogService = auditLogService;
             this.Synchronization = synchronization;
-            this.Synchronization.SyncCompleted += this.Refresh;
+            this.syncSubscription = synchronizationCompleteSource.SynchronizationEvents.Subscribe(r => this.RefreshDashboard());
 
             this.CreateNew = createNewViewModel;
             this.StartedInterviews = startedInterviewsViewModel;
@@ -132,6 +133,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         private GroupStatus typeOfInterviews;
         private bool synchronizationWithHqEnabled;
+        private readonly IDisposable syncSubscription;
 
         public GroupStatus TypeOfInterviews
         {
@@ -158,11 +160,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private void OnItemsLoaded(object sender, EventArgs e) =>
             this.IsInProgress = !(this.StartedInterviews.IsItemsLoaded && this.RejectedInterviews.IsItemsLoaded &&
                                   this.CompletedInterviews.IsItemsLoaded && this.CreateNew.IsItemsLoaded);
-
-        private void Refresh(object sender, EventArgs e)
-        {
-            this.RefreshDashboard();
-        }
 
         private void RefreshDashboard(Guid? lastVisitedInterviewId = null)
         {
@@ -236,7 +233,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             startingLongOperationMessageSubscriptionToken.Dispose();
             stopLongOperationMessageSubscriptionToken.Dispose();
 
-            this.Synchronization.SyncCompleted -= this.Refresh;
+            syncSubscription.Dispose();
 
             this.StartedInterviews.OnInterviewRemoved -= this.OnInterviewRemoved;
             this.CompletedInterviews.OnInterviewRemoved -= this.OnInterviewRemoved;

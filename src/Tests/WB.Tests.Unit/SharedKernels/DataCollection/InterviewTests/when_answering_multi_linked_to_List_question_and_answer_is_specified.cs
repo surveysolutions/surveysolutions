@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             BecauseOf();
         }
 
-        public void BecauseOf() => interview.AnswerMultipleOptionsQuestion(userId: userId, questionId: linkedQuestionId, answerTime: answerTime, rosterVector: propagationVector, selectedValues: new [] {1});
+        public void BecauseOf() => interview.AnswerMultipleOptionsQuestion(userId: userId, questionId: linkedQuestionId, originDate: answerTime, rosterVector: propagationVector, selectedValues: new [] {1});
 
         [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {
@@ -53,7 +53,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             eventContext.GetSingleEvent<MultipleOptionsQuestionAnswered>().RosterVector.Should().BeEquivalentTo(propagationVector);
 
         [NUnit.Framework.Test] public void should_raise_MultipleOptionsQuestionAnswered_event_with_AnswerTime_equal_to_answerTime () =>
-            eventContext.GetSingleEvent<MultipleOptionsQuestionAnswered>().AnswerTimeUtc.Should().BeCloseTo(DateTime.UtcNow, 2000);
+            eventContext.GetSingleEvent<MultipleOptionsQuestionAnswered>().OriginDate.Value.UtcDateTime.Should().BeCloseTo(DateTime.UtcNow, 2000);
 
         private static EventContext eventContext;
         private static Interview interview;
@@ -61,6 +61,6 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         private static Guid questionId = Guid.Parse("11111111111111111111111111111111");
         private static Guid linkedQuestionId = Guid.Parse("A1111111111111111111111111111111");
         private static readonly decimal[] propagationVector = RosterVector.Empty;
-        private static DateTime answerTime = 2.August(2010).At(22, 00);
+        private static DateTimeOffset answerTime = new  DateTimeOffset(2.August(2010).At(22, 00));
     }
 }

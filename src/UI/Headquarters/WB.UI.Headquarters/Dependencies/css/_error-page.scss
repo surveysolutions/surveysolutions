@@ -31,3 +31,12 @@ header > .red-line{
         }
     }
 }
+.under-construction .page-header{
+    background: url("../img/logo_under_constraction.jpg") 0 100px no-repeat;
+    padding-left: 100px;
+    padding-top: 100px;
+    p{
+        font-size: 12px;
+        line-height: 14px;
+    }
+}

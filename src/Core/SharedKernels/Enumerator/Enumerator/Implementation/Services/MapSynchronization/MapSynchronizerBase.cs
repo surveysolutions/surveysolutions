@@ -26,10 +26,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
 
         protected MapSyncProviderBase(IMapService mapService, ISynchronizationService synchronizationService, ILogger logger,
             IHttpStatistician httpStatistician, IUserInteractionService userInteractionService, IPrincipal principal,
-            IPasswordHasher passwordHasher, 
             IPlainStorage<InterviewView> interviewViewRepository, IAuditLogService auditLogService) 
             : base(synchronizationService, logger,
-            httpStatistician, userInteractionService, principal, passwordHasher, 
+            httpStatistician, userInteractionService, principal,  
             interviewViewRepository, auditLogService)
         {
             this.synchronizationService = synchronizationService;
@@ -62,7 +61,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
                 if (this.mapService.DoesMapExist(mapDescription.MapName))
                     continue;
 
-                void OnDownloadProgressChanged(DownloadProgressChangedEventArgs args)
+                void OnDownloadProgressChanged(TransferProgress args)
                 {
                     if (args.ProgressPercentage % 5 == 0)
                     {
@@ -89,7 +88,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
                         }
                         
                         var buffer = new byte[1024];
-                        var downloadProgressChangedEventArgs = new DownloadProgressChangedEventArgs()
+                        var downloadProgressChangedEventArgs = new TransferProgress()
                         {
                             TotalBytesToReceive = contentStreamResult.ContentLength
                         };

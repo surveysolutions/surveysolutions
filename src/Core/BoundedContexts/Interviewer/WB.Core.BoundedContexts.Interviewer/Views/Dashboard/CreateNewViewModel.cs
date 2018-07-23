@@ -22,20 +22,24 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private readonly IInterviewViewModelFactory viewModelFactory;
         private readonly IAssignmentDocumentsStorage assignmentsRepository;
         private readonly IViewModelNavigationService viewModelNavigationService;
+        private readonly IInterviewerSettings interviewerSettings;
         private SynchronizationViewModel synchronization;
 
-        public IMvxCommand SynchronizationCommand => new MvxCommand(this.RunSynchronization, () => !this.synchronization.IsSynchronizationInProgress);
+        public IMvxCommand SynchronizationCommand => new MvxCommand(this.RunSynchronization, 
+            () => !this.synchronization.IsSynchronizationInProgress && this.interviewerSettings.AllowSyncWithHq);
 
         public CreateNewViewModel(
             IPlainStorage<QuestionnaireView> questionnaireViewRepository,
             IInterviewViewModelFactory viewModelFactory,
             IAssignmentDocumentsStorage assignmentsRepository,
-            IViewModelNavigationService viewModelNavigationService)
+            IViewModelNavigationService viewModelNavigationService,
+            IInterviewerSettings interviewerSettings)
         {
             this.questionnaireViewRepository = questionnaireViewRepository;
             this.viewModelFactory = viewModelFactory;
             this.assignmentsRepository = assignmentsRepository;
             this.viewModelNavigationService = viewModelNavigationService;
+            this.interviewerSettings = interviewerSettings;
         }
 
         public void Load(SynchronizationViewModel sync)
@@ -62,6 +66,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.synchronization.IsSynchronizationInProgress = true;
             this.synchronization.Synchronize();
         }
+
+        public bool SynchronizationWithHqEnabled => this.interviewerSettings.AllowSyncWithHq;
 
         protected override IEnumerable<IDashboardItem> GetUiItems()
         {

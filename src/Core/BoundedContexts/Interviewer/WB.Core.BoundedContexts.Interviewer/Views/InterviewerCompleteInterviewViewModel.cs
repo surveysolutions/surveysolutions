@@ -52,9 +52,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
 
             var statefulInterview = this.interviewRepository.Get(interviewId);
-            if (string.IsNullOrEmpty(this.CompleteComment))
+            if (string.IsNullOrEmpty(this.Comment))
             {
-                this.CompleteComment = statefulInterview.InterviewerCompleteComment;
+                this.Comment = statefulInterview.InterviewerCompleteComment;
             }
         }
 

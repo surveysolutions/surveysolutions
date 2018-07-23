@@ -48,7 +48,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             this.translationsStorage = translationsStorage;
         }
 
-        public void StoreQuestionnaire(QuestionnaireIdentity questionnaireIdentity, string questionnaireDocument, bool census, List<TranslationDto> translationDtos)
+        public virtual void StoreQuestionnaire(QuestionnaireIdentity questionnaireIdentity, string questionnaireDocument, bool census, List<TranslationDto> translationDtos)
         {
             var serializedQuestionnaireDocument = this.synchronizationSerializer.Deserialize<QuestionnaireDocument>(questionnaireDocument);
             serializedQuestionnaireDocument.ParseCategoricalQuestionOptions();
@@ -98,7 +98,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             });
         }
 
-        public void RemoveQuestionnaire(QuestionnaireIdentity questionnaireIdentity)
+        public virtual void RemoveQuestionnaire(QuestionnaireIdentity questionnaireIdentity)
         {
             var questionnaireId = questionnaireIdentity.ToString();
             

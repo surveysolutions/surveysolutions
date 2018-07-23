@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:local="http://schemas.android.com/apk/res-auto"
@@ -40,14 +41,30 @@
       <LinearLayout android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
                       android:orientation="vertical">
-        <EditText
-          style="@style/Login_Endpoint_Editor"
-          android:id="@+id/LoginPage_endpoint"
-          android:layout_below="@+id/LoginPage_error_message"
-          android:singleLine="true"
-          android:inputType="textUri|textNoSuggestions"
-          android:imeOptions="actionNext"
-          local:MvxBind="Text Endpoint; Watermark Localization('EndpointHint'); BackgroundStyle ValidationStyleBackground(IsEndpointValid);" />
+          <RelativeLayout
+              android:id="@+id/relativeLayout"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              android:orientation="horizontal">
+
+              <EditText
+                  style="@style/Login_Endpoint_Editor"
+                  android:id="@+id/LoginPage_endpoint"
+                  android:layout_below="@+id/LoginPage_error_message"
+                  android:singleLine="true"
+                  android:inputType="textUri|textNoSuggestions"
+                  android:imeOptions="actionNext"
+                  android:padding="24dp"
+                  local:MvxBind="Text Endpoint; Watermark Localization('EndpointHint'); BackgroundStyle ValidationStyleBackground(IsEndpointValid);" />
+              
+              <ImageButton
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  android:id="@+id/LoginPage_scan"
+                  local:srcCompat="@drawable/scan_icon"
+                  android:layout_alignParentRight="true"
+                  local:MvxBind="Click ScanCommand;"/>
+          </RelativeLayout>
         <EditText
           style="@style/Login_Login_Editor"
           android:layout_below="@+id/LoginPage_endpoint"

@@ -1,6 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System.IO;
+using System.Threading.Tasks;
 using MvvmCross.ViewModels;
 using Ncqrs.Eventing.Storage;
+using NLog;
+using NLog.Config;
+using NLog.Targets;
 using Plugin.Geolocator;
 using Plugin.Geolocator.Abstractions;
 using Plugin.Media;
@@ -18,21 +22,25 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Implementation.Utils;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.CustomServices;
 using WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Services.Internals;
 using WB.UI.Shared.Enumerator.Services.Internals.FileSystem;
+using WB.UI.Shared.Enumerator.Services.Logging;
 
 namespace WB.UI.Shared.Enumerator
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class EnumeratorUIModule : IModule
     {
         public void Load(IIocRegistry registry)
@@ -74,13 +82,20 @@ namespace WB.UI.Shared.Enumerator
             registry.Bind<CoverInterviewFragment>();
             registry.Bind<OverviewFragment>();
 
-            registry.BindAsSingleton<INearbyConnection, NearbyConnection>();
+            registry.Bind<IAssignmentsSynchronizer, AssignmentsSynchronizer>();
+            registry.Bind<IAssignmentDocumentFromDtoBuilder, AssignmentDocumentFromDtoBuilder>();
+
             registry.BindAsSingleton<INearbyCommunicator, NearbyCommunicator>();
             registry.BindAsSingleton<IRequestHandler, NearbyConnectionsRequestHandler>();
             registry.BindAsSingleton<IPayloadProvider, PayloadProvider>();
+            registry.BindAsSingleton<IConnectionsApiLimits, ConnectionsApiLimits>();
+            registry.BindAsSingleton<IGoogleApiClientFactory, GoogleApiClientFactory>();
+            registry.BindAsSingleton<INearbyConnectionClient, NearbyConnectionClient>();
+
+            SetupLoggingFacility(registry);
         }
 
-        public Task Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
             var requestHandler = serviceLocator.GetInstance<IRequestHandler>();
             var requestHandlers = serviceLocator.GetAllInstances<IHandleCommunicationMessage>();
@@ -92,6 +107,37 @@ namespace WB.UI.Shared.Enumerator
 
             SQLitePCL.raw.SetProvider(new SQLitePCL.SQLite3Provider_e_sqlite3());
             return Task.CompletedTask;
+        }
+
+
+        private void SetupLoggingFacility(IIocRegistry registry)
+        {
+            var pathToLocalDirectory = AndroidPathUtils.GetPathToInternalDirectory();
+            var fileName = Path.Combine(pathToLocalDirectory, "Logs", "${shortdate}.log");
+            var fileTarget = new FileTarget("logFile")
+            {
+                FileName = fileName,
+                Layout = "${longdate}[${logger}][${level}][${message}][${onexception:${exception:format=toString,Data:exceptionDataSeparator=\r\n}|${stacktrace}}]"
+            };
+
+            var config = new LoggingConfiguration();
+            config.AddTarget("logFile", fileTarget);
+            config.LoggingRules.Add(new LoggingRule("*", LogLevel.Trace, fileTarget));
+
+            #if DEBUG
+            var androidTarget = new ConsoleTarget("android")
+            {
+                Layout =
+                    "[${logger:shortName=true}][${level}][${message}][${onexception:${exception:format=toString,Data}|${stacktrace}}]"
+            };
+
+            config.AddTarget("android", androidTarget);
+            config.LoggingRules.Add(new LoggingRule("*", LogLevel.Trace, androidTarget));
+            #endif
+
+            registry.Bind<ILoggerProvider, NLogLoggerProvider>();
+
+            LogManager.Configuration = config;
         }
     }
 }

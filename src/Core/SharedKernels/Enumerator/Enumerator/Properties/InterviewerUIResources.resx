@@ -353,7 +353,7 @@ for further instructions</value>
     <value>User authentication</value>
   </data>
   <data name="Synchronization_UserPassword_Update_Format" xml:space="preserve">
-    <value>Authentication problem. We were unable to confirm your credentials ('{0}'). Your account may have a different password; be locked or deleted. Please re-enter your password. If the problem persists, contact your Supervisor.</value>
+    <value>Authentication problem. We were unable to confirm your credentials '{0}'. Your account may have a different password, be locked or deleted. Please re-enter your password. If the problem persists, contact your Supervisor or Headquarters.</value>
   </data>
   <data name="Unauthorized" xml:space="preserve">
     <value>Your login or password is incorrect</value>
@@ -655,6 +655,9 @@ for further instructions</value>
   <data name="UnacceptableSSLCertificate" xml:space="preserve">
     <value>Failed to verify certificate for target URL. Please, check if Headquarters website address is valid and your device has corrent current date and time</value>
   </data>
+  <data name="InterviewerFromDifferentTeam" xml:space="preserve">
+    <value>Interviewer belongs to a different team. Please, sync with Headquarters website</value>
+  </data>
   <data name="Synchronization_DownloadingLogo" xml:space="preserve">
     <value>Downloading logo</value>
   </data>
@@ -759,6 +762,9 @@ Downloaded {3}%</value>
   <data name="Synchronization_Of_Interviewers" xml:space="preserve">
     <value>Synchronization of interviewers</value>
   </data>
+  <data name="Synchronization_Of_Supervisor_details" xml:space="preserve">
+    <value>Synchronization of Supervisor details</value>
+  </data>
   <data name="Synchronization_Of_InterviewersFormat" xml:space="preserve">
     <value>Synchronizing {0} of {1} interviewer(s)</value>
   </data>
@@ -767,5 +773,8 @@ Downloaded {3}%</value>
   </data>
   <data name="Prefs_AllowSyncWithHq_Summary" xml:space="preserve">
     <value>Disable this setting if you want to synchronize only with mobile supervisor application</value>
+  </data>
+  <data name="DashboardItem_Responsible" xml:space="preserve">
+    <value>Responsible: {0}</value>
   </data>
 </root>

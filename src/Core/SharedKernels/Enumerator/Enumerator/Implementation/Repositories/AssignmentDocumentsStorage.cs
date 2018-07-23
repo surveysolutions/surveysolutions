@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using SQLite;
@@ -43,7 +44,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
         {
             return RunInTransaction(query =>
             {
-                var assignment = query.Connection.Get<AssignmentDocument>(id);
+                var assignment = query.Connection.Find<AssignmentDocument>(id);
 
                 if (assignment == null) return null;
 
@@ -105,19 +106,33 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
         /// <returns></returns>
         public override IReadOnlyCollection<AssignmentDocument> LoadAll()
         {
+            return LoadAll(null);
+        }
+
+        public IReadOnlyCollection<AssignmentDocument> LoadAll(Guid? responsibleId)
+        {
             return RunInTransaction(assignmentTable =>
             {
+                var assignments = assignmentTable;
+
+                assignments = responsibleId == null
+                    ? assignments
+                    : assignments.Where(ass => ass.ResponsibleId == responsibleId);
+
+                var ids = assignments.ToList().Select(a => a.Id).ToArray();
+
                 var answersLookup = assignmentTable.Connection.Table<AssignmentDocument.AssignmentAnswer>()
-                    .Where(a => a.IsIdentifying)
+                    .Where(a => a.IsIdentifying && ids.Contains(a.AssignmentId))
                     .ToLookup(a => a.AssignmentId);
 
                 IEnumerable<AssignmentDocument> FillAnswers()
                 {
-                    foreach (var assignment in assignmentTable)
+                    foreach (var assignment in assignments)
                     {
                         assignment.IdentifyingAnswers = answersLookup[assignment.Id]
                             .Where(answer => answer.Identity.Id != assignment.LocationQuestionId)
                             .ToList();
+                        
                         yield return assignment;
                     }
                 }

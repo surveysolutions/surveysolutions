@@ -77,7 +77,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             {
                 var questionnaire = this.repository.GetById(repositoryId);
 
-                this.questionnaireDocumentsCache[repositoryId] = questionnaire ?? throw new ApplicationException($"Questionnaire {repositoryId} was not found");
+                if (questionnaire == null)
+                {
+                    return null;
+                }
+
+                this.questionnaireDocumentsCache[repositoryId] = questionnaire;
+                //  ?? throw new ApplicationException($"Questionnaire {repositoryId} was not found");
             }
 
             return this.questionnaireDocumentsCache[repositoryId];

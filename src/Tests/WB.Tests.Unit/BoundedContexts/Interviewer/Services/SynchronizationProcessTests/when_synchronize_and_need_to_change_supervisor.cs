@@ -36,7 +36,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 interviewersPlainStorage: InterviewerStorageMock.Object);
 
             viewModel
-                .SyncronizeAsync(new Progress<SyncProgressInfo>(), CancellationToken.None)
+                .SynchronizeAsync(new Progress<SyncProgressInfo>(), CancellationToken.None)
                 .WaitAndUnwrapException();
         }
 

@@ -1,12 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using MvvmCross.Plugin.Messenger;
 using WB.Core.BoundedContexts.Supervisor.Properties;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.Services;
-using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
@@ -27,7 +25,6 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         public override async Task Initialize()
         {
             await base.Initialize();
-            await this.UpdateUiItems();
         }
 
         public string TabTitle => SupervisorDashboard.ToBeAssigned;
@@ -39,7 +36,9 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             var subtitle = viewModelFactory.GetNew<DashboardSubTitleViewModel>();
             subtitle.Title = SupervisorDashboard.ToBeAssignedListSubtitle;
 
-            return subtitle.ToEnumerable().Concat(this.dashboardItemsAccessor.TasksToBeAssigned());
+            var tasksToBeAssigned = this.dashboardItemsAccessor.TasksToBeAssigned().ToList();
+
+            return subtitle.ToEnumerable().Concat(tasksToBeAssigned);
         }
     }
 }

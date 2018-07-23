@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Main.Core.Entities.SubEntities;
-using Microsoft.AspNet.Identity;
+using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -12,7 +11,9 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
@@ -34,6 +35,7 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
         private readonly IInterviewerVersionReader interviewerVersionReader;
         private readonly IInterviewFactory interviewFactory;
         private readonly IAuthorizedUser currentUser;
+        private readonly IQRCodeHelper qRCodeHelper;
 
         public InterviewerProfileFactory(
             HqUserManager userManager,
@@ -41,7 +43,8 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
             IDeviceSyncInfoRepository deviceSyncInfoRepository, 
             IInterviewerVersionReader interviewerVersionReader, 
             IInterviewFactory interviewFactory,
-            IAuthorizedUser currentUser)
+            IAuthorizedUser currentUser,
+            IQRCodeHelper qRCodeHelper)
         {
             this.userManager = userManager;
             this.interviewRepository = interviewRepository;
@@ -49,6 +52,7 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
             this.interviewerVersionReader = interviewerVersionReader;
             this.interviewFactory = interviewFactory;
             this.currentUser = currentUser;
+            this.qRCodeHelper = qRCodeHelper;
         }
 
         public IEnumerable<InterviewerPoint> GetInterviewerCheckinPoints(Guid interviewerId)
@@ -145,6 +149,14 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
             profile.SynchronizationActivity = this.deviceSyncInfoRepository.GetSynchronizationActivity(userId);
             profile.RegistredDevicesCount = registredDeviceCount;
             profile.HasAnyGpsAnswerForInterviewer = interviewFactory.HasAnyGpsAnswerForInterviewer(userId);
+
+            profile.SupportQRCodeGeneration = qRCodeHelper.SupportQRCodeGeneration();
+            profile.QRCodeAsBase64String = qRCodeHelper.GetQRCodeAsBase64StringSrc(
+                JsonConvert.SerializeObject((new FinishInstallationInfo()
+                {
+                    Url = qRCodeHelper.GetBaseUrl(),
+                    Login = profile.InterviewerName
+                })), 250, 250);
 
             return profile;
         }

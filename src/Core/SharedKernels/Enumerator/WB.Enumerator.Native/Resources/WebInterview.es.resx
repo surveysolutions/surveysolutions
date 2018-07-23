@@ -283,7 +283,7 @@
     <value>Con comentarios</value>
   </data>
   <data name="InterviewReceivedByInterviewer" xml:space="preserve">
-    <value>No se puede modificar una entrevista que ha sido recibida en el dispositivo del entrevistador</value>
+    <value>No se puede modificar una entrevista que ha sido recibida en el dispositivo</value>
   </data>
   <data name="PoweredBy" xml:space="preserve">
     <value>Powered by</value>

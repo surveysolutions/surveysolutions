@@ -14,17 +14,18 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Entities
             this.callback = callback;
         }
 
-        public override void OnPayloadReceived(string endpointId, Android.Gms.Nearby.Connection.Payload payload)
+        public override void OnPayloadReceived(string endpoint, Android.Gms.Nearby.Connection.Payload payload)
         {
-            var wbPayload = new Payload(payload);
+            var wbPayload = new Payload(payload, endpoint);
         
-            callback.OnPayloadReceived(endpointId, wbPayload);
+            callback.OnPayloadReceived(wbPayload);
         }
 
-        public override void OnPayloadTransferUpdate(string endpointId, PayloadTransferUpdate update)
+        public override void OnPayloadTransferUpdate(string endpoint, PayloadTransferUpdate update)
         {
             var transferUpdate = new NearbyPayloadTransferUpdate
             {
+                Endpoint = endpoint,
                 Id = update.PayloadId,
                 TotalBytes = update.TotalBytes,
                 BytesTransferred = update.BytesTransferred
@@ -37,7 +38,7 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Entities
                 case PayloadTransferUpdate.Status.Failure: transferUpdate.Status = TransferStatus.Failure; break;
             }
 
-            callback.OnPayloadTransferUpdate(endpointId, transferUpdate);
+            callback.OnPayloadTransferUpdate(transferUpdate);
         }
     }
 }

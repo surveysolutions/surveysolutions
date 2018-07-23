@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 
 namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services
@@ -13,5 +14,10 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services
 
         IEnumerable<IDashboardItem> Outbox();
         int OutboxCount();
+        bool IsWaitingForSupervisorActionInterview(Guid interviewId);
+        bool IsOutboxInterview(Guid interviewId);
+        IEnumerable<IDashboardItem> GetSentToInterviewerItems();
+        int SentToInterviewerCount();
+        bool IsSentToInterviewer(Guid interviewId);
     }
 }
