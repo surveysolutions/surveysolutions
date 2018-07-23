@@ -5,6 +5,7 @@ using FluentAssertions;
 using Main.Core.Events;
 using Moq;
 using Ncqrs.Eventing;
+using NSubstitute.ExceptionExtensions;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Supervisor;
@@ -339,6 +340,38 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
         public void UnknownExceptionType_are_equal_in_SupervisorInterviewsHandler_and_InterviewPackagesService()
         {
             Assert.AreEqual(SupervisorInterviewsHandler.UnknownExceptionType, InterviewPackagesService.UnknownExceptionType);
+        }
+
+        [Test]
+        public async Task when_UploadInterview_and_no_longer_assignment_by_uploaded_interview_should_not_throw_an_exception_when_trying_to_update_interviews_count_by_assignment()
+        {
+            //Arrange
+            var assignmentId = 1;
+            var existingInterviews = Create.Storage.SqliteInmemoryStorage(
+                Create.Entity.InterviewView(assignmentId: assignmentId, interviewId: Id.g1));
+
+            var assignments = Create.Storage.AssignmentDocumentsInmemoryStorage();
+            var mockOfBrokenPackagesStorage = new Mock<IPlainStorage<BrokenInterviewPackageView, int?>>();
+
+            var handler = Create.Service.SupervisorInterviewsHandler(
+                interviews: existingInterviews,
+                assignments: assignments,
+                brokenInterviewStorage: mockOfBrokenPackagesStorage.Object);
+
+            // Act
+            await handler.UploadInterview(new UploadInterviewRequest
+            {
+                InterviewKey = Create.Entity.InterviewKey().ToString(),
+                Interview = new InterviewPackageApiView
+                {
+                    InterviewId = Id.g1,
+                    Events = "",
+                    MetaInfo = new InterviewMetaInfo()
+                }
+            });
+
+            //Assert
+            mockOfBrokenPackagesStorage.Verify(x => x.Store(It.IsAny<BrokenInterviewPackageView>()), Times.Never);
         }
     }
 }

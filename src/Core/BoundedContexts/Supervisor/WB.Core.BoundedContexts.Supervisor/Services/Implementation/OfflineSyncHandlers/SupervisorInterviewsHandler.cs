@@ -174,12 +174,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
         private void UpdateAssignmentQuantityByInterview(Guid interviewId)
         {
             var interviewView = this.interviews.GetById(interviewId.FormatGuid());
-            if (interviewView?.Assignment != null)
-            {
-                var assignment = this.assignmentsStorage.GetById(interviewView.Assignment.Value);
-                assignment.CreatedInterviewsCount = this.interviews.Count(x => x.Assignment == interviewView.Assignment);
-                this.assignmentsStorage.Store(assignment);
-            }
+            if (interviewView?.Assignment == null) return;
+
+            var assignment = this.assignmentsStorage.GetById(interviewView.Assignment.Value);
+            if (assignment == null) return;
+
+            assignment.CreatedInterviewsCount = this.interviews.Count(x => x.Assignment == interviewView.Assignment);
+            this.assignmentsStorage.Store(assignment);
         }
 
         private bool CheckIfInterviewerWasMovedToAnotherTeam(
