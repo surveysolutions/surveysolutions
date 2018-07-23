@@ -126,10 +126,7 @@
   <data name="PL0004_FileWasntMappedRoster" xml:space="preserve">
     <value>File cannot be mapped to any roster in the questionnaire.</value>
   </data>
-  <data name="PL0005_QuestionDataTypeMismatch" xml:space="preserve">
-    <value>[PL0005] N/A</value>
-  </data>
-  <data name="PL0006_IdDublication" xml:space="preserve">
+    <data name="PL0006_IdDublication" xml:space="preserve">
     <value>Duplicate Id values found.</value>
   </data>
   <data name="PL0007_ServiceColumnIsAbsent" xml:space="preserve">
@@ -141,25 +138,10 @@
   <data name="PL0009_RosterIdIsInconsistantWithRosterSizeQuestion" xml:space="preserve">
     <value>Roster Id is inconsistent with roster size.</value>
   </data>
-  <data name="PL0010_UnsupportedLinkedQuestion" xml:space="preserve">
-    <value>Linked questions cannot be preloaded.</value>
-  </data>
-  <data name="PL0011_GeneralError" xml:space="preserve">
-    <value>General error occurred.</value>
-  </data>
-  <data name="PL0012_QuestionWasNotFound" xml:space="preserve">
-    <value>Question found in the uploaded file(s) that does not exist in the questionnaire</value>
-  </data>
-  <data name="PL0013_ValueIsNullOrEmpty" xml:space="preserve">
-    <value>Provided value is null or empty</value>
-  </data>
-  <data name="PL0014_ParsedValueIsNotAllowed" xml:space="preserve">
+    <data name="PL0014_ParsedValueIsNotAllowed" xml:space="preserve">
     <value>Provided question value not allowed.</value>
   </data>
-  <data name="PL0015_QuestionTypeIsIncorrect" xml:space="preserve">
-    <value>Type of question is not correct.</value>
-  </data>
-  <data name="PL0016_ExpectedDateTimeNotParsed" xml:space="preserve">
+    <data name="PL0016_ExpectedDateTimeNotParsed" xml:space="preserve">
     <value>Invalid Date or Time value entered in the date question.</value>
   </data>
   <data name="PL0017_ExpectedGpsNotParsed" xml:space="preserve">
@@ -175,23 +157,17 @@
   <data name="PL0022_AnswerIsIncorrectBecauseIsRosterSizeAndNegative" xml:space="preserve">
     <value>Roster size question cannot have negative values.</value>
   </data>
-  <data name="PL0023_UnsupportedMultimediaQuestion" xml:space="preserve">
-    <value>Picture question cannot be preloaded.</value>
-  </data>
-  <data name="PL0024_DataWasNotFound" xml:space="preserve">
+    <data name="PL0024_DataWasNotFound" xml:space="preserve">
     <value>Preloading data were not found.</value>
   </data>
-  <data name="PL0025_ResponsibleNameIsEmpty" xml:space="preserve">
-    <value>Responsible field was not provided for 1 or more observations</value>
-  </data>
-  <data name="PL0026_ResponsibleWasNotFound" xml:space="preserve">
-    <value>Responsible does not exist for 1 or more observations</value>
+    <data name="PL0026_ResponsibleWasNotFound" xml:space="preserve">
+    <value>Responsible does not exist for 1 or more observations.</value>
   </data>
   <data name="PL0027_ResponsibleIsLocked" xml:space="preserve">
-    <value>Responsible is a locked user for 1 or more observations</value>
+    <value>Responsible is a locked user for 1 or more observations.</value>
   </data>
   <data name="PL0028_UserIsNotSupervisorOrInterviewer" xml:space="preserve">
-    <value>User is not Supervisor or Interviewer for 1 or more observations</value>
+    <value>User is not Supervisor or Interviewer for 1 or more observations.</value>
   </data>
   <data name="PL0029_AnswerIsIncorrectBecauseIsRosterSizeAndMoreThan40" xml:space="preserve">
     <value>Answer to roster size question cannot be greater than {0}.</value>
@@ -220,56 +196,32 @@
   <data name="PL0036_QuantityShouldBeGreaterThanMinus1" xml:space="preserve">
     <value>Quantity should be greater than or equal to -1.</value>
   </data>
-  <data name="PL0037_ColumnIsNotIdentifying" xml:space="preserve">
-    <value>Column cannot be mapped to non identifying question</value>
-  </data>
-  <data name="PL0038_UnsupportedAreaQuestion" xml:space="preserve">
-    <value>Area question cannot be preloaded.</value>
-  </data>
-  <data name="PL0039_UnsupportedAudioQuestion" xml:space="preserve">
-    <value>Audio question cannot be preloaded.</value>
-  </data>
-  <data name="PL0040_QuestionnaireDataIsNotFound" xml:space="preserve">
+    <data name="PL0040_QuestionnaireDataIsNotFound" xml:space="preserve">
     <value>File with questionnaire level data is missing.</value>
   </data>
   <data name="PL0041_AnswerExceedsMaxAnswersCount" xml:space="preserve">
-    <value>Answered options count to multiple choice question can't be more than max allowed answers count</value>
+    <value>Answered options count to multiple choice question can't be more than max allowed answers count.</value>
   </data>
   <data name="PL0050_CategoricalMulti_AnswerMustBeGreaterOrEqualThen1" xml:space="preserve">
-    <value>Negative value is not allowed for Categorical Multi select question</value>
+    <value>Negative value is not allowed for Categorical Multi select question.</value>
   </data>
-  <data name="PL0045_TextListAnswerHasDifferentAmountOfRecordsThanRosterFile" xml:space="preserve">
-    <value>Inconsistency detected between the number of records in the data file {0}, which has {1} records, and the trigger question {2}, which has {3} rows. Interview id: {4}</value>
-  </data>
-  <data name="PL0042_IdIsEmpty" xml:space="preserve">
+    <data name="PL0042_IdIsEmpty" xml:space="preserve">
     <value>Id column doesn't have any value.</value>
   </data>
-  <data name="PL0046_HasDifferentTextsInListAndRosterTitles" xml:space="preserve">
-    <value>Inconsistency detected between the items lists in the data file {0} and question {1}. Items present in the text list and absent in the file: {2}. Rows from data file absent in text list question: {3}. Interview id: {4}</value>
-  </data>
-  <data name="PL0043_TextListAnswerHasDuplicatesInTexts" xml:space="preserve">
-    <value>Text list question {0} has non-unique items: {1}. Interview id: {2}</value>
-  </data>
-  <data name="PL0044_TextListAnswerHasDuplicatesInCodes" xml:space="preserve">
-    <value>Text list question {0} has non-unique item codes: {1}. Interview id: {2}</value>
-  </data>
-  <data name="HasAssignmentsToImport" xml:space="preserve">
-    <value>Please, wait until previous import of assignments is completed</value>
-  </data>
-  <data name="ArchiveWithPasswordNotSupported" xml:space="preserve">
+    <data name="ArchiveWithPasswordNotSupported" xml:space="preserve">
     <value>Password-protected archives are not supported</value>
   </data>
     <data name="PL0052_ColumnByTextListRosterSizeAnswerNotFound" xml:space="preserve">
     <value>Roster by list question should have column for text list answers</value>
   </data>
   <data name="PL0047_ProtectedVariables_MissingColumn" xml:space="preserve">
-    <value>Required column {0} is missing</value>
+    <value>Required column {0} is missing.</value>
   </data>
   <data name="PL0048_ProtectedVariables_VariableNotFoundInQuestionnaire" xml:space="preserve">
-    <value>Protected variable is not found in provided questionnaire</value>
+    <value>Protected variable is not found in provided questionnaire.</value>
   </data>
   <data name="PL0049_ProtectedVariables_VariableNotSupportsProtection" xml:space="preserve">
-    <value>Variable has type that does not support protection</value>
+    <value>Variable has type that does not support protection.</value>
   </data>
     <data name="PL0053_InconsistentNumericRosterInstanceCodes" xml:space="preserve">
     <value>Inconsistent roster code for numeric roster. Sequence of roster codes should be 1, 2, ... to count of roster instances</value>

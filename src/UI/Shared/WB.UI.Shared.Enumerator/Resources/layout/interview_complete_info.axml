@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+       xmlns:local="http://schemas.android.com/apk/res-auto">
+    <TextView
+          style="@style/Interview_Question_Title"
+          android:layout_marginLeft="@dimen/Interview_Entity_margin_left"
+          local:MvxBind="Text CompleteScreenTitle;" />
+
+    <View style="@style/Interview_Entity_Divider" />
+
+    <LinearLayout style="@style/Interview_Question" android:orientation="vertical">
+        <LinearLayout style="@style/Interview_Question_Header">
+            <TextView style="@style/Interview_Complete_Screen_Text"
+                      local:MvxBind="Text Localization('Interview_Complete_Questions_Status')" />
+        </LinearLayout>
+
+        <TableLayout
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:stretchColumns="1">
+            <TableRow android:stretchColumns="*">
+
+                <LinearLayout style="@style/Interview_Complete_Screen_Statistics_Column_With_Right_Border" >
+                    <LinearLayout style="@style/Interview_Complete_Screen_Statistics_Container" local:MvxBind="Visibility Visibility(AnsweredCount)">
+                        <TextView
+                                  android:id="@+id/Complete_AnsweredCount"
+                                  style="@style/Interview_Complete_Screen_Statistics_Answered_Counter"
+                                  local:MvxBind="Text AnsweredCount" />
+                        <TextView
+                                  android:id="@+id/Complete_AnsweredCountLabel"
+                                  style="@style/Interview_Complete_Screen_Statistics_Answered_Label"
+                                  local:MvxBind="Text Localization('Interview_Complete_Answered')" />
+                    </LinearLayout>
+                    <LinearLayout style="@style/Interview_Complete_Screen_Statistics_Container" local:MvxBind="Visibility  InvertedVisibility(AnsweredCount)">
+                        <TextView style="@style/Interview_Complete_Screen_Statistics_Counter" local:MvxBind="Text Localization('Interview_Complete_No')" />
+                        <TextView style="@style/Interview_Complete_Screen_Statistics_Label" local:MvxBind="Text Localization('Interview_Complete_Answered')" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout  style="@style/Interview_Complete_Screen_Statistics_Column_With_Right_Border">
+                    <LinearLayout style="@style/Interview_Complete_Screen_Statistics_Container" local:MvxBind="Visibility Visibility(UnansweredCount)">
+                        <TextView
+                            android:id="@+id/Complete_UnAnsweredCount"
+                            style="@style/Interview_Complete_Screen_Statistics_Unanswered_Counter"
+                            local:MvxBind="Text UnansweredCount" />
+                        <TextView
+                            android:id="@+id/Complete_UnAnsweredCountLabel"
+                            style="@style/Interview_Complete_Screen_Statistics_Unanswered_Label"
+                            local:MvxBind="Text Localization('Interview_Complete_Unanswered')" />
+                    </LinearLayout>
+                    <LinearLayout style="@style/Interview_Complete_Screen_Statistics_Container" local:MvxBind="Visibility  InvertedVisibility(UnansweredCount)">
+                        <TextView style="@style/Interview_Complete_Screen_Statistics_Counter" local:MvxBind="Text Localization('Interview_Complete_No')" />
+                        <TextView style="@style/Interview_Complete_Screen_Statistics_Label" local:MvxBind="Text Localization('Interview_Complete_Unanswered')" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout  style="@style/Interview_Complete_Screen_Statistics_Column">
+                    <LinearLayout style="@style/Interview_Complete_Screen_Statistics_Container" local:MvxBind="Visibility Visibility(ErrorsCount)">
+                        <TextView
+                            android:id="@+id/Complete_ErrorsCount"
+                            style="@style/Interview_Complete_Screen_Statistics_Errors_Counter"
+                            local:MvxBind="Text ErrorsCount" />
+                        <TextView
+                            android:id="@+id/Complete_ErrorsCountLabel"
+                            style="@style/Interview_Complete_Screen_Statistics_Errors_Label"
+                            local:MvxBind="Text Localization('Interview_Complete_Errors')" />
+                    </LinearLayout>
+                    <LinearLayout style="@style/Interview_Complete_Screen_Statistics_Container" local:MvxBind="Visibility  InvertedVisibility(ErrorsCount)">
+                        <TextView style="@style/Interview_Complete_Screen_Statistics_Counter" local:MvxBind="Text Localization('Interview_Complete_No')" />
+                        <TextView style="@style/Interview_Complete_Screen_Statistics_Label" local:MvxBind="Text Localization('Interview_Complete_Errors')" />
+                    </LinearLayout>
+                </LinearLayout>
+            </TableRow>
+        </TableLayout>
+
+    </LinearLayout>
+
+    <View style="@style/Interview_Entity_Divider"  local:MvxBind="Visibility Visibility(ErrorsCount)"/>
+
+    <LinearLayout style="@style/Interview_Question" android:orientation="vertical" local:MvxBind="Visibility Visibility(ErrorsCount)">
+        <LinearLayout style="@style/Interview_Question_Header">
+            <TextView
+                android:id="@+id/Complete_EntitiesWithErrorsDescription"
+                style="@style/Interview_Complete_Screen_Text"
+                local:MvxBind="Text EntitiesWithErrorsDescription" />
+        </LinearLayout>
+        <MvxLinearLayout style="@style/Interview_Question_Header"
+              android:orientation="vertical"
+              local:MvxBind="ItemsSource EntitiesWithErrors;"
+              local:MvxItemTemplate="@layout/interview_complete_entity_with_error" />
+    </LinearLayout>
+
+    <View style="@style/Interview_Entity_Divider" />
+
+    <LinearLayout style="@style/Interview_Question" android:orientation="vertical">
+        <TextView
+          style="@style/Interview_Complete_Screen_Text"
+          local:MvxBind="Text CommentLabel" />
+        <EditText
+          android:id="@+id/Complete_NoteToSupervisorTxt"
+          android:inputType="textMultiLine"
+          android:maxLines="5"
+          android:scrollbars="vertical"
+          android:scrollHorizontally="false"
+          android:gravity="top|left"
+          style="@style/Interview_TextEditor"
+          android:padding="@dimen/Interview_Question_Answer_Input_background_padding"
+          local:MvxBind="Text Comment; Watermark Localization('TextQuestion_Hint');" />
+    </LinearLayout>
+
+    <View style="@style/Interview_Entity_Divider" />
+</merge>

@@ -7,7 +7,10 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
+using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 {
@@ -18,24 +21,25 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private readonly IPlainStorage<QuestionnaireView> questionnaireViewRepository;
         private readonly IInterviewViewModelFactory viewModelFactory;
         private readonly IAssignmentDocumentsStorage assignmentsRepository;
-        private readonly IAssignmentDocumentsStorage assignmentViewRepository;
         private readonly IViewModelNavigationService viewModelNavigationService;
+        private readonly IInterviewerSettings interviewerSettings;
         private SynchronizationViewModel synchronization;
 
-        public IMvxCommand SynchronizationCommand => new MvxCommand(this.RunSynchronization, () => !this.synchronization.IsSynchronizationInProgress);
+        public IMvxCommand SynchronizationCommand => new MvxCommand(this.RunSynchronization, 
+            () => !this.synchronization.IsSynchronizationInProgress && this.interviewerSettings.AllowSyncWithHq);
 
         public CreateNewViewModel(
             IPlainStorage<QuestionnaireView> questionnaireViewRepository,
             IInterviewViewModelFactory viewModelFactory,
             IAssignmentDocumentsStorage assignmentsRepository,
-            IAssignmentDocumentsStorage assignmentViewRepository,
-            IViewModelNavigationService viewModelNavigationService)
+            IViewModelNavigationService viewModelNavigationService,
+            IInterviewerSettings interviewerSettings)
         {
             this.questionnaireViewRepository = questionnaireViewRepository;
             this.viewModelFactory = viewModelFactory;
             this.assignmentsRepository = assignmentsRepository;
-            this.assignmentViewRepository = assignmentViewRepository;
             this.viewModelNavigationService = viewModelNavigationService;
+            this.interviewerSettings = interviewerSettings;
         }
 
         public void Load(SynchronizationViewModel sync)
@@ -44,7 +48,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.Title = InterviewerUIResources.Dashboard_AssignmentsTabTitle;
 
             var censusQuestionnairesCount = this.questionnaireViewRepository.Count(questionnaire => questionnaire.Census);
-            var assignmentsCount = this.assignmentViewRepository.Count();
+            var assignmentsCount = this.assignmentsRepository.Count();
 
             this.ItemsCount = censusQuestionnairesCount + assignmentsCount;
 
@@ -62,6 +66,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.synchronization.IsSynchronizationInProgress = true;
             this.synchronization.Synchronize();
         }
+
+        public bool SynchronizationWithHqEnabled => this.interviewerSettings.AllowSyncWithHq;
 
         protected override IEnumerable<IDashboardItem> GetUiItems()
         {
@@ -86,7 +92,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
             foreach (var assignment in dbAssignments)
             {
-                var dashboardItem = this.viewModelFactory.GetNew<AssignmentDashboardItemViewModel>();
+                var dashboardItem = this.viewModelFactory.GetNew<InterviewerAssignmentDashboardItemViewModel>();
                 dashboardItem.Init(assignment);
 
                 yield return dashboardItem;
@@ -103,7 +109,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             else
             {
                 // update UI assignment
-                var assignment = this.UiItems.OfType<AssignmentDashboardItemViewModel>()
+                var assignment = this.UiItems.OfType<InterviewerAssignmentDashboardItemViewModel>()
                     .FirstOrDefault(x => x.AssignmentId == assignmentId.Value);
 
                 assignment?.DecreaseInterviewsCount();

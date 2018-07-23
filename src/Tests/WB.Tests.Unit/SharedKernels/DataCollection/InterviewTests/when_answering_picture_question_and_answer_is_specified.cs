@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             BecauseOf();
         }
 
-        public void BecauseOf() => interview.AnswerPictureQuestion(userId: userId, questionId: questionId, answerTime: answerTime, rosterVector: propagationVector, pictureFileName: pictureFileName);
+        public void BecauseOf() => interview.AnswerPictureQuestion(userId: userId, questionId: questionId, originDate: DateTimeOffset.Now, rosterVector: propagationVector, pictureFileName: pictureFileName);
 
         [NUnit.Framework.OneTimeTearDown] public void CleanUp()
         {

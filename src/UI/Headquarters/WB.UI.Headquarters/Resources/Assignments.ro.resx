@@ -1,0 +1,270 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Active" xml:space="preserve">
+    <value>Activ</value>
+  </data>
+  <data name="AllAssignments" xml:space="preserve">
+    <value>Toate interviurile alocate</value>
+  </data>
+  <data name="Archive" xml:space="preserve">
+    <value>Arhivă</value>
+  </data>
+  <data name="Archived" xml:space="preserve">
+    <value>Arhivat </value>
+  </data>
+  <data name="AssignmentsHeader" xml:space="preserve">
+    <value>Interviuri alocate</value>
+  </data>
+  <data name="AssignmentsSelected" xml:space="preserve">
+    <value>{{count}} Interviu alocat selectat</value>
+  </data>
+  <data name="AssignmentsSelected_plural" xml:space="preserve">
+    <value>{{count}} Interviuri alocate selectate</value>
+  </data>
+  <data name="ChangeSizeModalTitle" xml:space="preserve">
+    <value>Editați dimensiunea pentru alocarea {{assignmentId}}</value>
+  </data>
+  <data name="Count" xml:space="preserve">
+    <value>Numără</value>
+  </data>
+  <data name="CreateAssignment_AnswersInstruction" xml:space="preserve">
+    <value>Completează total sau parțial câmpurile de identificare</value>
+  </data>
+  <data name="CreateAssignment_ResponsibleInstruction" xml:space="preserve">
+    <value>Selectați responsabil (controlor sau anchetator) pentru acest interviu alocat</value>
+  </data>
+  <data name="CreatedAt" xml:space="preserve">
+    <value>Creat pe data de</value>
+  </data>
+  <data name="CreateInterview" xml:space="preserve">
+    <value>Începeți un nou interviu</value>
+  </data>
+  <data name="IdentifyingQuestions" xml:space="preserve">
+    <value>Întrebări de identificare</value>
+  </data>
+  <data name="InterviewsNeeded" xml:space="preserve">
+    <value>Interviuri necesare</value>
+  </data>
+  <data name="InvalidSize" xml:space="preserve">
+    <value>Câmpul Mărime trebuie să fie de -1 sau mai mult.</value>
+  </data>
+  <data name="NumberOfAssignmentsAffected" xml:space="preserve">
+    <value>{{count}} Interviu alocat va fi schimbat</value>
+  </data>
+  <data name="NumberOfAssignmentsAffected_plural" xml:space="preserve">
+    <value>{{count}} Interviuri alocate vor fi schimbate</value>
+  </data>
+  <data name="Questionnaire" xml:space="preserve">
+    <value>Chestionar</value>
+  </data>
+  <data name="SelectQuestionnaire" xml:space="preserve">
+    <value>Selectați chestionarul existent pentru a actualiza interviurile alocate</value>
+  </data>
+  <data name="SelectQuestionnaireToUpgradeFrom" xml:space="preserve">
+    <value>Selectați chestionarul pentru a face actualizari din</value>
+  </data>
+  <data name="SelectResponsible" xml:space="preserve">
+    <value>Selectați responsabil</value>
+  </data>
+  <data name="ShowArchived" xml:space="preserve">
+    <value>Status arhivat</value>
+  </data>
+  <data name="Size" xml:space="preserve">
+    <value>Mărime </value>
+  </data>
+  <data name="SizeExplanation" xml:space="preserve">
+    <value>Specificați  numărul maxim de alocări care vor fi generate pentru acest interviu. Valori permise: -1 pentru nelimitat, 0 pentru nul, alt număr pentru numărul maxim de alocări</value>
+  </data>
+  <data name="Stop" xml:space="preserve">
+    <value>Stop</value>
+  </data>
+  <data name="Tooltip_Filter_ArchivedStatus" xml:space="preserve">
+    <value>Indicator pentru starea interviului alocat (activ sau arhivat)</value>
+  </data>
+  <data name="Tooltip_Filter_Questionnaire" xml:space="preserve">
+    <value>Selectați un chestionar pentru a vedea interviurile alocate corespunzatoare. Selectați 'Toate chestionarele' pentru a vedea interviurile alocate corespunzatoare fiecarui chestionar.</value>
+  </data>
+  <data name="Tooltip_Filter_Responsible" xml:space="preserve">
+    <value>Utilizator responsabil. Faceți clic în câmp pentru a alege un nume de utilizator fie prin selectarea directă, fie tastând pentru a filtra în continuare lista de nume de utilizator.</value>
+  </data>
+  <data name="Tooltip_Table_Count" xml:space="preserve">
+    <value>Numărul de interviuri atribuite în prezent pentru această alocare. Este posibil să fie create mai multe interviuri, dar să nu fi fost sincronizate. Dați click pe oricare celulă pentru a vizualiza interviurile asociate. Dați click pe simbolul de sortare pentru a le ordona după număr.</value>
+  </data>
+  <data name="Tooltip_Table_CreatedAt" xml:space="preserve">
+    <value>Data la care a fost creată alocarea. Dați click pe simbolul de sortare pentru a le ordona după dată.</value>
+  </data>
+  <data name="Tooltip_Table_IdentifyingQuestions" xml:space="preserve">
+    <value>Informații care identifică fiecare alocare de interviu. Acestea sunt răspunsurile la întrebările marcate ca fiind de identificare în Designer</value>
+  </data>
+  <data name="Tooltip_Table_InterviewsNeeded" xml:space="preserve">
+    <value>Numărul de interviuri necesare pentru finalizarea acestei alocări.</value>
+  </data>
+  <data name="Tooltip_Table_Responsible" xml:space="preserve">
+    <value>Utilizatorul responsabil pentru alocare. Faceți clic pe simbolul de sortare pentru a ordona numele de utilizatori.</value>
+  </data>
+  <data name="Tooltip_Table_Size" xml:space="preserve">
+    <value>Numărul maxim de interviuri care pot fi efectuate pentru această alocare. Dați click pe orice celulă pentru a schimba acest număr. Dați click pe pictograma de sortare pentru a sorta după dimensiune.</value>
+  </data>
+  <data name="Tooltip_Table_UpdatedAt" xml:space="preserve">
+    <value>Când a fost efectuată ultima actualizare a alocării interviului. Dați click pe pictograma de sortare pentru a sorta după dată.</value>
+  </data>
+  <data name="Unarchive" xml:space="preserve">
+    <value>Dezarhivare</value>
+  </data>
+  <data name="Unlimited" xml:space="preserve">
+    <value>Nelimitat</value>
+  </data>
+  <data name="UpdatedAt" xml:space="preserve">
+    <value>Actualizat pe</value>
+  </data>
+  <data name="UpgradeBtn" xml:space="preserve">
+    <value>Actualizare</value>
+  </data>
+  <data name="UpgradeCancelled" xml:space="preserve">
+    <value>Actualizare oprită</value>
+  </data>
+  <data name="UpgradeDescription" xml:space="preserve">
+    <value>Interviurile alocate existente care nu au fost finalizate vor fi actualizate din chestionarul selectat și arhivate.</value>
+  </data>
+  <data name="UpgradeDownloadFailed" xml:space="preserve">
+    <value>Descărcați lista</value>
+  </data>
+  <data name="UpgradePreparation" xml:space="preserve">
+    <value>Se așteaptă încheierea altor actualizări.</value>
+  </data>
+  <data name="UpgradeProgressDone" xml:space="preserve">
+    <value>Terminat</value>
+  </data>
+  <data name="UpgradeProgressDoneCount" xml:space="preserve">
+    <value>Actualizată cu succes: {{processed}}</value>
+  </data>
+  <data name="UpgradeProgressDoneTitle" xml:space="preserve">
+    <value>Actualizarea de la {{from}} la {{to}} este terminată</value>
+  </data>
+  <data name="UpgradeProgressErrorCount" xml:space="preserve">
+    <value>Neactualizat număr {{count}}</value>
+  </data>
+  <data name="UpgradeProgressNumbers" xml:space="preserve">
+    <value>Actualizarea datelor {{processed}} din {{totalCount}}</value>
+  </data>
+  <data name="UpgradeProgressTitle" xml:space="preserve">
+    <value>Actualizarea interviurilor alocate de la {{from}} la {{to}}</value>
+  </data>
+</root>

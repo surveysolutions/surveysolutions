@@ -29,7 +29,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         }
 
         public void BecauseOf() =>
-            interview.CreateInterviewFromSynchronizationMetadata(interviewId, userId, questionnaireId, 1, interviewStatus, featuredQuestionsMeta, comments, rejectedDateTime, interviewerAssignedDateTime, isValid, createdOnClient);
+            interview.CreateInterviewFromSynchronizationMetadata(interviewId, userId, questionnaireId, 1, interviewStatus, 
+                featuredQuestionsMeta, comments, rejectedDateTime, 
+                interviewerAssignedDateTime, isValid, createdOnClient, DateTimeOffset.Now);
 
         [NUnit.Framework.Test] public void should_event_context_contains_3_events () =>
             eventContext.Events.Count().Should().Be(3);

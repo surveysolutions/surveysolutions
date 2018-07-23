@@ -15,7 +15,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             IViewModelNavigationService viewModelNavigationService,
             IDeviceSettings deviceSettings, 
             ITabletDiagnosticService tabletDiagnosticService,
-            BackupViewModel sendTabletInformationViewModel,
+            SendTabletInformationViewModel sendTabletInformationViewModel,
             CheckNewVersionViewModel checkNewVersion,
             BackupRestoreViewModel backupRestore,
             BandwidthTestViewModel bandwidthTest) : base(principal, viewModelNavigationService)
@@ -31,7 +31,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         public override bool IsAuthenticationRequired => false;
 
-        public BackupViewModel TabletInformation { get; set; }
+        public SendTabletInformationViewModel TabletInformation { get; set; }
 
         public CheckNewVersionViewModel CheckNewVersion { get; set; }
 

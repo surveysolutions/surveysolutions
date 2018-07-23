@@ -38,11 +38,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
                 foreach (var interviewStatus in Enum.GetValues(typeof (InterviewStatus)).Cast<InterviewStatus>())
                 {
                     var interview = Create.AggregateRoot.Interview(questionnaireRepository: questionnaireRepository);
-                    interview.Apply(new InterviewStatusChanged(originalInterviewStatus, ""));
+                    interview.Apply(new InterviewStatusChanged(originalInterviewStatus, "", DateTimeOffset.Now));
                     try
                     {
                         interview.CreateInterviewFromSynchronizationMetadata(interview.EventSourceId, userId, questionnaireId,1, interviewStatus, null, "", null, null,
-                            false, false);
+                            false, false, DateTimeOffset.Now);
                         exceptionByStatuses.Add(interviewStatus);
                     }
                     catch {}
@@ -92,7 +92,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         [NUnit.Framework.Test] public void should_interview_in_status_RejectedBySupervisor_be_allowed_to_change_on_RejectedBySupervisor_recheck_this_one () =>
             interviewStatusesWhichWasChangedWithoutException[InterviewStatus.RejectedBySupervisor].Should().BeEquivalentTo(new[]
             {
-                InterviewStatus.InterviewerAssigned, InterviewStatus.Completed, InterviewStatus.RejectedBySupervisor
+                InterviewStatus.InterviewerAssigned, InterviewStatus.Completed, InterviewStatus.RejectedBySupervisor, InterviewStatus.ApprovedBySupervisor, 
             });
 
         [NUnit.Framework.Test] public void should_interview_in_status_ApprovedBySupervisor_be_allowed_to_change_on_RejectedBySupervisor_recheck_this_one () =>

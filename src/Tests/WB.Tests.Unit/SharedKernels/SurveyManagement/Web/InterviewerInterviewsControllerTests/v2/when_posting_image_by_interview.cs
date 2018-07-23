@@ -2,7 +2,7 @@ using System;
 using Moq;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2;
+using WB.UI.Headquarters.API.DataCollection.Interviewer.v2;
 
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests.InterviewerInterviewsControllerTests.v2

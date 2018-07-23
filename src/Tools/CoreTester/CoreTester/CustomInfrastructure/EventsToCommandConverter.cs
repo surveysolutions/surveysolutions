@@ -48,6 +48,7 @@ namespace CoreTester.CustomInfrastructure
                 createCommand = new CreateInterview(interviewId, userId,
                     new QuestionnaireIdentity(interviewCreated.QuestionnaireId, interviewCreated.QuestionnaireVersion),
                     preloadedAnswers,
+                    new List<string>(), 
                     interviewCreated.CreationTime ?? DateTime.UtcNow,
                     supervisorAssigned.SupervisorId,
                     interviewerAssigned?.InterviewerId,
@@ -64,6 +65,7 @@ namespace CoreTester.CustomInfrastructure
                         new QuestionnaireIdentity(interviewOnClientCreated.QuestionnaireId,
                             interviewOnClientCreated.QuestionnaireVersion),
                         preloadedAnswers,
+                        new List<string>(), 
                         supervisorAssigned.AssignTime ?? DateTime.UtcNow,
                         supervisorAssigned.SupervisorId,
                         interviewerAssigned?.InterviewerId,
@@ -77,6 +79,7 @@ namespace CoreTester.CustomInfrastructure
                         new QuestionnaireIdentity(interviewFromPreloadedDataCreated.QuestionnaireId,
                             interviewFromPreloadedDataCreated.QuestionnaireVersion),
                         preloadedAnswers,
+                        new List<string>(), 
                         supervisorAssigned.AssignTime ?? DateTime.UtcNow,
                         supervisorAssigned.SupervisorId,
                         interviewerAssigned?.InterviewerId,
@@ -94,7 +97,7 @@ namespace CoreTester.CustomInfrastructure
             {
                 case AreaQuestionAnswered area:
                     return AreaAnswer.FromArea(new Area(area.Geometry, area.MapName,
-                        area.AreaSize, area.Length, area.Coordinates,
+                        area.NumberOfPoints, area.AreaSize, area.Length, area.Coordinates,
                         area.DistanceToEditor));
                 case AudioQuestionAnswered audio:
                     return AudioAnswer.FromString(audio.FileName, audio.Length);
@@ -111,7 +114,7 @@ namespace CoreTester.CustomInfrastructure
                 case NumericRealQuestionAnswered numericReal:
                     return NumericRealAnswer.FromDecimal(numericReal.Answer);
                 case PictureQuestionAnswered picture:
-                    return MultimediaAnswer.FromString(picture.PictureFileName);
+                    return MultimediaAnswer.FromString(picture.PictureFileName, picture.AnswerTimeUtc);
                 case QRBarcodeQuestionAnswered qr:
                     return QRBarcodeAnswer.FromString(qr.Answer);
                 case SingleOptionLinkedQuestionAnswered singleLinked:
@@ -142,11 +145,15 @@ namespace CoreTester.CustomInfrastructure
                     return answersRemoved.Questions.Select(x =>
                         new RemoveAnswerCommand(interviewId, userId, x, committedEvent.EventTimeStamp));
                 case AreaQuestionAnswered areaQuestion:
-                    return new AnswerAreaQuestionCommand(interviewId, userId,
+                    return new AnswerGeographyQuestionCommand(interviewId, userId,
                         areaQuestion.QuestionId, areaQuestion.RosterVector, areaQuestion.AnswerTimeUtc,
                         areaQuestion.Geometry,
-                        areaQuestion.MapName, areaQuestion.AreaSize, areaQuestion.Coordinates, areaQuestion.Length,
-                        areaQuestion.DistanceToEditor).ToEnumerable();
+                        areaQuestion.MapName, 
+                        areaQuestion.AreaSize, 
+                        areaQuestion.Coordinates, 
+                        areaQuestion.Length,
+                        areaQuestion.DistanceToEditor,
+                        areaQuestion.NumberOfPoints).ToEnumerable();
                 case AudioQuestionAnswered audioQuestion:
                     return new AnswerAudioQuestionCommand(interviewId, userId, audioQuestion.QuestionId,
                         audioQuestion.RosterVector, audioQuestion.AnswerTimeUtc,

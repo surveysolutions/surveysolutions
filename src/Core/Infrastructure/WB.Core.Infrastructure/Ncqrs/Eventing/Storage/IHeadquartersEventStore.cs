@@ -7,5 +7,7 @@ namespace Ncqrs.Eventing.Storage
         int CountOfAllEvents();
         bool HasEventsAfterSpecifiedSequenceWithAnyOfSpecifiedTypes(long sequence, Guid eventSourceId,
             params string[] typeNames);
+
+        int? GetMaxEventSequenceWithAnyOfSpecifiedTypes(Guid eventSourceId, params string[] typeNames);
     }
 }

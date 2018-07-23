@@ -122,7 +122,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public bool HasComments
         {
             get { return this.hasComments; }
-            private set { this.hasComments = value; this.RaisePropertyChanged(); }
+            set { this.hasComments = value; this.RaisePropertyChanged(); }
         }
 
         private bool isCommentInEditMode;
@@ -163,7 +163,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     userId: this.principal.CurrentUserIdentity.UserId,
                     questionId: this.Identity.Id,
                     rosterVector: this.Identity.RosterVector,
-                    commentTime: DateTime.UtcNow,
                     comment: this.InterviewerComment)).ConfigureAwait(false);
 
             this.UpdateCommentsFromInterview();

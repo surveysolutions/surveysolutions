@@ -27,7 +27,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.DashboardViewModelTest
         [Test]
         public void should_not_be_loaded_new_questionnaire () => mockOfDesignerApiService.Verify(
                 _ => _.GetQuestionnaireAsync(Moq.It.IsAny<string>(),
-                    Moq.It.IsAny<Action<DownloadProgressChangedEventArgs>>(), Moq.It.IsAny<CancellationToken>()),
+                    Moq.It.IsAny<IProgress<TransferProgress>>(), Moq.It.IsAny<CancellationToken>()),
                 Times.Never);
 
         private static DashboardViewModel viewModel;

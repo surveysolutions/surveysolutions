@@ -49,7 +49,7 @@ namespace WB.Core.BoundedContexts.Headquarters.MoveUserToAnotherTeam
             var interviewIds = GetInterviewIds(interviewerId);
             foreach (var interviewId in interviewIds)
             {
-                var moveInterviewToTeam = new MoveInterviewToTeam(interviewId, userId, previousSupervisorId, null, DateTime.UtcNow);
+                var moveInterviewToTeam = new MoveInterviewToTeam(interviewId, userId, previousSupervisorId, null);
                 ExecuteMoveInterviewToTeam(moveInterviewToTeam, result, interviewId);
             }
 
@@ -82,7 +82,7 @@ namespace WB.Core.BoundedContexts.Headquarters.MoveUserToAnotherTeam
             var interviewIds = GetInterviewIds(interviewerId);
             foreach (var interviewId in interviewIds)
             {
-                var moveInterviewToTeam = new MoveInterviewToTeam(interviewId, userId, newSupervisorId, interviewerId, DateTime.UtcNow);
+                var moveInterviewToTeam = new MoveInterviewToTeam(interviewId, userId, newSupervisorId, interviewerId);
                 ExecuteMoveInterviewToTeam(moveInterviewToTeam, result, interviewId);
             }
 

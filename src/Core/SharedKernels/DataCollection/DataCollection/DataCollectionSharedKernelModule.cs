@@ -17,7 +17,7 @@ namespace WB.Core.SharedKernels.DataCollection
             registry.Bind<StatefulInterview>();
         }
 
-        public Task Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
             return Task.CompletedTask;
         }

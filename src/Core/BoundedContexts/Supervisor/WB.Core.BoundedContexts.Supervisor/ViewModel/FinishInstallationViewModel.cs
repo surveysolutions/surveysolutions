@@ -34,6 +34,16 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             this.synchronizationService = synchronizationService;
         }
 
+        public override async Task Initialize()
+        {
+            await base.Initialize();
+#if DEBUG
+            this.Endpoint = "http://10.0.2.2/headquarters";
+            this.UserName = "sup";
+            this.Password = "1";
+#endif
+        }
+
         protected override Task RelinkUserToAnotherDeviceAsync(RestCredentials credentials, CancellationToken token) => throw new NotImplementedException();
 
         protected override async Task SaveUserToLocalStorageAsync(RestCredentials credentials, CancellationToken token)
@@ -42,9 +52,10 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 
             var supervisorIdentity = new SupervisorIdentity
             {
-                Id = GuidExtensions.FormatGuid((Guid) supervisor.Id),
+                Id = supervisor.Id.FormatGuid(),
                 UserId = supervisor.Id,
                 Name = this.UserName,
+                Email = supervisor.Email,
                 PasswordHash = this.passwordHasher.Hash(this.Password),
                 Token = credentials.Token
             };

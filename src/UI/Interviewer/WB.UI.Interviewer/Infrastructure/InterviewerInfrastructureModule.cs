@@ -2,13 +2,8 @@
 using System.Threading.Tasks;
 using Main.Core.Documents;
 using Ncqrs.Eventing.Storage;
-using NLog;
-using NLog.Config;
-using NLog.Targets;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
-using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
-using WB.Core.BoundedContexts.Interviewer.Services.Synchronization;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -17,15 +12,16 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using IPrincipal = WB.Core.SharedKernels.Enumerator.Services.Infrastructure.IPrincipal;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Services.Internals;
-using WB.UI.Shared.Enumerator.Services.Logging;
 
 namespace WB.UI.Interviewer.Infrastructure
 {
@@ -39,22 +35,8 @@ namespace WB.UI.Interviewer.Infrastructure
 
             var pathToLocalDirectory = AndroidPathUtils.GetPathToInternalDirectory();
 
-            var fileName = Path.Combine(pathToLocalDirectory, "Logs", "${shortdate}.log");
-            var fileTarget = new FileTarget("logFile")
-            {
-                FileName = fileName,
-                Layout = "${longdate}[${logger}][${level}][${message}][${onexception:${exception:format=toString,Data}|${stacktrace}}]"
-            };
-
-            var config = new LoggingConfiguration();
-            config.AddTarget("logFile", fileTarget);
-            config.LoggingRules.Add(new LoggingRule("*", LogLevel.Warn, fileTarget));
-            LogManager.Configuration = config;
-
             registry.BindAsSingletonWithConstructorArgument<IBackupRestoreService, BackupRestoreService>(
                 "privateStorage", pathToLocalDirectory);
-
-            registry.Bind<ILoggerProvider, NLogLoggerProvider>();
 
             registry.BindAsSingletonWithConstructorArgument<IQuestionnaireAssemblyAccessor, InterviewerQuestionnaireAssemblyAccessor>(
                 "pathToAssembliesDirectory", AndroidPathUtils.GetPathToSubfolderInLocalDirectory("assemblies"));
@@ -89,7 +71,7 @@ namespace WB.UI.Interviewer.Infrastructure
             registry.BindAsSingleton(typeof(IPlainStorage<>), typeof(SqlitePlainStorage<>));
         }
 
-        public Task Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
             return Task.CompletedTask;
         }

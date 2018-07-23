@@ -6516,6 +6516,13 @@ a.disabled {
     left: 8px;
     top: -5px; }
 
+.gray-link-underline {
+  color: #a6a8a9;
+  text-decoration: underline; }
+  .gray-link-underline:hover, .gray-link-underline:focus, .gray-link-underline:active {
+    text-decoration: none;
+    color: #a6a8a9; }
+
 .navbar {
   min-width: 360px;
   min-height: 70px;
@@ -9061,6 +9068,9 @@ h5, .preset-filters-container a, .preset-filters-container .export-queue {
 .default-text {
   color: #dbdfe2 !important; }
 
+.gray-font {
+  color: #a6a8a9; }
+
 .primary-text {
   color: #2a81cb !important; }
 
@@ -9495,6 +9505,9 @@ dl dd:after {
 
 .always-visible-scroll {
   overflow-y: scroll; }
+
+.padding-left-100 {
+  padding-left: 100px; }
 
 .fade-enter-active, .fade-leave-active {
   -webkit-transition: opacity 0.5s;

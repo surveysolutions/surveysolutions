@@ -12,14 +12,17 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
         public bool UsesExpressionStorage { get; }
         public DateTime? CreationTime { get; }
 
-        public InterviewCreated(Guid userId, Guid questionnaireId, long questionnaireVersion, int? assignmentId, bool usesExpressionStorage = false, DateTime? creationTime = null)
-            : base(userId)
+        public InterviewCreated(Guid userId, Guid questionnaireId, long questionnaireVersion, 
+            int? assignmentId, DateTimeOffset originDate, bool usesExpressionStorage = false)
+            : base(userId, originDate)
         {
             this.QuestionnaireId = questionnaireId;
             this.QuestionnaireVersion = questionnaireVersion;
             this.AssignmentId = assignmentId;
             this.UsesExpressionStorage = usesExpressionStorage;
-            this.CreationTime = creationTime;
+
+            if (originDate != default(DateTimeOffset))
+                this.CreationTime = originDate.UtcDateTime;
         }
     }
 }

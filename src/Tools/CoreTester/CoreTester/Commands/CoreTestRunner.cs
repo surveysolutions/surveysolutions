@@ -8,7 +8,6 @@ using Main.Core.Documents;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
-using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -114,10 +113,7 @@ namespace CoreTester.Commands
                     }
                 }
 
-                //continue;
-
-                questionnaireStorage.StoreQuestionnaire(questionnaireBrowseItem.QuestionnaireId,
-                    questionnaireBrowseItem.Version, questionnaire);
+                questionnaireStorage.StoreQuestionnaire(questionnaireBrowseItem.QuestionnaireId, questionnaireBrowseItem.Version, questionnaire);
                 var stopwatch = Stopwatch.StartNew();
                 var eventsCount = 0;
                 int lastTimeSomethingWasDumpedInOutput = 0;

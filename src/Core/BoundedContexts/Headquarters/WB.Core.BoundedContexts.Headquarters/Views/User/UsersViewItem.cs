@@ -1,5 +1,4 @@
 using System;
-using Main.Core.Entities.SubEntities;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.User
 {

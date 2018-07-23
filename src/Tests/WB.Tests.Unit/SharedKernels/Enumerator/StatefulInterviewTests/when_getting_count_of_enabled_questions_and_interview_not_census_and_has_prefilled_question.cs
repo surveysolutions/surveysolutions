@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
 
             var statefulInterview = Setup.StatefulInterview(questionnaire, false);
             statefulInterview.CreateInterview(
-                Create.Command.CreateInterview(questionnaire.PublicKey, 1, suervisorId, new List<InterviewAnswer>(), responsibleId, DateTime.UtcNow));
+                Create.Command.CreateInterview(questionnaire.PublicKey, 1, suervisorId, new List<InterviewAnswer>(), responsibleId));
 
             //act
             var countActiveQuestionsInInterview = statefulInterview.CountActiveQuestionsInInterview();

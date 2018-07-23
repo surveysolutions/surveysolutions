@@ -50,7 +50,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
             statefullInterview.AnswerNumericRealQuestion(interviewerId, substitutedQuestionId, RosterVector.Empty,
                 DateTime.UtcNow, 2);
             statefullInterview.Apply(
-                Create.Event.VariablesChanged(new ChangedVariable(substitutedVariableIdentity, 10)));
+                Create.Event.VariablesChanged(DateTimeOffset.Now, new ChangedVariable(substitutedVariableIdentity, 10)));
             statefullInterview.Apply(Create.Event.SubstitutionTitlesChanged(staticTexts: new[] {staticTextIdentity}));
 
             liteEventBus.PublishCommittedEvents(new CommittedEventStream(statefullInterview.EventSourceId,

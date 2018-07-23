@@ -15,6 +15,9 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
+using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
 using It = Moq.It;
@@ -95,7 +98,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
 
             this.sw = new Stopwatch();
             sw.Start();
-            await viewModel.SyncronizeAsync(Mock.Of<IProgress<SyncProgressInfo>>(), CancellationToken.None);
+            await viewModel.SynchronizeAsync(Mock.Of<IProgress<SyncProgressInfo>>(), CancellationToken.None);
             sw.Stop();
         }
 
