@@ -257,7 +257,7 @@ angular.module('designerApp')
                 }
             };
 
-            $rootScope.navigateTo = function (reference) {
+            $rootScope.navigateTo = function (reference, reload) {
                 if (reference.type.toLowerCase() === "questionnaire") {
                     $scope.verificationStatus.visible = false;
                     $scope.showShareInfo();
@@ -279,7 +279,8 @@ angular.module('designerApp')
                         itemId: reference.itemId,
                         indexOfEntityInProperty: reference.indexOfEntityInProperty,
                         property: reference.property
-                    });
+                    },
+                        {reload : reload});
                 }
             };
             

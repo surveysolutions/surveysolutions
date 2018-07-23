@@ -88,6 +88,7 @@ namespace WB.Enumerator.Native.WebInterview
 
             result.IsReadonly = interviewQuestion.IsReadonly;
             result.Title = interviewQuestion.Title.BrowserReadyText;
+            //result.Instructions = interviewQuestion.Instructions.BrowserReadyText;
 
             if (entityType == InterviewEntityType.Gps)
             {

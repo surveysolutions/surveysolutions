@@ -187,7 +187,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question with title substitution cannot be marked as identifying..
+        ///   Looks up a localized string similar to Question with title or instrustions substitution cannot be marked as identifying..
         /// </summary>
         public static string WB0015_QuestionWithTitleSubstitutionCantBePrefilled {
             get {
@@ -196,7 +196,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question with title substitution cannot reference itself..
+        ///   Looks up a localized string similar to Question with title or instrustions substitution cannot reference itself..
         /// </summary>
         public static string WB0016_QuestionWithTitleSubstitutionCantReferenceSelf {
             get {

@@ -397,6 +397,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ?? this.Tree.GetGroup(entityIdentity)?.Title
             ?? this.Tree.GetStaticText(entityIdentity)?.Title;
 
+        public string GetBrowserReadyInstructionsHtml(Identity entityIdentity)
+            => this.Tree.GetQuestion(entityIdentity)?.Instructions?.BrowserReadyText ?? string.Empty;
+
         public object GetVariableValueByOrDeeperRosterLevel(Guid variableId, RosterVector variableRosterVector)
         {
             do
