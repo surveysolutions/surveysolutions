@@ -12,8 +12,8 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
     {
         public AnsweredYesNoOption[] AnsweredOptions { get; private set; }
 
-        public AnswerYesNoQuestion(Guid interviewId, Guid userId, Guid questionId, RosterVector rosterVector, DateTime answerTime, IEnumerable<AnsweredYesNoOption> answeredOptions)
-            : base(interviewId, userId, questionId, rosterVector, answerTime)
+        public AnswerYesNoQuestion(Guid interviewId, Guid userId, Guid questionId, RosterVector rosterVector, IEnumerable<AnsweredYesNoOption> answeredOptions)
+            : base(interviewId, userId, questionId, rosterVector)
         {
             this.AnsweredOptions = answeredOptions.ToArray();
         }

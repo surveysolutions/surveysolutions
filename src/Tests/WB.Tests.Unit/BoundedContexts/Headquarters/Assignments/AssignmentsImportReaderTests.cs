@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
@@ -289,6 +290,48 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                     Column = columns[0],
                     Row = 1,
                     Value = row[0]
+                }
+            }).Using(new PreloadingValueComparer()));
+        }
+
+        [Test]
+        public void when_read_protected_variables_file_should_return_preloaded_file_with_2_specified_preloding_values()
+        {
+            // arrange
+            var variableName1 = "categorical";
+            var variableName2 = "multi";
+            var columns = new[] { "variable__Name" };
+            var rows = new[]
+            {
+                new[] {variableName1},
+                new[] {variableName2}
+            };
+
+            var reader = Create.Service.AssignmentsImportReader();
+            var stream = Create.Other.TabDelimitedTextStream(columns, rows);
+            // act
+            var file = reader.ReadTextFile(stream, "protected__variables.tab");
+            // assert
+            Assert.That(file.Rows, Has.Exactly(2).Items);
+            Assert.That(file.Rows[0].Cells, Is.EquivalentTo(new[]
+            {
+                new PreloadingValue
+                {
+                    VariableOrCodeOrPropertyName = columns[0].ToLower(),
+                    Column = columns[0],
+                    Row = 1,
+                    Value = variableName1
+                }
+            }).Using(new PreloadingValueComparer()));
+
+            Assert.That(file.Rows[1].Cells, Is.EquivalentTo(new[]
+            {
+                new PreloadingValue
+                {
+                    VariableOrCodeOrPropertyName = columns[0].ToLower(),
+                    Column = columns[0],
+                    Row = 2,
+                    Value = variableName2
                 }
             }).Using(new PreloadingValueComparer()));
         }

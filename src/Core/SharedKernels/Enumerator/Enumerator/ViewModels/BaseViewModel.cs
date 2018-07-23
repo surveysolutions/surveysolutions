@@ -9,7 +9,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
     public abstract class BaseViewModel : MvxViewModel
     {
         protected readonly IPrincipal principal;
-        private readonly IViewModelNavigationService viewModelNavigationService;
+        protected readonly IViewModelNavigationService viewModelNavigationService;
 
         protected BaseViewModel(IPrincipal principal, IViewModelNavigationService viewModelNavigationService)
         {

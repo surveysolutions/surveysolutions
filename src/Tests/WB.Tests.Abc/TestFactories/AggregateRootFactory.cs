@@ -69,16 +69,18 @@ namespace WB.Tests.Abc.TestFactories
         public StatefulInterview StatefulInterview(Guid interviewId, 
             Guid? questionnaireId = null,
             Guid? userId = null,
+            Guid? supervisorId = null,
             QuestionnaireDocument questionnaire = null,
             bool shouldBeInitialized = true)
         {
-            var interview = this.StatefulInterview(questionnaireId, userId, questionnaire, shouldBeInitialized);
+            var interview = this.StatefulInterview(questionnaireId, userId, supervisorId, questionnaire, shouldBeInitialized);
             interview.SetId(interviewId);
             return interview;
         }
 
         public StatefulInterview StatefulInterview(Guid? questionnaireId = null,
             Guid? userId = null,
+            Guid? supervisorId = null,
             QuestionnaireDocument questionnaire = null, 
             bool shouldBeInitialized = true,
             Action<Mock<IInterviewLevel>> setupLevel = null)
@@ -105,8 +107,8 @@ namespace WB.Tests.Abc.TestFactories
 
             if (shouldBeInitialized)
             {
-                var command = Create.Command.CreateInterview(Guid.Empty, userId ?? Guid.NewGuid(), Create.Entity.QuestionnaireIdentity(questionnaireId.Value, 1), DateTime.Now,
-                    Guid.NewGuid(), null, null, null);
+                var command = Create.Command.CreateInterview(Guid.Empty, userId ?? Guid.NewGuid(), Create.Entity.QuestionnaireIdentity(questionnaireId.Value, 1),
+                    supervisorId ?? Guid.NewGuid(), null, null, null);
                 statefulInterview.CreateInterview(command);
             }
 
@@ -131,7 +133,7 @@ namespace WB.Tests.Abc.TestFactories
 
             if (shouldBeInitialized)
             {
-                var command = Create.Command.CreateInterview(Guid.Empty, userId ?? Guid.NewGuid(), Create.Entity.QuestionnaireIdentity(questionnaireId.Value, 1), DateTime.Now,
+                var command = Create.Command.CreateInterview(Guid.Empty, userId ?? Guid.NewGuid(), Create.Entity.QuestionnaireIdentity(questionnaireId.Value, 1),
                     Guid.NewGuid(), null, null, null);
                 statefulInterview.CreateInterview(command);
             }

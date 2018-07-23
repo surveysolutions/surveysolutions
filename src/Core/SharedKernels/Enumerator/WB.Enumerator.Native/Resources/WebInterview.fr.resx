@@ -253,6 +253,6 @@
     <value>Les cookies ne sont pas activés dans votre navigateur web. Veuillez les activer dans les préférences de votre navigateur pour continuer</value>
   </data>
   <data name="InterviewReceivedByInterviewer" xml:space="preserve">
-    <value>Impossible de modifier L'entretien reçue sur l'appareil de l'enquêteur</value>
+    <value>Impossible de modifier L'entretien reçue sur l'appareil</value>
   </data>
 </root>

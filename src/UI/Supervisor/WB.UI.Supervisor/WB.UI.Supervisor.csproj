@@ -184,6 +184,9 @@
     <Reference Include="Plugin.Permissions, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Plugin.Permissions.3.0.0.12\lib\monoandroid71\Plugin.Permissions.dll</HintPath>
     </Reference>
+    <Reference Include="SignaturePad, Version=3.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Xamarin.Controls.SignaturePad.3.0.0\lib\MonoAndroid\SignaturePad.dll</HintPath>
+    </Reference>
     <Reference Include="SQLite-net, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\sqlite-net-pcl.1.4.118\lib\netstandard1.1\SQLite-net.dll</HintPath>
     </Reference>
@@ -285,25 +288,38 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Activities\DashboardActivity.cs" />
+    <Compile Include="Activities\Dashboard\DashboardFragmets.cs" />
+    <Compile Include="Activities\Dashboard\MenuFragment.cs" />
+    <Compile Include="Activities\Dashboard\RecyclerViewFragment.cs" />
     <Compile Include="Activities\DiagnosticsActivity.cs" />
     <Compile Include="Activities\FinishInstallationActivity.cs" />
+    <Compile Include="Activities\Interview\InterviewActivity.cs" />
+    <Compile Include="Activities\Interview\SupervisorCompleteFragment.cs" />
+    <Compile Include="Activities\LoadingActivity.cs" />
+    <Compile Include="Activities\LoginActivity.cs" />
+    <Compile Include="Activities\Interview\PrefilledQuestionsActivity.cs" />
+    <Compile Include="Activities\MapsActivity.cs" />
+    <Compile Include="Activities\OfflineSupervisorSyncActitivy.cs" />
     <Compile Include="Activities\PrefsActivity.cs" />
+    <Compile Include="CustomControls\InterviewerSelectorDialog.cs" />
+    <Compile Include="CustomControls\SupervisorDashboardTemplateSelector.cs" />
+    <Compile Include="MvvmBindings\DrawerLockModeBinding.cs" />
     <Compile Include="MvvmBindings\ImageCompanyLogoBinding.cs" />
-    <Compile Include="MvvmBindings\TextEditValidationStyleBackgroundConverter.cs" />
+    <Compile Include="MvvmBindings\SupervisorLocalizationValueConverter.cs" />
+    <Compile Include="MvvmBindings\SelectedBackgroundConverter.cs" />
+    <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="ServiceLocation\SupervisorInfrastructureModule.cs" />
     <Compile Include="Services\Implementation\CheckForExtendedVersionUriProvider.cs" />
     <Compile Include="Services\Implementation\CheckForVersionUriProvider.cs" />
-    <Compile Include="Services\Implementation\SupervisorPrincipal.cs" />
     <Compile Include="Services\Implementation\SupervisorSettings.cs" />
     <Compile Include="Services\Implementation\TabletDiagnosticService.cs" />
     <Compile Include="Services\Implementation\ViewModelNavigationService.cs" />
-    <Compile Include="Services\ISupervisorPrincipal.cs" />
     <Compile Include="SharedPreferences\SettingsNames.cs" />
     <Compile Include="SupervisorMvxApplication.cs" />
     <Compile Include="SupervisorApplication.cs" />
     <Compile Include="SupervisorAppStart.cs" />
     <Compile Include="LinkerPleaseInclude.cs" />
-    <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="ServiceLocation\SupervisorUIModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SupervisorSetup.cs" />
@@ -322,7 +338,7 @@
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\finish_installation.axml">
-      <SubType>AndroidResource</SubType>
+      <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\diagnostics.axml">
       <SubType>Designer</SubType>
@@ -339,11 +355,6 @@
     <None Include="Properties\AndroidManifest.xml">
       <SubType>Designer</SubType>
     </None>
-    <AndroidResource Include="Resources\drawable\SurveyShape.xml" />
-    <AndroidResource Include="Resources\drawable\SurveyTableHeader.xml" />
-    <AndroidResource Include="Resources\drawable\CounterRoundShape.xml" />
-    <AndroidResource Include="Resources\drawable\errorwarningstyle.xml" />
-    <AndroidResource Include="Resources\drawable\infowarningstyle.xml" />
     <AndroidResource Include="Resources\drawable-xxhdpi\icon.png" />
     <AndroidResource Include="Resources\drawable-xhdpi\icon.png" />
     <AndroidResource Include="Resources\drawable-mdpi\icon.png" />
@@ -354,7 +365,6 @@
     <AndroidResource Include="Resources\drawable-xhdpi\login_logo.png" />
     <AndroidResource Include="Resources\drawable-xxhdpi\login_logo.png" />
     <AndroidResource Include="Resources\drawable-mdpi\login_logo.png" />
-    <AndroidResource Include="Resources\drawable\borderless_button.xml" />
     <AndroidResource Include="Resources\values-small\dimensions.xml">
       <SubType>Designer</SubType>
     </AndroidResource>
@@ -416,12 +426,6 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\list_divider_material.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\back_arrow.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\values\strings.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -456,9 +460,15 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Resources\drawable-v21\" />
-    <Folder Include="Resources\drawable-xxxhdpi\" />
-    <Folder Include="ViewModel\" />
+    <AndroidResource Include="Resources\layout\dashboard_navigation_header.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\synchronize.axml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\drawable\login_logo.png" />
@@ -480,19 +490,102 @@
     <AndroidResource Include="Resources\values\login.xml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\textedit_invalid.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\drawable\textedit_valid.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\color\textedit_border_color_selector.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\color\textedit_color_selector.xml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\diagnostics_section_default.xml" />
+    <AndroidResource Include="Resources\layout\dashboard.axml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\menu\dashboard.xml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\menu\dashboard_sidebar_menu.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\temp_image.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\dashboard_sidebar.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\dashboard_interviews.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\dashboard_sidebar_counter.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\dashboard_interviewer_selector.axml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\dashboard_interviewer_to_select.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\dashboard_sidebar_header.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\sidebar_sync_icon.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\loading.axml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\menu\interview.xml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\interview_supervisor_complete.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\offline_sync.axml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\menu\maps.xml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\synch_icon_round.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\xml\file_paths.xml">
+      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\offline_sync_device_item.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\drawable\receive_interviews_icon.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

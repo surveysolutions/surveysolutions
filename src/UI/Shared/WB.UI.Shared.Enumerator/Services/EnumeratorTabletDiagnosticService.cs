@@ -16,6 +16,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 
 namespace WB.UI.Shared.Enumerator.Services
 {
@@ -55,7 +56,7 @@ namespace WB.UI.Shared.Enumerator.Services
 
         public async Task UpdateTheApp(CancellationToken cancellationToken, 
             bool continueIfNoPatch = true,
-            Action<Core.GenericSubdomains.Portable.Implementation.DownloadProgressChangedEventArgs> onDownloadProgressChanged = null)
+            IProgress<TransferProgress> onDownloadProgressChanged = null)
         {
             await this.permissions.AssureHasPermission(Permission.Storage);
 

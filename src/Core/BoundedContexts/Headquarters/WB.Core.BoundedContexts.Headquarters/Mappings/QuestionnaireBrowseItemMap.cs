@@ -19,6 +19,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             Property(x => x.LastEntryDate);
             Property(x => x.ImportDate);
             Property(x => x.Title);
+            Property(x => x.Variable);
             Property(x => x.IsPublic);
             Property(x => x.CreatedBy);
             Property(x => x.IsDeleted);

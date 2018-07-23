@@ -6,6 +6,7 @@ using Moq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters;
+using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
@@ -40,7 +41,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
                     Mock.Of<IQueryableReadSideRepositoryReader<InterviewCommentaries>>(),
                     Mock.Of<ITransactionManagerProvider>(),
                     Mock.Of<ILogger>()),
-                new InterviewErrorsExporter(Mock.Of<ICsvWriter>(), Mock.Of<IQuestionnaireStorage>(), Mock.Of<IFileSystemAccessor>()));
+                new InterviewErrorsExporter(Mock.Of<ICsvWriter>(), Mock.Of<IQuestionnaireStorage>(), Mock.Of<IFileSystemAccessor>()),
+                new DiagnosticsExporter(Mock.Of<InterviewDataExportSettings>(), 
+                    Mock.Of<IFileSystemAccessor>(),
+                    Mock.Of<ICsvWriter>(),
+                    Mock.Of<ILogger>(),
+                    Mock.Of<IInterviewDiagnosticsFactory>(),
+                    Mock.Of<ITransactionManagerProvider>()));
         }
 
         protected static IFileSystemAccessor CreateFileSystemAccessor(Action<string> returnContentAction)

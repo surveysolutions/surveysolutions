@@ -178,6 +178,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Collaborators.
+        /// </summary>
+        public static string CollaboratorsSettings {
+            get {
+                return ResourceManager.GetString("CollaboratorsSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Resolve.
         /// </summary>
         public static string CommentEditorResolve {
@@ -669,6 +678,15 @@ namespace WB.UI.Designer.Resources {
         public static string Help {
             get {
                 return ResourceManager.GetString("Help", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to A combo-box is a combination of a drop-down list and a single-line editable textbox. Options could be selected either by typing a value or its part or selecting a value from the list.
+        /// </summary>
+        public static string HelpCombobox {
+            get {
+                return ResourceManager.GetString("HelpCombobox", resourceCulture);
             }
         }
         
@@ -1231,6 +1249,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Public access.
+        /// </summary>
+        public static string PublicAccessSettings {
+            get {
+                return ResourceManager.GetString("PublicAccessSettings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Add Interviewer Instruction.
         /// </summary>
         public static string QuestionAddInstruction {
@@ -1389,6 +1416,15 @@ namespace WB.UI.Designer.Resources {
         public static string QuestionMustBeBound {
             get {
                 return ResourceManager.GetString("QuestionMustBeBound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaire settings.
+        /// </summary>
+        public static string QuestionnaireSettings {
+            get {
+                return ResourceManager.GetString("QuestionnaireSettings", resourceCulture);
             }
         }
         
@@ -1789,7 +1825,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invite collaborators by e-mail:.
+        ///   Looks up a localized string similar to Invite collaborators by e-mail or login.
         /// </summary>
         public static string SettingsInviteCollaborators {
             get {
@@ -1816,7 +1852,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Provide email of existing user.
+        ///   Looks up a localized string similar to Provide email or login of existing user.
         /// </summary>
         public static string SettingsProvideExistingEmail {
             get {
@@ -1843,7 +1879,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questionnaire name:.
+        ///   Looks up a localized string similar to Questionnaire name.
         /// </summary>
         public static string SettingsQuestionnaireName {
             get {
@@ -1857,6 +1893,15 @@ namespace WB.UI.Designer.Resources {
         public static string SettingsQuestionnaireSharing {
             get {
                 return ResourceManager.GetString("SettingsQuestionnaireSharing", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaire variable.
+        /// </summary>
+        public static string SettingsQuestionnaireVariable {
+            get {
+                return ResourceManager.GetString("SettingsQuestionnaireVariable", resourceCulture);
             }
         }
         
@@ -1888,7 +1933,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questionnaire settings.
+        ///   Looks up a localized string similar to Settings.
         /// </summary>
         public static string SettingsTitle {
             get {
@@ -1915,7 +1960,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Who has access:.
+        ///   Looks up a localized string similar to who has access.
         /// </summary>
         public static string SettingsWhoHasAccess {
             get {

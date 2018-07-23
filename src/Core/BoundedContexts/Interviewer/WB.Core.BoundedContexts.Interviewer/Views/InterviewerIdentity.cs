@@ -11,13 +11,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public string Name { get;  set; }
 
         /// <summary>
-        /// Hashed password
-        /// </summary>
-        [Obsolete("Should be removed after 5.19 release of Interviewer")]
-        [JsonIgnore]
-        public string Password { get; set; }
-
-        /// <summary>
         /// Updated password hash
         /// </summary>
         public string PasswordHash { get; set; }
@@ -29,5 +22,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         [PrimaryKey]
         public string Id { get; set; }
+
+        public string Email { get; set; }
     }
 }

@@ -9,7 +9,7 @@ using WB.Core.SharedKernels.QuestionnaireEntities;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 
 
-namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
+namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 {
     internal class when_verifying_questionnaire_with_variables_with_indirect_circular_references : QuestionnaireVerifierTestsContext
     {

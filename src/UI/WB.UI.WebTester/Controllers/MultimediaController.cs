@@ -98,7 +98,7 @@ namespace WB.UI.WebTester.Controllers
 
                     var command = new AnswerAudioQuestionCommand(interview.Id,
                         interview.CurrentResponsibleId, questionIdentity.Id, questionIdentity.RosterVector,
-                        DateTime.UtcNow, fileName, audioFile.Duration);
+                        fileName, audioFile.Duration);
 
                     this.commandService.Execute(command);
                 }
@@ -148,7 +148,7 @@ namespace WB.UI.WebTester.Controllers
                     }, fileName, interview.Id);
 
                     this.commandService.Execute(new AnswerPictureQuestionCommand(interview.Id,
-                        responsibleId, questionIdentity.Id, questionIdentity.RosterVector, DateTime.UtcNow, fileName));
+                        responsibleId, questionIdentity.Id, questionIdentity.RosterVector, fileName));
                 }
             }
             catch (Exception e)

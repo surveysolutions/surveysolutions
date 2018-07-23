@@ -54,7 +54,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Preloading
             };
 
             command = Create.Command.CreateInterview(Guid.NewGuid(),
-                Guid.NewGuid(), Guid.NewGuid(), 1, new PreloadedDataDto(preloadedLevelDtos).Answers, DateTime.Now, Guid.NewGuid());
+                Guid.NewGuid(), Guid.NewGuid(), 1, new PreloadedDataDto(preloadedLevelDtos).Answers, Guid.NewGuid());
             BecauseOf();
         }
 

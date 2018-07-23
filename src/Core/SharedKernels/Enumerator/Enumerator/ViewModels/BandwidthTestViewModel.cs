@@ -43,43 +43,43 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         public bool IsConnectionAbsent
         {
             get => this.isConnectionAbsent;
-            set => MvxNotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref this.isConnectionAbsent, value);
+            set => this.RaiseAndSetIfChanged( ref this.isConnectionAbsent, value);
         }
 
         public bool IsBandwidthTested
         {
             get => this.isBandwidthTested;
-            set => MvxNotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref this.isBandwidthTested, value);
+            set => this.RaiseAndSetIfChanged( ref this.isBandwidthTested, value);
         }
 
         public bool IsInProgress
         {
             get => this.isInProgress;
-            set => MvxNotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref this.isInProgress, value);
+            set => this.RaiseAndSetIfChanged( ref this.isInProgress, value);
         }
 
         public string ConnectionType
         {
             get => this.connectionType;
-            set => MvxNotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref this.connectionType, value);
+            set => this.RaiseAndSetIfChanged( ref this.connectionType, value);
         }
 
         public string ConnectionDescription
         {
             get => this.connectionDescription;
-            set => MvxNotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref this.connectionDescription, value);
+            set => this.RaiseAndSetIfChanged( ref this.connectionDescription, value);
         }
 
         public string NetworkName
         {
             get => this.networkName;
-            set => MvxNotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref this.networkName, value);
+            set => this.RaiseAndSetIfChanged( ref this.networkName, value);
         }
 
         public string Ping
         {
             get => this.ping;
-            set => MvxNotifyPropertyChangedExtensions.RaiseAndSetIfChanged(this, ref this.ping, value);
+            set => this.RaiseAndSetIfChanged( ref this.ping, value);
         }
 
         public string ServerUrl => this.deviceSettings.Endpoint;

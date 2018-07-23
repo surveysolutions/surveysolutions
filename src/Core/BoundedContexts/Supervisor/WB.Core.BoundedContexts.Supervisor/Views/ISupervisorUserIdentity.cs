@@ -2,7 +2,5 @@
 
 namespace WB.Core.BoundedContexts.Supervisor.Views
 {
-    public interface ISupervisorUserIdentity : IUserIdentity
-    {
-    }
+    public interface ISupervisorUserIdentity : IUserIdentity{}
 }

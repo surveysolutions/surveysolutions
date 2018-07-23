@@ -5,6 +5,7 @@ using NUnit.Framework;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services

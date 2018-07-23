@@ -405,8 +405,11 @@
 поэтому доступна только предыдущая версия. &lt;br /&gt;
 Oбратитесь в тех. поддержку за помощью</value>
   </data>
-    <data name="NumberCannotBeLessThanProtected" xml:space="preserve">
+  <data name="NumberCannotBeLessThanProtected" xml:space="preserve">
     <value>Введенное значение не может быть меньше чем защищенный ответ</value>
     <comment>Введенное значение не может быть меньше чем защищенный ответ</comment>
+  </data>
+  <data name="Interview_Overview_NotAnswered" xml:space="preserve">
+    <value>Не отвечен</value>
   </data>
 </root>

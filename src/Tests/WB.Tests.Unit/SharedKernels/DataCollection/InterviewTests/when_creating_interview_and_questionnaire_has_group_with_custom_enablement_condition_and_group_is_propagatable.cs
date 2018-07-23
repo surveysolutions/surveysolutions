@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             eventContext = new EventContext();
 
             command = Create.Command.CreateInterview(questionnaireId, 1, supervisorId,
-                new List<InterviewAnswer>(), answersTime: answersTime, userId: userId);
+                new List<InterviewAnswer>(), userId: userId);
 
             interview = Create.AggregateRoot.Interview(questionnaireRepository: questionnaireRepository);
             BecauseOf();

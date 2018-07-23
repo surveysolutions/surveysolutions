@@ -6,12 +6,14 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
     public class InterviewRejected : InterviewActiveEvent
     {
         public string Comment { get; private set; }
-        public DateTime? RejectTime { get; private set; }
-        public InterviewRejected(Guid userId, string comment, DateTime? rejectTime)
-            : base(userId)
+        public DateTime? RejectTime { get; set; }
+        public InterviewRejected(Guid userId, string comment, DateTimeOffset originDate)
+            : base(userId, originDate)
         {
             this.Comment = comment;
-            this.RejectTime = rejectTime;
+
+            if (originDate != default(DateTimeOffset))
+                this.RejectTime = originDate.UtcDateTime;
         }
     }
 }

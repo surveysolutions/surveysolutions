@@ -1,0 +1,1216 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AccessDenied_Title" xml:space="preserve">
+    <value>Accesul interzis</value>
+  </data>
+  <data name="AccountManage_ChangePassword" xml:space="preserve">
+    <value>Schimbaţi parola</value>
+  </data>
+  <data name="AccountManage_ChangePasswordHelp" xml:space="preserve">
+    <value>Utilizați formularul de mai jos pentru a modifica parola pentru cont</value>
+  </data>
+  <data name="AccountManage_EditPublicInformation" xml:space="preserve">
+    <value>Editați detaliile informațiilor publice ale profilului</value>
+  </data>
+  <data name="AccountManage_Login" xml:space="preserve">
+    <value>Conectare</value>
+  </data>
+  <data name="AccountManage_Role" xml:space="preserve">
+    <value>Rol</value>
+  </data>
+  <data name="AccountManage_SaveChanges" xml:space="preserve">
+    <value>Salvați modificările</value>
+  </data>
+  <data name="AccountManage_Title" xml:space="preserve">
+    <value>Editați profilul {0}</value>
+  </data>
+  <data name="AnyOption" xml:space="preserve">
+    <value>Oricare</value>
+  </data>
+  <data name="ApprovedByHeadquarters" xml:space="preserve">
+    <value>Aprobat de RINS</value>
+  </data>
+  <data name="ApprovedByupervisor" xml:space="preserve">
+    <value>Aprobat de controlor</value>
+  </data>
+  <data name="ApproveRejectPartialView_ApproveAction" xml:space="preserve">
+    <value>Aprobă</value>
+  </data>
+  <data name="ApproveRejectPartialView_ApproveLabel" xml:space="preserve">
+    <value>Aprobați interviul</value>
+  </data>
+  <data name="ApproveRejectPartialView_CommentLabel" xml:space="preserve">
+    <value>Comentariu</value>
+  </data>
+  <data name="ApproveRejectPartialView_RejectAction" xml:space="preserve">
+    <value>Respinge</value>
+  </data>
+  <data name="ApproveRejectPartialView_RejectLAbel" xml:space="preserve">
+    <value>Respingeți interviul</value>
+  </data>
+  <data name="ApproveRejectPartialView_UnapproveAction" xml:space="preserve">
+    <value>Dezaprobați</value>
+  </data>
+  <data name="ApproveRejectPartialView_UnapproveLabel" xml:space="preserve">
+    <value>Dezaprobați interviul</value>
+  </data>
+  <data name="AreaQestion_Area" xml:space="preserve">
+    <value>Zonă</value>
+  </data>
+  <data name="AreaQestion_AreaUnitMeter" xml:space="preserve">
+    <value>metri pătrați</value>
+  </data>
+  <data name="Assignments_PageTitle" xml:space="preserve">
+    <value>Sarcini</value>
+  </data>
+  <data name="Attention" xml:space="preserve">
+    <value>Atenţie!</value>
+  </data>
+  <data name="Backup_IndexTitle" xml:space="preserve">
+    <value>Index</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>Anulare</value>
+  </data>
+  <data name="CautionTitle" xml:space="preserve">
+    <value>Avertisment:</value>
+  </data>
+  <data name="CloseLabel" xml:space="preserve">
+    <value>Închideți</value>
+  </data>
+  <data name="Completed" xml:space="preserve">
+    <value>Finalizat</value>
+  </data>
+  <data name="ConfirmationNeededTitle" xml:space="preserve">
+    <value>Confirmare necesară</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Creați</value>
+  </data>
+  <data name="DetailsQuestionPartialView_WriteCommentPlaceholder" xml:space="preserve">
+    <value>Scrieți un comentariu...</value>
+  </data>
+  <data name="DownloadPage_Instructions" xml:space="preserve">
+    <value>Instrucțiuni de instalare</value>
+  </data>
+  <data name="DownloadPage_PageTitle" xml:space="preserve">
+    <value>Descărcați aplicația Interviewer</value>
+  </data>
+  <data name="DownloadPage_Title" xml:space="preserve">
+    <value>Tehnologia CAPI, dezvoltată de Banca Mondială.</value>
+  </data>
+  <data name="DownloadPage_Version" xml:space="preserve">
+    <value>Versiune</value>
+  </data>
+  <data name="DownloadPage_Welcome" xml:space="preserve">
+    <value>Bine ați venit pe pagina de descărcare a Survey Solutions Interviewer</value>
+  </data>
+  <data name="DownloadReport" xml:space="preserve">
+    <value>Descărcați raportul ca</value>
+  </data>
+  <data name="DownloadSupervisorPage_PageTitle" xml:space="preserve">
+    <value>Descărcați aplicația Supervisor</value>
+  </data>
+  <data name="DownloadSupervisorPage_Welcome" xml:space="preserve">
+    <value>Bine ați venit pe pagina de descărcare a Survey Solutions Supervisor</value>
+  </data>
+  <data name="EditQuestion_Save" xml:space="preserve">
+    <value>Salvare</value>
+  </data>
+  <data name="Error_Description" xml:space="preserve">
+    <value>A apărut o eroare în timpul procesării cererii dumneavoastră.</value>
+  </data>
+  <data name="Error_Title" xml:space="preserve">
+    <value>Eroare</value>
+  </data>
+  <data name="ErrorIndex_Title" xml:space="preserve">
+    <value>Eroare</value>
+  </data>
+  <data name="ExcludeEsriTitle" xml:space="preserve">
+    <value>Excludeți suportul ESRI Map</value>
+  </data>
+  <data name="Filters_Assignment" xml:space="preserve">
+    <value>Sarcină</value>
+  </data>
+  <data name="FilterTitle" xml:space="preserve">
+    <value>Filtre</value>
+  </data>
+  <data name="Forbidden_Title" xml:space="preserve">
+    <value>Nepermis</value>
+  </data>
+  <data name="GetEsriExtraDescription" xml:space="preserve">
+    <value>Suportul ESRI Map este o caracteristică experimentală. Utilizați-l numai dacă aveți nevoie de funcționalitatea avansată ESRI GIS. Includerea acestei funcționalități va mări semnificativ dimensiunea aplicației și timpul de descărcare.</value>
+  </data>
+  <data name="GetLatestApp" xml:space="preserve">
+    <value>Descărcați ultima versiune a aplicației pentru anchetator</value>
+  </data>
+  <data name="GetLatestAppDescription" xml:space="preserve">
+    <value>Descărcați și instalați această versiune a aplicației Interviewer pentru anchete care nu utilizează funcționalitatea ESRI GIS. Această aplicație nu include un ESRI SDK și, prin urmare, este mult mai mică și mai rapidă la descărcare comparativ cu versiunea cu SDK.</value>
+  </data>
+  <data name="GetLatestAppExtendedDescription" xml:space="preserve">
+    <value>Descărcați și instalați această versiune a aplicației pentru anchetator numai dacă utilizați funcționalitatea avansată ESRI GIS. Această aplicație conține un ESRI SDK mare, este de dimensiuni mari și poate dura mult timp la descărcare.</value>
+  </data>
+  <data name="GetLatestSupervisorApp" xml:space="preserve">
+    <value>Descărcați cea mai recentă aplicație Supervisor</value>
+  </data>
+  <data name="GlobalSettings_DeleteMapConfirmation" xml:space="preserve">
+    <value>Doriți să ștergeți harta?</value>
+  </data>
+  <data name="GlobalSettings_DeleteQuestionnareConfirmation" xml:space="preserve">
+    <value>Sigur doriți să ștergeți chestionarul? Toate interviurile realizate prin chestionarul curent vor fi pierdute.</value>
+  </data>
+  <data name="GlobalSettings_ForbiddenMessage" xml:space="preserve">
+    <value>Nu aveți permisiunea pentru această acțiune.</value>
+  </data>
+  <data name="GlobalSettings_NotifyDialogText" xml:space="preserve">
+    <value>Solicitarea dumneavoastră anterioară nu este finalizată. Vă rugăm așteptați să fie terminată și repetați operațiunea.</value>
+  </data>
+  <data name="GlobalSettings_NotifyDialogTitle" xml:space="preserve">
+    <value>Vă rugăm așteptați</value>
+  </data>
+  <data name="GlobalSettings_NotifyMarkersLimitReachedText" xml:space="preserve">
+    <value>Pentru acest nivel de zoom a fost atins numărul de puncte. Vă rugăm să măriți nivelul și să actualizați punctele.</value>
+  </data>
+  <data name="GlobalSettings_NotifyMarkersLimitReachedTitle" xml:space="preserve">
+    <value>Nu toate punctele au fost încărcate</value>
+  </data>
+  <data name="GlobalSettings_NotifyNoMarkersDialogText" xml:space="preserve">
+    <value>Acest chestionar nu conține coordonate GPS care să fie afișate pe hartă pentru variabila selectată.</value>
+  </data>
+  <data name="GlobalSettings_NotifyNoMarkersDialogTitle" xml:space="preserve">
+    <value>Nu s-au adăugat marcatori</value>
+  </data>
+  <data name="GlobalSettings_UnhandledExceptionMessage" xml:space="preserve">
+    <value>A apărut o eroare neașteptată. Ne pare rău pentru neplăcere.</value>
+  </data>
+  <data name="GPS_accuracy" xml:space="preserve">
+    <value>precizie</value>
+  </data>
+  <data name="GPS_altitude" xml:space="preserve">
+    <value>altitudine</value>
+  </data>
+  <data name="GPS_latitude" xml:space="preserve">
+    <value>latitudine</value>
+  </data>
+  <data name="GPS_longitude" xml:space="preserve">
+    <value>longitudine</value>
+  </data>
+  <data name="HealthCheck_Header" xml:space="preserve">
+    <value>Health check monitor</value>
+  </data>
+  <data name="HealthCheck_IndexTitle" xml:space="preserve">
+    <value>Health Check Page</value>
+  </data>
+  <data name="HideFilter" xml:space="preserve">
+    <value>Ascundeți filtrul</value>
+  </data>
+  <data name="HistoryOfStatuses_AssignedTo" xml:space="preserve">
+    <value>Alocat către</value>
+  </data>
+  <data name="HistoryOfStatuses_By" xml:space="preserve">
+    <value>După</value>
+  </data>
+  <data name="HistoryOfStatuses_Comment" xml:space="preserve">
+    <value>Comentariu</value>
+  </data>
+  <data name="HistoryOfStatuses_Interview" xml:space="preserve">
+    <value>Interviu</value>
+  </data>
+  <data name="HistoryOfStatuses_On" xml:space="preserve">
+    <value>Modificat pe data de</value>
+  </data>
+  <data name="HistoryOfStatuses_State" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="HistoryOfStatuses_Title" xml:space="preserve">
+    <value>Istoricul statusurilor interviurilor</value>
+  </data>
+  <data name="HistoryOfStatuses_ViewInterview" xml:space="preserve">
+    <value>Vizualizați interviul</value>
+  </data>
+  <data name="HQ_LockWarning" xml:space="preserve">
+    <value>RINS blocați (casetă bifată) nu se pot conecta și nu pot efectua nicio acțiune pe server.</value>
+  </data>
+  <data name="Index_cshtml_Execute_Do_you_want_to_continue_" xml:space="preserve">
+    <value>Doriți să continuați?</value>
+  </data>
+  <data name="InstallationInstruction" xml:space="preserve">
+    <value>Instrucțiuni de instalare</value>
+  </data>
+  <data name="InterviewController_RepeatLastStatus" xml:space="preserve">
+    <value>Starea stabilită de echipa de asistență Survey Solutions</value>
+  </data>
+  <data name="InterviewController_RepeatLastStatusFailed" xml:space="preserve">
+    <value>Repetarea ultimului status a fost nereușită.</value>
+  </data>
+  <data name="InterviewController_RevalidationFailed" xml:space="preserve">
+    <value>Revalidarea nu a reușit.</value>
+  </data>
+  <data name="InterviewDetails_AllButtonLabel" xml:space="preserve">
+    <value>toate</value>
+  </data>
+  <data name="InterviewDetails_AnsweredButtonLabel" xml:space="preserve">
+    <value>completate</value>
+  </data>
+  <data name="InterviewDetails_CommentedButtonLabel" xml:space="preserve">
+    <value>comentate</value>
+  </data>
+  <data name="InterviewDetails_DefaultTranslation" xml:space="preserve">
+    <value>original</value>
+  </data>
+  <data name="InterviewDetails_EnabledButtonLabel" xml:space="preserve">
+    <value>autorizate</value>
+  </data>
+  <data name="InterviewDetails_FlaggedButtonLabel" xml:space="preserve">
+    <value>marcate</value>
+  </data>
+  <data name="InterviewDetails_GroupsLabel" xml:space="preserve">
+    <value>Grupuri</value>
+  </data>
+  <data name="InterviewDetails_HiddenButtonLabel" xml:space="preserve">
+    <value>Ascuns</value>
+  </data>
+  <data name="InterviewDetails_HideGroupsLAbel" xml:space="preserve">
+    <value>Ascundeți grupurile</value>
+  </data>
+  <data name="InterviewDetails_InvalidButtonLabel" xml:space="preserve">
+    <value>Nevalid</value>
+  </data>
+  <data name="InterviewDetails_MoreDetails" xml:space="preserve">
+    <value>Detalii</value>
+  </data>
+  <data name="InterviewDetails_NoItems" xml:space="preserve">
+    <value>Nu există elemente care să satisfacă filtrul selectat</value>
+  </data>
+  <data name="InterviewDetails_PendingPackageLabel" xml:space="preserve">
+    <value>Interviul are în lista de așteptare pachete de sincronizare</value>
+  </data>
+  <data name="InterviewDetails_ResponsibleLabel" xml:space="preserve">
+    <value>Responsabil</value>
+  </data>
+  <data name="InterviewDetails_ShowGroupsLabel" xml:space="preserve">
+    <value>Afișați grupuri</value>
+  </data>
+  <data name="InterviewDetails_StatusLabel" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="InterviewDetails_SupervisorsButtonLabel" xml:space="preserve">
+    <value>a controlorului</value>
+  </data>
+  <data name="InterviewDetails_TranslationLabel" xml:space="preserve">
+    <value>Limba</value>
+  </data>
+  <data name="InterviewDetails_UnansweredButtonLabel" xml:space="preserve">
+    <value>Fără răspuns</value>
+  </data>
+  <data name="Interviewer_LockWarning" xml:space="preserve">
+    <value>Anchetatorii blocați (căsuța este bifată) nu își pot conecta tabletele la server și nu pot trimite interviuri către server.</value>
+  </data>
+  <data name="InterviewerAssigned" xml:space="preserve">
+    <value>Anchetator desemnat</value>
+  </data>
+  <data name="InterviewerController_EditSuccess" xml:space="preserve">
+    <value>Informațiile despre {0} au fost actualizate cu succes</value>
+  </data>
+  <data name="InterviewerController_InterviewerCreationSuccess" xml:space="preserve">
+    <value>Contul anchetatorului a fost creat cu succes</value>
+  </data>
+  <data name="InterviewerController_UpdateUseFailure" xml:space="preserve">
+    <value>Nu s-a putut actualiza informațiile despre utilizator, deoarece utilizatorul curent nu există</value>
+  </data>
+  <data name="InterviewerCreate_CreateIn" xml:space="preserve">
+    <value>Creați contul anchetatorului în</value>
+  </data>
+  <data name="InterviewerCreate_Team" xml:space="preserve">
+    <value>echipă</value>
+  </data>
+  <data name="InterviewerCreate_Title" xml:space="preserve">
+    <value>Creați</value>
+  </data>
+  <data name="InterviewerEdit_DeviceIdTitle" xml:space="preserve">
+    <value>ID-ul dispozitivului</value>
+  </data>
+  <data name="InterviewerEdit_NoDeviceHistory" xml:space="preserve">
+    <value>Sincronizarea nu s-a efectuat încă. Nu există informații despre dispozitivele anchetatorului.</value>
+  </data>
+  <data name="InterviewerEdit_StartUsingDateTitle" xml:space="preserve">
+    <value>Data de începere a utilizării</value>
+  </data>
+  <data name="InterviewerEdit_TitleFormat" xml:space="preserve">
+    <value>Anchetator: {0}</value>
+  </data>
+  <data name="InterviewerHq_DiscardConfirm" xml:space="preserve">
+    <value>Sunteți sigur că doriți să renunțați la datele din interviu?</value>
+  </data>
+  <data name="InterviewerHq_DiscardInterview" xml:space="preserve">
+    <value>Renunțare</value>
+  </data>
+  <data name="InterviewerHq_OpenInterview" xml:space="preserve">
+    <value>Deschidere</value>
+  </data>
+  <data name="InterviewerHq_RestartConfirm" xml:space="preserve">
+    <value>Vă rugăm furnizați un comentariu dacă este necesară redeschiderea unui interviu</value>
+  </data>
+  <data name="InterviewerHq_RestartInterview" xml:space="preserve">
+    <value>Redeschidere</value>
+  </data>
+  <data name="InterviewerIsArchived" xml:space="preserve">
+    <value>Contul anchetatorului este arhivat</value>
+  </data>
+  <data name="InterviewerProfile_AndroidVersion" xml:space="preserve">
+    <value>Versiunea Android</value>
+  </data>
+  <data name="InterviewerProfile_Approved" xml:space="preserve">
+    <value>interviuri realizate (finalizate și aprobate de RINS)</value>
+  </data>
+  <data name="InterviewerProfile_AssignedToFormat" xml:space="preserve">
+    <value>{0} (controlor: {1})</value>
+  </data>
+  <data name="InterviewerProfile_AverageSyncSpeed" xml:space="preserve">
+    <value>Viteza medie de sincronizare</value>
+  </data>
+  <data name="InterviewerProfile_BatteryStatus" xml:space="preserve">
+    <value>Starea bateriei (%)</value>
+  </data>
+  <data name="InterviewerProfile_BatteryStatus_SaverIsOff" xml:space="preserve">
+    <value>inactiv</value>
+  </data>
+  <data name="InterviewerProfile_BatteryStatus_SaverIsOn" xml:space="preserve">
+    <value>activ</value>
+  </data>
+  <data name="InterviewerProfile_BatteryStatusFormat" xml:space="preserve">
+    <value>{0}%, sursa de alimentare: {1}, economizorul de baterie este {2}</value>
+  </data>
+  <data name="InterviewerProfile_ConnectionMobileFormat" xml:space="preserve">
+    <value>Tip: {0} {1}, Operator: {2}</value>
+  </data>
+  <data name="InterviewerProfile_ConnectionSpeed" xml:space="preserve">
+    <value>Viteza conexiunii</value>
+  </data>
+  <data name="InterviewerProfile_ConnectionType" xml:space="preserve">
+    <value>Tipul conexiunii</value>
+  </data>
+  <data name="InterviewerProfile_ConnectionWifiFormat" xml:space="preserve">
+    <value>Tip: {0}</value>
+  </data>
+  <data name="InterviewerProfile_DatabaseInfo" xml:space="preserve">
+    <value>Bază de date</value>
+  </data>
+  <data name="InterviewerProfile_DataStatsFormat" xml:space="preserve">
+    <value>{0} încărcat, {1} descărcat</value>
+  </data>
+  <data name="InterviewerProfile_DeviceAndConnectionStatistics" xml:space="preserve">
+    <value>Statisticile conexiunii și dispozitivului</value>
+  </data>
+  <data name="InterviewerProfile_DeviceAssignmentDate" xml:space="preserve">
+    <value>Data atribuirii dispozitivului</value>
+  </data>
+  <data name="InterviewerProfile_DeviceDate" xml:space="preserve">
+    <value>Ora tabletei la începutul sincronizării</value>
+  </data>
+  <data name="InterviewerProfile_DeviceId" xml:space="preserve">
+    <value>Identificatorul dispozitivului</value>
+  </data>
+  <data name="InterviewerProfile_DeviceInfo" xml:space="preserve">
+    <value>Informații detaliate despre dispozitiv</value>
+  </data>
+  <data name="InterviewerProfile_DeviceLanguage" xml:space="preserve">
+    <value>Limba dispozitivului</value>
+  </data>
+  <data name="InterviewerProfile_DeviceLocation" xml:space="preserve">
+    <value>Locația dispozitivului sau ultima locație cunoscută</value>
+  </data>
+  <data name="InterviewerProfile_DeviceModel" xml:space="preserve">
+    <value>Modelul dispozitivului</value>
+  </data>
+  <data name="InterviewerProfile_DeviceOrientation" xml:space="preserve">
+    <value>Orientarea dispozitivului</value>
+  </data>
+  <data name="InterviewerProfile_DeviceSerial" xml:space="preserve">
+    <value>Numărul de serie al dispozitivului</value>
+  </data>
+  <data name="InterviewerProfile_DownloadedInterviewsCount" xml:space="preserve">
+    <value>Interviuri primite de anchetator</value>
+  </data>
+  <data name="InterviewerProfile_DownloadedQuestionnairesCount" xml:space="preserve">
+    <value>Chestionare primite de anchetator</value>
+  </data>
+  <data name="InterviewerProfile_EmailFormat" xml:space="preserve">
+    <value>E-mail: {0}</value>
+  </data>
+  <data name="InterviewerProfile_FullNameFormat" xml:space="preserve">
+    <value>Nume complet: {0}</value>
+  </data>
+  <data name="InterviewerProfile_Info" xml:space="preserve">
+    <value>Editați informațiile personale</value>
+  </data>
+  <data name="InterviewerProfile_InterviewerAppVersion" xml:space="preserve">
+    <value>Versiunea aplicației Interviewer</value>
+  </data>
+  <data name="InterviewerProfile_InterviewerCanBeUpdated" xml:space="preserve">
+    <value>Pot fi actualizate</value>
+  </data>
+  <data name="InterviewerProfile_Interviewers" xml:space="preserve">
+    <value>Anchetatori</value>
+  </data>
+  <data name="InterviewerProfile_InterviewerUpdatedDate" xml:space="preserve">
+    <value>Ultimele date actualizate ale Survey Solutions</value>
+  </data>
+  <data name="InterviewerProfile_InterviewerUpToDate" xml:space="preserve">
+    <value>La zi</value>
+  </data>
+  <data name="InterviewerProfile_InterviewerVersion" xml:space="preserve">
+    <value>Versiunea Survey Solutions</value>
+  </data>
+  <data name="InterviewerProfile_LastConnectionStatistics" xml:space="preserve">
+    <value>Ultimele statistici privind conexiunile</value>
+  </data>
+  <data name="InterviewerProfile_LastFailedSync" xml:space="preserve">
+    <value>Ultima sincronizare eșuată</value>
+  </data>
+  <data name="InterviewerProfile_LastSuccessSync" xml:space="preserve">
+    <value>Ultima sincronizare reușită</value>
+  </data>
+  <data name="InterviewerProfile_LastSyncronizationDate" xml:space="preserve">
+    <value>Ultima dată de comunicare</value>
+  </data>
+  <data name="InterviewerProfile_MemoryInfo" xml:space="preserve">
+    <value>Memorie (disponibilă / totală)</value>
+  </data>
+  <data name="InterviewerProfile_NewOnDevice" xml:space="preserve">
+    <value>nou pe dispozitiv</value>
+  </data>
+  <data name="InterviewerProfile_NumberOfFailedSynchronizations" xml:space="preserve">
+    <value>Numărul total de sincronizări eșuate</value>
+  </data>
+  <data name="InterviewerProfile_NumberOfSuccessSynchronizations" xml:space="preserve">
+    <value>Numărul total de sincronizări reușite</value>
+  </data>
+  <data name="InterviewerProfile_PhoneFormat" xml:space="preserve">
+    <value>Număr de telefon: {0}</value>
+  </data>
+  <data name="InterviewerProfile_Rejected" xml:space="preserve">
+    <value>respins din nou pe dispozitiv</value>
+  </data>
+  <data name="InterviewerProfile_Relinked" xml:space="preserve">
+    <value>Reautentificare</value>
+  </data>
+  <data name="InterviewerProfile_ServerDate" xml:space="preserve">
+    <value>Ora serverului la începutul sincronizării</value>
+  </data>
+  <data name="InterviewerProfile_ShowAuditLog" xml:space="preserve">
+    <value>Afișați jurnalul de acțiuni</value>
+  </data>
+  <data name="InterviewerProfile_SignalStrength" xml:space="preserve">
+    <value>Puterea semnalului</value>
+  </data>
+  <data name="InterviewerProfile_StartedAssignments" xml:space="preserve">
+    <value>Interviuri alocate care au fost începute, dar nu au fost finalizate</value>
+  </data>
+  <data name="InterviewerProfile_StorageInfo" xml:space="preserve">
+    <value>Stocare (disponibil / total)</value>
+  </data>
+  <data name="InterviewerProfile_Sync_Activity_All_Assignments_Desc" xml:space="preserve">
+    <value>Numărul de interviuri alocate neterminate sau nesincronizate pe dispozitiv la fiecare moment dat</value>
+  </data>
+  <data name="InterviewerProfile_Sync_Activity_Downloaded_Assignments_Desc" xml:space="preserve">
+    <value>Alocări descărcate</value>
+  </data>
+  <data name="InterviewerProfile_Sync_Activity_Failed_Sync" xml:space="preserve">
+    <value>Încercare de sincronizare eșuată</value>
+  </data>
+  <data name="InterviewerProfile_Sync_Activity_Nothing_To_Sync" xml:space="preserve">
+    <value>Conectare reușită, nimic de sincronizat</value>
+  </data>
+  <data name="InterviewerProfile_Sync_Activity_Title" xml:space="preserve">
+    <value>Activitatea recentă de sincronizare</value>
+  </data>
+  <data name="InterviewerProfile_Sync_Activity_Uploaded_Interview_Desc" xml:space="preserve">
+    <value>Încărcat pe server pentru aprobare</value>
+  </data>
+  <data name="InterviewerProfile_TitleFormat" xml:space="preserve">
+    <value>Anchetator: {0}</value>
+  </data>
+  <data name="InterviewerProfile_TotalSyncTime" xml:space="preserve">
+    <value>Durata sincronizării</value>
+  </data>
+  <data name="InterviewerProfile_UploadedInterviewsCount" xml:space="preserve">
+    <value>Interviuri finalizate primite de la anchetator</value>
+  </data>
+  <data name="InterviewerProfile_WaitingForApproval" xml:space="preserve">
+    <value>se asteapta aprobarea</value>
+  </data>
+  <data name="Interviewers_ActiveUsers" xml:space="preserve">
+    <value>Anchetatori activi</value>
+  </data>
+  <data name="Interviewers_Archive" xml:space="preserve">
+    <value>Arhiva</value>
+  </data>
+  <data name="Interviewers_ArchivedUsers" xml:space="preserve">
+    <value>Anchetatorii arhivați</value>
+  </data>
+  <data name="Interviewers_ArchiveInterviewers" xml:space="preserve">
+    <value>Anchetatorii vor fi arhivați.</value>
+  </data>
+  <data name="Interviewers_ArchiveInterviewersConfirm" xml:space="preserve">
+    <value>Doriți să continuați?</value>
+  </data>
+  <data name="Interviewers_ArchiveInterviewersConfirmMessage" xml:space="preserve">
+    <value>Dacă anchetatorul a finalizat interviuri pe tableta sa, atunci datele vor fi pierdute.</value>
+  </data>
+  <data name="Interviewers_ArchiveStatusTitle" xml:space="preserve">
+    <value>Starea arhivei</value>
+  </data>
+  <data name="Interviewers_Connected" xml:space="preserve">
+    <value>Conectat</value>
+  </data>
+  <data name="Interviewers_ConnectedToDeviceTitle" xml:space="preserve">
+    <value>Conectat la server</value>
+  </data>
+  <data name="Interviewers_CreationDateTitle" xml:space="preserve">
+    <value>Contul a fost creat la</value>
+  </data>
+  <data name="Interviewers_CreationDateTooltip" xml:space="preserve">
+    <value>Data la care a fost creat contul anchetatorului</value>
+  </data>
+  <data name="Interviewers_EmailTitle" xml:space="preserve">
+    <value>E-mailul anchetatorului</value>
+  </data>
+  <data name="Interviewers_FinishedWithErrors" xml:space="preserve">
+    <value>Finalizat cu erori. Vă rugăm să repetați acțiunea mai târziu. Scrieți pentru a vă ajuta dacă problemele se vor repeta în viitor.</value>
+  </data>
+  <data name="Interviewers_Header" xml:space="preserve">
+    <value>Anchetatorii</value>
+  </data>
+  <data name="Interviewers_InterviewerNeverConnected" xml:space="preserve">
+    <value>Niciodată conectat</value>
+  </data>
+  <data name="Interviewers_InterviewersToMove" xml:space="preserve">
+    <value>Anchetatorul(i) {0} va fi mutat într-o echipă a supraveghetorului {1}.</value>
+  </data>
+  <data name="Interviewers_InterviewersToStay" xml:space="preserve">
+    <value>Anchetatorul(i) {0} se află în echipa supraveghetorului {1} și nu se vor efectua acțiuni.</value>
+  </data>
+  <data name="Interviewers_InterviewerVersion" xml:space="preserve">
+    <value>Versiunea aplicației</value>
+  </data>
+  <data name="Interviewers_InterviewerVersionTooltip" xml:space="preserve">
+    <value>Versiunea aplicației Interviewer raportată în timpul ultimei sincronizări a tabletei sale cu serverul</value>
+  </data>
+  <data name="Interviewers_MoveAllToNewTeam" xml:space="preserve">
+    <value>Mutați anchetatorul(i) cu sarcinile și interviurile lui la echipa supraveghetorului {0}.</value>
+  </data>
+  <data name="Interviewers_MoveInterviewerPopupTitle" xml:space="preserve">
+    <value>Selectați o echipă unde să mutați {0}</value>
+  </data>
+  <data name="Interviewers_MoveToAnotherTeam" xml:space="preserve">
+    <value>Treceți la o altă echipă</value>
+  </data>
+  <data name="Interviewers_MovingCompleted" xml:space="preserve">
+    <value>Mutarea utilizatorilor terminată</value>
+  </data>
+  <data name="Interviewers_MovingIsInProgress" xml:space="preserve">
+    <value>Mutarea este în desfășurare</value>
+  </data>
+  <data name="Interviewers_NamesFormatLessThanLimit" xml:space="preserve">
+    <value>{0} și {1}</value>
+  </data>
+  <data name="Interviewers_NamesFormatMoreThanLimit" xml:space="preserve">
+    <value>{0} și {1} mai mult</value>
+  </data>
+  <data name="Interviewers_NotConnected" xml:space="preserve">
+    <value>Neconectat</value>
+  </data>
+  <data name="Interviewers_NotSyncedOption" xml:space="preserve">
+    <value>Niciodată conectat</value>
+  </data>
+  <data name="Interviewers_OutdatedOption" xml:space="preserve">
+    <value>Neactualizat</value>
+  </data>
+  <data name="Interviewers_ReassigntToOriginalSupervisor" xml:space="preserve">
+    <value>Controlorul devine responsabil pentru sarcinile și interviurile anchetatorului mutat.</value>
+  </data>
+  <data name="Interviewers_Selected" xml:space="preserve">
+    <value>Anchetator(i) selectat(i)</value>
+  </data>
+  <data name="Interviewers_SupervisorTitle" xml:space="preserve">
+    <value>Controlor</value>
+  </data>
+  <data name="Interviewers_SupervisorTooltip" xml:space="preserve">
+    <value>Numele de utilizator al controlorului anchetatorului</value>
+  </data>
+  <data name="Interviewers_Title" xml:space="preserve">
+    <value>Anchetatori</value>
+  </data>
+  <data name="Interviewers_Unarchive" xml:space="preserve">
+    <value>Dezarhivare</value>
+  </data>
+  <data name="Interviewers_UpToDateOption" xml:space="preserve">
+    <value>La zi</value>
+  </data>
+  <data name="Interviewers_UserNameTitle" xml:space="preserve">
+    <value>Nume de utilizator</value>
+  </data>
+  <data name="InterviewersAndDevicesTitle" xml:space="preserve">
+    <value>Dispozitive / Anchetatori</value>
+  </data>
+  <data name="InterviewHistory_Header" xml:space="preserve">
+    <value>Istoricul interviului</value>
+  </data>
+  <data name="Interviews_Selected" xml:space="preserve">
+    <value>interviu(ri) selectat(e)</value>
+  </data>
+  <data name="Layout_Filter" xml:space="preserve">
+    <value>Filtru</value>
+  </data>
+  <data name="Layout_Legal" xml:space="preserve">
+    <value>Legal</value>
+  </data>
+  <data name="Layout_RightsReserved" xml:space="preserve">
+    <value>Toate drepturile rezervate.</value>
+  </data>
+  <data name="Layout_WorldBank" xml:space="preserve">
+    <value>Grupul Băncii Mondiale</value>
+  </data>
+  <data name="Login" xml:space="preserve">
+    <value>Conectare</value>
+  </data>
+  <data name="LogOn_Legend" xml:space="preserve">
+    <value>Vă rugăm să vă conectați</value>
+  </data>
+  <data name="LogOn_LogIn" xml:space="preserve">
+    <value>Conectare</value>
+  </data>
+  <data name="LogOn_Title" xml:space="preserve">
+    <value>Conectare</value>
+  </data>
+  <data name="LogOn_UnsuccessfulLogin" xml:space="preserve">
+    <value>Conectarea a eșuat. Vă rugăm corectați erorile și încercați din nou.</value>
+  </data>
+  <data name="Maintenance_Description" xml:space="preserve">
+    <value>Aplicația este actualizată în prezent la o versiune mai nouă. Aceasta este o operație manuală și poate necesita o perioadă considerabilă de timp. Ne cerem scuze pentru neplăceri. După finalizarea procesului, veți fi redirecționat automat la pagina pe care ați solicitat-o.</value>
+  </data>
+  <data name="Maintenance_RebuildDescription" xml:space="preserve">
+    <value>Aplicația este acum reîncarcată, iar aceasta poate dura până la 10 minute sau mai mult. Ne cerem scuze pentru neplăceri. După finalizarea procesului, veți fi redirecționat automat la pagina pe care ați solicitat-o.</value>
+  </data>
+  <data name="Maintenance_Title" xml:space="preserve">
+    <value>Mentenanță</value>
+  </data>
+  <data name="MaintenanceReadSide_Header" xml:space="preserve">
+    <value>În mentenanță...</value>
+  </data>
+  <data name="MaintenanceRebuild_Header" xml:space="preserve">
+    <value>Repornește ...</value>
+  </data>
+  <data name="Map_DiscardConfirm" xml:space="preserve">
+    <value>Sigur doriți să ștergeți harta?</value>
+  </data>
+  <data name="Map_Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="Map_Uploaded" xml:space="preserve">
+    <value>Fișierul a fost încărcat. Prelucrare.</value>
+  </data>
+  <data name="Map_Uploading" xml:space="preserve">
+    <value>Se încarcă</value>
+  </data>
+  <data name="Map_UploadingError" xml:space="preserve">
+    <value>A apărut eroare în timpul încărcării</value>
+  </data>
+  <data name="Map_UploadingFileTooBig" xml:space="preserve">
+    <value>Fișierul este prea mare</value>
+  </data>
+  <data name="Map_UploadingSuccess" xml:space="preserve">
+    <value>Hărțile au fost încărcate cu succes</value>
+  </data>
+  <data name="MapDetails_DelinkUser" xml:space="preserve">
+    <value>Deconectați utilizatorul de pe hartă</value>
+  </data>
+  <data name="MapDetails_ImportedOn" xml:space="preserve">
+    <value>Importat pe</value>
+  </data>
+  <data name="MapDetails_InterviewerName" xml:space="preserve">
+    <value>Numele anchetatorului</value>
+  </data>
+  <data name="MapDetails_MapDisclaimer" xml:space="preserve">
+    <value>Această previzualizare arată harta încărcată suprapusă pe harta lumii</value>
+  </data>
+  <data name="MapDetails_MapTitle" xml:space="preserve">
+    <value>Hartă</value>
+  </data>
+  <data name="MapDetails_MaxScale" xml:space="preserve">
+    <value>Dimensionare la scară maximă</value>
+  </data>
+  <data name="MapDetails_MinScale" xml:space="preserve">
+    <value>Dimensionare la scară minimă</value>
+  </data>
+  <data name="MapDetails_Size" xml:space="preserve">
+    <value>Dimensiune (MB)</value>
+  </data>
+  <data name="MapLinking_Description" xml:space="preserve">
+    <value>Încărcați fișierul care conține corespondența între hărți și utilizatori</value>
+  </data>
+  <data name="MapLinking_DescriptionTitle" xml:space="preserve">
+    <value>Gestionați link-urile către harta utilizator</value>
+  </data>
+  <data name="MapLinking_DownloadExisting" xml:space="preserve">
+    <value>Descărcați link-urile existente</value>
+  </data>
+  <data name="MapLinking_UploadDescription" xml:space="preserve">
+    <value>Acest lucru vă va permite să creați harta către corespondența cu utilizatorul.</value>
+  </data>
+  <data name="MapLinking_UploadDescriptionTitle" xml:space="preserve">
+    <value>Încărcați mapările utilizatorilor</value>
+  </data>
+  <data name="MapLinking_UploadFile" xml:space="preserve">
+    <value>Încărcați fișierul .tab</value>
+  </data>
+  <data name="MapLinking_UploadFileDescription" xml:space="preserve">
+    <value>Încărcați fișierul .tab cu mapări de fișiere</value>
+  </data>
+  <data name="MapLinking_UploadFileDescription1" xml:space="preserve">
+    <value>Numele și numele de utilizator nevalide vor fi ignorate.</value>
+  </data>
+  <data name="MapList_DeleteMap" xml:space="preserve">
+    <value>Ștergeți harta</value>
+  </data>
+  <data name="MapList_Name" xml:space="preserve">
+    <value>Nume</value>
+  </data>
+  <data name="MapList_Size" xml:space="preserve">
+    <value>Dimensiune (MB)</value>
+  </data>
+  <data name="MapList_Title" xml:space="preserve">
+    <value>Hărți</value>
+  </data>
+  <data name="MapList_Updated" xml:space="preserve">
+    <value>Actualizat la</value>
+  </data>
+  <data name="MapList_Upload" xml:space="preserve">
+    <value>Încărcați fișierul .zip</value>
+  </data>
+  <data name="MapList_UploadDescription" xml:space="preserve">
+    <value>Încărcați arhiva zip care conține hărți.</value>
+  </data>
+  <data name="MapList_UploadDescriptionExtra" xml:space="preserve">
+    <value>Fișierele cu același nume vor fi suprascrise.</value>
+  </data>
+  <data name="MapList_UserLinking" xml:space="preserve">
+    <value>Actualizați conexiunea utilizator-hartă</value>
+  </data>
+  <data name="MapList_UserMapsLink" xml:space="preserve">
+    <value>Hărți utilizator</value>
+  </data>
+  <data name="MapList_UserMapsTitle" xml:space="preserve">
+    <value>Hărți utilizator</value>
+  </data>
+  <data name="MapUserLink_DiscardConfirm" xml:space="preserve">
+    <value>Sigur doriți să deconectați utilizatorul de pe hartă?</value>
+  </data>
+  <data name="NoResults" xml:space="preserve">
+    <value>Nu s-au găsit rezultate</value>
+  </data>
+  <data name="NotFound_Title" xml:space="preserve">
+    <value>Nu a fost găsit</value>
+  </data>
+  <data name="OperationFailedDescription" xml:space="preserve">
+    <value>A apărut o eroare, încercați din nou mai târziu.</value>
+  </data>
+  <data name="OperationFailedTitle" xml:space="preserve">
+    <value>Operațiunea a eșuat</value>
+  </data>
+  <data name="Or" xml:space="preserve">
+    <value>sau</value>
+  </data>
+  <data name="PackagesInfo_DeviceId" xml:space="preserve">
+    <value>Identificatorul dispozitivului</value>
+  </data>
+  <data name="PackagesInfo_Header" xml:space="preserve">
+    <value>Pachete de informații despre tablete</value>
+  </data>
+  <data name="PackagesInfo_Size" xml:space="preserve">
+    <value>Dimensiune (biți)</value>
+  </data>
+  <data name="PackagesInfo_Title" xml:space="preserve">
+    <value>Index</value>
+  </data>
+  <data name="PackagesInfo_UploadDate" xml:space="preserve">
+    <value>Data încărcării</value>
+  </data>
+  <data name="PackagesInfo_UserId" xml:space="preserve">
+    <value>Identificator de utilizator</value>
+  </data>
+  <data name="PackagesInfo_UserName" xml:space="preserve">
+    <value>Nume de utilizator</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Parola</value>
+  </data>
+  <data name="Profile_ApiUserCreate" xml:space="preserve">
+    <value>Creați utilizator API</value>
+  </data>
+  <data name="Profile_ApiUserEditFormat" xml:space="preserve">
+    <value>Editați profilul utilizatorului API: &lt;strong&gt;{0}&lt;/strong&gt;</value>
+  </data>
+  <data name="Profile_ApiUsersList" xml:space="preserve">
+    <value>Utilizatori API</value>
+  </data>
+  <data name="Profile_ApiUserWasCreated" xml:space="preserve">
+    <value>Utilizatorul API &lt;b&gt;{0}&lt;/b&gt; a fost creat cu succes</value>
+  </data>
+  <data name="Profile_HeadquartersCreate" xml:space="preserve">
+    <value>Creați RINS</value>
+  </data>
+  <data name="Profile_HeadquartersEditFormat" xml:space="preserve">
+    <value>Editați profilul RINS: &lt;strong&gt;{0}&lt;/strong&gt;</value>
+  </data>
+  <data name="Profile_HeadquartersList" xml:space="preserve">
+    <value>RINS</value>
+  </data>
+  <data name="Profile_InterviewerCreate" xml:space="preserve">
+    <value>Creați profilul anchetatorului</value>
+  </data>
+  <data name="Profile_InterviewerEditFormat" xml:space="preserve">
+    <value>Editați profilul anchetatorului: &lt;strong&gt;{0}&lt;/strong&gt;</value>
+  </data>
+  <data name="Profile_InterviewerProfile" xml:space="preserve">
+    <value>Profilul anchetatorului</value>
+  </data>
+  <data name="Profile_InterviewersList" xml:space="preserve">
+    <value>Anchetatori</value>
+  </data>
+  <data name="Profile_ObserverCreate" xml:space="preserve">
+    <value>Creați responsabil DTS</value>
+  </data>
+  <data name="Profile_ObserverEditFormat" xml:space="preserve">
+    <value>Editați profilul responsabilului DTS: &lt;strong&gt;{0}&lt;/strong&gt;</value>
+  </data>
+  <data name="Profile_ObserversList" xml:space="preserve">
+    <value>Responsabili DTS</value>
+  </data>
+  <data name="Profile_SupervisorCreate" xml:space="preserve">
+    <value>Creați profil de controlor</value>
+  </data>
+  <data name="Profile_SupervisorEditFormat" xml:space="preserve">
+    <value>Editați profilul controlorului: &lt;strong&gt;{0}&lt;/strong&gt;</value>
+  </data>
+  <data name="Profile_SupervisorsList" xml:space="preserve">
+    <value>Controlori</value>
+  </data>
+  <data name="PublicSection" xml:space="preserve">
+    <value>Detaliile cu informații personale (opțional) &lt;br&gt; vor fi vizibile numai pentru RINS</value>
+  </data>
+  <data name="QuestionnaireNameFormat" xml:space="preserve">
+    <value>{0} (ver. {1})</value>
+  </data>
+  <data name="QuestionnaireNameVersionFirst" xml:space="preserve">
+    <value>(ver. {1}) {0} </value>
+  </data>
+  <data name="RejectedByHeadquarters" xml:space="preserve">
+    <value>Respins de RINS</value>
+  </data>
+  <data name="RejectedBySupervisor" xml:space="preserve">
+    <value>Respins de controlor</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>Căutare</value>
+  </data>
+  <data name="ShowFilter" xml:space="preserve">
+    <value>Afișați filtrul</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="StatusDuration" xml:space="preserve">
+    <value>Durata statusului</value>
+  </data>
+  <data name="StatusDurationDescription" xml:space="preserve">
+    <value>Numărul de zile în care unitățile de anchetat și interviurile au rămas în starea lor actuală</value>
+  </data>
+  <data name="Supervisor_CreateText" xml:space="preserve">
+    <value>Această acțiune va crea un utilizator individual cu drepturi de control,
+        &lt;br&gt;pentru a crea mai mulți utilizatori puteți utiliza &lt;a href='{0}' target='_blank'&gt;crearea de grupuri de utilizatori&lt;/a&gt;.</value>
+  </data>
+  <data name="Supervisor_LockWarning" xml:space="preserve">
+    <value>Controlorul blocat (caseta bifată) nu se poate conecta și nu poate efectua nicio acțiune pe server.</value>
+  </data>
+  <data name="SupervisorAssigned" xml:space="preserve">
+    <value>Controlor atribuit</value>
+  </data>
+  <data name="Supervisors_ActiveUsers" xml:space="preserve">
+    <value>Controlori activi</value>
+  </data>
+  <data name="Supervisors_Archive" xml:space="preserve">
+    <value>Arhivă</value>
+  </data>
+  <data name="Supervisors_ArchivedUsers" xml:space="preserve">
+    <value>Arhiva controlorilor</value>
+  </data>
+  <data name="Supervisors_ArchiveStatusTitle" xml:space="preserve">
+    <value>Starea arhivei</value>
+  </data>
+  <data name="Supervisors_ArchiveSupervisorsConfirmMessage" xml:space="preserve">
+    <value>Dacă anchetatorul a completat interviuri pe tableta sa, atunci datele vor fi pierdute.</value>
+  </data>
+  <data name="Supervisors_Selected" xml:space="preserve">
+    <value>Controlor(i) selectat(i)</value>
+  </data>
+  <data name="Supervisors_Unarchive" xml:space="preserve">
+    <value>Dezarhivare</value>
+  </data>
+  <data name="Supervisors_UnarchiveSupervisorsConfirm" xml:space="preserve">
+    <value>Doriți să continuați?</value>
+  </data>
+  <data name="Survey_CreatedOnClientTitle" xml:space="preserve">
+    <value>Creat în aplicația Client</value>
+  </data>
+  <data name="Survey_HasErrorsTitle" xml:space="preserve">
+    <value>Cu erori</value>
+  </data>
+  <data name="Survey_Header" xml:space="preserve">
+    <value>Interviuri</value>
+  </data>
+  <data name="Survey_LastUpdateTitle" xml:space="preserve">
+    <value>Ultima actualizare</value>
+  </data>
+  <data name="Survey_ReceivedByInterviewerTitle" xml:space="preserve">
+    <value>Primit de Anchetator</value>
+  </data>
+  <data name="Survey_ResponsibleTitle" xml:space="preserve">
+    <value>Responsabil</value>
+  </data>
+  <data name="Survey_Status_Header" xml:space="preserve">
+    <value>Anchetatori și Anchete</value>
+  </data>
+  <data name="Survey_Status_Title" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="Survey_StatusTitle" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="SurveysAndStatuses_InterviewerStatisticsFormat" xml:space="preserve">
+    <value>{0} interviuri</value>
+  </data>
+  <data name="SurveysAndStatuses_InterviewerTitle" xml:space="preserve">
+    <value>Anchetator (echipă)</value>
+  </data>
+  <data name="SurveysAndStatuses_Overview" xml:space="preserve">
+    <value>Anchete și Statusuri</value>
+  </data>
+  <data name="SurveysAndStatuses_SupervisorTitle" xml:space="preserve">
+    <value>Controlor (echipe)</value>
+  </data>
+  <data name="SurveysStatuses_ApprovedByHQ" xml:space="preserve">
+    <value>Aprobat de RINS</value>
+  </data>
+  <data name="SurveysStatuses_ApprovedBySupervisor" xml:space="preserve">
+    <value>Aprobat de controlor</value>
+  </data>
+  <data name="SurveysStatuses_Completed" xml:space="preserve">
+    <value>Finalizat</value>
+  </data>
+  <data name="SurveysStatuses_InterviewerAssigned" xml:space="preserve">
+    <value>Anchetator alocat</value>
+  </data>
+  <data name="SurveysStatuses_RejectedByHQ" xml:space="preserve">
+    <value>Respins de RINS</value>
+  </data>
+  <data name="SurveysStatuses_RejectedBySupervisor" xml:space="preserve">
+    <value>Respins de controlor</value>
+  </data>
+  <data name="SurveysStatuses_SupervisorAssigned" xml:space="preserve">
+    <value>Controlor alocat</value>
+  </data>
+  <data name="SurveysStatuses_SurveyName" xml:space="preserve">
+    <value>Numele anchetei</value>
+  </data>
+  <data name="SurveysStatuses_TeamMembersHeader" xml:space="preserve">
+    <value>Membrii echipei</value>
+  </data>
+  <data name="SurveysStatuses_Title" xml:space="preserve">
+    <value>Anchete și Statusuri</value>
+  </data>
+  <data name="SurveysStatuses_Total" xml:space="preserve">
+    <value>Total</value>
+  </data>
+  <data name="TeamMember" xml:space="preserve">
+    <value>Membru al echipei</value>
+  </data>
+  <data name="TeamMembersAndStatuses" xml:space="preserve">
+    <value>Membrii echipei și Statusuri</value>
+  </data>
+  <data name="Template" xml:space="preserve">
+    <value>Şablon</value>
+  </data>
+  <data name="Total" xml:space="preserve">
+    <value>Total</value>
+  </data>
+  <data name="Unarchive" xml:space="preserve">
+    <value>Dezarhivare</value>
+  </data>
+  <data name="Update" xml:space="preserve">
+    <value>Actualizare</value>
+  </data>
+  <data name="UpgradeAssignmentsTitle" xml:space="preserve">
+    <value>Actualizarea interviurilor alocate</value>
+  </data>
+  <data name="Upload_Upload" xml:space="preserve">
+    <value>Încărcare</value>
+  </data>
+  <data name="Users_API_Instruction1" xml:space="preserve">
+    <value>Apăsați butonul Adăugați API pentru a crea un nou utilizator API.</value>
+  </data>
+  <data name="Users_API_Instruction2" xml:space="preserve">
+    <value>Faceți clic pe un nume de utilizator pentru a modifica profilul unui utilizator API existent.</value>
+  </data>
+  <data name="Users_Headquarters_Instruction1" xml:space="preserve">
+    <value>Apăsați butonul Adăugați RINS pentru a crea un nou utilizator RINS.</value>
+  </data>
+  <data name="Users_Headquarters_Instruction2" xml:space="preserve">
+    <value>Faceți clic pe un nume de utilizator pentru a modifica profilul unui utilizator RINS existent.</value>
+  </data>
+  <data name="Users_Interviewers_Instruction1" xml:space="preserve">
+    <value>Apăsați butonul Adăugați Anchetator pentru a crea un nou utilizator Anchetator.</value>
+  </data>
+  <data name="Users_Interviewers_Instruction2" xml:space="preserve">
+    <value>Faceți clic pe un nume de utilizator pentru a vedea informații despre un Anchetator și pentru a modifica profilul unui Anchetator.</value>
+  </data>
+  <data name="Users_Observers_Instruction1" xml:space="preserve">
+    <value>Apăsați butonul Adăugați /Responsabil DTS pentru a crea un nou utilizator Responsabil DTS.</value>
+  </data>
+  <data name="Users_Observers_Instruction2" xml:space="preserve">
+    <value>Faceți clic pe un nume de utilizator pentru a modifica profilul unui utilizator Responsabil DTS existent.</value>
+  </data>
+  <data name="Users_Supervisors_Instruction1" xml:space="preserve">
+    <value>Apăsați butonul Adăugați Controlor pentru a crea un nou utilizator Controlor.</value>
+  </data>
+  <data name="Users_Supervisors_Instruction2" xml:space="preserve">
+    <value>Faceți clic pe un nume de utilizator pentru a modifica profilul unui Controlor existent.</value>
+  </data>
+  <data name="WebsitePathIsTooLong_Title" xml:space="preserve">
+    <value>Dosarul care conține site-ul web are un nume de cale prea lung. Vă rog mutați site-ul web într-un alt dosar cu un nume mai scurt.</value>
+  </data>
+  <data name="YesNoQuestion_No" xml:space="preserve">
+    <value>Nu</value>
+  </data>
+  <data name="YesNoQuestion_Yes" xml:space="preserve">
+    <value>Da</value>
+  </data>
+</root>

@@ -163,7 +163,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 userId: this.principal.CurrentUserIdentity.UserId,
                 questionId: this.questionIdentity.Id,
                 rosterVector: this.questionIdentity.RosterVector,
-                answerTime: DateTime.UtcNow,
                 fileName: this.GetAudioFileName(),
                 length: audioDuration);
 
@@ -255,8 +254,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 await this.Answering.SendRemoveAnswerCommandAsync(
                     new RemoveAnswerCommand(this.interviewId,
                         this.principal.CurrentUserIdentity.UserId,
-                        this.questionIdentity,
-                        DateTime.UtcNow));
+                        this.questionIdentity));
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
             }
             catch (InterviewException exception)

@@ -26,5 +26,10 @@ namespace WB.UI.Shared.Enumerator.Services
         {
             return Path.Combine(GetPathToExternalDirectory(), "Interviewer", subFolderName);
         }
+
+        public static string GetPathToSupervisorSubfolderInExternalDirectory(string subFolderName)
+        {
+            return Path.Combine(GetPathToExternalDirectory(), "Supervisor", subFolderName);
+        }
     }
 }

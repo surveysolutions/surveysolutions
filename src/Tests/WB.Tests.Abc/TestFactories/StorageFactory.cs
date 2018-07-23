@@ -11,10 +11,12 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Interviewer.Services;
-using WB.Core.BoundedContexts.Interviewer.Services.Synchronization;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.SurveySolutions;
 using WB.Tests.Abc.Storage;
 using WB.UI.WebTester.Services;
@@ -71,6 +73,16 @@ namespace WB.Tests.Abc.TestFactories
         public S3FileStorage S3FileStorage(AmazonS3Settings s3Settings, IAmazonS3 client, ITransferUtility transferUtility, ILoggerProvider loggerProvider)
         {
             return new S3FileStorage(s3Settings, client, transferUtility, loggerProvider);
+        }
+
+        public IPlainStorage<TEntity> SqliteInmemoryStorage<TEntity>(params TEntity[] items)
+            where TEntity : class, IPlainStorageEntity, IPlainStorageEntity<string>, new()
+        {
+            var storage = new SqliteInmemoryStorage<TEntity>();
+            foreach (var entity in items)
+                storage.Store(entity);
+
+            return storage;
         }
     }
 }

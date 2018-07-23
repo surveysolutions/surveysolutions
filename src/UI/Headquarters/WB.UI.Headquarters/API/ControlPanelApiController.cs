@@ -4,12 +4,16 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using Main.Core.Events;
+using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.BrokenInterviewPackages;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -47,7 +51,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         private readonly IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory;
         private readonly IInterviewBrokenPackagesService interviewBrokenPackagesService;
         private readonly IUserViewFactory userViewFactory;
-
+        private readonly IJsonAllTypesSerializer serializer;
 
         public ControlPanelApiController(
             IInterviewPackagesService incomingSyncPackagesQueue,
@@ -57,7 +61,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             IProductVersionHistory productVersionHistory,
             IAllUsersAndQuestionnairesFactory allUsersAndQuestionnairesFactory,
             IInterviewBrokenPackagesService interviewBrokenPackagesService,
-            IUserViewFactory userViewFactory)
+            IUserViewFactory userViewFactory, 
+            IJsonAllTypesSerializer serializer)
         {
             this.incomingSyncPackagesQueue = incomingSyncPackagesQueue;
             this.synchronizationLogViewFactory = synchronizationLogViewFactory;
@@ -67,6 +72,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             this.allUsersAndQuestionnairesFactory = allUsersAndQuestionnairesFactory;
             this.interviewBrokenPackagesService = interviewBrokenPackagesService;
             this.userViewFactory = userViewFactory;
+            this.serializer = serializer;
         }
         
         [NoTransaction]
@@ -128,10 +134,18 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 
         [HttpGet]
         [ApiNoCache]
-        public IHttpActionResult DownloadSyncPackage(int id)
+        public IHttpActionResult DownloadSyncPackage(int id, string format)
         {
             BrokenInterviewPackage interviewPackage = this.brokenInterviewPackagesViewFactory.GetPackage(id);
-
+            if ("json".Equals(format, StringComparison.OrdinalIgnoreCase))
+            {
+                var events = this.serializer.Deserialize<AggregateRootEvent[]>(interviewPackage.Events);
+                return Json(events, new JsonSerializerSettings
+                {
+                    Formatting = Formatting.Indented,
+                    TypeNameHandling = TypeNameHandling.Objects
+                });
+            }
             return Content(HttpStatusCode.OK, interviewPackage.Events);
         }
 

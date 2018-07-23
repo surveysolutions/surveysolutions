@@ -19,7 +19,7 @@ namespace WB.UI.Supervisor.Services.Implementation
         private readonly IPlainStorage<SupervisorIdentity> usersStorage;
 
         public SupervisorSettings(IPlainStorage<ApplicationSettingsView> settingsStorage,
-            ISyncProtocolVersionProvider syncProtocolVersionProvider,
+            ISupervisorSyncProtocolVersionProvider syncProtocolVersionProvider,
             IQuestionnaireContentVersionProvider questionnaireContentVersionProvider,
             IPlainStorage<SupervisorIdentity> usersStorage,
             IFileSystemAccessor fileSystemAccessor,
@@ -49,17 +49,26 @@ namespace WB.UI.Supervisor.Services.Implementation
             Endpoint = string.Empty,
             HttpResponseTimeoutInSec = Application.Context.Resources.GetInteger(Resource.Integer.HttpResponseTimeout),
             EventChunkSize = Application.Context.Resources.GetInteger(Resource.Integer.EventChunkSize),
-            CommunicationBufferSize = Application.Context.Resources.GetInteger(Resource.Integer.BufferSize)
+            CommunicationBufferSize = Application.Context.Resources.GetInteger(Resource.Integer.BufferSize),
+            ShowLocationOnMap = Application.Context.Resources.GetBoolean(Resource.Boolean.ShowLocationOnMap)
         };
 
         protected override EnumeratorSettingsView CurrentSettings => this.currentSettings;
         public override int EventChunkSize => this.CurrentSettings.EventChunkSize.GetValueOrDefault(Application.Context.Resources.GetInteger(Resource.Integer.EventChunkSize));
         public override double GpsDesiredAccuracy => throw new NotImplementedException();
-        public override bool VibrateOnError => throw new NotImplementedException();
-        public override bool ShowLocationOnMap => throw new NotImplementedException();
+        public override bool VibrateOnError => false;
+        public override bool ShowLocationOnMap => this.currentSettings.ShowLocationOnMap;
         public override int GpsReceiveTimeoutSec => throw new NotImplementedException();
         public void SetGpsResponseTimeout(int timeout) => throw new NotImplementedException();
         public void SetGpsDesiredAccuracy(double value) => throw new NotImplementedException();
+        public void SetShowLocationOnMap(bool showLocationOnMap) => this.SaveCurrentSettings(settings => settings.ShowLocationOnMap = showLocationOnMap);
+
+        private void SaveCurrentSettings(Action<ApplicationSettingsView> onChanging)
+        {
+            var settings = this.currentSettings;
+            onChanging(settings);
+            SaveSettings(settings);
+        }
 
         protected override void SaveSettings(EnumeratorSettingsView settings)
             => this.settingsStorage.Store((ApplicationSettingsView)settings);

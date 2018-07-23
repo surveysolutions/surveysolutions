@@ -1,5 +1,6 @@
 using System;
 using FluentAssertions;
+using MvvmCross.Base;
 using Ncqrs.Spec;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -16,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             interview = Create.AggregateRoot.StatefulInterview(questionnaire: Create.Entity.QuestionnaireDocumentWithOneChapter());
 
-            interview.HardDelete(userId);
+            interview.HardDelete(userId, DateTimeOffset.Now);
 
             eventContext = new EventContext();
             BecauseOf();
@@ -24,7 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
         public void BecauseOf() =>
             exception =  NUnit.Framework.Assert.Throws<InterviewException>(() =>
-                interview.HqApprove(userId,"my commet"));
+                interview.HqApprove(userId,"my commet", DateTimeOffset.Now));
 
         [NUnit.Framework.Test] public void should_raise_InterviewException () =>
             exception.Should().NotBeNull();

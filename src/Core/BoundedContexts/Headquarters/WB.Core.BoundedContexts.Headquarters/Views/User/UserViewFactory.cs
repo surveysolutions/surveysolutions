@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interviewer;
 using WB.Core.BoundedContexts.Headquarters.Views.Responsible;
 using WB.Core.BoundedContexts.Headquarters.Views.Supervisor;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Infrastructure.Native.Utils;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.User
@@ -165,6 +166,35 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             };
 
             return result;
+        }
+
+        public IEnumerable<InterviewerFullApiView> GetInterviewers(Guid supervisorId)
+        {
+            var repository = this.UserRepository;
+
+            Func<IQueryable<HqUser>, IQueryable<InterviewerFullApiView>> query = allUsers =>
+            {
+                var interviewers = ApplyFilter(allUsers, null, false, UserRoles.Interviewer);
+
+                interviewers = ApplyFacetFilter(null, InterviewerFacet.None, interviewers, repository);
+
+                interviewers = AppySupervisorFilter(supervisorId, interviewers);
+
+                return interviewers.Select(x => new InterviewerFullApiView
+                {
+                    Id = x.Id,
+                    CreationDate = x.CreationDate,
+                    Email = x.Email,
+                    FullName = x.FullName,
+                    UserName = x.UserName,
+                    PhoneNumber = x.PhoneNumber,
+                    PasswordHash = x.PasswordHash
+                });
+            };
+
+            var filteredUsers = query.Invoke(repository.Users).ToList();
+
+            return filteredUsers;
         }
 
         public InterviewersView GetInterviewers(int pageIndex, int pageSize, string orderBy, string searchBy,

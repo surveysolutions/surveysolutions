@@ -430,6 +430,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>QuestionnaireHistoryResources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Resources\UnderConstruction.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UnderConstruction.resx</DependentUpon>
+    </Compile>
     <Compile Include="Services\IAuthenticationService.cs" />
     <Compile Include="Services\IDeskAuthenticationService.cs" />
     <Compile Include="Services\IWebTesterService.cs" />
@@ -447,6 +452,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\admin.css" />
+    <Content Include="Content\under-construction.css" />
     <Content Include="Content\identity\favicon-designer-114x114.png" />
     <Content Include="Content\identity\favicon-designer-120x120.png" />
     <Content Include="Content\identity\favicon-designer-144x144.png" />
@@ -461,6 +467,7 @@
     <Content Include="Content\images\DR-2017-folders-icons-2x.png" />
     <Content Include="Content\images\DR-2017-folders-icons-G2-color.png" />
     <Content Include="Content\images\DR-2017-folders-icons.png" />
+    <Content Include="Content\images\logo_under_constraction.jpg" />
     <Content Include="Content\images\pdf-question-legend.png" />
     <Content Include="Content\images\pdf-roster-legend.png" />
     <Content Include="Content\images\pdf_logo.png" />
@@ -619,6 +626,14 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\QuestionnaireHistoryResources.zh.resx">
       <DependentUpon>QuestionnaireHistoryResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\UnderConstruction.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>UnderConstruction.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\UnderConstruction.ru.resx">
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
@@ -892,6 +907,7 @@
     <Content Include="questionnaire\content\designer-editor\wb-find-replace.less" />
     <Content Include="Views\Questionnaire\Shared.cshtml" />
     <Content Include="Views\Shared\ExportHtmlModalDialog.cshtml" />
+    <Content Include="Views\UnderConstruction\Index.cshtml" />
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

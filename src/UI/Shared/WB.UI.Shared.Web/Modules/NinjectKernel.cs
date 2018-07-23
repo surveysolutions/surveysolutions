@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using Ninject;
@@ -38,19 +39,34 @@ namespace WB.UI.Shared.Web.Modules
             initModules.AddRange(modules.Select(m => m as IInitModule).Where(m => m != null));
         }
 
-        public async Task Init()
+        public Task Init()
         {
             this.Kernel.Bind<Func<IKernel>>().ToMethod(ctx => () => new Bootstrapper().Kernel);
             this.Kernel.Bind<IHttpModule>().To<HttpApplicationInitializationHttpModule>();
+
+            var status = new UnderConstructionInfo();
+            this.Kernel.Bind<UnderConstructionInfo>().ToConstant(status).InSingletonScope();
 
             // ServiceLocator
             ServiceLocator.SetLocatorProvider(() => new NativeNinjectServiceLocatorAdapter(this.Kernel));
             this.Kernel.Bind<IServiceLocator>().ToConstant(ServiceLocator.Current);
 
+            Thread thread = new Thread(() => InitModules(status).Wait()) { IsBackground = false };
+            thread.Start();
+
+            return Task.CompletedTask;
+        }
+
+        private async Task InitModules(UnderConstructionInfo status)
+        {
+            status.Status = UnderConstructionStatus.Running;
             foreach (var module in initModules)
             {
-                await module.Init(ServiceLocator.Current);
+                status.ClearMessage();
+                await module.Init(ServiceLocator.Current, status);
             }
+
+            status.Status = UnderConstructionStatus.Finished;
         }
     }
 }

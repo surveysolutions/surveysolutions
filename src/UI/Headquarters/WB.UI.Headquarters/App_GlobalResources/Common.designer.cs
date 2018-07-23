@@ -250,6 +250,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Download Supervisor app.
+        /// </summary>
+        internal static string DownloadSupervisor {
+            get {
+                return ResourceManager.GetString("DownloadSupervisor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Errors log.
         /// </summary>
         internal static string ErrorsLog {

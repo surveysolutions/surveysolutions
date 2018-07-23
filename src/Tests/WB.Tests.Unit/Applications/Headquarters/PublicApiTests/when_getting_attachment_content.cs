@@ -4,8 +4,8 @@ using FluentAssertions;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
-using WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2;
 using WB.Tests.Abc;
+using WB.UI.Headquarters.API.DataCollection.Interviewer.v2;
 
 
 namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests

@@ -10,6 +10,9 @@ using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
+using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
 using It = Moq.It;
@@ -67,7 +70,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             progressInfo.Setup(pi => pi.Report(It.IsAny<SyncProgressInfo>()))
                 .Callback<SyncProgressInfo>(spi => totalDeletedInterviewsCount = spi.Statistics.TotalDeletedInterviewsCount);
 
-            await viewModel.SyncronizeAsync(progressInfo.Object, CancellationToken.None);
+            await viewModel.SynchronizeAsync(progressInfo.Object, CancellationToken.None);
 
             mockOFInterviewAccessor.Verify(_ => _.RemoveInterview(interviewId), Times.Once);
             Assert.That(totalDeletedInterviewsCount, Is.EqualTo(1));

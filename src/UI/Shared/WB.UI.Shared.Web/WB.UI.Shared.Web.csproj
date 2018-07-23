@@ -137,6 +137,7 @@
   <ItemGroup>
     <Compile Include="Compression\CompressionHandler.cs" />
     <Compile Include="Configuration\ExternalStoragesConfigSection.cs" />
+    <Compile Include="Controllers\UnderConstructionController.cs" />
     <Compile Include="Extensions\IPrincipalExtensions.cs" />
     <Compile Include="Filters\ApiNoCacheAttribute.cs" />
     <Compile Include="Attributes\NoTransactionAttribute.cs" />
@@ -163,6 +164,7 @@
     <Compile Include="Extensions\LinkExtensions.cs" />
     <Compile Include="Extensions\StringExtensions.cs" />
     <Compile Include="Extensions\NameValueCollectionExtensions.cs" />
+    <Compile Include="Filters\UnderConstructionFilter.cs" />
     <Compile Include="Filters\ApiTransactionFilter.cs" />
     <Compile Include="Filters\ApiValidationAntiForgeryTokenVerifier.cs" />
     <Compile Include="Filters\ControlPanelAccessAttribute.cs" />
@@ -199,6 +201,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ErrorMessages.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Resources\UnderConstruction.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>UnderConstruction.resx</DependentUpon>
     </Compile>
     <Compile Include="Services\IImageProcessingService.cs" />
     <Compile Include="Services\ImageProcessingService.cs" />
@@ -244,6 +251,7 @@
     <EmbeddedResource Include="Resources\Captcha.ka.resx">
       <DependentUpon>Captcha.resx</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\Captcha.ro.resx" />
     <EmbeddedResource Include="Resources\Captcha.ru.resx">
       <DependentUpon>Captcha.resx</DependentUpon>
     </EmbeddedResource>
@@ -255,11 +263,15 @@
     <EmbeddedResource Include="Resources\Captcha.zh.resx">
       <DependentUpon>Captcha.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\ErrorMessages.ar.resx" />
+    <EmbeddedResource Include="Resources\ErrorMessages.ar.resx">
+      <DependentUpon>ErrorMessages.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\ErrorMessages.es.resx">
       <DependentUpon>ErrorMessages.resx</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\ErrorMessages.fr.resx" />
+    <EmbeddedResource Include="Resources\ErrorMessages.fr.resx">
+      <DependentUpon>ErrorMessages.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\ErrorMessages.ka.resx">
       <DependentUpon>ErrorMessages.resx</DependentUpon>
     </EmbeddedResource>
@@ -271,11 +283,20 @@
       <LastGenOutput>ErrorMessages.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\ErrorMessages.ro.resx" />
     <EmbeddedResource Include="Resources\ErrorMessages.zh.resx">
       <DependentUpon>ErrorMessages.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\ErrorMessages.ru.resx">
       <DependentUpon>ErrorMessages.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\UnderConstruction.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>UnderConstruction.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\UnderConstruction.ru.resx">
+      <DependentUpon>UnderConstruction.resx</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
