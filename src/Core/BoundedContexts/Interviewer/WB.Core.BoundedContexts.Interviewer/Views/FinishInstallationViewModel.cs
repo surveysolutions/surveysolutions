@@ -16,6 +16,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private readonly IPasswordHasher passwordHasher;
         private readonly IPlainStorage<InterviewerIdentity> interviewersPlainStorage;
         private readonly IInterviewerSynchronizationService synchronizationService;
+        private readonly IQRBarcodeScanService qrBarcodeScanService;
 
         public FinishInstallationViewModel(
             IViewModelNavigationService viewModelNavigationService,
@@ -25,11 +26,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             IDeviceSettings deviceSettings,
             IInterviewerSynchronizationService synchronizationService,
             ILogger logger,
+            IQRBarcodeScanService qrBarcodeScanService,
             IUserInteractionService userInteractionService) : base(viewModelNavigationService, principal, deviceSettings, synchronizationService, logger, userInteractionService)
         {
             this.passwordHasher = passwordHasher;
             this.interviewersPlainStorage = interviewersPlainStorage;
             this.synchronizationService = synchronizationService;
+            this.qrBarcodeScanService = qrBarcodeScanService;
         }
 
         protected override async Task RelinkUserToAnotherDeviceAsync(RestCredentials credentials, CancellationToken token)
@@ -57,6 +60,48 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             };
 
             this.interviewersPlainStorage.Store(interviewerIdentity);
+        }
+
+        private IMvxAsyncCommand scanAsyncCommand;
+        public IMvxAsyncCommand ScanCommand
+        {
+            get { return this.scanAsyncCommand ?? (this.scanAsyncCommand = new MvxAsyncCommand(this.ScanAsync, () => !IsInProgress)); }
+        }
+
+        private async Task ScanAsync()
+        {
+            this.IsInProgress = true;
+
+            try
+            {
+                var scanCode = await this.qrBarcodeScanService.ScanAsync();
+
+                if (scanCode != null)
+                {
+                    if (Uri.TryCreate(scanCode.Code, UriKind.Absolute, out var uriResult))
+                    {
+                        var seachTerm = "/api/interviewersync";
+                        var position = scanCode.Code.IndexOf(seachTerm, StringComparison.InvariantCultureIgnoreCase);
+
+                        this.Endpoint = position > 0 ? scanCode.Code.Substring(0, position) : scanCode.Code;
+                    }
+                    else
+                    {
+                        var finishInfo = JsonConvert.DeserializeObject<FinishInstallationInfo>(scanCode.Code);
+
+                        this.Endpoint = finishInfo.Url;
+                        this.UserName = finishInfo.Login;
+                        this.Password = finishInfo.Password;
+                    }
+                }
+            }
+            catch
+            {
+            }
+            finally
+            {
+                this.IsInProgress = false;
+            }
         }
     }
 }
