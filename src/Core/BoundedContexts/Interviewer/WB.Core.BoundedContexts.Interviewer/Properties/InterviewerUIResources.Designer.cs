@@ -1284,6 +1284,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bluetooth state cannot be determined by the application. Please reboot both Interviewer and Supervisor devices and try synchronization again.
+        /// </summary>
+        public static string SendToSupervisor_BluetoothError {
+            get {
+                return ResourceManager.GetString("SendToSupervisor_BluetoothError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Check that supervisor device has wifi and bluetooth turned on and you are withing couple of meters from it.
         /// </summary>
         public static string SendToSupervisor_CheckSupervisorDevice {

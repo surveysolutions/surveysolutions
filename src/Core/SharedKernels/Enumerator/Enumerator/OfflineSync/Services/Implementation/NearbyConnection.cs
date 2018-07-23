@@ -20,6 +20,8 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
         private readonly INearbyConnectionClient connectionClient;
         private readonly Subject<INearbyEvent> events;
 
+        private NamedAsyncLocker locker = new NamedAsyncLocker();
+
         public NearbyConnection(INearbyCommunicator communicator, ILogger logger, INearbyConnectionClient connectionClient)
         {
             this.communicator = communicator;
@@ -58,8 +60,6 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             var result = await this.connectionClient.StartAdvertisingAsync(serviceName, name, cancellationToken);
             return result;
         }
-
-        private NamedAsyncLocker locker = new NamedAsyncLocker();
 
         private readonly ConcurrentDictionary<string, bool> pendingRequestConnections =
             new ConcurrentDictionary<string, bool>();
