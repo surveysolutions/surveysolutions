@@ -13,7 +13,6 @@ using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -111,7 +110,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             localAssignmentsRepo = Create.Storage.AssignmentDocumentsInmemoryStorage();
             localAssignmentsRepo.Store(localAssignments);
 
-            var assignmentSyncService = new Mock<IAssignmentSynchronizationApi>();
+            var assignmentSyncService = new Mock<ISynchronizationService>();
             assignmentSyncService.Setup(s => s.GetAssignmentsAsync(It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult(remoteAssignments.Select(FromView).ToList()));
 

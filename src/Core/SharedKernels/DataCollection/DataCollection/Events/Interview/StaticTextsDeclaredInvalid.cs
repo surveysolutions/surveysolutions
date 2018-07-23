@@ -1,5 +1,5 @@
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 using WB.Core.GenericSubdomains.Portable;
 
@@ -13,14 +13,12 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 
         public IReadOnlyDictionary<Identity, IReadOnlyList<FailedValidationCondition>> GetFailedValidationConditionsDictionary()
             => this.failedValidationConditionsDictionary ?? (this.failedValidationConditionsDictionary
-                = this.FailedValidationConditions.ToDictionary());
+                = this.FailedValidationConditions != null ?
+                   this.FailedValidationConditions.ToDictionary() :
+                       new List<KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>>().ToDictionary());
 
-        protected StaticTextsDeclaredInvalid()
-        {
-            this.FailedValidationConditions = new List<KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>>();;
-        }
-
-        public StaticTextsDeclaredInvalid(List<KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>> failedValidationConditions)
+        public StaticTextsDeclaredInvalid(List<KeyValuePair<Identity, IReadOnlyList<FailedValidationCondition>>> failedValidationConditions, 
+            DateTimeOffset originDate) : base (originDate)
         {
             this.FailedValidationConditions = failedValidationConditions;
         }

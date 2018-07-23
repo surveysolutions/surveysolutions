@@ -10,7 +10,7 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
         public decimal[] OuterScopeRosterVector { get; private set; }
         public int Count { get; private set; }
 
-        public GroupPropagated(Guid groupId, decimal[] outerScopeRosterVector, int count)
+        public GroupPropagated(Guid groupId, decimal[] outerScopeRosterVector, int count, DateTimeOffset originDate) : base(originDate)
         {
             this.GroupId = groupId;
             this.OuterScopeRosterVector = outerScopeRosterVector;

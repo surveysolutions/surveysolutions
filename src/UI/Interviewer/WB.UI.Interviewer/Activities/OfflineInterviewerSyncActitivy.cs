@@ -1,6 +1,7 @@
 ﻿using Android.App;
 using Android.Views;
 using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.UI.Shared.Enumerator.OfflineSync.Activities;
 
 namespace WB.UI.Interviewer.Activities

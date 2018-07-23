@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.ObjectModel;
+using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Entities;
 
@@ -6,11 +8,17 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services
 {
     public interface INearbyConnection
     {
-        Task StartDiscovery(string serviceName, Action<string, NearbyDiscoveredEndpointInfo> foundEndpoint, Action<string> lostEndpoint);
-        Task<string> StartAdvertising(string serviceName, string name, NearbyConnectionLifeCycleCallback lifeCycleCallback);
-        Task RequestConnection(string name, string endpoint, NearbyConnectionLifeCycleCallback lifeCycleCallback);
-        Task AcceptConnection(string endpoint);
-        Task RejectConnection(string endpoint);
-        Task SendPayloadAsync(string to, IPayload payload);
+        Task<NearbyStatus> StartDiscoveryAsync(string serviceName, CancellationToken cancellationToken);
+        Task<string> StartAdvertisingAsync(string serviceName, string name, CancellationToken cancellationToken);
+        Task<NearbyStatus> RequestConnectionAsync(string name, string endpoint, CancellationToken cancellationToken);
+        Task<NearbyStatus> AcceptConnectionAsync(string endpoint, CancellationToken cancellationToken);
+        Task<NearbyStatus> RejectConnectionAsync(string endpoint, CancellationToken cancellationToken);
+        Task<NearbyStatus> SendPayloadAsync(string to, IPayload payload, CancellationToken cancellationToken);
+        void StopAllEndpoint();
+        IObservable<INearbyEvent> Events { get; }
+        ObservableCollection<RemoteEndpoint> RemoteEndpoints { get; }
+        void StopDiscovery();
+        void StopAdvertising();
+        void StopAll();
     }
 }

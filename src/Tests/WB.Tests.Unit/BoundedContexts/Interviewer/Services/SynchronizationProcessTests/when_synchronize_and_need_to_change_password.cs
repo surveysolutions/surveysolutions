@@ -71,7 +71,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 passwordHasher: passwordHasherMock.Object);
 
             // Act
-            await viewModel.SyncronizeAsync(new Progress<SyncProgressInfo>(), CancellationToken.None);
+            await viewModel.SynchronizeAsync(new Progress<SyncProgressInfo>(), CancellationToken.None);
 
             // Assert
 

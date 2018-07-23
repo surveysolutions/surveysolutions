@@ -24,6 +24,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels;
+using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Services.Export;
@@ -64,6 +65,8 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
+using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog;
+using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Utils;
@@ -364,6 +367,37 @@ namespace WB.Tests.Abc.TestFactories
                 TimeSpanWithPreviousStatus = timeSpanWithPreviousStatus
             };
 
+        public InterviewDiagnosticsInfo InterviewDiagnosticsInfo(
+            Guid? interviewId = null,
+            string interviewKey = null,
+            InterviewStatus status = InterviewStatus.InterviewerAssigned,
+            Guid? responsibleId = null, 
+            string responsibleName = null, 
+            int numberOfInterviewers = 0, 
+            int numberRejectionsBySupervisor = 0, 
+            int numberRejectionsByHq = 0, 
+            int numberValidQuestions = 0, 
+            int numberInvalidEntities = 0, 
+            int numberUnansweredQuestions = 0, 
+            int numberCommentedQuestions = 0, 
+            long? interviewDuration = null)
+            => new InterviewDiagnosticsInfo
+            {
+                InterviewId = interviewId ?? Guid.NewGuid(),
+                InterviewKey = interviewKey,
+                Status = status,
+                ResponsibleId = responsibleId ?? Guid.NewGuid(),
+                ResponsibleName = responsibleName,
+                NumberOfInterviewers = numberOfInterviewers,
+                NumberRejectionsBySupervisor = numberRejectionsBySupervisor,
+                NumberRejectionsByHq = numberRejectionsByHq,
+                NumberValidQuestions = numberValidQuestions,
+                NumberInvalidEntities = numberInvalidEntities,
+                NumberUnansweredQuestions = numberUnansweredQuestions,
+                NumberCommentedQuestions = numberCommentedQuestions,
+                InterviewDuration = interviewDuration
+            };
+
         public InterviewData InterviewData(
             bool createdOnClient = false,
             InterviewStatus status = InterviewStatus.Created,
@@ -555,7 +589,8 @@ namespace WB.Tests.Abc.TestFactories
             string questionaireTitle = null,
             int? assignmentId = null,
             bool? canBeDeleted = null,
-            Guid? responsibleId = null
+            Guid? responsibleId = null,
+            DateTime? receivedByInterviewerAt = null
             )
         {
             interviewId = interviewId ?? Guid.NewGuid();
@@ -563,14 +598,20 @@ namespace WB.Tests.Abc.TestFactories
             {
                 Id = interviewId.FormatGuid(),
                 InterviewId = interviewId.Value,
-                QuestionnaireId = questionnaireId,
+                QuestionnaireId = questionnaireId ?? Create.Entity.QuestionnaireIdentity().ToString(),
                 LocationQuestionId = prefilledQuestionId,
                 QuestionnaireTitle = questionaireTitle ?? "Questionnaire ",
                 Status = status ?? InterviewStatus.InterviewerAssigned,
                 Assignment = assignmentId,
                 CanBeDeleted = canBeDeleted ?? true,
-                ResponsibleId = responsibleId.GetValueOrDefault()
+                ResponsibleId = responsibleId.GetValueOrDefault(),
+                ReceivedByInterviewerAtUtc = receivedByInterviewerAt
             };
+        }
+
+        public InterviewSequenceView InterviewSequenceView(Guid id, int sequence)
+        {
+            return new InterviewSequenceView() {Id = id, ReceivedFromServerSequence = sequence};
         }
 
         public DataExportVariable LabeledVariable(string variableName = "var", string label = "lbl", Guid? questionId = null, params VariableValueLabel[] variableValueLabels)
@@ -1360,8 +1401,9 @@ namespace WB.Tests.Abc.TestFactories
             string translationIndex = null,
             TranslationType? type = null)
         {
-            return new WB.Core.SharedKernels.Enumerator.Views.TranslationInstance
+            return new TranslationInstance
             {
+                Id = Guid.NewGuid().ToString(),
                 Value = value,
                 TranslationId = tranlationId ?? Guid.NewGuid(),
                 QuestionnaireId = questionnaireId ?? Create.Entity.QuestionnaireIdentity().ToString(),
@@ -1647,13 +1689,15 @@ namespace WB.Tests.Abc.TestFactories
             };
         }
 
-        public AssignmentApiDocumentBuilder AssignmentApiDocument(int id, int? quantity, QuestionnaireIdentity questionnaireIdentity = null)
+        public AssignmentApiDocumentBuilder AssignmentApiDocument(int id, int? quantity, QuestionnaireIdentity questionnaireIdentity = null,
+            Guid? responsibleId = null)
         {
             return new AssignmentApiDocumentBuilder(new AssignmentApiDocument
             {
                 Id = id,
                 Quantity = quantity,
-                QuestionnaireId = questionnaireIdentity
+                QuestionnaireId = questionnaireIdentity,
+                ResponsibleId = responsibleId ?? Guid.Empty
             });
         }
 
@@ -1761,13 +1805,16 @@ namespace WB.Tests.Abc.TestFactories
         }
 
         public AssignmentDocumentBuilder AssignmentDocument(int id, int? quantity = null,
-            int interviewsCount = 0, string questionnaireIdentity = null)
+            int interviewsCount = 0, string questionnaireIdentity = null, Guid? responsibleId = null, Guid? originalResponsibleId = null)
         {
             return new AssignmentDocumentBuilder(new AssignmentDocument
             {
                 Id = id,
                 Quantity = quantity,
-                QuestionnaireId = questionnaireIdentity
+                QuestionnaireId = questionnaireIdentity,
+                ResponsibleId = responsibleId ?? Guid.Empty,
+                OriginalResponsibleId = originalResponsibleId ?? Guid.Empty,
+                CreatedInterviewsCount = interviewsCount
             });
         }
 
@@ -1780,7 +1827,7 @@ namespace WB.Tests.Abc.TestFactories
                 _entity = entity;
             }
 
-            public AssignmentDocumentBuilder WithAnswer(Identity identity, string answer, bool identifying = false)
+            public AssignmentDocumentBuilder WithAnswer(Identity identity, string answer, bool identifying = false, string serializedAnswer = null)
             {
                 this._entity.Answers = this._entity.Answers ?? new List<AssignmentDocument.AssignmentAnswer>();
                 this._entity.IdentifyingAnswers = this._entity.IdentifyingAnswers ?? new List<AssignmentDocument.AssignmentAnswer>();
@@ -1790,6 +1837,7 @@ namespace WB.Tests.Abc.TestFactories
                     AssignmentId = this._entity.Id,
                     AnswerAsString = answer,
                     IsIdentifying = identifying,
+                    SerializedAnswer = serializedAnswer,
                     Identity = identity
                 };
 
@@ -2149,6 +2197,45 @@ namespace WB.Tests.Abc.TestFactories
                 ColValue = col,
                 Count = count
             };
+        }
+
+        public AuditLogEntityFactory AuditLogEntity => new AuditLogEntityFactory();
+
+        public class AuditLogEntityFactory
+        {
+            private readonly Random rnd;
+            private readonly JsonAllTypesSerializer serializer;
+
+            public AuditLogEntityFactory()
+            {
+                this.rnd = new Random();
+                this.serializer = new JsonAllTypesSerializer();
+            }
+
+            public LogoutAuditLogEntity LogoutAuditLogEntity(string userName) 
+                => new LogoutAuditLogEntity(userName);
+
+            public CloseInterviewAuditLogEntity CloseInterviewAuditLogEntity(Guid? interviewId = null, string interviewKey = null) 
+                => new CloseInterviewAuditLogEntity(interviewId ?? Guid.NewGuid(), interviewKey ?? new InterviewKey(rnd.Next()).ToString());
+
+            public AuditLogEntityApiView AuditLogEntitiesApiView(
+                IAuditLogEntity entity, 
+                int? id = null, 
+                Guid? responsibleId = null, 
+                string responsible = null,
+                DateTime? dateTime = null, 
+                DateTime? dateTimeUtc = null) =>
+                new AuditLogEntityApiView
+                {
+                    Id = id ?? rnd.Next(),
+                    Type = entity.Type,
+                    PayloadType = entity.GetType().Name,
+                    ResponsibleId = responsibleId ?? Guid.NewGuid(),
+                    Payload = serializer.Serialize(entity),
+                    ResponsibleName = responsible ?? Guid.NewGuid().ToString(),
+                    Time = dateTime ?? DateTime.Now,
+                    TimeUtc = dateTimeUtc ?? DateTime.UtcNow
+                };
         }
     }
 }

@@ -17,6 +17,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview;
+using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.UI.Interviewer.ViewModel
 {
@@ -95,7 +96,7 @@ namespace WB.UI.Interviewer.ViewModel
         {
             if (!lastCreatedInterviewStorage.WasJustCreated(InterviewId))
             {
-                commandService.Execute(new ResumeInterviewCommand(Guid.Parse(InterviewId), Principal.CurrentUserIdentity.UserId, DateTime.Now, DateTime.UtcNow));
+                commandService.Execute(new ResumeInterviewCommand(Guid.Parse(InterviewId), Principal.CurrentUserIdentity.UserId));
             }
 
             auditLogService.Write(new OpenInterviewAuditLogEntity(Guid.Parse(InterviewId), interviewKey?.ToString(), assignmentId));
@@ -108,7 +109,7 @@ namespace WB.UI.Interviewer.ViewModel
             var interview = interviewRepository.Get(this.InterviewId);
             if (!interview.IsCompleted)
             {
-                commandService.Execute(new PauseInterviewCommand(Guid.Parse(InterviewId), interview.CurrentResponsibleId, DateTime.Now, DateTime.UtcNow));
+                commandService.Execute(new PauseInterviewCommand(Guid.Parse(InterviewId), interview.CurrentResponsibleId));
             }
 
             auditLogService.Write(new CloseInterviewAuditLogEntity(Guid.Parse(InterviewId), interviewKey?.ToString()));

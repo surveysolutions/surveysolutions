@@ -6,8 +6,12 @@ using Android.Support.V4.Widget;
 using Android.Support.V7.App;
 using Android.Support.V7.Widget;
 using Android.Views;
+using MvvmCross;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard;
+using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services;
+using WB.Core.BoundedContexts.Supervisor.ViewModel.InterviewerSelector;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.MapSynchronization;
@@ -24,8 +28,7 @@ namespace WB.UI.Supervisor.Activities
         ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
     [MvxActivityPresentation]
     public class DashboardActivity : BaseActivity<DashboardViewModel>, 
-        ISyncBgService<SyncProgressDto>, ISyncServiceHost<SyncBgService>,
-        ISyncBgService<MapSyncProgressStatus>, ISyncServiceHost<MapDownloadBackgroundService>
+        ISyncBgService<SyncProgressDto>, ISyncServiceHost<SyncBgService>
     {
         private ActionBarDrawerToggle drawerToggle;
 
@@ -33,8 +36,6 @@ namespace WB.UI.Supervisor.Activities
         protected override int ViewResourceId => Resource.Layout.dashboard;
 
         ServiceBinder<SyncBgService> ISyncServiceHost<SyncBgService>.Binder { get; set; }
-
-        ServiceBinder<MapDownloadBackgroundService> ISyncServiceHost<MapDownloadBackgroundService>.Binder { get; set; }
 
         protected override void OnCreate(Bundle bundle)
         {
@@ -50,7 +51,17 @@ namespace WB.UI.Supervisor.Activities
             if (bundle == null)
             {
                 if (this.ViewModel.LastVisitedInterviewId.HasValue)
-                    this.ViewModel.ShowOutboxCommand.Execute();
+                {
+                    var dashboardItemAccessor = ServiceLocator.Current.GetInstance<IDashboardItemsAccessor>();
+
+                    var interviewId = this.ViewModel.LastVisitedInterviewId.Value;
+                    if (dashboardItemAccessor.IsOutboxInterview(interviewId))
+                        this.ViewModel.ShowOutboxCommand.Execute();
+                    if(dashboardItemAccessor.IsWaitingForSupervisorActionInterview(interviewId))
+                        this.ViewModel.ShowWaitingSupervisorActionCommand.Execute();
+                    if (dashboardItemAccessor.IsSentToInterviewer(interviewId))
+                        this.ViewModel.ShowSentCommand.Execute();
+                }
                 else
                     ViewModel.ShowDefaultListCommand.Execute();
                 ViewModel.ShowMenuViewModelCommand.Execute();
@@ -73,7 +84,6 @@ namespace WB.UI.Supervisor.Activities
         {
             base.OnStart();
             this.BindService(new Intent(this, typeof(SyncBgService)), new SyncServiceConnection<SyncBgService>(this), Bind.AutoCreate);
-            this.BindService(new Intent(this, typeof(MapDownloadBackgroundService)), new SyncServiceConnection<MapDownloadBackgroundService>(this), Bind.AutoCreate);
         }
 
         protected override void OnViewModelSet()
@@ -82,17 +92,22 @@ namespace WB.UI.Supervisor.Activities
             this.ViewModel.Synchronization.SyncBgService = this;
         }
 
+        protected override void OnStop()
+        {
+            base.OnStop();
+            Mvx.Resolve<IInterviewerSelectorDialog>()?.CloseDialog();
+        }
+
         public override void OnBackPressed() { }
 
         public override bool OnCreateOptionsMenu(IMenu menu)
         {
             this.MenuInflater.Inflate(Resource.Menu.dashboard, menu);
 
-            menu.LocalizeMenuItem(Resource.Id.menu_offline_synchronization, "Offline Sync");
             menu.LocalizeMenuItem(Resource.Id.menu_signout, InterviewerUIResources.MenuItem_Title_SignOut);
             menu.LocalizeMenuItem(Resource.Id.menu_settings, InterviewerUIResources.MenuItem_Title_Settings);
             menu.LocalizeMenuItem(Resource.Id.menu_diagnostics, InterviewerUIResources.MenuItem_Title_Diagnostics);
-            menu.LocalizeMenuItem(Resource.Id.menu_maps_synchronization, InterviewerUIResources.MenuItem_Title_MapsSynchronization);
+            menu.LocalizeMenuItem(Resource.Id.menu_maps, InterviewerUIResources.MenuItem_Title_Maps);
             return base.OnCreateOptionsMenu(menu);
         }
 
@@ -100,11 +115,8 @@ namespace WB.UI.Supervisor.Activities
         {
             switch (item.ItemId)
             {
-                case Resource.Id.menu_synchronization:
-                    this.ViewModel.SynchronizationCommand.Execute();
-                    break;
-                case Resource.Id.menu_maps_synchronization:
-                    this.ViewModel.MapsSynchronizationCommand.Execute();
+                case Resource.Id.menu_maps:
+                    this.ViewModel.NavigateToMapsCommand.Execute();
                     break;
                 case Resource.Id.menu_settings:
                     Intent intent = new Intent(this, typeof(PrefsActivity));
@@ -112,9 +124,6 @@ namespace WB.UI.Supervisor.Activities
                     break;
                 case Resource.Id.menu_diagnostics:
                     this.ViewModel.NavigateToDiagnosticsPageCommand.Execute();
-                    break;
-                case Resource.Id.menu_offline_synchronization:
-                    this.ViewModel.NavigateToOfflineSyncCommand.Execute();
                     break;
                 case Resource.Id.menu_signout:
                     this.ViewModel.SignOutCommand.Execute();
@@ -124,11 +133,7 @@ namespace WB.UI.Supervisor.Activities
             return base.OnOptionsItemSelected(item);
         }
 
-        void ISyncBgService<MapSyncProgressStatus>.StartSync() => ((ISyncServiceHost<MapDownloadBackgroundService>)this).Binder.GetService().SyncMaps();
-
         void ISyncBgService<SyncProgressDto>.StartSync() => ((ISyncServiceHost<SyncBgService>)this).Binder.GetService().StartSync();
-
-        MapSyncProgressStatus ISyncBgService<MapSyncProgressStatus>.CurrentProgress => ((ISyncServiceHost<MapDownloadBackgroundService>)this).Binder.GetService().CurrentProgress;
 
         SyncProgressDto ISyncBgService<SyncProgressDto>.CurrentProgress => ((ISyncServiceHost<SyncBgService>)this).Binder.GetService().CurrentProgress;
     }

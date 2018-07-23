@@ -42,6 +42,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         private readonly CommentsExporter commentsExporter;
         private readonly InterviewActionsExporter interviewActionsExporter;
         private readonly IInterviewsExporter interviewsExporter;
+        private readonly DiagnosticsExporter diagnosticsExporter;
 
         private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries;
@@ -55,7 +56,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries,
             InterviewDataExportSettings exportSettings, 
             IQuestionnaireExportStructureStorage questionnaireExportStructureStorage,
-            IProductVersion productVersion)
+            IProductVersion productVersion,
+            IInterviewsExporter interviewsExporter,
+            CommentsExporter commentsExporter,
+            InterviewActionsExporter interviewActionsExporter,
+            DiagnosticsExporter diagnosticsExporter)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.csvWriter = csvWriter;
@@ -65,12 +70,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             this.exportSettings = exportSettings;
             this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
             this.productVersion = productVersion;
-
-            this.interviewsExporter = ServiceLocator.Current.GetInstance<IInterviewsExporter>();
-
-            this.commentsExporter = ServiceLocator.Current.GetInstance<CommentsExporter>();
-
-            this.interviewActionsExporter = ServiceLocator.Current.GetInstance<InterviewActionsExporter>();
+            this.interviewsExporter = interviewsExporter;
+            this.commentsExporter = commentsExporter;
+            this.interviewActionsExporter = interviewActionsExporter;
+            this.diagnosticsExporter = diagnosticsExporter;
         }
 
         public void GenerateDescriptionFile(QuestionnaireIdentity questionnaireIdentity, string basePath, string dataFilesExtension)
@@ -120,6 +123,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                 Task.Run(() => this.commentsExporter.Export(questionnaireExportStructure, interviewIdsToExport, basePath, exportCommentsProgress), cancellationToken),
                 Task.Run(() => this.interviewActionsExporter.Export(questionnaireIdentity, interviewIdsToExport, basePath, exportInterviewActionsProgress), cancellationToken),
                 Task.Run(() => this.interviewsExporter.Export(questionnaireExportStructure, interviewsToExport, basePath, exportInterviewsProgress, cancellationToken), cancellationToken),
+                Task.Run(() => this.diagnosticsExporter.Export(interviewIdsToExport, basePath, exportInterviewsProgress, cancellationToken), cancellationToken),
             }, cancellationToken);
 
             exportWatch.Stop();

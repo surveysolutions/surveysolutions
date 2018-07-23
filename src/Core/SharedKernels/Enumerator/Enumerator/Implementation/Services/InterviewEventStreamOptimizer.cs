@@ -18,10 +18,16 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             if (interviewEvents.Count == 0)
                 return interviewEvents;
 
-            CommittedEvent lastCompletionCommittedEvent = interviewEvents.Last(@event => @event.Payload is InterviewCompleted);
-            Guid lastCompletionCommitId = lastCompletionCommittedEvent.CommitId;
+            CommittedEvent lastCompletionCommittedEvent = interviewEvents.LastOrDefault(@event => @event.Payload is InterviewCompleted);
+            if (lastCompletionCommittedEvent != null)
+            {
+                Guid lastCompletionCommitId = lastCompletionCommittedEvent.CommitId;
 
-            return interviewEvents.Where(@event => !ShouldNotSendEvent(@event, lastCompletionCommitId)).ToReadOnlyCollection();
+                return interviewEvents.Where(@event => !ShouldNotSendEvent(@event, lastCompletionCommitId))
+                                      .ToReadOnlyCollection();
+            }
+
+            return interviewEvents;
         }
 
         private static bool ShouldNotSendEvent(CommittedEvent committedEvent, Guid lastCompletionCommitId)

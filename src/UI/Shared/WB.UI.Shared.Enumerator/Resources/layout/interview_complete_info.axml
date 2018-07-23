@@ -95,7 +95,7 @@
     <LinearLayout style="@style/Interview_Question" android:orientation="vertical">
         <TextView
           style="@style/Interview_Complete_Screen_Text"
-          local:MvxBind="Text CompleteCommentLabel" />
+          local:MvxBind="Text CommentLabel" />
         <EditText
           android:id="@+id/Complete_NoteToSupervisorTxt"
           android:inputType="textMultiLine"
@@ -105,7 +105,7 @@
           android:gravity="top|left"
           style="@style/Interview_TextEditor"
           android:padding="@dimen/Interview_Question_Answer_Input_background_padding"
-          local:MvxBind="Text CompleteComment; Watermark Localization('TextQuestion_Hint');" />
+          local:MvxBind="Text Comment; Watermark Localization('TextQuestion_Hint');" />
     </LinearLayout>
 
     <View style="@style/Interview_Entity_Divider" />

@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using FluentAssertions;
 using Moq;
 using Ncqrs.Spec;
@@ -26,7 +28,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var questionnaireRepository = Stub<IQuestionnaireStorage>.Returning(questionnaire);
 
             interview = Create.AggregateRoot.Interview(questionnaireRepository: questionnaireRepository);
-            interview.Apply(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, ""));
+            interview.Apply(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, "", DateTimeOffset.Now));
             interview.Apply(new InterviewerAssigned(userId, userId, DateTime.Now));
 
             command = Create.Command.SynchronizeInterviewEventsCommand(
@@ -62,7 +64,13 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
         static InterviewException exception;
 
-        static readonly IEvent[] eventsToPublish = new IEvent[] { new AnswersDeclaredInvalid(new Identity[0]), new GroupsEnabled(new Identity[0]) };
+        static readonly IEvent[] eventsToPublish = new IEvent[]
+        {
+            new AnswersDeclaredInvalid(
+                new Identity[0].ToDictionary<Identity, Identity, IReadOnlyList<FailedValidationCondition>>(question => question, question => new List<FailedValidationCondition>()), 
+                DateTimeOffset.Now),
+            new GroupsEnabled(new Identity[0], DateTimeOffset.Now)
+        };
         static SynchronizeInterviewEventsCommand command;
     }
 }

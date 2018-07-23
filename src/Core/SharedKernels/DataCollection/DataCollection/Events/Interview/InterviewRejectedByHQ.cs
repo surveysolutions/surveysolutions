@@ -7,8 +7,8 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
     {
         public string Comment { get; private set; }
 
-        public InterviewRejectedByHQ(Guid userId, string comment)
-            : base(userId)
+        public InterviewRejectedByHQ(Guid userId, string comment, DateTimeOffset originDate)
+            : base(userId, originDate)
         {
             this.Comment = comment;
         }

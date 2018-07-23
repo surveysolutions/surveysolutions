@@ -36,17 +36,5 @@ namespace Main.Core.Events
         public DateTime EventTimeStamp { get; set; }
 
         public IEvent Payload { get; set; }
-        
-        public UncommittedEvent CreateUncommitedEvent(int eventSequence, int initialVersionOfEventSource,
-                                                      DateTime? eventTimestamp = null)
-        {
-            return new UncommittedEvent(
-                this.EventIdentifier,
-                this.EventSourceId,
-                eventSequence,
-                initialVersionOfEventSource,
-                eventTimestamp ?? this.EventTimeStamp,
-                this.Payload);
-        }
     }
 }

@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.Enumerator.Denormalizer;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -40,11 +41,11 @@ namespace WB.UI.Interviewer
 
             if (currentInterviewer == null)
             {
-                viewModelNavigationService.NavigateToFinishInstallationAsync().ConfigureAwait(false);
+                viewModelNavigationService.NavigateToFinishInstallationAsync().WaitAndUnwrapException();
             }
             else
             {
-                viewModelNavigationService.NavigateToLoginAsync().ConfigureAwait(false);
+                viewModelNavigationService.NavigateToLoginAsync().WaitAndUnwrapException();
             }
         }
 

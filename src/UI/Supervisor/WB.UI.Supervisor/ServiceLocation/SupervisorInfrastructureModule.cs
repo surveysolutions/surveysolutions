@@ -1,10 +1,8 @@
-﻿using System.IO;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.IO;
 using System.Threading.Tasks;
 using Main.Core.Documents;
 using Ncqrs.Eventing.Storage;
-using NLog;
-using NLog.Config;
-using NLog.Targets;
 using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.BoundedContexts.Supervisor.Services.Implementation;
 using WB.Core.GenericSubdomains.Portable.Implementation;
@@ -24,13 +22,11 @@ using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Services.Internals;
-using WB.UI.Shared.Enumerator.Services.Logging;
-using WB.UI.Supervisor.Services;
-using WB.UI.Supervisor.Services.Implementation;
 using IPrincipal = WB.Core.SharedKernels.Enumerator.Services.Infrastructure.IPrincipal;
 
 namespace WB.UI.Supervisor.ServiceLocation
 {
+    [ExcludeFromCodeCoverage]
     public class SupervisorInfrastructureModule : IModule
     {
         public void Load(IIocRegistry registry)
@@ -41,22 +37,8 @@ namespace WB.UI.Supervisor.ServiceLocation
 
             var pathToLocalDirectory = AndroidPathUtils.GetPathToInternalDirectory();
 
-            var fileName = Path.Combine(pathToLocalDirectory, "Logs", "${shortdate}.log");
-            var fileTarget = new FileTarget("logFile")
-            {
-                FileName = fileName,
-                Layout = "${longdate}[${logger}][${level}][${message}][${onexception:${exception:format=toString,Data}|${stacktrace}}]"
-            };
-
-            var config = new LoggingConfiguration();
-            config.AddTarget("logFile", fileTarget);
-            config.LoggingRules.Add(new LoggingRule("*", LogLevel.Warn, fileTarget));
-            LogManager.Configuration = config;
-
             registry.BindAsSingletonWithConstructorArgument<IBackupRestoreService, BackupRestoreService>(
                 "privateStorage", pathToLocalDirectory);
-
-            registry.Bind<ILoggerProvider, NLogLoggerProvider>();
 
             registry.BindAsSingletonWithConstructorArgument<IQuestionnaireAssemblyAccessor, InterviewerQuestionnaireAssemblyAccessor>(
                 "pathToAssembliesDirectory", AndroidPathUtils.GetPathToSubfolderInLocalDirectory("assemblies"));
@@ -66,7 +48,6 @@ namespace WB.UI.Supervisor.ServiceLocation
 
             registry.BindAsSingleton<IPlainKeyValueStorage<QuestionnaireDocument>, QuestionnaireKeyValueStorage>();
 
-            registry.Bind<IInterviewerQuestionnaireAccessor, InterviewerQuestionnaireAccessor>();
             registry.Bind<IInterviewerInterviewAccessor, InterviewerInterviewAccessor>();
             registry.Bind<IInterviewEventStreamOptimizer, InterviewEventStreamOptimizer>();
             registry.Bind<IQuestionnaireTranslator, QuestionnaireTranslator>();
@@ -74,9 +55,11 @@ namespace WB.UI.Supervisor.ServiceLocation
             registry.Bind<IAudioFileStorage, InterviewerAudioFileStorage>();
             registry.Bind<IImageFileStorage, InterviewerImageFileStorage>();
             registry.Bind<IAnswerToStringConverter, AnswerToStringConverter>();
+            registry.Bind<IInterviewerQuestionnaireAccessor, SupervisorQuestionnaireAccessor>();
             registry.BindAsSingleton<IAssignmentDocumentsStorage, AssignmentDocumentsStorage>();
             registry.BindAsSingleton<IAuditLogService, EnumeratorAuditLogService>();
-
+            registry.BindAsSingleton<ITabletInfoService, TabletInfoService>();
+            
             registry.BindAsSingleton<IEnumeratorEventStorage, SqliteMultiFilesEventStorage>();
             registry.BindToRegisteredInterface<IEventStore, IEnumeratorEventStorage>();
 
@@ -86,11 +69,10 @@ namespace WB.UI.Supervisor.ServiceLocation
                 PathToInterviewsDirectory = AndroidPathUtils.GetPathToSubfolderInLocalDirectory($"data{Path.DirectorySeparatorChar}interviews")
             });
 
-
             registry.BindAsSingleton(typeof(IPlainStorage<,>), typeof(SqlitePlainStorage<,>));
             registry.BindAsSingleton(typeof(IPlainStorage<>), typeof(SqlitePlainStorage<>));
         }
 
-        public Task Init(IServiceLocator serviceLocator) => Task.CompletedTask;
+        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status) => Task.CompletedTask;
     }
 }

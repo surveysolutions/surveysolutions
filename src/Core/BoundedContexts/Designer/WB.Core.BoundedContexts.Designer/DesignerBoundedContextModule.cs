@@ -42,6 +42,7 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 
 namespace WB.Core.BoundedContexts.Designer
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class DesignerBoundedContextModule : IModule
     {
         private readonly ICompilerSettings compilerSettings;
@@ -93,7 +94,7 @@ namespace WB.Core.BoundedContexts.Designer
             registry.Bind(typeof(ITopologicalSorter<>), typeof(TopologicalSorter<>));
         }
 
-        public Task Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
             CommandRegistry
                 .Setup<User>()

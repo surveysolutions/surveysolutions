@@ -19,8 +19,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Synchronizat
         public void Should_raise_interview_key_assigned_event()
         {
             var interview = Create.AggregateRoot.Interview();
-            interview.Apply(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, ""));
-            interview.Apply(new InterviewerAssigned(userId, userId, DateTime.Now));
+            interview.Apply(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, "", DateTimeOffset.Now));
+            interview.Apply(new InterviewerAssigned(userId, userId, DateTimeOffset.Now));
 
             var command = Create.Command.SynchronizeInterviewEventsCommand(interviewKey: Create.Entity.InterviewKey(8));
 

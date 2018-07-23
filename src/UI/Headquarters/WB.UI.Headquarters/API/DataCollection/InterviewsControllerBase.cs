@@ -61,15 +61,17 @@ namespace WB.UI.Headquarters.API.DataCollection
         public virtual HttpResponseMessage Get()
         {
             var resultValue = GetInProgressInterviewsForResponsible(this.authorizedUser.Id)
-                .Select(interview => new InterviewApiView()
+                .Select(interview => new InterviewApiView
                 {
                     Id = interview.Id,
                     QuestionnaireIdentity = interview.QuestionnaireIdentity,
-                    IsRejected = interview.IsRejected
+                    IsRejected = interview.IsRejected,
+                    ResponsibleId = interview.ResponsibleId,
+                    Sequence = interview.LastEventSequence
                 }).ToList();
 
             var response = this.Request.CreateResponse(resultValue);
-            response.Headers.CacheControl = new CacheControlHeaderValue()
+            response.Headers.CacheControl = new CacheControlHeaderValue
             {
                 Public = false,
                 NoCache = true
@@ -109,13 +111,14 @@ namespace WB.UI.Headquarters.API.DataCollection
             if (string.IsNullOrEmpty(package.Events))
                 return Request.CreateErrorResponse(HttpStatusCode.BadRequest, "Server cannot accept empty package content.");
 
+            var targetStatus = (InterviewStatus) package.MetaInfo.Status;
             var interviewPackage = new InterviewPackage
             {
                 InterviewId = package.InterviewId,
                 QuestionnaireId = package.MetaInfo.TemplateId,
                 QuestionnaireVersion = package.MetaInfo.TemplateVersion,
-                InterviewStatus = (InterviewStatus)package.MetaInfo.Status,
-                ResponsibleId = package.MetaInfo.ResponsibleId,
+                InterviewStatus = targetStatus,
+                ResponsibleId =  package.MetaInfo.ResponsibleId,
                 IsCensusInterview = package.MetaInfo.CreatedOnClient ?? false,
                 IncomingDate = DateTime.UtcNow,
                 Events = package.Events

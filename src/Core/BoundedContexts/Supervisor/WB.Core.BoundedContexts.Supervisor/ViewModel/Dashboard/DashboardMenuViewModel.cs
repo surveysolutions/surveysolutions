@@ -18,10 +18,13 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         
         private int toBeAssignedItemsCount;
         private int outboxItemsCount;
+        private int sentToInterviewerCount;
         private int waitingForDecisionCount;
 
         protected readonly IPrincipal Principal;
         private MvxSubscriptionToken messengerSubscribtion;
+
+        private MvxSubscriptionToken syncMessengerSubscribtion;
 
         public DashboardMenuViewModel(IMvxNavigationService mvxNavigationService, 
             IMvxMessenger messenger,
@@ -35,21 +38,16 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             this.Principal = principal ?? throw new ArgumentNullException(nameof(principal));
         }
 
-        public override Task Initialize()
+        public override async Task Initialize()
         {
-            
-            RefreshCounters();
-
-            this.UserName = Principal.CurrentUserIdentity.Name;
-            this.UserEmail = Principal.CurrentUserIdentity.Email;
-
-            return Task.CompletedTask;
+            await base.Initialize();
         }
 
         public override void ViewAppeared()
         {
             base.ViewAppeared();
-            messengerSubscribtion = messenger.Subscribe<SynchronizationCompletedMsg>(msg => RefreshCounters(), MvxReference.Strong);
+            messengerSubscribtion = messenger.Subscribe<DashboardChangedMsg>(msg => RefreshCounters(), MvxReference.Strong);
+            RefreshCounters();
         }
 
         public override void ViewDisappeared()
@@ -63,10 +61,27 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             this.ToBeAssignedItemsCount = dashboardItemsAccessor.TasksToBeAssignedCount();
             this.WaitingForDecisionCount = dashboardItemsAccessor.WaitingForSupervisorActionCount();
             this.OutboxItemsCount = dashboardItemsAccessor.OutboxCount();
+            this.SentToInterviewerCount = dashboardItemsAccessor.SentToInterviewerCount();
+
+            this.UserName = Principal.CurrentUserIdentity.Name;
+            this.UserEmail = Principal.CurrentUserIdentity.Email;
         }
 
-        public string UserName { get; set; }
-        public string UserEmail { get; set; }
+        private string userName;
+
+        public string UserName
+        {
+            get => userName;
+            set => SetProperty(ref userName, value);
+        }
+
+        private string userEmail;
+
+        public string UserEmail
+        {
+            get => userEmail;
+            set => SetProperty(ref userEmail, value);
+        }
 
         public int Counter { get; set; }
 
@@ -80,6 +95,12 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         {
             get => outboxItemsCount;
             set => SetProperty(ref outboxItemsCount, value);
+        }
+
+        public int SentToInterviewerCount
+        {
+            get => sentToInterviewerCount;
+            set => SetProperty(ref sentToInterviewerCount, value);
         }
 
         public int WaitingForDecisionCount
@@ -97,6 +118,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         public IMvxCommand ShowOutboxItems =>
             new MvxAsyncCommand(async () => await mvxNavigationService.Navigate<OutboxViewModel>());
 
+        public IMvxCommand ShowSentItems => 
+            new MvxAsyncCommand(async () => await mvxNavigationService.Navigate<SentToInterviewerViewModel>());
 
         public IMvxCommand StartSync =>
             new MvxCommand(StartSynchronization);

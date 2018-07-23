@@ -61,6 +61,9 @@
     <EmbeddedResource Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.resx">
       <Link>UIResources.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.ro.resx">
+      <Link>UIResources.ro.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\Core\SharedKernels\Enumerator\Enumerator\Properties\UIResources.ru.resx">
       <Link>UIResources.ru.resx</Link>
     </EmbeddedResource>

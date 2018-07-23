@@ -16,6 +16,7 @@
 
     <Button style="@style/Dashboard_NewTab_NoInterviewsSyncButton"
             local:MvxBind="Text Localization('Dashboard_NoInterviewsSyncButton');
+                               Visible SynchronizationWithHqEnabled;
                                Click SynchronizationCommand;" />
   </LinearLayout>
   <MvxRecyclerView

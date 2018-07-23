@@ -1437,6 +1437,14 @@ header > .red-line {
     html body main .servers-error .centered-box-table {
       text-align: left; } }
 
+.under-construction .page-header {
+  background: url("../img/logo_under_constraction.jpg") 0 100px no-repeat;
+  padding-left: 100px;
+  padding-top: 100px; }
+  .under-construction .page-header p {
+    font-size: 12px;
+    line-height: 14px; }
+
 .question.with-flag {
   display: block;
   background-image: -webkit-gradient(linear, left top, right top, from(#ececec), to(#ececec));

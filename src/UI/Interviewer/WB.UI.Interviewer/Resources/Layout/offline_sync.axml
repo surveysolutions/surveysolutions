@@ -4,10 +4,132 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <TextView
-        style="@style/Dashboard_Search_SearchResult"
-        local:MvxBind="Text Status;" />
-    <TextView
-        style="@style/Dashboard_Search_SearchResult"
-        local:MvxBind="Text StatusDetails;" />
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/appbar">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            local:layout_scrollFlags="enterAlways|scroll" />
+    </android.support.design.widget.AppBarLayout>
+
+    <LinearLayout android:orientation="vertical"
+                  android:layout_height="wrap_content"
+                  style="@style/OfflineSync_MainHolder">
+        <TextView
+            style="@style/OfflineSync_Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            local:MvxBind="Text Title">
+        </TextView>
+        <TextView
+            style="@style/OfflineSync_ProgressTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            local:MvxBind="Text ProgressTitle; TextColor TransferingStatusToTextColor(TransferingStatus)">
+        </TextView>
+        <TextView
+            style="@style/OfflineSync_SubTitleText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            local:MvxBind="Text Localization('SendToSupervisor_SomeInterviewsOnSupervisor'); Visible Or(EnumToString(TransferingStatus) == 'Aborted', EnumToString(TransferingStatus) == 'CompletedWithErrors')">
+        </TextView>
+
+        <LinearLayout android:orientation="vertical"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      local:MvxBind="Visible EnumToString(TransferingStatus) == 'WaitingDevice'">
+            <LinearLayout android:orientation="horizontal"
+                          android:layout_width="match_parent"
+                          android:layout_height="wrap_content">
+
+                <ProgressBar style="@style/OfflineSync_InfinityProgress"/>
+
+                <TextView style="@style/OfflineSync_SearchDevice"
+                          android:layout_width="wrap_content"
+                          local:MvxBind="Text ConnectionStatus"/>
+            </LinearLayout>
+
+            <TextView style="@style/OfflineSync_Cancel"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      local:MvxBind="Text Localization('OfflineSync_Cancel'); Click CancelCommand"/>
+        </LinearLayout>
+
+        <TextView style="@style/OfflineSync_ProgressTitle"
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  local:MvxBind="Text Localization('SendToSupervisor_ConnectionFailed'); Visible EnumToString(TransferingStatus) == 'Failed'"/>
+
+        <LinearLayout android:orientation="vertical"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      local:MvxBind="Visible EnumToString(TransferingStatus) == 'Transferring'">
+
+            <TextView style="@style/OfflineSync_ProgressStatus"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      local:MvxBind="Text ProgressStatus"/>
+            
+            <TextView style="@style/OfflineSync_HeaderText"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      local:MvxBind="Text ProgressStatusDescription"/>
+
+            <TableLayout
+                style="@style/FullWidthWrappingLayout"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:stretchColumns="0">
+                <TableRow>
+                    <ProgressBar
+                        style="@style/OfflineSync_Progress"
+                        android:layout_height="wrap_content"
+                        android:layout_width="match_parent"
+                        local:MvxBind="Progress ProgressInPercents"/>
+
+                    <TextView style="@style/OfflineSync_Abort"
+                              android:layout_width="wrap_content"
+                              android:layout_height="wrap_content"
+                              local:MvxBind="Text Localization('OfflineSync_Abort'); Click AbortCommand"/>
+                </TableRow>
+            </TableLayout>
+
+            <TextView style="@style/OfflineSync_NetworkInfo"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      local:MvxBind="Text NetworkInfo"/>
+        </LinearLayout>
+
+        <Button style="@style/OfflineSync_Done"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                local:MvxBind="Text Localization('OfflineSync_Done'); Click DoneCommand; Visible EnumToString(TransferingStatus) == 'Completed'"/>
+
+        <LinearLayout android:orientation="horizontal"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      style="@style/SendToSupervisor_Navigation"
+                      local:MvxBind="Visible Or(Or(EnumToString(TransferingStatus) == 'Failed', EnumToString(TransferingStatus) == 'Aborted'), EnumToString(TransferingStatus) == 'CompletedWithErrors')">
+            <Button style="@style/SendToSupervisor_Retry"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    local:MvxBind="Text Localization('SendToSupervisor_Retry'); Click RetryCommand"/>
+            <TextView style="@style/OfflineSync_BackToDashboard"
+                      android:layout_width="wrap_content"
+                      android:layout_height="match_parent"
+                      local:MvxBind="Text Localization('OfflineSync_BackToDashboard'); Click CancelCommand"/>
+        </LinearLayout>
+
+        <TextView
+            style="@style/SendToSupervisor_Note"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            local:MvxBind="Text Localization('SendToSupervisor_Note'); Visible ShowNote">
+        </TextView>
+    </LinearLayout>
 </LinearLayout>

@@ -7,12 +7,19 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 
 namespace WB.Core.BoundedContexts.Tester.Services
 {
-    public class InMemoryPlainStorage<TEntity> : IPlainStorage<TEntity>
+    public class InMemoryPlainStorage<TEntity> : InMemoryPlainStorage<TEntity, string>, IPlainStorage<TEntity>
         where TEntity : class, IPlainStorageEntity
     {
-        public readonly Dictionary<string, TEntity> inMemroyStorage = new Dictionary<string, TEntity>();
 
-        public TEntity GetById(string id)
+    }
+
+
+    public class InMemoryPlainStorage<TEntity, TKey> : IPlainStorage<TEntity, TKey>
+        where TEntity : class, IPlainStorageEntity<TKey>
+    {
+        public readonly Dictionary<TKey, TEntity> inMemroyStorage = new Dictionary<TKey, TEntity>();
+
+        public TEntity GetById(TKey id)
         {
             return this.inMemroyStorage.ContainsKey(id) ? this.inMemroyStorage[id] : null;
         }
@@ -69,7 +76,7 @@ namespace WB.Core.BoundedContexts.Tester.Services
             }
         }
 
-        public void Remove(string id)
+        public void Remove(TKey id)
         {
             if (this.inMemroyStorage.ContainsKey(id)) this.inMemroyStorage.Remove(id);
         }

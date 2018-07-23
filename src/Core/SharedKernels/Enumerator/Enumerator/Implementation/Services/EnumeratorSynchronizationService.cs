@@ -10,7 +10,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -18,11 +18,10 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Questionnaire.Api;
 using WB.Core.SharedKernels.Questionnaire.Translations;
-using DownloadProgressChangedEventArgs = WB.Core.GenericSubdomains.Portable.Implementation.DownloadProgressChangedEventArgs;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
-    public abstract class EnumeratorSynchronizationService : ISynchronizationService, IAssignmentSynchronizationApi
+    public abstract class EnumeratorSynchronizationService : ISynchronizationService
     {
         protected abstract string ApiVersion { get; }
         protected abstract string ApiUrl { get; }
@@ -140,6 +139,16 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             return response;
         }
 
+        public Task LogAssignmentAsHandledAsync(int id, CancellationToken cancellationToken)
+        {
+            return Task.CompletedTask;
+        }
+
+        public Task SendSyncCompletedAsync(CancellationToken cancellationToken)
+        {
+            return Task.CompletedTask;
+        }
+
         public Task<AssignmentApiDocument> GetAssignmentAsync(int id, CancellationToken cancellationToken)
         {
             var response = this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<AssignmentApiDocument>(
@@ -213,27 +222,27 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         #region [Questionnaire Api]
 
 
-        public Task<byte[]> GetQuestionnaireAssemblyAsync(QuestionnaireIdentity questionnaire, Action<decimal, long, long> onDownloadProgressChanged,
+        public Task<byte[]> GetQuestionnaireAssemblyAsync(QuestionnaireIdentity questionnaire, IProgress<TransferProgress> transferProgress,
             CancellationToken token)
         {
             return this.TryGetRestResponseOrThrowAsync(async () =>
             {
                 var restFile = await this.restService.DownloadFileAsync(
                     url: $"{this.QuestionnairesController}/{questionnaire.QuestionnaireId}/{questionnaire.Version}/assembly",
-                    onDownloadProgressChanged: ToDownloadProgressChangedEvent(onDownloadProgressChanged),
+                    transferProgress: transferProgress,
                     token: token,
                     credentials: this.restCredentials).ConfigureAwait(false);
                 return restFile.Content;
             });
         }
 
-        public Task<QuestionnaireApiView> GetQuestionnaireAsync(QuestionnaireIdentity questionnaire, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token)
+        public Task<QuestionnaireApiView> GetQuestionnaireAsync(QuestionnaireIdentity questionnaire, IProgress<TransferProgress> transferProgress, CancellationToken token)
         {
             var questionnaireContentVersion = this.enumeratorSettings.GetSupportedQuestionnaireContentVersion().Major;
 
             return this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<QuestionnaireApiView>(
                 url: $"{this.QuestionnairesController}/{questionnaire.QuestionnaireId}/{questionnaire.Version}/{questionnaireContentVersion}",
-                onDownloadProgressChanged: ToDownloadProgressChangedEvent(onDownloadProgressChanged),
+                transferProgress: transferProgress,
                 token: token,
                 credentials: this.restCredentials));
         }
@@ -308,7 +317,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 credentials: this.restCredentials));
         }
 
-        public Task<List<CommittedEvent>> GetInterviewDetailsAsync(Guid interviewId, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token)
+        public Task<List<CommittedEvent>> GetInterviewDetailsAsync(Guid interviewId, IProgress<TransferProgress> transferProgress, CancellationToken token)
         {
             try
             {
@@ -316,7 +325,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     () =>  this.restService.GetAsync<List<CommittedEvent>>(
                         url: string.Concat(this.InterviewsController, "/", interviewId),
                         credentials: this.restCredentials,
-                        onDownloadProgressChanged: ToDownloadProgressChangedEvent(onDownloadProgressChanged),
+                        transferProgress: transferProgress,
                         token: token));
             }
             catch (SynchronizationException exception)
@@ -330,7 +339,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             }
         }
 
-        public Task UploadInterviewAsync(Guid interviewId, InterviewPackageApiView completedInterview, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token)
+        public Task UploadInterviewAsync(Guid interviewId, InterviewPackageApiView completedInterview, IProgress<TransferProgress> transferProgress, CancellationToken token)
         {
             return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
                 url: string.Concat(this.InterviewsController, "/", interviewId),
@@ -339,21 +348,21 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 token: token));
         }
 
-        public Task UploadInterviewImageAsync(Guid interviewId, string fileName, byte[] fileData, Action<decimal, long, long> onDownloadProgressChanged, CancellationToken token)
+        public Task UploadInterviewImageAsync(Guid interviewId, string fileName, byte[] fileData, IProgress<TransferProgress> transferProgress, CancellationToken token)
         {
             return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
-                url: string.Concat(this.InterviewsController, "/", interviewId, "/image"),
-                request: new PostFileRequest
+                string.Concat(this.InterviewsController, "/", interviewId, "/image"),
+                new PostFileRequest
                 {
                     InterviewId = interviewId,
                     FileName = fileName,
                     Data = Convert.ToBase64String(fileData)
                 },
-                credentials: this.restCredentials,
-                token: token));
+                this.restCredentials,
+                token));
         }
 
-        public Task UploadInterviewAudioAsync(Guid interviewId, string fileName, string contentType, byte[] fileData, Action<decimal, long, long> onDownloadProgressChanged,
+        public Task UploadInterviewAudioAsync(Guid interviewId, string fileName, string contentType, byte[] fileData, IProgress<TransferProgress> transferProgress,
             CancellationToken token)
         {
             return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
@@ -373,7 +382,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         
         #region Attachments
         public Task<List<string>> GetAttachmentContentsAsync(QuestionnaireIdentity questionnaire, 
-            Action<decimal, long, long> onDownloadProgressChanged,
+            IProgress<TransferProgress> transferProgress,
             CancellationToken token)
         {
             return this.TryGetRestResponseOrThrowAsync(() =>
@@ -384,14 +393,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         }
 
         public Task<AttachmentContent> GetAttachmentContentAsync(string contentId, 
-            Action<decimal, long, long> onDownloadProgressChanged, 
+            IProgress<TransferProgress> transferProgress, 
             CancellationToken token)
         {
             return this.TryGetRestResponseOrThrowAsync(async () =>
             {
                 var restFile = await this.restService.DownloadFileAsync(
                     url: $"{this.AttachmentContentController}/{contentId}",
-                    onDownloadProgressChanged: ToDownloadProgressChangedEvent(onDownloadProgressChanged),
+                    transferProgress: transferProgress,
                     token: token,
                     credentials: this.restCredentials).ConfigureAwait(false);
 
@@ -408,27 +417,27 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         #endregion
 
         #region [Application Api]
-        public Task<byte[]> GetApplicationAsync(CancellationToken token, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged = null) => 
+        public Task<byte[]> GetApplicationAsync(CancellationToken token, IProgress<TransferProgress> transferProgress = null) => 
             this.TryGetRestResponseOrThrowAsync(async () =>
             {
                 var restFile = await this.restService.DownloadFileAsync(
                     url: this.checkVersionUriProvider.CheckVersionUrl, token: token,
                     credentials: this.restCredentials, 
-                    onDownloadProgressChanged: onDownloadProgressChanged);
+                    transferProgress: transferProgress);
 
                 return restFile.Content;
             });
 
-        public Task<byte[]> GetApplicationPatchAsync(CancellationToken token, Action<DownloadProgressChangedEventArgs> onDownloadProgressChanged)
+        public Task<byte[]> GetApplicationPatchAsync(CancellationToken token, IProgress<TransferProgress> transferProgress)
         {
             return this.TryGetRestResponseOrThrowAsync(async () =>
             {
                 var interviewerPatchApiUrl = $"{this.checkVersionUriProvider.CheckVersionUrl}patch/{this.deviceSettings.GetApplicationVersionCode()}";
 
-                var restFile = await this.restService.DownloadFileAsync(url: interviewerPatchApiUrl, 
+                var restFile = await this.restService.DownloadFileAsync(url: interviewerPatchApiUrl,
                     token: token,
                     credentials: this.restCredentials,
-                    onDownloadProgressChanged: onDownloadProgressChanged);
+                    transferProgress: transferProgress);
 
                 return restFile.Content;
             });
@@ -437,9 +446,18 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         public Task<int?> GetLatestApplicationVersionAsync(CancellationToken token)
         {
             return this.TryGetRestResponseOrThrowAsync(async () =>
-                await this.restService.GetAsync<int?>(
-                    url: string.Concat(this.checkVersionUriProvider.CheckVersionUrl, "latestversion"),
-                    credentials: this.restCredentials, token: token).ConfigureAwait(false));
+            {
+                try
+                {
+                    return await this.restService.GetAsync<int?>(
+                        url: string.Concat(this.checkVersionUriProvider.CheckVersionUrl, "latestversion"),
+                        credentials: this.restCredentials, token: token).ConfigureAwait(false);
+                }
+                catch (RestException rest) when (rest.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return null;
+                }
+            });
         }
 
         public Task SendBackupAsync(string filePath, CancellationToken token)
@@ -596,16 +614,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             }
 
             return new SynchronizationException(exceptionType, exceptionMessage, ex);
-        }
-
-        private static Action<DownloadProgressChangedEventArgs> ToDownloadProgressChangedEvent(Action<decimal, long, long> onDownloadProgressChanged)
-        {
-            void OnDownloadProgressChangedInternal(DownloadProgressChangedEventArgs args)
-            {
-                onDownloadProgressChanged?.Invoke(args.ProgressPercentage, args.BytesReceived, args.TotalBytesToReceive ?? 0);
-            }
-
-            return OnDownloadProgressChangedInternal;
         }
 
         public async Task<CompanyLogoInfo> GetCompanyLogo(string storedClientEtag, CancellationToken cancellationToken)

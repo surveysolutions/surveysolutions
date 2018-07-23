@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using MvvmCross.Base;
 using MvvmCross.ViewModels;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
@@ -32,6 +33,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             try
             {
                 var newItems = this.GetUiItems().ToList();
+                foreach (var uiItem in this.UiItems)
+                {
+                    uiItem.DisposeIfDisposable();
+                }
                 this.UiItems.ReplaceWith(newItems);
             }
             finally

@@ -14,6 +14,7 @@ using WB.Core.Infrastructure.Modularity;
 
 namespace WB.Core.Infrastructure
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class EventFreeInfrastructureModule : IModule
     {
         public void Load(IIocRegistry registry)
@@ -23,7 +24,7 @@ namespace WB.Core.Infrastructure
             registry.Bind<IAggregateSnapshotter, DummyAggregateSnapshotter>();
         }
 
-        public Task Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
             return Task.CompletedTask;
         }

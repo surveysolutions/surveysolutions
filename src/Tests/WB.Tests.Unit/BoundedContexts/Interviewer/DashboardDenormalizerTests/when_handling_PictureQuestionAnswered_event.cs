@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
         [OneTimeSetUp]
         public void context()
         {
-            evnt = Create.Event.PictureQuestionAnswered(questionId, answerTimeUtc: this.answerTimeUtc).ToPublishedEvent(interviewId);
+            evnt = Create.Event.PictureQuestionAnswered(questionId, originDate: this.answerTime).ToPublishedEvent(interviewId);
 
             interviewViewStorage = new SqliteInmemoryStorage<InterviewView>();
             interviewViewStorage.Store(Create.Entity.InterviewView(interviewId: interviewId, questionnaireId: questionnaireIdentity.ToString()));
@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
 
         [Test]
         public void should_set_answer_time_as_start_date_for_interview() =>
-            interviewViewStorage.GetById(interviewId.FormatGuid())?.StartedDateTime.Should().Be(this.answerTimeUtc);
+            interviewViewStorage.GetById(interviewId.FormatGuid())?.StartedDateTime.Should().Be(this.answerTime.UtcDateTime);
 
         private static InterviewDashboardEventHandler denormalizer;
         private static IPublishedEvent<PictureQuestionAnswered> evnt;
@@ -50,6 +50,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
         private static SqliteInmemoryStorage<InterviewView> interviewViewStorage;
         private static readonly QuestionnaireIdentity questionnaireIdentity = new QuestionnaireIdentity(Guid.Parse("33333333333333333333333333333333"), 1);
         private static readonly Guid questionId = Guid.Parse("11111111111111111111111111111111");
-        private readonly DateTime answerTimeUtc = new DateTime(2000, 3, 28).ToUniversalTime();
+        private readonly DateTimeOffset answerTime = new DateTimeOffset(new DateTime(2000, 3, 28).ToUniversalTime());
     }
 }

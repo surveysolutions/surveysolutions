@@ -192,5 +192,7 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         bool IsParentOf(Identity parentIdentity, Identity childIdentity);
 
         bool IsAnswerProtected(Identity questionIdentity, decimal value);
+
+
     }
 }

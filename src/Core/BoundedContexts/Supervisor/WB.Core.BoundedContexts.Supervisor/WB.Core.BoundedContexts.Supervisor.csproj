@@ -28,6 +28,11 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
+    <Compile Update="Properties\SupervisorUIResources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>SupervisorUIResources.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -35,16 +40,30 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>InterviewDetails.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <EmbeddedResource Update="Properties\InterviewDetails.ru.resx">
+      <DependentUpon>InterviewDetails.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Update="Properties\InterviewMessages.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>InterviewMessages.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Properties\InterviewMessages.ru.resx">
       <Generator></Generator>
+      <DependentUpon>InterviewMessages.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Update="Properties\SupervisorDashboard.resx">
       <LastGenOutput>SupervisorDashboard.Designer.cs</LastGenOutput>
       <Generator>PublicResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Properties\SupervisorDashboard.ru.resx">
+      <DependentUpon>SupervisorDashboard.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Properties\SupervisorUIResources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>SupervisorUIResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Properties\SupervisorUIResources.ru.resx">
+      <DependentUpon>SupervisorUIResources.resx</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
 

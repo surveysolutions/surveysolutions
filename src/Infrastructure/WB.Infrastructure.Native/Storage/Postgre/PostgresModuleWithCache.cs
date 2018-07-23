@@ -72,7 +72,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             }
         }
 
-        public virtual Task Init(IServiceLocator serviceLocator)
+        public virtual Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
             return Task.CompletedTask;
         }

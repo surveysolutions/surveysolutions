@@ -27,12 +27,6 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
 
         public void Prepare(Guid? parameter) => this.lastVisitedInterviewId = parameter;
 
-        public override async Task Initialize()
-        {
-            await base.Initialize();
-            await this.UpdateUiItems();
-        }
-
         public OutboxViewModel(IDashboardItemsAccessor dashboardItemsAccessor,
             IInterviewViewModelFactory viewModelFactory)
         {
@@ -52,6 +46,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             var interviewIndex = 1;
             foreach (var dashboardItem in this.dashboardItemsAccessor.Outbox())
             {
+                yield return dashboardItem;
+
                 if (dashboardItem is SupervisorDashboardInterviewViewModel interviewDashboardItem &&
                     interviewDashboardItem.InterviewId == lastVisitedInterviewId)
                 {
@@ -59,8 +55,6 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
                 }
 
                 interviewIndex++;
-
-                yield return dashboardItem;
             }
         }
     }

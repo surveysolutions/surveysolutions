@@ -14,21 +14,21 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
         public void when_create_interview_status_history_should_contains_timestaps_from_events()
         {
             var interviewId = Guid.NewGuid();
-            var currentTime = DateTime.UtcNow;
+            var currentTime = DateTimeOffset.Now;
             var interviewSummary = Create.Entity.InterviewSummary(interviewId);
             var denormalizer = CreateStatusChangeHistoryDenormalizerFunctional();
 
-            denormalizer.Update(interviewSummary, Create.PublishedEvent.InterviewCreated(interviewId: interviewId, createTime: currentTime.AddSeconds(1)));
-            denormalizer.Update(interviewSummary, Create.PublishedEvent.SupervisorAssigned(interviewId: interviewId, assignTime: currentTime.AddSeconds(2)));
-            denormalizer.Update(interviewSummary, Create.PublishedEvent.InterviewerAssigned(interviewId: interviewId, assignTime: currentTime.AddSeconds(3)));
+            denormalizer.Update(interviewSummary, Create.PublishedEvent.InterviewCreated(interviewId: interviewId, originDate: currentTime.AddSeconds(1)));
+            denormalizer.Update(interviewSummary, Create.PublishedEvent.SupervisorAssigned(interviewId: interviewId, originDate: currentTime.AddSeconds(2)));
+            denormalizer.Update(interviewSummary, Create.PublishedEvent.InterviewerAssigned(interviewId: interviewId, originDate: currentTime.AddSeconds(3)));
 
             var statuses = interviewSummary.InterviewCommentedStatuses;
             Assert.That(InterviewExportedAction.Created, Is.EqualTo(statuses[0].Status));
-            Assert.That(currentTime.AddSeconds(1), Is.EqualTo(statuses[0].Timestamp));
+            Assert.That(currentTime.AddSeconds(1).UtcDateTime, Is.EqualTo(statuses[0].Timestamp));
             Assert.That(InterviewExportedAction.SupervisorAssigned, Is.EqualTo(statuses[1].Status));
-            Assert.That(currentTime.AddSeconds(2), Is.EqualTo(statuses[1].Timestamp));
+            Assert.That(currentTime.AddSeconds(2).UtcDateTime, Is.EqualTo(statuses[1].Timestamp));
             Assert.That(InterviewExportedAction.InterviewerAssigned, Is.EqualTo(statuses[2].Status));
-            Assert.That(currentTime.AddSeconds(3), Is.EqualTo(statuses[2].Timestamp));
+            Assert.That(currentTime.AddSeconds(3).UtcDateTime, Is.EqualTo(statuses[2].Timestamp));
         }
 
         [Test]
@@ -95,15 +95,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
 
             var denormalizer = CreateStatusChangeHistoryDenormalizerFunctional();
             var interviewSummary = Create.Entity.InterviewSummary(interviewId);
-            DateTime startDate = new DateTime(2010, 11, 1);
+            var startDate = new DateTimeOffset(new DateTime(2010, 11, 1));
 
             // Act
-            denormalizer.Update(interviewSummary, Create.PublishedEvent.InterviewCreated(interviewId: interviewId, createTime: startDate));
-            denormalizer.Update(interviewSummary, Create.PublishedEvent.InterviewerAssigned(interviewId: interviewId, assignTime: startDate));
-            denormalizer.Update(interviewSummary, Create.PublishedEvent.TextQuestionAnswered(interviewId: interviewId, answerTime: startDate.AddHours(2)));
-            denormalizer.Update(interviewSummary, Create.Event.InterviewPaused().ToPublishedEvent(eventSourceId: interviewId));
-            denormalizer.Update(interviewSummary, Create.Event.InterviewResumed().ToPublishedEvent(eventSourceId: interviewId));
-            denormalizer.Update(interviewSummary, Create.PublishedEvent.InterviewCompleted(interviewId: interviewId, completeTime: startDate.AddHours(5)));
+            denormalizer.Update(interviewSummary, Create.PublishedEvent.InterviewCreated(interviewId: interviewId, originDate: startDate));
+            denormalizer.Update(interviewSummary, Create.PublishedEvent.InterviewerAssigned(interviewId: interviewId, originDate: startDate));
+            denormalizer.Update(interviewSummary, Create.PublishedEvent.TextQuestionAnswered(interviewId: interviewId, originDate: startDate.AddHours(2)));
+            denormalizer.Update(interviewSummary, Create.Event.InterviewPaused(startDate.AddHours(2)).ToPublishedEvent(eventSourceId: interviewId));
+            denormalizer.Update(interviewSummary, Create.Event.InterviewResumed(startDate.AddHours(2)).ToPublishedEvent(eventSourceId: interviewId));
+            denormalizer.Update(interviewSummary, Create.PublishedEvent.InterviewCompleted(interviewId: interviewId, originDate: startDate.AddHours(5)));
 
             // Assert
             Assert.That(interviewSummary.InterviewCommentedStatuses.Last(), 
@@ -117,14 +117,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.EventHandlers.StatusChang
 
             var denormalizer = CreateStatusChangeHistoryDenormalizerFunctional();
             var interviewSummary = Create.Entity.InterviewSummary(interviewId);
-            DateTime startDate = new DateTime(2010, 11, 1);
+            var startDate = new DateTimeOffset(new DateTime(2010, 11, 1));
 
             // Act
-            denormalizer.Update(interviewSummary, Create.PublishedEvent.InterviewCreated(interviewId: interviewId, createTime: startDate));
-            denormalizer.Update(interviewSummary, Create.PublishedEvent.SupervisorAssigned(interviewId: interviewId, assignTime: startDate.AddHours(2)));
+            denormalizer.Update(interviewSummary, Create.PublishedEvent.InterviewCreated(interviewId: interviewId, originDate: startDate));
+            denormalizer.Update(interviewSummary, Create.PublishedEvent.SupervisorAssigned(interviewId: interviewId, originDate: startDate.AddHours(2)));
             denormalizer.Update(interviewSummary, Create.Event.InterviewClosedBySupervisor().ToPublishedEvent(eventSourceId: interviewId));
             denormalizer.Update(interviewSummary, Create.Event.InterviewOpenedBySupervisor().ToPublishedEvent(eventSourceId: interviewId));
-            denormalizer.Update(interviewSummary, Create.PublishedEvent.InterviewerAssigned(interviewId: interviewId, assignTime: startDate.AddHours(5)));
+            denormalizer.Update(interviewSummary, Create.PublishedEvent.InterviewerAssigned(interviewId: interviewId, originDate: startDate.AddHours(5)));
 
             // Assert
             Assert.That(interviewSummary.InterviewCommentedStatuses.Last(), 

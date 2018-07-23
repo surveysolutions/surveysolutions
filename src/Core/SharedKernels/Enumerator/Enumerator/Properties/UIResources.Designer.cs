@@ -1332,6 +1332,69 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Abort.
+        /// </summary>
+        public static string OfflineSync_Abort {
+            get {
+                return ResourceManager.GetString("OfflineSync_Abort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Back to dashboard.
+        /// </summary>
+        public static string OfflineSync_BackToDashboard {
+            get {
+                return ResourceManager.GetString("OfflineSync_BackToDashboard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string OfflineSync_Cancel {
+            get {
+                return ResourceManager.GetString("OfflineSync_Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This device is not supported..
+        /// </summary>
+        public static string OfflineSync_DeviceNotSupported {
+            get {
+                return ResourceManager.GetString("OfflineSync_DeviceNotSupported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Done.
+        /// </summary>
+        public static string OfflineSync_Done {
+            get {
+                return ResourceManager.GetString("OfflineSync_Done", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Google Play Services must be installed..
+        /// </summary>
+        public static string OfflineSync_InstallPlayServices {
+            get {
+                return ResourceManager.GetString("OfflineSync_InstallPlayServices", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Speed: {0}, Time left: {1}.
+        /// </summary>
+        public static string OfflineSync_NetworkInfo {
+            get {
+                return ResourceManager.GetString("OfflineSync_NetworkInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ok.
         /// </summary>
         public static string Ok {

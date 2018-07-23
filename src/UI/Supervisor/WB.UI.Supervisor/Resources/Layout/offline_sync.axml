@@ -4,10 +4,64 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <TextView
-        style="@style/Dashboard_Search_SearchResult"
-        local:MvxBind="Text Status;" />
-    <TextView
-        style="@style/Dashboard_Search_SearchResult"
-        local:MvxBind="Text StatusDetails;" />
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/appbar">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            local:layout_scrollFlags="enterAlways|scroll" />
+    </android.support.design.widget.AppBarLayout>
+
+    <LinearLayout android:orientation="vertical"
+                  android:layout_height="wrap_content"
+                  style="@style/OfflineSync_MainHolder">
+        <TextView
+            style="@style/OfflineSync_Title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            local:MvxBind="Text Title">
+        </TextView>
+        <TextView
+            style="@style/OfflineSync_ProgressTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            local:MvxBind="Text ProgressTitle">
+        </TextView>
+
+        <LinearLayout android:orientation="vertical"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      local:MvxBind="Visible Not(HasConnectedDevices)">
+            <LinearLayout android:orientation="horizontal"
+                          android:layout_width="match_parent"
+                          android:layout_height="wrap_content">
+
+                <ProgressBar style="@style/OfflineSync_InfinityProgress"/>
+
+                <TextView style="@style/OfflineSync_SearchDevice"
+                          android:layout_width="wrap_content"
+                          local:MvxBind="Text Localization('OfflineSync_WaitingInterviewers')"/>
+            </LinearLayout>
+
+            <TextView style="@style/OfflineSync_Cancel"
+                      android:layout_width="wrap_content"
+                      android:layout_height="wrap_content"
+                      local:MvxBind="Text Localization('OfflineSync_Cancel'); Click CancelCommand"/>
+        </LinearLayout>
+
+        <MvxLinearLayout style="@style/FullWidthWrappingLayout"
+                         android:orientation="vertical"
+                         local:MvxBind="ItemsSource ConnectedDevices;"
+                         local:MvxItemTemplate="@layout/offline_sync_device_item" />
+
+        <Button style="@style/OfflineSync_Done"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                local:MvxBind="Text Localization('OfflineSync_Done'); Click DoneCommand; Visible AllSynchronizationsFinished"/>
+    </LinearLayout>
 </LinearLayout>
+

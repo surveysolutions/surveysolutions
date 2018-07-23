@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
+using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
 using Main.Core.Documents;
@@ -22,6 +24,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Entities;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace WB.Tests.Abc.TestFactories
@@ -189,23 +192,25 @@ namespace WB.Tests.Abc.TestFactories
         {
             private static long IdSource = 0;
 
-            public IPayload AsBytes(byte[] bytes)
+            public IPayload AsBytes(byte[] bytes, string endpoint)
             {
                 return new Payload
                 {
                     Bytes = bytes,
                     Type = PayloadType.Bytes,
-                    Id = Interlocked.Increment(ref IdSource)
+                    Id = Interlocked.Increment(ref IdSource),
+                    Endpoint = endpoint
                 };
             }
 
-            public IPayload AsStream(byte[] bytes)
+            public IPayload AsStream(byte[] bytes, string endpoint)
             {
                 return new Payload
                 {
                     Stream = new MemoryStream(bytes),
                     Id = Interlocked.Increment(ref IdSource),
-                    Type = PayloadType.Stream
+                    Type = PayloadType.Stream,
+                    Endpoint = endpoint
                 };
             }
         }
@@ -214,32 +219,54 @@ namespace WB.Tests.Abc.TestFactories
 
         internal abstract class FakeNearbyConnectionBase : INearbyConnection
         {
-            public Task StartDiscovery(string serviceName, Action<string, NearbyDiscoveredEndpointInfo> foundEndpoint, Action<string> lostEndpoint)
+            public Task<NearbyStatus> StartDiscoveryAsync(string serviceName, CancellationToken cancellationToken)
             {
                 throw new NotImplementedException();
             }
 
-            public Task<string> StartAdvertising(string serviceName, string name, NearbyConnectionLifeCycleCallback lifeCycleCallback)
+            public Task<string> StartAdvertisingAsync(string serviceName, string name, CancellationToken cancellationToken)
             {
                 throw new NotImplementedException();
             }
 
-            public Task RequestConnection(string name, string endpoint, NearbyConnectionLifeCycleCallback lifeCycleCallback)
+            public Task<NearbyStatus> RequestConnectionAsync(string name, string endpoint, CancellationToken cancellationToken)
             {
                 throw new NotImplementedException();
             }
 
-            public Task AcceptConnection(string endpoint)
+            public Task<NearbyStatus> AcceptConnectionAsync(string endpoint, CancellationToken cancellationToken)
             {
                 throw new NotImplementedException();
             }
 
-            public Task RejectConnection(string endpoint)
+            public Task<NearbyStatus> RejectConnectionAsync(string endpoint, CancellationToken cancellationToken)
             {
                 throw new NotImplementedException();
             }
 
-            public virtual Task SendPayloadAsync(string to, IPayload payload)
+            public virtual Task<NearbyStatus> SendPayloadAsync(string to, IPayload payload, CancellationToken cancellationToken)
+            {
+                throw new NotImplementedException();
+            }
+
+            public void StopAllEndpoint()
+            {
+                throw new NotImplementedException();
+            }
+
+            public IObservable<INearbyEvent> Events { get; } = new Subject<INearbyEvent>();
+            public ObservableCollection<RemoteEndpoint> RemoteEndpoints { get; } = new CovariantObservableCollection<RemoteEndpoint>();
+            public void StopDiscovery()
+            {
+                throw new NotImplementedException();
+            }
+
+            public void StopAdvertising()
+            {
+                throw new NotImplementedException();
+            }
+
+            public void StopAll()
             {
                 throw new NotImplementedException();
             }
@@ -278,20 +305,23 @@ namespace WB.Tests.Abc.TestFactories
                 return this;
             }
 
-            public override async Task SendPayloadAsync(string to, IPayload payload)
+            public override async Task<NearbyStatus> SendPayloadAsync(string to, IPayload payload, CancellationToken cancellationToken)
             {
                 var from = connectionMap[to];
                 var toClient = clientsMap[to];
                 var fromClient = clientsMap[from];
                 int delayIdx = 0;
 
-                // google services notify on outgoing progress
-                fromClient.RecievePayloadTransferUpdate(this, to, new NearbyPayloadTransferUpdate
+                if (payload.Type != PayloadType.Bytes)
                 {
-                    Status = TransferStatus.InProgress,
-                    BytesTransferred = 0,
-                    Id = payload.Id
-                });
+                    // google services notify on outgoing progress
+                    fromClient.RecievePayloadTransferUpdate(this, to, new NearbyPayloadTransferUpdate
+                    {
+                        Status = TransferStatus.InProgress,
+                        BytesTransferred = 0,
+                        Id = payload.Id
+                    });
+                }
 
                 fromClient.RecievePayloadTransferUpdate(this, to, new NearbyPayloadTransferUpdate
                 {
@@ -307,12 +337,15 @@ namespace WB.Tests.Abc.TestFactories
 
                 await NextDelay();
 
-                toClient.RecievePayloadTransferUpdate(this, from, new NearbyPayloadTransferUpdate
+                if (payload.Type != PayloadType.Bytes)
                 {
-                    Status = TransferStatus.InProgress,
-                    BytesTransferred = 0,
-                    Id = payload.Id
-                });
+                    toClient.RecievePayloadTransferUpdate(this, from, new NearbyPayloadTransferUpdate
+                    {
+                        Status = TransferStatus.InProgress,
+                        BytesTransferred = 0,
+                        Id = payload.Id
+                    });
+                }
 
                 await NextDelay();
 
@@ -333,11 +366,14 @@ namespace WB.Tests.Abc.TestFactories
                         }
                     }
                 }
+
+                return NearbyStatus.Ok;
             }
         }
 
         internal class Payload : IPayload
         {
+            public string Endpoint { get; set; }
             public byte[] Bytes { get; set; }
             public long Id { get; set; }
             public Stream Stream { get; set;  }

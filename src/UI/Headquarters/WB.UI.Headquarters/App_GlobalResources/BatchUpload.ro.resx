@@ -1,0 +1,576 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AdvancedMode" xml:space="preserve">
+    <value>Import avansat</value>
+  </data>
+  <data name="AdvancedModeDescription" xml:space="preserve">
+    <value>Pentru a preîncărca date în mai multe secțiuni și variabile, puteți pregăti un set de fișiere .tab care corespund structurii chestionarului dvs. și puneți-le într-o arhivă .zip. Utilizați arhiva template de mai jos. Puteți pune numai acele fișiere și coloane pe care doriți să le încărcați. Orice coloane lipsă sau cu titluri care nu corespund unei variabile existente în chestionar vor fi ignorate.</value>
+  </data>
+  <data name="All" xml:space="preserve">
+    <value>Tot</value>
+  </data>
+  <data name="AreYouSureYouWantToDeleteFormat" xml:space="preserve">
+    <value>Sunteți sigur că doriți să ștergeți acest fișier?</value>
+  </data>
+  <data name="AssignedToMultipleEnumerators" xml:space="preserve">
+    <value>Alocat către {0} anchetatori</value>
+  </data>
+  <data name="AssignedToMultipleSupervisors" xml:space="preserve">
+    <value>Alocat către {0} controlori</value>
+  </data>
+  <data name="AssignedToSingleEnumerator" xml:space="preserve">
+    <value>Alocat către 1 anchetator</value>
+  </data>
+  <data name="AssignedToSingleSupervisor" xml:space="preserve">
+    <value>Alocat către 1 controlor</value>
+  </data>
+  <data name="AssignmentsAreNotCreated" xml:space="preserve">
+    <value>Nu au fost alocate</value>
+  </data>
+  <data name="BackToImport" xml:space="preserve">
+    <value>Înapoi la import</value>
+  </data>
+  <data name="BatchDescription" xml:space="preserve">
+    <value>Încărcare fișier tab cu date de identificare și date colectate anterior.</value>
+  </data>
+  <data name="BatchFileVerificationFailed" xml:space="preserve">
+    <value>Încărcare eșuată a fișierului</value>
+  </data>
+  <data name="BatchTitle" xml:space="preserve">
+    <value>Date de identificare și date colectate anterior (arhivă)</value>
+  </data>
+  <data name="BatchUpload_Title" xml:space="preserve">
+    <value>Încărcare automată</value>
+  </data>
+  <data name="BreadCrumbs_CreatingMultipleInterviews" xml:space="preserve">
+    <value>creare de alocări multiple</value>
+  </data>
+  <data name="BrowseTeams" xml:space="preserve">
+    <value>Echipe</value>
+  </data>
+  <data name="Cell" xml:space="preserve">
+    <value>Celulă</value>
+  </data>
+  <data name="Code" xml:space="preserve">
+    <value>Cod</value>
+  </data>
+  <data name="Column" xml:space="preserve">
+    <value>Coloană</value>
+  </data>
+  <data name="CreateAssignments" xml:space="preserve">
+    <value>Crează alocări</value>
+  </data>
+  <data name="CreateInterviews" xml:space="preserve">
+    <value>Crează interviuri</value>
+  </data>
+  <data name="CreateSample" xml:space="preserve">
+    <value>Crează interviuri din datele existente</value>
+  </data>
+  <data name="CreateUsers" xml:space="preserve">
+    <value>Crează utilizatori</value>
+  </data>
+  <data name="CreatingMultipleAssignments" xml:space="preserve">
+    <value>Creare alocări multiple</value>
+  </data>
+  <data name="CreatingMultipleInterviews" xml:space="preserve">
+    <value>Creare interviuri multiple</value>
+  </data>
+  <data name="CreatingUsers" xml:space="preserve">
+    <value>Creare utilizatori</value>
+  </data>
+  <data name="DataForMultipleAssignmentsFound" xml:space="preserve">
+    <value>Date găsite pentru {0} interviuri alocate</value>
+  </data>
+  <data name="DataForMultipleInterviewsFound" xml:space="preserve">
+    <value>Date găsite pentru {0} interviuri realizate</value>
+  </data>
+  <data name="DataForSingleAssignmentFound" xml:space="preserve">
+    <value>Date găsite pentru 1 unitate de anchetat</value>
+  </data>
+  <data name="DataForSingleInterviewFound" xml:space="preserve">
+    <value>Date găsite pentru 1 interviu realizat</value>
+  </data>
+  <data name="DataIsValid" xml:space="preserve">
+    <value>Date valide</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Șterge</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>Detalii</value>
+  </data>
+  <data name="DownloadDescListRequiredPreffiledData" xml:space="preserve">
+    <value>Variabile definite în Designer ca fiind de identificare.</value>
+  </data>
+  <data name="DownloadInvalidAssignments" xml:space="preserve">
+    <value>Descarcă interviurile alocate nevalide</value>
+  </data>
+  <data name="DownloadInvalidInterviews" xml:space="preserve">
+    <value>Descarcă interviurile nevalide</value>
+  </data>
+  <data name="DownloadLinkTitleListRequiredPreffiledData" xml:space="preserve">
+    <value>template .tab.</value>
+  </data>
+  <data name="DownloadTabTemplate" xml:space="preserve">
+    <value>Descarcă template-ul .tab pentru acest chestionar</value>
+  </data>
+  <data name="DownloadTemplateArchive" xml:space="preserve">
+    <value>Descarcă template-ul .zip pentru acest chestionar</value>
+  </data>
+  <data name="EmptySupervisorDescription" xml:space="preserve">
+    <value>În cazul în care nu sunt specificați utilizatorii, trebuie să alocați un controlor pentru toate interviurile alocate.</value>
+  </data>
+  <data name="EstimatedTime" xml:space="preserve">
+    <value>Timp estimat</value>
+  </data>
+  <data name="File" xml:space="preserve">
+    <value>Fișier</value>
+  </data>
+  <data name="FileName" xml:space="preserve">
+    <value>Nume fișier</value>
+  </data>
+  <data name="FileNotParsed" xml:space="preserve">
+    <value>Sunt permise doar fișierele .tab.</value>
+  </data>
+  <data name="FileSize" xml:space="preserve">
+    <value>Dimensiunea fișierului</value>
+  </data>
+  <data name="FileSizeLimit" xml:space="preserve">
+    <value>Dimensiunea fișierului nu poate depăși 300MB.</value>
+  </data>
+  <data name="Finished" xml:space="preserve">
+    <value>Finalizat</value>
+  </data>
+  <data name="FinishedWithError" xml:space="preserve">
+    <value>Finalizat cu erori</value>
+  </data>
+  <data name="FinishedWithErrorMessage" xml:space="preserve">
+    <value>Finalizat cu erori. Motivul:</value>
+  </data>
+  <data name="FormatNotSupported" xml:space="preserve">
+    <value>Formatul fișierului nu este permis. Datele conținute vor fi ignorate</value>
+  </data>
+  <data name="HiddenQuestions" xml:space="preserve">
+    <value>Întrebări ascunse</value>
+  </data>
+  <data name="HideListPrefilledData" xml:space="preserve">
+    <value>Ascunde lista de întrebări de identificare</value>
+  </data>
+  <data name="IdentifyingQuestions" xml:space="preserve">
+    <value>Întrebări de identificare</value>
+  </data>
+  <data name="Import_Verification_1_AssignmentVerified" xml:space="preserve">
+    <value>1 unitate de anchetare distribuită cu succes</value>
+  </data>
+  <data name="Import_Verification_1_Error" xml:space="preserve">
+    <value>1 eroare</value>
+  </data>
+  <data name="Import_Verification_AssignmentsVerified" xml:space="preserve">
+    <value>{0} interviuri alocate cu succes</value>
+  </data>
+  <data name="Import_Verification_Errors" xml:space="preserve">
+    <value>{0} erori</value>
+  </data>
+  <data name="Import_VerificationOfAssignmentData" xml:space="preserve">
+    <value>Verificarea interviurilor alocate</value>
+  </data>
+  <data name="Import_VerificationOfAssignments_ForQuestionnaire" xml:space="preserve">
+    <value>Verificarea interviurilor alocate pentru chestionarul {0}</value>
+  </data>
+  <data name="Import_VerificationOfDataFile" xml:space="preserve">
+    <value>Verificarea fișierului</value>
+  </data>
+  <data name="Import_VerificationOfDataFile_Progress" xml:space="preserve">
+    <value>pasul {0} din {1}</value>
+  </data>
+  <data name="Import_VerificationOfDataFile_Succeeded" xml:space="preserve">
+    <value>Verificare completă</value>
+  </data>
+  <data name="ImportAssignments_PageTitle" xml:space="preserve">
+    <value>Crearea alocării multiple cu încărcare automată</value>
+  </data>
+  <data name="ImportAssignmentsFor" xml:space="preserve">
+    <value>Importarea interviurilor alocate pentru {0}</value>
+  </data>
+  <data name="ImportFrom" xml:space="preserve">
+    <value>Importarea informației din fișierul {0} pentru chestionarul {1}</value>
+  </data>
+  <data name="Importing" xml:space="preserve">
+    <value>Importare</value>
+  </data>
+  <data name="ImportInProgress" xml:space="preserve">
+    <value>Se execută un alt proces de import a interviurilor alocate. Doar un singur proces de import este permis. Așteptați până la terminarea procesului și apoi încărcați un nou fișier. Urmați linkul dacă doriți să obțineți informații detaliate despre progresele înregistrate în legătură cu celălalt proces de import.</value>
+  </data>
+  <data name="ImportInterviews_ChooseFile" xml:space="preserve">
+    <value>Alegeți un fișier de importat</value>
+  </data>
+  <data name="ImportInterviews_Done" xml:space="preserve">
+    <value>Efectuat:</value>
+  </data>
+  <data name="ImportInterviews_NoneFailed" xml:space="preserve">
+    <value>Ne-eșuate</value>
+  </data>
+  <data name="ImportInterviews_PageTitle" xml:space="preserve">
+    <value>Crearea interviurilor multiple cu încărcare automată</value>
+  </data>
+  <data name="ImportInterviews_SelectButtonText" xml:space="preserve">
+    <value>Selectare</value>
+  </data>
+  <data name="ImportInterviews_SelectResponsible" xml:space="preserve">
+    <value>Selectarea responsabilului</value>
+  </data>
+  <data name="ImportInterviewsFor" xml:space="preserve">
+    <value>Importarea interviurilor pentru {0}</value>
+  </data>
+  <data name="ImportProgressFormat" xml:space="preserve">
+    <value>{0} din {1}</value>
+  </data>
+  <data name="ImportSample" xml:space="preserve">
+    <value>Importarea eșantionului</value>
+  </data>
+  <data name="ImportStatus" xml:space="preserve">
+    <value>Statusul importării</value>
+  </data>
+  <data name="InterviewsAreNotCreated" xml:space="preserve">
+    <value>Nu au fost create interviuri</value>
+  </data>
+  <data name="InterviewsImport_ImportingProgressPageTitle" xml:space="preserve">
+    <value>Importarea interviurilor alocate</value>
+  </data>
+  <data name="InVerificationProcess" xml:space="preserve">
+    <value>este în proces de verificare, verificat</value>
+  </data>
+  <data name="IsInvalid" xml:space="preserve">
+    <value>este nevalid. Vă rugăm rezolvați erorile de mai jos și încărcați din nou.</value>
+  </data>
+  <data name="LastUpdateDate" xml:space="preserve">
+    <value>Data ultimei încărcări</value>
+  </data>
+  <data name="ManualModeDescription" xml:space="preserve">
+    <value>Puteți aloca individual interviuri introducând toate câmpurile cerute în {0}</value>
+  </data>
+  <data name="ManualModeLinkTitle" xml:space="preserve">
+    <value>modul manual</value>
+  </data>
+  <data name="Message" xml:space="preserve">
+    <value>Mesaj</value>
+  </data>
+  <data name="MultipleAssignmentFailedToBeCreated" xml:space="preserve">
+    <value>{0} interviuri alocate eșuate</value>
+  </data>
+  <data name="MultipleAssignmentsCreated" xml:space="preserve">
+    <value>{0} interviuri alocate create</value>
+  </data>
+  <data name="MultipleErrorsWereFound" xml:space="preserve">
+    <value>{0} erori găsite</value>
+  </data>
+  <data name="MultipleInterviewFailedToBeCreated" xml:space="preserve">
+    <value>{0} interviuri eșuate</value>
+  </data>
+  <data name="MultipleInterviewsCreated" xml:space="preserve">
+    <value>{0} interviuri create</value>
+  </data>
+  <data name="NumberInterviewCreated" xml:space="preserve">
+    <value>Interviuri create</value>
+  </data>
+  <data name="OutOf" xml:space="preserve">
+    <value>din</value>
+  </data>
+  <data name="PleaseWait" xml:space="preserve">
+    <value>Vă rugăm așteptați</value>
+  </data>
+  <data name="PrefilledQuestionsRequired" xml:space="preserve">
+    <value>Fișierul nu conține coloane pentru datele de identificare solicitate: &lt;br/&gt; &lt;br/&gt; &lt;b&gt;{0}&lt;/b&gt;</value>
+  </data>
+  <data name="PrefilledRequiredData" xml:space="preserve">
+    <value>Date de identificare solicitate</value>
+  </data>
+  <data name="Prerequisite_FileOpen" xml:space="preserve">
+    <value>Fișierul încărcat nu poate fi accesat. Vă rugăm verificați formatul acestuia.</value>
+  </data>
+  <data name="Prerequisite_Questionnaire" xml:space="preserve">
+    <value>Chestionarul nu poate fi utilizat pentru preîncărcare</value>
+  </data>
+  <data name="Prerequisite_TabOrTxtFile" xml:space="preserve">
+    <value>Doar fișierele .tab și .txt sunt permise.</value>
+  </data>
+  <data name="Prerequisite_UnsupportedFiles" xml:space="preserve">
+    <value>Următoarele fișiere nu sunt permise: {0}.</value>
+  </data>
+  <data name="Prerequisite_ZipFile" xml:space="preserve">
+    <value>Doar fișierele .zip sunt permise.</value>
+  </data>
+  <data name="Processing" xml:space="preserve">
+    <value>În lucru...</value>
+  </data>
+  <data name="ReadyForUserCreation" xml:space="preserve">
+    <value>Pregătite pentru creare</value>
+  </data>
+  <data name="ReadyForValidation" xml:space="preserve">
+    <value>Pregătite pentru validare</value>
+  </data>
+  <data name="RecordsCount" xml:space="preserve">
+    <value>Număr de înregistrări </value>
+  </data>
+  <data name="RefreshActionOnUserUpload" xml:space="preserve">
+    <value>Actualizare</value>
+  </data>
+  <data name="RequiredField" xml:space="preserve">
+    <value>Acest câmpul este obligatoriu</value>
+  </data>
+  <data name="ResponsibleSupervisorWillBeAssigned" xml:space="preserve">
+    <value>Utilizatorul responsabil va fi distribuit automat</value>
+  </data>
+  <data name="RosterSizeQuestions" xml:space="preserve">
+    <value>Întrebări de deschidere a Listei </value>
+  </data>
+  <data name="Row" xml:space="preserve">
+    <value>Rând</value>
+  </data>
+  <data name="RunningInterviewImportProcess" xml:space="preserve">
+    <value>Procesul de importare al interviurilor alocate</value>
+  </data>
+  <data name="SampleCreationCompleted" xml:space="preserve">
+    <value>Crearea cu succes a interviului.</value>
+  </data>
+  <data name="SampleCreationResult" xml:space="preserve">
+    <value>Rezultatul creării interviului</value>
+  </data>
+  <data name="SampleImportWithErrors" xml:space="preserve">
+    <value>Interviul importat a fost completat cu erori</value>
+  </data>
+  <data name="SampleSuccess" xml:space="preserve">
+    <value>Interviul importat a fost completat cu succes</value>
+  </data>
+  <data name="Select_Responsible" xml:space="preserve">
+    <value>Selectarea responsabilului (necesar)</value>
+  </data>
+  <data name="Select_Responsible_Description" xml:space="preserve">
+    <value>Dacă nu este alocat niciun responsabil în fișierul automat utilizați acest cont de controlor/anchetator:</value>
+  </data>
+  <data name="SelectResponsibleToAssign" xml:space="preserve">
+    <value>Selectați responsabilul pentru acest grup</value>
+  </data>
+  <data name="SimpleDescription" xml:space="preserve">
+    <value>Încărcați fișierul .tab cu datele de identificare necesare. Opțional, specificați numele de utilizator al controlorilor sau anchetatorilor în coloana _responsible, iar în coloana _quantity puteți specifica capacitatea de alocare.</value>
+  </data>
+  <data name="SimpleTitle" xml:space="preserve">
+    <value>Date de identificare</value>
+  </data>
+  <data name="SingleAssignmentCreated" xml:space="preserve">
+    <value>1 interviu alocat</value>
+  </data>
+  <data name="SingleAssignmentFailedToBeCreated" xml:space="preserve">
+    <value>1 interviu nealocat</value>
+  </data>
+  <data name="SingleErrorFound" xml:space="preserve">
+    <value>1 eroare găsită</value>
+  </data>
+  <data name="SingleInterviewCreated" xml:space="preserve">
+    <value>1 interviu creat</value>
+  </data>
+  <data name="SingleInterviewFailedToBeCreated" xml:space="preserve">
+    <value>1 interviu eșuat</value>
+  </data>
+  <data name="Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="SupervisorMustBeSelected" xml:space="preserve">
+    <value>Trebuie selectat controlorul sau anchetatorul</value>
+  </data>
+  <data name="Upload" xml:space="preserve">
+    <value>Încărcat</value>
+  </data>
+  <data name="UploadDate" xml:space="preserve">
+    <value>Data încărcării</value>
+  </data>
+  <data name="UploadDescription" xml:space="preserve">
+    <value>Încărcați fișierul cu datele de identificare pentru a crea noi interviuri alocate. Specificați numele de utilizator al controlorilor sau anchetatorilor.</value>
+  </data>
+  <data name="Uploaded" xml:space="preserve">
+    <value>Încărcat</value>
+  </data>
+  <data name="UploadNewData" xml:space="preserve">
+    <value>Încarcă date noi</value>
+  </data>
+  <data name="UploadNewFile" xml:space="preserve">
+    <value>Încarcă un nou fișier</value>
+  </data>
+  <data name="UploadSample" xml:space="preserve">
+    <value>Încarcă eșantion</value>
+  </data>
+  <data name="UploadSampleDescription" xml:space="preserve">
+    <value>Pentru a încărca eșantionul care urmează să fie anchetat, vă rugăm să pregătiți un fișier (cu o dimensiune de până la 300MB) cu valori separate prin tab (fișier .tab), corespunzătoare template-ului de mai jos, care conține valori ale acelor variabile din chestionarul dvs. care au fost marcate ca fiind de identificare.</value>
+  </data>
+  <data name="UploadTabFile" xml:space="preserve">
+    <value>Încărcare fișier .tab</value>
+  </data>
+  <data name="UploadUsers" xml:space="preserve">
+    <value>Încărcare automată a utilizatorilor</value>
+  </data>
+  <data name="UploadUsers_NotAllowedExtension" xml:space="preserve">
+    <value>Doar fișierele cu extensiile {0} și {1} sunt permise.</value>
+  </data>
+  <data name="UploadUsers_Title" xml:space="preserve">
+    <value>Lista de fișiere cu utilizatori preîncărcați</value>
+  </data>
+  <data name="UploadUsersDescription" xml:space="preserve">
+    <value>Pregătirea unui fișier cu valori separate prin tab (.tab) corespunzător template-ului de mai jos. Coloanele marcate cu (*) sunt obligatorii. În coloana de 'roluri' se trec numai 'Controlorii' și 'Anchetatorii'.</value>
+  </data>
+  <data name="UploadZipFile" xml:space="preserve">
+    <value>Încărcare fișier .zip</value>
+  </data>
+  <data name="UserBatchUploads" xml:space="preserve">
+    <value>Încărcare automată a utilizatorilor</value>
+  </data>
+  <data name="UserPreloadingProcessIsMissing" xml:space="preserve">
+    <value>Lipsește procesul de preîncărcare a utilizatorilor</value>
+  </data>
+  <data name="UsersHaveBeenCreated" xml:space="preserve">
+    <value>utilizatorii au fost creați</value>
+  </data>
+  <data name="Validated" xml:space="preserve">
+    <value>Validat</value>
+  </data>
+  <data name="Validating" xml:space="preserve">
+    <value>În curs de validare</value>
+  </data>
+  <data name="ValidationFinishedWithError" xml:space="preserve">
+    <value>Validat</value>
+  </data>
+  <data name="VerificationCompleted" xml:space="preserve">
+    <value>Verificare completă</value>
+  </data>
+  <data name="Verify" xml:space="preserve">
+    <value>Verificare</value>
+  </data>
+  <data name="VerifyPanelData" xml:space="preserve">
+    <value>Verificarea datelor panel</value>
+  </data>
+  <data name="VerifySampleData" xml:space="preserve">
+    <value>Verificarea datelor</value>
+  </data>
+  <data name="ViewListPrefilledData" xml:space="preserve">
+    <value>Vizualizarea listei cu date de identificare obligatorii</value>
+  </data>
+  <data name="ViewListPreloadedData" xml:space="preserve">
+    <value>Vizualizarea listei cu valori preîncărcate</value>
+  </data>
+</root>

@@ -7,8 +7,8 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
 {
     class PayloadProvider : IPayloadProvider
     {
-        public IPayload AsBytes(byte[] bytes) => Payload.FromBytes(bytes);
+        public IPayload AsBytes(byte[] bytes, string endpoint) => Payload.FromBytes(endpoint, bytes);
 
-        public IPayload AsStream(byte[] bytes) => Payload.FromStream(new MemoryStream(bytes));
+        public IPayload AsStream(byte[] bytes, string endpoint) => Payload.FromStream(endpoint, new MemoryStream(bytes));
     }
 }

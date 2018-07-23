@@ -15,5 +15,9 @@
         CloseInterview,
         DeleteInterview,
         CompleteInterview,
+        ApproveInterview,
+        RejectInterview,
+        AssignResponsibleToInterview,
+        AssignResponsibleToAssignment,
     }
 }

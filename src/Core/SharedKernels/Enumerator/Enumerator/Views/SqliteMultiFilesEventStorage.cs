@@ -18,8 +18,7 @@ using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace WB.Core.SharedKernels.Enumerator.Views
 {
-    public class 
-        SqliteMultiFilesEventStorage : IEnumeratorEventStorage
+    public class SqliteMultiFilesEventStorage : IEnumeratorEventStorage
     {
         private SQLiteConnectionWithLock eventStoreInSingleFile;
         internal readonly Dictionary<Guid, SQLiteConnectionWithLock> connectionByEventSource = new Dictionary<Guid, SQLiteConnectionWithLock>();
@@ -194,13 +193,15 @@ namespace WB.Core.SharedKernels.Enumerator.Views
                 
                 using (connection.Lock())
                 {
-                    var committedEvents = connection
+                    var eventViews = connection
                         .Table<EventView>()
                         .Where(eventView
                             => eventView.EventSourceId == interviewId
                                && eventView.ExistsOnHq == null || eventView.ExistsOnHq == 0)
                         .OrderBy(x => x.EventSequence)
-                        .ToList()
+                        .ToList();
+
+                    var committedEvents = eventViews
                         .Select(x => ToCommitedEvent(x, eventSerializer))
                         .ToList();
                     return committedEvents;
@@ -208,6 +209,35 @@ namespace WB.Core.SharedKernels.Enumerator.Views
             }
 
             return new List<CommittedEvent>();
+        }
+
+        public bool HasEventsAfterSpecifiedSequenceWithAnyOfSpecifiedTypes(long sequence, Guid eventSourceId,
+            params string[] typeNames)
+        {
+            var connection = this.GetOrCreateConnection(eventSourceId);
+            using (connection.Lock())
+            {
+                var @event = connection
+                    .Table<EventView>()
+                    .FirstOrDefault(ev => ev.EventSequence > sequence 
+                                          && ev.EventSourceId == eventSourceId 
+                                          && typeNames.Contains(ev.EventType));
+                return @event != null;
+            }
+        }
+
+        public int GetMaxSequenceForAnyEvent(Guid eventSourceId, params string[] typeNames)
+        {
+            var connection = this.GetOrCreateConnection(eventSourceId);
+            using (connection.Lock())
+            {
+                var sequence = connection
+                    .Table<EventView>()
+                    .Where(ev => ev.EventSourceId == eventSourceId
+                                 && typeNames.Contains(ev.EventType))
+                    .Max(ev => ev.EventSequence);
+                return sequence;
+            }
         }
 
         public int GetLastEventKnownToHq(Guid interviewId)
