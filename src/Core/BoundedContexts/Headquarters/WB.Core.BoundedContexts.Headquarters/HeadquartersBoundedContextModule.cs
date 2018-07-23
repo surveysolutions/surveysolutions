@@ -192,6 +192,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<ISampleWebInterviewService, SampleWebInterviewService>();
             registry.Bind<IMapBrowseViewFactory, MapBrowseViewFactory>();
             registry.Bind<IOldschoolChartStatisticsDataProvider, OldschoolChartStatisticsDataProvider>();
+            registry.Bind<IInterviewDiagnosticsFactory, InterviewDiagnosticsFactory>();
 
             registry.Bind<ITeamsAndStatusesReport, TeamsAndStatusesReport>();
             registry.Bind<ISurveysAndStatusesReport, SurveysAndStatusesReport>();
@@ -261,6 +262,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IInterviewErrorsExporter, InterviewErrorsExporter>();
             registry.Bind<CommentsExporter>();
             registry.Bind<InterviewActionsExporter>();
+            registry.Bind<DiagnosticsExporter>();
 
             registry.Bind<ITabularDataToExternalStatPackageExportService, TabularDataToExternalStatPackageExportService>();
             registry.Bind<ITabFileReader, TabFileReader>();
