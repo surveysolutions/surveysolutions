@@ -9,7 +9,7 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
     {
         public static async Task<NearbyStatus> ToConnectionStatus(this Task<Statuses> statuses, Action<Statuses> logAction = null)
         {
-            var status = await statuses;
+            var status = await statuses.ConfigureAwait(false);
             logAction?.Invoke(status);
             return status?.ToConnectionStatus();
         }
