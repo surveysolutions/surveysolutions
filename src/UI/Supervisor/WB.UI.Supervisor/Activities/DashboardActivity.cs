@@ -54,10 +54,13 @@ namespace WB.UI.Supervisor.Activities
                 {
                     var dashboardItemAccessor = ServiceLocator.Current.GetInstance<IDashboardItemsAccessor>();
 
-                    if (dashboardItemAccessor.IsOutboxInterview(this.ViewModel.LastVisitedInterviewId.Value))
+                    var interviewId = this.ViewModel.LastVisitedInterviewId.Value;
+                    if (dashboardItemAccessor.IsOutboxInterview(interviewId))
                         this.ViewModel.ShowOutboxCommand.Execute();
-                    if(dashboardItemAccessor.IsWaitingForSupervisorActionInterview(this.ViewModel.LastVisitedInterviewId.Value))
+                    if(dashboardItemAccessor.IsWaitingForSupervisorActionInterview(interviewId))
                         this.ViewModel.ShowWaitingSupervisorActionCommand.Execute();
+                    if (dashboardItemAccessor.IsSentToInterviewer(interviewId))
+                        this.ViewModel.ShowSentCommand.Execute();
                 }
                 else
                     ViewModel.ShowDefaultListCommand.Execute();

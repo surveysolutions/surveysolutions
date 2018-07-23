@@ -149,6 +149,23 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Dashboard
             Assert.That(isOutboxInterview, Is.True);
         }
 
+        [Test]
+        public void IsSentToInterviewer_when_interview_is_sent_should_return_true()
+        {
+            var interview = Create.Entity.InterviewView(interviewId: Id.g1, responsibleId: Id.gB,
+                status: InterviewStatus.InterviewerAssigned, receivedByInterviewerAt: DateTime.UtcNow);
+
+            var interviews = Create.Storage.SqliteInmemoryStorage(interview);
+
+            var accessor = CreateItemsAccessor(interviews: interviews, principal: Create.Service.Principal(Id.gA));
+
+            //act
+            var isSentToInterviewer = accessor.IsSentToInterviewer(Id.g1);
+
+            //assert
+            Assert.That(isSentToInterviewer, Is.True);
+        }
+
         private DashboardItemsAccessor CreateItemsAccessor(
             IPlainStorage<InterviewView> interviews = null,
             IAssignmentDocumentsStorage assignments = null,
