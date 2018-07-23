@@ -44,7 +44,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
         {
             return RunInTransaction(query =>
             {
-                var assignment = query.Connection.Get<AssignmentDocument>(id);
+                var assignment = query.Connection.Find<AssignmentDocument>(id);
 
                 if (assignment == null) return null;
 
