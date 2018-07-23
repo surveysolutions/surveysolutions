@@ -27,6 +27,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
+using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles;
@@ -412,7 +413,11 @@ namespace WB.Tests.Abc.TestFactories
                 Mock.Of<IQuestionnaireExportStructureStorage>(_
                     => _.GetQuestionnaireExportStructure(It.IsAny<QuestionnaireIdentity>()) ==
                        questionnaireExportStructure),
-                Mock.Of<IProductVersion>());
+                Mock.Of<IProductVersion>(),
+                Mock.Of<IInterviewsExporter>(),
+                Mock.Of<CommentsExporter>(),
+                Mock.Of<InterviewActionsExporter>(),
+                Mock.Of<DiagnosticsExporter>());
 
         public InterviewerPrincipal InterviewerPrincipal(IPlainStorage<InterviewerIdentity> interviewersPlainStorage,
             IPasswordHasher passwordHasher)
@@ -597,6 +602,18 @@ namespace WB.Tests.Abc.TestFactories
                 interviewStatuses ?? new TestInMemoryWriter<InterviewSummary>(),
                 Mock.Of<ILogger>(),
                 Mock.Of<ISessionProvider>());
+        }
+
+        public DiagnosticsExporter DiagnisticsExporter(ICsvWriter csvWriter = null,
+            IFileSystemAccessor fileSystemAccessor = null,
+            IInterviewDiagnosticsFactory diagnosticsFactory = null)
+        {
+            return new DiagnosticsExporter(new InterviewDataExportSettings(),
+                fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
+                csvWriter ?? Mock.Of<ICsvWriter>(),
+                Mock.Of<ILogger>(),
+                diagnosticsFactory ?? Mock.Of<IInterviewDiagnosticsFactory>(),
+                Create.Service.TransactionManagerProvider());
         }
 
         public InterviewStatusTimeSpanDenormalizer InterviewStatusTimeSpanDenormalizer()
