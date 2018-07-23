@@ -225,17 +225,19 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         private void OnComplete(int failedInterviewsCount)
         {
-            System.Diagnostics.Trace.Write(">>> OnComplete");
-            if (failedInterviewsCount > 0)
+            base.InvokeOnMainThread(() =>
             {
-                this.ProgressTitle = string.Format(InterviewerUIResources.SendToSupervisor_SyncCompletedWithErrorsFormat, failedInterviewsCount);
-                this.TransferingStatus = TransferingStatus.CompletedWithErrors;
-            }
-            else
-            {
-                this.ProgressTitle = InterviewerUIResources.SendToSupervisor_SyncCompleted;
-                this.TransferingStatus = TransferingStatus.Completed;
-            }
+                if (failedInterviewsCount > 0)
+                {
+                    this.ProgressTitle = string.Format(InterviewerUIResources.SendToSupervisor_SyncCompletedWithErrorsFormat, failedInterviewsCount);
+                    this.TransferingStatus = TransferingStatus.CompletedWithErrors;
+                }
+                else
+                {
+                    this.ProgressTitle = InterviewerUIResources.SendToSupervisor_SyncCompleted;
+                    this.TransferingStatus = TransferingStatus.Completed;
+                }
+            });
             
             this.StopDiscovery();
         }

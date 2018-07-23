@@ -100,7 +100,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                 NearbyStatus result;
                 try
                 {
-                   result = await this.connectionClient.RequestConnectionAsync(name, endpoint, cancellationToken);
+                   result = await this.connectionClient.RequestConnectionAsync(name, endpoint, cancellationToken).ConfigureAwait(false);
                 }
                 catch (Exception)
                 {
@@ -125,7 +125,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
 
                 this.logger.Verbose($"({name}, {endpoint}) => RequestConnectionAsync ended {result.Status.ToString()}");
                 return result;
-            });
+            }).ConfigureAwait(false);
         }
 
         public Task<NearbyStatus> AcceptConnectionAsync(string endpoint, CancellationToken cancellationToken)
