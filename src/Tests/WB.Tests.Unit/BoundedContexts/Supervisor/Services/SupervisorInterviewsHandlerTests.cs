@@ -38,14 +38,14 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
         public async Task CanSynchronize_should_check_assemblyFileVersion_for_compatibility()
         {
             var userId = Guid.NewGuid();
-            var userToken = "test token";
+            var userStamp = "test token";
             var users = new Mock<IPlainStorage<InterviewerDocument>>();
-            users.Setup(x => x.GetById(userId.FormatGuid())).Returns(new InterviewerDocument(){Token = userToken});
+            users.Setup(x => x.GetById(userId.FormatGuid())).Returns(new InterviewerDocument(){SecurityStamp = userStamp });
 
             var handler = Create.Service.SupervisorInterviewsHandler(interviewerViewRepository:users.Object);
 
             var expectedVersion = ReflectionUtils.GetAssemblyVersion(typeof(SupervisorBoundedContextAssemblyIndicator));
-            var response = await handler.Handle(new CanSynchronizeRequest(expectedVersion.Revision, userId, userToken));
+            var response = await handler.Handle(new CanSynchronizeRequest(expectedVersion.Revision, userId, userStamp));
 
             Assert.That(response, Has.Property(nameof(response.CanSyncronize)).True);
         }

@@ -271,7 +271,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                 });
             }
             
-            if (user.PasswordHash != arg.PasswordHash)
+            if (user.SecurityStamp != arg.SecurityStamp)
             {
                 return Task.FromResult(new CanSynchronizeResponse
                 {
