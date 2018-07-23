@@ -17,5 +17,10 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
         public string PasswordHash { get; set; }
         public string PhoneNumber { get; set; }
         public string UserName { get; set; }
+
+        public string Token { set; get; }
+        public bool IsLockedBySupervisor { get; set; }
+
+        public bool IsLockedByHeadquarters { get; set; }
     }
 }

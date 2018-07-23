@@ -38,15 +38,33 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
         public async Task CanSynchronize_should_check_assemblyFileVersion_for_compatibility()
         {
             var userId = Guid.NewGuid();
+            var userToken = "test token";
             var users = new Mock<IPlainStorage<InterviewerDocument>>();
-            users.Setup(x => x.GetById(userId.FormatGuid())).Returns(new InterviewerDocument());
+            users.Setup(x => x.GetById(userId.FormatGuid())).Returns(new InterviewerDocument(){Token = userToken});
 
             var handler = Create.Service.SupervisorInterviewsHandler(interviewerViewRepository:users.Object);
 
             var expectedVersion = ReflectionUtils.GetAssemblyVersion(typeof(SupervisorBoundedContextAssemblyIndicator));
-            var response = await handler.Handle(new CanSynchronizeRequest(expectedVersion.Revision, userId));
+            var response = await handler.Handle(new CanSynchronizeRequest(expectedVersion.Revision, userId, userToken));
 
             Assert.That(response, Has.Property(nameof(response.CanSyncronize)).True);
+        }
+
+        [Test]
+        public async Task CanSynchronize_should_check_user_Token()
+        {
+            var userId = Guid.NewGuid();
+            var userToken = "test token";
+            var users = new Mock<IPlainStorage<InterviewerDocument>>();
+            users.Setup(x => x.GetById(userId.FormatGuid())).Returns(new InterviewerDocument() { Token = userToken });
+
+            var handler = Create.Service.SupervisorInterviewsHandler(interviewerViewRepository: users.Object);
+
+            var expectedVersion = ReflectionUtils.GetAssemblyVersion(typeof(SupervisorBoundedContextAssemblyIndicator));
+            var response = await handler.Handle(new CanSynchronizeRequest(expectedVersion.Revision, userId, "new token"));
+
+            Assert.That(response, Has.Property(nameof(response.CanSyncronize)).False);
+            Assert.AreEqual(response.Reason, SyncDeclineReason.InvalidPassword);
         }
 
         [Test]
@@ -59,7 +77,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             var handler = Create.Service.SupervisorInterviewsHandler(interviewerViewRepository: users.Object);
 
             var expectedVersion = ReflectionUtils.GetAssemblyVersion(typeof(SupervisorBoundedContextAssemblyIndicator));
-            var response = await handler.Handle(new CanSynchronizeRequest(expectedVersion.Revision, Guid.NewGuid()));
+            var response = await handler.Handle(new CanSynchronizeRequest(expectedVersion.Revision, Guid.NewGuid(), String.Empty));
 
             Assert.That(response, Has.Property(nameof(response.CanSyncronize)).False);
             Assert.AreEqual(response.Reason, SyncDeclineReason.NotATeamMember);
@@ -70,7 +88,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
         {
             var handler = Create.Service.SupervisorInterviewsHandler();
 
-            var response = await handler.Handle(new CanSynchronizeRequest(1, Guid.NewGuid()));
+            var response = await handler.Handle(new CanSynchronizeRequest(1, Guid.NewGuid(), String.Empty));
 
             Assert.That(response, Has.Property(nameof(response.CanSyncronize)).False);
         }
