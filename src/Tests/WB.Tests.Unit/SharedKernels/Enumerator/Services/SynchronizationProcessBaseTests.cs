@@ -72,7 +72,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services
         }
 
         [Test]
-        public async Task when_on_server_in_download_list_exists_interview_alredy_been_on_tablet_but_in_current_moment_is_upsent_should_scheck_sequesnce_and_download_new_version()
+        public async Task when_on_server_in_download_list_exists_interview_alredy_been_on_tablet_but_in_current_moment_is_upsent_should_check_sequesnce_and_download_new_version()
         {
             var interviewId = Id.gA;
             var responsibleId = Id.gB;
@@ -118,7 +118,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services
         }
 
         [Test]
-        public async Task when_on_server_in_download_list_exists_interview_alredy_been_on_tablet_but_in_current_moment_is_upsent_should_scheck_sequesnce_and_dont_download_if_version_is_same()
+        public async Task when_on_server_in_download_list_exists_interview_alredy_been_on_tablet_but_in_current_moment_is_upsent_should_check_sequesnce_and_dont_download_if_version_is_same()
         {
             var interviewId = Id.gA;
             var responsibleId = Id.gB;
@@ -154,6 +154,49 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services
                 eventBus: busMock.Object,
                 interviewFactory: interviewerInterviewAccessorMock.Object,
                 interviewSequenceViewRepository: localInterviewSequence);
+
+            // Act
+            await process.DownloadInterviewsAsync(new SynchronizationStatistics(), new Progress<SyncProgressInfo>(), CancellationToken.None);
+
+            // Assert
+            syncService.Verify(x => x.GetInterviewDetailsAsync(interviewId, It.IsAny<IProgress<TransferProgress>>(), It.IsAny<CancellationToken>()), Times.Never);
+            busMock.Verify(x => x.PublishCommittedEvents(interviewDetails), Times.Never);
+        }
+
+        [Test]
+        public async Task when_on_server_in_download_list_exists_interview_alredy_been_on_tablet_should_check_responsibe_and_dont_download_if_it_same()
+        {
+            var interviewId = Id.gA;
+            var responsibleId = Id.gB;
+
+            var syncService = new Mock<ISynchronizationService>();
+            syncService.Setup(x => x.GetInterviewsAsync(CancellationToken.None))
+                .ReturnsAsync(new List<InterviewApiView>
+                {
+                    new InterviewApiView
+                    {
+                        Id = interviewId,
+                        ResponsibleId = responsibleId,
+                        QuestionnaireIdentity = Create.Entity.QuestionnaireIdentity(),
+                        Sequence = 7
+                    }
+                });
+            syncService.Setup(x => x.CheckObsoleteInterviewsAsync(It.IsAny<List<ObsoletePackageCheck>>(), CancellationToken.None))
+                .ReturnsAsync(new List<Guid>());
+
+            List<CommittedEvent> interviewDetails = new List<CommittedEvent>();
+            syncService.Setup(x => x.GetInterviewDetailsAsync(interviewId, It.IsAny<IProgress<TransferProgress>>(), CancellationToken.None))
+                .ReturnsAsync(interviewDetails);
+
+            var localInterviews = new InMemoryPlainStorage<InterviewView>();
+            localInterviews.Store(Create.Entity.InterviewView(interviewId: interviewId, responsibleId: responsibleId));
+            var busMock = new Mock<ILiteEventBus>();
+            var interviewerInterviewAccessorMock = new Mock<IInterviewerInterviewAccessor>();
+
+            var process = CreateSyncProcess(synchronizationService: syncService.Object,
+                interviewViewRepository: localInterviews,
+                eventBus: busMock.Object,
+                interviewFactory: interviewerInterviewAccessorMock.Object);
 
             // Act
             await process.DownloadInterviewsAsync(new SynchronizationStatistics(), new Progress<SyncProgressInfo>(), CancellationToken.None);
