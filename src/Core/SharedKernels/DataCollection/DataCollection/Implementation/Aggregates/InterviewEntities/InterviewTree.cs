@@ -130,7 +130,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                     diff.IsNodeRemoved ||
                     diff.IsNodeDisabled ||
                     diff.IsNodeEnabled ||
-                    IsTitleChanged(diff) ||
+                    WereSubstitutableChanged(diff) ||
                     IsRosterTitleChanged(diff as InterviewTreeRosterDiff) ||
                     IsAnswerByQuestionChanged(diff as InterviewTreeQuestionDiff) ||
                     IsEntityValid(diff as InterviewTreeValidateableDiff) ||
@@ -151,7 +151,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         private bool IsFailedWarningValidationIndexChanged(InterviewTreeValidateableDiff diff) 
             => diff != null && diff.IsFailedErrorValidationIndexChanged;
 
-        private bool IsTitleChanged(InterviewTreeNodeDiff interviewTreeNodeDiff)
+        private bool WereSubstitutableChanged(InterviewTreeNodeDiff interviewTreeNodeDiff)
         {
             if (interviewTreeNodeDiff.IsNodeRemoved)
                 return false;
@@ -159,7 +159,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             var diffByQuestion = interviewTreeNodeDiff as InterviewTreeQuestionDiff;
             if (diffByQuestion != null)
             {
-                return diffByQuestion.IsTitleChanged || diffByQuestion.AreValidationMessagesChanged;
+                return diffByQuestion.IsTitleChanged || diffByQuestion.AreValidationMessagesChanged || diffByQuestion.WereInstructionsChanged;
             }
 
             var diffByRoster = interviewTreeNodeDiff as InterviewTreeGroupDiff;
@@ -274,6 +274,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             QuestionType questionType = questionnaire.GetQuestionType(questionIdentity.Id);
 
             SubstitutionText title = textFactory.CreateText(questionIdentity, questionnaire.GetQuestionTitle(questionIdentity.Id), questionnaire);
+            SubstitutionText instructions = textFactory.CreateText(questionIdentity, questionnaire.GetQuestionInstruction(questionIdentity.Id), questionnaire);
 
             IEnumerable<SubstitutionText> CreateText()
             {
@@ -326,6 +327,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
             return new InterviewTreeQuestion(questionIdentity,
                 title: title,
+                instructions: instructions,
                 variableName: variableName,
                 questionType: questionType,
                 answer: null,

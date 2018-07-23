@@ -246,7 +246,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 }
 
                 this.PutValidationMessages(result.Validity, callerInterview, identity);
-                this.PutInstructions(result, identity, questionnaire);
+                this.PutHideInstructions(result, identity, questionnaire);
                 this.ApplyDisablement(result, identity, questionnaire);
                 this.ApplyReviewState(result, question, callerInterview, isReviewMode);
                 result.Comments = this.GetComments(question);
@@ -327,10 +327,8 @@ namespace WB.Enumerator.Native.WebInterview.Services
             result.AcceptAnswer = true;
         }
 
-        private void PutInstructions(GenericQuestion result, Identity id, IQuestionnaire questionnaire)
+        private void PutHideInstructions(GenericQuestion result, Identity id, IQuestionnaire questionnaire)
         {
-
-            result.Instructions = questionnaire.GetQuestionInstruction(id.Id);
             result.HideInstructions = questionnaire.GetHideInstructions(id.Id);
         }
 

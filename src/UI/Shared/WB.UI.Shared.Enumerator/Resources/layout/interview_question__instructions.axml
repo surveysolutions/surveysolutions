@@ -15,6 +15,6 @@
                      Tag Format('Instruction_Title_{0}', Identity)" />
   <TextView
       style="@style/Interview_Question_Instruction_Details"
-      local:MvxBind="Text Instruction; Visible Not(IsInstructionsHidden);
+      local:MvxBind="Html Instruction.HtmlText; Visible Not(IsInstructionsHidden);
                      Tag Format('Instruction_{0}', Identity)" />
 </LinearLayout>

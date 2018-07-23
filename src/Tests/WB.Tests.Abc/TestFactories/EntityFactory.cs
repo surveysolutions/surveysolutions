@@ -1493,7 +1493,6 @@ namespace WB.Tests.Abc.TestFactories
             return section;
         }
 
-
         public InterviewTreeStaticText InterviewTreeStaticText(Identity staticTextIdentity, bool isDisabled = false)
         {
             var titleWithSubstitutions = Create.Entity.SubstitutionText(staticTextIdentity, "Title");
@@ -1511,15 +1510,18 @@ namespace WB.Tests.Abc.TestFactories
         }
 
         public InterviewTreeQuestion InterviewTreeQuestion_SingleOption(Identity questionIdentity,
-            bool isDisabled = false, string title = "title", string variableName = "var", int? answer = null)
+            bool isDisabled = false, string title = "title", string instructions = "inst", string variableName = "var", int? answer = null)
         {
-            var question = this.InterviewTreeQuestion(questionIdentity, isDisabled, title, variableName, QuestionType.SingleOption, answer, null, null, false, false);
+            var question = this.InterviewTreeQuestion(questionIdentity, isDisabled, title,instructions,
+                variableName, QuestionType.SingleOption, answer, null, null, false, false);
             if (isDisabled) question.Disable();
             return question;
         }
 
-        public InterviewTreeQuestion InterviewTreeQuestion(Identity questionIdentity, bool isDisabled = false, string title = "title",
-            string variableName = "var", QuestionType questionType = QuestionType.Text, object answer = null, IEnumerable<RosterVector> linkedOptions = null,
+        public InterviewTreeQuestion InterviewTreeQuestion(Identity questionIdentity, bool isDisabled = false, 
+            string title = "title", string instructions = "instructions",
+            string variableName = "var", QuestionType questionType = QuestionType.Text, 
+            object answer = null, IEnumerable<RosterVector> linkedOptions = null,
             Guid? cascadingParentQuestionId = null, 
             bool isYesNo = false, 
             bool isDecimal = false, 
@@ -1528,7 +1530,10 @@ namespace WB.Tests.Abc.TestFactories
             bool? isTimestamp = false)
         {
             var titleWithSubstitutions = Create.Entity.SubstitutionText(questionIdentity, title);
-            var question = new InterviewTreeQuestion(questionIdentity, titleWithSubstitutions, variableName, questionType, answer, linkedOptions, 
+            var instructionsWithSubstitutions = Create.Entity.SubstitutionText(questionIdentity, instructions);
+            
+            var question = new InterviewTreeQuestion(questionIdentity, titleWithSubstitutions, instructionsWithSubstitutions, 
+                variableName, questionType, answer, linkedOptions, 
                 cascadingParentQuestionId, isYesNo,  isDecimal, false, isTimestamp ?? false, linkedSourceId);
 
             if (isDisabled) question.Disable();
