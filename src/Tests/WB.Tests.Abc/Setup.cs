@@ -5,6 +5,7 @@ using System.Linq.Expressions;
 using AutoFixture;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities;
 using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
@@ -192,6 +193,19 @@ namespace WB.Tests.Abc
             {
                 { id, entity },
             });
+
+        public static FilteredOptionsViewModel FilteredOptionsViewModel(IEnumerable<Answer> optionList)
+        {
+            var options = optionList
+                .Select(x => Create.Entity.CategoricalQuestionOption(Convert.ToInt32(x.AnswerCode.Value), x.AnswerText))
+                .ToList();
+
+            Mock<FilteredOptionsViewModel> filteredOptionsViewModel = new Mock<FilteredOptionsViewModel>();
+            filteredOptionsViewModel.Setup(x => x.GetOptions(It.IsAny<string>())).Returns<string>(filter=>options.FindAll(x=>x.Title.Contains(filter)));
+            filteredOptionsViewModel.Setup(x => x.Init(It.IsAny<string>(), It.IsAny<Identity>(), It.IsAny<int>()));
+
+            return filteredOptionsViewModel.Object;
+        }
 
         public static FilteredOptionsViewModel FilteredOptionsViewModel(List<CategoricalOption> optionList = null)
         {
