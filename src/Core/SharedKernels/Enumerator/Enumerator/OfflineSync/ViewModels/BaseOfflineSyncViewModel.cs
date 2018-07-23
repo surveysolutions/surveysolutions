@@ -11,11 +11,13 @@ using WB.Core.SharedKernels.Enumerator.ViewModels;
 namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
 {
     [ExcludeFromCodeCoverage()] // TODO: remove attribute when UI binding completed
-    public abstract class BaseOfflineSyncViewModel : BaseViewModel
+    public abstract class BaseOfflineSyncViewModel : BaseViewModel, IDisposable
     {
         protected readonly IPermissionsService permissions;
         protected readonly INearbyConnection nearbyConnection;
+        protected CancellationTokenSource cancellationTokenSource = null;
         private readonly IEnumeratorSettings settings;
+        private readonly IDisposable nearbyConnectionSubscribtion;
 
         protected BaseOfflineSyncViewModel(IPrincipal principal,
             IViewModelNavigationService viewModelNavigationService,
@@ -26,20 +28,18 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
             this.permissions = permissions;
             this.nearbyConnection = nearbyConnection;
             this.settings = settings;
-            this.nearbyConnection.Events.Subscribe(HandleConnectionEvents);
+            nearbyConnectionSubscribtion = this.nearbyConnection.Events.Subscribe(HandleConnectionEvents);
         }
-
-        protected CancellationTokenSource cancellationTokenSource = null;
 
         protected async void HandleConnectionEvents(INearbyEvent @event)
         {
             switch (@event)
             {
                 case NearbyEvent.EndpointFound endpointFound:
-                    await this.RequestConnectionAsync(endpointFound.Endpoint, endpointFound.EndpointInfo.EndpointName);
+                    await this.RequestConnectionAsync(endpointFound.Endpoint, endpointFound.EndpointInfo.EndpointName).ConfigureAwait(false);
                     break;
                 case NearbyEvent.InitiatedConnection iniConnection:
-                    await this.InitializeConnectionAsync(iniConnection.Endpoint, iniConnection.Info.EndpointName);
+                    await this.InitializeConnectionAsync(iniConnection.Endpoint, iniConnection.Info.EndpointName).ConfigureAwait(false);
                     break;
                 case NearbyEvent.Connected connected:
                     this.OnDeviceConnected(connected.Name);
@@ -55,7 +55,8 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
         private async Task InitializeConnectionAsync(string endpoint, string name)
         {
             this.OnDeviceConnectionAccepting(name);
-            var connectionStatus = await this.nearbyConnection.AcceptConnectionAsync(endpoint, cancellationTokenSource.Token);
+            var connectionStatus = await this.nearbyConnection.AcceptConnectionAsync(endpoint, cancellationTokenSource.Token)
+                                             .ConfigureAwait(false);
 
             if (!connectionStatus.IsSuccess)
                 this.OnConnectionError(connectionStatus.StatusMessage, connectionStatus.Status);
@@ -67,7 +68,8 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
         {
             this.OnDeviceFound(name);
 
-            var connectionStatus = await this.nearbyConnection.RequestConnectionAsync(this.principal.CurrentUserIdentity.Name, endpoint, cancellationTokenSource.Token);
+            var connectionStatus = await this.nearbyConnection.RequestConnectionAsync(this.principal.CurrentUserIdentity.Name, endpoint, cancellationTokenSource.Token)
+                                             .ConfigureAwait(false);
 
             if (!connectionStatus.IsSuccess)
                 this.OnConnectionError(connectionStatus.StatusMessage, connectionStatus.Status);
@@ -91,5 +93,11 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
         }
 
         protected abstract string GetDeviceIdentification();
+
+        public void Dispose()
+        {
+            cancellationTokenSource?.Dispose();
+            nearbyConnectionSubscribtion?.Dispose();
+        }
     }
 }
