@@ -226,7 +226,7 @@ namespace WB.Core.SharedKernels.Enumerator.Views
             }
         }
 
-        public int GetLastSequenceForEvents(Guid eventSourceId, params string[] typeNames)
+        public int GetMaxSequenceForAnyEvent(Guid eventSourceId, params string[] typeNames)
         {
             var connection = this.GetOrCreateConnection(eventSourceId);
             using (connection.Lock())

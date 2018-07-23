@@ -236,7 +236,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     MarkInterviewAsReceivedFromHeadquarters(interview);
 
                     if (interview.Sequence.HasValue)
-                        interviewSequenceViewRepository.Store(new InterviewSequenceView() { Id = interview.Id, Sequence = interview.Sequence.Value });
+                        interviewSequenceViewRepository.Store(new InterviewSequenceView() { Id = interview.Id, ReceivedFromServerSequence = interview.Sequence.Value });
 
                     await this.synchronizationService.LogInterviewAsSuccessfullyHandledAsync(interview.Id);
 
@@ -286,7 +286,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                                                                    .ToList();
 
             var remoteInterviewsToCreate = remoteInterviews
-                .Where(interview => (!localInterviewIds.Contains(interview.Id) && IsNeedDownloadBySequenceValue(interview)) || obsoleteInterviews.Contains(interview.Id))
+                .Where(interview => (!localInterviewIds.Contains(interview.Id) && ShouldBeDownloadedBasedOnEventSequence(interview)) || obsoleteInterviews.Contains(interview.Id))
                 .ToList();
 
             this.RemoveInterviews(localInterviewIdsToRemove, statistics, progress);
@@ -294,14 +294,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             await this.CreateInterviewsAsync(remoteInterviewsToCreate, statistics, progress, cancellationToken);
         }
 
-        private bool IsNeedDownloadBySequenceValue(InterviewApiView interview)
+        private bool ShouldBeDownloadedBasedOnEventSequence(InterviewApiView interview)
         {
             if (!interview.Sequence.HasValue)
                 return true;
             var interviewSequenceView = interviewSequenceViewRepository.GetById(interview.Id);
             if (interviewSequenceView == null)
                 return true;
-            return interviewSequenceView.Sequence < interview.Sequence;
+            return interviewSequenceView.ReceivedFromServerSequence < interview.Sequence;
         }
 
         protected virtual async Task<List<Guid>> FindObsoleteInterviewsAsync(IEnumerable<InterviewView> localInterviews,
