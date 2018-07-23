@@ -1,10 +1,15 @@
 ﻿@using Humanizer
 @using Main.Core.Entities.SubEntities
+@using Newtonsoft.Json
 @using WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
 @using WB.Core.BoundedContexts.Headquarters.Services
 @using WB.Core.GenericSubdomains.Portable
 @using WB.Core.GenericSubdomains.Portable.ServiceLocation
+@using WB.Core.SharedKernels.DataCollection.ValueObjects
 @using WB.Core.SharedKernels.SurveyManagement.Web.Code
+@using WB.Core.BoundedContexts.Headquarters.Services
+@using WB.UI.Headquarters.Code
+@using WB.Core.SharedKernels.DataCollection.ValueObjects;
 @model WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles.InterviewerProfileModel
 
 @{
@@ -124,6 +129,13 @@
                 </li>
             }
             </ul>
+            @if (Model.SupportQRCodeGeneration)
+            {
+                <figure class="qrcode-wrapper">
+
+                <img id="download-qr" alt="QR Code" width="250" height="250" src="@Model.QRCodeAsBase64String"/>            
+                </figure>
+            }
         </div>
     </div>
 </div>
@@ -147,7 +159,8 @@
                     <div class="amount-of-questionnaires">@Model.ApprovedInterviewsByHqCount</div>
                     <div class="description">@Pages.InterviewerProfile_Approved</div>
                 </div>
-            </div>
+                </div>
+
         </div>
     </div>
 </div>

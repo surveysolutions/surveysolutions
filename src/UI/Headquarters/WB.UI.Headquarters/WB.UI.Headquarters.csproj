@@ -322,6 +322,12 @@
       <HintPath>..\..\..\..\packages\WebGrease.1.6.0\lib\WebGrease.dll</HintPath>
     </Reference>
     <Reference Include="WindowsBase" />
+    <Reference Include="zxing, Version=0.16.4.0, Culture=neutral, PublicKeyToken=4e88037ac681fe60, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\ZXing.Net.0.16.4\lib\net47\zxing.dll</HintPath>
+    </Reference>
+    <Reference Include="zxing.presentation, Version=0.16.4.0, Culture=neutral, PublicKeyToken=4e88037ac681fe60, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\ZXing.Net.0.16.4\lib\net47\zxing.presentation.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="App_GlobalResources\BatchUpload.es.resx">
@@ -2207,6 +2213,8 @@
     <Compile Include="Code\IRevalidateInterviewsAdministrationService.cs" />
     <Compile Include="Code\ApplicationSettings.cs" />
     <Compile Include="Code\MessageHandler\BasicAuthMessageHandler.cs" />
+    <Compile Include="Code\QRCodeHelper.cs" />
+    <Compile Include="Code\QRCodeBuilder.cs" />
     <Compile Include="Code\RevalidateInterviewsAdministrationService.cs" />
     <Compile Include="Code\Security\SimpleTokenVerifier.cs" />
     <Compile Include="API\Filters\UnhandledExceptionFilter.cs" />
@@ -2308,6 +2316,7 @@
     <Compile Include="Migrations\ReadSide\M001-100\QuestionnaireEntityMigration.cs" />
     <Compile Include="Migrations\Users\M005_AddDeviceAppVersionToProfile.cs" />
     <Compile Include="Migrations\Users\M201709081340_RemovedUserDocumentAndRolesTables.cs" />
+    <Compile Include="Models\DownloadModel.cs" />
     <Compile Include="Models\InterviewsDataTableRequest.cs" />
     <Compile Include="Models\Maps\MapsModel.cs" />
     <Compile Include="Models\Maps\UserMapModel.cs" />
