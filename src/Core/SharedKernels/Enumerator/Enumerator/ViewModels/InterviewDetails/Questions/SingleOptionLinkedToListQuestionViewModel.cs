@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Humanizer;
 using MvvmCross.Base;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
@@ -104,6 +105,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.linkedToQuestionId = questionnaire.GetQuestionReferencedByLinkedQuestion(this.Identity.Id);
 
+
+            var linkedToListQuestion = interview.GetSingleOptionLinkedToListQuestion(this.Identity);
+            this.previousOptionToReset = linkedToListQuestion.IsAnswered()
+                ? linkedToListQuestion.GetAnswer().SelectedValue
+                : (int?) null;
+
             this.Options = new CovariantObservableCollection<SingleOptionQuestionOptionViewModel>();
             this.Options.CollectionChanged += (sender, args) =>
             {
@@ -160,6 +167,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 		
         private async Task SaveAnswer()
         {
+            if (this.selectedOptionToSave == this.previousOptionToReset)
+                return;
+
             var selectedOption = this.GetOptionByValue(this.selectedOptionToSave);
             var previousOption = this.GetOptionByValue(this.previousOptionToReset);
 
@@ -172,11 +182,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             try
             {
+                if (previousOption != null)
+                {
+                    previousOption.Selected = false;
+                }
+
                 await this.Answering.SendAnswerQuestionCommandAsync(command);
 
-                this.QuestionState.Validity.ExecutedWithoutExceptions();
+                this.previousOptionToReset = this.selectedOptionToSave;
 
-                this.previousOptionToReset = null;
+                this.QuestionState.Validity.ExecutedWithoutExceptions();
             }
             catch (InterviewException ex)
             {
@@ -194,21 +209,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         internal async Task OptionSelectedAsync(object sender)
         {
-            var question = interview.GetSingleOptionLinkedToListQuestion(this.Identity);
             var selectedOption = (SingleOptionQuestionOptionViewModel) sender;
-            if (question.IsAnswered() && question.GetAnswer().SelectedValue == selectedOption.Value)
-                return;
-
-            selectedOptionToSave = selectedOption.Value;
+            this.selectedOptionToSave = selectedOption.Value;
             
-            var previousOption = this.Options.Except(selectedOption.ToEnumerable()).Where(option => option.Selected).ToList();
-
-            if (previousOptionToReset == null)
-            {
-                previousOptionToReset = previousOption.FirstOrDefault()?.Value;
-            }
-
-            previousOption.ForEach(x => x.Selected = false);
+            this.Options.Where(x=> x.Selected && x.Value!=selectedOptionToSave).ForEach(x => x.Selected = false);
 
             if (this.ThrottlePeriod == 0)
             {
@@ -251,6 +255,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 {
                     optionToDeselect.Selected = false;
                 }
+
+                this.previousOptionToReset = null;
             }
 
             if (@event.Questions.Any(question => question.Id == this.linkedToQuestionId))
