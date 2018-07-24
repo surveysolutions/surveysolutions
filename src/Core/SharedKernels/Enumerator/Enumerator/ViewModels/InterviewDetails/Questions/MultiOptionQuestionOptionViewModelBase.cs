@@ -1,6 +1,9 @@
+using System;
+using System.Diagnostics;
 using System.Linq;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
+using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
@@ -21,23 +24,33 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public string Title
         {
-            get { return this.title; }
-            set { this.RaiseAndSetIfChanged(ref this.title, value); }
+            get => this.title;
+            set => this.RaiseAndSetIfChanged(ref this.title, value);
         }
 
         public bool Checked
         {
-            get { return this.@checked; }
+            get => this.@checked;
             set
             {
                 if (this.@checked == value) return;
                 this.@checked = value;
                 if (value)
                 {
-                    this.CheckedOrder = this.QuestionViewModel.Options.Max(x => x.CheckedOrder) + 1;
+                    this.CheckedOrder = this.QuestionViewModel.Options
+                                            .Select(x => x.CheckedOrder ?? 0)
+                                            .DefaultIfEmpty(0)
+                                            .Max() + 1;
                 }
                 else
                 {
+                    if (this.CheckedOrder.HasValue)
+                    {
+                        this.QuestionViewModel.Options
+                            .Where(x => x.CheckedOrder > this.CheckedOrder)
+                            .ForEach(x => x.CheckedOrder -= 1);
+                    }
+
                     this.CheckedOrder = null;
                 }
 
@@ -47,7 +60,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public int? CheckedOrder
         {
-            get { return this.checkedOrder; }
+            get => this.checkedOrder;
             set
             {
                 if (this.checkedOrder == value) return;
