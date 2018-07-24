@@ -5,8 +5,6 @@
                 android:orientation="vertical"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                  android:minWidth="500dp"
-                  android:minHeight="500dp"
                 android:padding="@dimen/Interview_Overview_unanswered_background_padding">
 
         <TextView  android:layout_width="match_parent"
@@ -14,7 +12,7 @@
                    style="@style/Overview_NodeDetails_Title"
                    local:MvxBind="Text Localization('Interview_Overview_AdditionalInfo')"/>
 
-        <TextView  android:layout_width="match_parent"
+        <TextView  android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
                    style="@style/Overview_NodeDetails_SubTitle"
                    android:textColor="@color/errorTextColor"
@@ -25,7 +23,7 @@
                          android:orientation="vertical"
                          local:MvxItemTemplate="@layout/interview_overview_node_details_error">
         </MvxLinearLayout>
-        <TextView  android:layout_width="match_parent"
+        <TextView  android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
                    style="@style/Overview_NodeDetails_SubTitle"
                    android:textColor="@color/warningTextColor"
@@ -38,7 +36,7 @@
                          local:MvxItemTemplate="@layout/interview_overview_node_details_warning">
         </MvxLinearLayout>
 
-        <TextView  android:layout_width="match_parent"
+        <TextView  android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
                    style="@style/Overview_NodeDetails_SubTitle"
                    android:textColor="@color/comment_from_interviewer"
