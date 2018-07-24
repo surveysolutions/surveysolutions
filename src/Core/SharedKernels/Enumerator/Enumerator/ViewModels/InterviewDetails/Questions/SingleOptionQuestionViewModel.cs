@@ -91,6 +91,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var interview = this.interviewRepository.Get(interviewId);
             this.interviewId = interview.Id;
 
+            var singleOptionQuestion = interview.GetSingleOptionQuestion(this.questionIdentity);
+            this.previousOptionToReset = singleOptionQuestion.IsAnswered()
+                ? singleOptionQuestion.GetAnswer().SelectedValue
+                : (int?)null;
             this.UpdateQuestionOptions();
 
             this.filteredOptionsViewModel.OptionsChanged += FilteredOptionsViewModelOnOptionsChanged;
@@ -127,6 +131,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private async Task SaveAnswer()
         {
+            if (this.selectedOptionToSave == this.previousOptionToReset)
+                return;
+
             var selectedOption = this.GetOptionByValue(this.selectedOptionToSave);
             var previousOption = this.GetOptionByValue(this.previousOptionToReset);
 
@@ -149,9 +156,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
                 await this.Answering.SendAnswerQuestionCommandAsync(command).ConfigureAwait(false);
 
-                this.QuestionState.Validity.ExecutedWithoutExceptions();
+                this.previousOptionToReset = this.selectedOptionToSave;
 
-                this.previousOptionToReset = null;
+                this.QuestionState.Validity.ExecutedWithoutExceptions();
             }
             catch (InterviewException ex)
             {
@@ -177,9 +184,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             var selectedOption = (SingleOptionQuestionOptionViewModel)sender;
             selectedOptionToSave = selectedOption.Value;
-            
-            if (this.previousOptionToReset == null)
-                this.previousOptionToReset = this.Options.SingleOrDefault(option => option.Selected && option != selectedOption)?.Value;
 
             this.Options.Where(x=> x.Selected && x.Value!=selectedOptionToSave).ForEach(x => x.Selected = false);
 
@@ -236,6 +240,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     {
                         option.Selected = false;
                     }
+
+                    this.previousOptionToReset = null;
                 }
             }
         }
