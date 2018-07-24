@@ -45,7 +45,7 @@ namespace WB.UI.Shared.Enumerator.Activities
             {
                 if (node is OverviewQuestionViewModel question)
                 {
-                    return question.HasComment || question.ErrorMessages.Count > 0 || question.HasWarnings;
+                    return question.HasComment || question.HasErrors || question.HasWarnings;
                 }
                 else if (node is OverviewStaticText staticText)
                 {
