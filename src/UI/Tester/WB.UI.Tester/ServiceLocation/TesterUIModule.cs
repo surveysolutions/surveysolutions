@@ -7,6 +7,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.MapService;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Tester.Implementation.Services;
 using WB.UI.Tester.Infrastructure.Internals.Settings;
@@ -26,6 +27,7 @@ namespace WB.UI.Tester.ServiceLocation
             registry.Bind<TesterSettings>();
             registry.Bind<PhotoViewViewModel>();
             registry.BindAsSingleton<IInterviewViewModelFactory, InterviewViewModelFactory>();
+            registry.Bind<IGroupStateCalculationStrategy, EnumeratorGroupStateCalculationStrategy>();
 
 #if EXCLUDEEXTENSIONS
             registry.Bind<IAreaEditService, WB.UI.Shared.Enumerator.CustomServices.AreaEditor.DummyAreaEditService>();
