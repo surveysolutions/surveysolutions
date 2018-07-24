@@ -14,7 +14,7 @@ namespace WB.UI.Shared.Enumerator.Services
             var data = Encoding.UTF8.GetBytes(password);
             var saltBuffer = new byte[20];
             rng.GetBytes(saltBuffer);
-            var hash = SHA512.Create().ComputeHash(data.Union(saltBuffer).ToArray());
+            var hash = SHA512.Create().ComputeHash(data.Concat(saltBuffer).ToArray());
             return Convert.ToBase64String(saltBuffer) + ":" + Convert.ToBase64String(hash);
         }
 
