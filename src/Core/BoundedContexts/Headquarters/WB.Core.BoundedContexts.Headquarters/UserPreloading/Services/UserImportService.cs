@@ -111,7 +111,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Services
                                 dataException.ReadingContext.Row));
                     }
 
-                    if (userToImports.Current?.Email == string.Empty)
+                    if (userToImports.Current?.Email?.Trim() == string.Empty)
                         userToImports.Current.Email = null;
 
                     usersToImport.Add(userToImports.Current);
