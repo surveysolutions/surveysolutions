@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.OverviewTests
 
             Assert.That(node.Answer, Is.Null);
             Assert.That(node.IsAnswered, Is.False);
-            Assert.That(node.ErrorMessages, Is.Empty);
+            Assert.That(node.HasErrors, Is.False);
             Assert.That(node.HasWarnings, Is.False);
             Assert.That(node.State, Is.EqualTo(OverviewNodeState.Unanswered));
             Assert.That(node.Id, Is.EqualTo(identity.ToString()));

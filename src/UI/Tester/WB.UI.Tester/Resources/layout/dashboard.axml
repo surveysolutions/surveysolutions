@@ -20,7 +20,7 @@
                 local:MvxBind="Text HumanizedLastUpdateDate;" />
     </RelativeLayout>
       <ImageButton style="@style/Dashboard_SearchView_SearchButton"
-                   local:MvxBind="Click RefreshQuestionnairesCommand;"
+                   local:MvxBind="Click RefreshQuestionnairesCommand; Enabled Not(IsInProgress)"
                    local:srcCompat="@drawable/refresh"/>
       <ImageButton style="@style/Dashboard_SearchView_SearchButton"
         local:MvxBind="Click ShowSearchCommand; Visible Not(IsSearchVisible)"
