@@ -759,8 +759,8 @@
     <value>Выйти из поиска</value>
   </data>
   <data name="Synchronization_UploadAuditLog" xml:space="preserve">
-    <value>Загрузка на хедквотер аудин информации</value>
-    <comment>Загрузка на хедквотер аудин информации</comment>
+    <value>Загрузка на хедквотер аудит информации</value>
+    <comment>Загрузка на хедквотер аудит информации</comment>
   </data>
   <data name="Synchronization_CheckForObsolete_Interviews" xml:space="preserve">
     <value>Проверка устаревших интервью</value>
