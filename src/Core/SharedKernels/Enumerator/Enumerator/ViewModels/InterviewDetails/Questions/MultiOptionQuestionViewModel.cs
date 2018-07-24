@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -102,6 +101,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.isRosterSizeQuestion = questionnaire.IsRosterSizeQuestion(entityIdentity.Id);
 
             this.UpdateQuestionOptions();
+
+            PreviousOptionsToReset = interview.GetMultiOptionQuestion(this.Identity)?.GetAnswer()?.CheckedValues?.ToList();
+            this.selectedOptionsToSave = PreviousOptionsToReset.ToList();
 
             filteredOptionsViewModel.OptionsChanged += FilteredOptionsViewModelOnOptionsChanged;
         }
@@ -233,7 +235,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             try
             {
                 await this.Answering.SendAnswerQuestionCommandAsync(command);
-                PreviousOptionsToReset = null;
+                PreviousOptionsToReset = selectedValues.ToList();
                 
                 if (selectedValues.Length == this.maxAllowedAnswers)
                 {
@@ -264,7 +266,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 option.Checked = answer.CheckedValues.Contains(option.Value);
             }
 
-            PreviousOptionsToReset = null;
+            PreviousOptionsToReset = answer.CheckedValues.ToList();
         }
 
         public async Task ToggleAnswerAsync(MultiOptionQuestionOptionViewModelBase changedModel)
@@ -273,14 +275,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.areAnswersOrdered ?
                     this.Options.Where(x => x.Checked).OrderBy(x => x.CheckedOrder ?? 0).Select(x => x.Value).ToList() :
                     this.Options.Where(x => x.Checked).Select(x => x.Value).ToList();
-
-            if (previousOptionsToReset == null)
-            {
-                var toggledOptionValue = (changedModel as MultiOptionQuestionOptionViewModel).Value;
-                PreviousOptionsToReset = allSelectedOptions.Except(toggledOptionValue.ToEnumerable()).ToList();
-                if (!changedModel.Checked)
-                    PreviousOptionsToReset.Add(toggledOptionValue);
-            }
 
             if (this.maxAllowedAnswers.HasValue && allSelectedOptions.Count > this.maxAllowedAnswers)
             {
@@ -311,6 +305,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     option.CanBeChecked = true;
                 }
 
+                PreviousOptionsToReset = null;
                 UpateMaxAnswersCountMessage(0);
             }
         }
