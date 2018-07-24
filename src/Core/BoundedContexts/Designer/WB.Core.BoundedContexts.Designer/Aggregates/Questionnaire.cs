@@ -24,7 +24,6 @@ using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
-using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.Infrastructure.Aggregates;
@@ -263,6 +262,11 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     {
                         yield return QuestionnaireEntityReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.OptionsFilter);
                     }
+
+                    if (MatchesSearchTerm(question.Instructions, searchRegex) || MatchesSearchTerm(question.Instructions, searchRegex))
+                    {
+                        yield return QuestionnaireEntityReference.CreateFrom(questionnaireItem, QuestionnaireVerificationReferenceProperty.Instructions);
+                    }
                 }
 
                 var group = questionnaireItem as IGroup;
@@ -451,6 +455,12 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
                     {
                         replacedAny = true;
                         question.LinkedFilterExpression = ReplaceUsingSearchTerm(question.LinkedFilterExpression, searchRegex, command.ReplaceWith);
+                    }
+
+                    if (MatchesSearchTerm(question.Instructions, searchRegex))
+                    {
+                        replacedAny = true;
+                        question.Instructions = ReplaceUsingSearchTerm(question.Instructions, searchRegex, command.ReplaceWith);
                     }
                 }
 

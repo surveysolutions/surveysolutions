@@ -748,13 +748,13 @@ Downloaded {3}%</value>
     <value>Exit Search</value>
   </data>
   <data name="SendToSupervisor_MovingToSupervisorDevice" xml:space="preserve">
-    <value>Moving all completed interviews to supervisor device</value>
+    <value>Moving all completed interviews to supervisor's device</value>
   </data>
   <data name="SendToSupervisor_MovingToSupervisorFormat" xml:space="preserve">
     <value>Moving all completed interviews to '{0}'</value>
   </data>
   <data name="SendToSupervisor_CheckSupervisorDevice" xml:space="preserve">
-    <value>Check that supervisor device has wifi and bluetooth turned on and you are withing couple of meters from it</value>
+    <value>Check that supervisor's device has wifi and bluetooth turned on and you are within couple of meters from it</value>
   </data>
   <data name="SendToSupervisor_TransferInProgress" xml:space="preserve">
     <value>Transfer in progress</value>
@@ -772,8 +772,8 @@ Downloaded {3}%</value>
     <value>Connected to supervisor's device</value>
   </data>
   <data name="SendToSupervisor_SupervisorNotFound" xml:space="preserve">
-    <value>Transfer did not started.
-Supervisor device can not be located</value>
+    <value>Transfer has not been started.
+Supervisor's device can not be located</value>
   </data>
   <data name="SendToSupervisor_SupervisorTerminateTransfering" xml:space="preserve">
     <value>Transfer was aborted on second device.</value>
@@ -782,23 +782,19 @@ Supervisor device can not be located</value>
     <value>Some interviews are now on another device</value>
   </data>
   <data name="SendToSupervisor_SyncCompleted" xml:space="preserve">
-    <value>Transfer is complete. All completed interviews are now on another device</value>
+    <value>Transfer is finished. All completed interviews are now on another device</value>
   </data>
   <data name="SendToSupervisor_SyncCompletedWithErrorsFormat" xml:space="preserve">
-    <value>Transfer is complete. {0} interview(s) failed to synchronize</value>
+    <value>Transfer is finished. {0} interview(s) failed to synchronize</value>
   </data>
   <data name="SendToSupervisor_LookingForSupervisor" xml:space="preserve">
-    <value>Looking for supervisor device</value>
+    <value>Looking for supervisor's device</value>
   </data>
-  <data name="SendToSupervisor_MenuItem_Title" xml:space="preserve">
-    <value>Move completed
-interviews</value>
-  </data>
-  <data name="SendToSupervisor_Note" xml:space="preserve">
+    <data name="SendToSupervisor_Note" xml:space="preserve">
     <value>Note: This action will take more time than usual, do not turn of this device</value>
   </data>
   <data name="SendToSupervisor_ConnectionFailed" xml:space="preserve">
-    <value>Make sure both devices is in close proximity; WIFI and Bluetooth should be enabled on both devices; Supervisor application should be opened on Supervisor's device</value>
+    <value>Make sure both devices are in close proximity; WIFI and Bluetooth should be enabled on both devices; Supervisor application should be opened on supervisor's device</value>
   </data>
   <data name="SendToSupervisor_Retry" xml:space="preserve">
     <value>Retry</value>

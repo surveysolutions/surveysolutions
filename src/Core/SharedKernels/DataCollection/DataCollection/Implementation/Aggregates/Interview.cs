@@ -2081,9 +2081,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
         private void ApplySubstitutionEvents(IReadOnlyCollection<InterviewTreeNodeDiff> diff)
         {
-            var groupsWithChangedTitles = diff.OfType<InterviewTreeGroupDiff>().Where(x => x.IsTitleChanged).Select(x => x.ChangedNode.Identity).ToArray();
-            var questionsWithChangedTitles = diff.OfType<InterviewTreeQuestionDiff>().Where(x => x.IsTitleChanged || x.AreValidationMessagesChanged).Select(x => x.ChangedNode.Identity).ToArray();
-            var staticTextsWithChangedTitles = diff.OfType<InterviewTreeStaticTextDiff>().Where(x => x.IsTitleChanged || x.AreValidationMessagesChanged).Select(x => x.ChangedNode.Identity).ToArray();
+            var groupsWithChangedTitles = diff.OfType<InterviewTreeGroupDiff>()
+                .Where(x => x.IsTitleChanged).Select(x => x.ChangedNode.Identity).ToArray();
+
+            var questionsWithChangedTitles = diff.OfType<InterviewTreeQuestionDiff>()
+                .Where(x => x.IsTitleChanged || x.AreValidationMessagesChanged || x.WereInstructionsChanged)
+                .Select(x => x.ChangedNode.Identity).ToArray();
+
+            var staticTextsWithChangedTitles = diff.OfType<InterviewTreeStaticTextDiff>()
+                .Where(x => x.IsTitleChanged || x.AreValidationMessagesChanged)
+                .Select(x => x.ChangedNode.Identity).ToArray();
 
             if (groupsWithChangedTitles.Any() || questionsWithChangedTitles.Any() || staticTextsWithChangedTitles.Any())
             {
@@ -2725,8 +2732,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                         .Select(x => this.substitutionTextFactory.CreateText(question.Identity, x, questionnaire))
                         .ToArray();
 
+                    SubstitutionText instructions = this.substitutionTextFactory.CreateText(question.Identity,
+                        questionnaire.GetQuestionInstruction(question.Identity.Id), questionnaire);
+
                     question.SetTitle(title);
                     question.SetValidationMessages(validationMessages);
+                    question.SetInstructions(instructions);
                     question.ReplaceSubstitutions();
                 }
 

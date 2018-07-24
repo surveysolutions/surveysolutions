@@ -130,12 +130,12 @@
                         var data = result.data;
                         $scope.initialQuestion = angular.copy(data);
                         dataBind(data);
-                        utilityService.scrollToValidationCondition($state.params.indexOfEntityInProperty);
+                        
                         
                         var focusId = null;
                         switch ($state.params.property) {
                             case 'Title':
-                                focusId = 'edit-question-title';
+                                focusId = 'edit-question-title-highlight';
                                 break;
                             case 'VariableName':
                                 focusId = 'edit-question-variable-name';
@@ -147,7 +147,7 @@
                                 focusId = 'validation-expression-' + $state.params.indexOfEntityInProperty;
                                 break;
                             case 'ValidationMessage':
-                                focusId = 'validationMessage' + $state.params.indexOfEntityInProperty;
+                                focusId = 'validation-message-' + $state.params.indexOfEntityInProperty;
                                 break;
                             case 'Option':
                                 focusId = 'option-title-' + $state.params.indexOfEntityInProperty;
@@ -155,8 +155,16 @@
                             case 'OptionsFilter':
                                 focusId = 'optionsFilterExpression';
                                 break;
+                            case 'Instructions':
+                                focusId = 'edit-question-instructions';
                             default:
                                 break;
+                        }
+
+                        if (!_.isNull($state.params.indexOfEntityInProperty))
+                            utilityService.scrollToValidationCondition($state.params.indexOfEntityInProperty);
+                        else {
+                            utilityService.scrollToElement(".question-editor .form-holder", "#" + focusId);
                         }
 
                         utilityService.setFocusIn(focusId);

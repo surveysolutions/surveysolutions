@@ -93,6 +93,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         string GetTitleText(Identity entityIdentity);
         string GetBrowserReadyTitleHtml(Identity entityIdentity);
 
+        string GetBrowserReadyInstructionsHtml(Identity entityIdentity);
+
         IEnumerable<string> GetParentRosterTitlesWithoutLast(Identity questionIdentity);
 
         IEnumerable<string> GetParentRosterTitlesWithoutLastForRoster(Identity rosterIdentity);
