@@ -26,7 +26,7 @@ namespace WB.UI.Shared.Enumerator.Services
             if (split.Length != 2) return false;
             var data = Encoding.UTF8.GetBytes(password);
 
-            var newHash = SHA512.Create().ComputeHash(data.Union(Convert.FromBase64String(split[0])).ToArray());
+            var newHash = SHA512.Create().ComputeHash(data.Concat(Convert.FromBase64String(split[0])).ToArray());
             
             var oldHash = Convert.FromBase64String(split[1]);
 
