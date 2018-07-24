@@ -16,20 +16,6 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
 namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 {
-    public enum ConnectionStatus
-    {
-        WaitingForGoogleApi,
-        StartDiscovering,
-        StartAdvertising,
-        Disconnected,
-        Connecting,
-        Sync,
-        Done,
-        Connected,
-        Advertising,
-        Error
-    }
-
     [ExcludeFromCodeCoverage()] // TODO: remove attribute when UI binding completed
     public class OfflineSupervisorSyncViewModel : BaseOfflineSyncViewModel, IOfflineSyncViewModel
     {
