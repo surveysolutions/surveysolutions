@@ -7,7 +7,7 @@
                 android:layout_height="wrap_content"
                 android:padding="@dimen/Interview_Overview_unanswered_background_padding">
 
-        <TextView  android:layout_width="match_parent"
+        <TextView  android:layout_width="wrap_content"
                    android:layout_height="wrap_content"
                    style="@style/Overview_NodeDetails_Title"
                    local:MvxBind="Text Localization('Interview_Overview_AdditionalInfo')"/>
