@@ -51,12 +51,12 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
         }
 
         [Test]
-        public async Task CanSynchronize_should_check_user_Token()
+        public async Task CanSynchronize_should_check_security_stamp()
         {
             var userId = Guid.NewGuid();
             var userToken = "test token";
             var users = new Mock<IPlainStorage<InterviewerDocument>>();
-            users.Setup(x => x.GetById(userId.FormatGuid())).Returns(new InterviewerDocument() { Token = userToken });
+            users.Setup(x => x.GetById(userId.FormatGuid())).Returns(new InterviewerDocument() { SecurityStamp = userToken });
 
             var handler = Create.Service.SupervisorInterviewsHandler(interviewerViewRepository: users.Object);
 

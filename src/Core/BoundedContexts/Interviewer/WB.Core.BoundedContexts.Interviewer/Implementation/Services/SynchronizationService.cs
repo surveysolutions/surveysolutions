@@ -18,6 +18,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
     {
         protected override string ApiVersion => "v2";
         protected override string ApiUrl => "api/interviewer/";
+        public string ApiDownloadAppPrefixUrl => "/api/interviewersync";
 
         protected override string InterviewsController => string.Concat(ApiUrl, "v3", "/interviews");
 
@@ -35,7 +36,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                 this.restService.GetAsync<InterviewerApiView>(url: string.Concat(this.UsersController, "/current"),
                     credentials: credentials ?? this.restCredentials, token: token));
         }
-
         protected override string CanSynchronizeValidResponse => "449634775";
     }
 }
