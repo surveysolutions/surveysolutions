@@ -105,6 +105,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.linkedToQuestionId = questionnaire.GetQuestionReferencedByLinkedQuestion(this.Identity.Id);
             this.parentRosterIds = questionnaire.GetRostersFromTopToSpecifiedEntity(this.linkedToQuestionId).ToHashSet();
+            
+            this.previousOptionToReset = interview.GetLinkedSingleOptionQuestion(this.Identity).GetAnswer().SelectedValue;
 
             this.Options = new CovariantObservableCollection<SingleOptionLinkedQuestionOptionViewModel>(this.CreateOptions());
             this.Options.CollectionChanged += (sender, args) =>
@@ -163,6 +165,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private async Task SaveAnswer()
         {
+            if (this.selectedOptionToSave.SequenceEqual(this.previousOptionToReset))
+                return;
+
             var selectedOption = this.GetOptionByValue(this.selectedOptionToSave);
             var previousOption = this.GetOptionByValue(this.previousOptionToReset);
 
@@ -184,10 +189,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 }
 
                 await this.Answering.SendAnswerQuestionCommandAsync(command);
+                
+                this.previousOptionToReset = this.selectedOptionToSave;
 
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
-
-                this.previousOptionToReset = null;
             }
             catch (InterviewException ex)
             {
@@ -211,8 +216,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             var selectedOption = (SingleOptionLinkedQuestionOptionViewModel) sender;
             this.selectedOptionToSave = selectedOption.RosterVector;
-            if (this.previousOptionToReset == null)
-                this.previousOptionToReset = this.Options.SingleOrDefault(option => option.Selected && option != selectedOption)?.RosterVector;
 
             this.Options.Where(option => option.Selected && option != selectedOption).ForEach(x => x.Selected = false);
 
@@ -243,6 +246,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     {
                         option.Selected = false;
                     }
+
+                    this.previousOptionToReset = null;
                 }
             }
         }
