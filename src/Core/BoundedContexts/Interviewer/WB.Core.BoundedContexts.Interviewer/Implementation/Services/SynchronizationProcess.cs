@@ -120,18 +120,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 
         protected override async void CheckAfterStartSynchronization(CancellationToken cancellationToken){
 
+            var currentSupervisorId = await this.synchronizationService.GetCurrentSupervisor(token: cancellationToken, credentials: this.restCredentials);
+            if (currentSupervisorId != this.principal.CurrentUserIdentity.SupervisorId)
+            {
+                this.UpdateSupervisorOfInterviewer(currentSupervisorId);
+            }
+
             if (SynchronizationType == SynchronizationType.Online)
             {
                 var interviewer = await this.interviewerSynchronizationService
                     .GetInterviewerAsync(this.restCredentials, token: cancellationToken).ConfigureAwait(false);
                 UpdateSecurityStampOfInterviewer(interviewer.SecurityStamp);
-            }
-
-            var currentSupervisorId = await this.synchronizationService.GetCurrentSupervisor(token: cancellationToken, credentials: this.restCredentials);
-            
-            if (currentSupervisorId != this.principal.CurrentUserIdentity.SupervisorId)
-            {
-                this.UpdateSupervisorOfInterviewer(currentSupervisorId);
             }
         }
 
