@@ -204,7 +204,7 @@
   </data>
     <data name="RocordsMissing" xml:space="preserve">
     <value>Еще нет записей</value>
-    <comment>Аудин записи не найдены</comment>
+    <comment>Аудит записи не найдены</comment>
   </data>
     <data name="PageTitle" xml:space="preserve">
     <value>Лог действий</value>
