@@ -42,8 +42,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 return IdentityResult.Failed(FieldsAndValidations.CannotUpdate_CurrentUserDoesNotExists);
             if(appUser.IsArchived)
                 return IdentityResult.Failed(FieldsAndValidations.CannotUpdate_CurrentUserIsArchived);
-            
-            appUser.Email = editModel.Email;
+
+            appUser.Email = editModel.Email ?? string.Empty; // default value for email field
             appUser.FullName = editModel.PersonName;
             appUser.PhoneNumber = editModel.PhoneNumber;
             appUser.IsLockedBySupervisor = editModel.IsLockedBySupervisor;
@@ -87,7 +87,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 IsLockedBySupervisor = isLockedBySupervisor ?? false,
                 IsLockedByHeadquaters = user.IsLocked,
                 FullName = user.PersonName,
-                Email = user.Email,
+                Email = user.Email ?? string.Empty, // default value for email field
                 UserName = user.UserName,
                 PhoneNumber = user.PhoneNumber,
                 Profile = supervisorId.HasValue ? new HqUserProfile {SupervisorId = supervisorId} : null
