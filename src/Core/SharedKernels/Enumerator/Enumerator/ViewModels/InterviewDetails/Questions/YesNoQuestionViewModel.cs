@@ -268,11 +268,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             PreviousOptionToReset = answer.Select(x => new AnsweredYesNoOption(x.Value, x.Yes)).ToList();
         }
 
-        private YesNoQuestionOptionViewModel GetOptionByValue(decimal value)
-        {
-            return this.Options.FirstOrDefault(x => x.Value == value);
-        }
-
         public async Task ToggleAnswerAsync(YesNoQuestionOptionViewModel changedModel, bool? oldValue)
         {
             List<YesNoQuestionOptionViewModel> allSelectedOptions =
@@ -330,6 +325,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                         option.YesCanBeChecked = true;
                     }
                 }
+
+                PreviousOptionToReset = null;
 
                 UpateMaxAnswersCountMessage(0);
             }
