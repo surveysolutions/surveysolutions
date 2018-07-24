@@ -103,7 +103,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.UpdateQuestionOptions();
 
             PreviousOptionsToReset = interview.GetMultiOptionQuestion(this.Identity)?.GetAnswer()?.CheckedValues?.ToList();
-            this.selectedOptionsToSave = PreviousOptionsToReset.ToList();
 
             filteredOptionsViewModel.OptionsChanged += FilteredOptionsViewModelOnOptionsChanged;
         }
