@@ -19,6 +19,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         public string PersonName { get; set; }
         public string PhoneNumber { get; set; }
 
+        public string SecurityStamp { get; set; }
+
         public bool IsSupervisor()
         {
             return Roles.Any(role => role == UserRoles.Supervisor);

@@ -31,5 +31,17 @@ namespace WB.Tests.Unit.GenericSubdomains.Utils.PasswordHasherTests
             Assert.True(subject.VerifyPassword(anotherHash, "Hello"));
             Assert.False(subject.VerifyPassword(hash, "NotHello"));
         }
+
+        [Test]
+        public void Should_work_has_different_hashes_for_Hello()
+        {
+            var subject = new DevicePasswordHasher();
+
+            var hash = subject.Hash("Hello");
+
+            Assert.True(subject.VerifyPassword(hash, "Hello"));
+            Assert.False(subject.VerifyPassword(hash, "HHHeeellllooo"));
+            Assert.False(subject.VerifyPassword(hash, "NotHello"));
+        }
     }
 }
