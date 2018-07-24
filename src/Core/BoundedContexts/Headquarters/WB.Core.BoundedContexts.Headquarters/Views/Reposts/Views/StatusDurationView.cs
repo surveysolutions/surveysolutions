@@ -14,15 +14,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Views
         public DateTime? StartDate { get; set; }
         public DateTime EndDate { get; set; }
 
-        public int SupervisorAssignedCount { get; set; }
-        public int InterviewerAssignedCount { get; set; }
-        public int CompletedCount { get; set; }
-        public int RejectedBySupervisorCount { get; set; }
-        public int ApprovedBySupervisorCount { get; set; }
-        public int RejectedByHeadquartersCount { get; set; }
-        public int ApprovedByHeadquartersCount { get; set; }
+        public long SupervisorAssignedCount { get; set; }
+        public long InterviewerAssignedCount { get; set; }
+        public long CompletedCount { get; set; }
+        public long RejectedBySupervisorCount { get; set; }
+        public long ApprovedBySupervisorCount { get; set; }
+        public long RejectedByHeadquartersCount { get; set; }
+        public long ApprovedByHeadquartersCount { get; set; }
 
-        public int TotalCount => InterviewerAssignedCount + SupervisorAssignedCount +
+        public long TotalCount => InterviewerAssignedCount + SupervisorAssignedCount +
                                  CompletedCount + ApprovedBySupervisorCount + RejectedBySupervisorCount +
                                  ApprovedByHeadquartersCount + RejectedByHeadquartersCount;
     }

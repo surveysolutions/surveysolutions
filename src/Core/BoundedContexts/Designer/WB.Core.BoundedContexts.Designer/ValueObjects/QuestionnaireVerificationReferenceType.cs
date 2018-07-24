@@ -27,6 +27,7 @@ namespace WB.Core.BoundedContexts.Designer.ValueObjects
         FixedRosterItem = 8,
         OptionsFilter = 9,
         AttachmentName = 10,
-        VariableLabel = 11
+        VariableLabel = 11,
+        Instructions = 12
     }
 }

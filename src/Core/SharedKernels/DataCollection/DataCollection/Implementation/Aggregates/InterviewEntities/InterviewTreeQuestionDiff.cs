@@ -12,9 +12,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             var sourceQuestionNode = sourceNode as InterviewTreeQuestion;
             var changedQuestionNode = changedNode as InterviewTreeQuestion;
             IsTitleChanged = IsTitleChangedImpl(sourceQuestionNode, changedQuestionNode);
+            WereInstructionsChanged = WereInstructionsChangedImpl(sourceQuestionNode, changedQuestionNode);
 
             IsAnswerRemoved = IsAnswerRemovedImpl(sourceQuestionNode, changedQuestionNode);
-
             IsAnswerChanged = IsAnswerChangedImpl(sourceQuestionNode, changedQuestionNode);
             AreLinkedOptionsChanged = AreLinkedOptionsChangedImpl(sourceQuestionNode, changedQuestionNode);
             AreLinkedToListOptionsChanged = AreLinkedToListOptionsChangedImpl(sourceQuestionNode, changedQuestionNode);
@@ -31,6 +31,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public bool IsTitleChanged { get; }
 
+        public bool WereInstructionsChanged { get; }
+
         public bool IsAnswerRemoved { get; }
 
         public bool IsAnswerChanged { get; }
@@ -44,6 +46,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (IsNodeRemoved) return false;
             if (IsNodeAdded && !changedNode.Title.HasSubstitutions) return false;
             return sourceNode?.Title.Text != changedNode.Title.Text;
+        }
+
+        public bool WereInstructionsChangedImpl(InterviewTreeQuestion sourceNode, InterviewTreeQuestion changedNode)
+        {
+            if (IsNodeRemoved) return false;
+            if (IsNodeAdded && !changedNode.Instructions.HasSubstitutions) return false;
+            return sourceNode?.Instructions.Text != changedNode.Instructions.Text;
         }
 
         public bool AnswersMarkedAsProtectedImpl(InterviewTreeQuestion sourceNode, InterviewTreeQuestion changedNode)

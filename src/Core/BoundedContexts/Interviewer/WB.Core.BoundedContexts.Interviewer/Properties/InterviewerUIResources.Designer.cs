@@ -1293,7 +1293,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Check that supervisor device has wifi and bluetooth turned on and you are withing couple of meters from it.
+        ///   Looks up a localized string similar to Check that supervisor&apos;s device has wifi and bluetooth turned on and you are within couple of meters from it.
         /// </summary>
         public static string SendToSupervisor_CheckSupervisorDevice {
             get {
@@ -1302,7 +1302,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Make sure both devices is in close proximity; WIFI and Bluetooth should be enabled on both devices; Supervisor application should be opened on Supervisor&apos;s device.
+        ///   Looks up a localized string similar to Make sure both devices are in close proximity; WIFI and Bluetooth should be enabled on both devices; Supervisor application should be opened on supervisor&apos;s device.
         /// </summary>
         public static string SendToSupervisor_ConnectionFailed {
             get {
@@ -1338,7 +1338,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Looking for supervisor device.
+        ///   Looks up a localized string similar to Looking for supervisor&apos;s device.
         /// </summary>
         public static string SendToSupervisor_LookingForSupervisor {
             get {
@@ -1347,17 +1347,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Move completed
-        ///interviews.
-        /// </summary>
-        public static string SendToSupervisor_MenuItem_Title {
-            get {
-                return ResourceManager.GetString("SendToSupervisor_MenuItem_Title", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Moving all completed interviews to supervisor device.
+        ///   Looks up a localized string similar to Moving all completed interviews to supervisor&apos;s device.
         /// </summary>
         public static string SendToSupervisor_MovingToSupervisorDevice {
             get {
@@ -1402,8 +1392,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Transfer did not started.
-        ///Supervisor device can not be located.
+        ///   Looks up a localized string similar to Transfer has not been started.
+        ///Supervisor&apos;s device can not be located.
         /// </summary>
         public static string SendToSupervisor_SupervisorNotFound {
             get {
@@ -1421,7 +1411,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Transfer is complete. All completed interviews are now on another device.
+        ///   Looks up a localized string similar to Transfer is finished. All completed interviews are now on another device.
         /// </summary>
         public static string SendToSupervisor_SyncCompleted {
             get {
@@ -1430,7 +1420,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Transfer is complete. {0} interview(s) failed to synchronize.
+        ///   Looks up a localized string similar to Transfer is finished. {0} interview(s) failed to synchronize.
         /// </summary>
         public static string SendToSupervisor_SyncCompletedWithErrorsFormat {
             get {

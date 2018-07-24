@@ -270,6 +270,24 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                     Reason = SyncDeclineReason.NotATeamMember
                 });
             }
+            
+            if (user.SecurityStamp != arg.SecurityStamp)
+            {
+                return Task.FromResult(new CanSynchronizeResponse
+                {
+                    CanSyncronize = false,
+                    Reason = SyncDeclineReason.InvalidPassword
+                });
+            }
+
+            if (user.IsLockedByHeadquarters || user.IsLockedBySupervisor)
+            {
+                return Task.FromResult(new CanSynchronizeResponse
+                {
+                    CanSyncronize = false,
+                    Reason = SyncDeclineReason.UserIsLocked
+                });
+            }
 
             return Task.FromResult(new CanSynchronizeResponse
             {
@@ -296,6 +314,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                 Id = x.InterviewId,
                 IsRejected = x.Status == InterviewStatus.RejectedBySupervisor,
                 QuestionnaireIdentity = QuestionnaireIdentity.Parse(x.QuestionnaireId),
+                ResponsibleId = x.ResponsibleId,
                 Sequence = eventStore.GetMaxSequenceForAnyEvent(x.InterviewId, EventsThatAssignInterviewToResponsibleProvider.GetTypeNames())
             }).ToList();
 
