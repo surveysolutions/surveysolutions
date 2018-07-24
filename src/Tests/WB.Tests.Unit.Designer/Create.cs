@@ -957,7 +957,7 @@ namespace WB.Tests.Unit.Designer
 
         {
             var publicKey = questionId ?? Guid.NewGuid();
-            var stataExportCaption = variable ?? GetNameForEntity("text_quetion", publicKey);
+            var stataExportCaption = variable ?? GetNameForEntity("text_question", publicKey);
             return new TextQuestion(text)
             {
                 PublicKey = publicKey,
