@@ -105,8 +105,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.linkedToQuestionId = questionnaire.GetQuestionReferencedByLinkedQuestion(this.Identity.Id);
             this.parentRosterIds = questionnaire.GetRostersFromTopToSpecifiedEntity(this.linkedToQuestionId).ToHashSet();
-            
-            this.previousOptionToReset = interview.GetLinkedSingleOptionQuestion(this.Identity).GetAnswer().SelectedValue;
+
+            var question = interview.GetLinkedSingleOptionQuestion(this.Identity);
+            this.previousOptionToReset = question.IsAnswered() ? (decimal[])question.GetAnswer()?.SelectedValue : (decimal[])null;
 
             this.Options = new CovariantObservableCollection<SingleOptionLinkedQuestionOptionViewModel>(this.CreateOptions());
             this.Options.CollectionChanged += (sender, args) =>
@@ -165,7 +166,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private async Task SaveAnswer()
         {
-            if (this.selectedOptionToSave.SequenceEqual(this.previousOptionToReset))
+            if (this.previousOptionToReset != null && this.selectedOptionToSave.SequenceEqual(this.previousOptionToReset))
                 return;
 
             var selectedOption = this.GetOptionByValue(this.selectedOptionToSave);
