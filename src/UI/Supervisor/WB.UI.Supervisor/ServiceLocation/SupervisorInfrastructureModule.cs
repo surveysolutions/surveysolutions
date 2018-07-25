@@ -59,6 +59,7 @@ namespace WB.UI.Supervisor.ServiceLocation
             registry.BindAsSingleton<IAssignmentDocumentsStorage, AssignmentDocumentsStorage>();
             registry.BindAsSingleton<IAuditLogService, EnumeratorAuditLogService>();
             registry.BindAsSingleton<ITabletInfoService, TabletInfoService>();
+            registry.BindAsSingleton<IDeviceSynchronizationProgress, DeviceSynchronizationProgress>();
             
             registry.BindAsSingleton<IEnumeratorEventStorage, SqliteMultiFilesEventStorage>();
             registry.BindToRegisteredInterface<IEventStore, IEnumeratorEventStorage>();

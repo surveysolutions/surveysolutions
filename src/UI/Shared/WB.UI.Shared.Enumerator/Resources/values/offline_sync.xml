@@ -1,17 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <resources>
-    <style name="OfflineSync_HeaderText" parent="AppTheme">
+    <style name="OfflineSync_HeaderText">
         <item name="android:fontFamily">Roboto</item>
         <item name="android:textSize">@dimen/textsize_24</item>
         <item name="android:textColor">@color/offline_sync_regular_text</item>
     </style>
-    <style name="OfflineSync_SubTitleText" parent="AppTheme">
+    <style name="OfflineSync_SubTitleText">
         <item name="android:fontFamily">Roboto</item>
         <item name="android:textSize">@dimen/textsize_18</item>
         <item name="android:textColor">@color/offline_sync_regular_text</item>
         <item name="android:textStyle">bold</item>
     </style>
-    <style name="OfflineSync_Hyperlink" parent="AppTheme">
+    <style name="OfflineSync_Hyperlink">
         <item name="android:fontFamily">Roboto</item>
         <item name="android:textSize">@dimen/textsize_14</item>
         <item name="android:textColor">@color/offline_sync_regular_text</item>
@@ -19,8 +19,17 @@
         <item name="android:textAllCaps">true</item>
         <item name="android:letterSpacing">0.1</item>
     </style>
+    
+    <style name="Supervisor_OfflineSync_MainHolder">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:layout_marginLeft">@dimen/Interview_Entity_margin_left</item>
+        <item name="android:layout_marginRight">@dimen/Interview_Entity_margin_right</item>
+        <item name="android:layout_marginTop">@dimen/Interview_Entity_margin_vertical</item>
+    </style>
 
-    <style name="OfflineSync_MainHolder" parent="AppTheme">
+    <style name="OfflineSync_MainHolder">
         <item name="android:layout_width">@dimen/OfflineSync_MainHolder_LayoutWidth</item>
         <item name="android:layout_marginLeft">@dimen/OfflineSync_Base_MarginTop</item>
         <item name="android:layout_marginTop">@dimen/OfflineSync_Base_MarginTop</item>

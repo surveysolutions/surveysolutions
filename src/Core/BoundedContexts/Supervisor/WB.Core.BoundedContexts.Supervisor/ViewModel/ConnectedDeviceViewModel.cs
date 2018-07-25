@@ -1,67 +1,64 @@
-﻿using System;
-using System.Threading.Tasks;
-using Humanizer;
-using Humanizer.Bytes;
-using MvvmCross.Commands;
+﻿using MvvmCross.Commands;
 using MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.Supervisor.Properties;
-using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 {
     public class ConnectedDeviceViewModel : MvxViewModel
     {
+        private string interviewerName;
+        private SendingDeviceStatus status;
+        private SynchronizationStatistics statistics;
 
-        private string progressStatus;
-        public string ProgressStatus
+        public string InterviewerName
         {
-            get => this.progressStatus;
-            set => this.SetProperty(ref this.progressStatus, value);
+            get => interviewerName;
+            set => SetProperty(ref interviewerName, value);
         }
 
-        private string networkInfo;
-        public string NetworkInfo
+        public SendingDeviceStatus Status
         {
-            get => this.networkInfo;
-            set => this.SetProperty(ref this.networkInfo, value);
+            get => status;
+            set => SetProperty(ref status, value);
         }
 
-        private int progressInPercents;
-        public int ProgressInPercents
-        {
-            get => this.progressInPercents;
-            set => this.SetProperty(ref this.progressInPercents, value);
-        }
+        //public override Task Initialize()
+        //{
+        //    this.ProgressStatus = string.Format(SupervisorUIResources.OfflineSync_TransferInterviewsFormat, "interviewer1", 2, 5);
 
-        private TransferingStatus transferingStatus;
-        public TransferingStatus TransferingStatus
-        {
-            get => this.transferingStatus;
-            set => this.SetProperty(ref this.transferingStatus, value);
-        }
+        //    var speed = ByteSize.FromKilobytes(352);
+        //    var measurementInterval = TimeSpan.FromSeconds(1);
+        //    var kbPerSec = speed.Per(measurementInterval).Humanize();
 
-        public override Task Initialize()
-        {
-            this.ProgressStatus = string.Format(SupervisorUIResources.OfflineSync_TransferInterviewsFormat, "interviewer1", 2, 5);
-            
-            var speed = ByteSize.FromKilobytes(352);
-            var measurementInterval = TimeSpan.FromSeconds(1);
-            var kbPerSec = speed.Per(measurementInterval).Humanize();
+        //    var minLeft = TimeSpan.FromMinutes(10).Humanize();
 
-            var minLeft = TimeSpan.FromMinutes(10).Humanize();
+        //    this.ProgressInPercents = 33;
+        //    this.TransferingStatus = TransferingStatus.Transferring;
 
-            this.ProgressInPercents = 33;
-            this.TransferingStatus = TransferingStatus.Transferring;
-
-            return base.Initialize();
-        }
+        //    return base.Initialize();
+        //}
 
         public IMvxCommand AbortCommand => new MvxCommand(Abort);
 
+        public SynchronizationStatistics Statistics
+        {
+            get => statistics;
+            set => SetProperty(ref statistics, value);
+        }
+
         private void Abort()
         {
-            throw new NotImplementedException();
         }
+    }
+
+    public enum SendingDeviceStatus
+    {
+        Connected,
+        Disconnected,
+        Found,
+        ConnectionRequested,
+        Synchronizing,
+        DoneWithErrors,
+        Done
     }
 }

@@ -11,6 +11,7 @@ using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
@@ -18,6 +19,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
     {
         protected override string ApiVersion => "v2";
         protected override string ApiUrl => "api/interviewer/";
+        public string ApiDownloadAppPrefixUrl => "/api/interviewersync";
 
         protected override string InterviewsController => string.Concat(ApiUrl, "v3", "/interviews");
 

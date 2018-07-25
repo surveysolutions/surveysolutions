@@ -21,7 +21,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private readonly IPlainStorage<InterviewerIdentity> interviewersPlainStorage;
         private readonly IInterviewerSynchronizationService synchronizationService;
         private readonly IQRBarcodeScanService qrBarcodeScanService;
-
+        
         public FinishInstallationViewModel(
             IViewModelNavigationService viewModelNavigationService,
             IPrincipal principal,
@@ -85,9 +85,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 {
                     if (Uri.TryCreate(scanCode.Code, UriKind.Absolute, out var uriResult))
                     {
-                        var seachTerm = "/api/interviewersync";
-                        var position = scanCode.Code.IndexOf(seachTerm, StringComparison.InvariantCultureIgnoreCase);
-
+                        var position = scanCode.Code.IndexOf(synchronizationService.ApiDownloadAppPrefixUrl, StringComparison.InvariantCultureIgnoreCase);
                         this.Endpoint = position > 0 ? scanCode.Code.Substring(0, position) : scanCode.Code;
                     }
                     else
