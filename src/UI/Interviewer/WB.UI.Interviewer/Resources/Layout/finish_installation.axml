@@ -53,7 +53,7 @@
                   android:singleLine="true"
                   android:inputType="textUri|textNoSuggestions"
                   android:imeOptions="actionNext"
-                  android:padding="24dp"
+                  android:paddingRight="30dp"
                   local:MvxBind="Text Endpoint; Watermark Localization('EndpointHint'); BackgroundStyle ValidationStyleBackground(IsEndpointValid);" />
               
               <ImageButton
@@ -62,6 +62,9 @@
                   android:id="@+id/LoginPage_scan"
                   local:srcCompat="@drawable/scan_icon"
                   android:layout_alignParentRight="true"
+                  android:paddingTop="5dp"
+                  android:background="@null"
+                  android:scaleType="fitXY"
                   local:MvxBind="Click ScanCommand;"/>
           </RelativeLayout>
         <EditText

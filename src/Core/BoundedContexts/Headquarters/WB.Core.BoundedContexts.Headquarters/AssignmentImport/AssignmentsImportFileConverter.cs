@@ -40,7 +40,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
                 yield return new PreloadingAssignmentRow
                 {
-                    Row = i,
+                    Row = preloadingRow.RowIndex,
                     FileName = file.FileInfo.FileName,
                     QuestionnaireOrRosterName = file.FileInfo.QuestionnaireOrRosterName,
                     Answers = this.ToAssignmentAnswers(preloadingRow.Cells, questionnaire).Where(x=>/*not supported question types*/ x != null).ToArray(),

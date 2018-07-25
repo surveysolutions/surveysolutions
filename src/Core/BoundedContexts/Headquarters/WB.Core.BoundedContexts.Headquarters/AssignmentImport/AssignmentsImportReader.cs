@@ -65,6 +65,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
             return new PreloadingRow
             {
+                RowIndex = rowIndex,
                 Cells = cells.Select(x => x.Value.Count == 1 && x.Value.First().Column.ToLower() == x.Value.First().VariableOrCodeOrPropertyName
                     ? x.Value[0]
                     : (PreloadingCell) new PreloadingCompositeValue
@@ -101,20 +102,20 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             };
         }
 
-        private PreloadingRow ToProtectedVariablesRow(int rowIndex, ExpandoObject record)
+        private PreloadingRow ToProtectedVariablesRow(int rowIndex, ExpandoObject record) => new PreloadingRow
         {
-            return new PreloadingRow
-            {
-                Cells = record.Where(x => x.Key.Equals(ServiceColumns.ProtectedVariableNameColumn, StringComparison.OrdinalIgnoreCase))
-                    .Select(x => new PreloadingValue
-                    {
-                        VariableOrCodeOrPropertyName = x.Key.ToLower(),
-                        Column = x.Key,
-                        Row = rowIndex,
-                        Value = (string) x.Value
-                    }).ToArray()
-            };
-        }
+            RowIndex = rowIndex,
+            Cells = record
+                .Where(x => x.Key.Equals(ServiceColumns.ProtectedVariableNameColumn, StringComparison.OrdinalIgnoreCase))
+                .Select(x => new PreloadingValue
+                {
+                    VariableOrCodeOrPropertyName = x.Key.ToLower(),
+                    Column = x.Key,
+                    Row = rowIndex,
+                    Value = (string) x.Value
+                })
+                .ToArray()
+        };
 
         public IEnumerable<PreloadedFile> ReadZipFile(Stream inputStream)
         {

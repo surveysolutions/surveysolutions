@@ -485,7 +485,8 @@ namespace WB.Tests.Abc.TestFactories
                 eventBus ?? Mock.Of<IEventBus>(),
                 interviewerEventStorage ?? Mock.Of<IEnumeratorEventStorage>(),
                 Mock.Of<ISynchronizationMode>(),
-                Mock.Of<IPlainStorage<InterviewSequenceView, Guid>>());
+                Mock.Of<IPlainStorage<InterviewSequenceView, Guid>>(),
+                Mock.Of<IInterviewerSynchronizationService>());
         }
 
         public SynchronizationService SynchronizationService(IPrincipal principal = null,
