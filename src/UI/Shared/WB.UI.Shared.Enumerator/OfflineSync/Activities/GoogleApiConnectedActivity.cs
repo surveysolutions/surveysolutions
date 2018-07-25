@@ -126,6 +126,7 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
 
             if (this.GoogleApi.IsConnected)
             {
+                System.Diagnostics.Trace.Write("StartDiscoveryAsyncCommand call from  RestoreGoogleApiConnectionIfNeeded");
                 this.ViewModel.StartDiscoveryAsyncCommand.Execute();
                 return;
             }
@@ -135,6 +136,13 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
 
         public void OnConnected(Bundle connectionHint)
         {
+            //if (!this.GoogleApi.IsConnected)
+            //{
+            //    this.GoogleApi.Connect();
+            //    return;
+            //}
+
+            System.Diagnostics.Trace.Write("StartDiscoveryAsyncCommand call from OnConnected");
             this.ViewModel.StartDiscoveryAsyncCommand.Execute();
         }
 

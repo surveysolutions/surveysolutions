@@ -124,8 +124,7 @@
     <value>Uploading interviewer error messages</value>
   </data>
   <data name="OfflineSync_ReceivingInterviewsFromDevices" xml:space="preserve">
-    <value>Receiving interviews
-from another devices</value>
+    <value>Receiving interviews from interviewer device</value>
   </data>
   <data name="OfflineSync_ReceivingInterviews" xml:space="preserve">
     <value>Receiving interviews</value>
@@ -136,10 +135,6 @@ Your device ID is '{0}'</value>
   </data>
   <data name="OfflineSync_WaitingInterviewers" xml:space="preserve">
     <value>Waitnig for action from Interviewer devices</value>
-  </data>
-  <data name="OfflineSync_TransferInterviewsFormat" xml:space="preserve">
-    <value>Interviews by {0}:
-{1} of {2} transfered</value>
   </data>
   <data name="Synchronization_UploadStatistics" xml:space="preserve">
     <value>Uploading interviewers synchronization statistics</value>

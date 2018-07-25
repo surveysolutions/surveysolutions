@@ -2,13 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services.OfflineSync;
+using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -21,10 +22,9 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Views;
 
-
-namespace WB.Core.BoundedContexts.Interviewer.Services
+namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
-    public class SynchronizationProcess : SynchronizationProcessBase
+    public class InterviewerSynchronizationProcess : SynchronizationProcessBase
     {
         private readonly IInterviewerSettings interviewerSettings;
         private readonly ISynchronizationMode synchronizationMode;
@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         private readonly IPasswordHasher passwordHasher;
         private readonly IInterviewerSynchronizationService interviewerSynchronizationService;
 
-        public SynchronizationProcess(ISynchronizationService synchronizationService,
+        public InterviewerSynchronizationProcess(ISynchronizationService synchronizationService,
             IPlainStorage<InterviewerIdentity> interviewersPlainStorage,
             IPlainStorage<InterviewView> interviewViewRepository,
             IInterviewerPrincipal principal,
@@ -101,8 +101,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             cancellationToken.ThrowIfCancellationRequested();
             await this.UpdateApplicationAsync(progress, cancellationToken);
 
-            cancellationToken.ThrowIfCancellationRequested();
-            await this.synchronizationService.SendSyncCompletedAsync(cancellationToken);
+            await this.auditLogSynchronizer.SynchronizeAuditLogAsync(progress, statistics, cancellationToken);
         }
 
         protected override SynchronizationType SynchronizationType

@@ -18,10 +18,10 @@
 
     <LinearLayout android:orientation="vertical"
                   android:layout_height="wrap_content"
-                  style="@style/OfflineSync_MainHolder">
+                  style="@style/Supervisor_OfflineSync_MainHolder">
         <TextView
             style="@style/OfflineSync_Title"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             local:MvxBind="Text Title">
         </TextView>
@@ -32,7 +32,7 @@
             local:MvxBind="Text ProgressTitle">
         </TextView>
 
-        <LinearLayout android:orientation="vertical"
+        <!--<LinearLayout android:orientation="vertical"
                       android:layout_width="match_parent"
                       android:layout_height="wrap_content"
                       local:MvxBind="Visible Not(HasConnectedDevices)">
@@ -51,7 +51,7 @@
                       android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
                       local:MvxBind="Text Localization('OfflineSync_Cancel'); Click CancelCommand"/>
-        </LinearLayout>
+        </LinearLayout>-->
 
         <MvxLinearLayout style="@style/FullWidthWrappingLayout"
                          android:orientation="vertical"

@@ -68,7 +68,7 @@ namespace WB.UI.Supervisor.ServiceLocation
             registry.BindAsSingleton<IQuestionnaireContentVersionProvider, QuestionnaireContentVersionProvider>();
             registry.BindAsSingleton<ICommandService, SequentialCommandService>();
 
-            registry.Bind<ISynchronizationProcess, SynchronizationProcess>();
+            registry.Bind<ISynchronizationProcess, SupervisorSynchronizationProcess>();
             registry.Bind<IQuestionnaireDownloader, QuestionnaireDownloader>();
             registry.Bind<IAuditLogSynchronizer, AuditLogSynchronizer>();
             registry.Bind<ITechInfoSynchronizer, TechInfoSynchronizer>();
