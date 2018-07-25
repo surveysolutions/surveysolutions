@@ -39,7 +39,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly FilteredOptionsViewModel filteredOptionsViewModel;
         private Guid interviewId;
         private string interviewIdAsString;
-        private bool areAnswersOrdered;
+        public bool AreAnswersOrdered { get; protected set; }
         private int? maxAllowedAnswers;
         private bool isRosterSizeQuestion;
         private readonly QuestionStateViewModel<YesNoQuestionAnswered> questionState;
@@ -107,7 +107,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var questionnaire =
                 this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
-            this.areAnswersOrdered = questionnaire.ShouldQuestionRecordAnswersOrder(entityIdentity.Id);
+            this.AreAnswersOrdered = questionnaire.ShouldQuestionRecordAnswersOrder(entityIdentity.Id);
             this.maxAllowedAnswers = questionnaire.GetMaxSelectedAnswerOptions(entityIdentity.Id);
             this.isRosterSizeQuestion = questionnaire.IsRosterSizeQuestion(entityIdentity.Id);
             this.Identity = entityIdentity;
@@ -161,11 +161,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             bool? isSelected = isExistAnswer
                 ? checkedYesNoAnswerOptions.First(a => a.OptionValue == model.Value).Yes
                 : (bool?) null;
-            var yesAnswerCheckedOrder = isExistAnswer && this.areAnswersOrdered
+            var yesAnswerCheckedOrder = isExistAnswer && this.AreAnswersOrdered
                 ? Array.IndexOf(checkedYesNoAnswerOptions.Where(am => am.Yes).Select(am => am.OptionValue).ToArray(),
                       model.Value) + 1
                 : (int?) null;
-            var answerCheckedOrder = isExistAnswer && this.areAnswersOrdered
+            var answerCheckedOrder = isExistAnswer && this.AreAnswersOrdered
                 ? Array.IndexOf(checkedYesNoAnswerOptions.Select(am => am.OptionValue).ToArray(), model.Value) + 1
                 : (int?) null;
 
@@ -271,7 +271,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public async Task ToggleAnswerAsync(YesNoQuestionOptionViewModel changedModel, bool? oldValue)
         {
             List<YesNoQuestionOptionViewModel> allSelectedOptions =
-                this.areAnswersOrdered
+                this.AreAnswersOrdered
                     ? this.Options.Where(x => x.Selected.HasValue).OrderBy(x => x.AnswerCheckedOrder).ToList()
                     : this.Options.Where(x => x.Selected.HasValue).ToList();
 
@@ -316,7 +316,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (@event.Questions.Any(x =>
                 x.Id == this.Identity.Id && x.RosterVector.Identical(this.Identity.RosterVector)))
             {
-                if (this.areAnswersOrdered || this.maxAllowedAnswers.HasValue)
+                if (this.AreAnswersOrdered || this.maxAllowedAnswers.HasValue)
                 {
                     foreach (var option in this.Options.ToList())
                     {
@@ -336,7 +336,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             if (@event.QuestionId == this.Identity.Id && @event.RosterVector.Identical(this.Identity.RosterVector))
             {
-                if (this.areAnswersOrdered || this.maxAllowedAnswers.HasValue)
+                if (this.AreAnswersOrdered || this.maxAllowedAnswers.HasValue)
                 {
                     this.PutOrderOnOptions(@event);
                 }
@@ -371,11 +371,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 if (selectedOptionIndex >= 0)
                 {
                     var answeredYesNoOption = @event.AnsweredOptions[selectedOptionIndex];
-                    option.YesAnswerCheckedOrder = answeredYesNoOption.Yes && this.areAnswersOrdered
+                    option.Selected = answeredYesNoOption.Yes;
+                    option.YesAnswerCheckedOrder = answeredYesNoOption.Yes && this.AreAnswersOrdered
                         ? orderedYesOptions.IndexOf(option.Value) + 1
                         : (int?) null;
                     option.AnswerCheckedOrder = orderedOptions.IndexOf(option.Value) + 1;
-                    option.Selected = answeredYesNoOption.Yes;
                     option.YesCanBeChecked = answeredYesNoOption.Yes || maxAnswersCountNotReachedYet;
                 }
                 else
