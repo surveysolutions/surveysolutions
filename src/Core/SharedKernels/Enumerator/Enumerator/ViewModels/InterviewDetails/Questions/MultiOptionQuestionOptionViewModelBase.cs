@@ -1,5 +1,3 @@
-using System;
-using System.Diagnostics;
 using System.Linq;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;

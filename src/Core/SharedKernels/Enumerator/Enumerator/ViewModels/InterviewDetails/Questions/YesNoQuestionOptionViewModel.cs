@@ -44,35 +44,38 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
                 this.selected = value;
 
-                if (value == true)
+                if (this.QuestionViewModel.AreAnswersOrdered)
                 {
-                    this.AnswerCheckedOrder = this.QuestionViewModel.Options
-                                            .Select(x => x.AnswerCheckedOrder ?? 0)
-                                            .DefaultIfEmpty(0)
-                                            .Max() + 1;
-                    this.YesAnswerCheckedOrder = this.QuestionViewModel.Options
-                                                     .Select(x => x.YesAnswerCheckedOrder ?? 0)
-                                                     .DefaultIfEmpty(0)
-                                                     .Max() + 1;
-                }
-                else
-                {
-                    if (this.AnswerCheckedOrder.HasValue)
+                    if (value == true)
                     {
-                        this.QuestionViewModel.Options
-                            .Where(x => x.AnswerCheckedOrder > this.AnswerCheckedOrder)
-                            .ForEach(x => x.AnswerCheckedOrder -= 1);
+                        this.AnswerCheckedOrder = this.QuestionViewModel.Options
+                                                      .Select(x => x.AnswerCheckedOrder ?? 0)
+                                                      .DefaultIfEmpty(0)
+                                                      .Max() + 1;
+                        this.YesAnswerCheckedOrder = this.QuestionViewModel.Options
+                                                         .Select(x => x.YesAnswerCheckedOrder ?? 0)
+                                                         .DefaultIfEmpty(0)
+                                                         .Max() + 1;
                     }
-
-                    if (this.YesAnswerCheckedOrder.HasValue)
+                    else
                     {
-                        this.QuestionViewModel.Options
-                            .Where(x => x.YesAnswerCheckedOrder > this.YesAnswerCheckedOrder)
-                            .ForEach(x => x.YesAnswerCheckedOrder -= 1);
-                    }
+                        if (this.AnswerCheckedOrder.HasValue)
+                        {
+                            this.QuestionViewModel.Options
+                                .Where(x => x.AnswerCheckedOrder > this.AnswerCheckedOrder)
+                                .ForEach(x => x.AnswerCheckedOrder -= 1);
+                        }
 
-                    this.AnswerCheckedOrder = null;
-                    this.YesAnswerCheckedOrder = null;
+                        if (this.YesAnswerCheckedOrder.HasValue)
+                        {
+                            this.QuestionViewModel.Options
+                                .Where(x => x.YesAnswerCheckedOrder > this.YesAnswerCheckedOrder)
+                                .ForEach(x => x.YesAnswerCheckedOrder -= 1);
+                        }
+
+                        this.AnswerCheckedOrder = null;
+                        this.YesAnswerCheckedOrder = null;
+                    }
                 }
 
                 this.RaisePropertyChanged();
