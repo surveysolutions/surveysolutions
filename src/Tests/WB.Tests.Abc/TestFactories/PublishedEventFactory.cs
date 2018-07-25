@@ -122,8 +122,8 @@ namespace WB.Tests.Abc.TestFactories
             => new RosterInstancesRemoved(instances, originDate ?? DateTimeOffset.Now).ToPublishedEvent(eventSourceId: interviewId);
 
         public IPublishedEvent<DateTimeQuestionAnswered> DateTimeQuestionAnswered(Guid? interviewId = null, Guid? userId = null, 
-            Guid? questionId = null, DateTime? answer = null)
-            => new DateTimeQuestionAnswered(userId ?? Guid.NewGuid(), questionId ?? Guid.NewGuid(), new decimal[0], DateTime.UtcNow, answer ?? DateTime.UtcNow)
+            Guid? questionId = null, DateTime? answer = null, DateTimeOffset? originDate = null)
+            => new DateTimeQuestionAnswered(userId ?? Guid.NewGuid(), questionId ?? Guid.NewGuid(), new decimal[0], originDate ?? default(DateTimeOffset), answer ?? DateTime.Now)
                 .ToPublishedEvent(eventSourceId: interviewId);
     }
 }
