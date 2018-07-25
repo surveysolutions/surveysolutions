@@ -108,7 +108,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
 
                 logger.Verbose($"[{connection.GetEndpointName(endpoint) ?? endpoint}] #{payload.CorrelationId} - {typeof(TRequest).Name} => {typeof(TResponse).Name}");
 
-                await SendOverWire(connection, endpoint, payload, cancellationToken).ConfigureAwait(false);
+                await SendOverWireAsync(connection, endpoint, payload);
                 var response = await tsc.Task.ConfigureAwait(false);
 
                 logger.Verbose($"[{connection.GetEndpointName(endpoint) ?? endpoint}] #{payload.CorrelationId} - {typeof(TRequest).Name} => {response.GetType().Name}");
@@ -169,7 +169,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                     
                     if (header.PayloadContent != null)
                     {
-                        await HandlePayloadContent(nearbyConnection, endpoint, header.PayloadContent, CancellationToken.None);
+                        await HandlePayloadContent(nearbyConnection, endpoint, header.PayloadContent);
                     }
 
                     break;
@@ -212,7 +212,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                     {
                         var bytes = await payload.BytesFromStream;
                         var payloadContent = await payloadSerializer.FromPayloadAsync<PayloadContent>(bytes);
-                        await HandlePayloadContent(connection, endpoint, payloadContent, CancellationToken.None);
+                        await HandlePayloadContent(connection, endpoint, payloadContent);
                         logger.Verbose($"[{connection.GetEndpointName(endpoint) ?? endpoint}] #{payloadContent.CorrelationId} Incoming message - {payloadContent.Payload.GetType()}");
 
                         if (headers.TryGetValue(update.Id, out header))
@@ -283,7 +283,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             }
         }
 
-        private async Task HandlePayloadContent(INearbyConnection nearbyConnection, string endpoint, PayloadContent payloadContent, CancellationToken cancellationToken)
+        private async Task HandlePayloadContent(INearbyConnection nearbyConnection, string endpoint, PayloadContent payloadContent)
         {
             if (payloadContent.IsRequest)
             {
@@ -302,12 +302,12 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                             Endpoint = endpoint
                         }, false, e.Message);
 
-                    await SendOverWire(nearbyConnection, endpoint, errorResponse, cancellationToken);
+                    await SendOverWireAsync(nearbyConnection, endpoint, errorResponse);
                     return;
                 }
 
                 var responsePayload = await PreparePayload(endpoint, payloadContent.CorrelationId, response, false);
-                await SendOverWire(nearbyConnection, endpoint, responsePayload, cancellationToken);
+                await SendOverWireAsync(nearbyConnection, endpoint, responsePayload);
             }
             else
             {
@@ -315,23 +315,22 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             }
         }
 
-        private async Task SendOverWire(INearbyConnection nearbyConnection, string endpoint, Package package, CancellationToken cancellationToken)
+        private async Task SendOverWireAsync(INearbyConnection nearbyConnection, string endpoint, Package package)
         {
-            await SendOverWireInternal(package.Header);
+            await SendOverWireInternalAsync(package.Header);
             CommunicationSession.Current.RequestsTotal += 1;
 
             if (package.HeaderPayload.PayloadContent == null)
             {
-                await SendOverWireInternal(package.Content);
+                await SendOverWireInternalAsync(package.Content);
                 CommunicationSession.Current.RequestsTotal += 1;
             }
 
-            async Task SendOverWireInternal(IPayload payload)
+            async Task SendOverWireInternalAsync(IPayload payload)
             {
                 outgoingPayloads.AddOrUpdate(payload.Id, payload, (id, p) => payload);
 
-                await nearbyConnection.SendPayloadAsync(endpoint, payload, cancellationToken)
-                    .TimeoutAfter(TimeSpan.FromSeconds(30));
+                await nearbyConnection.SendPayloadAsync(endpoint, payload);
             }
         }
         

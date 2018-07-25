@@ -2,6 +2,7 @@
 using System.Linq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Tests.Abc;
 
@@ -645,6 +646,28 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             Assert.That(((AssignmentMultiAnswer)assignmentRows[0].Answers[0]).Values, Has.Exactly(2).Items);
             Assert.That(((AssignmentMultiAnswer)assignmentRows[0].Answers[0]).Values[0].Value, Is.Empty);
             Assert.That(((AssignmentMultiAnswer)assignmentRows[0].Answers[0]).Values[1].Value, Is.Empty);
+        }
+
+        [Test]
+        public void when_getting_assignment_row_with_1_row_should_return_row_with_row_index_equals_to_1()
+        {
+            //arrange
+            var interviewId = "interview1";
+            var column = "interview__Id";
+            var expectedRowIndex = 2;
+
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.TextQuestion()));
+
+            var file = Create.Entity.PreloadedFile(rows: Create.Entity.PreloadingRow(expectedRowIndex,
+                cells: new PreloadingCell[] {Create.Entity.PreloadingValue(column, interviewId)}));
+
+            var converter = Create.Service.AssignmentsImportFileConverter();
+            //act
+            var assignmentRows = converter.GetAssignmentRows(file, questionnaire).ToArray();
+            //assert
+            Assert.That(assignmentRows, Has.One.Items);
+            Assert.That(assignmentRows[0].Row, Is.EqualTo(expectedRowIndex));
         }
     }
 }

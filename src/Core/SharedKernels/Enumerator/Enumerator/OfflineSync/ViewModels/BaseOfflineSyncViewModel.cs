@@ -55,7 +55,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
         private async Task InitializeConnectionAsync(string endpoint, string name)
         {
             this.OnDeviceConnectionAccepting(name);
-            var connectionStatus = await this.nearbyConnection.AcceptConnectionAsync(endpoint, cancellationTokenSource.Token)
+            var connectionStatus = await this.nearbyConnection.AcceptConnectionAsync(endpoint)
                                              .ConfigureAwait(false);
 
             if (!connectionStatus.IsSuccess)
@@ -94,7 +94,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
 
         protected abstract string GetDeviceIdentification();
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             cancellationTokenSource?.Dispose();
             nearbyConnectionSubscribtion?.Dispose();

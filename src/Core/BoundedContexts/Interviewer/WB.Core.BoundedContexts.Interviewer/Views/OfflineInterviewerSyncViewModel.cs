@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading;
@@ -6,15 +7,16 @@ using System.Threading.Tasks;
 using Humanizer;
 using Humanizer.Bytes;
 using Humanizer.Localisation;
-using MvvmCross;
 using MvvmCross.Commands;
 using Plugin.Permissions.Abstractions;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services.OfflineSync;
+using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Entities;
+using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels;
 using WB.Core.SharedKernels.Enumerator.Properties;
@@ -33,6 +35,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         private readonly IInterviewerPrincipal principal;
         private readonly ISynchronizationMode synchronizationMode;
         private readonly ISynchronizationCompleteSource synchronizationCompleteSource;
+        private readonly IOfflineSyncClient syncClient;
         private static CancellationTokenSource synchronizationCancellationTokenSource;
 
         public OfflineInterviewerSyncViewModel(IInterviewerPrincipal principal,
@@ -41,12 +44,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             IEnumeratorSettings settings,
             ISynchronizationMode synchronizationMode,
             INearbyConnection nearbyConnection,
-            ISynchronizationCompleteSource synchronizationCompleteSource)
+            ISynchronizationCompleteSource synchronizationCompleteSource,
+            IOfflineSyncClient syncClient)
             : base(principal, viewModelNavigationService, permissions, nearbyConnection, settings)
         {
             this.principal = principal;
             this.synchronizationMode = synchronizationMode;
             this.synchronizationCompleteSource = synchronizationCompleteSource;
+            this.syncClient = syncClient;
         }
 
         private string title;
@@ -147,16 +152,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
             this.ProgressTitle = InterviewerUIResources.SendToSupervisor_TransferWasAborted;
             this.TransferingStatus = TransferingStatus.Aborted;
+
+            this.StopDiscovery();
         }
 
         private async Task Retry()
         {
             this.BindTitlesAndStatuses();
             this.nearbyConnection.StopAll();
-            await this.StartSynchronization.ExecuteAsync();
+            await this.StartDiscoveryAsyncCommand.ExecuteAsync();
         }
 
-        public IMvxAsyncCommand StartSynchronization => new MvxAsyncCommand(StartDiscovery);
+        public IMvxAsyncCommand StartDiscoveryAsyncCommand => new MvxAsyncCommand(StartDiscovery);
 
         private async Task StartDiscovery()
         {
@@ -169,10 +176,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 this.OnConnectionError(discoveryStatus.StatusMessage, discoveryStatus.Status);
         }
 
-        private void StopDiscovery()
-        {
-            this.nearbyConnection.StopDiscovery();
-        }
+        private void StopDiscovery() => this.nearbyConnection.StopDiscovery();
 
         protected override async void OnDeviceConnected(string name)
         {
@@ -199,14 +203,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         {
             this.StopDiscovery();
 
-            if (errorCode == ConnectionStatusCode.StatusBluetoothError)
-            {
-                this.ProgressTitle = InterviewerUIResources.SendToSupervisor_BluetoothError;
-            }
-            else
-            {
-                this.ProgressTitle = InterviewerUIResources.SendToSupervisor_SupervisorNotFound;
-            }
+            this.ProgressTitle = errorCode == ConnectionStatusCode.StatusBluetoothError
+                ? InterviewerUIResources.SendToSupervisor_BluetoothError
+                : InterviewerUIResources.SendToSupervisor_SupervisorNotFound;
 
             this.TransferingStatus = TransferingStatus.Failed;
         }
@@ -225,21 +224,20 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         private void OnComplete(int failedInterviewsCount)
         {
-            base.InvokeOnMainThread(() =>
-            {
-                if (failedInterviewsCount > 0)
-                {
-                    this.ProgressTitle = string.Format(InterviewerUIResources.SendToSupervisor_SyncCompletedWithErrorsFormat, failedInterviewsCount);
-                    this.TransferingStatus = TransferingStatus.CompletedWithErrors;
-                }
-                else
-                {
-                    this.ProgressTitle = InterviewerUIResources.SendToSupervisor_SyncCompleted;
-                    this.TransferingStatus = TransferingStatus.Completed;
-                }
-            });
-            
             this.StopDiscovery();
+
+            if (this.TransferingStatus == TransferingStatus.Aborted) return;
+
+            if (failedInterviewsCount > 0)
+            {
+                this.ProgressTitle = string.Format(InterviewerUIResources.SendToSupervisor_SyncCompletedWithErrorsFormat, failedInterviewsCount);
+                this.TransferingStatus = TransferingStatus.CompletedWithErrors;
+            }
+            else
+            {
+                this.ProgressTitle = InterviewerUIResources.SendToSupervisor_SyncCompleted;
+                this.TransferingStatus = TransferingStatus.Completed;
+            }
         }
 
         protected override string GetDeviceIdentification() => this.principal.CurrentUserIdentity.SupervisorId.FormatGuid();
@@ -264,35 +262,50 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                     this.synchronizationMode.Set(SynchronizationMode.Offline);
                     var synchronizationProcess = ServiceLocator.Current.GetInstance<ISynchronizationProcess>();
 
-                    await synchronizationProcess.SynchronizeAsync(
-                        new Progress<SyncProgressInfo>(o =>
+                    BlockingCollection<SyncProgressInfo> syncProgress = new BlockingCollection<SyncProgressInfo>();
+
+                    var progress = new Progress<SyncProgressInfo>(o =>
+                    {
+                            if (o.Status == SynchronizationStatus.Canceled)
+                                return;
+
+                        if (o.TransferProgress == null)
                         {
-                            if (o.TransferProgress == null)
+                            this.ProgressStatus = o.Title;
+                            this.ProgressStatusDescription = o.Description;
+                            this.NetworkInfo = string.Empty;
+                            this.ProgressInPercents = 0;
+                        }
+                        else
+                        {
+                            this.ProgressInPercents = o.TransferProgress?.Percent ?? 0;
+
+                            if (o.TransferProgress.Speed.HasValue)
                             {
-                                this.ProgressStatus = o.Title;
-                                this.ProgressStatusDescription = o.Description;
-                                this.NetworkInfo = string.Empty;
-                                this.ProgressInPercents = 0;
+                                var receivedBytes = ByteSize.FromBytes(o.TransferProgress.Speed.Value);
+                                var measurementInterval = TimeSpan.FromSeconds(1);
+                                var transferingSpeed = receivedBytes.Per(measurementInterval).Humanize("#.##");
+
+                                    this.NetworkInfo = string.Format(UIResources.OfflineSync_NetworkInfo,
+                                        transferingSpeed,
+                                    o.TransferProgress.Eta.Humanize(minUnit: TimeUnit.Second));
                             }
-                            else
-                            {
-                                this.ProgressInPercents = o.TransferProgress?.Percent ?? 0;
+                        }
 
-                                if (o.TransferProgress.Speed.HasValue)
-                                {
-                                    var receivedBytes = ByteSize.FromBytes(o.TransferProgress.Speed.Value);
-                                    var measurementInterval = TimeSpan.FromSeconds(1);
-                                    var transferingSpeed = receivedBytes.Per(measurementInterval).Humanize("#.##");
+                        syncProgress.Add(o);
 
-                                    this.NetworkInfo = string.Format(UIResources.OfflineSync_NetworkInfo, transferingSpeed,
-                                        o.TransferProgress.Eta.Humanize(minUnit: TimeUnit.Second));
-                                }
-                            }
+                        if (!o.IsRunning)
+                        {
+                            syncProgress.CompleteAdding();
+                            this.OnComplete(o.Statistics.FailedInterviewsCount);
+                        }
+                    });
 
-                            if(!o.IsRunning) this.OnComplete(o.Statistics.FailedInterviewsCount);
-                        }),
+                    ReportProgressToSupervisor(syncProgress);
+
+                    await synchronizationProcess.SynchronizeAsync(
+                        progress,
                         synchronizationCancellationTokenSource.Token).ConfigureAwait(false);
-
                     this.synchronizationCompleteSource.NotifyOnCompletedSynchronization(true);
                 }
             }
@@ -301,6 +314,44 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 this.synchronizationMode.Set(SynchronizationMode.Online);
                 synchronizationCancellationTokenSource = null;
             }
+        }
+
+        private void ReportProgressToSupervisor(BlockingCollection<SyncProgressInfo> syncProgress)
+        {
+#pragma warning disable 4014
+            Task.Run(async () =>
+            {
+                while (!syncProgress.IsCompleted)
+                {
+                    SyncProgressInfo syncProgressInfo = null;
+                    try
+                    {
+                        syncProgressInfo = syncProgress.Take();
+                    }
+                    catch (InvalidOperationException)
+                    {
+                    }
+
+                    if (syncProgressInfo != null)
+                    {
+                        try
+                        {
+                            var request = new SendSyncProgressInfoRequest
+                            {
+                                Info = syncProgressInfo,
+                                InterviewerLogin = this.principal.CurrentUserIdentity.Name
+                            };
+                            await syncClient.SendAsync(request, this.cancellationTokenSource.Token);
+                        }
+                        catch (OperationCanceledException)
+                        {
+                            syncProgress.CompleteAdding();
+                        }
+                    }
+                }
+
+            });
+#pragma warning restore 4014
         }
     }
 }

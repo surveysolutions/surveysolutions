@@ -19,7 +19,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProcessTests
 {
-    [NUnit.Framework.TestOf(typeof(SynchronizationProcess))]
+    [NUnit.Framework.TestOf(typeof(InterviewerSynchronizationProcess))]
     internal class when_synchronize_and_need_to_change_password
     {
         [NUnit.Framework.Test]

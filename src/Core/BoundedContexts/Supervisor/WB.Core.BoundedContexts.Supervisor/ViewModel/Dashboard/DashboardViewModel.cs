@@ -83,7 +83,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         private Task NavigateToOfflineSync()
         {
             this.Synchronization.CancelSynchronizationCommand.Execute();
-            return this.viewModelNavigationService.NavigateToAsync<OfflineSupervisorSyncViewModel>();
+            return this.viewModelNavigationService.NavigateToAsync<SupervisorOfflineSyncViewModel>();
         }
 
         public IMvxCommand NavigateToMapsCommand => new MvxAsyncCommand(() =>

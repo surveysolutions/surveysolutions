@@ -302,10 +302,18 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             var questionnaire = questionnaireStorage.GetQuestionnaireDocument(view.QuestionnaireId, view.QuestionnaireVersion);
             var question = questionnaire.Find<DateTimeQuestion>(@event.Payload.QuestionId);
 
+            DateTime answer = @event.Payload.Answer;
+            if (question.IsTimestamp)
+            {
+                if (@event.Payload.OriginDate.HasValue)
+                {
+                    answer = @event.Payload.OriginDate.Value.DateTime;
+                }
+            }
             this.AddHistoricalRecord(view, InterviewHistoricalAction.AnswerSet, @event.Payload.UserId,
                 @event.Payload.OriginDate?.LocalDateTime ?? @event.Payload.AnswerTimeUtc,
                 @event.Payload.OriginDate?.Offset,
-                this.CreateAnswerParameters(@event.Payload.QuestionId, AnswerUtils.AnswerToString(@event.Payload.Answer, isTimestamp: question.IsTimestamp),
+                this.CreateAnswerParameters(@event.Payload.QuestionId, AnswerUtils.AnswerToString(answer, isTimestamp: question.IsTimestamp),
                     @event.Payload.RosterVector));
 
             return view;

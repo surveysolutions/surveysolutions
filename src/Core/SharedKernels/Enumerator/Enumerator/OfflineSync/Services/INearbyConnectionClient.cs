@@ -10,9 +10,8 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services
         Task<NearbyStatus> StartDiscoveryAsync(string serviceName, CancellationToken cancellationToken);
         Task<string> StartAdvertisingAsync(string serviceName, string name, CancellationToken cancellationToken);
         Task<NearbyStatus> RequestConnectionAsync(string name, string endpoint, CancellationToken cancellationToken);
-        Task<NearbyStatus> AcceptConnectionAsync(string endpoint, CancellationToken cancellationToken);
-        Task<NearbyStatus> RejectConnectionAsync(string endpoint, CancellationToken cancellationToken);
-        Task<NearbyStatus> SendPayloadAsync(string to, IPayload payload, CancellationToken cancellationToken);
+        Task<NearbyStatus> AcceptConnectionAsync(string endpoint);
+        Task<NearbyStatus> SendPayloadAsync(string to, IPayload payload);
 
         void StopAllEndpoint();
         void StopDiscovery();
