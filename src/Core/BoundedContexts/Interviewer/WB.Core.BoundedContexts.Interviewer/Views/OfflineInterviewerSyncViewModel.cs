@@ -45,7 +45,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             ISynchronizationMode synchronizationMode,
             INearbyConnection nearbyConnection,
             ISynchronizationCompleteSource synchronizationCompleteSource,
-            ISynchronizationService synchronizationService,
             IOfflineSyncClient syncClient)
             : base(principal, viewModelNavigationService, permissions, nearbyConnection, settings)
         {
