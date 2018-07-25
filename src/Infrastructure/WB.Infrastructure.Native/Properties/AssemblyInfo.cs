@@ -12,5 +12,5 @@ using System.Runtime.InteropServices;
 [assembly: InternalsVisibleTo("WB.Tests.Integration")]
 [assembly: InternalsVisibleTo("PerformanceTest")]
 [assembly: InternalsVisibleTo("WB.Tests.Abc")]
-[assembly: InternalsVisibleTo("CoreTester")]
+[assembly: InternalsVisibleTo("Utils")]
 
