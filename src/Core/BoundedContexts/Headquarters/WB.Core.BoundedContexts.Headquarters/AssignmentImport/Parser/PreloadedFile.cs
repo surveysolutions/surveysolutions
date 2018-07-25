@@ -24,6 +24,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
     [DebuggerDisplay("[{Cells.Length} cells]")]
     public class PreloadingRow
     {
+        public int RowIndex { get; set; }
         [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
         public PreloadingCell[] Cells { get; set; }
     }
