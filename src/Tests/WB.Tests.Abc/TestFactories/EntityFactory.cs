@@ -953,6 +953,7 @@ namespace WB.Tests.Abc.TestFactories
             => new QuestionnaireDocument
             {
                 Title = "Questionnaire",
+                VariableName = "MyQuestionnaire",
                 PublicKey = id ?? Guid.NewGuid(),
                 Children = new List<IComposite>
                 {

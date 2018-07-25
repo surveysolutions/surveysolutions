@@ -21,6 +21,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         
         Translation Translation { get; }
 
+        string VariableName { get; }
+
         IQuestion GetQuestionByVariable(string variable);
 
         bool HasQuestion(Guid questionId);
