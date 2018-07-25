@@ -94,7 +94,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
 
         protected abstract string GetDeviceIdentification();
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             cancellationTokenSource?.Dispose();
             nearbyConnectionSubscribtion?.Dispose();

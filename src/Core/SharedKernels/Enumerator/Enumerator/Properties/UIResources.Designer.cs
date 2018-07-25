@@ -1368,6 +1368,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Receiving. {0} interviews done out of {1}. Errors count: {2}.
+        /// </summary>
+        public static string OfflineSync_DeviceStats {
+            get {
+                return ResourceManager.GetString("OfflineSync_DeviceStats", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Done.
         /// </summary>
         public static string OfflineSync_Done {
@@ -1553,6 +1562,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Supervisor_Complete_Reject_btn {
             get {
                 return ResourceManager.GetString("Supervisor_Complete_Reject_btn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Found interviewer device ({0}).
+        /// </summary>
+        public static string Synchronization_FoundDevice {
+            get {
+                return ResourceManager.GetString("Synchronization_FoundDevice", resourceCulture);
             }
         }
         

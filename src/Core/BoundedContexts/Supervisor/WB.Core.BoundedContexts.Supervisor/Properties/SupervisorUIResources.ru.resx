@@ -140,14 +140,6 @@
     <value>Ожидание действий от устройств интервьюверов</value>
     <comment>Ожидание действий от устройств интервьюверов</comment>
   </data>
-  <data name="OfflineSync_TransferInterviewsFormat" xml:space="preserve">
-    <value>Интервью от {0}:
-{1} из {2} получено
-</value>
-    <comment>Интервью от {0}:
-{1} из {2} получено
-</comment>
-  </data>
   <data name="Synchronization_UploadExceptions" xml:space="preserve">
     <value>Загрузка ошибок с планшетов интревьюеров</value>
   </data>
