@@ -79,6 +79,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade
                                 }
 
                                 newAssignment.SetIdentifyingData(newIdentifyingData);
+                                newAssignment.SetProtectedVariables(oldAssignment.ProtectedVariables);
                                 assignments.Store(newAssignment, null);
                                 migratedSuccessfully++;
                             }
