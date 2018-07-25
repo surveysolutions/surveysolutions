@@ -148,7 +148,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             }
             catch (ExtendedMessageHandlerException ex)
             {
-                if (ex.GetSelfOrInnerAs<TaskCanceledException>() != null)
+                if (ex.GetSelfOrInnerAs<TaskCanceledException>() != null || ex.GetSelfOrInnerAs<OperationCanceledException>() != null)
                 {
                     if (requestTimeoutToken.IsCancellationRequested)
                     {
@@ -169,11 +169,18 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                 else
                 {
                     var innerException = ex.InnerException;
-                    if (innerException != null && innerException.GetType().FullName == "Java.Net.ConnectException")
+                    if (innerException?.GetType().FullName == "Java.Net.ConnectException")
                     {
                         throw new RestException(message: innerException.Message, 
                             innerException: innerException,
                             type: RestExceptionType.HostUnreachable);
+                    }
+
+                    if (innerException?.GetType().Name == "SSLHandshakeException")
+                    {
+                        throw new RestException(message: innerException.Message, 
+                            innerException: innerException,
+                            type: RestExceptionType.UnacceptableCertificate);
                     }
                 }
 

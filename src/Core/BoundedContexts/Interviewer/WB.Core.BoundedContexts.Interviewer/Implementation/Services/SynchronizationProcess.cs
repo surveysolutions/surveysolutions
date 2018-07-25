@@ -32,6 +32,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         private readonly IPlainStorage<InterviewerIdentity> interviewersPlainStorage;
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
         private readonly IPasswordHasher passwordHasher;
+        private readonly IInterviewerSynchronizationService interviewerSynchronizationService;
 
         public SynchronizationProcess(ISynchronizationService synchronizationService,
             IPlainStorage<InterviewerIdentity> interviewersPlainStorage,
@@ -58,7 +59,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             ILiteEventBus eventBus,
             IEnumeratorEventStorage eventStore,
             ISynchronizationMode synchronizationMode,
-            IPlainStorage<InterviewSequenceView, Guid> interviewSequenceViewRepository) : base(synchronizationService, interviewViewRepository, principal, logger,
+            IPlainStorage<InterviewSequenceView, Guid> interviewSequenceViewRepository,
+            IInterviewerSynchronizationService interviewerSynchronizationService) : base(synchronizationService, interviewViewRepository, principal, logger,
             userInteractionService, questionnairesAccessor, interviewFactory, interviewMultimediaViewStorage, imagesStorage,
             logoSynchronizer, cleanupService, assignmentsSynchronizer, questionnaireDownloader, httpStatistician,
             assignmentsStorage, audioFileStorage, diagnosticService, auditLogSynchronizer, auditLogService,
@@ -70,6 +72,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             this.interviewersPlainStorage = interviewersPlainStorage;
             this.interviewViewRepository = interviewViewRepository;
             this.passwordHasher = passwordHasher;
+            this.interviewerSynchronizationService = interviewerSynchronizationService;
         }
 
         public override async Task Synchronize(IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken, SynchronizationStatistics statistics)
@@ -115,13 +118,30 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
             }
         }
 
-        protected override async void CheckAfterStartSynchronization(CancellationToken cancellationToken)
-        {
+        protected override async void CheckAfterStartSynchronization(CancellationToken cancellationToken){
+
             var currentSupervisorId = await this.synchronizationService.GetCurrentSupervisor(token: cancellationToken, credentials: this.restCredentials);
-            
             if (currentSupervisorId != this.principal.CurrentUserIdentity.SupervisorId)
             {
                 this.UpdateSupervisorOfInterviewer(currentSupervisorId);
+            }
+
+            if (SynchronizationType == SynchronizationType.Online)
+            {
+                var interviewer = await this.interviewerSynchronizationService
+                    .GetInterviewerAsync(this.restCredentials, token: cancellationToken).ConfigureAwait(false);
+                UpdateSecurityStampOfInterviewer(interviewer.SecurityStamp);
+            }
+        }
+
+        private void UpdateSecurityStampOfInterviewer(string securityStamp)
+        {
+            var localInterviewer = this.interviewersPlainStorage.FirstOrDefault();
+            if (localInterviewer.SecurityStamp != securityStamp)
+            {
+                localInterviewer.SecurityStamp = securityStamp;
+                this.interviewersPlainStorage.Store(localInterviewer);
+                this.principal.SignInWithHash(localInterviewer.Name, localInterviewer.PasswordHash, true);
             }
         }
 
