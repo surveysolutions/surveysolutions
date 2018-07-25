@@ -13,7 +13,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Infrastructure.Native.Storage;
 
-namespace CoreTester.CustomInfrastructure
+namespace Utils.CustomInfrastructure
 {
     public class QuestionnairesReader
     {

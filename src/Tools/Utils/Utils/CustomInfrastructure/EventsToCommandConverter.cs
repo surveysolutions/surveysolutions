@@ -13,7 +13,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEn
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 
-namespace CoreTester.CustomInfrastructure
+namespace Utils.CustomInfrastructure
 {
     public class EventsToCommandConverter
     {
@@ -49,7 +49,6 @@ namespace CoreTester.CustomInfrastructure
                     new QuestionnaireIdentity(interviewCreated.QuestionnaireId, interviewCreated.QuestionnaireVersion),
                     preloadedAnswers,
                     new List<string>(), 
-                    interviewCreated.CreationTime ?? DateTime.UtcNow,
                     supervisorAssigned.SupervisorId,
                     interviewerAssigned?.InterviewerId,
                     interviewKey?.Key,
@@ -66,7 +65,6 @@ namespace CoreTester.CustomInfrastructure
                             interviewOnClientCreated.QuestionnaireVersion),
                         preloadedAnswers,
                         new List<string>(), 
-                        supervisorAssigned.AssignTime ?? DateTime.UtcNow,
                         supervisorAssigned.SupervisorId,
                         interviewerAssigned?.InterviewerId,
                         interviewKey?.Key,
@@ -80,7 +78,6 @@ namespace CoreTester.CustomInfrastructure
                             interviewFromPreloadedDataCreated.QuestionnaireVersion),
                         preloadedAnswers,
                         new List<string>(), 
-                        supervisorAssigned.AssignTime ?? DateTime.UtcNow,
                         supervisorAssigned.SupervisorId,
                         interviewerAssigned?.InterviewerId,
                         interviewKey?.Key,
@@ -139,14 +136,13 @@ namespace CoreTester.CustomInfrastructure
             {
                 case AnswerRemoved answerRemoved:
                     return new RemoveAnswerCommand(interviewId, userId,
-                        new Identity(answerRemoved.QuestionId, answerRemoved.RosterVector),
-                        answerRemoved.RemoveTimeUtc).ToEnumerable();
+                        new Identity(answerRemoved.QuestionId, answerRemoved.RosterVector)).ToEnumerable();
                 case AnswersRemoved answersRemoved:
                     return answersRemoved.Questions.Select(x =>
-                        new RemoveAnswerCommand(interviewId, userId, x, committedEvent.EventTimeStamp));
+                        new RemoveAnswerCommand(interviewId, userId, x));
                 case AreaQuestionAnswered areaQuestion:
                     return new AnswerGeographyQuestionCommand(interviewId, userId,
-                        areaQuestion.QuestionId, areaQuestion.RosterVector, areaQuestion.AnswerTimeUtc,
+                        areaQuestion.QuestionId, areaQuestion.RosterVector,
                         areaQuestion.Geometry,
                         areaQuestion.MapName, 
                         areaQuestion.AreaSize, 
@@ -156,68 +152,55 @@ namespace CoreTester.CustomInfrastructure
                         areaQuestion.NumberOfPoints).ToEnumerable();
                 case AudioQuestionAnswered audioQuestion:
                     return new AnswerAudioQuestionCommand(interviewId, userId, audioQuestion.QuestionId,
-                        audioQuestion.RosterVector, audioQuestion.AnswerTimeUtc,
+                        audioQuestion.RosterVector, 
                         audioQuestion.FileName, audioQuestion.Length).ToEnumerable();
                 case DateTimeQuestionAnswered dateTimeQuestion:
                     return new AnswerDateTimeQuestionCommand(interviewId, userId, dateTimeQuestion.QuestionId,
-                        dateTimeQuestion.RosterVector,
-                        dateTimeQuestion.AnswerTimeUtc, dateTimeQuestion.Answer).ToEnumerable();
+                        dateTimeQuestion.RosterVector, dateTimeQuestion.Answer).ToEnumerable();
                 case GeoLocationQuestionAnswered geoLocation:
                     return new AnswerGeoLocationQuestionCommand(interviewId, userId, geoLocation.QuestionId,
-                        geoLocation.RosterVector, geoLocation.AnswerTimeUtc,
+                        geoLocation.RosterVector, 
                         geoLocation.Latitude, geoLocation.Longitude, geoLocation.Accuracy, geoLocation.Altitude,
                         geoLocation.Timestamp).ToEnumerable();
                 case MultipleOptionsLinkedQuestionAnswered multipleOptionsLinked:
                     return new AnswerMultipleOptionsLinkedQuestionCommand(interviewId, userId,
                             multipleOptionsLinked.QuestionId, multipleOptionsLinked.RosterVector,
-                            multipleOptionsLinked.AnswerTimeUtc,
                             multipleOptionsLinked.SelectedRosterVectors.Select(x => new RosterVector(x)).ToArray())
                         .ToEnumerable();
                 case MultipleOptionsQuestionAnswered multipleOptions:
                     return new AnswerMultipleOptionsQuestionCommand(interviewId, userId, multipleOptions.QuestionId,
                         multipleOptions.RosterVector,
-                        multipleOptions.AnswerTimeUtc,
                         multipleOptions.SelectedValues.Select(Convert.ToInt32).ToArray()).ToEnumerable();
                 case NumericIntegerQuestionAnswered numericInteger:
                     return new AnswerNumericIntegerQuestionCommand(interviewId, userId, numericInteger.QuestionId,
-                        numericInteger.RosterVector,
-                        numericInteger.AnswerTimeUtc, numericInteger.Answer).ToEnumerable();
+                        numericInteger.RosterVector, numericInteger.Answer).ToEnumerable();
                 case NumericRealQuestionAnswered numericReal:
                     return new AnswerNumericRealQuestionCommand(interviewId, userId, numericReal.QuestionId,
-                        numericReal.RosterVector,
-                        numericReal.AnswerTimeUtc, Convert.ToDouble(numericReal.Answer)).ToEnumerable();
+                        numericReal.RosterVector, Convert.ToDouble(numericReal.Answer)).ToEnumerable();
                 case PictureQuestionAnswered picture:
                     return new AnswerPictureQuestionCommand(interviewId, userId, picture.QuestionId,
-                        picture.RosterVector,
-                        picture.AnswerTimeUtc, picture.PictureFileName).ToEnumerable();
+                        picture.RosterVector,picture.PictureFileName).ToEnumerable();
                 case QRBarcodeQuestionAnswered qrBarcode:
                     return new AnswerQRBarcodeQuestionCommand(interviewId, userId, qrBarcode.QuestionId,
-                        qrBarcode.RosterVector,
-                        qrBarcode.AnswerTimeUtc, qrBarcode.Answer).ToEnumerable();
+                        qrBarcode.RosterVector, qrBarcode.Answer).ToEnumerable();
                 case SingleOptionLinkedQuestionAnswered singleOptionLinked:
                     return new AnswerSingleOptionLinkedQuestionCommand(interviewId, userId,
                         singleOptionLinked.QuestionId, singleOptionLinked.RosterVector,
-                        singleOptionLinked.AnswerTimeUtc, singleOptionLinked.SelectedRosterVector).ToEnumerable();
+                        singleOptionLinked.SelectedRosterVector).ToEnumerable();
                 case SingleOptionQuestionAnswered singleOption:
                     return new AnswerSingleOptionQuestionCommand(interviewId, userId, singleOption.QuestionId,
-                        singleOption.RosterVector, singleOption.AnswerTimeUtc,
+                        singleOption.RosterVector, 
                         Convert.ToInt32(singleOption.SelectedValue)).ToEnumerable();
                 case TextListQuestionAnswered textList:
                     return new AnswerTextListQuestionCommand(interviewId, userId, textList.QuestionId,
-                        textList.RosterVector,
-                        textList.AnswerTimeUtc, textList.Answers).ToEnumerable();
+                        textList.RosterVector, textList.Answers).ToEnumerable();
                 case TextQuestionAnswered text:
-                    return new AnswerTextQuestionCommand(interviewId, userId, text.QuestionId, text.RosterVector,
-                        text.AnswerTimeUtc, text.Answer).ToEnumerable();
+                    return new AnswerTextQuestionCommand(interviewId, userId, text.QuestionId, text.RosterVector,text.Answer).ToEnumerable();
                 case YesNoQuestionAnswered yesNo:
-                    return new AnswerYesNoQuestion(interviewId, userId, yesNo.QuestionId, yesNo.RosterVector,
-                        yesNo.AnswerTimeUtc, yesNo.AnsweredOptions).ToEnumerable();
+                    return new AnswerYesNoQuestion(interviewId, userId, yesNo.QuestionId, yesNo.RosterVector, yesNo.AnsweredOptions).ToEnumerable();
                 default:
                     return null;
             }
-
-            return null;
         }
-
     }
 }

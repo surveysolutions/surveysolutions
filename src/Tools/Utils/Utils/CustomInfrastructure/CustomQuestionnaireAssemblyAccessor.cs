@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
-namespace CoreTester.CustomInfrastructure
+namespace Utils.CustomInfrastructure
 {
     public class CustomQuestionnaireAssemblyAccessor : IQuestionnaireAssemblyAccessor
     {

@@ -9,7 +9,7 @@ using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 
-namespace CoreTester.CustomInfrastructure
+namespace Utils.CustomInfrastructure
 {
     public class CustomCommandService : ICommandService
     {

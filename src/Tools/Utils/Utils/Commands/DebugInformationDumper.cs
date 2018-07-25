@@ -14,7 +14,7 @@ using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
-namespace CoreTester.Commands
+namespace Utils.Commands
 {
     public class DebugInformationDumper
     {

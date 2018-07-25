@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using CoreTester.CustomInfrastructure;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing;
 using ReflectionMagic;
+using Utils.CustomInfrastructure;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -12,7 +12,7 @@ using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 
-namespace CoreTester.Commands
+namespace Utils.Commands
 {
     public class RemoveOrphanInterviewRecords
     {

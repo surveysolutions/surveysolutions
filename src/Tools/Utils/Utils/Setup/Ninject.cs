@@ -8,7 +8,7 @@ using Ninject.Syntax;
 using WB.Core.Infrastructure.Modularity;
 using WB.Infrastructure.Native.Threading;
 
-namespace CoreTester.Setup
+namespace Utils.Setup
 {
     public class NinjectModuleAdapter<TModule> : NinjectModuleAdapter
         where TModule : IModule

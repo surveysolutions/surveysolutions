@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using ICSharpCode.Decompiler;
 using ICSharpCode.Decompiler.CSharp;
@@ -20,7 +18,7 @@ using ITypeDefinition = ICSharpCode.Decompiler.TypeSystem.ITypeDefinition;
 using IVariable = WB.Core.SharedKernels.QuestionnaireEntities.IVariable;
 using TypeAttributes = Mono.Cecil.TypeAttributes;
 
-namespace CoreTester
+namespace Utils
 {
     public static class Utils
     {

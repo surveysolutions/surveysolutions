@@ -2,7 +2,7 @@
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Infrastructure.Native.Ioc;
 
-namespace CoreTester.Setup
+namespace Utils.Setup
 {
     internal class ServiceLocationModule : NinjectModule
     {

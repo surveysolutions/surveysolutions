@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Data.Common;
 using CommandLine;
-using CoreTester.Commands;
-using CoreTester.Setup;
 using Ninject;
 using NLog;
+using Utils.Commands;
+using Utils.Setup;
 
-namespace CoreTester
+namespace Utils
 {
     class Program
     {
@@ -38,6 +38,13 @@ namespace CoreTester
             public string ConnectionString { get; set; }
         }
 
+        [Verb("migrate", HelpText = "Migrate DB to the latest version.")]
+        protected class MigrateDbOptions
+        {
+            [Option('c', "connection", Required = true, HelpText = "Connection string to DB")]
+            public string ConnectionString { get; set; }
+        }
+
         static int Main(string[] args)
         {
             var logger = LogManager.GetCurrentClassLogger();
@@ -46,12 +53,18 @@ namespace CoreTester
             try
             {
                 return Parser.Default
-                    .ParseArguments<CoreTestOptions, DumpDebugInformationOptions, CoreDebugOptions, RemoveOrphanInterviewRecordsOptions>(args)
+                    .ParseArguments<
+                        CoreTestOptions, 
+                        DumpDebugInformationOptions, 
+                        CoreDebugOptions, 
+                        RemoveOrphanInterviewRecordsOptions,
+                        MigrateDbOptions>(args)
                     .MapResult(
                         (CoreTestOptions o) => RunCoreTestOptions(o),
                         (DumpDebugInformationOptions o) => RunDumpDebugInformationOptions(o),
                         (CoreDebugOptions o) => RunCoreDebugger(o),
                         (RemoveOrphanInterviewRecordsOptions o) => RunOrphanInterviewRecordsRemover(o),
+                        (MigrateDbOptions o) => RunMigrations(o),
                         errs =>
                         {
                             foreach (var error in errs)
@@ -68,6 +81,28 @@ namespace CoreTester
                 logger.Error(e);
                 return 1;
             }
+        }
+
+        private static int RunMigrations(MigrateDbOptions opts)
+        {
+            Console.WriteLine("++++++++++++++++++++++++++++++++++++++++++++");
+            Console.WriteLine($"started at {DateTime.Now}");
+            DbConnectionStringBuilder db = new DbConnectionStringBuilder {ConnectionString = opts.ConnectionString};
+            var serverName = db["Database"].ToString();
+            Console.WriteLine(serverName);
+            Console.WriteLine();
+
+            IKernel container = NinjectConfig.CreateKernel(opts.ConnectionString.Trim('"'));
+
+            RemoveOrphanInterviewRecords remover = container.Get<RemoveOrphanInterviewRecords>();
+
+            var runResult = remover.Run(serverName);
+
+            Console.WriteLine();
+            Console.WriteLine("Press Any key");
+            Console.ReadLine();
+
+            return runResult;
         }
 
         private static int RunOrphanInterviewRecordsRemover(RemoveOrphanInterviewRecordsOptions opts)

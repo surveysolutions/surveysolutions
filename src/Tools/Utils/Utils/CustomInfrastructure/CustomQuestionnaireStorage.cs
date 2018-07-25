@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
@@ -7,7 +6,7 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
-namespace CoreTester.CustomInfrastructure
+namespace Utils.CustomInfrastructure
 {
     public class CustomQuestionnaireStorage : IQuestionnaireStorage
     {

@@ -1,7 +1,7 @@
 ﻿using Ninject.Modules;
 using WB.Core.Infrastructure.Modularity;
 
-namespace CoreTester.Setup
+namespace Utils.Setup
 {
     public static class ModuleExtensions
     {

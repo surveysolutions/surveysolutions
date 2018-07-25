@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using CoreTester.CustomInfrastructure;
 using Main.Core.Documents;
 using Ncqrs.Eventing;
+using Utils.CustomInfrastructure;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -14,7 +14,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
-namespace CoreTester.Commands
+namespace Utils.Commands
 {
     public class CoreDebugger
     {

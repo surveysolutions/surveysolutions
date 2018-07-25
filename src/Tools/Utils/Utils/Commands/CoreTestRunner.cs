@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using CoreTester.CustomInfrastructure;
 using Main.Core.Documents;
 using Ncqrs.Eventing.Storage;
+using Utils.CustomInfrastructure;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -22,7 +22,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Infrastructure.Native.Storage;
 
-namespace CoreTester.Commands
+namespace Utils.Commands
 {
     public class CoreTestRunner
     {

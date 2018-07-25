@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Reflection;
-using CoreTester.Commands;
 using Ninject;
+using Utils.Commands;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Ncqrs;
@@ -10,7 +10,7 @@ using WB.Infrastructure.Native.Logging;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
 
-namespace CoreTester.Setup
+namespace Utils.Setup
 {
     public class NinjectConfig
     {
