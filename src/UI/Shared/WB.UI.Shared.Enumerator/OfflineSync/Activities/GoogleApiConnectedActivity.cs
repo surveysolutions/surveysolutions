@@ -126,7 +126,7 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
 
             if (this.GoogleApi.IsConnected)
             {
-                this.ViewModel.StartSynchronization.Execute();
+                this.ViewModel.StartDiscoveryAsyncCommand.Execute();
                 return;
             }
 
@@ -135,7 +135,7 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
 
         public void OnConnected(Bundle connectionHint)
         {
-            this.ViewModel.StartSynchronization.Execute();
+            this.ViewModel.StartDiscoveryAsyncCommand.Execute();
         }
 
         public void OnConnectionSuspended(int cause)

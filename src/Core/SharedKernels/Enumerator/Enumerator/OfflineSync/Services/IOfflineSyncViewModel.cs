@@ -5,7 +5,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services
 {
     public interface IOfflineSyncViewModel
     {
-        IMvxAsyncCommand StartSynchronization { get; }
+        IMvxAsyncCommand StartDiscoveryAsyncCommand { get; }
         IMvxCommand CancelCommand { get; }
     }
 }
