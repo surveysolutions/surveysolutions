@@ -5,4 +5,4 @@
   android:layout_width="match_parent"
   android:layout_height="wrap_content"
   style="@style/Interview_Question_Errors_Details"
-  local:MvxBind="Html HtmlText" />
+  local:MvxBind="Html HtmlText; Tag ItemTag" />
