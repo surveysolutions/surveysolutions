@@ -411,7 +411,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         }
 
         protected async Task UploadInterviewsAsync(IProgress<SyncProgressInfo> progress,
-            SynchronizationStatistics statistics, CancellationToken cancellationToken)
+            SynchronizationStatistics statistics, 
+            CancellationToken cancellationToken)
         {
             var completedInterviews = GetInterviewsForUpload();
 

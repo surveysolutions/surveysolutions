@@ -54,7 +54,7 @@ namespace WB.UI.Supervisor
                 {typeof(DiagnosticsViewModel),typeof(DiagnosticsActivity) },
                 {typeof(DashboardViewModel),typeof(DashboardActivity) },
                 {typeof(SupervisorInterviewViewModel),typeof(InterviewActivity) },
-                {typeof(OfflineSupervisorSyncViewModel), typeof(OfflineSupervisorSyncActitivy) },
+                {typeof(SupervisorOfflineSyncViewModel), typeof(OfflineSupervisorSyncActitivy) },
                 {typeof(SupervisorResolveInterviewViewModel), typeof (SupervisorCompleteFragment)},
                 {typeof(MapsViewModel), typeof (MapsActivity)},
                 {typeof(PhotoViewViewModel), typeof(PhotoViewActivity) },

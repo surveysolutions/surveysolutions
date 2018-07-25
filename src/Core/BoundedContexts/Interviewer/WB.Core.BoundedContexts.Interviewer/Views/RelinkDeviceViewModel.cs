@@ -61,14 +61,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             => new MvxAsyncCommand(this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>,
                 () => !this.IsInProgress);
 
-        private IMvxAsyncCommand relinkCommand;
-        public IMvxAsyncCommand RelinkCommand
-        {
-            get
-            {
-                return relinkCommand ?? (relinkCommand = new MvxAsyncCommand(this.RelinkCurrentInterviewerToDeviceAsync, () => !this.IsInProgress));
-            }
-        }
+        public IMvxAsyncCommand RelinkCommand => new MvxAsyncCommand(this.RelinkCurrentInterviewerToDeviceAsync, () => !this.IsInProgress);
 
         private CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
         private InterviewerIdentity userIdentityToRelink;

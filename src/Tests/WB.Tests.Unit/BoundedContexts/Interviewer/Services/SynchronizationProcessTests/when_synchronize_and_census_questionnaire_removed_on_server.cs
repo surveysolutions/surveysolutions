@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
@@ -19,7 +20,7 @@ using It = Moq.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProcessTests
 {
-    [NUnit.Framework.TestOf(typeof(SynchronizationProcess))]
+    [NUnit.Framework.TestOf(typeof(InterviewerSynchronizationProcess))]
     internal class when_synchronize_and_census_questionnaire_removed_on_server
     {
         [Test]

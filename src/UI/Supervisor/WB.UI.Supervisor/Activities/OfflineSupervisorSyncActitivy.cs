@@ -12,7 +12,7 @@ namespace WB.UI.Supervisor.Activities
         HardwareAccelerated = true,
         ConfigurationChanges =
             Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
-    public class OfflineSupervisorSyncActitivy : GoogleApiConnectedActivity<OfflineSupervisorSyncViewModel>
+    public class OfflineSupervisorSyncActitivy : GoogleApiConnectedActivity<SupervisorOfflineSyncViewModel>
     {
         protected override int ViewResourceId => Resource.Layout.offline_sync;
     }
