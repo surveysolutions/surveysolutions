@@ -98,7 +98,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 
         protected override void OnDeviceConnectionRequested(string name) => SetStatus(ConnectionStatus.Connecting, $"Requested conection to {name}");
 
-        public IMvxAsyncCommand StartSynchronization => new MvxAsyncCommand(() =>
+        public IMvxAsyncCommand StartDiscoveryAsyncCommand => new MvxAsyncCommand(() =>
         {
             this.cancellationTokenSource = new CancellationTokenSource();
             return this.StartAdvertising();
