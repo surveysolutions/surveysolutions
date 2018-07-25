@@ -2,6 +2,7 @@
 using System.Threading;
 using Moq;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
@@ -49,7 +50,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             PrincipalMock.Verify(x => x.SignInWithHash("name", "hash", true), Times.Once);
         }
 
-        static SynchronizationProcess viewModel;
+        static InterviewerSynchronizationProcess viewModel;
         static readonly Mock<IPlainStorage<InterviewerIdentity>> InterviewerStorageMock = new Mock<IPlainStorage<InterviewerIdentity>>();
         static Mock<IInterviewerPrincipal> PrincipalMock = new Mock<IInterviewerPrincipal>();
         static readonly Mock<ISynchronizationService>  SynchronizationServiceMock =new Mock<ISynchronizationService>();

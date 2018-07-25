@@ -128,22 +128,11 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             }).ConfigureAwait(false);
         }
 
-        public Task<NearbyStatus> AcceptConnectionAsync(string endpoint, CancellationToken cancellationToken)
-        {
-            return this.connectionClient.AcceptConnectionAsync(endpoint, cancellationToken);
-        }
-
-        public Task<NearbyStatus> RejectConnectionAsync(string endpoint, CancellationToken cancellationToken)
-        {
-            return this.connectionClient.RejectConnectionAsync(endpoint, cancellationToken);
-        }
-
-        public async Task<NearbyStatus> SendPayloadAsync(string to, IPayload payload,
-            CancellationToken cancellationToken)
-        {
-            var result = await this.connectionClient.SendPayloadAsync(to, payload, cancellationToken);
-            return result;
-        }
+        public Task<NearbyStatus> AcceptConnectionAsync(string endpoint) 
+            => this.connectionClient.AcceptConnectionAsync(endpoint);
+        
+        public Task<NearbyStatus> SendPayloadAsync(string to, IPayload payload)
+            => this.connectionClient.SendPayloadAsync(to, payload);
 
         public IObservable<INearbyEvent> Events { get; }
 
