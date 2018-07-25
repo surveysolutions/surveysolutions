@@ -57,15 +57,16 @@
                   local:MvxBind="Text Endpoint; Watermark Localization('EndpointHint'); BackgroundStyle ValidationStyleBackground(IsEndpointValid);" />
               
               <ImageButton
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
+                  android:layout_width="48dp"
+                  android:layout_height="48dp"
                   android:id="@+id/LoginPage_scan"
                   local:srcCompat="@drawable/scan_icon"
                   android:layout_alignParentRight="true"
-                  android:paddingTop="5dp"
+                  android:paddingTop="3dp"
                   android:background="@null"
                   android:scaleType="fitXY"
                   local:MvxBind="Click ScanCommand;"/>
+              <!--android:layout_centerVertical="true"-->
           </RelativeLayout>
         <EditText
           style="@style/Login_Login_Editor"
