@@ -94,9 +94,9 @@ namespace Utils
 
             IKernel container = NinjectConfig.CreateKernel(opts.ConnectionString.Trim('"'));
 
-            RemoveOrphanInterviewRecords remover = container.Get<RemoveOrphanInterviewRecords>();
+            DbMigrator remover = container.Get<DbMigrator>();
 
-            var runResult = remover.Run(serverName);
+            var runResult = remover.Run(serverName, opts.ConnectionString);
 
             Console.WriteLine();
             Console.WriteLine("Press Any key");

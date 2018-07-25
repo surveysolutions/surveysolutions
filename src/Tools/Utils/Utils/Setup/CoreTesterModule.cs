@@ -24,6 +24,7 @@ using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Modularity;
@@ -43,6 +44,7 @@ using WB.Enumerator.Native.Questionnaire;
 using WB.Enumerator.Native.Questionnaire.Impl;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Services;
+using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
@@ -120,8 +122,11 @@ namespace Utils.Setup
             registry.Bind<CoreTestRunner>();
             registry.Bind<DebugInformationDumper>();
             registry.Bind<CoreDebugger>();
+            registry.Bind<DbMigrator>();
 
             registry.Bind<ISerializer, NewtonJsonSerializer>();
+
+            registry.Bind<IFileSystemAccessor, FileSystemIOAccessor>();
 
             //Designer
             registry.Bind<IExpressionProcessorGenerator, QuestionnaireExpressionProcessorGenerator>();
