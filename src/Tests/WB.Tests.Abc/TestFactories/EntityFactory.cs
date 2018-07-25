@@ -2168,8 +2168,11 @@ namespace WB.Tests.Abc.TestFactories
                 Value = code.ToString()
             };
 
-        public PreloadingRow PreloadingRow(params PreloadingCell[] cells) => new PreloadingRow
+        public PreloadingRow PreloadingRow(params PreloadingCell[] cells) => this.PreloadingRow(1, cells);
+
+        public PreloadingRow PreloadingRow(int rowIndex = 1, params PreloadingCell[] cells) => new PreloadingRow
         {
+            RowIndex = rowIndex,
             Cells = cells
         };
 
