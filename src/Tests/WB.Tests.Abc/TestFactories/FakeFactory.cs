@@ -258,7 +258,6 @@ namespace WB.Tests.Abc.TestFactories
             public ObservableCollection<RemoteEndpoint> RemoteEndpoints { get; } = new CovariantObservableCollection<RemoteEndpoint>();
             public void StopDiscovery()
             {
-                throw new NotImplementedException();
             }
 
             public void StopAdvertising()
