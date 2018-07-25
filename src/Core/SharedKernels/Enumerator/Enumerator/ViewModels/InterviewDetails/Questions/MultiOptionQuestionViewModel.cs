@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -51,6 +52,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public QuestionInstructionViewModel InstructionViewModel => this.instructionViewModel;
         public IQuestionStateViewModel QuestionState => this.questionState;
         public AnsweringViewModel Answering { get; }
+        public bool AreAnswersOrdered => this.areAnswersOrdered;
 
         public MultiOptionQuestionViewModel(
             QuestionStateViewModel<MultipleOptionsQuestionAnswered> questionStateViewModel,
@@ -259,10 +261,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var interview = this.interviewRepository.Get(this.interviewId.FormatGuid());
             var answer = interview.GetMultiOptionQuestion(this.Identity)?.GetAnswer();
             if (answer == null) return;
-
+            var checkedOptions = answer.CheckedValues.ToArray();
             foreach (var option in Options)
             {
-                option.Checked = answer.CheckedValues.Contains(option.Value);
+                var selectedOptionIndex = Array.IndexOf(checkedOptions, option.Value);
+                option.Checked = selectedOptionIndex >= 0;
+                if (this.areAnswersOrdered)
+                {
+                    option.CheckedOrder = selectedOptionIndex + 1;
+                }
             }
 
             PreviousOptionsToReset = answer.CheckedValues.ToList();

@@ -65,6 +65,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         public Identity QuestionIdentity => this.Identity;
+        public bool AreAnswersOrdered => this.areAnswersOrdered;
 
         IObservableCollection<MultiOptionQuestionOptionViewModelBase> IMultiOptionQuestionViewModelToggleable.Options => this.Options;
 

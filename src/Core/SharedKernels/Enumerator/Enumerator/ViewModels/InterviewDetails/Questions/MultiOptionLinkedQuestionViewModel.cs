@@ -69,6 +69,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         public Identity Identity => this.questionIdentity;
+        public bool AreAnswersOrdered => this.areAnswersOrdered;
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {

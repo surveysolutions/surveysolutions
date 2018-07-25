@@ -33,23 +33,26 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 if (this.@checked == value) return;
                 this.@checked = value;
-                if (value)
+                if (QuestionViewModel.AreAnswersOrdered)
                 {
-                    this.CheckedOrder = this.QuestionViewModel.Options
-                                            .Select(x => x.CheckedOrder ?? 0)
-                                            .DefaultIfEmpty(0)
-                                            .Max() + 1;
-                }
-                else
-                {
-                    if (this.CheckedOrder.HasValue)
+                    if (value)
                     {
-                        this.QuestionViewModel.Options
-                            .Where(x => x.CheckedOrder > this.CheckedOrder)
-                            .ForEach(x => x.CheckedOrder -= 1);
+                        this.CheckedOrder = this.QuestionViewModel.Options
+                                                .Select(x => x.CheckedOrder ?? 0)
+                                                .DefaultIfEmpty(0)
+                                                .Max() + 1;
                     }
+                    else
+                    {
+                        if (this.CheckedOrder.HasValue)
+                        {
+                            this.QuestionViewModel.Options
+                                .Where(x => x.CheckedOrder > this.CheckedOrder)
+                                .ForEach(x => x.CheckedOrder -= 1);
+                        }
 
-                    this.CheckedOrder = null;
+                        this.CheckedOrder = null;
+                    }
                 }
 
                 this.RaisePropertyChanged();
