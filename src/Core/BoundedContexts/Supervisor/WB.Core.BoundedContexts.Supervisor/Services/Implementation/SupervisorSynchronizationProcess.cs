@@ -67,7 +67,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
             logoSynchronizer, cleanupService, assignmentsSynchronizer, questionnaireDownloader,
             httpStatistician,
             assignmentsStorage, audioFileStorage, diagnosticService, auditLogSynchronizer, auditLogService,
-            eventBus, eventStore, interviewSequenceViewRepository)
+            eventBus, eventStore, interviewSequenceViewRepository, supervisorSettings)
         {
             this.principal = principal;
             this.supervisorSettings = supervisorSettings;

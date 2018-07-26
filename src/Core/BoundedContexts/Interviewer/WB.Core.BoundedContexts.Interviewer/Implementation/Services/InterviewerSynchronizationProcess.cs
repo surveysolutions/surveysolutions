@@ -64,7 +64,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             userInteractionService, questionnairesAccessor, interviewFactory, interviewMultimediaViewStorage, imagesStorage,
             logoSynchronizer, cleanupService, assignmentsSynchronizer, questionnaireDownloader, httpStatistician,
             assignmentsStorage, audioFileStorage, diagnosticService, auditLogSynchronizer, auditLogService,
-            eventBus, eventStore, interviewSequenceViewRepository)
+            eventBus, eventStore, interviewSequenceViewRepository, interviewerSettings)
         {
             this.principal = principal;
             this.interviewerSettings = interviewerSettings;

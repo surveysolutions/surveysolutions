@@ -187,9 +187,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 token: token));
         }
 
-        public Task SendSyncStatisticsAsync(SyncStatisticsApiView statistics, CancellationToken token, RestCredentials credentials)
+        public Task<long?> SendSyncStatisticsAsync(SyncStatisticsApiView statistics, CancellationToken token, RestCredentials credentials)
         {
-            return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
+            return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync<long?>(
                 url: $"{this.DevicesController}/statistics",
                 request: statistics,
                 credentials: this.restCredentials,

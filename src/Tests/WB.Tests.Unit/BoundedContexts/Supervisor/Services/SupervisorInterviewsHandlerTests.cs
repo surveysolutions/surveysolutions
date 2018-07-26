@@ -4,8 +4,6 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Main.Core.Events;
 using Moq;
-using Ncqrs.Eventing;
-using NSubstitute.ExceptionExtensions;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Supervisor;
@@ -22,6 +20,7 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Utils;
@@ -42,10 +41,11 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             var users = new Mock<IPlainStorage<InterviewerDocument>>();
             users.Setup(x => x.GetById(userId.FormatGuid())).Returns(new InterviewerDocument(){SecurityStamp = userStamp });
 
-            var handler = Create.Service.SupervisorInterviewsHandler(interviewerViewRepository:users.Object);
+            var handler = Create.Service.SupervisorInterviewsHandler(interviewerViewRepository:users.Object, 
+                settings: Mock.Of<IEnumeratorSettings>(s => s.LastHqSyncTimestamp == 1));
 
             var expectedVersion = ReflectionUtils.GetAssemblyVersion(typeof(SupervisorBoundedContextAssemblyIndicator));
-            var response = await handler.Handle(new CanSynchronizeRequest(expectedVersion.Revision, userId, userStamp));
+            var response = await handler.CanSynchronize(new CanSynchronizeRequest(expectedVersion.Revision, userId, userStamp, null));
 
             Assert.That(response, Has.Property(nameof(response.CanSyncronize)).True);
         }
@@ -58,13 +58,53 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             var users = new Mock<IPlainStorage<InterviewerDocument>>();
             users.Setup(x => x.GetById(userId.FormatGuid())).Returns(new InterviewerDocument() { SecurityStamp = userToken });
 
-            var handler = Create.Service.SupervisorInterviewsHandler(interviewerViewRepository: users.Object);
+            var handler = Create.Service.SupervisorInterviewsHandler(interviewerViewRepository: users.Object,
+                settings: Mock.Of<IEnumeratorSettings>(s => s.LastHqSyncTimestamp == 1));
 
             var expectedVersion = ReflectionUtils.GetAssemblyVersion(typeof(SupervisorBoundedContextAssemblyIndicator));
-            var response = await handler.Handle(new CanSynchronizeRequest(expectedVersion.Revision, userId, "new token"));
+            var response = await handler.CanSynchronize(new CanSynchronizeRequest(expectedVersion.Revision, userId, "new token", null));
 
             Assert.That(response, Has.Property(nameof(response.CanSyncronize)).False);
             Assert.AreEqual(response.Reason, SyncDeclineReason.InvalidPassword);
+        }
+
+        [Test]
+        public async Task CanSynchronize_should_check_hq_timestamp_do_not_allow_offline_sync_if_sv_sync_outdated()
+        {
+            const long interviewerLastHqTimestamp = 10;
+            const long supervisorLastHqTimestamp = 5;
+
+            var userId = Guid.NewGuid();
+            var users = new Mock<IPlainStorage<InterviewerDocument>>();
+            users.Setup(x => x.GetById(userId.FormatGuid())).Returns(new InterviewerDocument());
+
+            var handler = Create.Service.SupervisorInterviewsHandler(interviewerViewRepository: users.Object,
+                settings: Mock.Of<IEnumeratorSettings>(s => s.LastHqSyncTimestamp == supervisorLastHqTimestamp));
+
+            var expectedVersion = ReflectionUtils.GetAssemblyVersion(typeof(SupervisorBoundedContextAssemblyIndicator));
+            var response = await handler.CanSynchronize(
+                new CanSynchronizeRequest(expectedVersion.Revision, userId, String.Empty, interviewerLastHqTimestamp));
+
+            Assert.That(response, Has.Property(nameof(response.CanSyncronize)).False);
+            Assert.AreEqual(response.Reason, SyncDeclineReason.SupervisorRequireOnlineSync);
+        }
+
+        [Test]
+        public async Task CanSynchronize_should_check_hq_timestamp_do_not_allow_offline_sync_if_no_online_occur()
+        {
+            var userId = Guid.NewGuid();
+            var userToken = "test token";
+            var users = new Mock<IPlainStorage<InterviewerDocument>>();
+            users.Setup(x => x.GetById(userId.FormatGuid())).Returns(new InterviewerDocument() { SecurityStamp = userToken });
+
+            var handler = Create.Service.SupervisorInterviewsHandler(interviewerViewRepository: users.Object,
+                settings: Mock.Of<IEnumeratorSettings>(s => s.LastHqSyncTimestamp == null));
+
+            var expectedVersion = ReflectionUtils.GetAssemblyVersion(typeof(SupervisorBoundedContextAssemblyIndicator));
+            var response = await handler.CanSynchronize(new CanSynchronizeRequest(expectedVersion.Revision, userId, "new token", null));
+
+            Assert.That(response, Has.Property(nameof(response.CanSyncronize)).False);
+            Assert.AreEqual(response.Reason, SyncDeclineReason.SupervisorRequireOnlineSync);
         }
 
         [Test]
@@ -74,10 +114,11 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             var users = new Mock<IPlainStorage<InterviewerDocument>>();
             users.Setup(x => x.GetById(userId.FormatGuid())).Returns(new InterviewerDocument());
 
-            var handler = Create.Service.SupervisorInterviewsHandler(interviewerViewRepository: users.Object);
+            var handler = Create.Service.SupervisorInterviewsHandler(interviewerViewRepository: users.Object,
+                settings: Mock.Of<IEnumeratorSettings>(s => s.LastHqSyncTimestamp == 1));
 
             var expectedVersion = ReflectionUtils.GetAssemblyVersion(typeof(SupervisorBoundedContextAssemblyIndicator));
-            var response = await handler.Handle(new CanSynchronizeRequest(expectedVersion.Revision, Guid.NewGuid(), String.Empty));
+            var response = await handler.CanSynchronize(new CanSynchronizeRequest(expectedVersion.Revision, Guid.NewGuid(), String.Empty, null));
 
             Assert.That(response, Has.Property(nameof(response.CanSyncronize)).False);
             Assert.AreEqual(response.Reason, SyncDeclineReason.NotATeamMember);
@@ -88,7 +129,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
         {
             var handler = Create.Service.SupervisorInterviewsHandler();
 
-            var response = await handler.Handle(new CanSynchronizeRequest(1, Guid.NewGuid(), String.Empty));
+            var response = await handler.CanSynchronize(new CanSynchronizeRequest(1, Guid.NewGuid(), String.Empty, null));
 
             Assert.That(response, Has.Property(nameof(response.CanSyncronize)).False);
         }
@@ -108,7 +149,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             var handler = Create.Service.SupervisorInterviewsHandler(interviews: interviews);
 
             // Act
-            var response = await handler.Handle(new GetInterviewsRequest(interviewerId));
+            var response = await handler.GetInterviews(new GetInterviewsRequest(interviewerId));
 
             response.Interviews.Select(x => x.Id).Should().BeEquivalentTo(Id.g2, Id.g5);
             response.Interviews.Select(x => x.ResponsibleId).Should().BeEquivalentTo(interviewerId, interviewerId);
@@ -126,7 +167,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             var handler = Create.Service.SupervisorInterviewsHandler(interviews: interviews);
 
             // Act
-            var response = await handler.Handle(new GetInterviewsRequest(responsibleId));
+            var response = await handler.GetInterviews(new GetInterviewsRequest(responsibleId));
 
             response.Interviews.Select(x => x.ResponsibleId).Should().BeEquivalentTo(responsibleId);
         }

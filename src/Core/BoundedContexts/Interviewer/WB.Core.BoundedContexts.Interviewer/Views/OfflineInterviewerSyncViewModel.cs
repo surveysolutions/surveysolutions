@@ -306,6 +306,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                         if (!o.IsRunning)
                         {
                             syncProgress.CompleteAdding();
+
+                            if (o.Status != SynchronizationStatus.Success)
+                            {
+                                this.ProgressTitle = o.Title;
+                                this.TransferingStatus = TransferingStatus.Failed;
+                                this.ProgressStatusDescription = o.Description;
+                                this.StopDiscovery();
+                            }
+                            else
                             this.OnComplete(o.Statistics.FailedInterviewsCount);
                         }
                     });

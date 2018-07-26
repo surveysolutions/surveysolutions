@@ -28,6 +28,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         private readonly IHttpStatistician httpStatistician;
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
         private readonly IAuditLogService auditLogService;
+        protected readonly IEnumeratorSettings enumeratorSettings;
 
         protected bool remoteLoginRequired;
         protected bool shouldUpdatePasswordOfResponsible;
@@ -46,7 +47,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             IUserInteractionService userInteractionService,
             IPrincipal principal,
             IPlainStorage<InterviewView> interviewViewRepository,
-            IAuditLogService auditLogService)
+            IAuditLogService auditLogService, 
+            IEnumeratorSettings enumeratorSettings)
         {
             this.logger = logger;
             this.synchronizationService = synchronizationService;
@@ -55,6 +57,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             this.principal = principal;
             this.interviewViewRepository = interviewViewRepository;
             this.auditLogService = auditLogService;
+            this.enumeratorSettings = enumeratorSettings;
         }
 
 
@@ -254,9 +257,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 {
                     try
                     {
-                        await this.synchronizationService.SendSyncStatisticsAsync(
+                        var hqTimestamp = await this.synchronizationService.SendSyncStatisticsAsync(
                             this.ToSyncStatisticsApiView(statistics, stopwatch),
                             cancellationToken, this.restCredentials);
+
+                        this.enumeratorSettings.SetLastHqSyncTimestamp(hqTimestamp);
                     }
                     catch (Exception e)
                     {
@@ -319,6 +324,16 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                             Title = InterviewerUIResources.Synchronization_UserLinkedToAnotherDevice_Status,
                             Description = InterviewerUIResources.Synchronization_UserLinkedToAnotherDevice_Title,
                             UserIsLinkedToAnotherDevice = true,
+                            Status = SynchronizationStatus.Fail,
+                            Statistics = statistics
+                        });
+                        auditLogService.Write(new SynchronizationFailedAuditLogEntity(ex));
+                        break;
+                    case SynchronizationExceptionType.SupervisorRequireOnlineSync:
+                        progress.Report(new SyncProgressInfo
+                        {
+                            Title = InterviewerUIResources.Synchronization_SupervisorShouldDoOnlineSync_Title,
+                            Description = InterviewerUIResources.Synchronization_SupervisorShouldDoOnlineSync,
                             Status = SynchronizationStatus.Fail,
                             Statistics = statistics
                         });

@@ -1653,6 +1653,24 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Supervisor need to do online synchronization. You device has been synchronized later then Supervisor..
+        /// </summary>
+        public static string Synchronization_SupervisorShouldDoOnlineSync {
+            get {
+                return ResourceManager.GetString("Synchronization_SupervisorShouldDoOnlineSync", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Supervisor need to be synchronized.
+        /// </summary>
+        public static string Synchronization_SupervisorShouldDoOnlineSync_Title {
+            get {
+                return ResourceManager.GetString("Synchronization_SupervisorShouldDoOnlineSync_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to completed assignments.
         /// </summary>
         public static string Synchronization_Upload_CompletedAssignments_Text {
