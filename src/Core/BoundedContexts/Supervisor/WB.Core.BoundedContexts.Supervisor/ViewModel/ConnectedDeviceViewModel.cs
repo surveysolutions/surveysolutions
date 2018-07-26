@@ -29,6 +29,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         }
 
         public ConnectedDeviceSynchronizationViewModel Synchronization { get; set; }
+
+        public SendingDeviceStatus DeviceStatus { get; set; }
     }
 
     public enum SendingDeviceStatus

@@ -138,19 +138,19 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 
         protected void OnDeviceProgressReported(DeviceSyncStats stats)
         {
-            ConnectedDeviceViewModel deviceInfo = FindDevice(stats);
+            ConnectedDeviceViewModel deviceInfo = FindDevice(stats.InterviewerLogin);
 
             deviceInfo?.Synchronization.ProgressOnProgressChanged(this, stats.ProgressInfo);
         }
 
-        private ConnectedDeviceViewModel FindDevice(DeviceSyncStats stats)
+        private ConnectedDeviceViewModel FindDevice(string interviewerLogin)
         {
             this.devicesLock.EnterReadLock();
 
             ConnectedDeviceViewModel deviceInfo;
             try
             {
-                deviceInfo = this.ConnectedDevices.FirstOrDefault(x => x.InterviewerName == stats.InterviewerLogin);
+                deviceInfo = this.ConnectedDevices.FirstOrDefault(x => x.InterviewerName == interviewerLogin);
             }
             finally
             {
@@ -162,11 +162,20 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 
         protected override void OnDeviceFound(string name)
         {
-            // Not called?
+            var device = FindDevice(name);
+            if (device != null)
+            {
+                device.DeviceStatus = SendingDeviceStatus.Found;
+            }
         }
 
         protected override void OnDeviceConnectionRequested(string name)
         {
+            var device = FindDevice(name);
+            if (device != null)
+            {
+                device.DeviceStatus = SendingDeviceStatus.ConnectionRequested;
+            }
         }
 
         protected override void OnDeviceConnected(string name)
@@ -184,7 +193,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
                 }
                 else
                 {
-                    existingDevice.Synchronization.Status = SynchronizationStatus.Started;
+                    existingDevice.DeviceStatus = SendingDeviceStatus.Connected;
                 }
             }
             finally
@@ -195,6 +204,11 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 
         protected override void OnDeviceDisconnected(string name)
         {
+            var device = FindDevice(name);
+            if (device != null)
+            {
+                device.DeviceStatus = SendingDeviceStatus.Disconnected;
+            }
         }
 
         public IMvxAsyncCommand RetryCommand => new MvxAsyncCommand(() =>
