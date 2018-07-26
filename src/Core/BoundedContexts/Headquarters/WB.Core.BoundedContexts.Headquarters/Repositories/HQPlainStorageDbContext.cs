@@ -5,7 +5,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
 {
     public class HQPlainStorageDbContext : DbContext
     {
-        public virtual DbSet<DeviceSyncInfo> DeviceSyncInfo { get; set; }
+        public DbSet<DeviceSyncInfo> DeviceSyncInfo { get; set; }
         public DbSet<SyncStatistics> SyncStatistics { get; set; }
         
         public HQPlainStorageDbContext(): base("Postgres")
