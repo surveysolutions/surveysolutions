@@ -26,7 +26,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProcessTests
 {
-    [TestOf(typeof(SynchronizationProcess))]
+    [TestOf(typeof(InterviewerSynchronizationProcess))]
     public class when_synchonize_and_tablet_has_obsolete_interviews 
     {
         [Test]

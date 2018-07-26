@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
             var mockOfViewModelNavigationService = new Mock<IViewModelNavigationService>();
             mockOfViewModelNavigationService.SetupGet(x => x.HasPendingOperations).Returns(true);
 
-            var mockOfSynchronizationViewModel = new Mock<SynchronizationViewModel>(
+            var mockOfSynchronizationViewModel = new Mock<LocalSynchronizationViewModel>(
                 Mock.Of<IMvxMessenger>(), new SynchronizationCompleteSource());
 
             var viewModel = CreateDashboardViewModel(
@@ -49,7 +49,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
         private static DashboardViewModel CreateDashboardViewModel(
             IViewModelNavigationService viewModelNavigationService = null,
             IInterviewerPrincipal principal = null,
-            SynchronizationViewModel synchronization = null,
+            LocalSynchronizationViewModel synchronization = null,
             IMvxMessenger messenger = null,
             IPlainStorage<InterviewView> interviewsRepository = null,
             ISynchronizationCompleteSource synchronizationCompleteSource = null)
@@ -57,7 +57,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
             return new DashboardViewModel(
                     viewModelNavigationService: viewModelNavigationService ?? Mock.Of<IViewModelNavigationService>(),
                     principal: principal ?? Mock.Of<IInterviewerPrincipal>(),
-                    synchronization: synchronization ?? Substitute.For<SynchronizationViewModel>(),
+                    synchronization: synchronization ?? Substitute.For<LocalSynchronizationViewModel>(),
                     messenger: messenger ?? Mock.Of<IMvxMessenger>(),
                     interviewerSettings: Mock.Of<IInterviewerSettings>(),
                     createNewViewModel: DashboardQuestionnairesViewModel(),

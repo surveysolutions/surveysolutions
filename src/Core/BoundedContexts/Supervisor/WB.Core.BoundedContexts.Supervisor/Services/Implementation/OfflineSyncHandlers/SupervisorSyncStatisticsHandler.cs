@@ -11,18 +11,33 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
     {
         private readonly IPlainStorage<InterviewerSyncStatisticsView, int?> statisticsStorage;
         private readonly ISynchronizationCompleteSource synchronizationCompleteSource;
+        private readonly IDeviceSynchronizationProgress deviceSynchronizationProgress;
 
         public SupervisorSyncStatisticsHandler(IPlainStorage<InterviewerSyncStatisticsView, int?> statisticsStorage,
-            ISynchronizationCompleteSource synchronizationCompleteSource)
+            ISynchronizationCompleteSource synchronizationCompleteSource,
+            IDeviceSynchronizationProgress deviceSynchronizationProgress)
         {
             this.statisticsStorage = statisticsStorage;
             this.synchronizationCompleteSource = synchronizationCompleteSource;
+            this.deviceSynchronizationProgress = deviceSynchronizationProgress;
         }
 
         public void Register(IRequestHandler requestHandler)
         {
             requestHandler.RegisterHandler<SyncStatisticsRequest, OkResponse>(SyncStatisticsAsync);
             requestHandler.RegisterHandler<SyncCompletedRequest, OkResponse>(HandleSyncCompletedAsync);
+            requestHandler.RegisterHandler<SendSyncProgressInfoRequest, OkResponse>(SendSyncProgressInfoAsync);
+        }
+
+        private Task<OkResponse> SendSyncProgressInfoAsync(SendSyncProgressInfoRequest request)
+        {
+            this.deviceSynchronizationProgress.Publish(new DeviceSyncStats
+            {
+                ProgressInfo = request.Info,
+                InterviewerLogin = request.InterviewerLogin
+            });
+
+            return OkResponse.Task;
         }
 
         public Task<OkResponse> HandleSyncCompletedAsync(SyncCompletedRequest arg)

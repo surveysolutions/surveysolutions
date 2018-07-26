@@ -61,7 +61,7 @@ namespace WB.UI.Interviewer.ServiceLocation
             registry.BindAsSingleton<ISupervisorSyncProtocolVersionProvider, SupervisorSyncProtocolVersionProvider>();
             registry.BindAsSingleton<IQuestionnaireContentVersionProvider, QuestionnaireContentVersionProvider>();
 
-            registry.Bind<ISynchronizationProcess, SynchronizationProcess>();
+            registry.Bind<ISynchronizationProcess, InterviewerSynchronizationProcess>();
             registry.Bind<IQuestionnaireDownloader, QuestionnaireDownloader>();
             
             registry.Bind<IAuditLogSynchronizer, AuditLogSynchronizer>();

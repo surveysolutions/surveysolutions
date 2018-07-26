@@ -444,7 +444,8 @@ namespace WB.Tests.Abc.TestFactories
             IEnumeratorSettings settings = null,
             ISynchronizationMode synchronizationMode = null,
             INearbyConnection nearbyConnection = null,
-            ISynchronizationCompleteSource synchronizationCompleteSource = null)
+            ISynchronizationCompleteSource synchronizationCompleteSource = null,
+            IRestService restService = null)
         {
             return new OfflineInterviewerSyncViewModel(
                 principal ?? Mock.Of<IInterviewerPrincipal>(),
@@ -453,7 +454,9 @@ namespace WB.Tests.Abc.TestFactories
                 settings ?? Mock.Of<IEnumeratorSettings>(),
                 synchronizationMode ?? Mock.Of<ISynchronizationMode>(),
                 nearbyConnection ?? Create.Fake.GoogleConnection(),
-                synchronizationCompleteSource ?? Mock.Of<ISynchronizationCompleteSource>());
+                synchronizationCompleteSource ?? Mock.Of<ISynchronizationCompleteSource>(),
+                Mock.Of<IOfflineSyncClient>(), 
+                restService ?? Mock.Of<IRestService>());
         }
     }
 }

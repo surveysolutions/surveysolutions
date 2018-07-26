@@ -228,10 +228,5 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         {
             return Service.LogAssignmentAsHandledAsync(id, cancellationToken);
         }
-
-        public Task SendSyncCompletedAsync(CancellationToken cancellationToken)
-        {
-            return this.Service.SendSyncCompletedAsync(cancellationToken);
-        }
     }
 }
