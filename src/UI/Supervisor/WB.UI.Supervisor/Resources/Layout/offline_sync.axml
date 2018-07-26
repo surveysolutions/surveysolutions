@@ -16,20 +16,12 @@
             local:layout_scrollFlags="enterAlways|scroll" />
     </android.support.design.widget.AppBarLayout>
 
-    <LinearLayout android:orientation="vertical"
-                  android:layout_height="wrap_content"
-                  style="@style/Supervisor_OfflineSync_MainHolder">
+    <LinearLayout style="@style/Supervisor_OfflineSync_MainHolder">
         <TextView
             style="@style/OfflineSync_Title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             local:MvxBind="Text Title">
-        </TextView>
-        <TextView
-            style="@style/OfflineSync_ProgressTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            local:MvxBind="Text ProgressTitle">
         </TextView>
 
         <!--<LinearLayout android:orientation="vertical"
