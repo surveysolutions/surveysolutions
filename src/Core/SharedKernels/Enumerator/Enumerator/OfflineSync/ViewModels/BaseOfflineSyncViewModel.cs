@@ -2,8 +2,11 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
+using MvvmCross.Commands;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Entities;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
@@ -17,18 +20,35 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
         protected readonly INearbyConnection nearbyConnection;
         protected CancellationTokenSource cancellationTokenSource = null;
         private readonly IEnumeratorSettings settings;
+        private readonly IRestService restService;
         private readonly IDisposable nearbyConnectionSubscribtion;
+
+        public IMvxAsyncCommand StartDiscoveryAsyncCommand => new MvxAsyncCommand(StartDiscoveryAsync);
 
         protected BaseOfflineSyncViewModel(IPrincipal principal,
             IViewModelNavigationService viewModelNavigationService,
             IPermissionsService permissions,
-            INearbyConnection nearbyConnection, IEnumeratorSettings settings)
+            INearbyConnection nearbyConnection, 
+            IEnumeratorSettings settings,
+            IRestService restService)
             : base(principal, viewModelNavigationService)
         {
             this.permissions = permissions;
             this.nearbyConnection = nearbyConnection;
             this.settings = settings;
+            this.restService = restService;
             nearbyConnectionSubscribtion = this.nearbyConnection.Events.Subscribe(HandleConnectionEvents);
+        }
+
+        private async Task StartDiscoveryAsync()
+        {
+            if (!this.restService.IsValidHostAddress(this.settings.Endpoint))
+            {
+                this.OnConnectionError(InterviewerUIResources.InvalidEndpoint, ConnectionStatusCode.StatusEndpointUnknown);
+                return;
+            }
+
+            await this.OnStartDiscovery();
         }
 
         protected async void HandleConnectionEvents(INearbyEvent @event)
@@ -55,7 +75,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
         private async Task InitializeConnectionAsync(string endpoint, string name)
         {
             this.OnDeviceConnectionAccepting(name);
-            var connectionStatus = await this.nearbyConnection.AcceptConnectionAsync(endpoint, cancellationTokenSource.Token)
+            var connectionStatus = await this.nearbyConnection.AcceptConnectionAsync(endpoint)
                                              .ConfigureAwait(false);
 
             if (!connectionStatus.IsSuccess)
@@ -77,6 +97,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
                 this.OnDeviceConnectionRequested(name);
         }
 
+        protected virtual Task OnStartDiscovery() => Task.CompletedTask;
         protected virtual void OnDeviceFound(string name) { }
         protected virtual void OnDeviceConnectionRequested(string name) { }
         protected virtual void OnDeviceConnectionAccepting(string name) { }
@@ -94,7 +115,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
 
         protected abstract string GetDeviceIdentification();
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             cancellationTokenSource?.Dispose();
             nearbyConnectionSubscribtion?.Dispose();

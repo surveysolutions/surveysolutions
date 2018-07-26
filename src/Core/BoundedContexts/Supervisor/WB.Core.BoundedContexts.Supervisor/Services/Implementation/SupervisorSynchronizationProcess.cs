@@ -22,7 +22,7 @@ using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
 {
-    public class SynchronizationProcess : SynchronizationProcessBase
+    public class SupervisorSynchronizationProcess : SynchronizationProcessBase
     {
         private readonly ISupervisorSettings supervisorSettings;
         private readonly IPrincipal principal;
@@ -33,7 +33,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
         private readonly ITechInfoSynchronizer techInfoSynchronizer;
         private readonly IPasswordHasher passwordHasher;
 
-        public SynchronizationProcess(ISupervisorSynchronizationService synchronizationService,
+        public SupervisorSynchronizationProcess(ISupervisorSynchronizationService synchronizationService,
             IPlainStorage<SupervisorIdentity> supervisorsPlainStorage,
             IPlainStorage<InterviewView> interviewViewRepository,
             IPrincipal principal,

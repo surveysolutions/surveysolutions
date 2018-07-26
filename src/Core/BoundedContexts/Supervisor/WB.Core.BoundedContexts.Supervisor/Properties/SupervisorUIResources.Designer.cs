@@ -80,22 +80,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Receiving interviews
-        ///from another devices.
+        ///   Looks up a localized string similar to Receiving interviews from interviewer device.
         /// </summary>
         public static string OfflineSync_ReceivingInterviewsFromDevices {
             get {
                 return ResourceManager.GetString("OfflineSync_ReceivingInterviewsFromDevices", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Interviews by {0}:
-        ///{1} of {2} transfered.
-        /// </summary>
-        public static string OfflineSync_TransferInterviewsFormat {
-            get {
-                return ResourceManager.GetString("OfflineSync_TransferInterviewsFormat", resourceCulture);
             }
         }
         

@@ -113,7 +113,6 @@ using WB.UI.Shared.Web.Captcha;
 using WB.UI.Shared.Web.Configuration;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 using AttachmentContent = WB.Core.BoundedContexts.Headquarters.Views.Questionnaire.AttachmentContent;
-using SynchronizationProcess = WB.Core.BoundedContexts.Interviewer.Services.SynchronizationProcess;
 using SynchronizationService = WB.Core.BoundedContexts.Interviewer.Implementation.Services.SynchronizationService;
 
 namespace WB.Tests.Abc.TestFactories
@@ -439,7 +438,7 @@ namespace WB.Tests.Abc.TestFactories
         public IPrincipal Principal(Guid userId)
             => Mock.Of<IPrincipal>(x => x.IsAuthenticated == true && x.CurrentUserIdentity == Mock.Of<IUserIdentity>(u => u.UserId == userId));
 
-        public SynchronizationProcess SynchronizationProcess(
+        public InterviewerSynchronizationProcess SynchronizationProcess(
             IPlainStorage<InterviewView> interviewViewRepository = null,
             IPlainStorage<InterviewerIdentity> interviewersPlainStorage = null,
             IPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage = null,
@@ -457,7 +456,7 @@ namespace WB.Tests.Abc.TestFactories
         {
             var syncServiceMock = synchronizationService ?? Mock.Of<ISynchronizationService>();
 
-            return new SynchronizationProcess(
+            return new InterviewerSynchronizationProcess(
                 syncServiceMock,
                 interviewersPlainStorage ?? Mock.Of<IPlainStorage<InterviewerIdentity>>(),
                 interviewViewRepository ?? new InMemoryPlainStorage<InterviewView>(),

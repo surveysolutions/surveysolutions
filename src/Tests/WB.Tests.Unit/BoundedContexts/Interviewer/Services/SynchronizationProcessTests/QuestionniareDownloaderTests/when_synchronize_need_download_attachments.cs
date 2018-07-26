@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
@@ -21,7 +22,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProcessTests.QuestionniareDownloaderTests
 {
-    [TestOf(typeof(SynchronizationProcess))]
+    [TestOf(typeof(InterviewerSynchronizationProcess))]
     internal class when_synchronize_and_need_download_missing_attachments
     {
         [OneTimeSetUp]

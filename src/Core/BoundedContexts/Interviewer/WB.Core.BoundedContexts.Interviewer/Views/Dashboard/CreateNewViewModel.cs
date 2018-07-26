@@ -23,7 +23,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private readonly IAssignmentDocumentsStorage assignmentsRepository;
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IInterviewerSettings interviewerSettings;
-        private SynchronizationViewModel synchronization;
+        private LocalSynchronizationViewModel synchronization;
 
         public IMvxCommand SynchronizationCommand => new MvxCommand(this.RunSynchronization, 
             () => !this.synchronization.IsSynchronizationInProgress && this.interviewerSettings.AllowSyncWithHq);
@@ -42,7 +42,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.interviewerSettings = interviewerSettings;
         }
 
-        public void Load(SynchronizationViewModel sync)
+        public void Load(LocalSynchronizationViewModel sync)
         {
             this.synchronization = sync;
             this.Title = InterviewerUIResources.Dashboard_AssignmentsTabTitle;
