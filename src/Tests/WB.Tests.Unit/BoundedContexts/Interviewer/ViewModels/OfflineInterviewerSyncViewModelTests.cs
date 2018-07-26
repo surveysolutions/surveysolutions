@@ -6,6 +6,7 @@ using Moq;
 using NUnit.Framework;
 using Plugin.Permissions.Abstractions;
 using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Entities;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -46,12 +47,15 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
             //arrange
             var userId = Guid.Parse("11111111111111111111111111111111");
             var principal = Create.Service.InterviewerPrincipal(userId);
-            var settings = Mock.Of<IEnumeratorSettings>(x => x.Endpoint == "http://google.com");
+            var supervisorUrl = "http://google.com";
+
+            var settings = Mock.Of<IEnumeratorSettings>(x => x.Endpoint == supervisorUrl);
+            var restService = Mock.Of<IRestService>(x => x.IsValidHostAddress(supervisorUrl) == true);
             var permissions = new Mock<IPermissionsService>();
             var nearbyConnection = new Mock<INearbyConnection>();
             nearbyConnection.SetupGet(x => x.Events).Returns(new Subject<INearbyEvent>());
             var vm = Create.ViewModel.OfflineInterviewerSyncViewModel(permissions: permissions.Object,
-                nearbyConnection: nearbyConnection.Object, settings: settings, principal: principal);
+                nearbyConnection: nearbyConnection.Object, settings: settings, principal: principal, restService: restService);
             //act
             vm.RetryCommand.Execute();
             //assert
@@ -122,6 +126,17 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
             events.OnNext(new NearbyEvent.Disconnected(It.IsAny<string>(), It.IsAny<string>()));
             //assert
             Assert.That(vm.TransferingStatus, Is.EqualTo(TransferingStatus.CompletedWithErrors));
+        }
+
+        [Test]
+        public async Task when_start_dicrovering_and_no_sync_endpoint_then_transfering_status_should_be_Failed()
+        {
+            //arrange
+            var vm = Create.ViewModel.OfflineInterviewerSyncViewModel();
+            //act
+            await vm.StartDiscoveryAsyncCommand.ExecuteAsync();
+            //assert
+            Assert.That(vm.TransferingStatus, Is.EqualTo(TransferingStatus.Failed));
         }
     }
 }
