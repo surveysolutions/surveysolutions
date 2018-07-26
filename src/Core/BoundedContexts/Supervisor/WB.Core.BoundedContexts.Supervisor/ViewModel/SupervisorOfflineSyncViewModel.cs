@@ -16,6 +16,7 @@ using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.Views;
 
@@ -102,8 +103,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         {
             await base.Initialize();
             this.Title = SupervisorUIResources.OfflineSync_ReceivingInterviewsFromDevices;
-            this.ProgressTitle = string.Format(SupervisorUIResources.OfflineSync_NoDevicesDetectedFormat,
-                this.principal.CurrentUserIdentity.Name);
+
             this.connectedDevices = new ObservableCollection<ConnectedDeviceViewModel>();
             //var test = new ConnectedDeviceViewModel();
             //test.InterviewerName = "Interviewer1";
@@ -112,7 +112,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             //    Description = "description",
             //    Statistics = new SynchronizationStatistics
             //    {
-            //        RemovedAssignmentsCount =  1,
+            //        RemovedAssignmentsCount = 1,
             //        NewAssignmentsCount = 1,
             //        DeletedInterviewsCount = 5,
             //        FailedToCreateInterviewsCount = 4,
