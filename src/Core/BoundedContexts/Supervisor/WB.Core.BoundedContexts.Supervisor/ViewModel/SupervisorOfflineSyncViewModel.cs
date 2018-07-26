@@ -4,19 +4,18 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using MvvmCross.Base;
 using MvvmCross.Commands;
 using MvvmCross.Logging;
 using Plugin.Permissions.Abstractions;
 using WB.Core.BoundedContexts.Supervisor.Properties;
 using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Entities;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
-using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 {
@@ -34,8 +33,9 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             INearbyCommunicator communicator,
             INearbyConnection nearbyConnection,
             IInterviewViewModelFactory viewModelFactory,
-            IDeviceSynchronizationProgress deviceSynchronizationProgress)
-            : base(principal, viewModelNavigationService, permissions, nearbyConnection, settings)
+            IDeviceSynchronizationProgress deviceSynchronizationProgress,
+            IRestService restService)
+            : base(principal, viewModelNavigationService, permissions, nearbyConnection, settings, restService)
         {
             SetStatus(ConnectionStatus.WaitingForGoogleApi);
             communicator.IncomingInfo.Subscribe(OnIncomingData);
@@ -73,6 +73,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 
         private ObservableCollection<ConnectedDeviceViewModel> connectedDevices;
         private IDisposable devicesSubscribtion;
+        private bool isInitialized = false;
 
         public ObservableCollection<ConnectedDeviceViewModel> ConnectedDevices
         {
@@ -92,7 +93,13 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         private void SetStatus(ConnectionStatus connectionStatus, string details = null)
         {
             var newLine = Environment.NewLine;
-            this.ProgressTitle = $"{this.GetServiceName()}{newLine}{connectionStatus.ToString()}{newLine}{details ?? String.Empty}";
+            this.ProgressTitle = $"{(this.isInitialized ? this.GetServiceName() : string.Empty)}{newLine}{connectionStatus.ToString()}{newLine}{details ?? String.Empty}";
+        }
+
+        protected override void OnConnectionError(string errorMessage, ConnectionStatusCode errorCode)
+        {
+            if(errorCode == ConnectionStatusCode.StatusEndpointUnknown)
+                SetStatus(ConnectionStatus.Error, errorMessage);
         }
 
         protected void OnDeviceProgressReported(DeviceSyncStats stats)
@@ -194,19 +201,17 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             }
         }
 
-        public IMvxAsyncCommand StartDiscoveryAsyncCommand => new MvxAsyncCommand(() =>
+        protected override async Task OnStartDiscovery()
         {
-            this.cancellationTokenSource = new CancellationTokenSource();
-            return this.StartAdvertising();
-        });
-
-        private async Task StartAdvertising()
-        {
+            this.isInitialized = true;
             await this.permissions.AssureHasPermission(Permission.Location);
+
+            this.cancellationTokenSource = new CancellationTokenSource();
 
             Log.Trace("StartAdvertising");
 
             SetStatus(ConnectionStatus.StartAdvertising, $"Starting advertising");
+
             var serviceName = this.GetServiceName();
             try
             {

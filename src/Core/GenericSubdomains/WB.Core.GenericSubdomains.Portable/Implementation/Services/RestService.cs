@@ -442,11 +442,9 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             return responseContent;
         }
 
-        private bool IsValidHostAddress(string url)
-        {
-            Uri uriResult;
-            return Uri.TryCreate(url, UriKind.Absolute, out uriResult) && (uriResult.Scheme == "http" || uriResult.Scheme == "https");
-        }
+        public bool IsValidHostAddress(string url)
+            => Uri.TryCreate(url, UriKind.Absolute, out var uriResult) &&
+               (uriResult.Scheme == "http" || uriResult.Scheme == "https");
 
         internal class RestResponse
         {

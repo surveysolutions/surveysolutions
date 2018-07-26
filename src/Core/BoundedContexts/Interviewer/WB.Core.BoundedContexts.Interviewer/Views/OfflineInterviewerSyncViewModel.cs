@@ -15,6 +15,7 @@ using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Entities;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
@@ -45,8 +46,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             ISynchronizationMode synchronizationMode,
             INearbyConnection nearbyConnection,
             ISynchronizationCompleteSource synchronizationCompleteSource,
-            IOfflineSyncClient syncClient)
-            : base(principal, viewModelNavigationService, permissions, nearbyConnection, settings)
+            IOfflineSyncClient syncClient,
+            IRestService restService)
+            : base(principal, viewModelNavigationService, permissions, nearbyConnection, settings, restService)
         {
             this.principal = principal;
             this.synchronizationMode = synchronizationMode;
@@ -162,10 +164,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.nearbyConnection.StopAll();
             await this.StartDiscoveryAsyncCommand.ExecuteAsync();
         }
-
-        public IMvxAsyncCommand StartDiscoveryAsyncCommand => new MvxAsyncCommand(StartDiscovery);
-
-        private async Task StartDiscovery()
+        
+        protected override async Task OnStartDiscovery()
         {
             this.cancellationTokenSource?.Cancel();
             this.cancellationTokenSource = new CancellationTokenSource();
@@ -203,9 +203,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         {
             this.StopDiscovery();
 
-            this.ProgressTitle = errorCode == ConnectionStatusCode.StatusBluetoothError
-                ? InterviewerUIResources.SendToSupervisor_BluetoothError
-                : InterviewerUIResources.SendToSupervisor_SupervisorNotFound;
+            switch (errorCode)
+            {
+                case ConnectionStatusCode.StatusBluetoothError:
+                    this.ProgressTitle = InterviewerUIResources.SendToSupervisor_BluetoothError;
+                    break;
+                case ConnectionStatusCode.StatusEndpointUnknown:
+                    this.ProgressTitle = errorMessage;
+                    break;
+                default:
+                    this.ProgressTitle = InterviewerUIResources.SendToSupervisor_SupervisorNotFound;
+                    break;
+            }
 
             this.TransferingStatus = TransferingStatus.Failed;
         }
