@@ -948,6 +948,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Location permission is required for work synchronization correctly.
+        /// </summary>
+        public static string LocationPermissionRequired {
+            get {
+                return ResourceManager.GetString("LocationPermissionRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This is first boot on this device. User and domain are not set yet.&lt;br /&gt;You need internet connection to proceed.
         /// </summary>
         public static string Login_FinishInstallation_Message {

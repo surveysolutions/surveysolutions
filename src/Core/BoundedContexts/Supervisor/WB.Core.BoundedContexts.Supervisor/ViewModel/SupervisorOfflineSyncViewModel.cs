@@ -81,14 +81,6 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             set => this.SetProperty(ref this.progressTitle, value);
         }
 
-        private bool shouldStartAdvertising = true;
-
-        public bool ShouldStartAdvertising
-        {
-            get => this.shouldStartAdvertising;
-            set => this.SetProperty(ref this.shouldStartAdvertising, value);
-        }
-
         private ObservableCollection<ConnectedDeviceViewModel> connectedDevices;
         private readonly IDisposable devicesSubscribtion;
         private bool isInitialized = false;
@@ -217,20 +209,6 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         protected override async Task OnStartDiscovery()
         {
             this.isInitialized = true;
-
-            if (!ShouldStartAdvertising)
-                return;
-
-            try
-            {
-                await this.permissions.AssureHasPermission(Permission.Location);
-            }
-            catch (MissingPermissionsException)
-            {
-                ShouldStartAdvertising = false;
-                SetStatus(ConnectionStatus.Error, "Location permission is needed for work correctly on synchronization");
-                return;
-            }
 
             this.cancellationTokenSource = new CancellationTokenSource();
 
