@@ -132,8 +132,13 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 
         protected override void OnConnectionError(string errorMessage, ConnectionStatusCode errorCode)
         {
-            if(errorCode == ConnectionStatusCode.StatusEndpointUnknown)
-                SetStatus(ConnectionStatus.Error, errorMessage);
+            switch (errorCode)
+            {
+                case ConnectionStatusCode.MissingPermissionAccessCoarseLocation:
+                case ConnectionStatusCode.StatusEndpointUnknown:
+                    SetStatus(ConnectionStatus.Error, errorMessage);
+                    break;
+            }
         }
 
         protected void OnDeviceProgressReported(DeviceSyncStats stats)
