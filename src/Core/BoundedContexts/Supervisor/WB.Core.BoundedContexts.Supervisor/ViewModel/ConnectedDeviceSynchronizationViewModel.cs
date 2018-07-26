@@ -9,6 +9,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 
         public override bool HasUserAnotherDevice => false;
 
+        public override bool CanBeManaged => false;
+
         protected override void OnSyncCompleted()
         {
         }

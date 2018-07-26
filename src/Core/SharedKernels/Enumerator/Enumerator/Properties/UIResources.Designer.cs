@@ -1368,24 +1368,6 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Receiving. {0} interviews done out of {1}. Errors count: {2}.
-        /// </summary>
-        public static string OfflineSync_DeviceStats {
-            get {
-                return ResourceManager.GetString("OfflineSync_DeviceStats", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Done.
-        /// </summary>
-        public static string OfflineSync_Done {
-            get {
-                return ResourceManager.GetString("OfflineSync_Done", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Google Play Services must be installed..
         /// </summary>
         public static string OfflineSync_InstallPlayServices {
