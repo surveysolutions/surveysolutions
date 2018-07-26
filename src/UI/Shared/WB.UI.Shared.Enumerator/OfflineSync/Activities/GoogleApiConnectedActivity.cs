@@ -63,7 +63,7 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
             }
         }
 
-        protected override void OnPause()
+        protected override void OnStop()
         {
             this.communicator?.StopAll();
             this.GoogleApi?.Disconnect();
@@ -74,7 +74,7 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
                 bluetoothReceiver = null;
             }
 
-            base.OnPause();
+            base.OnStop();
         }
 
         private void OnBluetoothDisabled(object sender, EventArgs e)
