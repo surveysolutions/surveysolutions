@@ -147,6 +147,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.StopDiscovery();
             this.Done();
         }
+
         private void Abort()
         {
             if (!synchronizationCancellationTokenSource?.IsCancellationRequested == true)
@@ -162,6 +163,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         {
             this.BindTitlesAndStatuses();
             this.nearbyConnection.StopAll();
+            ShouldStartAdvertising = true;
             await this.StartDiscoveryAsyncCommand.ExecuteAsync();
         }
         
@@ -169,7 +171,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         {
             this.cancellationTokenSource?.Cancel();
             this.cancellationTokenSource = new CancellationTokenSource();
-            await this.permissions.AssureHasPermission(Permission.Location);
 
             var discoveryStatus = await this.nearbyConnection.StartDiscoveryAsync(this.GetServiceName(), cancellationTokenSource.Token);
             if (!discoveryStatus.IsSuccess)
@@ -208,6 +209,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
                 case ConnectionStatusCode.StatusBluetoothError:
                     this.ProgressTitle = InterviewerUIResources.SendToSupervisor_BluetoothError;
                     break;
+                case ConnectionStatusCode.MissingPermissionAccessCoarseLocation:
                 case ConnectionStatusCode.StatusEndpointUnknown:
                     this.ProgressTitle = errorMessage;
                     break;
