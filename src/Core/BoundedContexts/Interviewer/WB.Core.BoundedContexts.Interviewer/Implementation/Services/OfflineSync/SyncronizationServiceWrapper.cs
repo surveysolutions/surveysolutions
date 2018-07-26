@@ -174,7 +174,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return Service.GetCompanyLogo(storedClientEtag, cancellationToken);
         }
 
-        public Task SendSyncStatisticsAsync(SyncStatisticsApiView statistics, CancellationToken token, RestCredentials credentials)
+        public Task<long?> SendSyncStatisticsAsync(SyncStatisticsApiView statistics, CancellationToken token, RestCredentials credentials)
         {
             return Service.SendSyncStatisticsAsync(statistics, token, credentials);
         }

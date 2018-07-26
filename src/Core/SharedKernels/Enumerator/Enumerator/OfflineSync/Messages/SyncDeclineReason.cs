@@ -6,6 +6,7 @@
         UnexpectedClientVersion = 1,
         NotATeamMember = 2,
         InvalidPassword = 3,
-        UserIsLocked = 4
+        UserIsLocked = 4,
+        SupervisorRequireOnlineSync = 5
     }
 }

@@ -367,6 +367,12 @@ for further instructions</value>
   <data name="Synchronization_UserLinkedToAnotherDevice_Status" xml:space="preserve">
     <value>User authentication error</value>
   </data>
+  <data name="Synchronization_SupervisorShouldDoOnlineSync_Title" xml:space="preserve">
+    <value>Supervisor need to be synchronized</value>
+  </data>
+    <data name="Synchronization_SupervisorShouldDoOnlineSync" xml:space="preserve">
+    <value>Supervisor need to do online synchronization. You device has been synchronized later then Supervisor.</value>
+  </data>
   <data name="Synchronization_UserLinkedToAnotherDevice_Title" xml:space="preserve">
     <value>Your account was relinked to another tablet</value>
   </data>

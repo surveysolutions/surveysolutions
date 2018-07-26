@@ -66,9 +66,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             IAuditLogService auditLogService,
             ILiteEventBus eventBus,
             IEnumeratorEventStorage eventStore,
-            IPlainStorage<InterviewSequenceView, Guid> interviewSequenceViewRepository) : base(synchronizationService, logger,
+            IPlainStorage<InterviewSequenceView, Guid> interviewSequenceViewRepository,
+            IEnumeratorSettings enumeratorSettings) : base(synchronizationService, logger,
             httpStatistician, userInteractionService, principal,  
-            interviewViewRepository, auditLogService)
+            interviewViewRepository, auditLogService, enumeratorSettings)
         {
             this.synchronizationService = synchronizationService;
             this.interviewViewRepository = interviewViewRepository;

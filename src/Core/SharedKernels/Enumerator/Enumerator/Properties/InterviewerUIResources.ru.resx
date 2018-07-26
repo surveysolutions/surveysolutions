@@ -789,4 +789,12 @@
   <data name="DashboardItem_Responsible" xml:space="preserve">
     <value>Ответственный: {0}</value>
   </data>
+    <data name="Synchronization_SupervisorShouldDoOnlineSync_Title" xml:space="preserve">
+    <value>Супервизор должен быть синхронизирован</value>
+    <comment>Супервизор должен быть синхронизирован</comment>
+  </data>
+    <data name="Synchronization_SupervisorShouldDoOnlineSync" xml:space="preserve">
+    <value>Супервизор провести онлайн синхронизацию. Ваше устройство было синхронизировано позже чем устройство супервизора</value>
+    <comment>Супервизор провести онлайн синхронизацию. Ваше устройство было синхронизировано позже чем устройство супервизора</comment>
+  </data>
 </root>
