@@ -12,27 +12,5 @@
               android:layout_height="wrap_content"
               local:MvxBind="Text Format(Localization('Synchronization_FoundDevice'), InterviewerName)"/>
 
-    <LinearLayout android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:orientation="horizontal"
-                  android:layout_marginTop="@dimen/Interview_Entity_margin_vertical">
-        <ProgressBar
-            android:layout_height="@dimen/IconSize"
-            android:layout_width="@dimen/IconSize"
-            local:MvxBind="Hidden EnumToString(Status) == 'Disconnected'"/>
-        <TextView android:layout_height="wrap_content"
-                  android:layout_width="@dimen/Zero" 
-                  android:layout_weight="1"
-                  style="@style/OfflineSync_SubTitleText"
-                  local:MvxBind="Text EnumToString(Status)"/>
-        <TextView style="@style/OfflineSync_Abort"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  local:MvxBind="Text Localization('OfflineSync_Abort'); Click AbortCommand; Hidden EnumToString(Status) == 'Disconnected'"/>
-
-    </LinearLayout>
-    <TextView style="@style/OfflineSync_NetworkInfo"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              local:MvxBind="Text Format(Localization('OfflineSync_DeviceStats'), Statistics.SuccessfullyUploadedInterviewsCount, Statistics.TotalCompletedInterviewsCount, Statistics.FailedInterviewsCount)"/>
+    <include layout="@layout/synchronization_panel" />
 </LinearLayout>
