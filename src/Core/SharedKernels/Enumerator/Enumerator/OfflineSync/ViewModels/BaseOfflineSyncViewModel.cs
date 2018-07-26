@@ -63,7 +63,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
             catch (MissingPermissionsException)
             {
                 ShouldStartAdvertising = false;
-                this.OnConnectionError(InterviewerUIResources.LocationPermissionRequired, ConnectionStatusCode.MissingPermissionLocation);
+                this.OnConnectionError(InterviewerUIResources.LocationPermissionRequired, ConnectionStatusCode.MissingPermissionAccessCoarseLocation);
                 return;
             }
 
@@ -126,7 +126,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
                 this.OnDeviceConnectionRequested(name);
         }
 
-        protected virtual Task OnStartDiscovery() => Task.CompletedTask;
+        protected abstract Task OnStartDiscovery();
 
         protected virtual void OnDeviceFound(string name)
         {
@@ -152,9 +152,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
         {
         }
 
-        protected virtual void OnConnectionError(string errorMessage, ConnectionStatusCode errorCode)
-        {
-        }
+        protected abstract void OnConnectionError(string errorMessage, ConnectionStatusCode errorCode);
 
         protected string GetServiceName()
         {
