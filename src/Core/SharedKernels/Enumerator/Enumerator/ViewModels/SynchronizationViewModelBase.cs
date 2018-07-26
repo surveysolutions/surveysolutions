@@ -57,6 +57,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             set => SetProperty( ref this.processOperation, value);
         }
 
+        public virtual bool CanBeManaged => true;
+
         public string ProcessOperationDescription
         {
             get => this.processOperationDescription;

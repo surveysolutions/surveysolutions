@@ -632,11 +632,7 @@
   <data name="Supervisor_Complete_Reject_btn" xml:space="preserve">
     <value>Отклонить</value>
   </data>
-  <data name="OfflineSync_Done" xml:space="preserve">
-    <value>Завершить</value>
-    <comment>Завершить</comment>
-  </data>
-  <data name="OfflineSync_BackToDashboard" xml:space="preserve">
+    <data name="OfflineSync_BackToDashboard" xml:space="preserve">
     <value>К списку заданий</value>
     <comment>К списку заданий</comment>
   </data>
