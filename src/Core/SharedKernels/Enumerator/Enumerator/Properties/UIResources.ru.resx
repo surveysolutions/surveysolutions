@@ -664,4 +664,8 @@
     <value>Найдено устройство интервьюра ({0})</value>
     <comment>{0} - interviewer login</comment>
   </data>
+    <data name="OfflineSync_Retry" xml:space="preserve">
+    <value>Попробывать еще раз</value>
+    <comment>Попробывать еще раз</comment>
+  </data>
 </root>

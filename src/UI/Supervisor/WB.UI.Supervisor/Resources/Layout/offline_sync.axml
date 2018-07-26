@@ -62,6 +62,22 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 local:MvxBind="Text Localization('OfflineSync_Done'); Click DoneCommand; Visible AllSynchronizationsFinished"/>
+        
+        <LinearLayout android:orientation="horizontal"
+                      android:layout_width="match_parent"
+                      android:layout_height="wrap_content"
+                      style="@style/OfflineSync_Navigation"
+                      local:MvxBind="Visible Not(ShouldStartAdvertising)">
+            <Button style="@style/OfflineSync_Retry"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    local:MvxBind="Text Localization('OfflineSync_Retry'); Click RetryCommand"/>
+            <TextView style="@style/OfflineSync_BackToDashboard"
+                      android:layout_width="wrap_content"
+                      android:layout_height="match_parent"
+                      local:MvxBind="Text Localization('OfflineSync_BackToDashboard'); Click GoToDashboardCommand"/>
+        </LinearLayout>
+
     </LinearLayout>
 </LinearLayout>
 
