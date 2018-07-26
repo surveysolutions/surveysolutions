@@ -9,7 +9,7 @@ using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation.Migrations;
 using WB.UI.Headquarters.Migrations.PlainStore;
 using WB.UI.Headquarters.Migrations.ReadSide;
-using WB.UI.Headquarters.Migrations.Users;
+using IKernel = Ninject.IKernel;
 
 namespace Utils.Commands
 {
@@ -22,7 +22,7 @@ namespace Utils.Commands
             this.logger = logger;
         }
 
-        public int Run(string serverName, string connectionString)
+        public int Run(string serverName, string connectionString, IKernel container)
         {
             logger.Info($"Migration of db {serverName}");
 
@@ -30,25 +30,31 @@ namespace Utils.Commands
             var PlainStoreSchemaName = "plainstore";
             var ReadSideSchemaName = "readside";
             var UsersSchemaName = "users";
-            
+
+            //var owinSecurityModule = new OwinSecurityModule();
+            //container.Load(owinSecurityModule.AsNinject());
+
+            DatabaseManagement.InitDatabase(connectionString, EventsSchemaName);
+            DatabaseManagement.InitDatabase(connectionString, PlainStoreSchemaName);
+            DatabaseManagement.InitDatabase(connectionString, ReadSideSchemaName);
+            DatabaseManagement.InitDatabase(connectionString, UsersSchemaName);
+
             try
             {
-                DatabaseManagement.InitDatabase(connectionString, EventsSchemaName);
-                DatabaseManagement.InitDatabase(connectionString, PlainStoreSchemaName);
-                DatabaseManagement.InitDatabase(connectionString, ReadSideSchemaName);
-                DatabaseManagement.InitDatabase(connectionString, UsersSchemaName);
-
                 MigrateToLatest(connectionString, EventsSchemaName, DbUpgradeSettings.FromFirstMigration<M001_AddEventSequenceIndex>());
                 MigrateToLatest(connectionString, PlainStoreSchemaName, DbUpgradeSettings.FromFirstMigration<M001_Init>());
                 MigrateToLatest(connectionString, ReadSideSchemaName, DbUpgradeSettings.FromFirstMigration<M001_InitDb>());
-                MigrateToLatest(connectionString, UsersSchemaName, DbUpgradeSettings.FromFirstMigration<M001_AddUsersHqIdentityModel>());
+                
+                //ServiceLocator.Current.GetInstance<HQPlainStorageDbContext>().DeviceSyncInfo.FirstOrDefault();
+                //ServiceLocator.Current.GetInstance<HQIdentityDbContext>().Roles.FirstOrDefault();
+
+                //MigrateToLatest(connectionString, UsersSchemaName, DbUpgradeSettings.FromFirstMigration<M001_AddUsersHqIdentityModel>());
             }
             catch (Exception exc)
             {
                 logger.Fatal("Error during db initialization.", exc);
                 Console.WriteLine(exc.ToString());
             }
-
 
             Console.WriteLine("++++++++++++++++++++++++++++++++++++++++++++");
             Console.WriteLine($"Finished at {DateTime.Now}");

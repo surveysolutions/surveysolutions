@@ -5,6 +5,7 @@ using Ninject;
 using NLog;
 using Utils.Commands;
 using Utils.Setup;
+using IKernel = Ninject.IKernel;
 
 namespace Utils
 {
@@ -96,7 +97,7 @@ namespace Utils
 
             DbMigrator remover = container.Get<DbMigrator>();
 
-            var runResult = remover.Run(serverName, opts.ConnectionString);
+            var runResult = remover.Run(serverName, opts.ConnectionString, container);
 
             Console.WriteLine();
             Console.WriteLine("Press Any key");
