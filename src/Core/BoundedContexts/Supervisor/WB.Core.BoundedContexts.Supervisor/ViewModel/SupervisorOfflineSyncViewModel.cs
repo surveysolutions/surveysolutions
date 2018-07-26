@@ -16,6 +16,7 @@ using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Utils;
 
 namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 {
@@ -23,6 +24,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
     public class SupervisorOfflineSyncViewModel : BaseOfflineSyncViewModel, IOfflineSyncViewModel
     {
         private readonly IInterviewViewModelFactory viewModelFactory;
+        private readonly IUserInteractionService userInteractionService;
 
         private ReaderWriterLockSlim devicesLock = new ReaderWriterLockSlim();
 
@@ -34,6 +36,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             INearbyConnection nearbyConnection,
             IInterviewViewModelFactory viewModelFactory,
             IDeviceSynchronizationProgress deviceSynchronizationProgress,
+            IUserInteractionService userInteractionService,
             IRestService restService)
             : base(principal, viewModelNavigationService, permissions, nearbyConnection, settings, restService)
         {
@@ -41,9 +44,11 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             communicator.IncomingInfo.Subscribe(OnIncomingData);
             this.viewModelFactory = viewModelFactory;
             devicesSubscribtion = deviceSynchronizationProgress.SyncStats.Subscribe(OnDeviceProgressReported);
+            this.userInteractionService = userInteractionService;
         }
 
         private string title;
+
         public string Title
         {
             get => this.title;
@@ -51,6 +56,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         }
 
         private bool hasConnectedDevices = true;
+
         public bool HasConnectedDevices
         {
             get => this.hasConnectedDevices;
@@ -58,6 +64,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         }
 
         private bool allSynchronizationsFinished;
+
         public bool AllSynchronizationsFinished
         {
             get => this.allSynchronizationsFinished;
@@ -65,10 +72,19 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         }
 
         private string progressTitle;
+
         public string ProgressTitle
         {
             get => this.progressTitle;
             set => this.SetProperty(ref this.progressTitle, value);
+        }
+
+        private bool shouldStartAdvertising = true;
+
+        public bool ShouldStartAdvertising
+        {
+            get => this.shouldStartAdvertising;
+            set => this.SetProperty(ref this.shouldStartAdvertising, value);
         }
 
         private ObservableCollection<ConnectedDeviceViewModel> connectedDevices;
@@ -112,7 +128,9 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             }
             else
             {
-                deviceStatus = stats.ProgressInfo.HasErrors ? SendingDeviceStatus.DoneWithErrors : SendingDeviceStatus.Done;
+                deviceStatus = stats.ProgressInfo.HasErrors
+                    ? SendingDeviceStatus.DoneWithErrors
+                    : SendingDeviceStatus.Done;
             }
 
             this.SetDeviceStatus(stats.InterviewerLogin, deviceStatus);
@@ -144,7 +162,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 
         protected override void OnDeviceFound(string name)
         {
-           // Not called?
+            // Not called?
         }
 
         protected override void OnDeviceConnectionRequested(string name)
@@ -201,10 +219,32 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             }
         }
 
+        public IMvxAsyncCommand RetryCommand => new MvxAsyncCommand(() =>
+        {
+            ShouldStartAdvertising = true;
+            return StartDiscoveryAsyncCommand.ExecuteAsync();
+        });
+
+        public IMvxAsyncCommand GoToDashboardCommand => new MvxAsyncCommand(() 
+            => viewModelNavigationService.NavigateToDashboardAsync());
+
         protected override async Task OnStartDiscovery()
         {
             this.isInitialized = true;
-            await this.permissions.AssureHasPermission(Permission.Location);
+
+            if (!ShouldStartAdvertising)
+                return;
+
+            try
+            {
+                await this.permissions.AssureHasPermission(Permission.Location);
+            }
+            catch (MissingPermissionsException)
+            {
+                ShouldStartAdvertising = false;
+                SetStatus(ConnectionStatus.Error, "Location permission is needed for work correctly on synchronization");
+                return;
+            }
 
             this.cancellationTokenSource = new CancellationTokenSource();
 
@@ -215,7 +255,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             var serviceName = this.GetServiceName();
             try
             {
-                await this.nearbyConnection.StartAdvertisingAsync(serviceName, this.principal.CurrentUserIdentity.Name, cancellationTokenSource.Token);
+                await this.nearbyConnection.StartAdvertisingAsync(serviceName, this.principal.CurrentUserIdentity.Name,
+                    cancellationTokenSource.Token);
                 SetStatus(ConnectionStatus.Advertising, "Waiting for interviewers connections");
             }
             catch (NearbyConnectionException nce)

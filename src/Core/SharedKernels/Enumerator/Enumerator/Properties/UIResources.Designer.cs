@@ -1404,6 +1404,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Retry.
+        /// </summary>
+        public static string OfflineSync_Retry {
+            get {
+                return ResourceManager.GetString("OfflineSync_Retry", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ok.
         /// </summary>
         public static string Ok {
