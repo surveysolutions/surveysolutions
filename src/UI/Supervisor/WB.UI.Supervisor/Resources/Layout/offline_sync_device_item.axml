@@ -32,9 +32,11 @@
                     app:MvxBind="Text InterviewerName"
                     android:layout_gravity="center_vertical"
                     android:id="@+id/device_interviewer_name" />
+        
         </LinearLayout>
 
-        <include layout="@layout/synchronization_panel" />
+        <include layout="@layout/synchronization_panel"
+                 app:MvxBind="Visible EnumToSting(DeviceStatus) == 'Connected'"/>
     </LinearLayout>
 </android.support.v7.widget.CardView>
 
