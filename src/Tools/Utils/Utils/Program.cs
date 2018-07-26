@@ -42,8 +42,6 @@ namespace Utils
         [Verb("migrate", HelpText = "Migrate DB to the latest version.")]
         protected class MigrateDbOptions
         {
-            [Option('c', "connection", Required = true, HelpText = "Connection string to DB")]
-            public string ConnectionString { get; set; }
         }
 
         static int Main(string[] args)
@@ -86,18 +84,20 @@ namespace Utils
 
         private static int RunMigrations(MigrateDbOptions opts)
         {
+            var connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["Postgres"].ConnectionString;
+
             Console.WriteLine("++++++++++++++++++++++++++++++++++++++++++++");
             Console.WriteLine($"started at {DateTime.Now}");
-            DbConnectionStringBuilder db = new DbConnectionStringBuilder {ConnectionString = opts.ConnectionString};
+            DbConnectionStringBuilder db = new DbConnectionStringBuilder {ConnectionString = connectionString};
             var serverName = db["Database"].ToString();
             Console.WriteLine(serverName);
             Console.WriteLine();
 
-            IKernel container = NinjectConfig.CreateKernel(opts.ConnectionString.Trim('"'));
+            IKernel container = NinjectConfig.CreateKernel(connectionString.Trim('"'));
 
             DbMigrator remover = container.Get<DbMigrator>();
 
-            var runResult = remover.Run(serverName, opts.ConnectionString, container);
+            var runResult = remover.Run(serverName, connectionString, container);
 
             Console.WriteLine();
             Console.WriteLine("Press Any key");

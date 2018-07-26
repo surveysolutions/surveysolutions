@@ -1,7 +1,14 @@
 ﻿using System;
+using System.Linq;
 using FluentMigrator.Runner;
 using FluentMigrator.Runner.Announcers;
 using FluentMigrator.Runner.Initialization;
+using Ninject;
+using Utils.Setup;
+using WB.Core.BoundedContexts.Headquarters;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
+using WB.Core.BoundedContexts.Headquarters.Repositories;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.DbMigrations;
@@ -9,6 +16,7 @@ using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation.Migrations;
 using WB.UI.Headquarters.Migrations.PlainStore;
 using WB.UI.Headquarters.Migrations.ReadSide;
+using WB.UI.Headquarters.Migrations.Users;
 using IKernel = Ninject.IKernel;
 
 namespace Utils.Commands
@@ -31,8 +39,8 @@ namespace Utils.Commands
             var ReadSideSchemaName = "readside";
             var UsersSchemaName = "users";
 
-            //var owinSecurityModule = new OwinSecurityModule();
-            //container.Load(owinSecurityModule.AsNinject());
+            var owinSecurityModule = new OwinSecurityModule();
+            container.Load(owinSecurityModule.AsNinject());
 
             DatabaseManagement.InitDatabase(connectionString, EventsSchemaName);
             DatabaseManagement.InitDatabase(connectionString, PlainStoreSchemaName);
@@ -45,7 +53,7 @@ namespace Utils.Commands
                 MigrateToLatest(connectionString, PlainStoreSchemaName, DbUpgradeSettings.FromFirstMigration<M001_Init>());
                 MigrateToLatest(connectionString, ReadSideSchemaName, DbUpgradeSettings.FromFirstMigration<M001_InitDb>());
                 
-                //ServiceLocator.Current.GetInstance<HQPlainStorageDbContext>().DeviceSyncInfo.FirstOrDefault();
+                ServiceLocator.Current.GetInstance<HQPlainStorageDbContext>().DeviceSyncInfo.FirstOrDefault();
                 //ServiceLocator.Current.GetInstance<HQIdentityDbContext>().Roles.FirstOrDefault();
 
                 //MigrateToLatest(connectionString, UsersSchemaName, DbUpgradeSettings.FromFirstMigration<M001_AddUsersHqIdentityModel>());
