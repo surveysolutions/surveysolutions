@@ -17,6 +17,7 @@ using WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
+using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 
 namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 {
@@ -88,7 +89,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         }
 
         private ObservableCollection<ConnectedDeviceViewModel> connectedDevices;
-        private IDisposable devicesSubscribtion;
+        private readonly IDisposable devicesSubscribtion;
         private bool isInitialized = false;
 
         public ObservableCollection<ConnectedDeviceViewModel> ConnectedDevices
@@ -104,6 +105,30 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             this.ProgressTitle = string.Format(SupervisorUIResources.OfflineSync_NoDevicesDetectedFormat,
                 this.principal.CurrentUserIdentity.Name);
             this.connectedDevices = new ObservableCollection<ConnectedDeviceViewModel>();
+            var test = new ConnectedDeviceViewModel();
+            test.Synchronization.ProgressOnProgressChanged(this, new SyncProgressInfo
+            {
+                Description = "description",
+                Statistics = new SynchronizationStatistics
+                {
+                    RemovedAssignmentsCount =  1,
+                    NewAssignmentsCount = 1,
+                    DeletedInterviewsCount = 5,
+                    FailedToCreateInterviewsCount = 4,
+                    TotalCompletedInterviewsCount = 12,
+                    FailedToUploadInterviwesCount = 21,
+                    NewInterviewsCount = 21,
+                    RejectedInterviewsCount = 21,
+                    SuccessfullyUploadedInterviewsCount = 12,
+                    SuccessfullyDownloadedQuestionnairesCount = 1225,
+                    TotalDeletedInterviewsCount = 19,
+                    TotalNewInterviewsCount = 676,
+                    TotalRejectedInterviewsCount = 12
+                },
+                Status = SynchronizationStatus.Upload,
+                Title = "title"
+            });
+            this.ConnectedDevices.Add(test);
         }
 
         private void SetStatus(ConnectionStatus connectionStatus, string details = null)
@@ -120,27 +145,11 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 
         protected void OnDeviceProgressReported(DeviceSyncStats stats)
         {
-            SendingDeviceStatus deviceStatus;
+            ConnectedDeviceViewModel deviceInfo = FindDevice(stats);
 
-            if (stats.ProgressInfo.IsRunning)
-            {
-                deviceStatus = SendingDeviceStatus.Synchronizing;
-            }
-            else
-            {
-                deviceStatus = stats.ProgressInfo.HasErrors
+            deviceInfo?.Synchronization.ProgressOnProgressChanged(this, stats.ProgressInfo);
                     ? SendingDeviceStatus.DoneWithErrors
                     : SendingDeviceStatus.Done;
-            }
-
-            this.SetDeviceStatus(stats.InterviewerLogin, deviceStatus);
-
-            var deviceInfo = FindDevice(stats);
-
-            if (deviceInfo != null)
-            {
-                deviceInfo.Statistics = stats.ProgressInfo.Statistics;
-            }
         }
 
         private ConnectedDeviceViewModel FindDevice(DeviceSyncStats stats)
@@ -167,7 +176,6 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 
         protected override void OnDeviceConnectionRequested(string name)
         {
-            SetDeviceStatus(name, SendingDeviceStatus.ConnectionRequested);
         }
 
         protected override void OnDeviceConnected(string name)
@@ -185,38 +193,17 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
                 }
                 else
                 {
-                    existingDevice.Status = SendingDeviceStatus.Connected;
+                    existingDevice.Synchronization.Status = SynchronizationStatus.Started;
                 }
             }
             finally
             {
                 this.devicesLock.ExitWriteLock();
             }
-
-            //SetDeviceStatus(name, SendingDeviceStatus.Connected);
         }
 
         protected override void OnDeviceDisconnected(string name)
         {
-            SetDeviceStatus(name, SendingDeviceStatus.Disconnected);
-        }
-
-        private void SetDeviceStatus(string name, SendingDeviceStatus existingDeviceStatus)
-        {
-            this.devicesLock.EnterReadLock();
-
-            try
-            {
-                var existingDevice = this.ConnectedDevices.FirstOrDefault(x => x.InterviewerName == name);
-                if (existingDevice != null)
-                {
-                    existingDevice.Status = existingDeviceStatus;
-                }
-            }
-            finally
-            {
-                this.devicesLock.ExitReadLock();
-            }
         }
 
         public IMvxAsyncCommand RetryCommand => new MvxAsyncCommand(() =>
