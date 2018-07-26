@@ -8,11 +8,11 @@ using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
@@ -30,17 +30,20 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly IInterviewerPrincipal principal;
         private readonly IInterviewerQuestionnaireAccessor questionnaireAccessor;
         private readonly IPlainStorage<InterviewView> interviews;
+        private readonly IEnumeratorSettings settings;
 
         public OfflineSynchronizationService(
             IOfflineSyncClient syncClient,
             IInterviewerPrincipal principal,
             IInterviewerQuestionnaireAccessor questionnaireAccessor,
-            IPlainStorage<InterviewView> interviews)
+            IPlainStorage<InterviewView> interviews, 
+            IEnumeratorSettings settings)
         {
             this.syncClient = syncClient;
             this.principal = principal;
             this.questionnaireAccessor = questionnaireAccessor;
             this.interviews = interviews;
+            this.settings = settings;
         }
 
         public Task UploadInterviewAsync(Guid interviewId, InterviewPackageApiView completedInterview,
@@ -139,11 +142,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return response.LogoInfo;
         }
 
-        public Task SendSyncStatisticsAsync(SyncStatisticsApiView statistics,
+        public async Task<long?> SendSyncStatisticsAsync(SyncStatisticsApiView statistics,
             CancellationToken token,
             RestCredentials credentials)
         {
-            return this.syncClient.SendAsync(new SyncStatisticsRequest(statistics, this.principal.CurrentUserIdentity.UserId), token);
+            await this.syncClient.SendAsync(new SyncStatisticsRequest(statistics, this.principal.CurrentUserIdentity.UserId),
+                token);
+
+            return this.settings.LastHqSyncTimestamp;
         }
 
         public Task SendUnexpectedExceptionAsync(UnexpectedExceptionApiView exception, CancellationToken token)
@@ -233,7 +239,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
             var request = new CanSynchronizeRequest(interviewerBoundedContextVersion.Revision, 
                 this.principal.CurrentUserIdentity.UserId,
-                this.principal.CurrentUserIdentity.SecurityStamp);
+                this.principal.CurrentUserIdentity.SecurityStamp,
+                settings.LastHqSyncTimestamp);
 
             var response = await this.syncClient.SendAsync<CanSynchronizeRequest, CanSynchronizeResponse>(request, 
                 token ?? CancellationToken.None);
@@ -250,6 +257,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                         throw new SynchronizationException(SynchronizationExceptionType.Unauthorized);
                     case SyncDeclineReason.UserIsLocked:
                         throw new SynchronizationException(SynchronizationExceptionType.UserLocked);
+                    case SyncDeclineReason.SupervisorRequireOnlineSync:
+                        throw new SynchronizationException(SynchronizationExceptionType.SupervisorRequireOnlineSync);
                     default:
                         throw new SynchronizationException(SynchronizationExceptionType.Unexpected);
                 }

@@ -42,6 +42,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
         private readonly IPrincipal principal;
         private readonly IPlainStorage<InterviewerDocument> interviewerViewRepository;
         private readonly IAssignmentDocumentsStorage assignmentsStorage;
+        private readonly IEnumeratorSettings settings;
 
         public SupervisorInterviewsHandler(ILiteEventBus eventBus,
             IEnumeratorEventStorage eventStore,
@@ -53,7 +54,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             IPlainStorage<SuperivsorReceivedPackageLogEntry, int> receivedPackagesLog,
             IPrincipal principal,
             IPlainStorage<InterviewerDocument> interviewerViewRepository,
-            IAssignmentDocumentsStorage assignmentsStorage)
+            IAssignmentDocumentsStorage assignmentsStorage, 
+            IEnumeratorSettings settings)
         {
             this.eventBus = eventBus;
             this.eventStore = eventStore;
@@ -66,13 +68,14 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             this.principal = principal;
             this.interviewerViewRepository = interviewerViewRepository;
             this.assignmentsStorage = assignmentsStorage;
+            this.settings = settings;
         }
 
         public void Register(IRequestHandler requestHandler)
         {
-            requestHandler.RegisterHandler<CanSynchronizeRequest, CanSynchronizeResponse>(Handle);
+            requestHandler.RegisterHandler<CanSynchronizeRequest, CanSynchronizeResponse>(CanSynchronize);
             requestHandler.RegisterHandler<PostInterviewRequest, OkResponse>(Handle);
-            requestHandler.RegisterHandler<GetInterviewsRequest, GetInterviewsResponse>(Handle);
+            requestHandler.RegisterHandler<GetInterviewsRequest, GetInterviewsResponse>(GetInterviews);
             requestHandler.RegisterHandler<LogInterviewAsSuccessfullyHandledRequest, OkResponse>(Handle);
             requestHandler.RegisterHandler<GetInterviewDetailsRequest, GetInterviewDetailsResponse>(Handle);
             requestHandler.RegisterHandler<UploadInterviewRequest, OkResponse>(UploadInterview);
@@ -248,8 +251,18 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             return Task.FromResult(new OkResponse());
         }
 
-        public Task<CanSynchronizeResponse> Handle(CanSynchronizeRequest arg)
+        public Task<CanSynchronizeResponse> CanSynchronize(CanSynchronizeRequest arg)
         {
+            if (settings.LastHqSyncTimestamp == null || 
+                arg.LastHqSyncTimestamp != null && arg.LastHqSyncTimestamp > settings.LastHqSyncTimestamp)
+            {
+                return Task.FromResult(new CanSynchronizeResponse
+                {
+                    CanSyncronize = false,
+                    Reason = SyncDeclineReason.SupervisorRequireOnlineSync
+                });
+            }
+
             var expectedVersion = ReflectionUtils.GetAssemblyVersion(typeof(SupervisorBoundedContextAssemblyIndicator));
 
             if (expectedVersion.Revision != arg.InterviewerBuildNumber)
@@ -303,7 +316,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             });
         }
 
-        public Task<GetInterviewsResponse> Handle(GetInterviewsRequest arg)
+        public Task<GetInterviewsResponse> GetInterviews(GetInterviewsRequest arg)
         {
             var interviewsForUser = this.interviews.Where(x =>
                 (x.Status == InterviewStatus.RejectedBySupervisor || x.Status == InterviewStatus.InterviewerAssigned)

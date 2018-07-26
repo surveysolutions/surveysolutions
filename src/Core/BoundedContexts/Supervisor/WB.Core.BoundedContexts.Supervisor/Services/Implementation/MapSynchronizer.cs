@@ -18,7 +18,19 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
         private readonly IPasswordHasher passwordHasher;
         private readonly IPrincipal principal;
 
-        public MapSyncProvider(IMapService mapService, ISynchronizationService synchronizationService, ILogger logger, IHttpStatistician httpStatistician, IUserInteractionService userInteractionService, IPrincipal principal, IPasswordHasher passwordHasher, IPlainStorage<SupervisorIdentity> supervisorPlainStorage, IPlainStorage<InterviewView> interviewViewRepository, IAuditLogService auditLogService) : base(mapService, synchronizationService, logger, httpStatistician, userInteractionService, principal, interviewViewRepository, auditLogService)
+        public MapSyncProvider(IMapService mapService, 
+            ISynchronizationService synchronizationService, 
+            ILogger logger, 
+            IHttpStatistician httpStatistician, 
+            IUserInteractionService userInteractionService,
+            IPrincipal principal, 
+            IPasswordHasher passwordHasher, 
+            IPlainStorage<SupervisorIdentity> supervisorPlainStorage, 
+            IPlainStorage<InterviewView> interviewViewRepository, 
+            IAuditLogService auditLogService,
+            IEnumeratorSettings enumeratorSettings) 
+            : base(mapService, synchronizationService, logger, httpStatistician, userInteractionService, principal, 
+                interviewViewRepository, auditLogService, enumeratorSettings)
         {
             this.supervisorPlainStorage = supervisorPlainStorage;
             this.passwordHasher = passwordHasher;

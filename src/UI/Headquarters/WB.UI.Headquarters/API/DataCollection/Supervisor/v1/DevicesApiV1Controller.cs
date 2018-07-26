@@ -45,7 +45,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
         public override Task<IHttpActionResult> Info(DeviceInfoApiView info) => base.Info(info);
 
         [HttpPost]
-        public override IHttpActionResult Statistics(SyncStatisticsApiView statistics) => base.Statistics(statistics);
+        public override long Statistics(SyncStatisticsApiView statistics) => base.Statistics(statistics);
 
         [HttpPost]
         public override IHttpActionResult UnexpectedException(UnexpectedExceptionApiView exception) => base.UnexpectedException(exception);
