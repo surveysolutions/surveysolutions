@@ -234,17 +234,17 @@ namespace WB.Tests.Abc.TestFactories
                 throw new NotImplementedException();
             }
 
-            public Task<NearbyStatus> AcceptConnectionAsync(string endpoint, CancellationToken cancellationToken)
+            public Task<NearbyStatus> AcceptConnectionAsync(string endpoint)
             {
                 throw new NotImplementedException();
             }
 
-            public Task<NearbyStatus> RejectConnectionAsync(string endpoint, CancellationToken cancellationToken)
+            public Task<NearbyStatus> RejectConnectionAsync(string endpoint)
             {
                 throw new NotImplementedException();
             }
 
-            public virtual Task<NearbyStatus> SendPayloadAsync(string to, IPayload payload, CancellationToken cancellationToken)
+            public virtual Task<NearbyStatus> SendPayloadAsync(string to, IPayload payload)
             {
                 throw new NotImplementedException();
             }
@@ -258,7 +258,6 @@ namespace WB.Tests.Abc.TestFactories
             public ObservableCollection<RemoteEndpoint> RemoteEndpoints { get; } = new CovariantObservableCollection<RemoteEndpoint>();
             public void StopDiscovery()
             {
-                throw new NotImplementedException();
             }
 
             public void StopAdvertising()
@@ -305,7 +304,7 @@ namespace WB.Tests.Abc.TestFactories
                 return this;
             }
 
-            public override async Task<NearbyStatus> SendPayloadAsync(string to, IPayload payload, CancellationToken cancellationToken)
+            public override async Task<NearbyStatus> SendPayloadAsync(string to, IPayload payload)
             {
                 var from = connectionMap[to];
                 var toClient = clientsMap[to];

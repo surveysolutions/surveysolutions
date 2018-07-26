@@ -35,7 +35,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         public DashboardViewModel(IViewModelNavigationService viewModelNavigationService,
             IPrincipal principal,
-            SynchronizationViewModel synchronization,
+            LocalSynchronizationViewModel synchronization,
             IMvxMessenger messenger,
             IInterviewerSettings interviewerSettings,
             CreateNewViewModel createNewViewModel,
@@ -145,7 +145,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                                                   + this.CompletedInterviews.ItemsCount
                                                   + this.RejectedInterviews.ItemsCount;
 
-        public SynchronizationViewModel Synchronization { get; set; }
+        public LocalSynchronizationViewModel Synchronization { get; set; }
 
         public string DashboardTitle
             => InterviewerUIResources.Dashboard_Title.FormatString(this.NumberOfAssignedInterviews.ToString(),

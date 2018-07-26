@@ -1368,15 +1368,6 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Done.
-        /// </summary>
-        public static string OfflineSync_Done {
-            get {
-                return ResourceManager.GetString("OfflineSync_Done", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   Looks up a localized string similar to Google Play Services must be installed..
         /// </summary>
         public static string OfflineSync_InstallPlayServices {
@@ -1391,6 +1382,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string OfflineSync_NetworkInfo {
             get {
                 return ResourceManager.GetString("OfflineSync_NetworkInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Retry.
+        /// </summary>
+        public static string OfflineSync_Retry {
+            get {
+                return ResourceManager.GetString("OfflineSync_Retry", resourceCulture);
             }
         }
         
@@ -1553,6 +1553,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Supervisor_Complete_Reject_btn {
             get {
                 return ResourceManager.GetString("Supervisor_Complete_Reject_btn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Found interviewer device ({0}).
+        /// </summary>
+        public static string Synchronization_FoundDevice {
+            get {
+                return ResourceManager.GetString("Synchronization_FoundDevice", resourceCulture);
             }
         }
         
