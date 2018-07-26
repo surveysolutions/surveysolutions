@@ -3,12 +3,14 @@ using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
+using Plugin.Permissions.Abstractions;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Entities;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 
 namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
@@ -28,7 +30,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
         protected BaseOfflineSyncViewModel(IPrincipal principal,
             IViewModelNavigationService viewModelNavigationService,
             IPermissionsService permissions,
-            INearbyConnection nearbyConnection, 
+            INearbyConnection nearbyConnection,
             IEnumeratorSettings settings,
             IRestService restService)
             : base(principal, viewModelNavigationService)
@@ -40,8 +42,31 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
             nearbyConnectionSubscribtion = this.nearbyConnection.Events.Subscribe(HandleConnectionEvents);
         }
 
+        private bool shouldStartAdvertising = true;
+
+        public bool ShouldStartAdvertising
+        {
+            get => this.shouldStartAdvertising;
+            set => this.SetProperty(ref this.shouldStartAdvertising, value);
+        }
+
+
         private async Task StartDiscoveryAsync()
         {
+            if (!ShouldStartAdvertising)
+                return;
+
+            try
+            {
+                await this.permissions.AssureHasPermission(Permission.Location);
+            }
+            catch (MissingPermissionsException)
+            {
+                ShouldStartAdvertising = false;
+                this.OnConnectionError(InterviewerUIResources.LocationPermissionRequired, ConnectionStatusCode.MissingPermissionLocation);
+                return;
+            }
+
             if (!this.restService.IsValidHostAddress(this.settings.Endpoint))
             {
                 this.OnConnectionError(InterviewerUIResources.InvalidEndpoint, ConnectionStatusCode.StatusEndpointUnknown);
@@ -56,10 +81,12 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
             switch (@event)
             {
                 case NearbyEvent.EndpointFound endpointFound:
-                    await this.RequestConnectionAsync(endpointFound.Endpoint, endpointFound.EndpointInfo.EndpointName).ConfigureAwait(false);
+                    await this.RequestConnectionAsync(endpointFound.Endpoint, endpointFound.EndpointInfo.EndpointName)
+                        .ConfigureAwait(false);
                     break;
                 case NearbyEvent.InitiatedConnection iniConnection:
-                    await this.InitializeConnectionAsync(iniConnection.Endpoint, iniConnection.Info.EndpointName).ConfigureAwait(false);
+                    await this.InitializeConnectionAsync(iniConnection.Endpoint, iniConnection.Info.EndpointName)
+                        .ConfigureAwait(false);
                     break;
                 case NearbyEvent.Connected connected:
                     this.OnDeviceConnected(connected.Name);
@@ -76,7 +103,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
         {
             this.OnDeviceConnectionAccepting(name);
             var connectionStatus = await this.nearbyConnection.AcceptConnectionAsync(endpoint)
-                                             .ConfigureAwait(false);
+                .ConfigureAwait(false);
 
             if (!connectionStatus.IsSuccess)
                 this.OnConnectionError(connectionStatus.StatusMessage, connectionStatus.Status);
@@ -88,8 +115,10 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
         {
             this.OnDeviceFound(name);
 
-            var connectionStatus = await this.nearbyConnection.RequestConnectionAsync(this.principal.CurrentUserIdentity.Name, endpoint, cancellationTokenSource.Token)
-                                             .ConfigureAwait(false);
+            var connectionStatus = await this.nearbyConnection
+                .RequestConnectionAsync(this.principal.CurrentUserIdentity.Name, endpoint,
+                    cancellationTokenSource.Token)
+                .ConfigureAwait(false);
 
             if (!connectionStatus.IsSuccess)
                 this.OnConnectionError(connectionStatus.StatusMessage, connectionStatus.Status);
@@ -98,13 +127,34 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
         }
 
         protected virtual Task OnStartDiscovery() => Task.CompletedTask;
-        protected virtual void OnDeviceFound(string name) { }
-        protected virtual void OnDeviceConnectionRequested(string name) { }
-        protected virtual void OnDeviceConnectionAccepting(string name) { }
-        protected virtual void OnDeviceConnectionAccepted(string name) { }
-        protected virtual void OnDeviceConnected(string name) { }
-        protected virtual void OnDeviceDisconnected(string name) { }
-        protected virtual void OnConnectionError(string errorMessage, ConnectionStatusCode errorCode) { }
+
+        protected virtual void OnDeviceFound(string name)
+        {
+        }
+
+        protected virtual void OnDeviceConnectionRequested(string name)
+        {
+        }
+
+        protected virtual void OnDeviceConnectionAccepting(string name)
+        {
+        }
+
+        protected virtual void OnDeviceConnectionAccepted(string name)
+        {
+        }
+
+        protected virtual void OnDeviceConnected(string name)
+        {
+        }
+
+        protected virtual void OnDeviceDisconnected(string name)
+        {
+        }
+
+        protected virtual void OnConnectionError(string errorMessage, ConnectionStatusCode errorCode)
+        {
+        }
 
         protected string GetServiceName()
         {
