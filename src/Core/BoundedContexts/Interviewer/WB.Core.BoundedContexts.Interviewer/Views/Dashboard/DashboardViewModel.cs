@@ -14,6 +14,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Entities;
+using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -27,16 +28,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 {
     public class DashboardViewModel : BaseOfflineSyncViewModel<DashboardViewModelArgs>
     {
-        private static object syncLockObject = new Object();
-
         private readonly IInterviewerPrincipal principal;
 
         private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IInterviewerSettings interviewerSettings;
         private readonly IPlainStorage<InterviewView> interviewsRepository;
         private readonly IAuditLogService auditLogService;
-        private readonly ISynchronizationCompleteSource synchronizationCompleteSource;
         private readonly ISynchronizationMode synchronizationMode;
+        private readonly IOfflineSyncClient syncClient;
 
         private readonly MvxSubscriptionToken startingLongOperationMessageSubscriptionToken;
         private readonly MvxSubscriptionToken stopLongOperationMessageSubscriptionToken;
@@ -61,7 +60,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             IPermissionsService permissionsService,
             INearbyConnection nearbyConnection,
             IRestService restService,
-            ISynchronizationMode synchronizationMode) : base(principal, viewModelNavigationService, permissionsService,
+            ISynchronizationMode synchronizationMode,
+            IOfflineSyncClient syncClient) : base(principal, viewModelNavigationService, permissionsService,
             nearbyConnection, interviewerSettings, restService)
         {
             this.viewModelNavigationService = viewModelNavigationService;
@@ -69,8 +69,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.interviewerSettings = interviewerSettings;
             this.interviewsRepository = interviewsRepository;
             this.auditLogService = auditLogService;
-            this.synchronizationCompleteSource = synchronizationCompleteSource;
             this.synchronizationMode = synchronizationMode;
+            this.syncClient = syncClient;
             this.Synchronization = synchronization;
             this.syncSubscription = synchronizationCompleteSource.SynchronizationEvents.Subscribe(r => this.RefreshDashboard());
 
@@ -85,6 +85,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 messenger.Subscribe<StopingLongOperationMessage>(this.DashboardItemOnStopLongOperation);
             this.Synchronization.Init();
             this.Synchronization.OnCancel += Synchronization_OnCancel;
+            this.Synchronization.OnProgressChanged += Synchronization_OnProgressChanged;
             this.StartedInterviews.OnInterviewRemoved += this.OnInterviewRemoved;
             this.CompletedInterviews.OnInterviewRemoved += this.OnInterviewRemoved;
             this.StartedInterviews.OnItemsLoaded += this.OnItemsLoaded;
@@ -262,6 +263,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.CompletedInterviews.OnItemsLoaded -= this.OnItemsLoaded;
             this.CreateNew.OnItemsLoaded -= this.OnItemsLoaded;
             this.Synchronization.OnCancel -= this.Synchronization_OnCancel;
+            this.Synchronization.OnProgressChanged -= this.Synchronization_OnProgressChanged;
         }
 
         protected override void InitFromBundle(IMvxBundle parameters)
@@ -348,19 +350,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         protected override void OnDeviceConnected(string name)
         {
-            try
-            {
-                using (new CommunicationSession())
-                {
-                    this.synchronizationMode.Set(SynchronizationMode.Offline);
+            this.StopDiscovery();
 
-                    this.SynchronizationCommand.Execute();
-                    this.synchronizationCompleteSource.NotifyOnCompletedSynchronization(true);
-                }
-            }
-            finally
+            using (new CommunicationSession())
             {
-                this.synchronizationMode.Set(SynchronizationMode.Online);
+                this.synchronizationMode.Set(SynchronizationMode.Offline);
+
+                this.RunSynchronization();
             }
         }
 
@@ -397,6 +393,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         }
 
         private void Synchronization_OnCancel(object sender, EventArgs e) => this.StopDiscovery();
+
+        private async void Synchronization_OnProgressChanged(object sender, SharedKernels.Enumerator.Services.Synchronization.SyncProgressInfo e)
+        {
+            var request = new SendSyncProgressInfoRequest
+            {
+                Info = e,
+                InterviewerLogin = this.principal.CurrentUserIdentity.Name
+            };
+
+            await syncClient.SendAsync(request, this.cancellationTokenSource.Token);
+        }
 
         #endregion
     }
