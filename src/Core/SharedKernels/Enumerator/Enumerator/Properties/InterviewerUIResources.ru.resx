@@ -784,7 +784,7 @@
     <value>Разрешить синхронизацию с Headquarters</value>
   </data>
   <data name="Prefs_AllowSyncWithHq_Summary" xml:space="preserve">
-    <value>Выключите эту настройку если приложение должно синхронизироваться только с мобильным приложением супервизора</value>
+    <value>Выключите эту настройку если приложение должно синхронизироваться только с мобильным приложением супервизора. После первой успешной синхронизации с Supervisor приложением будет невозможно включить эту опцию</value>
   </data>
   <data name="DashboardItem_Responsible" xml:space="preserve">
     <value>Ответственный: {0}</value>
@@ -798,5 +798,9 @@
   </data>
   <data name="Synchronization_SupervisorShouldDoOnlineSync" xml:space="preserve">
     <value>Супервизору необходимо провести онлайн синхронизацию. Ваше устройство было синхронизировано позже чем устройство супервизора</value>
+  </data>
+    <data name="Prefs_AllowSyncWithHq_Summary_Disabled" xml:space="preserve">
+    <value>Невозможно синхронизироваться с Headquarters, если была хотя бы одна успешная синхронизация с Supervisor приложением</value>
+    <comment>Невозможно синхронизироваться с Headquarters, если была хотя бы одна успешная синхронизация с Supervisor приложением</comment>
   </data>
 </root>

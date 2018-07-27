@@ -45,8 +45,7 @@ namespace WB.UI.Interviewer.Activities
 
                 this.FindPreference(SettingsNames.GpsDesiredAccuracy).PreferenceChange += (sender, e) =>
                 {
-                    double newValue;
-                    if (double.TryParse(e.NewValue.ToString(), out newValue))
+                    if (double.TryParse(e.NewValue.ToString(), out var newValue))
                     {
                         interviewerSettings.SetGpsDesiredAccuracy(newValue);
                     }
@@ -90,12 +89,18 @@ namespace WB.UI.Interviewer.Activities
                     this.UpdateSettings();
                 };
 
-                this.FindPreference(SettingsNames.AllowSyncWithHq).PreferenceChange += (sender, e) =>
+                var allowSyncWithHq = this.FindPreference(SettingsNames.AllowSyncWithHq);
+                
+                allowSyncWithHq.PreferenceChange += (sender, e) =>
                 {
                     interviewerSettings.SetAllowSyncWithHq(ParseBooleanSettingsValue(e.NewValue, interviewerSettings.AllowSyncWithHq));
                     this.UpdateSettings();
                 };
 
+                if (interviewerSettings.IsOfflineSynchronizationDone)
+                {
+                    allowSyncWithHq.Enabled = false;
+                }
 
                 this.UpdateSettings();
             }
@@ -134,14 +139,15 @@ namespace WB.UI.Interviewer.Activities
 
                 this.SetBooleanPreferenceTitleAndSummary(SettingsNames.AllowSyncWithHq, 
                     InterviewerUIResources.Prefs_AllowSyncWithHq,
-                    InterviewerUIResources.Prefs_AllowSyncWithHq_Summary,
+                    interviewerSettings.IsOfflineSynchronizationDone 
+                        ? InterviewerUIResources.Prefs_AllowSyncWithHq_Summary_Disabled
+                        : InterviewerUIResources.Prefs_AllowSyncWithHq_Summary,
                     interviewerSettings.AllowSyncWithHq);
             }
 
             private static bool ParseBooleanSettingsValue(object settingsValue, bool defaultValue)
             {
-                bool intValue;
-                if (bool.TryParse(settingsValue.ToString(), out intValue))
+                if (bool.TryParse(settingsValue.ToString(), out var intValue))
                     return intValue;
 
                 return defaultValue;
@@ -149,8 +155,7 @@ namespace WB.UI.Interviewer.Activities
 
             private static int ParseIntegerSettingsValue(object settingsValue, int defaultValue)
             {
-                var intValue = -1;
-                if (int.TryParse(settingsValue.ToString(), out intValue) && intValue > 0)
+                if (int.TryParse(settingsValue.ToString(), out var intValue) && intValue > 0)
                     return intValue;
 
                 return defaultValue;
@@ -163,8 +168,7 @@ namespace WB.UI.Interviewer.Activities
                 preference.Title = title;
                 preference.Summary = summary;
 
-                var editPreference = preference as EditTextPreference;
-                if (editPreference != null)
+                if (preference is EditTextPreference editPreference)
                 {
                     editPreference.Text = defaultValue;
                 }
@@ -176,8 +180,7 @@ namespace WB.UI.Interviewer.Activities
 
                 preference.Title = title;
                 preference.Summary = summary;
-                var checkBoxPreference = preference as CheckBoxPreference;
-                if (checkBoxPreference != null)
+                if (preference is CheckBoxPreference checkBoxPreference)
                 {
                     checkBoxPreference.Checked = defaultValue;
                 }
