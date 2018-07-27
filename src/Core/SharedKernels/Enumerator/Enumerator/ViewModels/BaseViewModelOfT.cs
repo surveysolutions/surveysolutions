@@ -8,7 +8,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
     public abstract class BaseViewModel<T> : MvxViewModel<T>
     {
         protected readonly IPrincipal Principal;
-        private readonly IViewModelNavigationService viewModelNavigationService;
+        protected readonly IViewModelNavigationService viewModelNavigationService;
         protected virtual bool IsAuthenticationRequired => true;
 
         protected BaseViewModel(IPrincipal principal, IViewModelNavigationService viewModelNavigationService)
