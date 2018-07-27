@@ -187,9 +187,9 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
 
         protected string GetServiceName()
         {
-            var normalizedEndpoint = new Uri(this.settings.Endpoint).ToString().TrimEnd('/').ToLower();
+            //var normalizedEndpoint = new Uri(this.settings.Endpoint).ToString().TrimEnd('/').ToLower();
 
-            return $"{normalizedEndpoint}/{this.GetDeviceIdentification()}";
+            return this.GetDeviceIdentification();
         }
 
         protected abstract string GetDeviceIdentification();
