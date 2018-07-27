@@ -371,10 +371,10 @@ for further instructions</value>
     <value>User authentication error</value>
   </data>
   <data name="Synchronization_SupervisorShouldDoOnlineSync_Title" xml:space="preserve">
-    <value>Supervisor need to be synchronized</value>
+    <value>Supervisor application needs to be synchronized.</value>
   </data>
     <data name="Synchronization_SupervisorShouldDoOnlineSync" xml:space="preserve">
-    <value>Supervisor need to do online synchronization. You device has been synchronized later then Supervisor.</value>
+    <value>Supervisor should always have latest changes from Headquarters, so it should be synchronized last in the team before offline synchronization is awailable</value>
   </data>
   <data name="Synchronization_UserLinkedToAnotherDevice_Title" xml:space="preserve">
     <value>Your account was relinked to another tablet</value>
