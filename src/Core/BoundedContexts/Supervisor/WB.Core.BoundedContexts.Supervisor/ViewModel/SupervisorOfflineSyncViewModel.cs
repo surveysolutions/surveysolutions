@@ -23,7 +23,7 @@ using WB.Core.SharedKernels.Enumerator.Views;
 namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 {
     [ExcludeFromCodeCoverage()] // TODO: remove attribute when UI binding completed
-    public class SupervisorOfflineSyncViewModel : BaseOfflineSyncViewModel, IOfflineSyncViewModel
+    public class SupervisorOfflineSyncViewModel : BaseOfflineSyncViewModel<object>, IOfflineSyncViewModel
     {
         private readonly IInterviewViewModelFactory viewModelFactory;
         private readonly IUserInteractionService userInteractionService;
@@ -89,6 +89,11 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         {
             get => this.connectedDevices;
             set => this.SetProperty(ref this.connectedDevices, value);
+        }
+
+        public override void Prepare(object parameter)
+        {
+            
         }
 
         public override async Task Initialize()
@@ -238,7 +243,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             var serviceName = this.GetServiceName();
             try
             {
-                await this.nearbyConnection.StartAdvertisingAsync(serviceName, this.principal.CurrentUserIdentity.Name,
+                await this.nearbyConnection.StartAdvertisingAsync(serviceName, this.Principal.CurrentUserIdentity.Name,
                     cancellationTokenSource.Token);
                 SetStatus(ConnectionStatus.Advertising, "Waiting for interviewers connections");
             }
@@ -253,7 +258,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             SetStatus(ConnectionStatus.Sync, dataInfo.ToString());
         }
 
-        protected override string GetDeviceIdentification() => this.principal.CurrentUserIdentity.UserId.FormatGuid();
+        protected override string GetDeviceIdentification() => this.Principal.CurrentUserIdentity.UserId.FormatGuid();
 
         public IMvxCommand CancelCommand => new MvxCommand(() => { });
 
