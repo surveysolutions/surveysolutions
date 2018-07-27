@@ -1,21 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              xmlns:local="http://schemas.android.com/apk/res-auto"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="wrap_content"
-              local:MvxBind="Tag Id; ViewOverviewNodeState State">
-    <TextView  android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               style="@style/Overview_Question_Title"
-               local:MvxBind="Html Title; TextViewNodeStateTextColor State"/>
-    
-    <ImageView style="@style/Overview_Question_Answer_Multimedia"
-               local:MvxBind="Bitmap Image,Converter=InMemoryImageValueWithDefault;Click ShowPhotoView; Visible IsAnswered "/>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+             xmlns:local="http://schemas.android.com/apk/res-auto"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content">
+    <View android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          local:MvxBind="ViewOverviewNodeState State;">
+    </View>
+    <View android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:background="@drawable/overview_background_commented"
+          local:MvxBind="Visible HasComment"/>
+    <LinearLayout android:orientation="vertical"
+                  android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  local:MvxBind="Tag Id; ViewOverviewNodeState State">
+        <TextView  android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   style="@style/Overview_Question_Title"
+                   local:MvxBind="Html Title; TextViewNodeStateTextColor State"/>
 
-    <TextView  android:layout_width="wrap_content"
-               android:layout_height="wrap_content"
-               style="@style/Overview_Question_Answer"
-               local:MvxBind="Text Answer; TextViewAnswerState State; Visible Not(IsAnswered)"/>
-    
-</LinearLayout>
+        <ImageView style="@style/Overview_Question_Answer_Multimedia"
+                   local:MvxBind="Bitmap Image,Converter=InMemoryImageValueWithDefault;Click ShowPhotoView; Visible IsAnswered "/>
+
+        <TextView  android:layout_width="wrap_content"
+                   android:layout_height="wrap_content"
+                   style="@style/Overview_Question_Answer"
+                   local:MvxBind="Text Answer; TextViewAnswerState State; Visible Not(IsAnswered)"/>
+
+    </LinearLayout>
+</FrameLayout>
