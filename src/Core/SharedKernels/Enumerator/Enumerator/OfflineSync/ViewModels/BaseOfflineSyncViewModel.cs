@@ -50,30 +50,54 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
             set => this.SetProperty(ref this.shouldStartAdvertising, value);
         }
 
+        private bool doesStartDiscoveryExecuted = false;
 
         private async Task StartDiscoveryAsync()
         {
-            if (!ShouldStartAdvertising)
+            if (doesStartDiscoveryExecuted)
                 return;
 
             try
             {
+                doesStartDiscoveryExecuted = true;
+
+                if (!ShouldStartAdvertising)
+                    return;
+
+                var isAllowedGetLocation = await TryRequestLocationPermission();
+                if (!isAllowedGetLocation)
+                    return;
+
+                if (!this.restService.IsValidHostAddress(this.settings.Endpoint))
+                {
+                    this.OnConnectionError(InterviewerUIResources.InvalidEndpoint, ConnectionStatusCode.StatusEndpointUnknown);
+                    return;
+                }
+
+                await this.OnStartDiscovery();
+            }
+            finally
+            {
+                doesStartDiscoveryExecuted = false;
+            }
+        }
+
+
+        private async Task<bool> TryRequestLocationPermission()
+        {
+            try
+            { 
                 await this.permissions.AssureHasPermission(Permission.Location);
             }
             catch (MissingPermissionsException)
             {
                 ShouldStartAdvertising = false;
-                this.OnConnectionError(InterviewerUIResources.LocationPermissionRequired, ConnectionStatusCode.MissingPermissionAccessCoarseLocation);
-                return;
+                this.OnConnectionError(InterviewerUIResources.LocationPermissionRequired,
+                    ConnectionStatusCode.MissingPermissionAccessCoarseLocation);
+                return false;
             }
 
-            if (!this.restService.IsValidHostAddress(this.settings.Endpoint))
-            {
-                this.OnConnectionError(InterviewerUIResources.InvalidEndpoint, ConnectionStatusCode.StatusEndpointUnknown);
-                return;
-            }
-
-            await this.OnStartDiscovery();
+            return true;
         }
 
         protected async void HandleConnectionEvents(INearbyEvent @event)

@@ -131,7 +131,8 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
                 return;
             }
 
-            this.GoogleApi.Connect();
+            if (!this.GoogleApi.IsConnected && !this.GoogleApi.IsConnecting)
+                this.GoogleApi.Connect();
         }
 
         public void OnConnected(Bundle connectionHint)
