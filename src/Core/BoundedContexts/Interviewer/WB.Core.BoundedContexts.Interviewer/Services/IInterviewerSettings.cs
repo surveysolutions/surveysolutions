@@ -8,5 +8,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
         void SetShowLocationOnMap(bool showLocationOnMap);
         void SetAllowSyncWithHq(bool allowSyncWithHq);
         bool AllowSyncWithHq { get; }
+        bool IsOfflineSynchronizationDone { get; }
+        void SetOfflineSynchronizationCompleted();
     }
 }

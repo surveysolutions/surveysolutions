@@ -1194,11 +1194,20 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Disable this setting if you want to synchronize only with mobile supervisor application.
+        ///   Looks up a localized string similar to Disable this setting if you want to synchronize only with mobile supervisor application. After first succesfull synchronization with Supervisor App it will be not possible to enable this setting back.
         /// </summary>
         public static string Prefs_AllowSyncWithHq_Summary {
             get {
                 return ResourceManager.GetString("Prefs_AllowSyncWithHq_Summary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to It is not possible to synchronize with Headquarters once there was at least one succesfull synchronization with Supervisor Application.
+        /// </summary>
+        public static string Prefs_AllowSyncWithHq_Summary_Disabled {
+            get {
+                return ResourceManager.GetString("Prefs_AllowSyncWithHq_Summary_Disabled", resourceCulture);
             }
         }
         

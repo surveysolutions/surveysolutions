@@ -781,7 +781,10 @@ Downloaded {3}%</value>
     <value>Allow synchronization with Headquarters</value>
   </data>
   <data name="Prefs_AllowSyncWithHq_Summary" xml:space="preserve">
-    <value>Disable this setting if you want to synchronize only with mobile supervisor application</value>
+    <value>Disable this setting if you want to synchronize only with mobile supervisor application. After first succesfull synchronization with Supervisor App it will be not possible to enable this setting back</value>
+  </data>
+  <data name="Prefs_AllowSyncWithHq_Summary_Disabled" xml:space="preserve">
+    <value>It is not possible to synchronize with Headquarters once there was at least one succesfull synchronization with Supervisor Application</value>
   </data>
   <data name="DashboardItem_Responsible" xml:space="preserve">
     <value>Responsible: {0}</value>
