@@ -282,9 +282,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
             IEnumerable<Guid> obsoleteInterviews = await this.FindObsoleteInterviewsAsync(localInterviews, remoteInterviews, progress, cancellationToken);
 
-            var localInterviewIdsToRemove = localInterviewsToRemove.Select(interview => interview.InterviewId)
-                                                                   .Concat(obsoleteInterviews)
-                                                                   .ToList();
+            var localInterviewIdsToRemove = localInterviewsToRemove
+                .Select(interview => interview.InterviewId)
+                .Where(IsNotPresentOnHq)
+                .Concat(obsoleteInterviews)
+                .ToList();
 
             var remoteInterviewsToCreate = remoteInterviews
                 .Where(interview => (!localInterviewIds.Contains(interview.Id) && ShouldBeDownloadedBasedOnEventSequence(interview)) || obsoleteInterviews.Contains(interview.Id))
@@ -293,6 +295,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             this.RemoveInterviews(localInterviewIdsToRemove, statistics, progress);
 
             await this.CreateInterviewsAsync(remoteInterviewsToCreate, statistics, progress, cancellationToken);
+        }
+
+        private bool IsNotPresentOnHq(Guid interviewId)
+        {
+            return interviewSequenceViewRepository.GetById(interviewId) != null;
         }
 
         private bool ShouldBeDownloadedBasedOnEventSequence(InterviewApiView interview)
@@ -415,11 +422,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             SynchronizationStatistics statistics, 
             CancellationToken cancellationToken)
         {
-            var completedInterviews = GetInterviewsForUpload();
+            var interviewsToUpload = GetInterviewsForUpload();
 
-            statistics.TotalCompletedInterviewsCount = completedInterviews.Count;
+            statistics.TotalCompletedInterviewsCount = interviewsToUpload.Count;
             var transferProgress = progress.AsTransferReport();
-            foreach (var completedInterview in completedInterviews)
+            foreach (var completedInterview in interviewsToUpload)
             {
                 cancellationToken.ThrowIfCancellationRequested();
                 try
