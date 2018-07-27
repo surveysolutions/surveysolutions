@@ -55,34 +55,35 @@ namespace WB.Tests.Unit.Infrastructure.OfflineSync
             }
         }
 
-        [TestCase(5, 0, 0, Description = "Should timeout before SV even recieve package")]
-        [TestCase(0, 5, 0, Description = "Should timeout after SV recieve package")]
-        [TestCase(0, 0, 5, Description = "Should timeout before success packages received by SV")]
-        public void should_throw_on_connection_timeout_at_certain_delays(params int[] delaysInSeconds)
-        {
-            // setting up timeout ot one second
-            NearbyCommunicator.MessageAwaitingTimeout = TimeSpan.FromSeconds(1);
+        
+        //[TestCase(5, 0, 0, Description = "Should timeout before SV even recieve package")]
+        //[TestCase(0, 5, 0, Description = "Should timeout after SV recieve package")]
+        //[TestCase(0, 0, 5, Description = "Should timeout before success packages received by SV")]
+        //public void should_throw_on_connection_timeout_at_certain_delays(params int[] delaysInSeconds)
+        //{
+        //    // setting up timeout ot one second
+        //    NearbyCommunicator.MessageAwaitingTimeout = TimeSpan.FromSeconds(1);
 
-            // setup server
-            var serverhandler = Create.Service.GoogleConnectionsRequestHandler()
-                .WithSampleEchoHandler();
+        //    // setup server
+        //    var serverhandler = Create.Service.GoogleConnectionsRequestHandler()
+        //        .WithSampleEchoHandler();
 
-            var server = Create.Service.NearbyConnectionManager(serverhandler);
+        //    var server = Create.Service.NearbyConnectionManager(serverhandler);
 
-            // client
-            var client = Create.Service.NearbyConnectionManager();
-            var clientCommunicator = Create.Fake.GoogleConnection()
-                .WithTwoWayClientServerConnectionMap(server, client)
-                .WithDelaysOnResponse(TimeSpan.FromSeconds(1));
+        //    // client
+        //    var client = Create.Service.NearbyConnectionManager();
+        //    var clientCommunicator = Create.Fake.GoogleConnection()
+        //        .WithTwoWayClientServerConnectionMap(server, client)
+        //        .WithDelaysOnResponse(TimeSpan.FromSeconds(1));
 
-            // act
+        //    // act
 
-            Assert.ThrowsAsync<TaskCanceledException>(async () =>
-            {
-                await client.SendAsync<PingMessage, PongMessage>(clientCommunicator, "server",
-                    new PingMessage(), null, CancellationToken.None);
-            });
-        }
+        //    Assert.ThrowsAsync<TaskCanceledException>(async () =>
+        //    {
+        //        await client.SendAsync<PingMessage, PongMessage>(clientCommunicator, "server",
+        //            new PingMessage(), null, CancellationToken.None);
+        //    });
+        //}
 
         [Test]
         public void should_throw_communication_exception_if_failed_response_recieved()
