@@ -181,6 +181,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         protected override async void OnDeviceConnected(string name)
         {
+            StopDiscovery();
+
             this.ProgressTitle = InterviewerUIResources.SendToSupervisor_TransferInProgress;
             this.TransferingStatus = TransferingStatus.Transferring;
 
@@ -189,7 +191,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         protected override void OnDeviceDisconnected(string name)
         {
-            if (new[] {TransferingStatus.Completed, TransferingStatus.Aborted}.Contains(this.TransferingStatus)) return;
+            if (new[] { TransferingStatus.Completed, TransferingStatus.Aborted }.Contains(this.TransferingStatus)) return;
 
             this.OnTerminateTransferring();
         }
@@ -341,22 +343,19 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 #pragma warning disable 4014
             Task.Run(async () =>
             {
-                foreach (var syncProgressInfo in syncProgress.GetConsumingEnumerable())
+                try
                 {
-                    try
+                    foreach (var syncProgressInfo in syncProgress.GetConsumingEnumerable())
                     {
                         var request = new SendSyncProgressInfoRequest
                         {
                             Info = syncProgressInfo,
                             InterviewerLogin = this.principal.CurrentUserIdentity.Name
                         };
+
                         await syncClient.SendAsync(request, this.cancellationTokenSource.Token);
                     }
-                    catch (OperationCanceledException)
-                    {
-                        syncProgress.CompleteAdding();
-                    }
-                }
+                }catch { /* om om om */ }
             });
 #pragma warning restore 4014
         }
