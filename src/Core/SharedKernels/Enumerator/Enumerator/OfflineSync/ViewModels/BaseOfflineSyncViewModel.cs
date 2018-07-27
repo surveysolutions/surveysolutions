@@ -105,6 +105,9 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
             var connectionStatus = await this.nearbyConnection.AcceptConnectionAsync(endpoint)
                 .ConfigureAwait(false);
 
+            if(connectionStatus.Status == ConnectionStatusCode.StatusAlreadyConnectedToEndpoint) 
+                return;
+            
             if (!connectionStatus.IsSuccess)
                 this.OnConnectionError(connectionStatus.StatusMessage, connectionStatus.Status);
             else
@@ -119,6 +122,9 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
                 .RequestConnectionAsync(this.principal.CurrentUserIdentity.Name, endpoint,
                     cancellationTokenSource.Token)
                 .ConfigureAwait(false);
+
+            if(connectionStatus.Status == ConnectionStatusCode.StatusAlreadyConnectedToEndpoint) 
+                return;
 
             if (!connectionStatus.IsSuccess)
                 this.OnConnectionError(connectionStatus.StatusMessage, connectionStatus.Status);
