@@ -74,7 +74,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
                     permissionsService: Mock.Of<IPermissionsService>(), 
                     nearbyConnection: Mock.Of<INearbyConnection>(x => x.Events == new Subject<INearbyEvent>()), 
                     restService: Mock.Of<IRestService>(), 
-                    synchronizationMode: Mock.Of<ISynchronizationMode>());
+                    synchronizationMode: Mock.Of<ISynchronizationMode>(), 
+                    syncClient: Mock.Of<IOfflineSyncClient>());
         }
 
         private static ISynchronizationCompleteSource SyncCompleteSource = new SynchronizationCompleteSource();
