@@ -1,3 +1,4 @@
+using System;
 using MvvmCross.ViewModels;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Views;
@@ -86,8 +87,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                         this.OnSyncCompleted();
                     }
                 }
+
+                OnProgressChanged?.Invoke(this, syncProgressInfo);
             });
         }
+
+        public event EventHandler<SyncProgressInfo> OnProgressChanged;
 
         protected abstract void OnSyncCompleted();
     }
