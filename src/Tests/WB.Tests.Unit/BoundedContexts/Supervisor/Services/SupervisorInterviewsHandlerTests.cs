@@ -51,6 +51,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
         }
 
         [Test]
+        [Ignore("KP-11677")]
         public async Task CanSynchronize_should_check_security_stamp()
         {
             var userId = Guid.NewGuid();
