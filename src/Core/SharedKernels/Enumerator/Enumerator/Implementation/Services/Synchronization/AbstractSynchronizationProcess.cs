@@ -262,6 +262,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                             cancellationToken, this.restCredentials);
 
                         this.enumeratorSettings.SetLastHqSyncTimestamp(hqTimestamp);
+
+                        OnSuccesfullSynchronization();
                     }
                     catch (Exception e)
                     {
@@ -410,6 +412,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 }
             }
         }
+
+        protected virtual void OnSuccesfullSynchronization() { }
 
         protected abstract void CheckAfterStartSynchronization(CancellationToken cancellationToken);
 

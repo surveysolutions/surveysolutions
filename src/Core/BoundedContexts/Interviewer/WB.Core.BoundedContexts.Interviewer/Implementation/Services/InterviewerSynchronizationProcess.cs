@@ -104,6 +104,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             await this.auditLogSynchronizer.SynchronizeAuditLogAsync(progress, statistics, cancellationToken);
         }
 
+        protected override void OnSuccesfullSynchronization()
+        {
+            if(this.synchronizationMode.GetMode() == SynchronizationMode.Offline)
+                this.interviewerSettings.SetOfflineSynchronizationCompleted();
+        }
+
         protected override SynchronizationType SynchronizationType
         {
             get

@@ -84,6 +84,15 @@ namespace WB.UI.Interviewer.Settings
         public override int EventChunkSize => this.CurrentSettings.EventChunkSize.GetValueOrDefault(Application.Context.Resources.GetInteger(Resource.Integer.EventChunkSize));
 
         public bool AllowSyncWithHq => this.currentSettings.AllowSyncWithHq.GetValueOrDefault(true);
+        public bool IsOfflineSynchronizationDone => this.currentSettings.IsOfflineSynchronizationDone.GetValueOrDefault(false);
+
+        public void SetOfflineSynchronizationCompleted()
+        {
+            this.SaveCurrentSettings(settings =>
+            {
+               settings.IsOfflineSynchronizationDone = true;
+            });
+        }
 
         public void SetGpsResponseTimeout(int timeout)
         {

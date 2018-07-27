@@ -9,5 +9,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
         public bool? VibrateOnError { get; set; }
         public bool? ShowLocationOnMap { get; set; }
         public bool? AllowSyncWithHq { get; set; }
+        public bool? IsOfflineSynchronizationDone { get; set; }
     }
 }
