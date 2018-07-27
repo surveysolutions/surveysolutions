@@ -1662,7 +1662,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Supervisor need to do online synchronization. You device has been synchronized later then Supervisor..
+        ///   Looks up a localized string similar to Supervisor should always have latest changes from Headquarters, so it should be synchronized last in the team before offline synchronization is awailable.
         /// </summary>
         public static string Synchronization_SupervisorShouldDoOnlineSync {
             get {
@@ -1671,7 +1671,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Supervisor need to be synchronized.
+        ///   Looks up a localized string similar to Supervisor application needs to be synchronized..
         /// </summary>
         public static string Synchronization_SupervisorShouldDoOnlineSync_Title {
             get {
