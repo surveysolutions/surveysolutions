@@ -16,7 +16,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels;
 namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
 {
     [ExcludeFromCodeCoverage()] // TODO: remove attribute when UI binding completed
-    public abstract class BaseOfflineSyncViewModel : BaseViewModel, IDisposable
+    public abstract class BaseOfflineSyncViewModel<TInputArgs> : BaseViewModel<TInputArgs>, IDisposable
     {
         protected readonly IPermissionsService permissions;
         protected readonly INearbyConnection nearbyConnection;
@@ -143,7 +143,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
             this.OnDeviceFound(name);
 
             var connectionStatus = await this.nearbyConnection
-                .RequestConnectionAsync(this.principal.CurrentUserIdentity.Name, endpoint,
+                .RequestConnectionAsync(this.Principal.CurrentUserIdentity.Name, endpoint,
                     cancellationTokenSource.Token)
                 .ConfigureAwait(false);
 

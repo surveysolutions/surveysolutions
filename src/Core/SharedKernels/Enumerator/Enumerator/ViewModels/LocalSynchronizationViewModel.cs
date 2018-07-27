@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using MvvmCross.Commands;
 using MvvmCross.Plugin.Messenger;
@@ -40,8 +41,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.IsSynchronizationInfoShowed = false;
         }
 
+        public event EventHandler OnCancel;
+
         public void CancelSynchronizaion()
         {
+            OnCancel?.Invoke(this, EventArgs.Empty);
+
             this.IsSynchronizationInfoShowed = false;
             this.IsSynchronizationInProgress = false;
             if (this.synchronizationCancellationTokenSource != null && !this.synchronizationCancellationTokenSource.IsCancellationRequested)

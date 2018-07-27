@@ -1,12 +1,16 @@
-﻿using Moq;
+﻿using System.Reactive.Subjects;
+using Moq;
 using MvvmCross.Plugin.Messenger;
 using MvvmCross.Tests;
 using NSubstitute;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Interviewer.Implementation.Services.OfflineSync;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
+using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -66,8 +70,11 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
                     rejectedInterviewsViewModel: DashboardRejectedInterviewsViewModel(), 
                     interviewsRepository: interviewsRepository ?? Substitute.For<IPlainStorage<InterviewView>>(),
                     auditLogService: Mock.Of<IAuditLogService>(),
-                    synchronizationCompleteSource: synchronizationCompleteSource ?? SyncCompleteSource
-                );
+                    synchronizationCompleteSource: synchronizationCompleteSource ?? SyncCompleteSource, 
+                    permissionsService: Mock.Of<IPermissionsService>(), 
+                    nearbyConnection: Mock.Of<INearbyConnection>(x => x.Events == new Subject<INearbyEvent>()), 
+                    restService: Mock.Of<IRestService>(), 
+                    synchronizationMode: Mock.Of<ISynchronizationMode>());
         }
 
         private static ISynchronizationCompleteSource SyncCompleteSource = new SynchronizationCompleteSource();

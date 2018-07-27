@@ -1,20 +1,31 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using Android.App;
+using Android.Bluetooth;
 using Android.Content;
+using Android.Gms.Common;
+using Android.Gms.Common.Apis;
+using Android.Gms.Nearby;
 using Android.OS;
 using Android.Support.Design.Widget;
 using Android.Support.V4.View;
-using Android.Support.V7.Widget;
 using Android.Views;
+using Android.Widget;
 using MvvmCross.Droid.Support.V4;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
+using WB.Core.SharedKernels.Enumerator.Views;
 using WB.UI.Shared.Enumerator.Activities;
+using WB.UI.Shared.Enumerator.OfflineSync.Activities;
+using WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation;
 using WB.UI.Shared.Enumerator.Services;
 using MvxFragmentStatePagerAdapter = WB.UI.Interviewer.CustomControls.MvxFragmentStatePagerAdapter;
+using Toolbar = Android.Support.V7.Widget.Toolbar;
 
 namespace WB.UI.Interviewer.Activities.Dashboard
 {
@@ -23,7 +34,11 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         WindowSoftInputMode = SoftInput.StateHidden,
         HardwareAccelerated = true,
         ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
-    public class DashboardActivity : BaseActivity<DashboardViewModel>, ISyncBgService<SyncProgressDto>, ISyncServiceHost<SyncBgService>
+    public class DashboardActivity : BaseActivity<DashboardViewModel>, 
+        ISyncBgService<SyncProgressDto>, 
+        ISyncServiceHost<SyncBgService>, 
+        GoogleApiClient.IConnectionCallbacks, 
+        GoogleApiClient.IOnConnectionFailedListener
     {
         protected override int ViewResourceId => Resource.Layout.dashboard;
 
@@ -161,6 +176,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         {
             base.OnViewModelSet();
             this.ViewModel.Synchronization.SyncBgService = this;
+            this.ViewModel.OnOfflineSynchonizationStarted += OnOfflineSynchonizationStarted;
         }
 
         public override void OnBackPressed() {}
@@ -205,5 +221,137 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         public void StartSync() => this.Binder.GetService().StartSync();
 
         public SyncProgressDto CurrentProgress => this.Binder.GetService().CurrentProgress;
+
+        #region Offline synhronization
+
+        protected GoogleApiClient GoogleApi;
+        const int RequestCodeRecoverPlayServices = 1001;
+        private INearbyConnection communicator;
+        private BluetoothReceiver bluetoothReceiver;
+
+        protected override void OnStop()
+        {
+            this.communicator?.StopAll();
+            this.GoogleApi?.Disconnect();
+            if (this.bluetoothReceiver != null)
+            {
+                UnregisterReceiver(this.bluetoothReceiver);
+                bluetoothReceiver.BluetoothDisabled -= OnBluetoothDisabled;
+                bluetoothReceiver = null;
+            }
+
+            base.OnStop();
+        }
+
+        private void OnBluetoothDisabled(object sender, EventArgs e)
+        {
+            this.UnregisterReceiver(this.bluetoothReceiver);
+            this.bluetoothReceiver.BluetoothDisabled -= OnBluetoothDisabled;
+            this.bluetoothReceiver = null;
+
+            this.RestoreGoogleApiConnectionIfNeeded();
+        }
+
+        public void OnConnected(Bundle connectionHint)
+        {
+            //if (!this.GoogleApi.IsConnected)
+            //{
+            //    this.GoogleApi.Connect();
+            //    return;
+            //}
+
+            System.Diagnostics.Trace.Write("StartDiscoveryAsyncCommand call from OnConnected");
+            this.ViewModel.StartDiscoveryAsyncCommand.Execute();
+        }
+
+        public void OnConnectionSuspended(int cause)
+        {
+        }
+
+        public void OnConnectionFailed(ConnectionResult result)
+        {
+        }
+
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                this.GoogleApi?.Dispose();
+                this.GoogleApi = null;
+                ServiceLocator.Current.GetInstance<IGoogleApiClientFactory>().GoogleApiClient = null;
+                this.ViewModel.OnOfflineSynchonizationStarted -= this.OnOfflineSynchonizationStarted;
+            }
+
+            base.Dispose(disposing);
+        }
+
+        private void OnOfflineSynchonizationStarted(object sender, EventArgs e)
+        {
+            if (!this.CheckPlayServices()) return;
+
+            var mBluetoothAdapter = BluetoothAdapter.DefaultAdapter;
+            if (mBluetoothAdapter.IsEnabled)
+            {
+                bluetoothReceiver = new BluetoothReceiver();
+                IntentFilter filter = new IntentFilter(BluetoothAdapter.ActionStateChanged);
+                RegisterReceiver(bluetoothReceiver, filter);
+                bluetoothReceiver.BluetoothDisabled += OnBluetoothDisabled;
+
+                BluetoothAdapter.DefaultAdapter.Disable();
+            }
+            else
+            {
+                this.RestoreGoogleApiConnectionIfNeeded();
+            }
+        }
+
+        /// <summary>
+        /// Check the device to make sure it has the Google Play Services APK.
+        /// If it doesn't, display a dialog that allows users to download the APK from the Google Play Store 
+        /// or enable it in the device's system settings.
+        /// </summary>
+        /// <returns></returns>
+        private bool CheckPlayServices()
+        {
+            GoogleApiAvailability apiAvailability = GoogleApiAvailability.Instance;
+            int resultCode = apiAvailability.IsGooglePlayServicesAvailable(this);
+            if (resultCode == ConnectionResult.Success) return true;
+
+            if (apiAvailability.IsUserResolvableError(resultCode))
+            {
+                this.ViewModel.ShowSynchronizationError(UIResources.OfflineSync_InstallPlayServices);
+                apiAvailability.GetErrorDialog(this, resultCode, RequestCodeRecoverPlayServices).Show();
+            }
+            else
+                this.ViewModel.ShowSynchronizationError(UIResources.OfflineSync_DeviceNotSupported);
+
+            return false;
+        }
+
+        private void RestoreGoogleApiConnectionIfNeeded()
+        {
+            if (this.GoogleApi == null)
+            {
+                this.GoogleApi = new GoogleApiClient.Builder(this)
+                    .AddConnectionCallbacks(this)
+                    .AddOnConnectionFailedListener(this)
+                    .AddApi(NearbyClass.CONNECTIONS_API)
+                    .Build();
+
+                this.communicator = ServiceLocator.Current.GetInstance<INearbyConnection>();
+                var apiClientFactory = ServiceLocator.Current.GetInstance<IGoogleApiClientFactory>();
+                apiClientFactory.GoogleApiClient = this.GoogleApi;
+            }
+
+            if (this.GoogleApi.IsConnected)
+            {
+                System.Diagnostics.Trace.Write("StartDiscoveryAsyncCommand call from  RestoreGoogleApiConnectionIfNeeded");
+                this.ViewModel.StartDiscoveryAsyncCommand.Execute();
+                return;
+            }
+
+            this.GoogleApi.Connect();
+        }
+        #endregion
     }
 }
