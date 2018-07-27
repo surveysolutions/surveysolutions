@@ -96,7 +96,7 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
         public async Task<NearbyStatus> AcceptConnectionAsync(string endpoint)
         {
             logger.Verbose($"({endpoint}) ENTER");
-
+            
             var result = await ExecuteNearbyActionWithTimeoutAsync(
                 NearbyClass.Connections.AcceptConnection(Api, endpoint,
                     new OnPayloadCallback(new NearbyPayloadCallback(OnPayloadReceived, OnPayloadTransferUpdate))))
@@ -196,7 +196,9 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
         {
             if (result.IsSuccess) return;
 
-            var nearbyStatus = ToConnectionStatus(result);
+            NearbyStatus nearbyStatus = ToConnectionStatus(result);
+            if (nearbyStatus.Status == ConnectionStatusCode.StatusAlreadyConnectedToEndpoint)
+                return;
 
             (string key, string data)[] FromStatuses(Statuses status)
             {
