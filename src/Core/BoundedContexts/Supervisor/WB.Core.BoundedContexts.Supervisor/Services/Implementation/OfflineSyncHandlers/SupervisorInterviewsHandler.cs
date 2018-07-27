@@ -284,14 +284,14 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                 });
             }
             
-            if (user.SecurityStamp != arg.SecurityStamp)
-            {
-                return Task.FromResult(new CanSynchronizeResponse
-                {
-                    CanSyncronize = false,
-                    Reason = SyncDeclineReason.InvalidPassword
-                });
-            }
+            //if (user.SecurityStamp != arg.SecurityStamp)
+            //{
+            //    return Task.FromResult(new CanSynchronizeResponse
+            //    {
+            //        CanSyncronize = false,
+            //        Reason = SyncDeclineReason.InvalidPassword
+            //    });
+            //}
 
             if (user.IsLockedByHeadquarters || user.IsLockedBySupervisor)
             {
