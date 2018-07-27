@@ -341,35 +341,22 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 #pragma warning disable 4014
             Task.Run(async () =>
             {
-                while (!syncProgress.IsCompleted)
+                foreach (var syncProgressInfo in syncProgress.GetConsumingEnumerable())
                 {
-                    SyncProgressInfo syncProgressInfo = null;
                     try
                     {
-                        syncProgressInfo = syncProgress.Take();
-                    }
-                    catch (InvalidOperationException)
-                    {
-                    }
-
-                    if (syncProgressInfo != null)
-                    {
-                        try
+                        var request = new SendSyncProgressInfoRequest
                         {
-                            var request = new SendSyncProgressInfoRequest
-                            {
-                                Info = syncProgressInfo,
-                                InterviewerLogin = this.principal.CurrentUserIdentity.Name
-                            };
-                            await syncClient.SendAsync(request, this.cancellationTokenSource.Token);
-                        }
-                        catch (OperationCanceledException)
-                        {
-                            syncProgress.CompleteAdding();
-                        }
+                            Info = syncProgressInfo,
+                            InterviewerLogin = this.principal.CurrentUserIdentity.Name
+                        };
+                        await syncClient.SendAsync(request, this.cancellationTokenSource.Token);
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        syncProgress.CompleteAdding();
                     }
                 }
-
             });
 #pragma warning restore 4014
         }
