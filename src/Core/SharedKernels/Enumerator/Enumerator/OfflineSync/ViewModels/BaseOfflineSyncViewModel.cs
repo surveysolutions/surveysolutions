@@ -126,10 +126,10 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
         private async Task InitializeConnectionAsync(string endpoint, string name)
         {
             this.OnDeviceConnectionAccepting(name);
-            var connectionStatus = await this.nearbyConnection.AcceptConnectionAsync(endpoint)
-                .ConfigureAwait(false);
+            var connectionStatus = await this.nearbyConnection.AcceptConnectionAsync(endpoint);
 
-            if(connectionStatus.Status == ConnectionStatusCode.StatusAlreadyConnectedToEndpoint) 
+            if(connectionStatus.Status == ConnectionStatusCode.StatusAlreadyConnectedToEndpoint ||
+                connectionStatus.Status == ConnectionStatusCode.StatusOutOfOrderApiCall)
                 return;
             
             if (!connectionStatus.IsSuccess)
@@ -147,7 +147,8 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
                     cancellationTokenSource.Token)
                 .ConfigureAwait(false);
 
-            if(connectionStatus.Status == ConnectionStatusCode.StatusAlreadyConnectedToEndpoint) 
+            if(connectionStatus.Status == ConnectionStatusCode.StatusAlreadyConnectedToEndpoint ||
+               connectionStatus.Status == ConnectionStatusCode.StatusOutOfOrderApiCall)
                 return;
 
             if (!connectionStatus.IsSuccess)
