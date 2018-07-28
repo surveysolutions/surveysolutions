@@ -1671,7 +1671,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Supervisor should always have latest changes from Headquarters, so it should be synchronized last in the team before offline synchronization is awailable.
+        ///   Looks up a localized string similar to Supervisor should always have latest changes from Headquarters, so it should be synchronized last in the team before offline synchronization is available.
         /// </summary>
         public static string Synchronization_SupervisorShouldDoOnlineSync {
             get {
