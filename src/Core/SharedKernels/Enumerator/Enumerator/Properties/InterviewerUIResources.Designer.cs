@@ -948,7 +948,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Location permission is required for work synchronization correctly.
+        ///   Looks up a localized string similar to Location permission is required for offline synchronization.
         /// </summary>
         public static string LocationPermissionRequired {
             get {

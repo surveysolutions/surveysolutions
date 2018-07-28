@@ -215,7 +215,7 @@ for further instructions</value>
     <value>Supervisor website address is invalid. Make sure that you entered correct url address</value>
   </data>
   <data name="LocationPermissionRequired" xml:space="preserve">
-    <value>Location permission is required for work synchronization correctly</value>
+    <value>Location permission is required for offline synchronization</value>
   </data>
   <data name="Login_Online_Signin_Explanation_message" xml:space="preserve">
     <value>You could try to sign in online if you forgot your password or it was reset</value>
