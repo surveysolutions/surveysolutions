@@ -48,7 +48,7 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
             if (!this.CheckPlayServices()) return;
 
             var mBluetoothAdapter = BluetoothAdapter.DefaultAdapter;
-            if (mBluetoothAdapter.IsEnabled)
+            if (mBluetoothAdapter?.IsEnabled == true)
             {
                 bluetoothReceiver = new BluetoothReceiver();
                 IntentFilter filter = new IntentFilter(BluetoothAdapter.ActionStateChanged);

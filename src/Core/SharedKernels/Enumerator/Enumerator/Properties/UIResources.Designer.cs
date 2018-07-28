@@ -1395,6 +1395,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Synchronization of assignments and interviews.
+        /// </summary>
+        public static string OfflineSync_Supervisor_Title {
+            get {
+                return ResourceManager.GetString("OfflineSync_Supervisor_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ok.
         /// </summary>
         public static string Ok {
