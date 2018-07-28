@@ -227,6 +227,9 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             return StartDiscoveryAsyncCommand.ExecuteAsync();
         });
 
+        public IMvxAsyncCommand ExitOfflineSyncCommand => new MvxAsyncCommand(async () =>
+            await this.viewModelNavigationService.NavigateToDashboardAsync());
+
         public IMvxAsyncCommand GoToDashboardCommand => new MvxAsyncCommand(() 
             => viewModelNavigationService.NavigateToDashboardAsync());
 

@@ -632,7 +632,7 @@
   <data name="Supervisor_Complete_Reject_btn" xml:space="preserve">
     <value>Отклонить</value>
   </data>
-    <data name="OfflineSync_BackToDashboard" xml:space="preserve">
+  <data name="OfflineSync_BackToDashboard" xml:space="preserve">
     <value>К списку заданий</value>
     <comment>К списку заданий</comment>
   </data>
@@ -660,8 +660,11 @@
     <value>Найдено устройство интервьюра ({0})</value>
     <comment>{0} - interviewer login</comment>
   </data>
-    <data name="OfflineSync_Retry" xml:space="preserve">
+  <data name="OfflineSync_Retry" xml:space="preserve">
     <value>Попробывать еще раз</value>
     <comment>Попробывать еще раз</comment>
+  </data>
+  <data name="OfflineSync_Supervisor_Title" xml:space="preserve">
+    <value>Синхронизация заданий и интервью</value>
   </data>
 </root>
