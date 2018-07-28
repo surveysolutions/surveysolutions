@@ -396,13 +396,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         private async void Synchronization_OnProgressChanged(object sender, SharedKernels.Enumerator.Services.Synchronization.SyncProgressInfo e)
         {
-            var request = new SendSyncProgressInfoRequest
+            if (this.cancellationTokenSource != null)
             {
-                Info = e,
-                InterviewerLogin = this.principal.CurrentUserIdentity.Name
-            };
+                var request = new SendSyncProgressInfoRequest
+                {
+                    Info = e,
+                    InterviewerLogin = this.principal.CurrentUserIdentity.Name
+                };
 
-            await syncClient.SendAsync(request, this.cancellationTokenSource.Token);
+                await syncClient.SendAsync(request, this.cancellationTokenSource.Token);
+            }
         }
 
         #endregion
