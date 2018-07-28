@@ -15,7 +15,7 @@
                   android:orientation="vertical"
                   android:layout_width="match_parent"
                   android:layout_height="wrap_content"
-                  local:MvxBind="Tag Id; ViewOverviewNodeState State">
+                  local:MvxBind="Tag Id;">
         <TextView android:layout_width="wrap_content"
                   android:layout_height="wrap_content"
                   style="@style/Overview_Question_Title"
