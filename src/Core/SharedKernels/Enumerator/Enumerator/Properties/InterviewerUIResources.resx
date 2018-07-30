@@ -358,6 +358,9 @@ for further instructions</value>
   <data name="Synchronization_UserPassword_Update_Format" xml:space="preserve">
     <value>Authentication problem. We were unable to confirm your credentials '{0}'. Your account may have a different password, be locked or deleted. Please re-enter your password. If the problem persists, contact your Supervisor or Headquarters.</value>
   </data>
+  <data name="Synchronization_UserDoNotBelongToTeam">
+    <value>User is no longer belong to this Supervisor team. Please contact You Headquarter for details</value>
+  </data>
   <data name="Unauthorized" xml:space="preserve">
     <value>Your login or password is incorrect</value>
   </data>

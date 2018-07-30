@@ -1752,6 +1752,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to User is no longer belong to this Supervisor team. Please contact You Headquarter for details.
+        /// </summary>
+        public static string Synchronization_UserDoNotBelongToTeam {
+            get {
+                return ResourceManager.GetString("Synchronization_UserDoNotBelongToTeam", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to User authentication error.
         /// </summary>
         public static string Synchronization_UserLinkedToAnotherDevice_Status {
