@@ -142,9 +142,10 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
         {
             this.OnDeviceFound(name);
 
+            var interviewerName = this.Principal.CurrentUserIdentity.Name;
+
             var connectionStatus = await this.nearbyConnection
-                .RequestConnectionAsync(this.Principal.CurrentUserIdentity.Name, endpoint,
-                    cancellationTokenSource.Token)
+                .RequestConnectionAsync(interviewerName, endpoint, cancellationTokenSource.Token) 
                 .ConfigureAwait(false);
 
             if(connectionStatus.Status == ConnectionStatusCode.StatusAlreadyConnectedToEndpoint ||

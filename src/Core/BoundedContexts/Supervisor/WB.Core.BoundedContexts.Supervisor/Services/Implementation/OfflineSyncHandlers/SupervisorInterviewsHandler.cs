@@ -170,12 +170,15 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
         private void UpdateAssignmentQuantityByInterview(Guid interviewId)
         {
             var interviewView = this.interviews.GetById(interviewId.FormatGuid());
+
             if (interviewView?.Assignment == null) return;
 
             var assignment = this.assignmentsStorage.GetById(interviewView.Assignment.Value);
             if (assignment == null) return;
 
-            assignment.CreatedInterviewsCount = this.interviews.Count(x => x.Assignment == interviewView.Assignment);
+            assignment.CreatedInterviewsCount = this.interviews.Where(x => x.Assignment == interviewView.Assignment)
+                .Count(x => x.FromHqSyncDateTime == null);
+
             this.assignmentsStorage.Store(assignment);
         }
 
