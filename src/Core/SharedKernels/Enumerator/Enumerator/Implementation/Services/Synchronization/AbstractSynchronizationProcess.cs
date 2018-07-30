@@ -355,7 +355,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         progress.Report(new SyncProgressInfo
                         {
                             Title = InterviewerUIResources.UnexpectedException,
-                            Description = InterviewerUIResources.InterviewerFromDifferentTeam,
+                            Description = InterviewerUIResources.Synchronization_UserDoNotBelongToTeam,
                             Status = SynchronizationStatus.Fail,
                             Statistics = statistics
                         });
