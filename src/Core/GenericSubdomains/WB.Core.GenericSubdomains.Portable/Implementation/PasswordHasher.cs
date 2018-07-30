@@ -16,9 +16,11 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
             return result.ToString().ToLower();
         }
 
-        public bool VerifyPassword(string hashedPassword, string password)
+        public PasswordVerificationResult VerifyPassword(string hashedPassword, string password)
         {
-            return hashedPassword == Hash(password);
+            return hashedPassword == Hash(password)
+                ? PasswordVerificationResult.Success
+                : PasswordVerificationResult.Failed;
         }
     }
 }
