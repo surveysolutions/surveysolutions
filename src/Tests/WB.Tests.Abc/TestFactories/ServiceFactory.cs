@@ -817,6 +817,15 @@ namespace WB.Tests.Abc.TestFactories
                 Mock.Of<IEnumeratorSettings>());
         }
 
+        public SupervisorCanSynchronizeHandler SupervisorCanSynchronizeHandler(
+            IPlainStorage<InterviewerDocument> interviewerViewRepository = null,
+            IEnumeratorSettings settings = null)
+        {
+            return new SupervisorCanSynchronizeHandler(
+                interviewerViewRepository ?? Mock.Of<IPlainStorage<InterviewerDocument>>(),
+                settings ?? Mock.Of<IEnumeratorSettings>());
+        }
+
         public SupervisorInterviewsHandler SupervisorInterviewsHandler(ILiteEventBus eventBus = null,
             IEnumeratorEventStorage eventStorage = null,
             IPlainStorage<InterviewView> interviews = null,
@@ -825,9 +834,7 @@ namespace WB.Tests.Abc.TestFactories
             IPlainStorage<BrokenInterviewPackageView, int?> brokenInterviewStorage = null,
             IPrincipal principal = null,
             IPlainStorage<InterviewerDocument> interviewerViewRepository = null,
-            IAssignmentDocumentsStorage assignments = null,
-            IEnumeratorSettings settings = null
-            )
+            IAssignmentDocumentsStorage assignments = null)
         {
             return new SupervisorInterviewsHandler(
                 eventBus ?? Mock.Of<ILiteEventBus>(),
@@ -839,9 +846,7 @@ namespace WB.Tests.Abc.TestFactories
                 brokenInterviewStorage ?? Mock.Of<IPlainStorage<BrokenInterviewPackageView, int?>>(),
                 new SqliteInmemoryStorage<SuperivsorReceivedPackageLogEntry, int>(),
                 principal ?? Mock.Of<IPrincipal>(),
-                interviewerViewRepository ?? Mock.Of<IPlainStorage<InterviewerDocument>>(),
-                assignments ?? Create.Storage.AssignmentDocumentsInmemoryStorage(),
-                settings ?? Mock.Of<IEnumeratorSettings>());
+                assignments ?? Create.Storage.AssignmentDocumentsInmemoryStorage());
         }
 
         public SupervisorGroupStateCalculationStrategy SupervisorGroupStateCalculationStrategy()
