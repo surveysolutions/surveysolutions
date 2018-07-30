@@ -15,7 +15,12 @@
   <dimen name="Login_Troubleshooting_Button_marginLeft">24dp</dimen>
   <dimen name="Login_Footer_paddingBottom">36dp</dimen>
   <dimen name="Login_Button_padding">10dp</dimen>
-  
+
+  <dimen name="Login_Endpoint_paddingRight">30dp</dimen>
+  <dimen name="Login_Scan_Button_width">48dp</dimen>
+  <dimen name="Login_Scan_Button_height">48dp</dimen>
+  <dimen name="Login_Scan_Button_paddingTop">3dp</dimen>
+
   <dimen name="Troubleshooting_padding">36dp</dimen>
   <dimen name="Troubleshooting_double_padding">88dp</dimen>
   <dimen name="Diagnostics_Title_padding">15dp</dimen>
