@@ -265,6 +265,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         {
             var dashboardItem = this.interviewViewRepository.GetById(interview.Id.FormatGuid());
             dashboardItem.CanBeDeleted = false;
+            dashboardItem.FromHqSyncDateTime = DateTime.UtcNow;
             this.interviewViewRepository.Store(dashboardItem);
         }
 
