@@ -315,7 +315,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         progress.Report(new SyncProgressInfo
                         {
                             Title = InterviewerUIResources.Synchronization_Fail_Title,
-                            Description = InterviewerUIResources.Unauthorized,
+                            Description = InterviewerUIResources.AccountIsLockedOnServer,
                             Status = SynchronizationStatus.Fail,
                             Statistics = statistics
                         });
