@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services
             this.interviewStorageMock = new Mock<IPlainStorage<InterviewerIdentity>>();
             this.passwordHasher = new Mock<IPasswordHasher>();
             this.passwordHasher.Setup(ph => ph.Hash(password)).Returns(hashedPassword);
-            this.passwordHasher.Setup(ph => ph.VerifyPassword(hashedPassword, password)).Returns(true);
+            this.passwordHasher.Setup(ph => ph.VerifyPassword(hashedPassword, password)).Returns(PasswordVerificationResult.Success);
             this.principal = Create.Service.InterviewerPrincipal(this.interviewStorageMock.Object, passwordHasher.Object);
         }
 
@@ -55,6 +55,26 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services
                 Times.Never, "Should not store user with updated password");
 
             this.passwordHasher.Verify(ph => ph.VerifyPassword(hashedPassword, password), Times.Once);
+        }
+
+        [Test]
+        public void Should_be_able_to_SignIn_using_OldPasswordHash_and_update_hash()
+        {
+            SetupInterviewerIdentity("Adams", null, hashedPassword);
+
+            this.passwordHasher.Setup(ph => ph.VerifyPassword(hashedPassword, password))
+                .Returns(PasswordVerificationResult.SuccessRehashNeeded);
+
+            this.passwordHasher.Setup(ph => ph.Hash(password)).Returns("NEWHASH");
+
+            Assert.True(this.principal.SignIn("Adams", password, true));
+
+            this.interviewStorageMock.Verify(v => v.Store(
+                    It.Is<InterviewerIdentity>(u => u.PasswordHash == "NEWHASH")),
+                 Times.Once, "Should store user with updated hash");
+
+            this.passwordHasher.Verify(ph => ph.VerifyPassword(hashedPassword, password), Times.Once);
+            this.passwordHasher.Verify(ph => ph.Hash(password), Times.Once);
         }
 
         [Test]

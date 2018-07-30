@@ -23,6 +23,16 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public IInterviewerUserIdentity CurrentUserIdentity => (IInterviewerUserIdentity)base.currentUserIdentity;
 
+        protected override void UpdateUserHash(string hash)
+        {
+            var user = this.usersStorage.Where(u => u.Name.ToLower() == CurrentUserIdentity.Name).FirstOrDefault();
+            if (user != null)
+            {
+                user.PasswordHash = hash;
+                this.usersStorage.Store(user);
+            }
+        }
+
         protected override IUserIdentity GetUserByName(string userName)
             => this.usersStorage.Where(user => user.Name.ToLower() == userName).FirstOrDefault();
     }
