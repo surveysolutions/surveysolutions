@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
 using Newtonsoft.Json.Serialization;
+using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.UI.Shared.Enumerator.Services.Internals
 {
@@ -33,6 +34,10 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
 
         public override Type BindToType(string assemblyName, string typeName)
         {
+            // Can be removed when all interivewers of version < 18.08 are synchronized with server
+            if ("WB.Core.BoundedContexts.Interviewer.Implementation.AuditLog.AuditLogEntityView".Equals(typeName, StringComparison.Ordinal))
+                return typeof(AuditLogEntityView);
+
             if (String.Equals(assemblyName, oldAssemblyNameToRedirect, StringComparison.Ordinal) ||
                 String.IsNullOrEmpty(assemblyName))
             {
