@@ -1,6 +1,7 @@
 using System.Threading.Tasks;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
+using WB.Core.BoundedContexts.Interviewer.Implementation.Services.OfflineSync;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
@@ -46,6 +47,7 @@ namespace WB.UI.Interviewer.ServiceLocation
             registry.Bind<IInterviewUniqueKeyGenerator, InterviewerInterviewUniqueKeyGenerator>();
             registry.Bind<IGroupStateCalculationStrategy, EnumeratorGroupStateCalculationStrategy>();
 
+            registry.BindAsSingleton<ISynchronizationMode, SynchronizationModeSelector>();
             registry.Bind<ISynchronizationService, SyncronizationServiceWrapper>();
 
             registry.Bind<IInterviewerSynchronizationService, SynchronizationService>();
