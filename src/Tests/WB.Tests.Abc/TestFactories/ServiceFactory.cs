@@ -47,7 +47,6 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
-using WB.Core.BoundedContexts.Interviewer.Implementation.Services.OfflineSync;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
@@ -452,6 +451,7 @@ namespace WB.Tests.Abc.TestFactories
             IInterviewerInterviewAccessor interviewFactory = null,
             IHttpStatistician httpStatistician = null,
             IEnumeratorEventStorage interviewerEventStorage = null,
+            IInterviewerSettings interviewerSettings = null,
             IEventBus eventBus = null)
         {
             var syncServiceMock = synchronizationService ?? Mock.Of<ISynchronizationService>();
@@ -463,9 +463,9 @@ namespace WB.Tests.Abc.TestFactories
                 principal ?? Mock.Of<IInterviewerPrincipal>(),
                 logger ?? Mock.Of<ILogger>(),
                 userInteractionService ?? Mock.Of<IUserInteractionService>(),
-                questionnaireFactory ?? Mock.Of<IInterviewerQuestionnaireAccessor>(x => x.GetCensusQuestionnaireIdentities() == new List<QuestionnaireIdentity>() &&
-                                                                                        x.GetAllQuestionnaireIdentities() == new List<QuestionnaireIdentity>() 
-                                                                                        ),
+                questionnaireFactory ?? Mock.Of<IInterviewerQuestionnaireAccessor>(x =>
+                    x.GetCensusQuestionnaireIdentities() == new List<QuestionnaireIdentity>() &&
+                    x.GetAllQuestionnaireIdentities() == new List<QuestionnaireIdentity>()),
                 interviewFactory ?? Mock.Of<IInterviewerInterviewAccessor>(),
                 interviewMultimediaViewStorage ?? Mock.Of<IPlainStorage<InterviewMultimediaView>>(),
                 interviewFileViewStorage ?? Mock.Of<IPlainStorage<InterviewFileView>>(),
@@ -478,12 +478,11 @@ namespace WB.Tests.Abc.TestFactories
                 Mock.Of<IAssignmentDocumentsStorage>(),
                 Mock.Of<IAudioFileStorage>(),
                 Mock.Of<ITabletDiagnosticService>(),
-                Mock.Of<IInterviewerSettings>(),
+                interviewerSettings ?? Mock.Of<IInterviewerSettings>(),
                 Mock.Of<IAuditLogSynchronizer>(),
                 Mock.Of<IAuditLogService>(),
                 eventBus ?? Mock.Of<IEventBus>(),
                 interviewerEventStorage ?? Mock.Of<IEnumeratorEventStorage>(),
-                Mock.Of<ISynchronizationMode>(),
                 Mock.Of<IPlainStorage<InterviewSequenceView, Guid>>(),
                 Mock.Of<IInterviewerSynchronizationService>());
         }

@@ -4,7 +4,6 @@ using MvvmCross.Plugin.Messenger;
 using MvvmCross.Tests;
 using NSubstitute;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Interviewer.Implementation.Services.OfflineSync;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
@@ -74,7 +73,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
                     permissionsService: Mock.Of<IPermissionsService>(), 
                     nearbyConnection: Mock.Of<INearbyConnection>(x => x.Events == new Subject<INearbyEvent>()), 
                     restService: Mock.Of<IRestService>(), 
-                    synchronizationMode: Mock.Of<ISynchronizationMode>(), 
                     syncClient: Mock.Of<IOfflineSyncClient>());
         }
 
