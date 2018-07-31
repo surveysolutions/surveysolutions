@@ -1,4 +1,4 @@
-namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
+namespace WB.Core.SharedKernels.DataCollection.ValueObjects.Interview
 {
     public enum GroupStatus
     {
