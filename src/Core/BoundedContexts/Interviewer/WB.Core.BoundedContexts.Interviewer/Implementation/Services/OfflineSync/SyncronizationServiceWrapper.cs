@@ -88,22 +88,22 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public Task<byte[]> GetApplicationAsync(CancellationToken token, IProgress<TransferProgress> transferProgress = null)
         {
-            return this.onlineService.GetApplicationAsync(token, transferProgress);
+            return Service.GetApplicationAsync(token, transferProgress);
         }
 
         public Task<byte[]> GetApplicationPatchAsync(CancellationToken token, IProgress<TransferProgress> transferProgress = null)
         {
-            return this.onlineService.GetApplicationPatchAsync(token, transferProgress);
+            return Service.GetApplicationPatchAsync(token, transferProgress);
         }
 
         public Task<int?> GetLatestApplicationVersionAsync(CancellationToken token)
         {
-            return this.onlineService.GetLatestApplicationVersionAsync(token);
+            return Service.GetLatestApplicationVersionAsync(token);
         }
 
         public Task SendBackupAsync(string filePath, CancellationToken token)
         {
-            return this.onlineService.SendBackupAsync(filePath, token);
+            return Service.SendBackupAsync(filePath, token);
         }
 
         public Task<List<InterviewApiView>> GetInterviewsAsync(CancellationToken token)
