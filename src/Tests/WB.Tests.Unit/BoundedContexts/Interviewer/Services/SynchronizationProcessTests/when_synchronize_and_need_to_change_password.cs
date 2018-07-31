@@ -68,7 +68,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 synchronizationService: synchronizationServiceMock.Object,
                 interviewersPlainStorage: interviewerStorageMock.Object,
                 userInteractionService: userInteractionServiceMock.Object,
-                passwordHasher: passwordHasherMock.Object);
+                passwordHasher: passwordHasherMock.Object, 
+                interviewerSettings: Mock.Of<IInterviewerSettings>(s => s.AllowSyncWithHq == true));
 
             // Act
             await viewModel.SynchronizeAsync(new Progress<SyncProgressInfo>(), CancellationToken.None);
