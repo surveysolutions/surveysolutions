@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using WB.Core.BoundedContexts.Supervisor.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
@@ -22,9 +23,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
 
         public ISupervisorUserIdentity CurrentUserIdentity => (ISupervisorUserIdentity)base.currentUserIdentity;
 
-        protected override void UpdateUserHash(string hash)
+        protected override void UpdateUserHash(string userId, string hash)
         {
-            var user = this.usersStorage.Where(u => u.Name.ToLower() == CurrentUserIdentity.Name).FirstOrDefault();
+            var user = this.usersStorage.GetById(userId);
             if (user != null)
             {
                 user.PasswordHash = hash;
