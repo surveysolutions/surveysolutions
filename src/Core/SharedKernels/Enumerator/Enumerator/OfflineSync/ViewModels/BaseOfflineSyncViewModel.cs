@@ -144,11 +144,21 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
 
             var interviewerName = this.Principal.CurrentUserIdentity.Name;
 
-            var connectionStatus = await this.nearbyConnection
-                .RequestConnectionAsync(interviewerName, endpoint, cancellationTokenSource.Token) 
-                .ConfigureAwait(false);
+            NearbyStatus connectionStatus = null;
+            try
+            {
+                connectionStatus = await this.nearbyConnection
+                    .RequestConnectionAsync(interviewerName, endpoint, cancellationTokenSource.Token)
+                    .ConfigureAwait(false);
+            }
+            catch (NullReferenceException)
+            {
+               //research the cause of NRE
+               //occurred with second call
+            }
 
-            if(connectionStatus.Status == ConnectionStatusCode.StatusAlreadyConnectedToEndpoint ||
+            if(connectionStatus == null ||
+               connectionStatus.Status == ConnectionStatusCode.StatusAlreadyConnectedToEndpoint ||
                connectionStatus.Status == ConnectionStatusCode.StatusOutOfOrderApiCall)
                 return;
 
