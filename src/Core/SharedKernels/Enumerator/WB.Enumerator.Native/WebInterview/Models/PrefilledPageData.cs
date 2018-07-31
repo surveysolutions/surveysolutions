@@ -1,4 +1,6 @@
-﻿namespace WB.Enumerator.Native.WebInterview.Models
+﻿using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+
+namespace WB.Enumerator.Native.WebInterview.Models
 {
     public class IdentifyingQuestion
     {
