@@ -120,13 +120,5 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
 
         public IMvxCommand ShowSentItems => 
             new MvxAsyncCommand(async () => await mvxNavigationService.Navigate<SentToInterviewerViewModel>());
-
-        public IMvxCommand StartSync =>
-            new MvxCommand(StartSynchronization);
-
-        public void StartSynchronization()
-        {
-            this.messenger.Publish(new RequestSynchronizationMsg(this));
-        }
     }
 }
