@@ -254,7 +254,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 {
                     statistics.FailedToCreateInterviewsCount++;
 
-                    await this.TrySendUnexpectedExceptionToServerAsync(exception, cancellationToken);
+                    await this.TrySendUnexpectedExceptionToServerAsync(exception);
                     this.logger.Error(
                         $"Failed to create interview {interview.Id}, interviewer {this.principal.CurrentUserIdentity.Name}",
                         exception);
@@ -463,14 +463,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     this.interviewFactory.RemoveInterview(completedInterview.InterviewId);
                     statistics.SuccessfullyUploadedInterviewsCount++;
                 }
-                catch (OperationCanceledException)
-                {
-
-                }
                 catch (Exception syncException)
                 {
                     statistics.FailedToUploadInterviwesCount++;
-                    await this.TrySendUnexpectedExceptionToServerAsync(syncException, cancellationToken);
+                    await this.TrySendUnexpectedExceptionToServerAsync(syncException);
 
                     this.logger.Error($"Failed to sync interview {completedInterview.Id}. Interviewer login {this.principal.CurrentUserIdentity.Name}", syncException);
                 }

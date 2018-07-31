@@ -237,8 +237,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
         }
 
 
-        protected override void CheckAfterStartSynchronization(CancellationToken cancellationToken)
+        protected override Task CheckAfterStartSynchronization(CancellationToken cancellationToken)
         {
+            return Task.CompletedTask;
         }
 
         protected override void UpdatePasswordOfResponsible(RestCredentials credentials)
