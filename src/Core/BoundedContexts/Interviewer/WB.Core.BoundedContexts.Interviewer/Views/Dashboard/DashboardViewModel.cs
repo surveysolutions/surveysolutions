@@ -72,7 +72,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.synchronizationMode = synchronizationMode;
             this.syncClient = syncClient;
             this.Synchronization = synchronization;
-            this.syncSubscription = synchronizationCompleteSource.SynchronizationEvents.Subscribe(r => this.RefreshDashboard());
+            this.syncSubscription = synchronizationCompleteSource.SynchronizationEvents.Subscribe(r =>
+            {
+                this.RefreshDashboard();
+                this.synchronizationMode.Set(SynchronizationMode.Online);
+            });
 
             this.CreateNew = createNewViewModel;
             this.StartedInterviews = startedInterviewsViewModel;
