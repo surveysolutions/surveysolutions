@@ -2,12 +2,14 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using WB.Core.BoundedContexts.Interviewer.Implementation.Services.OfflineSync;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -25,6 +27,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
     public class InterviewerSynchronizationProcess : SynchronizationProcessBase
     {
         private readonly IInterviewerSettings interviewerSettings;
+        private readonly ISynchronizationMode synchronizationMode;
         private readonly IInterviewerPrincipal principal;
         private readonly IPlainStorage<InterviewerIdentity> interviewersPlainStorage;
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
@@ -55,6 +58,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             IAuditLogService auditLogService,
             ILiteEventBus eventBus,
             IEnumeratorEventStorage eventStore,
+            ISynchronizationMode synchronizationMode,
             IPlainStorage<InterviewSequenceView, Guid> interviewSequenceViewRepository,
             IInterviewerSynchronizationService interviewerSynchronizationService) : base(synchronizationService, interviewViewRepository, principal, logger,
             userInteractionService, questionnairesAccessor, interviewFactory, interviewMultimediaViewStorage, imagesStorage,
@@ -64,6 +68,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         {
             this.principal = principal;
             this.interviewerSettings = interviewerSettings;
+            this.synchronizationMode = synchronizationMode;
             this.interviewersPlainStorage = interviewersPlainStorage;
             this.interviewViewRepository = interviewViewRepository;
             this.passwordHasher = passwordHasher;
@@ -101,7 +106,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         protected override void OnSuccesfullSynchronization()
         {
-            if(SynchronizationType == SynchronizationType.Offline)
+            if(this.synchronizationMode.GetMode() == SynchronizationMode.Offline)
                 this.interviewerSettings.SetOfflineSynchronizationCompleted();
         }
 
@@ -109,12 +114,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         {
             get
             {
-                if (interviewerSettings.AllowSyncWithHq == false)
+                var mode = synchronizationMode.GetMode();
+                if (mode == SynchronizationMode.Offline)
                     return SynchronizationType.Offline;
-
-                return SynchronizationType.Online;
-
-                throw new ArgumentException($"Unknown synchronization mode: {interviewerSettings.AllowSyncWithHq}");
+                if (mode == SynchronizationMode.Online)
+                    return SynchronizationType.Online;
+                throw new ArgumentException($"Unknown synchronization mode: {mode}");
             }
         }
 

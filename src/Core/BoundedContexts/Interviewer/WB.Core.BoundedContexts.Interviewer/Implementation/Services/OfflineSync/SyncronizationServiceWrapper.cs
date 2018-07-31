@@ -4,11 +4,13 @@ using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 using Ncqrs.Eventing;
-using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.BoundedContexts.Interviewer.Implementation.Services.OfflineSync;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Questionnaire.Api;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 
@@ -19,20 +21,26 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
     {
         private readonly OfflineSynchronizationService offlineService;
         private readonly SynchronizationService onlineService;
-        private readonly IInterviewerSettings interviewerSettings;
+        private readonly ISynchronizationMode mode;
 
         public SyncronizationServiceWrapper(
             OfflineSynchronizationService offlineService, 
-            SynchronizationService onlineService, IInterviewerSettings interviewerSettings)
+            SynchronizationService onlineService, 
+            ISynchronizationMode mode)
         {
             this.offlineService = offlineService;
             this.onlineService = onlineService;
-            this.interviewerSettings = interviewerSettings;
+            this.mode = mode;
         }
 
-        private ISynchronizationService Service => this.interviewerSettings.AllowSyncWithHq
-            ? this.onlineService
-            : (ISynchronizationService) this.offlineService;
+        private ISynchronizationService Service
+        {
+            get
+            {
+                if (this.mode.GetMode() == SynchronizationMode.Offline) return this.offlineService;
+                return this.onlineService;
+            }
+        }
 
         public Task<string> LoginAsync(LogonInfo logonInfo, RestCredentials credentials, CancellationToken? token = null)
         {
