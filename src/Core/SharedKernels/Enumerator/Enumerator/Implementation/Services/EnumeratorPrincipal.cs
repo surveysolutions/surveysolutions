@@ -39,12 +39,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     return false;
                 }
 
+                this.currentUserIdentity = localUser;
+
                 if (verificationResult == PasswordVerificationResult.SuccessRehashNeeded)
                 {
                     UpdateUserHash(this.passwordHasher.Hash(password));
                 }
-
-                this.currentUserIdentity = localUser;
             }
 
             return this.IsAuthenticated;
