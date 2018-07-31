@@ -8,6 +8,7 @@ using Moq;
 using Ncqrs.Eventing;
 using NSubstitute;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
+using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Supervisor.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -78,6 +79,18 @@ namespace WB.Tests.Abc.TestFactories
         {
             return Mock.Of<IPrincipal>(x => x.IsAuthenticated == true &&
                                             x.CurrentUserIdentity == Create.Other.SupervisorIdentity(null, null, null));
+        }
+
+        public InterviewerIdentity InterviewerIdentity(string id = null,
+            string userName = null,
+            string passwordHash = null)
+        {
+            return new InterviewerIdentity
+            {
+                Id = id ?? Guid.NewGuid().FormatGuid(),
+                Name = userName ?? "name",
+                PasswordHash = passwordHash ?? "pswdHash"
+            };
         }
     }
 }
