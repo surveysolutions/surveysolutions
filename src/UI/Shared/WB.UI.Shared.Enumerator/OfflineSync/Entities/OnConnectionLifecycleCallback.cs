@@ -16,34 +16,24 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Entities
         }
 
         public override void OnConnectionInitiated(string endpoint, ConnectionInfo connectionInfo)
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-            this.callback.OnConnectionInitiated(new NearbyConnectionInfo
+            => this.callback.OnConnectionInitiated(new NearbyConnectionInfo
             {
-                Endpoint =  endpoint,
+                Endpoint = endpoint,
                 CancellationToken = cancellationToken,
                 EndpointName = connectionInfo.EndpointName,
                 IsIncomingConnection = connectionInfo.IsIncomingConnection,
-                AuthenticationToken  = connectionInfo.AuthenticationToken
+                AuthenticationToken = connectionInfo.AuthenticationToken
             });
-        }
 
         public override void OnConnectionResult(string endpoint, ConnectionResolution resolution)
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-            callback.OnConnectionResult(new NearbyConnectionResolution
+            => callback.OnConnectionResult(new NearbyConnectionResolution
             {
                 Endpoint = endpoint,
                 CancellationToken = cancellationToken,
                 IsSuccess = resolution.Status.IsSuccess,
                 StatusCode = resolution.Status.StatusCode
             });
-        }
 
-        public override void OnDisconnected(string endpoint)
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-            callback.OnDisconnected(endpoint);
-        }
+        public override void OnDisconnected(string endpoint) => callback.OnDisconnected(endpoint);
     }
 }
