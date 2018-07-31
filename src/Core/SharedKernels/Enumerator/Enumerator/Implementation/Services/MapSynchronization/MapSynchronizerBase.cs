@@ -141,9 +141,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
             return new SyncStatisticsApiView();
         }
 
-        protected override void CheckAfterStartSynchronization(CancellationToken cancellationToken)
+        protected override Task CheckAfterStartSynchronization(CancellationToken cancellationToken)
         {
-            
+            return Task.CompletedTask;
         }
     }
 }
