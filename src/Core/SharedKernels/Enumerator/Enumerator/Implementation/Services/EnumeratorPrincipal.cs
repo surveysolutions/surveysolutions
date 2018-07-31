@@ -39,18 +39,18 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     return false;
                 }
 
-                this.currentUserIdentity = localUser;
-
                 if (verificationResult == PasswordVerificationResult.SuccessRehashNeeded)
                 {
-                    UpdateUserHash(this.passwordHasher.Hash(password));
+                    UpdateUserHash(localUser.Id, this.passwordHasher.Hash(password));
                 }
+
+                this.currentUserIdentity = localUser;
             }
 
             return this.IsAuthenticated;
         }
 
-        protected abstract void UpdateUserHash(string hash);
+        protected abstract void UpdateUserHash(string userId, string hash);
 
         public bool SignInWithHash(string userName, string passwordHash, bool staySignedIn)
         {
