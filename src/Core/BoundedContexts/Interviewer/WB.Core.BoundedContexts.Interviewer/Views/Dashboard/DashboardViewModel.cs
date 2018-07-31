@@ -4,8 +4,6 @@ using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
-using WB.Core.BoundedContexts.Interviewer.Implementation.Services.OfflineSync;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.Messages;
@@ -34,7 +32,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private readonly IInterviewerSettings interviewerSettings;
         private readonly IPlainStorage<InterviewView> interviewsRepository;
         private readonly IAuditLogService auditLogService;
-        private readonly ISynchronizationMode synchronizationMode;
         private readonly IOfflineSyncClient syncClient;
 
         private readonly MvxSubscriptionToken startingLongOperationMessageSubscriptionToken;
@@ -60,7 +57,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             IPermissionsService permissionsService,
             INearbyConnection nearbyConnection,
             IRestService restService,
-            ISynchronizationMode synchronizationMode,
             IOfflineSyncClient syncClient) : base(principal, viewModelNavigationService, permissionsService,
             nearbyConnection, interviewerSettings, restService)
         {
@@ -69,7 +65,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.interviewerSettings = interviewerSettings;
             this.interviewsRepository = interviewsRepository;
             this.auditLogService = auditLogService;
-            this.synchronizationMode = synchronizationMode;
             this.syncClient = syncClient;
             this.Synchronization = synchronization;
             this.syncSubscription = synchronizationCompleteSource.SynchronizationEvents.Subscribe(r => this.RefreshDashboard());
@@ -354,8 +349,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
             using (new CommunicationSession())
             {
-                this.synchronizationMode.Set(SynchronizationMode.Offline);
-
                 this.RunSynchronization();
             }
         }
