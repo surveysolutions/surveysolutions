@@ -4,8 +4,7 @@ using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Tests.Abc;
 
-
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireNameValidatorTests
+namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireImportValidatorTests
 {
     internal class when_validating_ImportFromDesigner_command_and_other_deleted_questionnaire_with_such_title_exists
     {
