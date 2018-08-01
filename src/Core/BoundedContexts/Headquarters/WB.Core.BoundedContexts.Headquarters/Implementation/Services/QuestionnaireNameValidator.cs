@@ -10,11 +10,11 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 {
-    internal class QuestionnaireNameValidator : ICommandValidator<Questionnaire, ImportFromDesigner>
+    internal class QuestionnaireImportValidator : ICommandValidator<Questionnaire, ImportFromDesigner>
     {
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage;
 
-        public QuestionnaireNameValidator(IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage)
+        public QuestionnaireImportValidator(IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage)
         {
             this.questionnaireBrowseItemStorage = questionnaireBrowseItemStorage;
         }
@@ -22,16 +22,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         public void Validate(Questionnaire aggregate, ImportFromDesigner command)
         {
             if (this.DoesOtherQuestionnaireWithSameTitleExist(command.QuestionnaireId, command.Source.Title))
-                throw new QuestionnaireException(string.Format(CommandValidatorsMessages.QuestionnaireNameUniqueFormat,
-                    command.Source.Title));
+                throw new QuestionnaireException(string.Format(CommandValidatorsMessages.QuestionnaireNameUniqueFormat, command.Source.Title));
 
             if (!string.IsNullOrWhiteSpace(command.Source.VariableName))
             {
                 if (this.DoesOtherQuestionnaireHasSameQuestionnaireVariable(command.QuestionnaireId,
                     command.Source.VariableName))
-                    throw new QuestionnaireException(string.Format(
-                        CommandValidatorsMessages.QuestionnaireNameUniqueFormat,
-                        command.Source.Title));
+                    throw new QuestionnaireException(string.Format(CommandValidatorsMessages.QuestionnaireVariableUniqueFormat, command.Source.VariableName));
             }
         }
 
