@@ -257,9 +257,9 @@ namespace WB.Tests.Abc.TestFactories
             => new QuestionnaireKeyValueStorage(
                 questionnaireDocumentViewRepository ?? Mock.Of<IPlainStorage<QuestionnaireDocumentView>>());
 
-        public QuestionnaireNameValidator QuestionnaireNameValidator(
+        public QuestionnaireImportValidator QuestionnaireNameValidator(
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage = null)
-            => new QuestionnaireNameValidator(
+            => new QuestionnaireImportValidator(
                 questionnaireBrowseItemStorage ??
                 Stub<IPlainStorageAccessor<QuestionnaireBrowseItem>>.WithNotEmptyValues);
 
