@@ -10,6 +10,7 @@ using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
@@ -252,6 +253,17 @@ namespace WB.Tests.Abc
         public static IPrincipal Principal(string name, string pass)
         {
             return Mock.Of<IPrincipal>(p => p.CurrentUserIdentity == Mock.Of<IUserIdentity>(i => i.Name == "name" && i.PasswordHash == "pass"));
+        }
+
+        public static IPlainStorageAccessor<QuestionnaireBrowseItem> QuestionnaireBrowseItemRepository(params QuestionnaireBrowseItem[] questionnaireBrowseItem)
+        {
+            var questionnaireBrowseItemStorage = Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>();
+
+            Mock.Get(questionnaireBrowseItemStorage)
+                .Setup(reader => reader.Query(It.IsAny<Func<IQueryable<QuestionnaireBrowseItem>, List<QuestionnaireBrowseItem>>>()))
+                .Returns<Func<IQueryable<QuestionnaireBrowseItem>, List<QuestionnaireBrowseItem>>>(query => query.Invoke(questionnaireBrowseItem.AsQueryable()));
+
+            return questionnaireBrowseItemStorage;
         }
     }
 }
