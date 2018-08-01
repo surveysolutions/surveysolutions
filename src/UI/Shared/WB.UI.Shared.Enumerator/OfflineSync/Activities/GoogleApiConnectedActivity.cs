@@ -66,7 +66,14 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
         protected override void OnStop()
         {
             this.communicator?.StopAll();
-            this.GoogleApi?.Disconnect();
+            if (this.GoogleApi != null)
+            {
+                if (this.GoogleApi.IsConnected)
+                {
+                    this.GoogleApi.Disconnect();
+                }
+            }
+            
             if (this.bluetoothReceiver != null)
             {
                 UnregisterReceiver(this.bluetoothReceiver);
