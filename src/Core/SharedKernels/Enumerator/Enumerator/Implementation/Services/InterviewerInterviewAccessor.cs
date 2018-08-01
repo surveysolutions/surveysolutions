@@ -37,6 +37,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         private readonly IJsonAllTypesSerializer synchronizationSerializer;
         private readonly IInterviewEventStreamOptimizer eventStreamOptimizer;
         private readonly ILiteEventRegistry eventRegistry;
+        private readonly IPlainStorage<InterviewSequenceView, Guid> interviewSequenceViewRepository;
 
         public InterviewerInterviewAccessor(
             IPlainStorage<QuestionnaireView> questionnaireRepository,
@@ -51,7 +52,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             ISnapshotStoreWithCache snapshotStoreWithCache,
             IJsonAllTypesSerializer synchronizationSerializer,
             IInterviewEventStreamOptimizer eventStreamOptimizer,
-            ILiteEventRegistry eventRegistry)
+            ILiteEventRegistry eventRegistry, 
+            IPlainStorage<InterviewSequenceView, Guid> interviewSequenceViewRepository)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.prefilledQuestions = prefilledQuestions;
@@ -66,6 +68,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             this.synchronizationSerializer = synchronizationSerializer;
             this.eventStreamOptimizer = eventStreamOptimizer;
             this.eventRegistry = eventRegistry;
+            this.interviewSequenceViewRepository = interviewSequenceViewRepository;
         }
 
         public void RemoveInterview(Guid interviewId)
@@ -74,10 +77,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             this.snapshotStoreWithCache.CleanCache();
 
             this.interviewViewRepository.Remove(interviewId.FormatGuid());
+            this.interviewSequenceViewRepository.Remove(interviewId);
 
             this.RemoveInterviewImages(interviewId);
             this.eventStore.RemoveEventSourceById(interviewId);
             this.eventRegistry.RemoveAggregateRoot(interviewId.FormatGuid());
+            
         }
 
         private void RemoveInterviewImages(Guid interviewId)
