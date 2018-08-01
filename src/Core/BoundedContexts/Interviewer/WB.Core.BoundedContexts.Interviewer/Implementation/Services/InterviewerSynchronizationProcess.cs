@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services.OfflineSync;
@@ -8,6 +9,7 @@ using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -16,6 +18,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization.Steps;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -77,31 +80,21 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public override async Task Synchronize(IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken, SynchronizationStatistics statistics)
         {
-            cancellationToken.ThrowIfCancellationRequested();
-            await this.UploadInterviewsAsync(progress, statistics, cancellationToken);
+            var steps = ServiceLocator.Current.GetAllInstances<ISynchronizationStep>();
 
-            cancellationToken.ThrowIfCancellationRequested();
-            await this.assignmentsSynchronizer.SynchronizeAssignmentsAsync(progress, statistics, cancellationToken);
+            var context = new EnumeratorSynchonizationContext
+            {
+                Progress = progress,
+                CancellationToken = cancellationToken,
+                Statistics = statistics
+            };
 
-            cancellationToken.ThrowIfCancellationRequested();
-            await this.SyncronizeCensusQuestionnaires(progress, statistics, cancellationToken);
-
-            cancellationToken.ThrowIfCancellationRequested();
-            await this.CheckObsoleteQuestionnairesAsync(progress, statistics, cancellationToken);
-
-            cancellationToken.ThrowIfCancellationRequested();
-            await this.DownloadInterviewsAsync(statistics, progress, cancellationToken);
-
-            cancellationToken.ThrowIfCancellationRequested();
-            await this.logoSynchronizer.DownloadCompanyLogo(progress, cancellationToken);
-
-            cancellationToken.ThrowIfCancellationRequested();
-            await this.auditLogSynchronizer.SynchronizeAuditLogAsync(progress, statistics, cancellationToken);
-
-            cancellationToken.ThrowIfCancellationRequested();
-            await this.UpdateApplicationAsync(progress, cancellationToken);
-
-            await this.auditLogSynchronizer.SynchronizeAuditLogAsync(progress, statistics, cancellationToken);
+            foreach (var step in steps.OrderBy(x => x.SortOrder))
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                step.Context = context;
+                await step.ExecuteAsync();
+            }
         }
 
         protected override void OnSuccesfullSynchronization()
