@@ -75,7 +75,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.syncSubscription = synchronizationCompleteSource.SynchronizationEvents.Subscribe(r =>
             {
                 this.RefreshDashboard();
-                this.synchronizationMode.Set(SynchronizationMode.Online);
             });
 
             this.CreateNew = createNewViewModel;
@@ -223,6 +222,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 return;
             }
 
+            this.synchronizationMode.Set(SynchronizationWithHqEnabled 
+                ? SynchronizationMode.Online 
+                : SynchronizationMode.Offline);
+
             this.Synchronization.IsSynchronizationInProgress = true;
             this.Synchronization.Synchronize();
         }
@@ -310,7 +313,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         private void StartOfflineSynchronization()
         {
-            this.StopDiscovery();
             this.Synchronization.CancelSynchronizationCommand.Execute();
             
             this.cancellationTokenSource = new CancellationTokenSource();
@@ -366,7 +368,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         protected override void OnDeviceDisconnected(string name)
         {
             if (this.Synchronization.Status != SynchronizationStatus.Success)
+            {
                 this.ShowSynchronizationError(InterviewerUIResources.SendToSupervisor_SupervisorTerminateTransfering);
+                this.Synchronization.SyncBgService?.CurrentProgress?.CancellationTokenSource?.Cancel();
+            }
         }
 
         protected override void OnDeviceFound(string name)
@@ -395,20 +400,26 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.Synchronization.IsSynchronizationInProgress = false;
         }
 
-        private void Synchronization_OnCancel(object sender, EventArgs e) => this.StopDiscovery();
+        private void Synchronization_OnCancel(object sender, EventArgs e)
+        {
+        }
 
         private async void Synchronization_OnProgressChanged(object sender, SharedKernels.Enumerator.Services.Synchronization.SyncProgressInfo e)
         {
-            if (this.cancellationTokenSource != null)
+            if (this.cancellationTokenSource == null || this.cancellationTokenSource.IsCancellationRequested)
             {
-                var request = new SendSyncProgressInfoRequest
-                {
-                    Info = e,
-                    InterviewerLogin = this.principal.CurrentUserIdentity.Name
-                };
-
-                await syncClient.SendAsync(request, this.cancellationTokenSource.Token);
+                return;
             }
+
+            if (SynchronizationWithHqEnabled) return;
+
+            var request = new SendSyncProgressInfoRequest
+            {
+                Info = e,
+                InterviewerLogin = this.principal.CurrentUserIdentity.Name
+            };
+
+            await syncClient.SendAsync(request, this.cancellationTokenSource.Token);
         }
 
         #endregion

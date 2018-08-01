@@ -108,6 +108,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
 
             try
             {
+                
                 payload = await PreparePayload(endpoint, Guid.NewGuid(), message, true);
                 payload.Comment = $"Package {typeof(TRequest).Name} -> {typeof(TResponse).Name}";
                 var tsc = new TaskCompletionSourceWithProgress(payload, progress, logger, cancellationToken);
@@ -513,6 +514,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             public void SetCanceled()
             {
                 logger.Verbose($"Payload: {Payload.Comment}");
+                TaskCompletionSource.TrySetCanceled();
                // SetCanceled(null);
                 isCompleted = true;
             }
