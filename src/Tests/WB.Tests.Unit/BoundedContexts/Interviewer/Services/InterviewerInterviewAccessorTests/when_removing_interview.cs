@@ -4,10 +4,7 @@ using FluentAssertions;
 using Moq;
 using Ncqrs.Eventing.Storage;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
-using WB.Core.BoundedContexts.Interviewer.Views;
-using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.WriteSide;
@@ -36,6 +33,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
             inMemoryFileViewRepository = new SqliteInmemoryStorage<InterviewFileView>();
             inMemoryFileViewRepository.Store(interviewFileViews);
 
+            inMemoryFileViewRepository.Store(interviewFileViews);
+
             interviewerInterviewAccessor = Create.Service.InterviewerInterviewAccessor(
                 commandService: mockOfCommandService.Object,
                 interviewViewRepository: interviewViewRepositoryMock.Object,
@@ -44,7 +43,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
                 principal: principal,
                 eventStore: eventStore.Object,
                 interviewMultimediaViewRepository: inMemoryMultimediaViewRepository,
-                interviewFileViewRepository: inMemoryFileViewRepository);
+                interviewFileViewRepository: inMemoryFileViewRepository,
+                interviewSequenceStorage: sequenceStorage.Object);
 
             BecauseOf();
         }
@@ -72,6 +72,10 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
         [Test]
         public void should_remove_events_by_specified_interview() =>
              eventStore.Verify(x => x.RemoveEventSourceById(interviewId), Times.Once);
+
+        [Test]
+        public void should_remove_sequence_for_specified_interview() =>
+            sequenceStorage.Verify(x => x.Remove(interviewId), Times.Once);
 
         private static readonly string interviewStringId = "11111111111111111111111111111111";
         private static readonly Guid interviewId = Guid.Parse(interviewStringId);
@@ -111,5 +115,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
         private static Mock<IEnumeratorEventStorage> eventStore;
         private static IPlainStorage<InterviewMultimediaView> inMemoryMultimediaViewRepository;
         private static IPlainStorage<InterviewFileView> inMemoryFileViewRepository;
+        private static readonly Mock<IPlainStorage<InterviewSequenceView, Guid>> sequenceStorage = new Mock<IPlainStorage<InterviewSequenceView, Guid>>();
     }
 }
