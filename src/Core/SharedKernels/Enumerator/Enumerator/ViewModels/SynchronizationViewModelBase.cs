@@ -73,11 +73,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 if (syncProgressInfo.TransferProgress == null)
                 {
                     this.IsSynchronizationInProgress = syncProgressInfo.IsRunning;
-                    this.ProcessOperation = syncProgressInfo.Title;
-                    this.ProcessOperationDescription = syncProgressInfo.Description;
+
+                    if (syncProgressInfo.Title != null || syncProgressInfo.Description != null)
+                    {
+                        this.ProcessOperation = syncProgressInfo.Title;
+                        this.ProcessOperationDescription = syncProgressInfo.Description;
+                        this.Status = syncProgressInfo.Status;
+                    }
+
                     this.Statistics = syncProgressInfo.Statistics;
 
-                    this.Status = syncProgressInfo.Status;
                     this.SynchronizationErrorOccured = this.SynchronizationErrorOccured || syncProgressInfo.HasErrors;
 
                     this.HasUserAnotherDevice = syncProgressInfo.UserIsLinkedToAnotherDevice;

@@ -60,7 +60,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             this.enumeratorSettings = enumeratorSettings;
         }
 
-
         public abstract Task Synchronize(IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken,
             SynchronizationStatistics statistics);
 
