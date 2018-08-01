@@ -67,13 +67,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels
                 var isAllowedGetLocation = await TryRequestLocationPermission();
                 if (!isAllowedGetLocation)
                     return;
-
-                if (!this.restService.IsValidHostAddress(this.settings.Endpoint))
-                {
-                    this.OnConnectionError(InterviewerUIResources.InvalidEndpoint, ConnectionStatusCode.StatusEndpointUnknown);
-                    return;
-                }
-
+                
                 await this.OnStartDiscovery();
             }
             finally
