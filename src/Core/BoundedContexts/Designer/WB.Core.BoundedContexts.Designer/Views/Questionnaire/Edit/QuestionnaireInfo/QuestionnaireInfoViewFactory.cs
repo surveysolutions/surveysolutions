@@ -48,9 +48,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.Questionnair
             {
                 QuestionnaireId = questionnaireId,
                 Title = questionnaireDocument.Title,
-                Variable = String.IsNullOrEmpty(questionnaireDocument.VariableName) 
-                    ? Aggregates.Questionnaire.DefaultQuestionnaireVariableName 
-                    : questionnaireDocument.VariableName,
+                Variable = questionnaireDocument.VariableName,
                 Chapters = new List<ChapterInfoView>(),
                 IsPublic = questionnaireDocument.IsPublic
             };
