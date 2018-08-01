@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireImportValida
                 .Setup(reader => reader.Query(Moq.It.IsAny<Func<IQueryable<QuestionnaireBrowseItem>, List<QuestionnaireBrowseItem>>>()))
                 .Returns<Func<IQueryable<QuestionnaireBrowseItem>, List<QuestionnaireBrowseItem>>>(query => query.Invoke(new[]
                 {
-                      Create.Entity.QuestionnaireBrowseItem(title: "different title", questionnaireId: differentQuestionnaireId),
+                      Create.Entity.QuestionnaireBrowseItem(title: "different title", variable:null,  questionnaireId: differentQuestionnaireId),
                 }.AsQueryable()));
 
             validator = Create.Service.QuestionnaireNameValidator(questionnaireBrowseItemStorage: questionnaireBrowseItemStorage);
