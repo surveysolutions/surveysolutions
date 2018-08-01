@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -114,20 +115,27 @@ namespace WB.UI.Headquarters.API
         {
             if (this.fileSystemAccessor.IsFileExists(pathToFile))
             {
-                var response = new HttpResponseMessage(HttpStatusCode.OK)
-                {
-                    Content = new StreamContent(this.fileSystemAccessor.ReadFile(pathToFile))
-                };
-                response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.android.package-archive");
-                response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
-                {
-                    FileName = responseFileName 
-                };
-
-                return response;
+                return HttpResponseMessage(pathToFile, responseFileName);
             }
 
             return this.Request.CreateErrorResponse(HttpStatusCode.NotFound, TabletSyncMessages.FileWasNotFound);
+        }
+
+        private HttpResponseMessage HttpResponseMessage(string pathToFile, string responseFileName)
+        {
+            if (!this.fileSystemAccessor.IsFileExists(pathToFile))
+                return this.Request.CreateErrorResponse(HttpStatusCode.NotFound, TabletSyncMessages.FileWasNotFound);
+
+            Stream fileStream = new FileStream(pathToFile, FileMode.Open, FileAccess.Read);
+            var response = new ProgressiveDownload(this.Request).ResultMessage(fileStream,
+                @"application/vnd.android.package-archive");
+
+            response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue(@"attachment")
+            {
+                FileName = responseFileName
+            };
+
+            return response;
         }
 
         [HttpGet]
