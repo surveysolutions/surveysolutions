@@ -24,6 +24,28 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             if (this.DoesOtherQuestionnaireWithSameTitleExist(command.QuestionnaireId, command.Source.Title))
                 throw new QuestionnaireException(string.Format(CommandValidatorsMessages.QuestionnaireNameUniqueFormat,
                     command.Source.Title));
+
+            if (!string.IsNullOrWhiteSpace(command.Source.VariableName))
+            {
+                if (this.DoesOtherQuestionnaireHasSameQuestionnaireVariable(command.QuestionnaireId,
+                    command.Source.VariableName))
+                    throw new QuestionnaireException(string.Format(
+                        CommandValidatorsMessages.QuestionnaireNameUniqueFormat,
+                        command.Source.Title));
+            }
+        }
+
+        private bool DoesOtherQuestionnaireHasSameQuestionnaireVariable(Guid questionnaireId, string variableName)
+        {
+            var questionairesWithSameVariable = this.questionnaireBrowseItemStorage.Query(_ => _
+                .Where(questionnaire => !questionnaire.IsDeleted)
+                .Where(questionnaire => questionnaire.Variable.ToLower() == variableName.ToLower())
+                .ToList());
+
+            var otherQuestionnairesWithSameTitle = questionairesWithSameVariable
+                .Where(questionnaire => questionnaire.QuestionnaireId != questionnaireId);
+
+            return otherQuestionnairesWithSameTitle.Any();
         }
 
         private bool DoesOtherQuestionnaireWithSameTitleExist(Guid questionnaireId, string questionnaireTitle)
