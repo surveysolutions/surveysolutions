@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Supervisor.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -13,6 +14,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization.Steps;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -82,11 +84,27 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
         public override async Task Synchronize(IProgress<SyncProgressInfo> progress,
             CancellationToken cancellationToken, SynchronizationStatistics statistics)
         {
-            cancellationToken.ThrowIfCancellationRequested();
-            await this.UploadInterviewsAsync(progress, statistics, cancellationToken);
+            var steps = ServiceLocator.Current.GetAllInstances<ISynchronizationStep>();
 
-            cancellationToken.ThrowIfCancellationRequested();
-            await this.assignmentsSynchronizer.SynchronizeAssignmentsAsync(progress, statistics, cancellationToken);
+            var context = new EnumeratorSynchonizationContext
+            {
+                Progress = progress,
+                CancellationToken = cancellationToken,
+                Statistics = statistics
+            };
+
+            foreach (var step in steps.OrderBy(x => x.SortOrder))
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                step.Context = context;
+                await step.ExecuteAsync();
+            }
+
+            //cancellationToken.ThrowIfCancellationRequested();
+            //await this.UploadInterviewsAsync(progress, statistics, cancellationToken);
+
+            //cancellationToken.ThrowIfCancellationRequested();
+            //await this.assignmentsSynchronizer.SynchronizeAssignmentsAsync(progress, statistics, cancellationToken);
 
             cancellationToken.ThrowIfCancellationRequested();
             await this.SyncronizeSupervisor(progress, statistics, cancellationToken);
