@@ -227,7 +227,8 @@ namespace WB.Tests.Abc.TestFactories
                 snapshotStoreWithCache ?? Mock.Of<ISnapshotStoreWithCache>(),
                 synchronizationSerializer ?? Mock.Of<IJsonAllTypesSerializer>(),
                 Mock.Of<IInterviewEventStreamOptimizer>(),
-                Mock.Of<ILiteEventRegistry>());
+                Mock.Of<ILiteEventRegistry>(),
+                Mock.Of<IPlainStorage<InterviewSequenceView, Guid>>());
 
         public InterviewEventStreamOptimizer InterviewEventStreamOptimizer()
             => new InterviewEventStreamOptimizer();
