@@ -50,7 +50,6 @@ namespace WB.UI.Supervisor.ServiceLocation
             registry.BindAsSingleton<ISnapshotStoreWithCache, InMemorySnapshotStoreWithCache>();
 
             registry.Bind<INetworkService, AndroidNetworkService>();
-            registry.Bind<IHttpClientFactory, AndroidHttpClientFactory>();
             registry.BindAsSingletonWithConstructorArgument<IRestService, RestService>("restServicePointManager", null);
             registry.Bind<IGroupStateCalculationStrategy, SupervisorGroupStateCalculationStrategy>();
             //registry.Bind<IInterviewUniqueKeyGenerator, InterviewerInterviewUniqueKeyGenerator>();
