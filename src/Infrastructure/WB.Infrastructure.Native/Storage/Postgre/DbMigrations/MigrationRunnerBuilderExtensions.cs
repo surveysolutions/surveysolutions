@@ -23,7 +23,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
                     sp.GetRequiredService<PostgresDbFactory>(),
                     sp.GetRequiredService<PostgresGenerator>(),
                     sp.GetRequiredService<ILogger<PostgresProcessor>>(),
-                    sp.GetRequiredService<IOptions<ProcessorOptions>>(),
+                    sp.GetRequiredService<IOptionsSnapshot<ProcessorOptions>>(),
                     sp.GetRequiredService<IConnectionStringAccessor>()))
                 .AddScoped<IMigrationProcessor>(sp => sp.GetRequiredService<PostgresProcessor>())
                 .AddScoped<PostgresQuoter>()
