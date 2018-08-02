@@ -18,7 +18,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
 {
     public class InterviewerDownloadInterviews : DownloadInterviews
     {
-        public InterviewerDownloadInterviews(ISynchronizationService synchronizationService, IQuestionnaireDownloader questionnaireDownloader, IPlainStorage<InterviewSequenceView, Guid> interviewSequenceViewRepository, IPlainStorage<InterviewView> interviewViewRepository, ILiteEventBus eventBus, IEnumeratorEventStorage eventStore, ILogger logger, IInterviewsRemover interviewsRemover, int sortOder) : base(synchronizationService, questionnaireDownloader, interviewSequenceViewRepository, interviewViewRepository, eventBus, eventStore, logger, interviewsRemover, sortOder)
+        public InterviewerDownloadInterviews(ISynchronizationService synchronizationService,
+            IQuestionnaireDownloader questionnaireDownloader, 
+            IPlainStorage<InterviewSequenceView, Guid> interviewSequenceViewRepository, 
+            IPlainStorage<InterviewView> interviewViewRepository, 
+            ILiteEventBus eventBus, 
+            IEnumeratorEventStorage eventStore, 
+            ILogger logger, 
+            IInterviewsRemover interviewsRemover, int sortOrder) : base(synchronizationService, questionnaireDownloader, interviewSequenceViewRepository, interviewViewRepository, eventBus, eventStore, logger, interviewsRemover, sortOrder)
         {
         }
 

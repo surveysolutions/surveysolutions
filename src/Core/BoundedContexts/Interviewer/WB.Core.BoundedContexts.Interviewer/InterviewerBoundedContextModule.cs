@@ -13,15 +13,15 @@ namespace WB.Core.BoundedContexts.Interviewer
     {
         public void Load(IIocRegistry registry)
         {
-            registry.Bind<ISynchronizationStep, InterviewerUploadInterviews>(new ConstructorArgument("sortOrder", context => 0));
-            registry.Bind<ISynchronizationStep, SynchronizeAssignments>(new ConstructorArgument("sortOrder", context => 10));
-            registry.Bind<ISynchronizationStep, CensusQuestionnairesSynchronization>(new ConstructorArgument("sortOrder", context => 20));
-            registry.Bind<ISynchronizationStep, CheckObsoleteQuestionnairesAsync>(new ConstructorArgument("sortOrder", context => 30));
-            registry.Bind<ISynchronizationStep, InterviewerDownloadInterviews>(new ConstructorArgument("sortOrder", context => 40));
-            registry.Bind<ISynchronizationStep, SynchronizeLogo>(new ConstructorArgument("sortOrder", context => 50));
-            registry.Bind<ISynchronizationStep, SynchronizeAuditLog>(new ConstructorArgument("sortOrder", context => 60));
-            registry.Bind<ISynchronizationStep, InterviewerUpdateApplication>(new ConstructorArgument("sortOrder", context => 70));
-            registry.Bind<ISynchronizationStep, SynchronizeAuditLog>(new ConstructorArgument("sortOrder", context => 80));
+            registry.BindWithConstructorArgument<ISynchronizationStep, InterviewerUploadInterviews>("sortOrder", 0);
+            registry.BindWithConstructorArgument<ISynchronizationStep, SynchronizeAssignments>("sortOrder", 10);
+            registry.BindWithConstructorArgument<ISynchronizationStep, CensusQuestionnairesSynchronization>("sortOrder", 20);
+            registry.BindWithConstructorArgument<ISynchronizationStep, CheckObsoleteQuestionnairesAsync>("sortOrder", 30);
+            registry.BindWithConstructorArgument<ISynchronizationStep, InterviewerDownloadInterviews>("sortOrder", 40);
+            registry.BindWithConstructorArgument<ISynchronizationStep, SynchronizeLogo>("sortOrder", 50);
+            registry.BindWithConstructorArgument<ISynchronizationStep, SynchronizeAuditLog>("sortOrder", 60);
+            registry.BindWithConstructorArgument<ISynchronizationStep, InterviewerUpdateApplication>("sortOrder", 70);
+            registry.BindWithConstructorArgument<ISynchronizationStep, SynchronizeAuditLog>("sortOrder", 80);
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
