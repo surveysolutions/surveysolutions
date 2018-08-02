@@ -82,14 +82,15 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 isTextInputPassword: true);
         }
 
-        protected async Task TrySendUnexpectedExceptionToServerAsync(Exception exception,
-            CancellationToken cancellationToken)
+        protected async Task TrySendUnexpectedExceptionToServerAsync(Exception exception)
         {
+            if (exception.GetSelfOrInnerAs<OperationCanceledException>() != null)
+                return;
+
             try
             {
                 await this.synchronizationService.SendUnexpectedExceptionAsync(
-                    this.ToUnexpectedExceptionApiView(exception),
-                    cancellationToken);
+                    this.ToUnexpectedExceptionApiView(exception), CancellationToken.None);
             }
             catch (Exception ex)
             {
@@ -225,7 +226,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
                 await this.synchronizationService.CanSynchronizeAsync(this.restCredentials, cancellationToken);
 
-                CheckAfterStartSynchronization(cancellationToken);
+                await CheckAfterStartSynchronization(cancellationToken);
 
                 cancellationToken.ThrowIfCancellationRequested();
 
@@ -245,7 +246,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     }
                     catch (Exception e)
                     {
-                        await this.TrySendUnexpectedExceptionToServerAsync(e, cancellationToken);
+                        await this.TrySendUnexpectedExceptionToServerAsync(e);
                     }
                 }
 
@@ -267,7 +268,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     }
                     catch (Exception e)
                     {
-                        await this.TrySendUnexpectedExceptionToServerAsync(e, cancellationToken);
+                        await this.TrySendUnexpectedExceptionToServerAsync(e);
                     }
                 }
 
@@ -383,7 +384,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     Statistics = statistics
                 });
 
-                await this.TrySendUnexpectedExceptionToServerAsync(ex, cancellationToken);
+                await this.TrySendUnexpectedExceptionToServerAsync(ex);
 
                 auditLogService.Write(new SynchronizationFailedAuditLogEntity(ex));
 
@@ -415,7 +416,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
         protected virtual void OnSuccesfullSynchronization() { }
 
-        protected abstract void CheckAfterStartSynchronization(CancellationToken cancellationToken);
+        protected abstract Task CheckAfterStartSynchronization(CancellationToken cancellationToken);
 
         protected abstract void UpdatePasswordOfResponsible(RestCredentials credentials);
     }
