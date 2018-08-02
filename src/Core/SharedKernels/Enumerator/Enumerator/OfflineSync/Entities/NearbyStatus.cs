@@ -7,6 +7,7 @@
         public bool IsInterrupted { get; set; }
 
         public bool IsSuccess { get; set; }
+
         public ConnectionStatusCode Status { get; set; }
 
         public int StatusCode { get; set; }
@@ -16,6 +17,14 @@
         public static NearbyStatus Ok = new NearbyStatus
         {
             IsSuccess = true
+        };
+
+        public static NearbyStatus NotConnected = new NearbyStatus
+        {
+            IsSuccess = false,
+            IsCanceled = true,
+            IsInterrupted = false,
+            Status = ConnectionStatusCode.StatusOutOfOrderApiCall
         };
     }
 }
