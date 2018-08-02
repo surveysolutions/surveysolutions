@@ -213,7 +213,8 @@ namespace WB.Tests.Abc.TestFactories
             IEventSourcedAggregateRootRepositoryWithCache aggregateRootRepositoryWithCache = null,
             ISnapshotStoreWithCache snapshotStoreWithCache = null,
             IPlainStorage<InterviewMultimediaView> interviewMultimediaViewRepository = null,
-            IPlainStorage<InterviewFileView> interviewFileViewRepository = null)
+            IPlainStorage<InterviewFileView> interviewFileViewRepository = null,
+            IPlainStorage<InterviewSequenceView, Guid> interviewSequenceStorage = null)
             => new InterviewerInterviewAccessor(
                 questionnaireRepository ?? Mock.Of<IPlainStorage<QuestionnaireView>>(),
                 Mock.Of<IPlainStorage<PrefilledQuestionView>>(),
@@ -227,7 +228,8 @@ namespace WB.Tests.Abc.TestFactories
                 snapshotStoreWithCache ?? Mock.Of<ISnapshotStoreWithCache>(),
                 synchronizationSerializer ?? Mock.Of<IJsonAllTypesSerializer>(),
                 Mock.Of<IInterviewEventStreamOptimizer>(),
-                Mock.Of<ILiteEventRegistry>());
+                Mock.Of<ILiteEventRegistry>(),
+                interviewSequenceStorage ?? Mock.Of<IPlainStorage<InterviewSequenceView, Guid>>());
 
         public InterviewEventStreamOptimizer InterviewEventStreamOptimizer()
             => new InterviewEventStreamOptimizer();
@@ -256,9 +258,9 @@ namespace WB.Tests.Abc.TestFactories
             => new QuestionnaireKeyValueStorage(
                 questionnaireDocumentViewRepository ?? Mock.Of<IPlainStorage<QuestionnaireDocumentView>>());
 
-        public QuestionnaireNameValidator QuestionnaireNameValidator(
+        public QuestionnaireImportValidator QuestionnaireNameValidator(
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage = null)
-            => new QuestionnaireNameValidator(
+            => new QuestionnaireImportValidator(
                 questionnaireBrowseItemStorage ??
                 Stub<IPlainStorageAccessor<QuestionnaireBrowseItem>>.WithNotEmptyValues);
 
