@@ -1,45 +1,46 @@
-﻿using FluentMigrator;
-using FluentMigrator.Runner;
-using FluentMigrator.Runner.Announcers;
+﻿using FluentMigrator.Runner;
 using FluentMigrator.Runner.Initialization;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.GenericSubdomains.Portable.Services;
+using FluentMigrator.Runner.Processors;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
 {
     public static class DbMigrationsRunner
     {
-        public class MigrationOptions : IMigrationProcessorOptions
+        public static void MigrateToLatest(string connectionString, string schemaName,
+            DbUpgradeSettings dbUpgradeSettings)
         {
-            public bool PreviewOnly { get; set; }
-            public string ProviderSwitches { get; set; }
-            public int Timeout { get; set; }
-        }
+            var serviceProvider = new ServiceCollection()
+                // Logging is the replacement for the old IAnnouncer
+                .AddSingleton<ILoggerProvider, NLogLoggerProvider>()
+                .AddSingleton(new DefaultConventionSet(schemaName, workingDirectory: null))
+                .Configure<ProcessorOptions>(opt => { opt.PreviewOnly = false; })
+                .Configure<TypeFilterOptions>(opt => { opt.Namespace = dbUpgradeSettings.MigrationsNamespace; })
+                // Registration of all FluentMigrator-specific services
+                .AddFluentMigratorCore()
+                // Configure the runner
+                .ConfigureRunner(
+                    builder => builder
+                        // Add Postgres
+                        .AddPostgres(schemaName)
+                        // The Postgres connection string
+                        .WithGlobalConnectionString(connectionString)
+                        // Specify the assembly with the migrations
+                        .WithMigrationsIn(dbUpgradeSettings.MigrationsAssembly))
+                .BuildServiceProvider();
 
-        public static void MigrateToLatest(string connectionString, string schemaName, DbUpgradeSettings dbUpgradeSettings)
-        {
-            var logger = ServiceLocator.Current.GetInstance<ILoggerProvider>().GetForType(typeof(DbMigrationsRunner));
-            var announcer = new TextWriterAnnouncer(s => logger.Info(s))
+            // Put the database update into a scope to ensure
+            // that all resources will be disposed.
+            using (var scope = serviceProvider.CreateScope())
             {
-                ShowSql = true
-            }; 
+                // Instantiate the runner
+                var runner = scope.ServiceProvider.GetRequiredService<IMigrationRunner>();
 
-            var migrationContext = new RunnerContext(announcer)
-            {
-                Namespace = dbUpgradeSettings.MigrationsNamespace
-            };
-
-            var options = new MigrationOptions
-            {
-                PreviewOnly = false
-            };
-
-            var factory = new InSchemaPostgresProcessorFactory(schemaName);
-            using (var processor = factory.Create(connectionString, announcer, options))
-            {
-                var runner = new MigrationRunner(dbUpgradeSettings.MigrationsAssembly, migrationContext, processor);
+                // Execute the migrations
                 runner.MigrateUp();
             }
         }
     }
+
 }
