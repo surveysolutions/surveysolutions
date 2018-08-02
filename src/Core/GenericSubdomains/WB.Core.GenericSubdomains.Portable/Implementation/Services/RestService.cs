@@ -101,7 +101,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             };
 
             request.Headers.Add("User-Agent", this.restServiceSettings.UserAgent);
-            request.Headers.Add("Accept-Encoding", "gzip,deflate");
+            //request.Headers.Add("Accept-Encoding", "gzip,deflate");//moved to handler
 
             if (forceNoCache)
             {
