@@ -72,7 +72,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.synchronizationMode = synchronizationMode;
             this.syncClient = syncClient;
             this.Synchronization = synchronization;
-            this.syncSubscription = synchronizationCompleteSource.SynchronizationEvents.Subscribe(r => this.RefreshDashboard());
+            this.syncSubscription = synchronizationCompleteSource.SynchronizationEvents.Subscribe(r =>
+            {
+                this.RefreshDashboard();
+                this.synchronizationMode.Set(SynchronizationMode.Online);
+            });
 
             this.CreateNew = createNewViewModel;
             this.StartedInterviews = startedInterviewsViewModel;
@@ -308,6 +312,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         {
             this.StopDiscovery();
             this.Synchronization.CancelSynchronizationCommand.Execute();
+            
+            this.cancellationTokenSource = new CancellationTokenSource();
 
             this.Synchronization.Status = SynchronizationStatus.Started;
             this.Synchronization.ProcessOperation = InterviewerUIResources.SendToSupervisor_LookingForSupervisor;
@@ -321,9 +327,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         protected override async Task OnStartDiscovery()
         {
-            this.cancellationTokenSource?.Cancel();
-            this.cancellationTokenSource = new CancellationTokenSource();
-
             var discoveryStatus = await this.nearbyConnection.StartDiscoveryAsync(this.GetServiceName(), cancellationTokenSource.Token);
             if (!discoveryStatus.IsSuccess)
                 this.OnConnectionError(discoveryStatus.StatusMessage, discoveryStatus.Status);
