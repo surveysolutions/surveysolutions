@@ -111,11 +111,11 @@
     <Reference Include="Esri.ArcGISRuntime, Version=100.2.1.0, Culture=neutral, PublicKeyToken=8fc3cc631e44ad86, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Esri.ArcGISRuntime.WPF.100.2.1\lib\net452\Esri.ArcGISRuntime.dll</HintPath>
     </Reference>
-    <Reference Include="FluentMigrator, Version=3.0.0.0, Culture=neutral, PublicKeyToken=aacfc7de5acabf05, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\FluentMigrator.3.0.0\lib\net461\FluentMigrator.dll</HintPath>
+    <Reference Include="FluentMigrator, Version=3.1.3.0, Culture=neutral, PublicKeyToken=aacfc7de5acabf05, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\FluentMigrator.3.1.3\lib\net461\FluentMigrator.dll</HintPath>
     </Reference>
-    <Reference Include="FluentMigrator.Abstractions, Version=3.0.0.0, Culture=neutral, PublicKeyToken=aacfc7de5acabf05, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\FluentMigrator.Abstractions.3.0.0\lib\net461\FluentMigrator.Abstractions.dll</HintPath>
+    <Reference Include="FluentMigrator.Abstractions, Version=3.1.3.0, Culture=neutral, PublicKeyToken=aacfc7de5acabf05, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\FluentMigrator.Abstractions.3.1.3\lib\net461\FluentMigrator.Abstractions.dll</HintPath>
     </Reference>
     <Reference Include="HtmlSanitizationLibrary, Version=4.3.0.0, Culture=neutral, PublicKeyToken=d127efab8a9c114f, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\AntiXSS.4.3.0\lib\net40\HtmlSanitizationLibrary.dll</HintPath>
