@@ -109,7 +109,11 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
 
         public void Bind<TInterface, TImplementation>(params ConstructorArgument[] constructorArguments) where TImplementation : TInterface
         {
-            throw new NotImplementedException();
+            var registrationBuilder = containerBuilder.RegisterType<TImplementation>().As<TInterface>();
+            foreach (var constructorArgument in constructorArguments)
+            {
+                registrationBuilder.WithParameter(constructorArgument.Name, constructorArgument.Value);
+            }
         }
 
         public void Bind<TImplementation>()
@@ -119,7 +123,8 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
 
         public void BindWithConstructorArgument<TInterface, TImplementation>(string argumentName, object argumentValue) where TImplementation : TInterface
         {
-            throw new NotImplementedException();
+            containerBuilder.RegisterType<TImplementation>().As<TInterface>()
+                .WithParameter(argumentName, argumentValue);
         }
 
         public void BindGeneric(Type implemenation)
