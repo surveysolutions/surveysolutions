@@ -8,8 +8,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
         public override void Up()
         {
             Create.Column("clientkey").OnTable("interviewsummaries")
-                .AsString(12).Nullable()
-                .WithColumnDescription("Human id assigned by IN client");
+                .AsString(12).Nullable();
 
             Delete.Index("interviewsummaries_unique_key").OnTable("interviewsummaries");
             Create.Index("interviewsummaries_unique_key").OnTable("interviewsummaries")
