@@ -27,7 +27,9 @@ namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
                         // The Postgres connection string
                         .WithGlobalConnectionString(connectionString)
                         // Specify the assembly with the migrations
-                        .WithMigrationsIn(dbUpgradeSettings.MigrationsAssembly))
+                        .ScanIn(dbUpgradeSettings.MigrationsAssembly)
+                        .For
+                        .Migrations())
                 .BuildServiceProvider();
 
             // Put the database update into a scope to ensure
