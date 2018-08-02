@@ -14,7 +14,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
             var serviceProvider = new ServiceCollection()
                 // Logging is the replacement for the old IAnnouncer
                 .AddSingleton<ILoggerProvider, NLogLoggerProvider>()
-                .AddSingleton(new DefaultConventionSet(schemaName, workingDirectory: null))
+                .AddSingleton(new DefaultConventionSet(defaultSchemaName: null, workingDirectory: null))
                 .Configure<ProcessorOptions>(opt => { opt.PreviewOnly = false; })
                 .Configure<TypeFilterOptions>(opt => { opt.Namespace = dbUpgradeSettings.MigrationsNamespace; })
                 // Registration of all FluentMigrator-specific services
@@ -28,8 +28,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
                         .WithGlobalConnectionString(connectionString)
                         // Specify the assembly with the migrations
                         .ScanIn(dbUpgradeSettings.MigrationsAssembly)
-                        .For
-                        .Migrations())
+                        .For.Migrations()
+                        .For.EmbeddedResources())
                 .BuildServiceProvider();
 
             // Put the database update into a scope to ensure

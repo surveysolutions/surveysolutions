@@ -1,4 +1,5 @@
 ﻿using FluentMigrator.Expressions;
+using FluentMigrator.Model;
 using FluentMigrator.Runner.Generators.Postgres;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
@@ -138,6 +139,25 @@ namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
         {
             expression.SchemaName = this.schemaName;
             return base.Generate(expression);
+        }
+
+        public override string GetUniqueString(CreateIndexExpression column)
+        {
+            column.Index.SchemaName = this.schemaName;
+            return base.GetUniqueString(column);
+        }
+
+        public override string GenerateForeignKeyName(ForeignKeyDefinition foreignKey)
+        {
+            foreignKey.ForeignTableSchema = this.schemaName;
+            foreignKey.PrimaryTableSchema = this.schemaName;
+            return base.GenerateForeignKeyName(foreignKey);
+        }
+
+        public override string GetClusterTypeString(CreateIndexExpression column)
+        {
+            column.Index.SchemaName = this.schemaName;
+            return base.GetClusterTypeString(column);
         }
     }
 }
