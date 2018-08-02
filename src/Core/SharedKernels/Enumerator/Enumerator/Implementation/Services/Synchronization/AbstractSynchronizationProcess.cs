@@ -60,7 +60,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             this.enumeratorSettings = enumeratorSettings;
         }
 
-
         public abstract Task Synchronize(IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken,
             SynchronizationStatistics statistics);
 
@@ -361,6 +360,15 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                             Statistics = statistics
                         });
                         auditLogService.Write(new SynchronizationFailedAuditLogEntity(ex));
+                        break;
+
+                    case SynchronizationExceptionType.UpgradeRequired:
+                        progress.Report(new SyncProgressInfo
+                        {
+                            Title = InterviewerUIResources.UpgradeRequired,
+                            Status = SynchronizationStatus.Fail,
+                            Statistics = statistics
+                        });
                         break;
                     default:
                         progress.Report(new SyncProgressInfo

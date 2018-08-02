@@ -880,7 +880,8 @@ namespace WB.Tests.Abc.TestFactories
 
         public QuestionnaireBrowseItem QuestionnaireBrowseItem(
             Guid? questionnaireId = null, long? version = null, QuestionnaireIdentity questionnaireIdentity = null,
-            string title = "Questionnaire Browse Item X", bool disabled = false, bool deleted = false, bool allowExportVariables = true)
+            string title = "Questionnaire Browse Item X", bool disabled = false, bool deleted = false, bool allowExportVariables = true, 
+            string variable = "questionnaire")
             => new QuestionnaireBrowseItem
             {
                 QuestionnaireId = questionnaireIdentity?.QuestionnaireId ?? questionnaireId ?? Guid.NewGuid(),
@@ -889,6 +890,7 @@ namespace WB.Tests.Abc.TestFactories
                 Disabled = disabled,
                 IsDeleted = deleted,
                 AllowExportVariables = allowExportVariables,
+                Variable = variable
             };
 
         public QuestionnaireBrowseItem QuestionnaireBrowseItem(QuestionnaireDocument questionnaire, bool supportsAssignments = true, bool allowExportVariables = true)

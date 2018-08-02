@@ -18,7 +18,7 @@
             <ImageView style="@style/ToolbarIcon"
                        android:layout_gravity="left"
                        local:MvxBind="Click ExitOfflineSyncCommand"
-                       local:srcCompat="@drawable/back_arrow"/>
+                       local:srcCompat="@drawable/back_arrow_white"/>
             <TextView
                 style="@style/ToolbarTitle"
                 local:MvxBind="Text Localization('OfflineSync_Supervisor_Title');" />
@@ -35,26 +35,6 @@
                 local:MvxBind="Text Title">
             </TextView>
 
-            <!--<LinearLayout android:orientation="vertical"
-                      android:layout_width="match_parent"
-                      android:layout_height="wrap_content"
-                      local:MvxBind="Visible Not(HasConnectedDevices)">
-            <LinearLayout android:orientation="horizontal"
-                          android:layout_width="match_parent"
-                          android:layout_height="wrap_content">
-
-                <ProgressBar style="@style/OfflineSync_InfinityProgress"/>
-
-                <TextView style="@style/OfflineSync_SearchDevice"
-                          android:layout_width="wrap_content"
-                          local:MvxBind="Text Localization('OfflineSync_WaitingInterviewers')"/>
-            </LinearLayout>
-
-            <TextView style="@style/OfflineSync_Cancel"
-                      android:layout_width="wrap_content"
-                      android:layout_height="wrap_content"
-                      local:MvxBind="Text Localization('OfflineSync_Cancel'); Click CancelCommand"/>
-        </LinearLayout>-->
             <MvxLinearLayout style="@style/FullWidthWrappingLayout"
                              android:orientation="vertical"
                              local:MvxBind="ItemsSource ConnectedDevices;"

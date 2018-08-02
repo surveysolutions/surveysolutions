@@ -120,6 +120,9 @@
   <data name="QuestionnaireNameUniqueFormat" xml:space="preserve">
     <value>Вы уже импотрировали другой опросник с таким заголовком '{0}'. Пожалуйста переименуйте этот опросник на Дизайнере, если хотите импортировать его.</value>
   </data>
+  <data name="QuestionnaireVariableUniqueFormat" xml:space="preserve">
+    <value>Вы уже импотрировали другой опросник с таким именем переменной опросника: '{0}'. Пожалуйста задайте другое имя перемененной опросника на Дизайнере, если хотите импортировать его.</value>
+  </data>
   <data name="UserDontHavePermissionsToAnswer" xml:space="preserve">
     <value>Только ответственный супервизор должен отвечать на вопросы супервизора </value>
   </data>
