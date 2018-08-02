@@ -287,7 +287,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services
                 throw new NotImplementedException();
             }
 
-            protected override void CheckAfterStartSynchronization(CancellationToken cancellationToken)
+            protected override Task CheckAfterStartSynchronization(CancellationToken cancellationToken)
             {
                 throw new NotImplementedException();
             }

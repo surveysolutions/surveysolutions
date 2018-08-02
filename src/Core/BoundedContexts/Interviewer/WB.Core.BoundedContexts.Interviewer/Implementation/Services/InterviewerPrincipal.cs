@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
@@ -23,9 +24,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public IInterviewerUserIdentity CurrentUserIdentity => (IInterviewerUserIdentity)base.currentUserIdentity;
 
-        protected override void UpdateUserHash(string hash)
+        protected override void UpdateUserHash(string userId, string hash)
         {
-            var user = this.usersStorage.Where(u => u.Name.ToLower() == CurrentUserIdentity.Name).FirstOrDefault();
+            var user = this.usersStorage.GetById(userId);
+
             if (user != null)
             {
                 user.PasswordHash = hash;

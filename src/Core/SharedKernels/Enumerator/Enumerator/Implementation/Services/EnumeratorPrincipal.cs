@@ -41,7 +41,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
                 if (verificationResult == PasswordVerificationResult.SuccessRehashNeeded)
                 {
-                    UpdateUserHash(this.passwordHasher.Hash(password));
+                    UpdateUserHash(localUser.Id, this.passwordHasher.Hash(password));
                 }
 
                 this.currentUserIdentity = localUser;
@@ -50,7 +50,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             return this.IsAuthenticated;
         }
 
-        protected abstract void UpdateUserHash(string hash);
+        protected abstract void UpdateUserHash(string userId, string hash);
 
         public bool SignInWithHash(string userName, string passwordHash, bool staySignedIn)
         {
