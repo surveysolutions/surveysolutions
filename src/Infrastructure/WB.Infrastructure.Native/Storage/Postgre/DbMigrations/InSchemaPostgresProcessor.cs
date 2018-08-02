@@ -1,9 +1,10 @@
-using System.Data;
-using FluentMigrator;
-using FluentMigrator.Expressions;
-using FluentMigrator.Runner;
+﻿using System.Data;
+using FluentMigrator.Runner.Generators.Postgres;
+using FluentMigrator.Runner.Initialization;
 using FluentMigrator.Runner.Processors;
 using FluentMigrator.Runner.Processors.Postgres;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
 {
@@ -11,191 +12,31 @@ namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
     {
         public string SchemaName { get; }
 
-        public InSchemaPostgresProcessor(IDbConnection connection, string schemaName, IMigrationGenerator generator, IAnnouncer announcer, IMigrationProcessorOptions options, IDbFactory factory)
-            : base(connection, generator, announcer, options, factory)
+        public InSchemaPostgresProcessor(string schemaName, PostgresDbFactory factory, PostgresGenerator generator, ILogger<PostgresProcessor> logger, IOptions<ProcessorOptions> options, IConnectionStringAccessor connectionStringAccessor)
+            : base(factory, generator, logger, options, connectionStringAccessor)
         {
             this.SchemaName = schemaName;
         }
 
-        public override void Process(CreateSchemaExpression expression)
-        {
-            expression.SchemaName = this.SchemaName;
-            base.Process(expression);
-        }
+        public override DataSet ReadTableData(string schemaName, string tableName) =>
+            base.ReadTableData(this.SchemaName, tableName);
 
-        public override void Process(DeleteSchemaExpression expression)
-        {
-            expression.SchemaName = this.SchemaName;
-            base.Process(expression);
-        }
+        public override bool ColumnExists(string schemaName, string tableName, string columnName) =>
+            base.ColumnExists(this.SchemaName, tableName, columnName);
 
-        public override void Process(CreateTableExpression expression)
-        {
-            expression.SchemaName = this.SchemaName;
-            base.Process(expression);
-        }
+        public override bool TableExists(string schemaName, string tableName) =>
+            base.TableExists(this.SchemaName, tableName);
 
-        public override void Process(AlterTableExpression expression)
-        {
-            expression.SchemaName = this.SchemaName;
-            base.Process(expression);
-        }
+        public override bool SequenceExists(string schemaName, string sequenceName) =>
+            base.SequenceExists(this.SchemaName, sequenceName);
 
-        public override void Process(AlterColumnExpression expression)
-        {
-            expression.SchemaName = this.SchemaName;
-            base.Process(expression);
-        }
+        public override bool ConstraintExists(string schemaName, string tableName, string constraintName) =>
+            base.ConstraintExists(this.SchemaName, tableName, constraintName);
 
-        public override void Process(CreateColumnExpression expression)
-        {
-            expression.SchemaName = this.SchemaName;
-            base.Process(expression);
-        }
+        public override bool IndexExists(string schemaName, string tableName, string indexName) =>
+            base.IndexExists(this.SchemaName, tableName, indexName);
 
-        public override void Process(DeleteTableExpression expression)
-        {
-            expression.SchemaName = this.SchemaName;
-            base.Process(expression);
-        }
-
-        public override void Process(DeleteColumnExpression expression)
-        {
-            expression.SchemaName = this.SchemaName;
-            base.Process(expression);
-        }
-
-        public override void Process(CreateForeignKeyExpression expression)
-        {
-            expression.ForeignKey.ForeignTableSchema = this.SchemaName;
-            expression.ForeignKey.PrimaryTableSchema = this.SchemaName;
-            base.Process(expression);
-        }
-
-        public override void Process(DeleteForeignKeyExpression expression)
-        {
-            expression.ForeignKey.ForeignTableSchema = this.SchemaName;
-            expression.ForeignKey.PrimaryTableSchema = this.SchemaName;
-            base.Process(expression);
-        }
-
-        public override void Process(CreateIndexExpression expression)
-        {
-            expression.Index.SchemaName = this.SchemaName;
-            base.Process(expression);
-        }
-
-        public override void Process(DeleteIndexExpression expression)
-        {
-            expression.Index.SchemaName = this.SchemaName;
-            base.Process(expression);
-        }
-
-        public override void Process(RenameTableExpression expression)
-        {
-            expression.SchemaName = this.SchemaName;
-            base.Process(expression);
-        }
-
-        public override void Process(RenameColumnExpression expression)
-        {
-            expression.SchemaName = this.SchemaName;
-            base.Process(expression);
-        }
-
-        public override void Process(InsertDataExpression expression)
-        {
-            expression.SchemaName = this.SchemaName;
-            base.Process(expression);
-        }
-
-        public override void Process(DeleteDataExpression expression)
-        {
-            expression.SchemaName = this.SchemaName;
-            base.Process(expression);
-        }
-
-        public override void Process(AlterDefaultConstraintExpression expression)
-        {
-            expression.SchemaName = this.SchemaName;
-            base.Process(expression);
-        }
-
-        public override void Process(UpdateDataExpression expression)
-        {
-            expression.SchemaName = this.SchemaName;
-            base.Process(expression);
-        }
-
-        public override void Process(AlterSchemaExpression expression)
-        {
-            expression.SourceSchemaName = this.SchemaName;
-            base.Process(expression);
-        }
-
-        public override void Process(CreateSequenceExpression expression)
-        {
-            expression.Sequence.SchemaName = this.SchemaName;
-            base.Process(expression);
-        }
-
-        public override void Process(DeleteSequenceExpression expression)
-        {
-            expression.SchemaName = this.SchemaName;
-            base.Process(expression);
-        }
-
-        public override void Process(CreateConstraintExpression expression)
-        {
-            expression.Constraint.SchemaName = this.SchemaName;
-            base.Process(expression);
-        }
-
-        public override void Process(DeleteConstraintExpression expression)
-        {
-            expression.Constraint.SchemaName = this.SchemaName;
-            base.Process(expression);
-        }
-
-        public override void Process(DeleteDefaultConstraintExpression expression)
-        {
-            expression.SchemaName = this.SchemaName;
-            base.Process(expression);
-        }
-
-        public override DataSet ReadTableData(string schemaName, string tableName)
-        {
-            return base.ReadTableData(this.SchemaName, tableName);
-        }
-
-        public override bool ColumnExists(string schemaName, string tableName, string columnName)
-        {
-            return base.ColumnExists(this.SchemaName, tableName, columnName);
-        }
-
-        public override bool TableExists(string schemaName, string tableName)
-        {
-            return base.TableExists(this.SchemaName, tableName);
-        }
-
-        public override bool SequenceExists(string schemaName, string sequenceName)
-        {
-            return base.SequenceExists(this.SchemaName, sequenceName);
-        }
-
-        public override bool ConstraintExists(string schemaName, string tableName, string constraintName)
-        {
-            return base.ConstraintExists(this.SchemaName, tableName, constraintName);
-        }
-
-        public override bool IndexExists(string schemaName, string tableName, string indexName)
-        {
-            return base.IndexExists(this.SchemaName, tableName, indexName);
-        }
-
-        public override bool DefaultValueExists(string schemaName, string tableName, string columnName, object defaultValue)
-        {
-            return base.DefaultValueExists(this.SchemaName, tableName, columnName, defaultValue);
-        }
+        public override bool DefaultValueExists(string schemaName, string tableName, string columnName,
+            object defaultValue) => base.DefaultValueExists(this.SchemaName, tableName, columnName, defaultValue);
     }
 }
