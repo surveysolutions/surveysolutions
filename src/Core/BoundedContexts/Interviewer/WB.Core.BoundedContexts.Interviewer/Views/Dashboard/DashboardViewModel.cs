@@ -102,11 +102,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.LastVisitedInterviewId = parameter.InterviewId;
         }
 
-        public override Task Initialize()
+        public override async Task Initialize()
         {
+            await base.Initialize().ConfigureAwait(false);
             this.RefreshDashboard(this.LastVisitedInterviewId);
             this.SelectTypeOfInterviewsByInterviewId(this.LastVisitedInterviewId);
-            return Task.CompletedTask;
         }
 
         public override void ViewAppeared()
@@ -198,7 +198,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private void SelectTypeOfInterviewsByInterviewId(Guid? lastVisitedInterviewId)
         {
             if (!lastVisitedInterviewId.HasValue)
+            {
                 this.TypeOfInterviews = this.CreateNew.InterviewStatus;
+                return;
+            }
 
             var interviewView = this.interviewsRepository.GetById(lastVisitedInterviewId.FormatGuid());
             if (interviewView == null) return;

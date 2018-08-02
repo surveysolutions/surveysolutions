@@ -92,7 +92,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         public override async Task Initialize()
         {
-            await base.Initialize();
+            await base.Initialize().ConfigureAwait(false);
             EmptySearchText = InterviewerUIResources.Dashboard_SearchWatermark;
             UpdateUiItems(SearchText);
         }
