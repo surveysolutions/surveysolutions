@@ -18,8 +18,8 @@
     <PackageReference Include="Dapper" Version="1.50.4" />
     <PackageReference Include="DotNetZip" Version="1.10.1" />
     <PackageReference Include="EPPlus" Version="4.5.2.1" />
-    <PackageReference Include="FluentMigrator" Version="1.6.2" />
-    <PackageReference Include="FluentMigrator.Runner" Version="1.6.2" />
+    <PackageReference Include="FluentMigrator" Version="3.0.0" />
+    <PackageReference Include="FluentMigrator.Runner" Version="3.0.0" />
     <PackageReference Include="FluentMigrator.Tools" Version="1.6.2" />
     <PackageReference Include="HtmlSanitizer" Version="4.0.185" />
     <PackageReference Include="Humanizer.Core" Version="2.2.0" />
