@@ -12,7 +12,12 @@ namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
     {
         public string SchemaName { get; }
 
-        public InSchemaPostgresProcessor(string schemaName, PostgresDbFactory factory, PostgresGenerator generator, ILogger<PostgresProcessor> logger, IOptions<ProcessorOptions> options, IConnectionStringAccessor connectionStringAccessor)
+        public InSchemaPostgresProcessor(string schemaName, 
+            PostgresDbFactory factory, 
+            PostgresGenerator generator,
+            ILogger<PostgresProcessor> logger, 
+            IOptionsSnapshot<ProcessorOptions> options,
+            IConnectionStringAccessor connectionStringAccessor)
             : base(factory, generator, logger, options, connectionStringAccessor)
         {
             this.SchemaName = schemaName;
