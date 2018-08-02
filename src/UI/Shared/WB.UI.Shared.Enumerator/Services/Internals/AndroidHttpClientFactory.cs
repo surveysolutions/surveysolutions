@@ -1,5 +1,7 @@
-﻿using System.Net.Http;
+﻿using System.Net;
+using System.Net.Http;
 using WB.Core.GenericSubdomains.Portable.Implementation;
+using Xamarin.Android.Net;
 
 namespace WB.UI.Shared.Enumerator.Services.Internals
 {
@@ -7,7 +9,11 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
     {
         public override HttpMessageHandler CreateMessageHandler()
         {
-            return new Xamarin.Android.Net.AndroidClientHandler();
+            var handler = new AndroidClientHandler
+            {
+                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
+            };
+            return handler;
         }
     }
 }
