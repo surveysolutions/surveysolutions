@@ -12,7 +12,6 @@ using WB.Core.GenericSubdomains.Portable.Implementation.Compression;
 using WB.Core.GenericSubdomains.Portable.Properties;
 using WB.Core.GenericSubdomains.Portable.Services;
 
-
 namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
 {
     public class RestService : IRestService
@@ -22,7 +21,6 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
         private readonly IJsonAllTypesSerializer synchronizationSerializer;
         private readonly IStringCompressor stringCompressor;
         private readonly IHttpStatistician httpStatistician;
-        private readonly IHttpClientFactory httpClientFactory;
 
         public RestService(
             IRestServiceSettings restServiceSettings,
@@ -30,15 +28,13 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             IJsonAllTypesSerializer synchronizationSerializer,
             IStringCompressor stringCompressor,
             IRestServicePointManager restServicePointManager,
-            IHttpStatistician httpStatistician,
-            IHttpClientFactory httpClientFactory)
+            IHttpStatistician httpStatistician)
         {
             this.restServiceSettings = restServiceSettings;
             this.networkService = networkService;
             this.synchronizationSerializer = synchronizationSerializer;
             this.stringCompressor = stringCompressor;
             this.httpStatistician = httpStatistician;
-            this.httpClientFactory = httpClientFactory;
 
             if (this.restServiceSettings.AcceptUnsignedSslCertificate)
                 restServicePointManager?.AcceptUnsignedSslCertificate();
@@ -89,8 +85,8 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
 
             var fullUrl = new Url(this.restServiceSettings.Endpoint, url, queryString);
 
-            var httpMessageHandler = httpClientFactory.CreateMessageHandler();
-            HttpClient httpClient = httpClientFactory.CreateClient(fullUrl, httpMessageHandler, httpStatistician);
+            var httpClient = new HttpClient(new ExtendedMessageHandler(new HttpClientHandler(), httpStatistician));
+
             httpClient.Timeout = this.restServiceSettings.Timeout;
 
             var request = new HttpRequestMessage()
@@ -100,7 +96,8 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                 Content = httpContent
             };
 
-            request.Headers.Add("User-Agent", this.restServiceSettings.UserAgent);
+            request.Headers.UserAgent.ParseAdd(this.restServiceSettings.UserAgent);
+            
             request.Headers.Add("Accept-Encoding", "gzip,deflate");
 
             if (forceNoCache)
