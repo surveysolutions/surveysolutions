@@ -111,20 +111,26 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
 
         public async Task<NearbyStatus> SendPayloadAsync(string to, IPayload payload)
         {
-            this.logger.Verbose($"({to}, '{payload}') ENTER");
+            if (this.Api.IsConnected)
+            {
+                this.logger.Verbose($"({to}, '{payload}') ENTER");
 
-            if (!(payload is Entities.Payload send))
-                throw new ArgumentException($"Cannot handle payload of type: {payload.GetType().FullName}", nameof(payload));
+                if (!(payload is Entities.Payload send))
+                    throw new ArgumentException($"Cannot handle payload of type: {payload.GetType().FullName}",
+                        nameof(payload));
 
-            var result = await ExecuteNearbyActionWithTimeoutAsync(
-                NearbyClass.Connections.SendPayload(Api, to, send.NearbyPayload))
-                .ConfigureAwait(false);
+                var result = await ExecuteNearbyActionWithTimeoutAsync(
+                        NearbyClass.Connections.SendPayload(Api, to, send.NearbyPayload))
+                    .ConfigureAwait(false);
 
-            LogNonSuccesfulResult(result, new ActionArgs(("to", to)));
+                LogNonSuccesfulResult(result, new ActionArgs(("to", to)));
 
-            this.logger.Verbose($"({to}, '{payload}') EXIT => {result.Status}");
+                this.logger.Verbose($"({to}, '{payload}') EXIT => {result.Status}");
 
-            return ToConnectionStatus(result);
+                return ToConnectionStatus(result);
+            }
+
+            return NearbyStatus.NotConnected;
         }
 
         private static async Task<Statuses> ExecuteNearbyActionWithTimeoutAsync(PendingResult nearbyAction)
@@ -246,7 +252,7 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
 
         private static NearbyStatus ToConnectionStatus(Statuses statuses)
         {
-            var status = Enum.IsDefined(typeof(ConnectionStatusCode), statuses.StatusCode)
+            ConnectionStatusCode status = Enum.IsDefined(typeof(ConnectionStatusCode), statuses.StatusCode)
                 ? (ConnectionStatusCode)statuses.StatusCode
                 : ConnectionStatusCode.Unknown;
 
