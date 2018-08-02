@@ -100,12 +100,8 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                 Content = httpContent
             };
 
-            //temp missformed agent to address 
-            //should not go to production
-            //https://github.com/xamarin/xamarin-android/issues/1931
-            request.Headers.Add("User-Agent", $"({this.restServiceSettings.UserAgent})"); 
-
-            //request.Headers.Add("Accept-Encoding", "gzip,deflate");//moved to handler
+            request.Headers.Add("User-Agent", this.restServiceSettings.UserAgent);
+            request.Headers.Add("Accept-Encoding", "gzip,deflate");
 
             if (forceNoCache)
             {
