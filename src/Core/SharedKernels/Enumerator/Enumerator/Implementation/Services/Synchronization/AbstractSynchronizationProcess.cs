@@ -361,6 +361,15 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         });
                         auditLogService.Write(new SynchronizationFailedAuditLogEntity(ex));
                         break;
+
+                    case SynchronizationExceptionType.UpgradeRequired:
+                        progress.Report(new SyncProgressInfo
+                        {
+                            Title = InterviewerUIResources.UpgradeRequired,
+                            Status = SynchronizationStatus.Fail,
+                            Statistics = statistics
+                        });
+                        break;
                     default:
                         progress.Report(new SyncProgressInfo
                         {
