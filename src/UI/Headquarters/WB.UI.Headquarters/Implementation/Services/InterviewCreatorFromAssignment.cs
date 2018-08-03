@@ -98,7 +98,6 @@ namespace WB.UI.Headquarters.Implementation.Services
                 questionnaireIdentity,
                 supervisorId: responsibleSupervisorId,
                 interviewerId: responsibleInterviewerId,
-                answersTime: DateTime.UtcNow,
                 answers: answers,
                 protectedVariables: new List<string>(),
                 interviewKey: this.interviewKeyGenerator.Get(),

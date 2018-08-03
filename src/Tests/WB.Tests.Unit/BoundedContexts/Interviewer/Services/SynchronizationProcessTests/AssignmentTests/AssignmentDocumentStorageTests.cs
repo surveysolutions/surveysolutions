@@ -3,11 +3,13 @@ using Moq;
 using NUnit.Framework;
 using SQLite;
 using WB.Core.BoundedContexts.Interviewer.Services;
-using WB.Core.BoundedContexts.Interviewer.Services.Synchronization;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Tests.Abc;
 using System.Collections.Generic;
+using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProcessTests.AssignmentTests
 {
@@ -66,6 +68,28 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             Assert.That(stored.Answers, Has.Count.EqualTo(5));
             
             AssertThatStoredAssignmentIsEqualToDocument(stored, document);
+        }    
+
+        [Test]
+        public void should_loadAll_by_responsible()
+        {
+            var responsible = Id.gA;
+
+            var document = Create.Entity.AssignmentDocument(1)
+                .WithResponsible(responsible)
+                .Build();
+
+            var document1 = Create.Entity.AssignmentDocument(2)
+                .WithResponsible(Id.gB)
+                .Build();
+
+            this.storage.Store(document);
+            this.storage.Store(document1);
+
+            var stored = this.storage.LoadAll(responsible);
+
+            Assert.That(stored, Has.Count.EqualTo(1));
+            Assert.That(stored.First(), Has.Property(nameof(AssignmentDocument.ResponsibleId)).EqualTo(responsible));
         }
 
         [Test]

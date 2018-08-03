@@ -8,7 +8,7 @@ using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 
-namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests.CascadingDropdownTests
+namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests.CascadingDropdownTests
 {
     internal class when_cascading_question_have_repeating_pair_of_Value_and_ParentValue : QuestionnaireVerifierTestsContext
     {

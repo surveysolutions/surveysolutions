@@ -257,8 +257,11 @@ angular.module('designerApp')
                 }
             };
 
-            $rootScope.navigateTo = function (reference) {
-                if (reference.type.toLowerCase() === "macro") {
+            $rootScope.navigateTo = function (reference, reload) {
+                if (reference.type.toLowerCase() === "questionnaire") {
+                    $scope.verificationStatus.visible = false;
+                    $scope.showShareInfo();
+                } else if (reference.type.toLowerCase() === "macro") {
                     $scope.verificationStatus.visible = false;
                     $rootScope.$broadcast("openMacrosList", { focusOn: reference.itemId });
                 } else if (reference.type.toLowerCase() === "lookuptable") {
@@ -276,7 +279,8 @@ angular.module('designerApp')
                         itemId: reference.itemId,
                         indexOfEntityInProperty: reference.indexOfEntityInProperty,
                         property: reference.property
-                    });
+                    },
+                        {reload : reload});
                 }
             };
             

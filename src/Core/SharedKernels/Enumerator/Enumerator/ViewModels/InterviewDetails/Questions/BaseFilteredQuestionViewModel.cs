@@ -2,7 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using MvvmCross.Core.ViewModels;
+using MvvmCross.Commands;
+using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -158,7 +159,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     this.principal.CurrentUserIdentity.UserId,
                     this.Identity.Id,
                     this.Identity.RosterVector,
-                    DateTime.UtcNow,
                     selectedOption.Value)).ConfigureAwait(false);
 
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
@@ -199,8 +199,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 await this.Answering.SendRemoveAnswerCommandAsync(
                     new RemoveAnswerCommand(this.interviewId,
                         this.principal.CurrentUserIdentity.UserId,
-                        this.Identity,
-                        DateTime.UtcNow));
+                        this.Identity));
 
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
             }

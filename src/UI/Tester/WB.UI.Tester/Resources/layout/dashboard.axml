@@ -19,9 +19,14 @@
                 android:layout_toRightOf="@+id/dashboadr_page_title"
                 local:MvxBind="Text HumanizedLastUpdateDate;" />
     </RelativeLayout>
-    <ImageButton style="@style/Dashboard_SearchView_SearchButton"
+      <ImageButton style="@style/Dashboard_SearchView_SearchButton"
+                   local:MvxBind="Click RefreshQuestionnairesCommand; Enabled Not(IsInProgress)"
+                   local:srcCompat="@drawable/refresh"/>
+      <ImageButton style="@style/Dashboard_SearchView_SearchButton"
         local:MvxBind="Click ShowSearchCommand; Visible Not(IsSearchVisible)"
                  local:srcCompat="@drawable/dashboard_search_icon"/>
+     
+
     <LinearLayout style="@style/Dashboard_SearchView_Container"
                      local:MvxBind="Visible IsSearchVisible;">
       <EditText style="@style/Dashboard_SearchView_FilterInput"

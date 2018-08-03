@@ -11,6 +11,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.UI.Shared.Enumerator.CustomServices;
@@ -61,7 +62,6 @@ namespace WB.UI.Tester.Infrastructure
             registry.Bind<INetworkService, AndroidNetworkService>();
             registry.Bind<IEnumeratorSettings, TesterSettings>();
             registry.Bind<IRestServicePointManager, RestServicePointManager>();
-            registry.Bind<IHttpClientFactory, ModernHttpClientFactory>();
             registry.Bind<IRestService, RestService>();
             registry.Bind<ISerializer, PortableJsonSerializer>();
             registry.Bind<IInterviewAnswerSerializer,PortableInterviewAnswerJsonSerializer>();
@@ -79,7 +79,7 @@ namespace WB.UI.Tester.Infrastructure
             registry.Bind<IQuestionnaireTranslator, QuestionnaireTranslator>();
         }
 
-        public Task Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
             return Task.CompletedTask;
         }

@@ -7,72 +7,76 @@
     <item name="android:layout_height">@dimen/Login_Element_width</item>
     <item name="android:layout_gravity">center</item>
   </style>
+    <style name="Login_ErrorMessage" parent="AppTheme">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">Trebuchet</item>
+        <item name="android:textSize">@dimen/textsize_12</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">@color/errorTextColor</item>
+        <item name="android:layout_marginBottom">@dimen/Login_ErrorMessage_marginBottom</item>
+        <item name="android:singleLine">false</item>
+        <item name="android:layout_gravity">center_horizontal</item>
+        <item name="android:gravity">center</item>
+        <item name="android:paddingLeft">@dimen/Login_ErrorMessage_Padding</item>
+        <item name="android:paddingRight">@dimen/Login_ErrorMessage_Padding</item>
+    </style>
+    <style name="Login_Editor" parent="AppTheme">
+        <item name="android:layout_width">@dimen/Login_Element_width</item>
+        <item name="android:layout_height">@dimen/Theme_Button_min_height</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:singleLine">true</item>
+        <item name="android:textColor">@color/textedit_color_selector</item>
+        <item name="android:textCursorDrawable">@null</item>
+    </style>
 
-  <style name="Login_ErrorMessage" parent="AppTheme">
-    <item name="android:layout_width">match_parent</item>
-    <item name="android:layout_height">wrap_content</item>
-    <item name="android:fontFamily">Trebuchet</item>
-    <item name="android:textSize">@dimen/textsize_12</item>
-    <item name="android:textStyle">bold</item>
-    <item name="android:textAllCaps">true</item>
-    <item name="android:textColor">@color/errorTextColor</item>
-    <item name="android:layout_marginBottom">@dimen/Login_ErrorMessage_marginBottom</item>
-    <item name="android:singleLine">false</item>
-    <item name="android:layout_gravity">center_horizontal</item>
-    <item name="android:gravity">center</item>
-    <item name="android:paddingLeft">@dimen/Login_ErrorMessage_Padding</item>
-    <item name="android:paddingRight">@dimen/Login_ErrorMessage_Padding</item>
-  </style>
-  <style name="Login_Editor" parent="AppTheme">
-    <item name="android:layout_width">@dimen/Login_Element_width</item>
-    <item name="android:layout_height">@dimen/Theme_Button_min_height</item>
-    <item name="android:layout_gravity">center</item>
-    <item name="android:singleLine">true</item>
-    <item name="android:textColor">@color/textedit_color_selector</item>
-    <item name="android:textCursorDrawable">@null</item>
-  </style>
+    <style name="Login_Endpoint_Editor" parent="Login_Editor">
+        <item name="android:layout_marginBottom">@dimen/Login_Input_marginBottom</item>
+    </style>
 
-  <style name="Login_Endpoint_Editor" parent="Login_Editor">
-    <item name="android:layout_marginBottom">@dimen/Login_Input_marginBottom</item>
-  </style>
+    <style name="Login_Login_Editor" parent="Login_Editor">
+        <item name="android:layout_marginBottom">@dimen/Login_Input_marginBottom</item>
+    </style>
 
-  <style name="Login_Login_Editor" parent="Login_Editor">
-    <item name="android:layout_marginBottom">@dimen/Login_Input_marginBottom</item>
-  </style>
+    <style name="Login_Password_Editor" parent="Login_Editor">
+        <item name="android:layout_marginBottom">@dimen/Login_Password_Editor_marginBottom</item>
+    </style>
 
-  <style name="Login_Password_Editor" parent="Login_Editor">
-    <item name="android:layout_marginBottom">@dimen/Login_Password_Editor_marginBottom</item>
-  </style>
+    <style name="Login_Button" parent="AppTheme">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">@dimen/Login_Button_padding</item>
+    </style>
 
-  <style name="Login_Button" parent="AppTheme">
-    <item name="android:layout_width">wrap_content</item>
-    <item name="android:layout_height">wrap_content</item>
-    <item name="android:padding">@dimen/Login_Button_padding</item>
-  </style>
+    <style name="Login_Troubleshotting_Button" parent="Login_Button">
+        <item name="android:layout_marginLeft">@dimen/Login_Troubleshooting_Button_marginLeft</item>
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:background">@drawable/transparent_input_button</item>
+    </style>
 
-  <style name="Login_Troubleshotting_Button" parent="Login_Button">
-    <item name="android:layout_marginLeft">@dimen/Login_Troubleshooting_Button_marginLeft</item>
-    <item name="android:textColor">@android:color/black</item>
-    <item name="android:background">@drawable/transparent_input_button</item>
-  </style>
+    <style name="Login_Footer" parent="VerticalFullWidthWrappingLayout">
+        <item name="android:paddingBottom">@dimen/Login_Footer_paddingBottom</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+    </style>
 
-  <style name="Login_Footer" parent="VerticalFullWidthWrappingLayout">
-    <item name="android:paddingBottom">@dimen/Login_Footer_paddingBottom</item>
-    <item name="android:layout_width">match_parent</item>
-    <item name="android:layout_height">wrap_content</item>
-  </style>
+    <style name="Login_Footer_Message" parent="AppTheme">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textColor">@color/login_footer_color</item>
+        <item name="android:textStyle">italic</item>
+    </style>
 
-  <style name="Login_Footer_Message" parent="AppTheme">
-    <item name="android:layout_width">match_parent</item>
-    <item name="android:layout_height">wrap_content</item>
-    <item name="android:gravity">center</item>
-    <item name="android:textColor">@color/login_footer_color</item>
-    <item name="android:textStyle">italic</item>
-  </style>
-  
-  <style name="Login_OnlineSingin_Button" parent="Login_Button">
-    <item name="android:layout_marginLeft">@dimen/Login_Troubleshooting_Button_marginLeft</item>
-    <item name="android:textColor">@color/errorTextColor</item>
-    <item name="android:background">@drawable/transparent_input_button</item>
-  </style>
+    <style name="Login_OnlineSingin_Button" parent="Login_Button">
+        <item name="android:layout_marginLeft">@dimen/Login_Troubleshooting_Button_marginLeft</item>
+        <item name="android:textColor">@color/errorTextColor</item>
+        <item name="android:background">@drawable/transparent_input_button</item>
+    </style>
+    <style name ="Login_Endpoint_Scan_Button" parent="AppTheme">
+        <item name="android:layout_width">@dimen/Login_Scan_Button_width</item>
+        <item name="android:layout_height">@dimen/Login_Scan_Button_height</item>
+        <item name="android:paddingTop">@dimen/Login_Scan_Button_paddingTop</item>
+    </style>
 </resources>

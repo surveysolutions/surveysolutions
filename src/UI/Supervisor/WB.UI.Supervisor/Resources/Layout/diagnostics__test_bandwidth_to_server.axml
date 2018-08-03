@@ -1,0 +1,65 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:local="http://schemas.android.com/apk/res-auto" style="@style/Diagnostics_Section">
+  <LinearLayout style="@style/Diagnostics_TitleSection">
+    <TextView
+       style="@style/Diagnostics_Section_Title"
+       local:MvxBind="Text Localization('Diagnostics_TestConnection_Title'); UnderlinePressed . ; Click BandwidthTest.TestConnectionCommand" />
+    <TextView
+              style="@style/Diagnostics_Section_Description"
+              local:MvxBind="Html Localization('Diagnostics_TestConnection_Description')" />
+    <LinearLayout android:layout_height="wrap_content"
+                  android:layout_width="match_parent"
+                android:orientation="horizontal">
+      <TextView
+        style="@style/Diagnostics_Section_Description"
+        android:textAllCaps="false"
+        android:layout_width="wrap_content"
+        local:MvxBind="Text Localization('Diagnostics_ServerUrl')" />
+      <TextView
+        style="@style/Diagnostics_Section_Description"
+        android:textAllCaps="false"
+        android:textColor="@color/btn_default"
+        android:clickable="true"
+        android:layout_width="wrap_content"
+        local:MvxBind="Text BandwidthTest.ServerUrl; UnderlinePressed .; Click BandwidthTest.OpenSyncEndPointCommand" />
+    </LinearLayout>
+  </LinearLayout>
+
+  <LinearLayout style="@style/Diagnostics_SubSection" local:MvxBind="Visible And(BandwidthTest.IsConnectionAbsent, BandwidthTest.IsBandwidthTested);" >
+    <TextView
+         style="@style/Diagnostics_Subsection_Title"
+         local:MvxBind="Html BandwidthTest.ConnectionDescription" />
+  </LinearLayout>
+  <LinearLayout style="@style/Diagnostics_SubSection" local:MvxBind="Visible And(Not(BandwidthTest.IsConnectionAbsent), BandwidthTest.IsBandwidthTested);" >
+    <TextView
+         style="@style/Diagnostics_Subsection_Title"
+         local:MvxBind="Html BandwidthTest.ConnectionDescription" />
+    <TextView
+    style="@style/Diagnostics_Section_Description"
+    local:MvxBind="Text Localization('Diagnostics_BandwidthTestConnectionType_Title')" />
+
+    <TextView
+   style="@style/Diagnostics_Subsection_Value"
+  local:MvxBind="Text BandwidthTest.ConnectionType" />
+    <TextView
+           style="@style/Diagnostics_Section_Description"
+           local:MvxBind="Text Localization('Diagnostics_BandwidthTestNetworkName_Title')" />
+    <TextView
+  style="@style/Diagnostics_Subsection_Value"
+  local:MvxBind="Text BandwidthTest.NetworkName" />
+
+
+    <TextView
+           style="@style/Diagnostics_Section_Description"
+           local:MvxBind="Text Localization('Diagnostics_BandwidthTestPing_Title')" />
+    <TextView
+  style="@style/Diagnostics_Subsection_Value"
+  local:MvxBind="Text BandwidthTest.Ping" />
+
+  </LinearLayout>
+
+  <ProgressBar style="@style/Interview_Question_Progress_Indicator"
+               android:indeterminateOnly="true"
+               local:MvxBind="Visible BandwidthTest.IsInProgress" />
+</LinearLayout>

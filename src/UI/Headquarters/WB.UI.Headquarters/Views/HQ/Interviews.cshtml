@@ -375,20 +375,33 @@
     </div>
 
     <script type="text/html" id="assign-interview-template">
-        <div class="btn-group assign-interviewer">
-            @Interviews.ChooseResponsible
-            <div class="input-group">
-                <input class="form-control with-clear-btn" placeholder="@Common.Any" data-bind="typeahead: Users.AssignTo, typeaheadOptions: {source: Users.LoadUsers, displayText: function(item){return item.UserName}, afterSelect: StoreInteviewer }, valueupdate:'afterkeydown'" type="text" />
-                <span data-bind="spinner: Users.IsResponsiblesLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
-                <div class="input-group-btn" data-bind="click: ClearAssignTo">
-                    <div class="btn btn-default"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></div>
+        <div class="assign-interviewer">
+            <div>
+                @Interviews.ChooseResponsible <br/><br />
+                <div class="input-group">
+                    <input class="form-control with-clear-btn" placeholder="@Common.Any" data-bind="typeahead: Users.AssignTo, typeaheadOptions: {source: Users.LoadUsers, displayText: function(item){return item.UserName}, afterSelect: StoreInteviewer }, valueupdate:'afterkeydown'" type="text" />
+                    <span data-bind="spinner: Users.IsResponsiblesLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
+                    <div class="input-group-btn" data-bind="click: ClearAssignTo">
+                        <div class="btn btn-default"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></div>
+                    </div>
+                </div> <br/>
+            </div>
+            <div>
+                @Html.Raw(string.Format(Interviews.AssignToOtherTeamConfirmMessage,
+                    "<span class='text-normal' data-bind='text: CountInterviewsToAssign'></span>",
+                    InterviewStatus.ApprovedBySupervisor.ToLocalizeString(),
+                    InterviewStatus.ApprovedByHeadquarters.ToLocalizeString()))
+            </div>
+            <div>
+                <div data-bind="if: CountReceivedByInterviewerItems > 0">
+                    <br />
+                    <input type="checkbox" id="reassignReceivedByInterviewer" data-bind="checked: IsReassignReceivedByInterviewer" class="checkbox-filter" />
+                    <label for="reassignReceivedByInterviewer" style="font-weight: normal">
+                        <span class="tick"></span>
+                        @Html.Raw(string.Format(Interviews.AssignReceivedConfirm, "<span data-bind='text: CountReceivedByInterviewerItems'></span>"))
+                    </label>
                 </div>
             </div>
-            <br />
-            @Html.Raw(string.Format(Interviews.AssignToOtherTeamConfirmMessage,
-                "<span class='text-normal' data-bind='text: CountInterviewsToAssign'></span>",
-                InterviewStatus.ApprovedBySupervisor.ToLocalizeString(),
-                InterviewStatus.ApprovedByHeadquarters.ToLocalizeString()))
         </div>
         <br />
     </script>

@@ -1,5 +1,4 @@
 using System;
-using Newtonsoft.Json;
 using SQLite;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -9,13 +8,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
     public class InterviewerIdentity : IInterviewerUserIdentity, IPlainStorageEntity
     {
         public string Name { get;  set; }
-
-        /// <summary>
-        /// Hashed password
-        /// </summary>
-        [Obsolete("Should be removed after 5.19 release of Interviewer")]
-        [JsonIgnore]
-        public string Password { get; set; }
 
         /// <summary>
         /// Updated password hash
@@ -29,5 +21,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
 
         [PrimaryKey]
         public string Id { get; set; }
+
+        public string Email { get; set; }
+
+        public string SecurityStamp { get; set; }
     }
 }

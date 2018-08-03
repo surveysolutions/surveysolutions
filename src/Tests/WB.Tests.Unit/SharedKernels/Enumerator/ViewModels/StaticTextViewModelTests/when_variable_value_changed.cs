@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
                 Create.Entity.Variable(variableName: substitutedVariable2Name, id: substitutedVariable2Identity.Id)
            });
 
-            interview = Create.AggregateRoot.StatefulInterview(questionnaire.PublicKey, Guid.NewGuid(), questionnaire);
+            interview = Create.AggregateRoot.StatefulInterview(questionnaire.PublicKey, userId: Guid.NewGuid(), questionnaire: questionnaire);
             interview.Apply(Create.Event.VariablesChanged(new []
             {
                 new ChangedVariable(substitutedVariable1Identity,  new DateTime(2016, 1, 31)),

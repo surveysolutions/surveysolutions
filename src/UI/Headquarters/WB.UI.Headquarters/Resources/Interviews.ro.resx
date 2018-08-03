@@ -1,0 +1,218 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ApproveConfirmMessage" xml:space="preserve">
+    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interviuri vor fi aprobate.&lt;/h3&gt;
+&lt;b&gt;Notă!&lt;/b&gt; Puteți aproba doar interviuri cu următoarele statusuri: &lt;i&gt;{1}&lt;/i&gt; și &lt;i&gt;{2}&lt;/i&gt;.</value>
+  </data>
+  <data name="ApproveConfirmMessageHQ" xml:space="preserve">
+    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interviuri vor fi aprobate.&lt;/h3&gt;
+&lt;b&gt;Notă!&lt;/b&gt; Puteți aproba doar interviuri cu următorul status: &lt;i&gt;{1}&lt;/i&gt; și &lt;i&gt;{2}&lt;/i&gt;.</value>
+  </data>
+  <data name="AssignConfirmMessage" xml:space="preserve">
+    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interviuri selectate pentru realocare.&lt;/h3&gt;
+&lt;b&gt;Notă!&lt;/b&gt; Puteți aloca doar interviuri cu următoarele statusuri: &lt;i&gt;{1}&lt;/i&gt;, &lt;i&gt;{2} (numai către un alt anchetator)&lt;/i&gt; și &lt;i&gt;{3}&lt;/i&gt;.</value>
+  </data>
+  <data name="Assignment" xml:space="preserve">
+    <value>Interviuri alocate</value>
+  </data>
+  <data name="AssignReceivedConfirm" xml:space="preserve">
+    <value>Aplicați pe {0} interviuri pe care anchetatorul le-a primit deja</value>
+  </data>
+  <data name="AssignToOtherTeamConfirmMessage" xml:space="preserve">
+    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interviuri vor fi alocate.&lt;/h3&gt;
+&lt;b&gt;Notă!&lt;/b&gt; Numai interviurile care nu au statusul &lt;i&gt;{1}&lt;/i&gt; și &lt;i&gt;{2}&lt;/i&gt; pot fi realocate.</value>
+  </data>
+  <data name="ChooseResponsible" xml:space="preserve">
+    <value>Nu s-a ales niciun responsabil pentru unele interviuri. Vă rugăm să alegeți un controlor sau anchetator responsabil.</value>
+  </data>
+  <data name="ChooseResponsibleInterviewer" xml:space="preserve">
+    <value>Nu s-a ales niciun responsabil pentru unele interviuri. Vă rugăm să alegeți un anchetator responsabil.</value>
+  </data>
+  <data name="ChooseResponsibleSupervisor" xml:space="preserve">
+    <value>Nu s-a ales niciun responsabil pentru unele interviuri. Vă rugăm să alegeți un controlor responsabil.</value>
+  </data>
+  <data name="ClientKeyTitle" xml:space="preserve">
+    <value>Cheia care a fost generată pe tabletă, dar a fost modificată din cauza interacțiunii cu interviul existent pe server</value>
+  </data>
+  <data name="ContinueConfirmMessage" xml:space="preserve">
+    <value>Doriți să continuați?</value>
+  </data>
+  <data name="ContinueConfirmMessageHQ" xml:space="preserve">
+    <value>Doriți să continuați?</value>
+  </data>
+  <data name="DeleteConfirmMessageHQ" xml:space="preserve">
+    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interviuri vor fi șterse.&lt;/h3&gt;
+&lt;b&gt;Notă!&lt;/b&gt; Puteți șterge interviurile care nu au fost primite de către anchetator cu următoarele statusuri doar: &lt;i&gt;{1}&lt;/i&gt; și &lt;i&gt;{2}&lt;/i&gt;.</value>
+  </data>
+  <data name="Errors" xml:space="preserve">
+    <value>Erori</value>
+  </data>
+  <data name="RejectConfirmMessage" xml:space="preserve">
+    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interviuri vor fi respinse.&lt;/h3&gt;
+&lt;b&gt;Notă!&lt;/b&gt; Puteți respinge doar interviurile cu următoarele statusuri: &lt;i&gt;{1}&lt;/i&gt; și &lt;i&gt;{2}&lt;/i&gt;.</value>
+  </data>
+  <data name="RejectConfirmMessageHQ" xml:space="preserve">
+    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interviuri vor fi respinse.&lt;/h3&gt;
+&lt;b&gt;Notă!&lt;/b&gt; Puteți respinge doar interviurile cu următorul status: &lt;i&gt;{1}&lt;/i&gt; și &lt;i&gt;{2}&lt;/i&gt;.</value>
+  </data>
+  <data name="Tooltip_Filter_Assignment" xml:space="preserve">
+    <value>ID de alocare. Faceți click pentru a introduce ID-ul complet.</value>
+  </data>
+  <data name="Tooltip_Filter_Questionnaire" xml:space="preserve">
+    <value>Selectați un chestionar pentru a vedea interviurile asociate în listă. Selectați 'Toate chestionarele' pentru a vedea interviurile asociate cu orice chestionar.</value>
+  </data>
+  <data name="Tooltip_Filter_Responsible" xml:space="preserve">
+    <value>Utilizator responsabil. Faceți click în câmp pentru a alege un nume de utilizator fie prin selectarea directă, fie tastând pentru a filtra în continuare lista de nume de utilizator.</value>
+  </data>
+  <data name="Tooltip_Filter_Status" xml:space="preserve">
+    <value>Statusul interviului. Selectați un status pentru a vedea toate interviurile cu acel status. Selectați 'Toate statusurile' pentru a vedea interviuri cu orice status.</value>
+  </data>
+  <data name="Tooltip_Table_Assignment" xml:space="preserve">
+    <value>Identificator pentru alocarea de care aparține acest interviu. Faceți click pe pictograma de sortare pentru a sorta după numărul de alocare.</value>
+  </data>
+  <data name="Tooltip_Table_ErrorsCount" xml:space="preserve">
+    <value>Afișează numărul total de întrebări nevalide și texte statice în interviu. Condițiile de validare eșuate de mai multe ori pentru aceeași entitate sunt numărate ca 1.</value>
+  </data>
+  <data name="Tooltip_Table_HideShowIdentifying" xml:space="preserve">
+    <value>Faceți click aici pentru a ascunde sau pentru a afișa întrebările de identificare. Ascunderea întrebărilor de identificare poate oferi mai mult spațiu pentru alte informații. Afișarea întrebărilor de identificare poate oferi detalii pentru diferențierea interviurilor.</value>
+  </data>
+  <data name="Tooltip_Table_IdentifyingQuestions" xml:space="preserve">
+    <value>Informații pentru a identifica fiecare alocare. Acestea sunt răspunsurile la întrebările marcate ca fiind de identificare în Designer.</value>
+  </data>
+  <data name="Tooltip_Table_InterviewKey" xml:space="preserve">
+    <value>Identificator prescurtat care apare în întregul sistem - la RINS, controlor și anchetator. Luați în considerare utilizarea acestui ID atunci când comunicați cu echipa din teren, mai degrabă decât un set mare de întrebări de identificare.</value>
+  </data>
+  <data name="Tooltip_Table_LastUpdate" xml:space="preserve">
+    <value>Când a fost postată pe server ultima modificare a interviului. Dați click pe pictograma de sortare pentru a sorta după dată.</value>
+  </data>
+  <data name="Tooltip_Table_ReceivedByInterviewer" xml:space="preserve">
+    <value>Indicator care arată dacă interviul a fost descărcat pe tableta anchetatorului. Faceți click pe pictograma de sortare pentru a sorta după primirea de către anchetator.</value>
+  </data>
+  <data name="Tooltip_Table_Responsible" xml:space="preserve">
+    <value>Utilizatorul responsabil cu alocarea. Dați click pe pictograma sortare pentru a sorta numele de utilizator.</value>
+  </data>
+  <data name="Tooltip_Table_Status" xml:space="preserve">
+    <value>Starea interviului în fluxul anchetei. Faceți click pe pictograma de sortare pentru a sorta după status.</value>
+  </data>
+  <data name="UnapproveConfirmMessageHQ" xml:space="preserve">
+    <value>&lt;h3&gt;&lt;b&gt;{0}&lt;/b&gt; interviuri vor fi dezaprobate.&lt;/h3&gt;
+&lt;b&gt;Notă!&lt;/b&gt; Puteți dezaproba doar interviurile cu următorul status: &lt;i&gt;{1}&lt;/i&gt;.</value>
+  </data>
+</root>

@@ -1,6 +1,6 @@
 ﻿using System;
 using Moq;
-using MvvmCross.Test.Core;
+using MvvmCross.Tests;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextQuestionViewMode
             IUserInteractionService userInteractionService = null)
         {
             var userIdentity = Mock.Of<IUserIdentity>(_ => _.UserId == userId);
-            var principal = Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == userIdentity);
+            var principal = Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == userIdentity && _.IsAuthenticated == true);
 
             QuestionStateMock.Setup(x => x.Validity).Returns(ValidityModelMock.Object);
 

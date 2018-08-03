@@ -24,6 +24,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels;
+using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Services.Export;
@@ -64,6 +65,8 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
+using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog;
+using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Utils;
@@ -364,6 +367,37 @@ namespace WB.Tests.Abc.TestFactories
                 TimeSpanWithPreviousStatus = timeSpanWithPreviousStatus
             };
 
+        public InterviewDiagnosticsInfo InterviewDiagnosticsInfo(
+            Guid? interviewId = null,
+            string interviewKey = null,
+            InterviewStatus status = InterviewStatus.InterviewerAssigned,
+            Guid? responsibleId = null, 
+            string responsibleName = null, 
+            int numberOfInterviewers = 0, 
+            int numberRejectionsBySupervisor = 0, 
+            int numberRejectionsByHq = 0, 
+            int numberValidQuestions = 0, 
+            int numberInvalidEntities = 0, 
+            int numberUnansweredQuestions = 0, 
+            int numberCommentedQuestions = 0, 
+            long? interviewDuration = null)
+            => new InterviewDiagnosticsInfo
+            {
+                InterviewId = interviewId ?? Guid.NewGuid(),
+                InterviewKey = interviewKey,
+                Status = status,
+                ResponsibleId = responsibleId ?? Guid.NewGuid(),
+                ResponsibleName = responsibleName,
+                NumberOfInterviewers = numberOfInterviewers,
+                NumberRejectionsBySupervisor = numberRejectionsBySupervisor,
+                NumberRejectionsByHq = numberRejectionsByHq,
+                NumberValidQuestions = numberValidQuestions,
+                NumberInvalidEntities = numberInvalidEntities,
+                NumberUnansweredQuestions = numberUnansweredQuestions,
+                NumberCommentedQuestions = numberCommentedQuestions,
+                InterviewDuration = interviewDuration
+            };
+
         public InterviewData InterviewData(
             bool createdOnClient = false,
             InterviewStatus status = InterviewStatus.Created,
@@ -554,7 +588,9 @@ namespace WB.Tests.Abc.TestFactories
             InterviewStatus? status = null,
             string questionaireTitle = null,
             int? assignmentId = null,
-            bool? canBeDeleted = null
+            bool? canBeDeleted = null,
+            Guid? responsibleId = null,
+            DateTime? receivedByInterviewerAt = null
             )
         {
             interviewId = interviewId ?? Guid.NewGuid();
@@ -562,13 +598,20 @@ namespace WB.Tests.Abc.TestFactories
             {
                 Id = interviewId.FormatGuid(),
                 InterviewId = interviewId.Value,
-                QuestionnaireId = questionnaireId,
+                QuestionnaireId = questionnaireId ?? Create.Entity.QuestionnaireIdentity().ToString(),
                 LocationQuestionId = prefilledQuestionId,
-                QuestionnaireTitle = questionaireTitle,
-                Status = status ?? default(InterviewStatus),
+                QuestionnaireTitle = questionaireTitle ?? "Questionnaire ",
+                Status = status ?? InterviewStatus.InterviewerAssigned,
                 Assignment = assignmentId,
-                CanBeDeleted = canBeDeleted ?? true
+                CanBeDeleted = canBeDeleted ?? true,
+                ResponsibleId = responsibleId.GetValueOrDefault(),
+                ReceivedByInterviewerAtUtc = receivedByInterviewerAt
             };
+        }
+
+        public InterviewSequenceView InterviewSequenceView(Guid id, int sequence)
+        {
+            return new InterviewSequenceView() {Id = id, ReceivedFromServerSequence = sequence};
         }
 
         public DataExportVariable LabeledVariable(string variableName = "var", string label = "lbl", Guid? questionId = null, params VariableValueLabel[] variableValueLabels)
@@ -837,7 +880,8 @@ namespace WB.Tests.Abc.TestFactories
 
         public QuestionnaireBrowseItem QuestionnaireBrowseItem(
             Guid? questionnaireId = null, long? version = null, QuestionnaireIdentity questionnaireIdentity = null,
-            string title = "Questionnaire Browse Item X", bool disabled = false, bool deleted = false, bool allowExportVariables = true)
+            string title = "Questionnaire Browse Item X", bool disabled = false, bool deleted = false, bool allowExportVariables = true, 
+            string variable = "questionnaire")
             => new QuestionnaireBrowseItem
             {
                 QuestionnaireId = questionnaireIdentity?.QuestionnaireId ?? questionnaireId ?? Guid.NewGuid(),
@@ -846,6 +890,7 @@ namespace WB.Tests.Abc.TestFactories
                 Disabled = disabled,
                 IsDeleted = deleted,
                 AllowExportVariables = allowExportVariables,
+                Variable = variable
             };
 
         public QuestionnaireBrowseItem QuestionnaireBrowseItem(QuestionnaireDocument questionnaire, bool supportsAssignments = true, bool allowExportVariables = true)
@@ -910,6 +955,7 @@ namespace WB.Tests.Abc.TestFactories
             => new QuestionnaireDocument
             {
                 Title = "Questionnaire",
+                VariableName = "MyQuestionnaire",
                 PublicKey = id ?? Guid.NewGuid(),
                 Children = new List<IComposite>
                 {
@@ -1176,7 +1222,7 @@ namespace WB.Tests.Abc.TestFactories
 
         public TextQuestion TextQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
             string mask = null,
-            string variable = "text_question",
+            string variable = null,
             string validationMessage = null,
             string text = "Question T",
             QuestionScope scope = QuestionScope.Interviewer,
@@ -1195,7 +1241,7 @@ namespace WB.Tests.Abc.TestFactories
                 Mask = mask,
                 QuestionText = text,
                 QuestionType = QuestionType.Text,
-                StataExportCaption = variable,
+                StataExportCaption = variable ?? "vv" + Guid.NewGuid().ToString("N"),
                 QuestionScope = scope,
                 Featured = preFilled,
                 VariableLabel = label,
@@ -1358,8 +1404,9 @@ namespace WB.Tests.Abc.TestFactories
             string translationIndex = null,
             TranslationType? type = null)
         {
-            return new WB.Core.SharedKernels.Enumerator.Views.TranslationInstance
+            return new TranslationInstance
             {
+                Id = Guid.NewGuid().ToString(),
                 Value = value,
                 TranslationId = tranlationId ?? Guid.NewGuid(),
                 QuestionnaireId = questionnaireId ?? Create.Entity.QuestionnaireIdentity().ToString(),
@@ -1449,7 +1496,6 @@ namespace WB.Tests.Abc.TestFactories
             return section;
         }
 
-
         public InterviewTreeStaticText InterviewTreeStaticText(Identity staticTextIdentity, bool isDisabled = false)
         {
             var titleWithSubstitutions = Create.Entity.SubstitutionText(staticTextIdentity, "Title");
@@ -1467,15 +1513,18 @@ namespace WB.Tests.Abc.TestFactories
         }
 
         public InterviewTreeQuestion InterviewTreeQuestion_SingleOption(Identity questionIdentity,
-            bool isDisabled = false, string title = "title", string variableName = "var", int? answer = null)
+            bool isDisabled = false, string title = "title", string instructions = "inst", string variableName = "var", int? answer = null)
         {
-            var question = this.InterviewTreeQuestion(questionIdentity, isDisabled, title, variableName, QuestionType.SingleOption, answer, null, null, false, false);
+            var question = this.InterviewTreeQuestion(questionIdentity, isDisabled, title,instructions,
+                variableName, QuestionType.SingleOption, answer, null, null, false, false);
             if (isDisabled) question.Disable();
             return question;
         }
 
-        public InterviewTreeQuestion InterviewTreeQuestion(Identity questionIdentity, bool isDisabled = false, string title = "title",
-            string variableName = "var", QuestionType questionType = QuestionType.Text, object answer = null, IEnumerable<RosterVector> linkedOptions = null,
+        public InterviewTreeQuestion InterviewTreeQuestion(Identity questionIdentity, bool isDisabled = false, 
+            string title = "title", string instructions = "instructions",
+            string variableName = "var", QuestionType questionType = QuestionType.Text, 
+            object answer = null, IEnumerable<RosterVector> linkedOptions = null,
             Guid? cascadingParentQuestionId = null, 
             bool isYesNo = false, 
             bool isDecimal = false, 
@@ -1484,7 +1533,10 @@ namespace WB.Tests.Abc.TestFactories
             bool? isTimestamp = false)
         {
             var titleWithSubstitutions = Create.Entity.SubstitutionText(questionIdentity, title);
-            var question = new InterviewTreeQuestion(questionIdentity, titleWithSubstitutions, variableName, questionType, answer, linkedOptions, 
+            var instructionsWithSubstitutions = Create.Entity.SubstitutionText(questionIdentity, instructions);
+            
+            var question = new InterviewTreeQuestion(questionIdentity, titleWithSubstitutions, instructionsWithSubstitutions, 
+                variableName, questionType, answer, linkedOptions, 
                 cascadingParentQuestionId, isYesNo,  isDecimal, false, isTimestamp ?? false, linkedSourceId);
 
             if (isDisabled) question.Disable();
@@ -1640,13 +1692,15 @@ namespace WB.Tests.Abc.TestFactories
             };
         }
 
-        public AssignmentApiDocumentBuilder AssignmentApiDocument(int id, int? quantity, QuestionnaireIdentity questionnaireIdentity = null)
+        public AssignmentApiDocumentBuilder AssignmentApiDocument(int id, int? quantity, QuestionnaireIdentity questionnaireIdentity = null,
+            Guid? responsibleId = null)
         {
             return new AssignmentApiDocumentBuilder(new AssignmentApiDocument
             {
                 Id = id,
                 Quantity = quantity,
-                QuestionnaireId = questionnaireIdentity
+                QuestionnaireId = questionnaireIdentity,
+                ResponsibleId = responsibleId ?? Guid.Empty
             });
         }
 
@@ -1753,13 +1807,17 @@ namespace WB.Tests.Abc.TestFactories
             return result;
         }
 
-        public AssignmentDocumentBuilder AssignmentDocument(int id, int? quantity = null, int interviewsCount = 0, string questionnaireIdentity = null)
+        public AssignmentDocumentBuilder AssignmentDocument(int id, int? quantity = null,
+            int interviewsCount = 0, string questionnaireIdentity = null, Guid? responsibleId = null, Guid? originalResponsibleId = null)
         {
             return new AssignmentDocumentBuilder(new AssignmentDocument
             {
                 Id = id,
                 Quantity = quantity,
-                QuestionnaireId = questionnaireIdentity
+                QuestionnaireId = questionnaireIdentity,
+                ResponsibleId = responsibleId ?? Guid.Empty,
+                OriginalResponsibleId = originalResponsibleId ?? Guid.Empty,
+                CreatedInterviewsCount = interviewsCount
             });
         }
 
@@ -1772,7 +1830,7 @@ namespace WB.Tests.Abc.TestFactories
                 _entity = entity;
             }
 
-            public AssignmentDocumentBuilder WithAnswer(Identity identity, string answer, bool identifying = false)
+            public AssignmentDocumentBuilder WithAnswer(Identity identity, string answer, bool identifying = false, string serializedAnswer = null)
             {
                 this._entity.Answers = this._entity.Answers ?? new List<AssignmentDocument.AssignmentAnswer>();
                 this._entity.IdentifyingAnswers = this._entity.IdentifyingAnswers ?? new List<AssignmentDocument.AssignmentAnswer>();
@@ -1782,6 +1840,7 @@ namespace WB.Tests.Abc.TestFactories
                     AssignmentId = this._entity.Id,
                     AnswerAsString = answer,
                     IsIdentifying = identifying,
+                    SerializedAnswer = serializedAnswer,
                     Identity = identity
                 };
 
@@ -1792,6 +1851,18 @@ namespace WB.Tests.Abc.TestFactories
                     this._entity.IdentifyingAnswers.Add(assignmentAnswer);
                 }
 
+                return this;
+            }
+
+            public AssignmentDocumentBuilder WithTitle(string title)
+            {
+                this._entity.Title = title;
+                return this;
+            }
+
+            public AssignmentDocumentBuilder WithResponsible(Guid responsibleId)
+            {
+                this._entity.ResponsibleId = responsibleId;
                 return this;
             }
 
@@ -1945,12 +2016,14 @@ namespace WB.Tests.Abc.TestFactories
         public InterviewState InterviewState(Guid interviewId) => new InterviewState {Id = interviewId};
 
         public PreloadedFile PreloadedFile(string questionnaireOrRosterName = null, params PreloadingRow[] rows)
+            => this.PreloadedFile(null, questionnaireOrRosterName, rows);
+
+        public PreloadedFile PreloadedFile(string fileName, string questionnaireOrRosterName, params PreloadingRow[] rows)
         {
             var columns = rows.SelectMany(x => x.Cells).OfType<PreloadingValue>().Select(x => x.Column).ToArray();
             return new PreloadedFile
             {
-                FileInfo = Create.Entity.PreloadedFileInfo(questionnaireOrRosterName: questionnaireOrRosterName,
-                    columns: columns),
+                FileInfo = Create.Entity.PreloadedFileInfo(columns, fileName, questionnaireOrRosterName),
                 Rows = rows
             };
         }
@@ -2098,8 +2171,11 @@ namespace WB.Tests.Abc.TestFactories
                 Value = code.ToString()
             };
 
-        public PreloadingRow PreloadingRow(params PreloadingCell[] cells) => new PreloadingRow
+        public PreloadingRow PreloadingRow(params PreloadingCell[] cells) => this.PreloadingRow(1, cells);
+
+        public PreloadingRow PreloadingRow(int rowIndex = 1, params PreloadingCell[] cells) => new PreloadingRow
         {
+            RowIndex = rowIndex,
             Cells = cells
         };
 
@@ -2127,6 +2203,45 @@ namespace WB.Tests.Abc.TestFactories
                 ColValue = col,
                 Count = count
             };
+        }
+
+        public AuditLogEntityFactory AuditLogEntity => new AuditLogEntityFactory();
+
+        public class AuditLogEntityFactory
+        {
+            private readonly Random rnd;
+            private readonly JsonAllTypesSerializer serializer;
+
+            public AuditLogEntityFactory()
+            {
+                this.rnd = new Random();
+                this.serializer = new JsonAllTypesSerializer();
+            }
+
+            public LogoutAuditLogEntity LogoutAuditLogEntity(string userName) 
+                => new LogoutAuditLogEntity(userName);
+
+            public CloseInterviewAuditLogEntity CloseInterviewAuditLogEntity(Guid? interviewId = null, string interviewKey = null) 
+                => new CloseInterviewAuditLogEntity(interviewId ?? Guid.NewGuid(), interviewKey ?? new InterviewKey(rnd.Next()).ToString());
+
+            public AuditLogEntityApiView AuditLogEntitiesApiView(
+                IAuditLogEntity entity, 
+                int? id = null, 
+                Guid? responsibleId = null, 
+                string responsible = null,
+                DateTime? dateTime = null, 
+                DateTime? dateTimeUtc = null) =>
+                new AuditLogEntityApiView
+                {
+                    Id = id ?? rnd.Next(),
+                    Type = entity.Type,
+                    PayloadType = entity.GetType().Name,
+                    ResponsibleId = responsibleId ?? Guid.NewGuid(),
+                    Payload = serializer.Serialize(entity),
+                    ResponsibleName = responsible ?? Guid.NewGuid().ToString(),
+                    Time = dateTime ?? DateTime.Now,
+                    TimeUtc = dateTimeUtc ?? DateTime.UtcNow
+                };
         }
     }
 }

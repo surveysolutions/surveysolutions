@@ -12,7 +12,7 @@
           <ImageView style="@style/Interview_Question_Multimedia_Picture"
               android:maxHeight="@dimen/Interview_Sidebar_GpsQuestions_max_height"
               android:maxWidth="@dimen/Interview_Sidebar_GpsQuestions_max_width"
-              android:scaleType="centerCrop"
+              android:scaleType="fitCenter"
               android:adjustViewBounds="true"
               local:MvxBind="Bitmap Answer,Converter=InMemoryImageValueWithDefault;Click ShowPhotoView; Visible QuestionState.IsAnswered "/>
           <include layout="@layout/interview_question__remove_button_recorded" />

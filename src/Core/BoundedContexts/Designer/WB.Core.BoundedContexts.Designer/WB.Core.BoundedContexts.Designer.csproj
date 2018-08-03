@@ -4,6 +4,7 @@
     <GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
     <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
     <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
+    <Configurations>Debug;Release;Debug-ESRI</Configurations>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
@@ -15,7 +16,7 @@
     <PackageReference Include="AngleSharp" Version="0.9.9.2" />
     <PackageReference Include="CsQuery" Version="1.3.4" />
     <PackageReference Include="CsvHelper" Version="6.1.0" />
-    <PackageReference Include="EPPlus" Version="4.5.1" />
+    <PackageReference Include="EPPlus" Version="4.5.2.1" />
     <PackageReference Include="HtmlSanitizer" Version="4.0.185" />
     <PackageReference Include="Microsoft.AspNet.WebPages.Data" Version="3.2.3" />
     <PackageReference Include="Microsoft.AspNet.WebPages.WebData" Version="3.2.3" />

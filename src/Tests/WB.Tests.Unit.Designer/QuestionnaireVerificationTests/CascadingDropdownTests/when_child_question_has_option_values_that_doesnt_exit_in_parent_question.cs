@@ -9,7 +9,7 @@ using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.GenericSubdomains.Portable;
 using QuestionnaireVerifier = WB.Core.BoundedContexts.Designer.Verifier.QuestionnaireVerifier;
 
-namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests.CascadingDropdownTests
+namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests.CascadingDropdownTests
 {
     internal class when_child_question_has_option_values_that_doesnt_exit_in_parent_question : QuestionnaireVerifierTestsContext
     {

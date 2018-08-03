@@ -44,8 +44,11 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             Critical<IComposite>("WB0058", VariableNameIsKeywords, VerificationMessages.WB0058_QuestionHasVariableNameReservedForServiceNeeds),
             Critical<IComposite>("WB0122", VariableNameHasSpecialCharacters, VerificationMessages.WB0122_VariableNameHasSpecialCharacters),
             Critical<IComposite>("WB0123", VariableNameStartWithDigitOrUnderscore, VerificationMessages.WB0123_VariableNameStartWithDigitOrUnderscore),
+            
             ErrorsByQuestionnaireEntitiesShareSameInternalId,
             ErrorsBySubstitutions,
+            ErrorsByInvalidQuestionnaireVariable,
+            Critical_EntitiesWithDuplicateVariableName_WB0026,
             Warning(NotShared, "WB0227", VerificationMessages.WB0227_NotShared),
         };
 
@@ -64,6 +67,83 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             QuestionType.MultyOption,
             QuestionType.TextList
         };
+
+        private static IEnumerable<QuestionnaireVerificationMessage> Critical_EntitiesWithDuplicateVariableName_WB0026(
+            MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            var rosterVariableNameMappedOnRosters = questionnaire
+                .Find<IGroup>(g => g.IsRoster && !string.IsNullOrEmpty(g.VariableName))
+                .Select(r => new
+                {
+                    Name = r.VariableName,
+                    Reference = QuestionnaireEntityReference.CreateForRoster(r.PublicKey)
+                })
+                .Union(questionnaire.Find<IQuestion>(q => true)
+                    .Where(x => !string.IsNullOrEmpty(x.StataExportCaption))
+                    .Select(r => new
+                    {
+                        Name = r.StataExportCaption,
+                        Reference = CreateReference(r)
+                    }))
+                .Union(questionnaire.LookupTables.Where(x => !string.IsNullOrEmpty(x.Value.TableName))
+                    .Select(r => new
+                    {
+                        Name = r.Value.TableName,
+                        Reference = QuestionnaireEntityReference.CreateForLookupTable(r.Key)
+                    }))
+                .Union(questionnaire.Find<IVariable>(x => !string.IsNullOrEmpty(x.Name))
+                    .Where(x => !string.IsNullOrEmpty(x.Name))
+                    .Select(r => new
+                    {
+                        Name = r.Name,
+                        Reference = CreateReference(r)
+                    })
+                ).Union(questionnaire.VariableName.ToEnumerable()
+                    .Where(x => !string.IsNullOrEmpty(x))
+                    .Select(r => new
+                    {
+                        Name = r,
+                        Reference = QuestionnaireEntityReference.CreateForQuestionnaire(questionnaire.PublicKey)
+                    })
+                ).ToList();
+
+
+            return rosterVariableNameMappedOnRosters
+                .GroupBy(s => s.Name, StringComparer.InvariantCultureIgnoreCase)
+                .Where(group => group.Count() > 1)
+                .Select(group => QuestionnaireVerificationMessage.Critical(
+                    "WB0026",
+                    VerificationMessages.WB0026_ItemsWithTheSameNamesFound,
+                    group.Select(x => x.Reference).ToArray()));
+        }
+        
+        private IEnumerable<QuestionnaireVerificationMessage> ErrorsByInvalidQuestionnaireVariable(MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            var foundErrors = new List<QuestionnaireVerificationMessage>();
+
+            var reference = QuestionnaireEntityReference.CreateForQuestionnaire(questionnaire.PublicKey);
+            if (string.IsNullOrWhiteSpace(questionnaire.VariableName))
+                foundErrors.Add(QuestionnaireVerificationMessage.Error("WB0067", VerificationMessages.WB0067_VariableNameIsEmpty, reference));
+
+            if (VariableNameHasSpecialCharacters(questionnaire.Questionnaire.Questionnaire, questionnaire))
+                foundErrors.Add(QuestionnaireVerificationMessage.Error("WB0122", VerificationMessages.WB0122_VariableNameHasSpecialCharacters, reference));
+
+            if (VariableNameStartWithDigitOrUnderscore(questionnaire.Questionnaire.Questionnaire, questionnaire))
+                foundErrors.Add(QuestionnaireVerificationMessage.Error("WB0123", VerificationMessages.WB0123_VariableNameStartWithDigitOrUnderscore, reference));
+
+            if (VariableNameIsKeywords(questionnaire.Questionnaire.Questionnaire, questionnaire))
+                foundErrors.Add(QuestionnaireVerificationMessage.Error("WB0058", VerificationMessages.WB0058_QuestionHasVariableNameReservedForServiceNeeds, reference));
+
+            if (VariableNameEndWithUnderscore(questionnaire.Questionnaire.Questionnaire, questionnaire))
+                foundErrors.Add(QuestionnaireVerificationMessage.Error("WB0124", VerificationMessages.WB0124_VariableNameEndWithUnderscore, reference));
+
+            if (VariableNameHasConsecutiveUnderscores(questionnaire.Questionnaire.Questionnaire, questionnaire))
+                foundErrors.Add(QuestionnaireVerificationMessage.Error("WB0125", VerificationMessages.WB0125_VariableNameHasConsecutiveUnderscores, reference));
+
+            return foundErrors.Distinct(new QuestionnaireVerificationMessage.CodeAndReferencesAndTranslationComparer());
+        }
+
+
         private static bool VariableNameIsEmpty(IComposite entity, MultiLanguageQuestionnaireDocument questionnaire)
         {
             if (entity is IGroup && !questionnaire.Questionnaire.IsRoster(entity))
@@ -158,8 +238,8 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
 
             foreach (var translatedEntity in entitiesSupportingSubstitutions)
             {
-                foundErrors.AddRange(this.GetErrorsBySubstitutionsInEntityTitle(translatedEntity, translatedEntity.Entity.GetTitle(), questionnaire));
-
+                foundErrors.AddRange(this.GetErrorsBySubstitutionsInEntityTitleOrInstructions(translatedEntity, translatedEntity.Entity.GetTitle(), questionnaire));
+                
                 if (translatedEntity.Entity is IValidatable entityAsValidatable)
                 {
                     var validationConditions = entityAsValidatable.ValidationConditions;
@@ -174,9 +254,11 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
                 if (translatedEntity.Entity is IQuestion entityAsQuestion)
                 {
                     var variableLabel= entityAsQuestion.VariableLabel;
-                    if (string.IsNullOrWhiteSpace(variableLabel))
-                        continue;
-                    foundErrors.AddRange(GetErrorsBySubstitutionsInVariableLabel(translatedEntity, variableLabel, questionnaire));
+                    if (!string.IsNullOrWhiteSpace(variableLabel))
+                      foundErrors.AddRange(GetErrorsBySubstitutionsInVariableLabel(translatedEntity, variableLabel, questionnaire));
+
+                    if (!string.IsNullOrWhiteSpace(entityAsQuestion.Instructions))
+                        foundErrors.AddRange(this.GetErrorsBySubstitutionsInEntityTitleOrInstructions(translatedEntity, entityAsQuestion.Instructions, questionnaire));
                 }
             }
 
@@ -214,7 +296,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             return entityErrors;
         }
 
-        private IEnumerable<QuestionnaireVerificationMessage> GetErrorsBySubstitutionsInEntityTitle(MultiLanguageQuestionnaireDocument.TranslatedEntity<IComposite> translatedEntity, string title, MultiLanguageQuestionnaireDocument questionnaire)
+        private IEnumerable<QuestionnaireVerificationMessage> GetErrorsBySubstitutionsInEntityTitleOrInstructions(MultiLanguageQuestionnaireDocument.TranslatedEntity<IComposite> translatedEntity, string title, MultiLanguageQuestionnaireDocument questionnaire)
         {
             string[] substitutionReferences = this.substitutionService.GetAllSubstitutionVariableNames(title);
 
@@ -242,10 +324,10 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             RosterScope vectorOfRosterQuestionsByEntityWithSubstitutions,
             MultiLanguageQuestionnaireDocument questionnaire)
         {
-            bool isTitle = validationConditionIndex == null;
+            bool isTitleOrInstructions = validationConditionIndex == null;
             var referenceToEntityWithSubstitution = CreateReference(traslatedEntityWithSubstitution.Entity, validationConditionIndex);
 
-            if (traslatedEntityWithSubstitution.Entity is IQuestion question && isTitle && substitutionReference == question.StataExportCaption)
+            if (traslatedEntityWithSubstitution.Entity is IQuestion question && isTitleOrInstructions && substitutionReference == question.StataExportCaption)
             {
                 return QuestionnaireVerificationMessage.Error("WB0016",
                     VerificationMessages.WB0016_QuestionWithTitleSubstitutionCantReferenceSelf,

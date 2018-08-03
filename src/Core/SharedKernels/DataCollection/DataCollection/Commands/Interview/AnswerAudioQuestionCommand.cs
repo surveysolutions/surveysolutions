@@ -10,8 +10,8 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
         public TimeSpan Length { get; private set; }
 
         public AnswerAudioQuestionCommand(Guid interviewId, Guid userId, Guid questionId, decimal[] rosterVector,
-            DateTime answerTime, string fileName, TimeSpan length)
-            : base(interviewId, userId, questionId, rosterVector, answerTime)
+            string fileName, TimeSpan length)
+            : base(interviewId, userId, questionId, rosterVector)
         {
             this.FileName = fileName;
             this.Length = length;

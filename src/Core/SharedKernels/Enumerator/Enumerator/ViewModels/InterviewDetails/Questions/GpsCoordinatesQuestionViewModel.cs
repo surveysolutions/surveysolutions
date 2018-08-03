@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
-using MvvmCross.Core.ViewModels;
+using MvvmCross.Commands;
+using MvvmCross.ViewModels;
 using Plugin.Geolocator.Abstractions;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
@@ -14,7 +12,6 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
@@ -69,8 +66,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     this.interviewId,
                     this.userId,
                     new Identity(this.questionIdentity.Id,
-                        this.questionIdentity.RosterVector),
-                    DateTime.UtcNow);
+                    this.questionIdentity.RosterVector));
                 await this.Answering.SendRemoveAnswerCommandAsync(command);
 
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
@@ -212,7 +208,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 userId: this.userId,
                 questionId: this.questionIdentity.Id,
                 rosterVector: this.questionIdentity.RosterVector,
-                answerTime: DateTime.UtcNow,
                 accuracy: location.Accuracy,
                 altitude: location.Altitude,
                 latitude: location.Latitude,

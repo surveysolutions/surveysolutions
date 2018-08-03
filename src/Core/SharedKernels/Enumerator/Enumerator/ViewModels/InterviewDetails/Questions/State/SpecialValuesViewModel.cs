@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using MvvmCross.Core.ViewModels;
-using MvvmCross.Platform.Core;
+using MvvmCross.Base;
+using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -164,7 +164,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private void RemoveSpecialValues()
         {
-            this.SpecialValues.ForEach(x => x.DisposeIfDisposable());
+            this.SpecialValues.ForEach(option =>
+            {
+                option.BeforeSelected -= this.SpecialValueSelected;
+                option.AnswerRemoved -= this.RemoveAnswerHandler;
+                option.DisposeIfDisposable();
+            });
             this.SpecialValues.Clear();
         }
 

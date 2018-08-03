@@ -5,6 +5,7 @@ using System.Web.Mvc;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser;
 using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
@@ -46,6 +47,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IPreloadedDataVerifier dataVerifier;
         private readonly IAssignmentsUpgradeService upgradeService;
         private readonly IAllUsersAndQuestionnairesFactory questionnairesFactory;
+        private readonly IExportFileNameService exportFileNameService;
 
         public SurveySetupController(
             ICommandService commandService,
@@ -61,7 +63,8 @@ namespace WB.UI.Headquarters.Controllers
             IAssignmentsImportReader assignmentsImportReader,
             IPreloadedDataVerifier dataVerifier,
             IAssignmentsUpgradeService upgradeService,
-            IAllUsersAndQuestionnairesFactory questionnairesFactory)
+            IAllUsersAndQuestionnairesFactory questionnairesFactory, 
+            IExportFileNameService exportFileNameService)
             : base(commandService, logger)
         {
             this.preloadingTemplateService = preloadingTemplateService;
@@ -75,6 +78,7 @@ namespace WB.UI.Headquarters.Controllers
             this.dataVerifier = dataVerifier;
             this.upgradeService = upgradeService;
             this.questionnairesFactory = questionnairesFactory;
+            this.exportFileNameService = exportFileNameService;
             this.sampleUploadViewFactory = sampleUploadViewFactory;
         }
 
@@ -165,11 +169,12 @@ namespace WB.UI.Headquarters.Controllers
 
         public ActionResult SimpleTemplateDownload(Guid id, long version)
         {
-            var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(new QuestionnaireIdentity(id, version));
+            var questionnaireIdentity = new QuestionnaireIdentity(id, version);
+            var questionnaireInfo = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
             if (questionnaireInfo == null || questionnaireInfo.IsDeleted)
                 return this.HttpNotFound();
 
-            string fileName = this.fileSystemAccessor.MakeValidFileName(questionnaireInfo.Title + ".tab");
+            string fileName = exportFileNameService.GetFileNameForAssignmentTemplate(questionnaireIdentity);
             byte[] templateFile = this.preloadingTemplateService.GetPrefilledPreloadingTemplateFile(id, version);
             return this.File(templateFile, "text/tab-separated-values", fileDownloadName: fileName);
         }
@@ -327,7 +332,7 @@ namespace WB.UI.Headquarters.Controllers
             if (isFile)
             {
                 preloadedFileInfo = this.assignmentsImportReader.ReadTextFileInfo(model.File.InputStream, model.File.FileName);
-                preloadedFileInfo.QuestionnaireOrRosterName = questionnaireFileName;/*we expect that it is main file*/
+                preloadedFileInfo.QuestionnaireOrRosterName = questionnaire.VariableName;/*we expect that it is main file*/
             }
             else if (isZip)
             {
@@ -337,6 +342,7 @@ namespace WB.UI.Headquarters.Controllers
 
                     preloadedFileInfo =
                         preloadedFiles.FirstOrDefault(x => x.QuestionnaireOrRosterName == questionnaireFileName) ??
+                        preloadedFiles.FirstOrDefault(x => x.QuestionnaireOrRosterName == questionnaire.VariableName) ??
                         preloadedFiles.FirstOrDefault();
                 }
                 catch (ZipException)

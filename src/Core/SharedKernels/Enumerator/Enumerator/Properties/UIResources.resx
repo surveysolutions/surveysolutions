@@ -353,6 +353,9 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="Interviewer_ApplicationName" xml:space="preserve">
     <value>Survey Solutions Interviewer</value>
   </data>
+  <data name="Supervisor_ApplicationName" xml:space="preserve">
+    <value>Survey Solutions Supervisor</value>
+  </data>
   <data name="Interview_CompleteScreen_ButtonText" xml:space="preserve">
     <value>To complete screen</value>
   </data>
@@ -540,6 +543,9 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
     <value>Cancel</value>
   </data>
   <data name="AreaMap_LengthFormat" xml:space="preserve">
+    <value>Length:</value>
+  </data>
+  <data name="AreaMap_PerimeterFormat" xml:space="preserve">
     <value>Perimeter:</value>
   </data>
   <data name="AreaMap_Active_Map_Title" xml:space="preserve">
@@ -595,5 +601,60 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   </data>
   <data name="Interview_MaxAnswersCount" xml:space="preserve">
     <value>{0} out of {1} options selected</value>
+  </data>
+  <data name="Interview_Overview" xml:space="preserve">
+    <value>Overview</value>
+  </data>
+  <data name="Interview_Overview_Name" xml:space="preserve">
+    <value>Overview</value>
+  </data>
+  <data name="Interview_Overview_NotAnswered" xml:space="preserve">
+    <value>Not answered</value>
+  </data>
+  <data name="Interview_Overview_AdditionalInfo" xml:space="preserve">
+    <value>Additional info</value>
+  </data>
+  <data name="Interview_Overview_Warnings" xml:space="preserve">
+    <value>Warning(s)</value>
+  </data>
+  <data name="Interview_Overview_Comments" xml:space="preserve">
+    <value>Commentaries</value>
+  </data>
+  <data name="Supervisor_Complete_Approve_btn" xml:space="preserve">
+    <value>Approve</value>
+  </data>
+  <data name="Supervisor_Complete_Assign_btn" xml:space="preserve">
+    <value>Assign</value>
+  </data>
+  <data name="Supervisor_Complete_Reject_btn" xml:space="preserve">
+    <value>Reject</value>
+  </data>
+  <data name="OfflineSync_Cancel" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="OfflineSync_Abort" xml:space="preserve">
+    <value>Abort</value>
+  </data>
+  <data name="OfflineSync_BackToDashboard" xml:space="preserve">
+    <value>Back to dashboard</value>
+  </data>
+  <data name="OfflineSync_Retry" xml:space="preserve">
+    <value>Retry</value>
+  </data>
+  <data name="OfflineSync_NetworkInfo" xml:space="preserve">
+    <value>Speed: {0}, Time left: {1}</value>
+  </data>
+  <data name="OfflineSync_InstallPlayServices" xml:space="preserve">
+    <value>Google Play Services must be installed.</value>
+  </data>
+  <data name="OfflineSync_DeviceNotSupported" xml:space="preserve">
+    <value>This device is not supported.</value>
+  </data>
+  <data name="Synchronization_FoundDevice" xml:space="preserve">
+    <value>Found interviewer device ({0})</value>
+    <comment>{0} - interviewer login</comment>
+  </data>
+  <data name="OfflineSync_Supervisor_Title" xml:space="preserve">
+    <value>Synchronization of assignments and interviews</value>
   </data>
 </root>

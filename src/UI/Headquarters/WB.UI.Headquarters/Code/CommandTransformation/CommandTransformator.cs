@@ -39,25 +39,25 @@ namespace WB.UI.Headquarters.Code.CommandTransformation
             var rejectCommand = command as RejectInterviewCommand;
             if (rejectCommand != null)
             {
-                rejectCommand.RejectTime = DateTime.UtcNow;
+                rejectCommand.OriginDate = DateTimeOffset.Now;
             }
 
             var rejectToInterviewerCommand = command as RejectInterviewToInterviewerCommand;
             if (rejectToInterviewerCommand != null)
             {
-                rejectToInterviewerCommand.RejectTime = DateTime.UtcNow;
+                rejectToInterviewerCommand.OriginDate = DateTimeOffset.Now;
             }
 
             var assignCommand = command as AssignInterviewerCommand;
             if (assignCommand != null)
             {
-                assignCommand.AssignTime = DateTime.UtcNow;
+                assignCommand.OriginDate = DateTimeOffset.Now;
             }
 
             var approveCommand = command as ApproveInterviewCommand;
             if (approveCommand != null)
             {
-                approveCommand.ApproveTime = DateTime.UtcNow;
+                approveCommand.OriginDate = DateTimeOffset.Now;
             }
 
             return command;
@@ -85,7 +85,6 @@ namespace WB.UI.Headquarters.Code.CommandTransformation
                 new QuestionnaireIdentity(command.QuestionnaireId, command.QuestionnaireVersion),
                 answers,
                 new List<string>(),
-                DateTime.UtcNow,
                 command.SupervisorId,
                 null,
                 interviewKey,

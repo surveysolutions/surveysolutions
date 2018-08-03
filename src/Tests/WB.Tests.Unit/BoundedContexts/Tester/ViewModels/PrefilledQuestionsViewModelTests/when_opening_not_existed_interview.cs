@@ -3,6 +3,7 @@ using Moq;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 
 namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.PrefilledQuestionsViewModelTests
 {
@@ -21,7 +22,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.ViewModels.PrefilledQuestionsView
                 interviewRepository: interviewRepositoryMock.Object,
                 viewModelNavigationService: navigationServiceMock.Object,
                 logger: loggerMock.Object);
-            viewModel.Init(notExistedInterviewId);
+            viewModel.Prepare(new InterviewViewModelArgs{InterviewId = notExistedInterviewId});
 
             // Act
             await viewModel.Initialize();

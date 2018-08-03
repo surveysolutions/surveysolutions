@@ -61,6 +61,9 @@
     <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.resx">
       <Link>InterviewerUIResources.resx</Link>
     </EmbeddedResource>
+    <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.ro.resx">
+      <Link>InterviewerUIResources.ro.resx</Link>
+    </EmbeddedResource>
     <EmbeddedResource Include="..\..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\Properties\InterviewerUIResources.ru.resx">
       <Link>InterviewerUIResources.ru.resx</Link>
     </EmbeddedResource>

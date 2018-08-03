@@ -1,10 +1,13 @@
 ﻿using System.Collections.Generic;
 using Main.Core.Documents;
 using Moq;
+using MvvmCross.Tests;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Tests.Abc;
@@ -13,7 +16,7 @@ using WB.Tests.Abc.Storage;
 namespace WB.Tests.Unit.BoundedContexts.Interviewer
 {
     [TestFixture]
-    public class AttachmentsCleanupServiceTests : MvvmCross.Test.Core.MvxIoCSupportingTest
+    public class AttachmentsCleanupServiceTests : MvxIoCSupportingTest
     {
         private IPlainStorage<AttachmentContentMetadata> metadataStorage;
         private IPlainStorage<AttachmentContentData> contentStorage;

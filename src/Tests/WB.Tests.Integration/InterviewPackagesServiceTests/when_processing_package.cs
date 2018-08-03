@@ -31,7 +31,6 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
     {
         [NUnit.Framework.OneTimeSetUp] public void context ()
         {
-            Context();
             var sessionFactory = IntegrationCreate.SessionFactory(connectionStringBuilder.ConnectionString, new[] { typeof(InterviewPackageMap), typeof(BrokenInterviewPackageMap) }, true);
             plainPostgresTransactionManager = new PlainPostgresTransactionManager(sessionFactory ?? Mock.Of<ISessionFactory>());
 
@@ -71,8 +70,8 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
                     new IEvent[]
                     {
                         Create.Event.InterviewOnClientCreated(Guid.NewGuid(), 111),
-                        new InterviewerAssigned(Guid.NewGuid(), Guid.NewGuid(), DateTime.UtcNow),
-                        new SupervisorAssigned(Guid.NewGuid(), Guid.NewGuid()),
+                        new InterviewerAssigned(Guid.NewGuid(), Guid.NewGuid(), DateTimeOffset.Now),
+                        new SupervisorAssigned(Guid.NewGuid(), Guid.NewGuid(), DateTimeOffset.Now),
                         new DateTimeQuestionAnswered(Guid.NewGuid(), Guid.NewGuid(), new decimal[] { 2, 5, 8}, DateTime.UtcNow, DateTime.Today),  
                     });
 

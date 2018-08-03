@@ -2,8 +2,10 @@ using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using MvvmCross.Core.ViewModels;
-using MvvmCross.Plugins.Messenger;
+using MvvmCross.Base;
+using MvvmCross.Commands;
+using MvvmCross.Plugin.Messenger;
+using MvvmCross.ViewModels;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
@@ -51,9 +53,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.SideBarGroupState = interviewStateViewModel;
         }
 
-        public void Init(NavigationState navigationState, string interviewId)
+        public void Init(NavigationState navigationState, string interviewId, string itemText)
         {
-            this.Title.InitAsStatic(UIResources.Interview_Complete_Screen_Title);
+            this.Title.InitAsStatic(itemText);
             this.SideBarGroupState.Init(interviewId, null);
 
             this.navigationState = navigationState;

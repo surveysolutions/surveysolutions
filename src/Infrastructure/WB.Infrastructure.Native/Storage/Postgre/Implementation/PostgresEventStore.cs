@@ -13,7 +13,7 @@ using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 {
-    public class PostgresEventStore  : IStreamableEventStore
+    public class PostgresEventStore  : IHeadquartersEventStore
     {
         private readonly PostgreConnectionSettings connectionSettings;
         private static long lastUsedGlobalSequence = -1;
@@ -210,6 +210,42 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                     result = exactCountScalar == null ? 0 : Convert.ToInt32(exactCountScalar);
                 }
                 return result;
+            }
+        }
+
+        public bool HasEventsAfterSpecifiedSequenceWithAnyOfSpecifiedTypes(long sequence, Guid eventSourceId, params string[] typeNames)
+        {
+            using (var connection = new NpgsqlConnection(this.connectionSettings.ConnectionString))
+            {
+                connection.Open();
+                var command = connection.CreateCommand();
+                command.CommandText = $@"select 1 from {tableNameWithSchema} where
+                                        eventsourceid = :eventSourceId
+                                        and eventsequence > :eventSequence
+                                        and eventtype = ANY(:eventTypes)
+                                        limit 1";
+                command.Parameters.AddWithValue("eventSourceId", NpgsqlDbType.Uuid, eventSourceId);
+                command.Parameters.AddWithValue("eventSequence", NpgsqlDbType.Bigint, sequence);
+                command.Parameters.AddWithValue("eventTypes", NpgsqlDbType.Array | NpgsqlDbType.Text, typeNames);
+                var scalar = command.ExecuteScalar();
+                return scalar != null;
+            }
+        }
+
+        public int? GetMaxEventSequenceWithAnyOfSpecifiedTypes(Guid eventSourceId, params string[] typeNames)
+        {
+            using (var connection = new NpgsqlConnection(this.connectionSettings.ConnectionString))
+            {
+                connection.Open();
+                var command = connection.CreateCommand();
+                command.CommandText = $@"select MAX(eventsequence) from {tableNameWithSchema} where
+                                        eventsourceid = :eventSourceId
+                                        and eventtype = ANY(:eventTypes)
+                                        limit 1";
+                command.Parameters.AddWithValue("eventSourceId", NpgsqlDbType.Uuid, eventSourceId);
+                command.Parameters.AddWithValue("eventTypes", NpgsqlDbType.Array | NpgsqlDbType.Text, typeNames);
+                var scalar = command.ExecuteScalar();
+                return scalar == DBNull.Value ? null : (int?) scalar;
             }
         }
 

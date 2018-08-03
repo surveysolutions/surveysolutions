@@ -17,5 +17,13 @@ namespace WB.Infrastructure.Native.Storage
             Converters = new JsonConverter[] { new StringEnumConverter(), new IdentityJsonConverter(), new RosterVectorConverter() },
             Binder = new OldToNewAssemblyRedirectSerializationBinder()
         };
+
+        public static readonly JsonSerializerSettings SyncronizationJsonSerializerSettings = new JsonSerializerSettings
+        {
+            NullValueHandling = NullValueHandling.Ignore,
+            DefaultValueHandling = DefaultValueHandling.Ignore,
+            MissingMemberHandling = MissingMemberHandling.Ignore,
+            TypeNameHandling = TypeNameHandling.Auto
+        };
     }
 }

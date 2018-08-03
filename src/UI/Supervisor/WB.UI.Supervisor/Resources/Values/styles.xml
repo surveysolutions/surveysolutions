@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <style name="Menu_Hint" parent="AppTheme">
+    <item name="android:textColor">@color/menu_hint_color</item>
+    <item name="android:fontFamily">Roboto</item>
+    <item name="android:textSize">@dimen/textsize_16</item>
+    <item name="android:textStyle">italic</item>
+  </style>
+
+  <style name="Menu_Hint_Bold" parent="Menu_Hint">
+    <item name="android:textStyle">italic|bold</item>
+  </style>
+    
+    <style name="Interviewer_Selector_Holder" parent="VerticalFullWidthWrappingLayout">
+        <item name="android:background">@android:color/white</item>
+        <item name="android:paddingBottom">@dimen/Interviewer_Selector_Dialog_PaddingBottom</item>
+        <item name="android:paddingTop">@dimen/Interviewer_Selector_Dialog_PaddingTop</item>
+        <item name="android:paddingLeft">@dimen/Interviewer_Selector_Dialog_PaddingLeft</item>
+        <item name="android:paddingRight">@dimen/Interviewer_Selector_Dialog_PaddingRight</item>
+    </style>
+
+    <style name="Interviewer_Selector_Title">
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/question_title_text</item>
+        <item name="android:textSize">@dimen/textsize_18</item>
+        <item name="android:paddingTop">@dimen/Interview_Group_button_padding</item>
+        <item name="android:paddingBottom">@dimen/Interview_Group_button_padding</item>
+    </style>
+    
+    <style name="Interviewer_Selector_Item">
+        <item name="android:paddingTop">@dimen/Interviewer_Selector_Item_Padding</item>
+        <item name="android:paddingBottom">@dimen/Interviewer_Selector_Item_Padding</item>
+    </style>
+    
+    <style name="Interviewer_Selector_Text">
+        <item name="android:textColor">@color/question_title_text</item>
+        <item name="android:textSize">@dimen/textsize_18</item>
+    </style>
+    
+    <style name="Interviewer_Selector_Button">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:padding">@dimen/Interview_Group_button_padding</item>
+        <item name="android:layout_marginRight">@dimen/Interview_Question_InputButton_padding_horizontal</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:letterSpacing">0.1</item>
+        <item name="android:layout_gravity">center_vertical</item>
+    </style>
+    
+    <style name="Interviewer_Selector_Cancel_Button" parent="Interviewer_Selector_Button">
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:background">?attr/selectableItemBackground</item>
+    </style>
+
+    <style name="Interviewer_Selector_Done_Button" parent="Interviewer_Selector_Button">
+        <item name="android:background">@drawable/default_input_button</item>
+    </style>
+
+    <style name="Sidebar_Header_Icon">
+        <item name="android:layout_width">@dimen/Sidebar_image_dimention</item>
+        <item name="android:layout_height">@dimen/Sidebar_image_dimention</item>
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:layout_alignParentLeft">true</item>
+        <item name="android:layout_alignParentTop">true</item>
+        <item name="android:src">@drawable/icon</item>
+    </style>
+    <style name="Sidebar_Header_Name">
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingLeft">@dimen/Sidebar_header_padding</item>
+        <item name="android:layout_alignParentTop">true</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="Sidebar_Header_Email">
+
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingLeft">@dimen/Sidebar_header_padding</item>
+
+    </style>
+    <style name="Sidebar_Header_Sync">
+        <item name="android:layout_alignParentBottom">true</item>
+        <item name="android:layout_alignParentRight">true</item>
+        <item name="android:layout_alignParentTop">true</item>
+
+        <item name="android:layout_width">@dimen/Sidebar_image_dimention</item>
+        <item name="android:layout_height">@dimen/Sidebar_image_dimention</item>
+        <item name="android:background">@null</item>
+        <item name="android:scaleType">fitXY</item>
+    </style>
+
+</resources>

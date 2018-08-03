@@ -7,9 +7,9 @@ using FluentAssertions;
 using Main.Core.Documents;
 using Moq;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Tests.Abc;
+using WB.UI.Headquarters.API.DataCollection.Interviewer.v2;
 
 namespace WB.Tests.Unit.Applications.Headquarters.PublicApiTests
 {

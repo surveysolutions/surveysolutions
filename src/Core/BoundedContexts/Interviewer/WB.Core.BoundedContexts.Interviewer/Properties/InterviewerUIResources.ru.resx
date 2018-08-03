@@ -305,7 +305,7 @@
     <value>Ошибка аутентификации пользователя</value>
   </data>
   <data name="Synchronization_UserAuthentication_Title" xml:space="preserve">
-    <value>Аутентификации пользователя</value>
+    <value>Аутентификация пользователя</value>
   </data>
   <data name="Synchronization_UserAuthentication_Description" xml:space="preserve">
     <value>Подготовка к синхронизации</value>
@@ -720,15 +720,15 @@
   <data name="Maps_Synchronization_Success_Description" xml:space="preserve">
     <value>Карты успешно обновлены</value>
   </data>
-    <data name="Synchronization_DownloadApplication" xml:space="preserve">
+  <data name="Synchronization_DownloadApplication" xml:space="preserve">
     <value>Загрузка обновлений</value>
     <comment>Загрузка обновлений</comment>
   </data>
-    <data name="Synchronization_CheckNewVersionOfApplication" xml:space="preserve">
+  <data name="Synchronization_CheckNewVersionOfApplication" xml:space="preserve">
     <value>Проверка обновлений</value>
     <comment>Проверка обновлений</comment>
   </data>
-    <data name="Synchronization_DownloadApplication_Description" xml:space="preserve">
+  <data name="Synchronization_DownloadApplication_Description" xml:space="preserve">
     <value>Загружено {0} из {1} при {2} ({3}%)</value>
     <comment>Загружено {0} из {1} ({2}%)</comment>
   </data>
@@ -755,8 +755,80 @@
   <data name="Dashboard_Search_ExitSearch" xml:space="preserve">
     <value>Выйти из поиска</value>
   </data>
-    <data name="Synchronization_UploadAuditLog" xml:space="preserve">
-    <value>Загрузка на хедквотер аудин информации</value>
-    <comment>Загрузка на хедквотер аудин информации</comment>
+  <data name="Synchronization_UploadAuditLog" xml:space="preserve">
+    <value>Загрузка на хедквотер аудит информации</value>
+  </data>
+  <data name="SendToSupervisor_Retry" xml:space="preserve">
+    <value>Повторить еще раз</value>
+    <comment>Повторить еще раз</comment>
+  </data>
+  <data name="SendToSupervisor_Note" xml:space="preserve">
+    <value>Примечание: Эта операция может занять больше времени чем обычно, не выключайте ваше устройство</value>
+    <comment>Примечание: Эта операция может занять времени больше чем обычно, не выключайте ваше устройство</comment>
+  </data>
+  <data name="SendToSupervisor_MovingToSupervisorDevice" xml:space="preserve">
+    <value>Перемещение всех завершенных интервью на устройство супервизора</value>
+    <comment>Перемещение всех завершенных интервью на устройство супервизора</comment>
+  </data>
+  <data name="SendToSupervisor_LookingForSupervisor" xml:space="preserve">
+    <value>Поиск устройства супервизора</value>
+    <comment>Поиск устройства супервизора</comment>
+  </data>
+  <data name="SendToSupervisor_CheckSupervisorDevice" xml:space="preserve">
+    <value>Проверьте что на устройстве супервизора включен wifi и bluetooth и вы находитесь в нескольких шагах от него</value>
+    <comment>Проверьте что на устройстве супервизора включен wifi и bluetooth и вы находитесь в нескольких шагах от него</comment>
+  </data>
+    <data name="SendToSupervisor_ConnectionFailed" xml:space="preserve">
+    <value>Убедитесь что оба устройсва находятся близко друг к другу; WIFI and Bluetooth дожны быть включены на обох устройствах; Приложение Supervisor дложно быть открыто на устройстве супервизора</value>
+    <comment>Убедитесь что оба устройсва находятся близко друг к другу; WIFI and Bluetooth дожны быть включены на обох устройствах; Приложение Supervisor дложно быть открыто на устройстве супервизора</comment>
+  </data>
+  <data name="SendToSupervisor_MovingToSupervisorFormat" xml:space="preserve">
+    <value>Перемещение всех завершенных интервью супервизору '{0}'</value>
+    <comment>Перемещение всех завершенных интервью супервизору '{0}'</comment>
+  </data>
+  <data name="SendToSupervisor_TransferInProgress" xml:space="preserve">
+    <value>Процесс передачи данных</value>
+    <comment>Процесс передачи данных</comment>
+  </data>
+  <data name="SendToSupervisor_SupervisorNotFound" xml:space="preserve">
+    <value>Передача данных не начата.
+Устройство супервизора не найдено</value>
+    <comment>Передача данных не начата.
+Устройство супервизора не найдено</comment>
+  </data>
+  <data name="SendToSupervisor_TransferWasAborted" xml:space="preserve">
+    <value>Передача данных была отменена</value>
+    <comment>Передача данных была отменена</comment>
+  </data>
+  <data name="SendToSupervisor_SyncCompleted" xml:space="preserve">
+    <value>Передача завершена. Все завершенные интервью теперь находятся на другом устройстве</value>
+    <comment>Передача завершена. Все завершенные интервью теперь находятся на другом устройстве</comment>
+  </data>
+  <data name="SendToSupervisor_SupervisorTerminateTransfering" xml:space="preserve">
+    <value>Передача была прервана на втором устройстве.</value>
+    <comment>Передача была прервана на втором устройстве.</comment>
+  </data>
+  <data name="SendToSupervisor_SomeInterviewsOnSupervisor" xml:space="preserve">
+    <value>Некоторые интервью теперь находятся на другом устройстве</value>
+    <comment>Некоторые интервью теперь находятся на другом устройстве</comment>
+  </data>
+  <data name="SendToSupervisor_SyncCompletedWithErrorsFormat" xml:space="preserve">
+    <value>Передача завершена. {0} интервью не синхронизировано из-за ошибки</value>
+    <comment>Передача завершена. {0} интервью не передано из-за ошибки</comment>
+  </data>
+  <data name="SendToSupervisor_DeviceFound" xml:space="preserve">
+    <value>Устройство супервизора найдено. Запрос подключения</value>
+    <comment>Устройство супервизора найдено. Запрос подключения</comment>
+  </data>
+  <data name="SendToSupervisor_DeviceConnectionAccepting" xml:space="preserve">
+    <value>Ожидание подтверждения соединения от супервизора</value>
+    <comment>Ожидание подтверждения соединения от супервизора</comment>
+  </data>
+  <data name="SendToSupervisor_DeviceConnectionAccepted" xml:space="preserve">
+    <value>Соединение с супервизором установлено</value>
+    <comment>Соединение с супервизором установлено</comment>
+  </data>
+  <data name="SendToSupervisor_BluetoothError" xml:space="preserve">
+    <value>Состояине Bluetooth передатчика не может быть корректно определено приложением. Пожалуйста перезагрузите оба приложения (Interviewer и Supervisor) и попробуйте синхронизировать</value>
   </data>
 </root>

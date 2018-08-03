@@ -133,7 +133,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Perimeter:.
+        ///   Looks up a localized string similar to Length:.
         /// </summary>
         public static string AreaMap_LengthFormat {
             get {
@@ -183,6 +183,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string AreaMap_NoMapsFound {
             get {
                 return ResourceManager.GetString("AreaMap_NoMapsFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Perimeter:.
+        /// </summary>
+        public static string AreaMap_PerimeterFormat {
+            get {
+                return ResourceManager.GetString("AreaMap_PerimeterFormat", resourceCulture);
             }
         }
         
@@ -828,6 +837,60 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Overview.
+        /// </summary>
+        public static string Interview_Overview {
+            get {
+                return ResourceManager.GetString("Interview_Overview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Additional info.
+        /// </summary>
+        public static string Interview_Overview_AdditionalInfo {
+            get {
+                return ResourceManager.GetString("Interview_Overview_AdditionalInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Commentaries.
+        /// </summary>
+        public static string Interview_Overview_Comments {
+            get {
+                return ResourceManager.GetString("Interview_Overview_Comments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Overview.
+        /// </summary>
+        public static string Interview_Overview_Name {
+            get {
+                return ResourceManager.GetString("Interview_Overview_Name", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not answered.
+        /// </summary>
+        public static string Interview_Overview_NotAnswered {
+            get {
+                return ResourceManager.GetString("Interview_Overview_NotAnswered", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Warning(s).
+        /// </summary>
+        public static string Interview_Overview_Warnings {
+            get {
+                return ResourceManager.GetString("Interview_Overview_Warnings", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All {0} questions answered.
         /// </summary>
         public static string Interview_PreviousGroupNavigation_AnsweredQuestions {
@@ -1269,6 +1332,78 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Abort.
+        /// </summary>
+        public static string OfflineSync_Abort {
+            get {
+                return ResourceManager.GetString("OfflineSync_Abort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Back to dashboard.
+        /// </summary>
+        public static string OfflineSync_BackToDashboard {
+            get {
+                return ResourceManager.GetString("OfflineSync_BackToDashboard", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string OfflineSync_Cancel {
+            get {
+                return ResourceManager.GetString("OfflineSync_Cancel", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to This device is not supported..
+        /// </summary>
+        public static string OfflineSync_DeviceNotSupported {
+            get {
+                return ResourceManager.GetString("OfflineSync_DeviceNotSupported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Google Play Services must be installed..
+        /// </summary>
+        public static string OfflineSync_InstallPlayServices {
+            get {
+                return ResourceManager.GetString("OfflineSync_InstallPlayServices", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Speed: {0}, Time left: {1}.
+        /// </summary>
+        public static string OfflineSync_NetworkInfo {
+            get {
+                return ResourceManager.GetString("OfflineSync_NetworkInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Retry.
+        /// </summary>
+        public static string OfflineSync_Retry {
+            get {
+                return ResourceManager.GetString("OfflineSync_Retry", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Synchronization of assignments and interviews.
+        /// </summary>
+        public static string OfflineSync_Supervisor_Title {
+            get {
+                return ResourceManager.GetString("OfflineSync_Supervisor_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Ok.
         /// </summary>
         public static string Ok {
@@ -1391,6 +1526,51 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string StaySignedInText {
             get {
                 return ResourceManager.GetString("StaySignedInText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Survey Solutions Supervisor.
+        /// </summary>
+        public static string Supervisor_ApplicationName {
+            get {
+                return ResourceManager.GetString("Supervisor_ApplicationName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Approve.
+        /// </summary>
+        public static string Supervisor_Complete_Approve_btn {
+            get {
+                return ResourceManager.GetString("Supervisor_Complete_Approve_btn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Assign.
+        /// </summary>
+        public static string Supervisor_Complete_Assign_btn {
+            get {
+                return ResourceManager.GetString("Supervisor_Complete_Assign_btn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reject.
+        /// </summary>
+        public static string Supervisor_Complete_Reject_btn {
+            get {
+                return ResourceManager.GetString("Supervisor_Complete_Reject_btn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Found interviewer device ({0}).
+        /// </summary>
+        public static string Synchronization_FoundDevice {
+            get {
+                return ResourceManager.GetString("Synchronization_FoundDevice", resourceCulture);
             }
         }
         

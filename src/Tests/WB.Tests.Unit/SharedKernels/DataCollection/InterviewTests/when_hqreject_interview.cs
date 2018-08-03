@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             eventContext = new EventContext();
 
-            interview.HqReject(userId, string.Empty);
+            interview.HqReject(userId, string.Empty, DateTimeOffset.Now);
         }
 
 

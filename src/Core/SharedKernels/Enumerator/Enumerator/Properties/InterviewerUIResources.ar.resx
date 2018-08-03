@@ -1,0 +1,695 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AccountIsLockedOnServer" xml:space="preserve">
+    <value>تم قفل حساب المستخدم. يرجى الاتصال بالمشرف.</value>
+  </data>
+  <data name="AccountIsNotAnInterviewer" xml:space="preserve">
+    <value>لا يحتوي حسابك على دور الباحث</value>
+  </data>
+  <data name="AccountIsNotApprovedOnServer" xml:space="preserve">
+    <value>لم تتم الموافقة على حسابك. يرجى الاتصال بالمشرف.</value>
+  </data>
+  <data name="ApplicationIncompatibleWithServer" xml:space="preserve">
+    <value>تطبيقك غير متوافق مع الخادم. قم بتحديث تطبيق الباحث الخاص بك</value>
+  </data>
+  <data name="Dashboard_AssignmentCard_SubTitleCountdown_UnlimitedFormat" xml:space="preserve">
+    <value>للجمع: غير محدود</value>
+  </data>
+  <data name="Dashboard_AssignmentCard_SubTitleCountdownFormat" xml:space="preserve">
+    <value>للجمع : {0} مقابلة (مقابلات)</value>
+  </data>
+  <data name="Dashboard_AssignmentCard_SubTitleSingleInterivew" xml:space="preserve">
+    <value>مهمة مقابلة واحدة</value>
+  </data>
+  <data name="Dashboard_AssignmentsTabTitle" xml:space="preserve">
+    <value>انشاء جديد</value>
+  </data>
+  <data name="Dashboard_CensusAssignment" xml:space="preserve">
+    <value>التعداد</value>
+  </data>
+  <data name="Dashboard_CompletedLinkText" xml:space="preserve">
+    <value>مكتمل ({0})</value>
+  </data>
+  <data name="Dashboard_CompletedTabText" xml:space="preserve">
+    <value>المقابلات المكتملة، سيتم تحميلها اثناء عملية التزامن القادمة</value>
+  </data>
+  <data name="Dashboard_CreateNewTabText" xml:space="preserve">
+    <value>انشاء مقابلة جديدة باستخدام القوالب</value>
+  </data>
+  <data name="Dashboard_Discard" xml:space="preserve">
+    <value>تجاهل</value>
+  </data>
+  <data name="Dashboard_Interview_AssignmentLabelFormat" xml:space="preserve">
+    <value>مهمة #{0}</value>
+  </data>
+  <data name="Dashboard_Interview_QuestionsAnsweredFormat" xml:space="preserve">
+    <value>{0}  إجابة (إجابات) تم الإجابة عليها</value>
+  </data>
+  <data name="Dashboard_NewItemsLinkText" xml:space="preserve">
+    <value>جديد ({0})</value>
+  </data>
+  <data name="Dashboard_No_InterviewKey" xml:space="preserve">
+    <value>لا مفتاح المقابلة</value>
+  </data>
+  <data name="Dashboard_NoInterviewsSyncButton" xml:space="preserve">
+    <value>تزامن</value>
+  </data>
+  <data name="Dashboard_NoInterviewsText" xml:space="preserve">
+    <value>مزامنة للحصول على مهام جديدة أو اتصل بمشرفك للحصول على مزيد من التعليمات</value>
+  </data>
+  <data name="Dashboard_NoInterviewsTitle" xml:space="preserve">
+    <value>ليس لديك أية مهام جديدة</value>
+  </data>
+  <data name="Dashboard_NoNewItemsLinkText" xml:space="preserve">
+    <value>لا جديد</value>
+  </data>
+  <data name="Dashboard_Open" xml:space="preserve">
+    <value>افتح</value>
+  </data>
+  <data name="Dashboard_QuestionnairesTabText" xml:space="preserve">
+    <value>يمكنك إنشاء مقابلات جديدة باستخدام المهام</value>
+  </data>
+  <data name="Dashboard_Reinitialize_Interview_Message" xml:space="preserve">
+    <value>اكتملت هذه المقابلة. هل تريد إعادة بدء المقابلة؟</value>
+  </data>
+  <data name="Dashboard_RejectedLinkText" xml:space="preserve">
+    <value>مرفوض ({0})</value>
+  </data>
+  <data name="Dashboard_RejectedTabText" xml:space="preserve">
+    <value>المقابلات التي تم رفضها من قبل المشرف تحتاج إلى حل المشكلات التي تمت الإشارة إليها على الغلاف </value>
+  </data>
+  <data name="Dashboard_RemoveInterviewQuestion" xml:space="preserve">
+    <value>هل تريد بالتأكيد حذف هذه المقابلة {0}؟</value>
+  </data>
+  <data name="Dashboard_Reopen" xml:space="preserve">
+    <value>اعادة فتح</value>
+  </data>
+  <data name="Dashboard_ShowLocation" xml:space="preserve">
+    <value>اظهار الموقع</value>
+  </data>
+  <data name="Dashboard_Start" xml:space="preserve">
+    <value>ابدأ</value>
+  </data>
+  <data name="Dashboard_StartedLinkText" xml:space="preserve">
+    <value>بدأت ({0})</value>
+  </data>
+  <data name="Dashboard_StartedTabText" xml:space="preserve">
+    <value>المقابلات التي بدأت ولكن لم تكتمل
+تحتاج إلى إكمالها لتكون متزامنة </value>
+  </data>
+  <data name="Dashboard_StartNewInterview" xml:space="preserve">
+    <value>بدء مقابلة جديدة</value>
+  </data>
+  <data name="Dashboard_Title" xml:space="preserve">
+    <value>{1} مقابلات ل  {0}</value>
+  </data>
+  <data name="Dashboard_ViewIssues" xml:space="preserve">
+    <value>عرض المشكلات</value>
+  </data>
+  <data name="DashboardItem_AssignedOn" xml:space="preserve">
+    <value>تم تعينه على {0}</value>
+  </data>
+  <data name="DashboardItem_AssignmentCreatedComment" xml:space="preserve">
+    <value>المقابلات التي تم إنشاؤها: {0}</value>
+  </data>
+  <data name="DashboardItem_AssignmentLeftComment" xml:space="preserve">
+    <value>{0} مقابلة/مقابلات</value>
+  </data>
+  <data name="DashboardItem_CensusModeComment" xml:space="preserve">
+    <value>وضع التعداد، المقابلات التي تم إنشاؤها: {0}</value>
+  </data>
+  <data name="DashboardItem_CompletedOn" xml:space="preserve">
+    <value>مكتمل في ({0})</value>
+  </data>
+  <data name="DashboardItem_CreatedOn" xml:space="preserve">
+    <value>تم إنشاؤه على {0}</value>
+  </data>
+  <data name="DashboardItem_NotStarted" xml:space="preserve">
+    <value>لم يبدأ</value>
+  </data>
+  <data name="DashboardItem_RejectedOn" xml:space="preserve">
+    <value>تم الرفض على {0}</value>
+  </data>
+  <data name="DashboardItem_StartedOn" xml:space="preserve">
+    <value>بدأت على {0}</value>
+  </data>
+  <data name="DashboardItem_Title" xml:space="preserve">
+    <value>{0} (v{1})</value>
+  </data>
+  <data name="Diagnostics_Backup_Description" xml:space="preserve">
+    <value>سيتم حفظ جميع البيانات التي تم جمعها إلى ملف النسخ الاحتياطي على هذا الجهاز.</value>
+  </data>
+  <data name="Diagnostics_Backup_Title" xml:space="preserve">
+    <value>النسخ الاحتياطي لجميع المعلومات</value>
+  </data>
+  <data name="Diagnostics_BackupDate_Title" xml:space="preserve">
+    <value>عند الحفظ</value>
+  </data>
+  <data name="Diagnostics_BackupFileLocation_Title" xml:space="preserve">
+    <value>موقع ملف النسخ الاحتياطي:</value>
+  </data>
+  <data name="Diagnostics_BackupReady_Title" xml:space="preserve">
+    <value>تم حفظ البيانات</value>
+  </data>
+  <data name="Diagnostics_BackupScope_Title" xml:space="preserve">
+    <value>نطاق:</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionNotOK_Title" xml:space="preserve">
+    <value>الاتصال &lt;font color="red"&gt;غير جيد&lt;/font&gt;</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionOK_Title" xml:space="preserve">
+    <value>الاتصال على ما يرام</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionType_Title" xml:space="preserve">
+    <value>نوع الاتصال</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestNetworkName_Title" xml:space="preserve">
+    <value>اسم الشبكة:</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestPing_Title" xml:space="preserve">
+    <value>Ping:</value>
+  </data>
+  <data name="Diagnostics_CheckVersion_Description" xml:space="preserve">
+    <value>سوف نتحقق من الإصدار الأحدث على خادم hq</value>
+  </data>
+  <data name="Diagnostics_CheckVersion_Title" xml:space="preserve">
+    <value>النسخة :{0} تحقق من النسخة الجديدة</value>
+  </data>
+  <data name="Diagnostics_Delete" xml:space="preserve">
+    <value>حذف</value>
+  </data>
+  <data name="Diagnostics_DownloadingPleaseWait" xml:space="preserve">
+    <value>جار التنزيل، يرجى الانتظار ...</value>
+  </data>
+  <data name="Diagnostics_NewVersionAvaliable_Title" xml:space="preserve">
+    <value>يوجد إصدار جديد. هل ترغب في تحميل وتحديث التطبيق؟</value>
+  </data>
+  <data name="Diagnostics_NewVersionNumber_Title" xml:space="preserve">
+    <value>رقم النسخة</value>
+  </data>
+  <data name="Diagnostics_No" xml:space="preserve">
+    <value>لا</value>
+  </data>
+  <data name="Diagnostics_Restore_Description" xml:space="preserve">
+    <value>عند استعادة البيانات المحفوظة فانها سوف تحل محل جميع المهام الحالية على هذا الجهاز</value>
+  </data>
+  <data name="Diagnostics_Restore_Title" xml:space="preserve">
+    <value>استعادة</value>
+  </data>
+  <data name="Diagnostics_RestoreReady_Title" xml:space="preserve">
+    <value>تم العثور على البيانات المحفوظة:</value>
+  </data>
+  <data name="Diagnostics_Send" xml:space="preserve">
+    <value>ارسال</value>
+  </data>
+  <data name="Diagnostics_Send_Description" xml:space="preserve">
+    <value>جميع بيانات التطبيق والمقابلة سيتم تجميعها في أرشيف واحد. قد يستغرق ذلك مدة تصل إلى 10 دقائق.</value>
+  </data>
+  <data name="Diagnostics_Send_Title" xml:space="preserve">
+    <value>جمع و ارسال جميع معلومات الجهاز اللوحي الى المقر الرئيسي</value>
+  </data>
+  <data name="Diagnostics_ServerUrl" xml:space="preserve">
+    <value>عنوان URL للخادم</value>
+  </data>
+  <data name="Diagnostics_Share_Description" xml:space="preserve">
+    <value>ستتم مشاركة جميع المعلومات أدناه كنص عادي. يمكن إرسالها عن طريق البريد الإلكتروني، Google Hangouts ، من أي تطبيق الرسائل الأخرى</value>
+  </data>
+  <data name="Diagnostics_Share_Title" xml:space="preserve">
+    <value>مشاركة جميع المعلومات التقنية</value>
+  </data>
+  <data name="Diagnostics_TabletInformationReady_Title" xml:space="preserve">
+    <value>أرشيف البيانات جاهز</value>
+  </data>
+  <data name="Diagnostics_TabletInformationScope_Title" xml:space="preserve">
+    <value>نطاق:</value>
+  </data>
+  <data name="Diagnostics_TabletInformationWhenGenerated_Title" xml:space="preserve">
+    <value>عند التوليد</value>
+  </data>
+  <data name="Diagnostics_TestConnection_Description" xml:space="preserve">
+    <value> سوف نختبر الاتصال مع خادمنا وسرعته</value>
+  </data>
+  <data name="Diagnostics_TestConnection_Title" xml:space="preserve">
+    <value>اختبار النطاق الترددي للخادم</value>
+  </data>
+  <data name="Diagnostics_Title" xml:space="preserve">
+    <value>التشخيص</value>
+  </data>
+  <data name="Diagnostics_Update" xml:space="preserve">
+    <value>تحديث</value>
+  </data>
+  <data name="Diagnostics_YouHaveTheLatestVersionOfApplication" xml:space="preserve">
+    <value>لديك احدث نسخة من التطبيق</value>
+  </data>
+  <data name="FailedToCreateInterview" xml:space="preserve">
+    <value>فشل إنشاء المقابلة. السبب: {0}</value>
+  </data>
+  <data name="FailedToLoadInterview" xml:space="preserve">
+    <value>فشل في فتح المقابلة</value>
+  </data>
+  <data name="FinishInstallation_EndpointDiffers" xml:space="preserve">
+    <value>نقطة نهاية التزامن '{0}' مختلفة عن المقدمة في الإعدادات ('{1}'). هل تريد تحميل عنوانurl من الإعدادات؟</value>
+  </data>
+  <data name="HostUnreachable" xml:space="preserve">
+    <value>لا يوجد اتصال بالإنترنت إلى الخادم الخاص بك. تحقق من عنوان الخادم و (أو) إعدادات الشبكة</value>
+  </data>
+  <data name="InternalServerError" xml:space="preserve">
+    <value>خطأ في الخادم .الرجاء التواصل مع فريق الدعم عن طريقsupport@mysurvey.solutions</value>
+  </data>
+  <data name="Interview_Loading" xml:space="preserve">
+    <value>جار التحميل</value>
+  </data>
+  <data name="Interview_Loading_With_Percents" xml:space="preserve">
+    <value>جار التحميل ... {0}٪</value>
+  </data>
+  <data name="InvalidEndpoint" xml:space="preserve">
+    <value>عنوان الموقع للمشرف غير فعال .تأكد من ادخال عنوان url صحيح </value>
+  </data>
+  <data name="Login_FinishInstallation_Message" xml:space="preserve">
+    <value>هذا التمهيد الأول على هذا الجهاز. لم يتم تعيين المستخدم والنطاق بعد. &lt;br /&gt; تحتاج إلى اتصال بالإنترنت للمتابعة</value>
+  </data>
+  <data name="Login_Online_Signin_Explanation_message" xml:space="preserve">
+    <value>يمكنك محاولة تسجيل الدخول عبر الإنترنت إذا نسيت كلمة المرور أو تم إعادة تعيينها</value>
+  </data>
+  <data name="Login_Online_SignIn_Failed" xml:space="preserve">
+    <value>مشكلة المصادقة على الخادم المتحكم يرجى الاتصال بالمشرف</value>
+  </data>
+  <data name="Login_WrongPassword" xml:space="preserve">
+    <value>خطأ في كلمة المرور</value>
+  </data>
+  <data name="Maintenance" xml:space="preserve">
+    <value>الموقع الإلكتروني لمشرف Survey Solutions تحت  الصيانة. آسف للإزعاج</value>
+  </data>
+  <data name="Maps_Title" xml:space="preserve">
+    <value>خرائط</value>
+  </data>
+  <data name="MapSyncProvider_SyncronizeMapsAsync_Checking_maps_on_server" xml:space="preserve">
+    <value>التحقق من الخرائط على الخادم</value>
+  </data>
+  <data name="MapSyncProvider_SyncronizeMapsAsync_Map_sync_error" xml:space="preserve">
+    <value>خطأ في مزامنة الخريطة</value>
+  </data>
+  <data name="MapSyncProvider_SyncronizeMapsAsync_Map_synchronization_succesfuly_finished" xml:space="preserve">
+    <value>انتهت مزامنة الخريطة بنجاح</value>
+  </data>
+  <data name="MapSyncProvider_SyncronizeMapsAsync_Progress_Report_Format" xml:space="preserve">
+    <value>التعامل مع الخريطة {0}، {1} من {2}.
+  تم تنزيل {3} من {4} ({5}٪) </value>
+  </data>
+  <data name="MenuItem_Title_Dashboard" xml:space="preserve">
+    <value>لوحة التحكم</value>
+  </data>
+  <data name="MenuItem_Title_Diagnostics" xml:space="preserve">
+    <value>التشخيص</value>
+  </data>
+  <data name="MenuItem_Title_Language" xml:space="preserve">
+    <value>اللغة</value>
+  </data>
+  <data name="MenuItem_Title_Language_Original" xml:space="preserve">
+    <value>أصلي</value>
+  </data>
+  <data name="MenuItem_Title_Login" xml:space="preserve">
+    <value>تسجيل الدخول</value>
+  </data>
+  <data name="MenuItem_Title_Maps" xml:space="preserve">
+    <value>خرائط</value>
+  </data>
+  <data name="MenuItem_Title_Settings" xml:space="preserve">
+    <value>الاعدادات</value>
+  </data>
+  <data name="MenuItem_Title_SignOut" xml:space="preserve">
+    <value>تسجيل خروج</value>
+  </data>
+  <data name="NoNetwork" xml:space="preserve">
+    <value>لا توجد شبكة. تحقق من إعدادات الشبكة</value>
+  </data>
+  <data name="NotSupportedServerSyncProtocolVersion" xml:space="preserve">
+    <value>لديك إصدار غير متوافق من تطبيق الباحث. من فضلك، إلغاء تثبيته وتثبيت مرة أخرى من المقر الخاص بك  في Survey Solutions</value>
+  </data>
+  <data name="Prefs_AboutApplication" xml:space="preserve">
+    <value>حول التطبيق</value>
+  </data>
+  <data name="Prefs_ApplicationVersionTitle" xml:space="preserve">
+    <value>نسخة التطبيق</value>
+  </data>
+  <data name="Prefs_BufferSizeSummary" xml:space="preserve">
+    <value>عدد وحدات البايت للحزمة من خلال استقبال / نقل البيانات من / إلى تطبيق المشرف</value>
+  </data>
+  <data name="Prefs_BufferSizeTitle" xml:space="preserve">
+    <value>حجم حزمة الاتصال</value>
+  </data>
+  <data name="Prefs_ConnectionSettings" xml:space="preserve">
+    <value>اعدادات الاتصال</value>
+  </data>
+  <data name="Prefs_DeviceIdTitle" xml:space="preserve">
+    <value>هوية الجهاز</value>
+  </data>
+  <data name="Prefs_EndpointTitle" xml:space="preserve">
+    <value>عنوان URL للمشرف</value>
+  </data>
+  <data name="Prefs_EventChunkSizeSummary" xml:space="preserve">
+    <value>كم عدد الأحداث التي يمكن قراءتها باستعلام واحد</value>
+  </data>
+  <data name="Prefs_GpsReceiveTimeoutSecSummary" xml:space="preserve">
+    <value>عدد الثواني للانتظار للإحداثيات</value>
+  </data>
+  <data name="Prefs_GpsReceiveTimeoutSecTitle" xml:space="preserve">
+    <value>نظام تحديد المواقع وصل الى انتهاء المهلة</value>
+  </data>
+  <data name="Prefs_HttpResponseTimeoutSummary" xml:space="preserve">
+    <value>عدد الثواني للانتظار حتى استجابة الخادم</value>
+  </data>
+  <data name="Prefs_HttpResponseTimeoutTitle" xml:space="preserve">
+    <value>مهلة استجابة الخادم انتهت</value>
+  </data>
+  <data name="Prefs_InterviewSettings" xml:space="preserve">
+    <value>إعدادات المقابلة</value>
+  </data>
+  <data name="Prefs_Title" xml:space="preserve">
+    <value>الاعدادات</value>
+  </data>
+  <data name="RequestCanceledByUser" xml:space="preserve">
+    <value>تم إلغاء الطلب من قبل المستخدم</value>
+  </data>
+  <data name="RequestTimeout" xml:space="preserve">
+    <value>انتهت المهلة عند الاتصال مع موقع مصمم Survey Solutions. تحقق من اتصالك بالإنترنت.</value>
+  </data>
+  <data name="ServiceUnavailable" xml:space="preserve">
+    <value>لا يوجد اتصال لمشرف Survey Solutions. يرجى التأكد من أن الموقع متاح.</value>
+  </data>
+  <data name="Share_to_Title" xml:space="preserve">
+    <value>مشاركة المعلومات مع.....</value>
+  </data>
+  <data name="Synchronization_Cancel" xml:space="preserve">
+    <value>إلغاء</value>
+  </data>
+  <data name="Synchronization_Check_Obsolete_Questionnaires" xml:space="preserve">
+    <value>تحقق من الاستبيانات الملغية</value>
+  </data>
+  <data name="Synchronization_Check_Obsolete_Questionnaires_Description" xml:space="preserve">
+    <value>إزالة {0} الاستبيان من {1}</value>
+  </data>
+  <data name="Synchronization_Done" xml:space="preserve">
+    <value>تم انجازه</value>
+  </data>
+  <data name="Synchronization_DoneWithErrors_Title" xml:space="preserve">
+    <value>اكتملت المزامنة مع وجود أخطاء</value>
+  </data>
+  <data name="Synchronization_Download_AttachmentsCleanup" xml:space="preserve">
+    <value>إزالة المرفقات الملغية</value>
+  </data>
+  <data name="Synchronization_Download_Description_Format" xml:space="preserve">
+    <value>{2} {1} من {0}  مكتمل</value>
+  </data>
+  <data name="Synchronization_Download_Title" xml:space="preserve">
+    <value>تحديث المهام</value>
+  </data>
+  <data name="Synchronization_DownloadingLogo" xml:space="preserve">
+    <value>تنزيل الشعار</value>
+  </data>
+  <data name="Synchronization_Fail_State_DeletedInterviews_Format" xml:space="preserve">
+    <value>{1} من {0} المقابلات المحذوفة</value>
+  </data>
+  <data name="Synchronization_Fail_State_FailedToProcess_Format" xml:space="preserve">
+    <value>{0} فشل في مزامنة مقابلة/مقابلات</value>
+  </data>
+  <data name="Synchronization_Fail_State_NewInterviews_Format" xml:space="preserve">
+    <value>من {0} من  {1} المقابلات الجديدة التي تم تنزيلها</value>
+  </data>
+  <data name="Synchronization_Fail_State_RejectedInterviews_Format" xml:space="preserve">
+    <value>{1} من {0} المقابلات المرتجعة التي تم رفضها</value>
+  </data>
+  <data name="Synchronization_Fail_State_UploadedInterviews_Format" xml:space="preserve">
+    <value> {1} من {0} المقابلات المكتملة التي تم تحميلها</value>
+  </data>
+  <data name="Synchronization_Fail_Title" xml:space="preserve">
+    <value>تم إيقاف المزامنة، يرجى إعادة المحاولة</value>
+  </data>
+  <data name="Synchronization_Fail_UnexpectedException" xml:space="preserve">
+    <value>استثناء غير المتوقع</value>
+  </data>
+  <data name="Synchronization_Interviews" xml:space="preserve">
+    <value>مقابلات</value>
+  </data>
+  <data name="Synchronization_LockedAssignments_Text" xml:space="preserve">
+    <value>تم تأمين المهام حتى اكتمال المزامنة</value>
+  </data>
+  <data name="Synchronization_Of_AssignmentsFormat" xml:space="preserve">
+    <value>مزامنة {0} من {1} التعيين (المهام)</value>
+  </data>
+  <data name="Synchronization_Questionnaires" xml:space="preserve">
+    <value>الاستبيانات</value>
+  </data>
+  <data name="Synchronization_Success_Description" xml:space="preserve">
+    <value>تم تحديث جميع المهام </value>
+  </data>
+  <data name="Synchronization_Success_State_DeletedInterviews_Format" xml:space="preserve">
+    <value>{0} مقابلات تم حذفها</value>
+  </data>
+  <data name="Synchronization_Success_State_NewInterviews_Format" xml:space="preserve">
+    <value>مقابلات جديدة تم تنزيلها {0}</value>
+  </data>
+  <data name="Synchronization_Success_State_RejectedInterviews_Format" xml:space="preserve">
+    <value>  {0} المقابلات المرتجعة التي تم رفضها</value>
+  </data>
+  <data name="Synchronization_Success_State_UploadedInterviews_Format" xml:space="preserve">
+    <value>تم تحميل المقابلات المكتملة {0}</value>
+  </data>
+  <data name="Synchronization_Success_Title" xml:space="preserve">
+    <value>اكتملت المزامنة بنجاح</value>
+  </data>
+  <data name="Synchronization_Upload_CompletedAssignments_Text" xml:space="preserve">
+    <value>المهام المكتملة</value>
+  </data>
+  <data name="Synchronization_Upload_Description_Format" xml:space="preserve">
+    <value>من {1} {2} مكتمل {0}</value>
+  </data>
+  <data name="Synchronization_Upload_Interviews_Text" xml:space="preserve">
+    <value>مقابلات</value>
+  </data>
+  <data name="Synchronization_Upload_Title_Format" xml:space="preserve">
+    <value>تم تحميل {0}</value>
+  </data>
+  <data name="Synchronization_UserAuthentication_Description" xml:space="preserve">
+    <value>التحضير للمزامنة</value>
+  </data>
+  <data name="Synchronization_UserAuthentication_Title" xml:space="preserve">
+    <value>مصادقة المستخدم</value>
+  </data>
+  <data name="Synchronization_UserLinkedToAnotherDevice_Status" xml:space="preserve">
+    <value>خطأ في مصادقة المستخدم</value>
+  </data>
+  <data name="Synchronization_UserLinkedToAnotherDevice_Title" xml:space="preserve">
+    <value>تمت إعادة ربط حسابك بجهاز لوحي آخر</value>
+  </data>
+  <data name="Synchronization_UserPassword_Update_Format" xml:space="preserve">
+    <value>مشكلة المصادقة. تعذر علينا تأكيد بيانات الاعتماد ('{0}'). قد يكون لحسابك كلمة مرور مختلفة؛ تكون مؤمنة أو محذوفة. من فضلك أعد إدخال الرمز السري. إذا استمرت المشكلة، اتصل بالمشرف.</value>
+  </data>
+  <data name="Troubleshooting_Backup" xml:space="preserve">
+    <value>انشاء نسخة احتياطية</value>
+  </data>
+  <data name="Troubleshooting_BackupErrorMessage" xml:space="preserve">
+    <value>حدث خطأ ما ولم يتم إنشاء نسخة احتياطية</value>
+  </data>
+  <data name="Troubleshooting_BackupWasSaved" xml:space="preserve">
+    <value>تم حفظ النسخ الاحتياطي إلى {0}</value>
+  </data>
+  <data name="Troubleshooting_CurrentVersion_CheckForUpdates" xml:space="preserve">
+    <value>النسخة :{0} تحقق من النسخة الجديدة</value>
+  </data>
+  <data name="Troubleshooting_InformationPackageIsSuccessfullySent" xml:space="preserve">
+    <value>تم إرسال حزمة المعلومات بنجاح</value>
+  </data>
+  <data name="Troubleshooting_InformationPackageSizeWarningFormat" xml:space="preserve">
+    <value>سيتم إرسال حزمة المعلومات من الحجم {0} عبر الشبكة. هل تريد بالتأكيد إرسالها؟</value>
+  </data>
+  <data name="Troubleshooting_NewVerisonExist" xml:space="preserve">
+    <value>يوجد إصدار جديد. هل ترغب في تحميل وتحديث التطبيق؟</value>
+  </data>
+  <data name="Troubleshooting_NoNewVersion" xml:space="preserve">
+    <value>لديك احدث نسخة من التطبيق</value>
+  </data>
+  <data name="Troubleshooting_Old_AreYouSureYouWantToRestore" xml:space="preserve">
+    <value>سيتم مسح جميع البيانات الحالية. هل تريد بالتأكيد المتابعة للاستعادة. إذا كانت الإجابة بنعم، يرجى التأكد من استعادة البيانات في {0}</value>
+  </data>
+  <data name="Troubleshooting_Old_CreatingInformationPackage" xml:space="preserve">
+    <value>انشاء حزمة المعلومات</value>
+  </data>
+  <data name="Troubleshooting_Old_InformationPackage" xml:space="preserve">
+    <value>حزمة المعلومات</value>
+  </data>
+  <data name="Troubleshooting_Old_InformationPackageIsSuccessfullySent" xml:space="preserve">
+    <value>تم إرسال حزمة المعلومات بنجاح</value>
+  </data>
+  <data name="Troubleshooting_Old_InformationPackageSizeWarningFormat" xml:space="preserve">
+    <value>سيتم إرسال حزمة المعلومات من الحجم {0} عبر الشبكة. هل تريد بالتأكيد إرسالها؟</value>
+  </data>
+  <data name="Troubleshooting_Old_SendingInformationPackage" xml:space="preserve">
+    <value>ارسال حزمة البيانات</value>
+  </data>
+  <data name="Troubleshooting_Old_SendingOfInformationPackageIsCanceled" xml:space="preserve">
+    <value>تم الغاء ارسال حزمة البياانت السبب : {0}</value>
+  </data>
+  <data name="Troubleshooting_Old_SendingOfInformationPackageIsCanceling" xml:space="preserve">
+    <value>إلغاء</value>
+  </data>
+  <data name="Troubleshooting_RestorationErrorMessage" xml:space="preserve">
+    <value>حدث خطأ ما ولم يتم استرجاعه</value>
+  </data>
+  <data name="Troubleshooting_Restore" xml:space="preserve">
+    <value>استعادة من النسخة الاحتياطية</value>
+  </data>
+  <data name="Troubleshooting_RestoreConfirmation" xml:space="preserve">
+    <value>سيتم مسح جميع البيانات الحالية. هل تريد بالتأكيد المتابعة للاستعادة. إذا كانت الإجابة بنعم، يرجى التأكد من استعادة البيانات في {0}</value>
+  </data>
+  <data name="Troubleshooting_RestoredSuccessfully" xml:space="preserve">
+    <value>تمت استعادة الجهاز اللوحي بنجاح</value>
+  </data>
+  <data name="Troubleshooting_RestoreFolderIsEmpty" xml:space="preserve">
+    <value>المجلد '{0}' فارغ. الرجاء وضع النسخ الاحتياطي الذي تريد استعادته في المجلد.</value>
+  </data>
+  <data name="Troubleshooting_SendingOfInformationPackageErrorMessage" xml:space="preserve">
+    <value>فشل ارسال حزمة البيانات </value>
+  </data>
+  <data name="Troubleshooting_SendTabletInformation" xml:space="preserve">
+    <value>ارسال بيانات الجهاز اللوحي</value>
+  </data>
+  <data name="Troubleshooting_Title" xml:space="preserve">
+    <value>استكشاف الأخطاء وإصلاحها</value>
+  </data>
+  <data name="Troubleshooting_Unknown_ErrorMessage" xml:space="preserve">
+    <value>حدث خطأ أثناء التحقق من الإصدار. الرجاء التحقق من الإعدادات أو إعادة المحاولة لاحقا</value>
+  </data>
+  <data name="UnacceptableSSLCertificate" xml:space="preserve">
+    <value>أخفق التحقق من الشهادة لعنوان URL المستهدف. يرجى التحقق مما إذا كان عنوان موقع المقر الرئيسي صالحا وأن جهازك يحتوي على التاريخ والوقت الحاليين</value>
+  </data>
+  <data name="Unauthorized" xml:space="preserve">
+    <value>تسجيل الدخول أو كلمة المرور غير صحيحة</value>
+  </data>
+  <data name="UnexpectedException" xml:space="preserve">
+    <value>خطا غير متوقع</value>
+  </data>
+  <data name="UpgradeRequired" xml:space="preserve">
+    <value>تم إصدار نسخة جديدة من التطبيق. من فضلك، تحديث التطبيق</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>تحذير</value>
+  </data>
+</root>

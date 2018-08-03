@@ -9,13 +9,17 @@ using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.SharedKernels.DataCollection.WebApi;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
+using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProcessTests
 {
-    [NUnit.Framework.TestOf(typeof(SynchronizationProcess))]
+    [NUnit.Framework.TestOf(typeof(InterviewerSynchronizationProcess))]
     internal class when_synchronize_and_need_to_change_password
     {
         [NUnit.Framework.Test]
@@ -25,13 +29,10 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
 
             Mock<IPlainStorage<InterviewerIdentity>> interviewerStorageMock = new Mock<IPlainStorage<InterviewerIdentity>>();
             Mock<IUserInteractionService> userInteractionServiceMock = new Mock<IUserInteractionService>();
-            Mock<IInterviewerPrincipal> principalMock = new Mock<IInterviewerPrincipal>();
             Mock<ISynchronizationService> synchronizationServiceMock = new Mock<ISynchronizationService>();
             Mock<IPasswordHasher> passwordHasherMock = new Mock<IPasswordHasher>();
 
-            principalMock
-                .Setup(x => x.CurrentUserIdentity)
-                .Returns(interviewerIdentity);
+            var principalMock = Mock.Get(Setup.InterviewerPrincipal(interviewerIdentity));
 
             userInteractionServiceMock
                 .Setup(x => x.ConfirmWithTextInputAsync(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<bool>()))
@@ -44,8 +45,12 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 .Returns(Task.FromResult("new token"));
 
             synchronizationServiceMock
-                .Setup(x => x.CanSynchronizeAsync(It.Is<RestCredentials>(r => r.Password == interviewerIdentity.Password), It.IsAny<CancellationToken>()))
-                .Throws(new SynchronizationException(type: SynchronizationExceptionType.Unauthorized, message: "", innerException: null));
+                .Setup(x => x.CanSynchronizeAsync(It.Is<RestCredentials>(r => r.Token == interviewerIdentity.Token), It.IsAny<CancellationToken>()))
+                .Throws(new SynchronizationException(type: SynchronizationExceptionType.Unauthorized, message: "Test unauthorized", innerException: null));
+
+            synchronizationServiceMock
+                .Setup(x => x.CanSynchronizeAsync(It.Is<RestCredentials>(r => r.Token == "new token"), It.IsAny<CancellationToken>()))
+                .Returns(Task.CompletedTask);
 
             passwordHasherMock
                 .Setup(x => x.Hash(It.IsAny<string>()))
@@ -53,7 +58,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
 
             passwordHasherMock
                 .Setup(x => x.VerifyPassword(It.IsAny<string>(), It.IsAny<string>()))
-                .Returns(true);
+                .Returns(PasswordVerificationResult.Success);
 
             interviewerStorageMock
                 .Setup(x => x.FirstOrDefault())
@@ -66,7 +71,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 passwordHasher: passwordHasherMock.Object);
 
             // Act
-            await viewModel.SyncronizeAsync(new Progress<SyncProgressInfo>(), CancellationToken.None);
+            await viewModel.SynchronizeAsync(new Progress<SyncProgressInfo>(), CancellationToken.None);
 
             // Assert
 

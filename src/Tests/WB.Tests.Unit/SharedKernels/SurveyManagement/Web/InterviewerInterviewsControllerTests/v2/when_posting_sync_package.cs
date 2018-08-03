@@ -5,7 +5,7 @@ using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
-using WB.Core.SharedKernels.SurveyManagement.Web.Api.Interviewer.v2;
+using WB.UI.Headquarters.API.DataCollection.Interviewer.v2;
 
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiTests.InterviewerInterviewsControllerTests.v2

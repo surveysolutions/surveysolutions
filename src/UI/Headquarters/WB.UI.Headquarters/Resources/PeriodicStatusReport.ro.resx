@@ -1,0 +1,243 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="Average" xml:space="preserve">
+    <value>Durata medie</value>
+  </data>
+  <data name="AverageCaseAssignmentDuration" xml:space="preserve">
+    <value>Durata medie de alocare</value>
+  </data>
+  <data name="AverageCaseAssignmentDurationDescription" xml:space="preserve">
+    <value>Durata medie de când un interviu este alocat unui anchetator până când butonul finalizat este apăsat pe o tabletă</value>
+  </data>
+  <data name="AverageHQProcessingTime" xml:space="preserve">
+    <value>Durata medie de procesare de către RINS</value>
+  </data>
+  <data name="AverageHQProcessingTimeDescription" xml:space="preserve">
+    <value>Durata medie de când un controlor aprobă un interviu până când interviull este fie aprobat, fie respins de RINS</value>
+  </data>
+  <data name="AverageInterviewDuration" xml:space="preserve">
+    <value>Durata medie a interviului</value>
+  </data>
+  <data name="AverageInterviewDurationDescription" xml:space="preserve">
+    <value>Durata medie în care interviul a fost activ pe ecranul tabletei anchetatorului înainte de finalizare</value>
+  </data>
+  <data name="AverageInterviewDurationForSupervisors" xml:space="preserve">
+    <value>Durata medie de când un anchetator înregistrează primul răspuns pe o tabletă până când anchetatorul apasă butonul Finalizare</value>
+  </data>
+  <data name="AverageOverallCaseProcessingTime" xml:space="preserve">
+    <value>Durata medie de procesare globală a cazurilor</value>
+  </data>
+  <data name="AverageOverallCaseProcessingTimeDescription" xml:space="preserve">
+    <value>Durata medie de când un interviu este atribuit pentru prima oară până când RINS îl aprobă.</value>
+  </data>
+  <data name="AverageSupervisorProcessingTime" xml:space="preserve">
+    <value>Durata medie de procesare de către controlor</value>
+  </data>
+  <data name="AverageSupervisorProcessingTimeDescription" xml:space="preserve">
+    <value>Durata medie de când un anchetator apasă butonul Finalizare până când controlorul acceptă sau respinge intreviul.</value>
+  </data>
+  <data name="BackToSupervisors" xml:space="preserve">
+    <value>Înapoi la controlori</value>
+  </data>
+  <data name="By" xml:space="preserve">
+    <value>De</value>
+  </data>
+  <data name="Day" xml:space="preserve">
+    <value>Zile</value>
+  </data>
+  <data name="From" xml:space="preserve">
+    <value>De la</value>
+  </data>
+  <data name="InterviewActions" xml:space="preserve">
+    <value>Acţiuni interviu</value>
+  </data>
+  <data name="InThe" xml:space="preserve">
+    <value>în</value>
+  </data>
+  <data name="InTheSupervisorTeamFormat" xml:space="preserve">
+    <value>în echipa {0}</value>
+  </data>
+  <data name="LastDateToShowLabel" xml:space="preserve">
+    <value>Începând de la</value>
+  </data>
+  <data name="Month" xml:space="preserve">
+    <value>Luni</value>
+  </data>
+  <data name="NumberOfCompletedInterviews" xml:space="preserve">
+    <value>Numărul de interviuri finalizate</value>
+  </data>
+  <data name="NumberOfCompletedInterviewsDescription" xml:space="preserve">
+    <value>Numărul total de interviuri realizate de o echipă. Interviurile respinse și apoi finalizate sunt considerate evenimente separate de completare.</value>
+  </data>
+  <data name="NumberOfInterviewsApprovedByHQ" xml:space="preserve">
+    <value>Numărul de interviuri aprobate de RINS</value>
+  </data>
+  <data name="NumberOfInterviewsApprovedByHQDescription" xml:space="preserve">
+    <value>Numărul de interviuri colectate de {0} aprobate de RINS</value>
+  </data>
+  <data name="NumberOfInterviewTransactionsByHQ" xml:space="preserve">
+    <value>Număr de interviuri gestionate de RINS</value>
+  </data>
+  <data name="NumberOfInterviewTransactionsByHQDescription" xml:space="preserve">
+    <value>Numărul de aprobări și respingeri din partea RINS pentru interviurile colectate de {0}.</value>
+  </data>
+  <data name="NumberOfInterviewTransactionsBySupervisor" xml:space="preserve">
+    <value>Număr de interviuri gestionate de Controlor</value>
+  </data>
+  <data name="NumberOfInterviewTransactionsBySupervisorDescription" xml:space="preserve">
+    <value>Numărul de aprobări și respingeri din partea Controlorului pentru interviurile colectate de {0}.</value>
+  </data>
+  <data name="OverTheLast" xml:space="preserve">
+    <value>În perioada precedentă</value>
+  </data>
+  <data name="Period" xml:space="preserve">
+    <value>Perioada</value>
+  </data>
+  <data name="PeriodCount" xml:space="preserve">
+    <value>Număr perioade</value>
+  </data>
+  <data name="PeriodUnit" xml:space="preserve">
+    <value>Unitatea de timp</value>
+  </data>
+  <data name="Questionnaire" xml:space="preserve">
+    <value>Chestionar</value>
+  </data>
+  <data name="Team" xml:space="preserve">
+    <value>Echipă</value>
+  </data>
+  <data name="TeamMember" xml:space="preserve">
+    <value>Membru al echipei</value>
+  </data>
+  <data name="TimeSpentToCompleteInterviewInHours" xml:space="preserve">
+    <value>Durata medie a interviului</value>
+  </data>
+  <data name="Total" xml:space="preserve">
+    <value>Total</value>
+  </data>
+  <data name="Type" xml:space="preserve">
+    <value>Tip</value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>ver.</value>
+  </data>
+  <data name="Week" xml:space="preserve">
+    <value>Săptămâni</value>
+  </data>
+</root>

@@ -6,12 +6,14 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
     public class InterviewApproved : InterviewActiveEvent
     {
         public string Comment { get; private set; }
-        public DateTime? ApproveTime { get; private set; }
-        public InterviewApproved(Guid userId, string comment, DateTime? approveTime)
-            : base(userId)
+        public DateTime? ApproveTime { get; set; }
+        public InterviewApproved(Guid userId, string comment, DateTimeOffset originDate) 
+            : base(userId, originDate)
         {
             this.Comment = comment;
-            ApproveTime = approveTime;
+
+            if (originDate != default(DateTimeOffset))
+                this.ApproveTime = originDate.UtcDateTime;
         }
     }
 }

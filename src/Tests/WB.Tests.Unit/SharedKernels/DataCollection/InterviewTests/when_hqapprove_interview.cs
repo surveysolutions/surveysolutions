@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
         }
 
         public void BecauseOf() =>
-            interview.HqApprove(userId, string.Empty);
+            interview.HqApprove(userId, string.Empty, DateTimeOffset.Now);
 
         [NUnit.Framework.Test] public void should_raise_two_events () =>
             eventContext.Events.Count().Should().Be(2);

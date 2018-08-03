@@ -460,3 +460,16 @@ a.disabled{
     	top: -5px;
 	}
 }
+.gray-link-underline{
+	color: $gray_light;
+	text-decoration: underline;
+	&:hover,&:focus,&:active{
+		text-decoration: none;
+		color: $gray_light;
+	}
+}
+.btn-link-look{
+	padding: 0;
+	text-transform: initial;
+	font: inherit;
+}

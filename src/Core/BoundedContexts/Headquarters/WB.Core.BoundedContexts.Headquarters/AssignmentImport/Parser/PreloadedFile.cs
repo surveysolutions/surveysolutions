@@ -24,6 +24,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
     [DebuggerDisplay("[{Cells.Length} cells]")]
     public class PreloadingRow
     {
+        public int RowIndex { get; set; }
         [DebuggerBrowsable(DebuggerBrowsableState.RootHidden)]
         public PreloadingCell[] Cells { get; set; }
     }
@@ -33,12 +34,14 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Parser
         public string VariableOrCodeOrPropertyName { get; set; }
     }
 
-    [DebuggerDisplay("[{Column}]={Value}")]
+    [DebuggerDisplay("{ToString()}")]
     public class PreloadingValue : PreloadingCell
     {
         public int Row { get; set; }
         public string Column { get; set; }
         public string Value { get; set; }
+
+        public override string ToString() => $"[{Row}, {Column}]={Value}";
     }
 
     [DebuggerDisplay("composite[{VariableOrCodeOrPropertyName}]")]

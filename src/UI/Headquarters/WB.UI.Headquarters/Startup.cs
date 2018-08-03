@@ -24,7 +24,6 @@ using Ninject.Web.Common.OwinHost;
 using Ninject.Web.Common.WebHost;
 using Ninject.Web.WebApi.OwinHost;
 using NLog;
-using Npgsql.Logging;
 using Owin;
 using Quartz;
 using StackExchange.Exceptional;

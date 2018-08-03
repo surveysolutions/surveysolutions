@@ -242,4 +242,13 @@
   <data name="PatchRequestedFormat" xml:space="preserve">
     <value>Запрошен патч для приложения версии {0}</value>
   </data>
+  <data name="GetInterviewPackageV3" xml:space="preserve">
+    <value>&lt;b&gt;V3&lt;/b&gt; Скачивание пакета интервью: {0}</value>
+  </data>
+  <data name="PostPackageV3" xml:space="preserve">
+    <value>&lt;b&gt;V3&lt;/b&gt; Загрузка интервью: {0}</value>
+  </data>
+  <data name="CheckObsoleteInterviews" xml:space="preserve">
+    <value>Проверка устаревших интервью. Запрос: &lt;pre&gt;{0}&lt;/pre&gt;</value>
+  </data>
 </root>

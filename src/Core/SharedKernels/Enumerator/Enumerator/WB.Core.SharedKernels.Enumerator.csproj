@@ -4,24 +4,27 @@
     <GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
     <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
     <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
+    <Configurations>Debug;Release;Debug-ESRI</Configurations>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <NoWarn>1701;1702;1705;612;618;1030</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Autofac" Version="4.6.2" />
+    <Compile Remove="Extensions.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="4.8.1" />
     <PackageReference Include="Humanizer.Core" Version="2.2.0" />
-    <PackageReference Include="Microsoft.NETCore.Portable.Compatibility" Version="1.0.1" />
-    <PackageReference Include="MvvmCross.Core" Version="5.7.0" />
-    <PackageReference Include="MvvmCross.Platform" Version="5.7.0" />
-    <PackageReference Include="MvvmCross.Plugin.Messenger" Version="5.7.0" />
-    <PackageReference Include="MvvmCross.Plugin.PictureChooser" Version="5.7.0" />
+    <PackageReference Include="MvvmCross.Plugin.Messenger" Version="6.1.2" />
+    <PackageReference Include="MvvmCross.Plugin.PictureChooser" Version="6.1.2" />
+    <PackageReference Include="MvvmCross.Plugin.WebBrowser" Version="6.1.2" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
-    <PackageReference Include="Plugin.Permissions" Version="2.1.0" />
+    <PackageReference Include="Plugin.Permissions" Version="3.0.0.12" />
     <PackageReference Include="sqlite-net-pcl" Version="1.4.118" />
-    <PackageReference Include="SQLitePCLRaw.bundle_green" Version="1.1.9" />
-    <PackageReference Include="SQLitePCLRaw.core" Version="1.1.9" />
-    <PackageReference Include="Xam.Plugin.Geolocator" Version="4.1.3" />
+    <PackageReference Include="SQLitePCLRaw.bundle_green" Version="1.1.11" />
+    <PackageReference Include="SQLitePCLRaw.core" Version="1.1.11" />
+    <PackageReference Include="System.Reactive.Linq" Version="3.1.1" />
+    <PackageReference Include="Xam.Plugin.Geolocator" Version="4.5.0.6" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj" />
@@ -36,6 +39,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="Properties\InterviewerUIResources.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+    </Compile>
     <Compile Update="Properties\UIResources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -43,9 +51,97 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Update="Properties\InterviewerUIResources.ar.resx">
+      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Properties\InterviewerUIResources.es.resx">
+      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Properties\InterviewerUIResources.fr.resx">
+      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Properties\InterviewerUIResources.id-ID.resx">
+      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Properties\InterviewerUIResources.ka.resx">
+      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Properties\InterviewerUIResources.km.resx">
+      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Properties\InterviewerUIResources.pt.resx">
+      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Properties\InterviewerUIResources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>InterviewerUIResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Properties\InterviewerUIResources.ro.resx">
+      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Properties\InterviewerUIResources.ru.resx">
+      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Properties\InterviewerUIResources.th-TH.resx">
+      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Properties\InterviewerUIResources.uk-UA.resx">
+      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Properties\InterviewerUIResources.vi-VN.resx">
+      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Properties\InterviewerUIResources.zh-CN.resx">
+      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Properties\InterviewerUIResources.zh.resx">
+      <DependentUpon>InterviewerUIResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Properties\UIResources.ar.resx">
+      <DependentUpon>UIResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Properties\UIResources.es.resx">
+      <DependentUpon>UIResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Properties\UIResources.fr.resx">
+      <DependentUpon>UIResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Properties\UIResources.id-ID.resx">
+      <DependentUpon>UIResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Properties\UIResources.ka.resx">
+      <DependentUpon>UIResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Properties\UIResources.km.resx">
+      <DependentUpon>UIResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Properties\UIResources.pt.resx">
+      <DependentUpon>UIResources.resx</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Update="Properties\UIResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>UIResources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Properties\UIResources.ro.resx">
+      <DependentUpon>UIResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Properties\UIResources.ru.resx">
+      <DependentUpon>UIResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Properties\UIResources.th-TH.resx">
+      <DependentUpon>UIResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Properties\UIResources.uk-UA.resx">
+      <DependentUpon>UIResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Properties\UIResources.vi-VN.resx">
+      <DependentUpon>UIResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Properties\UIResources.zh-CN.resx">
+      <DependentUpon>UIResources.resx</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Properties\UIResources.zh.resx">
+      <DependentUpon>UIResources.resx</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
 </Project>

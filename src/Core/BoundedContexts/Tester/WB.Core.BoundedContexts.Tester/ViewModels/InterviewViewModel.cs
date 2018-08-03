@@ -1,11 +1,10 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using MvvmCross.Core.ViewModels;
+using MvvmCross.Commands;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
@@ -47,11 +46,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         public override IMvxCommand ReloadCommand => new MvxAsyncCommand(async () => await this.viewModelNavigationService.NavigateToInterviewAsync(this.InterviewId, this.navigationState.CurrentNavigationIdentity));
 
-        public IMvxCommand NavigateToDashboardCommand => new MvxAsyncCommand(this.NavigateToDashboard);
         public IMvxAsyncCommand ReloadQuestionnaireCommand => new MvxAsyncCommand(this.ReloadQuestionnaire, () => !this.IsInProgress);
-
-        public IMvxCommand NavigateToSettingsCommand => new MvxCommand(this.viewModelNavigationService.NavigateToSettings);
-        public IMvxCommand SignOutCommand => new MvxAsyncCommand(this.viewModelNavigationService.SignOutAndNavigateToLoginAsync);
 
         public override async Task NavigateBack()
         {
@@ -61,14 +56,9 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             }
             else
             {
-                await this.NavigateToDashboard();
+                await this.viewModelNavigationService.NavigateToDashboardAsync();
+                this.Dispose();
             }
-        }
-
-        private async Task NavigateToDashboard()
-        {
-            await this.viewModelNavigationService.NavigateToDashboardAsync();
-            this.Dispose();
         }
 
         private async Task ReloadQuestionnaire()
@@ -92,27 +82,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             finally
             {
                 this.IsInProgress = false;
-            }
-        }
-
-        protected override MvxViewModel UpdateCurrentScreenViewModel(ScreenChangedEventArgs eventArgs)
-        {
-            switch (this.navigationState.CurrentScreenType)
-            {
-                case ScreenType.Complete:
-                    var completeInterviewViewModel = this.interviewViewModelFactory.GetNew<CompleteInterviewViewModel>();
-                    completeInterviewViewModel.Configure(this.InterviewId, this.navigationState);
-                    return completeInterviewViewModel;
-                case ScreenType.Cover:
-                    var coverInterviewViewModel = this.interviewViewModelFactory.GetNew<CoverInterviewViewModel>();
-                    coverInterviewViewModel.Configure(this.InterviewId, this.navigationState);
-                    return coverInterviewViewModel;
-                case ScreenType.Group:
-                    var activeStageViewModel = this.interviewViewModelFactory.GetNew<EnumerationStageViewModel>();
-                    activeStageViewModel.Configure(this.InterviewId, this.navigationState, eventArgs.TargetGroup, eventArgs.AnchoredElementIdentity);
-                    return activeStageViewModel;
-                default:
-                    return null;
             }
         }
     }

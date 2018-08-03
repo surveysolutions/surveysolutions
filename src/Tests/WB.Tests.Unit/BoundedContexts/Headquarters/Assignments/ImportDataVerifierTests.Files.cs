@@ -100,6 +100,26 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         }
 
         [Test]
+        public void when_verify_main_questionnaire_with_file_name_by_variable_name_should_return_empty_errors()
+        {
+            // arrange
+            var arhiveFileName = "arhive.zip";
+            var questionnaire = Create.Entity.PlainQuestionnaire(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(children: new[]
+                    {Create.Entity.Roster(variable: "someRoster")}));
+
+            var preloadedFile = Create.Entity.PreloadedFileInfo(questionnaireOrRosterName: "MyQuestionnaire");
+
+            var verifier = Create.Service.ImportDataVerifier();
+
+            // act
+            var errors = verifier.VerifyFiles(arhiveFileName, new[] { preloadedFile }, questionnaire).ToArray();
+
+            // assert
+            Assert.That(errors, Is.Empty);
+        }
+
+        [Test]
         public void when_verify_main_questionnaire_file_in_lower_case_should_return_empty_errors()
         {
             // arrange
@@ -116,7 +136,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         }
 
         [Test]
-        public void when_verify_files_and_dont_have_main_file_should_return_empty_errors()
+        public void when_verify_files_and_dont_have_main_file_should_return_PL0040_error()
         {
             // arrange
             var arhiveFileName = "arhive.zip";
@@ -134,7 +154,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             Assert.That(errors.Length, Is.EqualTo(1));
             Assert.That(errors[0].Code, Is.EqualTo("PL0040"));
             Assert.That(errors[0].References.First().DataFile, Is.EqualTo(arhiveFileName));
-            Assert.That(errors[0].References.First().Content, Is.EqualTo("Questionnaire.tab"));
+            Assert.That(errors[0].References.First().Content, Is.EqualTo("MyQuestionnaire.tab"));
         }
 
         [Test]

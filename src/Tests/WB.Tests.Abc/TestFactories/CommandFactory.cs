@@ -23,7 +23,6 @@ namespace WB.Tests.Abc.TestFactories
                 userId: userId,
                 questionId: Guid.NewGuid(),
                 rosterVector: new decimal[0],
-                answerTime: DateTime.UtcNow,
                 answer: answer);
 
         public AnswerGeoLocationQuestionCommand AnswerGeoLocationQuestionCommand(Guid interviewId, Guid userId, double latitude = 0,
@@ -33,7 +32,6 @@ namespace WB.Tests.Abc.TestFactories
                 userId: userId,
                 questionId: Guid.NewGuid(),
                 rosterVector: new decimal[0],
-                answerTime: DateTime.UtcNow,
                 longitude: longitude,
                 latitude: latitude,
                 accuracy: accuracy,
@@ -46,7 +44,6 @@ namespace WB.Tests.Abc.TestFactories
                 userId: userId,
                 questionId: Guid.NewGuid(),
                 rosterVector: new decimal[0],
-                answerTime: DateTime.UtcNow,
                 selectedRosterVectors: answer);
 
         public AnswerMultipleOptionsQuestionCommand AnswerMultipleOptionsQuestionCommand(Guid interviewId, Guid userId, int[] answer = null, Guid? questionId = null)
@@ -55,7 +52,6 @@ namespace WB.Tests.Abc.TestFactories
                 userId: userId,
                 questionId: questionId ?? Guid.NewGuid(),
                 rosterVector: new decimal[0],
-                answerTime: DateTime.UtcNow,
                 selectedValues: answer);
 
         public AnswerNumericIntegerQuestionCommand AnswerNumericIntegerQuestionCommand(Guid? interviewId = null, 
@@ -65,7 +61,6 @@ namespace WB.Tests.Abc.TestFactories
                 userId: userId ?? Guid.NewGuid(),
                 questionId: questionId ?? Guid.NewGuid(),
                 rosterVector: new decimal[0],
-                answerTime: DateTime.UtcNow,
                 answer: answer);
 
         public AnswerNumericRealQuestionCommand AnswerNumericRealQuestionCommand(Guid interviewId, Guid userId, double answer = 0)
@@ -74,7 +69,6 @@ namespace WB.Tests.Abc.TestFactories
                 userId: userId,
                 questionId: Guid.NewGuid(),
                 rosterVector: new decimal[0],
-                answerTime: DateTime.UtcNow,
                 answer: answer);
 
         public AnswerPictureQuestionCommand AnswerPictureQuestionCommand(Guid interviewId, Guid userId, string answer = "")
@@ -83,7 +77,6 @@ namespace WB.Tests.Abc.TestFactories
                 userId: userId,
                 questionId: Guid.NewGuid(),
                 rosterVector: new decimal[0],
-                answerTime: DateTime.UtcNow,
                 pictureFileName: answer);
 
         public AnswerQRBarcodeQuestionCommand AnswerQRBarcodeQuestionCommand(Guid interviewId, Guid userId, string answer = "")
@@ -92,7 +85,6 @@ namespace WB.Tests.Abc.TestFactories
                 userId: userId,
                 questionId: Guid.NewGuid(),
                 rosterVector: new decimal[0],
-                answerTime: DateTime.UtcNow,
                 answer: answer);
 
         public AnswerSingleOptionLinkedQuestionCommand AnswerSingleOptionLinkedQuestionCommand(Guid interviewId, Guid userId, decimal[] answer = null)
@@ -101,7 +93,6 @@ namespace WB.Tests.Abc.TestFactories
                 userId: userId,
                 questionId: Guid.NewGuid(),
                 rosterVector: new decimal[0],
-                answerTime: DateTime.UtcNow,
                 selectedRosterVector: answer);
 
         public AnswerSingleOptionQuestionCommand AnswerSingleOptionQuestionCommand(Guid interviewId, Guid userId, int answer = 0, Guid? questionId = null)
@@ -110,7 +101,6 @@ namespace WB.Tests.Abc.TestFactories
                 userId: userId,
                 questionId: questionId ?? Guid.NewGuid(),
                 rosterVector: new decimal[0],
-                answerTime: DateTime.UtcNow,
                 selectedValue: answer);
 
         public AnswerTextListQuestionCommand AnswerTextListQuestionCommand(Guid interviewId, Guid userId, Tuple<decimal, string>[] answer = null)
@@ -119,7 +109,6 @@ namespace WB.Tests.Abc.TestFactories
                 userId: userId,
                 questionId: Guid.NewGuid(),
                 rosterVector: new decimal[0],
-                answerTime: DateTime.UtcNow,
                 answers: answer);
 
         public AnswerTextQuestionCommand AnswerTextQuestionCommand(Guid interviewId, 
@@ -131,18 +120,15 @@ namespace WB.Tests.Abc.TestFactories
                 userId: userId,
                 questionId: questionId ?? Guid.NewGuid(),
                 rosterVector: new decimal[0],
-                answerTime: DateTime.UtcNow,
                 answer: answer);
 
         public AnswerYesNoQuestion AnswerYesNoQuestion(Guid? userId = null,
-            Guid? questionId = null, RosterVector rosterVector = null, AnsweredYesNoOption[] answeredOptions = null,
-            DateTime? answerTime = null)
+            Guid? questionId = null, RosterVector rosterVector = null, AnsweredYesNoOption[] answeredOptions = null)
             => new AnswerYesNoQuestion(
                 interviewId: Guid.NewGuid(),
                 userId: userId ?? Guid.NewGuid(),
                 questionId: questionId ?? Guid.NewGuid(),
                 rosterVector: rosterVector ?? Core.SharedKernels.DataCollection.RosterVector.Empty,
-                answerTime: answerTime ?? DateTime.UtcNow,
                 answeredOptions: answeredOptions ?? new AnsweredYesNoOption[] { });
 
         public AnswerYesNoQuestion AnswerYesNoQuestion(Guid interviewId, Guid userId, IEnumerable<AnsweredYesNoOption> answer = default(IEnumerable<AnsweredYesNoOption>))
@@ -151,7 +137,6 @@ namespace WB.Tests.Abc.TestFactories
                 userId: userId,
                 questionId: Guid.NewGuid(),
                 rosterVector: new decimal[0],
-                answerTime: DateTime.UtcNow,
                 answeredOptions: answer);
 
         public CloneQuestionnaire CloneQuestionnaire(
@@ -174,13 +159,15 @@ namespace WB.Tests.Abc.TestFactories
 
         public ImportFromDesigner ImportFromDesigner(Guid? questionnaireId = null, string title = "Questionnaire X",
             Guid? responsibleId = null, string base64StringOfAssembly = "<base64>assembly</base64> :)",
-            long questionnaireContentVersion = 1)
+            long questionnaireContentVersion = 1,
+            string variable = "questionnaire")
             => new ImportFromDesigner(
                 responsibleId ?? Guid.NewGuid(),
                 new QuestionnaireDocument
                 {
                     PublicKey = questionnaireId ?? Guid.NewGuid(),
                     Title = title,
+                    VariableName = variable
                 },
                 false,
                 base64StringOfAssembly,
@@ -215,7 +202,6 @@ namespace WB.Tests.Abc.TestFactories
                 userId: userId ?? Guid.NewGuid(),
                 questionId: questionId,
                 rosterVector: new decimal[0],
-                answerTime: DateTime.UtcNow,
                 geometry: "",
                 mapName:"",
                 area:0,
@@ -264,7 +250,6 @@ namespace WB.Tests.Abc.TestFactories
             Guid questionnaireId,
             long version,
             List<InterviewAnswer> answers,
-            DateTime answersTime,
             Guid supervisorId,
             Guid? interviewerId = null,
             InterviewKey interviewKey = null,
@@ -277,7 +262,6 @@ namespace WB.Tests.Abc.TestFactories
                 Create.Entity.QuestionnaireIdentity(questionnaireId, version), 
                 answers, 
                 protectedAnswers ?? new List<string>(),
-                answersTime, 
                 supervisorId, 
                 interviewerId, 
                 interviewKey, 
@@ -289,7 +273,6 @@ namespace WB.Tests.Abc.TestFactories
             Guid? responsibleSupervisorId = null,
             List<InterviewAnswer> answersToFeaturedQuestions = null,
             Guid? userId = null,
-            DateTime? answersTime = null,
             List<string> protectedAnswers = null)
         {
             return this.CreateInterview(
@@ -298,7 +281,6 @@ namespace WB.Tests.Abc.TestFactories
                 questionnaireId ?? Guid.NewGuid(),
                 questionnaireVersion ?? 1,
                 answersToFeaturedQuestions,
-                answersTime ?? DateTime.Now,
                 responsibleSupervisorId ?? Guid.NewGuid(),
                 null,
                 Create.Entity.InterviewKey(),
@@ -310,7 +292,6 @@ namespace WB.Tests.Abc.TestFactories
             Guid? interviewId = null,
             Guid? userId = null,
             QuestionnaireIdentity questionnaireIdentity = null,
-            DateTime? answersTime = null, 
             Guid? supervisorId = null,
             InterviewKey interviewKey = null,
             int? assignmentId = null,
@@ -323,7 +304,6 @@ namespace WB.Tests.Abc.TestFactories
                 questionnaireIdentity?.QuestionnaireId ?? Guid.NewGuid(),
                 questionnaireIdentity?.Version ?? 1,
                 answers ?? new List<InterviewAnswer>(),
-                answersTime ?? DateTime.UtcNow,
                 supervisorId ?? Guid.NewGuid(),
                 userId,
                 interviewKey, 
@@ -334,24 +314,28 @@ namespace WB.Tests.Abc.TestFactories
         public AssignResponsibleCommand AssignResponsibleCommand(Guid? interviewId = null, 
             Guid? userId = null, 
             Guid? interviewerId = null, 
-            Guid? supervisorId = null, 
-            DateTime? assignTime = null)
+            Guid? supervisorId = null)
         {
             return new AssignResponsibleCommand(interviewId ?? Guid.NewGuid(),
                 userId ?? Guid.NewGuid(),
                 interviewerId,
-                supervisorId ?? Guid.NewGuid(),
-                assignTime ?? DateTime.UtcNow);
+                supervisorId ?? Guid.NewGuid());
         }
 
-        public ResumeInterviewCommand ResumeInterview(Guid interviewId, DateTime utcDate)
+        public ResumeInterviewCommand ResumeInterview(Guid interviewId, DateTimeOffset? originDate = null)
         {
-            return new ResumeInterviewCommand(interviewId, Guid.NewGuid(), DateTime.Now, utcDate);
+            return new ResumeInterviewCommand(interviewId, Guid.NewGuid())
+            {
+                OriginDate = originDate ?? DateTimeOffset.Now
+            };
         }
 
-        public PauseInterviewCommand PauseInterview(Guid interviewId, DateTime utcDate)
+        public PauseInterviewCommand PauseInterview(Guid interviewId, DateTimeOffset? originDate = null)
         {
-            return new PauseInterviewCommand(interviewId, Guid.NewGuid(), DateTime.Now, utcDate);
+            return new PauseInterviewCommand(interviewId, Guid.NewGuid())
+            {
+                OriginDate = originDate ?? DateTimeOffset.Now
+            };
         }
     }
 }

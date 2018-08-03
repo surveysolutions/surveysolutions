@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.Infrastructure.FileSystem;
@@ -14,6 +15,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
         void DeleteMapUserLink(string map, string user);
         ReportView GetAllMapUsersReportView();
         void UpdateUserMaps(string mapName, string[] users);
-        string[] GetAllMapsForUser(string userName);
+        string[] GetAllMapsForInterviewer(string userName);
+        string[] GetAllMapsForSupervisor(Guid supervisorId);
     }
 }

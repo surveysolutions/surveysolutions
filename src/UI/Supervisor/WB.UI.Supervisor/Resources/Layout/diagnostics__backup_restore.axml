@@ -1,0 +1,100 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:local="http://schemas.android.com/apk/res-auto" style="@style/Diagnostics_Section">
+
+  <LinearLayout style="@style/Diagnostics_TitleSection">
+    <TextView
+      android:id="@+id/Diagnostics_BackupTitle"
+      style="@style/Diagnostics_Section_Title"
+      local:MvxBind="Text  Localization('Diagnostics_Backup_Title'); Click BackupRestore.BackupCommand; UnderlinePressed ." />
+    <TextView
+              android:id="@+id/Diagnostics_BackupDescription"
+              style="@style/Diagnostics_Section_Description"
+              local:MvxBind="Text Localization('Diagnostics_Backup_Description'); Click BackupRestore.IncreaseClicksCountOnDescriptionPanelCommand" />
+  </LinearLayout>
+
+
+  <LinearLayout style="@style/Diagnostics_SubSection" local:MvxBind="Visible BackupRestore.IsBackupCreated;" >
+    <TextView
+         android:id="@+id/Diagnostics_BackupReady"
+         style="@style/Diagnostics_Subsection_Title"
+         local:MvxBind="Text Localization('Diagnostics_BackupReady_Title')" />
+    <TextView
+       android:id="@+id/Diagnostics_BackupFileLocationTitle"
+    style="@style/Diagnostics_Section_Description"
+    local:MvxBind="Text Localization('Diagnostics_BackupFileLocation_Title')" />
+
+    <TextView
+         android:id="@+id/Diagnostics_BackupFileLocationPath"
+         style="@style/Diagnostics_Subsection_Value"
+         local:MvxBind="Text BackupRestore.BackupLocation" />
+    <TextView
+           android:id="@+id/Diagnostics_BackupDateTitle"
+           style="@style/Diagnostics_Section_Description"
+           local:MvxBind="Text Localization('Diagnostics_BackupDate_Title')" />
+    <TextView
+          android:id="@+id/Diagnostics_BackupCreationDate"
+          style="@style/Diagnostics_Subsection_Value"
+          local:MvxBind="Text BackupRestore.BackupCreationDate" />
+
+    <TextView
+           android:id="@+id/Diagnostics_BackupScopeTitle"
+           style="@style/Diagnostics_Section_Description"
+           local:MvxBind="Text Localization('Diagnostics_BackupScope_Title')" />
+    <TextView
+          android:id="@+id/Diagnostics_BackupScope"
+          style="@style/Diagnostics_Subsection_Value"
+          local:MvxBind="Text BackupRestore.BackupScope" />
+
+  </LinearLayout>
+
+  <LinearLayout style="@style/Diagnostics_SubSection" local:MvxBind="Visible BackupRestore.IsRestoreVisible;" >
+    <TextView
+         android:id="@+id/Diagnostics_RestoreReadyTitle"
+         style="@style/Diagnostics_Subsection_Title"
+         local:MvxBind="Text Localization('Diagnostics_RestoreReady_Title')" />
+    <TextView
+          android:id="@+id/Diagnostics_RestoreFileLocationTitle"
+          style="@style/Diagnostics_Section_Description"
+          local:MvxBind="Text Localization('Diagnostics_BackupFileLocation_Title')" />
+
+    <TextView
+       android:id="@+id/Diagnostics_RestoreFileLocation"
+         style="@style/Diagnostics_Subsection_Value"
+        local:MvxBind="Text BackupRestore.RestoreLocation" />
+    <TextView
+         android:id="@+id/Diagnostics_RestoreBackupFileTitle"
+           style="@style/Diagnostics_Section_Description"
+           local:MvxBind="Text Localization('Diagnostics_BackupDate_Title')" />
+    <TextView
+       android:id="@+id/Diagnostics_RestoreFileCreationDate"
+        style="@style/Diagnostics_Subsection_Value"
+        local:MvxBind="Text BackupRestore.RestoreCreationDate" />
+
+    <TextView
+          android:id="@+id/Diagnostics_RestoreScopeTitle"
+           style="@style/Diagnostics_Section_Description"
+           local:MvxBind="Text Localization('Diagnostics_BackupScope_Title')" />
+    <TextView
+       android:id="@+id/Diagnostics_RestoreScope"
+        style="@style/Diagnostics_Subsection_Value"
+        local:MvxBind="Text BackupRestore.RestoreScope" />
+
+  </LinearLayout>
+
+  <LinearLayout style="@style/Diagnostics_TitleSection" local:MvxBind="Visible BackupRestore.IsRestoreVisible;">
+    <Button
+       android:id="@+id/Diagnostics_RestoreBtn"
+      style="@style/Restore_Button"
+      local:MvxBind="Text Localization('Diagnostics_Restore_Title'); Click BackupRestore.RestoreCommand" />
+    <TextView
+         android:id="@+id/Diagnostics_RestoreWarning"
+              style="@style/Diagnostics_Section_Description_Warning"
+              local:MvxBind="Html Localization('Diagnostics_Restore_Description')" />
+  </LinearLayout>
+  <ProgressBar 
+               android:id="@+id/Diagnostics_ProgressIndicator"
+               style="@style/Interview_Question_Progress_Indicator"
+               android:indeterminateOnly="true"
+               local:MvxBind="Visible BackupRestore.IsBackupInProgress" />
+</LinearLayout>

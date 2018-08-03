@@ -1,10 +1,10 @@
 using System;
 using System.Windows.Input;
-using MvvmCross.Core.ViewModels;
+using MvvmCross.Commands;
+using MvvmCross.ViewModels;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State
 {
@@ -18,13 +18,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public QuestionInstructionViewModel(
             IQuestionnaireStorage questionnaireRepository,
-            IStatefulInterviewRepository interviewRepository)
+            IStatefulInterviewRepository interviewRepository,
+            DynamicTextViewModel instruction)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
+
+            this.Instruction = instruction;
         }
 
-        public string Instruction { get; private set; }
+        public DynamicTextViewModel Instruction { get; private set; }
 
         private bool isInstructionsHidden;
         public bool IsInstructionsHidden
@@ -33,7 +36,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             set { this.RaiseAndSetIfChanged(ref this.isInstructionsHidden, value); }
         }
 
-        public bool HasInstructions => !string.IsNullOrWhiteSpace(Instruction);
+        public bool HasInstructions => !string.IsNullOrWhiteSpace(this.Instruction.HtmlText);
 
         public virtual void Init(string interviewId, Identity questionIdentity)
         {
@@ -44,8 +47,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
 
             this.IsInstructionsHidden = questionnaire.GetHideInstructions(questionIdentity.Id);
-            this.Instruction = questionnaire.GetQuestionInstruction(questionIdentity.Id);
+            
             this.Identity = questionIdentity;
+
+            this.Instruction.InitAsInstructions(interviewId, questionIdentity);
         }
 
         public Identity Identity { get; private set; }

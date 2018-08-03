@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
             var questionnaireRepository = SetupQuestionnaireRepositoryWithListQuestion(isRosterSizeQuestion: true, maxAnswerCount : null);
 
             var userIdentity = Mock.Of<IUserIdentity>(_ => _.UserId == userId);
-            var principal = Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == userIdentity);
+            var principal = Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == userIdentity && _.IsAuthenticated == true);
 
             listModel = CreateTextListQuestionViewModel(
                 QuestionStateMock.Object,

@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
-using MvvmCross.Core.ViewModels;
+using MvvmCross.Commands;
+using MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -15,6 +16,8 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview;
+using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.UI.Interviewer.ViewModel
 {
@@ -54,13 +57,6 @@ namespace WB.UI.Interviewer.ViewModel
 
         public override IMvxCommand ReloadCommand => new MvxAsyncCommand(async () => await this.viewModelNavigationService.NavigateToInterviewAsync(this.InterviewId, this.navigationState.CurrentNavigationIdentity));
 
-        public IMvxCommand NavigateToDashboardCommand => new MvxAsyncCommand(async () => {
-            await this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
-            this.Dispose();
-        });
-        public IMvxCommand NavigateToDiagnosticsPageCommand => new MvxAsyncCommand(this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>);
-        public IMvxCommand SignOutCommand => new MvxAsyncCommand(this.viewModelNavigationService.SignOutAndNavigateToLoginAsync);
-
         public IMvxCommand NavigateToMapsCommand => new MvxAsyncCommand(this.viewModelNavigationService.NavigateToAsync<MapsViewModel>);
 
         public override async Task NavigateBack()
@@ -91,16 +87,8 @@ namespace WB.UI.Interviewer.ViewModel
                     var completeInterviewViewModel = this.interviewViewModelFactory.GetNew<InterviewerCompleteInterviewViewModel>();
                     completeInterviewViewModel.Configure(this.InterviewId, this.navigationState);
                     return completeInterviewViewModel;
-                case ScreenType.Cover:
-                    var coverInterviewViewModel = this.interviewViewModelFactory.GetNew<CoverInterviewViewModel>();
-                    coverInterviewViewModel.Configure(this.InterviewId, this.navigationState);
-                    return coverInterviewViewModel;
-                case ScreenType.Group:
-                    var activeStageViewModel = this.interviewViewModelFactory.GetNew<EnumerationStageViewModel>();
-                    activeStageViewModel.Configure(this.InterviewId, this.navigationState, eventArgs.TargetGroup, eventArgs.AnchoredElementIdentity);
-                    return activeStageViewModel;
                 default:
-                    return null;
+                    return base.UpdateCurrentScreenViewModel(eventArgs);
             }
         }
 
@@ -108,7 +96,7 @@ namespace WB.UI.Interviewer.ViewModel
         {
             if (!lastCreatedInterviewStorage.WasJustCreated(InterviewId))
             {
-                commandService.Execute(new ResumeInterviewCommand(Guid.Parse(InterviewId), Principal.CurrentUserIdentity.UserId, DateTime.Now, DateTime.UtcNow));
+                commandService.Execute(new ResumeInterviewCommand(Guid.Parse(InterviewId), Principal.CurrentUserIdentity.UserId));
             }
 
             auditLogService.Write(new OpenInterviewAuditLogEntity(Guid.Parse(InterviewId), interviewKey?.ToString(), assignmentId));
@@ -121,12 +109,12 @@ namespace WB.UI.Interviewer.ViewModel
             var interview = interviewRepository.Get(this.InterviewId);
             if (!interview.IsCompleted)
             {
-                commandService.Execute(new PauseInterviewCommand(Guid.Parse(InterviewId), interview.CurrentResponsibleId, DateTime.Now, DateTime.UtcNow));
+                commandService.Execute(new PauseInterviewCommand(Guid.Parse(InterviewId), interview.CurrentResponsibleId));
             }
 
             auditLogService.Write(new CloseInterviewAuditLogEntity(Guid.Parse(InterviewId), interviewKey?.ToString()));
 
-            base.ViewDisappeared();
+            base.ViewDisappearing();
         }
     }
 }

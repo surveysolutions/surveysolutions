@@ -1,7 +1,7 @@
 using System;
 using System.Threading;
 using Moq;
-using MvvmCross.Plugins.Messenger;
+using MvvmCross.Plugin.Messenger;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.Messages;

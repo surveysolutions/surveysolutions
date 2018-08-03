@@ -1,24 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using MvvmCross.Core.ViewModels;
-using MvvmCross.Plugins.Messenger;
-using WB.Core.BoundedContexts.Interviewer.Properties;
+using MvvmCross.Commands;
+using MvvmCross.Plugin.Messenger;
+using MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.Messages;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
+using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 {
-    public class CensusQuestionnaireDashboardItemViewModel : MvxNotifyPropertyChanged, IDashboardItem
+    public class CensusQuestionnaireDashboardItemViewModel : MvxNotifyPropertyChanged, IDashboardItem, IDisposable
     {
         private readonly ICommandService commandService;
         private readonly IInterviewerPrincipal principal;
@@ -91,7 +93,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
                 interviewerIdentity.UserId, this.questionnaireIdentity, 
                 new List<InterviewAnswer>(),
                 new List<string>(),
-                DateTime.UtcNow,
                 interviewerIdentity.SupervisorId,
                 interviewerIdentity.UserId,
                 keyGenerator.Get(),
@@ -101,5 +102,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         }
 
         private void RaiseStartingLongOperation() => this.messenger.Publish(new StartingLongOperationMessage(this));
+
+        public void Dispose()
+        {
+            interviewViewRepository?.Dispose();
+        }
     }
 }

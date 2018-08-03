@@ -37,7 +37,7 @@ namespace WB.UI.Designer.App_Start
             registry.Bind<IQuestionnireHistoryVersionsService, QuestionnireHistoryVersionsService>();
         }
 
-        public Task Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
             return Task.CompletedTask;
         }
