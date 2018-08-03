@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using MvvmCross.Core.ViewModels;
-using MvvmCross.Platform.Core;
+using MvvmCross.Base;
+using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
@@ -147,7 +147,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.userId,
                 this.questionIdentity.Id,
                 this.questionIdentity.RosterVector,
-                DateTime.UtcNow,
                 selectedValues);
 
             try
@@ -211,6 +210,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             if (@event.Questions.Contains(this.Identity))
             {
+                UpateMaxAnswersCountMessage(0);
+
                 foreach (var option in this.options)
                     this.UpdateOptionSelection(option, new List<decimal>());
             }
@@ -340,7 +341,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private void UpateMaxAnswersCountMessage(int answersCount)
         {
-            if (this.maxAllowedAnswers.HasValue && this.HasOptions)
+            if (this.maxAllowedAnswers.HasValue)
             {
                 this.MaxAnswersCountMessage = string.Format(UIResources.Interview_MaxAnswersCount,
                     answersCount, Math.Min(this.maxAllowedAnswers.Value, this.Options.Count));

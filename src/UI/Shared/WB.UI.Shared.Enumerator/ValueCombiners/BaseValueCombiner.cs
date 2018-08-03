@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MvvmCross.Binding.Bindings.SourceSteps;
 using MvvmCross.Binding.Combiners;
-using MvvmCross.Platform.Converters;
+using MvvmCross.Converters;
 
 namespace WB.UI.Shared.Enumerator.ValueCombiners
 {

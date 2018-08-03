@@ -4,7 +4,7 @@ using Android.Text;
 using Android.Text.Style;
 using Android.Widget;
 using MvvmCross.Binding;
-using MvvmCross.Platform.Droid.Platform;
+using MvvmCross.Platforms.Android;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;

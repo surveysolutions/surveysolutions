@@ -49,7 +49,7 @@
         </div>
 
         <div class="form-group">
-            <label for="edit-question-title" class="wb-label" ng-i18next="QuestionText"></label><br>
+            <label for="edit-question-title-highlight" class="wb-label" ng-i18next="QuestionText"></label><br>
             <div class="pseudo-form-control">
                 <div id="edit-question-title-highlight"
                      ui-ace="{ onLoad : setupAceForSubstitutions, require: ['ace/ext/language_tools'] }" ng-model="activeQuestion.title"></div>
@@ -73,8 +73,11 @@
 
                 <input id="cb-hide-instructions" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.hideInstructions" />
                 <label for="cb-hide-instructions"><span></span>{{'QuestionHideInstruction' | i18next}} <help key="hideInstructions" /></label>
-
-                <textarea id="edit-question-instructions" ng-model="activeQuestion.instructions" class="form-control" msd-elastic></textarea>
+                
+                <div class="pseudo-form-control">
+                    <div id="edit-question-instructions"
+                         ui-ace="{ onLoad : setupAceForSubstitutions, require: ['ace/ext/language_tools'] }" ng-model="activeQuestion.instructions"></div>
+                </div>
             </div>
 
             <div class="form-group col-xs-1">

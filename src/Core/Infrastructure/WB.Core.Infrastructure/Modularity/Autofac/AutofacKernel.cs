@@ -1,8 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Autofac;
+using Autofac.Features.ResolveAnything;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.UI.Shared.Enumerator.Services.Internals;
 
@@ -30,16 +31,32 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
             initModules.AddRange(modules.Select(m => m as IInitModule).Where(m => m != null));
         }
 
-        public async Task Init()
+        public Task Init()
         {
+            containerBuilder.RegisterSource(new AnyConcreteTypeNotAlreadyRegisteredSource());
+            var status = new UnderConstructionInfo();
+            this.containerBuilder.Register((ctx, p) => status).SingleInstance();
+
             Container = containerBuilder.Build();
 
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(Container));
 
+            Thread thread = new Thread(() => InitModules(status).Wait()) { IsBackground = false };
+            thread.Start();
+
+            return Task.CompletedTask;
+        }
+
+        private async Task InitModules(UnderConstructionInfo status)
+        {
+            status.Status = UnderConstructionStatus.Running;
             foreach (var module in initModules)
             {
-                await module.Init(ServiceLocator.Current); 
+                status.ClearMessage();
+                await module.Init(ServiceLocator.Current, status);
             }
+
+            status.Status = UnderConstructionStatus.Finished;
         }
     }
 }

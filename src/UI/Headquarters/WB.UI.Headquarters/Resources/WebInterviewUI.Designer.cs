@@ -576,6 +576,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Not answered.
+        /// </summary>
+        internal static string Interview_Overview_NotAnswered {
+            get {
+                return ResourceManager.GetString("Interview_Overview_NotAnswered", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Interview is received by interviewer and cannot be modified.
         /// </summary>
         internal static string InterviewReceivedCantModify {

@@ -7,8 +7,8 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview.Base
         public Guid QuestionId { get; private set; }
         public decimal[] RosterVector { get; private set; }
 
-        protected QuestionActiveEvent(Guid userId, Guid questionId, decimal[] rosterVector)
-            : base(userId)
+        protected QuestionActiveEvent(Guid userId, Guid questionId, decimal[] rosterVector, DateTimeOffset originDate)
+            : base(userId, originDate)
         {
             this.QuestionId = questionId;
             this.RosterVector = rosterVector;

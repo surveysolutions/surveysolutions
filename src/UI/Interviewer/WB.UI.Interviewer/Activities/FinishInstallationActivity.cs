@@ -4,9 +4,9 @@ using Android.Content.PM;
 using Android.OS;
 using Android.Support.V7.Widget;
 using Android.Views;
-using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Tasks;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.UI.Shared.Enumerator.Activities;
 
 namespace WB.UI.Interviewer.Activities
@@ -33,13 +33,6 @@ namespace WB.UI.Interviewer.Activities
             {
                 this.ViewModel.CancellInProgressTask();
             }
-        }
-
-        protected override void OnResume()
-        {
-            base.OnResume();
-
-            this.ViewModel.RefreshEndpoint().WaitAndUnwrapException();
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)

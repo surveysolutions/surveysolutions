@@ -1,8 +1,8 @@
 using System.Threading.Tasks;
-using MvvmCross.Platform.Droid.Platform;
-using MWBarcodeScanner;
+using MvvmCross.Platforms.Android;
 using Plugin.Permissions.Abstractions;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using ZXing.Mobile;
 
 namespace WB.UI.Shared.Enumerator.Services.Internals
 {
@@ -20,20 +20,12 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
         public async Task<QRBarcodeScanResult> ScanAsync()
         {
             await this.permissions.AssureHasPermission(Permission.Camera);
-
-            var scanner = new Scanner(this.androidCurrentTopActivity.Activity);
-            scanner.setInterfaceOrientation(
-                this.androidCurrentTopActivity.Activity.RequestedOrientation.ToString());
-
-            this.CustomizeScanner();
+            
+            MobileBarcodeScanner.Initialize(this.androidCurrentTopActivity.Activity.Application);
+            var scanner = new MobileBarcodeScanner();
             var result = await scanner.Scan();
 
-            return result != null ? new QRBarcodeScanResult() { Code = result.code, RawBytes = result.bytes } : null;
-        }
-
-        private void CustomizeScanner()
-        {
-            BarcodeConfig.MWB_registerSDK("uaEgBR8jq/WJ7+CWNIP0iOEUYiTL0ayG6WGHMA2U6/U=");
+            return result != null ? new QRBarcodeScanResult() { Code = result.Text, RawBytes = result.RawBytes} : null;
         }
     }
 }

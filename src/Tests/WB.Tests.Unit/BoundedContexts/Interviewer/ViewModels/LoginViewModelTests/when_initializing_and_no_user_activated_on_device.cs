@@ -19,10 +19,10 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.LoginViewModelTes
                 interviewersPlainStorage: interviewersPlainStorage.Object);
 
             // Act
-            await viewModel.Initialize();
+            viewModel.ViewCreated();
 
             // Assert
-            viewModelNavigationServiceMock.Verify(x => x.NavigateToAsync<FinishInstallationViewModel>(), Times.Once);
+            viewModelNavigationServiceMock.Verify(x => x.NavigateToFinishInstallationAsync(), Times.Once);
         }
     }
 }

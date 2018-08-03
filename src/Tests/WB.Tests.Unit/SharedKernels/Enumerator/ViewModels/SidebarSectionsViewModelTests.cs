@@ -1,14 +1,14 @@
 ﻿using Main.Core.Entities.Composite;
 using Moq;
-using MvvmCross.Core.Views;
-using MvvmCross.Platform.Core;
-using MvvmCross.Test.Core;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Documents;
+using MvvmCross.Base;
+using MvvmCross.Tests;
+using MvvmCross.Views;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
@@ -211,7 +211,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             //assert
             var addedDisabledSectionViewModel = viewModel.AllVisibleSections.Except(viewModelsWithoutDisabled).Single();
 
-            Assert.That(viewModel.AllVisibleSections.Count, Is.EqualTo(5));
+            Assert.That(viewModel.AllVisibleSections.Count, Is.EqualTo(6));
             Assert.That(viewModel.AllVisibleSections.ToList().IndexOf(addedDisabledSectionViewModel), Is.EqualTo(2));
         }
     }

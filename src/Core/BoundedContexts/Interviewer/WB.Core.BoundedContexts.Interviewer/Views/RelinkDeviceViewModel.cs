@@ -1,17 +1,19 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using MvvmCross.Core.ViewModels;
+using MvvmCross.Commands;
+using MvvmCross.ViewModels;
 using Newtonsoft.Json;
-using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
-using WB.Core.BoundedContexts.Interviewer.Properties;
-using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views
 {
@@ -59,14 +61,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             => new MvxAsyncCommand(this.viewModelNavigationService.NavigateToAsync<DiagnosticsViewModel>,
                 () => !this.IsInProgress);
 
-        private IMvxAsyncCommand relinkCommand;
-        public IMvxAsyncCommand RelinkCommand
-        {
-            get
-            {
-                return relinkCommand ?? (relinkCommand = new MvxAsyncCommand(this.RelinkCurrentInterviewerToDeviceAsync, () => !this.IsInProgress));
-            }
-        }
+        public IMvxAsyncCommand RelinkCommand => new MvxAsyncCommand(this.RelinkCurrentInterviewerToDeviceAsync, () => !this.IsInProgress);
 
         private CancellationTokenSource cancellationTokenSource = new CancellationTokenSource();
         private InterviewerIdentity userIdentityToRelink;
@@ -97,7 +92,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             this.cancellationTokenSource = new CancellationTokenSource();
             try
             {
-                await this.synchronizationService.LinkCurrentInterviewerToDeviceAsync(
+                await this.synchronizationService.LinkCurrentUserToDeviceAsync(
                     credentials: new RestCredentials
                     {
                         Login = this.userIdentityToRelink.Name,

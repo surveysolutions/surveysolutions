@@ -7,17 +7,17 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire
     [Serializable]
     public class AddSharedPersonToQuestionnaire : QuestionnaireCommand
     {
-        public AddSharedPersonToQuestionnaire(Guid questionnaireId, Guid personId, string email, ShareType shareType, Guid responsibleId)
+        public AddSharedPersonToQuestionnaire(Guid questionnaireId, Guid personId, string emailOrLogin, ShareType shareType, Guid responsibleId)
             : base(questionnaireId, responsibleId)
         {
             this.PersonId = personId;
-            this.Email = email;
+            this.EmailOrLogin = emailOrLogin;
             this.ShareType = shareType;
         }
 
         public ShareType ShareType { set; get; }
 
         public Guid PersonId { get; set; }
-        public string Email { get; private set; }
+        public string EmailOrLogin { get; set; }
     }
 }

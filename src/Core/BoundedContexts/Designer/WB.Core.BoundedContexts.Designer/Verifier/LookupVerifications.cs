@@ -33,50 +33,9 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             CriticalForLookupTable(LookupTableMoreThan10Columns, "WB0043", VerificationMessages.WB0043_LookupTableMoreThan11Columns),
             CriticalForLookupTable(LookupTableMoreThan5000Rows, "WB0044", VerificationMessages.WB0044_LookupTableMoreThan5000Rows),
             CriticalForLookupTable(LookupTableNotUniqueRowcodeValues, "WB0047", VerificationMessages.WB0047_LookupTableNotUniqueRowcodeValues),
-            Critical_LookupTablesWithDuplicateVariableName_WB0026,
         };
 
-        private static IEnumerable<QuestionnaireVerificationMessage> Critical_LookupTablesWithDuplicateVariableName_WB0026(
-            MultiLanguageQuestionnaireDocument questionnaire)
-        {
-            var rosterVariableNameMappedOnRosters = questionnaire
-                .Find<IGroup>(g => g.IsRoster && !string.IsNullOrEmpty(g.VariableName))
-                .Select(r => new
-                {
-                    Name = r.VariableName,
-                    Reference = QuestionnaireEntityReference.CreateForRoster(r.PublicKey)
-                })
-                .Union(questionnaire.Find<IQuestion>(q => true)
-                    .Where(x => !string.IsNullOrEmpty(x.StataExportCaption))
-                    .Select(r => new
-                    {
-                        Name = r.StataExportCaption,
-                        Reference = CreateReference(r)
-                    }))
-                .Union(questionnaire.LookupTables.Where(x => !string.IsNullOrEmpty(x.Value.TableName))
-                    .Select(r => new
-                    {
-                        Name = r.Value.TableName,
-                        Reference = QuestionnaireEntityReference.CreateForLookupTable(r.Key)
-                    }))
-                .Union(questionnaire.Find<IVariable>(x => !string.IsNullOrEmpty(x.Name))
-                    .Where(x => !string.IsNullOrEmpty(x.Name))
-                    .Select(r => new
-                    {
-                        Name = r.Name,
-                        Reference = CreateReference(r)
-                    })
-                ).ToList();
-
-
-            return rosterVariableNameMappedOnRosters
-                .GroupBy(s => s.Name, StringComparer.InvariantCultureIgnoreCase)
-                .Where(group => group.Count() > 1)
-                .Select(group => QuestionnaireVerificationMessage.Critical(
-                    "WB0026",
-                    VerificationMessages.WB0026_ItemsWithTheSameNamesFound,
-                    group.Select(x => x.Reference).ToArray()));
-        }
+        
 
         private static bool LookupTableHasEmptyName(Guid tableId, LookupTable table, MultiLanguageQuestionnaireDocument questionnaire)
         {

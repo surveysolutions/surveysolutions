@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
@@ -41,7 +40,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     public class InterviewTreeQuestion : InterviewTreeLeafNode, ISubstitutable, IInterviewTreeValidateable
     {
         public InterviewTreeQuestion(Identity identity, 
-            SubstitutionText title, 
+            SubstitutionText title,
+            SubstitutionText instructions,
             string variableName,
             QuestionType questionType, 
             object answer, // always null here
@@ -67,8 +67,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.IsPrefilled = isPrefilled;
             this.IsSupervisors = isSupervisors;
             this.IsHidden = isHidden;
+            this.Instructions = instructions;
 
-            
             switch (questionType)
             {
                 case QuestionType.SingleOption:
@@ -184,9 +184,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public List<AnswerComment> AnswerComments { get; set; } = new List<AnswerComment>();
 
-        public SubstitutionText Title { get; private set; }
+        public sealed override SubstitutionText Title { get; protected set; }
 
         public SubstitutionText[] ValidationMessages { get; private set; }
+
+        public SubstitutionText Instructions { get; private set; }
 
         public string VariableName { get; }
         public bool IsInterviewer { get; private set; }
@@ -217,6 +219,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             this.Title = title;
             this.Title.SetTree(this.Tree);
+        }
+        public void SetInstructions(SubstitutionText instructions)
+        {
+            this.Instructions = instructions;
+            this.Instructions.SetTree(this.Tree);
         }
 
         public void SetValidationMessages(SubstitutionText[] validationMessages)
@@ -700,6 +707,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 ((InterviewTreeCascadingQuestion)clonedQuestion.InterviewQuestion).SetQuestion(clonedQuestion);
 
             clonedQuestion.Title = this.Title?.Clone();
+            clonedQuestion.Instructions = this.Instructions?.Clone();
             clonedQuestion.ValidationMessages = this.ValidationMessages.Select(x => x.Clone()).ToArray();
             clonedQuestion.FailedErrors = this.FailedErrors?
                 .Select(v => new FailedValidationCondition(v.FailedConditionIndex))
@@ -753,6 +761,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public void ReplaceSubstitutions()
         {
             this.Title.ReplaceSubstitutions();
+            this.Instructions.ReplaceSubstitutions();
             foreach (var messagesWithSubstition in this.ValidationMessages)
             {
                 messagesWithSubstition.ReplaceSubstitutions();
@@ -763,6 +772,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             base.SetTree(tree);
             this.Title?.SetTree(tree);
+            this.Instructions?.SetTree(tree);
             foreach (var messagesWithSubstition in this.ValidationMessages)
             {
                 messagesWithSubstition.SetTree(tree);

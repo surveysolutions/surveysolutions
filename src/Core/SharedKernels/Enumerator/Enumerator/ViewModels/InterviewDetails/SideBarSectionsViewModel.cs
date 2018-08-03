@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using MvvmCross.Core.ViewModels;
+using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
@@ -52,13 +52,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public void Init(string interviewId, NavigationState navigationState)
         {
-            if (navigationState == null) throw new ArgumentNullException(nameof(navigationState));
-            if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
-
             if (this.navigationState != null) throw new Exception("ViewModel already initialized");
+            this.interviewId = interviewId ?? throw new ArgumentNullException(nameof(interviewId));
+            this.navigationState = navigationState ?? throw new ArgumentNullException(nameof(navigationState));
 
-            this.interviewId = interviewId;
-            this.navigationState = navigationState;
             this.navigationState.ScreenChanged += this.OnScreenChanged;
 
             this.eventRegistry.Subscribe(this, interviewId);
@@ -73,6 +70,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.AllVisibleSections = new ObservableRangeCollection<ISideBarItem>(new[]
             {
                 this.modelsFactory.BuildCoverItem(this.navigationState),
+                this.modelsFactory.BuildOverviewItem(this.navigationState, this.interviewId),
                 this.modelsFactory.BuildCompleteItem(this.navigationState, this.interviewId)
             });
 

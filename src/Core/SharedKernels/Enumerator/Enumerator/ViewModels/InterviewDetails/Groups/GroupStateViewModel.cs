@@ -1,5 +1,5 @@
 using System.Linq;
-using MvvmCross.Core.ViewModels;
+using MvvmCross.ViewModels;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -9,14 +9,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
     public class GroupStateViewModel : MvxNotifyPropertyChanged
     {
         private readonly IStatefulInterviewRepository interviewRepository;
-        
+        private readonly IGroupStateCalculationStrategy groupStateCalculationStrategy;
+
         protected GroupStateViewModel()
         {
         }
 
-        public GroupStateViewModel(IStatefulInterviewRepository interviewRepository)
+        public GroupStateViewModel(IStatefulInterviewRepository interviewRepository,
+            IGroupStateCalculationStrategy groupStateCalculationStrategy)
         {
             this.interviewRepository = interviewRepository;
+            this.groupStateCalculationStrategy = groupStateCalculationStrategy;
         }
 
         private string interviewId;
@@ -76,31 +79,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 
         private GroupStatus CalculateDetailedStatus(Identity groupIdentity, IStatefulInterview interview)
         {
-            if (interview.HasEnabledInvalidQuestionsAndStaticTexts(groupIdentity))
-                return this.QuestionsCount == this.AnsweredQuestionsCount ? GroupStatus.CompletedInvalid : GroupStatus.StartedInvalid;
-
-            var groupStatus = GroupStatus.Completed;
-
-            if (interview.HasUnansweredQuestions(groupIdentity))
-                groupStatus = this.AnsweredQuestionsCount > 0 ? GroupStatus.Started : GroupStatus.NotStarted;
-
-            var subgroupStatuses = interview.GetEnabledSubgroups(groupIdentity)
-                .Select(subgroup => CalculateDetailedStatus(subgroup, interview));
-
-            foreach (var subGroupStatus in subgroupStatuses)
-            {
-                switch (groupStatus)
-                {
-                    case GroupStatus.Completed when subGroupStatus != GroupStatus.Completed:
-                        return GroupStatus.Started;
-                    case GroupStatus.NotStarted when subGroupStatus != GroupStatus.NotStarted:
-                        return GroupStatus.Started;
-                }
-            }
-
-            return groupStatus;
+            return this.groupStateCalculationStrategy.CalculateDetailedStatus(groupIdentity, interview);
         }
-
-        protected bool AreAllQuestionsAnswered() => this.QuestionsCount == this.AnsweredQuestionsCount;
     }
 }

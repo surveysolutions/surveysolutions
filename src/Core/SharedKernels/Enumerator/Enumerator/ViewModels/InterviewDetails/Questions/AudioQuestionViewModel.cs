@@ -5,7 +5,8 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using Humanizer;
 using Humanizer.Localisation;
-using MvvmCross.Core.ViewModels;
+using MvvmCross.Commands;
+using MvvmCross.ViewModels;
 using Plugin.Permissions.Abstractions;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
@@ -162,7 +163,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 userId: this.principal.CurrentUserIdentity.UserId,
                 questionId: this.questionIdentity.Id,
                 rosterVector: this.questionIdentity.RosterVector,
-                answerTime: DateTime.UtcNow,
                 fileName: this.GetAudioFileName(),
                 length: audioDuration);
 
@@ -254,8 +254,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 await this.Answering.SendRemoveAnswerCommandAsync(
                     new RemoveAnswerCommand(this.interviewId,
                         this.principal.CurrentUserIdentity.UserId,
-                        this.questionIdentity,
-                        DateTime.UtcNow));
+                        this.questionIdentity));
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
             }
             catch (InterviewException exception)

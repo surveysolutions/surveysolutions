@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using MvvmCross.Core.ViewModels;
-using MvvmCross.Platform;
-using MvvmCross.Platform.Core;
+using MvvmCross.Base;
+using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
@@ -223,7 +222,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.userId,
                 this.Identity.Id,
                 this.Identity.RosterVector,
-                DateTime.UtcNow,
                 selectedValuesWithJustChanged);
 
             try
@@ -303,7 +301,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 if (selectedOptionIndex >= 0)
                 {
                     var answeredYesNoOption = @event.AnsweredOptions[selectedOptionIndex];
-                    option.YesAnswerCheckedOrder = answeredYesNoOption.Yes 
+                    option.YesAnswerCheckedOrder = answeredYesNoOption.Yes && this.areAnswersOrdered
                         ? orderedYesOptions.IndexOf(option.Value) + 1
                         : (int?)null;
                     option.AnswerCheckedOrder = orderedOptions.IndexOf(option.Value) + 1;

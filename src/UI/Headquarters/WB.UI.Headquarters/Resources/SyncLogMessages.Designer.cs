@@ -88,6 +88,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Check for obsolete interviews. Request: &lt;pre&gt;{0}&lt;/pre&gt;.
+        /// </summary>
+        public static string CheckObsoleteInterviews {
+            get {
+                return ResourceManager.GetString("CheckObsoleteInterviews", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;li&gt;Delete interview: &lt;a href=&quot;{3}&quot;&gt;{0}&lt;/a&gt;, Package: {1}, Sort index: {2}&lt;/li&gt;.
         /// </summary>
         public static string DeleteInterviewPackage {
@@ -219,6 +228,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string GetInterviewPackages {
             get {
                 return ResourceManager.GetString("GetInterviewPackages", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;b&gt;V3&lt;/b&gt; Download interview package: {0}.
+        /// </summary>
+        public static string GetInterviewPackageV3 {
+            get {
+                return ResourceManager.GetString("GetInterviewPackageV3", resourceCulture);
             }
         }
         
@@ -372,6 +390,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string PostPackage {
             get {
                 return ResourceManager.GetString("PostPackage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to &lt;b&gt;V3&lt;/b&gt; Upload interview: {0}.
+        /// </summary>
+        public static string PostPackageV3 {
+            get {
+                return ResourceManager.GetString("PostPackageV3", resourceCulture);
             }
         }
         

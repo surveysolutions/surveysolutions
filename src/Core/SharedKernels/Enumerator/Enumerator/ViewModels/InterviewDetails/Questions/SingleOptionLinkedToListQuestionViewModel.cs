@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using MvvmCross.Platform.Core;
-using MvvmCross.Core.ViewModels;
+using MvvmCross.Base;
+using MvvmCross.ViewModels;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -141,8 +141,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 await this.Answering.SendRemoveAnswerCommandAsync(
                     new RemoveAnswerCommand(this.interviewId,
                         this.userId,
-                        this.Identity,
-                        DateTime.UtcNow));
+                        this.Identity));
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
             }
             catch (InterviewException exception)
@@ -165,7 +164,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.userId,
                 this.Identity.Id,
                 this.Identity.RosterVector,
-                DateTime.UtcNow,
                 selectedOption.Value);
 
             try

@@ -6,9 +6,10 @@ using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using Humanizer;
-using MvvmCross.Core.ViewModels;
+using MvvmCross.Commands;
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.Properties;
+using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.BoundedContexts.Tester.Views;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -60,8 +61,10 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.QuestionnaireDownloader = questionnaireDownloader;
         }
 
-        public override Task Initialize()
+        public override async Task Initialize()
         {
+            await base.Initialize().ConfigureAwait(false);
+
             this.localQuestionnaires = this.questionnaireListStorage.LoadAll();
             
             if (!localQuestionnaires.Any())
@@ -79,7 +82,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             var lastUpdate = this.dashboardLastUpdateStorage.GetById(this.principal.CurrentUserIdentity.Name);
 
             this.HumanizeLastUpdateDate(lastUpdate?.LastUpdateDate);
-            return Task.CompletedTask;
         }
        
         private void SearchByLocalQuestionnaires(string searchTerm = null)
@@ -206,10 +208,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
         public IMvxAsyncCommand<QuestionnaireListItem> LoadQuestionnaireCommand => this.loadQuestionnaireCommand ?? (this.loadQuestionnaireCommand
             = new MvxAsyncCommand<QuestionnaireListItem>(this.LoadQuestionnaireAsync, _ => !this.IsInProgress));
 
-        private IMvxAsyncCommand refreshQuestionnairesCommand;
 
-        public IMvxAsyncCommand RefreshQuestionnairesCommand => this.refreshQuestionnairesCommand ?? (this.refreshQuestionnairesCommand
-            = new MvxAsyncCommand(this.LoadServerQuestionnairesAsync, () => !this.IsInProgress));
+        public IMvxAsyncCommand RefreshQuestionnairesCommand => new MvxAsyncCommand(this.LoadServerQuestionnairesAsync, () => !this.IsInProgress);
         
         public IMvxCommand ShowMyQuestionnairesCommand => new MvxCommand(this.ShowMyQuestionnaires);
         public IMvxCommand ShowPublicQuestionnairesCommand => new MvxCommand(this.ShowPublicQuestionnaires);

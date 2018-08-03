@@ -3,24 +3,25 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-using Android.Content;
 using Android.Runtime;
 using Android.Support.V4.Widget;
 using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
+using FFImageLoading.Cross;
+using MvvmCross;
 using MvvmCross.Binding.Bindings.Target.Construction;
 using MvvmCross.Binding.Combiners;
-using MvvmCross.Core.Views;
-using MvvmCross.Droid.Platform;
+using MvvmCross.Converters;
 using MvvmCross.Droid.Support.V7.AppCompat;
 using MvvmCross.Droid.Support.V7.RecyclerView;
-using MvvmCross.Platform;
-using MvvmCross.Platform.Converters;
-using MvvmCross.Platform.Logging;
+using MvvmCross.Logging;
+using MvvmCross.ViewModels;
+using MvvmCross.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.Converters;
 using WB.UI.Shared.Enumerator.CustomBindings;
@@ -32,9 +33,10 @@ using BindingFlags = System.Reflection.BindingFlags;
 
 namespace WB.UI.Shared.Enumerator
 {
-    public abstract class EnumeratorSetup : MvxAndroidSetup
+    public abstract class EnumeratorSetup<TApplication> : MvxAppCompatSetup<TApplication> 
+        where TApplication : class, IMvxApplication, new()
     {
-        protected EnumeratorSetup(Context applicationContext) : base(applicationContext)
+        protected EnumeratorSetup()
         {
             //restart the app to avoid incorrect state
             TaskScheduler.UnobservedTaskException += (sender, args) =>
@@ -69,16 +71,19 @@ namespace WB.UI.Shared.Enumerator
 
         protected virtual void ProcessException(Exception exception)
         {
-            Mvx.Resolve<IMvxLogProvider>().GetLogFor<EnumeratorSetup>().Error(exception, "UncaughtExceptionHandler");
+            Mvx.Resolve<IMvxLogProvider>().GetLogFor("EnumeratorSetup").Error(exception, "UncaughtExceptionHandler");
             Mvx.Resolve<ILogger>().Fatal("UncaughtExceptionHandler", exception);
         }
 
         protected override void InitializeViewLookup()
         {
+            base.InitializeViewLookup();
             var viewModelViewLookup = new Dictionary<Type, Type>()
             {
                 {typeof (EnumerationStageViewModel), typeof (InterviewEntitiesListFragment)},
                 {typeof(CoverInterviewViewModel), typeof (CoverInterviewFragment)},
+                {typeof(OverviewViewModel), typeof (OverviewFragment)},
+                {typeof(OverviewNodeDetailsViewModel), typeof(OverviewNodeDetailsFragment)}
             };
 
             var container = Mvx.Resolve<IMvxViewsContainer>();
@@ -92,7 +97,7 @@ namespace WB.UI.Shared.Enumerator
             Mvx.CallbackWhenRegistered<IMvxValueCombinerRegistry>(combinerRegistry => 
                 combinerRegistry.AddOrOverwriteFrom(Assembly.GetAssembly(typeof(LayoutBackgroundStyleValueCombiner))));
 
-            registry.AddOrOverwrite("Localization", new LocalizationValueConverter());
+            registry.AddOrOverwrite("EnumToString", new EnumToStringConverter());
             registry.AddOrOverwrite("GroupStateToColor", new GroupStateToColorConverter());
             registry.AddOrOverwrite("IsCurrentUserCommentToColor", new IsCurrentUserCommentToColorConverter());
             registry.AddOrOverwrite("ToGoogleMapUrl", new ToGoogleMapUrlConverter());
@@ -107,6 +112,16 @@ namespace WB.UI.Shared.Enumerator
             registry.AddOrOverwrite("VisibleOrInvisible", new VisibleOrInvisibleValueConverter());
             registry.AddOrOverwrite("AudioNoiseTypeToShape", new AudioNoiseTypeToShapeConverter());
             registry.AddOrOverwrite("AudioNoiseTypeToDot", new AudioNoiseTypeToDotConverter());
+
+            registry.AddOrOverwrite("Localization", new EnumeratorLocalizationValueConverter());
+            registry.AddOrOverwrite("StatusToDasboardBackground", new StatusToDasboardBackgroundConverter());
+            registry.AddOrOverwrite("InterviewStatusToColor", new InterviewStatusToColorConverter());
+            registry.AddOrOverwrite("InterviewStatusToDrawable", new InterviewStatusToDrawableConverter());
+            registry.AddOrOverwrite("InterviewStatusToButton", new InterviewStatusToButtonConverter());
+            registry.AddOrOverwrite("SynchronizationStatusToDrawable", new SynchronizationStatusToDrawableConverter());
+            registry.AddOrOverwrite("ValidationStyleBackground", new TextEditValidationStyleBackgroundConverter());
+            registry.AddOrOverwrite("IsSynchronizationFailOrCanceled", new IsSynchronizationFailOrCanceledConverter());
+            registry.AddOrOverwrite("SynchronizationStatusToTextColor", new SynchronizationStatusToTextColorConverter());
         }
 
         protected override void FillTargetFactories(IMvxTargetBindingFactoryRegistry registry)
@@ -121,6 +136,7 @@ namespace WB.UI.Shared.Enumerator
             registry.RegisterCustomBindingFactory<EditText>("FocusValueChanged", (editText) => new EditTextFocusValueChangedBinding(editText));
             registry.RegisterCustomBindingFactory<EditText>("SetFocus", (editText) => new EditTextSetFocusBinding(editText));
             registry.RegisterCustomBindingFactory<ProgressBar>("ShowProgress", (view) => new ProgressBarIndeterminateBinding(view));
+            registry.RegisterCustomBindingFactory<ProgressBar>("Progress", (view) => new ProgressBarProgressBinding(view));
             registry.RegisterCustomBindingFactory<View>("BackgroundStyle", (view) => new ViewBackgroundDrawableBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("Bold", textView => new TextViewBoldBinding(textView));
             registry.RegisterCustomBindingFactory<EditText>("DateChange", editText => new EditTextDateBinding(editText));
@@ -145,6 +161,11 @@ namespace WB.UI.Shared.Enumerator
             registry.RegisterCustomBindingFactory<SignaturePadView>("Signature", (view) => new SignatureBinding(view));
             registry.RegisterCustomBindingFactory<SignaturePadView>("SignaturePadSettings", (view) => new SignaturePadSettingsBinding(view));
             registry.RegisterCustomBindingFactory<ImageButton>("Playback", (view) => new ImageButtonPlaybackToggleBinding(view));
+            registry.RegisterCustomBindingFactory<RecyclerView>("ScrollToPosition", view => new RecyclerViewScrollToPositionBinding(view));
+
+            registry.RegisterCustomBindingFactory<View>("ViewOverviewNodeState", (view) => new ViewOverviewNodeStateBinding(view));
+            registry.RegisterCustomBindingFactory<TextView>("TextViewNodeStateTextColor", (view) => new TextViewNodeStateTextColorBinding(view));
+            registry.RegisterCustomBindingFactory<TextView>("TextViewAnswerState", (view) => new TextViewAnswerStateBinding(view));
             MvxAppCompatSetupHelper.FillTargetFactories(registry);
 
             RegisterAutoCompleteTextViewBindings(registry);
@@ -172,10 +193,11 @@ namespace WB.UI.Shared.Enumerator
                 typeof (FlowLayout).Assembly,
                 typeof (MvxRecyclerView).Assembly,
                 typeof (DrawerLayout).Assembly,
-                typeof (SwitchCompat).Assembly
+                typeof (SwitchCompat).Assembly,
+                typeof (MvxCachedImageView).Assembly
             });
 
-        protected override IEnumerable<Assembly> GetViewModelAssemblies()
+        public override IEnumerable<Assembly> GetViewModelAssemblies()
         {
             return new[]
             {

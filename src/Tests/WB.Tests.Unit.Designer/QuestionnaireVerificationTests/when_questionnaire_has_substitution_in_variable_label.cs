@@ -3,7 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Resources;
 
-namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
+namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 {
     [TestFixture]
     internal class when_questionnaire_has_substitution_in_variable_label : QuestionnaireVerifierTestsContext

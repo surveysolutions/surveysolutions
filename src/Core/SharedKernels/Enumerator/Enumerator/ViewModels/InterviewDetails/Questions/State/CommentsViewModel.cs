@@ -4,8 +4,9 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
-using MvvmCross.Core.ViewModels;
-using MvvmCross.Platform.Core;
+using MvvmCross.Base;
+using MvvmCross.Commands;
+using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
@@ -121,7 +122,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public bool HasComments
         {
             get { return this.hasComments; }
-            private set { this.hasComments = value; this.RaisePropertyChanged(); }
+            set { this.hasComments = value; this.RaisePropertyChanged(); }
         }
 
         private bool isCommentInEditMode;
@@ -151,7 +152,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         public ObservableCollection<CommentViewModel> Comments { get; } = new ObservableCollection<CommentViewModel>();
-        public IMvxAsyncCommand InterviewerCommentChangeCommand => new MvxAsyncCommand(this.SendCommentQuestionCommandAsync);
+        public IMvxAsyncCommand InterviewerCommentChangeCommand => new MvxAsyncCommand(async () =>
+            await this.SendCommentQuestionCommandAsync(), () => this.principal.IsAuthenticated);
 
         private async Task SendCommentQuestionCommandAsync()
         {
@@ -161,7 +163,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     userId: this.principal.CurrentUserIdentity.UserId,
                     questionId: this.Identity.Id,
                     rosterVector: this.Identity.RosterVector,
-                    commentTime: DateTime.UtcNow,
                     comment: this.InterviewerComment)).ConfigureAwait(false);
 
             this.UpdateCommentsFromInterview();

@@ -1,19 +1,16 @@
 using System;
 using System.IO;
-using Autofac;
-using MvvmCross.Platform.IoC;
+using MvvmCross.IoC;
 using WB.Core.BoundedContexts.Tester;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator;
 using WB.UI.Shared.Enumerator;
-using WB.UI.Shared.Enumerator.Autofac;
 using WB.UI.Shared.Enumerator.Services;
-using WB.UI.Shared.Enumerator.Services.Internals;
 using WB.UI.Tester.Infrastructure;
+using MvxIoCProvider = WB.UI.Shared.Enumerator.Autofac.MvxIoCProvider;
 
 namespace WB.UI.Tester.ServiceLocation
 {
@@ -26,7 +23,7 @@ namespace WB.UI.Tester.ServiceLocation
                : AndroidPathUtils.GetPathToExternalDirectory();
 
             AutofacKernel kernel = new AutofacKernel();
-
+            
             kernel.Load(
                 new NcqrsModule(),
                 new InfrastructureModuleMobile(),

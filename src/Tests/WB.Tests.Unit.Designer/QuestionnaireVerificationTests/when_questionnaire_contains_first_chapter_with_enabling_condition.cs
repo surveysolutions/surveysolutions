@@ -3,7 +3,7 @@ using System.Linq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Resources;
 
-namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireVerificationTests
+namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
 {
     [TestFixture]
     internal class when_questionnaire_contains_first_chapter_with_enabling_condition : QuestionnaireVerifierTestsContext

@@ -77,7 +77,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             {
                 var questionnaire = this.repository.GetById(repositoryId);
 
-                this.questionnaireDocumentsCache[repositoryId] = questionnaire ?? throw new ApplicationException($"Questionnaire {repositoryId} was not found");
+                if (questionnaire == null)
+                {
+                    return null;
+                }
+
+                this.questionnaireDocumentsCache[repositoryId] = questionnaire;
+                //  ?? throw new ApplicationException($"Questionnaire {repositoryId} was not found");
             }
 
             return this.questionnaireDocumentsCache[repositoryId];
@@ -99,7 +105,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             document.IsDeleted = true;
             StoreQuestionnaire(id, version, document);
 
-            this.questionnaireDocumentsCache.TryRemove(repositoryId);
+            this.questionnaireDocumentsCache.TryRemove(repositoryId, out _);
             this.plainQuestionnairesCache.Clear();
         }
 

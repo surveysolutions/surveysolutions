@@ -23,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 
             eventContext = new EventContext();
             //act
-            interview.HqReject(hqId, string.Empty);
+            interview.HqReject(hqId, string.Empty, DateTimeOffset.Now);
 
             //assert
             eventContext.ShouldContainEvent<InterviewRejected>(@event => @event.UserId == hqId);

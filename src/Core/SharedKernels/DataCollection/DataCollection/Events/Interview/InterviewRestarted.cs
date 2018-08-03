@@ -5,17 +5,18 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
 {
     public class InterviewRestarted : InterviewActiveEvent
     {
-        public InterviewRestarted(Guid userId, DateTime? restartTime, string comment)
-            : base(userId)
+        public InterviewRestarted(Guid userId, DateTimeOffset originDate, string comment)
+            : base(userId, originDate)
         {
             Comment = comment;
-            if (restartTime != default(DateTime))
+
+            if (originDate != default(DateTimeOffset))
             {
-                this.RestartTime = restartTime;
+                this.RestartTime = originDate.UtcDateTime;
             }
         }
 
-        public DateTime? RestartTime { get; private set; }
+        public DateTime? RestartTime { get; set; }
         public string Comment { get; private set; }
     }
 }

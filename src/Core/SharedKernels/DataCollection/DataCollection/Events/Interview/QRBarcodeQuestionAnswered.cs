@@ -7,8 +7,9 @@ namespace WB.Core.SharedKernels.DataCollection.Events.Interview
     {
         public string Answer { get; private set; }
 
-        public QRBarcodeQuestionAnswered(Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTimeUtc, string answer)
-            : base(userId, questionId, rosterVector, answerTimeUtc)
+        public QRBarcodeQuestionAnswered(Guid userId, Guid questionId, decimal[] rosterVector, 
+            DateTimeOffset originDate, string answer)
+            : base(userId, questionId, rosterVector, originDate)
         {
             this.Answer = answer;
         }

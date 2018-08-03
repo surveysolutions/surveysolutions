@@ -1,9 +1,8 @@
 ﻿using System;
 using Android.Graphics;
-using Android.Graphics.Drawables;
 using Android.Util;
 using Android.Widget;
-using MvvmCross.Platform.Droid.Platform;
+using MvvmCross.Platforms.Android;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
@@ -51,7 +50,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
         protected virtual void SetDefaultImage(ImageView control)
         {
-            control.SetImageResource(Resource.Drawable.no_image_found);
+            control.SetImageResource(Resource.Drawable.img_placeholder);
         }
 
         private static void SetupPaddingForImageView(ImageView control, DisplayMetrics displayMetrics, BitmapFactory.Options boundsOptions)

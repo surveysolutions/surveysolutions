@@ -8,6 +8,7 @@
   <dimen name="Login_Element_width">300dp</dimen>
   <dimen name="Login_Element_margin_vertical_normal">15dp</dimen>
   <dimen name="Login_Element_margin_vertical_thin">10dp</dimen>
+  <dimen name="Login_Button_padding">10dp</dimen>
 
   <dimen name="Dashboard_SearchView_width">300dp</dimen>
   <dimen name="Dashboard_SearchView_DeleteButton_size">24dp</dimen>

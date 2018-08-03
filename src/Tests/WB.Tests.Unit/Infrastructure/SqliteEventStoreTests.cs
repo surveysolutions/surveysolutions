@@ -5,13 +5,14 @@ using Moq;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Interviewer.Implementation.Storage;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
+using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.Infrastructure
@@ -33,6 +34,21 @@ namespace WB.Tests.Unit.Infrastructure
               Mock.Of<IEnumeratorSettings>(x => x.EventChunkSize == 100),
               Mock.Of<IFileSystemAccessor>(x=>x.IsFileExists(Moq.It.IsAny<string>()) == true),
               Mock.Of<IEventTypeResolver>(x => x.ResolveType("TextQuestionAnswered") == typeof(TextQuestionAnswered)));
+        }
+
+        [Test]
+        public void should_check_that_HasEventsAfterSpecifiedSequenceWithAnyOfSpecifiedTypes()
+        {
+            var eventSourceId = Id.gA;
+
+            sqliteEventStorage.Store(new UncommittedEventStream(null,
+                new List<UncommittedEvent> {
+                    Create.Other.UncommittedEvent(eventSourceId, Create.Event.TextQuestionAnswered(), sequence: 1),
+                    Create.Other.UncommittedEvent(eventSourceId, Create.Event.TextQuestionAnswered(), sequence: 2)
+                }));
+
+            var hasChanged = sqliteEventStorage.HasEventsAfterSpecifiedSequenceWithAnyOfSpecifiedTypes(1, eventSourceId, typeof(TextQuestionAnswered).Name);
+            Assert.That(hasChanged, Is.True);
         }
 
         [Test]

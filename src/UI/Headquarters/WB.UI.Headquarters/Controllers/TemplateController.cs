@@ -85,7 +85,7 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<ActionResult> Import(Guid id, ImportModel request)
+        public async Task<ActionResult> Import(Guid id, ImportModel request, bool showResult = false)
         {
             if (this.designerUserCredentials.Get() == null)
             {
@@ -113,6 +113,9 @@ namespace WB.UI.Headquarters.Controllers
                         return RedirectToAction("UpgradeProgress", "SurveySetup", new {id = processId});
                     }
 
+                    if (showResult)
+                        return Json(result);
+                    
                     return this.RedirectToAction("Index", "SurveySetup");
                 }
             }

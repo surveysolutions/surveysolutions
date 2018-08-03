@@ -28,27 +28,81 @@ namespace WB.Core.SharedKernels.DataCollection.Generated
     {
 #>
     public static class <#= table.TypeName#>_Generator
-    {
-
-        //to avoid SO
-        private static void AddElement(Dictionary<int, <#= table.TypeName#>> dic, int key, <#= table.TypeName#> value)
-        {
-            dic.Add(key,value);
-        }
-
+    {       
 
         public static Dictionary<int, <#= table.TypeName#>> GetTable()
         {
+            
             var lookup__table = new Dictionary<int, <#= table.TypeName#>>();
+            //to avoid SO
+            //generated method is too big
+
+            FillTableFirst1000(lookup__table);
+            FillTableSecond1000(lookup__table);
+            FillTableThird1000(lookup__table);
+            FillTableFourth1000(lookup__table);
+            FillTableFifth1000(lookup__table);
+            return lookup__table;
+        }
+
+        public static void FillTableFirst1000(Dictionary<int, <#= table.TypeName#>> lookup__table)
+        {
 <#
-            foreach (var row in table.Rows) 
+            foreach (var row in table.Rows.Take(1000)) 
             {
 #>
-                AddElement(lookup__table, <#= row.RowCode #>, new <#= table.TypeName#>(<#= row.RowCode #>, <#= string.Join(",",  row.Variables.Select(x => x ==null ? "null" : x.ToString() ) ) #>));
+                lookup__table.Add(<#= row.RowCode #>, new <#= table.TypeName#>(<#= row.RowCode #>, <#= string.Join(",",  row.Variables.Select(x => x == null ? "null" : x.ToString() ) ) #>));
 <# 
             }
 #>
-            return lookup__table;
+        }
+
+        public static void FillTableSecond1000(Dictionary<int, <#= table.TypeName#>> lookup__table)
+        {
+<#
+            foreach (var row in table.Rows.Skip(1000).Take(1000)) 
+            {
+#>
+                lookup__table.Add(<#= row.RowCode #>, new <#= table.TypeName#>(<#= row.RowCode #>, <#= string.Join(",",  row.Variables.Select(x => x == null ? "null" : x.ToString() ) ) #>));
+<# 
+            }
+#>
+        }
+
+        public static void FillTableThird1000(Dictionary<int, <#= table.TypeName#>> lookup__table)
+        {
+<#
+            foreach (var row in table.Rows.Skip(2000).Take(1000)) 
+            {
+#>
+                lookup__table.Add(<#= row.RowCode #>, new <#= table.TypeName#>(<#= row.RowCode #>, <#= string.Join(",",  row.Variables.Select(x => x == null ? "null" : x.ToString() ) ) #>));
+<# 
+            }
+#>
+
+        }
+        public static void FillTableFourth1000(Dictionary<int, <#= table.TypeName#>> lookup__table)
+        {
+<#
+            foreach (var row in table.Rows.Skip(3000).Take(1000)) 
+            {
+#>
+                lookup__table.Add(<#= row.RowCode #>, new <#= table.TypeName#>(<#= row.RowCode #>, <#= string.Join(",",  row.Variables.Select(x => x == null ? "null" : x.ToString() ) ) #>));
+<# 
+            }
+#>
+
+        }
+        public static void FillTableFifth1000(Dictionary<int, <#= table.TypeName#>> lookup__table)
+        {
+<#
+            foreach (var row in table.Rows.Skip(4000)) 
+            {
+#>
+                lookup__table.Add(<#= row.RowCode #>, new <#= table.TypeName#>(<#= row.RowCode #>, <#= string.Join(",",  row.Variables.Select(x => x == null ? "null" : x.ToString() ) ) #>));
+<# 
+            }
+#>
         }
     }
 

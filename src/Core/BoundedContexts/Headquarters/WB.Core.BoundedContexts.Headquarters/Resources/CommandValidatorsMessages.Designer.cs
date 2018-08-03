@@ -70,6 +70,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to You have already imported another questionnaire with questionnaire variable &apos;{0}&apos; from Designer. If you still want to import this particular one, please give it a different questionnaire variable in Designer..
+        /// </summary>
+        public static string QuestionnaireVariableUniqueFormat {
+            get {
+                return ResourceManager.GetString("QuestionnaireVariableUniqueFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Only the responsible supervisor for this assignment can answer its supervisor&apos;s questions.
         /// </summary>
         public static string UserDontHavePermissionsToAnswer {

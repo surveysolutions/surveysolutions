@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using Main.Core.Entities.Composite;
-using MvvmCross.Core.Platform;
-using MvvmCross.Platform;
-using MvvmCross.Test.Core;
+using MvvmCross;
+using MvvmCross.Core;
+using MvvmCross.Tests;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;

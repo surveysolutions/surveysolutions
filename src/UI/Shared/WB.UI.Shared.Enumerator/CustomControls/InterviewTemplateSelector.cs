@@ -132,5 +132,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
         {
             return fromViewType;
         }
+
+        public int ItemTemplateId { get; set; }
     }
 }

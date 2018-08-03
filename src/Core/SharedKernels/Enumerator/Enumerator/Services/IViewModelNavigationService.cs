@@ -1,6 +1,5 @@
-using System;
 using System.Threading.Tasks;
-using MvvmCross.Core.ViewModels;
+using MvvmCross.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 
 namespace WB.Core.SharedKernels.Enumerator.Services
@@ -13,6 +12,8 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         void NavigateToSettings();
         Task SignOutAndNavigateToLoginAsync();
         Task NavigateToLoginAsync();
+        Task NavigateToFinishInstallationAsync();
+        Task NavigateToMapsAsync();
         Task NavigateToInterviewAsync(string interviewId, NavigationIdentity navigationIdentity);
         Task NavigateToPrefilledQuestionsAsync(string interviewId);
         void NavigateToSplashScreen();

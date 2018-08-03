@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using MvvmCross.Test.Core;
 using Moq;
+using MvvmCross.Tests;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Properties;
@@ -9,7 +9,11 @@ using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.Diagnostics
 {
@@ -77,11 +81,11 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.Diagnostics
             Assert.That(sendTabletInformationViewModel.IsPackageBuild, Is.EqualTo(false));
         }
 
-        private BackupViewModel CreateSendTabletInformationViewModel(IBackupRestoreService backupRestoreService=null,
+        private SendTabletInformationViewModel CreateSendTabletInformationViewModel(IBackupRestoreService backupRestoreService=null,
             ISynchronizationService synchronizationService = null)
         {
             return
-                new BackupViewModel(
+                new SendTabletInformationViewModel(
                     backupRestoreService ?? Mock.Of<IBackupRestoreService>(_ => _.BackupAsync() == Task.FromResult("backup-path")),
                     synchronizationService ?? Mock.Of<ISynchronizationService>(), 
                     Mock.Of<ILogger>(), 

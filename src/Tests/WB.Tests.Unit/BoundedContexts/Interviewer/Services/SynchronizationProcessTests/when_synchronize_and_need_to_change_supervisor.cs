@@ -2,12 +2,16 @@
 using System.Threading;
 using Moq;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Tasks;
+using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProcessTests
@@ -20,9 +24,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         {
             var interviewerIdentity = new InterviewerIdentity {Name = "name", PasswordHash = "hash", Token = "Outdated token", SupervisorId = Id.g1};
 
-            PrincipalMock
-                .Setup(x => x.CurrentUserIdentity)
-                .Returns(interviewerIdentity);
+            PrincipalMock = Mock.Get(Setup.InterviewerPrincipal(interviewerIdentity));
           
             SynchronizationServiceMock
                 .Setup(x => x.GetCurrentSupervisor(It.IsAny<CancellationToken>(), It.IsAny<RestCredentials>()))
@@ -35,7 +37,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 interviewersPlainStorage: InterviewerStorageMock.Object);
 
             viewModel
-                .SyncronizeAsync(new Progress<SyncProgressInfo>(), CancellationToken.None)
+                .SynchronizeAsync(new Progress<SyncProgressInfo>(), CancellationToken.None)
                 .WaitAndUnwrapException();
         }
 
@@ -48,9 +50,9 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             PrincipalMock.Verify(x => x.SignInWithHash("name", "hash", true), Times.Once);
         }
 
-        static SynchronizationProcess viewModel;
+        static InterviewerSynchronizationProcess viewModel;
         static readonly Mock<IPlainStorage<InterviewerIdentity>> InterviewerStorageMock = new Mock<IPlainStorage<InterviewerIdentity>>();
-        static readonly Mock<IInterviewerPrincipal> PrincipalMock = new Mock<IInterviewerPrincipal>();
+        static Mock<IInterviewerPrincipal> PrincipalMock = new Mock<IInterviewerPrincipal>();
         static readonly Mock<ISynchronizationService>  SynchronizationServiceMock =new Mock<ISynchronizationService>();
     }
 }

@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:local="http://schemas.android.com/apk/res-auto" style="@style/Diagnostics_Section">
+  <LinearLayout style="@style/Diagnostics_TitleSection">
+    <TextView
+         style="@style/Diagnostics_Section_Title"
+         local:MvxBind="Text Format(Localization('Diagnostics_CheckVersion_Title'), CheckNewVersion.Version); Click CheckNewVersion.CheckVersionCommand;  UnderlinePressed ." />
+  </LinearLayout>
+  <LinearLayout style="@style/Diagnostics_SubSection" local:MvxBind="Visible CheckNewVersion.IsNewVersionAvaliable;" >
+    <TextView
+         style="@style/Diagnostics_Subsection_Title"
+         local:MvxBind="Text Localization('Diagnostics_NewVersionAvaliable_Title')" />
+    <LinearLayout
+            style="@style/Diagnostic_FormContainer">
+
+      <Button
+        style="@style/Diagnostics_Green_Button"
+        local:MvxBind="Text Localization('Diagnostics_Update'); Click CheckNewVersion.UpdateApplicationCommand" />
+
+      <Button
+          style="@style/Diagnostic_Transparent_Button" 
+          local:MvxBind="Text Localization('Diagnostics_No'); Click CheckNewVersion.RejectUpdateApplicationCommand" />
+    </LinearLayout>
+
+  </LinearLayout>
+  <LinearLayout style="@style/Diagnostics_SubSection" local:MvxBind="Visible IsStringNotEmpty(CheckNewVersion.CheckNewVersionResult)" >
+    <TextView
+     style="@style/Diagnostics_Subsection_Title"
+     local:MvxBind="Text CheckNewVersion.CheckNewVersionResult" />
+    <Button
+         style="@style/Diagnostic_Transparent_Button"
+         local:MvxBind="Text Localization('Cancel'); Click CheckNewVersion.CancelUpgrade; Visible CheckNewVersion.IsVersionCheckInProgress" />
+  </LinearLayout>
+  <ProgressBar style="@style/Interview_Question_Progress_Indicator"
+               android:indeterminateOnly="true"
+               local:MvxBind="Visible CheckNewVersion.IsVersionCheckInProgress" />
+</LinearLayout>

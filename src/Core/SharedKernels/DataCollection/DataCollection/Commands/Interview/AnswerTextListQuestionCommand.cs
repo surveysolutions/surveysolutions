@@ -7,8 +7,8 @@ namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
     {
         public Tuple<decimal, string>[] Answers { get; private set; }
 
-        public AnswerTextListQuestionCommand(Guid interviewId, Guid userId, Guid questionId, decimal[] rosterVector, DateTime answerTime, Tuple<decimal, string>[] answers)
-            : base(interviewId, userId, questionId, rosterVector, answerTime)
+        public AnswerTextListQuestionCommand(Guid interviewId, Guid userId, Guid questionId, decimal[] rosterVector, Tuple<decimal, string>[] answers)
+            : base(interviewId, userId, questionId, rosterVector)
         {
             this.Answers = answers;
         }

@@ -1,7 +1,7 @@
 ﻿using System;
 using Moq;
-using MvvmCross.Platform.Core;
-using MvvmCross.Test.Core;
+using MvvmCross.Base;
+using MvvmCross.Tests;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -23,15 +23,18 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
             base.Setup();
         }
 
-        protected static readonly Identity questionIdentity = Create.Entity.Identity(Guid.Parse("11111111111111111111111111111111"), new decimal[0]);
+        protected static readonly Identity questionIdentity =
+            Create.Entity.Identity(Guid.Parse("11111111111111111111111111111111"), new decimal[0]);
 
-        protected static IQuestionnaireStorage SetupQuestionnaireRepositoryWithListQuestion(bool isRosterSizeQuestion = false, int? maxAnswerCount = 5)
+        protected static IQuestionnaireStorage SetupQuestionnaireRepositoryWithListQuestion(
+            bool isRosterSizeQuestion = false, int? maxAnswerCount = 5)
         {
             var questionnaire = Mock.Of<IQuestionnaire>(_
                 => _.IsRosterSizeQuestion(questionIdentity.Id) == isRosterSizeQuestion
-                && _.GetMaxSelectedAnswerOptions(questionIdentity.Id) == maxAnswerCount
+                   && _.GetMaxSelectedAnswerOptions(questionIdentity.Id) == maxAnswerCount
             );
-            return Mock.Of<IQuestionnaireStorage>(x => x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire);
+            return Mock.Of<IQuestionnaireStorage>(x =>
+                x.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire);
         }
 
         protected static TextListQuestionViewModel CreateTextListQuestionViewModel(
@@ -44,7 +47,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
             IMvxMainThreadDispatcher mainThreadDispatcher = null)
         {
             return new TextListQuestionViewModel(
-                principal ?? Mock.Of<IPrincipal>(),
+                principal ?? Mock.Of<IPrincipal>(x => x.IsAuthenticated == true),
                 questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 questionStateViewModel ?? Mock.Of<QuestionStateViewModel<TextListQuestionAnswered>>(),

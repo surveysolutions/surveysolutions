@@ -1,6 +1,6 @@
 ﻿using System;
 using HockeyApp.Android;
-using MvvmCross.Platform;
+using MvvmCross;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 

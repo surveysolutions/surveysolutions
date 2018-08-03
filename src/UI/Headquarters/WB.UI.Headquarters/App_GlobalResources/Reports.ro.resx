@@ -1,0 +1,327 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="ApprovedByHQ" xml:space="preserve">
+    <value>Aprobare RINS</value>
+  </data>
+  <data name="ApprovedBySupervisor" xml:space="preserve">
+    <value>Aprobare controlor</value>
+  </data>
+  <data name="Average" xml:space="preserve">
+    <value>Medie</value>
+  </data>
+  <data name="ByAnswerValue" xml:space="preserve">
+    <value>Filtrați după valoarea numerică</value>
+  </data>
+  <data name="Completed" xml:space="preserve">
+    <value>Completat</value>
+  </data>
+  <data name="CompletionDate" xml:space="preserve">
+    <value>Data completării</value>
+  </data>
+  <data name="ConditionQuestion" xml:space="preserve">
+    <value>Condiția întrebării </value>
+  </data>
+  <data name="Count" xml:space="preserve">
+    <value>Numără</value>
+  </data>
+  <data name="CumulativeInterviewChart" xml:space="preserve">
+    <value>Grafic cumulativ chestionare</value>
+  </data>
+  <data name="DatesRange" xml:space="preserve">
+    <value>Interval date</value>
+  </data>
+  <data name="ImportUsersTemplate" xml:space="preserve">
+    <value>Importați template-ul pentru utilizatori</value>
+  </data>
+  <data name="InterviewChart" xml:space="preserve">
+    <value>Diagrama chestionarului</value>
+  </data>
+  <data name="InterviewerAssigned" xml:space="preserve">
+    <value>Anchetator alocat</value>
+  </data>
+  <data name="Interviewers" xml:space="preserve">
+    <value>Anchetatori</value>
+  </data>
+  <data name="LastUpdatedDate" xml:space="preserve">
+    <value>Actualizat pe</value>
+  </data>
+  <data name="Max" xml:space="preserve">
+    <value>Valoarea maximă</value>
+  </data>
+  <data name="Median" xml:space="preserve">
+    <value>Valoarea mediană</value>
+  </data>
+  <data name="Min" xml:space="preserve">
+    <value>Valoarea minimă</value>
+  </data>
+  <data name="Percentile05" xml:space="preserve">
+    <value>Centila 05</value>
+  </data>
+  <data name="Percentile50" xml:space="preserve">
+    <value>Centila 50</value>
+  </data>
+  <data name="Percentile95" xml:space="preserve">
+    <value>Centila 95</value>
+  </data>
+  <data name="PivotView" xml:space="preserve">
+    <value>Tabel pivot</value>
+  </data>
+  <data name="Question" xml:space="preserve">
+    <value>Întrebare</value>
+  </data>
+  <data name="QuestionLabel" xml:space="preserve">
+    <value>Eticheta întrebării</value>
+  </data>
+  <data name="Questionnaire" xml:space="preserve">
+    <value>Chestionar</value>
+  </data>
+  <data name="QuestionText" xml:space="preserve">
+    <value>Text întrebare</value>
+  </data>
+  <data name="RejectedByHQ" xml:space="preserve">
+    <value>Respins de RINS</value>
+  </data>
+  <data name="RejectedBySupervisor" xml:space="preserve">
+    <value>Respins de controlor</value>
+  </data>
+  <data name="Report_Average_case_assignment_duration" xml:space="preserve">
+    <value>Durata medie a interviului alocat</value>
+  </data>
+  <data name="Report_Average_HQ_processing_time" xml:space="preserve">
+    <value>Durata medie de procesare a RINS</value>
+  </data>
+  <data name="Report_Average_Interview_Duration" xml:space="preserve">
+    <value>Durata medie a interviului</value>
+  </data>
+  <data name="Report_Average_overall_case_processing_time" xml:space="preserve">
+    <value>Durata medie de procesare totală a cazului</value>
+  </data>
+  <data name="Report_Average_supervisor_processing_time" xml:space="preserve">
+    <value>Durata medie de procesare a controlorului</value>
+  </data>
+  <data name="Report_Days_by_Interview_Status" xml:space="preserve">
+    <value>Zile dupa statusul interviului</value>
+  </data>
+  <data name="Report_Devices_and_Interviewers" xml:space="preserve">
+    <value>Dispozitive și anchetatori</value>
+  </data>
+  <data name="Report_Number_of_Completed_Interviews" xml:space="preserve">
+    <value>Numărul de interviuri completate</value>
+  </data>
+  <data name="Report_Number_of_interview_transactions_by_HQ" xml:space="preserve">
+    <value>Numărul de interviuri completate operate de RINS</value>
+  </data>
+  <data name="Report_Number_of_interview_transactions_by_Supervisor" xml:space="preserve">
+    <value>Numărul de interviuri completate operate de controlor</value>
+  </data>
+  <data name="Report_Number_of_interviews_approved_by_HQ" xml:space="preserve">
+    <value>Numărul de interviuri aprobate de RINS</value>
+  </data>
+  <data name="Report_Quantity_By_Interviewers" xml:space="preserve">
+    <value>Cantitate pe anchetatori</value>
+  </data>
+  <data name="Report_Quantity_By_Supervisors" xml:space="preserve">
+    <value>Cantitate pe controlori</value>
+  </data>
+  <data name="Report_Speed_Between_Statuses_By_Interviewers" xml:space="preserve">
+    <value>Durata între statusuri pe anchetatori</value>
+  </data>
+  <data name="Report_Speed_Between_Statuses_By_Supervisors" xml:space="preserve">
+    <value>Durata între statusuri pe controlori</value>
+  </data>
+  <data name="Report_Speed_By_Interviewers" xml:space="preserve">
+    <value>Durata pe anchetatori</value>
+  </data>
+  <data name="Report_Speed_By_Supervisors" xml:space="preserve">
+    <value>Durata pe controlori</value>
+  </data>
+  <data name="Report_Status_Duration" xml:space="preserve">
+    <value>Durată status</value>
+  </data>
+  <data name="Report_Supervisors_And_Statuses" xml:space="preserve">
+    <value>Controlori și statusuri</value>
+  </data>
+  <data name="Report_Surveys_and_Statuses" xml:space="preserve">
+    <value>Anchete și statusuri</value>
+  </data>
+  <data name="Report_Team_Members_and_Statuses" xml:space="preserve">
+    <value>Membrii echipei și statusuri</value>
+  </data>
+  <data name="Report_Teams_and_Statuses" xml:space="preserve">
+    <value>Echipe și statusuri </value>
+  </data>
+  <data name="Restarted" xml:space="preserve">
+    <value>Repornit</value>
+  </data>
+  <data name="SelectConditionQuestion" xml:space="preserve">
+    <value>Selectați condiția</value>
+  </data>
+  <data name="SelectQuestion" xml:space="preserve">
+    <value>Selectați întrebarea </value>
+  </data>
+  <data name="StatusDuration" xml:space="preserve">
+    <value>Număr zile ale interviului în status</value>
+  </data>
+  <data name="Sum" xml:space="preserve">
+    <value>Suma</value>
+  </data>
+  <data name="SupervisorAssigned" xml:space="preserve">
+    <value>Controlor desemnat</value>
+  </data>
+  <data name="SupervisorsAndSurveys" xml:space="preserve">
+    <value>Controlori și Anchete</value>
+  </data>
+  <data name="SurveyName" xml:space="preserve">
+    <value>Titlul chestionarului </value>
+  </data>
+  <data name="SurveysAndStatuses" xml:space="preserve">
+    <value>Anchete și Statusuri </value>
+  </data>
+  <data name="TeamLeadsOnly" xml:space="preserve">
+    <value>Echipe </value>
+  </data>
+  <data name="TeamsAndStatuses" xml:space="preserve">
+    <value>Echipe și Statusuri </value>
+  </data>
+  <data name="TemplateVersion" xml:space="preserve">
+    <value>Versiunea chestionarului</value>
+  </data>
+  <data name="Updated" xml:space="preserve">
+    <value>Actualizat {0}</value>
+  </data>
+  <data name="UpdateNow" xml:space="preserve">
+    <value>Acualizează acum</value>
+  </data>
+  <data name="Updating" xml:space="preserve">
+    <value>Actualizare în curs</value>
+  </data>
+  <data name="Variables" xml:space="preserve">
+    <value>Variabile </value>
+  </data>
+  <data name="Version" xml:space="preserve">
+    <value>Versiune</value>
+  </data>
+  <data name="ViewOptions" xml:space="preserve">
+    <value>Vedeți opțiunile</value>
+  </data>
+  <data name="WithInterviewers" xml:space="preserve">
+    <value>Membrii echipei</value>
+  </data>
+</root>

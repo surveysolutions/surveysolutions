@@ -1,16 +1,13 @@
 ﻿using System;
-using System.Globalization;
-using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Input;
-using MvvmCross.Core.ViewModels;
+using MvvmCross.Commands;
+using MvvmCross.ViewModels;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
@@ -84,8 +81,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 var command = new RemoveAnswerCommand(Guid.Parse(this.interviewId),
                     this.principal.CurrentUserIdentity.UserId,
-                    this.questionIdentity,
-                    DateTime.UtcNow);
+                    this.questionIdentity);
                 await this.Answering.SendRemoveAnswerCommandAsync(command);
 
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
@@ -107,7 +103,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     userId: this.principal.CurrentUserIdentity.UserId,
                     questionId: this.questionIdentity.Id,
                     rosterVector: this.questionIdentity.RosterVector,
-                    answerTime: DateTime.UtcNow,
                     answer: answerValue
                     );
                 await this.Answering.SendAnswerQuestionCommandAsync(command);

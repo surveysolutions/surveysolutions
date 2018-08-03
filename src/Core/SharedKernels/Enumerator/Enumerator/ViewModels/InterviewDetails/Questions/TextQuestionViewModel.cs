@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using MvvmCross.Core.ViewModels;
+using MvvmCross.Commands;
+using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
@@ -112,7 +113,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public bool IsMaskedQuestionAnswered { get; set; }
         
-        public ICommand ValueChangeCommand => new MvxAsyncCommand<string>(this.SaveAnswer);
+        public ICommand ValueChangeCommand => new MvxAsyncCommand<string>(async s => await this.SaveAnswer(s), s => this.principal.IsAuthenticated);
 
         private IMvxCommand answerRemoveCommand;
         private readonly QuestionStateViewModel<TextQuestionAnswered> questionState;
@@ -132,8 +133,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 var command = new RemoveAnswerCommand(Guid.Parse(this.interviewId), 
                     this.principal.CurrentUserIdentity.UserId,
-                    this.questionIdentity,
-                    DateTime.UtcNow);
+                    this.questionIdentity);
                 await this.Answering.SendRemoveAnswerCommandAsync(command);
 
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
@@ -153,13 +153,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             if (!this.Mask.IsNullOrEmpty() && !this.IsMaskedQuestionAnswered)
             {
-                this.QuestionState?.Validity?.MarkAnswerAsNotSavedWithMessage(UIResources.Interview_Question_Text_MaskError);
+                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.Interview_Question_Text_MaskError);
                 return;
             }
 
             if(string.IsNullOrWhiteSpace(text))
             {
-                this.QuestionState?.Validity?.MarkAnswerAsNotSavedWithMessage(UIResources.Interview_Question_Text_Empty);
+                this.QuestionState.Validity.MarkAnswerAsNotSavedWithMessage(UIResources.Interview_Question_Text_Empty);
                 return;
             }
 
@@ -168,17 +168,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 userId: this.principal.CurrentUserIdentity.UserId,
                 questionId: this.questionIdentity.Id,
                 rosterVector: this.questionIdentity.RosterVector,
-                answerTime: DateTime.UtcNow,
                 answer: text);
 
             try
             {
                 await this.Answering.SendAnswerQuestionCommandAsync(command);
-                this.QuestionState?.Validity?.ExecutedWithoutExceptions();
+                this.QuestionState.Validity.ExecutedWithoutExceptions();
             }
             catch (InterviewException ex)
             {
-                this.QuestionState?.Validity?.ProcessException(ex);
+                this.QuestionState.Validity.ProcessException(ex);
             }
         }
 

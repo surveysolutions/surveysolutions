@@ -1,0 +1,435 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AccountIsLockedOnServer" xml:space="preserve">
+    <value>บัญชีผู้ใช้ถูกล็อก กรุณาติดต่อ Supervisor</value>
+  </data>
+  <data name="AccountIsNotAnInterviewer" xml:space="preserve">
+    <value>บัญชีผู้ใช้ไม่ได้กำหนดสิทธิ์ให้เป็น Interviewer</value>
+  </data>
+  <data name="AccountIsNotApprovedOnServer" xml:space="preserve">
+    <value>บัญชีผู้ใช้ไม่ได้รับการอนุมัติ กรุณาติดต่อ Supervisor</value>
+  </data>
+  <data name="ApplicationIncompatibleWithServer" xml:space="preserve">
+    <value>เวอร์ชันที่ใช้อยู่ไม่ตรงกับเซิร์ฟเวอร์ กรุณาปรับปรุง Survey Solutions Interviewer</value>
+  </data>
+  <data name="Dashboard_CompletedLinkText" xml:space="preserve">
+    <value>เสร็จสมบูรณ์ : ({0})</value>
+  </data>
+  <data name="Dashboard_NewItemsLinkText" xml:space="preserve">
+    <value>งานใหม่ : ({0})</value>
+  </data>
+  <data name="Dashboard_NoInterviewsSyncButton" xml:space="preserve">
+    <value>ซิงโครไนส์</value>
+  </data>
+  <data name="Dashboard_NoInterviewsText" xml:space="preserve">
+    <value>ซิงโครไนส์เพื่อรับงานใหม่ หรือติดต่อ Supervisor เพื่อรับคำแนะนำเพิ่มเติม</value>
+  </data>
+  <data name="Dashboard_NoInterviewsTitle" xml:space="preserve">
+    <value>ไม่มีงานใหม่</value>
+  </data>
+  <data name="Dashboard_NoNewItemsLinkText" xml:space="preserve">
+    <value>ไม่มีงานใหม่</value>
+  </data>
+  <data name="Dashboard_Reinitialize_Interview_Message" xml:space="preserve">
+    <value>สัมภาษณ์เสร็จสมบูรณ์ ต้องการกลับไปแก้ไขเพิ่มเติมหรือไม่</value>
+  </data>
+  <data name="Dashboard_RejectedLinkText" xml:space="preserve">
+    <value>ถูกปฏิเสธ : ({0})</value>
+  </data>
+  <data name="Dashboard_RemoveInterviewQuestion" xml:space="preserve">
+    <value>ต้องการลบข้อมูลการสัมภาษณ์ของ {0} หรือไม่</value>
+  </data>
+  <data name="Dashboard_StartedLinkText" xml:space="preserve">
+    <value>เริ่มสัมภาษณ์ : ({0})</value>
+  </data>
+  <data name="DashboardItem_AssignedOn" xml:space="preserve">
+    <value>{0} เสร็จสมบูรณ์เมื่อ</value>
+  </data>
+  <data name="DashboardItem_CensusModeComment" xml:space="preserve">
+    <value>โหมดสำมะโน สร้างการสัมภาษณ์แล้ว : {0}</value>
+  </data>
+  <data name="DashboardItem_CompletedOn" xml:space="preserve">
+    <value>เสร็จสมบูรณ์เมื่อ {0}</value>
+  </data>
+  <data name="DashboardItem_CreatedOn" xml:space="preserve">
+    <value>มอบหมายงานเมื่อ  {0}</value>
+  </data>
+  <data name="DashboardItem_NotStarted" xml:space="preserve">
+    <value>ยังไม่เริ่มต้น</value>
+  </data>
+  <data name="DashboardItem_RejectedOn" xml:space="preserve">
+    <value>ถูกปฏิเสธเมื่อ {0}</value>
+  </data>
+  <data name="DashboardItem_StartedOn" xml:space="preserve">
+    <value>เริ่มสัมภาษณ์เมื่อ {0}</value>
+  </data>
+  <data name="DashboardItem_Title" xml:space="preserve">
+    <value>{0} (v{1})</value>
+  </data>
+  <data name="InternalServerError" xml:space="preserve">
+    <value>ข้อผิดพลาดของเซิร์ฟเวอร์ กรุณาติดต่อทีมสนับสนุนที่ support@mysurvey.solutions</value>
+  </data>
+  <data name="InvalidEndpoint" xml:space="preserve">
+    <value>แอดเดรสของเว็บไซต์ Survey Solutions Supervisor ไม่ถูกต้อง กรุณาระบุแอดเดรสที่ถูกต้อง</value>
+  </data>
+  <data name="Login_FinishInstallation_Message" xml:space="preserve">
+    <value>สำหรับการใช้งานเครื่องครั้งแรก ชื่อผู้ใช้และโดเมนยังไม่ได้ถูกกำหนด ต้องเชื่อมต่ออินเทอร์เน็ตเพื่อดำเนินการต่อไป</value>
+  </data>
+  <data name="Login_Online_Signin_Explanation_message" xml:space="preserve">
+    <value>ควรลองเข้าสู่ระบบแบบออนไลน์ ถ้าคุณลืมรหัสผ่านหรือรหัสผ่านถูกเปลี่ยน</value>
+  </data>
+  <data name="Login_Online_SignIn_Failed" xml:space="preserve">
+    <value>มีปัญหาการยืนยันตัวตน กรุณาติดต่อ Supervisor หรือ Headqurater</value>
+  </data>
+  <data name="Login_WrongPassword" xml:space="preserve">
+    <value>รหัสผ่านไม่ถูกต้อง</value>
+  </data>
+  <data name="Maintenance" xml:space="preserve">
+    <value>เว็บไซต์ Survey Solutions Supervisor อยู่ระหว่างการบำรุงรักษา ขออภัยในความไม่สะดวก</value>
+  </data>
+  <data name="MenuItem_Title_Dashboard" xml:space="preserve">
+    <value>Dashboard</value>
+  </data>
+  <data name="MenuItem_Title_Login" xml:space="preserve">
+    <value>เข้าสู่ระบบ</value>
+  </data>
+  <data name="MenuItem_Title_Settings" xml:space="preserve">
+    <value>การตั้งค่า</value>
+  </data>
+  <data name="MenuItem_Title_SignOut" xml:space="preserve">
+    <value>ออกจากระบบ</value>
+  </data>
+  <data name="NoNetwork" xml:space="preserve">
+    <value>ไม่สามารถใช้งานเครือข่ายได้ กรุณาตรวจสอบการตั้งค่าเครือข่าย</value>
+  </data>
+  <data name="Prefs_AboutApplication" xml:space="preserve">
+    <value>เกี่ยวกับแอพพลิเคชัน</value>
+  </data>
+  <data name="Prefs_ApplicationVersionTitle" xml:space="preserve">
+    <value>เวอร์ชันของแอพพลิเคชัน</value>
+  </data>
+  <data name="Prefs_BufferSizeSummary" xml:space="preserve">
+    <value>ขนาดของแพคเกจ (ไบต์) ที่รับ/ส่ง จาก/ถึง Survey Solutions  Supervisor</value>
+  </data>
+  <data name="Prefs_BufferSizeTitle" xml:space="preserve">
+    <value>ขนาดของแพคเกจ </value>
+  </data>
+  <data name="Prefs_ConnectionSettings" xml:space="preserve">
+    <value>การตั้งค่าการเชื่อมต่อ</value>
+  </data>
+  <data name="Prefs_DeviceIdTitle" xml:space="preserve">
+    <value>หมายเลขเครื่องที่ใช้งาน :</value>
+  </data>
+  <data name="Prefs_EndpointTitle" xml:space="preserve">
+    <value>URL ของ Survey Solutions Supervisor </value>
+  </data>
+  <data name="Prefs_GpsReceiveTimeoutSecSummary" xml:space="preserve">
+    <value>จำนวนวินาทีในการจับพิกัด</value>
+  </data>
+  <data name="Prefs_GpsReceiveTimeoutSecTitle" xml:space="preserve">
+    <value>กำหนดเวลาในการจับพิกัด</value>
+  </data>
+  <data name="Prefs_HttpResponseTimeoutSummary" xml:space="preserve">
+    <value>จำนวนวินาทีในการรอการตอบสนองของเซิร์ฟเวอร์</value>
+  </data>
+  <data name="Prefs_HttpResponseTimeoutTitle" xml:space="preserve">
+    <value>กำหนดเวลาในการตอบสนองของเซิร์ฟเวอร์</value>
+  </data>
+  <data name="Prefs_InterviewSettings" xml:space="preserve">
+    <value>การตั้งค่าการสัมภาษณ์</value>
+  </data>
+  <data name="Prefs_Title" xml:space="preserve">
+    <value>การตั้งค่า</value>
+  </data>
+  <data name="RequestCanceledByUser" xml:space="preserve">
+    <value>การร้องขอถูกยกเลิกโดยผู้ใช้งาน</value>
+  </data>
+  <data name="RequestTimeout" xml:space="preserve">
+    <value>หมดเวลาการเชื่อมต่อเว็บไซต์ Survey Solutions Supervisor กรุณาตรวจสอบการเชื่อมต่ออินเทอร์เน็ต</value>
+  </data>
+  <data name="ServiceUnavailable" xml:space="preserve">
+    <value>ไม่สามารถเชื่อมต่อกับเว็บไซต์ Survey Solutions Supervisor กรุณาตรวจสอบให้แน่ใจว่าเว็บไซต์พร้อมใช้งาน</value>
+  </data>
+  <data name="Synchronization_Cancel" xml:space="preserve">
+    <value>ยกเลิก</value>
+  </data>
+  <data name="Synchronization_Download_Description_Format" xml:space="preserve">
+    <value>{0} จาก {1} {2} เสร็จแล้ว</value>
+  </data>
+  <data name="Synchronization_Download_Title" xml:space="preserve">
+    <value>กำลังปรับปรุงการมอบหมายงาน</value>
+  </data>
+  <data name="Synchronization_Fail_State_DeletedInterviews_Format" xml:space="preserve">
+    <value>การสัมภาษณ์ที่ถูกลบ {0} จาก {1} </value>
+  </data>
+  <data name="Synchronization_Fail_State_NewInterviews_Format" xml:space="preserve">
+    <value>การสัมภาษณ์ที่ถูกดาวน์โหลดใหม่ {0} จาก {1} </value>
+  </data>
+  <data name="Synchronization_Fail_State_RejectedInterviews_Format" xml:space="preserve">
+    <value>การสัมภาษณ์ที่ถูกปฏิเสธ {0} จาก {1} </value>
+  </data>
+  <data name="Synchronization_Fail_State_UploadedInterviews_Format" xml:space="preserve">
+    <value>การสัมภาษณ์สมบูรณ์ที่อัพโหลดแล้ว {0} จาก {1} </value>
+  </data>
+  <data name="Synchronization_Fail_Title" xml:space="preserve">
+    <value>การซิงโครไนส์ไม่สำเร็จ กรุณาลองอีกครั้ง</value>
+  </data>
+  <data name="Synchronization_Fail_UnexpectedException" xml:space="preserve">
+    <value>ข้อยกเว้นที่นอกเหนือจากที่คาดการณ์ไว้</value>
+  </data>
+  <data name="Synchronization_Interviews" xml:space="preserve">
+    <value>สัมภาษณ์</value>
+  </data>
+  <data name="Synchronization_LockedAssignments_Text" xml:space="preserve">
+    <value>การมอบหมายงานถูกล็อคจนกว่าการซิงโครไนส์จะเสร็จเรียบร้อย</value>
+  </data>
+  <data name="Synchronization_Questionnaires" xml:space="preserve">
+    <value>แบบสอบถาม</value>
+  </data>
+  <data name="Synchronization_Success_Description" xml:space="preserve">
+    <value>การมอบหมายงานทั้งหมดถูกปรับปรุง</value>
+  </data>
+  <data name="Synchronization_Success_State_DeletedInterviews_Format" xml:space="preserve">
+    <value>การสัมภาษณ์ที่ถูกลบ : {0}</value>
+  </data>
+  <data name="Synchronization_Success_State_NewInterviews_Format" xml:space="preserve">
+    <value>การสัมภาษณ์ที่ถูกดาวน์โหลดใหม่ : {0}</value>
+  </data>
+  <data name="Synchronization_Success_State_RejectedInterviews_Format" xml:space="preserve">
+    <value>การสัมภาษณ์ที่ถูกปฏิเสธ : {0}</value>
+  </data>
+  <data name="Synchronization_Success_State_UploadedInterviews_Format" xml:space="preserve">
+    <value>การสัมภาษณ์สมบูรณ์ที่อัพโหลดแล้ว : {0}</value>
+  </data>
+  <data name="Synchronization_Success_Title" xml:space="preserve">
+    <value>การ Synchronize เสร็จสมบูรณ์</value>
+  </data>
+  <data name="Synchronization_Upload_CompletedAssignments_Text" xml:space="preserve">
+    <value>งานที่ได้รับมอบหมายเสร็จสมบูรณ์</value>
+  </data>
+  <data name="Synchronization_Upload_Description_Format" xml:space="preserve">
+    <value>{0} จาก {1} {2} เสร็จแล้ว</value>
+  </data>
+  <data name="Synchronization_Upload_Interviews_Text" xml:space="preserve">
+    <value>สัมภาษณ์</value>
+  </data>
+  <data name="Synchronization_Upload_Title_Format" xml:space="preserve">
+    <value>กำลังอัพโหลด : {0}</value>
+  </data>
+  <data name="Synchronization_UserAuthentication_Description" xml:space="preserve">
+    <value>กำลังเตรียมความพร้อมสำหรับการซิงโครไนส์</value>
+  </data>
+  <data name="Synchronization_UserAuthentication_Title" xml:space="preserve">
+    <value>การยืนยันบัญชีผู้ใช้</value>
+  </data>
+  <data name="Synchronization_UserLinkedToAnotherDevice_Status" xml:space="preserve">
+    <value>การยืนยันบัญชีผู้ใช้เกิดข้อผิดพลาด</value>
+  </data>
+  <data name="Synchronization_UserLinkedToAnotherDevice_Title" xml:space="preserve">
+    <value>บัญชีผู้ใช้ถูกใช้งานด้วยเครื่องอื่น</value>
+  </data>
+  <data name="Synchronization_UserPassword_Update_Format" xml:space="preserve">
+    <value>ไม่สามารถยืนยันบัญชีผู้ใช้ได้ ({0}) อาจจะมีปัญหาอย่างใดอย่างหนึ่งต่อไปนี้ พิมพ์รหัสผ่านไม่ถูกต้อง บัญชีผู้ใช้ถูกล็อคโดย Headquarter บัญชีผู้ใช้ถูกลบโดย Headquarter กรุณาป้อนรหัสผ่านล่าสุด ถ้ายังไม่สามารถแก้ปัญหาได้ กรุณาติดต่อ Supervisor</value>
+  </data>
+  <data name="Troubleshooting_Backup" xml:space="preserve">
+    <value>สำรองข้อมูล</value>
+  </data>
+  <data name="Troubleshooting_BackupErrorMessage" xml:space="preserve">
+    <value>เกิดข้อผิดพลาดบางอย่าง และทำให้ไม่สามารถสำรองข้อมูลได้</value>
+  </data>
+  <data name="Troubleshooting_BackupWasSaved" xml:space="preserve">
+    <value>การสำรองข้อมูลถูกบันทึกที่ {0}</value>
+  </data>
+  <data name="Troubleshooting_CurrentVersion_CheckForUpdates" xml:space="preserve">
+    <value>เวอร์ชัน : {0}  กรุณาตรวจสอบเวอร์ชันใหม่</value>
+  </data>
+  <data name="Troubleshooting_InformationPackageIsSuccessfullySent" xml:space="preserve">
+    <value>แพคเกจข้อมูลถูกส่งเรียบร้อยแล้ว</value>
+  </data>
+  <data name="Troubleshooting_InformationPackageSizeWarningFormat" xml:space="preserve">
+    <value>แพคเกจข้อมูลที่มีขนาด {0} จะถูกส่งผ่านเครือข่าย คุณต้องการส่งหรือไม่</value>
+  </data>
+  <data name="Troubleshooting_NewVerisonExist" xml:space="preserve">
+    <value>มีเวอร์ชันใหม่แล้ว คุณต้องการดาวน์โหลดและปรับปรุง Survey solution Interviewer หรือไม่</value>
+  </data>
+  <data name="Troubleshooting_NoNewVersion" xml:space="preserve">
+    <value>คุณใช้ Survey Solutions Interviewer เวอร์ชันล่าสุดแล้ว</value>
+  </data>
+  <data name="Troubleshooting_Old_AreYouSureYouWantToRestore" xml:space="preserve">
+    <value>ข้อมูลปัจจุบันทั้งหมดจะถูกลบ คุณต้องการกู้คืนข้อมูลหรือไม่ ถ้าใช่ กรุณาตรวจสอบว่าข้อมูลที่กู้คืนอยู่ที่ {0}</value>
+  </data>
+  <data name="Troubleshooting_Old_CreatingInformationPackage" xml:space="preserve">
+    <value>กำลังสร้างแพคเกจข้อมูล</value>
+  </data>
+  <data name="Troubleshooting_Old_InformationPackage" xml:space="preserve">
+    <value>แพคเกจข้อมูล</value>
+  </data>
+  <data name="Troubleshooting_Old_InformationPackageIsSuccessfullySent" xml:space="preserve">
+    <value>แพคเกจข้อมูลถูกส่งเรียบร้อยแล้ว</value>
+  </data>
+  <data name="Troubleshooting_Old_InformationPackageSizeWarningFormat" xml:space="preserve">
+    <value>แพคเกจข้อมูลที่มีขนาด {0} จะถูกส่งผ่านเครือข่าย คุณต้องการส่งหรือไม่</value>
+  </data>
+  <data name="Troubleshooting_Old_SendingInformationPackage" xml:space="preserve">
+    <value>กำลังส่งแพคเกจข้อมูล</value>
+  </data>
+  <data name="Troubleshooting_Old_SendingOfInformationPackageIsCanceled" xml:space="preserve">
+    <value>แพคเกจข้อมูลที่กำลังส่งถูกยกเลิก สาเหตุ: {0}</value>
+  </data>
+  <data name="Troubleshooting_Old_SendingOfInformationPackageIsCanceling" xml:space="preserve">
+    <value>กำลังยกเลิก</value>
+  </data>
+  <data name="Troubleshooting_RestorationErrorMessage" xml:space="preserve">
+    <value>เกิดข้อผิดพลาดบางอย่าง และการกู้คืนฐานข้อมูลใน Tablet ล้มเหลว</value>
+  </data>
+  <data name="Troubleshooting_Restore" xml:space="preserve">
+    <value>การกู้ข้อมูลจากข้อมูลสำรอง</value>
+  </data>
+  <data name="Troubleshooting_RestoreConfirmation" xml:space="preserve">
+    <value>ข้อมูลปัจจุบันทั้งหมดจะถูกลบ คุณต้องการกู้คืนข้อมูลหรือไม่ ถ้าใช่ กรุณาตรวจสอบว่าข้อมูลที่กู้คืนอยู่ที่ {0}</value>
+  </data>
+  <data name="Troubleshooting_RestoredSuccessfully" xml:space="preserve">
+    <value>เรียกคืนข้อมูลบนแท็บเล็ตสำเร็จ</value>
+  </data>
+  <data name="Troubleshooting_SendingOfInformationPackageErrorMessage" xml:space="preserve">
+    <value>การส่งแพคเกจข้อมูลล้มเหลว</value>
+  </data>
+  <data name="Troubleshooting_SendTabletInformation" xml:space="preserve">
+    <value>ส่งข้อมูลของแท็บเล็ต</value>
+  </data>
+  <data name="Troubleshooting_Title" xml:space="preserve">
+    <value>การแก้ไขปัญหา</value>
+  </data>
+  <data name="Troubleshooting_Unknown_ErrorMessage" xml:space="preserve">
+    <value>เกิดข้อผิดพลาดในการตรวจสอบเวอร์ชัน กรุณาตรวจสอบการตั้งค่าหรือลองอีกครั้งภายหลัง</value>
+  </data>
+  <data name="Unauthorized" xml:space="preserve">
+    <value>ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง</value>
+  </data>
+  <data name="UnexpectedException" xml:space="preserve">
+    <value>ข้อผิดพลาดที่นอกเหนือจากที่คาดการณ์ไว้</value>
+  </data>
+  <data name="UpgradeRequired" xml:space="preserve">
+    <value>มีเวอร์ชันใหม่แล้ว กรุณาปรับปรุง Survey Solutions Interviewer</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>คำเตือน</value>
+  </data>
+</root>

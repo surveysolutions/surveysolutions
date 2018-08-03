@@ -15,9 +15,6 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             this.Target.Indeterminate = value;
         }
 
-        public override MvxBindingMode DefaultMode
-        {
-            get { return MvxBindingMode.OneWay; }
-        }
+        public override MvxBindingMode DefaultMode => MvxBindingMode.OneWay;
     }
 }

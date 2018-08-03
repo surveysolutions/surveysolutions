@@ -21,7 +21,7 @@
                     }
                     else
                     {
-                       <span>@Pdf.Format(PdfStrings.Roster_GeneretedByQuestion, questionnaire.GetStringifiedTypeOfRosterSizeQuestion(roster.RosterSizeQuestionId), string.Format(@"<a href=""#{0}"">{1}</a>", questionnaire.GetItemRef(roster.RosterSizeQuestionId.Value), questionnaire.GetRosterSourceQuestionVariable(roster.PublicKey)))</span>
+                       <span>@Pdf.Format(PdfStrings.Roster_GeneretedByQuestion, questionnaire.GetStringifiedTypeOfRosterSizeQuestion(roster.RosterSizeQuestionId), string.Format(@"<a href=""#{0}"">{1}</a>", roster.RosterSizeQuestionId.HasValue ? questionnaire.GetItemRef(roster.RosterSizeQuestionId.Value) : "", questionnaire.GetRosterSourceQuestionVariable(roster.PublicKey)))</span>
                     }
                     </div>
                 <div class="variable_name">@(roster.VariableName)</div>

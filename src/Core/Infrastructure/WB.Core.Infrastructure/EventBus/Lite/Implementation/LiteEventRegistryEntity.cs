@@ -6,18 +6,18 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
     [DebuggerDisplay("HandlerType = {HandlerType}")]
     internal class LiteEventRegistryEntity
     {
-        public LiteEventRegistryEntity(ILiteEventHandler eventHandler, ILiteEventRaiseFilter filter)
+        public LiteEventRegistryEntity(ILiteEventHandler eventHandler, string aggreateRootId = null)
         {
             if (eventHandler == null)
                 throw new ArgumentNullException(nameof(eventHandler));
 
             this.EventHandler = new WeakReference<ILiteEventHandler>(eventHandler);
-            this.Filter = filter;
+            this.AggreateRootId = aggreateRootId;
             this.HandlerType = eventHandler.GetType().Name;
         }
 
         public WeakReference<ILiteEventHandler> EventHandler { get; }
-        public ILiteEventRaiseFilter Filter { get; }
+        public string AggreateRootId { get; }
 
         public string HandlerType { get; }
 

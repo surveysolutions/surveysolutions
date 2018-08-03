@@ -1,0 +1,653 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AccountIsLockedOnServer" xml:space="preserve">
+    <value>თქვენი მომხმარებლის ანგარიში დაბლოკილია. გთხოვთ, დაუკავშირდეთ ზედამხედველს</value>
+  </data>
+  <data name="AccountIsNotAnInterviewer" xml:space="preserve">
+    <value>თქვენს ანგარიშს არ აქვს ინტერვიუერის ფუნქცია</value>
+  </data>
+  <data name="AccountIsNotApprovedOnServer" xml:space="preserve">
+    <value>თქვენი მომხმარებლის ანგარიში არ არის დადასტურებული. გთხოვთ, დაუკავშირდეთ ზედამხედველს</value>
+  </data>
+  <data name="ApplicationIncompatibleWithServer" xml:space="preserve">
+    <value>თქვენი აპლიკაცია არ არის თავსებადი სერვერთან. განაახლეთ ინტერვიუერის აპლიკაციის ვერსია</value>
+  </data>
+  <data name="Dashboard_AssignmentsTabTitle" xml:space="preserve">
+    <value>შექმენით ახალი</value>
+  </data>
+  <data name="Dashboard_CompletedLinkText" xml:space="preserve">
+    <value>დასრულებული ({0})</value>
+  </data>
+  <data name="Dashboard_CompletedTabText" xml:space="preserve">
+    <value>დასრულებული ინტერვიუები აიტვირთება შემდეგი სინქრონიზაციის დროს</value>
+  </data>
+  <data name="Dashboard_CreateNewTabText" xml:space="preserve">
+    <value>შექმენით ახალი ინტერვიუ ნიმუშების გამოყენებით</value>
+  </data>
+  <data name="Dashboard_Discard" xml:space="preserve">
+    <value>უარყოფა</value>
+  </data>
+  <data name="Dashboard_NewItemsLinkText" xml:space="preserve">
+    <value>ახალი ({0})</value>
+  </data>
+  <data name="Dashboard_NoInterviewsSyncButton" xml:space="preserve">
+    <value>სინქრონიზაცია</value>
+  </data>
+  <data name="Dashboard_NoInterviewsText" xml:space="preserve">
+    <value>ახალი დავალებების მისაღებად გააკეთეთ სინქრონიზაცია ან დაუკავშირდით ზედამხედველს ინსტრუქციის მისაღებად</value>
+  </data>
+  <data name="Dashboard_NoInterviewsTitle" xml:space="preserve">
+    <value>თქვენ არ გაქვთ ახალი დავალებები</value>
+  </data>
+  <data name="Dashboard_NoNewItemsLinkText" xml:space="preserve">
+    <value>არ არის ახალი</value>
+  </data>
+  <data name="Dashboard_Open" xml:space="preserve">
+    <value>გახსნა</value>
+  </data>
+  <data name="Dashboard_QuestionnairesTabText" xml:space="preserve">
+    <value>თქვენ შეგიძლიათ ახალი ინტერვიუების შექმნა დავალებების გამოყენებით</value>
+  </data>
+  <data name="Dashboard_Reinitialize_Interview_Message" xml:space="preserve">
+    <value>ეს ინტერვიუ დამთავრდა. გსურთ ინტერვიუს თავიდან დაწყება?</value>
+  </data>
+  <data name="Dashboard_RejectedLinkText" xml:space="preserve">
+    <value>დაწუნებული ({0})</value>
+  </data>
+  <data name="Dashboard_RejectedTabText" xml:space="preserve">
+    <value>ინტერვიუები, რომლებიც ზედამხედველმა დაიწუნა
+თქვენ უნდა აღმოფხვრათ ის პრობლემები, რომლებიც ჩანიშნულია ყდაზე</value>
+  </data>
+  <data name="Dashboard_RemoveInterviewQuestion" xml:space="preserve">
+    <value>დარწმუნებული ხართ, რომ გინდათ ამ ინტერვიუს "{0}" წაშლა?</value>
+  </data>
+  <data name="Dashboard_ShowLocation" xml:space="preserve">
+    <value>მაჩვენე ადგილმდებარეობა</value>
+  </data>
+  <data name="Dashboard_Start" xml:space="preserve">
+    <value>დაწყება</value>
+  </data>
+  <data name="Dashboard_StartedLinkText" xml:space="preserve">
+    <value>დაწყებული ({0})</value>
+  </data>
+  <data name="Dashboard_StartedTabText" xml:space="preserve">
+    <value>ინტერვიუები, რომლებიც დაიწყო მაგრამ არ დასრულებულა
+თქვენ უნდა დაასრულოთ, რათა მოხდეს მათი სინქრონიზაცია</value>
+  </data>
+  <data name="Dashboard_Title" xml:space="preserve">
+    <value>{0} ინტერვიუები {1} -თვის</value>
+  </data>
+  <data name="DashboardItem_AssignedOn" xml:space="preserve">
+    <value>მიკუთვნებულია {0}</value>
+  </data>
+  <data name="DashboardItem_AssignmentCreatedComment" xml:space="preserve">
+    <value>ინტერვიუები შექმნილია: {0}</value>
+  </data>
+  <data name="DashboardItem_AssignmentLeftComment" xml:space="preserve">
+    <value>{0} ინტერვიუ(ები)</value>
+  </data>
+  <data name="DashboardItem_CensusModeComment" xml:space="preserve">
+    <value>Census mode, ინტერვიუები შექმნილია: {0}</value>
+  </data>
+  <data name="DashboardItem_CompletedOn" xml:space="preserve">
+    <value>დასრულებილია {0}-ზე</value>
+  </data>
+  <data name="DashboardItem_CreatedOn" xml:space="preserve">
+    <value>შექმნილია {0} -ზე</value>
+  </data>
+  <data name="DashboardItem_NotStarted" xml:space="preserve">
+    <value>არ დაწყებულა</value>
+  </data>
+  <data name="DashboardItem_RejectedOn" xml:space="preserve">
+    <value>დაწუნებულია {0} -ზე</value>
+  </data>
+  <data name="DashboardItem_StartedOn" xml:space="preserve">
+    <value>დაწყებულია {0} -ზე</value>
+  </data>
+  <data name="DashboardItem_Title" xml:space="preserve">
+    <value>{0} (v{1})</value>
+  </data>
+  <data name="Diagnostics_Backup_Description" xml:space="preserve">
+    <value>მთლიანი შეგროვებული მონაცემები შეინახება ამ მოწყობილობის არქივაციის ფაილში</value>
+  </data>
+  <data name="Diagnostics_Backup_Title" xml:space="preserve">
+    <value>დავაარქივოთ ყველა მიღებული ინფორმაცია</value>
+  </data>
+  <data name="Diagnostics_BackupDate_Title" xml:space="preserve">
+    <value>როდის არის შენახული:</value>
+  </data>
+  <data name="Diagnostics_BackupFileLocation_Title" xml:space="preserve">
+    <value>არქივაციის ფაილის ადგილმდებარეობა:</value>
+  </data>
+  <data name="Diagnostics_BackupReady_Title" xml:space="preserve">
+    <value>შენახვის თარიღი</value>
+  </data>
+  <data name="Diagnostics_BackupScope_Title" xml:space="preserve">
+    <value>მასშტაბი:</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionAbsent_Title" xml:space="preserve">
+    <value>&lt;font color="red"&gt;ინტერნეტთან წვდომა არ არის&lt;/font&gt;</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionNotOK_Title" xml:space="preserve">
+    <value>კავშირი&lt;font color="red"&gt;ცუდია&lt;/font&gt;</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionOK_Title" xml:space="preserve">
+    <value>კავშირი კარგია</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionToTheServerAbsent_Title" xml:space="preserve">
+    <value>&lt;font color="red"&gt;ჩვენს სერვერთან კავშირი არაა&lt;/font&gt;</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestConnectionType_Title" xml:space="preserve">
+    <value>კავშირის ტიპი:</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestNetworkName_Title" xml:space="preserve">
+    <value>ქსელის სახელი:</value>
+  </data>
+  <data name="Diagnostics_BandwidthTestPing_Title" xml:space="preserve">
+    <value>Ping:</value>
+  </data>
+  <data name="Diagnostics_CheckVersion_Description" xml:space="preserve">
+    <value>ჩვენ შევამოწმებთ სათაო ოფისის სერვერის ახალ ვერსიას</value>
+  </data>
+  <data name="Diagnostics_CheckVersion_Title" xml:space="preserve">
+    <value>ვერსია: {0}. შეამოწმეთ ახალი ვერსია</value>
+  </data>
+  <data name="Diagnostics_Delete" xml:space="preserve">
+    <value>წაშლა</value>
+  </data>
+  <data name="Diagnostics_DownloadingPleaseWait" xml:space="preserve">
+    <value>მიმდინარეობს გადმოწერა, გთხოვთ დაელოდოთ...</value>
+  </data>
+  <data name="Diagnostics_NewVersionAvaliable_Title" xml:space="preserve">
+    <value>ახალი ვერსია გამოსულია. გსურთ, რომ გადმოწეროთ და განაახლოთ აპლიკაცია?</value>
+  </data>
+  <data name="Diagnostics_NewVersionNumber_Title" xml:space="preserve">
+    <value>ვერსიის ნომერი:</value>
+  </data>
+  <data name="Diagnostics_No" xml:space="preserve">
+    <value>არა</value>
+  </data>
+  <data name="Diagnostics_Restore_Description" xml:space="preserve">
+    <value>შენახული მონაცემების აღდგენისას თქვენ გადააწერთ ყველა მიმდინარე დავალებებს ამ მოწყობილობაში</value>
+  </data>
+  <data name="Diagnostics_Restore_Title" xml:space="preserve">
+    <value>აღდგენა</value>
+  </data>
+  <data name="Diagnostics_RestoreReady_Title" xml:space="preserve">
+    <value>ნაპოვნია შენახული მონაცემები:</value>
+  </data>
+  <data name="Diagnostics_Send" xml:space="preserve">
+    <value>გაგზავნა</value>
+  </data>
+  <data name="Diagnostics_Send_Description" xml:space="preserve">
+    <value>ყველა აპლიკაცია და ინტერვიუ მოგროვდება ერთ არქივში. ეს დაახლოებით 10 წუთს გაგრძელდება</value>
+  </data>
+  <data name="Diagnostics_Send_Title" xml:space="preserve">
+    <value>შეაგროვეთ და გააგზავნეთ ტაბლეტის ყველა ინფორმაცია სათაო ოფისში</value>
+  </data>
+  <data name="Diagnostics_Share_Description" xml:space="preserve">
+    <value>ქვემოთ მოცემული ყველა ინფორმაცია გაზიარდება, როგორც ტექსტი. მისი გაგზავნა შესაძლებელი იქნება ელ.ფოსტის მეშვეობით, ან სხვა დამხმარე სერვისებით</value>
+  </data>
+  <data name="Diagnostics_Share_Title" xml:space="preserve">
+    <value>გააზიარე ტექნიკური ინფორმაცია</value>
+  </data>
+  <data name="Diagnostics_TabletInformationReady_Title" xml:space="preserve">
+    <value>მონაცემთა არქივი მზადაა</value>
+  </data>
+  <data name="Diagnostics_TabletInformationScope_Title" xml:space="preserve">
+    <value>მასშტაბი:</value>
+  </data>
+  <data name="Diagnostics_TabletInformationWhenGenerated_Title" xml:space="preserve">
+    <value>როდის დაგენერირდა:</value>
+  </data>
+  <data name="Diagnostics_TestConnection_Description" xml:space="preserve">
+    <value>ჩვენ შევამოწმებთ კავშირს და სიჩქარეს სერვერთან</value>
+  </data>
+  <data name="Diagnostics_TestConnection_Title" xml:space="preserve">
+    <value>შეამოწმე გამტარუნარიანობა სერვერთან</value>
+  </data>
+  <data name="Diagnostics_Title" xml:space="preserve">
+    <value>დიაგნოსტიკა</value>
+  </data>
+  <data name="Diagnostics_Update" xml:space="preserve">
+    <value>განახლება წარუმატებლად დასრულდა</value>
+  </data>
+  <data name="Diagnostics_YouHaveTheLatestVersionOfApplication" xml:space="preserve">
+    <value>თქვენ გაქვთ აპლიკაციის უახლესი ვერსია</value>
+  </data>
+  <data name="FailedToCreateInterview" xml:space="preserve">
+    <value>ინტერვიუს შექმნა წარუმატებელია. მიზეზი: {0}</value>
+  </data>
+  <data name="FailedToLoadInterview" xml:space="preserve">
+    <value>ინტერვიუს გახსნა წარუმატებელია</value>
+  </data>
+  <data name="FinishInstallation_EndpointDiffers" xml:space="preserve">
+    <value>სინქრონიზაციის ბოლო წერტილი '{0}' განსხვავდება პარამეტრებში არსებულისგან ('{1}'). ჩამოტვირთე URL პარამეტრებიდან?</value>
+  </data>
+  <data name="HostUnreachable" xml:space="preserve">
+    <value>ინტერნეტზე წვდომა არ არის თქვენს სერვერთან. შეამოწმეთ სერვერის მისამართი და (ან) ქსელის პარამეტრები</value>
+  </data>
+  <data name="InternalServerError" xml:space="preserve">
+    <value>სერვერის შეცდომა. გთხოვთ დაუკავშირდეთ მხარდაჭერის ჯგუფს მისამართზე support@mysurvey.solutions</value>
+  </data>
+  <data name="Interview_Loading" xml:space="preserve">
+    <value>იტვირთება...</value>
+  </data>
+  <data name="Interview_Loading_With_Percents" xml:space="preserve">
+    <value>იტვირთება... {0}%</value>
+  </data>
+  <data name="InvalidEndpoint" xml:space="preserve">
+    <value>ზედამხედველის ვებ-გვერდის მისამართი არასწორია. დარწმუნდით, რომ სწორად შეიყვანეთ მისამართი</value>
+  </data>
+  <data name="Login_FinishInstallation_Message" xml:space="preserve">
+    <value>ეს არის პირველი ჩატვირთვა ამ მოწყობილობაზე. მომხმარებელი და ჯგუფი არ არის დაყენებული ჯერ. &lt;br /&gt; თქვენ გჭრდებათ ინტერნეტი რომ დაიწყოთ</value>
+  </data>
+  <data name="Login_Online_Signin_Explanation_message" xml:space="preserve">
+    <value>თუ თქვენ დაკარგეთ თქვენი პაროლი, შეგიძლიათ სცადოთ სისტემაში შესვლა</value>
+  </data>
+  <data name="Login_Online_SignIn_Failed" xml:space="preserve">
+    <value>ავტორიზაციის პრობლემა სერვერზე. გთხოვთ, დაუკავშირდეთ თქვენს ზედამხედველს</value>
+  </data>
+  <data name="Login_WrongPassword" xml:space="preserve">
+    <value>არასწორი პაროლი</value>
+  </data>
+  <data name="Maintenance" xml:space="preserve">
+    <value>Survey Solutions Supervisor-ის ვებ-გვერდი დროებით მიუწვდომელია. ბოდიშს გიხდით შეფერხებისთვის</value>
+  </data>
+  <data name="MenuItem_Title_Dashboard" xml:space="preserve">
+    <value>პარამეტრების დაფა</value>
+  </data>
+  <data name="MenuItem_Title_Diagnostics" xml:space="preserve">
+    <value>დიაგნოსტიკა</value>
+  </data>
+  <data name="MenuItem_Title_Language" xml:space="preserve">
+    <value>ენა</value>
+  </data>
+  <data name="MenuItem_Title_Language_Original" xml:space="preserve">
+    <value>ორიგინალი</value>
+  </data>
+  <data name="MenuItem_Title_Login" xml:space="preserve">
+    <value>შესვლა</value>
+  </data>
+  <data name="MenuItem_Title_Settings" xml:space="preserve">
+    <value>პარამეტრები</value>
+  </data>
+  <data name="MenuItem_Title_SignOut" xml:space="preserve">
+    <value>გამოსვლა</value>
+  </data>
+  <data name="NoNetwork" xml:space="preserve">
+    <value>ქსელი არ არის. შეამოწმეთ ქსელის პარამეტრები</value>
+  </data>
+  <data name="NotSupportedServerSyncProtocolVersion" xml:space="preserve">
+    <value>თქვენ ინტერვიუერის აპლიკაციის არასწორი ვერსია გაქვთ. გთხოვთ, წაშალოთ ის და ჩვენი Survey Solutions Headquarters საიტიდან დააყენეთ თავიდან</value>
+  </data>
+  <data name="Prefs_AboutApplication" xml:space="preserve">
+    <value>აპლიკაციის შესახებ</value>
+  </data>
+  <data name="Prefs_ApplicationVersionTitle" xml:space="preserve">
+    <value>აპლიკაციის ვერსია:</value>
+  </data>
+  <data name="Prefs_BufferSizeSummary" xml:space="preserve">
+    <value>ზედამხედველის აპლიკაციიდან/აპლიკაციაზე მისაღები/გასაგზავნი ბაიტების რაოდენობა</value>
+  </data>
+  <data name="Prefs_BufferSizeTitle" xml:space="preserve">
+    <value>დაკავშირების პაკეტის მოცულობა</value>
+  </data>
+  <data name="Prefs_ConnectionSettings" xml:space="preserve">
+    <value>კავშირის პარამეტრები</value>
+  </data>
+  <data name="Prefs_DeviceIdTitle" xml:space="preserve">
+    <value>მოწყობილობის ID:</value>
+  </data>
+  <data name="Prefs_EndpointTitle" xml:space="preserve">
+    <value>ზედამხედველის URL</value>
+  </data>
+  <data name="Prefs_EventChunkSizeSummary" xml:space="preserve">
+    <value>რამდენი მოვლენა შეიძლება, წავიკითხოთ ერთი მიმართვით</value>
+  </data>
+  <data name="Prefs_EventChunkSizeTitle" xml:space="preserve">
+    <value>მოვლენის ფრაგმენტის მოცულობა</value>
+  </data>
+  <data name="Prefs_GpsReceiveTimeoutSecSummary" xml:space="preserve">
+    <value>კოორდინატის მიღების მოლოდინისთვის საჭირო წამების რაოდენობა</value>
+  </data>
+  <data name="Prefs_GpsReceiveTimeoutSecTitle" xml:space="preserve">
+    <value>GPS-ის მიღების დაყოვნება</value>
+  </data>
+  <data name="Prefs_HttpResponseTimeoutSummary" xml:space="preserve">
+    <value>სერვერის პასუხის მოლოდინისთვის საჭირო წამების რაოდენობა</value>
+  </data>
+  <data name="Prefs_HttpResponseTimeoutTitle" xml:space="preserve">
+    <value>სერვერის პასუხის დაყოვნება</value>
+  </data>
+  <data name="Prefs_InterviewSettings" xml:space="preserve">
+    <value>ინტერვიუს პარამეტრები</value>
+  </data>
+  <data name="Prefs_Title" xml:space="preserve">
+    <value>პარამეტრები</value>
+  </data>
+  <data name="RequestCanceledByUser" xml:space="preserve">
+    <value>მოთხოვნა უარყოფილია მომხმარებლის მიერ</value>
+  </data>
+  <data name="RequestTimeout" xml:space="preserve">
+    <value>Survey Solutions Supervisor-ის ვებ-გვერდთან წვდომის დროს დაყოვნება. გადაამოწმეთ ინტერნეტთან კავშირი</value>
+  </data>
+  <data name="ServiceUnavailable" xml:space="preserve">
+    <value>არ არის კავშირი Survey Solutions Supervisor-ის ვებ-გვერდთან. გადაამოწმეთ, არსებობს თუ არა ვებ-გვერდი</value>
+  </data>
+  <data name="Share_to_Title" xml:space="preserve">
+    <value>გააზიარეთ ინფორმაცია...</value>
+  </data>
+  <data name="Synchronization_Cancel" xml:space="preserve">
+    <value>უარყოფა</value>
+  </data>
+  <data name="Synchronization_Check_Obsolete_Questionnaires" xml:space="preserve">
+    <value>მოძველებული კითხვარების შემოწმება</value>
+  </data>
+  <data name="Synchronization_Check_Obsolete_Questionnaires_Description" xml:space="preserve">
+    <value>{1} -დან {0} კითხვარების წაშლა</value>
+  </data>
+  <data name="Synchronization_Done" xml:space="preserve">
+    <value>შესრულებულია</value>
+  </data>
+  <data name="Synchronization_DoneWithErrors_Title" xml:space="preserve">
+    <value>სინქრონიზაცია დამთავრდა შეცდომებით</value>
+  </data>
+  <data name="Synchronization_Download_AttachmentsCleanup" xml:space="preserve">
+    <value>მოძველებული მიმაგრებული ფაილების წაშლა</value>
+  </data>
+  <data name="Synchronization_Download_Description_Format" xml:space="preserve">
+    <value>{1} {2} -დან {0} შესრულებულია</value>
+  </data>
+  <data name="Synchronization_Download_Title" xml:space="preserve">
+    <value>დავალებების განახლება</value>
+  </data>
+  <data name="Synchronization_DownloadingLogo" xml:space="preserve">
+    <value>ლოგოს გადმოწერა</value>
+  </data>
+  <data name="Synchronization_Fail_State_DeletedInterviews_Format" xml:space="preserve">
+    <value>{1} -დან {0} ინტერვიუ წაშლილია</value>
+  </data>
+  <data name="Synchronization_Fail_State_FailedToProcess_Format" xml:space="preserve">
+    <value>{0} ინტერვიუს სინქრონიზაცია არ შესრულდა</value>
+  </data>
+  <data name="Synchronization_Fail_State_NewInterviews_Format" xml:space="preserve">
+    <value>{1} -დან {0} ახალი ინტერვიუ გადმოიწერა</value>
+  </data>
+  <data name="Synchronization_Fail_State_RejectedInterviews_Format" xml:space="preserve">
+    <value>{1} -დან {0} დაწუნებული ინტერვიუ დაბრუნდა უკან</value>
+  </data>
+  <data name="Synchronization_Fail_State_UploadedInterviews_Format" xml:space="preserve">
+    <value>{1} -დან {0} დასრულებული ინტერვიუ აიტვირთა</value>
+  </data>
+  <data name="Synchronization_Fail_Title" xml:space="preserve">
+    <value>სინქრონიზაცია შეწყდა, სცადეთ თავიდან</value>
+  </data>
+  <data name="Synchronization_Fail_UnexpectedException" xml:space="preserve">
+    <value>მოულოდნელი გამონაკლისი</value>
+  </data>
+  <data name="Synchronization_Interviews" xml:space="preserve">
+    <value>ინტერვიუები</value>
+  </data>
+  <data name="Synchronization_LockedAssignments_Text" xml:space="preserve">
+    <value>დავალებები დაბლოკილია სინქრონიზაციის დასრულებამდე</value>
+  </data>
+  <data name="Synchronization_Of_AssignmentsFormat" xml:space="preserve">
+    <value>მიმდინარეობს {1} -დან {0} დავალებების სინქრონიზაცია</value>
+  </data>
+  <data name="Synchronization_Questionnaires" xml:space="preserve">
+    <value>კითხვარები</value>
+  </data>
+  <data name="Synchronization_Success_Description" xml:space="preserve">
+    <value>ყველა დავალება განახლებულია</value>
+  </data>
+  <data name="Synchronization_Success_State_DeletedInterviews_Format" xml:space="preserve">
+    <value>{0} ინტერვიუები წაშლილია</value>
+  </data>
+  <data name="Synchronization_Success_State_NewInterviews_Format" xml:space="preserve">
+    <value>{0} ახალი ინტერვიუები გადმოიწერა</value>
+  </data>
+  <data name="Synchronization_Success_State_RejectedInterviews_Format" xml:space="preserve">
+    <value>{0} დაწუნებული ინტერვიუები დაბრუნდა უკან</value>
+  </data>
+  <data name="Synchronization_Success_State_UploadedInterviews_Format" xml:space="preserve">
+    <value>{0} დასრულებული ინტერვიუები აიტვირთა</value>
+  </data>
+  <data name="Synchronization_Success_Title" xml:space="preserve">
+    <value>სინქრონიზაცია წარმატებით შესრულდა</value>
+  </data>
+  <data name="Synchronization_Upload_CompletedAssignments_Text" xml:space="preserve">
+    <value>შესრულებული დავალებები</value>
+  </data>
+  <data name="Synchronization_Upload_Description_Format" xml:space="preserve">
+    <value>{1} {2} -დან {0} შესრულებულია</value>
+  </data>
+  <data name="Synchronization_Upload_Interviews_Text" xml:space="preserve">
+    <value>ინტერვიუები</value>
+  </data>
+  <data name="Synchronization_Upload_Title_Format" xml:space="preserve">
+    <value>მიმდინარეობს ატვირთვა {0}</value>
+  </data>
+  <data name="Synchronization_UserAuthentication_Description" xml:space="preserve">
+    <value>სიქრონიზაციისთვის მომზადება</value>
+  </data>
+  <data name="Synchronization_UserAuthentication_Title" xml:space="preserve">
+    <value>მომხმარებლის ავტორიზაცია</value>
+  </data>
+  <data name="Synchronization_UserLinkedToAnotherDevice_Status" xml:space="preserve">
+    <value>მომხმარებლის ავტორიზაციის შეცდომა</value>
+  </data>
+  <data name="Synchronization_UserLinkedToAnotherDevice_Title" xml:space="preserve">
+    <value>თქვენი ანგარიში სხვა მოწყობილობასთან შეერთდა</value>
+  </data>
+  <data name="Synchronization_UserPassword_Update_Format" xml:space="preserve">
+    <value>ავტორიზაციის პრობლემა. ჩვენ არ შეგვიძლია თქვენ მიერ შეყვანილი მომხმარებლის სახელის და პაროლის ("{0}") დადასტურება. თქვენს მომხმარებელს შეიძლება, ჰქონდეს სხვა პაროლი; დაბლოკილია ან წაშლილია. გთხოვთ, თავიდან შეიყვანოთ პაროლი. თუ პრობლემა განმეორდება, დაუკავშირდით ზედამხედველს</value>
+  </data>
+  <data name="Troubleshooting_Backup" xml:space="preserve">
+    <value>სარეზერვო ასლის შექმნა</value>
+  </data>
+  <data name="Troubleshooting_BackupErrorMessage" xml:space="preserve">
+    <value>დაფიქსირდა შეცდომა სარეზერვო ასლის შექმნისას</value>
+  </data>
+  <data name="Troubleshooting_BackupWasSaved" xml:space="preserve">
+    <value>სარეზერვო ასლი შენახულია {0}</value>
+  </data>
+  <data name="Troubleshooting_CurrentVersion_CheckForUpdates" xml:space="preserve">
+    <value>ვერსია: {0}. შეამოწმეთ ახალი ვერსია</value>
+  </data>
+  <data name="Troubleshooting_InformationPackageIsSuccessfullySent" xml:space="preserve">
+    <value>საინფორმაციო პაკეტი წარმატებით გაიგზავნა</value>
+  </data>
+  <data name="Troubleshooting_InformationPackageSizeWarningFormat" xml:space="preserve">
+    <value>{0} მოცულობის საინფორმაციო პაკეტი გაიგზავნება ქსელის მეშვეობით. დარწმუნებული ხართ რომ გსურთ გაგზავნა?</value>
+  </data>
+  <data name="Troubleshooting_NewVerisonExist" xml:space="preserve">
+    <value>ახალი ვერსია გამოსულია. გსურთ, რომ გადმოწეროთ და განაახლოთ აპლიკაცია?</value>
+  </data>
+  <data name="Troubleshooting_NoNewVersion" xml:space="preserve">
+    <value>თქვენ გაქვთ აპლიკაციის უახლესი ვერსია</value>
+  </data>
+  <data name="Troubleshooting_Old_AreYouSureYouWantToRestore" xml:space="preserve">
+    <value>ყველა მიმდინარე მონაცემი წაიშლება. გსურთ აღდგენის პროცესის დაწყება? თუ კი, დარწმუნდით რომ აღსადგენი მონაცემები წარმოდგენილია {0}-ზე</value>
+  </data>
+  <data name="Troubleshooting_Old_CreatingInformationPackage" xml:space="preserve">
+    <value>საინფორმაციო პაკეტის შექმნა</value>
+  </data>
+  <data name="Troubleshooting_Old_InformationPackage" xml:space="preserve">
+    <value>საინფორმაციო პაკეტი</value>
+  </data>
+  <data name="Troubleshooting_Old_InformationPackageIsSuccessfullySent" xml:space="preserve">
+    <value>საინფორმაციო პაკეტი წარმატებით გაიგზავნა</value>
+  </data>
+  <data name="Troubleshooting_Old_InformationPackageSizeWarningFormat" xml:space="preserve">
+    <value>{0} მოცულობის საინფორმაციო პაკეტი გაიგზავნება ქსელის მეშვეობით. დარწმუნებული ხართ, რომ გსურთ გაგზავნა?</value>
+  </data>
+  <data name="Troubleshooting_Old_SendingInformationPackage" xml:space="preserve">
+    <value>საინფორმაციო პაკეტის გაგზავნა</value>
+  </data>
+  <data name="Troubleshooting_Old_SendingOfInformationPackageIsCanceled" xml:space="preserve">
+    <value>საინფორმაციო პაკეტის გაგზავნა შეწყვეტილია. მიზეზი: {0}</value>
+  </data>
+  <data name="Troubleshooting_Old_SendingOfInformationPackageIsCanceling" xml:space="preserve">
+    <value>მიმდინარეობს შეწყვეტა</value>
+  </data>
+  <data name="Troubleshooting_RestorationErrorMessage" xml:space="preserve">
+    <value>დაფიქსირდა შეცდომა და ტაბლეტის აღდგენა ვერ მოხერხდა</value>
+  </data>
+  <data name="Troubleshooting_Restore" xml:space="preserve">
+    <value>სარეზერვო ასლიდან აღდგენა</value>
+  </data>
+  <data name="Troubleshooting_RestoreConfirmation" xml:space="preserve">
+    <value>ყველა მიმდინარე მონაცემები წაიშლება. გსურთ აღდგენის პროცესის დაწყება? თუ კი, დარწმუნდით რომ აღსადგენი მონაცემები წარმოდგენილია {0}-ზე</value>
+  </data>
+  <data name="Troubleshooting_RestoredSuccessfully" xml:space="preserve">
+    <value>ტაბლეტის აღდგენა წარმატებით შესრულდა</value>
+  </data>
+  <data name="Troubleshooting_RestoreFolderIsEmpty" xml:space="preserve">
+    <value>{0} საქაღალდე ცარიელია. გთხოვთ, ამ საქაღალდეში მოათავსოთ სარეზერვო ასლი აღსადგენად.</value>
+  </data>
+  <data name="Troubleshooting_SendingOfInformationPackageErrorMessage" xml:space="preserve">
+    <value>საინფორმაციო პაკეტის გაგზავნა წარუმატებელია</value>
+  </data>
+  <data name="Troubleshooting_SendTabletInformation" xml:space="preserve">
+    <value>ტაბლეტის ინფორმაციის გაგზავნა</value>
+  </data>
+  <data name="Troubleshooting_Title" xml:space="preserve">
+    <value>პრობლემების აღმოფხვრა</value>
+  </data>
+  <data name="Troubleshooting_Unknown_ErrorMessage" xml:space="preserve">
+    <value>ვერსიის შემოწმებისას მოხდა შეცდომა. შეამოწმეთ პარამეტრები ან სცადეთ მოგვიანებით</value>
+  </data>
+  <data name="UnacceptableSSLCertificate" xml:space="preserve">
+    <value>მოცემული URL-ის სერტიფიკატის შემოწმება წარუმატებელია. გთხოვთ, შეამოწმოთ სათაო ოფისის ვებ-გვერდის მისამართისა  და თქვენს მოწყობილობაში თარიღისა და დროის სისწორე</value>
+  </data>
+  <data name="Unauthorized" xml:space="preserve">
+    <value>მომხმარებლის სახელი ან პაროლი არასწორია</value>
+  </data>
+  <data name="UnexpectedException" xml:space="preserve">
+    <value>მოულოდნელი შეცდომა</value>
+  </data>
+  <data name="UpgradeRequired" xml:space="preserve">
+    <value>აპლიკაციის ახალი ვერსია გამოსულია. გთხოვთ, გააკეთოთ აპლიკაციის განახლება</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>გაფრთხილება</value>
+  </data>
+</root>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:local="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    style="@style/Interviewer_Selector_Item"
+    local:MvxBind=" BackgroundStyle SectionStyleBackground(IsSelected)"
+    >
+    <TextView
+        style="@style/Interviewer_Selector_Text"
+        android:layout_weight="0.5"
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_gravity="left"
+        local:MvxBind="Html Login;"/>
+    <TextView
+        style="@style/Interviewer_Selector_Text"
+        android:layout_weight="0.5"
+        android:layout_gravity="right"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        local:MvxBind="Html FullName;"/>
+</LinearLayout>

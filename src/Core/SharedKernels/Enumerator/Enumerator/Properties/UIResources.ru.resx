@@ -512,8 +512,11 @@
   <data name="AreaMap_Cancel" xml:space="preserve">
     <value>Отмена</value>
   </data>
-  <data name="AreaMap_LengthFormat" xml:space="preserve">
+  <data name="AreaMap_PerimeterFormat" xml:space="preserve">
     <value>Периметр:</value>
+  </data>
+  <data name="AreaMap_LengthFormat" xml:space="preserve">
+    <value>Длинна:</value>
   </data>
   <data name="AreaMap_MapTitle" xml:space="preserve">
     <value>Карта</value>
@@ -595,5 +598,73 @@
   </data>
   <data name="Interview_MaxAnswersCount" xml:space="preserve">
     <value>{0} из {1} опций выбрано</value>
+  </data>
+  <data name="Supervisor_ApplicationName" xml:space="preserve">
+    <value>Survey Solutions Supervisor</value>
+    <comment>Survey Solutions Supervisor</comment>
+  </data>
+  <data name="Interview_Overview_NotAnswered" xml:space="preserve">
+    <value>Не отвечен</value>
+  </data>
+  <data name="Interview_Overview" xml:space="preserve">
+    <value>Обзор</value>
+    <comment>Обзор</comment>
+  </data>
+  <data name="Interview_Overview_Name" xml:space="preserve">
+    <value>Обзор</value>
+    <comment>Обзор</comment>
+  </data>
+  <data name="Interview_Overview_AdditionalInfo" xml:space="preserve">
+    <value>Дополнительная информация</value>
+  </data>
+  <data name="Interview_Overview_Comments" xml:space="preserve">
+    <value>Комментарии</value>
+  </data>
+  <data name="Interview_Overview_Warnings" xml:space="preserve">
+    <value>Ошибки</value>
+  </data>
+  <data name="Supervisor_Complete_Approve_btn" xml:space="preserve">
+    <value>Утвердить</value>
+  </data>
+  <data name="Supervisor_Complete_Assign_btn" xml:space="preserve">
+    <value>Назначить</value>
+  </data>
+  <data name="Supervisor_Complete_Reject_btn" xml:space="preserve">
+    <value>Отклонить</value>
+  </data>
+  <data name="OfflineSync_BackToDashboard" xml:space="preserve">
+    <value>К списку заданий</value>
+    <comment>К списку заданий</comment>
+  </data>
+  <data name="OfflineSync_Abort" xml:space="preserve">
+    <value>Прервать</value>
+    <comment>Отмена</comment>
+  </data>
+  <data name="OfflineSync_Cancel" xml:space="preserve">
+    <value>Отмена</value>
+    <comment>Отмена</comment>
+  </data>
+  <data name="OfflineSync_InstallPlayServices" xml:space="preserve">
+    <value>Должны быть установлены Google Play Services.</value>
+    <comment>Должны быть установлены Google Play Services.</comment>
+  </data>
+  <data name="OfflineSync_DeviceNotSupported" xml:space="preserve">
+    <value>Это устройство не поддерживается.</value>
+    <comment>Это устройство не поддерживается.</comment>
+  </data>
+  <data name="OfflineSync_NetworkInfo" xml:space="preserve">
+    <value>Скорость: {0}, Осталось: {1}</value>
+    <comment>Скорость: {0}, Осталось: {1}</comment>
+  </data>
+  <data name="Synchronization_FoundDevice" xml:space="preserve">
+    <value>Найдено устройство интервьюра ({0})</value>
+    <comment>{0} - interviewer login</comment>
+  </data>
+  <data name="OfflineSync_Retry" xml:space="preserve">
+    <value>Попробывать еще раз</value>
+    <comment>Попробывать еще раз</comment>
+  </data>
+  <data name="OfflineSync_Supervisor_Title" xml:space="preserve">
+    <value>Синхронизация заданий и интервью</value>
   </data>
 </root>

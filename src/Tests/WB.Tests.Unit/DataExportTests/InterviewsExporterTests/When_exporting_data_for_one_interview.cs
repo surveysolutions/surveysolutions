@@ -81,7 +81,7 @@ namespace WB.Tests.Unit.DataExportTests.InterviewsExporterTests
             exporter.Export(questionnaireExportStructure, interviewIdsToExport, "", new Progress<int>(), CancellationToken.None);
 
             //assert
-            Assert.That(dataInCsvFile[0].File, Is.EqualTo("Questionnaire.tab"));
+            Assert.That(dataInCsvFile[0].File, Is.EqualTo("MyQuestionnaire.tab"));
 
             Assert.That(dataInCsvFile[0].Data[0][3], Is.EqualTo(ServiceColumns.Key));
             Assert.That(dataInCsvFile[1].Data[0][3], Is.EqualTo(interviewKey));

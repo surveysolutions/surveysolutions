@@ -6,5 +6,8 @@
               local:MvxBind="BackgroundStyle QuestionOptionBackground(LayoutBackgroundStyle(QuestionState.Validity.IsInvalid, QuestionState.IsAnswered, false));">
   
   <EditText style="@style/Interview_Question_Answer_Text_Editor"
-            local:MvxBind="FocusValueChanged AddNewItemCommand; Text Text; Watermark Localization('TextListQuestion_Hint');" />
+            local:MvxBind="FocusValueChanged AddNewItemCommand; 
+            Text Text; 
+            Watermark Localization('TextListQuestion_Hint');
+            Tag Format('ListQuestionEmpty_{0}', QuestionState.Header.Identity)" />
 </LinearLayout>

@@ -10,7 +10,7 @@ using WB.Core.Infrastructure.Implementation.Aggregates;
 
 namespace WB.Core.Infrastructure.CommandBus.Implementation
 {
-    internal class SequentialCommandService : CommandService
+    public class SequentialCommandService : CommandService
     {
         private class CommandDescriptor
         {

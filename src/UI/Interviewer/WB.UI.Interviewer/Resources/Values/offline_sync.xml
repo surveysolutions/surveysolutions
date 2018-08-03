@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+    <style name="SendToSupervisor_Note" parent="OfflineSync_SubTitleText">
+        <item name="android:layout_marginTop">@dimen/SendToSupervisor_Note_MarginTop</item>
+    </style>
+    <style name="SendToSupervisor_Retry" parent="Interview_Previous_Group_Navigation_Button">
+        <item name="android:layout_marginLeft">0dp</item>
+        <item name="android:background">@drawable/group_started</item>
+    </style>
+    <style name="SendToSupervisor_Navigation" parent="AppTheme">
+        <item name="android:layout_marginTop">@dimen/OfflineSync_Base_MarginTop</item>
+    </style>
+</resources>

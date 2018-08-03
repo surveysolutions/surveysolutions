@@ -3,11 +3,13 @@ using Android.Content;
 using Android.OS;
 using Android.Support.V7.Widget;
 using Android.Views;
-using WB.Core.BoundedContexts.Interviewer.Properties;
-using WB.Core.BoundedContexts.Interviewer.Services;
-using WB.Core.BoundedContexts.Interviewer.Views;
-using WB.UI.Interviewer.Services;
+using WB.Core.SharedKernels.Enumerator.Properties;
+using WB.Core.SharedKernels.Enumerator.Services.MapSynchronization;
+using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
+using WB.Core.SharedKernels.Enumerator.Views;
+using WB.UI.Shared.Enumerator;
 using WB.UI.Shared.Enumerator.Activities;
+using WB.UI.Shared.Enumerator.Services;
 
 namespace WB.UI.Interviewer.Activities
 {
@@ -15,9 +17,9 @@ namespace WB.UI.Interviewer.Activities
         WindowSoftInputMode = SoftInput.StateHidden,
         HardwareAccelerated = true,
         ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
-    public class MapsActivity : BaseActivity<MapsViewModel>, IMapSyncBackgroundService
+    public class MapsActivity : BaseActivity<MapsViewModel>, ISyncBgService<MapSyncProgressStatus>, ISyncServiceHost<MapDownloadBackgroundService>
     {
-        public MapDownloadBackgroundServiceBinder Binder { get; set; }
+        public ServiceBinder<MapDownloadBackgroundService> Binder { get; set; }
 
         protected override int ViewResourceId
         {
@@ -41,7 +43,7 @@ namespace WB.UI.Interviewer.Activities
         protected override void OnStart()
         {
             base.OnStart();
-            this.BindService(new Intent(this, typeof(MapDownloadBackgroundService)), new MapDownloadServiceConnection(this), Bind.AutoCreate);
+            this.BindService(new Intent(this, typeof(MapDownloadBackgroundService)), new SyncServiceConnection<MapDownloadBackgroundService>(this), Bind.AutoCreate);
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)
@@ -79,8 +81,8 @@ namespace WB.UI.Interviewer.Activities
             return base.OnOptionsItemSelected(item);
         }
 
-        public void SyncMaps() => this.Binder.GetMapDownloadBackgroundService().SyncMaps();
+        public void StartSync() => this.Binder.GetService().SyncMaps();
 
-        public MapSyncProgressStatus CurrentProgress => this.Binder.GetMapDownloadBackgroundService().CurrentProgress;
+        public MapSyncProgressStatus CurrentProgress => this.Binder.GetService().CurrentProgress;
     }
 }

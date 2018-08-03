@@ -1,5 +1,5 @@
 ﻿using Moq;
-using MvvmCross.Test.Core;
+using MvvmCross.Tests;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;

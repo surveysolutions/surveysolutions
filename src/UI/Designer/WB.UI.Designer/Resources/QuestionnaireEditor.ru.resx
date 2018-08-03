@@ -1115,8 +1115,23 @@
   <data name="IsWarning" xml:space="preserve">
     <value>Предупреждение</value>
   </data>
-    <data name="GeometryType" xml:space="preserve">
+  <data name="GeometryType" xml:space="preserve">
     <value>Тип геометрии</value>
     <comment>Тип геометрии</comment>
+  </data>
+  <data name="CollaboratorsSettings" xml:space="preserve">
+    <value>Совместная работа</value>
+  </data>
+  <data name="PublicAccessSettings" xml:space="preserve">
+    <value>Публичный доступ</value>
+  </data>
+  <data name="QuestionnaireSettings" xml:space="preserve">
+    <value>Настройки опросника</value>
+  </data>
+  <data name="SettingsQuestionnaireVariable" xml:space="preserve">
+    <value>Переменная опросника</value>
+  </data>
+  <data name="HelpCombobox" xml:space="preserve">
+    <value>Комбобокс - это комбинация выпадающего списка и однострочного текстового поля. Опции могут быть выбраны либо непостредственно из списка, либо набором значиния в поле</value>
   </data>
 </root>

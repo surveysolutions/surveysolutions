@@ -7,7 +7,10 @@ export default class HqRouter {
     constructor(options) {
         this.options = Object.assign({
             base: window.input.settings.config.basePath,
-            mode: "history"
+            mode: "history",
+            scrollBehavior(to, from, savedPosition) {
+                return { x: 0, y: 0 }
+            }
         }, options);
     }
 

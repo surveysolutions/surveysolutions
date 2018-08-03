@@ -4,8 +4,15 @@ using Android.Widget;
 
 namespace WB.UI.Tester
 {
+    // ReSharper disable once UnusedMember.Global
     public class LinkerPleaseInclude
     {
+        public void Include()
+        {
+            // ReSharper disable once ObjectCreationAsStatement
+            new System.Globalization.ThaiBuddhistCalendar();
+        }
+
         public void Include(Button button)
         {
             button.Click += (s, e) => button.Text = button.Text + "";

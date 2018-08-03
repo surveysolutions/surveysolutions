@@ -1,19 +1,20 @@
 using System;
 using System.Linq.Expressions;
-using WB.Core.BoundedContexts.Interviewer.Properties;
-using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
+using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 {
     public class CompletedInterviewsViewModel : BaseInterviewsViewModel
     {
         public override GroupStatus InterviewStatus => GroupStatus.Completed;
-        protected override string TabTitle => InterviewerUIResources.Dashboard_CompletedLinkText;
-        protected override string TabDescription => InterviewerUIResources.Dashboard_CompletedTabText;
+        public override string TabTitle => InterviewerUIResources.Dashboard_CompletedLinkText;
+        public override string TabDescription => InterviewerUIResources.Dashboard_CompletedTabText;
         
         private readonly IPrincipal principal;
 

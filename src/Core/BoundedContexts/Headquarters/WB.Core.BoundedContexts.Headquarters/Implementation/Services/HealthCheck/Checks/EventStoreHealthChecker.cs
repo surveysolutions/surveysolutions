@@ -6,9 +6,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.HealthChe
 {
     public class EventStoreHealthChecker : IAtomicHealthCheck<EventStoreHealthCheckResult>
     {
-        private readonly IStreamableEventStore eventStore;
+        private readonly IHeadquartersEventStore eventStore;
 
-        public EventStoreHealthChecker(IStreamableEventStore eventStore)
+        public EventStoreHealthChecker(IHeadquartersEventStore eventStore)
         {
             this.eventStore = eventStore;
         }

@@ -4,6 +4,7 @@
 
         $scope.questionnaire = questionnaire;
         $scope.questionnaire.editedTitle = questionnaire.title;
+        $scope.questionnaire.editedVariable = questionnaire.variable;
 
         $scope.shareTypeOptions = [{ text: $i18next.t('SettingsShareEdit'), name: "Edit" }, { name: "View", text: $i18next.t('SettingsShareView') }];
         
@@ -25,30 +26,41 @@
         };
 
         $scope.invite = function () {
-            var request = shareService.findUserByEmail($scope.viewModel.shareWith);
+            var request = shareService.findUserByEmailOrLogin($scope.viewModel.shareWith);
             request.then(function (result) {
                 var data = result.data;
                 $scope.viewModel.doesUserExist = data.doesUserExist;
 
                 if (data.doesUserExist) {
-                    var shareRequest = shareService.shareWith($scope.viewModel.shareWith, $scope.questionnaire.questionnaireId, $scope.viewModel.shareType.name);
+                    var shareRequest = shareService.shareWith(
+                        $scope.viewModel.shareWith, 
+                        $scope.questionnaire.questionnaireId, 
+                        $scope.viewModel.shareType.name);
                     shareRequest.then(function () {
                         if (_.where($scope.questionnaire.sharedPersons, { email: $scope.viewModel.shareWith }).length === 0) {
-                            $scope.questionnaire.sharedPersons.push({ email: $scope.viewModel.shareWith, shareType: $scope.viewModel.shareType });
+                            $scope.questionnaire.sharedPersons.push({
+                                 email: data.email, 
+                                 login: data.userName,
+                                 userId: data.id,
+                                 shareType: $scope.viewModel.shareType
+                            });
                         }
 
                         $scope.viewModel.shareWith = '';
                         $scope.viewModel.doesUserExist = true;
+                        $scope.viewModel.shareForm.$setPristine();
                     });
                 }
             });
         };
 
         $scope.updateTitle = function () {
-            var updateRequest = shareService.udpateQuestionnaire($scope.questionnaire.questionnaireId, $scope.questionnaire.editedTitle, $scope.questionnaire.isPublic);
+            var updateRequest = shareService.udpateQuestionnaire($scope.questionnaire.questionnaireId, $scope.questionnaire.editedTitle, $scope.questionnaire.editedVariable, $scope.questionnaire.isPublic);
             updateRequest.then(function () {
                 $scope.questionnaire.title = $scope.questionnaire.editedTitle;
+                $scope.questionnaire.variable = $scope.questionnaire.editedVariable;
                 $uibModalInstance.close();
+                $scope.questionnaireForm.$setPristine();
             });
         };
 
@@ -62,7 +74,7 @@
         };
 
         $scope.togglePublicity = function () {
-            var updateRequest = shareService.udpateQuestionnaire($scope.questionnaire.questionnaireId, $scope.questionnaire.title, !$scope.questionnaire.isPublic);
+            var updateRequest = shareService.udpateQuestionnaire($scope.questionnaire.questionnaireId, $scope.questionnaire.title,  $scope.questionnaire.variable, !$scope.questionnaire.isPublic);
             updateRequest.then(function () {
                 $scope.questionnaire.isPublic = !$scope.questionnaire.isPublic;
             });
