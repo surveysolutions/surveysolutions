@@ -9,6 +9,7 @@ using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.WebApi;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Questionnaire.Api;
@@ -111,7 +112,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public Task SendBackupAsync(string filePath, CancellationToken token)
         {
-            return Service.SendBackupAsync(filePath, token);
+            return onlineService.SendBackupAsync(filePath, token);
         }
 
         public Task<List<InterviewApiView>> GetInterviewsAsync(CancellationToken token)
