@@ -46,7 +46,6 @@ namespace WB.UI.Interviewer.ServiceLocation
             registry.Bind<IInterviewUniqueKeyGenerator, InterviewerInterviewUniqueKeyGenerator>();
             registry.Bind<IGroupStateCalculationStrategy, EnumeratorGroupStateCalculationStrategy>();
 
-            registry.BindAsSingleton<ISynchronizationMode, SynchronizationModeSelector>();
             registry.Bind<ISynchronizationService, SyncronizationServiceWrapper>();
 
             registry.Bind<IInterviewerSynchronizationService, SynchronizationService>();

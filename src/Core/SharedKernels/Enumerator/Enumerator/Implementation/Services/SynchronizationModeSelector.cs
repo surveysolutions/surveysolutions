@@ -1,4 +1,6 @@
-namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services.OfflineSync
+using WB.Core.SharedKernels.Enumerator.Services;
+
+namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
     public class SynchronizationModeSelector : ISynchronizationMode
     {
