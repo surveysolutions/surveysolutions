@@ -66,13 +66,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 .Select(interview => interview.InterviewId)
                 .Where(IsNotPresentOnHq)
                 .Concat(obsoleteInterviews)
-                .ToList();
+                .ToArray();
 
             var remoteInterviewsToCreate = remoteInterviews
                 .Where(interview => (!localInterviewIds.Contains(interview.Id) && ShouldBeDownloadedBasedOnEventSequence(interview)) || obsoleteInterviews.Contains(interview.Id))
                 .ToList();
 
-            this.interviewsRemover.RemoveInterviews(localInterviewIdsToRemove, this.Context.Statistics, this.Context.Progress);
+            this.interviewsRemover.RemoveInterviews(this.Context.Statistics, this.Context.Progress, localInterviewIdsToRemove);
 
             await this.CreateInterviewsAsync(remoteInterviewsToCreate, this.Context.Statistics, this.Context.Progress, this.Context.CancellationToken);
         }

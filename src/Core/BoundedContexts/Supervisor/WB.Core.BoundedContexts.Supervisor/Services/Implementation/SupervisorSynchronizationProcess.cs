@@ -57,12 +57,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
             IEnumeratorEventStorage eventStore,
             IPlainStorage<InterviewSequenceView, Guid> interviewSequenceViewRepository) : base(synchronizationService,
             interviewViewRepository, principal, logger,
-            userInteractionService, questionnairesAccessor, interviewFactory, interviewMultimediaViewStorage,
-            imagesStorage,
-            logoSynchronizer, cleanupService, assignmentsSynchronizer, questionnaireDownloader,
+            userInteractionService, assignmentsSynchronizer,
             httpStatistician,
-            assignmentsStorage, audioFileStorage, diagnosticService, auditLogSynchronizer, auditLogService,
-            eventBus, eventStore, interviewSequenceViewRepository, supervisorSettings)
+            assignmentsStorage, auditLogSynchronizer, auditLogService, supervisorSettings)
         {
             this.principal = principal;
             this.supervisorSettings = supervisorSettings;
@@ -107,29 +104,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
             this.principal.SignIn(localSupervisor.Name, credentials.Password, true);
         }
 
-        protected override int GetApplicationVersionCode()
-        {
-            return supervisorSettings.GetApplicationVersionCode();
-        }
-
-        protected override Task SyncronizeCensusQuestionnaires(IProgress<SyncProgressInfo> progress,
-            SynchronizationStatistics statistics,
-            CancellationToken cancellationToken)
-        {
-            return Task.CompletedTask; // supervisor does not support census
-        }
-
-        protected override Task<List<Guid>> FindObsoleteInterviewsAsync(IEnumerable<InterviewView> localInterviews,
+        protected virtual Task<List<Guid>> FindObsoleteInterviewsAsync(IEnumerable<InterviewView> localInterviews,
             IEnumerable<InterviewApiView> remoteInterviews,
             IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken)
         {
             return Task.FromResult(new List<Guid>());
-        }
-
-        protected override IReadOnlyCollection<InterviewView> GetInterviewsForUpload()
-        {
-            return this.interviewViewRepository.Where(interview =>
-                interview.Status == InterviewStatus.ApprovedBySupervisor);
         }
     }
 }

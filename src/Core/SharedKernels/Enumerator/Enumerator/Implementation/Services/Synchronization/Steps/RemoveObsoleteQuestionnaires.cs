@@ -11,7 +11,7 @@ using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization.Steps
 {
-    public class CheckObsoleteQuestionnairesAsync : SynchronizationStep
+    public class RemoveObsoleteQuestionnaires : SynchronizationStep
     {
         private readonly ISynchronizationService synchronizationService;
         private readonly IInterviewerQuestionnaireAccessor questionnairesAccessor;
@@ -19,7 +19,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         private readonly IAttachmentsCleanupService attachmentsCleanupService;
         private readonly IInterviewsRemover interviewsRemover;
 
-        public CheckObsoleteQuestionnairesAsync(ISynchronizationService synchronizationService, IInterviewerQuestionnaireAccessor questionnairesAccessor, IPlainStorage<InterviewView> interviewViewRepository,
+        public RemoveObsoleteQuestionnaires(ISynchronizationService synchronizationService, IInterviewerQuestionnaireAccessor questionnairesAccessor, IPlainStorage<InterviewView> interviewViewRepository,
             IAttachmentsCleanupService attachmentsCleanupService, IInterviewsRemover interviewsRemover,
             ILogger logger,
             int sortOrder) : base(sortOrder, synchronizationService, logger)
@@ -66,8 +66,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 var removedInterviews = this.interviewViewRepository
                     .Where(interview => interview.QuestionnaireId == questionnaireId)
                     .Select(interview => interview.InterviewId)
-                    .ToList();
-                this.interviewsRemover.RemoveInterviews(removedInterviews, this.Context.Statistics, this.Context.Progress);
+                    .ToArray();
+                this.interviewsRemover.RemoveInterviews(this.Context.Statistics, this.Context.Progress, removedInterviews);
 
                 this.questionnairesAccessor.RemoveQuestionnaire(questionnaireIdentity);
             }

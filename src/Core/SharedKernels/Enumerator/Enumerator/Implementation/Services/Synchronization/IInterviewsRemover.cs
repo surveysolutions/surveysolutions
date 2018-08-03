@@ -7,6 +7,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 {
     public interface IInterviewsRemover
     {
-        void RemoveInterviews(List<Guid> localInterviewIdsToRemove, SynchronizationStatistics contextStatistics, IProgress<SyncProgressInfo> contextProgress);
+        void RemoveInterviews(SynchronizationStatistics contextStatistics,
+            IProgress<SyncProgressInfo> contextProgress, params Guid[] localInterviewIdsToRemove);
     }
 }
