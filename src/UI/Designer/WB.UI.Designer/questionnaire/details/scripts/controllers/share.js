@@ -74,7 +74,7 @@
         };
 
         $scope.togglePublicity = function () {
-            var updateRequest = shareService.udpateQuestionnaire($scope.questionnaire.questionnaireId, $scope.questionnaire.title, !$scope.questionnaire.isPublic);
+            var updateRequest = shareService.udpateQuestionnaire($scope.questionnaire.questionnaireId, $scope.questionnaire.title,  $scope.questionnaire.variable, !$scope.questionnaire.isPublic);
             updateRequest.then(function () {
                 $scope.questionnaire.isPublic = !$scope.questionnaire.isPublic;
             });
