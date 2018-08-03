@@ -9,7 +9,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
     [DebuggerDisplay("{ToString()}")]
     public class InterviewTreeStaticText : InterviewTreeLeafNode, ISubstitutable, IInterviewTreeValidateable
     {
-        public SubstitutionText Title { get; private set; }
+        public sealed override SubstitutionText Title { get; protected set; }
 
         public SubstitutionText[] ValidationMessages { get; private set; }
 

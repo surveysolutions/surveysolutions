@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -11,10 +12,8 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
-using WB.Core.SharedKernel.Structures.TabletInformation;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.UI.Headquarters.Controllers;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Resources;
@@ -35,12 +34,14 @@ namespace WB.UI.Headquarters.API
 
         private string ResponseInterviewerFileName = "interviewer.apk";
 
+        private string ResponseSupervisorFileName = "supervisor.apk";
+
         public InterviewerSyncController(ICommandService commandService,
             IAuthorizedUser authorizedUser,
             ILogger logger,
             IImageFileStorage imageFileRepository,
             IFileSystemAccessor fileSystemAccessor,
-            ISyncProtocolVersionProvider syncVersionProvider,
+            IInterviewerSyncProtocolVersionProvider syncVersionProvider,
             ITabletInformationService tabletInformationService,
             IInterviewPackagesService incomingSyncPackagesQueue, 
             IUserViewFactory userViewFactory,
@@ -92,51 +93,58 @@ namespace WB.UI.Headquarters.API
             return this.Request.CreateResponse(HttpStatusCode.OK);
         }
 
-        [HttpPost]
-        [ApiBasicAuth(new[] { UserRoles.Interviewer })]
-        public HttpResponseMessage PostPackage(PostPackageRequest request)
-        {
-            this.incomingSyncPackagesQueue.StoreOrProcessPackage(item: request.SynchronizationPackage);
-
-            return this.Request.CreateResponse(HttpStatusCode.OK);
-        }
-
         [HttpGet]
         [AllowAnonymous]
         public HttpResponseMessage GetLatestVersion()
         {
-            string pathToFile = this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(InterviewerApkInfo.Directory), InterviewerApkInfo.FileName);
+            string pathToFile = this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(ClientApkInfo.Directory), ClientApkInfo.InterviewerFileName);
 
-            return this.CheckFileAndResponse(pathToFile);
+            return this.CheckFileAndResponse(pathToFile, this.ResponseInterviewerFileName);
         }
 
-        private HttpResponseMessage CheckFileAndResponse(string pathToFile)
+        [HttpGet]
+        [AllowAnonymous]
+        public HttpResponseMessage GetLatestSupervisor()
+        {
+            string pathToFile = this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(ClientApkInfo.Directory), ClientApkInfo.SupervisorFileName);
+
+            return this.CheckFileAndResponse(pathToFile, ResponseSupervisorFileName);
+        }
+
+        private HttpResponseMessage CheckFileAndResponse(string pathToFile, string responseFileName)
         {
             if (this.fileSystemAccessor.IsFileExists(pathToFile))
             {
-                var response = new HttpResponseMessage(HttpStatusCode.OK)
-                {
-                    Content = new StreamContent(this.fileSystemAccessor.ReadFile(pathToFile))
-                };
-                response.Content.Headers.ContentType = new MediaTypeHeaderValue("application/vnd.android.package-archive");
-                response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
-                {
-                    FileName = this.ResponseInterviewerFileName
-                };
-
-                return response;
+                return HttpResponseMessage(pathToFile, responseFileName);
             }
 
             return this.Request.CreateErrorResponse(HttpStatusCode.NotFound, TabletSyncMessages.FileWasNotFound);
+        }
+
+        private HttpResponseMessage HttpResponseMessage(string pathToFile, string responseFileName)
+        {
+            if (!this.fileSystemAccessor.IsFileExists(pathToFile))
+                return this.Request.CreateErrorResponse(HttpStatusCode.NotFound, TabletSyncMessages.FileWasNotFound);
+
+            Stream fileStream = new FileStream(pathToFile, FileMode.Open, FileAccess.Read);
+            var response = new ProgressiveDownload(this.Request).ResultMessage(fileStream,
+                @"application/vnd.android.package-archive");
+
+            response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue(@"attachment")
+            {
+                FileName = responseFileName
+            };
+
+            return response;
         }
 
         [HttpGet]
         [AllowAnonymous]
         public HttpResponseMessage GetLatestExtendedVersion()
         {
-            string pathToFile = this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(InterviewerApkInfo.Directory), InterviewerApkInfo.ExtendedFileName);
+            string pathToFile = this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(ClientApkInfo.Directory), ClientApkInfo.InterviewerExtendedFileName);
 
-            return this.CheckFileAndResponse(pathToFile);
+            return this.CheckFileAndResponse(pathToFile, this.ResponseInterviewerFileName);
         }
 
         [HttpGet]
@@ -144,27 +152,13 @@ namespace WB.UI.Headquarters.API
         public bool CheckNewVersion(int versionCode)
         {
             string pathToInterviewerApp =
-                this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(InterviewerApkInfo.Directory), InterviewerApkInfo.FileName);
+                this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(ClientApkInfo.Directory), ClientApkInfo.InterviewerFileName);
 
             int? interviewerApkVersion = !this.fileSystemAccessor.IsFileExists(pathToInterviewerApp)
                 ? null
                 : this.androidPackageReader.Read(pathToInterviewerApp).Version;
             
             return interviewerApkVersion.HasValue && (interviewerApkVersion.Value > versionCode);
-        }
-
-        [HttpPost]
-        [AllowAnonymous]
-        public void PostInfoPackage(TabletInformationPackage tabletInformationPackage)
-        {
-            var user = this.userViewFactory.GetUser(new UserViewInputModel(tabletInformationPackage.AndroidId));
-
-            this.tabletInformationService.SaveTabletInformation(
-                content: Convert.FromBase64String(tabletInformationPackage.Content),
-                androidId: tabletInformationPackage.AndroidId,
-                user: user);
-
-            //log record
         }
     }
 }

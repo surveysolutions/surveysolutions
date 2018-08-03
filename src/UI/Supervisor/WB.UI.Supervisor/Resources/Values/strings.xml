@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="vertical_ellipsis">&#8942;</string>
+    <string name="lorem_ipsum_long">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec sagittis rhoncus efficitur. Nam id lobortis justo, vel tincidunt est. Integer scelerisque justo lacinia ultricies eleifend. Cras ac lacinia nisi. Curabitur a purus eu libero iaculis pulvinar. Etiam ut placerat magna. Cras vitae justo ut justo accumsan dictum. Nunc vulputate bibendum congue.
+
+Sed sed nisl id lectus posuere sodales. Nulla consectetur velit vitae euismod lobortis. Integer condimentum, arcu nec rhoncus lobortis, lacus libero varius mauris, pretium feugiat est tellus eu risus. Quisque ac purus magna. Mauris efficitur lacus ante, non tristique risus fringilla id. Sed varius auctor tellus. In facilisis placerat ipsum, id varius urna. Cras ac sollicitudin purus. Curabitur pellentesque sapien at placerat fermentum. In hac habitasse platea dictumst. Proin est erat, aliquam eu elit in, mattis pharetra odio. Donec semper gravida quam non scelerisque. Donec porta orci sit amet fringilla malesuada.
+
+Nulla aliquam magna ut est condimentum, pharetra laoreet lacus vehicula. Mauris finibus semper tempus. Mauris at erat arcu. Mauris vulputate odio at nulla euismod, sed efficitur erat molestie. In vitae libero quis erat viverra eleifend at eu lorem. Aenean quis cursus mi. Aenean dictum, mi a consequat eleifend, eros velit feugiat orci, quis semper magna justo sit amet elit. Aliquam consectetur, erat vel suscipit tincidunt, ipsum felis ornare orci, vitae luctus justo eros a purus. Suspendisse quis nibh et diam aliquet pretium. Quisque ut fermentum nisl, feugiat lobortis magna. Nullam pharetra imperdiet consectetur. Etiam augue augue, cursus quis pharetra sed, fringilla in nisi. Nullam ac sagittis nisi, sit amet aliquam orci. Phasellus metus tellus, tempus id tincidunt sed, gravida et lorem. Proin at mauris nec sem fringilla pharetra.
+
+Donec vitae scelerisque mi. Sed eu sagittis urna, quis imperdiet tortor. Sed quis diam sit amet nulla accumsan volutpat. Nulla facilisi. Donec rhoncus commodo faucibus. Donec iaculis at nisl at pellentesque. Etiam vel pharetra lorem. Praesent bibendum dui quam, vel eleifend dui interdum sit amet. Praesent eget feugiat nisi. Integer bibendum diam lectus, rutrum dignissim augue venenatis a.
+
+Fusce non feugiat eros. Pellentesque hendrerit augue ligula, id congue orci eleifend nec. Suspendisse at ultrices ex. Nullam ullamcorper pellentesque pretium. Donec ut turpis ante. Nulla a hendrerit sapien. Aliquam vel pharetra purus. Pellentesque laoreet molestie quam at rutrum. Duis pellentesque, felis id lacinia posuere, nulla nisi semper odio, ac suscipit turpis tortor nec leo. Nulla fringilla, turpis quis vestibulum finibus, arcu neque dapibus dui, nec porta tortor ante ac sem.</string>
+   
+    
+    <string name="appbar_scrolling_view_behavior" translatable="false">android.support.design.widget.AppBarLayout$ScrollingViewBehavior</string>
+    
+</resources>

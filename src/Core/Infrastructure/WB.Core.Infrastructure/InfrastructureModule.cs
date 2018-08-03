@@ -19,7 +19,7 @@ namespace WB.Core.Infrastructure
             registry.Bind<IPlainAggregateRootRepository, PlainAggregateRootRepository>();
         }
 
-        public Task Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
             return Task.CompletedTask;
         }

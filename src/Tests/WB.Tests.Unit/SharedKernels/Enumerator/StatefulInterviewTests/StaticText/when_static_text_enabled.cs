@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests.StaticTe
             BecauseOf();
         }
 
-        private void BecauseOf() => statefulInterview.Apply(Create.Event.StaticTextsEnabled(staticTextIdentity));
+        private void BecauseOf() => statefulInterview.Apply(Create.Event.StaticTextsEnabled(staticTexts:staticTextIdentity));
 
         [NUnit.Framework.Test] public void should_enable_it () => statefulInterview.IsEnabled(staticTextIdentity).Should().BeTrue();
 

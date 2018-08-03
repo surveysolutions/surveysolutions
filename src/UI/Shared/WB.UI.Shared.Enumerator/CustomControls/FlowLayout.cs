@@ -5,10 +5,9 @@ using Android.Content;
 using Android.Graphics;
 using Android.Util;
 using Android.Views;
-using MvvmCross.Binding;
 using MvvmCross.Binding.Attributes;
 using MvvmCross.Binding.BindingContext;
-using MvvmCross.Binding.Droid.Views;
+using MvvmCross.Platforms.Android.Binding.Views;
 
 namespace WB.UI.Shared.Enumerator.CustomControls
 {
@@ -252,7 +251,6 @@ namespace WB.UI.Shared.Enumerator.CustomControls
                     this._adapter.DataSetChanged += new EventHandler<NotifyCollectionChangedEventArgs>(this.AdapterOnDataSetChanged);
                 if (this._adapter != null)
                     return;
-                MvxBindingTrace.Warning("Setting Adapter to null is not recommended - you might lose ItemsSource binding when doing this");
             }
         }
 

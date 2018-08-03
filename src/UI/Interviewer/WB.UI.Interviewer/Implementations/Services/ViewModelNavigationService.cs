@@ -1,9 +1,8 @@
 using System;
 using System.Threading.Tasks;
 using Android.Content;
-using MvvmCross.Core.Navigation;
-using MvvmCross.Core.ViewModels;
-using MvvmCross.Platform.Droid.Platform;
+using MvvmCross.Navigation;
+using MvvmCross.Platforms.Android;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.Infrastructure.CommandBus;
@@ -11,6 +10,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
+using WB.Core.SharedKernels.Enumerator.Views;
 using WB.UI.Interviewer.Activities;
 using WB.UI.Interviewer.ViewModel;
 using WB.UI.Shared.Enumerator.Services;
@@ -58,6 +58,11 @@ namespace WB.UI.Interviewer.Implementations.Services
         {
             base.RestartApp(typeof(SplashActivity));
         }
+
+        public override Task NavigateToFinishInstallationAsync()
+            => this.NavigateToAsync<FinishInstallationViewModel>();
+
+        public override Task NavigateToMapsAsync() => this.NavigateToAsync<MapsViewModel>();
 
         public override Task NavigateToInterviewAsync(string interviewId, NavigationIdentity navigationIdentity)
             => this.navigationService.Navigate<InterviewViewModel, InterviewViewModelArgs>(new InterviewViewModelArgs

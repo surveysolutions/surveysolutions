@@ -20,9 +20,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Synchronizat
         public void Should_not_change_interview_id()
         {
             var interview = Create.AggregateRoot.Interview();
-            interview.Apply(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, ""));
-            interview.Apply(new InterviewerAssigned(userId, userId, DateTime.Now));
-            interview.Apply(new InterviewKeyAssigned(Create.Entity.InterviewKey(6)));
+            interview.Apply(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, "", DateTimeOffset.Now));
+            interview.Apply(new InterviewerAssigned(userId, userId, DateTimeOffset.Now));
+            interview.Apply(new InterviewKeyAssigned(Create.Entity.InterviewKey(6), DateTimeOffset.Now));
 
             var newKey = Create.Entity.InterviewKey(8);
             var command = Create.Command.SynchronizeInterviewEventsCommand(

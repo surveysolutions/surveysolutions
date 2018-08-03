@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.Infrastructure.Modularity;
 using WB.UI.Designer.Code.ConfigurationManager;
 using WB.UI.Designer.Code.Implementation;
 using WB.UI.Designer.Implementation.Services;
@@ -47,6 +48,8 @@ namespace WB.UI.Designer.Code
 
         public void Load(IWebIocRegistry registry)
         {
+            registry.BindHttpFilter<UnderConstructionHttpFilter>(System.Web.Http.Filters.FilterScope.Controller, 0);
+            registry.BindMvcFilter<UnderConstructionMvcFilter>(FilterScope.First, 0);
             registry.BindMvcFilterWhenActionMethodHasNoAttribute<PlainTransactionFilter, NoTransactionAttribute>(FilterScope.First, 0);
             registry.BindHttpFilterWhenActionMethodHasNoAttribute<PlainApiTransactionFilter, NoTransactionAttribute>(System.Web.Http.Filters.FilterScope.Global);
 
@@ -69,7 +72,7 @@ namespace WB.UI.Designer.Code
             registry.Bind<IDeskAuthenticationService, DeskAuthenticationService>();
         }
 
-        public Task Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
             return Task.CompletedTask;
         }

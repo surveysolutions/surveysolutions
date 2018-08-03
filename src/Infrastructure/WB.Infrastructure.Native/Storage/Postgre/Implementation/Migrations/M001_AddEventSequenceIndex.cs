@@ -10,16 +10,17 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation.Migrations
 
         public override void Up()
         {
-                if (Schema.Table(tableName).Exists())
-                {
-                    Execute.Sql($" delete from {schemaName}.{tableName} where exists(select 1 from {schemaName}.{tableName} ee2 where {schemaName}.{tableName}.eventsourceid = ee2.eventsourceid AND {schemaName}.{tableName}.eventsequence = ee2.eventsequence AND {schemaName}.{tableName}.globalsequence < ee2.globalsequence);");
+            if (Schema.Table(tableName).Exists())
+            {
+                Execute.Sql(
+                    $" delete from {schemaName}.{tableName} where exists(select 1 from {schemaName}.{tableName} ee2 where {schemaName}.{tableName}.eventsourceid = ee2.eventsourceid AND {schemaName}.{tableName}.eventsequence = ee2.eventsequence AND {schemaName}.{tableName}.globalsequence < ee2.globalsequence);");
 
-                    if (!Schema.Table(tableName).Index("event_source_eventsequence_indx").Exists())
-                    {
-                        Create.Index("event_source_eventsequence_indx")
-                            .OnTable(tableName)
-                            .OnColumn("eventsourceid").Ascending()
-                            .OnColumn("eventsequence").Ascending().WithOptions().Unique();
+                if (!Schema.Table(tableName).Index("event_source_eventsequence_indx").Exists())
+                {
+                    Create.Index("event_source_eventsequence_indx")
+                        .OnTable(tableName)
+                        .OnColumn("eventsourceid").Ascending()
+                        .OnColumn("eventsequence").Ascending().WithOptions().Unique();
                 }
             }
         }

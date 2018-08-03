@@ -1,7 +1,7 @@
 ﻿using System;
 using Main.Core.Documents;
 using Moq;
-using MvvmCross.Plugins.Messenger;
+using MvvmCross.Plugin.Messenger;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable;
@@ -93,6 +93,12 @@ namespace WB.Tests.Integration
                         liteEventRegistry,
                         interviewRepository: interviewsRepository), Mock.Of<InterviewStateViewModel>(),
                         IntegrationCreate.AnswerNotifier(liteEventRegistry)));
+
+            Mock.Get(ServiceLocator.Current)
+                .Setup(locator => locator.GetInstance<SideBarOverviewViewModel>())
+                .Returns(() => new SideBarOverviewViewModel(mvxMessenger, Create.ViewModel.DynamicTextViewModel(
+                    liteEventRegistry,
+                    interviewRepository: interviewsRepository), Mock.Of<InterviewStateViewModel>()));
 
             Mock.Get(ServiceLocator.Current)
                 .Setup(locator => locator.GetInstance<SideBarSectionViewModel>())

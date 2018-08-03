@@ -6,7 +6,9 @@ using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Enumerator.Denormalizer;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Tests.Abc;
 using it = Moq.It;
 
@@ -56,7 +58,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.DashboardDenormalizerTests
         [NUnit.Framework.Test] public void should_store_longitude_from_answer_to_prefilled_GPS_question_to_result_dashboard_item () =>
             dashboardItem.LocationLongitude.Should().Be(prefilledGpsQuestionLongitude);
 
-        private static InterviewerDashboardEventHandler denormalizer;
+        private static InterviewDashboardEventHandler denormalizer;
         private static IPublishedEvent<InterviewSynchronized> @event;
         private static InterviewView dashboardItem;
         private static Guid prefilledGpsQuestionId = Guid.Parse("11111111111111111111111111111111");

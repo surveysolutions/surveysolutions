@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using MvvmCross.Core.ViewModels;
-using MvvmCross.Platform;
+using MvvmCross.Commands;
+using MvvmCross.ViewModels;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
@@ -12,7 +12,6 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.Enumerator.Properties;
-using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;

@@ -1284,6 +1284,169 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Bluetooth state cannot be determined by the application. Please reboot both Interviewer and Supervisor devices and try synchronization again.
+        /// </summary>
+        public static string SendToSupervisor_BluetoothError {
+            get {
+                return ResourceManager.GetString("SendToSupervisor_BluetoothError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Check that supervisor&apos;s device has wifi and bluetooth turned on and you are within couple of meters from it.
+        /// </summary>
+        public static string SendToSupervisor_CheckSupervisorDevice {
+            get {
+                return ResourceManager.GetString("SendToSupervisor_CheckSupervisorDevice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Make sure both devices are in close proximity; WIFI and Bluetooth should be enabled on both devices; Supervisor application should be opened on supervisor&apos;s device.
+        /// </summary>
+        public static string SendToSupervisor_ConnectionFailed {
+            get {
+                return ResourceManager.GetString("SendToSupervisor_ConnectionFailed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Connected to supervisor&apos;s device.
+        /// </summary>
+        public static string SendToSupervisor_DeviceConnectionAccepted {
+            get {
+                return ResourceManager.GetString("SendToSupervisor_DeviceConnectionAccepted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Waiting for connection approval from supervisor.
+        /// </summary>
+        public static string SendToSupervisor_DeviceConnectionAccepting {
+            get {
+                return ResourceManager.GetString("SendToSupervisor_DeviceConnectionAccepting", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Supervisor&apos;s device found. Requesting connection.
+        /// </summary>
+        public static string SendToSupervisor_DeviceFound {
+            get {
+                return ResourceManager.GetString("SendToSupervisor_DeviceFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Looking for supervisor&apos;s device.
+        /// </summary>
+        public static string SendToSupervisor_LookingForSupervisor {
+            get {
+                return ResourceManager.GetString("SendToSupervisor_LookingForSupervisor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Moving all completed interviews to supervisor&apos;s device.
+        /// </summary>
+        public static string SendToSupervisor_MovingToSupervisorDevice {
+            get {
+                return ResourceManager.GetString("SendToSupervisor_MovingToSupervisorDevice", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Moving all completed interviews to &apos;{0}&apos;.
+        /// </summary>
+        public static string SendToSupervisor_MovingToSupervisorFormat {
+            get {
+                return ResourceManager.GetString("SendToSupervisor_MovingToSupervisorFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Note: This action will take more time than usual, do not turn of this device.
+        /// </summary>
+        public static string SendToSupervisor_Note {
+            get {
+                return ResourceManager.GetString("SendToSupervisor_Note", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Retry.
+        /// </summary>
+        public static string SendToSupervisor_Retry {
+            get {
+                return ResourceManager.GetString("SendToSupervisor_Retry", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Some interviews are now on another device.
+        /// </summary>
+        public static string SendToSupervisor_SomeInterviewsOnSupervisor {
+            get {
+                return ResourceManager.GetString("SendToSupervisor_SomeInterviewsOnSupervisor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Transfer has not been started.
+        ///Supervisor&apos;s device can not be located.
+        /// </summary>
+        public static string SendToSupervisor_SupervisorNotFound {
+            get {
+                return ResourceManager.GetString("SendToSupervisor_SupervisorNotFound", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Transfer was aborted on second device..
+        /// </summary>
+        public static string SendToSupervisor_SupervisorTerminateTransfering {
+            get {
+                return ResourceManager.GetString("SendToSupervisor_SupervisorTerminateTransfering", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Transfer is finished. All completed interviews are now on another device.
+        /// </summary>
+        public static string SendToSupervisor_SyncCompleted {
+            get {
+                return ResourceManager.GetString("SendToSupervisor_SyncCompleted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Transfer is finished. {0} interview(s) failed to synchronize.
+        /// </summary>
+        public static string SendToSupervisor_SyncCompletedWithErrorsFormat {
+            get {
+                return ResourceManager.GetString("SendToSupervisor_SyncCompletedWithErrorsFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Transfer in progress.
+        /// </summary>
+        public static string SendToSupervisor_TransferInProgress {
+            get {
+                return ResourceManager.GetString("SendToSupervisor_TransferInProgress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Transfer was aborted.
+        /// </summary>
+        public static string SendToSupervisor_TransferWasAborted {
+            get {
+                return ResourceManager.GetString("SendToSupervisor_TransferWasAborted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No connection to the Survey Solutions Supervisor. Please make sure that the website is available..
         /// </summary>
         public static string ServiceUnavailable {

@@ -20,7 +20,7 @@ namespace WB.UI.Headquarters.Code
         {
             get
             {
-                string pathToInterviewerApp = this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(InterviewerApkInfo.Directory), InterviewerApkInfo.FileName);
+                string pathToInterviewerApp = this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(ClientApkInfo.Directory), ClientApkInfo.InterviewerFileName);
 
                 int? interviewerApkVersion = !this.fileSystemAccessor.IsFileExists(pathToInterviewerApp)
                     ? null

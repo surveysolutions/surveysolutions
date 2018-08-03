@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
-using MvvmCross.Core.ViewModels;
-using MvvmCross.Platform.Core;
+using MvvmCross.Base;
+using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -156,6 +156,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private async void SaveAnswers()
         {
+            if (!this.principal.IsAuthenticated) return;
+
             var answerViewModels = this.Answers.OfType<TextListItemViewModel>().ToList();
 
             if (answerViewModels.Any(x => string.IsNullOrWhiteSpace(x.Title)))
@@ -171,7 +173,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 userId: this.principal.CurrentUserIdentity.UserId,
                 questionId: this.questionIdentity.Id,
                 rosterVector: this.questionIdentity.RosterVector,
-                answerTime: DateTime.UtcNow,
                 answers: answers);
 
             try

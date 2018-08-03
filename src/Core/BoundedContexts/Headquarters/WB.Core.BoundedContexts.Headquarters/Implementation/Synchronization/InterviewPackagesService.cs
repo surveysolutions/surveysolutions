@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 using Main.Core.Events;
+using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
@@ -17,11 +17,11 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Events;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Enumerator.Native.WebInterview;
-using WB.Infrastructure.Native.Monitoring;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
 {
@@ -31,6 +31,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
         private readonly IPlainStorageAccessor<InterviewPackage> interviewPackageStorage;
         private readonly IPlainStorageAccessor<BrokenInterviewPackage> brokenInterviewPackageStorage;
         private readonly IPlainStorageAccessor<ReceivedPackageLogEntry> packagesTracker;
+        private readonly IHeadquartersEventStore eventStore;
         private readonly ILogger logger;
         private readonly IJsonAllTypesSerializer serializer;
         private readonly ICommandService commandService;
@@ -44,6 +45,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             IPlainStorageAccessor<InterviewPackage> interviewPackageStorage,
             IPlainStorageAccessor<BrokenInterviewPackage> brokenInterviewPackageStorage,
             IPlainStorageAccessor<ReceivedPackageLogEntry> packagesTracker,
+            IHeadquartersEventStore eventStore,
             ILogger logger,
             IJsonAllTypesSerializer serializer,
             ICommandService commandService,
@@ -56,6 +58,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             this.interviewPackageStorage = interviewPackageStorage;
             this.brokenInterviewPackageStorage = brokenInterviewPackageStorage;
             this.packagesTracker = packagesTracker;
+            this.eventStore = eventStore;
             this.logger = logger;
             this.serializer = serializer;
             this.commandService = commandService;
@@ -64,11 +67,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             this.interviews = interviews;
             this.transactionManager = transactionManager;
             this.userRepository = userRepository;
-        }
-
-        [Obsolete("Since v 5.8")]
-        public virtual void StoreOrProcessPackage(string item)
-        {
         }
 
         public void StoreOrProcessPackage(InterviewPackage interviewPackage)
@@ -217,6 +215,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
 
         public void ProcessPackage(InterviewPackage interview)
         {
+            // TODO validate event stream versions for no gaps inside
             Stopwatch innerwatch = Stopwatch.StartNew();
             string existingInterviewKey = null;
             try
@@ -231,6 +230,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                 existingInterviewKey = this.interviews.GetById(interview.InterviewId)?.Key;
                 var aggregateRootEvents = this.serializer
                     .Deserialize<AggregateRootEvent[]>(interview.Events.Replace(@"\u0000", ""));
+
+                var firstEvent = aggregateRootEvents.FirstOrDefault();
+                if (firstEvent != null && 
+                    firstEvent.Payload.GetType() != typeof(SynchronizationMetadataApplied) &&
+                    eventStore.HasEventsAfterSpecifiedSequenceWithAnyOfSpecifiedTypes(firstEvent.EventSequence - 1, 
+                        interview.InterviewId,
+                        EventsThatChangeAnswersStateProvider.GetTypeNames()))
+                {
+                    throw new InterviewException("Provided interview package is outdated. New answers were given to the interview while interviewer had interview on a tablet", InterviewDomainExceptionType.PackageIsOudated);
+                }
 
                 AssertPackageNotDuplicated(aggregateRootEvents);
 
@@ -274,7 +283,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
 
                 this.transactionManager.RollbackCommandTransaction();
 
-                var exceptionType = (exception as InterviewException)?.ExceptionType.ToString() ?? UnknownExceptionType;
+                var interviewException = exception as InterviewException;
+                if (interviewException == null)
+                {
+                    interviewException = interviewException.UnwrapAllInnerExceptions()
+                        .OfType<InterviewException>()
+                        .FirstOrDefault();
+                }
+
+                var exceptionType = interviewException?.ExceptionType.ToString() ?? UnknownExceptionType;
 
                 this.brokenInterviewPackageStorage.Store(new BrokenInterviewPackage
                 {
@@ -337,14 +354,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             }
         }
 
-        private bool CheckIfInterviewerWasMovedToAnotherTeam(Guid interviewerId,
+        private bool CheckIfInterviewerWasMovedToAnotherTeam(Guid responsibleId,
             IEvent[] interviewEvents, out Guid? newSupervisorId)
         {
             newSupervisorId = null;
             SupervisorAssigned supervisorAssigned = interviewEvents.OfType<SupervisorAssigned>().LastOrDefault();
             if (supervisorAssigned == null)
                 return false;
-            HqUser interviewer = userRepository.FindByIdAsync(interviewerId).Result;
+            HqUser interviewer = userRepository.FindByIdAsync(responsibleId).Result;
             newSupervisorId = interviewer.Profile.SupervisorId;
             return newSupervisorId != supervisorAssigned.SupervisorId;
         }

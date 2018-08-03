@@ -1,6 +1,7 @@
 ﻿using System;
 using MvvmCross.Droid.Support.V7.RecyclerView.ItemTemplates;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
+using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 
 namespace WB.UI.Interviewer.CustomControls
 {
@@ -8,7 +9,7 @@ namespace WB.UI.Interviewer.CustomControls
     {
         private static readonly Type CensusType = typeof(CensusQuestionnaireDashboardItemViewModel);
         private static readonly Type InterviewType = typeof(InterviewDashboardItemViewModel);
-        private static readonly Type AssignmentType = typeof(AssignmentDashboardItemViewModel);
+        private static readonly Type AssignmentType = typeof(InterviewerAssignmentDashboardItemViewModel);
         private static readonly Type SubtitleType = typeof(DashboardSubTitleViewModel);
 
         public int GetItemViewType(object forItemObject)
@@ -33,5 +34,7 @@ namespace WB.UI.Interviewer.CustomControls
         {
             return fromViewType;
         }
+
+        public int ItemTemplateId { get; set; }
     }
 }

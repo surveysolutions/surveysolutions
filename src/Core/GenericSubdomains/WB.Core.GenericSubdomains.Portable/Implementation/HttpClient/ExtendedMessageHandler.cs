@@ -49,10 +49,6 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
             {
                 return await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
             }
-            catch (OperationCanceledException ex) when (!cancellationToken.IsCancellationRequested)
-            {
-                throw new ExtendedMessageHandlerException(call, ex);
-            }
             catch (Exception ex)
             {
                 throw new ExtendedMessageHandlerException(call, ex);

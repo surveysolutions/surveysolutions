@@ -2,7 +2,6 @@
 using System.IO;
 using System.Linq;
 using System.Text;
-using FluentAssertions;
 using Ionic.Zip;
 using Ionic.Zlib;
 using NUnit.Framework;

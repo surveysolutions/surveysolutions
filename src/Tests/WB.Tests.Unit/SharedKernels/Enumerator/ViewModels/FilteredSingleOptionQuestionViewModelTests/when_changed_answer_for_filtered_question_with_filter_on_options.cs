@@ -2,7 +2,7 @@ using System;
 using System.Linq;
 using System.Threading;
 using Moq;
-using MvvmCross.Plugins.Messenger;
+using MvvmCross.Plugin.Messenger;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;

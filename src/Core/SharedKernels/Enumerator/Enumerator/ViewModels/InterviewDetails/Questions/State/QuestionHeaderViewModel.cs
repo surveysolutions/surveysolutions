@@ -1,6 +1,7 @@
 using System;
 using System.Windows.Input;
-using MvvmCross.Core.ViewModels;
+using MvvmCross.Commands;
+using MvvmCross.ViewModels;
 using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State

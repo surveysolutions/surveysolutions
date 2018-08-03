@@ -136,7 +136,7 @@
   </data>
   <data name="DeleteConfirmMessageHQ" xml:space="preserve">
     <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/b&gt; entretien (s) seront supprimés. &lt;/h3&gt;
-&lt;b&gt; Attention! &lt;/b&gt; Vous ne pouvez supprimer les entretiens qu'avec les statuts suivants uniquement: &lt;i&gt; {1} &lt;/i&gt; et &lt;i&gt; {2} &lt;/i&gt;. </value>
+&lt;b&gt; Attention! &lt;/b&gt; Vous pouvez supprimer les interviews non reçues par Interviewer uniquement avec les statuts suivants: &lt;i&gt; {1} &lt;/i&gt; et &lt;i&gt; {2} &lt;/i&gt;. </value>
   </data>
   <data name="RejectConfirmMessage" xml:space="preserve">
     <value>&lt;h3&gt; &lt;b&gt; {0} &lt;/b&gt; entretien (s) seront rejetés. &lt;/h3&gt;
@@ -179,9 +179,6 @@
   </data>
   <data name="Tooltip_Filter_Assignment" xml:space="preserve">
     <value>ID d'affectation. Cliquez dans le champ pour taper le numéro complet d'identification.</value>
-  </data>
-  <data name="Tooltip_Filter_Questionnaire" xml:space="preserve">
-    <value>Version du questionnaire. Sélectionnez une version du questionnaire pour voir ses entretiens associés dans le rapport situé à droite. Sélectionnez "Tous les questionnaires" pour voir les entretiens associés à un questionnaire donné.</value>
   </data>
   <data name="Tooltip_Filter_Responsible" xml:space="preserve">
     <value>Utilisateur responsable Cliquez dans le champ pour choisir un nom d'utilisateur en le sélectionnant directement ou en tapant pour filtrer la liste des noms d'utilisateur plus loin.</value>

@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Android.Content;
-using MvvmCross.Core.Navigation;
-using MvvmCross.Core.ViewModels;
-using MvvmCross.Platform.Droid.Platform;
+using MvvmCross.Navigation;
+using MvvmCross.Platforms.Android;
+using MvvmCross.ViewModels;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -41,6 +41,11 @@ namespace WB.UI.Shared.Enumerator.Services
                                                     this.userInterfaceStateService.IsUserInferfaceLocked;
 
         public abstract Task NavigateToLoginAsync();
+        public abstract Task NavigateToFinishInstallationAsync();
+
+        public abstract Task NavigateToMapsAsync();
+
+
         public abstract Task NavigateToInterviewAsync(string interviewId, NavigationIdentity navigationIdentity);
         public abstract Task NavigateToPrefilledQuestionsAsync(string interviewId);
         public abstract void NavigateToSplashScreen();

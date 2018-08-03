@@ -1,9 +1,18 @@
 ﻿using System;
+using System.Collections.Generic;
 using Main.Core.Documents;
 using Moq;
-using MvvmCross.Platform.Core;
-using MvvmCross.Plugins.Messenger;
+using MvvmCross.Base;
+using MvvmCross.Plugin.Messenger;
+using WB.Core.BoundedContexts.Interviewer.Implementation.Services.OfflineSync;
+using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
+using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard;
+using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items;
+using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services;
+using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -16,14 +25,19 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator;
+using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
+using WB.Core.SharedKernels.Enumerator.Views;
+using WB.Core.SharedKernels.Enumerator.Views.Dashboard;
 
 namespace WB.Tests.Abc.TestFactories
 {
@@ -162,7 +176,8 @@ namespace WB.Tests.Abc.TestFactories
                 questionnaireRepository,
                 statefulInterviewRepository,
                 questionStateViewModel,
-                new QuestionInstructionViewModel(questionnaireRepository, statefulInterviewRepository),
+                new QuestionInstructionViewModel(questionnaireRepository, statefulInterviewRepository, 
+                    new DynamicTextViewModel(eventRegistry ?? Stub<ILiteEventRegistry>.WithNotEmptyValues, statefulInterviewRepository, new SubstitutionService())),
                 answering ?? this.AnsweringViewModel());
         }
 
@@ -317,6 +332,13 @@ namespace WB.Tests.Abc.TestFactories
                         liteEventRegistry,
                         interviewRepository: interviewsRepository), Mock.Of<CoverStateViewModel>()));
 
+            
+            Mock.Get(ServiceLocator.Current)
+                .Setup(locator => locator.GetInstance<SideBarOverviewViewModel>())
+                .Returns(() => new SideBarOverviewViewModel(mvxMessenger, Create.ViewModel.DynamicTextViewModel(
+                    liteEventRegistry,
+                    interviewRepository: interviewsRepository), Mock.Of<InterviewStateViewModel>()));
+
             Mock.Get(ServiceLocator.Current)
                 .Setup(locator => locator.GetInstance<SideBarCompleteSectionViewModel>())
                 .Returns(() => new SideBarCompleteSectionViewModel(mvxMessenger, Create.ViewModel.DynamicTextViewModel(
@@ -380,6 +402,40 @@ namespace WB.Tests.Abc.TestFactories
                 optionsViewModel ?? Mock.Of<FilteredOptionsViewModel>(), 
                 mvxMainThreadDispatcher ?? Mock.Of<IMvxMainThreadDispatcher>(), 
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>());
+        }
+
+        public SideBarCompleteSectionViewModel SideBarCompleteSectionViewModel()
+        {
+            return new SideBarCompleteSectionViewModel(Mock.Of<IMvxMessenger>(),
+                Create.ViewModel.DynamicTextViewModel(),
+                Mock.Of<InterviewStateViewModel>(),
+                Create.Entity.AnswerNotifier(Create.Service.LiteEventRegistry()));
+        }
+
+        public WaitingForSupervisorActionViewModel WaitingForSupervisorActionViewModel(
+            IDashboardItemsAccessor dashboardItemsAccessor = null,
+            IInterviewViewModelFactory viewModelFactory = null)
+            => new WaitingForSupervisorActionViewModel(dashboardItemsAccessor ?? Mock.Of<IDashboardItemsAccessor>(),
+                viewModelFactory ?? Create.Service.SupervisorInterviewViewModelFactory());
+
+        public SupervisorDashboardInterviewViewModel SupervisorDashboardInterviewViewModel(Guid? interviewId = null,
+            IPrincipal principal = null,
+            IPlainStorage<InterviewerDocument> interviewers = null)
+        {
+            var viewModel = new SupervisorDashboardInterviewViewModel(
+                Mock.Of<IServiceLocator>(),
+                Mock.Of<IAuditLogService>(),
+                Mock.Of<IViewModelNavigationService>(),
+                principal ?? Mock.Of<IPrincipal>(x => x.CurrentUserIdentity == Create.Other.SupervisorIdentity(null, null, null)),
+                interviewers ?? new InMemoryPlainStorage<InterviewerDocument>());
+
+            if (interviewId.HasValue)
+            {
+                viewModel.Init(Create.Entity.InterviewView(interviewId: interviewId,
+                    questionnaireId: Create.Entity.QuestionnaireIdentity().ToString()), new List<PrefilledQuestion>());
+            }
+
+            return viewModel;
         }
     }
 }

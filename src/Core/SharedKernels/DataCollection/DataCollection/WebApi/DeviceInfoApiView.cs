@@ -31,6 +31,10 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
         public RAMInfoApiView RAMInfo { get; set; }
         public long DBSizeInfo { get; set; }
         public int NumberOfStartedInterviews { get; set; }
+
+        public DateTimeOffset? ReceivedDate { get; set; }
+
+        public Guid? UserId { get; set; }
     }
 
     public class RAMInfoApiView

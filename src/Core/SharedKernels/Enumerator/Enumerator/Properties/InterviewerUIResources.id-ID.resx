@@ -1,0 +1,439 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AccountIsLockedOnServer" xml:space="preserve">
+    <value>Akun pengguna Anda terkunci. Silahkan hubungi penyelia Anda.</value>
+  </data>
+  <data name="AccountIsNotAnInterviewer" xml:space="preserve">
+    <value>Akun Anda tidak memiliki peran Pewawancara</value>
+  </data>
+  <data name="AccountIsNotApprovedOnServer" xml:space="preserve">
+    <value>Akun Anda tidak disetujui. Silahkan hubungi penyelia Anda.</value>
+  </data>
+  <data name="ApplicationIncompatibleWithServer" xml:space="preserve">
+    <value>Aplikasi Anda tidak kompatibel dengan server satu. Perbarui aplikasi Pewawancara Anda.</value>
+  </data>
+  <data name="Dashboard_CompletedLinkText" xml:space="preserve">
+    <value>Selesai ({0})</value>
+  </data>
+  <data name="Dashboard_NewItemsLinkText" xml:space="preserve">
+    <value>Baru ({0})</value>
+  </data>
+  <data name="Dashboard_NoInterviewsSyncButton" xml:space="preserve">
+    <value>Menyinkronkan</value>
+  </data>
+  <data name="Dashboard_NoInterviewsText" xml:space="preserve">
+    <value>Sinkronkan untuk mendapatkan tugas baru 
+atau hubungi penyelia Anda
+untuk instruksi lebih lanjut</value>
+  </data>
+  <data name="Dashboard_NoInterviewsTitle" xml:space="preserve">
+    <value>Anda tidak memiliki tugas baru</value>
+  </data>
+  <data name="Dashboard_NoNewItemsLinkText" xml:space="preserve">
+    <value>Tidak ada yang baru</value>
+  </data>
+  <data name="Dashboard_Reinitialize_Interview_Message" xml:space="preserve">
+    <value>Wawancara ini selesai. Apakah Anda ingin memulai kembali wawancara?</value>
+  </data>
+  <data name="Dashboard_RejectedLinkText" xml:space="preserve">
+    <value> ditolak ({0})</value>
+  </data>
+  <data name="Dashboard_RemoveInterviewQuestion" xml:space="preserve">
+    <value>Apakah Anda yakin Anda ingin menghapus wawancara ini "{0}" ?</value>
+  </data>
+  <data name="Dashboard_StartedLinkText" xml:space="preserve">
+    <value>dimulai ({0})</value>
+  </data>
+  <data name="DashboardItem_AssignedOn" xml:space="preserve">
+    <value>Selesai pada {0}</value>
+  </data>
+  <data name="DashboardItem_CensusModeComment" xml:space="preserve">
+    <value>Modus sensus, Wawancara diciptakan: {0}</value>
+  </data>
+  <data name="DashboardItem_CompletedOn" xml:space="preserve">
+    <value>Selesai pada {0}</value>
+  </data>
+  <data name="DashboardItem_CreatedOn" xml:space="preserve">
+    <value>Ditetapkan pada {0}</value>
+  </data>
+  <data name="DashboardItem_NotStarted" xml:space="preserve">
+    <value>Belum dimulai</value>
+  </data>
+  <data name="DashboardItem_RejectedOn" xml:space="preserve">
+    <value>Ditolak pada {0}</value>
+  </data>
+  <data name="DashboardItem_StartedOn" xml:space="preserve">
+    <value>Dimulai pada {0}</value>
+  </data>
+  <data name="DashboardItem_Title" xml:space="preserve">
+    <value>{0} (v{1})</value>
+  </data>
+  <data name="InternalServerError" xml:space="preserve">
+    <value>Server error. Silahkan hubungi tim pendukung di support@mysurvey.solutions.</value>
+  </data>
+  <data name="InvalidEndpoint" xml:space="preserve">
+    <value>Alamat situs Supervisor tidak benar. Pastikan bahwa Anda memasukkan alamat url yang benar.</value>
+  </data>
+  <data name="Login_FinishInstallation_Message" xml:space="preserve">
+    <value>Ini adalah boot pertama pada perangkat ini. Pengguna dan domain belum diatur. &lt;br /&gt; Anda perlu koneksi internet untuk melanjutkan</value>
+  </data>
+  <data name="Login_Online_Signin_Explanation_message" xml:space="preserve">
+    <value>Anda bisa mencoba masuk secara online jika Anda lupa sandi Anda atau akun anda diatur ulang</value>
+  </data>
+  <data name="Login_Online_SignIn_Failed" xml:space="preserve">
+    <value>Masalah otentikasi pada remote server juga. Silahkan hubungi Penyelia Anda atau Kantor Pusat</value>
+  </data>
+  <data name="Login_WrongPassword" xml:space="preserve">
+    <value>Kata sandi salah</value>
+  </data>
+  <data name="Maintenance" xml:space="preserve">
+    <value>Situs Penyelia Survey Solutions sedang pada modus perawatan. Maaf untuk ketidaknyamanannya</value>
+  </data>
+  <data name="MenuItem_Title_Dashboard" xml:space="preserve">
+    <value>Dasbor</value>
+  </data>
+  <data name="MenuItem_Title_Login" xml:space="preserve">
+    <value>Login</value>
+  </data>
+  <data name="MenuItem_Title_Settings" xml:space="preserve">
+    <value>Pengaturan</value>
+  </data>
+  <data name="MenuItem_Title_SignOut" xml:space="preserve">
+    <value>Keluar</value>
+  </data>
+  <data name="NoNetwork" xml:space="preserve">
+    <value>Tidak ada jaringan. Periksa pengaturan jaringan Anda</value>
+  </data>
+  <data name="Prefs_AboutApplication" xml:space="preserve">
+    <value>Tentang aplikasi</value>
+  </data>
+  <data name="Prefs_ApplicationVersionTitle" xml:space="preserve">
+    <value>Versi aplikasi:</value>
+  </data>
+  <data name="Prefs_BufferSizeSummary" xml:space="preserve">
+    <value>Jumlah byte untuk paket dengan menerima/mengirim data dari/ke aplikasi penyelia</value>
+  </data>
+  <data name="Prefs_BufferSizeTitle" xml:space="preserve">
+    <value>Ukuran paket komunikasi</value>
+  </data>
+  <data name="Prefs_ConnectionSettings" xml:space="preserve">
+    <value>Pengaturan sambungan</value>
+  </data>
+  <data name="Prefs_DeviceIdTitle" xml:space="preserve">
+    <value>ID perangkat:</value>
+  </data>
+  <data name="Prefs_EndpointTitle" xml:space="preserve">
+    <value>URL Penyelia</value>
+  </data>
+  <data name="Prefs_GpsReceiveTimeoutSecSummary" xml:space="preserve">
+    <value>Jumlah detik untuk menunggu koordinat</value>
+  </data>
+  <data name="Prefs_GpsReceiveTimeoutSecTitle" xml:space="preserve">
+    <value>Waktu menerima GPS sudah habis</value>
+  </data>
+  <data name="Prefs_HttpResponseTimeoutSummary" xml:space="preserve">
+    <value>Jumlah detik untuk menunggu sampai server merespon</value>
+  </data>
+  <data name="Prefs_HttpResponseTimeoutTitle" xml:space="preserve">
+    <value>Waktu respon server sudah habis</value>
+  </data>
+  <data name="Prefs_InterviewSettings" xml:space="preserve">
+    <value>Pengaturan wawancara</value>
+  </data>
+  <data name="Prefs_Title" xml:space="preserve">
+    <value>Pengaturan</value>
+  </data>
+  <data name="RequestCanceledByUser" xml:space="preserve">
+    <value>Permintaan dibatalkan oleh pengguna</value>
+  </data>
+  <data name="RequestTimeout" xml:space="preserve">
+    <value>Waktu habis saat menghubungkan ke Situs Penyelia Survey Solutions. Periksa koneksi internet Anda.</value>
+  </data>
+  <data name="ServiceUnavailable" xml:space="preserve">
+    <value>Tidak ada koneksi ke Penyelia Survey Solutions. Pastikan bahwa situs ini tersedia.</value>
+  </data>
+  <data name="Synchronization_Cancel" xml:space="preserve">
+    <value>Batal</value>
+  </data>
+  <data name="Synchronization_Download_Description_Format" xml:space="preserve">
+    <value>{0} dari {1} {2} dilakukan</value>
+  </data>
+  <data name="Synchronization_Download_Title" xml:space="preserve">
+    <value>Memperbarui tugas</value>
+  </data>
+  <data name="Synchronization_Fail_State_DeletedInterviews_Format" xml:space="preserve">
+    <value>{0} dari {1} wawancara dihapus</value>
+  </data>
+  <data name="Synchronization_Fail_State_NewInterviews_Format" xml:space="preserve">
+    <value>{0} dari {1} wawancara baru diunduh</value>
+  </data>
+  <data name="Synchronization_Fail_State_RejectedInterviews_Format" xml:space="preserve">
+    <value>{0} dari {1} wawancara yang ditolak dikembalikan</value>
+  </data>
+  <data name="Synchronization_Fail_State_UploadedInterviews_Format" xml:space="preserve">
+    <value>{0} dari {1} wawancara yang selesai diunggah</value>
+  </data>
+  <data name="Synchronization_Fail_Title" xml:space="preserve">
+    <value>Sinkronisasi terganggu, silahkan dicoba lagi</value>
+  </data>
+  <data name="Synchronization_Fail_UnexpectedException" xml:space="preserve">
+    <value>Pengecualian yang tak terduga</value>
+  </data>
+  <data name="Synchronization_Interviews" xml:space="preserve">
+    <value>wawancara</value>
+  </data>
+  <data name="Synchronization_LockedAssignments_Text" xml:space="preserve">
+    <value>Penugasan terkunci sampai sinkronisasi selesai</value>
+  </data>
+  <data name="Synchronization_Questionnaires" xml:space="preserve">
+    <value>kuesioner</value>
+  </data>
+  <data name="Synchronization_Success_Description" xml:space="preserve">
+    <value>Semua penugasan telah diperbarui</value>
+  </data>
+  <data name="Synchronization_Success_State_DeletedInterviews_Format" xml:space="preserve">
+    <value>{0} wawancara dihapus</value>
+  </data>
+  <data name="Synchronization_Success_State_NewInterviews_Format" xml:space="preserve">
+    <value>{0} wawancara baru diunduh</value>
+  </data>
+  <data name="Synchronization_Success_State_RejectedInterviews_Format" xml:space="preserve">
+    <value>{0} wawancara yang ditolak dikembalikan</value>
+  </data>
+  <data name="Synchronization_Success_State_UploadedInterviews_Format" xml:space="preserve">
+    <value>{0} wawancara yang sudah selesai diunggah</value>
+  </data>
+  <data name="Synchronization_Success_Title" xml:space="preserve">
+    <value>Sinkronisasi berhasil diselesaikan</value>
+  </data>
+  <data name="Synchronization_Upload_CompletedAssignments_Text" xml:space="preserve">
+    <value>penugasan yang selesai</value>
+  </data>
+  <data name="Synchronization_Upload_Description_Format" xml:space="preserve">
+    <value>{0} dari {1} {2} dikerjakan</value>
+  </data>
+  <data name="Synchronization_Upload_Interviews_Text" xml:space="preserve">
+    <value>wawancara</value>
+  </data>
+  <data name="Synchronization_Upload_Title_Format" xml:space="preserve">
+    <value>Mengunggah {0}</value>
+  </data>
+  <data name="Synchronization_UserAuthentication_Description" xml:space="preserve">
+    <value>Mempersiapkan untuk sinkronisasi</value>
+  </data>
+  <data name="Synchronization_UserAuthentication_Title" xml:space="preserve">
+    <value>Otentikasi pengguna</value>
+  </data>
+  <data name="Synchronization_UserLinkedToAnotherDevice_Status" xml:space="preserve">
+    <value>Kesalahan otentikasi pengguna</value>
+  </data>
+  <data name="Synchronization_UserLinkedToAnotherDevice_Title" xml:space="preserve">
+    <value>Akun Anda dihubungkan kembali ke tablet lain</value>
+  </data>
+  <data name="Synchronization_UserPassword_Update_Format" xml:space="preserve">
+    <value>Masalah otentikasi. Kami tidak dapat mengkonfirmasi akun pewawancara Anda ('{0}').
+Akun Anda mungkin memiliki salah satu dari masalah berikut: memiliki password yang berbeda dari yang Anda masukkan, dikunci oleh Kantor Pusat, atau dihapus oleh Kantor Pusat.
+Silahkan masukkan password Anda yang diperbarui. Jika hal itu tidak menyelesaikan masalah, silahkan hubungi Penyelia Anda atau Kantor Pusat.</value>
+  </data>
+  <data name="Troubleshooting_Backup" xml:space="preserve">
+    <value>Membuat cadangan</value>
+  </data>
+  <data name="Troubleshooting_BackupErrorMessage" xml:space="preserve">
+    <value>Sesuatu kesalahan terjadi dan cadangannya gagal dibuat</value>
+  </data>
+  <data name="Troubleshooting_BackupWasSaved" xml:space="preserve">
+    <value>Cadangan disimpan ke {0}</value>
+  </data>
+  <data name="Troubleshooting_CurrentVersion_CheckForUpdates" xml:space="preserve">
+    <value>Versi: {0}. Periksa versi baru</value>
+  </data>
+  <data name="Troubleshooting_InformationPackageIsSuccessfullySent" xml:space="preserve">
+    <value>Paket informasi berhasil dikirim</value>
+  </data>
+  <data name="Troubleshooting_InformationPackageSizeWarningFormat" xml:space="preserve">
+    <value>Paket informasi untuk ukuran {0} akan dikirimkan melalui jaringan. Apakah Anda yakin ingin mengirimnya?</value>
+  </data>
+  <data name="Troubleshooting_NewVerisonExist" xml:space="preserve">
+    <value>Versi baru telah tersedia. Apakah anda ingin mengunduh dan memperbarui aplikasi?</value>
+  </data>
+  <data name="Troubleshooting_NoNewVersion" xml:space="preserve">
+    <value>Anda memiliki versi terbaru dari aplikasi</value>
+  </data>
+  <data name="Troubleshooting_Old_AreYouSureYouWantToRestore" xml:space="preserve">
+    <value>Semua data terkini akan dihapus. Apakah Anda yakin ingin melanjutkan untuk restore. Jika Ya, pastikan restore data tersajikan pada {0}</value>
+  </data>
+  <data name="Troubleshooting_Old_CreatingInformationPackage" xml:space="preserve">
+    <value>Membuat paket informasi</value>
+  </data>
+  <data name="Troubleshooting_Old_InformationPackage" xml:space="preserve">
+    <value>Paket informasi</value>
+  </data>
+  <data name="Troubleshooting_Old_InformationPackageIsSuccessfullySent" xml:space="preserve">
+    <value>Paket informasi berhasil dikirim.</value>
+  </data>
+  <data name="Troubleshooting_Old_InformationPackageSizeWarningFormat" xml:space="preserve">
+    <value>Paket informasi untuk ukuran {0} akan dikirimkan melalui jaringan. Apakah Anda yakin ingin mengirimnya?</value>
+  </data>
+  <data name="Troubleshooting_Old_SendingInformationPackage" xml:space="preserve">
+    <value>Mengirim paket informasi</value>
+  </data>
+  <data name="Troubleshooting_Old_SendingOfInformationPackageIsCanceled" xml:space="preserve">
+    <value>Pengiriman paket informasi dibatalkan. Alasan: {0}</value>
+  </data>
+  <data name="Troubleshooting_Old_SendingOfInformationPackageIsCanceling" xml:space="preserve">
+    <value>Membatalkan</value>
+  </data>
+  <data name="Troubleshooting_RestorationErrorMessage" xml:space="preserve">
+    <value>Sesuatu yang tidak beres terjadi dan tabletnya gagal untuk di-restore</value>
+  </data>
+  <data name="Troubleshooting_Restore" xml:space="preserve">
+    <value>Memulihkan dari cadangan</value>
+  </data>
+  <data name="Troubleshooting_RestoreConfirmation" xml:space="preserve">
+    <value>Semua data terkini akan dihapus. Apakah Anda yakin ingin melanjutkan untuk restore. Jika Ya, pastikan restore data tersajikan pada {0}</value>
+  </data>
+  <data name="Troubleshooting_RestoredSuccessfully" xml:space="preserve">
+    <value>Tablet berhasil di-restore</value>
+  </data>
+  <data name="Troubleshooting_SendingOfInformationPackageErrorMessage" xml:space="preserve">
+    <value>Pengiriman paket informasi gagal</value>
+  </data>
+  <data name="Troubleshooting_SendTabletInformation" xml:space="preserve">
+    <value>Mengirimkan informasi di dalam tablet</value>
+  </data>
+  <data name="Troubleshooting_Title" xml:space="preserve">
+    <value>Pemecahan masalah</value>
+  </data>
+  <data name="Troubleshooting_Unknown_ErrorMessage" xml:space="preserve">
+    <value>Kesalahan terjadi pada pemeriksaan versi. Silahkan periksa kembali pengaturan atau coba lagi nanti</value>
+  </data>
+  <data name="Unauthorized" xml:space="preserve">
+    <value>Login atau sandi Anda salah</value>
+  </data>
+  <data name="UnexpectedException" xml:space="preserve">
+    <value>Kesalahan yang tidak terduga</value>
+  </data>
+  <data name="UpgradeRequired" xml:space="preserve">
+    <value>Versi baru dari aplikasi telah dirilis. Silahkan perbarui aplikasi</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Peringatan</value>
+  </data>
+</root>

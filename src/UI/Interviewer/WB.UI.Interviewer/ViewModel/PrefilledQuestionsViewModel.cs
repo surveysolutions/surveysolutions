@@ -1,6 +1,5 @@
-using System;
+using MvvmCross.Commands;
 using System.Threading.Tasks;
-using MvvmCross.Core.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -10,6 +9,7 @@ using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.UI.Interviewer.ViewModel
 {

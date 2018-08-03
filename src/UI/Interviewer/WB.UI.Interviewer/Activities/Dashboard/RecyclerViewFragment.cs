@@ -1,15 +1,15 @@
 ﻿using Android.OS;
 using Android.Views;
-using MvvmCross.Binding.Droid.BindingContext;
 using MvvmCross.Droid.Support.V7.RecyclerView;
-using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
+using MvvmCross.Platforms.Android.Binding.BindingContext;
+using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 using WB.UI.Shared.Enumerator.Activities;
 
 namespace WB.UI.Interviewer.Activities.Dashboard
 {
     public abstract class RecyclerViewFragment<TViewModel> : BaseFragment<TViewModel> where TViewModel : ListViewModel
     {
-        protected override int ViewResourceId => Resource.Layout.fragment_dashboard_tab;
+        protected override int ViewResourceId => Resource.Layout.dashboard_tab;
 
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {

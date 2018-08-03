@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Windows.Input;
-using MvvmCross.Core.ViewModels;
+using MvvmCross.Commands;
+using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
@@ -129,7 +130,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                         userId: this.userId,
                         questionId: this.questionIdentity.Id,
                         rosterVector: this.questionIdentity.RosterVector,
-                        answerTime: DateTime.UtcNow,
                         geometry: answerArea.Geometry,
                         mapName: answerArea.MapName,
                         area: answerArea.Area,
@@ -178,8 +178,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                             new RemoveAnswerCommand(
                                 Guid.Parse(this.interviewId),
                                 this.userId, 
-                                this.questionIdentity,
-                                DateTime.UtcNow));
+                                this.questionIdentity));
 
                         this.QuestionState.Validity.ExecutedWithoutExceptions();
                     }

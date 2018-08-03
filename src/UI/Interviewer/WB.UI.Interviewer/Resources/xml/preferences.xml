@@ -9,6 +9,7 @@
   </PreferenceCategory>
 
   <PreferenceCategory android:key="connection_settings_category">
+    <CheckBoxPreference android:key="AllowSyncWithHq" />
     <EditTextPreference android:key="SyncAddress"/>
     <EditTextPreference android:key="HttpResponseTimeout" android:numeric="integer"/>
     <EditTextPreference android:key="BufferSize" android:numeric="integer"/>

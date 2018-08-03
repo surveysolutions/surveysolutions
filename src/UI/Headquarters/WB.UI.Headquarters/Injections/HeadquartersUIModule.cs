@@ -73,7 +73,6 @@ namespace WB.UI.Headquarters.Injections
             registry.Bind<IStringCompressor, JsonCompressor>();
             registry.BindAsSingleton<IRestServiceSettings, DesignerQuestionnaireApiRestServiceSettings>();
 
-            registry.Bind<IHttpClientFactory, DefaultHttpClientFactory>();
             registry.Bind<IRestService, RestService>(
                 new ConstructorArgument("networkService", _ => null),
                 new ConstructorArgument("restServicePointManager", _ => null),
@@ -83,6 +82,8 @@ namespace WB.UI.Headquarters.Injections
 
             registry.Bind<IArchiveUtils, IProtectedArchiveUtils, ZipArchiveUtils>();
 
+            registry.BindHttpFilter<UnderConstructionHttpFilter>(System.Web.Http.Filters.FilterScope.Global, 0);
+            registry.BindMvcFilter<UnderConstructionMvcFilter>(FilterScope.First, 0);
             registry.BindMvcFilterWhenActionMethodHasNoAttribute<TransactionFilter, NoTransactionAttribute>(FilterScope.First, 0);
             registry.BindMvcFilterWhenActionMethodHasNoAttribute<PlainTransactionFilter, NoTransactionAttribute>(FilterScope.First, 0);
             registry.BindHttpFilterWhenActionMethodHasNoAttribute<ApiTransactionFilter, NoTransactionAttribute>(System.Web.Http.Filters.FilterScope.Controller);
@@ -98,9 +99,11 @@ namespace WB.UI.Headquarters.Injections
             registry.Bind<IInterviewerProfileFactory, InterviewerProfileFactory>();
             registry.Bind<ITranslationsExportService, TranslationsExportService>();
             registry.Bind<IQuestionnaireExporter, QuestionnaireExporter>();
+
+            registry.Bind<IQRCodeHelper, QRCodeHelper>();
         }
 
-        public Task Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
             return Task.CompletedTask;
         }

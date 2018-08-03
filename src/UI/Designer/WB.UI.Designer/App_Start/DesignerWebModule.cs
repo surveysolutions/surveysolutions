@@ -9,6 +9,7 @@ using WB.UI.Designer.Code.Implementation;
 using WB.UI.Designer.Exceptions;
 using IRecipientNotifier = WB.Core.BoundedContexts.Designer.Services.IRecipientNotifier;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.Modularity;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Storage;
 using WB.UI.Designer.Api.WebTester;
@@ -59,7 +60,7 @@ namespace WB.UI.Designer
             registry.BindAsSingleton<IWebTesterService, WebTesterService>();
         }
 
-        public Task Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
             return Task.CompletedTask;
         }

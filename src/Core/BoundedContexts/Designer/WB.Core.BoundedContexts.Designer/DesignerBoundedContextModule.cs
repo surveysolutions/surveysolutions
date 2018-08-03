@@ -42,6 +42,7 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 
 namespace WB.Core.BoundedContexts.Designer
 {
+    [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage]
     public class DesignerBoundedContextModule : IModule
     {
         private readonly ICompilerSettings compilerSettings;
@@ -93,7 +94,7 @@ namespace WB.Core.BoundedContexts.Designer
             registry.Bind(typeof(ITopologicalSorter<>), typeof(TopologicalSorter<>));
         }
 
-        public Task Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
             CommandRegistry
                 .Setup<User>()
@@ -176,7 +177,7 @@ namespace WB.Core.BoundedContexts.Designer
                 .Handles<UpdateVariable>(aggregate => aggregate.UpdateVariable, config => config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>())
                 .Handles<DeleteVariable>((command, aggregate) => aggregate.DeleteVariable(command.EntityId, command.ResponsibleId), config => config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>().PreProcessBy<ResourcesPreProcessor>())
                 // Sharing
-                .Handles<AddSharedPersonToQuestionnaire>((command, aggregate) => aggregate.AddSharedPerson(command.PersonId, command.Email, command.ShareType, command.ResponsibleId), config => config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>())
+                .Handles<AddSharedPersonToQuestionnaire>((command, aggregate) => aggregate.AddSharedPerson(command.PersonId, command.EmailOrLogin, command.ShareType, command.ResponsibleId), config => config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>())
                 .Handles<RemoveSharedPersonFromQuestionnaire>((command, aggregate) => aggregate.RemoveSharedPerson(command.PersonId, command.Email, command.ResponsibleId), config => config.PostProcessBy<ListViewPostProcessor>().PostProcessBy<HistoryPostProcessor>());
 
             return Task.CompletedTask;

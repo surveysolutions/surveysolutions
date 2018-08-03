@@ -1,4 +1,26 @@
 .share-question-dialog {
+
+    h2 {
+        .opensanslight-font();
+        font-size: 24px;
+        margin-top: 0;
+    }
+
+    hr {
+        margin-left: -15px;
+        margin-right: -15px;
+        margin-top: 10px;
+    }
+
+    .share-type {
+        .btn{
+            padding: 6px 12px;
+            line-height: 18px;
+            border-width: 2px;
+            border-style: solid;
+        }
+    }
+
     ul.accounts {
         list-style: none;
         padding-left: 0;
@@ -33,30 +55,24 @@
     }
 
     .form-group {
-        
-        .vertical-top{
-            vertical-align: top;
-        }
-
-        .questionaire-title {
-            width: 475px;
-        }
-        .share-with-email {
-            width: 320px;
-        }
         &.share-form-btn-label {
             padding-top: 6px;
-         }
-        .invite-button {
-            line-height: 0px;
         }
 
-        p{
+        &.input-variable-name:before {
+            display: none;
+        }
+
+        p {
             color: #a94442;
+        }
+
+        .update-button, .invite-button {
+            margin-top: 20px;
         }
     }
 
-    a.owner{
+    a.owner {
         color: @success-message-color;
     }
 }

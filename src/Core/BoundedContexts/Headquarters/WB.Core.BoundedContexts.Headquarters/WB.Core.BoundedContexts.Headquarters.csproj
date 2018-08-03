@@ -4,6 +4,7 @@
     <GenerateAssemblyInformationalVersionAttribute>false</GenerateAssemblyInformationalVersionAttribute>
     <GenerateAssemblyVersionAttribute>false</GenerateAssemblyVersionAttribute>
     <GenerateAssemblyFileVersionAttribute>false</GenerateAssemblyFileVersionAttribute>
+    <Configurations>Debug;Release;Debug-ESRI</Configurations>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
@@ -33,14 +34,14 @@
     <PackageReference Include="Dapper" Version="1.50.4" />
     <PackageReference Include="Dropbox.Api" Version="4.7.0" />
     <PackageReference Include="EntityFramework" Version="6.2.0" />
-    <PackageReference Include="EPPlus" Version="4.5.1" />
+    <PackageReference Include="EPPlus" Version="4.5.2.1" />
     <PackageReference Include="Google.Apis.Drive.v3" Version="1.32.2.1170" />
     <PackageReference Include="Iesi.Collections" Version="4.0.4" />
     <PackageReference Include="Iteedee.ApkReader" Version="1.0.1" />
     <PackageReference Include="Microsoft.AspNet.Identity.Core" Version="2.2.1" />
     <PackageReference Include="Microsoft.AspNet.Identity.EntityFramework" Version="2.2.1" />
     <PackageReference Include="Microsoft.AspNet.Identity.Owin" Version="2.2.1" />
-    <PackageReference Include="Microsoft.CSharp" Version="4.4.1" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
     <PackageReference Include="Microsoft.Graph.Core" Version="1.8.1" />
     <PackageReference Include="Microsoft.OneDriveSDK" Version="2.0.7" />
     <PackageReference Include="Microsoft.Owin" Version="3.1.0" />
@@ -49,7 +50,7 @@
     <PackageReference Include="Microsoft.Owin.Security.Cookies" Version="3.1.0" />
     <PackageReference Include="Microsoft.Owin.Security.OAuth" Version="3.1.0" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
-    <PackageReference Include="NHibernate" Version="5.1.0" />
+    <PackageReference Include="NHibernate" Version="5.1.2" />
     <PackageReference Include="Ninject" Version="3.3.4" />
     <PackageReference Include="Owin" Version="1.0" />
     <PackageReference Include="Quartz" Version="2.6.1" />

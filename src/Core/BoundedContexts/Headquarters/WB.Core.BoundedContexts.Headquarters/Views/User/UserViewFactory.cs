@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interviewer;
 using WB.Core.BoundedContexts.Headquarters.Views.Responsible;
 using WB.Core.BoundedContexts.Headquarters.Views.Supervisor;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Infrastructure.Native.Utils;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.User
@@ -53,7 +54,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                 SupervisorId = user.Profile.SupervisorId,
                 SupervisorName = repository.Users.Select(x => new { x.Id, Name = x.UserName })
                     .FirstOrDefault(x => user.Profile.SupervisorId == x.Id)
-                    .Name
+                    .Name,
+                SecurityStamp = user.SecurityStamp
             });
 
             if (input.PublicKey != null)
@@ -82,7 +84,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                 Supervisor = dbUser.SupervisorId.HasValue
                     ? new UserLight(dbUser.SupervisorId.Value, dbUser.SupervisorName)
                     : null,
-                Roles = new HashSet<UserRoles>(new[] { dbUser.RoleId.ToUserRole() })
+                Roles = new HashSet<UserRoles>(new[] { dbUser.RoleId.ToUserRole() }),
+                SecurityStamp = dbUser.SecurityStamp
             };
         }
 
@@ -165,6 +168,38 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             };
 
             return result;
+        }
+
+        public IEnumerable<InterviewerFullApiView> GetInterviewers(Guid supervisorId)
+        {
+            var repository = this.UserRepository;
+
+            Func<IQueryable<HqUser>, IQueryable<InterviewerFullApiView>> query = allUsers =>
+            {
+                var interviewers = ApplyFilter(allUsers, null, false, UserRoles.Interviewer);
+
+                interviewers = ApplyFacetFilter(null, InterviewerFacet.None, interviewers, repository);
+
+                interviewers = AppySupervisorFilter(supervisorId, interviewers);
+
+                return interviewers.Select(x => new InterviewerFullApiView
+                {
+                    Id = x.Id,
+                    CreationDate = x.CreationDate,
+                    Email = x.Email,
+                    FullName = x.FullName,
+                    UserName = x.UserName,
+                    PhoneNumber = x.PhoneNumber,
+                    PasswordHash = x.PasswordHash,
+                    IsLockedByHeadquarters = x.IsLockedByHeadquaters,
+                    IsLockedBySupervisor = x.IsLockedBySupervisor,
+                    SecurityStamp = x.SecurityStamp
+                });
+            };
+
+            var filteredUsers = query.Invoke(repository.Users).ToList();
+
+            return filteredUsers;
         }
 
         public InterviewersView GetInterviewers(int pageIndex, int pageSize, string orderBy, string searchBy,
@@ -434,6 +469,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             public Guid? SupervisorId { get; set; }
             public string SupervisorName { get; set; }
             public string DeviceId { get; set; }
+            public string SecurityStamp { get; set; }
         }
     }
 }

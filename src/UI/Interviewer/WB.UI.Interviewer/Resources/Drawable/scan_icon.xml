@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="14dp"
+    android:height="14dp"
+    android:viewportWidth="14"
+    android:viewportHeight="14">
+
+    <path
+        android:fillColor="#737373"
+        android:fillType="evenOdd"
+        android:pathData="M4,2H3H2v1v1v1h1h1h1V4V3V2H4z M4,4H3V3h1V4z" />
+    <path
+        android:fillColor="#737373"
+        android:fillType="evenOdd"
+        android:pathData="M4,8H3H2v1v1v1h1h1h1v-1V9V8H4z M4,10H3V9h1V10z" />
+    <path
+        android:fillColor="#737373"
+        android:fillType="evenOdd"
+        android:pathData="M 4 6 H 5 V 7 H 4 V 6 Z" />
+    <path
+        android:fillColor="#737373"
+        android:fillType="evenOdd"
+        android:pathData="M 2 6 H 3 V 7 H 2 V 6 Z" />
+    <path
+        android:fillColor="#737373"
+        android:fillType="evenOdd"
+        android:pathData="M 6 2 H 7 V 3 H 6 V 2 Z" />
+    <path
+        android:fillColor="#737373"
+        android:fillType="evenOdd"
+        android:pathData="M 6 4 L 6 5 L 6 7 L 7 7 L 7 5 L 7 4 Z" />
+    <path
+        android:fillColor="#737373"
+        android:fillType="evenOdd"
+        android:pathData="M 6 8 H 7 V 9 H 6 V 8 Z" />
+    <path
+        android:fillColor="#737373"
+        android:fillType="evenOdd"
+        android:pathData="M 6 10 H 9 V 11 H 6 V 10 Z" />
+    <path
+        android:fillColor="#737373"
+        android:fillType="evenOdd"
+        android:pathData="M10,2H9H8v1v1v1h1h1h1V4V3V2H10z M10,4H9V3h1V4z" />
+    <path
+        android:fillColor="#737373"
+        android:fillType="evenOdd"
+        android:pathData="M 10 8 H 11 V 9 H 10 V 8 Z" />
+    <path
+        android:fillColor="#737373"
+        android:fillType="evenOdd"
+        android:pathData="M 10 10 H 11 V 11 H 10 V 10 Z" />
+    <path
+        android:fillColor="#737373"
+        android:fillType="evenOdd"
+        android:pathData="M 10 6 H 11 V 7 H 10 V 6 Z" />
+    <path
+        android:fillColor="#737373"
+        android:fillType="evenOdd"
+        android:pathData="M 8 6 L 8 7 L 8 9 L 9 9 L 9 7 L 9 6 Z" />
+</vector>

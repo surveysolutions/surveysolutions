@@ -1,11 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net471</TargetFramework>
+    <Configurations>Debug;Release;Debug-ESRI</Configurations>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\WB.Core.BoundedContexts.Designer.csproj" />
     <ProjectReference Include="..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\WB.Core.BoundedContexts.Headquarters.csproj" />
     <ProjectReference Include="..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\WB.Core.BoundedContexts.Interviewer.csproj" />
+    <ProjectReference Include="..\..\Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\WB.Core.BoundedContexts.Supervisor.csproj" />
     <ProjectReference Include="..\..\Core\BoundedContexts\Tester\WB.Core.BoundedContexts.Tester\WB.Core.BoundedContexts.Tester.csproj" />
     <ProjectReference Include="..\..\Core\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj" />
     <ProjectReference Include="..\..\Core\Infrastructure\WB.Core.Infrastructure\WB.Core.Infrastructure.csproj" />
@@ -21,7 +23,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Antlr3.Runtime" Version="3.5.1" />
-    <PackageReference Include="AutoFixture" Version="4.2.0" />
+    <PackageReference Include="AutoFixture" Version="4.4.0" />
     <PackageReference Include="AutoFixture.AutoMoq" Version="4.2.0" />
     <PackageReference Include="Castle.Core" Version="4.2.1" />
     <PackageReference Include="Common.Logging" Version="3.4.1" />
@@ -31,33 +33,31 @@
     <PackageReference Include="Microsoft.AspNet.Identity.Core" Version="2.2.1" />
     <PackageReference Include="Microsoft.AspNet.Identity.EntityFramework" Version="2.2.1" />
     <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.2.3" />
-    <PackageReference Include="Microsoft.CSharp" Version="4.4.1" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
     <PackageReference Include="Microsoft.NETCore.Platforms" Version="2.0.1" />
     <PackageReference Include="Microsoft.Win32.Primitives" Version="4.3.0" />
     <PackageReference Include="Moq" Version="4.8.2" />
-    <PackageReference Include="MvvmCross.Core" Version="5.7.0" />
-    <PackageReference Include="MvvmCross.Platform" Version="5.7.0" />
-    <PackageReference Include="MvvmCross.Plugin.Messenger" Version="5.7.0" />
-    <PackageReference Include="NHibernate" Version="5.1.0" />
+    <PackageReference Include="MvvmCross.Plugin.Messenger" Version="6.1.2" />
+    <PackageReference Include="NHibernate" Version="5.1.2" />
     <PackageReference Include="NSubstitute" Version="3.1.0" />
     <PackageReference Include="NUnit.Console" Version="3.8.0" />
     <PackageReference Include="NUnit.Extension.NUnitProjectLoader" Version="3.6.0" />
     <PackageReference Include="NUnit.Extension.NUnitV2Driver" Version="3.7.0" />
     <PackageReference Include="NUnit.Extension.NUnitV2ResultWriter" Version="3.6.0" />
-    <PackageReference Include="NUnit.Extension.TeamCityEventListener" Version="1.0.3" />
+    <PackageReference Include="NUnit.Extension.TeamCityEventListener" Version="1.0.4" />
     <PackageReference Include="NUnit.Extension.VSProjectLoader" Version="3.7.0" />
     <PackageReference Include="NUnit.framework" Version="2.63.0" />
     <PackageReference Include="Quartz" Version="2.6.1" />
     <PackageReference Include="ReflectionMagic" Version="3.1.0" />
-    <PackageReference Include="Remotion.Linq" Version="2.1.2" />
-    <PackageReference Include="Remotion.Linq.EagerFetching" Version="2.1.0" />
+    <PackageReference Include="Remotion.Linq" Version="2.2.0" />
+    <PackageReference Include="Remotion.Linq.EagerFetching" Version="2.2.0" />
     <PackageReference Include="sqlite-net-pcl" Version="1.4.118" />
-    <PackageReference Include="SQLitePCLRaw.bundle_green" Version="1.1.9" />
-    <PackageReference Include="SQLitePCLRaw.core" Version="1.1.9" />
-    <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3.linux" Version="1.1.9" />
-    <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3.osx" Version="1.1.9" />
-    <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3.v110_xp" Version="1.1.9" />
-    <PackageReference Include="SQLitePCLRaw.provider.e_sqlite3.net45" Version="1.1.9" />
+    <PackageReference Include="SQLitePCLRaw.bundle_green" Version="1.1.11" />
+    <PackageReference Include="SQLitePCLRaw.core" Version="1.1.11" />
+    <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3.linux" Version="1.1.11" />
+    <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3.osx" Version="1.1.11" />
+    <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3.v110_xp" Version="1.1.11" />
+    <PackageReference Include="SQLitePCLRaw.provider.e_sqlite3.net45" Version="1.1.11" />
     <PackageReference Include="System.Collections.Immutable" Version="1.4.0" />
     <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.4.0" />
   </ItemGroup>

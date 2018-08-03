@@ -11,4 +11,4 @@ using System.Runtime.CompilerServices;
 [assembly: InternalsVisibleTo("WB.Tests.Integration")]
 [assembly: InternalsVisibleTo("WB.Tests.Abc")]
 [assembly: InternalsVisibleTo("PerformanceTest")]
-[assembly: InternalsVisibleTo("CoreTester")]
+[assembly: InternalsVisibleTo("Utils")]

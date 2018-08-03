@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using MvvmCross.Binding.ExtensionMethods;
+using MvvmCross.Binding.Extensions;
 using WB.UI.Shared.Enumerator.Converters;
 
 namespace WB.UI.Shared.Enumerator.ValueCombiners

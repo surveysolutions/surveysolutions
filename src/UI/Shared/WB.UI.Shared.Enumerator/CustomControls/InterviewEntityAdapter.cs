@@ -1,10 +1,10 @@
 ﻿using Android.Content;
 using Android.Support.V7.Widget;
 using Android.Views;
-using MvvmCross.Binding.Droid.BindingContext;
+using MvvmCross;
 using MvvmCross.Droid.Support.V7.RecyclerView;
-using MvvmCross.Platform;
-using MvvmCross.Platform.Droid.Platform;
+using MvvmCross.Platforms.Android;
+using MvvmCross.Platforms.Android.Binding.BindingContext;
 using WB.UI.Shared.Enumerator.Activities;
 using Object = Java.Lang.Object;
 

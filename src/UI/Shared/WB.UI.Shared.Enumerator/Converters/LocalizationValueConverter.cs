@@ -1,6 +1,6 @@
 using System;
 using System.Globalization;
-using MvvmCross.Platform.Converters;
+using MvvmCross.Converters;
 using WB.Core.SharedKernels.Enumerator.Properties;
 
 namespace WB.UI.Shared.Enumerator.Converters

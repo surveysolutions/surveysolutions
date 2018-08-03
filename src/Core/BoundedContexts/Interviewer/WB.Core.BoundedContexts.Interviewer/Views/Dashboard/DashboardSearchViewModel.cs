@@ -1,18 +1,22 @@
-﻿using MvvmCross.Core.ViewModels;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using MvvmCross.Plugins.Messenger;
-using WB.Core.BoundedContexts.Interviewer.Properties;
+using MvvmCross.Commands;
+using MvvmCross.Plugin.Messenger;
+using MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.Messages;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
+using WB.Core.SharedKernels.Enumerator.Views;
+using WB.Core.SharedKernels.Enumerator.Views.Dashboard;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 {
@@ -88,7 +92,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         public override async Task Initialize()
         {
-            await base.Initialize();
+            await base.Initialize().ConfigureAwait(false);
             EmptySearchText = InterviewerUIResources.Dashboard_SearchWatermark;
             UpdateUiItems(SearchText);
         }
@@ -180,7 +184,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
                 if (isMatched)
                 {
-                    var assignmentItemViewModel = this.viewModelFactory.GetNew<AssignmentDashboardItemViewModel>();
+                    var assignmentItemViewModel = this.viewModelFactory.GetNew<InterviewerAssignmentDashboardItemViewModel>();
                     assignmentItemViewModel.Init(assignmentItem);
                     yield return assignmentItemViewModel;
                 }

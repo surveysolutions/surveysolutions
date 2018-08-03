@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.StatefulInterviewTests
             Guid supervisorId = Guid.Parse("11111111111111111111111111111111");
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(Create.Entity.TextQuestion(questionid, scope: QuestionScope.Hidden));
 
-            var interview = Create.AggregateRoot.StatefulInterview(questionnaire.PublicKey, Guid.NewGuid(), questionnaire);
+            var interview = Create.AggregateRoot.StatefulInterview(questionnaire.PublicKey, userId: Guid.NewGuid(), questionnaire: questionnaire);
 
             interview.AssignInterviewer(supervisorId, Guid.NewGuid(), DateTime.Now);
             interview.CommentAnswer(supervisorId, questionid, RosterVector.Empty, DateTime.Now, "in comment");

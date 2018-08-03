@@ -1,5 +1,7 @@
 using System;
-using MvvmCross.Core.ViewModels;
+using MvvmCross.Commands;
+using MvvmCross.ViewModels;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
@@ -59,5 +61,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var handler = this.AnswerRemoved;
             handler?.Invoke(this, EventArgs.Empty);
         }
+
+        public string ItemTag => this.QuestionState.Header.Identity + "_Opt_" + (RosterVector == null ? "<null>" : new RosterVector(RosterVector).ToString());
     }
 }

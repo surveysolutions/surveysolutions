@@ -14,7 +14,7 @@ namespace WB.Infrastructure.Native.Files
             //this.Bind<IArchiveUtils>().To<ZipArchiveUtils>();
         }
 
-        public Task Init(IServiceLocator serviceLocator)
+        public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
             return Task.CompletedTask;
         }

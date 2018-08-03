@@ -4,10 +4,9 @@ using Android.OS;
 using Android.Support.V4.Widget;
 using Android.Support.V7.App;
 using Android.Views;
-using Java.Interop;
-using MvvmCross.Platform;
-using MvvmCross.Platform.Core;
-using MvvmCross.Plugins.Messenger;
+using MvvmCross;
+using MvvmCross.Base;
+using MvvmCross.Plugin.Messenger;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.DataCollection;
@@ -109,9 +108,8 @@ namespace WB.UI.Shared.Enumerator.Activities
         {
             base.OnStop();
 
-            var messenger = Mvx.Resolve<IMvxMessenger>();
-            messenger.Unsubscribe<SectionChangeMessage>(sectionChangeSubscriptionToken);
-            messenger.Unsubscribe<InterviewCompletedMessage>(interviewCompleteActivityToken);
+            sectionChangeSubscriptionToken.Dispose();
+            interviewCompleteActivityToken.Dispose();
             Mvx.Resolve<IAudioDialog>()?.StopRecordingAndSaveResult();
         }
 

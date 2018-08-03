@@ -6,21 +6,25 @@ using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services;
-using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
-using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
+using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.WebApi;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
+using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
-using It = Moq.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProcessTests
 {
-    [NUnit.Framework.TestOf(typeof(SynchronizationProcess))]
+    [TestOf(typeof(InterviewerSynchronizationProcess))]
     internal class when_synchronize_and_upload_sync_statistics
     {
         private Mock<ISynchronizationService> synchronizationServiceMock;
@@ -58,13 +62,16 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
 
             this.synchronizationServiceMock = new Mock<ISynchronizationService>();
 
-            synchronizationServiceMock.Setup(x => x.GetCensusQuestionnairesAsync(Moq.It.IsAny<CancellationToken>()))
+            synchronizationServiceMock.Setup(x => x.GetCensusQuestionnairesAsync(It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new List<QuestionnaireIdentity>(new[] { questionnaireIdentity }));
-            synchronizationServiceMock.Setup(x => x.GetServerQuestionnairesAsync(Moq.It.IsAny<CancellationToken>()))
+            synchronizationServiceMock.Setup(x => x.GetServerQuestionnairesAsync(It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new List<QuestionnaireIdentity>(new[] { questionnaireIdentity }));
-            synchronizationServiceMock.Setup(x => x.GetInterviewsAsync(Moq.It.IsAny<CancellationToken>()))
+            synchronizationServiceMock.Setup(x => x.GetInterviewsAsync(It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new List<InterviewApiView>());
-            
+            synchronizationServiceMock.Setup(x =>
+                    x.CheckObsoleteInterviewsAsync(It.IsAny<List<ObsoletePackageCheck>>(), CancellationToken.None))
+                .ReturnsAsync(new List<Guid>());
+
             var interviewerQuestionnaireAccessor = Mock.Of<IInterviewerQuestionnaireAccessor>(
                 x => x.GetCensusQuestionnaireIdentities() == new List<QuestionnaireIdentity>(new[] { questionnaireIdentity })
                      && x.GetAllQuestionnaireIdentities() == new List<QuestionnaireIdentity>(new[] { questionnaireIdentity })
@@ -79,19 +86,28 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                     Duration = this.totalDuration
                 });
 
-            var mockOFInterviewAccessor = new Mock<IInterviewerInterviewAccessor>();
+            var mockOfInterviewAccessor = new Mock<IInterviewerInterviewAccessor>();
+
+            var interviewerSyncService = new Mock<IInterviewerSynchronizationService>();
+            interviewerSyncService.Setup(x => x.GetInterviewerAsync(It.IsAny<RestCredentials>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new InterviewerApiView());
+
+            IPlainStorage<InterviewerIdentity> localInterviewers = new InMemoryPlainStorage<InterviewerIdentity>();
+            localInterviewers.Store(Create.Other.InterviewerIdentity());
 
             var viewModel = Create.Service.SynchronizationProcess(principal: principal,
+                interviewersPlainStorage: localInterviewers,
                 interviewViewRepository: interviewViewRepository,
                 synchronizationService: synchronizationServiceMock.Object,
                 questionnaireFactory: interviewerQuestionnaireAccessor,
-                interviewFactory: mockOFInterviewAccessor.Object,
-                httpStatistician: httpStatistician.Object
+                interviewFactory: mockOfInterviewAccessor.Object,
+                httpStatistician: httpStatistician.Object,
+                interviewerSynchronizationService: interviewerSyncService.Object
             );
 
             this.sw = new Stopwatch();
             sw.Start();
-            await viewModel.SyncronizeAsync(Mock.Of<IProgress<SyncProgressInfo>>(), CancellationToken.None);
+            await viewModel.SynchronizeAsync(Mock.Of<IProgress<SyncProgressInfo>>(), CancellationToken.None);
             sw.Stop();
         }
 

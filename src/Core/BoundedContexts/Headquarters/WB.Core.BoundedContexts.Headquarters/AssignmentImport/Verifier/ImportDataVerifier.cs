@@ -175,12 +175,10 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         {
             if (!files.Any(x => IsQuestionnaireFile(x.QuestionnaireOrRosterName, questionnaire)))
             {
-                var questionaireFileName = this.fileSystem.MakeStataCompatibleFileName(questionnaire.Title);
-
                 yield return ToFileError("PL0040", messages.PL0040_QuestionnaireDataIsNotFound,
                     new PreloadedFileInfo
                     {
-                        FileName = $"{questionaireFileName}.tab"
+                        FileName = $"{questionnaire.VariableName}.tab"
                     }, originalFileName);
                 yield break;
             }
@@ -207,10 +205,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                     if (error != null) yield return error;
 
                 var columnNames = file.Columns.Select(x => x.ToLower());
-                var isQuestionnaireFile = IsQuestionnaireFile(file.QuestionnaireOrRosterName, questionnaire);
-                var hasRosterFiles = files.Any(x => x.QuestionnaireOrRosterName != file.QuestionnaireOrRosterName);
-
-                if ((isQuestionnaireFile && hasRosterFiles || (!isQuestionnaireFile && /*advanced preloading*/files.Length > 1)) && !columnNames.Contains(ServiceColumns.InterviewId))
+                if (/*advanced preloading*/files.Length > 1 && !columnNames.Contains(ServiceColumns.InterviewId))
                 {
                     yield return ToColumnError("PL0007", messages.PL0007_ServiceColumnIsAbsent, file.FileName, ServiceColumns.InterviewId);
                 }
@@ -773,8 +768,13 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             => !string.IsNullOrWhiteSpace(quantity.Value) && !quantity.Quantity.HasValue;
 
         private bool IsQuestionnaireFile(string questionnaireOrRosterName, IQuestionnaire questionnaire)
-            => string.Equals(this.fileSystem.MakeStataCompatibleFileName(questionnaireOrRosterName),
-                this.fileSystem.MakeStataCompatibleFileName(questionnaire.Title), StringComparison.InvariantCultureIgnoreCase);
+        {
+            var inputFileName = this.fileSystem.MakeStataCompatibleFileName(questionnaireOrRosterName);
+            var questionnaireFileName = this.fileSystem.MakeStataCompatibleFileName(questionnaire.Title);
+
+            return string.Equals(inputFileName, questionnaireFileName, StringComparison.InvariantCultureIgnoreCase) ||
+                   string.Equals(inputFileName, questionnaire.VariableName, StringComparison.InvariantCultureIgnoreCase);
+        }
 
         private IEnumerable<(string oldName, string newName)> GetRosterInstanceIdColumns(PreloadedFileInfo file, IQuestionnaire questionnaire)
         {

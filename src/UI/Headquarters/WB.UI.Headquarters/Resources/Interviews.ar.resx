@@ -169,9 +169,6 @@
   <data name="Tooltip_Filter_Assignment" xml:space="preserve">
     <value>معرف المهمة. انقر في الحقل لكتابة رقم التعريف الكامل.</value>
   </data>
-  <data name="Tooltip_Filter_Questionnaire" xml:space="preserve">
-    <value>نسخة الاستبيان. حدد نسخة استبيان لرؤية المقابلات المرتبطة بها في التقرير إلى اليمين. حدد "جميع الاستبيانات" لرؤية المقابلات المرتبطة بأي استبيان.</value>
-  </data>
   <data name="Tooltip_Filter_Responsible" xml:space="preserve">
     <value>المستخدم مسؤول. انقر في الحقل لاختيار اسم مستخدم إما بتحديده مباشرة أو الكتابة لتصفية قائمة أسماء المستخدمين كذلك.</value>
   </data>

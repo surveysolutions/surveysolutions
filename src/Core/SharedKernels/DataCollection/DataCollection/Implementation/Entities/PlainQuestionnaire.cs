@@ -231,6 +231,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public string Title => this.innerDocument.Title;
 
         public Translation Translation => this.translation;
+        public string VariableName => this.innerDocument.VariableName;
 
         public IQuestion GetQuestionByVariable(string variable)
         {
@@ -912,6 +913,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return new ReadOnlyCollection<Guid>(result.ToList());
         }
 
+        public IReadOnlyList<Guid> GetAllUnderlyingEntities(Guid groupId)
+        {
+            var result = GetChildEntityIds(groupId);
+            return new ReadOnlyCollection<Guid>(result.ToList());
+        }
+
         public IReadOnlyList<Guid> GetSubSectionsWithEnablementCondition(Guid groupId)
         {
             var result = GetChildEntityIds(groupId)
@@ -1047,6 +1054,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public bool HasQuestion(string variableName)
         {
+            variableName = variableName.ToLower();
+
             return this.QuestionVariableNamesCache.Contains(variableName);
         }
 
@@ -1325,10 +1334,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return this.GetSubstitutionReferencedEntities(this.AllGroups);
         }
 
-        private HashSet<string> GetQuestionVariableNamesCache()
-        {
-            return this.AllQuestions.Select(x => x.StataExportCaption).ToHashSet();
-        }
+        private HashSet<string> GetQuestionVariableNamesCache() 
+            => this.AllQuestions.Select(x => x.StataExportCaption.ToLower()).ToHashSet();
 
         private HashSet<string> GetVariableNamesCache()
         {

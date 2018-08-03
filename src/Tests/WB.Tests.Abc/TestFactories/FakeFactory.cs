@@ -1,11 +1,15 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
+using System.Reactive.Subjects;
+using System.Threading;
+using System.Threading.Tasks;
 using Main.Core.Documents;
 using Moq;
-using MvvmCross.Core.ViewModels;
-using MvvmCross.Core.Views;
-using MvvmCross.Platform.Core;
+using MvvmCross.Base;
+using MvvmCross.ViewModels;
+using MvvmCross.Views;
 using Ncqrs.Domain;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing;
@@ -18,6 +22,9 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.Enumerator.OfflineSync.Entities;
+using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace WB.Tests.Abc.TestFactories
@@ -107,23 +114,35 @@ namespace WB.Tests.Abc.TestFactories
             public readonly List<MvxViewModelRequest> Requests = new List<MvxViewModelRequest>();
             public readonly List<MvxPresentationHint> Hints = new List<MvxPresentationHint>();
 
-            public bool RequestMainThreadAction(Action action, bool maskExceptions = true)
+            public Task<bool> ShowViewModel(MvxViewModelRequest request)
+            {
+                this.Requests.Add(request);
+                return Task.FromResult(true);
+            }
+
+            public Task<bool> ChangePresentation(MvxPresentationHint hint)
+            {
+                this.Hints.Add(hint);
+                return Task.FromResult(true);
+            }
+
+            public Task ExecuteOnMainThreadAsync(Action action, bool maskExceptions = true)
+            {
+                throw new NotImplementedException();
+            }
+
+            public Task ExecuteOnMainThreadAsync(Func<Task> action, bool maskExceptions = true)
+            {
+                throw new NotImplementedException();
+            }
+
+            public override bool RequestMainThreadAction(Action action, bool maskExceptions = true)
             {
                 action();
                 return true;
             }
 
-            public bool ShowViewModel(MvxViewModelRequest request)
-            {
-                this.Requests.Add(request);
-                return true;
-            }
-
-            public bool ChangePresentation(MvxPresentationHint hint)
-            {
-                this.Hints.Add(hint);
-                return true;
-            }
+            public override bool IsOnMainThread => true;
         }
 
         public IDataExportFileAccessor DataExportFileAccessor()
@@ -145,6 +164,8 @@ namespace WB.Tests.Abc.TestFactories
                 action.Invoke();
                 return true;
             }
+
+            public bool IsOnMainThread => true;
         }
         
 
@@ -163,6 +184,208 @@ namespace WB.Tests.Abc.TestFactories
                 mock.Setup(sl => sl.GetInstance<T>()).Returns(item);
                 return this;
             }
+        }
+
+        public IPayloadProvider PayloadProvider() => new PayloadProvier();
+
+        internal class PayloadProvier : IPayloadProvider
+        {
+            private static long IdSource = 0;
+
+            public IPayload AsBytes(byte[] bytes, string endpoint)
+            {
+                return new Payload
+                {
+                    Bytes = bytes,
+                    Type = PayloadType.Bytes,
+                    Id = Interlocked.Increment(ref IdSource),
+                    Endpoint = endpoint
+                };
+            }
+
+            public IPayload AsStream(byte[] bytes, string endpoint)
+            {
+                return new Payload
+                {
+                    Stream = new MemoryStream(bytes),
+                    Id = Interlocked.Increment(ref IdSource),
+                    Type = PayloadType.Stream,
+                    Endpoint = endpoint
+                };
+            }
+        }
+
+        public FakeNearbyConnection GoogleConnection() => new FakeNearbyConnection();
+
+        internal abstract class FakeNearbyConnectionBase : INearbyConnection
+        {
+            public Task<NearbyStatus> StartDiscoveryAsync(string serviceName, CancellationToken cancellationToken)
+            {
+                throw new NotImplementedException();
+            }
+
+            public Task<string> StartAdvertisingAsync(string serviceName, string name, CancellationToken cancellationToken)
+            {
+                throw new NotImplementedException();
+            }
+
+            public Task<NearbyStatus> RequestConnectionAsync(string name, string endpoint, CancellationToken cancellationToken)
+            {
+                throw new NotImplementedException();
+            }
+
+            public Task<NearbyStatus> AcceptConnectionAsync(string endpoint)
+            {
+                throw new NotImplementedException();
+            }
+
+            public Task<NearbyStatus> RejectConnectionAsync(string endpoint)
+            {
+                throw new NotImplementedException();
+            }
+
+            public virtual Task<NearbyStatus> SendPayloadAsync(string to, IPayload payload)
+            {
+                throw new NotImplementedException();
+            }
+
+            public void StopAllEndpoint()
+            {
+                throw new NotImplementedException();
+            }
+
+            public IObservable<INearbyEvent> Events { get; } = new Subject<INearbyEvent>();
+            public ObservableCollection<RemoteEndpoint> RemoteEndpoints { get; } = new CovariantObservableCollection<RemoteEndpoint>();
+            public void StopDiscovery()
+            {
+            }
+
+            public void StopAdvertising()
+            {
+                throw new NotImplementedException();
+            }
+
+            public void StopAll()
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        internal class FakeNearbyConnection : FakeNearbyConnectionBase
+        {
+            private readonly IDictionary<string, INearbyCommunicator> clientsMap = new Dictionary<string, INearbyCommunicator>();
+            private readonly IDictionary<string, string> connectionMap = new Dictionary<string, string>();
+
+            public FakeNearbyConnection SetConnectionManager(string endpoint, INearbyCommunicator manager)
+            {
+                clientsMap.Add(endpoint, manager);
+                return this;
+            }
+
+            public FakeNearbyConnection MapConnection(string fromEndpoint, string toEndpoint)
+            {
+                connectionMap.Add(fromEndpoint, toEndpoint);
+                return this;
+            }
+
+            public FakeNearbyConnection WithTwoWayClientServerConnectionMap(INearbyCommunicator server, INearbyCommunicator client)
+            {
+                return this.SetConnectionManager("server", server)
+                    .SetConnectionManager("client", client)
+                    .MapConnection("server", "client")
+                    .MapConnection("client", "server");
+            }
+
+            private TimeSpan[] delays = null;
+
+            public FakeNearbyConnection WithDelaysOnResponse(params TimeSpan[] delays)
+            {
+                this.delays = delays;
+                return this;
+            }
+
+            public override async Task<NearbyStatus> SendPayloadAsync(string to, IPayload payload)
+            {
+                var from = connectionMap[to];
+                var toClient = clientsMap[to];
+                var fromClient = clientsMap[from];
+                int delayIdx = 0;
+
+                if (payload.Type != PayloadType.Bytes)
+                {
+                    // google services notify on outgoing progress
+                    fromClient.RecievePayloadTransferUpdate(this, to, new NearbyPayloadTransferUpdate
+                    {
+                        Status = TransferStatus.InProgress,
+                        BytesTransferred = 0,
+                        Id = payload.Id
+                    });
+                }
+
+                fromClient.RecievePayloadTransferUpdate(this, to, new NearbyPayloadTransferUpdate
+                {
+                    Status = TransferStatus.Success,
+                    BytesTransferred = 100,
+                    Id = payload.Id
+                });
+
+                await NextDelay();
+
+                // google service notify that payload is received
+                await toClient.RecievePayloadAsync(this, from, payload);
+
+                await NextDelay();
+
+                if (payload.Type != PayloadType.Bytes)
+                {
+                    toClient.RecievePayloadTransferUpdate(this, from, new NearbyPayloadTransferUpdate
+                    {
+                        Status = TransferStatus.InProgress,
+                        BytesTransferred = 0,
+                        Id = payload.Id
+                    });
+                }
+
+                await NextDelay();
+
+                toClient.RecievePayloadTransferUpdate(this, from, new NearbyPayloadTransferUpdate
+                {
+                    Status = TransferStatus.Success,
+                    BytesTransferred = 100,
+                    Id = payload.Id
+                });
+
+                async Task NextDelay()
+                {
+                    if (delays != null)
+                    {
+                        if (delayIdx < delays.Length)
+                        {
+                            await Task.Delay(delays[delayIdx++]);
+                        }
+                    }
+                }
+
+                return NearbyStatus.Ok;
+            }
+        }
+
+        internal class Payload : IPayload
+        {
+            public string Endpoint { get; set; }
+            public byte[] Bytes { get; set; }
+            public long Id { get; set; }
+            public Stream Stream { get; set;  }
+            public PayloadType Type { get; set; }
+
+            public Task ReadStreamAsync()
+            {
+                var ms = Stream as MemoryStream;
+                BytesFromStream = Task.FromResult(ms.ToArray());
+                return BytesFromStream;
+            }
+
+            public Task<byte[]> BytesFromStream { get; set; }
         }
     }
 }

@@ -31,10 +31,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests.Synchronizat
             foreach (var interviewStatus in statuses)
             {
                 var interview = CreateInterview(questionnaireRepository: questionnaireRepository);
-                interview.Apply(new InterviewStatusChanged(interviewStatus, null));
+                interview.Apply(new InterviewStatusChanged(interviewStatus, null, DateTimeOffset.Now));
                 try
                 {
-                    interview.HqReject(userId, "comment");
+                    interview.HqReject(userId, "comment", DateTimeOffset.Now);
                 }
                 catch (InterviewException)
                 {

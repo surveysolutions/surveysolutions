@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using Android.Views;
-using MvvmCross.Platform.Converters;
-using MvvmCross.Platform.Platform;
+using MvvmCross.Converters;
 
 namespace WB.UI.Shared.Enumerator.Converters
 {

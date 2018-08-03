@@ -2,10 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using MvvmCross.Core.ViewModels;
-using MvvmCross.Plugins.Messenger;
+using MvvmCross.Base;
+using MvvmCross.Commands;
+using MvvmCross.Plugin.Messenger;
+using MvvmCross.ViewModels;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
+using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -34,7 +38,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             IEntitiesListViewModelFactory entitiesListViewModelFactory,
             ILastCompletionComments lastCompletionComments,
             InterviewStateViewModel interviewState,
-            DynamicTextViewModel dynamicTextViewModel)
+            DynamicTextViewModel dynamicTextViewModel,
+            ILogger logger)
         {
             this.viewModelNavigationService = viewModelNavigationService;
             this.commandService = commandService;
@@ -45,7 +50,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.InterviewState = interviewState;
             this.Name = dynamicTextViewModel;
+            this.logger = logger;
         }
+
+        private readonly ILogger logger;
 
         protected Guid interviewId;
 
@@ -73,7 +81,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     this.entitiesListViewModelFactory.MaxNumberOfEntities)
                 : UIResources.Interview_Complete_Entities_With_Errors;
 
-            this.CompleteComment = lastCompletionComments.Get(this.interviewId);
+            this.Comment = lastCompletionComments.Get(this.interviewId);
+            this.CommentLabel = UIResources.Interview_Complete_Note_For_Supervisor;
         }
 
         public int AnsweredCount { get; set; }
@@ -96,15 +105,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             }
         }
 
-        public string CompleteComment
+        public string Comment
         {
-            get => completeComment;
+            get => comment;
             set
             {
-                completeComment = value;
+                comment = value;
                 this.lastCompletionComments.Store(this.interviewId, value);
             }
         }
+
+        public string CommentLabel { get; protected set; }
 
         private bool wasThisInterviewCompleted = false;
         public bool WasThisInterviewCompleted
@@ -113,7 +124,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             set => this.RaiseAndSetIfChanged(ref this.wasThisInterviewCompleted, value);
         }
 
-        private string completeComment;
+        private string comment;
 
         private async Task CompleteInterviewAsync()
         {
@@ -126,12 +137,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             var completeInterview = new CompleteInterviewCommand(
                 interviewId: this.interviewId,
                 userId: this.principal.CurrentUserIdentity.UserId,
-                comment: this.CompleteComment,
-                completeTime: DateTime.UtcNow);
+                comment: this.Comment);
 
-            await this.commandService.ExecuteAsync(completeInterview);
+            try
+            {
+                await this.commandService.ExecuteAsync(completeInterview);
+            }
+            catch (InterviewException e)
+            {
+                logger.Warn("Interview has unexpected status", e);
+            }
+
             this.lastCompletionComments.Remove(interviewId);
-
             await this.CloseInterviewAfterComplete();
         }
 
@@ -145,6 +162,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public void Dispose()
         {
             this.Name.Dispose();
+            this.InterviewState.DisposeIfDisposable();
         }
     }
 }

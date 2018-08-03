@@ -1,11 +1,10 @@
+using System;
 using System.Threading.Tasks;
 using Android.Content;
-using MvvmCross.Core.Navigation;
-using MvvmCross.Core.ViewModels;
-using MvvmCross.Platform.Droid.Platform;
+using MvvmCross.Navigation;
+using MvvmCross.Platforms.Android;
 using WB.Core.BoundedContexts.Tester.ViewModels;
 using WB.Core.Infrastructure.CommandBus;
-
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
@@ -48,6 +47,12 @@ namespace WB.UI.Tester.Implementation.Services
             {
                 InterviewId = interviewId
             });
+
+        public override Task NavigateToFinishInstallationAsync()
+            => throw new NotImplementedException();
+
+        public override Task NavigateToMapsAsync()
+        => throw new NotImplementedException();
 
         public override Task NavigateToInterviewAsync(string interviewId, NavigationIdentity navigationIdentity)
             => this.navigationService.Navigate<InterviewViewModel, InterviewViewModelArgs>(new InterviewViewModelArgs

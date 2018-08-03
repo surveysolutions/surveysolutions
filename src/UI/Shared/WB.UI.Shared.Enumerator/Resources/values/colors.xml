@@ -1,107 +1,154 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <color name="applicationBackground">#FFFAFAFA</color>
-  <color name="colorBlueThemePrimary">#FF2A81CB</color>
-  <color name="colorAccent">@android:color/holo_blue_bright</color>
-  <color name="colorPrimary">@android:color/darker_gray</color>
+    <color name="applicationBackground">#FFFAFAFA</color>
+    <color name="colorBlueThemePrimary">#FF2A81CB</color>
+    <color name="colorAccent">@android:color/holo_blue_bright</color>
+    <color name="colorPrimary">@android:color/darker_gray</color>
 
-  <color name="errorTextColor">#e64a19</color>
-  <color name="warningTextColor">#F9BD07</color>
-  <color name="disabledTextColor">#afafaf</color>
+    <color name="errorTextColor">#e64a19</color>
+    <color name="commentsTextColor">#DF3DBF</color>
+    <color name="warningTextColor">#F9BD07</color>
+    <color name="disabledTextColor">#afafaf</color>
+    <color name="notAnsweredLabel">#4277A8</color>
+    <color name="overview_invalid_border">#F0D0C7</color>
+    <color name="overview_invalid_text">#c70000</color>
+    <color name="overview_invalid_background">#FCDAD1</color>
+    <color name="overview_unanswered_border">#D6D6D6</color>
+    <color name="overview_unanswered_background">#E1E1E1</color>
+    <color name="overview_commented_overlay">#4DE88AD3</color>
 
-  <color name="sideBarPrefilledQuestionText">#FF747474</color>
+    <color name="sideBarPrefilledQuestionText">#FF747474</color>
+
+    <color name="commentInterviewerTextColor">#FF747474</color>
+    <color name="commentDetailsInterviewerTextColor">#FF000000</color>
+    <color name="commentSupervisorTextColor">#FFF6D6D0</color>
+    <color name="nonAnsweredBackground">#EEEFF0</color>
+    <color name="invalidAnsweredBackground">#FFF6D6D0</color>
+
+    <color name="colorToolbarText">#FFFFFFFF</color>
+    <color name="colorToolbarTransp">#BFFFFFFF</color>
+
+    <color name="emptyOptionsText">#a5a5a5</color>
+
+    <color name="recordedAnswerText">#000000</color>
+
+    <color name="editorTextColor">#FF3F3F3F</color>
+    <color name="editorAnsweredBorder">#D0D0D0</color>
+    <color name="editorHintTextColor">#FFB2B2B2</color>
+    <color name="btn_default">#2a81cb</color>
+    <color name="button_pressed">#0d6dbf</color>
+    <color name="button_unpressed">#2a81cb</color>
+
+    <color name="group_title_text">#FFFFFFFF</color>
+
+    <color name="group_not_started">#C6C6C6</color>
+    <color name="group_started">#2a81cb</color>
+    <color name="group_started_pressed">#236cad</color>
+    <color name="group_completed">#1f9500</color>
+    <color name="group_completed_pressed">#187d00</color>
+    <color name="group_with_invalid_answers">#e4512b</color>
+    <color name="group_with_invalid_answers_pressed">#cd4927</color>
+
+    <color name="default_input_button_pressed">#0D6DBF</color>
+    <color name="default_input_button_unpressed">#2A81CB</color>
+    <color name="default_input_button_disabled">#C6C6C6</color>
+
+    <color name="question_input_button_pressed">#FAFAFA</color>
+    <color name="question_input_button_unpressed">@android:color/white</color>
+    <color name="question_input_button_disabled">#C6C6C6</color>
+
+    <color name="dashboard_button_color">#F6F6F6</color>
+    <color name="dashboard_button_color_pressed">#E5E5E5</color>
+    <color name="dashboard_questionnairelist_empty_text">#a3a3a3</color>
+
+    <color name="dashboard_completed_tab">#388e3c</color>
+    <color name="dashboard_in_progress_tab">#1976d2</color>
+    <color name="dashboard_rejected_tab">#e64a19</color>
+    <color name="dashboard_interview_title">#404040</color>
+
+    <color name="dashboard_interview_delimeter">#ebebeb</color>
+    <color name="dashboard_interview_background">#FFFFFF</color>
+    <color name="dashboard_new_tab">#6D6D6D</color>
+    <color name="dashboard_prefilled_question">#999999</color>
+    <color name="dashboard_in_progress_tab">#1976d2</color>
+
+    <color name="dashboard_border">#ECECEC</color>
+    <color name="dashboard_border_shadow">#C2C2C2</color>
+
+    <color name="dashboard_new_interview_status">#E9E9E9</color>
+    <color name="dashboard_main_color">#404040</color>
+
+    <color name="dashboard_interview_subtitle">#9e9e9e</color>
+
+    <color name="dashboard_new_tab">#6D6D6D</color>
+    <color name="dashboard_new_interview_status">#E9E9E9</color>
+    <color name="dashboard_no_interviews_text">#A7A7A7</color>
+    <color name="dashboard_synchronization_delimiter">#E3E3E3</color>
+    <color name="dashboard_synchronization_regular_title">#000000</color>
+    <color name="dashboard_synchronization_statistics_text">#FF747474</color>
+    <color name="dashboard_synchronization_fail_title">#96F45D28</color>
+    <color name="dashboard_border">#ECECEC</color>
+    <color name="dashboard_border_shadow">#C2C2C2</color>
+
+    <color name="dashboard_search_background_color">#F2F2F2</color>
+    <color name="dashboard_search_exit_color">#2A81CB</color>
 
 
-  <color name="commentInterviewerTextColor">#FF747474</color>
-  <color name="commentDetailsInterviewerTextColor">#FF000000</color>
-  <color name="commentSupervisorTextColor">#FFF6D6D0</color>
-  <color name="nonAnsweredBackground">#EEEFF0</color>
+    <color name="previous_group_navigation_answered">#7AC16B</color>
+    <color name="previous_group_navigation_unanswered">#2A81CB</color>
 
-  <color name="colorToolbarText">#FFFFFFFF</color>
-  <color name="colorToolbarTransp">#BFFFFFFF</color>
+    <color name="sections_list_background_color">#ffffff</color>
+    <color name="sections_list_selected_background_color">#EFF1F3</color>
+    <color name="sections_list_text_color">#000000</color>
+    <color name="sections_list_pressed_background_color">#DFE2E6</color>
+    <color name="sections_list_current_background_color">#DFE2E6</color>
 
-  <color name="emptyOptionsText">#a5a5a5</color>
+    <color name="list_style_divider_color">#EDEDED</color>
 
-  <color name="recordedAnswerText">#000000</color>
+    <color name="darkActionBar">#575757</color>
+    <color name="interviewActionBar">#246EAD</color>
 
-  <color name="editorTextColor">#FF3F3F3F</color>
-  <color name="editorAnsweredBorder">#D0D0D0</color>
-  <color name="editorHintTextColor">#FFB2B2B2</color>
-  <color name="btn_default">#2a81cb</color>
-  <color name="button_pressed">#0d6dbf</color>
-  <color name="button_unpressed">#2a81cb</color>
+    <color name="interviewHeaderCompleted">#1f9500</color>
+    <color name="interviewHeaderInProgress">#2a81cb</color>
+    <color name="interviewHeaderErrors">#e64a19</color>
+    <color name="interviewHeaderDisabled">#545454</color>
 
-  <color name="group_title_text">#FFFFFFFF</color>
+    <color name="interviewStatusBarCompleted">#309211</color>
+    <color name="interviewStatusBarInProgress">#246EAD</color>
+    <color name="interviewStatusBarErrors">#e64a19</color>
+    <color name="interviewStatusBarDisabled">#474747</color>
 
-  <color name="group_not_started">#C6C6C6</color>
-  <color name="group_started">#2a81cb</color>
-  <color name="group_started_pressed">#236cad</color>
-  <color name="group_completed">#1f9500</color>
-  <color name="group_completed_pressed">#187d00</color>
-  <color name="group_with_invalid_answers">#e4512b</color>
-  <color name="group_with_invalid_answers_pressed">#cd4927</color>
+    <color name="complete_screen_title_text">#747474</color>
+    <color name="complete_screen_statistics_border">#dadada</color>
+    <color name="complete_screen_statistics_answered_color">#2a81cb</color>
+    <color name="complete_screen_statistics_unanswered_color">#000000</color>
+    <color name="complete_screen_statistics_error_color">#e64a19</color>
+    <color name="complete_screen_statistics_neutral_color">#9a9a9a</color>
 
-  <color name="default_input_button_pressed">#0D6DBF</color>
-  <color name="default_input_button_unpressed">#2A81CB</color>
-  <color name="default_input_button_disabled">#C6C6C6</color>
+    <color name="interview_question_yes_no">#36AEE5</color>
+    <color name="interview_question_yesno_selected_text">#3f3f3f</color>
+    <color name="interview_question_yesno_not_selected_text">#a3a3a3</color>
 
-  <color name="question_input_button_pressed">#FAFAFA</color>
-  <color name="question_input_button_unpressed">@android:color/white</color>
-  <color name="question_input_button_disabled">#C6C6C6</color>
+    <color name="instructions">#2a81cb</color>
+    <color name="instructions_pressed">#001D8B</color>
 
-  <color name="dashboard_button_color">#F6F6F6</color>
-  <color name="dashboard_button_color_pressed">#E5E5E5</color>
-  <color name="dashboard_questionnairelist_empty_text">#a3a3a3</color>
+    <color name="comment_from_authority">#ff5722</color>
+    <color name="comment_from_interviewer">#000000</color>
 
-  <color name="previous_group_navigation_answered">#7AC16B</color>
-  <color name="previous_group_navigation_unanswered">#2A81CB</color>
+    <color name="cover_not_from_supervisor_color">#000000</color>
 
-  <color name="sections_list_background_color">#ffffff</color>
-  <color name="sections_list_selected_background_color">#EFF1F3</color>
-  <color name="sections_list_text_color">#000000</color>
-  <color name="sections_list_pressed_background_color">#DFE2E6</color>
-  <color name="sections_list_current_background_color">#DFE2E6</color>
+    <color name="color_white_30_percent_transparent">#B3ffffff</color>
+    <color name="color_white_10_percent_transparent">#E6ffffff</color>
 
-  <color name="list_style_divider_color">#EDEDED</color>
+    <color name="readonly_question_background">#FAFAFA</color>
+    <color name="readonly_question_inner_shape">#FFFFFF</color>
+    <color name="readonly_question_outer_shape">#D0D0D0</color>
 
-  <color name="darkActionBar">#575757</color>
-  <color name="interviewActionBar">#246EAD</color>
+    <color name="cover_header_text">#000000</color>
 
-  <color name="interviewHeaderCompleted">#1f9500</color>
-  <color name="interviewHeaderInProgress">#2a81cb</color>
-  <color name="interviewHeaderErrors">#e64a19</color>
-  <color name="interviewHeaderDisabled">#545454</color>
-
-  <color name="interviewStatusBarCompleted">#309211</color>
-  <color name="interviewStatusBarInProgress">#246EAD</color>
-  <color name="interviewStatusBarErrors">#e64a19</color>
-  <color name="interviewStatusBarDisabled">#474747</color>
-
-  <color name="complete_screen_title_text">#747474</color>
-  <color name="complete_screen_statistics_border">#dadada</color>
-  <color name="complete_screen_statistics_answered_color">#2a81cb</color>
-  <color name="complete_screen_statistics_unanswered_color">#000000</color>
-  <color name="complete_screen_statistics_error_color">#e64a19</color>
-  <color name="complete_screen_statistics_neutral_color">#9a9a9a</color>
-
-  <color name="interview_question_yes_no">#36AEE5</color>
-  <color name="interview_question_yesno_selected_text">#3f3f3f</color>
-  <color name="interview_question_yesno_not_selected_text">#a3a3a3</color>
-
-  <color name="instructions">#2a81cb</color>
-  <color name="instructions_pressed">#001D8B</color>
-
-  <color name="comment_from_authority">#ff5722</color>
-  <color name="comment_from_interviewer">#000000</color>
-
-  <color name="cover_not_from_supervisor_color">#000000</color>
-
-  <color name="color_white_30_percent_transparent">#B3ffffff</color>
-  <color name="color_white_10_percent_transparent">#E6ffffff</color>
-
-  <color name="readonly_question_background">#FAFAFA</color>
-  <color name="readonly_question_inner_shape">#FFFFFF</color>
-  <color name="readonly_question_outer_shape">#D0D0D0</color>
-  
-  <color name="cover_header_text">#000000</color>
+    <color name="offline_sync_regular_text">#333333</color>
+    <color name="offline_sync_abort_text">#df4813</color>
+    <color name="offline_sync_complete_text">#1f9500</color>
+    <color name="offline_sync_waitingdevice_text">#2a81cb</color>
+    <color name="offline_sync_error_text">#e4512b</color>
 </resources>

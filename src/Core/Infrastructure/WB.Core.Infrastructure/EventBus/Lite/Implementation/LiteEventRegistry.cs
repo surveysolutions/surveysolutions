@@ -5,7 +5,6 @@ using System.Reflection;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.EventBus.Lite.Implementation.RaiseFilters;
 
 namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
 {
@@ -25,7 +24,7 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
                 RegisterHandlerForEvent(
                     handler, 
                     eventType, 
-                    aggregateRootId != null ? new AggregateRootRaiseFilter(aggregateRootId) : null);
+                    aggregateRootId);
             }
         }
 
@@ -71,7 +70,7 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
                 }
 
                 var liteEventRegistryEntities = handlersForEventType
-                    .Where(entity => entity.Filter == null || entity.Filter.IsNeedRaise(@event))
+                    .Where(entity => entity.AggreateRootId == null || entity.AggreateRootId == @event.EventSourceId.FormatGuid())
                     .ToList();
 
 
@@ -80,6 +79,15 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
                     .Where(handler => handler != null)
                     .Select(GetActionHandler)
                     .ToList();
+            }
+        }
+
+        public void RemoveAggregateRoot(string aggregateRootId)
+        {
+            foreach (var handlerKey in this.handlers.Keys)
+            {
+                var handler = this.handlers[handlerKey];
+                handler.RemoveWhere(x => x.AggreateRootId == aggregateRootId);
             }
         }
 
@@ -92,7 +100,7 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
             return null;
         }
 
-        private void RegisterHandlerForEvent(ILiteEventHandler handler, Type eventType, ILiteEventRaiseFilter raiseFilter)
+        private void RegisterHandlerForEvent(ILiteEventHandler handler, Type eventType, string raiseFilter)
         {
             lock (LockObject)
             {
