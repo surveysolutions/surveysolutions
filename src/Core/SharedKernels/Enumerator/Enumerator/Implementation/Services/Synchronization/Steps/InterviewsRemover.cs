@@ -16,10 +16,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             this.interviewFactory = interviewFactory;
         }
 
-        public void RemoveInterviews(List<Guid> interviewIds, SynchronizationStatistics statistics,
-            IProgress<SyncProgressInfo> progress)
+        public void RemoveInterviews(SynchronizationStatistics statistics, IProgress<SyncProgressInfo> progress,
+            params Guid[] interviewIds)
         {
-            statistics.TotalDeletedInterviewsCount += interviewIds.Count;
+            statistics.TotalDeletedInterviewsCount += interviewIds.Length;
             foreach (var interviewId in interviewIds)
             {
                 progress.Report(new SyncProgressInfo
@@ -27,7 +27,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     Title = InterviewerUIResources.Synchronization_Download_Title,
                     Description = string.Format(InterviewerUIResources.Synchronization_Download_Description_Format,
                         statistics.DeletedInterviewsCount + 1,
-                        interviewIds.Count,
+                        interviewIds.Length,
                         InterviewerUIResources.Synchronization_Interviews)
                 });
 
