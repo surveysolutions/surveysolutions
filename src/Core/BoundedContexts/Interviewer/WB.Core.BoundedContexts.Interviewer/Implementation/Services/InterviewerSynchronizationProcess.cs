@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,10 +10,8 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization;
@@ -33,7 +30,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly ISynchronizationMode synchronizationMode;
         private readonly IInterviewerPrincipal principal;
         private readonly IPlainStorage<InterviewerIdentity> interviewersPlainStorage;
-        private readonly IPlainStorage<InterviewView> interviewViewRepository;
         private readonly IPasswordHasher passwordHasher;
         private readonly IInterviewerSynchronizationService interviewerSynchronizationService;
 
@@ -64,16 +60,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             ISynchronizationMode synchronizationMode,
             IPlainStorage<InterviewSequenceView, Guid> interviewSequenceViewRepository,
             IInterviewerSynchronizationService interviewerSynchronizationService) : base(synchronizationService, interviewViewRepository, principal, logger,
-            userInteractionService, questionnairesAccessor, interviewFactory, interviewMultimediaViewStorage, imagesStorage,
-            logoSynchronizer, cleanupService, assignmentsSynchronizer, questionnaireDownloader, httpStatistician,
-            assignmentsStorage, audioFileStorage, diagnosticService, auditLogSynchronizer, auditLogService,
-            eventBus, eventStore, interviewSequenceViewRepository, interviewerSettings)
+            userInteractionService, assignmentsSynchronizer, httpStatistician,
+            assignmentsStorage, auditLogSynchronizer, auditLogService, interviewerSettings)
         {
             this.principal = principal;
             this.interviewerSettings = interviewerSettings;
             this.synchronizationMode = synchronizationMode;
             this.interviewersPlainStorage = interviewersPlainStorage;
-            this.interviewViewRepository = interviewViewRepository;
             this.passwordHasher = passwordHasher;
             this.interviewerSynchronizationService = interviewerSynchronizationService;
         }
@@ -118,7 +111,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         protected override async Task CheckAfterStartSynchronization(CancellationToken cancellationToken){
 
-            var currentSupervisorId = await this.synchronizationService.GetCurrentSupervisor(token: cancellationToken, credentials: this.restCredentials);
+            var currentSupervisorId = await this.synchronizationService.GetCurrentSupervisor(token: cancellationToken, credentials: this.RestCredentials);
             if (currentSupervisorId != this.principal.CurrentUserIdentity.SupervisorId)
             {
                 this.UpdateSupervisorOfInterviewer(currentSupervisorId);
@@ -127,7 +120,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             if (SynchronizationType == SynchronizationType.Online)
             {
                 var interviewer = await this.interviewerSynchronizationService
-                    .GetInterviewerAsync(this.restCredentials, token: cancellationToken).ConfigureAwait(false);
+                    .GetInterviewerAsync(this.RestCredentials, token: cancellationToken).ConfigureAwait(false);
                 UpdateSecurityStampOfInterviewer(interviewer.SecurityStamp);
             }
         }
@@ -159,16 +152,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
             this.interviewersPlainStorage.Store(localInterviewer);
             this.principal.SignIn(localInterviewer.Name, credentials.Password, true);
-        }
-
-        protected override int GetApplicationVersionCode()
-        {
-            return interviewerSettings.GetApplicationVersionCode();
-        }
-
-        protected override IReadOnlyCollection<InterviewView> GetInterviewsForUpload()
-        {
-            return this.interviewViewRepository.Where(interview => interview.Status == InterviewStatus.Completed);
         }
     }
 }

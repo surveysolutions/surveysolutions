@@ -2,30 +2,25 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using FluentAssertions;
 using Moq;
 using Ncqrs.Eventing;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Tester.Services;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.WebApi;
-using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization.Steps;
 using WB.Core.SharedKernels.Enumerator.Services;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Tests.Abc;
-using List = NHibernate.Mapping.List;
 
 namespace WB.Tests.Unit.SharedKernels.Enumerator.Services
 {
-    [TestOf(typeof(SynchronizationProcessBase))]
+    [TestOf(typeof(DownloadInterviews))]
     public class SynchronizationProcessBaseTests
     {
         [Test]
@@ -56,19 +51,19 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services
             var localInterviews = new InMemoryPlainStorage<InterviewView>();
             localInterviews.Store(Create.Entity.InterviewView(interviewId: reassingedInterviewId, responsibleId: oldAssignee));
             var busMock = new Mock<ILiteEventBus>();
-            var interviewerInterviewAccessorMock = new Mock<IInterviewerInterviewAccessor>();
+            var interviewerInterviewAccessorMock = new Mock<IInterviewsRemover>();
 
-            var process = CreateSyncProcess(synchronizationService: syncService.Object,
+            var process = Create.Service.InterviewerDownloadInterviews(synchronizationService: syncService.Object,
                 interviewViewRepository: localInterviews,
                 eventBus: busMock.Object,
-                interviewFactory: interviewerInterviewAccessorMock.Object);
+                interviewsRemover: interviewerInterviewAccessorMock.Object);
 
             // Act
-            await process.DownloadInterviewsAsync(new SynchronizationStatistics(), new Progress<SyncProgressInfo>(), CancellationToken.None);
+            await process.ExecuteAsync();
 
             // Assert
             busMock.Verify(x => x.PublishCommittedEvents(interviewDetails));
-            interviewerInterviewAccessorMock.Verify(x => x.RemoveInterview(reassingedInterviewId));
+            interviewerInterviewAccessorMock.Verify(x => x.RemoveInterviews(It.IsAny<SynchronizationStatistics>(), It.IsAny<IProgress<SyncProgressInfo>>(), reassingedInterviewId));
         }
 
         [Test]
@@ -98,19 +93,17 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services
 
             var localInterviews = new InMemoryPlainStorage<InterviewView>();
             var busMock = new Mock<ILiteEventBus>();
-            var interviewerInterviewAccessorMock = new Mock<IInterviewerInterviewAccessor>();
 
             var localInterviewSequence = new InMemoryPlainStorage<InterviewSequenceView, Guid>();
             localInterviewSequence.Store(Create.Entity.InterviewSequenceView(interviewId, 5));
 
-            var process = CreateSyncProcess(synchronizationService: syncService.Object,
+            var process = Create.Service.InterviewerDownloadInterviews(synchronizationService: syncService.Object,
                 interviewViewRepository: localInterviews,
                 eventBus: busMock.Object,
-                interviewFactory: interviewerInterviewAccessorMock.Object,
                 interviewSequenceViewRepository: localInterviewSequence);
 
             // Act
-            await process.DownloadInterviewsAsync(new SynchronizationStatistics(), new Progress<SyncProgressInfo>(), CancellationToken.None);
+            await process.ExecuteAsync();
 
             // Assert
             syncService.Verify(x => x.GetInterviewDetailsAsync(interviewId, It.IsAny<IProgress<TransferProgress>>(), It.IsAny<CancellationToken>()));
@@ -144,19 +137,17 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services
 
             var localInterviews = new InMemoryPlainStorage<InterviewView>();
             var busMock = new Mock<ILiteEventBus>();
-            var interviewerInterviewAccessorMock = new Mock<IInterviewerInterviewAccessor>();
 
             var localInterviewSequence = new InMemoryPlainStorage<InterviewSequenceView, Guid>();
             localInterviewSequence.Store(Create.Entity.InterviewSequenceView(interviewId, 7));
 
-            var process = CreateSyncProcess(synchronizationService: syncService.Object,
+            var process = Create.Service.InterviewerDownloadInterviews(synchronizationService: syncService.Object,
                 interviewViewRepository: localInterviews,
                 eventBus: busMock.Object,
-                interviewFactory: interviewerInterviewAccessorMock.Object,
                 interviewSequenceViewRepository: localInterviewSequence);
 
             // Act
-            await process.DownloadInterviewsAsync(new SynchronizationStatistics(), new Progress<SyncProgressInfo>(), CancellationToken.None);
+            await process.ExecuteAsync();
 
             // Assert
             syncService.Verify(x => x.GetInterviewDetailsAsync(interviewId, It.IsAny<IProgress<TransferProgress>>(), It.IsAny<CancellationToken>()), Times.Never);
@@ -191,118 +182,54 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services
             var localInterviews = new InMemoryPlainStorage<InterviewView>();
             localInterviews.Store(Create.Entity.InterviewView(interviewId: interviewId, responsibleId: responsibleId));
             var busMock = new Mock<ILiteEventBus>();
-            var interviewerInterviewAccessorMock = new Mock<IInterviewerInterviewAccessor>();
 
-            var process = CreateSyncProcess(synchronizationService: syncService.Object,
+            var process = Create.Service.InterviewerDownloadInterviews(synchronizationService: syncService.Object,
                 interviewViewRepository: localInterviews,
-                eventBus: busMock.Object,
-                interviewFactory: interviewerInterviewAccessorMock.Object);
+                eventBus: busMock.Object);
 
             // Act
-            await process.DownloadInterviewsAsync(new SynchronizationStatistics(), new Progress<SyncProgressInfo>(), CancellationToken.None);
+            await process.ExecuteAsync();
 
             // Assert
             syncService.Verify(x => x.GetInterviewDetailsAsync(interviewId, It.IsAny<IProgress<TransferProgress>>(), It.IsAny<CancellationToken>()), Times.Never);
             busMock.Verify(x => x.PublishCommittedEvents(interviewDetails), Times.Never);
         }
 
-        private static TestSynchronizationProcess CreateSyncProcess(ISynchronizationService synchronizationService = null, 
-            IPlainStorage<InterviewView> interviewViewRepository = null, 
-            IPrincipal principal = null,
-            ILogger logger = null,
-            IUserInteractionService userInteractionService = null,
-            IInterviewerQuestionnaireAccessor questionnairesAccessor = null, 
-            IInterviewerInterviewAccessor interviewFactory = null, 
-            IPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage = null, 
-            IPlainStorage<InterviewFileView> imagesStorage = null, 
-            CompanyLogoSynchronizer logoSynchronizer = null, 
-            AttachmentsCleanupService cleanupService = null, 
-            IPasswordHasher passwordHasher = null, IAssignmentsSynchronizer assignmentsSynchronizer = null, 
+        private static DownloadInterviewsTest CreateSyncProcess(ISynchronizationService synchronizationService = null, 
+            IPlainStorage<InterviewView> interviewViewRepository = null,
             IQuestionnaireDownloader questionnaireDownloader = null, 
-            IHttpStatistician httpStatistician = null, 
-            IAssignmentDocumentsStorage assignmentsStorage = null, 
-            IAudioFileStorage audioFileStorage = null, 
-            ITabletDiagnosticService diagnosticService = null, 
-            IAuditLogSynchronizer auditLogSynchronizer = null, 
-            IAuditLogService auditLogService = null, 
             ILiteEventBus eventBus = null, 
             IEnumeratorEventStorage eventStore = null,
             IPlainStorage<InterviewSequenceView, Guid> interviewSequenceViewRepository = null,
-            IEnumeratorSettings settings = null)
+            IInterviewsRemover interviewsRemover = null)
         {
-            return new TestSynchronizationProcess(
+            return new DownloadInterviewsTest(
                 synchronizationService ?? Create.Service.SynchronizationService(),
-                interviewViewRepository ?? new InMemoryPlainStorage<InterviewView>(),
-                principal ?? Create.Service.Principal(Guid.NewGuid()),
-                logger ?? Mock.Of<ILogger>(),
-                userInteractionService ?? Mock.Of<IUserInteractionService>(),
-                questionnairesAccessor ?? Mock.Of<IInterviewerQuestionnaireAccessor>(),
-                interviewFactory ?? Mock.Of<IInterviewerInterviewAccessor>(),
-                interviewMultimediaViewStorage ?? new InMemoryPlainStorage<InterviewMultimediaView>(),
-                imagesStorage ?? new InMemoryPlainStorage<InterviewFileView>(),
-                logoSynchronizer ?? new CompanyLogoSynchronizer(new InMemoryPlainStorage<CompanyLogo>(), Mock.Of<ISynchronizationService>()),
-                cleanupService ?? Mock.Of<AttachmentsCleanupService>(),
-                passwordHasher ?? Mock.Of<IPasswordHasher>(),
-                assignmentsSynchronizer ?? Mock.Of<IAssignmentsSynchronizer>(),
                 questionnaireDownloader ?? Mock.Of<IQuestionnaireDownloader>(),
-                httpStatistician ?? Mock.Of<IHttpStatistician>(),
-                assignmentsStorage ?? Mock.Of<IAssignmentDocumentsStorage>(),
-                audioFileStorage ?? Mock.Of<IAudioFileStorage>(),
-                diagnosticService ?? Mock.Of<ITabletDiagnosticService>(),
-                auditLogSynchronizer ?? Mock.Of<IAuditLogSynchronizer>(),
-                auditLogService ?? Mock.Of<IAuditLogService>(),
+                interviewSequenceViewRepository ?? Mock.Of<IPlainStorage<InterviewSequenceView, Guid>>(),
+                interviewViewRepository ?? new InMemoryPlainStorage<InterviewView>(),
                 eventBus ?? Create.Service.LiteEventBus(),
                 eventStore ?? Mock.Of<IEnumeratorEventStorage>(),
-                interviewSequenceViewRepository ?? Mock.Of<IPlainStorage<InterviewSequenceView, Guid>>(), 
-                settings ?? Mock.Of<IEnumeratorSettings>());
+                Mock.Of<ILogger>(),
+                interviewsRemover ?? Mock.Of<IInterviewsRemover>(),
+                0);
         }
 
-        private class TestSynchronizationProcess : SynchronizationProcessBase
+        private class DownloadInterviewsTest : DownloadInterviews
         {
-            public TestSynchronizationProcess(ISynchronizationService synchronizationService,
+            public DownloadInterviewsTest(ISynchronizationService synchronizationService, 
+                IQuestionnaireDownloader questionnaireDownloader, 
+                IPlainStorage<InterviewSequenceView, Guid> interviewSequenceViewRepository, 
                 IPlainStorage<InterviewView> interviewViewRepository,
-                IPrincipal principal, ILogger logger, IUserInteractionService userInteractionService,
-                IInterviewerQuestionnaireAccessor questionnairesAccessor,
-                IInterviewerInterviewAccessor interviewFactory,
-                IPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage,
-                IPlainStorage<InterviewFileView> imagesStorage, CompanyLogoSynchronizer logoSynchronizer,
-                AttachmentsCleanupService cleanupService, IPasswordHasher passwordHasher,
-                IAssignmentsSynchronizer assignmentsSynchronizer, IQuestionnaireDownloader questionnaireDownloader,
-                IHttpStatistician httpStatistician, IAssignmentDocumentsStorage assignmentsStorage,
-                IAudioFileStorage audioFileStorage, ITabletDiagnosticService diagnosticService,
-                IAuditLogSynchronizer auditLogSynchronizer, IAuditLogService auditLogService, ILiteEventBus eventBus,
-                IEnumeratorEventStorage eventStore,
-                IPlainStorage<InterviewSequenceView, Guid> interviewSequenceViewRepository,
-                IEnumeratorSettings enumeratorSettings) : base(
-                synchronizationService, interviewViewRepository, principal, logger, userInteractionService,
-                questionnairesAccessor, interviewFactory, interviewMultimediaViewStorage, imagesStorage,
-                logoSynchronizer, cleanupService, assignmentsSynchronizer, questionnaireDownloader, httpStatistician,
-                assignmentsStorage, audioFileStorage, diagnosticService, auditLogSynchronizer, auditLogService,
-                eventBus, eventStore, interviewSequenceViewRepository, enumeratorSettings)
+                ILiteEventBus eventBus, 
+                IEnumeratorEventStorage eventStore, 
+                ILogger logger,
+                IInterviewsRemover interviewsRemover, int sortOder) : base(synchronizationService, questionnaireDownloader, interviewSequenceViewRepository, interviewViewRepository, eventBus, eventStore, logger, interviewsRemover, sortOder)
             {
             }
 
-            public override Task Synchronize(IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken, SynchronizationStatistics statistics)
-            {
-                throw new NotImplementedException();
-            }
-
-            protected override Task CheckAfterStartSynchronization(CancellationToken cancellationToken)
-            {
-                throw new NotImplementedException();
-            }
-
-            protected override void UpdatePasswordOfResponsible(RestCredentials credentials)
-            {
-                throw new NotImplementedException();
-            }
-
-            protected override IReadOnlyCollection<InterviewView> GetInterviewsForUpload()
-            {
-                throw new NotImplementedException();
-            }
-
-            protected override int GetApplicationVersionCode()
+            protected override Task<List<Guid>> FindObsoleteInterviewsAsync(IEnumerable<InterviewView> localInterviews, IEnumerable<InterviewApiView> remoteInterviews, IProgress<SyncProgressInfo> progress,
+                CancellationToken cancellationToken)
             {
                 throw new NotImplementedException();
             }
