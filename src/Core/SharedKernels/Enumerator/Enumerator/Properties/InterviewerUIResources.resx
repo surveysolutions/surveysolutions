@@ -358,7 +358,7 @@ for further instructions</value>
   <data name="Synchronization_UserPassword_Update_Format" xml:space="preserve">
     <value>Authentication problem. We were unable to confirm your credentials '{0}'. Your account may have a different password, be locked or deleted. Please re-enter your password. If the problem persists, contact your Supervisor or Headquarters.</value>
   </data>
-  <data name="Synchronization_UserDoNotBelongToTeam">
+  <data name="Synchronization_UserDoNotBelongToTeam" xml:space="preserve">
     <value>User is no longer belongs to Supervisor {0} team. Please contact Your Headquarters for details.</value>
   </data>
   <data name="Unauthorized" xml:space="preserve">
@@ -791,5 +791,8 @@ Downloaded {3}%</value>
   </data>
   <data name="DashboardItem_Responsible" xml:space="preserve">
     <value>Responsible: {0}</value>
+  </data>
+  <data name="DashboardItem_RejectedByHqOn" xml:space="preserve">
+    <value>Rejected by Headquarters on {0}</value>
   </data>
 </root>

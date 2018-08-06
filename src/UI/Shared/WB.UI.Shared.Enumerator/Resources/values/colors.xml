@@ -64,6 +64,8 @@
     <color name="dashboard_completed_tab">#388e3c</color>
     <color name="dashboard_in_progress_tab">#1976d2</color>
     <color name="dashboard_rejected_tab">#e64a19</color>
+    <color name="dashboard_approved_by_supervsor">#0fb8be</color>
+    <color name="dashboard_rejected_by_headquarter">#651800</color>
     <color name="dashboard_interview_title">#404040</color>
 
     <color name="dashboard_interview_delimeter">#ebebeb</color>
