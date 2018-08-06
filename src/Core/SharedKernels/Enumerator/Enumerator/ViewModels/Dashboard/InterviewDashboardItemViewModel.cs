@@ -172,6 +172,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
                     return FormatDateTimeString(InterviewerUIResources.DashboardItem_CompletedOn, interview.CompletedDateTime);
                 case DashboardInterviewStatus.Rejected:
                     return FormatDateTimeString(InterviewerUIResources.DashboardItem_RejectedOn, interview.RejectedDateTime);
+                case DashboardInterviewStatus.RejectedByHeadquarters:
+                    return FormatDateTimeString(InterviewerUIResources.DashboardItem_RejectedByHqOn, interview.RejectedDateTime);
                 default:
                     return string.Empty;
             }
@@ -192,11 +194,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             switch (interviewStatus)
             {
                 case InterviewStatus.RejectedByHeadquarters:
+                    return DashboardInterviewStatus.RejectedByHeadquarters;
                 case InterviewStatus.RejectedBySupervisor:
                     return DashboardInterviewStatus.Rejected;
                 case InterviewStatus.Completed:
                 case InterviewStatus.ApprovedBySupervisor:
-                    return DashboardInterviewStatus.Completed;
+                    return DashboardInterviewStatus.ApprovedBySupervisor;
                 case InterviewStatus.Restarted:
                     return DashboardInterviewStatus.InProgress;
                 case InterviewStatus.InterviewerAssigned:
