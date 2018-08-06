@@ -89,7 +89,7 @@ namespace WB.Tests.Integration
                     new RoslynCompiler(),
                     IntegrationCreate.CodeGenerator(),
                     IntegrationCreate.CodeGeneratorV2(),
-                    new DynamicCompilerSettingsProvider(defaultDynamicCompilerSettings, fileSystemAccessor));
+                    new DynamicCompilerSettingsProvider());
 
             var latestSupportedVersion = DesignerEngineVersionService().LatestSupportedVersion;
             var emitResult = 
