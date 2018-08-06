@@ -217,6 +217,8 @@ else
 }
 UpdateAndroidAppManifest -VersionName $VersionName -VersionCode $VersionCode -CapiProject $CapiProject
 
+Write-Host "##teamcity[message text='PlatformsOverride = $PlatformsOverride']"		
+
 if([string]::IsNullOrWhiteSpace($PlatformsOverride))
 {
 	if (Test-Path $OutFileName) {
@@ -231,7 +233,7 @@ if([string]::IsNullOrWhiteSpace($PlatformsOverride))
 }
 else
 {
-	$TargetAbis = $PlatformsOverride.Split{"{;}"}
+	$TargetAbis =  ($PlatformsOverride -split ';').Trim()
 	Foreach ($TargetAbi in $TargetAbis)
 	{
 		if (Test-Path "$TargetAbi$OutFileName") {
