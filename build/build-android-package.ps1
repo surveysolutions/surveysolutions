@@ -86,6 +86,8 @@ function UpdateAndroidAppManifest($VersionName, $VersionCode, $CapiProject){
 	Write-Host "##teamcity[blockOpened name='Updating Android App Manifest']"
 	Write-Host "##teamcity[progressStart 'Updating Android App Manifest']"
 
+	Write-Host "##teamcity[message text='VersionCode = $VersionCode']"
+	
 	$PahToManifest = (GetPathToManifest $CapiProject)
 
 	[xml] $xam = Get-Content -Path ($PahToManifest)
@@ -215,12 +217,14 @@ else
 {
 	$VersionName = $VersionName + " (build " + $VersionCode + ") with Maps"
 }
-UpdateAndroidAppManifest -VersionName $VersionName -VersionCode $VersionCode -CapiProject $CapiProject
-
-Write-Host "##teamcity[message text='PlatformsOverride = $PlatformsOverride']"		
-
+		
+Write-Host "##teamcity[message text='PlatformsOverride = $PlatformsOverride']"
+		
 if([string]::IsNullOrWhiteSpace($PlatformsOverride))
 {
+	UpdateAndroidAppManifest -VersionName $VersionName -VersionCode $VersionCode -CapiProject $CapiProject
+	
+
 	if (Test-Path $OutFileName) {
 		Remove-Item $OutFileName -Force
 	}
@@ -234,8 +238,12 @@ if([string]::IsNullOrWhiteSpace($PlatformsOverride))
 else
 {
 	$TargetAbis =  ($PlatformsOverride -split ';').Trim()
+	$IndexToAdd = 0 
 	Foreach ($TargetAbi in $TargetAbis)
 	{
+		$IndexToAdd = $IndexToAdd + 1
+		UpdateAndroidAppManifest -VersionName $VersionName -VersionCode "$VersionCode$IndexToAdd" -CapiProject $CapiProject
+	
 		if (Test-Path "$TargetAbi$OutFileName") {
 			Remove-Item "$TargetAbi$OutFileName" -Force
 		}
