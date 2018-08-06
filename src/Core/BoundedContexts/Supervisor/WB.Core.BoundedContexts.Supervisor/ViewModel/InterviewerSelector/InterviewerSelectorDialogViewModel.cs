@@ -65,6 +65,13 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.InterviewerSelector
             set => this.RaiseAndSetIfChanged(ref this.title, value);
         }
 
+        private string note;
+        public string Note
+        {
+            get => this.note;
+            set => this.RaiseAndSetIfChanged(ref this.note, value);
+        }
+
         private void Cancel() => this.OnCancel?.Invoke(this, EventArgs.Empty);
 
         private void Done()
