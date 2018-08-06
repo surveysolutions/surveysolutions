@@ -1356,7 +1356,7 @@ namespace WB.Tests.Unit.Designer
 
             var defaultDynamicCompilerSettings = Mock.Of<ICompilerSettings>(_ => _.SettingsCollection == settings);
 
-            return new DynamicCompilerSettingsProvider(defaultDynamicCompilerSettings, fileSystemAccessor);
+            return new DynamicCompilerSettingsProvider();
         }
 
         public static QuestionnaireVerifier QuestionnaireVerifier(
