@@ -472,7 +472,7 @@ namespace WB.Tests.Integration.InterviewTests.CodeGenerationTests
                     new RoslynCompiler(),
                     IntegrationCreate.CodeGenerator(),
                     IntegrationCreate.CodeGeneratorV2(),
-                    new DynamicCompilerSettingsProvider(defaultDynamicCompilerSettings, fileSystemAccessor));
+                    new DynamicCompilerSettingsProvider());
         }
 
         public static QuestionnaireDocument CreateQuestionnaireWithQuestionAndConditionContainingUsageOfSelf(Guid questionId)
