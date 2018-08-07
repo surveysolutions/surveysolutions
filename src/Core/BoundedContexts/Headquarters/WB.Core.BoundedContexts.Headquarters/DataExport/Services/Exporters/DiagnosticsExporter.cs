@@ -31,7 +31,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 
         public readonly DoExportFileHeader[] DiagnosticsFileColumns =
         {
-            new DoExportFileHeader("interview_key", "Unique 32-character long identifier of the interview"),
+            new DoExportFileHeader("interview__key", "Unique 32-character long identifier of the interview"),
             new DoExportFileHeader("interview_status", "Last status of interview"),
             new DoExportFileHeader("responsible", "Last responsible person"),
             new DoExportFileHeader("n_of_Interviewers", "Number of interviewers who worked on this interview"),
