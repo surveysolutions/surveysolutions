@@ -50,7 +50,6 @@ namespace WB.UI.Supervisor.ServiceLocation
             registry.BindAsSingleton<ISnapshotStoreWithCache, InMemorySnapshotStoreWithCache>();
 
             registry.Bind<INetworkService, AndroidNetworkService>();
-            registry.Bind<IHttpClientFactory, AndroidHttpClientFactory>();
             registry.BindAsSingletonWithConstructorArgument<IRestService, RestService>("restServicePointManager", null);
             registry.Bind<IGroupStateCalculationStrategy, SupervisorGroupStateCalculationStrategy>();
             //registry.Bind<IInterviewUniqueKeyGenerator, InterviewerInterviewUniqueKeyGenerator>();
@@ -103,6 +102,7 @@ namespace WB.UI.Supervisor.ServiceLocation
             registry.Bind<IHandleCommunicationMessage, SupervisorSyncStatisticsHandler>();
             registry.Bind<IHandleCommunicationMessage, SupervisorAssignmentsHandler>();
             registry.Bind<IHandleCommunicationMessage, SupervisorTabletInfoHandler>();
+            registry.Bind<IHandleCommunicationMessage, SupervisorCanSynchronizeHandler>();
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)

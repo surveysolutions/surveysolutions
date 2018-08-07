@@ -6,12 +6,16 @@
 
   <TextView
     style="@style/Interview_Question_Title"
-    local:MvxBind="Html Text.HtmlText; Visible Not(QuestionState.Validity.IsInvalid)" />
+    local:MvxBind="Html Text.HtmlText; 
+                   Visible Not(QuestionState.Validity.IsInvalid);
+                   Tag Format('Static_Valid_Title{0}', Identity)" />
 
   <TextView
     style="@style/Interview_Question_Title"
     android:textColor="@color/errorTextColor"
-    local:MvxBind="Text Text.PlainText; Visible QuestionState.Validity.IsInvalid" />
+    local:MvxBind="Text Text.PlainText; 
+                   Visible QuestionState.Validity.IsInvalid;
+                   Tag Format('Static_Invalid_Title{0}', Identity)" />
 
   <include layout="@layout/interview__attachment" />
   <LinearLayout 
@@ -23,7 +27,8 @@
       local:MvxBind="Visible QuestionState.Validity.IsInvalid">
     <TextView
         style="@style/Interview_Question_Errors_Title"
-        local:MvxBind="Text QuestionState.Validity.Error.Caption" />
+        local:MvxBind="Text QuestionState.Validity.Error.Caption;
+                       Tag Format('Static_Error_Caption_{0}', Identity)" />
     <MvxLinearLayout
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
@@ -40,7 +45,8 @@
     local:MvxBind="Visible QuestionState.Warnings.IsImplausible">
     <TextView
       style="@style/Interview_Question_Warning_Title"
-      local:MvxBind="Text QuestionState.Warnings.Warning.Caption" />
+      local:MvxBind="Text QuestionState.Warnings.Warning.Caption;
+                     Tag Format('Static_Warnings_Caption_{0}', Identity)" />
     <MvxLinearLayout
       android:layout_width="match_parent"
       android:layout_height="wrap_content"

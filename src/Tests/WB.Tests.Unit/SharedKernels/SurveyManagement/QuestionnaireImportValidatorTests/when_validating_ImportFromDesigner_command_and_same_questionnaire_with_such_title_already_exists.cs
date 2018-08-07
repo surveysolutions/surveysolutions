@@ -9,8 +9,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Tests.Abc;
 
-
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireNameValidatorTests
+namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireImportValidatorTests
 {
     internal class when_validating_ImportFromDesigner_command_and_same_questionnaire_with_such_title_already_exists
     {
@@ -31,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireNameValidato
             Assert.DoesNotThrow(() => validator.Validate(null, command));
         }
 
-        private static QuestionnaireNameValidator validator;
+        private static QuestionnaireImportValidator validator;
         private static ImportFromDesigner command;
         private static string title = "The Title";
         private static Guid importedQuestionnaireId = Guid.Parse("11111111111111111111111111111111");

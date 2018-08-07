@@ -443,24 +443,5 @@ namespace WB.Tests.Abc.TestFactories
 
             return viewModel;
         }
-
-        public OfflineInterviewerSyncViewModel OfflineInterviewerSyncViewModel(IInterviewerPrincipal principal = null,
-            IViewModelNavigationService viewModelNavigationService = null,
-            IPermissionsService permissions = null,
-            IEnumeratorSettings settings = null,
-            ISynchronizationMode synchronizationMode = null,
-            INearbyConnection nearbyConnection = null,
-            ISynchronizationCompleteSource synchronizationCompleteSource = null)
-        {
-            return new OfflineInterviewerSyncViewModel(
-                principal ?? Mock.Of<IInterviewerPrincipal>(),
-                viewModelNavigationService ?? Mock.Of<IViewModelNavigationService>(),
-                permissions ?? Mock.Of<IPermissionsService>(),
-                settings ?? Mock.Of<IEnumeratorSettings>(),
-                synchronizationMode ?? Mock.Of<ISynchronizationMode>(),
-                nearbyConnection ?? Create.Fake.GoogleConnection(),
-                synchronizationCompleteSource ?? Mock.Of<ISynchronizationCompleteSource>(),
-                Mock.Of<IOfflineSyncClient>());
-        }
     }
 }

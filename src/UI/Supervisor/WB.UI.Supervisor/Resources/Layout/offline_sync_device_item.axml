@@ -1,38 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:local="http://schemas.android.com/apk/res-auto"
+<android.support.v7.widget.CardView
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    app:cardCornerRadius="@dimen/Dashboard_Card_CornerRadius"
+    app:cardElevation="@dimen/Dashboard_Card_Elevation"
+    app:cardUseCompatPadding="true"
+    app:cardPreventCornerOverlap="false"
     android:layout_marginTop="@dimen/Interview_Entity_margin_vertical">
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-    <TextView style="@style/OfflineSync_ProgressStatus"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              local:MvxBind="Text Format(Localization('Synchronization_FoundDevice'), InterviewerName)"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="@dimen/Dashboard_Layout_marginLeft"
+            android:paddingRight="@dimen/Dashboard_Layout_marginLeft"
+            android:paddingTop="@dimen/Dashboard_Layout_marginLeft"
+            >
+            <ImageView android:layout_width="@dimen/Dashboard_SearchView_DeleteButton_size"
+                    android:layout_height="@dimen/Dashboard_SearchView_DeleteButton_size"
+                    app:srcCompat="@drawable/interviewer_icon"
+                    android:id="@+id/device_interviewer_icon"
+                    />
+            <TextView android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    app:MvxBind="Text InterviewerName"
+                    android:layout_gravity="center_vertical"
+                    android:id="@+id/device_interviewer_name" />
+        
+        </LinearLayout>
 
-    <LinearLayout android:layout_width="match_parent"
-                  android:layout_height="wrap_content"
-                  android:orientation="horizontal"
-                  android:layout_marginTop="@dimen/Interview_Entity_margin_vertical">
-        <ProgressBar
-            android:layout_height="@dimen/IconSize"
-            android:layout_width="@dimen/IconSize"
-            local:MvxBind="Hidden EnumToString(Status) == 'Disconnected'"/>
-        <TextView android:layout_height="wrap_content"
-                  android:layout_width="@dimen/Zero" 
-                  android:layout_weight="1"
-                  style="@style/OfflineSync_SubTitleText"
-                  local:MvxBind="Text EnumToString(Status)"/>
-        <TextView style="@style/OfflineSync_Abort"
-                  android:layout_width="wrap_content"
-                  android:layout_height="wrap_content"
-                  local:MvxBind="Text Localization('OfflineSync_Abort'); Click AbortCommand; Hidden EnumToString(Status) == 'Disconnected'"/>
-
+        <include layout="@layout/synchronization_panel"
+                />
     </LinearLayout>
-    <TextView style="@style/OfflineSync_NetworkInfo"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              local:MvxBind="Text Format(Localization('OfflineSync_DeviceStats'), Statistics.SuccessfullyUploadedInterviewsCount, Statistics.TotalCompletedInterviewsCount, Statistics.FailedInterviewsCount)"/>
-</LinearLayout>
+</android.support.v7.widget.CardView>
+

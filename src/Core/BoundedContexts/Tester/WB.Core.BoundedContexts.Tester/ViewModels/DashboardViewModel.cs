@@ -61,8 +61,10 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             this.QuestionnaireDownloader = questionnaireDownloader;
         }
 
-        public override Task Initialize()
+        public override async Task Initialize()
         {
+            await base.Initialize().ConfigureAwait(false);
+
             this.localQuestionnaires = this.questionnaireListStorage.LoadAll();
             
             if (!localQuestionnaires.Any())
@@ -80,7 +82,6 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
             var lastUpdate = this.dashboardLastUpdateStorage.GetById(this.principal.CurrentUserIdentity.Name);
 
             this.HumanizeLastUpdateDate(lastUpdate?.LastUpdateDate);
-            return Task.CompletedTask;
         }
        
         private void SearchByLocalQuestionnaires(string searchTerm = null)

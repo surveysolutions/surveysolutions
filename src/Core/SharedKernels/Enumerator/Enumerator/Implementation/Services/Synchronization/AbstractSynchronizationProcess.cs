@@ -28,6 +28,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         private readonly IHttpStatistician httpStatistician;
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
         private readonly IAuditLogService auditLogService;
+        protected readonly IEnumeratorSettings enumeratorSettings;
 
         protected bool remoteLoginRequired;
         protected bool shouldUpdatePasswordOfResponsible;
@@ -46,7 +47,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             IUserInteractionService userInteractionService,
             IPrincipal principal,
             IPlainStorage<InterviewView> interviewViewRepository,
-            IAuditLogService auditLogService)
+            IAuditLogService auditLogService, 
+            IEnumeratorSettings enumeratorSettings)
         {
             this.logger = logger;
             this.synchronizationService = synchronizationService;
@@ -55,8 +57,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             this.principal = principal;
             this.interviewViewRepository = interviewViewRepository;
             this.auditLogService = auditLogService;
+            this.enumeratorSettings = enumeratorSettings;
         }
-
 
         public abstract Task Synchronize(IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken,
             SynchronizationStatistics statistics);
@@ -79,14 +81,15 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 isTextInputPassword: true);
         }
 
-        protected async Task TrySendUnexpectedExceptionToServerAsync(Exception exception,
-            CancellationToken cancellationToken)
+        protected async Task TrySendUnexpectedExceptionToServerAsync(Exception exception)
         {
+            if (exception.GetSelfOrInnerAs<OperationCanceledException>() != null)
+                return;
+
             try
             {
                 await this.synchronizationService.SendUnexpectedExceptionAsync(
-                    this.ToUnexpectedExceptionApiView(exception),
-                    cancellationToken);
+                    this.ToUnexpectedExceptionApiView(exception), CancellationToken.None);
             }
             catch (Exception ex)
             {
@@ -222,7 +225,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
                 await this.synchronizationService.CanSynchronizeAsync(this.restCredentials, cancellationToken);
 
-                CheckAfterStartSynchronization(cancellationToken);
+                await CheckAfterStartSynchronization(cancellationToken);
 
                 cancellationToken.ThrowIfCancellationRequested();
 
@@ -242,7 +245,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     }
                     catch (Exception e)
                     {
-                        await this.TrySendUnexpectedExceptionToServerAsync(e, cancellationToken);
+                        await this.TrySendUnexpectedExceptionToServerAsync(e);
                     }
                 }
 
@@ -254,13 +257,17 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 {
                     try
                     {
-                        await this.synchronizationService.SendSyncStatisticsAsync(
+                        var hqTimestamp = await this.synchronizationService.SendSyncStatisticsAsync(
                             this.ToSyncStatisticsApiView(statistics, stopwatch),
                             cancellationToken, this.restCredentials);
+
+                        this.enumeratorSettings.SetLastHqSyncTimestamp(hqTimestamp);
+
+                        OnSuccesfullSynchronization();
                     }
                     catch (Exception e)
                     {
-                        await this.TrySendUnexpectedExceptionToServerAsync(e, cancellationToken);
+                        await this.TrySendUnexpectedExceptionToServerAsync(e);
                     }
                 }
 
@@ -308,7 +315,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         progress.Report(new SyncProgressInfo
                         {
                             Title = InterviewerUIResources.Synchronization_Fail_Title,
-                            Description = InterviewerUIResources.Unauthorized,
+                            Description = InterviewerUIResources.AccountIsLockedOnServer,
                             Status = SynchronizationStatus.Fail,
                             Statistics = statistics
                         });
@@ -319,6 +326,16 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                             Title = InterviewerUIResources.Synchronization_UserLinkedToAnotherDevice_Status,
                             Description = InterviewerUIResources.Synchronization_UserLinkedToAnotherDevice_Title,
                             UserIsLinkedToAnotherDevice = true,
+                            Status = SynchronizationStatus.Fail,
+                            Statistics = statistics
+                        });
+                        auditLogService.Write(new SynchronizationFailedAuditLogEntity(ex));
+                        break;
+                    case SynchronizationExceptionType.SupervisorRequireOnlineSync:
+                        progress.Report(new SyncProgressInfo
+                        {
+                            Title = InterviewerUIResources.Synchronization_SupervisorShouldDoOnlineSync_Title,
+                            Description = InterviewerUIResources.Synchronization_SupervisorShouldDoOnlineSync,
                             Status = SynchronizationStatus.Fail,
                             Statistics = statistics
                         });
@@ -338,11 +355,20 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         progress.Report(new SyncProgressInfo
                         {
                             Title = InterviewerUIResources.UnexpectedException,
-                            Description = InterviewerUIResources.InterviewerFromDifferentTeam,
+                            Description = InterviewerUIResources.Synchronization_UserDoNotBelongToTeam,
                             Status = SynchronizationStatus.Fail,
                             Statistics = statistics
                         });
                         auditLogService.Write(new SynchronizationFailedAuditLogEntity(ex));
+                        break;
+
+                    case SynchronizationExceptionType.UpgradeRequired:
+                        progress.Report(new SyncProgressInfo
+                        {
+                            Title = InterviewerUIResources.UpgradeRequired,
+                            Status = SynchronizationStatus.Fail,
+                            Statistics = statistics
+                        });
                         break;
                     default:
                         progress.Report(new SyncProgressInfo
@@ -366,7 +392,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     Statistics = statistics
                 });
 
-                await this.TrySendUnexpectedExceptionToServerAsync(ex, cancellationToken);
+                await this.TrySendUnexpectedExceptionToServerAsync(ex);
 
                 auditLogService.Write(new SynchronizationFailedAuditLogEntity(ex));
 
@@ -396,7 +422,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             }
         }
 
-        protected abstract void CheckAfterStartSynchronization(CancellationToken cancellationToken);
+        protected virtual void OnSuccesfullSynchronization() { }
+
+        protected abstract Task CheckAfterStartSynchronization(CancellationToken cancellationToken);
 
         protected abstract void UpdatePasswordOfResponsible(RestCredentials credentials);
     }

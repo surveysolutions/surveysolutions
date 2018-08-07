@@ -66,9 +66,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             IAuditLogService auditLogService,
             ILiteEventBus eventBus,
             IEnumeratorEventStorage eventStore,
-            IPlainStorage<InterviewSequenceView, Guid> interviewSequenceViewRepository) : base(synchronizationService, logger,
+            IPlainStorage<InterviewSequenceView, Guid> interviewSequenceViewRepository,
+            IEnumeratorSettings enumeratorSettings) : base(synchronizationService, logger,
             httpStatistician, userInteractionService, principal,  
-            interviewViewRepository, auditLogService)
+            interviewViewRepository, auditLogService, enumeratorSettings)
         {
             this.synchronizationService = synchronizationService;
             this.interviewViewRepository = interviewViewRepository;
@@ -253,7 +254,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 {
                     statistics.FailedToCreateInterviewsCount++;
 
-                    await this.TrySendUnexpectedExceptionToServerAsync(exception, cancellationToken);
+                    await this.TrySendUnexpectedExceptionToServerAsync(exception);
                     this.logger.Error(
                         $"Failed to create interview {interview.Id}, interviewer {this.principal.CurrentUserIdentity.Name}",
                         exception);
@@ -264,6 +265,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         {
             var dashboardItem = this.interviewViewRepository.GetById(interview.Id.FormatGuid());
             dashboardItem.CanBeDeleted = false;
+            dashboardItem.FromHqSyncDateTime = DateTime.UtcNow;
             this.interviewViewRepository.Store(dashboardItem);
         }
 
@@ -281,9 +283,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
             IEnumerable<Guid> obsoleteInterviews = await this.FindObsoleteInterviewsAsync(localInterviews, remoteInterviews, progress, cancellationToken);
 
-            var localInterviewIdsToRemove = localInterviewsToRemove.Select(interview => interview.InterviewId)
-                                                                   .Concat(obsoleteInterviews)
-                                                                   .ToList();
+            var localInterviewIdsToRemove = localInterviewsToRemove
+                .Select(interview => interview.InterviewId)
+                .Where(IsNotPresentOnHq)
+                .Concat(obsoleteInterviews)
+                .ToList();
 
             var remoteInterviewsToCreate = remoteInterviews
                 .Where(interview => (!localInterviewIds.Contains(interview.Id) && ShouldBeDownloadedBasedOnEventSequence(interview)) || obsoleteInterviews.Contains(interview.Id))
@@ -292,6 +296,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             this.RemoveInterviews(localInterviewIdsToRemove, statistics, progress);
 
             await this.CreateInterviewsAsync(remoteInterviewsToCreate, statistics, progress, cancellationToken);
+        }
+
+        private bool IsNotPresentOnHq(Guid interviewId)
+        {
+            return interviewSequenceViewRepository.GetById(interviewId) != null;
         }
 
         private bool ShouldBeDownloadedBasedOnEventSequence(InterviewApiView interview)
@@ -414,11 +423,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             SynchronizationStatistics statistics, 
             CancellationToken cancellationToken)
         {
-            var completedInterviews = GetInterviewsForUpload();
+            var interviewsToUpload = GetInterviewsForUpload();
 
-            statistics.TotalCompletedInterviewsCount = completedInterviews.Count;
+            statistics.TotalCompletedInterviewsCount = interviewsToUpload.Count;
             var transferProgress = progress.AsTransferReport();
-            foreach (var completedInterview in completedInterviews)
+            foreach (var completedInterview in interviewsToUpload)
             {
                 cancellationToken.ThrowIfCancellationRequested();
                 try
@@ -454,14 +463,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     this.interviewFactory.RemoveInterview(completedInterview.InterviewId);
                     statistics.SuccessfullyUploadedInterviewsCount++;
                 }
-                catch (OperationCanceledException)
-                {
-
-                }
                 catch (Exception syncException)
                 {
                     statistics.FailedToUploadInterviwesCount++;
-                    await this.TrySendUnexpectedExceptionToServerAsync(syncException, cancellationToken);
+                    await this.TrySendUnexpectedExceptionToServerAsync(syncException);
 
                     this.logger.Error($"Failed to sync interview {completedInterview.Id}. Interviewer login {this.principal.CurrentUserIdentity.Name}", syncException);
                 }

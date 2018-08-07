@@ -23,7 +23,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         private readonly IMvxMessenger messenger;
         public Guid? LastVisitedInterviewId { get; set; }
 
-        public SynchronizationViewModel Synchronization { get; set; }
+        public LocalSynchronizationViewModel Synchronization { get; set; }
 
         public string DashboardTitle => "dashboard title :)";
 
@@ -31,7 +31,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             IViewModelNavigationService viewModelNavigationService,
             IMvxNavigationService mvxNavigationService,
             IMvxMessenger messenger,
-            SynchronizationViewModel synchronization)
+            LocalSynchronizationViewModel synchronization)
             : base(principal, viewModelNavigationService)
         {
             this.viewModelNavigationService = viewModelNavigationService;

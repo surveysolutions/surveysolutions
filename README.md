@@ -1,4 +1,6 @@
 ![Link Text](http://build.mysurvey.solutions/app/rest/builds/buildType:`(id:CI)`/statusIcon)
+# 18.08
+- For all HQs should be cleared PreLoadingTemplates folder
 # 5.27
 - All HQs which should have ability to export binary to external storages should get following code to web.config file to configuration section:
 <configSections>

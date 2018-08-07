@@ -23,6 +23,7 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         public DateTime? StartedDateTime { get; set; }
         public DateTime? CompletedDateTime { get; set; }
         public DateTime? RejectedDateTime { get; set; }
+        public DateTime? FromHqSyncDateTime { get; set; }
 
         public byte[] AnswersOnPrefilledQuestions { get; set; }
         public byte[] GpsLocation { get; set; }
