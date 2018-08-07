@@ -114,7 +114,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         {
             this.interviewerSelectorDialog.Selected += OnInterviewerSelected;
             this.interviewerSelectorDialog.Cancelled += OnSelectionCancelled;
-            this.interviewerSelectorDialog.SelectInterviewer("Select responsible for the interview");
+            this.interviewerSelectorDialog.SelectInterviewer(SupervisorUIResources.SelectResponsible);
         }
 
         private void OnSelectionCancelled(object sender, EventArgs e)

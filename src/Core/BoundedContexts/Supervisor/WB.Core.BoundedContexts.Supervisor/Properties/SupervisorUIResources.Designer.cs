@@ -98,6 +98,15 @@ namespace WB.Core.BoundedContexts.Supervisor.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Select responsible for the interview.
+        /// </summary>
+        public static string SelectResponsible {
+            get {
+                return ResourceManager.GetString("SelectResponsible", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Uploading broken interview packages.
         /// </summary>
         public static string Synchronization_UploadBrokenInterviewPackages {
