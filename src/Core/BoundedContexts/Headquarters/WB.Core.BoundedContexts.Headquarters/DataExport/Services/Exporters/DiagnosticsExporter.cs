@@ -4,18 +4,15 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Threading;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.Export;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
-using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
@@ -34,7 +31,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 
         private readonly DoExportFileHeader[] diagnosticsFileColumns =
         {
-            new DoExportFileHeader("Interview_key", "Unique 32-character long identifier of the interview"),
+            new DoExportFileHeader("interview_key", "Unique 32-character long identifier of the interview"),
             new DoExportFileHeader("interview_status", "Last status of interview"),
             new DoExportFileHeader("responsible", "Last responsible person"),
             new DoExportFileHeader("n_of_Interviewers", "Number of interviewers who worked on this interview"),
