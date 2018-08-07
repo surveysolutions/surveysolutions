@@ -27,9 +27,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         private readonly ITransactionManagerProvider transactionManager;
 
         private readonly string dataFileExtension = "tab";
-        private readonly string diagnosticsFileName = "interview__diagnostics";
+        public readonly string DiagnosticsFileName = "interview__diagnostics";
 
-        private readonly DoExportFileHeader[] diagnosticsFileColumns =
+        public readonly DoExportFileHeader[] DiagnosticsFileColumns =
         {
             new DoExportFileHeader("interview_key", "Unique 32-character long identifier of the interview"),
             new DoExportFileHeader("interview_status", "Last status of interview"),
@@ -71,7 +71,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         {
             var batchSize = this.interviewDataExportSettings.MaxRecordsCountPerOneExportQuery;
 
-            string diagnosticsFilePath = this.fileSystemAccessor.CombinePath(basePath, Path.ChangeExtension(this.diagnosticsFileName, this.dataFileExtension));
+            string diagnosticsFilePath = this.fileSystemAccessor.CombinePath(basePath, Path.ChangeExtension(this.DiagnosticsFileName, this.dataFileExtension));
             this.WriteFileHeader(diagnosticsFilePath);
 
             long totalProcessed = 0;
@@ -102,10 +102,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         {
             var doContent = new DoFile();
 
-            doContent.BuildInsheet(Path.ChangeExtension(this.diagnosticsFileName, this.dataFileExtension));
+            doContent.BuildInsheet(Path.ChangeExtension(this.DiagnosticsFileName, this.dataFileExtension));
             doContent.AppendLine();
 
-            foreach (var exportFileHeader in diagnosticsFileColumns)
+            foreach (var exportFileHeader in DiagnosticsFileColumns)
             {
                 if (exportFileHeader.AddCapture)
                     doContent.AppendCaptureLabelToVariableMatching(exportFileHeader.Title, exportFileHeader.Description);
@@ -113,7 +113,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                     doContent.AppendLabelToVariableMatching(exportFileHeader.Title, exportFileHeader.Description);
             }
 
-            var fileName = $"{diagnosticsFileName}.{DoFile.ContentFileNameExtension}";
+            var fileName = $"{DiagnosticsFileName}.{DoFile.ContentFileNameExtension}";
             var contentFilePath = this.fileSystemAccessor.CombinePath(basePath, fileName);
 
             this.fileSystemAccessor.WriteAllText(contentFilePath, doContent.ToString());
@@ -122,7 +122,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 
         private void WriteFileHeader(string commentsFilePath)
         {
-            var diagnosticsHeader = diagnosticsFileColumns.Select(h => h.Title).ToArray();
+            var diagnosticsHeader = DiagnosticsFileColumns.Select(h => h.Title).ToArray();
 
             this.csvWriter.WriteData(commentsFilePath, new[] { diagnosticsHeader }, ExportFileSettings.DataFileSeparator.ToString());
         }

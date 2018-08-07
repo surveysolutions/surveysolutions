@@ -19,6 +19,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         List<string[]> Export(QuestionnaireExportStructure exportStructure, List<InterviewEntity> entitiesToExport, string basePath);
         void WriteHeader(bool hasAtLeastOneRoster, int maxRosterDepthInQuestionnaire, string filePath);
         void WriteDoFile(QuestionnaireExportStructure questionnaireExportStructure, string basePath);
+
+        DoExportFileHeader[] GetHeader();
+        string GetFileName();
     }
 
     internal class InterviewErrorsExporter : IInterviewErrorsExporter
@@ -176,6 +179,16 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             var contentFilePath = this.fileSystemAccessor.CombinePath(basePath, fileName);
 
             this.fileSystemAccessor.WriteAllText(contentFilePath, doContent.ToString());
+        }
+
+        public DoExportFileHeader[] GetHeader()
+        {
+            return errorsFileColumns;
+        }
+
+        public string GetFileName()
+        {
+            return FileName;
         }
 
         private static List<string> GetHeaders(bool hasAtLeastOneRoster, int maxRosterDepthInQuestionnaire)
