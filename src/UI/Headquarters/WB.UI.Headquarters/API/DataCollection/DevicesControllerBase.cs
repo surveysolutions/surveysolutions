@@ -3,6 +3,7 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+using StackExchange.Exceptional.Internal;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -110,7 +111,7 @@ namespace WB.UI.Headquarters.API.DataCollection
             return this.Ok();
         }
 
-        public virtual IHttpActionResult Statistics(SyncStatisticsApiView statistics)
+        public virtual long Statistics(SyncStatisticsApiView statistics)
         {
             var deviceInfo = this.deviceSyncInfoRepository.GetLastByInterviewerId(this.authorizedUser.Id);
             deviceInfo.Statistics = new SyncStatistics
@@ -131,9 +132,9 @@ namespace WB.UI.Headquarters.API.DataCollection
                 AssignmentsOnDeviceCount = statistics.AssignmentsOnDeviceCount,
                 NewAssignmentsCount = statistics.NewAssignmentsCount
             };
-            this.deviceSyncInfoRepository.AddOrUpdate(deviceInfo);
 
-            return this.Ok();
+            this.deviceSyncInfoRepository.AddOrUpdate(deviceInfo);
+            return DateTime.UtcNow.ToEpochTime();
         }
 
         public virtual IHttpActionResult UnexpectedException(UnexpectedExceptionApiView exception)

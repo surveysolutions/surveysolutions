@@ -27,7 +27,7 @@ namespace WB.UI.Headquarters.API
             {
                 if (IsRangeRequest)
                 {
-                    var content = new ByteRangeStreamContent(stream, this.request.Headers.Range, mediaType);
+                    var content = new ByteRangeStreamContent(stream, this.request.Headers.Range, mediaType, 16 * 1024);
                     var response = this.request.CreateResponse(HttpStatusCode.PartialContent);
                     response.Headers.AcceptRanges.Add("bytes");
                     response.Content = content;

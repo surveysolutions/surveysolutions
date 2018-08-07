@@ -41,7 +41,7 @@ namespace WB.UI.Shared.Enumerator.Services
         protected abstract EnumeratorSettingsView CurrentSettings { get; }
 
         public string Endpoint => this.CurrentSettings.Endpoint;
-
+        public long? LastHqSyncTimestamp => this.CurrentSettings.LastHqSyncTimestamp;
         public abstract bool VibrateOnError { get; }
         public abstract bool ShowLocationOnMap { get; }
         public abstract int GpsReceiveTimeoutSec { get; }
@@ -123,6 +123,11 @@ namespace WB.UI.Shared.Enumerator.Services
             {
                 settings.Endpoint = endpoint;
             });
+        }
+
+        public void SetLastHqSyncTimestamp(long? timestamp)
+        {
+            this.SaveCurrentSettings(settings => { settings.LastHqSyncTimestamp = timestamp; });
         }
 
         public void SetHttpResponseTimeout(int timeout)

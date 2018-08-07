@@ -64,7 +64,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             userInteractionService, questionnairesAccessor, interviewFactory, interviewMultimediaViewStorage, imagesStorage,
             logoSynchronizer, cleanupService, assignmentsSynchronizer, questionnaireDownloader, httpStatistician,
             assignmentsStorage, audioFileStorage, diagnosticService, auditLogSynchronizer, auditLogService,
-            eventBus, eventStore, interviewSequenceViewRepository)
+            eventBus, eventStore, interviewSequenceViewRepository, interviewerSettings)
         {
             this.principal = principal;
             this.interviewerSettings = interviewerSettings;
@@ -104,6 +104,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             await this.auditLogSynchronizer.SynchronizeAuditLogAsync(progress, statistics, cancellationToken);
         }
 
+        protected override void OnSuccesfullSynchronization()
+        {
+            if(this.synchronizationMode.GetMode() == SynchronizationMode.Offline)
+                this.interviewerSettings.SetOfflineSynchronizationCompleted();
+        }
+
         protected override SynchronizationType SynchronizationType
         {
             get
@@ -117,7 +123,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             }
         }
 
-        protected override async void CheckAfterStartSynchronization(CancellationToken cancellationToken){
+        protected override async Task CheckAfterStartSynchronization(CancellationToken cancellationToken){
 
             var currentSupervisorId = await this.synchronizationService.GetCurrentSupervisor(token: cancellationToken, credentials: this.restCredentials);
             if (currentSupervisorId != this.principal.CurrentUserIdentity.SupervisorId)

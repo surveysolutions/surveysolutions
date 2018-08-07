@@ -24,12 +24,17 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
         private readonly ILogger logger;
         private readonly IMapService mapService;
 
-        protected MapSyncProviderBase(IMapService mapService, ISynchronizationService synchronizationService, ILogger logger,
-            IHttpStatistician httpStatistician, IUserInteractionService userInteractionService, IPrincipal principal,
-            IPlainStorage<InterviewView> interviewViewRepository, IAuditLogService auditLogService) 
+        protected MapSyncProviderBase(IMapService mapService, 
+            ISynchronizationService synchronizationService, ILogger logger,
+            IHttpStatistician httpStatistician, 
+            IUserInteractionService userInteractionService, 
+            IPrincipal principal,
+            IPlainStorage<InterviewView> interviewViewRepository, 
+            IAuditLogService auditLogService,
+            IEnumeratorSettings enumeratorSettings) 
             : base(synchronizationService, logger,
             httpStatistician, userInteractionService, principal,  
-            interviewViewRepository, auditLogService)
+            interviewViewRepository, auditLogService, enumeratorSettings)
         {
             this.synchronizationService = synchronizationService;
             this.logger = logger;
@@ -136,9 +141,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
             return new SyncStatisticsApiView();
         }
 
-        protected override void CheckAfterStartSynchronization(CancellationToken cancellationToken)
+        protected override Task CheckAfterStartSynchronization(CancellationToken cancellationToken)
         {
-            
+            return Task.CompletedTask;
         }
     }
 }

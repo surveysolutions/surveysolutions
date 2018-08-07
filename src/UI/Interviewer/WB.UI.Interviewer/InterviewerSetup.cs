@@ -62,8 +62,7 @@ namespace WB.UI.Interviewer
                 {typeof(InterviewerCompleteInterviewViewModel), typeof (CompleteInterviewFragment)},
                 {typeof (PrefilledQuestionsViewModel), typeof (PrefilledQuestionsActivity)},
                 {typeof (MapsViewModel), typeof(MapsActivity) },
-                {typeof (PhotoViewViewModel), typeof(PhotoViewActivity) },
-                {typeof(OfflineInterviewerSyncViewModel), typeof(OfflineInterviewerSyncActitivy) }
+                {typeof (PhotoViewViewModel), typeof(PhotoViewActivity) }
 #if !EXCLUDEEXTENSIONS
                 ,{typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel), typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorActivity)}
 #endif

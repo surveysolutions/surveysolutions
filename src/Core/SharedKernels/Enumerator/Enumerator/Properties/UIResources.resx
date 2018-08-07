@@ -638,8 +638,8 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="OfflineSync_BackToDashboard" xml:space="preserve">
     <value>Back to dashboard</value>
   </data>
-  <data name="OfflineSync_Done" xml:space="preserve">
-    <value>Done</value>
+  <data name="OfflineSync_Retry" xml:space="preserve">
+    <value>Retry</value>
   </data>
   <data name="OfflineSync_NetworkInfo" xml:space="preserve">
     <value>Speed: {0}, Time left: {1}</value>
@@ -654,8 +654,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
     <value>Found interviewer device ({0})</value>
     <comment>{0} - interviewer login</comment>
   </data>
-  <data name="OfflineSync_DeviceStats" xml:space="preserve">
-    <value>Receiving. {0} interviews done out of {1}. Errors count: {2}</value>
-    <comment>{0} done interviews count, {1} total number of interviews to be synchronized, {2} errors count</comment>
+  <data name="OfflineSync_Supervisor_Title" xml:space="preserve">
+    <value>Synchronization of assignments and interviews</value>
   </data>
 </root>

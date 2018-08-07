@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             var supervisorIdentity = Create.Other.SupervisorIdentity(id: userId, userName: login, passwordHash: hashedPassword);
             identityStorage.Store(supervisorIdentity);
 
-            var passwordHash = Mock.Of<IPasswordHasher>(x => x.VerifyPassword(hashedPassword, password) == true &&
+            var passwordHash = Mock.Of<IPasswordHasher>(x => x.VerifyPassword(hashedPassword, password) == PasswordVerificationResult.Success &&
                                                              x.Hash(password) == hashedPassword &&
                                                              x.Hash("wrong") == "wrongHash");
 

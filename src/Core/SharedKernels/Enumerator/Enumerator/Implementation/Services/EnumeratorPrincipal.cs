@@ -31,13 +31,26 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
             if (localUser == null) return false;
 
-            if (localUser.PasswordHash != null && this.passwordHasher.VerifyPassword(localUser.PasswordHash, password))
+            if (localUser.PasswordHash != null)
             {
+                var verificationResult = this.passwordHasher.VerifyPassword(localUser.PasswordHash, password);
+                if (verificationResult == PasswordVerificationResult.Failed)
+                {
+                    return false;
+                }
+
+                if (verificationResult == PasswordVerificationResult.SuccessRehashNeeded)
+                {
+                    UpdateUserHash(localUser.Id, this.passwordHasher.Hash(password));
+                }
+
                 this.currentUserIdentity = localUser;
             }
 
             return this.IsAuthenticated;
         }
+
+        protected abstract void UpdateUserHash(string userId, string hash);
 
         public bool SignInWithHash(string userName, string passwordHash, bool staySignedIn)
         {

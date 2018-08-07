@@ -213,7 +213,8 @@ namespace WB.Tests.Abc.TestFactories
             IEventSourcedAggregateRootRepositoryWithCache aggregateRootRepositoryWithCache = null,
             ISnapshotStoreWithCache snapshotStoreWithCache = null,
             IPlainStorage<InterviewMultimediaView> interviewMultimediaViewRepository = null,
-            IPlainStorage<InterviewFileView> interviewFileViewRepository = null)
+            IPlainStorage<InterviewFileView> interviewFileViewRepository = null,
+            IPlainStorage<InterviewSequenceView, Guid> interviewSequenceStorage = null)
             => new InterviewerInterviewAccessor(
                 questionnaireRepository ?? Mock.Of<IPlainStorage<QuestionnaireView>>(),
                 Mock.Of<IPlainStorage<PrefilledQuestionView>>(),
@@ -227,7 +228,8 @@ namespace WB.Tests.Abc.TestFactories
                 snapshotStoreWithCache ?? Mock.Of<ISnapshotStoreWithCache>(),
                 synchronizationSerializer ?? Mock.Of<IJsonAllTypesSerializer>(),
                 Mock.Of<IInterviewEventStreamOptimizer>(),
-                Mock.Of<ILiteEventRegistry>());
+                Mock.Of<ILiteEventRegistry>(),
+                interviewSequenceStorage ?? Mock.Of<IPlainStorage<InterviewSequenceView, Guid>>());
 
         public InterviewEventStreamOptimizer InterviewEventStreamOptimizer()
             => new InterviewEventStreamOptimizer();
@@ -256,9 +258,9 @@ namespace WB.Tests.Abc.TestFactories
             => new QuestionnaireKeyValueStorage(
                 questionnaireDocumentViewRepository ?? Mock.Of<IPlainStorage<QuestionnaireDocumentView>>());
 
-        public QuestionnaireNameValidator QuestionnaireNameValidator(
+        public QuestionnaireImportValidator QuestionnaireNameValidator(
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage = null)
-            => new QuestionnaireNameValidator(
+            => new QuestionnaireImportValidator(
                 questionnaireBrowseItemStorage ??
                 Stub<IPlainStorageAccessor<QuestionnaireBrowseItem>>.WithNotEmptyValues);
 
@@ -452,7 +454,8 @@ namespace WB.Tests.Abc.TestFactories
             IInterviewerInterviewAccessor interviewFactory = null,
             IHttpStatistician httpStatistician = null,
             IEnumeratorEventStorage interviewerEventStorage = null,
-            IEventBus eventBus = null)
+            IEventBus eventBus = null,
+            IInterviewerSynchronizationService interviewerSynchronizationService = null)
         {
             var syncServiceMock = synchronizationService ?? Mock.Of<ISynchronizationService>();
 
@@ -485,7 +488,7 @@ namespace WB.Tests.Abc.TestFactories
                 interviewerEventStorage ?? Mock.Of<IEnumeratorEventStorage>(),
                 Mock.Of<ISynchronizationMode>(),
                 Mock.Of<IPlainStorage<InterviewSequenceView, Guid>>(),
-                Mock.Of<IInterviewerSynchronizationService>());
+                interviewerSynchronizationService ?? Mock.Of<IInterviewerSynchronizationService>());
         }
 
         public SynchronizationService SynchronizationService(IPrincipal principal = null,
@@ -813,7 +816,17 @@ namespace WB.Tests.Abc.TestFactories
                 offlineSyncClient ?? Mock.Of<IOfflineSyncClient>(),
                 interviewerPrincipal ?? Mock.Of<IInterviewerPrincipal>(),
                 Mock.Of< IInterviewerQuestionnaireAccessor>(),
-                Mock.Of<IPlainStorage<InterviewView>>());
+                Mock.Of<IPlainStorage<InterviewView>>(),
+                Mock.Of<IEnumeratorSettings>());
+        }
+
+        public SupervisorCanSynchronizeHandler SupervisorCanSynchronizeHandler(
+            IPlainStorage<InterviewerDocument> interviewerViewRepository = null,
+            IEnumeratorSettings settings = null)
+        {
+            return new SupervisorCanSynchronizeHandler(
+                interviewerViewRepository ?? Mock.Of<IPlainStorage<InterviewerDocument>>(),
+                settings ?? Mock.Of<IEnumeratorSettings>());
         }
 
         public SupervisorInterviewsHandler SupervisorInterviewsHandler(ILiteEventBus eventBus = null,
@@ -836,7 +849,6 @@ namespace WB.Tests.Abc.TestFactories
                 brokenInterviewStorage ?? Mock.Of<IPlainStorage<BrokenInterviewPackageView, int?>>(),
                 new SqliteInmemoryStorage<SuperivsorReceivedPackageLogEntry, int>(),
                 principal ?? Mock.Of<IPrincipal>(),
-                interviewerViewRepository ?? Mock.Of<IPlainStorage<InterviewerDocument>>(),
                 assignments ?? Create.Storage.AssignmentDocumentsInmemoryStorage());
         }
 

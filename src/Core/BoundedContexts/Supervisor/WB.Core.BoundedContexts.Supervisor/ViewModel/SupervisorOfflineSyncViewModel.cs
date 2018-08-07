@@ -4,26 +4,29 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using MvvmCross.Base;
 using MvvmCross.Commands;
 using MvvmCross.Logging;
 using Plugin.Permissions.Abstractions;
 using WB.Core.BoundedContexts.Supervisor.Properties;
 using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Entities;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 {
     [ExcludeFromCodeCoverage()] // TODO: remove attribute when UI binding completed
-    public class SupervisorOfflineSyncViewModel : BaseOfflineSyncViewModel, IOfflineSyncViewModel
+    public class SupervisorOfflineSyncViewModel : BaseOfflineSyncViewModel<object>, IOfflineSyncViewModel
     {
         private readonly IInterviewViewModelFactory viewModelFactory;
+        private readonly IUserInteractionService userInteractionService;
 
         private ReaderWriterLockSlim devicesLock = new ReaderWriterLockSlim();
 
@@ -34,16 +37,20 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             INearbyCommunicator communicator,
             INearbyConnection nearbyConnection,
             IInterviewViewModelFactory viewModelFactory,
-            IDeviceSynchronizationProgress deviceSynchronizationProgress)
-            : base(principal, viewModelNavigationService, permissions, nearbyConnection, settings)
+            IDeviceSynchronizationProgress deviceSynchronizationProgress,
+            IUserInteractionService userInteractionService,
+            IRestService restService)
+            : base(principal, viewModelNavigationService, permissions, nearbyConnection, settings, restService)
         {
             SetStatus(ConnectionStatus.WaitingForGoogleApi);
             communicator.IncomingInfo.Subscribe(OnIncomingData);
             this.viewModelFactory = viewModelFactory;
             devicesSubscribtion = deviceSynchronizationProgress.SyncStats.Subscribe(OnDeviceProgressReported);
+            this.userInteractionService = userInteractionService;
         }
 
         private string title;
+
         public string Title
         {
             get => this.title;
@@ -51,6 +58,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         }
 
         private bool hasConnectedDevices = true;
+
         public bool HasConnectedDevices
         {
             get => this.hasConnectedDevices;
@@ -58,6 +66,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         }
 
         private bool allSynchronizationsFinished;
+
         public bool AllSynchronizationsFinished
         {
             get => this.allSynchronizationsFinished;
@@ -65,6 +74,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         }
 
         private string progressTitle;
+
         public string ProgressTitle
         {
             get => this.progressTitle;
@@ -72,7 +82,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         }
 
         private ObservableCollection<ConnectedDeviceViewModel> connectedDevices;
-        private IDisposable devicesSubscribtion;
+        private readonly IDisposable devicesSubscribtion;
+        private bool isInitialized = false;
 
         public ObservableCollection<ConnectedDeviceViewModel> ConnectedDevices
         {
@@ -80,52 +91,76 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             set => this.SetProperty(ref this.connectedDevices, value);
         }
 
+        public override void Prepare(object parameter)
+        {
+            
+        }
+
         public override async Task Initialize()
         {
             await base.Initialize();
             this.Title = SupervisorUIResources.OfflineSync_ReceivingInterviewsFromDevices;
-            this.ProgressTitle = string.Format(SupervisorUIResources.OfflineSync_NoDevicesDetectedFormat,
-                this.principal.CurrentUserIdentity.Name);
+
             this.connectedDevices = new ObservableCollection<ConnectedDeviceViewModel>();
+            //var test = new ConnectedDeviceViewModel();
+            //test.InterviewerName = "Interviewer1";
+            //test.Synchronization.ProgressOnProgressChanged(this, new SyncProgressInfo
+            //{
+            //    Description = "description",
+            //    Statistics = new SynchronizationStatistics
+            //    {
+            //        RemovedAssignmentsCount = 1,
+            //        NewAssignmentsCount = 1,
+            //        DeletedInterviewsCount = 5,
+            //        FailedToCreateInterviewsCount = 4,
+            //        TotalCompletedInterviewsCount = 12,
+            //        FailedToUploadInterviwesCount = 21,
+            //        NewInterviewsCount = 21,
+            //        RejectedInterviewsCount = 21,
+            //        SuccessfullyUploadedInterviewsCount = 12,
+            //        SuccessfullyDownloadedQuestionnairesCount = 1225,
+            //        TotalDeletedInterviewsCount = 19,
+            //        TotalNewInterviewsCount = 676,
+            //        TotalRejectedInterviewsCount = 12
+            //    },
+            //    Status = SynchronizationStatus.Upload,
+            //    Title = "title"
+            //});
+            //this.ConnectedDevices.Add(test);
         }
 
         private void SetStatus(ConnectionStatus connectionStatus, string details = null)
         {
             var newLine = Environment.NewLine;
-            this.ProgressTitle = $"{this.GetServiceName()}{newLine}{connectionStatus.ToString()}{newLine}{details ?? String.Empty}";
+            this.ProgressTitle = $"{(this.isInitialized ? this.GetServiceName() : string.Empty)}{newLine}{connectionStatus.ToString()}{newLine}{details ?? String.Empty}";
+        }
+
+        protected override void OnConnectionError(string errorMessage, ConnectionStatusCode errorCode)
+        {
+            switch (errorCode)
+            {
+                case ConnectionStatusCode.MissingPermissionAccessCoarseLocation:
+                case ConnectionStatusCode.StatusEndpointUnknown:
+                    SetStatus(ConnectionStatus.Error, errorMessage);
+                    break;
+            }
         }
 
         protected void OnDeviceProgressReported(DeviceSyncStats stats)
         {
-            SendingDeviceStatus deviceStatus;
+            ConnectedDeviceViewModel deviceInfo = FindDevice(stats.InterviewerLogin);
 
-            if (stats.ProgressInfo.IsRunning)
-            {
-                deviceStatus = SendingDeviceStatus.Synchronizing;
-            }
-            else
-            {
-                deviceStatus = stats.ProgressInfo.HasErrors ? SendingDeviceStatus.DoneWithErrors : SendingDeviceStatus.Done;
-            }
-
-            this.SetDeviceStatus(stats.InterviewerLogin, deviceStatus);
-
-            var deviceInfo = FindDevice(stats);
-
-            if (deviceInfo != null)
-            {
-                deviceInfo.Statistics = stats.ProgressInfo.Statistics;
-            }
+            deviceInfo?.Synchronization.ProgressOnProgressChanged(this, stats.ProgressInfo);
         }
 
-        private ConnectedDeviceViewModel FindDevice(DeviceSyncStats stats)
+        private ConnectedDeviceViewModel FindDevice(string interviewerLogin)
         {
             this.devicesLock.EnterReadLock();
 
             ConnectedDeviceViewModel deviceInfo;
             try
             {
-                deviceInfo = this.ConnectedDevices.FirstOrDefault(x => x.InterviewerName == stats.InterviewerLogin);
+                deviceInfo = this.ConnectedDevices.FirstOrDefault(x => x.InterviewerName == interviewerLogin);
             }
             finally
             {
@@ -137,12 +172,20 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 
         protected override void OnDeviceFound(string name)
         {
-           // Not called?
+            var device = FindDevice(name);
+            if (device != null)
+            {
+                device.DeviceStatus = SendingDeviceStatus.Found;
+            }
         }
 
         protected override void OnDeviceConnectionRequested(string name)
         {
-            SetDeviceStatus(name, SendingDeviceStatus.ConnectionRequested);
+            var device = FindDevice(name);
+            if (device != null)
+            {
+                device.DeviceStatus = SendingDeviceStatus.ConnectionRequested;
+            }
         }
 
         protected override void OnDeviceConnected(string name)
@@ -160,57 +203,51 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
                 }
                 else
                 {
-                    existingDevice.Status = SendingDeviceStatus.Connected;
+                    existingDevice.DeviceStatus = SendingDeviceStatus.Connected;
                 }
             }
             finally
             {
                 this.devicesLock.ExitWriteLock();
             }
-
-            //SetDeviceStatus(name, SendingDeviceStatus.Connected);
         }
 
         protected override void OnDeviceDisconnected(string name)
         {
-            SetDeviceStatus(name, SendingDeviceStatus.Disconnected);
-        }
-
-        private void SetDeviceStatus(string name, SendingDeviceStatus existingDeviceStatus)
-        {
-            this.devicesLock.EnterReadLock();
-
-            try
+            var device = FindDevice(name);
+            if (device != null)
             {
-                var existingDevice = this.ConnectedDevices.FirstOrDefault(x => x.InterviewerName == name);
-                if (existingDevice != null)
-                {
-                    existingDevice.Status = existingDeviceStatus;
-                }
-            }
-            finally
-            {
-                this.devicesLock.ExitReadLock();
+                device.DeviceStatus = SendingDeviceStatus.Disconnected;
             }
         }
 
-        public IMvxAsyncCommand StartDiscoveryAsyncCommand => new MvxAsyncCommand(() =>
+        public IMvxAsyncCommand RetryCommand => new MvxAsyncCommand(() =>
         {
-            this.cancellationTokenSource = new CancellationTokenSource();
-            return this.StartAdvertising();
+            ShouldStartAdvertising = true;
+            return StartDiscoveryAsyncCommand.ExecuteAsync();
         });
 
-        private async Task StartAdvertising()
+        public IMvxAsyncCommand ExitOfflineSyncCommand => new MvxAsyncCommand(async () =>
+            await this.viewModelNavigationService.NavigateToDashboardAsync());
+
+        public IMvxAsyncCommand GoToDashboardCommand => new MvxAsyncCommand(() 
+            => viewModelNavigationService.NavigateToDashboardAsync());
+
+        protected override async Task OnStartDiscovery()
         {
-            await this.permissions.AssureHasPermission(Permission.Location);
+            this.isInitialized = true;
+
+            this.cancellationTokenSource = new CancellationTokenSource();
 
             Log.Trace("StartAdvertising");
 
             SetStatus(ConnectionStatus.StartAdvertising, $"Starting advertising");
+
             var serviceName = this.GetServiceName();
             try
             {
-                await this.nearbyConnection.StartAdvertisingAsync(serviceName, this.principal.CurrentUserIdentity.Name, cancellationTokenSource.Token);
+                await this.nearbyConnection.StartAdvertisingAsync(serviceName, this.Principal.CurrentUserIdentity.Name,
+                    cancellationTokenSource.Token);
                 SetStatus(ConnectionStatus.Advertising, "Waiting for interviewers connections");
             }
             catch (NearbyConnectionException nce)
@@ -224,7 +261,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             SetStatus(ConnectionStatus.Sync, dataInfo.ToString());
         }
 
-        protected override string GetDeviceIdentification() => this.principal.CurrentUserIdentity.UserId.FormatGuid();
+        protected override string GetDeviceIdentification() => this.Principal.CurrentUserIdentity.UserId.FormatGuid();
 
         public IMvxCommand CancelCommand => new MvxCommand(() => { });
 

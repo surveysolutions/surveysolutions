@@ -48,7 +48,7 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
             if (!this.CheckPlayServices()) return;
 
             var mBluetoothAdapter = BluetoothAdapter.DefaultAdapter;
-            if (mBluetoothAdapter.IsEnabled)
+            if (mBluetoothAdapter?.IsEnabled == true)
             {
                 bluetoothReceiver = new BluetoothReceiver();
                 IntentFilter filter = new IntentFilter(BluetoothAdapter.ActionStateChanged);
@@ -63,10 +63,17 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
             }
         }
 
-        protected override void OnPause()
+        protected override void OnStop()
         {
             this.communicator?.StopAll();
-            this.GoogleApi?.Disconnect();
+            if (this.GoogleApi != null)
+            {
+                if (this.GoogleApi.IsConnected)
+                {
+                    this.GoogleApi.Disconnect();
+                }
+            }
+            
             if (this.bluetoothReceiver != null)
             {
                 UnregisterReceiver(this.bluetoothReceiver);
@@ -74,7 +81,7 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
                 bluetoothReceiver = null;
             }
 
-            base.OnPause();
+            base.OnStop();
         }
 
         private void OnBluetoothDisabled(object sender, EventArgs e)
@@ -131,7 +138,8 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
                 return;
             }
 
-            this.GoogleApi.Connect();
+            if (!this.GoogleApi.IsConnected && !this.GoogleApi.IsConnecting)
+                this.GoogleApi.Connect();
         }
 
         public void OnConnected(Bundle connectionHint)

@@ -773,7 +773,7 @@
   </data>
   <data name="Synchronization_Of_Supervisor_details" xml:space="preserve">
     <value>Синхронизация деталей супервизора</value>
-   </data>
+  </data>
   <data name="Synchronization_Of_InterviewersFormat" xml:space="preserve">
     <value>Синхронизация интервьюверов: {0} из {1}</value>
   </data>
@@ -784,9 +784,27 @@
     <value>Разрешить синхронизацию с Headquarters</value>
   </data>
   <data name="Prefs_AllowSyncWithHq_Summary" xml:space="preserve">
-    <value>Выключите эту настройку если приложение должно синхронизироваться только с мобильным приложением супервизора</value>
+    <value>Выключите эту настройку если приложение должно синхронизироваться только с мобильным приложением супервизора. После первой успешной синхронизации с Supervisor приложением будет невозможно включить эту опцию</value>
   </data>
   <data name="DashboardItem_Responsible" xml:space="preserve">
     <value>Ответственный: {0}</value>
+  </data>
+  <data name="Synchronization_SupervisorShouldDoOnlineSync_Title" xml:space="preserve">
+    <value>Приложение Supervisor должно быть синхронизировано.</value>
+  </data>
+  <data name="LocationPermissionRequired" xml:space="preserve">
+    <value>Необходимо разрешение на работу с геопозицией для работы синхронизации</value>
+    <comment>Необходимо разрешение на работу с геопозицией для работы синхронизации</comment>
+  </data>
+  <data name="Synchronization_SupervisorShouldDoOnlineSync" xml:space="preserve">
+    <value>Приложение Supervisor должно всегда иметь последние изменения с Headquarters, поэтому должно быть синхронизировано последним в команде перед тем как станет достуным оффлайн синхронизация.</value>
+  </data>
+  <data name="Prefs_AllowSyncWithHq_Summary_Disabled" xml:space="preserve">
+    <value>Невозможно синхронизироваться с Headquarters, если была хотя бы одна успешная синхронизация с Supervisor приложением</value>
+    <comment>Невозможно синхронизироваться с Headquarters, если была хотя бы одна успешная синхронизация с Supervisor приложением</comment>
+  </data>
+  <data name="Synchronization_UserDoNotBelongToTeam" xml:space="preserve">
+    <value>Пользователь больше не состоит в команде этого супервизора. Пожалуйста свяжитесь с Вашим Хедквотером.</value>
+    <comment>Пользователь больше не состоит в команде супервизора {0}. Пожалуйста свяжитесь с Вашим Хедквотером</comment>
   </data>
 </root>

@@ -83,7 +83,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                     return new NearbyStatus
                     {
                         IsSuccess = true,
-                        Status = ConnectionStatusCode.StatusOk
+                        Status = ConnectionStatusCode.StatusAlreadyConnectedToEndpoint
                     };
                 }
 
