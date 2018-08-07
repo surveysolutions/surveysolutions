@@ -42,12 +42,10 @@ namespace WB.UI.Interviewer.ServiceLocation
             registry.BindAsSingleton<ISnapshotStoreWithCache, InMemorySnapshotStoreWithCache>();
 
             registry.Bind<INetworkService, AndroidNetworkService>();
-            registry.Bind<IHttpClientFactory, AndroidHttpClientFactory>();
             registry.BindAsSingletonWithConstructorArgument<IRestService, RestService>("restServicePointManager", null);
             registry.Bind<IInterviewUniqueKeyGenerator, InterviewerInterviewUniqueKeyGenerator>();
             registry.Bind<IGroupStateCalculationStrategy, EnumeratorGroupStateCalculationStrategy>();
 
-            registry.BindAsSingleton<ISynchronizationMode, SynchronizationModeSelector>();
             registry.Bind<ISynchronizationService, SyncronizationServiceWrapper>();
 
             registry.Bind<IInterviewerSynchronizationService, SynchronizationService>();

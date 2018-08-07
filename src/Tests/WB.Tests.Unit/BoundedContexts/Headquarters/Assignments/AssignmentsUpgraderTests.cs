@@ -137,6 +137,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                 quantity: migratedAssignmentQuantity,
                 questionnaireIdentity: migrateFrom);
             var interviewAnswerId = Create.Identity();
+            var protectedVariableName = "pro";
             assignmentToMigrate.SetAnswers(new List<InterviewAnswer>
             {
                 Create.Entity.InterviewAnswer(interviewAnswerId, Create.Entity.TextQuestionAnswer("blabla"))
@@ -146,6 +147,11 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             assignmentToMigrate.SetIdentifyingData(new List<IdentifyingAnswer>
             {
                 Create.Entity.IdentifyingAnswer(identity: prefilledInterviewAnswerId, answer: "identifying")
+            });
+
+            assignmentToMigrate.SetProtectedVariables(new List<string>()
+            {
+                protectedVariableName
             });
 
             assignmentsStorage.Store(assignmentToMigrate, migratedAssignmentId);
@@ -176,6 +182,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             Assert.That(newAssignment, Has.Property(nameof(newAssignment.QuestionnaireId)).EqualTo(migrateTo));
             Assert.That(newAssignment.Answers, Is.EquivalentTo(assignmentToMigrate.Answers));
             Assert.That(newAssignment.IdentifyingData, Has.Count.EqualTo(1));
+            Assert.That(newAssignment.ProtectedVariables, Has.Count.EqualTo(1));
         }
 
         [Test]

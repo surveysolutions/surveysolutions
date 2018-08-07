@@ -231,6 +231,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public string Title => this.innerDocument.Title;
 
         public Translation Translation => this.translation;
+        public string VariableName => this.innerDocument.VariableName;
 
         public IQuestion GetQuestionByVariable(string variable)
         {

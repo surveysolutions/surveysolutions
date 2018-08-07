@@ -124,5 +124,10 @@ namespace WB.UI.Tester.Infrastructure.Internals.Settings
         public bool ShowLocationOnMap => SharedPreferences.GetBoolean(ShowLocationOnMapParamName, true);
 
         public bool ShowAnswerTime => SharedPreferences.GetBoolean(ShowAnsweringTimeName, false);
+        public long? LastHqSyncTimestamp { get; } = null;
+        public void SetLastHqSyncTimestamp(long? lastHqSyncTimestamp)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

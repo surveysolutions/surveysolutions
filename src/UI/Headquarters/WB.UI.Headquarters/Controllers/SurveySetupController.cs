@@ -332,7 +332,7 @@ namespace WB.UI.Headquarters.Controllers
             if (isFile)
             {
                 preloadedFileInfo = this.assignmentsImportReader.ReadTextFileInfo(model.File.InputStream, model.File.FileName);
-                preloadedFileInfo.QuestionnaireOrRosterName = questionnaireFileName;/*we expect that it is main file*/
+                preloadedFileInfo.QuestionnaireOrRosterName = questionnaire.VariableName;/*we expect that it is main file*/
             }
             else if (isZip)
             {
@@ -342,6 +342,7 @@ namespace WB.UI.Headquarters.Controllers
 
                     preloadedFileInfo =
                         preloadedFiles.FirstOrDefault(x => x.QuestionnaireOrRosterName == questionnaireFileName) ??
+                        preloadedFiles.FirstOrDefault(x => x.QuestionnaireOrRosterName == questionnaire.VariableName) ??
                         preloadedFiles.FirstOrDefault();
                 }
                 catch (ZipException)

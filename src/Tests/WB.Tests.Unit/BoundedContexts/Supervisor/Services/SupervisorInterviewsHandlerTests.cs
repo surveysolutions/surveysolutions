@@ -4,11 +4,8 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Main.Core.Events;
 using Moq;
-using Ncqrs.Eventing;
-using NSubstitute.ExceptionExtensions;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
-using WB.Core.BoundedContexts.Supervisor;
 using WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSyncHandlers;
 using WB.Core.BoundedContexts.Supervisor.Views;
 using WB.Core.BoundedContexts.Tester.Services;
@@ -24,7 +21,6 @@ using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
-using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
@@ -34,65 +30,6 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
     [TestOf(typeof(SupervisorInterviewsHandler))]
     public class SupervisorInterviewsHandlerTests
     {
-        [Test]
-        public async Task CanSynchronize_should_check_assemblyFileVersion_for_compatibility()
-        {
-            var userId = Guid.NewGuid();
-            var userStamp = "test token";
-            var users = new Mock<IPlainStorage<InterviewerDocument>>();
-            users.Setup(x => x.GetById(userId.FormatGuid())).Returns(new InterviewerDocument(){SecurityStamp = userStamp });
-
-            var handler = Create.Service.SupervisorInterviewsHandler(interviewerViewRepository:users.Object);
-
-            var expectedVersion = ReflectionUtils.GetAssemblyVersion(typeof(SupervisorBoundedContextAssemblyIndicator));
-            var response = await handler.Handle(new CanSynchronizeRequest(expectedVersion.Revision, userId, userStamp));
-
-            Assert.That(response, Has.Property(nameof(response.CanSyncronize)).True);
-        }
-
-        [Test]
-        public async Task CanSynchronize_should_check_security_stamp()
-        {
-            var userId = Guid.NewGuid();
-            var userToken = "test token";
-            var users = new Mock<IPlainStorage<InterviewerDocument>>();
-            users.Setup(x => x.GetById(userId.FormatGuid())).Returns(new InterviewerDocument() { SecurityStamp = userToken });
-
-            var handler = Create.Service.SupervisorInterviewsHandler(interviewerViewRepository: users.Object);
-
-            var expectedVersion = ReflectionUtils.GetAssemblyVersion(typeof(SupervisorBoundedContextAssemblyIndicator));
-            var response = await handler.Handle(new CanSynchronizeRequest(expectedVersion.Revision, userId, "new token"));
-
-            Assert.That(response, Has.Property(nameof(response.CanSyncronize)).False);
-            Assert.AreEqual(response.Reason, SyncDeclineReason.InvalidPassword);
-        }
-
-        [Test]
-        public async Task CanSynchronize_should_check_UserId_for_Team_belonging()
-        {
-            var userId = Guid.NewGuid();
-            var users = new Mock<IPlainStorage<InterviewerDocument>>();
-            users.Setup(x => x.GetById(userId.FormatGuid())).Returns(new InterviewerDocument());
-
-            var handler = Create.Service.SupervisorInterviewsHandler(interviewerViewRepository: users.Object);
-
-            var expectedVersion = ReflectionUtils.GetAssemblyVersion(typeof(SupervisorBoundedContextAssemblyIndicator));
-            var response = await handler.Handle(new CanSynchronizeRequest(expectedVersion.Revision, Guid.NewGuid(), String.Empty));
-
-            Assert.That(response, Has.Property(nameof(response.CanSyncronize)).False);
-            Assert.AreEqual(response.Reason, SyncDeclineReason.NotATeamMember);
-        }
-
-        [Test]
-        public async Task CanSynchronize_should_check_assemblyFileVersion_for_incompatibility()
-        {
-            var handler = Create.Service.SupervisorInterviewsHandler();
-
-            var response = await handler.Handle(new CanSynchronizeRequest(1, Guid.NewGuid(), String.Empty));
-
-            Assert.That(response, Has.Property(nameof(response.CanSyncronize)).False);
-        }
-
         [Test]
         public async Task GetInterviewsRequest_Should_filter_interviews_by_status_and_responsible()
         {
@@ -108,7 +45,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             var handler = Create.Service.SupervisorInterviewsHandler(interviews: interviews);
 
             // Act
-            var response = await handler.Handle(new GetInterviewsRequest(interviewerId));
+            var response = await handler.GetInterviews(new GetInterviewsRequest(interviewerId));
 
             response.Interviews.Select(x => x.Id).Should().BeEquivalentTo(Id.g2, Id.g5);
             response.Interviews.Select(x => x.ResponsibleId).Should().BeEquivalentTo(interviewerId, interviewerId);
@@ -126,7 +63,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             var handler = Create.Service.SupervisorInterviewsHandler(interviews: interviews);
 
             // Act
-            var response = await handler.Handle(new GetInterviewsRequest(responsibleId));
+            var response = await handler.GetInterviews(new GetInterviewsRequest(responsibleId));
 
             response.Interviews.Select(x => x.ResponsibleId).Should().BeEquivalentTo(responsibleId);
         }

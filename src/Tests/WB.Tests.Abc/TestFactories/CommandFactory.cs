@@ -159,13 +159,15 @@ namespace WB.Tests.Abc.TestFactories
 
         public ImportFromDesigner ImportFromDesigner(Guid? questionnaireId = null, string title = "Questionnaire X",
             Guid? responsibleId = null, string base64StringOfAssembly = "<base64>assembly</base64> :)",
-            long questionnaireContentVersion = 1)
+            long questionnaireContentVersion = 1,
+            string variable = "questionnaire")
             => new ImportFromDesigner(
                 responsibleId ?? Guid.NewGuid(),
                 new QuestionnaireDocument
                 {
                     PublicKey = questionnaireId ?? Guid.NewGuid(),
                     Title = title,
+                    VariableName = variable
                 },
                 false,
                 base64StringOfAssembly,

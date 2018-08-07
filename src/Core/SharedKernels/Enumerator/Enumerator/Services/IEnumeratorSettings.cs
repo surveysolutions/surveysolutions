@@ -14,5 +14,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         bool ShowVariables { get; }
         bool ShowLocationOnMap { get; }
         bool ShowAnswerTime { get; }
+        long? LastHqSyncTimestamp { get; }
+        void SetLastHqSyncTimestamp(long? lastHqSyncTimestamp);
     }
 }

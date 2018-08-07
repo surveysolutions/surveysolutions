@@ -21,6 +21,16 @@
           local:MvxBind="Html Title;"/>
       </LinearLayout>
     </TableRow>
+    <TableRow local:MvxBind="Visibility Visibility(Note != null);">
+      <LinearLayout style="@style/VerticalFullWidthWrappingLayout">
+          <TextView
+              style="@style/Interviewer_Selector_Note"
+              android:layout_width="match_parent"
+              android:layout_height="wrap_content"
+              local:MvxBind="Html Note;"
+              android:layout_weight="1"/>
+      </LinearLayout>
+    </TableRow>
     <TableRow>
       <LinearLayout 
           android:layout_width="match_parent"

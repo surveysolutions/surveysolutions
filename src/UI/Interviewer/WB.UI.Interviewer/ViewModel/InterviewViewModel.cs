@@ -114,7 +114,7 @@ namespace WB.UI.Interviewer.ViewModel
 
             auditLogService.Write(new CloseInterviewAuditLogEntity(Guid.Parse(InterviewId), interviewKey?.ToString()));
 
-            base.ViewDisappeared();
+            base.ViewDisappearing();
         }
     }
 }

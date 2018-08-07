@@ -948,6 +948,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Location permission is required for offline synchronization.
+        /// </summary>
+        public static string LocationPermissionRequired {
+            get {
+                return ResourceManager.GetString("LocationPermissionRequired", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to This is first boot on this device. User and domain are not set yet.&lt;br /&gt;You need internet connection to proceed.
         /// </summary>
         public static string Login_FinishInstallation_Message {
@@ -1185,11 +1194,20 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Disable this setting if you want to synchronize only with mobile supervisor application.
+        ///   Looks up a localized string similar to Disable this setting if you want to synchronize only with mobile supervisor application. After first succesfull synchronization with Supervisor App it will be not possible to enable this setting back.
         /// </summary>
         public static string Prefs_AllowSyncWithHq_Summary {
             get {
                 return ResourceManager.GetString("Prefs_AllowSyncWithHq_Summary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to It is not possible to synchronize with Headquarters once there was at least one succesfull synchronization with Supervisor Application.
+        /// </summary>
+        public static string Prefs_AllowSyncWithHq_Summary_Disabled {
+            get {
+                return ResourceManager.GetString("Prefs_AllowSyncWithHq_Summary_Disabled", resourceCulture);
             }
         }
         
@@ -1653,6 +1671,24 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Supervisor should always have latest changes from Headquarters, so it should be synchronized last in the team before offline synchronization is available.
+        /// </summary>
+        public static string Synchronization_SupervisorShouldDoOnlineSync {
+            get {
+                return ResourceManager.GetString("Synchronization_SupervisorShouldDoOnlineSync", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Supervisor application needs to be synchronized..
+        /// </summary>
+        public static string Synchronization_SupervisorShouldDoOnlineSync_Title {
+            get {
+                return ResourceManager.GetString("Synchronization_SupervisorShouldDoOnlineSync_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to completed assignments.
         /// </summary>
         public static string Synchronization_Upload_CompletedAssignments_Text {
@@ -1712,6 +1748,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Synchronization_UserAuthentication_Title {
             get {
                 return ResourceManager.GetString("Synchronization_UserAuthentication_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to User is no longer belong to this Supervisor team. Please contact You Headquarter for details.
+        /// </summary>
+        public static string Synchronization_UserDoNotBelongToTeam {
+            get {
+                return ResourceManager.GetString("Synchronization_UserDoNotBelongToTeam", resourceCulture);
             }
         }
         

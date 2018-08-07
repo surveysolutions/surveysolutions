@@ -4,8 +4,7 @@ using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Tests.Abc;
 
-
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireNameValidatorTests
+namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireImportValidatorTests
 {
     internal class when_validating_ImportFromDesigner_command_and_other_deleted_questionnaire_with_such_title_exists
     {
@@ -24,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.QuestionnaireNameValidato
             validator.Validate(null, command);
         }
 
-        private static QuestionnaireNameValidator validator;
+        private static QuestionnaireImportValidator validator;
         private static ImportFromDesigner command;
         private static string title = "The Title";
         private static Guid importedQuestionnaireId = Guid.Parse("11111111111111111111111111111111");

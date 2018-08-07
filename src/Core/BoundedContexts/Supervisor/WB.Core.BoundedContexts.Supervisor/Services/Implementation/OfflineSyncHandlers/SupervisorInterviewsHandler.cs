@@ -22,7 +22,6 @@ using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
-using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSyncHandlers
@@ -40,9 +39,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
         private readonly ICommandService commandService;
         private readonly IPlainStorage<BrokenInterviewPackageView, int?> brokenInterviewPackageStorage;
         private readonly IPrincipal principal;
-        private readonly IPlainStorage<InterviewerDocument> interviewerViewRepository;
+        
         private readonly IAssignmentDocumentsStorage assignmentsStorage;
-
+        
         public SupervisorInterviewsHandler(ILiteEventBus eventBus,
             IEnumeratorEventStorage eventStore,
             IPlainStorage<InterviewView> interviews,
@@ -52,7 +51,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             IPlainStorage<BrokenInterviewPackageView, int?> brokenInterviewPackageStorage,
             IPlainStorage<SuperivsorReceivedPackageLogEntry, int> receivedPackagesLog,
             IPrincipal principal,
-            IPlainStorage<InterviewerDocument> interviewerViewRepository,
             IAssignmentDocumentsStorage assignmentsStorage)
         {
             this.eventBus = eventBus;
@@ -64,15 +62,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             this.commandService = commandService;
             this.brokenInterviewPackageStorage = brokenInterviewPackageStorage;
             this.principal = principal;
-            this.interviewerViewRepository = interviewerViewRepository;
             this.assignmentsStorage = assignmentsStorage;
         }
 
         public void Register(IRequestHandler requestHandler)
         {
-            requestHandler.RegisterHandler<CanSynchronizeRequest, CanSynchronizeResponse>(Handle);
             requestHandler.RegisterHandler<PostInterviewRequest, OkResponse>(Handle);
-            requestHandler.RegisterHandler<GetInterviewsRequest, GetInterviewsResponse>(Handle);
+            requestHandler.RegisterHandler<GetInterviewsRequest, GetInterviewsResponse>(GetInterviews);
             requestHandler.RegisterHandler<LogInterviewAsSuccessfullyHandledRequest, OkResponse>(Handle);
             requestHandler.RegisterHandler<GetInterviewDetailsRequest, GetInterviewDetailsResponse>(Handle);
             requestHandler.RegisterHandler<UploadInterviewRequest, OkResponse>(UploadInterview);
@@ -174,12 +170,15 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
         private void UpdateAssignmentQuantityByInterview(Guid interviewId)
         {
             var interviewView = this.interviews.GetById(interviewId.FormatGuid());
+
             if (interviewView?.Assignment == null) return;
 
             var assignment = this.assignmentsStorage.GetById(interviewView.Assignment.Value);
             if (assignment == null) return;
 
-            assignment.CreatedInterviewsCount = this.interviews.Count(x => x.Assignment == interviewView.Assignment);
+            assignment.CreatedInterviewsCount = this.interviews.Where(x => x.Assignment == interviewView.Assignment)
+                .Count(x => x.FromHqSyncDateTime == null);
+
             this.assignmentsStorage.Store(assignment);
         }
 
@@ -248,52 +247,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             return Task.FromResult(new OkResponse());
         }
 
-        public Task<CanSynchronizeResponse> Handle(CanSynchronizeRequest arg)
-        {
-            var expectedVersion = ReflectionUtils.GetAssemblyVersion(typeof(SupervisorBoundedContextAssemblyIndicator));
-
-            if (expectedVersion.Revision != arg.InterviewerBuildNumber)
-            {
-                return Task.FromResult(new CanSynchronizeResponse
-                {
-                    CanSyncronize = false,
-                    Reason = SyncDeclineReason.UnexpectedClientVersion
-                });
-            }
-
-            var user = interviewerViewRepository.GetById(arg.InterviewerId.FormatGuid());
-            if (user == null)
-            {
-                return Task.FromResult(new CanSynchronizeResponse
-                {
-                    CanSyncronize = false,
-                    Reason = SyncDeclineReason.NotATeamMember
-                });
-            }
-            
-            if (user.SecurityStamp != arg.SecurityStamp)
-            {
-                return Task.FromResult(new CanSynchronizeResponse
-                {
-                    CanSyncronize = false,
-                    Reason = SyncDeclineReason.InvalidPassword
-                });
-            }
-
-            if (user.IsLockedByHeadquarters || user.IsLockedBySupervisor)
-            {
-                return Task.FromResult(new CanSynchronizeResponse
-                {
-                    CanSyncronize = false,
-                    Reason = SyncDeclineReason.UserIsLocked
-                });
-            }
-
-            return Task.FromResult(new CanSynchronizeResponse
-            {
-                CanSyncronize = true
-            });
-        }
 
         private Task<SupervisorIdResponse> GetSupervisorId(SupervisorIdRequest request)
         {
@@ -303,7 +256,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             });
         }
 
-        public Task<GetInterviewsResponse> Handle(GetInterviewsRequest arg)
+        public Task<GetInterviewsResponse> GetInterviews(GetInterviewsRequest arg)
         {
             var interviewsForUser = this.interviews.Where(x =>
                 (x.Status == InterviewStatus.RejectedBySupervisor || x.Status == InterviewStatus.InterviewerAssigned)

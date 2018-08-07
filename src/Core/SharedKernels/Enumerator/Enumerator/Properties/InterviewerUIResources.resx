@@ -214,6 +214,9 @@ for further instructions</value>
   <data name="InvalidEndpoint" xml:space="preserve">
     <value>Supervisor website address is invalid. Make sure that you entered correct url address</value>
   </data>
+  <data name="LocationPermissionRequired" xml:space="preserve">
+    <value>Location permission is required for offline synchronization</value>
+  </data>
   <data name="Login_Online_Signin_Explanation_message" xml:space="preserve">
     <value>You could try to sign in online if you forgot your password or it was reset</value>
   </data>
@@ -355,6 +358,9 @@ for further instructions</value>
   <data name="Synchronization_UserPassword_Update_Format" xml:space="preserve">
     <value>Authentication problem. We were unable to confirm your credentials '{0}'. Your account may have a different password, be locked or deleted. Please re-enter your password. If the problem persists, contact your Supervisor or Headquarters.</value>
   </data>
+  <data name="Synchronization_UserDoNotBelongToTeam">
+    <value>User is no longer belongs to Supervisor {0} team. Please contact Your Headquarters for details.</value>
+  </data>
   <data name="Unauthorized" xml:space="preserve">
     <value>Your login or password is incorrect</value>
   </data>
@@ -366,6 +372,12 @@ for further instructions</value>
   </data>
   <data name="Synchronization_UserLinkedToAnotherDevice_Status" xml:space="preserve">
     <value>User authentication error</value>
+  </data>
+  <data name="Synchronization_SupervisorShouldDoOnlineSync_Title" xml:space="preserve">
+    <value>Supervisor application needs to be synchronized.</value>
+  </data>
+  <data name="Synchronization_SupervisorShouldDoOnlineSync" xml:space="preserve">
+    <value>Supervisor should always have latest changes from Headquarters, so it should be synchronized last in the team before offline synchronization is available</value>
   </data>
   <data name="Synchronization_UserLinkedToAnotherDevice_Title" xml:space="preserve">
     <value>Your account was relinked to another tablet</value>
@@ -772,7 +784,10 @@ Downloaded {3}%</value>
     <value>Allow synchronization with Headquarters</value>
   </data>
   <data name="Prefs_AllowSyncWithHq_Summary" xml:space="preserve">
-    <value>Disable this setting if you want to synchronize only with mobile supervisor application</value>
+    <value>Disable this setting if you want to synchronize only with mobile supervisor application. After first succesfull synchronization with Supervisor App it will be not possible to enable this setting back</value>
+  </data>
+  <data name="Prefs_AllowSyncWithHq_Summary_Disabled" xml:space="preserve">
+    <value>It is not possible to synchronize with Headquarters once there was at least one succesfull synchronization with Supervisor Application</value>
   </data>
   <data name="DashboardItem_Responsible" xml:space="preserve">
     <value>Responsible: {0}</value>
