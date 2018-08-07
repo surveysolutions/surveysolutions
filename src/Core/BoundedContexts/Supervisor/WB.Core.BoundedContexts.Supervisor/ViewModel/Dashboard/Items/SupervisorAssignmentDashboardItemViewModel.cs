@@ -46,12 +46,12 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
             Actions.Add(new ActionDefinition
             {
                 ActionType = ActionType.Primary,
-                Command = new MvxAsyncCommand(this.SelectInterviewerAsync, () => true),
+                Command = new MvxCommand(this.SelectInterviewer),
                 Label = InterviewerUIResources.Dashboard_Assign
             });
         }
 
-        private async Task SelectInterviewerAsync()
+        private void SelectInterviewer()
         {
             this.interviewerSelectorDialog.Selected += OnInterviewerSelected;
             this.interviewerSelectorDialog.Cancelled += OnSelectionCancelled;

@@ -26,14 +26,14 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.InterviewerSelector
             protected set => this.RaiseAndSetIfChanged(ref this.uiItems, value);
         }
 
-        public IMvxAsyncCommand<InterviewerToSelectViewModel> SelectInterviewerCommand => new MvxAsyncCommand<InterviewerToSelectViewModel>(async interviewer => { await this.SelectInterviewerAsync(interviewer); });
+        public IMvxCommand<InterviewerToSelectViewModel> SelectInterviewerCommand => new MvxCommand<InterviewerToSelectViewModel>(this.SelectInterviewer);
 
         public InterviewerSelectorDialogViewModel(IInterviewersListAccessor interviewersAccessor)
         {
             this.interviewersAccessor = interviewersAccessor;
         }
 
-        private async Task SelectInterviewerAsync(InterviewerToSelectViewModel interviewer)
+        private void SelectInterviewer(InterviewerToSelectViewModel interviewer)
         {
             this.uiItems.ForEach(x => x.IsSelected = false);
             this.selectedInterviewer = interviewer;
