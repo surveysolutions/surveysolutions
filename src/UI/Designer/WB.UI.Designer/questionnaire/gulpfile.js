@@ -4,11 +4,13 @@ const path = require('path');
 const mainBowerFiles = require('main-bower-files');
 const runSequence = require('run-sequence');
 const concat = require('gulp-concat');
+const utils = require('gulp-util')
 const debug = require('gulp-debug');
 const appendPrepend = require('gulp-append-prepend');
 const minifyHTML = require('gulp-htmlmin');
 const templateCache = require("gulp-angular-templatecache");
 const fs = require("fs");
+const isDevMode = !utils.env.production
 
 const paths = {
   scripts: ['details/scripts/**/*.js'],
@@ -143,7 +145,10 @@ gulp.task('resx2json', function(){
             filePath.basename += ".en";
           }
       }))
-      .pipe(gulp.dest('build/resources'));
+      .pipe(isDevMode ? utils.noop() : plugins.rev())
+      .pipe(gulp.dest('build/resources'))
+      .pipe(plugins.rev.manifest())
+      .pipe(gulp.dest('build'));
 });
 
 gulp.task('copyFilesNeededForBundler', function(){
@@ -200,6 +205,14 @@ gulp.task('index', function () {
 
   return target.pipe(plugins.inject(gulp.src('./build/libs*.css', { read: false }), { relative: true, name: 'libs' }))
                .pipe(plugins.inject(sources, { relative: true }))
+               .pipe(plugins.inject(gulp.src("./build/rev-manifest.json"),
+                {
+                  name: 'manifest',
+                  transform: function(filePath, file) {
+                    return '<script>window.localization = ' + file.contents.toString('utf8') + '</script>'
+                  }
+               }))
+
     		   .pipe(gulp.dest('./details'));
 });
 
