@@ -20,11 +20,13 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         {
             this.dashboardItemsAccessor = dashboardItemsAccessor;
             this.viewModelFactory = viewModelFactory;
+
+            this.Title = SupervisorDashboard.SentToInterviewer;
         }
 
         public string TabTitle => SupervisorDashboard.ToBeAssigned;
 
-        public override GroupStatus InterviewStatus => GroupStatus.Started;
+        public override GroupStatus InterviewStatus => GroupStatus.Disabled;
 
         protected override IEnumerable<IDashboardItem> GetUiItems()
         {

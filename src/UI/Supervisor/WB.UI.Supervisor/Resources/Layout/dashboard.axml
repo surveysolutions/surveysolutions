@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:clickable="true"
     android:focusableInTouchMode="true"
-    local:MvxBind="Lock Synchronization.IsSynchronizationInProgress;">
+    local:MvxBind="Lock Synchronization.IsSynchronizationInProgress;
+                   StatusBarColorByInterviewStatus TypeOfInterviews;">
 
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/overview_coordinator_layout"
@@ -24,7 +25,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimaryDark"
-                local:layout_scrollFlags="enterAlways|scroll" >
+                local:layout_scrollFlags="enterAlways|scroll" 
+                local:MvxBind="ColorByInterviewStatus TypeOfInterviews;">
+                <TextView
+                    style="@style/ToolbarTitle"
+                    local:MvxBind="Text DashboardTitle;" />
                 <ImageButton style="@style/ToolbarIcon"
                              android:id="@+id/synchronize_with_hq"
                              local:MvxBind="Click NavigateToOfflineSyncCommand;"
