@@ -184,10 +184,15 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             }
 
             foreach (var file in files)
-            {
-                foreach (var error in this.FileVerifiers.SelectMany(x => x.Invoke(originalFileName, file, questionnaire)))
-                    if (error != null) yield return error;
-            }
+            foreach (var error in this.VerifyFile(originalFileName, file, questionnaire))
+                yield return error;
+
+        }
+
+        public IEnumerable<PanelImportVerificationError> VerifyFile(string fileName, PreloadedFileInfo file, IQuestionnaire questionnaire)
+        {
+            foreach (var error in this.FileVerifiers.SelectMany(x => x.Invoke(fileName, file, questionnaire)))
+                if (error != null) yield return error;
         }
 
         public IEnumerable<PanelImportVerificationError> VerifyRosters(List<PreloadingAssignmentRow> allRowsByAllFiles, IQuestionnaire questionnaire)
