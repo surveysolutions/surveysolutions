@@ -34,7 +34,6 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 
                 if (timeSinceLastClickInMilliseconds < 500)
                 {
-                    System.Diagnostics.Trace.Write("skip click");
                     return;
                 }
             }
@@ -45,7 +44,6 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             if (!command.CanExecute(null))
                 return;
 
-            System.Diagnostics.Trace.Write($"click {DateTime.UtcNow}");
             lastClickUtc = DateTime.UtcNow;
             command.Execute(null);
         }
