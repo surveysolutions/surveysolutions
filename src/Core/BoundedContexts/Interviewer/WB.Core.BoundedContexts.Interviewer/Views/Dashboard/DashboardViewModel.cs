@@ -321,7 +321,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         }
 
         public IMvxAsyncCommand ShowSearchCommand =>
-            new MvxAsyncCommand(viewModelNavigationService.NavigateToAsync<DashboardSearchViewModel>);
+            new MvxAsyncCommand(viewModelNavigationService.NavigateToAsync<SearchViewModel>);
 
         #region Offline synchronization
 

@@ -20,7 +20,7 @@ using WB.Core.SharedKernels.Enumerator.Views.Dashboard;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 {
-    public class DashboardSearchViewModel : BaseViewModel, IDisposable
+    public class SearchViewModel : BaseViewModel, IDisposable
     {
         private readonly IInterviewViewModelFactory viewModelFactory;
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
@@ -31,7 +31,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private readonly IDisposable startingLongOperationMessageSubscriptionToken;
         private readonly IDisposable stopLongOperationMessageSubscriptionToken;
 
-        public DashboardSearchViewModel(IPrincipal principal, 
+        public SearchViewModel(IPrincipal principal, 
             IViewModelNavigationService viewModelNavigationService,
             IInterviewViewModelFactory viewModelFactory,
             IPlainStorage<InterviewView> interviewViewRepository,

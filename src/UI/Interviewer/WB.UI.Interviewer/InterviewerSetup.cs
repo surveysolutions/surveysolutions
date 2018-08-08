@@ -54,7 +54,7 @@ namespace WB.UI.Interviewer
                 {typeof(LoginViewModel), typeof(LoginActivity)},
                 {typeof(FinishInstallationViewModel), typeof(FinishInstallationActivity)},
                 {typeof(DashboardViewModel), typeof(DashboardActivity)},
-                {typeof(DashboardSearchViewModel), typeof(DashboardSearchActivity)},
+                {typeof(SearchViewModel), typeof(SearchActivity)},
                 {typeof(DiagnosticsViewModel),typeof(DiagnosticsActivity) },
                 {typeof(LoadingViewModel),typeof(LoadingActivity) },
                 {typeof(InterviewViewModel), typeof(InterviewActivity)},
