@@ -32,7 +32,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         private readonly IQuestionnaireLabelFactory questionnaireLabelFactory;
 
-        private readonly IExportSeviceDataProvider exportSeviceDataProvider;
+        private readonly IExportServiceDataProvider exportSeviceDataProvider;
 
         public TabularDataToExternalStatPackageExportService(
             IFileSystemAccessor fileSystemAccessor,
@@ -43,7 +43,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             IDatasetWriterFactory datasetWriterFactory, 
             IQuestionnaireLabelFactory questionnaireLabelFactory,
             IQuestionnaireExportStructureStorage questionnaireExportStructureStorage,
-            IExportSeviceDataProvider exportSeviceDataProvider)
+            IExportServiceDataProvider exportSeviceDataProvider)
         {
             this.transactionManager = transactionManager;
             this.fileSystemAccessor = fileSystemAccessor;

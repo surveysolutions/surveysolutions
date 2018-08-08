@@ -4,9 +4,9 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 {
-    internal class ExportSeviceDataProvider : IExportSeviceDataProvider
+    internal class ExportServiceDataProvider : IExportServiceDataProvider
     {
-        public ExportSeviceDataProvider(DiagnosticsExporter diagnosticsExporter,
+        public ExportServiceDataProvider(DiagnosticsExporter diagnosticsExporter,
             IInterviewErrorsExporter interviewErrorsExporter,
             InterviewActionsExporter interviewActionsExporter,
             CommentsExporter commentsExporter)

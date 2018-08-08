@@ -25,7 +25,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.T
             ITabFileReader tabFileReader = null,
             IDataQueryFactory dataQueryFactory = null,
             IDatasetWriterFactory datasetWriterFactory = null,
-            IExportSeviceDataProvider exportSeviceDataProvider = null)
+            IExportServiceDataProvider exportServiceDataProvider = null)
         {
             fileSystemAccessor = fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>();
             return new TabularDataToExternalStatPackageExportService(
@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.T
                 Mock.Of<IQuestionnaireExportStructureStorage>(
                     _ =>
                         _.GetQuestionnaireExportStructure(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaireExportStructure),
-                exportSeviceDataProvider ?? Mock.Of <IExportSeviceDataProvider>());
+                exportServiceDataProvider ?? Mock.Of <IExportServiceDataProvider>());
         }
 
         protected static HeaderStructureForLevel CreateHeaderStructureForLevel(string levelName = "table name", string[] referenceNames = null, ValueVector<Guid> levelScopeVector = null)

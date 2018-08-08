@@ -2,7 +2,7 @@
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 {
-    public interface IExportSeviceDataProvider
+    public interface IExportServiceDataProvider
     {
         Dictionary<string, Dictionary<string,string>> GetServiceDataLabels();
     }
