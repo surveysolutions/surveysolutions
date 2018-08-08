@@ -227,8 +227,6 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         {
             Error(RosterFileNotFound, "PL0004", messages.PL0004_FileWasntMappedRoster),
             Errors(MissingRosterInstanceColumns, "PL0007", messages.PL0007_ServiceColumnIsAbsent),
-            Errors(OptionalGpsPropertyAndMissingLatitudeAndLongitude, "PL0030", messages.PL0030_GpsFieldsRequired),
-            Errors(DuplicatedColumns, "PL0031", messages.PL0031_ColumnNameDuplicatesFound),
             Errors(ColumnByTextListRosterSizeAnswerNotFound, "PL0052", messages.PL0052_ColumnByTextListRosterSizeAnswerNotFound),
         });
 
