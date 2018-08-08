@@ -279,6 +279,8 @@
     <Compile Include="Converters\EnumToStringConverter.cs" />
     <Compile Include="CustomBindings\ProgressBarProgressBinding.cs" />
     <Compile Include="CustomBindings\ThrottledClickBinding.cs" />
+    <Compile Include="CustomServices\BackStackHintHandler.cs" />
+    <Compile Include="CustomServices\OpenLoginScreenHint.cs" />
     <Compile Include="OfflineSync\Activities\BluetoothReceiver.cs" />
     <Compile Include="OfflineSync\Activities\GoogleApiConnectedActivity.cs" />
     <Compile Include="Activities\Dashboard\RecyclerViewAdapter.cs" />

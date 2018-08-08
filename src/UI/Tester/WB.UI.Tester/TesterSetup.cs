@@ -5,6 +5,7 @@ using System.Reflection;
 using MvvmCross;
 using MvvmCross.Converters;
 using MvvmCross.IoC;
+using MvvmCross.Platforms.Android.Presenters;
 using MvvmCross.Views;
 using WB.Core.BoundedContexts.Tester;
 using WB.Core.BoundedContexts.Tester.ViewModels;
@@ -12,6 +13,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.UI.Shared.Enumerator;
 using WB.UI.Shared.Enumerator.Activities;
+using WB.UI.Shared.Enumerator.CustomServices;
 using WB.UI.Tester.Activities;
 using WB.UI.Tester.Converters;
 using WB.UI.Tester.ServiceLocation;
@@ -63,6 +65,22 @@ namespace WB.UI.Tester
                 typeof(WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel).Assembly
 #endif
             });
+        }
+
+        BackStackHintHandler backStackHandler;
+
+        /// <summary>
+        /// Creates the view presenter.
+        /// </summary>
+        /// <returns>The view presenter.</returns>
+        protected override IMvxAndroidViewPresenter CreateViewPresenter()
+        {
+            var presenter = base.CreateViewPresenter();
+
+            backStackHandler = new BackStackHintHandler(ApplicationContext, typeof(LoginActivity));
+            presenter.AddPresentationHintHandler<OpenLoginScreenHint>(backStackHandler.HandleClearBackstackHint);
+
+            return presenter;
         }
     }
 }
