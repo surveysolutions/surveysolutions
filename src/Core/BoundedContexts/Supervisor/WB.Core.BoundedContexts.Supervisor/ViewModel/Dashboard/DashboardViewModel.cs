@@ -5,6 +5,7 @@ using MvvmCross.Navigation;
 using MvvmCross.Navigation.EventArguments;
 using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
+using WB.Core.BoundedContexts.Supervisor.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
@@ -70,6 +71,12 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         public override void Prepare(DashboardViewModelArgs parameter)
         {
             this.LastVisitedInterviewId = parameter.InterviewId;
+        }
+
+        public override async Task Initialize()
+        {
+            await base.Initialize();
+            this.DashboardTitle = SupervisorDashboard.ToBeAssigned;
         }
 
         public IMvxAsyncCommand SynchronizationCommand => new MvxAsyncCommand(this.RunSynchronization);
