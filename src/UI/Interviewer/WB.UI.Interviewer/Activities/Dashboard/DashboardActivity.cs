@@ -320,7 +320,8 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             if (apiAvailability.IsUserResolvableError(resultCode))
             {
                 this.ViewModel.ShowSynchronizationError(UIResources.OfflineSync_InstallPlayServices);
-                apiAvailability.GetErrorDialog(this, resultCode, RequestCodeRecoverPlayServices).Show();
+                ServiceLocator.Current.GetInstance<IUserInteractionService>().ShowGoogleApiErrorDialog(resultCode,
+                    RequestCodeRecoverPlayServices);
             }
             else
                 this.ViewModel.ShowSynchronizationError(UIResources.OfflineSync_DeviceNotSupported);
