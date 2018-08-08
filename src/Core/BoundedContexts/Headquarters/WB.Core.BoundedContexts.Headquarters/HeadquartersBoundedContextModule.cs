@@ -262,7 +262,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<CommentsExporter>();
             registry.Bind<InterviewActionsExporter>();
             registry.Bind<DiagnosticsExporter>();
-            registry.Bind<IExportSeviceDataProvider, ExportSeviceDataProvider>();
+            registry.Bind<IExportServiceDataProvider, ExportServiceDataProvider>();
 
             registry.Bind<ITabularDataToExternalStatPackageExportService, TabularDataToExternalStatPackageExportService>();
             registry.Bind<ITabFileReader, TabFileReader>();
