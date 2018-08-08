@@ -7,4 +7,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
     {
         GroupStatus CalculateDetailedStatus(Identity groupIdentity, IStatefulInterview interview);
     }
+
+    public interface IInterviewStateCalculationStrategy
+    {
+        SimpleGroupStatus CalculateSimpleStatus(IStatefulInterview interview);
+        GroupStatus CalculateDetailedStatus(IStatefulInterview interview);
+    }
 }
