@@ -13,7 +13,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         WindowSoftInputMode = SoftInput.StateVisible,
         HardwareAccelerated = true,
         ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
-    public class DashboardSearchActivity : BaseActivity<DashboardSearchViewModel>
+    public class SearchActivity : BaseActivity<SearchViewModel>
     {
         protected override int ViewResourceId => Resource.Layout.dashboard_search;
 

@@ -310,7 +310,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Activities\Dashboard\DashboardSearchActivity.cs" />
+    <Compile Include="Activities\Dashboard\SearchActivity.cs" />
     <Compile Include="Activities\Dashboard\DashboardActivity.cs" />
     <Compile Include="Activities\Dashboard\CompletedInterviewsFragment.cs" />
     <Compile Include="Activities\Dashboard\QuestionnairesFragment.cs" />
