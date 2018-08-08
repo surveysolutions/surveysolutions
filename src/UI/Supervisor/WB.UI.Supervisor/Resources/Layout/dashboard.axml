@@ -26,10 +26,7 @@
                 android:layout_height="?attr/actionBarSize"
                 android:background="?attr/colorPrimaryDark"
                 local:layout_scrollFlags="enterAlways|scroll" 
-                local:MvxBind="ColorByInterviewStatus TypeOfInterviews;">
-                <TextView
-                    style="@style/ToolbarTitle"
-                    local:MvxBind="Text DashboardTitle;" />
+                local:MvxBind="ColorByInterviewStatus TypeOfInterviews; Title DashboardTitle">
             </android.support.v7.widget.Toolbar>
 
         </android.support.design.widget.AppBarLayout>
