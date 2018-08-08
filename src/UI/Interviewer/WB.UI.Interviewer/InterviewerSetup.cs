@@ -61,7 +61,7 @@ namespace WB.UI.Interviewer
                 {typeof (PrefilledQuestionsViewModel), typeof (PrefilledQuestionsActivity)},
                 {typeof (MapsViewModel), typeof(MapsActivity) },
                 {typeof (PhotoViewViewModel), typeof(PhotoViewActivity) },
-                {typeof(SearchViewModel), typeof(InterviewerSearchActivity)},
+                {typeof(SearchViewModel), typeof(InterviewerSearchActivity)}
 #if !EXCLUDEEXTENSIONS
                 ,{typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel), typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorActivity)}
 #endif

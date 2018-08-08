@@ -178,6 +178,15 @@ namespace WB.UI.Interviewer.Activities.Dashboard
             base.OnViewModelSet();
             this.ViewModel.Synchronization.SyncBgService = this;
             this.ViewModel.OnOfflineSynchonizationStarted += OnOfflineSynchonizationStarted;
+            this.ViewModel.PropertyChanged += OnPropertyChanged;
+        }
+
+        private void OnPropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(ViewModel.SynchronizationWithHqEnabled))
+            {
+                this.InvalidateOptionsMenu();
+            }
         }
 
         public override void OnBackPressed() {}
