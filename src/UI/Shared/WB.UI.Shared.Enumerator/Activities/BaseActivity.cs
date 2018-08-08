@@ -1,4 +1,6 @@
 using Android.OS;
+using Android.Support.Graphics.Drawable;
+using Android.Views;
 using HockeyApp.Android;
 using MvvmCross;
 using MvvmCross.Droid.Support.V7.AppCompat;
@@ -52,6 +54,13 @@ namespace WB.UI.Shared.Enumerator.Activities
         {
             TryWriteMemoryInformationToLog($"Destroyed Activity {this.GetType().Name}");
             base.OnDestroy();
+        }
+
+        protected void SetMenuItemIcon(IMenu menu, int itemId, int drawableId)
+        {
+            var item = menu.FindItem(itemId);
+            var drawable = VectorDrawableCompat.Create(Resources, drawableId, Theme);
+            item.SetIcon(drawable);
         }
 
         private void TryWriteMemoryInformationToLog(string message)

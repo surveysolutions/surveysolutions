@@ -8,6 +8,7 @@ using Android.Gms.Common.Apis;
 using Android.Gms.Nearby;
 using Android.OS;
 using Android.Support.Design.Widget;
+using Android.Support.Graphics.Drawable;
 using Android.Support.V4.View;
 using Android.Views;
 using Android.Widget;
@@ -185,6 +186,19 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         {
             this.MenuInflater.Inflate(Resource.Menu.dashboard, menu);
 
+            SetMenuItemIcon(menu, Resource.Id.menu_search, Resource.Drawable.dashboard_search_icon);
+            SetMenuItemIcon(menu, Resource.Id.menu_synchronization, Resource.Drawable.synchronize_icon);
+            SetMenuItemIcon(menu, Resource.Id.menu_offline_synchronization, Resource.Drawable.synchronize_offline_icon);
+
+            if (ViewModel.SynchronizationWithHqEnabled)
+            {
+                menu.FindItem(Resource.Id.menu_offline_synchronization).SetVisible(false);
+            }
+            else
+            {
+                menu.FindItem(Resource.Id.menu_synchronization).SetVisible(false);
+            }
+
             menu.LocalizeMenuItem(Resource.Id.menu_search, InterviewerUIResources.MenuItem_Title_Search);
             menu.LocalizeMenuItem(Resource.Id.menu_signout, InterviewerUIResources.MenuItem_Title_SignOut);
             menu.LocalizeMenuItem(Resource.Id.menu_settings, InterviewerUIResources.MenuItem_Title_Settings);
@@ -212,6 +226,12 @@ namespace WB.UI.Interviewer.Activities.Dashboard
                     break;
                 case Resource.Id.menu_search:
                     this.ViewModel.ShowSearchCommand.Execute();
+                    break;
+                case Resource.Id.menu_synchronization:
+                    this.ViewModel.SynchronizationCommand.Execute();
+                    break;
+                case Resource.Id.menu_offline_synchronization:
+                    this.ViewModel.StartOfflineSyncCommand.Execute();
                     break;
             }
 

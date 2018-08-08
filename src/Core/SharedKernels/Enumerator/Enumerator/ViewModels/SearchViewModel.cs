@@ -5,27 +5,23 @@ using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.Interviewer.Services;
-using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
-using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.Messages;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
-using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
+using WB.Core.SharedKernels.Enumerator.ViewModels.Messages;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Enumerator.Views.Dashboard;
 
-namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
+namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
     public class SearchViewModel : BaseViewModel, IDisposable
     {
         private readonly IInterviewViewModelFactory viewModelFactory;
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
         private readonly IPlainStorage<PrefilledQuestionView> identifyingQuestionsRepo;
-        private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IAssignmentDocumentsStorage assignmentsRepository;
 
         private readonly IDisposable startingLongOperationMessageSubscriptionToken;
@@ -43,7 +39,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.viewModelFactory = viewModelFactory;
             this.interviewViewRepository = interviewViewRepository;
             this.identifyingQuestionsRepo = identifyingQuestionsRepo;
-            this.viewModelNavigationService = viewModelNavigationService;
             this.assignmentsRepository = assignmentsRepository;
 
             startingLongOperationMessageSubscriptionToken = messenger.Subscribe<StartingLongOperationMessage>(this.DashboardItemOnStartingLongOperation);
@@ -178,14 +173,13 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         {
             foreach (var assignmentItem in GetAssignmentItems())
             {
-                bool isMatched = Contatins(assignmentItem.Title, searctText)
-                                 || Contatins(assignmentItem.Id.ToString(), searctText)
-                                 || (assignmentItem.IdentifyingAnswers?.Any(pi => Contatins(pi.AnswerAsString, searctText)) ?? false);
+                bool isMatched = Contains(assignmentItem.Title, searctText)
+                                 || Contains(assignmentItem.Id.ToString(), searctText)
+                                 || (assignmentItem.IdentifyingAnswers?.Any(pi => Contains(pi.AnswerAsString, searctText)) ?? false);
 
                 if (isMatched)
                 {
-                    var assignmentItemViewModel = this.viewModelFactory.GetNew<InterviewerAssignmentDashboardItemViewModel>();
-                    assignmentItemViewModel.Init(assignmentItem);
+                    var assignmentItemViewModel = this.viewModelFactory.GetDashboardAssignment(assignmentItem);
                     yield return assignmentItemViewModel;
                 }
 
@@ -204,11 +198,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 bool isMatched = interviewView.ResponsibleId == principal.CurrentUserIdentity.UserId
                                  &&
                                  (
-                                     Contatins(interviewView.InterviewKey, searctText)
-                                     || Contatins(interviewView.QuestionnaireTitle, searctText)
-                                     || Contatins(interviewView.Assignment?.ToString(), searctText)
-                                     || Contatins(interviewView.LastInterviewerOrSupervisorComment, searctText)
-                                     || details.Any(pi => Contatins(pi.Answer, searctText))
+                                     Contains(interviewView.InterviewKey, searctText)
+                                     || Contains(interviewView.QuestionnaireTitle, searctText)
+                                     || Contains(interviewView.Assignment?.ToString(), searctText)
+                                     || Contains(interviewView.LastInterviewerOrSupervisorComment, searctText)
+                                     || details.Any(pi => Contains(pi.Answer, searctText))
                                  );
 
                 if (isMatched)
@@ -220,7 +214,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             }
         }
 
-        private bool Contatins(string originalString, string searchText)
+        private bool Contains(string originalString, string searchText)
         {
             if (string.IsNullOrWhiteSpace(originalString))
                 return false;

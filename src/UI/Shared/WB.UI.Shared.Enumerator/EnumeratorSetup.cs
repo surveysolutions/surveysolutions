@@ -20,6 +20,7 @@ using MvvmCross.ViewModels;
 using MvvmCross.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview;
 using WB.UI.Shared.Enumerator.Activities;
@@ -33,7 +34,8 @@ using BindingFlags = System.Reflection.BindingFlags;
 
 namespace WB.UI.Shared.Enumerator
 {
-    public abstract class EnumeratorSetup<TApplication> : MvxAppCompatSetup<TApplication> 
+    public abstract class 
+        EnumeratorSetup<TApplication> : MvxAppCompatSetup<TApplication> 
         where TApplication : class, IMvxApplication, new()
     {
         protected EnumeratorSetup()
