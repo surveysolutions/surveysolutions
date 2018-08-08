@@ -58,6 +58,7 @@ namespace WB.UI.Supervisor
                 {typeof(SupervisorResolveInterviewViewModel), typeof (SupervisorCompleteFragment)},
                 {typeof(MapsViewModel), typeof (MapsActivity)},
                 {typeof(PhotoViewViewModel), typeof(PhotoViewActivity) },
+                {typeof(SearchViewModel), typeof(SupervisorSearchActivity)},
 #if !EXCLUDEEXTENSIONS
                 {typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel), typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorActivity)}
 #endif

@@ -2,16 +2,27 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:local="http://schemas.android.com/apk/res-auto"
       android:id="@+id/menu">
-  <item
-      android:id="@+id/menu_maps"
-      local:showAsAction="never" />
-  <item
-      android:id="@+id/menu_settings"
-      local:showAsAction="never" />
-  <item
-      android:id="@+id/menu_diagnostics"
-      local:showAsAction="never" />
-  <item
-      android:id="@+id/menu_signout"
-      local:showAsAction="never" />
+    <item
+        android:id="@+id/menu_sync_with_hq"
+        local:showAsAction="ifRoom"/>
+    <item
+        android:id="@+id/menu_sync_offline"
+        local:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/menu_search"
+        local:showAsAction="ifRoom"/>
+
+    <item
+        android:id="@+id/menu_maps"
+        local:showAsAction="never" />
+    <item
+        android:id="@+id/menu_settings"
+        local:showAsAction="never" />
+    <item
+        android:id="@+id/menu_diagnostics"
+        local:showAsAction="never" />
+    <item
+        android:id="@+id/menu_signout"
+        local:showAsAction="never" />
 </menu>

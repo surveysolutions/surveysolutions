@@ -30,14 +30,14 @@
                 <TextView
                     style="@style/ToolbarTitle"
                     local:MvxBind="Text DashboardTitle;" />
-                <ImageButton style="@style/ToolbarIcon"
+                <!--<ImageButton style="@style/ToolbarIcon"
                              android:id="@+id/synchronize_with_hq"
                              local:MvxBind="Click NavigateToOfflineSyncCommand;"
                              local:srcCompat="@drawable/receive_interviews_icon"/>
                 <ImageButton style="@style/ToolbarIcon"
                              android:id="@+id/synchronize_offline"
                              local:MvxBind="Click SynchronizationCommand;"
-                             local:srcCompat="@drawable/synchronize_icon"/>
+                             local:srcCompat="@drawable/synchronize_icon"/>-->
             </android.support.v7.widget.Toolbar>
 
         </android.support.design.widget.AppBarLayout>

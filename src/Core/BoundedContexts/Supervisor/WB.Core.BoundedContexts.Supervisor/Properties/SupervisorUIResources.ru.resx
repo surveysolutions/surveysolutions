@@ -146,4 +146,10 @@
   <data name="SelectResponsible" xml:space="preserve">
     <value>Выберите ответственного за интервью</value>
   </data>
+  <data name="Synchronization_Synchronize_HQ" xml:space="preserve">
+    <value>Синхронизировать с Хедквотером</value>
+  </data>
+  <data name="Synchronization_Synchronize_Offline" xml:space="preserve">
+    <value>Синхронизировать с Интервьюерами</value>
+  </data>
 </root>
