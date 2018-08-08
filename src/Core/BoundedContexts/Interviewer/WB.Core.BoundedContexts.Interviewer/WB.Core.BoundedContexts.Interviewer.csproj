@@ -29,6 +29,7 @@
   <ItemGroup>
     <Folder Include="Implementation\AuditLog\" />
     <Folder Include="Implementation\Storage\" />
+    <Folder Include="Views\Dashboard\Messages\" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FFImageLoading">

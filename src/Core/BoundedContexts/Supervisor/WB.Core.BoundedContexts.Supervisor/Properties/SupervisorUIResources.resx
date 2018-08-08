@@ -145,4 +145,10 @@ Your device ID is '{0}'</value>
   <data name="SelectResponsible" xml:space="preserve">
     <value>Select responsible for the interview</value>
   </data>
+  <data name="Synchronization_Synchronize_HQ" xml:space="preserve">
+    <value>Synchronize with Headquarters</value>
+  </data>
+  <data name="Synchronization_Synchronize_Offline" xml:space="preserve">
+    <value>Synchronize with Interviewers</value>
+  </data>
 </root>

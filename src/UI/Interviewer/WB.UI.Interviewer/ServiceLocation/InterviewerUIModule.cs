@@ -69,7 +69,7 @@ namespace WB.UI.Interviewer.ServiceLocation
             registry.Bind<IViewModelNavigationService, ViewModelNavigationService>();
             registry.BindAsSingleton<ILastCreatedInterviewStorage, LastCreatedInterviewStorage>();
 
-            registry.BindAsSingleton<IInterviewViewModelFactory, InterviewViewModelFactory>();
+            registry.BindAsSingleton<IInterviewViewModelFactory, InterviewerInterviewViewModelFactory>();
 
             registry.BindAsSingleton<ICommandService, SequentialCommandService>();
 #if EXCLUDEEXTENSIONS

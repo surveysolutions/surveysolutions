@@ -107,6 +107,24 @@ namespace WB.Core.BoundedContexts.Supervisor.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Synchronize with Headquarters.
+        /// </summary>
+        public static string Synchronization_Synchronize_HQ {
+            get {
+                return ResourceManager.GetString("Synchronization_Synchronize_HQ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Synchronize with Interviewers.
+        /// </summary>
+        public static string Synchronization_Synchronize_Offline {
+            get {
+                return ResourceManager.GetString("Synchronization_Synchronize_Offline", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Uploading broken interview packages.
         /// </summary>
         public static string Synchronization_UploadBrokenInterviewPackages {

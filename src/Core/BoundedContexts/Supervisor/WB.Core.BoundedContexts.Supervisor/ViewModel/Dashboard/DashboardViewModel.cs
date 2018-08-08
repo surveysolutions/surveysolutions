@@ -110,6 +110,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             return this.viewModelNavigationService.NavigateToAsync<MapsViewModel>();
         });
 
+        public IMvxAsyncCommand ShowSearchCommand => new MvxAsyncCommand(this.viewModelNavigationService.NavigateToAsync<SearchViewModel>);
+
         private Task RunSynchronization()
         {
             if (this.Synchronization.IsSynchronizationInProgress)

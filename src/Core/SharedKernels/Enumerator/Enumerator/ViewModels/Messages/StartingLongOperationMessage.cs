@@ -1,6 +1,6 @@
 ﻿using MvvmCross.Plugin.Messenger;
 
-namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.Messages
+namespace WB.Core.SharedKernels.Enumerator.ViewModels.Messages
 {
     public class StartingLongOperationMessage : MvxMessage
     {

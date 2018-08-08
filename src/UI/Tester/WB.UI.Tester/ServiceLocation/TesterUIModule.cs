@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
@@ -26,7 +27,7 @@ namespace WB.UI.Tester.ServiceLocation
             registry.Bind<IMapService, MapService>();
             registry.Bind<TesterSettings>();
             registry.Bind<PhotoViewViewModel>();
-            registry.BindAsSingleton<IInterviewViewModelFactory, InterviewViewModelFactory>();
+            registry.BindAsSingleton<IInterviewViewModelFactory, TesterInterviewViewModelFactory>();
             registry.Bind<IGroupStateCalculationStrategy, EnumeratorGroupStateCalculationStrategy>();
             registry.Bind<IInterviewStateCalculationStrategy, EnumeratorInterviewStateCalculationStrategy>();
 
