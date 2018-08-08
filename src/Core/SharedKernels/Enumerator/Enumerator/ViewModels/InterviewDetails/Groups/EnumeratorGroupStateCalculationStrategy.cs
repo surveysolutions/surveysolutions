@@ -33,6 +33,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
                 }
             }
 
+            ;
+
             return groupStatus;
         }
     }
