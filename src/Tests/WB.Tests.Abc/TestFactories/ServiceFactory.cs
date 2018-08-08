@@ -330,7 +330,7 @@ namespace WB.Tests.Abc.TestFactories
             IStatefulInterviewRepository interviewRepository,
             IEnumeratorSettings settings)
         {
-            return new InterviewViewModelFactory(questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
+            return new InterviewerInterviewViewModelFactory(questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 settings ?? Mock.Of<IEnumeratorSettings>());
         }
