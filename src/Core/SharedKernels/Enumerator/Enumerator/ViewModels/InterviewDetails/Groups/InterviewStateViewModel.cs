@@ -6,14 +6,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 {
     public class InterviewStateViewModel : GroupStateViewModel
     {
+        private readonly IInterviewStateCalculationStrategy interviewStateCalculationStrategy;
         private readonly IStatefulInterviewRepository interviewRepository;
 
         protected InterviewStateViewModel()
         {
         }
 
-        public InterviewStateViewModel(IStatefulInterviewRepository interviewRepository)
+        public InterviewStateViewModel(IStatefulInterviewRepository interviewRepository, IInterviewStateCalculationStrategy interviewStateCalculationStrategy)
         {
+            this.interviewStateCalculationStrategy = interviewStateCalculationStrategy;
             this.interviewRepository = interviewRepository;
         }
 
@@ -39,33 +41,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 
         private SimpleGroupStatus CalculateInterviewSimpleStatus()
         {
-            if (InvalidAnswersCount > 0)
-                return SimpleGroupStatus.Invalid;
-
-            if (AreAllQuestionsAnswered())
-                return SimpleGroupStatus.Completed;
-
-            return SimpleGroupStatus.Other;
+            IStatefulInterview interview = this.interviewRepository.Get(this.interviewId);
+            return this.interviewStateCalculationStrategy.CalculateSimpleStatus(interview);
         }
 
         private GroupStatus CalculateDetailedStatus()
         {
-            switch (this.SimpleStatus)
-            {
-                case SimpleGroupStatus.Completed:
-                    return GroupStatus.Completed;
-
-                case SimpleGroupStatus.Invalid:
-                    return this.AreAllQuestionsAnswered() ? GroupStatus.CompletedInvalid : GroupStatus.StartedInvalid;
-
-                case SimpleGroupStatus.Other:
-                    return this.AnsweredQuestionsCount > 0 ? GroupStatus.Started : GroupStatus.NotStarted;
-
-                default:
-                    return GroupStatus.Started;
-            }
+            IStatefulInterview interview = this.interviewRepository.Get(this.interviewId);
+            return this.interviewStateCalculationStrategy.CalculateDetailedStatus(interview);
         }
-
-        protected bool AreAllQuestionsAnswered() => this.QuestionsCount == this.AnsweredQuestionsCount;
     }
 }

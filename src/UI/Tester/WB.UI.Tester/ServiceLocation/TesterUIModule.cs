@@ -28,6 +28,7 @@ namespace WB.UI.Tester.ServiceLocation
             registry.Bind<PhotoViewViewModel>();
             registry.BindAsSingleton<IInterviewViewModelFactory, InterviewViewModelFactory>();
             registry.Bind<IGroupStateCalculationStrategy, EnumeratorGroupStateCalculationStrategy>();
+            registry.Bind<IInterviewStateCalculationStrategy, EnumeratorInterviewStateCalculationStrategy>();
 
 #if EXCLUDEEXTENSIONS
             registry.Bind<IAreaEditService, WB.UI.Shared.Enumerator.CustomServices.AreaEditor.DummyAreaEditService>();

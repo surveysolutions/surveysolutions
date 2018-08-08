@@ -45,6 +45,7 @@ namespace WB.UI.Interviewer.ServiceLocation
             registry.BindAsSingletonWithConstructorArgument<IRestService, RestService>("restServicePointManager", null);
             registry.Bind<IInterviewUniqueKeyGenerator, InterviewerInterviewUniqueKeyGenerator>();
             registry.Bind<IGroupStateCalculationStrategy, EnumeratorGroupStateCalculationStrategy>();
+            registry.Bind<IInterviewStateCalculationStrategy, EnumeratorInterviewStateCalculationStrategy>();
 
             registry.Bind<ISynchronizationService, SyncronizationServiceWrapper>();
 
