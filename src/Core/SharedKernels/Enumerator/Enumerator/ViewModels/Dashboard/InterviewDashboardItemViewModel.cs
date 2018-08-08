@@ -197,16 +197,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
                     return DashboardInterviewStatus.RejectedByHeadquarters;
                 case InterviewStatus.RejectedBySupervisor:
                     return DashboardInterviewStatus.Rejected;
-                case InterviewStatus.Completed:
                 case InterviewStatus.ApprovedBySupervisor:
                     return DashboardInterviewStatus.ApprovedBySupervisor;
                 case InterviewStatus.Restarted:
                     return DashboardInterviewStatus.InProgress;
+                case InterviewStatus.Completed:
+                    return DashboardInterviewStatus.Completed;
                 case InterviewStatus.InterviewerAssigned:
                     return startedDateTime.HasValue
                         ? DashboardInterviewStatus.InProgress
                         : DashboardInterviewStatus.New;
-
                 default:
                     throw new ArgumentException("Can't identify status for interview: {0}".FormatString(interviewStatus));
             }
