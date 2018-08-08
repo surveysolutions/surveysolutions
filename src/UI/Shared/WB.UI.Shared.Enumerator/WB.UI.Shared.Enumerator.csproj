@@ -1103,7 +1103,7 @@
     <None Include="packages.config">
       <SubType>Designer</SubType>
     </None>
-    <AndroidResource Include="Resources\layout\interview_complete_status_change.axml">
+    <AndroidResource Include="Resources\layout\interview_complete.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\interview_active_group.axml">
