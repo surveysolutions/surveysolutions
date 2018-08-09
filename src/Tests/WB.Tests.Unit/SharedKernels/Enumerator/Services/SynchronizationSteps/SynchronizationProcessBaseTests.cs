@@ -5,23 +5,20 @@ using System.Threading.Tasks;
 using Moq;
 using Ncqrs.Eventing;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Interviewer.Synchronization;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization;
-using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization.Steps;
-using WB.Core.SharedKernels.Enumerator.Services;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Tests.Abc;
 
-namespace WB.Tests.Unit.SharedKernels.Enumerator.Services
+namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.SynchronizationSteps
 {
-    [TestOf(typeof(DownloadInterviews))]
-    public class SynchronizationProcessBaseTests
+    [TestOf(typeof(InterviewerDownloadInterviews))]
+    public class InterviewerDownloadInterviewsTests
     {
         [Test]
         public async Task when_responsible_changed_should_remove_local_interview_and_download_it_again()
@@ -195,44 +192,45 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services
             busMock.Verify(x => x.PublishCommittedEvents(interviewDetails), Times.Never);
         }
 
-        private static DownloadInterviewsTest CreateSyncProcess(ISynchronizationService synchronizationService = null, 
-            IPlainStorage<InterviewView> interviewViewRepository = null,
-            IQuestionnaireDownloader questionnaireDownloader = null, 
-            ILiteEventBus eventBus = null, 
-            IEnumeratorEventStorage eventStore = null,
-            IPlainStorage<InterviewSequenceView, Guid> interviewSequenceViewRepository = null,
-            IInterviewsRemover interviewsRemover = null)
+        [Test]
+        public async Task when_interview_is_not_marked_as_received_by_IN_but_it_is_on_interviewer()
         {
-            return new DownloadInterviewsTest(
-                synchronizationService ?? Create.Service.SynchronizationService(),
-                questionnaireDownloader ?? Mock.Of<IQuestionnaireDownloader>(),
-                interviewSequenceViewRepository ?? Mock.Of<IPlainStorage<InterviewSequenceView, Guid>>(),
-                interviewViewRepository ?? new InMemoryPlainStorage<InterviewView>(),
-                eventBus ?? Create.Service.LiteEventBus(),
-                eventStore ?? Mock.Of<IEnumeratorEventStorage>(),
-                Mock.Of<ILogger>(),
-                interviewsRemover ?? Mock.Of<IInterviewsRemover>(),
-                0);
-        }
+            var responsible = Id.g1;
 
-        private class DownloadInterviewsTest : DownloadInterviews
-        {
-            public DownloadInterviewsTest(ISynchronizationService synchronizationService, 
-                IQuestionnaireDownloader questionnaireDownloader, 
-                IPlainStorage<InterviewSequenceView, Guid> interviewSequenceViewRepository, 
-                IPlainStorage<InterviewView> interviewViewRepository,
-                ILiteEventBus eventBus, 
-                IEnumeratorEventStorage eventStore, 
-                ILogger logger,
-                IInterviewsRemover interviewsRemover, int sortOder) : base(synchronizationService, questionnaireDownloader, interviewSequenceViewRepository, interviewViewRepository, eventBus, eventStore, logger, interviewsRemover, sortOder)
-            {
-            }
+            var localInterviews = new InMemoryPlainStorage<InterviewView>();
+            var interviewId = Id.gA;
+            var interview = Create.Entity.InterviewView(interviewId: interviewId, responsibleId: responsible);
+            localInterviews.Store(interview);
+            
+            var syncService = new Mock<ISynchronizationService>();
+            syncService.Setup(x => x.GetInterviewsAsync(It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new List<InterviewApiView>
+                {
+                    new InterviewApiView
+                    {
+                        Id = interviewId,
+                        ResponsibleId = responsible,
+                        QuestionnaireIdentity = Create.Entity.QuestionnaireIdentity(),
+                        Sequence = 7,
+                        IsMarkedAsReceivedByInterviewer = false
+                    }
+                });
 
-            protected override Task<List<Guid>> FindObsoleteInterviewsAsync(IEnumerable<InterviewView> localInterviews, IEnumerable<InterviewApiView> remoteInterviews, IProgress<SyncProgressInfo> progress,
-                CancellationToken cancellationToken)
-            {
-                throw new NotImplementedException();
-            }
+            syncService.Setup(x => x.CheckObsoleteInterviewsAsync(It.IsAny<List<ObsoletePackageCheck>>(), CancellationToken.None))
+                .ReturnsAsync(new List<Guid>());
+
+            var localInterviewSequence = new InMemoryPlainStorage<InterviewSequenceView, Guid>();
+            localInterviewSequence.Store(Create.Entity.InterviewSequenceView(interviewId, 7));
+
+            var step = Create.Service.InterviewerDownloadInterviews(synchronizationService: syncService.Object,
+                interviewViewRepository: localInterviews,
+                interviewSequenceViewRepository: localInterviewSequence);
+
+            // Act
+            await step.ExecuteAsync();
+
+            // Assert
+            syncService.Verify(x => x.LogInterviewAsSuccessfullyHandledAsync(interviewId), Times.Once);
         }
     }
 }
