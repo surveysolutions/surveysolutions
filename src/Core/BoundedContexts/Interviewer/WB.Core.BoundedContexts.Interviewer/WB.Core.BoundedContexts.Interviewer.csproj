@@ -7,6 +7,14 @@
     <Configurations>Debug;Release;Debug-ESRI</Configurations>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Implementation\AuditLog\**" />
+    <Compile Remove="Implementation\Storage\**" />
+    <EmbeddedResource Remove="Implementation\AuditLog\**" />
+    <EmbeddedResource Remove="Implementation\Storage\**" />
+    <None Remove="Implementation\AuditLog\**" />
+    <None Remove="Implementation\Storage\**" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Autofac" Version="4.8.1" />
     <PackageReference Include="MvvmCross.Plugin.File" Version="6.1.2" />
     <PackageReference Include="MvvmCross.Plugin.Messenger" Version="6.1.2" />
@@ -27,11 +35,7 @@
     <ProjectReference Include="..\..\..\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Implementation\AuditLog\" />
-    <Folder Include="Implementation\Storage\" />
     <Folder Include="Views\Dashboard\Messages\" />
-  </ItemGroup>
-  <ItemGroup>
     <Reference Include="FFImageLoading">
       <HintPath>..\..\..\..\..\packages\Xamarin.FFImageLoading.2.4.3.840\lib\MonoAndroid10\FFImageLoading.dll</HintPath>
     </Reference>

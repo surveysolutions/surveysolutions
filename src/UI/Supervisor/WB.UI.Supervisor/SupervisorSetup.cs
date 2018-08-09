@@ -12,6 +12,7 @@ using MvvmCross.Converters;
 using MvvmCross.IoC;
 using MvvmCross.Platforms.Android.Presenters;
 using MvvmCross.Views;
+using WB.Core.BoundedContexts.Supervisor;
 using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.BoundedContexts.Supervisor.ViewModel;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard;
@@ -101,6 +102,7 @@ namespace WB.UI.Supervisor
                 new EnumeratorUIModule(),
                 new EnumeratorSharedKernelModule(),
                 new SupervisorInfrastructureModule(),
+                new SupervisorBoundedContextModule(), 
                 new SupervisorUiModule(),
                 };
 
