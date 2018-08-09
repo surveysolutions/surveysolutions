@@ -114,7 +114,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         {
             this.interviewerSelectorDialog.Selected += OnInterviewerSelected;
             this.interviewerSelectorDialog.Cancelled += OnSelectionCancelled;
-            this.interviewerSelectorDialog.SelectInterviewer(SupervisorUIResources.SelectResponsible);
+            this.interviewerSelectorDialog.SelectInterviewer(SupervisorUIResources.SelectResponsible,
+                "You can assign following statuses only: Supervisor Assigned, Interviewer Assigned(another interviewer) and Rejected by Supervisor.");
         }
 
         private void OnSelectionCancelled(object sender, EventArgs e)
@@ -125,11 +126,17 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         private async void OnInterviewerSelected(object sender, InterviewerSelectedArgs e)
         {
             this.UnsubscribeDialog();
-            var command = new AssignInterviewerCommand(interviewId, this.principal.CurrentUserIdentity.UserId, e.InterviewerId);
-            auditLogService.Write(new AssignResponsibleToInterviewAuditLogEntity(interviewId, interview.GetInterviewKey().ToString(), e.InterviewerId, e.Login));
-            this.commandService.Execute(command);
 
-            await this.navigationService.NavigateToDashboardAsync(interviewId.FormatGuid());
+            if (e.InterviewerId != interview.CurrentResponsibleId)
+            {
+                var command = new AssignInterviewerCommand(interviewId, this.principal.CurrentUserIdentity.UserId,
+                    e.InterviewerId);
+                auditLogService.Write(new AssignResponsibleToInterviewAuditLogEntity(interviewId,
+                    interview.GetInterviewKey().ToString(), e.InterviewerId, e.Login));
+                this.commandService.Execute(command);
+
+                await this.navigationService.NavigateToDashboardAsync(interviewId.FormatGuid());
+            }
         }
 
         private void UnsubscribeDialog()
