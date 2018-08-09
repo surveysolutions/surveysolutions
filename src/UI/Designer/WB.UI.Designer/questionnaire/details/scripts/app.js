@@ -8,7 +8,10 @@
         lng: $('html').attr('lang'), 
         fallbackLng: 'en', 
         backend: {
-            loadPath: '../build/resources/QuestionnaireEditor.{{lng}}.json'
+            loadPath: function(languages) {
+                var key = 'QuestionnaireEditor.' + languages[0] + '.json'
+                return '../build/resources/' + window.localization[key]
+            }
         },
         load: 'languageOnly',
         useCookie: false,
@@ -24,7 +27,6 @@
         }
     }, function (err, t) {
         localizationInitPromise.resolve();
-        //console.log('resources loaded');
     });
     window.i18next.on('languageChanged', function(lng) {
         moment.locale(lng);

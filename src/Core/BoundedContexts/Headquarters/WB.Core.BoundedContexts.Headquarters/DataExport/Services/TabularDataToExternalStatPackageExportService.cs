@@ -32,6 +32,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         private readonly IQuestionnaireLabelFactory questionnaireLabelFactory;
 
+        private readonly IExportServiceDataProvider exportSeviceDataProvider;
+
         public TabularDataToExternalStatPackageExportService(
             IFileSystemAccessor fileSystemAccessor,
             ITransactionManagerProvider transactionManager,
@@ -40,7 +42,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             IDataQueryFactory dataQueryFactory,
             IDatasetWriterFactory datasetWriterFactory, 
             IQuestionnaireLabelFactory questionnaireLabelFactory,
-            IQuestionnaireExportStructureStorage questionnaireExportStructureStorage)
+            IQuestionnaireExportStructureStorage questionnaireExportStructureStorage,
+            IExportServiceDataProvider exportSeviceDataProvider)
         {
             this.transactionManager = transactionManager;
             this.fileSystemAccessor = fileSystemAccessor;
@@ -51,6 +54,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             this.questionnaireLabelFactory = questionnaireLabelFactory;
             this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
             this.dataQueryFactory = dataQueryFactory;
+            this.exportSeviceDataProvider = exportSeviceDataProvider;
+
         }
 
         private const string StataFileNameExtension = ExportFileSettings.StataDataFileExtension;
@@ -74,7 +79,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             return this.CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, DataExportFormat.SPSS, tabularDataFiles, progress, cancellationToken);
         }
 
-        private string[] CreateAndGetExportDataFiles(Guid questionnaireId, long questionnaireVersion, DataExportFormat format, string[] dataFiles, IProgress<int> progress, CancellationToken cancellationToken)
+        private string[] CreateAndGetExportDataFiles(Guid questionnaireId, long questionnaireVersion, DataExportFormat format, 
+            string[] dataFiles, IProgress<int> progress, CancellationToken cancellationToken)
         {
             string currentDataInfo = string.Empty;
             try
@@ -92,6 +98,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
                 var labelsForQuestionnaire = this.questionnaireLabelFactory.CreateLabelsForQuestionnaire(questionnaireExportStructure);
 
+                var serviceDataLabels = this.exportSeviceDataProvider.GetServiceDataLabels();
+
                 var result = new List<string>();
                 string fileExtention = format == DataExportFormat.STATA
                     ? StataFileNameExtension
@@ -108,14 +116,16 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
                     var meta = this.tabReader.GetMetaFromTabFile(tabFile);
 
-                    var levelName = this.fileSystemAccessor.GetFileNameWithoutExtension(tabFile);
+                    var fileName = this.fileSystemAccessor.GetFileNameWithoutExtension(tabFile);
 
                     var questionnaireLevelLabels =
                         labelsForQuestionnaire.FirstOrDefault(
-                            x => string.Equals(x.LevelName, levelName, StringComparison.InvariantCultureIgnoreCase));
+                            x => string.Equals(x.LevelName, fileName, StringComparison.InvariantCultureIgnoreCase));
 
                     if (questionnaireLevelLabels != null)
                         UpdateMetaWithLabels(meta, questionnaireLevelLabels);
+                    else if (serviceDataLabels.ContainsKey(fileName))
+                        UpdateMetaWithLabels(meta, serviceDataLabels[fileName]);
 
                     meta.ExtendedMissings.Add(ExportFormatSettings.MissingNumericQuestionValue, "missing");
                     meta.ExtendedStrMissings.Add(ExportFormatSettings.MissingStringQuestionValue, "missing");
@@ -171,6 +181,17 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                 }
 
                 meta.AssociateValueSet(meta.Variables[index].VarName, valueSet);
+            }
+        }
+
+        private static void UpdateMetaWithLabels(IDatasetMeta meta, Dictionary<string, string> serviceLabels)
+        {
+            foreach (var variable in meta.Variables)
+            {
+                if (!serviceLabels.ContainsKey(variable.VarName))
+                    continue;
+
+                variable.VarLabel = serviceLabels[variable.VarName];
             }
         }
 
