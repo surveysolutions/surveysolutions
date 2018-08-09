@@ -51,7 +51,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
         public override async Task ExecuteAsync()
         {
-            var remoteInterviews = await this.SynchronizationService.GetInterviewsAsync(this.Context.CancellationToken);
+            List<InterviewApiView> remoteInterviews = await this.SynchronizationService.GetInterviewsAsync(this.Context.CancellationToken);
             var remoteInterviewWithSequence = remoteInterviews.ToDictionary(k => k.Id, v => v.Sequence);
 
             var localInterviews = this.interviewViewRepository.LoadAll();
@@ -60,7 +60,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             var localInterviewsToRemove = localInterviews.Where(
                 interview => !remoteInterviewWithSequence.ContainsKey(interview.InterviewId) && !interview.CanBeDeleted);
 
-            IEnumerable<Guid> obsoleteInterviews = await this.FindObsoleteInterviewsAsync(localInterviews, remoteInterviews, this.Context.Progress, this.Context.CancellationToken);
+            var obsoleteInterviews = await this.FindObsoleteInterviewsAsync(localInterviews, remoteInterviews, this.Context.Progress, this.Context.CancellationToken);
 
             var localInterviewIdsToRemove = localInterviewsToRemove
                 .Select(interview => interview.InterviewId)
@@ -73,6 +73,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 .ToList();
 
             this.interviewsRemover.RemoveInterviews(this.Context.Statistics, this.Context.Progress, localInterviewIdsToRemove);
+
+            var interviewsThatAreNotMarkedAsReceived = remoteInterviews.Where(x => !x.IsMarkedAsReceivedByInterviewer && 
+                                                                                   remoteInterviewsToCreate.All(r => r.Id != x.Id));
+            foreach (var interviewApiView in interviewsThatAreNotMarkedAsReceived)
+            {
+                this.Context.CancellationToken.ThrowIfCancellationRequested();
+                await this.SynchronizationService.LogInterviewAsSuccessfullyHandledAsync(interviewApiView.Id);
+            }
 
             await this.CreateInterviewsAsync(remoteInterviewsToCreate, this.Context.Statistics, this.Context.Progress, this.Context.CancellationToken);
         }
