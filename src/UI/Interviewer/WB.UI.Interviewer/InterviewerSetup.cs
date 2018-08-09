@@ -11,6 +11,7 @@ using MvvmCross.Converters;
 using MvvmCross.IoC;
 using MvvmCross.Platforms.Android.Presenters;
 using MvvmCross.Views;
+using WB.Core.BoundedContexts.Interviewer;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
@@ -103,6 +104,7 @@ namespace WB.UI.Interviewer
                 new InterviewerInfrastructureModule(),
                 new EnumeratorUIModule(),
                 new EnumeratorSharedKernelModule(),
+                new InterviewerBoundedContextModule(), 
                 new InterviewerUIModule(),
                 };
 
