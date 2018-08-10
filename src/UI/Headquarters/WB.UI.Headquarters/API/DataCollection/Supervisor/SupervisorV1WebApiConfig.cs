@@ -112,6 +112,11 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor
             // INTERVIEWERS
             config.TypedRoute("api/supervisor/v1/interviewers", c => c.Action<InterviewersApiController>(x => x.Get()));
 
+            // Interviewer updates
+            config.TypedRoute("api/supervisor/v1/updates", c => c.Action<UpdatesApiV1Controller>(x => x.Get()));
+            config.Routes.MapHttpRoute("GetInterviewerAppPatch", "api/supervisor/v1/updates/{id}",
+                new {controller = "UpdatesApiV1", action = "Patch"});
+
         }
 
 #pragma warning restore 4014

@@ -152,4 +152,12 @@
   <data name="Synchronization_Synchronize_Offline" xml:space="preserve">
     <value>Синхронизировать с Интервьюерами</value>
   </data>
+    <data name="Synchronization_Download_Interviewer_App_Patches" xml:space="preserve">
+    <value>Загрузка обновлений для интервьюер приложения</value>
+    <comment>Загрузка обновлений для интервьюер приложения</comment>
+  </data>
+    <data name="Synchronization_Download_Interviewer_App_Patches_Format" xml:space="preserve">
+    <value>Загрузка обновлений. {0} из {1} загружено</value>
+    <comment>Загрузка обновлений. {0} из {1} загружено</comment>
+  </data>
 </root>
