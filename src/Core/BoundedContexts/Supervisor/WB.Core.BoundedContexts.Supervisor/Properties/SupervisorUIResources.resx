@@ -148,6 +148,12 @@ Your device ID is '{0}'</value>
   <data name="Synchronization_Synchronize_HQ" xml:space="preserve">
     <value>Synchronize with Headquarters</value>
   </data>
+  <data name="Synchronization_Download_Interviewer_App_Patches" xml:space="preserve">
+    <value>Downloading updates for interviewer application</value>
+  </data>
+  <data name="Synchronization_Download_Interviewer_App_Patches_Format" xml:space="preserve">
+    <value>Downloading updates. {0} of {1} downloaded</value>
+  </data>
   <data name="Synchronization_Synchronize_Offline" xml:space="preserve">
     <value>Synchronize with Interviewers</value>
   </data>

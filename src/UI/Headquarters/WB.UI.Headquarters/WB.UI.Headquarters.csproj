@@ -1899,6 +1899,7 @@
     <Compile Include="API\DataCollection\Supervisor\v1\SettingsV1Controller.cs" />
     <Compile Include="API\DataCollection\Supervisor\v1\InterviewersApiController.cs" />
     <Compile Include="API\DataCollection\Supervisor\v1\TranslationsApiV1Controller.cs" />
+    <Compile Include="API\DataCollection\Supervisor\v1\UpdatesApiV1Controller.cs" />
     <Compile Include="API\DataCollection\TranslationsControllerBase.cs" />
     <Compile Include="API\Helpers.cs" />
     <Compile Include="API\DataCollection\Interviewer\v2\AssignmentsApiV2Controller.cs" />
