@@ -52,7 +52,6 @@ namespace WB.UI.Headquarters.Injections
             registry.Bind<IMetaInfoBuilder, MetaInfoBuilder>();
             registry.Bind<IUserImportService, UserImportService>();
             registry.Bind<IMoveUserToAnotherTeamService, MoveUserToAnotherTeamService>();
-            registry.Bind<IAttachmentContentService, AttachmentContentService>();
             registry.Bind<ISupportedVersionProvider, SupportedVersionProvider>();
             registry.Bind<IDataExportProcessDetails, DataExportProcessDetails>();
 
@@ -65,12 +64,11 @@ namespace WB.UI.Headquarters.Injections
             registry.BindAsSingleton<IHttpStatistician, HttpStatistician>();
             registry.BindAsSingleton<IAudioProcessingService, AudioProcessingService>();
 
-            registry.BindToMethod<ISerializer>(() => new NewtonJsonSerializer());
+            
             registry.BindToMethod<IInterviewAnswerSerializer>(() => new NewtonInterviewAnswerJsonSerializer());
 
             registry.BindToMethod<IJsonAllTypesSerializer>(() => new JsonAllTypesSerializer());
 
-            registry.Bind<IStringCompressor, JsonCompressor>();
             registry.BindAsSingleton<IRestServiceSettings, DesignerQuestionnaireApiRestServiceSettings>();
 
             registry.Bind<IRestService, RestService>(

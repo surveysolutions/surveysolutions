@@ -83,6 +83,7 @@ using WB.Enumerator.Native.WebInterview;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog;
+using WB.Infrastructure.Native.Storage;
 
 namespace WB.Core.BoundedContexts.Headquarters
 {
@@ -151,6 +152,10 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IPreloadedDataVerifier, ImportDataVerifier>();
 
             registry.Bind<IExportFileNameService, ExportExportFileNameService>();
+
+            registry.BindAsSingleton<IStringCompressor, JsonCompressor>();
+            registry.Bind<ISerializer, NewtonJsonSerializer>();
+            registry.Bind<IAttachmentContentService, AttachmentContentService>();
 
             registry.BindAsSingletonWithConstructorArgument<IMapStorageService, FileSystemMapStorageService>("folderPath", this.currentFolderPath);
 
