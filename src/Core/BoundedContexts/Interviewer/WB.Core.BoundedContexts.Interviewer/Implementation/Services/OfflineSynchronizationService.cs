@@ -208,6 +208,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return syncClient.SendAsync(new LogAssignmentAsHandledRequest { Id = id }, cancellationToken);
         }
 
+        public Task<byte[]> GetFileAsync(string url, IProgress<TransferProgress> transferProgress, CancellationToken token)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<List<AssignmentApiView>> GetAssignmentsAsync(CancellationToken cancellationToken)
         {
             var response = await

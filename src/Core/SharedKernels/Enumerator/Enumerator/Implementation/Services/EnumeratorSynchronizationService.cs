@@ -480,6 +480,17 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         #endregion
 
+        public Task<byte[]> GetFileAsync(string url, IProgress<TransferProgress> transferProgress, CancellationToken token)
+            => this.TryGetRestResponseOrThrowAsync(async () =>
+            {
+                var restFile = await this.restService.DownloadFileAsync(
+                    url: url,
+                    transferProgress: transferProgress,
+                    token: token,
+                    credentials: this.restCredentials).ConfigureAwait(false);
+                return restFile.Content;
+            });
+
         protected async Task TryGetRestResponseOrThrowAsync(Func<Task> restRequestTask)
         {
             if (restRequestTask == null) throw new ArgumentNullException(nameof(restRequestTask));

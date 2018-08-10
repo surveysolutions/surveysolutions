@@ -25,7 +25,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
         protected string InterviewerTabletInfosController => string.Concat(ApplicationUrl, "/interviewerTabletInfos");
         protected string InterviewerStatisticsController => string.Concat(ApplicationUrl, "/interviewerStatistics");
         protected string GetListOfDeletedQuestionnairesController => string.Concat(ApplicationUrl, "/deletedQuestionnairesList");
-
+        protected string GetUpdatesController => string.Concat(ApplicationUrl, "/updates");
 
         public SynchronizationService(IPrincipal principal, IRestService restService,
             ISupervisorSettings settings, ISupervisorSyncProtocolVersionProvider syncProtocolVersionProvider,
@@ -97,6 +97,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
                 credentials: this.restCredentials,
                 token: cancellationToken));
         }
+
+        public Task<InterviewerApplicationPatchApiView[]> GetListOInterviewerAppPatchesAsync(CancellationToken cancellationToken)
+            => this.TryGetRestResponseOrThrowAsync(() =>
+                this.restService.GetAsync<InterviewerApplicationPatchApiView[]>(
+                    url: this.GetUpdatesController,
+                    credentials: this.restCredentials,
+                    token: cancellationToken));
 
         protected override string CanSynchronizeValidResponse => "158329303";
     }
