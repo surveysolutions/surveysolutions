@@ -1,6 +1,6 @@
 ﻿namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 {
-    internal class DoExportFileHeader
+    public class DoExportFileHeader
     {
         public DoExportFileHeader(string title, string description)
         {

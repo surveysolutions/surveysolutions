@@ -50,6 +50,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         private Dictionary<Guid, IQuestion> questionsCache = null;
         private Dictionary<string, IQuestion> questionsByVariableCache = null;
         private Dictionary<Guid, IGroup> groupsCache = null;
+        private Dictionary<Guid, IGroup> rostersCache = null;
         private Dictionary<Guid, IComposite> entitiesCache = null;
         private ReadOnlyCollection<Guid> sectionsCache = null;
         private Dictionary<string, HashSet<Guid>> substitutionReferencedQuestionsCache = null;
@@ -168,6 +169,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
                             group => group));
             }
         }
+
+        private Dictionary<Guid, IGroup> RosterCache
+            => this.rostersCache ?? (this.rostersCache =
+                   this.innerDocument.Find<IGroup>(IsRosterGroup)
+                       .ToDictionary(group => @group.PublicKey, group => @group));
 
         private Dictionary<string, HashSet<Guid>> SubstitutionReferencedQuestionsCache
             => this.substitutionReferencedQuestionsCache
@@ -329,10 +335,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             return this.VariablesCache.Values.Single(x => x.Name == variableName).PublicKey;
         }
+
         public Guid? GetRosterIdByVariableName(string variableName, bool ignoreCase = false)
-        {
-            return this.GroupCache.Values.SingleOrDefault(x => string.Equals(x.VariableName, variableName, ignoreCase? StringComparison.InvariantCultureIgnoreCase : StringComparison.InvariantCulture))?.PublicKey;
-        }
+            => this.RosterCache.Values.SingleOrDefault(x => string.Equals(x.VariableName, variableName,
+                    ignoreCase ? StringComparison.InvariantCultureIgnoreCase : StringComparison.InvariantCulture))
+                ?.PublicKey;
 
         public string GetQuestionTitle(Guid questionId) => this.GetQuestionOrThrow(questionId).QuestionText;
 
