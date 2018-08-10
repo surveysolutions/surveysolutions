@@ -27,8 +27,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
     {
         private readonly InterviewDataExportSettings interviewDataExportSettings;
         private readonly IFileSystemAccessor fileSystemAccessor;
-        private readonly string interviewActionsFileName = "interview__actions";
-        private readonly DoExportFileHeader[] actionFileColumns =
+        public readonly string InterviewActionsFileName = "interview__actions";
+        public readonly DoExportFileHeader[] ActionFileColumns =
         {
             new DoExportFileHeader("interview__id", "Unique 32-character long identifier of the interview"), 
             new DoExportFileHeader("Action", "Type of action taken"), 
@@ -69,10 +69,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 
         public void Export(QuestionnaireIdentity questionnaireIdentity, List<Guid> interviewIdsToExport, string basePath, IProgress<int> progress)
         {
-            var actionFilePath = this.fileSystemAccessor.CombinePath(basePath, Path.ChangeExtension(this.interviewActionsFileName, this.dataFileExtension));
+            var actionFilePath = this.fileSystemAccessor.CombinePath(basePath, Path.ChangeExtension(this.InterviewActionsFileName, this.dataFileExtension));
             var batchSize = this.interviewDataExportSettings.MaxRecordsCountPerOneExportQuery;
 
-            var fileColumns = this.actionFileColumns.Select(a => a.Title).ToArray();
+            var fileColumns = this.ActionFileColumns.Select(a => a.Title).ToArray();
             this.csvWriter.WriteData(actionFilePath, new[] { fileColumns }, ExportFileSettings.DataFileSeparator.ToString());
 
             long totalProcessedCount = 0;
@@ -105,15 +105,15 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         {
             var doContent = new DoFile();
 
-            doContent.BuildInsheet(Path.ChangeExtension(this.interviewActionsFileName, this.dataFileExtension));
+            doContent.BuildInsheet(Path.ChangeExtension(this.InterviewActionsFileName, this.dataFileExtension));
             doContent.AppendLine();
 
-            foreach (var actionFileColumn in actionFileColumns)
+            foreach (var actionFileColumn in ActionFileColumns)
             {
                 doContent.AppendLabelToVariableMatching(actionFileColumn.Title, actionFileColumn.Description);
             }
 
-            var fileName = $"{interviewActionsFileName}.{DoFile.ContentFileNameExtension}";
+            var fileName = $"{InterviewActionsFileName}.{DoFile.ContentFileNameExtension}";
             var contentFilePath = this.fileSystemAccessor.CombinePath(basePath, fileName);
 
             this.fileSystemAccessor.WriteAllText(contentFilePath, doContent.ToString());
