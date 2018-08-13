@@ -10,7 +10,6 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization.Steps;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -53,10 +52,16 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
             if (!this.fileSystemAccessor.IsDirectoryExists(patchesDirectory))
                 this.fileSystemAccessor.CreateDirectory(patchesDirectory);
             
-            var listOfPatchesInfo = await this.supervisorSynchronization.GetListOInterviewerAppPatchesAsync(Context.CancellationToken);
+            var listOfPatchesInfo = await this.supervisorSynchronization.GetListOfInterviewerAppPatchesAsync(Context.CancellationToken);
             var listOfMissingPatches = listOfPatchesInfo
-                .Where(x => !this.fileSystemAccessor.IsFileExists(
-                    this.fileSystemAccessor.CombinePath(patchesDirectory, x.FileName)))
+                .Where(x =>
+                {
+                    var filePath = this.fileSystemAccessor.CombinePath(patchesDirectory, x.FileName);
+
+                    return !this.fileSystemAccessor.IsFileExists(filePath) ||
+                           // sometimes we have deltas with zero length. just for no hotfix in the future
+                           this.fileSystemAccessor.GetFileSize(filePath) == 0;
+                })
                 .ToArray();
 
             for(int patchIndex = 0; patchIndex < listOfMissingPatches.Length; patchIndex++)

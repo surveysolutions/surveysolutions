@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services
             CancellationToken cancellationToken);
 
         Task<List<string>> GetListOfDeletedQuestionnairesIds(CancellationToken cancellationToken);
-        Task<InterviewerApplicationPatchApiView[]> GetListOInterviewerAppPatchesAsync(CancellationToken cancellationToken);
+        Task<InterviewerApplicationPatchApiView[]> GetListOfInterviewerAppPatchesAsync(CancellationToken cancellationToken);
 
         string ApiDownloadAppPrefixUrl { get; }
     }

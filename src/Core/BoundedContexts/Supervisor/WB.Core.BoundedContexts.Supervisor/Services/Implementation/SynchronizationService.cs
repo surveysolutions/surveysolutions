@@ -98,7 +98,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
                 token: cancellationToken));
         }
 
-        public Task<InterviewerApplicationPatchApiView[]> GetListOInterviewerAppPatchesAsync(CancellationToken cancellationToken)
+        public Task<InterviewerApplicationPatchApiView[]> GetListOfInterviewerAppPatchesAsync(CancellationToken cancellationToken)
             => this.TryGetRestResponseOrThrowAsync(() =>
                 this.restService.GetAsync<InterviewerApplicationPatchApiView[]>(
                     url: this.GetUpdatesController,
