@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -69,6 +70,8 @@ using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.WebApi;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization.Steps;
+using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
@@ -2243,5 +2246,14 @@ namespace WB.Tests.Abc.TestFactories
                     TimeUtc = dateTimeUtc ?? DateTime.UtcNow
                 };
         }
+
+        public EnumeratorSynchonizationContext EnumeratorSynchonizationContext(
+            IProgress<SyncProgressInfo> progress = null)
+            => new EnumeratorSynchonizationContext
+            {
+                Statistics = new SynchronizationStatistics(),
+                CancellationToken = CancellationToken.None,
+                Progress = progress ?? Mock.Of<IProgress<SyncProgressInfo>>()
+            };
     }
 }
