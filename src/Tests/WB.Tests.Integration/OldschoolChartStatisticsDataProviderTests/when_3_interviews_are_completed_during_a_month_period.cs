@@ -18,11 +18,11 @@ namespace WB.Tests.Integration.OldschoolChartStatisticsDataProviderTests
     internal class when_3_interviews_are_completed_during_a_month_period : with_postgres_db
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
-            var sessionFactory = IntegrationCreate.SessionFactory(connectionStringBuilder.ConnectionString,
+            var sessionFactory = IntegrationCreate.SessionFactory(ConnectionStringBuilder.ConnectionString,
                 new[] {typeof (CumulativeReportStatusChangeMap)}, true);
             postgresTransactionManager = new CqrsPostgresTransactionManager(sessionFactory ?? Mock.Of<ISessionFactory>());
 
-            pgSqlConnection = new NpgsqlConnection(connectionStringBuilder.ConnectionString);
+            pgSqlConnection = new NpgsqlConnection(ConnectionStringBuilder.ConnectionString);
             pgSqlConnection.Open();
 
             cumulativeReportStatusChangeStorage =
