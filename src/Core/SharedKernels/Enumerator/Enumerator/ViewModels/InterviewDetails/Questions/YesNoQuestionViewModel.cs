@@ -249,23 +249,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var answer = interview.GetYesNoQuestion(this.Identity)?.GetAnswer().CheckedOptions;
             if (answer == null) return;
 
-            foreach (var option in Options)
-            {
-                var selectedAnswer = answer.FirstOrDefault(x => x.Value == option.Value);
-                if (selectedAnswer != null)
-                {
-                    option.YesSelected = selectedAnswer.Yes;
-                    option.NoSelected = selectedAnswer.No;
-                }
-                else
-                {
-                    option.Selected = null;
-                    option.YesAnswerCheckedOrder = null;
-                    option.YesCanBeChecked = true;
-                }
-            }
-
             PreviousOptionToReset = answer.Select(x => new AnsweredYesNoOption(x.Value, x.Yes)).ToList();
+            PutOrderOnOptions(PreviousOptionToReset.ToArray());
         }
 
         public async Task ToggleAnswerAsync(YesNoQuestionOptionViewModel changedModel, bool? oldValue)
@@ -338,7 +323,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 if (this.AreAnswersOrdered || this.maxAllowedAnswers.HasValue)
                 {
-                    this.PutOrderOnOptions(@event);
+                    this.PutOrderOnOptions(@event.AnsweredOptions);
                 }
 
                 UpateMaxAnswersCountMessage(@event.AnsweredOptions.Count(x => x.Yes));
@@ -357,10 +342,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        private void PutOrderOnOptions(YesNoQuestionAnswered @event)
+        private void PutOrderOnOptions(AnsweredYesNoOption[] answeredYesNoOptions)
         {
-            var orderedOptions = @event.AnsweredOptions.Select(ao => ao.OptionValue).ToList();
-            var orderedYesOptions = @event.AnsweredOptions.Where(ao => ao.Yes).Select(ao => ao.OptionValue).ToList();
+            var orderedOptions = answeredYesNoOptions.Select(ao => ao.OptionValue).ToList();
+            var orderedYesOptions = answeredYesNoOptions.Where(ao => ao.Yes).Select(ao => ao.OptionValue).ToList();
             var maxAnswersCountNotReachedYet =
                 !this.maxAllowedAnswers.HasValue || orderedYesOptions.Count < this.maxAllowedAnswers;
 
@@ -370,7 +355,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
                 if (selectedOptionIndex >= 0)
                 {
-                    var answeredYesNoOption = @event.AnsweredOptions[selectedOptionIndex];
+                    var answeredYesNoOption = answeredYesNoOptions[selectedOptionIndex];
                     option.Selected = answeredYesNoOption.Yes;
                     option.YesAnswerCheckedOrder = answeredYesNoOption.Yes && this.AreAnswersOrdered
                         ? orderedYesOptions.IndexOf(option.Value) + 1
