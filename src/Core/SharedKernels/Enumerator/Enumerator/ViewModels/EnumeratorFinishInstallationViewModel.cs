@@ -1,11 +1,13 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable.Tasks;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;
@@ -25,13 +27,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private CancellationTokenSource cancellationTokenSource;
         private readonly IUserInteractionService userInteractionService;
         private const string StateKey = "identity";
+        private readonly IQRBarcodeScanService qrBarcodeScanService;
 
         protected EnumeratorFinishInstallationViewModel(
             IViewModelNavigationService viewModelNavigationService,
             IPrincipal principal,
             IDeviceSettings deviceSettings,
             ISynchronizationService synchronizationService,
-            ILogger logger, 
+            ILogger logger,
+            IQRBarcodeScanService qrBarcodeScanService,
             IUserInteractionService userInteractionService) : base(principal, viewModelNavigationService)
         {
             this.viewModelNavigationService = viewModelNavigationService;
@@ -39,7 +43,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.synchronizationService = synchronizationService;
             this.logger = logger;
             this.userInteractionService = userInteractionService;
+
+            this.qrBarcodeScanService = qrBarcodeScanService;
         }
+
+        protected abstract string GetAppPrefixUrl();
 
         protected override bool IsAuthenticationRequired => false;
 
@@ -243,5 +251,45 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         protected abstract Task SaveUserToLocalStorageAsync(RestCredentials credentials, CancellationToken token);
 
         public void CancellInProgressTask() => this.cancellationTokenSource?.Cancel();
+
+        private IMvxAsyncCommand scanAsyncCommand;
+        public IMvxAsyncCommand ScanCommand
+        {
+            get { return this.scanAsyncCommand ?? (this.scanAsyncCommand = new MvxAsyncCommand(this.ScanAsync, () => !IsInProgress)); }
+        }
+
+        protected async Task ScanAsync()
+        {
+            this.IsInProgress = true;
+
+            try
+            {
+                var scanCode = await this.qrBarcodeScanService.ScanAsync();
+
+                if (scanCode != null)
+                {
+                    if (Uri.TryCreate(scanCode.Code, UriKind.Absolute, out var uriResult))
+                    {
+                        var position = scanCode.Code.IndexOf(GetAppPrefixUrl(), StringComparison.InvariantCultureIgnoreCase);
+                        this.Endpoint = position > 0 ? scanCode.Code.Substring(0, position) : scanCode.Code;
+                    }
+                    else
+                    {
+                        var finishInfo = JsonConvert.DeserializeObject<FinishInstallationInfo>(scanCode.Code);
+
+                        this.Endpoint = finishInfo.Url;
+                        this.UserName = finishInfo.Login;
+                        this.Password = finishInfo.Password;
+                    }
+                }
+            }
+            catch
+            {
+            }
+            finally
+            {
+                this.IsInProgress = false;
+            }
+        }
     }
 }

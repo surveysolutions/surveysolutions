@@ -7,6 +7,14 @@
     <Configurations>Debug;Release;Debug-ESRI</Configurations>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Implementation\AuditLog\**" />
+    <Compile Remove="Implementation\Storage\**" />
+    <EmbeddedResource Remove="Implementation\AuditLog\**" />
+    <EmbeddedResource Remove="Implementation\Storage\**" />
+    <None Remove="Implementation\AuditLog\**" />
+    <None Remove="Implementation\Storage\**" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="Autofac" Version="4.8.1" />
     <PackageReference Include="MvvmCross.Plugin.File" Version="6.1.2" />
     <PackageReference Include="MvvmCross.Plugin.Messenger" Version="6.1.2" />
@@ -25,10 +33,6 @@
     <ProjectReference Include="..\..\..\SharedKernels\DataCollection\DataCollection\WB.Core.SharedKernels.DataCollection.csproj" />
     <ProjectReference Include="..\..\..\SharedKernels\Enumerator\Enumerator\WB.Core.SharedKernels.Enumerator.csproj" />
     <ProjectReference Include="..\..\..\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Implementation\AuditLog\" />
-    <Folder Include="Implementation\Storage\" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="FFImageLoading">

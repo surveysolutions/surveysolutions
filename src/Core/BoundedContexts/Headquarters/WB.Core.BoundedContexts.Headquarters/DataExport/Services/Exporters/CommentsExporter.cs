@@ -25,12 +25,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ICsvWriter csvWriter;
         private readonly string dataFileExtension = "tab";
-        private readonly string commentsFileName = "interview__comments";
+        public readonly string CommentsFileName = "interview__comments";
         private readonly IQueryableReadSideRepositoryReader<InterviewCommentaries> interviewCommentariesStorage;
         private readonly ITransactionManagerProvider transactionManager;
         private readonly ILogger logger;
 
-        private readonly DoExportFileHeader[] commentsFileColumns =
+        public readonly DoExportFileHeader[] CommentsFileColumns =
         {
             new DoExportFileHeader("Order", "Sequential order of the comment"),
             new DoExportFileHeader("Originator", "Login name of the person leaving the comment"),
@@ -75,7 +75,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             var batchSize = this.interviewDataExportSettings.MaxRecordsCountPerOneExportQuery;
 
             
-            string commentsFilePath = this.fileSystemAccessor.CombinePath(basePath, Path.ChangeExtension(this.commentsFileName, this.dataFileExtension));
+            string commentsFilePath = this.fileSystemAccessor.CombinePath(basePath, Path.ChangeExtension(this.CommentsFileName, this.dataFileExtension));
             int maxRosterDepthInQuestionnaire = questionnaireExportStructure.HeaderToLevelMap.Values.Max(x => x.LevelScopeVector.Count);
             bool hasAtLeastOneRoster = questionnaireExportStructure.HeaderToLevelMap.Values.Any(x => x.LevelScopeVector.Count > 0);
             this.WriteFileHeader(hasAtLeastOneRoster, maxRosterDepthInQuestionnaire, commentsFilePath);
@@ -114,7 +114,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         {
             var doContent = new DoFile();
 
-            doContent.BuildInsheet(Path.ChangeExtension(this.commentsFileName, this.dataFileExtension));
+            doContent.BuildInsheet(Path.ChangeExtension(this.CommentsFileName, this.dataFileExtension));
             doContent.AppendLine();
 
             int maxRosterDepthInQuestionnaire = questionnaireExportStructure.HeaderToLevelMap.Values.Max(x => x.LevelScopeVector.Count);
@@ -123,7 +123,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 
             foreach (var header in headersList)
             {
-                var exportFileHeader = commentsFileColumns.SingleOrDefault(c => c.Title.Equals(header, StringComparison.CurrentCultureIgnoreCase));
+                var exportFileHeader = CommentsFileColumns.SingleOrDefault(c => c.Title.Equals(header, StringComparison.CurrentCultureIgnoreCase));
                 if (exportFileHeader != null)
                 {
                     if (exportFileHeader.AddCapture)
@@ -137,7 +137,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                 }
             }
 
-            var fileName = $"{commentsFileName}.{DoFile.ContentFileNameExtension}";
+            var fileName = $"{CommentsFileName}.{DoFile.ContentFileNameExtension}";
             var contentFilePath = this.fileSystemAccessor.CombinePath(basePath, fileName);
 
             this.fileSystemAccessor.WriteAllText(contentFilePath, doContent.ToString());
