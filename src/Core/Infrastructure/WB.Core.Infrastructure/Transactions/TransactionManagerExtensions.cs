@@ -54,7 +54,14 @@ namespace WB.Core.Infrastructure.Transactions
             {
                 if (shouldStartTransaction)
                 {
-                    transactionManager.RollbackTransaction();
+                    try
+                    {
+                        transactionManager.RollbackTransaction();
+                    }
+                    catch
+                    {
+                        //suppressing rollback exception to throw original exception
+                    }
                 }
                 throw;
             }
@@ -76,7 +83,14 @@ namespace WB.Core.Infrastructure.Transactions
             {
                 if (shouldStartTransaction)
                 {
-                    transactionManager.RollbackCommandTransaction();
+                    try
+                    {
+                        transactionManager.RollbackCommandTransaction();
+                    }
+                    catch
+                    {
+                        //suppressing rollback exception to throw original exception
+                    }
                 }
             }
         }
@@ -98,7 +112,14 @@ namespace WB.Core.Infrastructure.Transactions
             {
                 if (shouldStartTransaction)
                 {
-                    transactionManager.RollbackTransaction();
+                    try
+                    {
+                        transactionManager.RollbackTransaction();
+                    }
+                    catch
+                    {
+                        //suppressing rollback exception to throw original exception
+                    }
                 }
             }
         }
