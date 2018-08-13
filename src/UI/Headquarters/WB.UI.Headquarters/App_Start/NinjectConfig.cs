@@ -206,7 +206,7 @@ namespace WB.UI.Headquarters
 
             var trackingSettings = GetTrackingSettings(settingsProvider);
 
-            var owinSecurityModule = new OwinSecurityModule();
+            var owinSecurityModule = new OwinSecurityModule("Postgres");
             var mainModule = new MainModule(settingsProvider, applicationSecuritySection, legacyAssemblySettings);
 
             kernel.Load(

@@ -13,7 +13,7 @@ namespace WB.Tests.Integration.PostgreSQLTests
         {
             TestConnectionString = ConfigurationManager.ConnectionStrings["TestConnection"].ConnectionString;
             databaseName = "testdb_" + Guid.NewGuid().FormatGuid();
-            connectionStringBuilder = new NpgsqlConnectionStringBuilder(TestConnectionString)
+            ConnectionStringBuilder = new NpgsqlConnectionStringBuilder(TestConnectionString)
             {
                 Database = databaseName
             };
@@ -21,7 +21,7 @@ namespace WB.Tests.Integration.PostgreSQLTests
             using (var connection = new NpgsqlConnection(TestConnectionString))
             {
                 connection.Open();
-                var command = string.Format(@"CREATE DATABASE {0} ENCODING = 'UTF8'", databaseName);
+                var command = $"CREATE DATABASE {databaseName} ENCODING = 'UTF8'";
                 using (var sqlCommand = connection.CreateCommand())
                 {
                     sqlCommand.CommandText = command;
@@ -49,7 +49,7 @@ namespace WB.Tests.Integration.PostgreSQLTests
             }
         }
 
-        protected static NpgsqlConnectionStringBuilder connectionStringBuilder;
+        protected static NpgsqlConnectionStringBuilder ConnectionStringBuilder;
         protected static string TestConnectionString;
         private static string databaseName;
     }

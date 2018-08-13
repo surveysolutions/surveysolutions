@@ -155,7 +155,9 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             registry.BindAsSingleton<IStringCompressor, JsonCompressor>();
             registry.Bind<ISerializer, NewtonJsonSerializer>();
+            registry.Bind<IJsonAllTypesSerializer, JsonAllTypesSerializer>();
             registry.Bind<IAttachmentContentService, AttachmentContentService>();
+            registry.Bind<IInterviewAnswerSerializer, NewtonInterviewAnswerJsonSerializer>();
 
             registry.BindAsSingletonWithConstructorArgument<IMapStorageService, FileSystemMapStorageService>("folderPath", this.currentFolderPath);
 
@@ -175,6 +177,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IExportViewFactory, ExportViewFactory>();
             registry.Bind<IQuestionnaireVersionProvider, QuestionnaireVersionProvider>();
             registry.Bind<ITranslationManagementService, TranslationManagementService>();
+            registry.Bind<IAssemblyService, AssemblyService>();
             
             registry.Bind<IAllInterviewsFactory, AllInterviewsFactory>();
             registry.Bind<ITeamInterviewsFactory, TeamInterviewsFactory>();

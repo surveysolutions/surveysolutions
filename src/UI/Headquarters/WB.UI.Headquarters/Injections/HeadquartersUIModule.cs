@@ -57,17 +57,11 @@ namespace WB.UI.Headquarters.Injections
 
             registry.Bind<IExceptionFilter, HandleUIExceptionAttribute>();
 
-            registry.Bind<IAssemblyService, AssemblyService>();
             registry.Bind<IImageProcessingService, ImageProcessingService>();
 
             registry.BindAsSingleton<IVersionCheckService, VersionCheckService>();
             registry.BindAsSingleton<IHttpStatistician, HttpStatistician>();
             registry.BindAsSingleton<IAudioProcessingService, AudioProcessingService>();
-
-            
-            registry.BindToMethod<IInterviewAnswerSerializer>(() => new NewtonInterviewAnswerJsonSerializer());
-
-            registry.BindToMethod<IJsonAllTypesSerializer>(() => new JsonAllTypesSerializer());
 
             registry.BindAsSingleton<IRestServiceSettings, DesignerQuestionnaireApiRestServiceSettings>();
 
