@@ -20,21 +20,23 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
 {
     public class DownloadInterviewerAppPatches : SynchronizationStep
     {
-        private readonly ISupervisorSynchronizationService supervisorSynchronization;
+        private readonly ISupervisorSynchronizationService synchronizationService;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IPermissionsService permissions;
+        private readonly ISupervisorSettings supervisorSettings;
 
         public DownloadInterviewerAppPatches(int sortOrder,
-            ISynchronizationService synchronizationService,
             ILogger logger,
-            ISupervisorSynchronizationService supervisorSynchronization,
+            ISupervisorSynchronizationService synchronizationService,
             IFileSystemAccessor fileSystemAccessor,
-            IPermissionsService permissions) :
+            IPermissionsService permissions,
+            ISupervisorSettings supervisorSettings) :
             base(sortOrder, synchronizationService, logger)
         {
-            this.supervisorSynchronization = supervisorSynchronization;
+            this.synchronizationService = synchronizationService;
             this.fileSystemAccessor = fileSystemAccessor;
             this.permissions = permissions;
+            this.supervisorSettings = supervisorSettings;
         }
 
         public override async Task ExecuteAsync()
@@ -51,8 +53,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
             var patchesDirectory = this.fileSystemAccessor.CombinePath(pathToRootDirectory, "patches");
             if (!this.fileSystemAccessor.IsDirectoryExists(patchesDirectory))
                 this.fileSystemAccessor.CreateDirectory(patchesDirectory);
+
+            var latestVersionOfInterviewerApp = await this.synchronizationService.GetLatestInterviewerAppVersionAsync(Context.CancellationToken);
+            this.supervisorSettings.SetLatestInterviewerAppVersion(latestVersionOfInterviewerApp);
             
-            var listOfPatchesInfo = await this.supervisorSynchronization.GetListOfInterviewerAppPatchesAsync(Context.CancellationToken);
+            var listOfPatchesInfo = await this.synchronizationService.GetListOfInterviewerAppPatchesAsync(Context.CancellationToken);
             var listOfMissingPatches = listOfPatchesInfo
                 .Where(x =>
                 {
@@ -72,7 +77,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
                 Stopwatch sw = null;
                 try
                 {
-                    var patch = await this.supervisorSynchronization.GetFileAsync(patchInfo.Url,
+                    var patch = await this.synchronizationService.GetFileAsync(patchInfo.Url,
                         new Progress<TransferProgress>(downloadProgress =>
                         {
                             if (sw == null) sw = Stopwatch.StartNew();

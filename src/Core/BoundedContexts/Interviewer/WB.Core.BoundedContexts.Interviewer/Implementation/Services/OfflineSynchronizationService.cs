@@ -31,19 +31,22 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly IInterviewerQuestionnaireAccessor questionnaireAccessor;
         private readonly IPlainStorage<InterviewView> interviews;
         private readonly IEnumeratorSettings settings;
+        private readonly IDeviceSettings deviceSettings;
 
         public OfflineSynchronizationService(
             IOfflineSyncClient syncClient,
             IInterviewerPrincipal principal,
             IInterviewerQuestionnaireAccessor questionnaireAccessor,
             IPlainStorage<InterviewView> interviews, 
-            IEnumeratorSettings settings)
+            IEnumeratorSettings settings,
+            IDeviceSettings deviceSettings)
         {
             this.syncClient = syncClient;
             this.principal = principal;
             this.questionnaireAccessor = questionnaireAccessor;
             this.interviews = interviews;
             this.settings = settings;
+            this.deviceSettings = deviceSettings;
         }
 
         public Task UploadInterviewAsync(Guid interviewId, InterviewPackageApiView completedInterview,
@@ -175,10 +178,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return response.SupervisorId;
         }
 
-        public Task<bool> IsAutoUpdateEnabledAsync(CancellationToken token)
-        {
-            return Task.FromResult(false);
-        }
+        public Task<bool> IsAutoUpdateEnabledAsync(CancellationToken token) => Task.FromResult(true);
 
         public Task UploadAuditLogEntityAsync(AuditLogEntitiesApiView auditLogEntity, CancellationToken cancellationToken)
         {
@@ -323,14 +323,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return Task.FromResult<byte[]>(null);
         }
 
-        public Task<byte[]> GetApplicationPatchAsync(CancellationToken token, IProgress<TransferProgress> transferProgress = null)
+        public async Task<byte[]> GetApplicationPatchAsync(CancellationToken token, IProgress<TransferProgress> transferProgress = null)
         {
-            return Task.FromResult<byte[]>(null);
+            var response = await this.syncClient.SendAsync<GetInterviewerAppPatchRequest, GetInterviewerAppPatchResponse>(
+                new GetInterviewerAppPatchRequest(this.deviceSettings.GetApplicationVersionCode(), this.settings.ApplicationType), token, transferProgress);
+            return response.Content;
         }
 
-        public Task<int?> GetLatestApplicationVersionAsync(CancellationToken token)
+        public async Task<int?> GetLatestApplicationVersionAsync(CancellationToken token)
         {
-            return Task.FromResult<int?>(null);
+            var response = await this.syncClient.SendAsync<GetLatestApplicationVersionRequest, GetLatestApplicationVersionResponse>(
+                new GetLatestApplicationVersionRequest(), token);
+            return response.InterviewerApplicationVersion;
         }
 
         public Task SendBackupAsync(string filePath, CancellationToken token)

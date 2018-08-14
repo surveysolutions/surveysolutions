@@ -15,13 +15,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
     {
         private readonly ISynchronizationService synchronizationService;
         private readonly ITabletDiagnosticService diagnosticService;
-        private readonly ILogger logger;
 
         public UpdateApplication(int sortOrder,
-            ISynchronizationService synchronizationService, ILogger logger) : base(sortOrder, synchronizationService, logger)
+            ISynchronizationService synchronizationService,
+            ITabletDiagnosticService diagnosticService,
+            ILogger logger) : base(sortOrder, synchronizationService, logger)
         {
             this.synchronizationService = synchronizationService;
-            this.logger = logger;
+            this.diagnosticService = diagnosticService;
         }
 
         public override async Task ExecuteAsync()
