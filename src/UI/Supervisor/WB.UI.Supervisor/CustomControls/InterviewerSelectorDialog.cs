@@ -7,10 +7,8 @@ using MvvmCross.Droid.Support.V7.RecyclerView;
 using MvvmCross.Platforms.Android;
 using MvvmCross.Platforms.Android.Binding.BindingContext;
 using MvvmCross.Platforms.Android.Views;
-using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.InterviewerSelector;
 using WB.Core.SharedKernels.Enumerator.Services;
-using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.UI.Supervisor.CustomControls
 {
@@ -39,11 +37,12 @@ namespace WB.UI.Supervisor.CustomControls
             this.Cancelled?.Invoke(this, EventArgs.Empty);
         }
 
-        public void SelectInterviewer(string title)
+        public void SelectInterviewer(string title, string note = null)
         {
             this.viewModel = this.viewModelFactory.GetNew<InterviewerSelectorDialogViewModel>();
             this.viewModel.Init();
             this.viewModel.Title = title;
+            this.viewModel.Note = note;
             this.viewModel.OnCancel += ViewModel_OnCancel;
             this.viewModel.OnDone += ViewModel_OnDone;
 
