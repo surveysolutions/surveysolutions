@@ -14,7 +14,7 @@
                     android:id="@+id/btnAssign"
                     style="@style/Interview_Complete_Screen_Button"
                     local:MvxBind="HideKeyboardOnClick .; 
-                         ThrottledClick Assign; 
+                         Click Assign; 
                          Text Localization('Supervisor_Complete_Assign_btn');"/>
             
                 <Button
@@ -23,7 +23,7 @@
                     android:background="@drawable/group_completed"
                     android:layout_marginLeft="@dimen/button_shadow_margin"
                     local:MvxBind="HideKeyboardOnClick .; 
-                         ThrottledClick Approve; 
+                         Click Approve; 
                          Text Localization('Supervisor_Complete_Approve_btn'); 
                          "/>
                 <Button
@@ -32,7 +32,7 @@
                     android:layout_marginLeft="@dimen/button_shadow_margin"
                     android:background="@drawable/group_with_invalid_answers"
                     local:MvxBind="HideKeyboardOnClick .; 
-                         ThrottledClick Reject; 
+                         Click Reject; 
                          Text Localization('Supervisor_Complete_Reject_btn');"/>
             </LinearLayout>
           
