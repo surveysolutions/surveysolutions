@@ -174,6 +174,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
                     return FormatDateTimeString(InterviewerUIResources.DashboardItem_RejectedOn, interview.RejectedDateTime);
                 case DashboardInterviewStatus.RejectedByHeadquarters:
                     return FormatDateTimeString(InterviewerUIResources.DashboardItem_RejectedByHqOn, interview.RejectedDateTime);
+                case DashboardInterviewStatus.ApprovedBySupervisor:
+                    return FormatDateTimeString(InterviewerUIResources.DashboardItem_ApprovedBySupervisor, interview.ApprovedDateTimeUtc);
                 default:
                     return string.Empty;
             }
