@@ -311,7 +311,7 @@ namespace WB.Tests.Integration.FullStackIntegration.Hq
 
             oldServiceLocator = ServiceLocator.Current;
             ServiceLocator.SetLocatorProvider(() =>
-                new NativeNinjectServiceLocatorAdapter(kernel.Kernel)); // TODO reset to previous
+                new NativeNinjectServiceLocatorAdapter(kernel.Kernel)); 
         }
 
         private async Task<Mock<IRestService>> SetupMockOfDesigner()
