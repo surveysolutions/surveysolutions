@@ -114,6 +114,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor
 
             // Interviewer updates
             config.TypedRoute("api/supervisor/v1/updates", c => c.Action<UpdatesApiV1Controller>(x => x.Get()));
+            config.TypedRoute("api/supervisor/v1/updates/latestversion", c => c.Action<UpdatesApiV1Controller>(x => x.GetLatestVersion()));
             config.Routes.MapHttpRoute("GetInterviewerAppPatch", "api/supervisor/v1/updates/{id}",
                 new {controller = "UpdatesApiV1", action = "Patch"});
 

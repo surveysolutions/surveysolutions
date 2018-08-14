@@ -2,21 +2,20 @@
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
-using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSyncHandlers
 {
-    public class SupervisorCanSynchronizeHandler : IHandleCommunicationMessage
+    public class SupervisorSynchronizeHandler : IHandleCommunicationMessage
     {
         private readonly IPlainStorage<InterviewerDocument> interviewerViewRepository;
-        private readonly IEnumeratorSettings settings;
+        private readonly ISupervisorSettings settings;
 
-        public SupervisorCanSynchronizeHandler(
+        public SupervisorSynchronizeHandler(
             IPlainStorage<InterviewerDocument> interviewerViewRepository,
-            IEnumeratorSettings settings)
+            ISupervisorSettings settings)
         {
             this.interviewerViewRepository = interviewerViewRepository;
             this.settings = settings;
@@ -25,8 +24,15 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
         public void Register(IRequestHandler requestHandler)
         {
             requestHandler.RegisterHandler<CanSynchronizeRequest, CanSynchronizeResponse>(CanSynchronize);
+            requestHandler.RegisterHandler<GetLatestApplicationVersionRequest, GetLatestApplicationVersionResponse>(GetLatestApplicationVersion);
         }
-        
+
+        private Task<GetLatestApplicationVersionResponse> GetLatestApplicationVersion(GetLatestApplicationVersionRequest request)
+            => Task.FromResult(new GetLatestApplicationVersionResponse
+            {
+                InterviewerApplicationVersion = this.settings.LatestInterviewerAppVersion
+            });
+
         public Task<CanSynchronizeResponse> CanSynchronize(CanSynchronizeRequest arg)
         {
             if (settings.LastHqSyncTimestamp == null ||

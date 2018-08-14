@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Supervisor.Views;
@@ -104,6 +105,21 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
                     url: this.GetUpdatesController,
                     credentials: this.restCredentials,
                     token: cancellationToken));
+
+        public Task<int?> GetLatestInterviewerAppVersionAsync(CancellationToken token)
+            => this.TryGetRestResponseOrThrowAsync(async () =>
+            {
+                try
+                {
+                    return await this.restService.GetAsync<int?>(
+                        url: string.Concat(this.GetUpdatesController, "/latestversion"),
+                        credentials: this.restCredentials, token: token).ConfigureAwait(false);
+                }
+                catch (RestException rest) when (rest.StatusCode == HttpStatusCode.NotFound)
+                {
+                    return null;
+                }
+            });
 
         protected override string CanSynchronizeValidResponse => "158329303";
     }

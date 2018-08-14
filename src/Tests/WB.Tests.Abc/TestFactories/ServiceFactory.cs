@@ -54,6 +54,7 @@ using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Synchronization;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
+using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.BoundedContexts.Supervisor.Services.Implementation;
 using WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSyncHandlers;
 using WB.Core.BoundedContexts.Supervisor.ViewModel;
@@ -820,16 +821,17 @@ namespace WB.Tests.Abc.TestFactories
                 interviewerPrincipal ?? Mock.Of<IInterviewerPrincipal>(),
                 Mock.Of< IInterviewerQuestionnaireAccessor>(),
                 Mock.Of<IPlainStorage<InterviewView>>(),
-                Mock.Of<IEnumeratorSettings>());
+                Mock.Of<IEnumeratorSettings>(),
+                Mock.Of<IDeviceSettings>());
         }
 
-        public SupervisorCanSynchronizeHandler SupervisorCanSynchronizeHandler(
+        public SupervisorSynchronizeHandler SupervisorSynchronizeHandler(
             IPlainStorage<InterviewerDocument> interviewerViewRepository = null,
-            IEnumeratorSettings settings = null)
+            ISupervisorSettings settings = null)
         {
-            return new SupervisorCanSynchronizeHandler(
+            return new SupervisorSynchronizeHandler(
                 interviewerViewRepository ?? Mock.Of<IPlainStorage<InterviewerDocument>>(),
-                settings ?? Mock.Of<IEnumeratorSettings>());
+                settings ?? Mock.Of<ISupervisorSettings>());
         }
 
         public SupervisorInterviewsHandler SupervisorInterviewsHandler(ILiteEventBus eventBus = null,

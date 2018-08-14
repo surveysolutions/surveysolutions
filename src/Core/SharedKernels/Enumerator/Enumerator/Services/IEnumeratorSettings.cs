@@ -3,6 +3,12 @@ using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.Core.SharedKernels.Enumerator.Services
 {
+    public enum EnumeratorApplicationType
+    {
+        WithMaps = 1,
+        WithoutMaps
+    }
+
     public interface IEnumeratorSettings : IRestServiceSettings
     {
         int EventChunkSize { get; }
@@ -16,5 +22,6 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         bool ShowAnswerTime { get; }
         long? LastHqSyncTimestamp { get; }
         void SetLastHqSyncTimestamp(long? lastHqSyncTimestamp);
+        EnumeratorApplicationType ApplicationType { get; }
     }
 }
