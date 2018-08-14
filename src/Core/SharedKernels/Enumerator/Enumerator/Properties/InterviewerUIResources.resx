@@ -798,4 +798,8 @@ Downloaded {3}%</value>
   <data name="DashboardItem_ApprovedBySupervisor" xml:space="preserve">
     <value>Approved by Supervisor at {0}</value>
   </data>
+  <data name="FinishInstallation_QrBarcodeReaderErrorMessage" xml:space="preserve">
+    <value>An error occurred while scanning</value>
+  </data>
+
 </root>
