@@ -251,4 +251,12 @@
   <data name="CheckObsoleteInterviews" xml:space="preserve">
     <value>Проверка устаревших интервью. Запрос: &lt;pre&gt;{0}&lt;/pre&gt;</value>
   </data>
+    <data name="SupervisorPatchRequestedFormat" xml:space="preserve">
+    <value>Запрошен патч для Supervisor приложения версии {0}</value>
+    <comment>Запрошен патч для Supervisor приложения версии {0}</comment>
+  </data>
+    <data name="SupervisorApkRequested" xml:space="preserve">
+    <value>Запрошена новая версия приложения Supervisor</value>
+    <comment>Запрошена новая версия приложения Supervisor</comment>
+  </data>
 </root>
