@@ -28,11 +28,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         private readonly IHttpStatistician httpStatistician;
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
         private readonly IAuditLogService auditLogService;
-        protected readonly IEnumeratorSettings enumeratorSettings;
+        private readonly IEnumeratorSettings enumeratorSettings;
 
-        protected bool remoteLoginRequired;
-        protected bool shouldUpdatePasswordOfResponsible;
-        protected RestCredentials restCredentials;
+        private bool remoteLoginRequired;
+        private bool shouldUpdatePasswordOfResponsible;
+        protected RestCredentials RestCredentials;
 
         protected abstract bool SendStatistics { get; }
 
@@ -197,7 +197,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     Statistics = statistics
                 });
 
-                this.restCredentials = this.restCredentials ?? new RestCredentials
+                this.RestCredentials = this.RestCredentials ?? new RestCredentials
                 {
                     Login = this.principal.CurrentUserIdentity.Name,
                     Token = this.principal.CurrentUserIdentity.Token
@@ -207,12 +207,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 {
                     var token = await this.synchronizationService.LoginAsync(new LogonInfo
                     {
-                        Username = this.restCredentials.Login,
-                        Password = this.restCredentials.Password
-                    }, this.restCredentials);
+                        Username = this.RestCredentials.Login,
+                        Password = this.RestCredentials.Password
+                    }, this.RestCredentials);
 
-                    this.restCredentials.Password = this.restCredentials.Password;
-                    this.restCredentials.Token = token;
+                    this.RestCredentials.Password = this.RestCredentials.Password;
+                    this.RestCredentials.Token = token;
 
                     this.remoteLoginRequired = false;
                 }
@@ -220,10 +220,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 if (this.shouldUpdatePasswordOfResponsible)
                 {
                     this.shouldUpdatePasswordOfResponsible = false;
-                    this.UpdatePasswordOfResponsible(this.restCredentials);
+                    this.UpdatePasswordOfResponsible(this.RestCredentials);
                 }
 
-                await this.synchronizationService.CanSynchronizeAsync(this.restCredentials, cancellationToken);
+                await this.synchronizationService.CanSynchronizeAsync(this.RestCredentials, cancellationToken);
 
                 await CheckAfterStartSynchronization(cancellationToken);
 
@@ -233,7 +233,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 {
                     try
                     {
-                        DeviceInfo deviceInfo = null;
+                        DeviceInfo deviceInfo;
 
                         using (var deviceInformationService = ServiceLocator.Current.GetInstance<IDeviceInformationService>())
                         {
@@ -259,7 +259,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     {
                         var hqTimestamp = await this.synchronizationService.SendSyncStatisticsAsync(
                             this.ToSyncStatisticsApiView(statistics, stopwatch),
-                            cancellationToken, this.restCredentials);
+                            cancellationToken, this.RestCredentials);
 
                         this.enumeratorSettings.SetLastHqSyncTimestamp(hqTimestamp);
 
@@ -416,7 +416,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 else
                 {
                     this.remoteLoginRequired = true;
-                    this.restCredentials.Password = newPassword;
+                    this.RestCredentials.Password = newPassword;
                     await this.SynchronizeAsync(progress, cancellationToken);
                 }
             }

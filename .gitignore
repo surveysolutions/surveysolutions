@@ -91,3 +91,4 @@ src/Tools/k6/k6.exe
 /src/UI/WB.UI.WebTester/Views/Shared/partial.webtester.cshtml
 Elmah/
 /src/UI/Supervisor/WB.UI.Supervisor/Resources/Resource.Designer.cs
+/src/UI/Designer/WB.UI.Designer/questionnaire/build/rev-manifest.json

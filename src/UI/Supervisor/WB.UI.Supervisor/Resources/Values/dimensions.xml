@@ -39,4 +39,10 @@
     
     <dimen name="Sidebar_header_padding">10dp</dimen>
     <dimen name="Sidebar_image_dimention">48dp</dimen>
+
+    <dimen name="Login_Endpoint_paddingRight">30dp</dimen>
+    <dimen name="Login_Scan_Button_width">48dp</dimen>
+    <dimen name="Login_Scan_Button_height">48dp</dimen>
+    <dimen name="Login_Scan_Button_paddingTop">3dp</dimen>
+
 </resources>
