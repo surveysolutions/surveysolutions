@@ -246,7 +246,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private void ResetUiOptions()
         {
             var interview = this.interviewRepository.Get(this.interviewId.FormatGuid());
-            var answer = interview.GetYesNoQuestion(this.Identity)?.GetAnswer().CheckedOptions;
+            var answer = interview.GetYesNoQuestion(this.Identity)?.GetAnswer()?.CheckedOptions;
             if (answer == null) return;
 
             PreviousOptionToReset = answer.Select(x => new AnsweredYesNoOption(x.Value, x.Yes)).ToList();
