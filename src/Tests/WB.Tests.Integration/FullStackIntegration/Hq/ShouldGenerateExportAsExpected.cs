@@ -68,7 +68,7 @@ using WB.UI.Shared.Web.Versions;
 namespace WB.Tests.Integration.FullStackIntegration.Hq
 {
     [TestFixture]
-    public class QuestionnaireBuilder : with_postgres_db
+    public class ShouldGenerateExportAsExpected : with_postgres_db
     {
         private string tempFolder;
         private string questionnaireContentFolder;
@@ -77,6 +77,7 @@ namespace WB.Tests.Integration.FullStackIntegration.Hq
         private readonly Guid questionanireId = Guid.Parse("6158dd074d64498f8a50e5e9828fda23");
         private string actualExportFolder;
         private string expectedExportFolder;
+        private IServiceLocator oldServiceLocator;
 
         private const string resourcesNamespace = "WB.Tests.Integration.FullStackIntegration.Hq";
 
@@ -91,7 +92,7 @@ namespace WB.Tests.Integration.FullStackIntegration.Hq
             Directory.CreateDirectory(expectedExportFolder);
 
             Directory.CreateDirectory(tempFolder);
-            testAssembly = Assembly.GetAssembly(typeof(QuestionnaireBuilder));
+            testAssembly = Assembly.GetAssembly(typeof(ShouldGenerateExportAsExpected));
             var zipPath = Path.Combine(tempFolder, "quuestionnaire.zip");
 
             using (var stream = testAssembly.GetManifestResourceStream($"{resourcesNamespace}.Enumerator Questions Automation.zip"))
@@ -111,7 +112,7 @@ namespace WB.Tests.Integration.FullStackIntegration.Hq
         }
 
         [Test]
-        public async Task QuestionnairePackageComposer()
+        public async Task Test()
         {
             await ImportQuestionnaire();
             await CreateUsers();
@@ -308,6 +309,7 @@ namespace WB.Tests.Integration.FullStackIntegration.Hq
 
             kernel.InitModules(new UnderConstructionInfo()).Wait();
 
+            oldServiceLocator = ServiceLocator.Current;
             ServiceLocator.SetLocatorProvider(() =>
                 new NativeNinjectServiceLocatorAdapter(kernel.Kernel)); // TODO reset to previous
         }
@@ -422,6 +424,8 @@ namespace WB.Tests.Integration.FullStackIntegration.Hq
             {
                 Directory.Delete(tempFolder, true);
             }
+
+            ServiceLocator.SetLocatorProvider(() => oldServiceLocator);
         }
     }
 }
