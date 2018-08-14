@@ -360,7 +360,7 @@ namespace WB.UI.Headquarters.Controllers
 
             try
             {
-                var fileErrors = this.dataVerifier.VerifyFiles(model.File.FileName, new[] {preloadedFileInfo}, questionnaire).Take(10).ToArray();
+                var fileErrors = this.dataVerifier.VerifyFile(model.File.FileName, preloadedFileInfo, questionnaire).Take(10).ToArray();
                 if (fileErrors.Any())
                 {
                     return this.View("InterviewImportVerificationErrors",

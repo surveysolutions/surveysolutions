@@ -4,8 +4,6 @@ using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
-using WB.Core.BoundedContexts.Interviewer.Implementation.Services.OfflineSync;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.Messages;
@@ -36,9 +34,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private readonly IAuditLogService auditLogService;
         private readonly ISynchronizationMode synchronizationMode;
         private readonly IOfflineSyncClient syncClient;
+        private readonly IMvxMessenger messenger;
 
-        private readonly MvxSubscriptionToken startingLongOperationMessageSubscriptionToken;
-        private readonly MvxSubscriptionToken stopLongOperationMessageSubscriptionToken;
+        private MvxSubscriptionToken startingLongOperationMessageSubscriptionToken;
+        private MvxSubscriptionToken stopLongOperationMessageSubscriptionToken;
 
         public CreateNewViewModel CreateNew { get; }
         public StartedInterviewsViewModel StartedInterviews { get; }
@@ -64,6 +63,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             IOfflineSyncClient syncClient) : base(principal, viewModelNavigationService, permissionsService,
             nearbyConnection, interviewerSettings, restService)
         {
+            this.messenger = messenger;
             this.viewModelNavigationService = viewModelNavigationService;
             this.principal = principal;
             this.interviewerSettings = interviewerSettings;
@@ -112,7 +112,21 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public override void ViewAppeared()
         {
             base.ViewAppeared();
+
+            startingLongOperationMessageSubscriptionToken =
+                messenger.Subscribe<StartingLongOperationMessage>(this.DashboardItemOnStartingLongOperation);
+            stopLongOperationMessageSubscriptionToken =
+                messenger.Subscribe<StopingLongOperationMessage>(this.DashboardItemOnStopLongOperation);
+            
             this.SynchronizationWithHqEnabled = this.interviewerSettings.AllowSyncWithHq;
+        }
+
+        public override void ViewDisappeared()
+        {
+            startingLongOperationMessageSubscriptionToken.Dispose();
+            stopLongOperationMessageSubscriptionToken.Dispose();
+
+            base.ViewDisappeared();
         }
 
         public bool SynchronizationWithHqEnabled

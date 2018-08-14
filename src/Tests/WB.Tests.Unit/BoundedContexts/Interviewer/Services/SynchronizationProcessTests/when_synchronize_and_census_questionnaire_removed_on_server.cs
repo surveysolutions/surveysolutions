@@ -4,15 +4,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services;
-using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
-using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
-using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization.Steps;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
@@ -23,14 +21,12 @@ using It = Moq.It;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProcessTests
 {
-    [NUnit.Framework.TestOf(typeof(InterviewerSynchronizationProcess))]
+    [TestOf(typeof(RemoveObsoleteQuestionnaires))]
     internal class when_synchronize_and_census_questionnaire_removed_on_server
     {
         [Test]
         public async Task should_progress_report_1_deleted_interview()
         {
-            var principal = Setup.InterviewerPrincipal("name", "pass");
-
             var interviewId = Guid.NewGuid();
             int totalDeletedInterviewsCount = 0;
 
@@ -61,31 +57,18 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                      && x.GetAllQuestionnaireIdentities() == new List<QuestionnaireIdentity>(new[] { removedQuestionnaireIdentity })
             );
 
-            var interviewerSyncService = Mock.Of<IInterviewerSynchronizationService>(s => 
-                s.GetInterviewerAsync(It.IsAny<RestCredentials>(), It.IsAny<CancellationToken>())
-                == Task.FromResult(new InterviewerApiView()));
+            var interviewsRemover = new Mock<IInterviewsRemover>();
 
-            var interviewerStorage = Mock.Of<IPlainStorage<InterviewerIdentity>>(ii => ii.FirstOrDefault() == new InterviewerIdentity());
-
-            var mockOfInterviewAccessor = new Mock<IInterviewerInterviewAccessor>();
-
-            var viewModel = Create.Service.SynchronizationProcess(principal: principal,
-                interviewViewRepository: interviewViewRepository,
+            var synchronizationStep = Create.Service.RemoveObsoleteQuestionnaires(
                 synchronizationService: synchronizationService,
-                interviewerSynchronizationService: interviewerSyncService,
-                questionnaireFactory: interviewerQuestionnaireAccessor,
-                interviewersPlainStorage: interviewerStorage,
-                interviewFactory: mockOfInterviewAccessor.Object
+                interviewsRemover: interviewsRemover.Object,
+                questionnairesAccessor: interviewerQuestionnaireAccessor,
+                interviewViewRepository: interviewViewRepository
             );
 
-            var progressInfo = new Mock<IProgress<SyncProgressInfo>>();
-            progressInfo.Setup(pi => pi.Report(It.IsAny<SyncProgressInfo>()))
-                .Callback<SyncProgressInfo>(spi => totalDeletedInterviewsCount = spi.Statistics.TotalDeletedInterviewsCount);
+            await synchronizationStep.ExecuteAsync();
 
-            await viewModel.SynchronizeAsync(progressInfo.Object, CancellationToken.None);
-
-            mockOfInterviewAccessor.Verify(_ => _.RemoveInterview(interviewId), Times.Once);
-            Assert.That(totalDeletedInterviewsCount, Is.EqualTo(1));
+            interviewsRemover.Verify(x => x.RemoveInterviews(It.IsAny<SynchronizationStatistics>(), It.IsAny<IProgress<SyncProgressInfo>>(), interviewId));
         }
     }
 }
