@@ -810,4 +810,7 @@
   <data name="DashboardItem_RejectedByHqOn" xml:space="preserve">
     <value>Отклонено хедквотером {0}</value>
   </data>
+  <data name="DashboardItem_ApprovedBySupervisor" xml:space="preserve">
+    <value>Утверждено супервизором {0}</value>
+  </data>
 </root>
