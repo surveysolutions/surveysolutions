@@ -46,6 +46,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.settings = settings;
         }
 
+        public async Task<bool> IsInterviewExists(Guid interviewId, DuplicatePackageCheck duplicatePackageCheck, CancellationToken cancellationToken)
+        {
+            var result = await this.syncClient.SendAsync<CheckInterviewForDuplicateRequest, CheckInterviewForDuplicateResponse>(new CheckInterviewForDuplicateRequest
+            {
+                InterviewId = interviewId,
+                Check = duplicatePackageCheck
+            }, cancellationToken);
+
+            return result.IsDuplicated;
+        }
+
         public Task UploadInterviewAsync(Guid interviewId, InterviewPackageApiView completedInterview,
             IProgress<TransferProgress> transferProgress, CancellationToken token)
         {

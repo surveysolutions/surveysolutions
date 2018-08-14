@@ -346,5 +346,36 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             //Assert
             mockOfBrokenPackagesStorage.Verify(x => x.Store(It.IsAny<BrokenInterviewPackageView>()), Times.Never);
         }
+
+        [Test]
+        public async Task should_detect_duplicate_packages()
+        {
+            (DateTime first, DateTime last) timestamps = (DateTime.Now, DateTime.UtcNow);
+             
+            var recievedPackagesLog = new InMemoryPlainStorage<SuperivsorReceivedPackageLogEntry, int>();
+            recievedPackagesLog.Store(new SuperivsorReceivedPackageLogEntry
+            {
+                FirstEventId = Id.gA,
+                LastEventId = Id.gF,
+                FirstEventTimestamp = timestamps.first,
+                LastEventTimestamp = timestamps.last
+            });
+
+            var handler = Create.Service.SupervisorInterviewsHandler(receivedPackagesLog: recievedPackagesLog);
+
+            var response = await handler.CheckForDuplicate(new CheckInterviewForDuplicateRequest
+            {
+                InterviewId = Id.g1,
+                Check = new DuplicatePackageCheck
+                {
+                    FirstEventId = Id.gA,
+                    LastEventId = Id.gF,
+                    FirstEventTimeStamp = timestamps.first,
+                    LastEventTimeStamp = timestamps.last
+                }
+            });
+
+            Assert.That(response.IsDuplicated, Is.EqualTo(true));
+        }
     }
 }

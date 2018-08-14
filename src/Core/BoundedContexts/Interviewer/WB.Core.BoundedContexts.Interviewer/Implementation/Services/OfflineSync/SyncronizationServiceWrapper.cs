@@ -130,6 +130,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return Service.GetInterviewDetailsAsync(interviewId, transferProgress, token);
         }
 
+        public Task<bool> IsInterviewExists(Guid interviewId, DuplicatePackageCheck duplicatePackageCheck, CancellationToken cancellationToken)
+        {
+            return Service.IsInterviewExists(interviewId, duplicatePackageCheck, cancellationToken);
+        }
+
         public Task UploadInterviewAsync(Guid interviewId, InterviewPackageApiView completedInterview,
             IProgress<TransferProgress> transferProgress, CancellationToken token)
         {

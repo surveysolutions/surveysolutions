@@ -88,6 +88,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Check for duplicated interview. Interview: &lt;pre&gt;{0}&lt;/pre&gt;.
+        /// </summary>
+        public static string CheckIsPackageDuplicatedFormat {
+            get {
+                return ResourceManager.GetString("CheckIsPackageDuplicatedFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Check for obsolete interviews. Request: &lt;pre&gt;{0}&lt;/pre&gt;.
         /// </summary>
         public static string CheckObsoleteInterviews {

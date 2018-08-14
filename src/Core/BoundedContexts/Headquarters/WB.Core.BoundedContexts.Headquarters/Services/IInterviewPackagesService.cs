@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using WB.Core.BoundedContexts.Headquarters.Views;
+using WB.Core.SharedKernels.DataCollection.WebApi;
 
 namespace WB.Core.BoundedContexts.Headquarters.Services
 {
@@ -12,6 +13,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
         void ProcessPackage(string packageId);
         void ProcessPackage(InterviewPackage interview);
         bool HasPendingPackageByInterview(Guid interviewId);
+        bool IsPackageDuplicated(DuplicatePackageCheck duplicatePackageCheck);
 
         IReadOnlyCollection<string> GetAllPackagesInterviewIds();
     }
