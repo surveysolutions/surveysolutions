@@ -152,6 +152,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                         this.Identity));
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
 
+                foreach (var option in this.Options.Where(option => option.Selected).ToList())
+                {
+                    option.Selected = false;
+                }
+
                 this.previousOptionToReset = null;
             }
             catch (InterviewException exception)
