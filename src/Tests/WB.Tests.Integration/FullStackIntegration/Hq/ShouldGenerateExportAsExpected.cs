@@ -235,12 +235,20 @@ namespace WB.Tests.Integration.FullStackIntegration.Hq
                 "Number of files and file names in export should be not changed");
             foreach (var expectedFile in expectedFiles)
             {
-                var expectedContent = File.ReadAllText(expectedFile);
                 var expectedFileName = Path.GetFileName(expectedFile);
-                var actualContent = File.ReadAllText(actualFiles.Single(x => Path.GetFileName(x) == expectedFileName));
+                if (expectedFileName == "export__readme.txt")
+                {
+                    var expectedContent = File.ReadAllLines(expectedFile).Skip(1);
+                    var actualContent = File.ReadAllLines(actualFiles.Single(x => Path.GetFileName(x) == expectedFileName)).Skip(1); // first line contains version info and is always changing
 
-                Assert.That(actualContent, Is.EqualTo(expectedContent),
-                    $"Mismatch found in file {expectedFileName}");
+                    Assert.That(expectedContent, Is.EquivalentTo(actualContent), $"Mismatch found in file {expectedFileName}");
+                }
+                else
+                {
+                    var expectedContent = File.ReadAllText(expectedFile);
+                    var actualContent = File.ReadAllText(actualFiles.Single(x => Path.GetFileName(x) == expectedFileName));
+                    Assert.That(actualContent, Is.EqualTo(expectedContent), $"Mismatch found in file {expectedFileName}");
+                }
             }
         }
 
@@ -304,14 +312,12 @@ namespace WB.Tests.Integration.FullStackIntegration.Hq
                 new FileStorageModule(tempFolder),
                 new OwinSecurityModule());
 
+            oldServiceLocator = ServiceLocator.Current;
+
             ServiceLocator.SetLocatorProvider(() => new NativeNinjectServiceLocatorAdapter(kernel.Kernel));
             kernel.Kernel.Bind<IServiceLocator>().ToConstant(ServiceLocator.Current);
 
             kernel.InitModules(new UnderConstructionInfo()).Wait();
-
-            oldServiceLocator = ServiceLocator.Current;
-            ServiceLocator.SetLocatorProvider(() =>
-                new NativeNinjectServiceLocatorAdapter(kernel.Kernel)); 
         }
 
         private async Task<Mock<IRestService>> SetupMockOfDesigner()
@@ -370,7 +376,6 @@ namespace WB.Tests.Integration.FullStackIntegration.Hq
                     Content = File.ReadAllText(Path.Combine(questionnaireContentFolder, @"Lookup Tables\c0e4d24d5e62df4d2fc92e2f78889277.txt")),
                     FileName = "c0e4d24d5e62df4d2fc92e2f78889277.txt"
                 });
-
 
             return restService;
         }
