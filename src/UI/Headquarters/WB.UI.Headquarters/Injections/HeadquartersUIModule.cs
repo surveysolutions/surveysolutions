@@ -70,10 +70,6 @@ namespace WB.UI.Headquarters.Injections
                 new ConstructorArgument("restServicePointManager", _ => null),
                 new ConstructorArgument("httpStatistican", _ => _.Resolve<IHttpStatistician>()));
 
-            registry.Bind<IExportSettings, ExportSettings>();
-
-            registry.Bind<IArchiveUtils, IProtectedArchiveUtils, ZipArchiveUtils>();
-
             registry.BindHttpFilter<UnderConstructionHttpFilter>(System.Web.Http.Filters.FilterScope.Global, 0);
             registry.BindMvcFilter<UnderConstructionMvcFilter>(FilterScope.First, 0);
             registry.BindMvcFilterWhenActionMethodHasNoAttribute<TransactionFilter, NoTransactionAttribute>(FilterScope.First, 0);

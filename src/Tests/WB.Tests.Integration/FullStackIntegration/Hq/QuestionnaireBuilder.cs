@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.IO;
+using System.Linq;
 using System.Net;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
@@ -15,16 +18,23 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableServic
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
+using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
+using WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers.Implementation;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
 using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Storage;
 using WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -39,6 +49,7 @@ using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Enumerator.Native.Questionnaire;
 using WB.Enumerator.Native.WebInterview;
@@ -55,7 +66,9 @@ using WB.Tests.Integration.PostgreSQLTests;
 using WB.UI.Headquarters.Injections;
 using WB.UI.Headquarters.Migrations.PlainStore;
 using WB.UI.Headquarters.Migrations.ReadSide;
+using WB.UI.Headquarters.Migrations.Users;
 using WB.UI.Shared.Web.Configuration;
+using WB.UI.Shared.Web.MembershipProvider.Accounts;
 using WB.UI.Shared.Web.Modules;
 using WB.UI.Shared.Web.Versions;
 
@@ -68,6 +81,7 @@ namespace WB.Tests.Integration.FullStackIntegration.Hq
         private string questionnaireContentFolder;
         private string exportFolder;
         private Assembly testAssembly;
+        private readonly Guid questionanireId = Guid.Parse("6158dd074d64498f8a50e5e9828fda23");
 
         [OneTimeSetUp]
         public void Setup()
@@ -128,7 +142,9 @@ namespace WB.Tests.Integration.FullStackIntegration.Hq
                     SchemaName = "events"
                 }, 
                 new DbUpgradeSettings(typeof(M001_AddEventSequenceIndex).Assembly, typeof(M001_AddEventSequenceIndex).Namespace));
-
+            
+            Database.SetInitializer(new FluentMigratorInitializer<HQIdentityDbContext>("users", DbUpgradeSettings.FromFirstMigration<M001_AddUsersHqIdentityModel>()));
+                
             kernel.Load(
                 new NLogLoggingModule(),
                 new InfrastructureModule(),
@@ -137,13 +153,14 @@ namespace WB.Tests.Integration.FullStackIntegration.Hq
                 new NcqrsModule(),
                 new ProductVersionModule(typeof(HeadquartersUIModule).Assembly),
                 new TestModule(),
-                new QuartzModule(),
                 eventStoreModule,
                 plainStorageModule,
-                new OwinSecurityModule(ConnectionStringBuilder.ConnectionString),
                 new PostgresKeyValueModule(new ReadSideCacheSettings(50, 30)),
                 pgReadSideModule,
-                hqBoundedContext);
+                hqBoundedContext,
+                new QuartzModule(),
+                new FileStorageModule(tempFolder),
+                new OwinSecurityModule());
 
             ServiceLocator.SetLocatorProvider(() => new NativeNinjectServiceLocatorAdapter(kernel.Kernel));
             kernel.Kernel.Bind<IServiceLocator>().ToConstant(ServiceLocator.Current);
@@ -163,14 +180,17 @@ namespace WB.Tests.Integration.FullStackIntegration.Hq
             public void Load(IIocRegistry registry)
             {
                 registry.BindAsSingleton<IEventSourcedAggregateRootRepository, IAggregateRootCacheCleaner, EventSourcedAggregateRootRepositoryWithExtendedCache>();
-                registry.BindToMethod<IWebInterviewNotificationService>(() => Mock.Of<IWebInterviewNotificationService>());
+                registry.BindToMethod(() => Mock.Of<IWebInterviewNotificationService>());
 
                 var eventBusConfigSection = new EventBusConfigSection();
                 registry.BindAsSingletonWithConstructorArgument<ILiteEventBus, NcqrCompatibleEventDispatcher>(
                     "eventBusSettings",
                      eventBusConfigSection.GetSettings());
 
-                registry.Bind<IUserStore<HqUser, Guid>, HqUserStore>();
+                registry.BindToConstant<IPasswordPolicy>(() => new PasswordPolicy
+                {
+                    PasswordStrengthRegularExpression = ".*"
+                });
             }
         }
 
@@ -179,49 +199,38 @@ namespace WB.Tests.Integration.FullStackIntegration.Hq
         {
             await ImportQuestionnaire();
             await CreateUsers();
+            await RunSynchronization();
+            RunExport();
 
+        }
 
+        private void RunExport()
+        {
+            var questionnaireIdentity = new QuestionnaireIdentity(questionanireId, 1);
+
+            var tabularFormatDataExportHandler = ServiceLocator.Current.GetInstance<TabularFormatDataExportHandler>();
+
+            var plainTransaction = ServiceLocator.Current.GetInstance<IPlainTransactionManager>();
+            plainTransaction.ExecuteInPlainTransaction(() =>
+                tabularFormatDataExportHandler.ExportData(new DataExportProcessDetails(DataExportFormat.Tabular,
+                    questionnaireIdentity,
+                    "Enumerator Questions Automation")));
+        }
+
+        private async Task RunSynchronization()
+        {
             var packagesService = ServiceLocator.Current.GetInstance<IInterviewPackagesService>();
 
             string interview;
-            using (var streamReader =
-                new StreamReader(
-                    testAssembly.GetManifestResourceStream(
-                        "WB.Tests.Integration.FullStackIntegration.Hq.syncPackage.json")))
+            using (var streamReader = new StreamReader(testAssembly.GetManifestResourceStream("WB.Tests.Integration.FullStackIntegration.Hq.syncPackage.json")))
             {
-                interview = streamReader.ReadToEnd();
+                interview = await streamReader.ReadToEndAsync();
             }
 
             var interviewPackage = ServiceLocator.Current.GetInstance<ISerializer>().Deserialize<InterviewPackage>(interview);
 
-            var transactionManager = ServiceLocator.Current.GetInstance<ITransactionManager>();
-            var plainTransactionManager = ServiceLocator.Current.GetInstance<IPlainTransactionManager>();
-
-            plainTransactionManager.BeginTransaction();
-            transactionManager.BeginCommandTransaction();
-
-            packagesService.ProcessPackage(interviewPackage);
-
-            transactionManager.CommitCommandTransaction();
-            plainTransactionManager.CommitTransaction();
-            //var lookupTables = new InMemoryPlainStorageAccessor<LookupTableContent>();
-            //lookupTables.
-
-            //var lookupTableService = new LookupTableService(lookupTables, new InMemoryPlainStorageAccessor<QuestionnaireDocument>());
-
-
-            //QuestionnaireExpressionProcessorGenerator expressionProcessorGenerator =
-            //    new QuestionnaireExpressionProcessorGenerator(new RoslynCompiler(), IntegrationCreate.CodeGenerator(),
-            //        new CodeGeneratorV2(new CodeGenerationModelsFactory(new MacrosSubstitutionService(), lookupTableService, new QuestionTypeToCSharpTypeMapper())),
-            //        new DynamicCompilerSettingsProvider(compilerSettings, fileSystemAccessor));
-
-            //NewtonJsonSerializer serializer = new NewtonJsonSerializer();
-            //var version = IntegrationCreate.DesignerEngineVersionService().LatestSupportedVersion;
-
-            //GenerationResult generationResult = expressionProcessorGenerator.GenerateProcessorStateAssembly(
-            //    questionnaire,
-            //    version,
-            //    out resultAssembly);
+            var plainTransaction = ServiceLocator.Current.GetInstance<IPlainTransactionManager>();
+            plainTransaction.ExecuteInPlainTransaction(() => { packagesService.ProcessPackage(interviewPackage); });
         }
 
         private async Task CreateUsers()
