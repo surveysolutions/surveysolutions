@@ -151,11 +151,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             try
             {
+                timer.Change(Timeout.Infinite, Timeout.Infinite);
                 await this.Answering.SendRemoveAnswerCommandAsync(
                     new RemoveAnswerCommand(this.interviewId,
                         this.userId,
                         this.Identity));
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
+
+                foreach (var option in this.Options.Where(option => option.Selected).ToList())
+                {
+                    option.Selected = false;
+                }
+
                 this.previousOptionToReset = null;
             }
             catch (InterviewException exception)
