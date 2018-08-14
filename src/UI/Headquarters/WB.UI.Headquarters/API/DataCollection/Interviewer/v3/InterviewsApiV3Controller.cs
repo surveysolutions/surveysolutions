@@ -26,7 +26,18 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v3
     [ApiBasicAuth(new[] { UserRoles.Interviewer })]
     public class InterviewsApiV3Controller : InterviewerInterviewsControllerBase
     {
-        public InterviewsApiV3Controller(IImageFileStorage imageFileStorage, IAudioFileStorage audioFileStorage, IAuthorizedUser authorizedUser, IInterviewInformationFactory interviewsFactory, IInterviewPackagesService packagesService, ICommandService commandService, IMetaInfoBuilder metaBuilder, IJsonAllTypesSerializer synchronizationSerializer, IHeadquartersEventStore eventStore) : base(imageFileStorage, audioFileStorage, authorizedUser, interviewsFactory, packagesService, commandService, metaBuilder, synchronizationSerializer, eventStore)
+        public InterviewsApiV3Controller(IImageFileStorage imageFileStorage,
+            IAudioFileStorage audioFileStorage,
+            IAuthorizedUser authorizedUser,
+            IInterviewInformationFactory interviewsFactory,
+            IInterviewPackagesService packagesService,
+            ICommandService commandService,
+            IMetaInfoBuilder metaBuilder,
+            IJsonAllTypesSerializer synchronizationSerializer,
+            IHeadquartersEventStore eventStore) :
+            base(imageFileStorage,
+                audioFileStorage, authorizedUser, interviewsFactory, packagesService, commandService, metaBuilder,
+                synchronizationSerializer, eventStore)
         {
         }
 
@@ -58,7 +69,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v3
                     obsoletePackageCheck.InterviewId, EventsThatChangeAnswersStateProvider.GetTypeNames()))
                 {
                     obsoleteInterviews.Add(obsoletePackageCheck.InterviewId);
-                } 
+                }
             }
 
             return Request.CreateResponse(HttpStatusCode.OK, obsoleteInterviews);
@@ -68,5 +79,11 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v3
         public override void PostImage(PostFileRequest request) => base.PostImage(request);
         [HttpPost]
         public override void PostAudio(PostFileRequest request) => base.PostAudio(request);
+
+        [WriteToSyncLog(SynchronizationLogType.CheckIsPackageDuplicated)]
+        public bool PostDuplicateCheck(Guid id, [FromBody] DuplicatePackageCheck duplicatePackageCheck)
+        {
+            return this.packagesService.IsPackageDuplicated(duplicatePackageCheck);
+        }
     }
 }

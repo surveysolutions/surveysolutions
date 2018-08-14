@@ -245,5 +245,8 @@
   </data>
   <data name="CheckObsoleteInterviews" xml:space="preserve">
     <value>Check for obsolete interviews. Request: &lt;pre&gt;{0}&lt;/pre&gt;</value>
+  </data>  
+  <data name="CheckIsPackageDuplicatedFormat" xml:space="preserve">
+    <value>Check for duplicated interview. Interview: &lt;pre&gt;{0}&lt;/pre&gt;</value>
   </data>
 </root>

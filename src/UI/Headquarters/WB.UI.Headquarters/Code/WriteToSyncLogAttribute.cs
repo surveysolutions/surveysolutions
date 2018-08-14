@@ -222,6 +222,11 @@ namespace WB.UI.Headquarters.Code
                         var request = context.GetActionArgumentOrDefault("knownPackages", new List<ObsoletePackageCheck>());
                         logItem.Log = string.Format(SyncLogMessages.CheckObsoleteInterviews, JsonConvert.SerializeObject(request, Formatting.Indented));
                         break;
+                    case SynchronizationLogType.CheckIsPackageDuplicated:
+                        var duplicatedPackageCheckId = context.GetActionArgumentOrDefault<Guid>("id", Guid.Empty);
+                        logItem.Log = SyncLogMessages.CheckIsPackageDuplicatedFormat.FormatString(duplicatedPackageCheckId.ToString());
+                        logItem.InterviewId = duplicatedPackageCheckId;
+                        break;
                     default:
                         throw new ArgumentException("logAction");
                 }

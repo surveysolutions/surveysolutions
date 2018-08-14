@@ -30,6 +30,8 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer
                 c => c.Action<InterviewsApiV3Controller>(x => x.PostImage(Param.Any<PostFileRequest>())));
             config.TypedRoute("api/interviewer/v3/interviews/{id:guid}/audio",
                 c => c.Action<InterviewsApiV3Controller>(x => x.PostAudio(Param.Any<PostFileRequest>())));
+            config.TypedRoute("api/interviewer/v3/interviews/{id:guid}/isInterviewExists",
+                c => c.Action<InterviewsApiV3Controller>(x => x.PostDuplicateCheck(Param.Any<Guid>(), Param.Any<DuplicatePackageCheck>())));
         }
 
 #pragma warning restore 4014
