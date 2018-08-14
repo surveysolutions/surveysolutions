@@ -912,6 +912,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to An error occurred while scanning.
+        /// </summary>
+        public static string FinishInstallation_QrBarcodeReaderErrorMessage {
+            get {
+                return ResourceManager.GetString("FinishInstallation_QrBarcodeReaderErrorMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No internet access to your server. Check server address and(or) network settings.
         /// </summary>
         public static string HostUnreachable {

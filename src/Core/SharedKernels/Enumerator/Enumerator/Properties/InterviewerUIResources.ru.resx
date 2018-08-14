@@ -813,4 +813,7 @@
   <data name="DashboardItem_ApprovedBySupervisor" xml:space="preserve">
     <value>Утверждено супервизором {0}</value>
   </data>
+  <data name="FinishInstallation_QrBarcodeReaderErrorMessage" xml:space="preserve">
+    <value>Ошибка сканирования</value>
+  </data>
 </root>
