@@ -336,6 +336,28 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             }
         }
 
+        public Task<bool> IsInterviewExists(Guid interviewId, DuplicatePackageCheck duplicatePackageCheck, CancellationToken cancellationToken)
+        {
+            try
+            {
+                return this.TryGetRestResponseOrThrowAsync(
+                    () => this.restService.PostAsync<bool>(
+                        url: string.Concat(this.InterviewsController,"/", interviewId, "/isInterviewExists"),
+                        credentials: this.restCredentials, 
+                        token: cancellationToken,
+                        request: duplicatePackageCheck));
+            }
+            catch (SynchronizationException exception)
+            {
+                var httpStatusCode = (exception.InnerException as RestException)?.StatusCode;
+                if (httpStatusCode == HttpStatusCode.NotFound)
+                    return Task.FromResult<bool>(false);
+
+                this.logger.Error("Exception on download interview. ID:" + interviewId, exception);
+                throw;
+            }
+        }
+
         public Task UploadInterviewAsync(Guid interviewId, InterviewPackageApiView completedInterview, IProgress<TransferProgress> transferProgress, CancellationToken token)
         {
             return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(

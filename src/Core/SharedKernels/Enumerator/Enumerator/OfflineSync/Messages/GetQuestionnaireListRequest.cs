@@ -69,6 +69,18 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Messages
         public InterviewPackageApiView Interview { get; set; }
     }
 
+    public class CheckInterviewForDuplicateRequest : ICommunicationMessage
+    {
+        public Guid InterviewId { get; set; }
+        public DuplicatePackageCheck Check { get; set; }
+    }
+
+    public class CheckInterviewForDuplicateResponse : ICommunicationMessage
+    {
+        public Guid InterviewId { get; set; }
+        public bool IsDuplicated { get; set; }
+    }
+
     public class GetAssignmentRequest : ICommunicationMessage
     {
         public int Id { get; set; }

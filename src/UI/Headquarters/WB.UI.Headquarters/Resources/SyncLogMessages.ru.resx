@@ -251,6 +251,10 @@
   <data name="CheckObsoleteInterviews" xml:space="preserve">
     <value>Проверка устаревших интервью. Запрос: &lt;pre&gt;{0}&lt;/pre&gt;</value>
   </data>
+    <data name="CheckIsPackageDuplicatedFormat" xml:space="preserve">
+    <value>Проверка интервью на дубликат. Интервью: &lt;pre&gt;{0}&lt;/pre&gt;</value>
+    <comment>Проверка интервью на дубликат. Интервью: &lt;pre&gt;{0}&lt;/pre&gt;</comment>
+  </data>
     <data name="SupervisorPatchRequestedFormat" xml:space="preserve">
     <value>Запрошен патч для Supervisor приложения версии {0}</value>
     <comment>Запрошен патч для Supervisor приложения версии {0}</comment>

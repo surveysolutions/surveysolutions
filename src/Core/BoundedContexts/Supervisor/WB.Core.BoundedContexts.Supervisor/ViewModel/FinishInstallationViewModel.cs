@@ -46,7 +46,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         {
             await base.Initialize();
 #if DEBUG
-            this.Endpoint = "http://10.0.2.2/headquarters";
+            this.Endpoint = "http://192.168.88./headquarters";
             this.UserName = "sup";
             this.Password = "1";
 #endif

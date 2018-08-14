@@ -14,6 +14,15 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
         public int SequenceOfLastReceivedEvent { get; set; }
     }
 
+    public class DuplicatePackageCheck
+    {
+        public Guid FirstEventId { get; set; }
+        public Guid LastEventId { get; set; }
+
+        public DateTime FirstEventTimeStamp { get; set; }
+        public DateTime LastEventTimeStamp { get; set; }
+    }
+
     public class InterviewPackageApiView
     {
         public Guid InterviewId { get; set; }

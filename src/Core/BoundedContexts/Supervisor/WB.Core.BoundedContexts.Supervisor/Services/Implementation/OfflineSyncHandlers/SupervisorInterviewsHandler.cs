@@ -73,6 +73,22 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             requestHandler.RegisterHandler<GetInterviewDetailsRequest, GetInterviewDetailsResponse>(Handle);
             requestHandler.RegisterHandler<UploadInterviewRequest, OkResponse>(UploadInterview);
             requestHandler.RegisterHandler<SupervisorIdRequest, SupervisorIdResponse>(GetSupervisorId);
+            requestHandler.RegisterHandler<CheckInterviewForDuplicateRequest, CheckInterviewForDuplicateResponse>(CheckForDuplicate);
+        }
+
+        public Task<CheckInterviewForDuplicateResponse> CheckForDuplicate(CheckInterviewForDuplicateRequest arg)
+        {
+            var existingReceivedPackageLog = this.receivedPackagesLog.Where(
+                x => x.FirstEventId == arg.Check.FirstEventId &&
+                     x.FirstEventTimestamp == arg.Check.FirstEventTimeStamp &&
+                     x.LastEventId == arg.Check.LastEventId &&
+                     x.LastEventTimestamp == arg.Check.LastEventTimeStamp).Count;
+
+            return Task.FromResult(new CheckInterviewForDuplicateResponse
+            {
+                InterviewId = arg.InterviewId,
+                IsDuplicated = existingReceivedPackageLog > 0
+            });
         }
 
         public Task<OkResponse> UploadInterview(UploadInterviewRequest request)

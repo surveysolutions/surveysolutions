@@ -43,13 +43,19 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             
             Context.Statistics.TotalCompletedInterviewsCount = interviewsToUpload.Count;
             var transferProgress = Context.Progress.AsTransferReport();
+
             foreach (var completedInterview in interviewsToUpload)
             {
                 Context.CancellationToken.ThrowIfCancellationRequested();
                 try
                 {
-                    var interviewPackage = this.interviewFactory.GetInteviewEventsPackageOrNull(completedInterview.InterviewId);
+                    var duplicateCheck = this.interviewFactory.GetInterviewDuplicatePackageCheck(completedInterview.InterviewId);
 
+                    var isAlreadyUploaded = await this.synchronizationService.IsInterviewExists(completedInterview.InterviewId,
+                            duplicateCheck, Context.CancellationToken);
+
+                    var interviewPackage = this.interviewFactory.GetInteviewEventsPackageOrNull(completedInterview.InterviewId);
+                    
                     Context.Progress.Report(new SyncProgressInfo
                     {
                         Title = string.Format(InterviewerUIResources.Synchronization_Upload_Title_Format,
@@ -60,20 +66,28 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         Status = SynchronizationStatus.Upload
                     });
 
-                    await this.UploadImagesByCompletedInterviewAsync(completedInterview.InterviewId, Context.Progress, Context.CancellationToken);
-                    await this.UploadAudioByCompletedInterviewAsync(completedInterview.InterviewId, Context.Progress, Context.CancellationToken);
+                    await Task.WhenAll(
+                        this.UploadImagesByCompletedInterviewAsync(completedInterview.InterviewId, Context.Progress, Context.CancellationToken),
+                        this.UploadAudioByCompletedInterviewAsync(completedInterview.InterviewId, Context.Progress, Context.CancellationToken));
 
-                    if (interviewPackage != null)
+                    if (!isAlreadyUploaded)
                     {
-                        await this.synchronizationService.UploadInterviewAsync(
-                            completedInterview.InterviewId,
-                            interviewPackage,
-                            transferProgress,
-                            Context.CancellationToken);
+                        if (interviewPackage != null)
+                        {
+                            await this.synchronizationService.UploadInterviewAsync(
+                                completedInterview.InterviewId,
+                                interviewPackage,
+                                transferProgress,
+                                Context.CancellationToken);
+                        }
+                        else
+                        {
+                            this.logger.Warn($"Interview event stream is missing. No package was sent to server");
+                        }
                     }
                     else
                     {
-                        this.logger.Warn($"Interview event stream is missing. No package was sent to server");
+                        this.logger.Warn("Interview event stream is already uploaded");
                     }
 
                     this.interviewFactory.RemoveInterview(completedInterview.InterviewId);
