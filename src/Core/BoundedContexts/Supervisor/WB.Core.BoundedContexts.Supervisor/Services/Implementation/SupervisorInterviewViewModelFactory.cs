@@ -10,6 +10,7 @@ using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 using WB.Core.SharedKernels.Enumerator.Views;
+using WB.Core.SharedKernels.Enumerator.Views.Dashboard;
 
 namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
 {
@@ -29,6 +30,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
             SupervisorAssignmentDashboardItemViewModel result =
                 ServiceLocator.Current.GetInstance<SupervisorAssignmentDashboardItemViewModel>();
             result.Init(assignment);
+            return result;
+        }
+
+        public override IDashboardItem GetDashboardInterview(InterviewView interviewView, List<PrefilledQuestion> details)
+        {
+            var result = GetNew<SupervisorDashboardInterviewViewModel>();
+            result.Init(interviewView, details);
             return result;
         }
     }
