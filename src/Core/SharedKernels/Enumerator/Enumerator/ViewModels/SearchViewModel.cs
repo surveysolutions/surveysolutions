@@ -195,20 +195,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                     .Select(fi => new PrefilledQuestion { Answer = fi.Answer?.Trim(), Question = fi.QuestionText })
                     .ToList();
 
-                bool isMatched = interviewView.ResponsibleId == principal.CurrentUserIdentity.UserId
-                                 &&
-                                 (
-                                     Contains(interviewView.InterviewKey, searctText)
-                                     || Contains(interviewView.QuestionnaireTitle, searctText)
-                                     || Contains(interviewView.Assignment?.ToString(), searctText)
-                                     || Contains(interviewView.LastInterviewerOrSupervisorComment, searctText)
-                                     || details.Any(pi => Contains(pi.Answer, searctText))
-                                 );
+                bool isMatched = 
+                                 Contains(interviewView.InterviewKey, searctText)
+                                 || Contains(interviewView.QuestionnaireTitle, searctText)
+                                 || Contains(interviewView.Assignment?.ToString(), searctText)
+                                 || Contains(interviewView.LastInterviewerOrSupervisorComment, searctText)
+                                 || details.Any(pi => Contains(pi.Answer, searctText));
 
                 if (isMatched)
                 {
-                    var interviewDashboardItem = this.viewModelFactory.GetNew<InterviewDashboardItemViewModel>();
-                    interviewDashboardItem.Init(interviewView, details);
+                    var interviewDashboardItem = this.viewModelFactory.GetDashboardInterview(interviewView, details);
                     yield return interviewDashboardItem;
                 }
             }

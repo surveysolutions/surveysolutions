@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Core.SharedKernels.Enumerator.Views;
+using WB.Core.SharedKernels.Enumerator.Views.Dashboard;
 using GroupViewModel = WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups.GroupViewModel;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
@@ -271,5 +272,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         }
 
         public abstract IDashboardItem GetDashboardAssignment(AssignmentDocument assignment);
+
+        public virtual IDashboardItem GetDashboardInterview(InterviewView interviewView, List<PrefilledQuestion> details)
+        {
+            var result = GetNew<InterviewDashboardItemViewModel>();
+            result.Init(interviewView, details);
+            return result;
+        }
     }
 }
