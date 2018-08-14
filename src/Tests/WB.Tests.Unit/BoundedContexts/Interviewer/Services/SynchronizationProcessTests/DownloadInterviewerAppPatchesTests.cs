@@ -54,7 +54,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 x.GetFileSize(existingFile) == 1);
 
             var step = CreateDownloadInterviewerAppPatches(
-                supervisorSynchronization: mockOfSupervisorSynchronization.Object,
+                synchronizationService: mockOfSupervisorSynchronization.Object,
                 fileSystemAccessor: fileSystemAccessor);
             // act
             await step.ExecuteAsync();
@@ -81,7 +81,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 x.GetFileSize(zeroFileName) == 0);
 
             var step = CreateDownloadInterviewerAppPatches(
-                supervisorSynchronization: mockOfSupervisorSynchronization.Object,
+                synchronizationService: mockOfSupervisorSynchronization.Object,
                 fileSystemAccessor: fileSystemAccessor);
             // act
             await step.ExecuteAsync();
@@ -89,19 +89,41 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             mockOfSupervisorSynchronization.Verify(x => x.GetFileAsync(zeroFileName, It.IsAny<IProgress<TransferProgress>>(), It.IsAny<CancellationToken>()), Times.Once);
         }
 
+        [Test]
+        public async Task when_ExecuteAsync_should_get_latest_interviewer_app_version_from_server_and_save_it_to_local_settings()
+        {
+            // arrange
+            int? version = 12345;
+
+            var mockOfSupervisorSynchronization = new Mock<ISupervisorSynchronizationService>();
+            mockOfSupervisorSynchronization.Setup(x => x.GetLatestInterviewerAppVersionAsync(It.IsAny<CancellationToken>())).Returns(Task.FromResult(version));
+
+            var mockOfSupervisorSettings = new Mock<ISupervisorSettings>();
+
+            var step = CreateDownloadInterviewerAppPatches(
+                synchronizationService: mockOfSupervisorSynchronization.Object,
+                supervisorSettings: mockOfSupervisorSettings.Object);
+
+            // act
+            await step.ExecuteAsync();
+            // assert
+            mockOfSupervisorSynchronization.Verify(x => x.GetLatestInterviewerAppVersionAsync(It.IsAny<CancellationToken>()), Times.Once);
+            mockOfSupervisorSettings.Verify(x => x.SetLatestInterviewerAppVersion(version), Times.Once);
+        }
+
         private static DownloadInterviewerAppPatches CreateDownloadInterviewerAppPatches(
-            ISynchronizationService synchronizationService = null,
+            ISupervisorSynchronizationService synchronizationService = null,
             ILogger logger = null,
-            ISupervisorSynchronizationService supervisorSynchronization = null,
             IFileSystemAccessor fileSystemAccessor = null,
-            IPermissionsService permissions = null)
+            IPermissionsService permissions = null,
+            ISupervisorSettings supervisorSettings = null)
         {
             return new DownloadInterviewerAppPatches(0,
-                synchronizationService: synchronizationService ?? Mock.Of<ISynchronizationService>(),
                 logger: logger ?? Mock.Of<ILogger>(),
-                supervisorSynchronization: supervisorSynchronization ?? Mock.Of<ISupervisorSynchronizationService>(),
+                synchronizationService: synchronizationService ?? Mock.Of<ISupervisorSynchronizationService>(),
                 fileSystemAccessor: fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
-                permissions: permissions ?? Mock.Of<IPermissionsService>())
+                permissions: permissions ?? Mock.Of<IPermissionsService>(), 
+                supervisorSettings: supervisorSettings ?? Mock.Of<ISupervisorSettings>())
             {
                 Context = Create.Entity.EnumeratorSynchonizationContext()
             };
