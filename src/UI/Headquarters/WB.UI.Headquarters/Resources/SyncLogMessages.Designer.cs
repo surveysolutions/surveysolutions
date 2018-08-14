@@ -421,6 +421,24 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to New Supervisor application file requested.
+        /// </summary>
+        public static string SupervisorApkRequested {
+            get {
+                return ResourceManager.GetString("SupervisorApkRequested", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Supervisor patch file requested for version {0}.
+        /// </summary>
+        public static string SupervisorPatchRequestedFormat {
+            get {
+                return ResourceManager.GetString("SupervisorPatchRequestedFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;li&gt;Update interview: &lt;a href=&quot;{3}&quot;&gt;{0}&lt;/a&gt;, Package: {1}, Sort index: {2}&lt;/li&gt;.
         /// </summary>
         public static string UpdateInterviewPackage {
