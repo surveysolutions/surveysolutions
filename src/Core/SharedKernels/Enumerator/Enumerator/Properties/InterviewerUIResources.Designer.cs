@@ -435,6 +435,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Approved by Supervisor at {0}.
+        /// </summary>
+        public static string DashboardItem_ApprovedBySupervisor {
+            get {
+                return ResourceManager.GetString("DashboardItem_ApprovedBySupervisor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Assigned on {0}.
         /// </summary>
         public static string DashboardItem_AssignedOn {
