@@ -5,24 +5,17 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Reflection;
-using System.Threading;
 using System.Threading.Tasks;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
-using Microsoft.AspNet.Identity;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
-using WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService;
-using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers.Implementation;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.QuartzIntegration;
@@ -42,6 +35,7 @@ using WB.Core.Infrastructure;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus.Lite;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Modularity;
@@ -60,7 +54,6 @@ using WB.Infrastructure.Native.Logging;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation.Migrations;
-using WB.Infrastructure.Native.Threading;
 using WB.Tests.Abc;
 using WB.Tests.Integration.PostgreSQLTests;
 using WB.UI.Headquarters.Injections;
@@ -82,18 +75,26 @@ namespace WB.Tests.Integration.FullStackIntegration.Hq
         private string exportFolder;
         private Assembly testAssembly;
         private readonly Guid questionanireId = Guid.Parse("6158dd074d64498f8a50e5e9828fda23");
+        private string actualExportFolder;
+        private string expectedExportFolder;
+
+        private const string resourcesNamespace = "WB.Tests.Integration.FullStackIntegration.Hq";
 
         [OneTimeSetUp]
         public void Setup()
         {
             tempFolder = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString("N"));
             exportFolder = Path.Combine(tempFolder, "Export");
+            actualExportFolder = Path.Combine(tempFolder, @"Actual");
+            expectedExportFolder = Path.Combine(tempFolder, @"Expected");
+            Directory.CreateDirectory(actualExportFolder);
+            Directory.CreateDirectory(expectedExportFolder);
 
             Directory.CreateDirectory(tempFolder);
             testAssembly = Assembly.GetAssembly(typeof(QuestionnaireBuilder));
             var zipPath = Path.Combine(tempFolder, "quuestionnaire.zip");
 
-            using (var stream = testAssembly.GetManifestResourceStream("WB.Tests.Integration.FullStackIntegration.Hq.Enumerator Questions Automation.zip"))
+            using (var stream = testAssembly.GetManifestResourceStream($"{resourcesNamespace}.Enumerator Questions Automation.zip"))
             {
                 using (var outputStream = File.Create(zipPath))
                 {
@@ -104,9 +105,146 @@ namespace WB.Tests.Integration.FullStackIntegration.Hq
             ZipArchiveUtils zipUtil = new ZipArchiveUtils();
             zipUtil.Unzip(zipPath, tempFolder, true);
 
-            questionnaireContentFolder = Path.Combine(tempFolder,
-                "Enumerator Questions Automation (6158dd074d64498f8a50e5e9828fda23)");
+            questionnaireContentFolder = Path.Combine(tempFolder, "Enumerator Questions Automation (6158dd074d64498f8a50e5e9828fda23)");
 
+            ConfigureIoc();
+        }
+
+        [Test]
+        public async Task QuestionnairePackageComposer()
+        {
+            await ImportQuestionnaire();
+            await CreateUsers();
+            await RunSynchronization();
+            RunExport();
+            await PrepareActualAndExpectedExportData();
+            CompareProducedExportWithExpected();
+        }
+
+        private async Task ImportQuestionnaire()
+        {
+            var restService = await SetupMockOfDesigner();
+
+            var authorizedUser = Mock.Of<IAuthorizedUser>();
+
+            var transactionManager = ServiceLocator.Current.GetInstance<ITransactionManager>();
+            var plainTransactionManager = ServiceLocator.Current.GetInstance<IPlainTransactionManager>();
+
+            plainTransactionManager.BeginTransaction();
+            transactionManager.BeginCommandTransaction();
+            var importService = new QuestionnaireImportService(
+                ServiceLocator.Current.GetInstance<ISupportedVersionProvider>(),
+                restService.Object,
+                ServiceLocator.Current.GetInstance<IStringCompressor>(),
+                ServiceLocator.Current.GetInstance<IAttachmentContentService>(),
+                ServiceLocator.Current.GetInstance<IQuestionnaireVersionProvider>(),
+                ServiceLocator.Current.GetInstance<ITranslationManagementService>(),
+                ServiceLocator.Current.GetInstance<IPlainKeyValueStorage<QuestionnaireLookupTable>>(),
+                ServiceLocator.Current.GetInstance<ICommandService>(),
+                Mock.Of<ILogger>(),
+                ServiceLocator.Current.GetInstance<IAuditLog>(),
+                authorizedUser,
+                Mock.Of<DesignerUserCredentials>(x => x.Get() == new RestCredentials())
+            );
+
+            await importService.Import(questionanireId, "name", false);
+
+            transactionManager.CommitCommandTransaction();
+            plainTransactionManager.CommitTransaction();
+        }
+
+        private async Task CreateUsers()
+        {
+            using (var userManager = ServiceLocator.Current.GetInstance<HqUserManager>())
+            {
+                var supervisorId = Guid.Parse("437af4c9-c60e-44c5-b527-ae8f39fcee1a");
+                await userManager.CreateUserAsync(new HqUser
+                {
+                    Id = supervisorId,
+                    UserName = "sup"
+                }, "1", UserRoles.Supervisor);
+
+                await userManager.CreateUserAsync(new HqUser
+                {
+                    Id = Guid.Parse("35e19d19-e927-484e-a950-1e9e88a64684"),
+                    UserName = "int",
+                    Profile = new HqUserProfile
+                    {
+                        SupervisorId = supervisorId
+                    }
+                }, "1", UserRoles.Interviewer);
+            }
+        }
+
+        private async Task RunSynchronization()
+        {
+            var packagesService = ServiceLocator.Current.GetInstance<IInterviewPackagesService>();
+
+            string interview;
+            var manifestResourceStream = testAssembly.GetManifestResourceStream($"{resourcesNamespace}.syncPackage.json");
+            using (var streamReader = new StreamReader(manifestResourceStream))
+            {
+                interview = await streamReader.ReadToEndAsync();
+            }
+
+            var interviewPackage = ServiceLocator.Current.GetInstance<ISerializer>().Deserialize<InterviewPackage>(interview);
+
+            var plainTransaction = ServiceLocator.Current.GetInstance<IPlainTransactionManager>();
+            plainTransaction.ExecuteInPlainTransaction(() => { packagesService.ProcessPackage(interviewPackage); });
+        }
+
+        private void RunExport()
+        {
+            var questionnaireIdentity = new QuestionnaireIdentity(questionanireId, 1);
+
+            var tabularFormatDataExportHandler = ServiceLocator.Current.GetInstance<TabularFormatDataExportHandler>();
+
+            var plainTransaction = ServiceLocator.Current.GetInstance<IPlainTransactionManager>();
+            plainTransaction.ExecuteInPlainTransaction(() =>
+                tabularFormatDataExportHandler.ExportData(new DataExportProcessDetails(DataExportFormat.Tabular,
+                    questionnaireIdentity,
+                    "Enumerator Questions Automation")));
+        }
+
+        private async Task PrepareActualAndExpectedExportData()
+        {
+            var archiveUtils = ServiceLocator.Current.GetInstance<IArchiveUtils>();
+            var generatedExportFilePath = Path.Combine(tempFolder, @"Export\ExportedData\auto_1_Tabular_All.zip");
+            archiveUtils.Unzip(generatedExportFilePath, actualExportFolder);
+
+            var expectedArchivePath = Path.Combine(tempFolder, @"Expected\archive.zip");
+            using (var expctedExportStream = testAssembly.GetManifestResourceStream($"{resourcesNamespace}.expectedExport.zip"))
+            {
+                using (var expectedExportFileStream = File.Create(expectedArchivePath))
+                {
+                    await expctedExportStream.CopyToAsync(expectedExportFileStream);
+                }
+            }
+
+            archiveUtils.Unzip(expectedArchivePath, expectedExportFolder);
+            File.Delete(expectedArchivePath);
+        }
+
+        private void CompareProducedExportWithExpected()
+        {
+            var expectedFiles = Directory.GetFiles(expectedExportFolder);
+            var actualFiles = Directory.GetFiles(actualExportFolder);
+
+            Assert.That(expectedFiles.Select(Path.GetFileName), Is.EquivalentTo(actualFiles.Select(Path.GetFileName)),
+                "Number of files and file names in export should be not changed");
+            foreach (var expectedFile in expectedFiles)
+            {
+                var expectedContent = File.ReadAllText(expectedFile);
+                var expectedFileName = Path.GetFileName(expectedFile);
+                var actualContent = File.ReadAllText(actualFiles.Single(x => Path.GetFileName(x) == expectedFileName));
+
+                Assert.That(actualContent, Is.EqualTo(expectedContent),
+                    $"Mismatch found in file {expectedFileName}");
+            }
+        }
+
+        private void ConfigureIoc()
+        {
             var kernel = new NinjectKernel();
 
             var pgReadSideModule = new PostgresReadSideModule(
@@ -127,24 +265,27 @@ namespace WB.Tests.Integration.FullStackIntegration.Hq
                     typeof(ProductVersionModule).Assembly,
                 }
             });
-            
-            var hqBoundedContext = new HeadquartersBoundedContextModule(tempFolder, new SyncPackagesProcessorBackgroundJobSetting(false, 0, 0, 1), 
-                Create.Entity.UserPreloadingSettings(), 
-                new ExportSettings(1), 
-                new InterviewDataExportSettings(exportFolder, false), 
+
+            var hqBoundedContext = new HeadquartersBoundedContextModule(tempFolder,
+                new SyncPackagesProcessorBackgroundJobSetting(false, 0, 0, 1),
+                Create.Entity.UserPreloadingSettings(),
+                new ExportSettings(1),
+                new InterviewDataExportSettings(exportFolder, false),
                 new SampleImportSettings(1),
-                new SyncSettings(), 
+                new SyncSettings(),
                 new TrackingSettings(TimeSpan.Zero));
 
             var eventStoreModule = new PostgresWriteSideModule(new PostgreConnectionSettings
                 {
                     ConnectionString = ConnectionStringBuilder.ConnectionString,
                     SchemaName = "events"
-                }, 
-                new DbUpgradeSettings(typeof(M001_AddEventSequenceIndex).Assembly, typeof(M001_AddEventSequenceIndex).Namespace));
-            
-            Database.SetInitializer(new FluentMigratorInitializer<HQIdentityDbContext>("users", DbUpgradeSettings.FromFirstMigration<M001_AddUsersHqIdentityModel>()));
-                
+                },
+                new DbUpgradeSettings(typeof(M001_AddEventSequenceIndex).Assembly,
+                    typeof(M001_AddEventSequenceIndex).Namespace));
+
+            Database.SetInitializer(new FluentMigratorInitializer<HQIdentityDbContext>("users",
+                DbUpgradeSettings.FromFirstMigration<M001_AddUsersHqIdentityModel>()));
+
             kernel.Load(
                 new NLogLoggingModule(),
                 new InfrastructureModule(),
@@ -167,130 +308,8 @@ namespace WB.Tests.Integration.FullStackIntegration.Hq
 
             kernel.InitModules(new UnderConstructionInfo()).Wait();
 
-            ServiceLocator.SetLocatorProvider(() => new NativeNinjectServiceLocatorAdapter(kernel.Kernel)); // TODO reset to previous
-        }
-
-        class TestModule : IModule
-        {
-            public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
-            {
-                return Task.CompletedTask;
-            }
-
-            public void Load(IIocRegistry registry)
-            {
-                registry.BindAsSingleton<IEventSourcedAggregateRootRepository, IAggregateRootCacheCleaner, EventSourcedAggregateRootRepositoryWithExtendedCache>();
-                registry.BindToMethod(() => Mock.Of<IWebInterviewNotificationService>());
-
-                var eventBusConfigSection = new EventBusConfigSection();
-                registry.BindAsSingletonWithConstructorArgument<ILiteEventBus, NcqrCompatibleEventDispatcher>(
-                    "eventBusSettings",
-                     eventBusConfigSection.GetSettings());
-
-                registry.BindToConstant<IPasswordPolicy>(() => new PasswordPolicy
-                {
-                    PasswordStrengthRegularExpression = ".*"
-                });
-            }
-        }
-
-        [Test]
-        public async Task QuestionnairePackageComposer()
-        {
-            await ImportQuestionnaire();
-            await CreateUsers();
-            await RunSynchronization();
-            RunExport();
-
-        }
-
-        private void RunExport()
-        {
-            var questionnaireIdentity = new QuestionnaireIdentity(questionanireId, 1);
-
-            var tabularFormatDataExportHandler = ServiceLocator.Current.GetInstance<TabularFormatDataExportHandler>();
-
-            var plainTransaction = ServiceLocator.Current.GetInstance<IPlainTransactionManager>();
-            plainTransaction.ExecuteInPlainTransaction(() =>
-                tabularFormatDataExportHandler.ExportData(new DataExportProcessDetails(DataExportFormat.Tabular,
-                    questionnaireIdentity,
-                    "Enumerator Questions Automation")));
-        }
-
-        private async Task RunSynchronization()
-        {
-            var packagesService = ServiceLocator.Current.GetInstance<IInterviewPackagesService>();
-
-            string interview;
-            using (var streamReader = new StreamReader(testAssembly.GetManifestResourceStream("WB.Tests.Integration.FullStackIntegration.Hq.syncPackage.json")))
-            {
-                interview = await streamReader.ReadToEndAsync();
-            }
-
-            var interviewPackage = ServiceLocator.Current.GetInstance<ISerializer>().Deserialize<InterviewPackage>(interview);
-
-            var plainTransaction = ServiceLocator.Current.GetInstance<IPlainTransactionManager>();
-            plainTransaction.ExecuteInPlainTransaction(() => { packagesService.ProcessPackage(interviewPackage); });
-        }
-
-        private async Task CreateUsers()
-        {
-            using (var userManager = ServiceLocator.Current.GetInstance<HqUserManager>())
-            {
-                var supervisorId = Guid.Parse("437af4c9-c60e-44c5-b527-ae8f39fcee1a");
-                await userManager.CreateUserAsync(new HqUser
-                {
-                    Id = supervisorId,
-                    UserName = "sup"
-                }, "1", UserRoles.Supervisor);
-
-                await userManager.CreateUserAsync(new HqUser
-                {
-                    Id = Guid.Parse("35e19d19-e927-484e-a950-1e9e88a64684"),
-                    UserName = "int",
-                    Profile = new HqUserProfile
-                        {
-                            SupervisorId = supervisorId
-                        }
-                }, "1", UserRoles.Interviewer);
-            }
-        }
-
-        private async Task ImportQuestionnaire()
-        {
-            var restService = await SetupMockOfDesigner();
-
-            var authorizedUser = Mock.Of<IAuthorizedUser>();
-
-            var questionnaireId = Guid.Parse("900c45084d9d4c63a54c8ae5f60d07e3");
-
-            ThreadMarkerManager.MarkCurrentThreadAsIsolated();
-
-            var transactionManager = ServiceLocator.Current.GetInstance<ITransactionManager>();
-            var plainTransactionManager = ServiceLocator.Current.GetInstance<IPlainTransactionManager>();
-
-            plainTransactionManager.BeginTransaction();
-            transactionManager.BeginCommandTransaction();
-            var importService = new QuestionnaireImportService(
-                ServiceLocator.Current.GetInstance<ISupportedVersionProvider>(),
-                restService.Object,
-                ServiceLocator.Current.GetInstance<IStringCompressor>(),
-                ServiceLocator.Current.GetInstance<IAttachmentContentService>(),
-                ServiceLocator.Current.GetInstance<IQuestionnaireVersionProvider>(),
-                ServiceLocator.Current.GetInstance<ITranslationManagementService>(),
-                ServiceLocator.Current.GetInstance<IPlainKeyValueStorage<QuestionnaireLookupTable>>(),
-                ServiceLocator.Current.GetInstance<ICommandService>(),
-                Mock.Of<ILogger>(),
-                ServiceLocator.Current.GetInstance<IAuditLog>(),
-                authorizedUser,
-                Mock.Of<DesignerUserCredentials>(x => x.Get() == new RestCredentials())
-            );
-
-            await importService.Import(questionnaireId, "name", false);
-
-            transactionManager.CommitCommandTransaction();
-            plainTransactionManager.CommitTransaction();
-            ThreadMarkerManager.ReleaseCurrentThreadFromIsolation();
+            ServiceLocator.SetLocatorProvider(() =>
+                new NativeNinjectServiceLocatorAdapter(kernel.Kernel)); // TODO reset to previous
         }
 
         private async Task<Mock<IRestService>> SetupMockOfDesigner()
@@ -358,7 +377,7 @@ namespace WB.Tests.Integration.FullStackIntegration.Hq
         {
             string compiledAssembly;
             using (var assemblyStream =
-                testAssembly.GetManifestResourceStream("WB.Tests.Integration.FullStackIntegration.Hq.assembly.dll"))
+                testAssembly.GetManifestResourceStream($"{resourcesNamespace}.assembly.dll"))
             {
                 using (var memoryStream = new MemoryStream())
                 {
@@ -372,6 +391,29 @@ namespace WB.Tests.Integration.FullStackIntegration.Hq
             return compiledAssembly;
         }
 
+        class TestModule : IModule
+        {
+            public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
+            {
+                return Task.CompletedTask;
+            }
+
+            public void Load(IIocRegistry registry)
+            {
+                registry.BindAsSingleton<IEventSourcedAggregateRootRepository, IAggregateRootCacheCleaner, EventSourcedAggregateRootRepositoryWithExtendedCache>();
+                registry.BindToMethod(Mock.Of<IWebInterviewNotificationService>);
+
+                var eventBusConfigSection = new EventBusConfigSection();
+                registry.BindAsSingletonWithConstructorArgument<ILiteEventBus, NcqrCompatibleEventDispatcher>(
+                    "eventBusSettings",
+                    eventBusConfigSection.GetSettings());
+
+                registry.BindToConstant<IPasswordPolicy>(() => new PasswordPolicy
+                {
+                    PasswordStrengthRegularExpression = ".*"
+                });
+            }
+        }
 
         [OneTimeTearDown]
         public void TearDown()
