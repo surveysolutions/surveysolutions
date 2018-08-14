@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Main.Core.Entities.Composite;
 using Moq;
+using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -15,7 +16,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
 {
     internal class when_toggling_answer : MultiOptionLinkedQuestionViewModelTestsContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [OneTimeSetUp] 
+        public void context () {
             questionId = Create.Entity.Identity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), Empty.RosterVector);
             Guid linkedToQuestionId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
             Guid userId = Guid.Parse("77777777777777777777777777777777");
@@ -40,16 +42,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
 
             questionViewModel = CreateViewModel(interviewRepository: interviews, questionnaireStorage: questionnaires, answering:answering.Object);
             questionViewModel.Init("interviewId", questionId, Create.Other.NavigationState());
-            BecauseOf();
-        }
 
-        public void BecauseOf() 
-        {
             questionViewModel.Options.First().Checked = true;
             questionViewModel.ToggleAnswerAsync(questionViewModel.Options.First()).WaitAndUnwrapException();
         }
 
-        [NUnit.Framework.Test] public void should_send_command_with_selected_roster_vectors () =>
+        [Test] 
+        public void should_send_command_with_selected_roster_vectors () =>
             answering.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.Is<AnswerMultipleOptionsLinkedQuestionCommand>(c =>
                 c.QuestionId == questionId.Id && c.SelectedRosterVectors.Any(pv => pv.Identical(questionViewModel.Options.First().Value)))));
 
