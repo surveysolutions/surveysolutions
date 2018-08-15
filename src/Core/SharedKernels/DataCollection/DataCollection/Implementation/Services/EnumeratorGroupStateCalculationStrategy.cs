@@ -1,10 +1,11 @@
 ﻿using System.Linq;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
-namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
+namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
 {
-    public class EnumeratorGroupStateCalculationStrategy : IGroupStateCalculationStrategy
+    public class EnumeratorGroupGroupStateCalculationStrategy : IEnumeratorGroupStateCalculationStrategy
     {
         public GroupStatus CalculateDetailedStatus(Identity groupIdentity, IStatefulInterview interview)
         {
