@@ -13,7 +13,7 @@ namespace WB.Tests.Integration.PostgreSQLTests
         {
             TestConnectionString = ConfigurationManager.ConnectionStrings["TestConnection"].ConnectionString;
             databaseName = "testdb_" + Guid.NewGuid().FormatGuid();
-            connectionStringBuilder = new NpgsqlConnectionStringBuilder(TestConnectionString)
+            ConnectionStringBuilder = new NpgsqlConnectionStringBuilder(TestConnectionString)
             {
                 Database = databaseName
             };
@@ -21,7 +21,7 @@ namespace WB.Tests.Integration.PostgreSQLTests
             using (var connection = new NpgsqlConnection(TestConnectionString))
             {
                 connection.Open();
-                var command = string.Format(@"CREATE DATABASE {0} ENCODING = 'UTF8'", databaseName);
+                var command = $"CREATE DATABASE {databaseName} ENCODING = 'UTF8'";
                 using (var sqlCommand = connection.CreateCommand())
                 {
                     sqlCommand.CommandText = command;
@@ -29,6 +29,20 @@ namespace WB.Tests.Integration.PostgreSQLTests
                 }
                 connection.Close();
             }
+
+            var cnSection = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.None);
+
+            if (cnSection.ConnectionStrings.ConnectionStrings["Postgres"] != null)
+            {
+                cnSection.ConnectionStrings.ConnectionStrings.Remove("Postgres");
+            }
+            cnSection.ConnectionStrings.ConnectionStrings.Add(new ConnectionStringSettings("Postgres", ConnectionStringBuilder.ConnectionString)
+            {
+                ProviderName = "Npgsql"
+            });
+            cnSection.Save();
+
+            ConfigurationManager.RefreshSection("connectionStrings");
         }
 
         [OneTimeTearDown]
@@ -49,7 +63,7 @@ namespace WB.Tests.Integration.PostgreSQLTests
             }
         }
 
-        protected static NpgsqlConnectionStringBuilder connectionStringBuilder;
+        protected static NpgsqlConnectionStringBuilder ConnectionStringBuilder;
         protected static string TestConnectionString;
         private static string databaseName;
     }

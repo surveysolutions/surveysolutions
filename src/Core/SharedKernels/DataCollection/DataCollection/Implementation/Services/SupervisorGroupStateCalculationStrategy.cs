@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
+using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
-namespace WB.Core.BoundedContexts.Supervisor.ViewModel
+namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
 {
-    public class SupervisorGroupStateCalculationStrategy : IGroupStateCalculationStrategy
+    public class SupervisorGroupStateCalculationStrategy : ISupervisorGroupStateCalculationStrategy
     {
         public GroupStatus CalculateDetailedStatus(Identity groupIdentity, IStatefulInterview interview)
         {
