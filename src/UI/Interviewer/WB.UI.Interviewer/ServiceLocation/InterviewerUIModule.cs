@@ -12,6 +12,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.CommandBus.Implementation;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization;
@@ -44,7 +45,7 @@ namespace WB.UI.Interviewer.ServiceLocation
             registry.Bind<INetworkService, AndroidNetworkService>();
             registry.BindAsSingletonWithConstructorArgument<IRestService, RestService>("restServicePointManager", null);
             registry.Bind<IInterviewUniqueKeyGenerator, InterviewerInterviewUniqueKeyGenerator>();
-            registry.Bind<IGroupStateCalculationStrategy, EnumeratorGroupStateCalculationStrategy>();
+            registry.Bind<IGroupStateCalculationStrategy, EnumeratorGroupGroupStateCalculationStrategy>();
             registry.Bind<IInterviewStateCalculationStrategy, EnumeratorInterviewStateCalculationStrategy>();
 
             registry.Bind<ISynchronizationService, SyncronizationServiceWrapper>();

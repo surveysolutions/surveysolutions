@@ -2,6 +2,7 @@ using System;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using NUnit.Framework;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Enumerator.Native.WebInterview.Models;
 using WB.Tests.Abc;
 

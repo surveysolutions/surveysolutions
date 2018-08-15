@@ -10,8 +10,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         private readonly Func<ICqrsPostgresTransactionManager> transactionManagerFactory;
         private readonly Func<ICqrsPostgresTransactionManager> noTransactionTransactionManagerFactory;
 
-        private ICqrsPostgresTransactionManager pinnedTransactionManager;
-
         public TransactionManagerProvider(
             Func<CqrsPostgresTransactionManager> transactionManagerFactory,
             Func<NoTransactionCqrsPostgresTransactionManager> noTransactionTransactionManagerFactory)
@@ -29,18 +27,12 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         public ITransactionManager GetTransactionManager() => this.GetPostgresTransactionManager();
 
         public ISession GetSession() => this.GetPostgresTransactionManager().GetSession();
-
-        public void UnpinTransactionManager()
-        {
-            this.pinnedTransactionManager = null;
-        }
-
+        
         private ICqrsPostgresTransactionManager GetPostgresTransactionManager()
         {
-            return this.pinnedTransactionManager ?? 
-                (ThreadMarkerManager.IsCurrentThreadNoTransactional() ? 
+            return ThreadMarkerManager.IsCurrentThreadNoTransactional() ? 
                     this.noTransactionTransactionManagerFactory.Invoke() : 
-                    this.transactionManagerFactory.Invoke());
+                    this.transactionManagerFactory.Invoke();
         }
     }
 }
