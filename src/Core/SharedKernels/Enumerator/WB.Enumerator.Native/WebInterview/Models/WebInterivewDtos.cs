@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Enumerator.Native.WebInterview.Models
 {
@@ -262,14 +263,6 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public Validity Validity { get; set; } = new Validity();
         public bool Current { get; set; }
         public bool IsRoster { get; set; }
-    }
-
-    public enum GroupStatus
-    {
-        NotStarted = 1,
-        Started,
-        Completed,
-        Invalid
     }
 
     public class DropdownItem
