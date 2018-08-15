@@ -60,9 +60,9 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels.FinishInstallation
 
             var viewModel = Create.ViewModel.FinishInstallationViewModel(qrBarcodeScanService: scanner.Object);
             await viewModel.ScanCommand.ExecuteAsync();
-
-
+            
             Assert.That(viewModel.Endpoint, Is.Null);
+            Assert.That(viewModel.ErrorMessage, Is.EqualTo("An error occurred while scanning"));
         }
 
         [Test]
