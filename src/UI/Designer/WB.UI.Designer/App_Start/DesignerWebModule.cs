@@ -30,11 +30,9 @@ namespace WB.UI.Designer
             registry.BindMvcFilterInSingletonScope<CustomHandleErrorFilter>(FilterScope.Global, 0);
             registry.BindMvcFilterInSingletonScope<CustomAuthorizeFilter>(FilterScope.Global, 0);
 
-            registry.BindToMethod<ISerializer>(() => new NewtonJsonSerializer());
             registry.BindToMethod<IJsonAllTypesSerializer>(() => new JsonAllTypesSerializer());
 
             registry.BindAsSingleton<IQuestionnairePackageComposer, QuestionnairePackageComposer>();
-            registry.BindAsSingleton<IStringCompressor, JsonCompressor>();
             registry.Bind<IArchiveUtils, ZipArchiveUtils>();
             registry.BindToConstant<IMembershipHelper>(() => new MembershipHelper());
             registry.BindToConstructorInSingletonScope<IMembershipWebUser>(x => new MembershipWebUser(x.Inject<IMembershipHelper>()));
