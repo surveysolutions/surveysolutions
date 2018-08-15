@@ -210,9 +210,12 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.BindToConstant<SyncPackagesProcessorBackgroundJobSetting>(() => this.syncPackagesProcessorBackgroundJobSetting);
             registry.Bind<InterviewDetailsBackgroundSchedulerTask>();
 
+            registry.Bind<IEnumeratorGroupStateCalculationStrategy, EnumeratorGroupGroupStateCalculationStrategy>();
+            registry.Bind<ISupervisorGroupStateCalculationStrategy, SupervisorGroupStateCalculationStrategy>();
+
             registry.BindWithConstructorArgument<ITabletInformationService, FileBasedTabletInformationService>("parentFolder", this.currentFolderPath);
 
-            registry.BindAsSingleton<IPasswordHasher, PasswordHasher>(); // external class which cannot be put to self-describing module because ninject is not portable
+            registry.BindAsSingleton<IPasswordHasher, PasswordHasher>(); 
 
             registry.Bind<IExportFactory, ExportFactory>();
 

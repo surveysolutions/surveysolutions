@@ -2,6 +2,8 @@
 using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Modularity;
+using WB.Core.SharedKernels.DataCollection.Implementation.Services;
+using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -28,7 +30,7 @@ namespace WB.UI.Tester.ServiceLocation
             registry.Bind<TesterSettings>();
             registry.Bind<PhotoViewViewModel>();
             registry.BindAsSingleton<IInterviewViewModelFactory, TesterInterviewViewModelFactory>();
-            registry.Bind<IGroupStateCalculationStrategy, EnumeratorGroupStateCalculationStrategy>();
+            registry.Bind<IGroupStateCalculationStrategy, EnumeratorGroupGroupStateCalculationStrategy>();
             registry.Bind<IInterviewStateCalculationStrategy, EnumeratorInterviewStateCalculationStrategy>();
 
 #if EXCLUDEEXTENSIONS
