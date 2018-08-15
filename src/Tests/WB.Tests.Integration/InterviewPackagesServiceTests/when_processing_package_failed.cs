@@ -30,7 +30,7 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
     internal class when_processing_package_failed : with_postgres_db
     {
         [OneTimeSetUp] public void context () {
-            var sessionFactory = IntegrationCreate.SessionFactory(connectionStringBuilder.ConnectionString,
+            var sessionFactory = IntegrationCreate.SessionFactory(ConnectionStringBuilder.ConnectionString,
                 new[] {typeof(InterviewPackageMap), typeof(BrokenInterviewPackageMap)}, true);
             plainPostgresTransactionManager =
                 new PlainPostgresTransactionManager(sessionFactory ?? Mock.Of<ISessionFactory>());
@@ -39,7 +39,7 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
             expectedException = new InterviewException("Some interview exception",
                 InterviewDomainExceptionType.StatusIsNotOneOfExpected);
 
-            pgSqlConnection = new NpgsqlConnection(connectionStringBuilder.ConnectionString);
+            pgSqlConnection = new NpgsqlConnection(ConnectionStringBuilder.ConnectionString);
             pgSqlConnection.Open();
 
             packagesStorage = new PostgresPlainStorageRepository<InterviewPackage>(plainPostgresTransactionManager);

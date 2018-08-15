@@ -36,7 +36,7 @@ namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests
 
         protected static PostgreReadSideStorage<InterviewSummary> CreateInterviewSummaryRepository()
         {
-            var sessionFactory = IntegrationCreate.SessionFactory(connectionStringBuilder.ConnectionString, new[]
+            var sessionFactory = IntegrationCreate.SessionFactory(ConnectionStringBuilder.ConnectionString, new[]
             {
                 typeof(InterviewSummaryMap),
                 typeof(TimeSpanBetweenStatusesMap),
@@ -45,7 +45,7 @@ namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests
             }, true);
             postgresTransactionManager = new CqrsPostgresTransactionManager(sessionFactory ?? Mock.Of<ISessionFactory>());
 
-            pgSqlConnection = new NpgsqlConnection(connectionStringBuilder.ConnectionString);
+            pgSqlConnection = new NpgsqlConnection(ConnectionStringBuilder.ConnectionString);
             pgSqlConnection.Open();
 
             return new PostgreReadSideStorage<InterviewSummary>(postgresTransactionManager, Mock.Of<ILogger>());
