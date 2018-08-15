@@ -11,6 +11,7 @@ using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Enumerator.Native.WebInterview.Models;
 using GpsAnswer = WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers.GpsAnswer;
@@ -71,7 +72,7 @@ namespace WB.Enumerator.Native.WebInterview
         public GroupStatus GetInterviewStatus()
         {
             var interview = this.GetCallerInterview();
-            if (interview == null) return GroupStatus.Invalid;
+            if (interview == null) return GroupStatus.StartedInvalid;
 
             return this.interviewEntityFactory.GetInterviewSimpleStatus(interview, IsReviewMode);
         }
@@ -186,9 +187,9 @@ namespace WB.Enumerator.Native.WebInterview
                 button.Target = target.Identity.ToString();
                 button.Status = button.Type == ButtonType.Complete
                     ? this.interviewEntityFactory.GetInterviewSimpleStatus(statefulInterview, IsReviewMode)
-                    : this.interviewEntityFactory.CalculateSimpleStatus(target, IsReviewMode);
+                    : this.interviewEntityFactory.CalculateSimpleStatus(target, IsReviewMode, statefulInterview);
 
-                this.interviewEntityFactory.ApplyValidity(button.Validity, target, IsReviewMode);
+                this.interviewEntityFactory.ApplyValidity(button.Validity, target, statefulInterview, IsReviewMode);
 
                 return button;
             }
@@ -325,11 +326,11 @@ namespace WB.Enumerator.Native.WebInterview
                 Title = currentTreeGroup?.Title.Text,
                 RosterTitle = (currentTreeGroupAsRoster)?.RosterTitle,
                 Breadcrumbs = breadCrumbs.ToArray(),
-                Status = this.interviewEntityFactory.CalculateSimpleStatus(currentTreeGroup, IsReviewMode),
+                Status = this.interviewEntityFactory.CalculateSimpleStatus(currentTreeGroup, IsReviewMode, statefulInterview),
                 IsRoster = currentTreeGroupAsRoster != null
             };
 
-            this.interviewEntityFactory.ApplyValidity(info.Validity, currentTreeGroup, IsReviewMode);
+            this.interviewEntityFactory.ApplyValidity(info.Validity, currentTreeGroup, statefulInterview, IsReviewMode);
 
             return info;
         }
