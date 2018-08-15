@@ -21,12 +21,12 @@ namespace WB.Tests.Integration.PostgreSQLTests
         [NUnit.Framework.OneTimeSetUp]
         public void context()
         {
-            pgSqlConnection = new NpgsqlConnection(connectionStringBuilder.ConnectionString);
+            pgSqlConnection = new NpgsqlConnection(ConnectionStringBuilder.ConnectionString);
             pgSqlConnection.Open();
 
             var sessionProvider = Mock.Of<ISessionProvider>(x => x.GetSession() == Mock.Of<ISession>(y => y.Transaction == Mock.Of<ITransaction>() && y.Connection == pgSqlConnection));
             storage = IntegrationCreate.PostgresReadSideKeyValueStorage<TestPersistedClass>(
-                sessionProvider: sessionProvider, postgreConnectionSettings: new PostgreConnectionSettings { ConnectionString = connectionStringBuilder.ConnectionString });
+                sessionProvider: sessionProvider, postgreConnectionSettings: new PostgreConnectionSettings { ConnectionString = ConnectionStringBuilder.ConnectionString });
             storedDate = new DateTime(2010, 1, 1);
             usedId = "id";
             BecauseOf();

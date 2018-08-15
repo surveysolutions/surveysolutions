@@ -6,6 +6,8 @@ using AutoMapper;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
+using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Enumerator.Native.WebInterview.Models;
 
@@ -14,11 +16,17 @@ namespace WB.Enumerator.Native.WebInterview.Services
     public class WebInterviewInterviewEntityFactory : IWebInterviewInterviewEntityFactory
     {
         private readonly IMapper autoMapper;
+        private readonly IEnumeratorGroupStateCalculationStrategy enumeratorGroupStateCalculationStrategy;
+        private readonly ISupervisorGroupStateCalculationStrategy supervisorGroupStateCalculationStrategy;
         private static readonly Regex HtmlRemovalRegex = new Regex(Constants.HtmlRemovalPattern, RegexOptions.Compiled);
 
-        public WebInterviewInterviewEntityFactory(IMapper autoMapper)
+        public WebInterviewInterviewEntityFactory(IMapper autoMapper,
+            IEnumeratorGroupStateCalculationStrategy enumeratorGroupStateCalculationStrategy,
+            ISupervisorGroupStateCalculationStrategy supervisorGroupStateCalculationStrategy)
         {
             this.autoMapper = autoMapper;
+            this.enumeratorGroupStateCalculationStrategy = enumeratorGroupStateCalculationStrategy;
+            this.supervisorGroupStateCalculationStrategy = supervisorGroupStateCalculationStrategy;
         }
 
         public Sidebar GetSidebarChildSectionsOf(string currentSectionId, 
@@ -58,8 +66,8 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 {
                     opts.AfterMap((g, sidebarPanel) =>
                     {
-                        this.ApplyValidity(sidebarPanel.Validity, g, isReviewMode);
-                        sidebarPanel.Status = this.CalculateSimpleStatus(g, isReviewMode);
+                        this.ApplyValidity(sidebarPanel.Validity, g, interview, isReviewMode);
+                        sidebarPanel.Status = this.CalculateSimpleStatus(g, isReviewMode, interview);
                         sidebarPanel.Collapsed = !visibleSections.Contains(g.Identity);
                         sidebarPanel.Current = visibleSections.Contains(g.Identity);
                     });
@@ -281,8 +289,8 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 var result = this.autoMapper.Map<InterviewGroupOrRosterInstance>(group);
 
                 this.ApplyDisablement(result, identity, questionnaire);
-                this.ApplyGroupStateData(result, group, isReviewMode);
-                this.ApplyValidity(result.Validity, group, isReviewMode);
+                this.ApplyGroupStateData(result, group, callerInterview, isReviewMode);
+                this.ApplyValidity(result.Validity, group, callerInterview, isReviewMode);
                 return result;
             }
 
@@ -292,8 +300,8 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 var result = this.autoMapper.Map<InterviewGroupOrRosterInstance>(roster);
 
                 this.ApplyDisablement(result, identity, questionnaire);
-                this.ApplyGroupStateData(result, roster, isReviewMode);
-                this.ApplyValidity(result.Validity, roster, isReviewMode);
+                this.ApplyGroupStateData(result, roster, callerInterview, isReviewMode);
+                this.ApplyValidity(result.Validity, roster, callerInterview, isReviewMode);
                 return result;
             }
 
@@ -368,15 +376,17 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 .ToArray();
         }
 
-        public void ApplyValidity(Validity validity, InterviewTreeGroup group, bool isReviewMode)
+        public void ApplyValidity(Validity validity, InterviewTreeGroup group, IStatefulInterview callerInterview,
+            bool isReviewMode)
         {
             validity.IsValid = !HasQuestionsWithInvalidAnswers(group, isReviewMode);
         }
 
-        private void ApplyGroupStateData(InterviewGroupOrRosterInstance group, InterviewTreeGroup treeGroup, bool isReviewMode)
+        private void ApplyGroupStateData(InterviewGroupOrRosterInstance @group, InterviewTreeGroup treeGroup,
+            IStatefulInterview callerInterview, bool isReviewMode)
         {
             group.Stats = this.GetGroupStatistics(treeGroup, isReviewMode);
-            group.Status = this.CalculateSimpleStatus(treeGroup, isReviewMode);
+            group.Status = this.CalculateSimpleStatus(treeGroup, isReviewMode, callerInterview);
         }
 
         private static bool HasQuestionsWithInvalidAnswers(InterviewTreeGroup group, bool isReviewMode) =>
@@ -399,42 +409,20 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 ? group.CountEnabledInvalidQuestionsAndStaticTextsForSupervisor()
                 : group.CountEnabledInvalidQuestionsAndStaticTexts();
         
-        public GroupStatus CalculateSimpleStatus(InterviewTreeGroup group, bool isReviewMode)
+        public GroupStatus CalculateSimpleStatus(InterviewTreeGroup group, bool isReviewMode, IStatefulInterview interview)
         {
-            GroupStatus status;
-
-            if (HasUnansweredQuestions(group, isReviewMode))
-                status = CountEnabledAnsweredQuestions(group, isReviewMode) > 0
-                    ? GroupStatus.Started
-                    : GroupStatus.NotStarted;
-            else
-                status = GroupStatus.Completed;
-
-            foreach (var subGroup in GetSubgroupStatuses())
+            if (isReviewMode)
             {
-                switch (status)
-                {
-                    case GroupStatus.Completed when subGroup != GroupStatus.Completed:
-                        return GroupStatus.Started;
-                    case GroupStatus.NotStarted when subGroup != GroupStatus.NotStarted:
-                        return GroupStatus.Started;
-                }
+                return this.supervisorGroupStateCalculationStrategy.CalculateDetailedStatus(group.Identity, interview);
             }
 
-            return status;
-
-            IEnumerable<GroupStatus> GetSubgroupStatuses()
-            {
-                return group.Children.OfType<InterviewTreeGroup>()
-                    .Where(c => c.IsDisabled() == false)
-                    .Select(subgroup => this.CalculateSimpleStatus(subgroup, isReviewMode));
-            }
+            return this.enumeratorGroupStateCalculationStrategy.CalculateDetailedStatus(@group.Identity, interview);
         }
 
         public GroupStatus GetInterviewSimpleStatus(IStatefulInterview interview, bool isReviewMode)
         {
             if (InvalidEntities() > 0)
-                return GroupStatus.Invalid;
+                return GroupStatus.StartedInvalid;
 
             return ActiveQuestions() == AnsweredQuestions()
                 ? GroupStatus.Completed

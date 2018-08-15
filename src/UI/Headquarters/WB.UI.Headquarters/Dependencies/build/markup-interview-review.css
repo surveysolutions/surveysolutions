@@ -153,7 +153,8 @@
   margin-bottom: 5px; }
 
 .panel-details .about-questionnaire {
-  width: 100%; }
+  width: 100%;
+  min-height: 40px; }
 
 .panel-details h3 {
   margin-bottom: 5px;
@@ -212,16 +213,12 @@
 .panel-details .data {
   font-family: "RobotoRegular"; }
 
-.panel-details .questionnaire-details-actions,
-.panel-details .about-questionnaire {
-  min-height: 40px; }
-
 .panel-details .questionnaire-details-actions {
-  float: right;
-  padding-top: 17px; }
+  float: right; }
   .panel-details .questionnaire-details-actions .reject {
     margin-right: 15px; }
   .panel-details .questionnaire-details-actions .buttons-container {
+    padding-top: 17px;
     display: inline-block; }
     .panel-details .questionnaire-details-actions .buttons-container .btn {
       max-width: 145px;
@@ -231,6 +228,8 @@
 
 .panel-details .bootstrap-select.btn-group {
   width: 180px !important; }
+  .panel-details .bootstrap-select.btn-group:only-child {
+    padding-top: 17px; }
   .panel-details .bootstrap-select.btn-group .dropdown-toggle {
     height: 36px;
     line-height: 16px; }
@@ -416,8 +415,7 @@
     padding-right: 0; }
   .panel-details.contains-tranlation.contains-action-buttons .questionnaire-details-actions {
     width: 100%;
-    float: none;
-    padding-top: 10px; } }
+    float: none; } }
 
 @media only screen and (max-width: 1300px) {
   .web-interview-for-supervisor .details-interview.questionnaire {
@@ -607,8 +605,7 @@
     padding-right: 0;
     float: none; }
   .panel-details.contains-tranlation .questionnaire-details-actions, .panel-details.contains-action-buttons .questionnaire-details-actions {
-    float: none;
-    padding-top: 10px; } }
+    float: none; } }
 
 @media (max-width: 880px) {
   .web-interview.filters-results-are-shown .filters-results.active {
@@ -658,12 +655,6 @@
   .panel-details .aside-menu .dropdown-menu {
     left: 35px;
     right: auto; } }
-
-@media only screen and (max-width: 600px) {
-  .questionnaire-details-actions .buttons-container {
-    margin-top: 10px; }
-    .questionnaire-details-actions .buttons-container:only-child {
-      margin-top: 0; } }
 
 @media (max-width: 481px) {
   .web-interview.web-interview-for-supervisor .aside-menu {
