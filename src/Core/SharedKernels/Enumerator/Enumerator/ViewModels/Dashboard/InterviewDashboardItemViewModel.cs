@@ -223,6 +223,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
                 case DashboardInterviewStatus.Completed:
                 case DashboardInterviewStatus.Rejected:
                     return interview.LastInterviewerOrSupervisorComment;
+                case DashboardInterviewStatus.ApprovedBySupervisor:
+                    return interview.LastInterviewerOrSupervisorComment;
                 default:
                     return string.Empty;
             }
