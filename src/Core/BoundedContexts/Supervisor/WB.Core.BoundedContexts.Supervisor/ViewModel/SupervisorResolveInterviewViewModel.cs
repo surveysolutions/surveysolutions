@@ -110,12 +110,19 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             this.status == InterviewStatus.SupervisorAssigned || 
             this.status == InterviewStatus.InterviewerAssigned);
 
+        private bool interviewerSelectionInProgress;
         private void SelectInterviewer()
         {
-            this.interviewerSelectorDialog.Selected += OnInterviewerSelected;
-            this.interviewerSelectorDialog.Cancelled += OnSelectionCancelled;
-            this.interviewerSelectorDialog.SelectInterviewer(SupervisorUIResources.SelectResponsible,
-                "You can assign following statuses only: Supervisor Assigned, Interviewer Assigned(another interviewer) and Rejected by Supervisor.");
+            if (!interviewerSelectionInProgress)
+            {
+                interviewerSelectionInProgress = true;
+
+                this.interviewerSelectorDialog.Selected += OnInterviewerSelected;
+                this.interviewerSelectorDialog.Cancelled += OnSelectionCancelled;
+
+                this.interviewerSelectorDialog.SelectInterviewer(SupervisorUIResources.SelectResponsible,
+                    "You can assign following statuses only: Supervisor Assigned, Interviewer Assigned(another interviewer) and Rejected by Supervisor.");
+            }
         }
 
         private void OnSelectionCancelled(object sender, EventArgs e)
@@ -128,6 +135,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         {
             if (assignInProgress) return;
 
+            interviewerSelectionInProgress = false;
             assignInProgress = true;
             try
             {
@@ -155,6 +163,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             if (this.interviewerSelectorDialog==null)
                 return;
 
+            interviewerSelectionInProgress = false;
             this.interviewerSelectorDialog.Selected -= OnInterviewerSelected;
             this.interviewerSelectorDialog.Cancelled -= OnSelectionCancelled;
         }
