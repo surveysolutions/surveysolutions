@@ -6523,6 +6523,11 @@ a.disabled {
     text-decoration: none;
     color: #a6a8a9; }
 
+.btn-link-look {
+  padding: 0;
+  text-transform: initial;
+  font: inherit; }
+
 .navbar {
   min-width: 360px;
   min-height: 70px;
