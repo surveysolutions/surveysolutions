@@ -10,9 +10,7 @@ using Main.Core.Documents;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableService
 {
@@ -20,7 +18,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.LookupTableSe
     {
         private readonly IPlainKeyValueStorage<LookupTableContent> lookupTableContentStorage;
         private readonly IPlainKeyValueStorage<QuestionnaireDocument> documentStorage;
-        private static readonly Regex VariableNameRegex = new Regex("^[A-Za-z][_A-Za-z0-9]*(?<!_)$");
+        private static readonly Regex VariableNameRegex = new Regex("^[A-Za-z][_A-Za-z0-9]*(?<!_)$", RegexOptions.Compiled);
         private const string ROWCODE = "rowcode";
         private const string DELIMETER = "\t";
         private const int MAX_ROWS_COUNT = 5000;
