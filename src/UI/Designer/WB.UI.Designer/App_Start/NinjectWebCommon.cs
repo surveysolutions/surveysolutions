@@ -83,6 +83,18 @@ namespace WB.UI.Designer.App_Start
 
             var membershipSection = settingsProvider.GetSection<MembershipSection>("system.web/membership");
             var membershipSettings = membershipSection?.Providers[membershipSection.DefaultProvider].Parameters;
+            var ormSettings = new UnitOfWorkConnectionSettings
+            {
+                ConnectionString = settingsProvider.ConnectionStrings["Postgres"].ConnectionString,
+                PlainMappingAssemblies = new List<Assembly>
+                {
+                    typeof(DesignerBoundedContextModule).Assembly,
+                    typeof(ProductVersionModule).Assembly,
+                },
+                PlainStorageSchemaName = "plainstore",
+                ReadSideMappingAssemblies = new List<Assembly>()
+            };
+
 
             var kernel = new NinjectKernel();
             kernel.Load(
@@ -93,7 +105,7 @@ namespace WB.UI.Designer.App_Start
                 new CaptchaModule(settingsProvider.AppSettings.Get("CaptchaService")),
                 new NLogLoggingModule(),
                 new PostgresKeyValueModule(cacheSettings),
-                new PostgresPlainStorageModule(postgresPlainStorageSettings),
+                new OrmModule(ormSettings),
                 new DesignerCommandDeserializationModule(),
                 new DesignerBoundedContextModule(dynamicCompilerSettings),
                 new QuestionnaireVerificationModule(),

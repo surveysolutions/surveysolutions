@@ -9,11 +9,11 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 {
     internal class PostgresPlainStorageRepository<TEntity> : IPlainStorageAccessor<TEntity> where TEntity : class
     {
-        private readonly IPlainSessionProvider sessionProvider;
+        private readonly IUnitOfWork unitOfWork;
 
-        public PostgresPlainStorageRepository(IPlainSessionProvider sessionProvider)
+        public PostgresPlainStorageRepository(IUnitOfWork unitOfWork)
         {
-            this.sessionProvider = sessionProvider;
+            this.unitOfWork = unitOfWork;
         }
 
         public TEntity GetById(object id)
@@ -66,7 +66,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         public ISession GetSession()
         {
-            return this.sessionProvider.GetSession();
+            return this.unitOfWork.Session;
         }
     }
 }

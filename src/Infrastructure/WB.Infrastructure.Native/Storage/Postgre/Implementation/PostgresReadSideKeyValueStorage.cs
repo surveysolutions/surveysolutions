@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Data.Common;
-using Ninject;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
@@ -12,13 +11,13 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         IReadSideKeyValueStorage<TEntity>, IDisposable
         where TEntity : class, IReadSideRepositoryEntity
     {
-        private readonly ISessionProvider sessionProvider;
+        private readonly IUnitOfWork sessionProvider;
 
-        public PostgresReadSideKeyValueStorage([Named(PostgresReadSideModule.SessionProviderName)]ISessionProvider sessionProvider, 
-            PostgreConnectionSettings connectionSettings, ILogger logger, IEntitySerializer<TEntity> entitySerializer) 
-            : base(connectionSettings.ConnectionString, connectionSettings.SchemaName, logger, entitySerializer)
+        public PostgresReadSideKeyValueStorage(IUnitOfWork unitOfWork, 
+            UnitOfWorkConnectionSettings connectionSettings, ILogger logger, IEntitySerializer<TEntity> entitySerializer) 
+            : base(connectionSettings.ConnectionString, connectionSettings.ReadSideSchemaName, logger, entitySerializer)
         {
-            this.sessionProvider = sessionProvider;
+            this.sessionProvider = unitOfWork;
 
             this.EnshureTableExists();
         }
@@ -37,14 +36,14 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         private void EnlistInTransaction(DbCommand command)
         {
-            var session = this.sessionProvider.GetSession();
+            var session = this.sessionProvider.Session;
             command.Connection = session.Connection;
             session.Transaction.Enlist(command);
         }
 
         public void Flush()
         {
-            this.sessionProvider.GetSession().Flush();
+            this.sessionProvider.Session.Flush();
         }
     }
 }

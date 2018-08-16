@@ -1,32 +1,33 @@
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
-using NHibernate.Criterion;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.Infrastructure.Transactions;
+using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.UI.Shared.Web.Filters
 {
     public class ApiTransactionFilter : ActionFilterAttribute
     {
-        ITransactionManagerProvider TransactionManager => ServiceLocator.Current.GetInstance<ITransactionManagerProvider>();
+        private readonly IUnitOfWork unitOfWork;
+
+        public ApiTransactionFilter(IUnitOfWork unitOfWork)
+        {
+            this.unitOfWork = unitOfWork;
+        }
+
         
         public override void OnActionExecuting(HttpActionContext actionContext)
         {
-            this.TransactionManager.GetTransactionManager().BeginCommandTransaction();
+            this.unitOfWork.Start();
         }
 
         public override void OnActionExecuted(HttpActionExecutedContext actionExecutedContext)
         {
-            if (this.TransactionManager.GetTransactionManager().TransactionStarted)
+            if (actionExecutedContext.Exception != null)
             {
-                if (actionExecutedContext.Exception != null)
-                {
-                    this.TransactionManager.GetTransactionManager().RollbackCommandTransaction();
-                }
-                else
-                {
-                    this.TransactionManager.GetTransactionManager().CommitCommandTransaction();
-                }
+                this.unitOfWork.AcceptChanges();
+            }
+            else
+            {
+                this.unitOfWork.Dispose();
             }
         }
     }

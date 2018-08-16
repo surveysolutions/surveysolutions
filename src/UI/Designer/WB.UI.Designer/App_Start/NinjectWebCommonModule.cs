@@ -23,7 +23,7 @@ namespace WB.UI.Designer.App_Start
     {
         public void Load(IWebIocRegistry registry)
         {
-            registry.BindAsSingleton<IAggregateRootCacheCleaner, DummyAggregateRootCacheCleaner>();
+            registry.Bind<IAggregateRootCacheCleaner, DummyAggregateRootCacheCleaner>();
 
             registry.BindHttpFilterWhenControllerHasAttribute<TokenValidationAuthorizationFilter, ApiValidationAntiForgeryTokenAttribute>(
                 FilterScope.Controller,

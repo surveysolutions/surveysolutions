@@ -43,7 +43,7 @@ namespace WB.UI.Designer.Api.WebTester
             this.questionnaireVerifier = questionnaireVerifier;
         }
 
-        readonly MemoryCache Cache = new MemoryCache("CompilationPackages");
+        static readonly MemoryCache Cache = new MemoryCache("CompilationPackages");
 
         public Questionnaire ComposeQuestionnaire(Guid questionnaireId)
         {

@@ -50,8 +50,9 @@ namespace WB.UI.Designer.Code
         {
             registry.BindHttpFilter<UnderConstructionHttpFilter>(System.Web.Http.Filters.FilterScope.Controller, 0);
             registry.BindMvcFilter<UnderConstructionMvcFilter>(FilterScope.First, 0);
-            registry.BindMvcFilterWhenActionMethodHasNoAttribute<PlainTransactionFilter, NoTransactionAttribute>(FilterScope.First, 0);
-            registry.BindHttpFilterWhenActionMethodHasNoAttribute<PlainApiTransactionFilter, NoTransactionAttribute>(System.Web.Http.Filters.FilterScope.Global);
+            //registry.BindMvcFilterWhenActionMethodHasNoAttribute<TransactionFilter, NoTransactionAttribute>(FilterScope.First, 1);
+            //registry.BindHttpFilterWhenActionMethodHasNoAttribute<ApiTransactionFilter, NoTransactionAttribute>(System.Web.Http.Filters.FilterScope.Global, 1);
+
 
             registry.Bind<ICommandInflater, CommandInflater>();
             registry.Bind<IQuestionnaireHelper, QuestionnaireHelper>();

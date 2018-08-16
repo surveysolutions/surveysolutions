@@ -23,7 +23,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
         public void Load(IIocRegistry registry)
         {
-            registry.BindAsSingletonWithConstructorArgument<IHeadquartersEventStore, PostgresEventStore>("connectionSettings", this.eventStoreSettings);
+            registry.Bind<IHeadquartersEventStore, PostgresEventStore>(new ConstructorArgument("connectionSettings", (ctx) => this.eventStoreSettings));
             registry.BindToMethod<IEventStore>(context => context.Get<IHeadquartersEventStore>());
         }
 

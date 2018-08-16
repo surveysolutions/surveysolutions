@@ -32,6 +32,7 @@ using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.QuestionnairePostProcessors;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
+using WB.Core.BoundedContexts.Designer.Services.Accounts;
 using WB.Core.BoundedContexts.Designer.Translations;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.Infrastructure.Aggregates;
@@ -79,6 +80,7 @@ namespace WB.Core.BoundedContexts.Designer
             registry.Bind<ITranslationsService, TranslationsService>();
             registry.Bind<ITranslationsExportService, TranslationsExportService>();
             registry.Bind<IQuestionnaireTranslator, QuestionnaireTranslator>();
+            registry.Bind<IAccountRepository, DesignerAccountRepository>();
 
             registry.BindAsSingleton<IStringCompressor, JsonCompressor>();
             registry.Bind<ISerializer, NewtonJsonSerializer>();

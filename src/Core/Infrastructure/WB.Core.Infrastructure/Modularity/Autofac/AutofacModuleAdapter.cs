@@ -146,6 +146,12 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
             throw new NotImplementedException();
         }
 
+        public void BindInIsolatedThreadScopeOrRequestScopeOrThreadScope<T1, T2>() where T2 : T1
+        {
+            throw new NotImplementedException();
+        }
+
+
         void IIocRegistry.BindAsSingleton<TInterface, TImplementation>()
         {
             containerBuilder.RegisterType<TImplementation>().As<TInterface>().SingleInstance();
