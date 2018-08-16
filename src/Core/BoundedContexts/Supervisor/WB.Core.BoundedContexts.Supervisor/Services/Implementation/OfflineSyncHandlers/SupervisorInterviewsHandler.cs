@@ -259,7 +259,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
         public Task<GetInterviewsResponse> GetInterviews(GetInterviewsRequest arg)
         {
             var interviewsForUser = this.interviews.Where(x =>
-                (x.Status == InterviewStatus.RejectedBySupervisor || x.Status == InterviewStatus.InterviewerAssigned)
+                (x.Status == InterviewStatus.RejectedBySupervisor || 
+                 x.Status == InterviewStatus.InterviewerAssigned || 
+                 x.Status == InterviewStatus.Restarted)
                 && x.ResponsibleId == arg.UserId);
 
             List<InterviewApiView> response = interviewsForUser.Select(x => new InterviewApiView
