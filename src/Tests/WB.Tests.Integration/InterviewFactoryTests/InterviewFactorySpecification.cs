@@ -110,8 +110,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
         {
             return new InterviewFactory(
                 summaryRepository: interviewSummaryRepository,
-                sessionProvider: this.plainTransactionManager, 
-                questionnaireItems: compositeItemsRepository);
+                sessionProvider: this.plainTransactionManager);
         }
     }
 }
