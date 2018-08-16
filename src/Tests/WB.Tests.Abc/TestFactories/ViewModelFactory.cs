@@ -455,5 +455,8 @@ namespace WB.Tests.Abc.TestFactories
                 qrBarcodeScanService ?? Mock.Of<IQRBarcodeScanService>(),
                 serializer?? Mock.Of <ISerializer>(),
                 userInteractionService?? Mock.Of<IUserInteractionService>());
+
+        public ConnectedDeviceSynchronizationViewModel ConnectedDeviceSynchronizationViewModel()
+            => new ConnectedDeviceSynchronizationViewModel();
     }
 }

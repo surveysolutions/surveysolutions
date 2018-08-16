@@ -97,6 +97,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Synchronizing assignment(s).
+        /// </summary>
+        public static string AssignmentsSynchronization {
+            get {
+                return ResourceManager.GetString("AssignmentsSynchronization", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Assign.
         /// </summary>
         public static string Dashboard_Assign {
@@ -1815,6 +1824,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Transferring assignments.
+        /// </summary>
+        public static string TransferringAssignments {
+            get {
+                return ResourceManager.GetString("TransferringAssignments", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Create backup.
         /// </summary>
         public static string Troubleshooting_Backup {
@@ -2063,6 +2081,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string UnexpectedException {
             get {
                 return ResourceManager.GetString("UnexpectedException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Updating questionnaires.
+        /// </summary>
+        public static string UpdatingQuestionnaires {
+            get {
+                return ResourceManager.GetString("UpdatingQuestionnaires", resourceCulture);
             }
         }
         

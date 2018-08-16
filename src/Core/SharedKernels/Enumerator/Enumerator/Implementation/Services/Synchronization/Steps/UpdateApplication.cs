@@ -33,7 +33,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             Context.Progress.Report(new SyncProgressInfo
             {
                 Title = InterviewerUIResources.Synchronization_CheckNewVersionOfApplication,
-                Status = SynchronizationStatus.Started
+                Status = SynchronizationStatus.Started,
+                Stage= SyncStage.CheckNewVersionOfApplication
             });
 
             var versionFromServer = await
@@ -61,7 +62,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                                 totalKilobytes.Humanize("00.00 MB"),
                                 receivedKilobytes.Per(sw.Elapsed).Humanize("00.00"),
                                 (int) downloadProgress.ProgressPercentage),
-                            Status = SynchronizationStatus.Download
+                            Status = SynchronizationStatus.Download,
+                            Stage = SyncStage.DownloadApplication
                         });
                     }));
                 }

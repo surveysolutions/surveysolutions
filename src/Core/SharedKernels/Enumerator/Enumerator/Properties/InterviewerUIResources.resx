@@ -316,6 +316,12 @@ for further instructions</value>
   <data name="Synchronization_Questionnaires" xml:space="preserve">
     <value>questionnaires</value>
   </data>
+  <data name="UpdatingQuestionnaires" xml:space="preserve">
+    <value>Updating questionnaires</value>
+  </data>
+  <data name="TransferringAssignments" xml:space="preserve">
+    <value>Transferring assignments</value>
+  </data>
   <data name="Synchronization_Success_Description" xml:space="preserve">
     <value>All assignments were updated</value>
   </data>
@@ -636,6 +642,9 @@ for further instructions</value>
   </data>
   <data name="Synchronization_Of_AssignmentsFormat" xml:space="preserve">
     <value>Synchronizing {0} of {1} assignment(s)</value>
+  </data>
+  <data name="AssignmentsSynchronization" xml:space="preserve">
+    <value>Synchronizing assignment(s)</value>
   </data>
   <data name="Synchronization_Check_Obsolete_Questionnaires_Description" xml:space="preserve">
     <value>Removing {0} questionnaire out of {1}</value>
