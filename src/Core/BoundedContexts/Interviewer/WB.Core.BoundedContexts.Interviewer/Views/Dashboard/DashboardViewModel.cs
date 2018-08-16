@@ -6,6 +6,7 @@ using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
+using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.Messages;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -82,10 +83,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.CompletedInterviews = completedInterviewsViewModel;
             this.RejectedInterviews = rejectedInterviewsViewModel;
 
-            startingLongOperationMessageSubscriptionToken =
-                messenger.Subscribe<StartingLongOperationMessage>(this.DashboardItemOnStartingLongOperation);
-            stopLongOperationMessageSubscriptionToken =
-                messenger.Subscribe<StopingLongOperationMessage>(this.DashboardItemOnStopLongOperation);
+            SubscribeOnMessages();
+
             this.Synchronization.Init();
             this.Synchronization.OnCancel += Synchronization_OnCancel;
             this.Synchronization.OnProgressChanged += Synchronization_OnProgressChanged;
@@ -113,20 +112,29 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         {
             base.ViewAppeared();
 
-            startingLongOperationMessageSubscriptionToken =
-                messenger.Subscribe<StartingLongOperationMessage>(this.DashboardItemOnStartingLongOperation);
-            stopLongOperationMessageSubscriptionToken =
-                messenger.Subscribe<StopingLongOperationMessage>(this.DashboardItemOnStopLongOperation);
-            
+            SubscribeOnMessages();
+
             this.SynchronizationWithHqEnabled = this.interviewerSettings.AllowSyncWithHq;
         }
 
         public override void ViewDisappeared()
         {
+            UnsubscribeFromMessages();
+            base.ViewDisappeared();
+        }
+
+        private void SubscribeOnMessages()
+        {
+            startingLongOperationMessageSubscriptionToken =
+                messenger.Subscribe<StartingLongOperationMessage>(this.DashboardItemOnStartingLongOperation);
+            stopLongOperationMessageSubscriptionToken =
+                messenger.Subscribe<StopingLongOperationMessage>(this.DashboardItemOnStopLongOperation);
+        }
+
+        private void UnsubscribeFromMessages()
+        {
             startingLongOperationMessageSubscriptionToken.Dispose();
             stopLongOperationMessageSubscriptionToken.Dispose();
-
-            base.ViewDisappeared();
         }
 
         public bool SynchronizationWithHqEnabled
@@ -191,6 +199,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         {
             this.RaisePropertyChanged(() => this.DashboardTitle);
             this.CreateNew.UpdateAssignment(e.AssignmentId);
+            this.CreateNew.Load(this.Synchronization);
         }
 
         private void OnItemsLoaded(object sender, EventArgs e) =>
@@ -275,8 +284,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         {
             base.Dispose();
 
-            startingLongOperationMessageSubscriptionToken.Dispose();
-            stopLongOperationMessageSubscriptionToken.Dispose();
+            UnsubscribeFromMessages();
 
             syncSubscription.Dispose();
 
