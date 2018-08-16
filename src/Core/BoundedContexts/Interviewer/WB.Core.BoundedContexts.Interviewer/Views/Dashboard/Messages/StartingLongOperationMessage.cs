@@ -15,4 +15,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.Messages
         {
         }
     }
+
+    public class InterviewRemovedMessage : MvxMessage
+    {
+        public InterviewRemovedMessage(object sender) : base(sender)
+        {
+        }
+    }
 }
