@@ -159,9 +159,20 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
             if (item.AssignmentId.HasValue)
             {
-                var assesment = assignments.FirstOrDefault(i => i.Id == item.AssignmentId.Value);
-                if (assesment?.CreatedInterviewsCount != null)
-                    assesment.CreatedInterviewsCount--;
+                var uiAssignment = this.UiItems.OfType<InterviewerAssignmentDashboardItemViewModel>()
+                        .FirstOrDefault(x => x.AssignmentId == item.AssignmentId.Value);
+
+                if (uiAssignment != null)
+                {
+                    uiAssignment.DecreaseInterviewsCount();
+                }
+                else
+                {
+                    var assignment = assignments.FirstOrDefault(i => i.Id == item.AssignmentId.Value);
+                    if (assignment?.CreatedInterviewsCount != null)
+                        assignment.CreatedInterviewsCount--;
+                    assignmentsRepository.Store(assignment);
+                }
             }
 
             this.interviews.RemoveAll(x => x.InterviewId == item.InterviewId);
@@ -188,7 +199,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                     assignmentItemViewModel.Init(assignmentItem);
                     yield return assignmentItemViewModel;
                 }
-
             }
 
 
