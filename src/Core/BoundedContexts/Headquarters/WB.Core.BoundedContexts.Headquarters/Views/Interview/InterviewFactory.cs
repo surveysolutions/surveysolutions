@@ -7,9 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Caching;
-using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -21,6 +19,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.Questionnaire.Documents;
+using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
@@ -28,23 +27,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
     public class InterviewFactory : IInterviewFactory
     {
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> summaryRepository;
-        private readonly ISessionProvider sessionProvider;
-        private readonly IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireItems;
+        private readonly IUnitOfWork sessionProvider;
 
         public InterviewFactory(
             IQueryableReadSideRepositoryReader<InterviewSummary> summaryRepository,
-            ISessionProvider sessionProvider,
-            IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireItems)
+            IUnitOfWork sessionProvider)
         {
             this.summaryRepository = summaryRepository;
             this.sessionProvider = sessionProvider;
-            this.questionnaireItems = questionnaireItems;
         }
 
         public Identity[] GetQuestionsWithFlagBySectionId(QuestionnaireIdentity questionnaireId, Guid interviewId,
             Identity sectionId)
         {
-            return sessionProvider.GetSession().Connection.Query<(Guid entityId, string rosterVector)>(
+            return sessionProvider.Session.Connection.Query<(Guid entityId, string rosterVector)>(
                     $@"SELECT {Column.EntityId} as Id, {Column.RosterVector}
                        FROM {Table.InterviewsView}
                        WHERE {Column.InterviewId} = @InterviewId
@@ -62,7 +58,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         }
 
         public Identity[] GetFlaggedQuestionIds(Guid interviewId)
-            => sessionProvider.GetSession().Connection.Query<(Guid entityId, string rosterVector)>(
+            => sessionProvider.Session.Connection.Query<(Guid entityId, string rosterVector)>(
                     $"SELECT {Column.EntityId}, {Column.RosterVector} " +
                     $"FROM {Table.InterviewsView} WHERE {Column.InterviewId} = @InterviewId AND {Column.HasFlag} = true",
                     new { InterviewId = interviewId })
@@ -91,7 +87,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 hasFlag = flagged
             };
 
-            var flaggedRows = sessionProvider.GetSession().Connection
+            var flaggedRows = sessionProvider.Session.Connection
                 .Query<(int interviewId, int entityId, string rosterVector, bool hasFlag)>
                 ($"select interviewid, entityid, rostervector, hasflag from {Table.Interviews} " +
                  $"where interviewid = @id and entityid = @entityid and rostervector = @rostervector", row).ToList();
@@ -102,12 +98,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 case 0 when flagged == false:
                     return;
                 case 0:
-                    sessionProvider.GetSession().Connection.Execute(
+                    sessionProvider.Session.Connection.Execute(
                         $@"INSERT INTO {Table.Interviews} (interviewid, entityid, rostervector, isenabled, hasflag)
                        VALUES(@id, @entityid, @rostervector, true, @hasFlag)", row);
                     break;
                 default:
-                    sessionProvider.GetSession().Connection.Execute(
+                    sessionProvider.Session.Connection.Execute(
                         $@"UPDATE {Table.Interviews} SET hasflag=@hasFlag where interviewid=@id and entityid=@entityid and rostervector=@rostervector", row);
                     break;
             }
@@ -115,7 +111,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         public void RemoveInterview(Guid interviewId)
         {
-            var conn = sessionProvider.GetSession().Connection;
+            var conn = sessionProvider.Session.Connection;
             conn.Execute($@"DELETE FROM {Table.Interviews} i
                     USING {Table.InterviewsId} s
                     WHERE i.{Column.InterviewId} = s.id AND s.{Column.InterviewId} = @InterviewId",
@@ -127,7 +123,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         public InterviewStringAnswer[] GetMultimediaAnswersByQuestionnaire(QuestionnaireIdentity questionnaireIdentity)
         {
-            return sessionProvider.GetSession().Connection
+            return sessionProvider.Session.Connection
                 .Query<InterviewStringAnswer>(
                     $@"select i.{Column.InterviewId}, i.{Column.AsString} as answer
                        from {Table.InterviewsView} i
@@ -142,7 +138,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         }
 
         public InterviewStringAnswer[] GetAudioAnswersByQuestionnaire(QuestionnaireIdentity questionnaireIdentity)
-            => sessionProvider.GetSession().Connection.Query<InterviewStringAnswer>(
+            => sessionProvider.Session.Connection.Query<InterviewStringAnswer>(
                 $"SELECT i.{Column.InterviewId}, i.{Column.AsAudio}->>'{nameof(AudioAnswer.FileName)}' as Answer " +
                 $"FROM readside.interviewsummaries s INNER JOIN {Table.InterviewsView} i ON(s.interviewid = i.{Column.InterviewId}) " +
                 $"WHERE {Column.QuestionnaireIdentity} = '{questionnaireIdentity}' " +
@@ -160,7 +156,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             double southWestCornerLatitude, double northEastCornerLongtitude, double southWestCornerLongtitude,
             Guid? supervisorId)
         {
-            var result = sessionProvider.GetSession().Connection.Query<InterviewGpsAnswer>(
+            var result = sessionProvider.Session.Connection.Query<InterviewGpsAnswer>(
                 $@"with interviews as(
                     select teamleadid, interviewid, latitude, longitude
                     from
@@ -209,7 +205,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         public InterviewGpsAnswerWithTimeStamp[] GetGpsAnswersForInterviewer(Guid interviewerId)
         {
-            var result = sessionProvider.GetSession().Connection.Query<InterviewGpsAnswerWithTimeStamp>(
+            var result = sessionProvider.Session.Connection.Query<InterviewGpsAnswerWithTimeStamp>(
                 $@"with interviews as(
                     select entityid, interviewid, latitude, longitude, timestamp, status
                     from
@@ -246,7 +242,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         public bool HasAnyGpsAnswerForInterviewer(Guid interviewerId)
         {
-            var result = sessionProvider.GetSession().Connection.Query<int>(
+            var result = sessionProvider.Session.Connection.Query<int>(
                 $@"         select 1
                             from
                                 readside.interviews_view i
@@ -338,7 +334,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
             if (cacheValue is Dictionary<Guid, int> cached) return cached;
 
-            var entities = this.sessionProvider.GetSession().Connection
+            var entities = this.sessionProvider.Session.Connection
                 .Query<(int id, Guid entityId)>(
                     @"SELECT id, entityid FROM readside.questionnaire_entities where questionnaireidentity = @questionnaireIdentity",
                     new { questionnaireIdentity });
@@ -351,7 +347,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         private (int id, string questionnaireId) GetInterviewId(Guid interviewId)
         {
-            var conn = sessionProvider.GetSession().Connection;
+            var conn = sessionProvider.Session.Connection;
             var id = interviewId.FormatGuid();
             return conn.QuerySingleOrDefault<(int id, string questionnaireId)>(
                 // https://stackoverflow.com/a/42217872/41483
@@ -374,7 +370,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         private void SaveInterviewStateItem(Guid interviewId, IEnumerable<InterviewEntity> stateItems)
         {
-            var conn = sessionProvider.GetSession().Connection;
+            var conn = sessionProvider.Session.Connection;
 
             var interview = GetInterviewId(interviewId);
 
@@ -433,7 +429,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         public IEnumerable<InterviewEntity> GetInterviewEntities(IEnumerable<Guid> interviews)
         {
-            var connection = sessionProvider.GetSession().Connection;
+            var connection = sessionProvider.Session.Connection;
 
             var ids = string.Join(",", interviews.Select(i => "'" + i.ToString() + "'"));
 
