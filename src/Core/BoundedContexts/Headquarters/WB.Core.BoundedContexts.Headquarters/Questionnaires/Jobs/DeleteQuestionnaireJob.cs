@@ -12,32 +12,28 @@ namespace WB.Core.BoundedContexts.Headquarters.Questionnaires.Jobs
     [DisallowConcurrentExecution]
     public class DeleteQuestionnaireJob : IJob
     {
-        private IPlainStorageAccessor<QuestionnaireBrowseItem> QuestionnaireBrowseItemReader => 
-            ServiceLocator.Current.GetInstance<IPlainStorageAccessor<QuestionnaireBrowseItem>>();
+        private readonly IDeleteQuestionnaireService deleteQuestionnaireService;
+        private readonly IPlainTransactionManager transactionManager;
+        private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemReader;
 
-        private IPlainTransactionManager plainTransactionManager =>
-            ServiceLocator.Current.GetInstance<IPlainTransactionManager>();
-
-
-        private IDeleteQuestionnaireService DeletionService => ServiceLocator.Current.GetInstance<IDeleteQuestionnaireService>();
+        public DeleteQuestionnaireJob(IDeleteQuestionnaireService deleteQuestionnaireService, 
+            IPlainTransactionManager transactionManager, 
+            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemReader)
+        {
+            this.deleteQuestionnaireService = deleteQuestionnaireService;
+            this.transactionManager = transactionManager;
+            this.questionnaireBrowseItemReader = questionnaireBrowseItemReader;
+        }
 
         public void Execute(IJobExecutionContext context)
         {
             var disabledNotDeletedQuestionnaire =
-                this.plainTransactionManager.ExecuteInQueryTransaction(() => 
-                QuestionnaireBrowseItemReader.Query(_ => _.FirstOrDefault(q => q.Disabled && !q.IsDeleted)));
+                transactionManager.ExecuteInQueryTransaction(() =>
+                    questionnaireBrowseItemReader.Query(_ => _.FirstOrDefault(q => q.Disabled && !q.IsDeleted)));
 
             if(disabledNotDeletedQuestionnaire == null) return;
 
-            ThreadMarkerManager.MarkCurrentThreadAsIsolated();
-            try
-            {
-                this.DeletionService.DeleteInterviewsAndQuestionnaireAfter(disabledNotDeletedQuestionnaire.QuestionnaireId, disabledNotDeletedQuestionnaire.Version, disabledNotDeletedQuestionnaire.DisabledBy);
-            }
-            finally
-            {
-                ThreadMarkerManager.ReleaseCurrentThreadFromIsolation();
-            }
+            deleteQuestionnaireService.DeleteInterviewsAndQuestionnaireAfter(disabledNotDeletedQuestionnaire.QuestionnaireId, disabledNotDeletedQuestionnaire.Version, disabledNotDeletedQuestionnaire.DisabledBy);
         }
     }
 }

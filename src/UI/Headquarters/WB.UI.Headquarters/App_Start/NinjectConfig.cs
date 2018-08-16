@@ -100,6 +100,21 @@ namespace WB.UI.Headquarters
 
             Database.SetInitializer(new FluentMigratorInitializer<HQIdentityDbContext>("users", DbUpgradeSettings.FromFirstMigration<M001_AddUsersHqIdentityModel>()));
 
+
+            UnitOfWorkConnectionSettings connectionSettings = new UnitOfWorkConnectionSettings
+            {
+                ConnectionString = settingsProvider.ConnectionStrings[dbConnectionStringName].ConnectionString,
+                ReadSideSchemaName = PostgresReadSideModule.ReadSideSchemaName,
+                ReadSideMappingAssemblies = mappingAssemblies,
+                PlainStorageSchemaName = "plainstore",
+                PlainMappingAssemblies = new List<Assembly>
+                {
+                    typeof(HeadquartersBoundedContextModule).Assembly,
+                    typeof(ProductVersionModule).Assembly,
+                }
+            };
+
+
             var kernel = new NinjectKernel();
             kernel.Load(
                 new NLogLoggingModule(),
@@ -111,12 +126,7 @@ namespace WB.UI.Headquarters
                 new QuestionnaireUpgraderModule(),
                 new FileInfrastructureModule(),
                 new ProductVersionModule(typeof(HeadquartersUIModule).Assembly),
-                new PostgresKeyValueModule(cacheSettings),
-                new PostgresReadSideModule(
-                    settingsProvider.ConnectionStrings[dbConnectionStringName].ConnectionString,
-                    PostgresReadSideModule.ReadSideSchemaName, DbUpgradeSettings.FromFirstMigration<M001_InitDb>(),
-                    cacheSettings,
-                    mappingAssemblies)
+                new OrmModule(connectionSettings)
             );
 
             kernel.Load(new HeadquartersUIModule());
@@ -210,7 +220,7 @@ namespace WB.UI.Headquarters
             var mainModule = new MainModule(settingsProvider, applicationSecuritySection, legacyAssemblySettings);
 
             kernel.Load(
-                new PostgresPlainStorageModule(postgresPlainStorageSettings),
+                //new PostgresPlainStorageModule(postgresPlainStorageSettings),
                 eventStoreModule,
                 new DataCollectionSharedKernelModule(),
                 new HeadquartersBoundedContextModule(basePath,

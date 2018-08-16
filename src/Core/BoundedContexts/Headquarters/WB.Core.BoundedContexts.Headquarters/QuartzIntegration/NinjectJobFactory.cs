@@ -3,6 +3,7 @@ using System.Globalization;
 using Ninject;
 using Quartz;
 using Quartz.Spi;
+using WB.Infrastructure.Native.Ioc;
 
 namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
 {
@@ -40,7 +41,7 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
             Type jobType = jobDetail.JobType;
             try
             {
-                return this.kernel.Get(jobType) as IJob;
+                return this.kernel.Get(jobType, new NonRequestScopedParameter()) as IJob;
             }
             catch (Exception e)
             {
@@ -55,7 +56,7 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
         /// </summary>
         public void ReturnJob(IJob job)
         {
-
+            this.kernel.Release(job);
         }
     }
 }
