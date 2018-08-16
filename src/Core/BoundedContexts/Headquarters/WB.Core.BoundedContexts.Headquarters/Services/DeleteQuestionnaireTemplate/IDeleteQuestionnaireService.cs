@@ -5,7 +5,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Services.DeleteQuestionnaireTempl
 {
     public interface IDeleteQuestionnaireService
     {
-        Task DeleteQuestionnaire(Guid questionnaireId,
+        void DisableQuestionnaire(Guid questionnaireId,
             long questionnaireVersion, Guid? userId);
+
+        void DeleteInterviewsAndQuestionnaireAfter(Guid questionnaireId, long questionnaireVersion, Guid? userId);
     }
 }
