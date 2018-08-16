@@ -5,6 +5,7 @@ using Quartz;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Jobs;
 using WB.Core.BoundedContexts.Headquarters.Maps;
+using WB.Core.BoundedContexts.Headquarters.Questionnaires.Jobs;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewDetailsDataScheduler;
@@ -119,6 +120,7 @@ namespace WB.UI.Headquarters
             serviceLocator.GetInstance<AssignmentsImportTask>().Schedule(repeatIntervalInSeconds: 300);
             serviceLocator.GetInstance<AssignmentsVerificationTask>().Schedule(repeatIntervalInSeconds: 300);
             serviceLocator.GetInstance<ExportJobScheduler>().Configure();
+            serviceLocator.GetInstance<DeleteQuestionnaireJobScheduler>().Configure();
             serviceLocator.GetInstance<PauseResumeJobScheduler>().Configure();
             serviceLocator.GetInstance<UpgradeAssignmentJobScheduler>().Configure();
             serviceLocator.GetInstance<IRefreshReportsTask>().Run();
