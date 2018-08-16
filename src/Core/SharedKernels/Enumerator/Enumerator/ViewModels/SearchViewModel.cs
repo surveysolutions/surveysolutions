@@ -154,7 +154,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
             if (item.AssignmentId.HasValue)
             {
-                var uiAssignment = this.UiItems.OfType<InterviewerAssignmentDashboardItemViewModel>()
+                var uiAssignment = this.UiItems.OfType<AssignmentDashboardItemViewModel>()
                         .FirstOrDefault(x => x.AssignmentId == item.AssignmentId.Value);
 
                 if (uiAssignment != null)
