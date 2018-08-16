@@ -17,6 +17,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         private int interviewsByAssignmentCount;
         private QuestionnaireIdentity questionnaireIdentity;
 
+        public int AssignmentId => this.Assignment.Id;
+
         protected AssignmentDashboardItemViewModel(IServiceLocator serviceLocator) : base(serviceLocator)
         {
             this.serviceLocator = serviceLocator;
