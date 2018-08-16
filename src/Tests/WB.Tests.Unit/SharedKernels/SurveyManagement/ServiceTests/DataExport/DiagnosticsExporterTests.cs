@@ -7,7 +7,6 @@ using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Tests.Abc;
 
@@ -93,10 +92,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport
             exporter.Export(new List<Guid>() { interviewId1, interviewId2, interviewId3 }, "", new Progress<int>(), CancellationToken.None);
 
             Assert.That(fileData.Count, Is.EqualTo(3 /*interviews*/ + 1 /*header*/));
-            Assert.That(fileData[0], Is.EqualTo(new[] { "interview__key", "interview_status", "responsible", "n_of_Interviewers", "n_rejections_by_supervisor", "n_rejections_by_hq", "n_entities_errors", "n_questions_comments", "interview_duration" }));
-            Assert.That(fileData[1], Is.EqualTo(new[] { "key1", "InterviewerAssigned", "int1", "1", "2", "3", "5", "7", "00:00:00.0100000" }));
-            Assert.That(fileData[2], Is.EqualTo(new[] { "key2", "RejectedByHeadquarters", "int2", "9", "8", "7", "5", "3", "00:00:00.0200000" }));
-            Assert.That(fileData[3], Is.EqualTo(new[] { "key3", "RejectedBySupervisor", "int1", "2", "4", "6", "9", "2", "00:02:55.8237000" }));
+            Assert.That(fileData[0], Is.EqualTo(new[] { "interview__id", "interview__key", "interview_status", "responsible", "n_of_Interviewers", "n_rejections_by_supervisor", "n_rejections_by_hq", "n_entities_errors", "n_questions_comments", "interview_duration" }));
+            Assert.That(fileData[1], Is.EqualTo(new[] { interviewId1.ToString() ,"key1", "InterviewerAssigned", "int1", "1", "2", "3", "5", "7", "00:00:00.0100000" }));
+            Assert.That(fileData[2], Is.EqualTo(new[] { interviewId2.ToString(), "key2", "RejectedByHeadquarters", "int2", "9", "8", "7", "5", "3", "00:00:00.0200000" }));
+            Assert.That(fileData[3], Is.EqualTo(new[] { interviewId3.ToString(), "key3", "RejectedBySupervisor", "int1", "2", "4", "6", "9", "2", "00:02:55.8237000" }));
         }
     }
 }

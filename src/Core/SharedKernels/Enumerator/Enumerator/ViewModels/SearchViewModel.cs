@@ -154,9 +154,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
             if (item.AssignmentId.HasValue)
             {
-                var assesment = assignments.FirstOrDefault(i => i.Id == item.AssignmentId.Value);
-                if (assesment?.CreatedInterviewsCount != null)
-                    assesment.CreatedInterviewsCount--;
+                var uiAssignment = this.UiItems.OfType<InterviewerAssignmentDashboardItemViewModel>()
+                        .FirstOrDefault(x => x.AssignmentId == item.AssignmentId.Value);
+
+                if (uiAssignment != null)
+                {
+                    uiAssignment.DecreaseInterviewsCount();
+                }
+                else
+                {
+                    var assignment = assignments.FirstOrDefault(i => i.Id == item.AssignmentId.Value);
+                    if (assignment?.CreatedInterviewsCount != null)
+                        assignment.CreatedInterviewsCount--;
+                    assignmentsRepository.Store(assignment);
+                }
             }
 
             this.interviews.RemoveAll(x => x.InterviewId == item.InterviewId);
@@ -182,7 +193,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                     var assignmentItemViewModel = this.viewModelFactory.GetDashboardAssignment(assignmentItem);
                     yield return assignmentItemViewModel;
                 }
-
             }
 
 
