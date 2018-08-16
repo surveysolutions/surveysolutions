@@ -55,7 +55,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             this.auditLog = auditLog;
         }
 
-        public Task DeleteQuestionnaire(Guid questionnaireId, long questionnaireVersion, Guid? userId)
+        public void DisableQuestionnaire(Guid questionnaireId, long questionnaireVersion, Guid? userId)
         {
             this.logger.Warn($"Questionnaire {questionnaireId}${questionnaireVersion} deletion was triggered by {userId} user");
             var questionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
@@ -71,22 +71,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
                         userId));
                 }
             }
-
-            return Task.Factory.StartNew(() =>
-            {
-                ThreadMarkerManager.MarkCurrentThreadAsIsolated();
-                try
-                {
-                    this.DeleteInterviewsAndQuestionnaireAfter(questionnaireId, questionnaireVersion, userId);
-                }
-                finally
-                {
-                    ThreadMarkerManager.ReleaseCurrentThreadFromIsolation();
-                }
-            });
         }
 
-        private void DeleteInterviewsAndQuestionnaireAfter(Guid questionnaireId, long questionnaireVersion, Guid? userId)
+        public void DeleteInterviewsAndQuestionnaireAfter(Guid questionnaireId, long questionnaireVersion, Guid? userId)
         {
             var questionnaireKey = ObjectExtensions.AsCompositeKey(questionnaireId.FormatGuid(), questionnaireVersion);
              

@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
     internal class DeleteQuestionnaireServiceTests : DeleteQuestionnaireServiceTestContext
     {
         [Test]
-        public async Task when_delete_questionnaire_and_lookup_tables()
+        public void when_delete_questionnaire_and_lookup_tables()
         {
             var questionnaireIdentity = Create.Entity.QuestionnaireIdentity(Id.g1, 5);
 
@@ -74,7 +74,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
                                 Version = questionnaireIdentity.Version
                             }));
 
-            await deleteQuestionnaireService.DeleteQuestionnaire(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, userId);
+            deleteQuestionnaireService.DeleteInterviewsAndQuestionnaireAfter(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version, userId);
             
             Mock.Get(questionnaireStorage).Verify(s => s.GetQuestionnaireDocument(questionnaireIdentity), Times.Once);
             
@@ -85,7 +85,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
         string GetLookupKey(QuestionnaireIdentity questionnaireIdentity, Guid lookupId) => LookupStorageHelpers.GetLookupKey(null, questionnaireIdentity, lookupId);
         
         [Test]
-        public async Task when_delete_questionnaire_and_one_interview()
+        public void when_delete_questionnaire_and_one_interview()
         {
             Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
             long questionnaireVersion = 5;
@@ -122,7 +122,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
                                 Version = questionnaireVersion
                             }));
 
-            await deleteQuestionnaireService.DeleteQuestionnaire(questionnaireId, questionnaireVersion, userId);
+            deleteQuestionnaireService.DisableQuestionnaire(questionnaireId, questionnaireVersion, userId);
+            deleteQuestionnaireService.DeleteInterviewsAndQuestionnaireAfter(questionnaireId, questionnaireVersion, userId);
 
             commandServiceMock.Received(1).Execute(
                 Arg.Is<DisableQuestionnaire>(
