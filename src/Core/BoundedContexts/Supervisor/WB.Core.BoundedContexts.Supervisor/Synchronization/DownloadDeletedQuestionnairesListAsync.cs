@@ -28,7 +28,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
             {
                 Title = InterviewerUIResources.Synchronization_Check_Obsolete_Questionnaires,
                 Statistics = Context.Statistics,
-                Status = SynchronizationStatus.Download
+                Status = SynchronizationStatus.Download,
+                Stage = SyncStage.CheckObsoleteQuestionnaires
             });
 
             var deletedQuestionnairesList = await this.supervisorSynchronization.GetListOfDeletedQuestionnairesIds(Context.CancellationToken);

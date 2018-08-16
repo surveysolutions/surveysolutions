@@ -337,6 +337,12 @@
   <data name="Synchronization_Questionnaires" xml:space="preserve">
     <value>вопросники</value>
   </data>
+  <data name="UpdatingQuestionnaires" xml:space="preserve">
+    <value>Обновление вопросников</value>
+  </data>
+  <data name="TransferringAssignments" xml:space="preserve">
+    <value>Передача назначений</value>
+  </data>
   <data name="Synchronization_LockedAssignments_Text" xml:space="preserve">
     <value>Интервью заблокированы до окончания синхронизации</value>
   </data>
@@ -665,6 +671,9 @@
   <data name="DashboardItem_AssignmentCreatedComment" xml:space="preserve">
     <value>Создано интервью: {0}</value>
     <comment>Создано интервью: {0}</comment>
+  </data>
+  <data name="AssignmentsSynchronization" xml:space="preserve">
+    <value>Синхронизация заданий</value>
   </data>
   <data name="Synchronization_Of_AssignmentsFormat" xml:space="preserve">
     <value>Синхронизация {0} из {1} заданий</value>
