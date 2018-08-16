@@ -22,10 +22,10 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         {
             base.Load(registry);
 
-            registry.BindToMethodInSingletonScope(typeof(IReadSideKeyValueStorage<>), this.GetReadSideStorageWrappedWithCache);
-            registry.BindToMethodInSingletonScope(typeof(IReadSideKeyValueStorage<,>), this.GetGenericReadSideStorageWrappedWithCache);
+            registry.Bind(typeof(IReadSideKeyValueStorage<>), typeof(PostgresReadSideKeyValueStorage<>));
+            registry.Bind(typeof(IReadSideKeyValueStorage<,>), typeof(PostgresReadSideKeyValueStorage<>));
 
-            registry.BindAsSingleton(typeof(IPlainKeyValueStorage<>), typeof(PostgresPlainKeyValueStorage<>));
+            registry.Bind(typeof(IPlainKeyValueStorage<>), typeof(PostgresPlainKeyValueStorage<>));
 
             registry.BindAsSingleton(typeof(IEntitySerializer<>), typeof(EntitySerializer<>));
         }

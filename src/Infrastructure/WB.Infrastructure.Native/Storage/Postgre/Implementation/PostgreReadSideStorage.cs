@@ -21,8 +21,9 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             INativeReadSideStorage<TEntity>
         where TEntity : class, IReadSideRepositoryEntity
     {
-        public PostgreReadSideStorage([Named(PostgresReadSideModule.SessionProviderName)]ISessionProvider sessionProvider, 
-            ILogger logger) : base(sessionProvider, logger)
+        public PostgreReadSideStorage(
+            IUnitOfWork unitOfWork, 
+            ILogger logger) : base(unitOfWork, logger)
         {
         }
     }
@@ -31,29 +32,29 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         INativeReadSideStorage<TEntity,TKey>
         where TEntity : class, IReadSideRepositoryEntity
     {
-        private readonly ISessionProvider sessionProvider;
+        private readonly IUnitOfWork sessionProvider;
         private readonly ILogger logger;
 
-        public PostgreReadSideStorage([Named(PostgresReadSideModule.SessionProviderName)]ISessionProvider sessionProvider, 
+        public PostgreReadSideStorage(IUnitOfWork unitOfWork, 
             ILogger logger)
         {
-            this.sessionProvider = sessionProvider;
+            this.sessionProvider = unitOfWork;
             this.logger = logger;
         }
 
         public virtual int Count()
         {
-            return this.sessionProvider.GetSession().QueryOver<TEntity>().RowCount();
+            return this.sessionProvider.Session.QueryOver<TEntity>().RowCount();
         }
 
         public virtual TEntity GetById(TKey id)
         {
-            return this.sessionProvider.GetSession().Get<TEntity>(id);
+            return this.sessionProvider.Session.Get<TEntity>(id);
         }
 
         public virtual void Remove(TKey id)
         {
-            var session = this.sessionProvider.GetSession();
+            var session = this.sessionProvider.Session;
 
             var entity = session.Get<TEntity>(id);
 
@@ -65,7 +66,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         public virtual void Store(TEntity entity, TKey id)
         {
-            ISession session = this.sessionProvider.GetSession();
+            ISession session = this.sessionProvider.Session;
 
             var storedEntity = session.Get<TEntity>(id);
             if (!object.ReferenceEquals(storedEntity, entity) && storedEntity != null)
@@ -94,21 +95,12 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         public void Flush()
         {
-            this.sessionProvider.GetSession().Flush();
-        }
-
-        public virtual void Clear()
-        {
-            ISession session = this.sessionProvider.GetSession();
-
-            string entityName = typeof(TEntity).Name;
-
-            session.Delete(string.Format("from {0} e", entityName));
+            this.sessionProvider.Session.Flush();
         }
 
         public int CountDistinctWithRecursiveIndex<TResult>(Func<IQueryOver<TEntity, TEntity>, IQueryOver<TResult,TResult>> query)
         {
-            var queryable= query.Invoke(this.sessionProvider.GetSession().QueryOver<TEntity>());
+            var queryable= query.Invoke(this.sessionProvider.Session.QueryOver<TEntity>());
 
             var countQuery = this.GenerateCountRowsQuery(queryable.UnderlyingCriteria);
 
@@ -119,7 +111,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         public IQuery GenerateCountRowsQuery(ICriteria criteria)
         {
-            ISession session = this.sessionProvider.GetSession();
+            ISession session = this.sessionProvider.Session;
             var criteriaImpl = (CriteriaImpl)criteria;
             var sessionImpl = (SessionImpl)criteriaImpl.Session;
             var factory = (SessionFactoryImpl)sessionImpl.SessionFactory;
@@ -154,12 +146,12 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         public virtual TResult QueryOver<TResult>(Func<IQueryOver<TEntity, TEntity>, TResult> query)
         {
-            return query.Invoke(this.sessionProvider.GetSession().QueryOver<TEntity>());
+            return query.Invoke(this.sessionProvider.Session.QueryOver<TEntity>());
         }
 
         public virtual TResult Query<TResult>(Func<IQueryable<TEntity>, TResult> query)
         {
-            return query.Invoke(this.sessionProvider.GetSession().Query<TEntity>());
+            return query.Invoke(this.sessionProvider.Session.Query<TEntity>());
         }
 
         public Type ViewType

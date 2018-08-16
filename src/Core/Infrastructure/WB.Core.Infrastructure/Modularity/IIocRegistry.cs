@@ -28,5 +28,6 @@ namespace WB.Core.Infrastructure.Modularity
         void Unbind<T>();
         bool HasBinding<T>();
         void BindInIsolatedThreadScopeOrRequestScopeOrThreadScope<T>();
+        void BindInIsolatedThreadScopeOrRequestScopeOrThreadScope<T1, T2>() where T2 : T1;
     }
 }

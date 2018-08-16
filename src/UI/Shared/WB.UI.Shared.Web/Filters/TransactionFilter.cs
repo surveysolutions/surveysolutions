@@ -1,30 +1,33 @@
 using System.Web.Mvc;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Transactions;
+using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.UI.Shared.Web.Filters
 {
     public class TransactionFilter : ActionFilterAttribute
     {
-        ITransactionManagerProvider TransactionManagerProvider => ServiceLocator.Current.GetInstance<ITransactionManagerProvider>();
+        private readonly IUnitOfWork unitOfWork;
+
+        public TransactionFilter(IUnitOfWork unitOfWork)
+        {
+            this.unitOfWork = unitOfWork;
+        }
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            this.TransactionManagerProvider.GetTransactionManager().BeginCommandTransaction();
+            this.unitOfWork.Start();
         }
 
         public override void OnResultExecuted(ResultExecutedContext filterContext)
         {
-            if (TransactionManagerProvider.GetTransactionManager().TransactionStarted)
+            if (filterContext.Exception != null)
             {
-                if (filterContext.Exception != null)
-                {
-                    TransactionManagerProvider.GetTransactionManager().RollbackCommandTransaction();
-                }
-                else
-                {
-                    TransactionManagerProvider.GetTransactionManager().CommitCommandTransaction();
-                }
+                unitOfWork.AcceptChanges();
+            }
+            else
+            {
+                unitOfWork.Dispose();
             }
         }
     }

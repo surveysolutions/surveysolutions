@@ -13,6 +13,7 @@ using WB.Core.Infrastructure.Modularity;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Storage;
 using WB.UI.Designer.Api.WebTester;
+using WB.UI.Designer.Code;
 using WB.UI.Designer.Implementation.Services;
 using WB.UI.Designer.Services;
 using WB.UI.Shared.Web.Modules;
@@ -27,21 +28,18 @@ namespace WB.UI.Designer
         public void Load(IWebIocRegistry registry)
         {
             //registry.Bind<ILog>().ToConstant(new Log()).InSingletonScope();
-            registry.BindMvcFilterInSingletonScope<CustomHandleErrorFilter>(FilterScope.Global, 0);
-            registry.BindMvcFilterInSingletonScope<CustomAuthorizeFilter>(FilterScope.Global, 0);
+            registry.BindMvcFilter<CustomHandleErrorFilter>(FilterScope.Global, 20);
+            registry.BindMvcFilter<CustomAuthorizeFilter>(FilterScope.Global, 20);
 
-            registry.BindToMethod<IJsonAllTypesSerializer>(() => new JsonAllTypesSerializer());
+            registry.Bind<IJsonAllTypesSerializer, JsonAllTypesSerializer>();
 
-            registry.BindAsSingleton<IQuestionnairePackageComposer, QuestionnairePackageComposer>();
+            registry.Bind<IQuestionnairePackageComposer, QuestionnairePackageComposer>();
             registry.Bind<IArchiveUtils, ZipArchiveUtils>();
-            registry.BindToConstant<IMembershipHelper>(() => new MembershipHelper());
-            registry.BindToConstructorInSingletonScope<IMembershipWebUser>(x => new MembershipWebUser(x.Inject<IMembershipHelper>()));
-            registry.BindToConstructorInSingletonScope<IMembershipWebServiceUser>(x => new MembershipWebServiceUser(x.Inject<IMembershipHelper>()));
-            registry.BindToConstructorInSingletonScope<IMembershipUserService>(x =>
-                    new MembershipUserService(
-                        x.Inject<IMembershipHelper>(),
-                        x.Inject<IMembershipWebUser>(),
-                        x.Inject<IMembershipWebServiceUser>()));
+            registry.Bind<IMembershipHelper, MembershipHelper>();
+
+            registry.Bind<IMembershipWebUser, MembershipWebUser>();
+            registry.Bind<IMembershipWebServiceUser, MembershipWebServiceUser>();
+            registry.Bind<IMembershipUserService, MembershipUserService>();
 
             registry.Bind<IRecipientNotifier, MailNotifier>();
 
