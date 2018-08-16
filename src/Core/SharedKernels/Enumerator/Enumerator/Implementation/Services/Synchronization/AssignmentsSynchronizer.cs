@@ -50,7 +50,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             {
                 Title = InterviewerUIResources.Synchronization_Of_AssignmentsFormat.FormatString(0, remoteAssignments.Count),
                 Statistics = statistics,
-                Status = SynchronizationStatus.Download
+                Status = SynchronizationStatus.Download,
+                Stage = SyncStage.AssignmentsSynchronization
             });
 
             // removing local assignments if needed
@@ -89,7 +90,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     {
                         Title = InterviewerUIResources.Synchronization_Of_AssignmentsFormat.FormatString(processedAssignmentsCount, remoteAssignments.Count),
                         Statistics = statistics,
-                        Status = SynchronizationStatus.Download
+                        Status = SynchronizationStatus.Download,
+                        Stage = SyncStage.AssignmentsSynchronization
                     });
 
                     this.assignmentsRepository.Store(local);
@@ -124,7 +126,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             {
                 Title = InterviewerUIResources.Synchronization_Of_AssignmentsFormat.FormatString(processedAssignmentsCount, remoteAssignments.Count),
                 Statistics = statistics,
-                Status = SynchronizationStatus.Download
+                Status = SynchronizationStatus.Download,
+                Stage = SyncStage.AssignmentsSynchronization
             });
         }
     }
