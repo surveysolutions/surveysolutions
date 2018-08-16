@@ -12,8 +12,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
         private IInterviewFromAssignmentCreatorService InterviewFromAssignmentCreator
             => serviceLocator.GetInstance<IInterviewFromAssignmentCreatorService>();
 
-        public int AssignmentId => this.Assignment.Id;
-
         public InterviewerAssignmentDashboardItemViewModel(IServiceLocator serviceLocator) : base(serviceLocator)
         {
         }
