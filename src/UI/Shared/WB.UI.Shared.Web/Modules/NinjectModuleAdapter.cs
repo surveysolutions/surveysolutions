@@ -221,11 +221,12 @@ namespace WB.UI.Shared.Web.Modules
         public void BindInIsolatedThreadScopeOrRequestScopeOrThreadScope<T1, T2>() where T2 : T1
         {
             this.Kernel.Bind<T1>().To<T2>()
-                .InRequestScope();
+                .When(x => x.Parameters.OfType<NonRequestScopedParameter>().Any())
+                .InScope(_ => JobScope.Scope.Value);
 
             this.Kernel.Bind<T1>().To<T2>()
-                .When(x => x.Parameters.OfType<NonRequestScopedParameter>().Any())
-                .InCallScope();
+                .When(x => !x.Parameters.OfType<NonRequestScopedParameter>().Any())
+                .InRequestScope();
         }
 
         public static IBindingNamedWithOrOnSyntax<T> InIsolatedThreadScopeOrRequestScopeOrThreadScope<T>(IBindingInSyntax<T> syntax)

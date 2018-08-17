@@ -9,9 +9,14 @@ namespace WB.UI.Shared.Web.Filters
     {
         public override void OnActionExecuted(HttpActionExecutedContext actionExecutedContext)
         {
+            var unitOfWork = ServiceLocator.Current.GetInstance<IUnitOfWork>();
             if (actionExecutedContext.Exception == null)
             {
-                ServiceLocator.Current.GetInstance<IUnitOfWork>().AcceptChanges();
+                unitOfWork.AcceptChanges();
+            }
+            else
+            {
+                unitOfWork.Dispose();
             }
         }
     }
