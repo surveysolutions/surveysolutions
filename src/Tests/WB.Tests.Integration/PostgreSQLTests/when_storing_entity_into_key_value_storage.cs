@@ -24,9 +24,10 @@ namespace WB.Tests.Integration.PostgreSQLTests
             pgSqlConnection = new NpgsqlConnection(ConnectionStringBuilder.ConnectionString);
             pgSqlConnection.Open();
 
-            var sessionProvider = Mock.Of<ISessionProvider>(x => x.GetSession() == Mock.Of<ISession>(y => y.Transaction == Mock.Of<ITransaction>() && y.Connection == pgSqlConnection));
+            var sessionProvider = Mock.Of<IUnitOfWork>(x => x.Session == Mock.Of<ISession>(y => y.Transaction == Mock.Of<ITransaction>() && y.Connection == pgSqlConnection));
             storage = IntegrationCreate.PostgresReadSideKeyValueStorage<TestPersistedClass>(
-                sessionProvider: sessionProvider, postgreConnectionSettings: new PostgreConnectionSettings { ConnectionString = ConnectionStringBuilder.ConnectionString });
+                sessionProvider: sessionProvider, 
+                postgreConnectionSettings: new UnitOfWorkConnectionSettings { ConnectionString = ConnectionStringBuilder.ConnectionString });
             storedDate = new DateTime(2010, 1, 1);
             usedId = "id";
             BecauseOf();

@@ -62,10 +62,6 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
 
             var dataExportFileAccessor = CrerateDataExportFileAccessor(fileSystemAccessor.Object);
 
-            var manager = new Mock<IPlainTransactionManager>();
-            var plainTransactionManagerProvider = new Mock<IPlainTransactionManagerProvider>();
-            plainTransactionManagerProvider.Setup(t => t.GetPlainTransactionManager()).Returns(manager.Object);
-
             var exportedDataAccessor = new Mock<IFilebasedExportedDataAccessor>();
             exportedDataAccessor.Setup(f => f.GetArchiveFilePathForExportedData(
                     It.IsAny<QuestionnaireIdentity>(), DataExportFormat.Binary, null, null, null))
@@ -79,7 +75,6 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters
                     filebasedExportedDataAccessor: exportedDataAccessor.Object,
                     fileSystemAccessor: fileSystemAccessor.Object,
                     dataExportFileAccessor: dataExportFileAccessor,
-                    plainTransactionManagerProvider: plainTransactionManagerProvider.Object,
                     questionnaireStorage: questionnaireStorage);
 
             //act

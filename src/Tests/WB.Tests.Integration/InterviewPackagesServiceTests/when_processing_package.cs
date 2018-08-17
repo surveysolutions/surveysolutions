@@ -20,6 +20,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Infrastructure.Native.Storage;
+using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
@@ -32,7 +33,7 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
         [NUnit.Framework.OneTimeSetUp] public void context ()
         {
             var sessionFactory = IntegrationCreate.SessionFactory(ConnectionStringBuilder.ConnectionString, new[] { typeof(InterviewPackageMap), typeof(BrokenInterviewPackageMap) }, true);
-            plainPostgresTransactionManager = new PlainPostgresTransactionManager(sessionFactory ?? Mock.Of<ISessionFactory>());
+            plainPostgresTransactionManager = Mock.Of<IUnitOfWork>(x => x.Session == sessionFactory.OpenSession());
 
             pgSqlConnection = new NpgsqlConnection(ConnectionStringBuilder.ConnectionString);
             pgSqlConnection.Open();
@@ -47,7 +48,6 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
 
             var newtonJsonSerializer = new JsonAllTypesSerializer();
 
-            transactionManager = new Mock<ITransactionManager>();
             interviewPackagesService = Create.Service.InterviewPackagesService(
                 syncSettings: new SyncSettings(origin) { UseBackgroundJobForProcessingPackages = true},
                 logger: Mock.Of<ILogger>(),
@@ -56,8 +56,7 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
                 brokenInterviewPackageStorage: Mock.Of<IPlainStorageAccessor<BrokenInterviewPackage>>(),
                 commandService: mockOfCommandService.Object,
                 uniqueKeyGenerator: Mock.Of<IInterviewUniqueKeyGenerator>(),
-                interviews: new TestInMemoryWriter<InterviewSummary>(),
-                transactionManager: transactionManager.Object);
+                interviews: new TestInMemoryWriter<InterviewSummary>());
 
             expectedCommand = Create.Command.SynchronizeInterviewEventsCommand(
                 interviewId: Guid.Parse("11111111111111111111111111111111"),
@@ -75,8 +74,7 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
                         new DateTimeQuestionAnswered(Guid.NewGuid(), Guid.NewGuid(), new decimal[] { 2, 5, 8}, DateTime.UtcNow, DateTime.Today),  
                     });
 
-            plainPostgresTransactionManager.ExecuteInPlainTransaction(
-                () => interviewPackagesService.StoreOrProcessPackage(
+                interviewPackagesService.StoreOrProcessPackage(
                     new InterviewPackage
                     {
                         InterviewId = expectedCommand.InterviewId,
@@ -86,12 +84,11 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
                         InterviewStatus = expectedCommand.InterviewStatus,
                         IsCensusInterview = expectedCommand.CreatedOnClient,
                         Events = newtonJsonSerializer.Serialize(expectedCommand.SynchronizedEvents.Select(IntegrationCreate.AggregateRootEvent).ToArray())
-                    }));
+                    });
             BecauseOf();
         }
 
-        private void BecauseOf() => plainPostgresTransactionManager.ExecuteInPlainTransaction(
-                () => interviewPackagesService.ProcessPackage("1"));
+        private void BecauseOf() => interviewPackagesService.ProcessPackage("1");
 
         [NUnit.Framework.Test] public void should_execute_SynchronizeInterviewEventsCommand_command () =>
             mockOfCommandService.Verify(x => x.Execute(Moq.It.IsAny<SynchronizeInterviewEventsCommand>(), origin), Times.Once);
@@ -106,20 +103,20 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
             actualCommand.SynchronizedEvents.Should().OnlyContain(x=>expectedCommand.SynchronizedEvents.Any(y=>y.GetType() == x.GetType()));
         }
 
-        [NUnit.Framework.Test] public void should_commit_transaction () => transactionManager.Verify(x => x.CommitCommandTransaction(), Times.Once);
-        [NUnit.Framework.Test] public void should_begin_transaction () => transactionManager.Verify(x => x.BeginCommandTransaction(), Times.Once);
-
         [OneTimeTearDown]
-        public void TearDown() => pgSqlConnection.Close();
+        public void TearDown()
+        {
+            plainPostgresTransactionManager.Dispose();
+            pgSqlConnection.Close();
+        }
 
         private static SynchronizeInterviewEventsCommand expectedCommand;
         private static SynchronizeInterviewEventsCommand actualCommand;
         private static Mock<ICommandService> mockOfCommandService;
         private static InterviewPackagesService interviewPackagesService;
         private static PostgresPlainStorageRepository<InterviewPackage> packagesStorage;
-        private static PlainPostgresTransactionManager plainPostgresTransactionManager;
+        private static IUnitOfWork plainPostgresTransactionManager;
         static NpgsqlConnection pgSqlConnection;
         private static string origin;
-        private static Mock<ITransactionManager> transactionManager;
     }
 }

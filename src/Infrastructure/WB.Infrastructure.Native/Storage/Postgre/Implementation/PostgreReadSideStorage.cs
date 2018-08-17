@@ -4,10 +4,8 @@ using System.Linq;
 using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.Impl;
-using NHibernate.Linq;
 using NHibernate.Loader.Criteria;
 using NHibernate.Persister.Entity;
-using Ninject;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -154,10 +152,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             return query.Invoke(this.sessionProvider.Session.Query<TEntity>());
         }
 
-        public Type ViewType
-        {
-            get { return typeof(TEntity); }
-        }
+        public Type ViewType => typeof(TEntity);
 
         public string GetReadableStatus()
         {
@@ -166,7 +161,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         private void FastBulkStore(List<Tuple<TEntity, TKey>> bulk)
         {
-            var sessionFactory = ServiceLocator.Current.GetInstance<ISessionFactory>(PostgresReadSideModule.ReadSideSessionFactoryName);
+            var sessionFactory = ServiceLocator.Current.GetInstance<ISessionFactory>();
 
             foreach (var subBulk in bulk.Batch(2048))
             {
@@ -188,7 +183,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         private void SlowBulkStore(List<Tuple<TEntity, TKey>> bulk)
         {
-            var sessionFactory = ServiceLocator.Current.GetInstance<ISessionFactory>(PostgresReadSideModule.ReadSideSessionFactoryName);
+            var sessionFactory = ServiceLocator.Current.GetInstance<ISessionFactory>();
             using (ISession session = sessionFactory.OpenSession())
             using (ITransaction transaction = session.BeginTransaction())
             {

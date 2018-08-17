@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Globalization;
 using Ninject;
 using Quartz;
@@ -10,6 +11,8 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
     public class NinjectJobFactory : IJobFactory
     {
         private readonly IKernel kernel;
+
+        private static ConcurrentDictionary<IJob, NinjectAmbientScope> resolvedJobs = new ConcurrentDictionary<IJob, NinjectAmbientScope>();
 
         public NinjectJobFactory(IKernel kernel)
         {
@@ -41,7 +44,11 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
             Type jobType = jobDetail.JobType;
             try
             {
-                return this.kernel.Get(jobType, new NonRequestScopedParameter()) as IJob;
+                var scope = new NinjectAmbientScope();
+                var job = this.kernel.Get(jobType, new NonRequestScopedParameter()) as IJob;
+                if (job == null) throw new ArgumentNullException(nameof(job));
+                resolvedJobs[job] = scope;
+                return job;
             }
             catch (Exception e)
             {
@@ -56,7 +63,11 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
         /// </summary>
         public void ReturnJob(IJob job)
         {
-            this.kernel.Release(job);
+            if (resolvedJobs.ContainsKey(job))
+            {
+                resolvedJobs.TryGetValue(job, out var scope);
+                scope?.Dispose();
+            }
         }
     }
 }

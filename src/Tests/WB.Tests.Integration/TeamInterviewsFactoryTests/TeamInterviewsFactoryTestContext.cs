@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Headquarters.Mappings;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Tests.Integration.PostgreSQLEventStoreTests;
 
@@ -25,7 +26,7 @@ namespace WB.Tests.Integration.TeamInterviewsFactoryTests
                 typeof(InterviewSummaryMap), typeof(TimeSpanBetweenStatusesMap), typeof(QuestionAnswerMap), typeof(InterviewCommentedStatusMap)
             }, true, schemaName: "readside");
 
-            postgresTransactionManager = new CqrsPostgresTransactionManager(sessionFactory ?? Mock.Of<ISessionFactory>());
+            postgresTransactionManager = Mock.Of<IUnitOfWork>(x => x.Session == sessionFactory.OpenSession());
 
             pgSqlConnection = new NpgsqlConnection(connectionString);
             pgSqlConnection.Open();
@@ -39,7 +40,7 @@ namespace WB.Tests.Integration.TeamInterviewsFactoryTests
         protected static PostgreReadSideStorage<InterviewSummary> CreateInterviewSummaryRepository()
         {
             var sessionFactory = IntegrationCreate.SessionFactory(connectionString, new[] { typeof(InterviewSummaryMap), typeof(TimeSpanBetweenStatusesMap), typeof(QuestionAnswerMap) }, true);
-            postgresTransactionManager = new CqrsPostgresTransactionManager(sessionFactory ?? Mock.Of<ISessionFactory>());
+            postgresTransactionManager = Mock.Of<IUnitOfWork>(x => x.Session == sessionFactory.OpenSession());
 
             pgSqlConnection = new NpgsqlConnection(connectionString);
             pgSqlConnection.Open();
@@ -50,7 +51,7 @@ namespace WB.Tests.Integration.TeamInterviewsFactoryTests
         protected static PostgreReadSideStorage<QuestionAnswer> CreateQuestionAnswerRepository()
         {
             var sessionFactory = IntegrationCreate.SessionFactory(connectionString, new[] { typeof(InterviewSummaryMap), typeof(TimeSpanBetweenStatusesMap), typeof(QuestionAnswerMap) }, true);
-            postgresTransactionManager = new CqrsPostgresTransactionManager(sessionFactory ?? Mock.Of<ISessionFactory>());
+            postgresTransactionManager = Mock.Of<IUnitOfWork>(x => x.Session == sessionFactory.OpenSession());
 
             pgSqlConnection = new NpgsqlConnection(connectionString);
             pgSqlConnection.Open();
@@ -60,19 +61,7 @@ namespace WB.Tests.Integration.TeamInterviewsFactoryTests
 
         protected static void ExecuteInCommandTransaction(Action action)
         {
-            try
-            {
-                postgresTransactionManager.BeginCommandTransaction();
-
-                action();
-
-                postgresTransactionManager.CommitCommandTransaction();
-            }
-            catch
-            {
-                postgresTransactionManager.RollbackCommandTransaction();
-                throw;
-            }
+            action();
         }
 
 
@@ -84,7 +73,7 @@ namespace WB.Tests.Integration.TeamInterviewsFactoryTests
         }
 
         protected static NpgsqlConnection pgSqlConnection;
-        protected static CqrsPostgresTransactionManager postgresTransactionManager;
         private static string connectionString;
+        private static IUnitOfWork postgresTransactionManager;
     }
 }

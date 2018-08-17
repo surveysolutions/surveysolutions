@@ -29,13 +29,13 @@ namespace WB.Tests.Integration.InterviewFactoryTests
 {
     internal class InterviewFactorySpecification
     {
-        protected PlainPostgresTransactionManager plainTransactionManager;
         private string connectionString;
         protected PostgreReadSideStorage<InterviewSummary> interviewSummaryRepository;
         protected PostgreReadSideStorage<QuestionnaireCompositeItem, int> questionnaireItemsRepository;
         protected HqQuestionnaireStorage questionnaireStorage;
         protected InMemoryKeyValueStorage<QuestionnaireDocument> questionnaireDocumentRepository;
         private PostgresPlainStorageRepository<QuestionnaireCompositeItem> compositeItemsRepository;
+        private IUnitOfWork plainTransactionManager;
 
 
         [OneTimeSetUp]
@@ -51,9 +51,9 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                     typeof(QuestionAnswerMap),
                     typeof(TimeSpanBetweenStatusesMap),
                     typeof(InterviewCommentedStatusMap)
-                }, true, PostgresReadSideModule.ReadSideSchemaName);
+                }, true, new UnitOfWorkConnectionSettings().ReadSideSchemaName);
 
-            this.plainTransactionManager = new PlainPostgresTransactionManager(sessionFactory);
+            this.plainTransactionManager = Mock.Of<IUnitOfWork>(x => x.Session == sessionFactory.OpenSession());
 
             Abc.Setup.InstanceToMockedServiceLocator<IEntitySerializer<int[][]>>(new EntitySerializer<int[][]>());
             Abc.Setup.InstanceToMockedServiceLocator<IEntitySerializer<GeoPosition>>(new EntitySerializer<GeoPosition>());
@@ -80,31 +80,22 @@ namespace WB.Tests.Integration.InterviewFactoryTests
 
         protected void StoreInterviewSummary(InterviewSummary interviewSummary, QuestionnaireIdentity questionnaireIdentity)
         {
-            this.plainTransactionManager.ExecuteInPlainTransaction(() =>
-            {
-                interviewSummary.QuestionnaireIdentity = questionnaireIdentity.ToString();
-                interviewSummary.SummaryId = interviewSummary.InterviewId.FormatGuid();
-                this.interviewSummaryRepository.Store(interviewSummary, interviewSummary.SummaryId);
-            });
+            interviewSummary.QuestionnaireIdentity = questionnaireIdentity.ToString();
+            interviewSummary.SummaryId = interviewSummary.InterviewId.FormatGuid();
+            this.interviewSummaryRepository.Store(interviewSummary, interviewSummary.SummaryId);
         }
 
         protected void PrepareQuestionnaire(QuestionnaireDocument document, long questionnaireVersion = 1)
         {
             document.Id = document.PublicKey.FormatGuid();
-
-            this.plainTransactionManager.ExecuteInPlainTransaction(() =>
-            {
-                this.questionnaireStorage.StoreQuestionnaire(document.PublicKey, questionnaireVersion, document);
-            });
+            this.questionnaireStorage.StoreQuestionnaire(document.PublicKey, questionnaireVersion, document);
         }
 
         protected InterviewEntity[] GetInterviewEntities(InterviewFactory factory, Guid interviewId, Guid questionnaireId, long version = 1) =>
-            this.plainTransactionManager.ExecuteInPlainTransaction(()
-                => factory.GetInterviewEntities(interviewId).ToArray());
+                factory.GetInterviewEntities(interviewId).ToArray();
 
         protected InterviewEntity[] GetInterviewEntities(InterviewFactory factory, QuestionnaireIdentity questionnaireId, Guid interviewId) =>
-            this.plainTransactionManager.ExecuteInPlainTransaction(()
-                => factory.GetInterviewEntities(interviewId).ToArray());
+                factory.GetInterviewEntities(interviewId).ToArray();
 
         protected InterviewFactory CreateInterviewFactory()
         {

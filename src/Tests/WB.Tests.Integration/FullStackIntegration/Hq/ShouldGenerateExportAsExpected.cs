@@ -128,30 +128,26 @@ namespace WB.Tests.Integration.FullStackIntegration.Hq
 
             var authorizedUser = Mock.Of<IAuthorizedUser>();
 
-            var transactionManager = ServiceLocator.Current.GetInstance<ITransactionManager>();
-            var plainTransactionManager = ServiceLocator.Current.GetInstance<IPlainTransactionManager>();
+            using (new NinjectAmbientScope())
+            {
+                var importService = new QuestionnaireImportService(
+                    ServiceLocator.Current.GetInstance<ISupportedVersionProvider>(),
+                    restService.Object,
+                    ServiceLocator.Current.GetInstance<IStringCompressor>(),
+                    ServiceLocator.Current.GetInstance<IAttachmentContentService>(),
+                    ServiceLocator.Current.GetInstance<IQuestionnaireVersionProvider>(),
+                    ServiceLocator.Current.GetInstance<ITranslationManagementService>(),
+                    ServiceLocator.Current.GetInstance<IPlainKeyValueStorage<QuestionnaireLookupTable>>(),
+                    ServiceLocator.Current.GetInstance<ICommandService>(),
+                    Mock.Of<ILogger>(),
+                    ServiceLocator.Current.GetInstance<IAuditLog>(),
+                    authorizedUser,
+                    Mock.Of<DesignerUserCredentials>(x => x.Get() == new RestCredentials())
+                );
 
-            plainTransactionManager.BeginTransaction();
-            transactionManager.BeginCommandTransaction();
-            var importService = new QuestionnaireImportService(
-                ServiceLocator.Current.GetInstance<ISupportedVersionProvider>(),
-                restService.Object,
-                ServiceLocator.Current.GetInstance<IStringCompressor>(),
-                ServiceLocator.Current.GetInstance<IAttachmentContentService>(),
-                ServiceLocator.Current.GetInstance<IQuestionnaireVersionProvider>(),
-                ServiceLocator.Current.GetInstance<ITranslationManagementService>(),
-                ServiceLocator.Current.GetInstance<IPlainKeyValueStorage<QuestionnaireLookupTable>>(),
-                ServiceLocator.Current.GetInstance<ICommandService>(),
-                Mock.Of<ILogger>(),
-                ServiceLocator.Current.GetInstance<IAuditLog>(),
-                authorizedUser,
-                Mock.Of<DesignerUserCredentials>(x => x.Get() == new RestCredentials())
-            );
-
-            await importService.Import(questionanireId, "name", false);
-
-            transactionManager.CommitCommandTransaction();
-            plainTransactionManager.CommitTransaction();
+                await importService.Import(questionanireId, "name", false);
+                ServiceLocator.Current.GetInstance<IUnitOfWork>().AcceptChanges();
+            }
         }
 
         private async Task CreateUsers()
@@ -179,8 +175,6 @@ namespace WB.Tests.Integration.FullStackIntegration.Hq
 
         private async Task RunSynchronization()
         {
-            var packagesService = ServiceLocator.Current.GetInstance<IInterviewPackagesService>();
-
             string interview;
             var manifestResourceStream = testAssembly.GetManifestResourceStream($"{resourcesNamespace}.syncPackage.json");
             using (var streamReader = new StreamReader(manifestResourceStream))
@@ -190,21 +184,23 @@ namespace WB.Tests.Integration.FullStackIntegration.Hq
 
             var interviewPackage = ServiceLocator.Current.GetInstance<ISerializer>().Deserialize<InterviewPackage>(interview);
 
-            var plainTransaction = ServiceLocator.Current.GetInstance<IPlainTransactionManager>();
-            plainTransaction.ExecuteInPlainTransaction(() => { packagesService.ProcessPackage(interviewPackage); });
+            using (new NinjectAmbientScope())
+            {
+                var packagesService = ServiceLocator.Current.GetInstance<IInterviewPackagesService>();
+                packagesService.ProcessPackage(interviewPackage);
+                ServiceLocator.Current.GetInstance<IUnitOfWork>().AcceptChanges();
+            }
         }
 
         private void RunExport()
         {
             var questionnaireIdentity = new QuestionnaireIdentity(questionanireId, 1);
 
-            var tabularFormatDataExportHandler = ServiceLocator.Current.GetInstance<TabularFormatDataExportHandler>();
-
-            var plainTransaction = ServiceLocator.Current.GetInstance<IPlainTransactionManager>();
-            plainTransaction.ExecuteInPlainTransaction(() =>
-                tabularFormatDataExportHandler.ExportData(new DataExportProcessDetails(DataExportFormat.Tabular,
-                    questionnaireIdentity,
-                    "Enumerator Questions Automation")));
+            using (new NinjectAmbientScope())
+            {
+                var tabularFormatDataExportHandler =ServiceLocator.Current.GetInstance<TabularFormatDataExportHandler>();
+                tabularFormatDataExportHandler.ExportData(new DataExportProcessDetails(DataExportFormat.Tabular, questionnaireIdentity, "Enumerator Questions Automation"));
+            }
         }
 
         private async Task PrepareActualAndExpectedExportData()
@@ -256,24 +252,16 @@ namespace WB.Tests.Integration.FullStackIntegration.Hq
         {
             var kernel = new NinjectKernel();
 
-            var pgReadSideModule = new PostgresReadSideModule(
-                ConnectionStringBuilder.ConnectionString,
-                PostgresReadSideModule.ReadSideSchemaName,
-                DbUpgradeSettings.FromFirstMigration<M001_InitDb>(),
-                new ReadSideCacheSettings(50, 30),
-                new List<Assembly> {typeof(HeadquartersBoundedContextModule).Assembly});
-
-            var plainStorageModule = new PostgresPlainStorageModule(new PostgresPlainStorageSettings()
+            var unitOfWorkModule = new UnitOfWorkConnectionSettings();
+            unitOfWorkModule.ConnectionString = ConnectionStringBuilder.ConnectionString;
+            unitOfWorkModule.ReadSideMappingAssemblies = new List<Assembly> {typeof(HeadquartersBoundedContextModule).Assembly};
+            unitOfWorkModule.ReadSideUpgradeSettings = DbUpgradeSettings.FromFirstMigration<M001_InitDb>();
+            unitOfWorkModule.PlainMappingAssemblies = new List<Assembly>
             {
-                ConnectionString = ConnectionStringBuilder.ConnectionString,
-                SchemaName = "plainstore",
-                DbUpgradeSettings = new DbUpgradeSettings(typeof(M001_Init).Assembly, typeof(M001_Init).Namespace),
-                MappingAssemblies = new List<Assembly>
-                {
-                    typeof(HeadquartersBoundedContextModule).Assembly,
-                    typeof(ProductVersionModule).Assembly,
-                }
-            });
+                typeof(HeadquartersBoundedContextModule).Assembly,
+                typeof(ProductVersionModule).Assembly,
+            };
+            unitOfWorkModule.PlainStoreUpgradeSettings = new DbUpgradeSettings(typeof(M001_Init).Assembly, typeof(M001_Init).Namespace);
 
             var hqBoundedContext = new HeadquartersBoundedContextModule(tempFolder,
                 new SyncPackagesProcessorBackgroundJobSetting(false, 0, 0, 1),
@@ -304,9 +292,7 @@ namespace WB.Tests.Integration.FullStackIntegration.Hq
                 new ProductVersionModule(typeof(HeadquartersUIModule).Assembly),
                 new TestModule(),
                 eventStoreModule,
-                plainStorageModule,
-                new PostgresKeyValueModule(new ReadSideCacheSettings(50, 30)),
-                pgReadSideModule,
+                new OrmModule(unitOfWorkModule),
                 hqBoundedContext,
                 new QuartzModule(),
                 new FileStorageModule(tempFolder),

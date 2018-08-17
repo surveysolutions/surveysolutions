@@ -304,12 +304,12 @@ namespace WB.Tests.Integration
         }
 
         public static PostgresReadSideKeyValueStorage<TEntity> PostgresReadSideKeyValueStorage<TEntity>(
-            ISessionProvider sessionProvider = null, PostgreConnectionSettings postgreConnectionSettings = null)
+            IUnitOfWork sessionProvider = null, UnitOfWorkConnectionSettings postgreConnectionSettings = null)
             where TEntity : class, IReadSideRepositoryEntity
         {
             return new PostgresReadSideKeyValueStorage<TEntity>(
-                sessionProvider ?? Mock.Of<ISessionProvider>(),
-                postgreConnectionSettings ?? new PostgreConnectionSettings(),
+                sessionProvider ?? Mock.Of<IUnitOfWork>(),
+                postgreConnectionSettings ?? new UnitOfWorkConnectionSettings(),
                 Mock.Of<ILogger>(),
                 new EntitySerializer<TEntity>());
         }
@@ -376,11 +376,11 @@ namespace WB.Tests.Integration
             => new DesignerEngineVersionService();
 
         public static PostgreReadSideStorage<TEntity> PostgresReadSideRepository<TEntity>(
-            ISessionProvider sessionProvider = null)
+            IUnitOfWork sessionProvider = null)
             where TEntity : class, IReadSideRepositoryEntity
         {
             return new PostgreReadSideStorage<TEntity>(
-                sessionProvider ?? Mock.Of<ISessionProvider>(),
+                sessionProvider ?? Mock.Of<IUnitOfWork>(),
                 Mock.Of<ILogger>());
         }
 
