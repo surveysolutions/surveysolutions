@@ -79,10 +79,6 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.BinaryFormatDataExportHandl
 
             var dataExportFileAccessor = CrerateDataExportFileAccessor(fileSystemAccessor.Object);
 
-            var manager = new Mock<IPlainTransactionManager>();
-            var plainTransactionManagerProvider = new Mock<IPlainTransactionManagerProvider>();
-            plainTransactionManagerProvider.Setup(t => t.GetPlainTransactionManager()).Returns(manager.Object);
-
             var filebasedExportedDataAccessor = new Mock<IFilebasedExportedDataAccessor>();
             filebasedExportedDataAccessor.Setup(s => s.GetArchiveFilePathForExportedData(
                     It.IsAny<QuestionnaireIdentity>(), DataExportFormat.Binary, null, null, null))
@@ -100,7 +96,6 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.BinaryFormatDataExportHandl
                     interviewDataExportSettings: new InterviewDataExportSettings(tempFolder, true),
                     dataExportFileAccessor: dataExportFileAccessor,
                     audioFileStorage: audioFileStorage.Object,
-                    plainTransactionManagerProvider: plainTransactionManagerProvider.Object,
                     questionnaireStorage: questionnaireStorage);
 
             Because();

@@ -20,6 +20,7 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Infrastructure.Native.Storage;
+using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
@@ -29,11 +30,13 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
 {
     internal class when_processing_package_failed : with_postgres_db
     {
-        [OneTimeSetUp] public void context () {
+        [OneTimeSetUp]
+        public void context()
+        {
             var sessionFactory = IntegrationCreate.SessionFactory(ConnectionStringBuilder.ConnectionString,
-                new[] {typeof(InterviewPackageMap), typeof(BrokenInterviewPackageMap)}, true);
+                new[] { typeof(InterviewPackageMap), typeof(BrokenInterviewPackageMap) }, true);
             plainPostgresTransactionManager =
-                new PlainPostgresTransactionManager(sessionFactory ?? Mock.Of<ISessionFactory>());
+                Mock.Of<IUnitOfWork>(x => x.Session == sessionFactory.OpenSession());
 
             origin = "hq";
             expectedException = new InterviewException("Some interview exception",
@@ -43,8 +46,7 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
             pgSqlConnection.Open();
 
             packagesStorage = new PostgresPlainStorageRepository<InterviewPackage>(plainPostgresTransactionManager);
-            brokenPackagesStorage =
-                new PostgresPlainStorageRepository<BrokenInterviewPackage>(plainPostgresTransactionManager);
+            brokenPackagesStorage = new PostgresPlainStorageRepository<BrokenInterviewPackage>(plainPostgresTransactionManager);
 
             mockOfCommandService = new Mock<ICommandService>();
             mockOfCommandService.Setup(
@@ -53,18 +55,15 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
 
             var newtonJsonSerializer = new JsonAllTypesSerializer();
 
-            transactionManagerMock = new Mock<ITransactionManager>();
-
             interviewPackagesService = Create.Service.InterviewPackagesService(
-                syncSettings: new SyncSettings(origin) {UseBackgroundJobForProcessingPackages = true},
+                syncSettings: new SyncSettings(origin) { UseBackgroundJobForProcessingPackages = true },
                 logger: Mock.Of<ILogger>(),
                 serializer: newtonJsonSerializer,
                 interviewPackageStorage: packagesStorage,
                 brokenInterviewPackageStorage: brokenPackagesStorage,
                 commandService: mockOfCommandService.Object,
                 uniqueKeyGenerator: Mock.Of<IInterviewUniqueKeyGenerator>(),
-                interviews: new TestInMemoryWriter<InterviewSummary>(),
-                transactionManager: transactionManagerMock.Object);
+                interviews: new TestInMemoryWriter<InterviewSummary>());
 
             expectedCommand = Create.Command.SynchronizeInterviewEventsCommand(
                 interviewId: Guid.Parse("11111111111111111111111111111111"),
@@ -86,28 +85,27 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
             expectedEventsString = newtonJsonSerializer.Serialize(expectedCommand.SynchronizedEvents
                 .Select(IntegrationCreate.AggregateRootEvent).ToArray());
 
-            plainPostgresTransactionManager.ExecuteInPlainTransaction(
-                () => interviewPackagesService.StoreOrProcessPackage(new InterviewPackage
-                {
-                    InterviewId = expectedCommand.InterviewId,
-                    QuestionnaireId = expectedCommand.QuestionnaireId,
-                    QuestionnaireVersion = expectedCommand.QuestionnaireVersion,
-                    ResponsibleId = expectedCommand.UserId,
-                    InterviewStatus = expectedCommand.InterviewStatus,
-                    IsCensusInterview = expectedCommand.CreatedOnClient,
-                    Events = expectedEventsString
-                }));
+            interviewPackagesService.StoreOrProcessPackage(new InterviewPackage
+            {
+                InterviewId = expectedCommand.InterviewId,
+                QuestionnaireId = expectedCommand.QuestionnaireId,
+                QuestionnaireVersion = expectedCommand.QuestionnaireVersion,
+                ResponsibleId = expectedCommand.UserId,
+                InterviewStatus = expectedCommand.InterviewStatus,
+                IsCensusInterview = expectedCommand.CreatedOnClient,
+                Events = expectedEventsString
+            });
 
             BecauseOf();
         }
 
-        private void BecauseOf() => plainPostgresTransactionManager.ExecuteInPlainTransaction(
-            () => interviewPackagesService.ProcessPackage("1"));
+        private void BecauseOf() =>
+            interviewPackagesService.ProcessPackage("1");
 
-        [NUnit.Framework.Test] public void should_broken_packages_storage_contains_specified_interview () 
+        [NUnit.Framework.Test]
+        public void should_broken_packages_storage_contains_specified_interview()
         {
-            var expectedPackage = plainPostgresTransactionManager.ExecuteInPlainTransaction(
-                () => brokenPackagesStorage.GetById(1));
+            var expectedPackage = brokenPackagesStorage.GetById(1);
 
             expectedPackage.IsCensusInterview.Should().Be(expectedCommand.CreatedOnClient);
             expectedPackage.InterviewStatus.Should().Be(expectedCommand.InterviewStatus);
@@ -121,8 +119,6 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
             expectedPackage.PackageSize.Should().Be(expectedEventsString.Length);
         }
 
-        [NUnit.Framework.Test] public void should_rollback_transaction () => transactionManagerMock.Verify(x => x.BeginCommandTransaction(), Times.Once);
-
         [OneTimeTearDown]
         public void TearDown() => pgSqlConnection.Close();
 
@@ -131,11 +127,10 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
         private static InterviewPackagesService interviewPackagesService;
         private static PostgresPlainStorageRepository<InterviewPackage> packagesStorage;
         private static PostgresPlainStorageRepository<BrokenInterviewPackage> brokenPackagesStorage;
-        private static PlainPostgresTransactionManager plainPostgresTransactionManager;
+        private static IUnitOfWork plainPostgresTransactionManager;
         static NpgsqlConnection pgSqlConnection;
         private static string origin;
         private static InterviewException expectedException;
         private static string expectedEventsString;
-        private static Mock<ITransactionManager> transactionManagerMock;
     }
 }

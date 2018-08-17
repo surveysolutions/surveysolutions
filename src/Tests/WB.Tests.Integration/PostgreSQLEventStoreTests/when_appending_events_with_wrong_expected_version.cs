@@ -43,10 +43,10 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
                 DateTime.UtcNow,
                 new AccountConfirmed()));
 
-            var sessionProvider = new Mock<ISessionProvider>();
+            var sessionProvider = new Mock<IUnitOfWork>();
             npgsqlConnection = new NpgsqlConnection(connectionStringBuilder.ConnectionString);
             npgsqlConnection.Open();
-            sessionProvider.Setup(x => x.GetSession())
+            sessionProvider.SetupGet(x => x.Session)
                 .Returns(Mock.Of<ISession>(i => i.Connection == npgsqlConnection));
 
             eventStore = new PostgresEventStore(

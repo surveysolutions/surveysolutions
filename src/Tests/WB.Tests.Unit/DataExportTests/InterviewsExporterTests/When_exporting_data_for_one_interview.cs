@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.DataExportTests.InterviewsExporterTests
     [TestOf(typeof(InterviewsExporter))]
     internal class when_exporting_data_for_one_interview
     {
-                [SetUp]
+        [SetUp]
         public void SetUp()
         {
             dataInCsvFile = new List<CsvData>();
@@ -32,8 +32,6 @@ namespace WB.Tests.Unit.DataExportTests.InterviewsExporterTests
             fileSystemAccessor = new Mock<IFileSystemAccessor>();
             logger = new Mock<ILogger>();
             csvWriter = Create.Service.CsvWriter(dataInCsvFile);
-            transactionManagerProvider = new Mock<ITransactionManagerProvider>();
-            transactionManagerProvider.Setup(x => x.GetTransactionManager()).Returns(Mock.Of<ITransactionManager>());
 
             errorsExporter = new Mock<IInterviewErrorsExporter>();
             errorsExporter.Setup(x => x.Export(It.IsAny<QuestionnaireExportStructure>(), It.IsAny<List<InterviewEntity>>(), It.IsAny<string>()))
@@ -71,7 +69,6 @@ namespace WB.Tests.Unit.DataExportTests.InterviewsExporterTests
             var exporter = new InterviewsExporter(logger.Object,
                 interviewDataExportSettings,
                 csvWriter,
-                transactionManagerProvider.Object,
                 errorsExporter.Object,
                 Mock.Of<IInterviewFactory>(),
                 exportViewFactory.Object,
@@ -98,7 +95,6 @@ namespace WB.Tests.Unit.DataExportTests.InterviewsExporterTests
         private Mock<ILogger> logger;
         private readonly InterviewDataExportSettings interviewDataExportSettings = new InterviewDataExportSettings("folder", false, 1, 1, 1, 1 ,10);
         private ICsvWriter csvWriter;
-        private Mock<ITransactionManagerProvider> transactionManagerProvider;
         private Mock<IInterviewErrorsExporter> errorsExporter;
     }
 }

@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Moq;
 using NHibernate;
 using Npgsql;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Mappings;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.Transactions;
+using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Tests.Abc;
 using WB.Tests.Integration.PostgreSQLEventStoreTests;
@@ -19,7 +20,7 @@ namespace WB.Tests.Integration.AssignmentsDeletionServiceTests
     public class AssignmetnsDeletionServiceTests 
     {
         private ISessionFactory sessionFactory;
-        private PlainPostgresTransactionManager plainPostgresTransactionManager;
+        private IUnitOfWork plainPostgresTransactionManager;
         private string connectionString;
 
         [OneTimeSetUp]
@@ -34,9 +35,9 @@ namespace WB.Tests.Integration.AssignmentsDeletionServiceTests
                     typeof(ReadonlyUserMap),
                     typeof(AssignmentMap),
                     typeof(QuestionnaireLiteViewItemMap),
-                    typeof(Core.BoundedContexts.Headquarters.Assignments.InterviewSummaryMap)
+                    typeof(InterviewSummaryMap)
                 }, true, "plainstore");
-            plainPostgresTransactionManager = new PlainPostgresTransactionManager(sessionFactory);
+            plainPostgresTransactionManager = Mock.Of<IUnitOfWork>(x => x.Session == sessionFactory.OpenSession());
         }
 
         [Test]
@@ -54,7 +55,7 @@ namespace WB.Tests.Integration.AssignmentsDeletionServiceTests
 
             IPlainStorageAccessor<Assignment> assignments = new PostgresPlainStorageRepository<Assignment>(plainPostgresTransactionManager);
 
-            this.plainPostgresTransactionManager.ExecuteInPlainTransaction(() => assignments.Store(assignment, null));
+            assignments.Store(assignment, null);
 
             var service = new AssignmetnsDeletionService(sessionFactory);
 
@@ -62,7 +63,7 @@ namespace WB.Tests.Integration.AssignmentsDeletionServiceTests
             service.Delete(questionnaireIdentity);
 
             // assert
-            var actual = this.plainPostgresTransactionManager.ExecuteInPlainTransaction(() => assignments.Query(_ => _.Count()));
+            var actual = assignments.Query(_ => _.Count());
             Assert.That(actual, Is.EqualTo(0), "All assignments should be deleted");
 
             using (NpgsqlConnection connection = new NpgsqlConnection(this.connectionString))

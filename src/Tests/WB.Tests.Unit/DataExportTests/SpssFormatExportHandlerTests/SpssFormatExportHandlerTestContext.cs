@@ -40,7 +40,6 @@ namespace WB.Tests.Unit.DataExportTests.SpssFormatExportHandlerTests
                 IProtectedArchiveUtils archiveUtils = null)
         {
             return new DataExportFileAccessor(Mock.Of<IExportSettings>(),
-                Mock.Of<IPlainTransactionManagerProvider>(_ => _.GetPlainTransactionManager() == Mock.Of<IPlainTransactionManager>()),
                 archiveUtils ?? Mock.Of<IProtectedArchiveUtils>(),
                 Mock.Of<ILogger>(), Mock.Of<IExternalFileStorage>());
         }

@@ -30,7 +30,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.T
             fileSystemAccessor = fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>();
             return new TabularDataToExternalStatPackageExportService(
                 fileSystemAccessor,
-                Mock.Of<ITransactionManagerProvider>(_ => _.GetTransactionManager() == Mock.Of<ITransactionManager>()),
                 Mock.Of<ILogger>(),
                 tabFileReader ?? Mock.Of<ITabFileReader>(),
                 dataQueryFactory ?? Mock.Of< IDataQueryFactory> (),

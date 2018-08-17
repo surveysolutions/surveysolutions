@@ -157,6 +157,11 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
             containerBuilder.RegisterType<TImplementation>().As<TInterface>().SingleInstance();
         }
 
+        public void BindAsSingleton<TInterface1, TInterface2, TImplementation>() where TImplementation : TInterface2, TInterface1
+        {
+            throw new NotImplementedException();
+        }
+
         void IIocRegistry.BindAsSingletonWithConstructorArgument<TInterface, TImplementation>(string argumentName, object argumentValue)
         {
             containerBuilder.RegisterType<TImplementation>().As<TInterface>()

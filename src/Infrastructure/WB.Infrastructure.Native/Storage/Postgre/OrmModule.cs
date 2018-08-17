@@ -16,12 +16,15 @@ using NHibernate.Cfg.MappingSchema;
 using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
 using Ninject;
+using NLog;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Infrastructure.Native.Monitoring;
+using WB.Infrastructure.Native.Resources;
+using WB.Infrastructure.Native.Storage.Postgre.DbMigrations;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
 
@@ -38,13 +41,49 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
+            try
+            {
+                status.Message = Modules.InitializingDb;
+                DatabaseManagement.InitDatabase(this.connectionSettings.ConnectionString,
+                    this.connectionSettings.PlainStorageSchemaName);
+
+                status.Message = Modules.MigrateDb;
+                DbMigrationsRunner.MigrateToLatest(this.connectionSettings.ConnectionString,
+                    this.connectionSettings.PlainStorageSchemaName,
+                    this.connectionSettings.PlainStoreUpgradeSettings);
+            }
+            catch (Exception exc)
+            {
+                LogManager.GetLogger(nameof(OrmModule)).Fatal(exc, "Error during db initialization.");
+                throw;
+            }
+
+            if (this.connectionSettings.ReadSideUpgradeSettings != null)
+            {
+                try
+                {
+                    status.Message = Modules.InitializingDb;
+                    DatabaseManagement.InitDatabase(this.connectionSettings.ConnectionString,
+                        this.connectionSettings.ReadSideSchemaName);
+
+                    status.Message = Modules.MigrateDb;
+                    DbMigrationsRunner.MigrateToLatest(this.connectionSettings.ConnectionString,
+                        this.connectionSettings.ReadSideSchemaName, this.connectionSettings.ReadSideUpgradeSettings);
+                }
+                catch (Exception exc)
+                {
+                    LogManager.GetLogger(nameof(OrmModule)).Fatal(exc, "Error during db initialization.");
+                    throw new InitializationException(Subsystem.Database, null, exc);
+                }
+            }
+
             return Task.CompletedTask;
         }
 
         public void Load(IIocRegistry registry)
         {
             registry.BindToConstant(() => this.connectionSettings);
-            registry.BindToMethodInSingletonScope<ISessionFactory>(context => this.BuildSessionFactory(), "mainFactory");
+            registry.BindToMethodInSingletonScope<ISessionFactory>(context => this.BuildSessionFactory());
             registry.BindInIsolatedThreadScopeOrRequestScopeOrThreadScope<IUnitOfWork, UnitOfWork>();
 
             registry.Bind(typeof(IQueryableReadSideRepositoryReader<>), typeof(PostgreReadSideStorage<>));
@@ -174,6 +213,12 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
     public class UnitOfWorkConnectionSettings
     {
+        public UnitOfWorkConnectionSettings()
+        {
+            this.ReadSideSchemaName = "readside";
+            this.PlainStorageSchemaName = "plainstore";
+        }
+
         public string ConnectionString { get; set; }
 
         public string PlainStorageSchemaName { get; set; }
@@ -181,6 +226,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
         public IList<Assembly> PlainMappingAssemblies { get; set; }
         public IList<Assembly> ReadSideMappingAssemblies { get; set; }
+        public DbUpgradeSettings ReadSideUpgradeSettings { get; set; }
+        public DbUpgradeSettings PlainStoreUpgradeSettings { get; set; }
     }
 
     public interface IUnitOfWork : IDisposable
@@ -199,7 +246,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         private static int Counter = 0;
         public int Id { get; set; }
 
-        public UnitOfWork([Named("mainFactory")]ISessionFactory sessionFactory)
+        public UnitOfWork(ISessionFactory sessionFactory)
         {
             this.sessionFactory = sessionFactory;
             Id = Interlocked.Increment(ref Counter);

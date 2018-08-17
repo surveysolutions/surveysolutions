@@ -55,28 +55,6 @@ namespace WB.UI.Designer.App_Start
 
             var dynamicCompilerSettings = settingsProvider.GetSection<DynamicCompilerSettingsGroup>("dynamicCompilerSettingsGroup");
 
-            string appDataDirectory = settingsProvider.AppSettings["DataStorePath"];
-            if (appDataDirectory.StartsWith("~/") || appDataDirectory.StartsWith(@"~\"))
-            {
-                appDataDirectory = HostingEnvironment.MapPath(appDataDirectory);
-            }
-
-            var cacheSettings = new ReadSideCacheSettings(
-                cacheSizeInEntities: settingsProvider.AppSettings.GetInt("ReadSide.CacheSize", @default: 1024),
-                storeOperationBulkSize: settingsProvider.AppSettings.GetInt("ReadSide.BulkSize", @default: 512));
-
-            var postgresPlainStorageSettings = new PostgresPlainStorageSettings()
-            {
-                ConnectionString = settingsProvider.ConnectionStrings["Postgres"].ConnectionString,
-                SchemaName = "plainstore",
-                DbUpgradeSettings = new DbUpgradeSettings(typeof(Migrations.PlainStore.M001_Init).Assembly, typeof(Migrations.PlainStore.M001_Init).Namespace),
-                MappingAssemblies = new List<Assembly>
-                {
-                    typeof(DesignerBoundedContextModule).Assembly,
-                    typeof(ProductVersionModule).Assembly,
-                }
-            };
-
             var pdfSettings = settingsProvider.GetSection<PdfConfigSection>("pdf");
 
             var deskSettings = settingsProvider.GetSection<DeskConfigSection>("desk");
@@ -92,7 +70,8 @@ namespace WB.UI.Designer.App_Start
                     typeof(ProductVersionModule).Assembly,
                 },
                 PlainStorageSchemaName = "plainstore",
-                ReadSideMappingAssemblies = new List<Assembly>()
+                ReadSideMappingAssemblies = new List<Assembly>(),
+                PlainStoreUpgradeSettings = new DbUpgradeSettings(typeof(Migrations.PlainStore.M001_Init).Assembly, typeof(Migrations.PlainStore.M001_Init).Namespace)
             };
 
 
