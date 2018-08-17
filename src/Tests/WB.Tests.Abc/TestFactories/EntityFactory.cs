@@ -593,7 +593,8 @@ namespace WB.Tests.Abc.TestFactories
             int? assignmentId = null,
             bool? canBeDeleted = null,
             Guid? responsibleId = null,
-            DateTime? receivedByInterviewerAt = null
+            DateTime? receivedByInterviewerAt = null,
+            DateTime? fromHqSyncDateTime = null
             )
         {
             interviewId = interviewId ?? Guid.NewGuid();
@@ -608,7 +609,8 @@ namespace WB.Tests.Abc.TestFactories
                 Assignment = assignmentId,
                 CanBeDeleted = canBeDeleted ?? true,
                 ResponsibleId = responsibleId.GetValueOrDefault(),
-                ReceivedByInterviewerAtUtc = receivedByInterviewerAt
+                ReceivedByInterviewerAtUtc = receivedByInterviewerAt,
+                FromHqSyncDateTime = fromHqSyncDateTime
             };
         }
 
