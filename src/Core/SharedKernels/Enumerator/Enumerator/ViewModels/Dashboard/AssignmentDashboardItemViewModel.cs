@@ -91,11 +91,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         public void DecreaseInterviewsCount()
         {
             interviewsByAssignmentCount--;
-
-            // update db assignment
-            Assignment.CreatedInterviewsCount = interviewsByAssignmentCount;
-            AssignmentsRepository.Store(Assignment);
-            
             BindTitles();
         }
 
