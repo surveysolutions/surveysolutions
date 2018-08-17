@@ -102,7 +102,8 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             serializer.Setup(x => x.Deserialize<AggregateRootEvent[]>(packageSerializedEvents))
                 .Returns(packageEvents);
 
-            var handler = Create.Service.SupervisorInterviewsHandler(commandService: commandSerivce.Object,
+            var handler = Create.Service.SupervisorInterviewsHandler(
+                commandService: commandSerivce.Object,
                 serializer: serializer.Object);
 
             // Act
@@ -223,7 +224,8 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             var assignmentId = 1;
             var existingInterviews = new InMemoryPlainStorage<InterviewView>();
             existingInterviews.Store(Create.Entity.InterviewView(assignmentId: assignmentId, interviewId: Id.g1));
-            existingInterviews.Store(Create.Entity.InterviewView(assignmentId: assignmentId, interviewId: Id.g2, status: InterviewStatus.RejectedBySupervisor));
+            existingInterviews.Store(Create.Entity.InterviewView(assignmentId: assignmentId, interviewId: Id.g2, status: InterviewStatus.RejectedBySupervisor, fromHqSyncDateTime: DateTime.UtcNow.AddHours(-10)));
+            existingInterviews.Store(Create.Entity.InterviewView(assignmentId: assignmentId, interviewId: Id.g3, fromHqSyncDateTime: null));
 
             var assignments = Create.Storage.AssignmentDocumentsInmemoryStorage();
             assignments.Store(Create.Entity.AssignmentDocument(assignmentId).Build());
