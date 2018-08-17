@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.Messages;
 using WB.Core.GenericSubdomains.Portable;
@@ -159,20 +158,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
             if (item.AssignmentId.HasValue)
             {
-                var uiAssignment = this.UiItems.OfType<InterviewerAssignmentDashboardItemViewModel>()
-                        .FirstOrDefault(x => x.AssignmentId == item.AssignmentId.Value);
+                assignmentsRepository.DecreaseInterviewsCount(item.AssignmentId.Value);
 
-                if (uiAssignment != null)
-                {
-                    uiAssignment.DecreaseInterviewsCount();
-                }
-                else
-                {
-                    var assignment = assignments.FirstOrDefault(i => i.Id == item.AssignmentId.Value);
-                    if (assignment?.CreatedInterviewsCount != null)
-                        assignment.CreatedInterviewsCount--;
-                    assignmentsRepository.Store(assignment);
-                }
+                this.UiItems
+                    .OfType<InterviewerAssignmentDashboardItemViewModel>()
+                    .FirstOrDefault(x => x.AssignmentId == item.AssignmentId.Value)
+                    ?.DecreaseInterviewsCount();
             }
 
             this.interviews.RemoveAll(x => x.InterviewId == item.InterviewId);
