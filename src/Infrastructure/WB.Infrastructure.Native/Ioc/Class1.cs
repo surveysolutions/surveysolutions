@@ -10,7 +10,7 @@ namespace WB.Infrastructure.Native.Ioc
     /// Ninject ambient scope.
     /// </summary>
     /// <remarks>
-    /// Nested scopes are supported, but multi-threading in nested scopes is not supported.
+    /// Nested scopes are supported, but multi-threading in nested scopes is not supported. https://mono.software/2016/04/21/Ninject-ambient-scope-and-deterministic-dispose/
     /// </remarks>
     public class NinjectAmbientScope : NinjectDisposableScope
     {
