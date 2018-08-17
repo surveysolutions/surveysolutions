@@ -65,46 +65,36 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         {
             base.Load(registry);
 
-            registry.BindToConstant<PostgreConnectionSettings>(() => new PostgreConnectionSettings
-            {
-                ConnectionString = this.connectionString,
-                SchemaName = ReadSideSchemaName
-            });
+            //registry.BindToConstant<PostgreConnectionSettings>(() => new PostgreConnectionSettings
+            //{
+            //    ConnectionString = this.connectionString,
+            //    SchemaName = ReadSideSchemaName
+            //});
 
-            registry.BindWithConstructorArgument<IPostgresReadSideBootstraper, PostgresReadSideBootstraper>("dbUpgradeSettings", this.dbUpgradeSettings);
+            //registry.BindWithConstructorArgument<IPostgresReadSideBootstraper, PostgresReadSideBootstraper>("dbUpgradeSettings", this.dbUpgradeSettings);
 
-            registry.BindAsSingleton(typeof(IQueryableReadSideRepositoryReader<>), typeof(PostgreReadSideStorage<>));
-            registry.BindAsSingleton(typeof(IQueryableReadSideRepositoryReader<,>), typeof(PostgreReadSideStorage<,>));
+            //registry.BindAsSingleton(typeof(IQueryableReadSideRepositoryReader<>), typeof(PostgreReadSideStorage<>));
+            //registry.BindAsSingleton(typeof(IQueryableReadSideRepositoryReader<,>), typeof(PostgreReadSideStorage<,>));
 
-            registry.BindAsSingleton(typeof(IReadSideRepositoryReader<>), typeof(PostgreReadSideStorage<>));
-            registry.BindAsSingleton(typeof(IReadSideRepositoryReader<,>), typeof(PostgreReadSideStorage<,>)); 
+            //registry.BindAsSingleton(typeof(IReadSideRepositoryReader<>), typeof(PostgreReadSideStorage<>));
+            //registry.BindAsSingleton(typeof(IReadSideRepositoryReader<,>), typeof(PostgreReadSideStorage<,>)); 
 
-            registry.BindAsSingleton(typeof(INativeReadSideStorage<>), typeof(PostgreReadSideStorage<>));
-            registry.BindAsSingleton(typeof(INativeReadSideStorage<,>), typeof(PostgreReadSideStorage<,>));
+            //registry.BindAsSingleton(typeof(INativeReadSideStorage<>), typeof(PostgreReadSideStorage<>));
+            //registry.BindAsSingleton(typeof(INativeReadSideStorage<,>), typeof(PostgreReadSideStorage<,>));
 
-            registry.BindAsSingleton(typeof(PostgreReadSideStorage<>), typeof(PostgreReadSideStorage<>));
-            registry.BindAsSingleton(typeof(PostgreReadSideStorage<,>), typeof(PostgreReadSideStorage<,>));
+            //registry.BindAsSingleton(typeof(PostgreReadSideStorage<>), typeof(PostgreReadSideStorage<>));
+            //registry.BindAsSingleton(typeof(PostgreReadSideStorage<,>), typeof(PostgreReadSideStorage<,>));
 
-            registry.BindToMethodInSingletonScope(typeof(IReadSideRepositoryWriter<>), this.GetReadSideStorageWrappedWithCache);
-            registry.BindToMethodInSingletonScope(typeof(IReadSideRepositoryWriter<,>), this.GetGenericReadSideStorageWrappedWithCache);
+            //registry.BindToMethodInSingletonScope(typeof(IReadSideRepositoryWriter<>), this.GetReadSideStorageWrappedWithCache);
+            //registry.BindToMethodInSingletonScope(typeof(IReadSideRepositoryWriter<,>), this.GetGenericReadSideStorageWrappedWithCache);
 
-            registry.BindToMethodInSingletonScope<ISessionFactory>(kernel => this.BuildSessionFactory(), ReadSideSessionFactoryName);
+            //registry.BindToMethodInSingletonScope<ISessionFactory>(kernel => this.BuildSessionFactory(), ReadSideSessionFactoryName);
 
-            registry.BindInIsolatedThreadScopeOrRequestScopeOrThreadScope<CqrsPostgresTransactionManager>();
-            registry.BindInIsolatedThreadScopeOrRequestScopeOrThreadScope<NoTransactionCqrsPostgresTransactionManager>();
+            //registry.BindInIsolatedThreadScopeOrRequestScopeOrThreadScope<CqrsPostgresTransactionManager>();
+            //registry.BindInIsolatedThreadScopeOrRequestScopeOrThreadScope<NoTransactionCqrsPostgresTransactionManager>();
 
-            registry.BindToMethod<Func<CqrsPostgresTransactionManager>>(context => context.Get<CqrsPostgresTransactionManager>);
-            registry.BindToMethod<Func<NoTransactionCqrsPostgresTransactionManager>>(context => () => context.Get<NoTransactionCqrsPostgresTransactionManager>());
-
-            registry.BindToConstructorInSingletonScope<TransactionManagerProvider>(c => new TransactionManagerProvider(
-                    c.Inject<Func<CqrsPostgresTransactionManager>>(),
-                    c.Inject<Func<NoTransactionCqrsPostgresTransactionManager>>()));
-
-            registry.BindToMethod<ISessionProvider>(context => context.Get<TransactionManagerProvider>(), SessionProviderName);
-            registry.BindToMethod<ITransactionManager>(context => context.Get<CqrsPostgresTransactionManager>());
-
-            registry.BindToMethod<ITransactionManagerProvider>(context => context.Get<TransactionManagerProvider>());
-            registry.BindToMethod<ITransactionManagerProviderManager>(context => context.Get<TransactionManagerProvider>());
+            //registry.BindToMethod<Func<CqrsPostgresTransactionManager>>(context => context.Get<CqrsPostgresTransactionManager>);
+            //registry.BindToMethod<Func<NoTransactionCqrsPostgresTransactionManager>>(context => () => context.Get<NoTransactionCqrsPostgresTransactionManager>());
         }
 
         public override Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)

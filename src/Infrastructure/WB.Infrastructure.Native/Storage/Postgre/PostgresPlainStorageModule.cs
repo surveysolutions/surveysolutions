@@ -34,27 +34,25 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
         public void Load(IIocRegistry registry)
         {
-            registry.BindToConstant<PostgresPlainStorageSettings>(() => this.settings);
+            //registry.BindToConstant<PostgresPlainStorageSettings>(() => this.settings);
             
-            registry.BindToMethodInSingletonScope<ISessionFactory>(context => this.BuildSessionFactory(settings.SchemaName), SessionFactoryName);
+            //registry.BindToMethodInSingletonScope<ISessionFactory>(context => this.BuildSessionFactory(settings.SchemaName), SessionFactoryName);
 
-            registry.BindInIsolatedThreadScopeOrRequestScopeOrThreadScope<PlainPostgresTransactionManager>();
-            registry.BindInIsolatedThreadScopeOrRequestScopeOrThreadScope<NoTransactionPlainPostgresTransactionManager>();
+            //registry.BindInIsolatedThreadScopeOrRequestScopeOrThreadScope<PlainPostgresTransactionManager>();
+            //registry.BindInIsolatedThreadScopeOrRequestScopeOrThreadScope<NoTransactionPlainPostgresTransactionManager>();
 
-            registry.BindToMethod<Func<PlainPostgresTransactionManager>>(context => () => context.Get<PlainPostgresTransactionManager>());
-            registry.BindToMethod<Func<NoTransactionPlainPostgresTransactionManager>>(context => () => context.Get<NoTransactionPlainPostgresTransactionManager>());
+            //registry.BindToMethod<Func<PlainPostgresTransactionManager>>(context => () => context.Get<PlainPostgresTransactionManager>());
+            //registry.BindToMethod<Func<NoTransactionPlainPostgresTransactionManager>>(context => () => context.Get<NoTransactionPlainPostgresTransactionManager>());
 
-            registry
-                .BindToConstructorInSingletonScope<PlainTransactionManagerProvider>(constructor => new PlainTransactionManagerProvider(
-                    constructor.Inject<Func<PlainPostgresTransactionManager>>(),
-                    constructor.Inject<Func<NoTransactionPlainPostgresTransactionManager>>()));
+            //registry
+            //    .BindToConstructorInSingletonScope<PlainTransactionManagerProvider>(constructor => new PlainTransactionManagerProvider(
+            //        constructor.Inject<Func<PlainPostgresTransactionManager>>(),
+            //        constructor.Inject<Func<NoTransactionPlainPostgresTransactionManager>>()));
 
-            registry.BindToMethod<IPlainSessionProvider>(context => context.Get<PlainTransactionManagerProvider>());
-            registry.BindToMethod<IPlainTransactionManager>(context => context.Get<PlainPostgresTransactionManager>());
+            //registry.BindToMethod<IPlainSessionProvider>(context => context.Get<PlainTransactionManagerProvider>());
+            //registry.BindToMethod<IPlainTransactionManager>(context => context.Get<PlainPostgresTransactionManager>());
 
-            registry.BindToMethod<IPlainTransactionManagerProvider>(context => context.Get<PlainTransactionManagerProvider>());
-
-            registry.Bind(typeof(IPlainStorageAccessor<>), typeof(PostgresPlainStorageRepository<>));
+            //registry.Bind(typeof(IPlainStorageAccessor<>), typeof(PostgresPlainStorageRepository<>));
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
