@@ -314,6 +314,7 @@ namespace WB.Core.SharedKernels.Enumerator.Denormalizer
                 evnt.Payload.Status == InterviewStatus.RejectedByHeadquarters)
             {
                 interviewView.RejectedDateTime = evnt.Payload.UtcTime ?? evnt.EventTimeStamp;
+                interviewView.LastInterviewerOrSupervisorComment = evnt.Payload.Comment;
                 interviewView.CanBeDeleted = false;
             }
 
