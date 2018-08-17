@@ -7,9 +7,6 @@ using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Moq;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Interviewer.Services;
-using WB.Core.BoundedContexts.Interviewer.Views;
-using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -70,7 +67,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
 
             interviews = new List<InterviewView>
             {
-                Create.Entity.InterviewView(status: InterviewStatus.InterviewerAssigned, assignmentId: 1, canBeDeleted: false),
+                Create.Entity.InterviewView(status: InterviewStatus.InterviewerAssigned, assignmentId: 1, canBeDeleted: false, fromHqSyncDateTime: DateTime.Now),
                 Create.Entity.InterviewView(status: InterviewStatus.InterviewerAssigned, assignmentId: 1, canBeDeleted: true),
                 Create.Entity.InterviewView(status: InterviewStatus.Completed, assignmentId: 1, canBeDeleted: true),
                 Create.Entity.InterviewView(status: InterviewStatus.RejectedBySupervisor, assignmentId: 1, canBeDeleted: false)
@@ -176,8 +173,10 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         {
             var existingAssignment = localAssignmentsRepo.LoadAll().FirstOrDefault(ad => ad.Id == 1);
             Assert.That(existingAssignment.Quantity, Is.EqualTo(remoteAssignments[0].Quantity));
-            Assert.That(existingAssignment.CreatedInterviewsCount, Is.EqualTo(1 /*InterviewerAssigned that can be deleted*/ 
-                                                                               + 1 /* Completed that can be deleted too*/));
+            Assert.That(existingAssignment.CreatedInterviewsCount, Is.EqualTo(  1 /*InterviewerAssigned that can be deleted*/ 
+                                                                              + 1 /* Completed that can be deleted too*/
+                                                                              + 1 /*RejectedBySupervisor*/));
+            //all were not synchronized with hq
         }
 
         [Test]
