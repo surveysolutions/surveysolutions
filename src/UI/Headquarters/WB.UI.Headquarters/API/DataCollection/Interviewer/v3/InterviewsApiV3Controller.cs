@@ -8,10 +8,10 @@ using System.Web.Http.Results;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
-using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
@@ -26,7 +26,11 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v3
     [ApiBasicAuth(new[] { UserRoles.Interviewer })]
     public class InterviewsApiV3Controller : InterviewerInterviewsControllerBase
     {
-        public InterviewsApiV3Controller(IImageFileStorage imageFileStorage,
+        private readonly IImageFileStorage imageFileStorage;
+        private readonly IAudioFileStorage audioFileStorage;
+
+        public InterviewsApiV3Controller(
+            IImageFileStorage imageFileStorage,
             IAudioFileStorage audioFileStorage,
             IAuthorizedUser authorizedUser,
             IInterviewInformationFactory interviewsFactory,
@@ -39,6 +43,8 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v3
                 audioFileStorage, authorizedUser, interviewsFactory, packagesService, commandService, metaBuilder,
                 synchronizationSerializer, eventStore)
         {
+            this.imageFileStorage = imageFileStorage;
+            this.audioFileStorage = audioFileStorage;
         }
 
         [HttpGet]
@@ -81,9 +87,20 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v3
         public override void PostAudio(PostFileRequest request) => base.PostAudio(request);
 
         [WriteToSyncLog(SynchronizationLogType.CheckIsPackageDuplicated)]
-        public bool PostDuplicateCheck(Guid id, [FromBody] DuplicatePackageCheck duplicatePackageCheck)
+        [HttpPost]
+        public InterviewUploadState GetInterviewUploadState(Guid id, [FromBody] EventStreamSignatureTag eventStreamSignatureTag)
         {
-            return this.packagesService.IsPackageDuplicated(duplicatePackageCheck);
+            var doesEventsExists =  this.packagesService.IsPackageDuplicated(eventStreamSignatureTag);
+
+            var binaries = this.imageFileStorage.GetBinaryFilesForInterview(id)
+                .Union(this.audioFileStorage.GetBinaryFilesForInterview(id))
+                .Select(bf => bf.FileName);
+
+            return new InterviewUploadState
+            {
+                IsEventsUploaded = doesEventsExists,
+                BinaryFilesNames = binaries.ToHashSet()
+            };
         }
     }
 }

@@ -112,6 +112,9 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor
             // INTERVIEWERS
             config.TypedRoute("api/supervisor/v1/interviewers", c => c.Action<InterviewersApiController>(x => x.Get()));
 
+            config.TypedRoute("api/supervisor/v1/interviews/{id:guid}/getInterviewUploadState",
+                c => c.Action<InterviewsApiV1Controller>(x => x.GetInterviewUploadState(Param.Any<Guid>(), Param.Any<EventStreamSignatureTag>())));
+
         }
 
 #pragma warning restore 4014

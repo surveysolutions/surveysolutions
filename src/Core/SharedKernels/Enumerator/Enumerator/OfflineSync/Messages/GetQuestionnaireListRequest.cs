@@ -69,16 +69,16 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Messages
         public InterviewPackageApiView Interview { get; set; }
     }
 
-    public class CheckInterviewForDuplicateRequest : ICommunicationMessage
+    public class GetInterviewUploadStateRequest : ICommunicationMessage
     {
         public Guid InterviewId { get; set; }
-        public DuplicatePackageCheck Check { get; set; }
+        public EventStreamSignatureTag Check { get; set; }
     }
 
-    public class CheckInterviewForDuplicateResponse : ICommunicationMessage
+    public class GetInterviewUploadStateResponse : ICommunicationMessage
     {
         public Guid InterviewId { get; set; }
-        public bool IsDuplicated { get; set; }
+        public InterviewUploadState UploadState { get; set; }
     }
 
     public class GetAssignmentRequest : ICommunicationMessage

@@ -341,7 +341,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             var firstEvent = aggregateRootEvents[0];
             var lastEvent = aggregateRootEvents[aggregateRootEvents.Length - 1];
 
-            var isPackageDuplicated = IsPackageDuplicated(new DuplicatePackageCheck
+            var isPackageDuplicated = IsPackageDuplicated(new EventStreamSignatureTag
             {
                 FirstEventId = firstEvent.EventIdentifier,
                 FirstEventTimeStamp = firstEvent.EventTimeStamp,
@@ -356,13 +356,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             }
         }
 
-        public bool IsPackageDuplicated(DuplicatePackageCheck duplicatePackageCheck)
+        public bool IsPackageDuplicated(EventStreamSignatureTag eventStreamSignatureTag)
         {
             var existingReceivedPackageLog = this.packagesTracker.Query(_ =>
-                _.FirstOrDefault(x => x.FirstEventId == duplicatePackageCheck.FirstEventId &&
-                                      x.FirstEventTimestamp == duplicatePackageCheck.FirstEventTimeStamp &&
-                                      x.LastEventId == duplicatePackageCheck.LastEventId &&
-                                      x.LastEventTimestamp == duplicatePackageCheck.LastEventTimeStamp));
+                _.FirstOrDefault(x => x.FirstEventId == eventStreamSignatureTag.FirstEventId &&
+                                      x.FirstEventTimestamp == eventStreamSignatureTag.FirstEventTimeStamp &&
+                                      x.LastEventId == eventStreamSignatureTag.LastEventId &&
+                                      x.LastEventTimestamp == eventStreamSignatureTag.LastEventTimeStamp));
 
             return existingReceivedPackageLog != null;
 
