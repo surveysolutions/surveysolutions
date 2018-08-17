@@ -45,7 +45,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
                 new CommittedEvent(Guid.NewGuid(), "origin", lastEvent.eventId, interviewId, 1, lastEvent.timeStamp, 2, null)
             };
 
-            var check = subject.GetInterviewDuplicatePackageCheck(interviewId);
+            var check = subject.GetInterviewEventStreamCheckData(interviewId);
 
             Assert.That(check.FirstEventId, Is.EqualTo(firstEvent.eventId));
             Assert.That(check.LastEventId, Is.EqualTo(lastEvent.eventId));
@@ -58,7 +58,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.InterviewerIntervie
         {
             events = new List<CommittedEvent>();
 
-            var check = subject.GetInterviewDuplicatePackageCheck(interviewId);
+            var check = subject.GetInterviewEventStreamCheckData(interviewId);
 
             Assert.Null(check);
         }

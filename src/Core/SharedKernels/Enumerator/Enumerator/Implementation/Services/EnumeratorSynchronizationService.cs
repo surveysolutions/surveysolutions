@@ -10,7 +10,6 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -336,22 +335,22 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             }
         }
 
-        public Task<bool> IsInterviewExists(Guid interviewId, DuplicatePackageCheck duplicatePackageCheck, CancellationToken cancellationToken)
+        public Task<InterviewUploadState> GetInterviewUploadState(Guid interviewId, EventStreamSignatureTag eventStreamSignatureTag, CancellationToken cancellationToken)
         {
             try
             {
                 return this.TryGetRestResponseOrThrowAsync(
-                    () => this.restService.PostAsync<bool>(
-                        url: string.Concat(this.InterviewsController,"/", interviewId, "/isInterviewExists"),
+                    () => this.restService.PostAsync<InterviewUploadState>(
+                        url: string.Concat(this.InterviewsController,"/", interviewId, "/getInterviewUploadState"),
                         credentials: this.restCredentials, 
                         token: cancellationToken,
-                        request: duplicatePackageCheck));
+                        request: eventStreamSignatureTag));
             }
             catch (SynchronizationException exception)
             {
                 var httpStatusCode = (exception.InnerException as RestException)?.StatusCode;
                 if (httpStatusCode == HttpStatusCode.NotFound)
-                    return Task.FromResult<bool>(false);
+                    return Task.FromResult(new InterviewUploadState());
 
                 this.logger.Error("Exception on download interview. ID:" + interviewId, exception);
                 throw;

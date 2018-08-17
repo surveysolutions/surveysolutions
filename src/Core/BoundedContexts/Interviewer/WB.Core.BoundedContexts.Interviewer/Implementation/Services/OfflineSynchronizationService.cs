@@ -46,15 +46,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.settings = settings;
         }
 
-        public async Task<bool> IsInterviewExists(Guid interviewId, DuplicatePackageCheck duplicatePackageCheck, CancellationToken cancellationToken)
+        public async Task<InterviewUploadState> GetInterviewUploadState(Guid interviewId, EventStreamSignatureTag eventStreamSignatureTag, CancellationToken cancellationToken)
         {
-            var result = await this.syncClient.SendAsync<CheckInterviewForDuplicateRequest, CheckInterviewForDuplicateResponse>(new CheckInterviewForDuplicateRequest
+            var result = await this.syncClient.SendAsync<GetInterviewUploadStateRequest, GetInterviewUploadStateResponse>(new GetInterviewUploadStateRequest
             {
                 InterviewId = interviewId,
-                Check = duplicatePackageCheck
+                Check = eventStreamSignatureTag
             }, cancellationToken);
 
-            return result.IsDuplicated;
+            return result.UploadState;
         }
 
         public Task UploadInterviewAsync(Guid interviewId, InterviewPackageApiView completedInterview,

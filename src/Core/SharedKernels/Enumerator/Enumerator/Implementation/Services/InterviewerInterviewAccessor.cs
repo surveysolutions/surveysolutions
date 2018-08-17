@@ -160,7 +160,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             return eventsToSend;
         }
 
-        public DuplicatePackageCheck GetInterviewDuplicatePackageCheck(Guid interviewId)
+        public EventStreamSignatureTag GetInterviewEventStreamCheckData(Guid interviewId)
         {
             List<CommittedEvent> storedEvents = this.eventStore.GetPendingEvents(interviewId).ToList();
 
@@ -171,7 +171,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             var first = optimizedEvents.First();
             var last = optimizedEvents.Last();
 
-            return new DuplicatePackageCheck
+            return new EventStreamSignatureTag
             {
                 FirstEventId = first.EventIdentifier,
                 LastEventId = last.EventIdentifier,
