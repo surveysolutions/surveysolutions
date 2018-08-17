@@ -1392,6 +1392,43 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string SelectResponsible_CancelButtonText {
+            get {
+                return ResourceManager.GetString("SelectResponsible_CancelButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reassign.
+        /// </summary>
+        public static string SelectResponsible_Reassign {
+            get {
+                return ResourceManager.GetString("SelectResponsible_Reassign", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reassign.
+        /// </summary>
+        public static string SelectResponsible_ReassignButtonText {
+            get {
+                return ResourceManager.GetString("SelectResponsible_ReassignButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select new responsible for this interview
+        ///it will be able to enumerator after next sync.
+        /// </summary>
+        public static string SelectResponsible_ReassignDescription {
+            get {
+                return ResourceManager.GetString("SelectResponsible_ReassignDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No connection to the Survey Solutions Supervisor. Please make sure that the website is available..
         /// </summary>
         public static string ServiceUnavailable {

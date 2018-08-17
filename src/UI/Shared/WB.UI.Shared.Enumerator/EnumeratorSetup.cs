@@ -87,7 +87,8 @@ namespace WB.UI.Shared.Enumerator
                 {typeof (EnumerationStageViewModel), typeof (InterviewEntitiesListFragment)},
                 {typeof(CoverInterviewViewModel), typeof (CoverInterviewFragment)},
                 {typeof(OverviewViewModel), typeof (OverviewFragment)},
-                {typeof(OverviewNodeDetailsViewModel), typeof(OverviewNodeDetailsFragment)}
+                {typeof(OverviewNodeDetailsViewModel), typeof(OverviewNodeDetailsFragment)},
+                {typeof(SelectResponsibleForAssignmentViewModel), typeof(SelectResponsibleForAssignmentFragment)},
             };
 
             var container = Mvx.Resolve<IMvxViewsContainer>();
@@ -170,6 +171,7 @@ namespace WB.UI.Shared.Enumerator
             registry.RegisterCustomBindingFactory<View>("ViewOverviewNodeState", (view) => new ViewOverviewNodeStateBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("TextViewNodeStateTextColor", (view) => new TextViewNodeStateTextColorBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("TextViewAnswerState", (view) => new TextViewAnswerStateBinding(view));
+            registry.RegisterCustomBindingFactory<TextView>("AssignToInterviewerText", (view) => new AssignToInterviewerTextBinding(view));
             MvxAppCompatSetupHelper.FillTargetFactories(registry);
 
             RegisterAutoCompleteTextViewBindings(registry);
