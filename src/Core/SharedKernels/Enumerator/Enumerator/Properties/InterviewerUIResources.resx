@@ -810,5 +810,17 @@ Downloaded {3}%</value>
   <data name="FinishInstallation_QrBarcodeReaderErrorMessage" xml:space="preserve">
     <value>An error occurred while scanning</value>
   </data>
-
+  <data name="SelectResponsible_Reassign" xml:space="preserve">
+    <value>Reassign</value>
+  </data>
+  <data name="SelectResponsible_ReassignDescription" xml:space="preserve">
+    <value>Select new responsible for this interview
+it will be able to enumerator after next sync</value>
+  </data>
+  <data name="SelectResponsible_ReassignButtonText" xml:space="preserve">
+    <value>Reassign</value>
+  </data>
+  <data name="SelectResponsible_CancelButtonText" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
 </root>

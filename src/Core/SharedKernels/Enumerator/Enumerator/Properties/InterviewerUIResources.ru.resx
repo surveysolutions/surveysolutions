@@ -825,4 +825,24 @@
   <data name="FinishInstallation_QrBarcodeReaderErrorMessage" xml:space="preserve">
     <value>Ошибка сканирования</value>
   </data>
+    <data name="SelectResponsible_Reassign" xml:space="preserve">
+    <value>Назначить</value>
+    <comment>Назначить</comment>
+  </data>
+    <data name="SelectResponsible_ReassignDescription" xml:space="preserve">
+    <value>Выберите нового ответственного для этого интервью
+он сможет получить его после следующей синхронизации
+</value>
+    <comment>Выберите нового ответственного для этого интервью
+он сможет получить его после следующей синхронизации
+</comment>
+  </data>
+    <data name="SelectResponsible_ReassignButtonText" xml:space="preserve">
+    <value>Назначить</value>
+    <comment>Назначить</comment>
+  </data>
+    <data name="SelectResponsible_CancelButtonText" xml:space="preserve">
+    <value>Отмена</value>
+    <comment>Отмена</comment>
+  </data>
 </root>
