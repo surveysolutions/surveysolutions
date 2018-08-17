@@ -17,7 +17,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         public string Login { get; set; }
 
         public string FullName { get; set; }
-        public bool IsEnabled { get; set; }
         public int InterviewsCount { get; set; }
 
         private bool isSelected;

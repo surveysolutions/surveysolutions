@@ -26,7 +26,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private readonly ICommandService commandService;
         private readonly IViewModelNavigationService navigationService;
         private readonly IMvxMessenger mvxMessenger;
-        private readonly IStatefulInterviewRepository interviewRepository;
+        private readonly IStatefulInterviewRepository statefullInterviewRepository;
         private readonly IPlainStorage<InterviewView> interviewStorage;
         private readonly IPlainStorage<AssignmentDocument, int> assignmentsStorage;
 
@@ -38,7 +38,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             ICommandService commandService,
             IViewModelNavigationService navigationService,
             IMvxMessenger mvxMessenger,
-            IStatefulInterviewRepository interviewRepository,
+            IStatefulInterviewRepository statefullInterviewRepository,
             IPlainStorage<InterviewView> interviewStorage,
             IPlainStorage<AssignmentDocument, int> assignmentsStorage)
         {
@@ -49,7 +49,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.commandService = commandService;
             this.navigationService = navigationService;
             this.mvxMessenger = mvxMessenger;
-            this.interviewRepository = interviewRepository;
+            this.statefullInterviewRepository = statefullInterviewRepository;
             this.interviewStorage = interviewStorage;
             this.assignmentsStorage = assignmentsStorage;
         }
@@ -66,7 +66,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         public IMvxCommand CancelCommand => new MvxCommand(this.Cancel);
         public IMvxCommand SelectInterviewerCommand => new MvxCommand<InterviewerToSelectViewModel>(this.SelectInterviewer);
 
-        private MvxObservableCollection<InterviewerToSelectViewModel> uiItems = new MvxObservableCollection<InterviewerToSelectViewModel>();
+        private MvxObservableCollection<InterviewerToSelectViewModel> uiItems;
         public MvxObservableCollection<InterviewerToSelectViewModel> UiItems
         {
             get => this.uiItems;
@@ -111,7 +111,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         private async Task AssignToInterviewAsync(Guid interviewId, InterviewerToSelectViewModel interviewer)
         {
-            var interview = this.interviewRepository.Get(interviewId.FormatGuid());
+            var interview = this.statefullInterviewRepository.Get(interviewId.FormatGuid());
 
             var command = new AssignInterviewerCommand(interviewId, this.principal.CurrentUserIdentity.UserId,
                 interviewer.Id);
@@ -126,7 +126,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         private void SelectInterviewer(InterviewerToSelectViewModel interviewer)
         {
-            this.uiItems.Where(x => x != interviewer).ForEach(x => x.IsSelected = false);
+            this.UiItems.Where(x => x != interviewer).ForEach(x => x.IsSelected = false);
             this.CanReassign = true;
         }
 
@@ -135,22 +135,28 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         {
             this.input = parameter;
 
-            var allInterviewers = usersRepository.LoadAll().AsQueryable();
+            var responsible = GetResponsible(parameter);
+            var interviewerViewModels = this.usersRepository.LoadAll().Where(x => x.InterviewerId != responsible)
+                .Select(ToInterviewerToSelectViewModel);
 
-            if (this.input.InterviewId.HasValue)
+            this.UiItems = new MvxObservableCollection<InterviewerToSelectViewModel>(interviewerViewModels);
+        }
+
+        private Guid? GetResponsible(SelectResponsibleForAssignmentArgs args)
+        {
+            if (args.InterviewId.HasValue)
             {
-                var selectedInterview = this.interviewRepository.Get(this.input.InterviewId.Value.FormatGuid());
-                allInterviewers = allInterviewers.Where(x => x.InterviewerId != selectedInterview.CurrentResponsibleId);
-            }
-            
-            if(this.input.AssignmentId.HasValue)
-            {
-                var selectedAssigment = this.assignmentsStorage.GetById(this.input.AssignmentId.Value);
-                allInterviewers = allInterviewers.Where(x => x.InterviewerId != selectedAssigment.ResponsibleId);
+                var selectedInterview = this.statefullInterviewRepository.Get(this.input.InterviewId.Value.FormatGuid());
+                return selectedInterview.CurrentResponsibleId;
             }
 
-            
-            this.UiItems.ReplaceWith(allInterviewers.AsEnumerable().Select(ToInterviewerToSelectViewModel));
+            if (args.AssignmentId.HasValue)
+            {
+                var selectedAssignment = this.assignmentsStorage.GetById(this.input.AssignmentId.Value);
+                return selectedAssignment.ResponsibleId;
+            }
+
+            return null;
         }
 
         private class InterviewsQuantity
