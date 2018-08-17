@@ -81,21 +81,6 @@ namespace WB.UI.Headquarters
 
             var dbConnectionStringName = @"Postgres";
 
-            var postgresPlainStorageSettings = new PostgresPlainStorageSettings()
-            {
-                ConnectionString = settingsProvider.ConnectionStrings[dbConnectionStringName].ConnectionString,
-                SchemaName = "plainstore",
-                DbUpgradeSettings = new DbUpgradeSettings(typeof(M001_Init).Assembly, typeof(M001_Init).Namespace),
-                MappingAssemblies = new List<Assembly>
-                {
-                    typeof(HeadquartersBoundedContextModule).Assembly,
-                    typeof(ProductVersionModule).Assembly,
-                }
-            };
-
-            var cacheSettings = new ReadSideCacheSettings(cacheSizeInEntities: settingsProvider.AppSettings.GetInt("ReadSide.CacheSize", @default: 1024),
-                storeOperationBulkSize: settingsProvider.AppSettings.GetInt("ReadSide.BulkSize", @default: 512));
-
             var applicationSecuritySection = settingsProvider.GetSection<HqSecuritySection>(@"applicationSecurity");
 
             Database.SetInitializer(new FluentMigratorInitializer<HQIdentityDbContext>("users", DbUpgradeSettings.FromFirstMigration<M001_AddUsersHqIdentityModel>()));
@@ -104,14 +89,15 @@ namespace WB.UI.Headquarters
             UnitOfWorkConnectionSettings connectionSettings = new UnitOfWorkConnectionSettings
             {
                 ConnectionString = settingsProvider.ConnectionStrings[dbConnectionStringName].ConnectionString,
-                ReadSideSchemaName = PostgresReadSideModule.ReadSideSchemaName,
                 ReadSideMappingAssemblies = mappingAssemblies,
                 PlainStorageSchemaName = "plainstore",
                 PlainMappingAssemblies = new List<Assembly>
                 {
                     typeof(HeadquartersBoundedContextModule).Assembly,
                     typeof(ProductVersionModule).Assembly,
-                }
+                },
+                PlainStoreUpgradeSettings = new DbUpgradeSettings(typeof(M001_Init).Assembly, typeof(M001_Init).Namespace),
+                ReadSideUpgradeSettings = new DbUpgradeSettings(typeof(M001_Init).Assembly, typeof(M001_InitDb).Namespace)
             };
 
 

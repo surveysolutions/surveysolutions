@@ -286,7 +286,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
 
                 var exceptionType = interviewException?.ExceptionType.ToString() ?? UnknownExceptionType;
 
-                using (var brokenPackageUow = new UnitOfWork(ServiceLocator.Current.GetInstance<ISessionFactory>("mainFactory")))
+                using (var brokenPackageUow = new UnitOfWork(ServiceLocator.Current.GetInstance<ISessionFactory>()))
                 {
                     brokenPackageUow.Session.Save(new BrokenInterviewPackage
                     {

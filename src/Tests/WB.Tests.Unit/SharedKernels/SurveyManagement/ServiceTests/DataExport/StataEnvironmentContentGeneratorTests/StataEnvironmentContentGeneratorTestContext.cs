@@ -16,6 +16,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
+using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.StataEnvironmentContentGeneratorTests
@@ -31,23 +32,20 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
                 new InterviewActionsExporter(Mock.Of<InterviewDataExportSettings>(), 
                     Mock.Of<IFileSystemAccessor>(), 
                     Mock.Of<ICsvWriter>(),
-                    Mock.Of<ITransactionManagerProvider>(),
                     Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(),
                     Mock.Of<ILogger>(),
-                    Mock.Of<ISessionProvider>()),
+                    Mock.Of<IUnitOfWork>()),
                 new CommentsExporter(Mock.Of<InterviewDataExportSettings>(),
                     Mock.Of<IFileSystemAccessor>(),
                     Mock.Of<ICsvWriter>(),
                     Mock.Of<IQueryableReadSideRepositoryReader<InterviewCommentaries>>(),
-                    Mock.Of<ITransactionManagerProvider>(),
                     Mock.Of<ILogger>()),
                 new InterviewErrorsExporter(Mock.Of<ICsvWriter>(), Mock.Of<IQuestionnaireStorage>(), Mock.Of<IFileSystemAccessor>()),
                 new DiagnosticsExporter(Mock.Of<InterviewDataExportSettings>(), 
                     Mock.Of<IFileSystemAccessor>(),
                     Mock.Of<ICsvWriter>(),
                     Mock.Of<ILogger>(),
-                    Mock.Of<IInterviewDiagnosticsFactory>(),
-                    Mock.Of<ITransactionManagerProvider>()));
+                    Mock.Of<IInterviewDiagnosticsFactory>()));
         }
 
         protected static IFileSystemAccessor CreateFileSystemAccessor(Action<string> returnContentAction)

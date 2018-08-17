@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Infrastructure.Native.Storage;
+using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Tests.Integration.PostgreSQLTests;
 
@@ -43,7 +44,7 @@ namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests
                 typeof(QuestionAnswerMap),
                 typeof(InterviewCommentedStatusMap)
             }, true);
-            postgresTransactionManager = new CqrsPostgresTransactionManager(sessionFactory ?? Mock.Of<ISessionFactory>());
+            postgresTransactionManager = Mock.Of<IUnitOfWork>(x => x.Session == sessionFactory.OpenSession());
 
             pgSqlConnection = new NpgsqlConnection(ConnectionStringBuilder.ConnectionString);
             pgSqlConnection.Open();
@@ -53,19 +54,7 @@ namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests
 
         protected static void ExecuteInCommandTransaction(Action action)
         {
-            try
-            {
-                postgresTransactionManager.BeginCommandTransaction();
-
-                action();
-
-                postgresTransactionManager.CommitCommandTransaction();
-            }
-            catch
-            {
-                postgresTransactionManager.RollbackCommandTransaction();
-                throw;
-            }
+            action();
         }
 
         [OneTimeTearDown]
@@ -75,6 +64,6 @@ namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests
         }
 
         protected static NpgsqlConnection pgSqlConnection;
-        protected static CqrsPostgresTransactionManager postgresTransactionManager;
+        protected static IUnitOfWork postgresTransactionManager;
     }
 }

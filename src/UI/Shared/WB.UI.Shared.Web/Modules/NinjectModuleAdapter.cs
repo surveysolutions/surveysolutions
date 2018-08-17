@@ -96,6 +96,11 @@ namespace WB.UI.Shared.Web.Modules
             this.Kernel.Bind<TInterface>().To<TImplementation>().InSingletonScope();
         }
 
+        public void BindAsSingleton<TInterface1, TInterface2, TImplementation>() where TImplementation : TInterface2, TInterface1
+        {
+            this.Kernel.Bind<TInterface1, TInterface2>().To<TImplementation>().InSingletonScope();
+        }
+
         void IIocRegistry.BindAsSingletonWithConstructorArgument<TInterface, TImplementation>(string argumentName, object argumentValue)
         {
             this.Kernel.Bind<TInterface>().To<TImplementation>().InSingletonScope()
@@ -222,7 +227,7 @@ namespace WB.UI.Shared.Web.Modules
         {
             this.Kernel.Bind<T1>().To<T2>()
                 .When(x => x.Parameters.OfType<NonRequestScopedParameter>().Any())
-                .InScope(_ => JobScope.Scope.Value);
+                .InAmbientScope();
 
             this.Kernel.Bind<T1>().To<T2>()
                 .When(x => !x.Parameters.OfType<NonRequestScopedParameter>().Any())

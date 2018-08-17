@@ -27,7 +27,7 @@ namespace WB.UI.Headquarters.Services
             {
                 MetricsRegistry.Instance.RegisterOnDemandCollectors(
                     new BrokenPackagesStatsCollector(
-                        kernel.Get<ISessionFactory>("mainFactory")));
+                        kernel.Get<ISessionFactory>()));
 
                 // getting instance name from connection string information
                 var connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["Postgres"];

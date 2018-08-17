@@ -46,7 +46,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 set.Key(key => key.Column("assignmentid"));
                 set.Lazy(CollectionLazy.Extra);
                 set.Cascade(Cascade.None);
-                set.Schema(PostgresReadSideModule.ReadSideSchemaName);
+                set.Schema(new UnitOfWorkConnectionSettings().ReadSideSchemaName);
             }, relation => relation.OneToMany());
 
             List(x => x.IdentifyingData, mapper =>
