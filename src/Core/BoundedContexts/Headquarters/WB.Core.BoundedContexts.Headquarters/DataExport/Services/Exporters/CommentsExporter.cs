@@ -27,7 +27,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         private readonly string dataFileExtension = "tab";
         public readonly string CommentsFileName = "interview__comments";
         private readonly IQueryableReadSideRepositoryReader<InterviewCommentaries> interviewCommentariesStorage;
-        private readonly ITransactionManagerProvider transactionManager;
         private readonly ILogger logger;
 
         public readonly DoExportFileHeader[] CommentsFileColumns =
@@ -56,14 +55,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             IFileSystemAccessor fileSystemAccessor,
             ICsvWriter csvWriter,
             IQueryableReadSideRepositoryReader<InterviewCommentaries> interviewCommentariesStorage,
-            ITransactionManagerProvider transactionManager,
             ILogger logger)
         {
             this.interviewDataExportSettings = interviewDataExportSettings;
             this.fileSystemAccessor = fileSystemAccessor;
             this.csvWriter = csvWriter;
             this.interviewCommentariesStorage = interviewCommentariesStorage;
-            this.transactionManager = transactionManager;
             this.logger = logger;
         }
 
@@ -91,10 +88,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                 Expression<Func<InterviewCommentaries, bool>> whereClauseForComments = 
                     x => interviewIdsStrings.Contains(x.InterviewId);
                 
-                var exportComments = this.transactionManager
-                                           .GetTransactionManager()
-                                           .ExecuteInQueryTransaction(
-                                                () => this.QueryCommentsChunkFromReadSide(whereClauseForComments, maxRosterDepthInQuestionnaire, hasAtLeastOneRoster));
+                var exportComments = this.QueryCommentsChunkFromReadSide(whereClauseForComments, maxRosterDepthInQuestionnaire, hasAtLeastOneRoster);
 
                 this.csvWriter.WriteData(commentsFilePath, exportComments, ExportFileSettings.DataFileSeparator.ToString());
                 totalProcessed += interviewIdsStrings.Length;

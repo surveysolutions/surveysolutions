@@ -140,9 +140,6 @@ namespace WB.UI.Headquarters.Controllers
             return this.View(model);
         }
 
-        private IRevalidateInterviewsAdministrationService RevalidateInterviewsAdministrationService
-            => this.serviceLocator.GetInstance<IRevalidateInterviewsAdministrationService>();
-
         public ActionResult Index() => this.View();
 
         public ActionResult NConfig() => this.View();
@@ -188,33 +185,6 @@ namespace WB.UI.Headquarters.Controllers
         public ActionResult RevalidateInterviews()
         {
             return this.View();
-        }
-
-        [HttpPost]
-        public ActionResult RevalidateAllInterviewsWithErrors(RevalidateModel model)
-        {
-            var authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>();
-
-            this.RevalidateInterviewsAdministrationService.RevalidateAllInterviewsWithErrorsAsync(
-                authorizedUser.Id,
-                model.FromDate,
-                model.ToDate?.AddDays(1)
-            );
-
-            return this.RedirectToAction("RevalidateInterviews");
-        }
-
-        public ActionResult StopInterviewRevalidating()
-        {
-            this.RevalidateInterviewsAdministrationService.StopInterviewsRevalidating();
-
-            return this.RedirectToAction("RevalidateInterviews");
-        }
-
-        [OutputCache(NoStore = true, Duration = 0, VaryByParam = "*")]
-        public string GetRevalidateInterviewStatus()
-        {
-            return this.RevalidateInterviewsAdministrationService.GetReadableStatus();
         }
 
         #endregion

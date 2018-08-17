@@ -18,8 +18,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
         private readonly ITranslationStorage translationStorage;
         private readonly IQuestionnaireTranslator translator;
 
-        private readonly ConcurrentDictionary<string, QuestionnaireDocument> questionnaireDocumentsCache = new ConcurrentDictionary<string, QuestionnaireDocument>();
-        private readonly ConcurrentDictionary<string, PlainQuestionnaire> plainQuestionnairesCache = new ConcurrentDictionary<string, PlainQuestionnaire>();
+        private static ConcurrentDictionary<string, QuestionnaireDocument> questionnaireDocumentsCache = new ConcurrentDictionary<string, QuestionnaireDocument>();
+        private static ConcurrentDictionary<string, PlainQuestionnaire> plainQuestionnairesCache = new ConcurrentDictionary<string, PlainQuestionnaire>();
 
         public QuestionnaireStorage(IPlainKeyValueStorage<QuestionnaireDocument> repository, ITranslationStorage translationStorage, IQuestionnaireTranslator translator)
         {
@@ -32,7 +32,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
         {
             string questionnaireCacheKey = language != null ? $"{identity}${language}" : $"{identity}";
 
-            return this.plainQuestionnairesCache.GetOrAdd(questionnaireCacheKey, s => CreatePlainQuestionnaire(identity, language));
+            return plainQuestionnairesCache.GetOrAdd(questionnaireCacheKey, s => CreatePlainQuestionnaire(identity, language));
         }
 
         private PlainQuestionnaire CreatePlainQuestionnaire(QuestionnaireIdentity identity, string language)
@@ -65,15 +65,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
         {
             string repositoryId = GetRepositoryId(new QuestionnaireIdentity(id, version));
             this.repository.Store(questionnaireDocument, repositoryId);
-            this.questionnaireDocumentsCache[repositoryId] = questionnaireDocument.Clone();
-            this.plainQuestionnairesCache.Clear();
+            questionnaireDocumentsCache[repositoryId] = questionnaireDocument.Clone();
+            plainQuestionnairesCache.Clear();
         }
 
         public QuestionnaireDocument GetQuestionnaireDocument(Guid id, long version)
         {
             string repositoryId = GetRepositoryId(new QuestionnaireIdentity(id, version));
 
-            if (!this.questionnaireDocumentsCache.ContainsKey(repositoryId))
+            if (!questionnaireDocumentsCache.ContainsKey(repositoryId))
             {
                 var questionnaire = this.repository.GetById(repositoryId);
 
@@ -82,11 +82,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
                     return null;
                 }
 
-                this.questionnaireDocumentsCache[repositoryId] = questionnaire;
+                questionnaireDocumentsCache[repositoryId] = questionnaire;
                 //  ?? throw new ApplicationException($"Questionnaire {repositoryId} was not found");
             }
 
-            return this.questionnaireDocumentsCache[repositoryId];
+            return questionnaireDocumentsCache[repositoryId];
         }
 
         public QuestionnaireDocument GetQuestionnaireDocument(QuestionnaireIdentity identity)
@@ -105,8 +105,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             document.IsDeleted = true;
             StoreQuestionnaire(id, version, document);
 
-            this.questionnaireDocumentsCache.TryRemove(repositoryId, out _);
-            this.plainQuestionnairesCache.Clear();
+            questionnaireDocumentsCache.TryRemove(repositoryId, out _);
+            plainQuestionnairesCache.Clear();
         }
 
         private static string GetRepositoryId(QuestionnaireIdentity questionnaireIdentity)

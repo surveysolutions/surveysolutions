@@ -104,7 +104,6 @@ namespace WB.UI.Designer.App_Start
                 new WebConfigurationModule(membershipSettings),
                 new CaptchaModule(settingsProvider.AppSettings.Get("CaptchaService")),
                 new NLogLoggingModule(),
-                new PostgresKeyValueModule(cacheSettings),
                 new OrmModule(ormSettings),
                 new DesignerCommandDeserializationModule(),
                 new DesignerBoundedContextModule(dynamicCompilerSettings),

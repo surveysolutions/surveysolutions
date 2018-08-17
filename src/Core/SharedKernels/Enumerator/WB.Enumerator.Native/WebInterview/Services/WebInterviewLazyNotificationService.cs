@@ -11,12 +11,6 @@ namespace WB.Enumerator.Native.WebInterview.Services
 {
     public class WebInterviewLazyNotificationService : WebInterviewNotificationService
     {
-        private IPlainTransactionManager transactionManager
-            => ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>().GetPlainTransactionManager();
-
-        private ITransactionManager readTransactionManager
-            => ServiceLocator.Current.GetInstance<ITransactionManagerProvider>().GetTransactionManager();
-
         public WebInterviewLazyNotificationService(
             IStatefulInterviewRepository statefulInterviewRepository,
             IQuestionnaireStorage questionnaireStorage,
@@ -35,8 +29,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
             {
                 try
                 {
-                    transactionManager.ExecuteInQueryTransaction(() =>
-                        readTransactionManager.ExecuteInQueryTransaction(action));
+                    action();
                 }
                 catch (NotSupportedException)
                 {

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Commands;
@@ -20,7 +19,6 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Enumerator.Native.Questionnaire;
-using WB.Infrastructure.Native.Threading;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQuestionnaireTemplate
 {
@@ -37,8 +35,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
 
         private static readonly object DeleteInProcessLockObject = new object();
         private static readonly HashSet<string> DeleteInProcess = new HashSet<string>();
-
-        IPlainTransactionManager plainTransactionManager => ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>().GetPlainTransactionManager();
 
         public DeleteQuestionnaireService(Func<IInterviewsToDeleteFactory> interviewsToDeleteFactory, 
             ICommandService commandService,
@@ -92,7 +88,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
                 this.DeleteTranslations(questionnaireId, questionnaireVersion);
                 this.DeleteLookupTables(questionnaireIdentity);
 
-                var assignmentsImportStatus = plainTransactionManager.ExecuteInPlainTransaction(() => this.importService.GetImportStatus());
+                var assignmentsImportStatus = this.importService.GetImportStatus();
 
                 var isAssignmentImportIsGoing = assignmentsImportStatus?.ProcessStatus == AssignmentsImportProcessStatus.Verification ||
                                                 assignmentsImportStatus?.ProcessStatus == AssignmentsImportProcessStatus.Import;
@@ -101,9 +97,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
                 {
                     this.DeleteAssignments(new QuestionnaireIdentity(questionnaireId, questionnaireVersion));
 
-                    plainTransactionManager.ExecuteInPlainTransaction(() =>
-                        this.commandService.Execute(new DeleteQuestionnaire(questionnaireId, questionnaireVersion,
-                            userId)));
+                        this.commandService.Execute(new DeleteQuestionnaire(questionnaireId, questionnaireVersion, userId));
                 }
             }
             catch (Exception e)
@@ -125,27 +119,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
 
         private void DeleteLookupTables(QuestionnaireIdentity questionnaireIdentity)
         {
-            ServiceLocator.Current.ExecuteInPlainTransaction(serviceLocator =>
-            {
-                var questionnaireStorage = serviceLocator.GetInstance<IQuestionnaireStorage>();
-                var lookupTablesStorage = serviceLocator.GetInstance<IPlainKeyValueStorage<QuestionnaireLookupTable>>();
+            var questionnaireStorage = ServiceLocator.Current.GetInstance<IQuestionnaireStorage>();
+            var lookupTablesStorage = ServiceLocator.Current.GetInstance<IPlainKeyValueStorage<QuestionnaireLookupTable>>();
 
-                var questionnaireDocument = questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity);
-                
-                foreach (var lookupTableInfo in questionnaireDocument.LookupTables)
-                {
-                    var id = lookupTablesStorage.GetLookupKey(questionnaireIdentity, lookupTableInfo.Key);
-                    lookupTablesStorage.Remove(id);
-                }
-            });
+            var questionnaireDocument = questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity);
+            
+            foreach (var lookupTableInfo in questionnaireDocument.LookupTables)
+            {
+                var id = lookupTablesStorage.GetLookupKey(questionnaireIdentity, lookupTableInfo.Key);
+                lookupTablesStorage.Remove(id);
+            }
         }
 
         private void DeleteTranslations(Guid questionnaireId, long questionnaireVersion)
         {
-            ServiceLocator.Current.ExecuteInPlainTransaction(() =>
-            {
-                this.translations.Delete(new QuestionnaireIdentity(questionnaireId, questionnaireVersion));
-            });
+            this.translations.Delete(new QuestionnaireIdentity(questionnaireId, questionnaireVersion));
         }
 
         private void DeleteInterviews(Guid questionnaireId, long questionnaireVersion, Guid? userId)
@@ -153,32 +141,24 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             var exceptionsDuringDelete = new List<Exception>();
 
             IInterviewsToDeleteFactory toDeleteFactory = this.interviewsToDeleteFactory.Invoke();
-            ITransactionManager transactionManager = ServiceLocator.Current.GetInstance<ITransactionManager>();
-            List<InterviewSummary> listOfInterviews = transactionManager.ExecuteInQueryTransaction(() => 
-                                                            toDeleteFactory.Load(questionnaireId, questionnaireVersion));
+            List<InterviewSummary> listOfInterviews = toDeleteFactory.Load(questionnaireId, questionnaireVersion);
             do
             {
                 try
                 {
-                    transactionManager.BeginCommandTransaction();
-
                     foreach (var interviewSummary in listOfInterviews)
                     {
                         this.commandService.Execute(new HardDeleteInterview(interviewSummary.InterviewId,
                             userId ?? interviewSummary.ResponsibleId));
                     }
-
-                    transactionManager.CommitCommandTransaction();
                 }
                 catch (Exception e)
                 {
-                    transactionManager.RollbackCommandTransaction();
                     this.logger.Error(e.Message, e);
                     exceptionsDuringDelete.Add(e);
                 }
 
-                listOfInterviews = transactionManager.ExecuteInQueryTransaction(() =>
-                                                            toDeleteFactory.Load(questionnaireId, questionnaireVersion));
+                listOfInterviews = toDeleteFactory.Load(questionnaireId, questionnaireVersion);
 
             } while (
                 exceptionsDuringDelete.Count == 0 && 

@@ -32,14 +32,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers.
         private readonly IUserViewFactory userReader;
 
         private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
-        private readonly ITransactionManagerProvider transactionManagerProvider;
-        private readonly IPlainTransactionManagerProvider plainTransactionManagerProvider;
 
-        private ITransactionManager TransactionManager => this.transactionManagerProvider.GetTransactionManager();
-        private IPlainTransactionManager PlainTransactionManager => this.plainTransactionManagerProvider.GetPlainTransactionManager();
-
-        private void ExecuteInTransaction(Action action) => this.TransactionManager.ExecuteInQueryTransaction(()
-            => this.PlainTransactionManager.ExecuteInPlainTransaction(action.Invoke));
+        private void ExecuteInTransaction(Action action) => action.Invoke();
 
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly ICsvWriter csvWriter;
@@ -50,10 +44,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers.
             IReadSideRepositoryWriter<InterviewSummary> interviewSummaryReader,
             IUserViewFactory userReader,
             InterviewDataExportSettings interviewDataExportSettings,
-            ITransactionManagerProvider transactionManagerProvider,
             IDataExportProcessesService dataExportProcessesService, 
             IQuestionnaireExportStructureStorage questionnaireExportStructureStorage, 
-            IPlainTransactionManagerProvider plainTransactionManagerProvider,
             IQuestionnaireStorage questionnaireStorage,
             IFileSystemAccessor fs,
             IFilebasedExportedDataAccessor dataAccessor,
@@ -65,9 +57,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers.
             this.eventStore = eventStore;
             this.interviewSummaryReader = interviewSummaryReader;
             this.userReader = userReader;
-            this.transactionManagerProvider = transactionManagerProvider;
             this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
-            this.plainTransactionManagerProvider = plainTransactionManagerProvider;
             this.questionnaireStorage = questionnaireStorage;
             this.csvWriter = csvWriter;
             this.tabularFormatExportService = tabularFormatExportService;

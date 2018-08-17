@@ -20,7 +20,7 @@ namespace WB.UI.Headquarters.API.WebInterview
 
             foreach (var type in HubPipelineModules)
             {
-                registry.BindAsSingleton(typeof(IHubPipelineModule), type);
+                registry.Bind(typeof(IHubPipelineModule), type);
             }
         }
 

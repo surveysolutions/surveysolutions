@@ -10,20 +10,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.HealthChe
     class NumberOfUnhandledPackagesChecker : IAtomicHealthCheck<NumberOfUnhandledPackagesHealthCheckResult>
     {
         private readonly IInterviewBrokenPackagesService interviewBrokenPackagesService;
-        private readonly IPlainTransactionManager transactionManager;
 
-        public NumberOfUnhandledPackagesChecker(IInterviewBrokenPackagesService interviewBrokenPackagesService, IPlainTransactionManager transactionManager)
+        public NumberOfUnhandledPackagesChecker(IInterviewBrokenPackagesService interviewBrokenPackagesService)
         {
             this.interviewBrokenPackagesService = interviewBrokenPackagesService;
-            this.transactionManager = transactionManager;
         }
 
         public NumberOfUnhandledPackagesHealthCheckResult Check()
         {
             try
             {
-                int count = this.transactionManager.ExecuteInPlainTransaction(
-                    () => this.interviewBrokenPackagesService.InvalidPackagesCount);
+                int count = this.interviewBrokenPackagesService.InvalidPackagesCount;
 
                 if (count == 0)
                     return NumberOfUnhandledPackagesHealthCheckResult.Happy(count);

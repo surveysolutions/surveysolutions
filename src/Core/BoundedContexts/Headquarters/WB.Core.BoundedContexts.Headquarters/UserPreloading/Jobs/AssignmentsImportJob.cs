@@ -24,26 +24,20 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
         private IAssignmentsImportService importAssignmentsService => ServiceLocator.Current
             .GetInstance<IAssignmentsImportService>();
 
-        private IPlainTransactionManager plainTransactionManager => ServiceLocator.Current
-            .GetInstance<IPlainTransactionManager>();
-
         private SampleImportSettings sampleImportSettings => ServiceLocator.Current
             .GetInstance<SampleImportSettings>();
 
         private IQuestionnaireStorage questionnaireStorage => ServiceLocator.Current
             .GetInstance<IQuestionnaireStorage>();
 
-        private T ExecuteInPlain<T>(Func<T> func) => this.plainTransactionManager.ExecuteInPlainTransaction(func);
-        private void ExecuteInPlain(Action func) => this.plainTransactionManager.ExecuteInPlainTransaction(func);
-
         public void Execute(IJobExecutionContext context)
         {
             try
             {
-                var importProcess = this.ExecuteInPlain(() => this.importAssignmentsService.GetImportStatus());
+                var importProcess = this.importAssignmentsService.GetImportStatus();
                 if (importProcess?.ProcessStatus != AssignmentsImportProcessStatus.Import) return;
 
-                var allAssignmentIds = this.ExecuteInPlain(() => this.importAssignmentsService.GetAllAssignmentIdsToImport());
+                var allAssignmentIds = this.importAssignmentsService.GetAllAssignmentIdsToImport();
 
                 this.logger.Debug("Assignments import job: Started");
                 var sw = new Stopwatch();
@@ -57,15 +51,15 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
                         {
                             ThreadMarkerManager.MarkCurrentThreadAsIsolated();
 
-                            var questionnaire = this.ExecuteInPlain(() => this.questionnaireStorage.GetQuestionnaire(importProcess.QuestionnaireIdentity, null));
+                            var questionnaire = this.questionnaireStorage.GetQuestionnaire(importProcess.QuestionnaireIdentity, null);
                             if (questionnaire == null)
                             {
-                                this.ExecuteInPlain(() => this.importAssignmentsService.RemoveAssignmentToImport(assignmentId));
+                                this.importAssignmentsService.RemoveAssignmentToImport(assignmentId);
                                 return;
                             }
 
                             this.ImportAssignment(assignmentId, importProcess.AssignedTo, questionnaire);
-                            this.ExecuteInPlain(() => this.importAssignmentsService.RemoveAssignmentToImport(assignmentId));
+                            this.importAssignmentsService.RemoveAssignmentToImport(assignmentId);
 
                         }
                         finally
@@ -74,8 +68,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
                         }
                     });
 
-                this.ExecuteInPlain(() => this.importAssignmentsService.SetImportProcessStatus(
-                    AssignmentsImportProcessStatus.ImportCompleted));
+                this.importAssignmentsService.SetImportProcessStatus(AssignmentsImportProcessStatus.ImportCompleted);
 
                 sw.Stop();
                 this.logger.Debug($"Assignments import job: Finished. Elapsed time: {sw.Elapsed}");
@@ -88,19 +81,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
 
         private void ImportAssignment(int assignmentId, Guid defaultResponsible, IQuestionnaire questionnaire)
         {
-            var transactionManager = ServiceLocator.Current.GetInstance<ITransactionManagerProvider>().GetTransactionManager();
-
-            try
-            {
-                transactionManager.BeginCommandTransaction();
-                this.ExecuteInPlain(() => this.importAssignmentsService.ImportAssignment(assignmentId, defaultResponsible, questionnaire));
-                transactionManager.CommitCommandTransaction();
-            }
-            catch
-            {
-                transactionManager.RollbackCommandTransaction();
-            }
-            
+            this.importAssignmentsService.ImportAssignment(assignmentId, defaultResponsible, questionnaire);
         }
     }
 }
