@@ -30,7 +30,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
         private Task<GetLatestApplicationVersionResponse> GetLatestApplicationVersion(GetLatestApplicationVersionRequest request)
             => Task.FromResult(new GetLatestApplicationVersionResponse
             {
-                InterviewerApplicationVersion = this.settings.LatestInterviewerAppVersion
+                InterviewerApplicationVersion =
+                    this.settings.LatestInterviewerAppVersion <= this.settings.GetApplicationVersionCode()
+                        ? this.settings.LatestInterviewerAppVersion
+                        : null
             });
 
         public Task<CanSynchronizeResponse> CanSynchronize(CanSynchronizeRequest arg)

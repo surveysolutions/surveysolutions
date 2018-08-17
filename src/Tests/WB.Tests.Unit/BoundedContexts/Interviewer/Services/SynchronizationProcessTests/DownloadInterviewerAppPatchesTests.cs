@@ -43,8 +43,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 .Setup(x => x.GetListOfInterviewerAppPatchesAsync(It.IsAny<CancellationToken>())).Returns(
                     Task.FromResult(new[]
                     {
-                        new InterviewerApplicationPatchApiView {FileName = notExistingFile, Url = notExistingFile},
-                        new InterviewerApplicationPatchApiView {FileName = existingFile, Url = existingFile},
+                        Create.Entity.InterviewerApplicationPatchApiView(notExistingFile, notExistingFile),
+                        Create.Entity.InterviewerApplicationPatchApiView(existingFile, existingFile),
                     }));
             var fileSystemAccessor = Mock.Of<IFileSystemAccessor>(x =>
                 x.CombinePath(It.IsAny<string>(), notExistingFile) == notExistingFile &&
