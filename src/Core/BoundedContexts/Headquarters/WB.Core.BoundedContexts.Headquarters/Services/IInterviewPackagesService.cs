@@ -13,7 +13,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
         void ProcessPackage(string packageId);
         void ProcessPackage(InterviewPackage interview);
         bool HasPendingPackageByInterview(Guid interviewId);
-        bool IsPackageDuplicated(DuplicatePackageCheck duplicatePackageCheck);
+        bool IsPackageDuplicated(EventStreamSignatureTag eventStreamSignatureTag);
 
         IReadOnlyCollection<string> GetAllPackagesInterviewIds();
     }

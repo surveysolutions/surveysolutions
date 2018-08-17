@@ -14,7 +14,7 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
         public int SequenceOfLastReceivedEvent { get; set; }
     }
 
-    public class DuplicatePackageCheck
+    public class EventStreamSignatureTag
     {
         public Guid FirstEventId { get; set; }
         public Guid LastEventId { get; set; }

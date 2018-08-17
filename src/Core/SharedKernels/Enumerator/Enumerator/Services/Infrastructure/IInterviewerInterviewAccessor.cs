@@ -11,6 +11,6 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Infrastructure
         void RemoveInterview(Guid interviewId);
         InterviewPackageApiView GetInteviewEventsPackageOrNull(Guid interviewId);
         IReadOnlyCollection<CommittedEvent> GetPendingInteviewEvents(Guid interviewId);
-        DuplicatePackageCheck GetInterviewDuplicatePackageCheck(Guid interviewId);
+        EventStreamSignatureTag GetInterviewEventStreamCheckData(Guid interviewId);
     }
 }
