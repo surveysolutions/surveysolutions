@@ -20,6 +20,10 @@ namespace WB.UI.Shared.Web.Filters
             {
                 unitOfWork.AcceptChanges();
             }
+            else
+            {
+                unitOfWork.Dispose();
+            }
         }
     }
 }

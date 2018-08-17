@@ -4,12 +4,14 @@ using System.Diagnostics;
 using System.Linq;
 using Main.Core.Events;
 using Ncqrs.Eventing.Storage;
+using NHibernate;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus;
@@ -22,6 +24,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Enumerator.Native.WebInterview;
+using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
 {
@@ -39,6 +42,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
         private readonly SyncSettings syncSettings;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviews;
         private readonly IUserRepository userRepository;
+        private readonly IUnitOfWork unitOfWork;
 
         public InterviewPackagesService(
             IPlainStorageAccessor<InterviewPackage> interviewPackageStorage,
@@ -51,7 +55,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             IInterviewUniqueKeyGenerator uniqueKeyGenerator,
             SyncSettings syncSettings,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviews,
-            IUserRepository userRepository)
+            IUserRepository userRepository,
+            IUnitOfWork unitOfWork)
         {
             this.interviewPackageStorage = interviewPackageStorage;
             this.brokenInterviewPackageStorage = brokenInterviewPackageStorage;
@@ -64,6 +69,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             this.syncSettings = syncSettings;
             this.interviews = interviews;
             this.userRepository = userRepository;
+            this.unitOfWork = unitOfWork;
         }
 
         public void StoreOrProcessPackage(InterviewPackage interviewPackage)
@@ -265,38 +271,44 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             }
             catch (Exception exception)
             {
-                /// TODO CHECK HOW TO ROLLBACK CHANGES HERE!!!!
+                this.unitOfWork.Dispose();
+
+
                 this.logger.Error($"Interview events by {interview.InterviewId} processing failed. Reason: '{exception.Message}'", exception);
 
                 var interviewException = exception as InterviewException;
                 if (interviewException == null)
                 {
-                    interviewException = interviewException?.UnwrapAllInnerExceptions()
+                    interviewException = exception.UnwrapAllInnerExceptions()
                         .OfType<InterviewException>()
                         .FirstOrDefault();
                 }
 
                 var exceptionType = interviewException?.ExceptionType.ToString() ?? UnknownExceptionType;
 
-                this.brokenInterviewPackageStorage.Store(new BrokenInterviewPackage
+                using (var brokenPackageUow = new UnitOfWork(ServiceLocator.Current.GetInstance<ISessionFactory>("mainFactory")))
                 {
-                    InterviewId = interview.InterviewId,
-                    InterviewKey = existingInterviewKey,
-                    QuestionnaireId = interview.QuestionnaireId,
-                    QuestionnaireVersion = interview.QuestionnaireVersion,
-                    InterviewStatus = interview.InterviewStatus,
-                    ResponsibleId = interview.ResponsibleId,
-                    IsCensusInterview = interview.IsCensusInterview,
-                    IncomingDate = interview.IncomingDate,
-                    Events = interview.Events,
-                    PackageSize = interview.Events?.Length ?? 0,
-                    ProcessingDate = DateTime.UtcNow,
-                    ExceptionType = exceptionType,
-                    ExceptionMessage = exception.Message,
-                    ExceptionStackTrace = string.Join(Environment.NewLine, exception.UnwrapAllInnerExceptions().Select(ex => $"{ex.Message} {ex.StackTrace}")),
-                    ReprocessAttemptsCount = interview.ProcessAttemptsCount,
-                }, null);
-                
+                    brokenPackageUow.Session.Save(new BrokenInterviewPackage
+                    {
+                        InterviewId = interview.InterviewId,
+                        InterviewKey = existingInterviewKey,
+                        QuestionnaireId = interview.QuestionnaireId,
+                        QuestionnaireVersion = interview.QuestionnaireVersion,
+                        InterviewStatus = interview.InterviewStatus,
+                        ResponsibleId = interview.ResponsibleId,
+                        IsCensusInterview = interview.IsCensusInterview,
+                        IncomingDate = interview.IncomingDate,
+                        Events = interview.Events,
+                        PackageSize = interview.Events?.Length ?? 0,
+                        ProcessingDate = DateTime.UtcNow,
+                        ExceptionType = exceptionType,
+                        ExceptionMessage = exception.Message,
+                        ExceptionStackTrace = string.Join(Environment.NewLine, exception.UnwrapAllInnerExceptions().Select(ex => $"{ex.Message} {ex.StackTrace}")),
+                        ReprocessAttemptsCount = interview.ProcessAttemptsCount,
+                    });
+                    brokenPackageUow.AcceptChanges();
+                }
+
                 this.logger.Debug($"Interview events by {interview.InterviewId} moved to broken packages. Took {innerwatch.Elapsed:g}.");
                 innerwatch.Restart();
             }
