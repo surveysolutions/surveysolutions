@@ -10,7 +10,6 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
@@ -96,7 +95,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 var dashboardItem = this.viewModelFactory.GetNew<InterviewerAssignmentDashboardItemViewModel>();
                 dashboardItem.Init(assignment);
 
-                yield return dashboardItem;
+                if (dashboardItem.InterviewsLeftByAssignmentCount > 0)
+                {
+                    yield return dashboardItem;
+                }
             }
         }
 
@@ -109,11 +111,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             }
             else
             {
-                // update UI assignment
-                var assignment = this.UiItems.OfType<InterviewerAssignmentDashboardItemViewModel>()
-                    .FirstOrDefault(x => x.AssignmentId == assignmentId.Value);
-
-                assignment?.DecreaseInterviewsCount();
+                this.assignmentsRepository.DecreaseInterviewsCount(assignmentId.Value);
+                
+                this.UiItems
+                    .OfType<InterviewerAssignmentDashboardItemViewModel>()
+                    .FirstOrDefault(x => x.AssignmentId == assignmentId.Value)
+                    ?.DecreaseInterviewsCount();
             }
         }
     }

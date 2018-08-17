@@ -2,8 +2,6 @@ using System.Linq;
 using Moq;
 using NUnit.Framework;
 using SQLite;
-using WB.Core.BoundedContexts.Interviewer.Services;
-using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Tests.Abc;
 using System.Collections.Generic;
@@ -24,6 +22,28 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             this.connection = Create.Storage.InMemorySqLiteConnection;
 
             this.storage = new AssignmentDocumentsStorage(connection, Mock.Of<ILogger>());
+        }
+
+        [Test]
+        public void should_store_decrease_interviews_count()
+        {
+            //arrang
+            var document = Create.Entity.AssignmentDocument(1, quantity: 10, interviewsCount: 10)
+                .WithAnswer(Create.Entity.Identity(Id.g1), "answer1")
+                .WithAnswer(Create.Entity.Identity(Id.g2), "answer2")
+                .WithAnswer(Create.Entity.Identity(Id.g3), "IDEN1", true)
+                .WithAnswer(Create.Entity.Identity(Id.g4), "IDEN2", true)
+                .Build();
+
+            this.storage.Store(document);
+
+            //act
+            this.storage.DecreaseInterviewsCount(1);
+
+            //assert
+            var assignment =  this.storage.GetById(1);
+
+            Assert.That(assignment.CreatedInterviewsCount, Is.EqualTo(9));
         }
 
         [Test]

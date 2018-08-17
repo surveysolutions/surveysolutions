@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.Messages;
 using WB.Core.GenericSubdomains.Portable;
@@ -159,9 +158,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
             if (item.AssignmentId.HasValue)
             {
-                var assesment = assignments.FirstOrDefault(i => i.Id == item.AssignmentId.Value);
-                if (assesment?.CreatedInterviewsCount != null)
-                    assesment.CreatedInterviewsCount--;
+                assignmentsRepository.DecreaseInterviewsCount(item.AssignmentId.Value);
+
+                this.UiItems
+                    .OfType<InterviewerAssignmentDashboardItemViewModel>()
+                    .FirstOrDefault(x => x.AssignmentId == item.AssignmentId.Value)
+                    ?.DecreaseInterviewsCount();
             }
 
             this.interviews.RemoveAll(x => x.InterviewId == item.InterviewId);
@@ -188,7 +190,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                     assignmentItemViewModel.Init(assignmentItem);
                     yield return assignmentItemViewModel;
                 }
-
             }
 
 
