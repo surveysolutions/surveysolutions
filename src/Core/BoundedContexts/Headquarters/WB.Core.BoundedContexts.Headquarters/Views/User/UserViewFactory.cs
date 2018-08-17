@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
-using WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviewer;
 using WB.Core.BoundedContexts.Headquarters.Views.Responsible;
@@ -17,18 +16,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
     internal class UserViewFactory : IUserViewFactory
     {
         private readonly IUserRepository userRepository;
-        private readonly IInterviewerProfileFactory interviewerProfileFactory;
 
         protected IUserRepository UserRepository => this.userRepository ?? ServiceLocator.Current.GetInstance<IUserRepository>();
 
-        protected IInterviewerProfileFactory InterviewerProfileFactory => this.interviewerProfileFactory ?? ServiceLocator.Current.GetInstance<IInterviewerProfileFactory>();
-
         public UserViewFactory(
-            IUserRepository userRepository, 
-            IInterviewerProfileFactory interviewerProfileFactory)
+            IUserRepository userRepository)
         {
             this.userRepository = userRepository;
-            this.interviewerProfileFactory = interviewerProfileFactory;
         }
 
         public UserViewFactory()

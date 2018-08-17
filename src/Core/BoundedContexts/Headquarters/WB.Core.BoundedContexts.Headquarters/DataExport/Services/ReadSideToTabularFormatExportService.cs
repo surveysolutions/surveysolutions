@@ -38,7 +38,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         private readonly ICsvWriter csvWriter;
         private readonly ILogger logger;
 
-        private readonly ITransactionManagerProvider transactionManager;
         private readonly CommentsExporter commentsExporter;
         private readonly InterviewActionsExporter interviewActionsExporter;
         private readonly IInterviewsExporter interviewsExporter;
@@ -52,7 +51,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         public ReadSideToTabularFormatExportService(IFileSystemAccessor fileSystemAccessor,
             ICsvWriter csvWriter, 
             ILogger logger,
-            ITransactionManagerProvider transactionManager, 
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries,
             InterviewDataExportSettings exportSettings, 
             IQuestionnaireExportStructureStorage questionnaireExportStructureStorage,
@@ -65,7 +63,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             this.fileSystemAccessor = fileSystemAccessor;
             this.csvWriter = csvWriter;
             this.logger = logger;
-            this.transactionManager = transactionManager;
             this.interviewSummaries = interviewSummaries;
             this.exportSettings = exportSettings;
             this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
@@ -145,13 +142,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                batchInterviews = this.transactionManager.GetTransactionManager().ExecuteInQueryTransaction(() =>
-                    this.interviewSummaries.Query(_ => this.Filter(_, questionnaireIdentity, status, fromDate, toDate)
+                batchInterviews = this.interviewSummaries.Query(_ => this.Filter(_, questionnaireIdentity, status, fromDate, toDate)
                         .OrderBy(x => x.InterviewId)
                         .Where(x => lastRecivedId == null || x.SummaryId.CompareTo(lastRecivedId) > 0)
                         .Select(x => new InterviewToExport(x.InterviewId, x.Key, x.ErrorsCount, x.Status))
                         .Take(this.exportSettings.InterviewIdsQueryBatchSize)
-                        .ToList()));
+                        .ToList());
 
                 if (batchInterviews.Count > 0)
                     lastRecivedId = batchInterviews.Last().Id.FormatGuid();

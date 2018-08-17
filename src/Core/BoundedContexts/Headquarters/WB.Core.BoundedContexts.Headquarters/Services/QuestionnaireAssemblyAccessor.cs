@@ -13,7 +13,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
     internal class QuestionnaireAssemblyAccessor : IQuestionnaireAssemblyAccessor
     {
         private readonly IAssemblyService assemblyService;
-        private readonly ConcurrentDictionary<string, AssemblyHolder> assemblyCache = new ConcurrentDictionary<string, AssemblyHolder>();
+        private static readonly ConcurrentDictionary<string, AssemblyHolder> assemblyCache = new ConcurrentDictionary<string, AssemblyHolder>();
 
         private static ILogger Logger => ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<QuestionnaireAssemblyAccessor>();
 
@@ -58,7 +58,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
             if (assemblyInfo == null)
                 return null;
 
-            var assembly = this.assemblyCache.GetOrAdd(assemblyFileName, CreateAssemblyHolder(assemblyFileName, assemblyInfo.Content));
+            var assembly = assemblyCache.GetOrAdd(assemblyFileName, CreateAssemblyHolder(assemblyFileName, assemblyInfo.Content));
 
             return assembly;
 

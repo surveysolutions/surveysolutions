@@ -23,10 +23,9 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
         private readonly IServiceLocator serviceLocator;
         private readonly IAggregateRootCacheCleaner aggregateRootCacheCleaner;
 
-        private int executingCommandsCount = 0;
-        private readonly object executionCountLock = new object();
+        private static int executingCommandsCount = 0;
+        private static readonly object executionCountLock = new object();
         private TaskCompletionSource<object> executionAwaiter = null;
-
 
         public CommandService(
             IEventSourcedAggregateRootRepository eventSourcedRepository,
@@ -72,19 +71,19 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
 
         private void RegisterCommandExecution()
         {
-            lock (this.executionCountLock)
+            lock (executionCountLock)
             {
-                this.executingCommandsCount++;
+                executingCommandsCount++;
             }
         }
 
         private void UnregisterCommandExecution()
         {
-            lock (this.executionCountLock)
+            lock (executionCountLock)
             {
-                this.executingCommandsCount--;
+                executingCommandsCount--;
 
-                if (this.executingCommandsCount > 0)
+                if (executingCommandsCount > 0)
                     return;
 
                 if (this.executionAwaiter != null)
@@ -97,9 +96,9 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
 
         public Task WaitPendingCommandsAsync()
         {
-            lock (this.executionCountLock)
+            lock (executionCountLock)
             {
-                if (this.executingCommandsCount == 0)
+                if (executingCommandsCount == 0)
                     return Task.FromResult(null as object);
 
                 if (this.executionAwaiter == null)
@@ -111,7 +110,7 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             }
         }
 
-        public bool HasPendingCommands => this.executingCommandsCount > 0;
+        public bool HasPendingCommands => executingCommandsCount > 0;
 
         protected virtual void ExecuteImpl(ICommand command, string origin, CancellationToken cancellationToken)
         {

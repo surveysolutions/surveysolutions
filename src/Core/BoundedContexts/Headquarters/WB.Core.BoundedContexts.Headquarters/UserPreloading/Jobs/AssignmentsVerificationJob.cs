@@ -39,18 +39,14 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
         private AssignmentsImportTask assignmentsImportTask => ServiceLocator.Current
             .GetInstance<AssignmentsImportTask>();
 
-        private T ExecuteInPlain<T>(Func<T> func) => this.plainTransactionManager.ExecuteInPlainTransaction(func);
-        private void ExecuteInPlain(Action func) => this.plainTransactionManager.ExecuteInPlainTransaction(func);
-
-
         public void Execute(IJobExecutionContext context)
         {
             try
             {
-                var importProcess = this.ExecuteInPlain(() => this.importAssignmentsService.GetImportStatus());
+                var importProcess = this.importAssignmentsService.GetImportStatus();
                 if (importProcess?.ProcessStatus != AssignmentsImportProcessStatus.Verification) return;
 
-                var allAssignmentIds = this.ExecuteInPlain(() => this.importAssignmentsService.GetAllAssignmentIdsToVerify());
+                var allAssignmentIds = this.importAssignmentsService.GetAllAssignmentIdsToVerify();
 
                 this.logger.Debug("Assignments verification job: Started");
 
@@ -65,23 +61,23 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
                         {
                             ThreadMarkerManager.MarkCurrentThreadAsIsolated();
 
-                            var assignmentToVerify = this.ExecuteInPlain(() => this.importAssignmentsService.GetAssignmentById(assignmentId));
+                            var assignmentToVerify = this.importAssignmentsService.GetAssignmentById(assignmentId);
                             if (assignmentToVerify == null) return;
 
-                            var questionnaire = this.ExecuteInPlain(() => this.questionnaireStorage.GetQuestionnaire(importProcess.QuestionnaireIdentity, null));
+                            var questionnaire =  this.questionnaireStorage.GetQuestionnaire(importProcess.QuestionnaireIdentity, null);
                             if (questionnaire == null)
                             {
-                                this.ExecuteInPlain(() => this.importAssignmentsService.RemoveAssignmentToImport(assignmentToVerify.Id));
+                                this.importAssignmentsService.RemoveAssignmentToImport(assignmentToVerify.Id);
                                 return;
                             }
 
-                            var error = this.ExecuteInPlain(() =>
+                            var error = 
                                 this.importAssignmentsVerifier.VerifyWithInterviewTree(
                                     assignmentToVerify.Answers,
                                     assignmentToVerify.Interviewer ?? assignmentToVerify.Supervisor,
-                                    questionnaire));
+                                    questionnaire);
 
-                            this.ExecuteInPlain(() => this.importAssignmentsService.SetVerifiedToAssignment(assignmentToVerify.Id, error?.ErrorMessage));
+                            this.importAssignmentsService.SetVerifiedToAssignment(assignmentToVerify.Id, error?.ErrorMessage);
                         }
                         finally
                         {
@@ -89,8 +85,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
                         }
                     });
 
-                this.ExecuteInPlain(() =>
-                    this.importAssignmentsService.SetImportProcessStatus(AssignmentsImportProcessStatus.Import));
+                    this.importAssignmentsService.SetImportProcessStatus(AssignmentsImportProcessStatus.Import);
 
                 assignmentsImportTask.Run();
 

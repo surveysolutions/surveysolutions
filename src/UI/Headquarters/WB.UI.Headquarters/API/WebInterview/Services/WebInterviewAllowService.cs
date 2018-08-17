@@ -13,11 +13,9 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
 {
     class WebInterviewAllowService : IWebInterviewAllowService
     {
-        private readonly ITransactionManagerProvider transactionManagerProvider;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
         private readonly IAuthorizedUser authorizedUser;
-        private readonly IPlainTransactionManagerProvider plainTransactionManagerProvider;
         private static readonly List<InterviewStatus> AllowedInterviewStatuses = new List<InterviewStatus>
         {
             InterviewStatus.InterviewerAssigned,
@@ -31,25 +29,19 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
         };
 
         public WebInterviewAllowService(
-            ITransactionManagerProvider transactionManagerProvider,
-            IPlainTransactionManagerProvider plainTransactionManagerProvider,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage,
             IWebInterviewConfigProvider webInterviewConfigProvider, 
             IAuthorizedUser authorizedUser)
         {
-            this.transactionManagerProvider = transactionManagerProvider;
             this.interviewSummaryStorage = interviewSummaryStorage;
             this.webInterviewConfigProvider = webInterviewConfigProvider;
             this.authorizedUser = authorizedUser;
-            this.plainTransactionManagerProvider = plainTransactionManagerProvider;
         }
 
         public void CheckWebInterviewAccessPermissions(string interviewId)
         {
             Guid interviewGuid = Guid.Parse(interviewId);
-            var interview = transactionManagerProvider.GetTransactionManager()
-                .ExecuteInQueryTransaction(
-                    () => interviewSummaryStorage.GetById(interviewGuid));
+            var interview = interviewSummaryStorage.GetById(interviewGuid);
 
             if (interview == null)
                 throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewNotFound, Enumerator.Native.Resources.WebInterview.Error_NotFound);
@@ -70,10 +62,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
 
             QuestionnaireIdentity questionnaireIdentity = new QuestionnaireIdentity(interview.QuestionnaireId, interview.QuestionnaireVersion);
 
-            WebInterviewConfig webInterviewConfig = plainTransactionManagerProvider
-                .GetPlainTransactionManager()
-                    .ExecuteInPlainTransaction(
-                        () => webInterviewConfigProvider.Get( questionnaireIdentity));
+            WebInterviewConfig webInterviewConfig = webInterviewConfigProvider.Get( questionnaireIdentity);
 
             //interview is not public available and logged in user is not current interview responsible
             if (!webInterviewConfig.Started && interview.Status == InterviewStatus.InterviewerAssigned && this.authorizedUser.IsAuthenticated)

@@ -26,17 +26,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Jo
 
                 var task = ServiceLocator.Current.GetInstance<IRefreshReportsTask>();
                 var repository = ServiceLocator.Current.GetInstance<IInterviewReportDataRepository>();
+                var localJobRun = Stopwatch.StartNew();
+                task.RegisterJobStart(DateTime.UtcNow);
+                LogInfo($"Start refresh of report");
+                repository.Refresh();
+                task.RegisterJobCompletion(DateTime.UtcNow);
 
-                transactionManager.ExecuteInPlainTransaction(() =>
-                {
-                    var localJobRun = Stopwatch.StartNew();
-                    task.RegisterJobStart(DateTime.UtcNow);
-                    LogInfo($"Start refresh of report");
-                    repository.Refresh();
-                    task.RegisterJobCompletion(DateTime.UtcNow);
-
-                    LogInfo($"Completed refesh of reports. Took: {localJobRun.Elapsed:g}");
-                });
+                LogInfo($"Completed refesh of reports. Took: {localJobRun.Elapsed:g}");
 
                 LogInfo($"All jobs runnig time: {globalJobRun.Elapsed:g}");
             }

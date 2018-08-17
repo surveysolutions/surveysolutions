@@ -38,7 +38,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
         private readonly IInterviewUniqueKeyGenerator uniqueKeyGenerator;
         private readonly SyncSettings syncSettings;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviews;
-        private readonly ITransactionManager transactionManager;
         private readonly IUserRepository userRepository;
 
         public InterviewPackagesService(
@@ -52,7 +51,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             IInterviewUniqueKeyGenerator uniqueKeyGenerator,
             SyncSettings syncSettings,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviews,
-            ITransactionManager transactionManager,
             IUserRepository userRepository)
         {
             this.interviewPackageStorage = interviewPackageStorage;
@@ -65,7 +63,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             this.uniqueKeyGenerator = uniqueKeyGenerator;
             this.syncSettings = syncSettings;
             this.interviews = interviews;
-            this.transactionManager = transactionManager;
             this.userRepository = userRepository;
         }
 
@@ -220,13 +217,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             string existingInterviewKey = null;
             try
             {
-                bool startedOwnTransaction = false;
-                if (!this.transactionManager.TransactionStarted)
-                {
-                    startedOwnTransaction = true;
-                    transactionManager.BeginCommandTransaction();
-                }
-
                 existingInterviewKey = this.interviews.GetById(interview.InterviewId)?.Key;
                 var aggregateRootEvents = this.serializer
                     .Deserialize<AggregateRootEvent[]>(interview.Events.Replace(@"\u0000", ""));
@@ -272,16 +262,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
 
                 RecordProcessedPackageInfo(aggregateRootEvents);
 
-                if (startedOwnTransaction)
-                {
-                    this.transactionManager.CommitCommandTransaction();
-                }
             }
             catch (Exception exception)
             {
+                /// TODO CHECK HOW TO ROLLBACK CHANGES HERE!!!!
                 this.logger.Error($"Interview events by {interview.InterviewId} processing failed. Reason: '{exception.Message}'", exception);
-
-                this.transactionManager.RollbackCommandTransaction();
 
                 var interviewException = exception as InterviewException;
                 if (interviewException == null)

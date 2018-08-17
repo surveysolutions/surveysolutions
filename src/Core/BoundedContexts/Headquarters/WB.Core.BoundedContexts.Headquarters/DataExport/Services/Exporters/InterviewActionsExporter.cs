@@ -17,8 +17,8 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
@@ -41,27 +41,19 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         };
         private readonly string dataFileExtension = "tab";
         private readonly ICsvWriter csvWriter;
-        private readonly ITransactionManagerProvider transactionManager;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatuses;
-        private readonly ISessionProvider sessionProvider;
+        private readonly IUnitOfWork sessionProvider;
         private readonly ILogger logger;
-
-        protected InterviewActionsExporter()
-        {
-
-        }
 
         public InterviewActionsExporter(InterviewDataExportSettings interviewDataExportSettings,
             IFileSystemAccessor fileSystemAccessor, 
             ICsvWriter csvWriter, 
-            ITransactionManagerProvider transactionManager, 
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatuses,
-            ILogger logger, ISessionProvider sessionProvider)
+            ILogger logger, IUnitOfWork sessionProvider)
         {
             this.interviewDataExportSettings = interviewDataExportSettings;
             this.fileSystemAccessor = fileSystemAccessor;
             this.csvWriter = csvWriter;
-            this.transactionManager = transactionManager;
             this.interviewStatuses = interviewStatuses;
             this.logger = logger;
             this.sessionProvider = sessionProvider;
@@ -84,8 +76,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                 var interviewIdsStrings = interviewsBatch.ToArray();
                 Expression<Func<InterviewSummary, bool>> whereClauseForAction = x => interviewIdsStrings.Contains(x.InterviewId);
 
-                var actionsChunk = this.transactionManager.GetTransactionManager().ExecuteInQueryTransaction(
-                    () => this.QueryActionsChunkFromReadSide(whereClauseForAction));
+                var actionsChunk = this.QueryActionsChunkFromReadSide(whereClauseForAction);
 
                 this.csvWriter.WriteData(actionFilePath, actionsChunk, ExportFileSettings.DataFileSeparator.ToString());
 
@@ -121,7 +112,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 
         private List<string[]> QueryActionsChunkFromReadSide(Expression<Func<InterviewSummary, bool>> queryActions)
         {
-            sessionProvider.GetSession()?.Connection?.Execute("set enable_seqscan=false");
+            sessionProvider.Session?.Connection?.Execute("set enable_seqscan=false");
 
             var interviews =
               this.interviewStatuses.Query(_ => _

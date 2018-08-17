@@ -81,8 +81,7 @@ namespace WB.UI.Headquarters.Services
                 LastLoadedAt = DateTime.Now;
                 ErrorOccuredAt = null;
                 
-                this.plainTransactionManager.ExecuteInPlainTransaction(() 
-                    => this.appSettingsStorage.Store(versionInfo, VersionCheckingInfo.VersionCheckingInfoKey));
+                this.appSettingsStorage.Store(versionInfo, VersionCheckingInfo.VersionCheckingInfoKey);
             }
             catch (Exception)
             {

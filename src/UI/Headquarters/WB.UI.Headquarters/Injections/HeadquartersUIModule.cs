@@ -59,7 +59,7 @@ namespace WB.UI.Headquarters.Injections
 
             registry.Bind<IImageProcessingService, ImageProcessingService>();
 
-            registry.BindAsSingleton<IVersionCheckService, VersionCheckService>();
+            registry.Bind<IVersionCheckService, VersionCheckService>();
             registry.BindAsSingleton<IHttpStatistician, HttpStatistician>();
             registry.BindAsSingleton<IAudioProcessingService, AudioProcessingService>();
 
@@ -72,12 +72,13 @@ namespace WB.UI.Headquarters.Injections
 
             registry.BindHttpFilter<UnderConstructionHttpFilter>(System.Web.Http.Filters.FilterScope.Global, 0);
             registry.BindMvcFilter<UnderConstructionMvcFilter>(FilterScope.First, 0);
-            registry.BindMvcFilterWhenActionMethodHasNoAttribute<GlobalNotificationAttribute, NoTransactionAttribute>(FilterScope.Global, null);
+            registry.BindMvcFilterWhenActionMethodHasNoAttribute<GlobalNotificationAttribute, NoTransactionAttribute>(FilterScope.Global, 5);
 
-            //this.Bind<IUserWebViewFactory>().To<UserWebViewFactory>(); // binded automatically but should not
+            registry.BindMvcFilterWhenActionMethodHasNoAttribute<TransactionFilter, NoTransactionAttribute>(FilterScope.First, 1);
+            registry.BindHttpFilterWhenActionMethodHasNoAttribute<ApiTransactionFilter, NoTransactionAttribute>(System.Web.Http.Filters.FilterScope.Global, 1);
+
             registry.Bind<ICommandDeserializer, SurveyManagementCommandDeserializer>();
-            registry.BindAsSingleton<IRevalidateInterviewsAdministrationService, RevalidateInterviewsAdministrationService>();
-            registry.BindAsSingleton<IInterviewerVersionReader, InterviewerVersionReader>();
+            registry.Bind<IInterviewerVersionReader, InterviewerVersionReader>();
             registry.Bind<IWebInterviewAllowService, WebInterviewAllowService>();
             registry.Bind<IReviewAllowedService, ReviewAllowedService>();
             registry.Bind<IInterviewerProfileFactory, InterviewerProfileFactory>();

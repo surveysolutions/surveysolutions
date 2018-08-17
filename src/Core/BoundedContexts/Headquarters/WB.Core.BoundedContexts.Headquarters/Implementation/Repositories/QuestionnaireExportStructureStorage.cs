@@ -11,7 +11,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
     {
         private readonly IExportViewFactory exportViewFactory;
 
-        private readonly MemoryCache cache = new MemoryCache(nameof(QuestionnaireExportStructure));
+        private static readonly MemoryCache cache = new MemoryCache(nameof(QuestionnaireExportStructure));
 
         public QuestionnaireExportStructureStorage(IExportViewFactory exportViewFactory)
         {
@@ -21,7 +21,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
         public QuestionnaireExportStructure GetQuestionnaireExportStructure(QuestionnaireIdentity id)
         {
             var idStringKey = id.ToString();
-            var cachedQuestionnaireExportStructure = this.cache.Get(idStringKey);
+            var cachedQuestionnaireExportStructure = cache.Get(idStringKey);
             if (cachedQuestionnaireExportStructure == null)
             {
                 cachedQuestionnaireExportStructure = this.exportViewFactory.CreateQuestionnaireExportStructure(id);
@@ -29,7 +29,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
                 if (cachedQuestionnaireExportStructure == null)
                     return null;
 
-                this.cache.Set(idStringKey, 
+                cache.Set(idStringKey, 
                     cachedQuestionnaireExportStructure,
                     DateTime.Now.AddHours(1));
             }

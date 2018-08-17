@@ -407,7 +407,8 @@ namespace WB.Tests.Integration.FullStackIntegration.Hq
 
             public void Load(IIocRegistry registry)
             {
-                registry.BindAsSingleton<IEventSourcedAggregateRootRepository, IAggregateRootCacheCleaner, EventSourcedAggregateRootRepositoryWithExtendedCache>();
+                registry.BindAsSingleton<IEventSourcedAggregateRootRepository,EventSourcedAggregateRootRepositoryWithExtendedCache>();
+                registry.BindAsSingleton<IAggregateRootCacheCleaner, EventSourcedAggregateRootRepositoryWithExtendedCache>();
                 registry.BindToMethod(Mock.Of<IWebInterviewNotificationService>);
 
                 var eventBusConfigSection = new EventBusConfigSection();

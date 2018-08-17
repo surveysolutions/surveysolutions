@@ -16,7 +16,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers.
 {
     internal class TabularFormatDataExportHandler : AbstractDataExportHandler
     {
-        private readonly ITransactionManagerProvider transactionManagerProvider;
         private readonly ITabularFormatExportService tabularFormatExportService;
         private readonly IEnvironmentContentService environmentContentService;
 
@@ -25,7 +24,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers.
         public TabularFormatDataExportHandler(
             IFileSystemAccessor fileSystemAccessor,
             InterviewDataExportSettings interviewDataExportSettings, 
-            ITransactionManagerProvider transactionManagerProvider, 
             ITabularFormatExportService tabularFormatExportService,
             IEnvironmentContentService environmentContentService, 
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor,
@@ -35,7 +33,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers.
             IDataExportFileAccessor dataExportFileAccessor) : 
             base(fileSystemAccessor, filebasedExportedDataAccessor, interviewDataExportSettings, dataExportProcessesService, dataExportFileAccessor)
         {
-            this.transactionManagerProvider = transactionManagerProvider;
             this.tabularFormatExportService = tabularFormatExportService;
             this.environmentContentService = environmentContentService;
             this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
@@ -60,14 +57,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers.
 
         private void CreateDoFilesForQuestionnaire(QuestionnaireIdentity questionnaireIdentity, string directoryPath, CancellationToken cancellationToken)
         {
-            this.transactionManagerProvider.GetTransactionManager().ExecuteInQueryTransaction(() =>
-            {
-                var questionnaireExportStructure =
-                    this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(
-                        new QuestionnaireIdentity(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version));
+            var questionnaireExportStructure =
+                this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(
+                    new QuestionnaireIdentity(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version));
 
-                this.environmentContentService.CreateEnvironmentFiles(questionnaireExportStructure, directoryPath, cancellationToken);
-            });
+            this.environmentContentService.CreateEnvironmentFiles(questionnaireExportStructure, directoryPath,
+                cancellationToken);
         }
     }
 }
