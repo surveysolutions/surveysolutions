@@ -13,23 +13,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Questionnaires.Jobs
     public class DeleteQuestionnaireJob : IJob
     {
         private readonly IDeleteQuestionnaireService deleteQuestionnaireService;
-        private readonly IPlainTransactionManager transactionManager;
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemReader;
 
         public DeleteQuestionnaireJob(IDeleteQuestionnaireService deleteQuestionnaireService, 
-            IPlainTransactionManager transactionManager, 
             IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemReader)
         {
             this.deleteQuestionnaireService = deleteQuestionnaireService;
-            this.transactionManager = transactionManager;
             this.questionnaireBrowseItemReader = questionnaireBrowseItemReader;
         }
 
         public void Execute(IJobExecutionContext context)
         {
             var disabledNotDeletedQuestionnaire =
-                transactionManager.ExecuteInQueryTransaction(() =>
-                    questionnaireBrowseItemReader.Query(_ => _.FirstOrDefault(q => q.Disabled && !q.IsDeleted)));
+                    questionnaireBrowseItemReader.Query(_ => _.FirstOrDefault(q => q.Disabled && !q.IsDeleted));
 
             if(disabledNotDeletedQuestionnaire == null) return;
 

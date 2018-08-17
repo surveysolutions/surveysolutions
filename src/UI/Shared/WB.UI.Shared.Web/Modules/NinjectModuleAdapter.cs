@@ -96,25 +96,10 @@ namespace WB.UI.Shared.Web.Modules
             this.Kernel.Bind<TInterface>().To<TImplementation>().InSingletonScope();
         }
 
-        void IIocRegistry.BindAsSingleton<TInterface1, TInterface2, TImplementation>()
-        {
-            this.Kernel.Bind<TInterface1, TInterface2>().To<TImplementation>().InSingletonScope();
-        }
-
         void IIocRegistry.BindAsSingletonWithConstructorArgument<TInterface, TImplementation>(string argumentName, object argumentValue)
         {
             this.Kernel.Bind<TInterface>().To<TImplementation>().InSingletonScope()
                 .WithConstructorArgument(argumentName, argumentValue);
-        }
-
-        public void BindAsSingletonWithConstructorArgument<TInterface, TImplementation>(
-            params ConstructorArgument[] constructorArguments) where TImplementation : TInterface
-        {
-            var syntax = this.Kernel.Bind<TInterface>().To<TImplementation>().InSingletonScope();
-            foreach (var constructorArgument in constructorArguments)
-            {
-                syntax.WithConstructorArgument(constructorArgument.Name, c => constructorArgument.Value(new NinjectModuleContext(c)));
-            }
         }
 
         void IIocRegistry.BindToRegisteredInterface<TInterface, TRegisteredInterface>()

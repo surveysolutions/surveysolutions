@@ -7,8 +7,6 @@ namespace WB.UI.Shared.Web.Modules
     {
         void BindMvcFilter<T>(System.Web.Mvc.FilterScope filterScope, int? order);
 
-        void BindMvcFilterInSingletonScope<T>(System.Web.Mvc.FilterScope filterScope, int? order);
-
         void BindMvcFilterWhenActionMethodHasNoAttribute<T, TAttribute>(System.Web.Mvc.FilterScope filterScope, int? order);
 
         void BindHttpFilter<T>(System.Web.Http.Filters.FilterScope filterScope, int? order) where T : IFilter;

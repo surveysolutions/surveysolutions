@@ -17,8 +17,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage;
         private readonly InterviewPreconditionsServiceSettings interviewPreconditionsServiceSettings;
 
-        private ITransactionManagerProvider TransactionManagerProvider => ServiceLocator.Current.GetInstance<ITransactionManagerProvider>();
-
         public SurveyManagementInterviewCommandValidator(
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage, 
             InterviewPreconditionsServiceSettings interviewPreconditionsServiceSettings)
@@ -47,23 +45,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
 
         private int QueryInterviewsCount()
         {
-            var shouldUseOwnTransaction = !this.TransactionManagerProvider.GetTransactionManager().TransactionStarted;
-
-            if (shouldUseOwnTransaction)
-            {
-                this.TransactionManagerProvider.GetTransactionManager().BeginCommandTransaction();
-            }
-            try
-            {
-                return this.interviewSummaryStorage.Query(_ => _.Select(i => i.InterviewId).Count());
-            }
-            finally
-            {
-                if (shouldUseOwnTransaction)
-                {
-                    this.TransactionManagerProvider.GetTransactionManager().RollbackCommandTransaction();
-                }
-            }
+            return this.interviewSummaryStorage.Query(_ => _.Select(i => i.InterviewId).Count());
         }
 
         public void Validate(StatefulInterview aggregate, SynchronizeInterviewEventsCommand command)

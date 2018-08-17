@@ -38,15 +38,13 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
                 UserToImport userToImport = null;
                 do
                 {
-                    userToImport = this.transactionManager.ExecuteInPlainTransaction(
-                        () => this.importUsersService.GetUserToImport());
+                    userToImport = this.importUsersService.GetUserToImport();
 
                     if (userToImport == null) break;
 
                     this.CreateUserOrUnarchiveAndUpdateAsync(userToImport).WaitAndUnwrapException();
 
-                    this.transactionManager.ExecuteInPlainTransaction(
-                        () => this.importUsersService.RemoveImportedUser(userToImport));
+                    this.importUsersService.RemoveImportedUser(userToImport);
 
                 } while (userToImport != null);
             }

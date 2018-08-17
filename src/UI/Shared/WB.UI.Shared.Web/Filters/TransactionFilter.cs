@@ -14,20 +14,11 @@ namespace WB.UI.Shared.Web.Filters
             this.unitOfWork = unitOfWork;
         }
 
-        public override void OnActionExecuting(ActionExecutingContext filterContext)
-        {
-            this.unitOfWork.Start();
-        }
-
         public override void OnResultExecuted(ResultExecutedContext filterContext)
         {
-            if (filterContext.Exception != null)
+            if (filterContext.Exception == null)
             {
                 unitOfWork.AcceptChanges();
-            }
-            else
-            {
-                unitOfWork.Dispose();
             }
         }
     }

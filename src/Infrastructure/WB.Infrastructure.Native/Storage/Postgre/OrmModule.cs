@@ -213,6 +213,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
         public void AcceptChanges()
         {
+            if(isDisposed) throw new ObjectDisposedException(nameof(UnitOfWork));
+
             transaction.Commit();
             session.Close();
             transaction = null;
@@ -224,12 +226,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             get
             {
                 if(isDisposed) throw new ObjectDisposedException(nameof(UnitOfWork));
-                
-                if (session == null)
-                {
-                    throw new InvalidOperationException("Trying to execute db call without transaction");
-                }
-
                 return session;
             }
         } 

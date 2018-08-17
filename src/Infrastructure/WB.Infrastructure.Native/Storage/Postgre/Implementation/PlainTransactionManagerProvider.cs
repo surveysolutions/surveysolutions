@@ -6,7 +6,7 @@ using WB.Infrastructure.Native.Threading;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 {
-    internal class PlainTransactionManagerProvider : IPlainSessionProvider, IPlainTransactionManagerProvider
+    internal class PlainTransactionManagerProvider : IPlainSessionProvider
     {
         private readonly Func<IPlainPostgresTransactionManager> transactionManagerFactory;
         private readonly Func<IPlainPostgresTransactionManager> noTransactionTransactionManagerFactory;

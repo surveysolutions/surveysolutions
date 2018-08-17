@@ -28,22 +28,17 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview.Jobs
         {
             var allCommands = Queue.DeQueueForPublish();
 
-            var transactionManager = ServiceLocator.Current.GetInstance<ITransactionManager>();
-
             foreach (var interviewCommand in allCommands)
             {
                 try
                 {
-                    transactionManager.BeginCommandTransaction();
                     this.CommandService.Execute(interviewCommand);
-                    transactionManager.CommitCommandTransaction();
                 }
                 catch(InterviewException interviewException) when (interviewException.ExceptionType == InterviewDomainExceptionType.StatusIsNotOneOfExpected)
                 {
                 }
                 catch (Exception e)
                 {
-                    transactionManager.RollbackCommandTransaction();
                     this.Logger.Error($"Failed to log command {interviewCommand.GetType().Name} for interview {interviewCommand.InterviewId}", e);
                 }
             }

@@ -24,16 +24,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             IImageFileStorage imageFileRepository,
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor,
             InterviewDataExportSettings interviewDataExportSettings,
-            ITransactionManager transactionManager,
             IInterviewFactory interviewFactory,
             IDataExportProcessesService dataExportProcessesService,
             IQuestionnaireStorage questionnaireStorage,
             IDataExportFileAccessor dataExportFileAccessor,
-            IAudioFileStorage audioFileStorage,
-            IPlainTransactionManagerProvider plainTransactionManagerProvider)
+            IAudioFileStorage audioFileStorage)
             : base(fileSystemAccessor, filebasedExportedDataAccessor, interviewDataExportSettings,
-                dataExportProcessesService, dataExportFileAccessor, questionnaireStorage, transactionManager,
-                interviewFactory, imageFileRepository, audioFileStorage, plainTransactionManagerProvider)
+                dataExportProcessesService, dataExportFileAccessor, questionnaireStorage,
+                interviewFactory, imageFileRepository, audioFileStorage)
         {
         }
 

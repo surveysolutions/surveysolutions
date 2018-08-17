@@ -36,15 +36,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         private readonly ILogger logger;
         private readonly InterviewDataExportSettings interviewDataExportSettings;
         private readonly ICsvWriter csvWriter;
-        private ITransactionManager TransactionManager => transactionManagerProvider.GetTransactionManager();
-        private readonly ITransactionManagerProvider transactionManagerProvider;
         private readonly IInterviewErrorsExporter errorsExporter;
         private readonly IQuestionnaireStorage questionnaireStorage;
 
         public InterviewsExporter(ILogger logger,
             InterviewDataExportSettings interviewDataExportSettings,
             ICsvWriter csvWriter,
-            ITransactionManagerProvider plainTransactionManagerProvider,
             IInterviewErrorsExporter errorsExporter,
             IInterviewFactory interviewFactory,
             IExportViewFactory exportViewFactory,
@@ -56,7 +53,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.interviewDataExportSettings = interviewDataExportSettings ?? throw new ArgumentNullException(nameof(interviewDataExportSettings));
             this.csvWriter = csvWriter ?? throw new ArgumentNullException(nameof(csvWriter));
-            this.transactionManagerProvider = plainTransactionManagerProvider ?? throw new ArgumentNullException(nameof(plainTransactionManagerProvider));
             this.errorsExporter = errorsExporter ?? throw new ArgumentNullException(nameof(errorsExporter));
         }
 
@@ -127,34 +123,30 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                 foreach (IEnumerable<InterviewToExport> batchIds in interviewIdsToExport.Batch(batchSize))
                 {
                     var batch = batchIds.ToDictionary(b => b.Id);
-
-                    this.TransactionManager.ExecuteInQueryTransaction(() =>
+                    try
                     {
-                        try
+                        getDbDataStopwatch.Restart();
+
+                        var interviews = interviewFactory.GetInterviewEntities(batch.Keys);
+
+                        foreach (var interviewEntity in interviews)
                         {
-                            getDbDataStopwatch.Restart();
-
-                            var interviews = interviewFactory.GetInterviewEntities(batch.Keys);
-
-                            foreach (var interviewEntity in interviews)
-                            {
-                                batch[interviewEntity.InterviewId].Entities.Add(interviewEntity);
-                            }
-
-                            getDbDataStopwatch.Stop();
-
-                            var eta = dbEta.AddProgress(getDbDataStopwatch.Elapsed.TotalMilliseconds, batch.Count);
-                            log($"DB read batch of {batch.Count} interviews in {getDbDataStopwatch.Elapsed:g}. "
-                                + $"ETA to read out db: {eta:g} ({dbEta.ItemsPerHour} interviews/hour).");
-
-                            interviewsToProcess.Add(batch.Values.ToList(), cancellationToken);
+                            batch[interviewEntity.InterviewId].Entities.Add(interviewEntity);
                         }
-                        catch (Exception e)
-                        {
-                            this.logger.Error("Error occur while reading interviews from DB", e);
-                            throw;
-                        }
-                    });
+
+                        getDbDataStopwatch.Stop();
+
+                        var eta = dbEta.AddProgress(getDbDataStopwatch.Elapsed.TotalMilliseconds, batch.Count);
+                        log($"DB read batch of {batch.Count} interviews in {getDbDataStopwatch.Elapsed:g}. "
+                            + $"ETA to read out db: {eta:g} ({dbEta.ItemsPerHour} interviews/hour).");
+
+                        interviewsToProcess.Add(batch.Values.ToList(), cancellationToken);
+                    }
+                    catch (Exception e)
+                    {
+                        this.logger.Error("Error occur while reading interviews from DB", e);
+                        throw;
+                    }
                 }
             }
             finally

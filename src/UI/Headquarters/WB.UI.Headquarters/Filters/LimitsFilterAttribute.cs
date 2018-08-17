@@ -15,11 +15,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Filters
             get { return ServiceLocator.Current.GetInstance<InterviewPreconditionsServiceSettings>(); }
         }
 
-        private ITransactionManagerProvider TransactionManagerProvider
-        {
-            get { return ServiceLocator.Current.GetInstance<ITransactionManagerProvider>(); }
-        }
-
         private IQueryableReadSideRepositoryReader<InterviewSummary> InterviewSummaryStorage
         {
             get { return ServiceLocator.Current.GetInstance<IQueryableReadSideRepositoryReader<InterviewSummary>>(); }
@@ -51,23 +46,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Filters
 
         private int QueryInterviewsCount()
         {
-            var shouldUseOwnTransaction = !TransactionManagerProvider.GetTransactionManager().TransactionStarted;
-
-            if (shouldUseOwnTransaction)
-            {
-                this.TransactionManagerProvider.GetTransactionManager().BeginCommandTransaction();
-            }
-            try
-            {
-                return InterviewSummaryStorage.Query(_ => _.Select(i => i.InterviewId).Count());
-            }
-            finally
-            {
-                if (shouldUseOwnTransaction)
-                {
-                    this.TransactionManagerProvider.GetTransactionManager().RollbackCommandTransaction();
-                }
-            }
+            return InterviewSummaryStorage.Query(_ => _.Select(i => i.InterviewId).Count());
         }
     }
 }

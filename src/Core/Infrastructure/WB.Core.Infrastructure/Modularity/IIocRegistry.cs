@@ -11,9 +11,7 @@ namespace WB.Core.Infrastructure.Modularity
         void Bind<TImplementation>();
         void BindWithConstructorArgument<TInterface, TImplementation>(string argumentName, object argumentValue) where TImplementation : TInterface;
         void BindAsSingleton<TInterface, TImplementation>() where TImplementation : TInterface;
-        void BindAsSingleton<TInterface1,TInterface2, TImplementation>() where TImplementation : TInterface1, TInterface2;
         void BindAsSingletonWithConstructorArgument<TInterface, TImplementation>(string argumentName, object argumentValue) where TImplementation : TInterface;
-        void BindAsSingletonWithConstructorArgument<TInterface, TImplementation>(params ConstructorArgument[] constructorArguments) where TImplementation : TInterface;
         void BindToRegisteredInterface<TInterface, TRegisteredInterface>() where TRegisteredInterface : TInterface;
         void BindToMethod<T>(Func<T> func, string name = null);
         void BindToMethod<T>(Func<IModuleContext, T> func, string name = null);

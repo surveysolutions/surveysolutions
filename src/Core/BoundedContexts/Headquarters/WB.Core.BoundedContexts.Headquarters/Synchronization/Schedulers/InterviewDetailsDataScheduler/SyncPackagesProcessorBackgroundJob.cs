@@ -19,7 +19,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.Interv
         ILogger logger => ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<SyncPackagesProcessorBackgroundJob>();
         IInterviewPackagesService interviewPackagesService => ServiceLocator.Current.GetInstance<IInterviewPackagesService>();
         SyncPackagesProcessorBackgroundJobSetting interviewPackagesJobSetings => ServiceLocator.Current.GetInstance<SyncPackagesProcessorBackgroundJobSetting>();
-        IPlainTransactionManager plainTransactionManager => ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>().GetPlainTransactionManager();
 
         public void Execute(IJobExecutionContext context)
         {
@@ -61,28 +60,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.Interv
 
         private T ExecuteInQueryTransaction<T>(Func<T> query)
         {
-            ThreadMarkerManager.MarkCurrentThreadAsNoTransactional();
-            try
-            {
-                return this.plainTransactionManager.ExecuteInQueryTransaction(query);
-            }
-            finally
-            {
-                ThreadMarkerManager.RemoveCurrentThreadFromNoTransactional();
-            }
+            return query();
         }
 
         private void ExecuteInPlainTransaction(Action query)
         {
-            ThreadMarkerManager.MarkCurrentThreadAsIsolated();
-            try
-            {
-                this.plainTransactionManager.ExecuteInPlainTransaction(query);
-            }
-            finally
-            {
-                ThreadMarkerManager.ReleaseCurrentThreadFromIsolation();
-            }
+            query();
         }
     }
 }

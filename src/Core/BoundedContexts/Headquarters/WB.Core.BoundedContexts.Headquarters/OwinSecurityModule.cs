@@ -21,7 +21,7 @@ namespace WB.Core.BoundedContexts.Headquarters
         public void Load(IIocRegistry registry)
         {
             registry.Bind<IUserRepository, HqUserStore>();
-            registry.BindAsSingleton<IHashCompatibilityProvider, HashCompatibilityProvider>();
+            registry.Bind<IHashCompatibilityProvider, HashCompatibilityProvider>();
             registry.Bind<IPasswordHasher, PasswordHasher>();
             registry.Bind<IIdentityValidator<string>, HqPasswordValidator>();
 

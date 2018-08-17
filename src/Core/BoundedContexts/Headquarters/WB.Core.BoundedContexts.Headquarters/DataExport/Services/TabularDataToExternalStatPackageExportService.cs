@@ -21,7 +21,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 {
     internal class TabularDataToExternalStatPackageExportService : ITabularDataToExternalStatPackageExportService
     {
-        private readonly ITransactionManagerProvider transactionManager;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ILogger logger;
 
@@ -36,7 +35,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         public TabularDataToExternalStatPackageExportService(
             IFileSystemAccessor fileSystemAccessor,
-            ITransactionManagerProvider transactionManager,
             ILogger logger,
             ITabFileReader tabReader,
             IDataQueryFactory dataQueryFactory,
@@ -45,7 +43,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             IQuestionnaireExportStructureStorage questionnaireExportStructureStorage,
             IExportServiceDataProvider exportSeviceDataProvider)
         {
-            this.transactionManager = transactionManager;
             this.fileSystemAccessor = fileSystemAccessor;
             this.logger = logger;
 
@@ -90,8 +87,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                 var questionnaire = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
 
                 var questionnaireExportStructure =
-                    this.transactionManager.GetTransactionManager().ExecuteInQueryTransaction(() =>
-                        this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(questionnaire));
+                        this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(questionnaire);
 
                 if (questionnaireExportStructure == null)
                     return new string[0];

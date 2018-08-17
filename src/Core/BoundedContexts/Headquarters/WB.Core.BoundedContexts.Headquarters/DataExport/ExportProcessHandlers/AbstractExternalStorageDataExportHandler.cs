@@ -18,11 +18,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
         IExportProcessHandler<ExportBinaryToExternalStorage>
     {
         private readonly IQuestionnaireStorage questionnaireStorage;
-        private readonly ITransactionManager transactionManager;
         private readonly IInterviewFactory interviewFactory;
         private readonly IImageFileStorage imageFileRepository;
         private readonly IAudioFileStorage audioFileStorage;
-        private readonly IPlainTransactionManagerProvider plainTransactionManagerProvider;
 
         protected AbstractExternalStorageDataExportHandler(IFileSystemAccessor fileSystemAccessor,
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor,
@@ -30,20 +28,16 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
             IDataExportProcessesService dataExportProcessesService, 
             IDataExportFileAccessor dataExportFileAccessor,
             IQuestionnaireStorage questionnaireStorage,
-            ITransactionManager transactionManager,
             IInterviewFactory interviewFactory,
             IImageFileStorage imageFileRepository,
-            IAudioFileStorage audioFileStorage,
-            IPlainTransactionManagerProvider plainTransactionManagerProvider) :
+            IAudioFileStorage audioFileStorage) :
             base(fileSystemAccessor, filebasedExportedDataAccessor, interviewDataExportSettings,
                 dataExportProcessesService, dataExportFileAccessor)
         {
             this.questionnaireStorage = questionnaireStorage;
-            this.transactionManager = transactionManager;
             this.interviewFactory = interviewFactory;
             this.imageFileRepository = imageFileRepository;
             this.audioFileStorage = audioFileStorage;
-            this.plainTransactionManagerProvider = plainTransactionManagerProvider;
         }
 
         protected override DataExportFormat Format => DataExportFormat.Binary;
@@ -56,13 +50,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
 
             cancellationToken.ThrowIfCancellationRequested();
 
-            var allMultimediaAnswers = this.transactionManager.ExecuteInQueryTransaction(
-                () => this.interviewFactory.GetMultimediaAnswersByQuestionnaire(settings.QuestionnaireId));
+            var allMultimediaAnswers = this.interviewFactory.GetMultimediaAnswersByQuestionnaire(settings.QuestionnaireId);
 
             cancellationToken.ThrowIfCancellationRequested();
 
-            var allAudioAnswers = this.transactionManager.ExecuteInQueryTransaction(
-                () => this.interviewFactory.GetAudioAnswersByQuestionnaire(settings.QuestionnaireId));
+            var allAudioAnswers = this.interviewFactory.GetAudioAnswersByQuestionnaire(settings.QuestionnaireId);
 
             var interviewIds = allMultimediaAnswers.Select(x => x.InterviewId)
                 .Union(allAudioAnswers.Select(x => x.InterviewId)).Distinct().ToList();
@@ -97,9 +89,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers
                     foreach (var audioFileName in allAudioAnswers.Where(x => x.InterviewId == interviewId)
                         .Select(x => x.Answer))
                     {
-                        var fileContent = this.plainTransactionManagerProvider.GetPlainTransactionManager()
-                            .ExecuteInQueryTransaction(
-                                () => audioFileStorage.GetInterviewBinaryData(interviewId, audioFileName));
+                        var fileContent = audioFileStorage.GetInterviewBinaryData(interviewId, audioFileName);
 
                         if (fileContent != null)
                             this.UploadFile(interviewFolderPath, fileContent, audioFileName);

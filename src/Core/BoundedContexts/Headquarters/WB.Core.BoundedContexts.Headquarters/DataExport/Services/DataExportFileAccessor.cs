@@ -16,21 +16,16 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
     public class DataExportFileAccessor : IDataExportFileAccessor
     {
         private readonly IExportSettings exportSettings;
-        private readonly IPlainTransactionManagerProvider plainTransactionManagerProvider;
         private readonly IProtectedArchiveUtils archiveUtils;
         private readonly IExternalFileStorage externalFileStorage;
         private readonly ILogger logger;
 
-        private IPlainTransactionManager PlainTransactionManager => this.plainTransactionManagerProvider.GetPlainTransactionManager();
-
         public DataExportFileAccessor(IExportSettings exportSettings, 
-            IPlainTransactionManagerProvider plainTransactionManagerProvider, 
             IProtectedArchiveUtils archiveUtils,
             ILogger logger, 
             IExternalFileStorage externalFileStorage)
         {
             this.exportSettings = exportSettings;
-            this.plainTransactionManagerProvider = plainTransactionManagerProvider;
             this.archiveUtils = archiveUtils;
             this.logger = logger;
             this.externalFileStorage = externalFileStorage;
@@ -76,10 +71,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         private string GetPasswordFromSettings()
         {
-            return this.PlainTransactionManager.ExecuteInPlainTransaction(() =>
-                this.exportSettings.EncryptionEnforced()
+            return this.exportSettings.EncryptionEnforced()
                     ? this.exportSettings.GetPassword()
-                    : null);
+                    : null;
         }
     }
 }

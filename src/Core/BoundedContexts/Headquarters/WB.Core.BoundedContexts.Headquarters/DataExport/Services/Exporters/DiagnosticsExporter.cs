@@ -24,7 +24,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         private readonly ICsvWriter csvWriter;
         private readonly ILogger logger;
         private readonly IInterviewDiagnosticsFactory diagnosticsFactory;
-        private readonly ITransactionManagerProvider transactionManager;
 
         private readonly string dataFileExtension = "tab";
         public readonly string DiagnosticsFileName = "interview__diagnostics";
@@ -53,15 +52,13 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             IFileSystemAccessor fileSystemAccessor,
             ICsvWriter csvWriter,
             ILogger logger,
-            IInterviewDiagnosticsFactory diagnosticsFactory,
-            ITransactionManagerProvider transactionManager)
+            IInterviewDiagnosticsFactory diagnosticsFactory)
         {
             this.interviewDataExportSettings = interviewDataExportSettings;
             this.fileSystemAccessor = fileSystemAccessor;
             this.csvWriter = csvWriter;
             this.logger = logger;
             this.diagnosticsFactory = diagnosticsFactory;
-            this.transactionManager = transactionManager;
         }
 
         public void Export(List<Guid> interviewIdsToExport,
@@ -81,8 +78,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             foreach (var interviewsChunk in interviewIdsToExport.Batch(batchSize))
             {
                 var interviewIds = interviewsChunk.ToList();
-                var diagnosticsRecords = this.transactionManager.GetTransactionManager().ExecuteInQueryTransaction(
-                                                () => this.QueryDiagnosticsChunkFromReadSide(interviewIds));
+                var diagnosticsRecords = this.QueryDiagnosticsChunkFromReadSide(interviewIds);
 
                 this.csvWriter.WriteData(diagnosticsFilePath, diagnosticsRecords, ExportFileSettings.DataFileSeparator.ToString());
                 totalProcessed += interviewIds.Count;

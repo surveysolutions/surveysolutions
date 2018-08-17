@@ -251,7 +251,7 @@ namespace WB.Tests.Abc.TestFactories
         public NcqrCompatibleEventDispatcher NcqrCompatibleEventDispatcher(EventBusSettings eventBusSettings = null,
             ILogger logger = null, params IEventHandler[] handlers)
             => new NcqrCompatibleEventDispatcher(
-                eventStore: Mock.Of<IEventStore>(),
+                eventStore: () => Mock.Of<IEventStore>(),
                 eventBusSettings: eventBusSettings ?? Create.Entity.EventBusSettings(),
                 logger: logger ?? Mock.Of<ILogger>(),
                 eventHandlers: handlers);
