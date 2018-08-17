@@ -2258,5 +2258,8 @@ namespace WB.Tests.Abc.TestFactories
                 CancellationToken = CancellationToken.None,
                 Progress = progress ?? Mock.Of<IProgress<SyncProgressInfo>>()
             };
+
+        public InterviewerApplicationPatchApiView InterviewerApplicationPatchApiView(string fileName, string url) 
+            => new InterviewerApplicationPatchApiView {FileName = fileName, Url = url};
     }
 }

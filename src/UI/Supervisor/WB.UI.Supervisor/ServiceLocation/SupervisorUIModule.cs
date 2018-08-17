@@ -95,6 +95,7 @@ namespace WB.UI.Supervisor.ServiceLocation
             registry.Bind<IHandleCommunicationMessage, SupervisorAssignmentsHandler>();
             registry.Bind<IHandleCommunicationMessage, SupervisorTabletInfoHandler>();
             registry.Bind<IHandleCommunicationMessage, SupervisorSynchronizeHandler>();
+            registry.Bind<IHandleCommunicationMessage, InterviewerUpdateHandler>();
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
