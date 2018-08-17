@@ -224,6 +224,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
                 case DashboardInterviewStatus.Rejected:
                     return interview.LastInterviewerOrSupervisorComment;
                 case DashboardInterviewStatus.ApprovedBySupervisor:
+                case DashboardInterviewStatus.RejectedByHeadquarters:
                     return interview.LastInterviewerOrSupervisorComment;
                 default:
                     return string.Empty;
