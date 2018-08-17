@@ -2210,6 +2210,9 @@ namespace WB.Tests.Abc.TestFactories
 
         public AuditLogEntityFactory AuditLogEntity => new AuditLogEntityFactory();
 
+        public InterviewerDocument InterviewerDocument(Guid interviewerId, string login = null) =>
+            new InterviewerDocument {Id = interviewerId.ToString(), InterviewerId = interviewerId, UserName = login};
+
         public class AuditLogEntityFactory
         {
             private readonly Random rnd;
