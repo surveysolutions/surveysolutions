@@ -2,21 +2,17 @@
 using Android.Content;
 using Android.Content.Res;
 using Android.OS;
-using Android.Support.Graphics.Drawable;
 using Android.Support.V4.Widget;
 using Android.Support.V7.App;
 using Android.Support.V7.Widget;
 using Android.Views;
-using MvvmCross;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
 using WB.Core.BoundedContexts.Supervisor.Properties;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services;
-using WB.Core.BoundedContexts.Supervisor.ViewModel.InterviewerSelector;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
-using WB.Core.SharedKernels.Enumerator.Services.MapSynchronization;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.Services;
@@ -92,12 +88,6 @@ namespace WB.UI.Supervisor.Activities
         {
             base.OnViewModelSet();
             this.ViewModel.Synchronization.SyncBgService = this;
-        }
-
-        protected override void OnStop()
-        {
-            base.OnStop();
-            Mvx.Resolve<IInterviewerSelectorDialog>()?.CloseDialog();
         }
 
         public override void OnBackPressed() { }

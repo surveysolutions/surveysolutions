@@ -142,10 +142,7 @@ Your device ID is '{0}'</value>
   <data name="Synchronization_UploadStatisticsStats" xml:space="preserve">
     <value>Uploaded {0} of {1}</value>
   </data>
-  <data name="SelectResponsible" xml:space="preserve">
-    <value>Select responsible for the interview</value>
-  </data>
-  <data name="Synchronization_Synchronize_HQ" xml:space="preserve">
+    <data name="Synchronization_Synchronize_HQ" xml:space="preserve">
     <value>Synchronize with Headquarters</value>
   </data>
   <data name="Synchronization_Download_Interviewer_App_Patches" xml:space="preserve">

@@ -312,7 +312,6 @@
     <Compile Include="Activities\OfflineSupervisorSyncActitivy.cs" />
     <Compile Include="Activities\PrefsActivity.cs" />
     <Compile Include="Activities\SupervisorSearchActivity.cs" />
-    <Compile Include="CustomControls\InterviewerSelectorDialog.cs" />
     <Compile Include="CustomControls\SupervisorDashboardTemplateSelector.cs" />
     <Compile Include="MvvmBindings\DrawerLockModeBinding.cs" />
     <Compile Include="MvvmBindings\ImageCompanyLogoBinding.cs" />
@@ -532,17 +531,6 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidResource Include="Resources\layout\dashboard_sidebar_counter.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\layout\dashboard_interviewer_selector.axml">
-      <Generator>MSBuild:UpdateGeneratedFiles</Generator>
-      <SubType>Designer</SubType>
-    </AndroidResource>
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidResource Include="Resources\layout\dashboard_interviewer_to_select.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>

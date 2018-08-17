@@ -143,10 +143,7 @@
   <data name="Synchronization_UploadStatisticsStats" xml:space="preserve">
     <value>Загружено {0} из {1}</value>
   </data>
-  <data name="SelectResponsible" xml:space="preserve">
-    <value>Выберите ответственного за интервью</value>
-  </data>
-  <data name="Synchronization_Synchronize_HQ" xml:space="preserve">
+    <data name="Synchronization_Synchronize_HQ" xml:space="preserve">
     <value>Синхронизировать с Хедквотером</value>
   </data>
   <data name="Synchronization_Synchronize_Offline" xml:space="preserve">
