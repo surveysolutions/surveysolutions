@@ -535,7 +535,8 @@ namespace WB.Tests.Abc.TestFactories
             IAssignmentDocumentsStorage assignmentsRepository = null,
             IQuestionnaireDownloader questionnaireDownloader = null,
             IQuestionnaireStorage questionnaireStorage = null,
-            IPlainStorage<InterviewView> interviewViewRepository = null)
+            IPlainStorage<InterviewView> interviewViewRepository = null,
+            IPlainStorage<InterviewerDocument> interviewerViewRepository = null)
         {
             return new AssignmentsSynchronizer(
                 synchronizationService ?? Mock.Of<ISynchronizationService>(),
@@ -545,7 +546,8 @@ namespace WB.Tests.Abc.TestFactories
                 new AssignmentDocumentFromDtoBuilder( 
                 Mock.Of<IAnswerToStringConverter>(),
                 Mock.Of<IInterviewAnswerSerializer>()),
-                interviewViewRepository ?? Mock.Of<IPlainStorage<InterviewView>>());
+                interviewViewRepository ?? Mock.Of<IPlainStorage<InterviewView>>(),
+                interviewerViewRepository ?? Mock.Of<IPlainStorage<InterviewerDocument>>());
         }
 
         public IAnswerToStringConverter AnswerToStringConverter()
