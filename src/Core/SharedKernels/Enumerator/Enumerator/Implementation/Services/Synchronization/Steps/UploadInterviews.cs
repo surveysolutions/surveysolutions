@@ -57,7 +57,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         Description = string.Format(InterviewerUIResources.Synchronization_Upload_Description_Format,
                             Context.Statistics.SuccessfullyUploadedInterviewsCount, Context.Statistics.TotalCompletedInterviewsCount,
                             InterviewerUIResources.Synchronization_Upload_Interviews_Text),
-                        Status = SynchronizationStatus.Upload
+                        Status = SynchronizationStatus.Upload,
+                        Stage = SyncStage.UploadInterviews
                     });
 
                     await this.UploadImagesByCompletedInterviewAsync(completedInterview.InterviewId, Context.Progress, Context.CancellationToken);

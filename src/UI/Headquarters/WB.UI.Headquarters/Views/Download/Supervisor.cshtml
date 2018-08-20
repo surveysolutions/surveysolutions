@@ -1,10 +1,12 @@
-﻿@using WB.Core.GenericSubdomains.Portable.ServiceLocation
+﻿@using WB.Core.BoundedContexts.Headquarters.Services
+@using WB.Core.GenericSubdomains.Portable.ServiceLocation
 @using WB.Core.Infrastructure.Versions
 @using WB.Core.SharedKernels.SurveyManagement.Web.Code
 @using WB.UI.Shared.Web.Extensions
-@model WB.Core.SharedKernels.SurveyManagement.Web.Models.LogOnModel
+@model WB.UI.Headquarters.Models.DownloadModel
 @{
     Layout = null;
+    var qRCodeHelper = ServiceLocator.Current.GetInstance<IQRCodeHelper>();
 }
 <!DOCTYPE html>
 <html>
@@ -22,59 +24,62 @@
     <!-- endinject -->
 </head>
 <body>
-<main>
-    <div class="container-fluid">
-        <div class="row two-columns-form">
-            <div class="col-md-6 col-sm-6 col-xs-12 left-column">
-                <div class="centered-box-table">
-                    <div class="centered-box-table-cell">
-                        <div class="retina headquarter">Survey Solutions Headquarters</div>
-                        <p>
-                            @Pages.DownloadPage_Title
-                        </p>
+    <main>
+        <div class="container-fluid">
+            <div class="row two-columns-form">
+                <div class="col-md-6 col-sm-6 col-xs-12 left-column">
+                    <div class="centered-box-table">
+                        <div class="centered-box-table-cell">
+                            <div class="retina headquarter">Survey Solutions Headquarters</div>
+                            <p>
+                                @Pages.DownloadPage_Title
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-6 col-xs-12 right-column">
+                    <div class="centered-box-table">
+                        <div class="centered-box-table-cell">
+                            <div class="hq-apps-wrapper">
+                                <h2>@Pages.DownloadSupervisorPage_Welcome</h2>
+                                <div class="form-actions">
+                                    <a href="@Url.HttpRouteUrl("DefaultApiWithAction", new {action = "GetLatestSupervisor", controller = "InterviewerSync"})" class="get-interviewer-app" id="dowload">
+                                        <span>@Pages.GetLatestSupervisorApp</span>
+                                        <span class="version">@Pages.DownloadPage_Version @(ServiceLocator.Current.GetInstance<IProductVersion>())</span>
+                                    </a>
+                                    @if (qRCodeHelper.SupportQRCodeGeneration())
+                                    {
+                                        <img id="download-qr" alt="QR Code" width="250" height="250" src="@Model.QRBase64Apk"/>
+                                    }
+                                </div>
+
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-md-6 col-sm-6 col-xs-12 right-column">
-                <div class="centered-box-table">
-                    <div class="centered-box-table-cell">
-                        <div class="hq-apps-wrapper">
-                            <h2>@Pages.DownloadSupervisorPage_Welcome</h2>
-                            <div class="form-actions">
-                                <a href="@Url.HttpRouteUrl("DefaultApiWithAction", new {action = "GetLatestSupervisor", controller = "InterviewerSync"})" class="get-interviewer-app" id="dowload">
-                                    <span>@Pages.GetLatestSupervisorApp</span>
-                                    <span class="version">@Pages.DownloadPage_Version @(ServiceLocator.Current.GetInstance<IProductVersion>())</span>
-                                </a>
-                                
-                            </div>
-                            
-                        </div>
-                    </div>
-                </div>            
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container-fluid">
+            <div class="text-left">
+                &copy; @DateTime.Now.Year.ToString() <a href="http://www.worldbankgroup.org">@Pages.Layout_WorldBank</a>, @Pages.Layout_RightsReserved <a href="http://go.worldbank.org/OS6V7NIUD0">@Pages.Layout_Legal</a>.
+            </div>
+            <div class="text-left">
+                @(ServiceLocator.Current.GetInstance<IProductVersion>())
+                @if (AppSettings.IsDebugBuilded)
+                {
+                    <span id="build-config">[.NET Debug]</span>
+                }
+                @if (HttpContext.Current.IsDebuggingEnabled)
+                {
+                    <span id="compile-config" style="color: red">Web Debug</span>
+                }
+
             </div>
         </div>
-    </div>
-</main> 
-    
-<footer class="footer">
-    <div class="container-fluid">
-        <div class="text-left">
-            &copy; @DateTime.Now.Year.ToString() <a href="http://www.worldbankgroup.org">@Pages.Layout_WorldBank</a>, @Pages.Layout_RightsReserved <a href="http://go.worldbank.org/OS6V7NIUD0">@Pages.Layout_Legal</a>.
-        </div>
-        <div class="text-left">
-            @(ServiceLocator.Current.GetInstance<IProductVersion>())
-            @if (AppSettings.IsDebugBuilded)
-            {
-                <span id="build-config">[.NET Debug]</span>
-            }
-            @if (HttpContext.Current.IsDebuggingEnabled)
-            {
-                <span id="compile-config" style="color: red">Web Debug</span>
-            }
-            
-        </div>
-    </div>
-</footer>
+    </footer>
 
 </body>
 </html>

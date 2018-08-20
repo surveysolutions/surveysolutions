@@ -31,7 +31,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             requestHandler.RegisterHandler<UploadInterviewImageRequest, OkResponse>(UploadImage);
             requestHandler.RegisterHandler<UploadInterviewAudioRequest, OkResponse>(UploadAudio);
         }
-        
+
         public Task<GetCompanyLogoResponse> GetCompanyLogo(GetCompanyLogoRequest request)
         {
             var existingLogo = logoStorage.GetById(CompanyLogo.StorageKey);

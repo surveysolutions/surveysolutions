@@ -42,13 +42,15 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             interviews.Store(Create.Entity.InterviewView(interviewId: Id.g4,responsibleId: interviewerId, status: InterviewStatus.RejectedByHeadquarters, questionnaireId: questionnaireId));
             interviews.Store(Create.Entity.InterviewView(interviewId: Id.g5,responsibleId: interviewerId, status: InterviewStatus.InterviewerAssigned, questionnaireId: questionnaireId));
 
+            interviews.Store(Create.Entity.InterviewView(interviewId: Id.g6, responsibleId: interviewerId, status: InterviewStatus.Restarted, questionnaireId: questionnaireId));
+
             var handler = Create.Service.SupervisorInterviewsHandler(interviews: interviews);
 
             // Act
             var response = await handler.GetInterviews(new GetInterviewsRequest(interviewerId));
 
-            response.Interviews.Select(x => x.Id).Should().BeEquivalentTo(Id.g2, Id.g5);
-            response.Interviews.Select(x => x.ResponsibleId).Should().BeEquivalentTo(interviewerId, interviewerId);
+            response.Interviews.Select(x => x.Id).Should().BeEquivalentTo(Id.g2, Id.g5, Id.g6);
+            response.Interviews.Select(x => x.ResponsibleId).Should().BeEquivalentTo(interviewerId, interviewerId, interviewerId);
         }
 
         [Test]
@@ -102,7 +104,8 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             serializer.Setup(x => x.Deserialize<AggregateRootEvent[]>(packageSerializedEvents))
                 .Returns(packageEvents);
 
-            var handler = Create.Service.SupervisorInterviewsHandler(commandService: commandSerivce.Object,
+            var handler = Create.Service.SupervisorInterviewsHandler(
+                commandService: commandSerivce.Object,
                 serializer: serializer.Object);
 
             // Act
@@ -223,7 +226,8 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             var assignmentId = 1;
             var existingInterviews = new InMemoryPlainStorage<InterviewView>();
             existingInterviews.Store(Create.Entity.InterviewView(assignmentId: assignmentId, interviewId: Id.g1));
-            existingInterviews.Store(Create.Entity.InterviewView(assignmentId: assignmentId, interviewId: Id.g2, status: InterviewStatus.RejectedBySupervisor));
+            existingInterviews.Store(Create.Entity.InterviewView(assignmentId: assignmentId, interviewId: Id.g2, status: InterviewStatus.RejectedBySupervisor, fromHqSyncDateTime: DateTime.UtcNow.AddHours(-10)));
+            existingInterviews.Store(Create.Entity.InterviewView(assignmentId: assignmentId, interviewId: Id.g3, fromHqSyncDateTime: null));
 
             var assignments = Create.Storage.AssignmentDocumentsInmemoryStorage();
             assignments.Store(Create.Entity.AssignmentDocument(assignmentId).Build());

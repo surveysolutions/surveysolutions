@@ -15,13 +15,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
     {
         private readonly ISynchronizationService synchronizationService;
         private readonly ITabletDiagnosticService diagnosticService;
-        private readonly ILogger logger;
 
         public UpdateApplication(int sortOrder,
-            ISynchronizationService synchronizationService, ILogger logger) : base(sortOrder, synchronizationService, logger)
+            ISynchronizationService synchronizationService,
+            ITabletDiagnosticService diagnosticService,
+            ILogger logger) : base(sortOrder, synchronizationService, logger)
         {
             this.synchronizationService = synchronizationService;
-            this.logger = logger;
+            this.diagnosticService = diagnosticService;
         }
 
         public override async Task ExecuteAsync()
@@ -32,7 +33,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             Context.Progress.Report(new SyncProgressInfo
             {
                 Title = InterviewerUIResources.Synchronization_CheckNewVersionOfApplication,
-                Status = SynchronizationStatus.Started
+                Status = SynchronizationStatus.Started,
+                Stage= SyncStage.CheckNewVersionOfApplication
             });
 
             var versionFromServer = await
@@ -60,7 +62,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                                 totalKilobytes.Humanize("00.00 MB"),
                                 receivedKilobytes.Per(sw.Elapsed).Humanize("00.00"),
                                 (int) downloadProgress.ProgressPercentage),
-                            Status = SynchronizationStatus.Download
+                            Status = SynchronizationStatus.Download,
+                            Stage = SyncStage.DownloadApplication
                         });
                     }));
                 }

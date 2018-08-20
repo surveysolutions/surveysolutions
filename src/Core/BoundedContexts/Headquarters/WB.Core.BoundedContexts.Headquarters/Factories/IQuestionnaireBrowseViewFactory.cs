@@ -10,5 +10,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Factories
         QuestionnaireBrowseView Load(QuestionnaireBrowseInputModel input);
         QuestionnaireBrowseItem GetById(QuestionnaireIdentity identity);
         List<QuestionnaireBrowseItem> GetByIds(params QuestionnaireIdentity[] identities);
+        IEnumerable<QuestionnaireIdentity> GetAllQuestionnaireIdentities();
     }
 }
