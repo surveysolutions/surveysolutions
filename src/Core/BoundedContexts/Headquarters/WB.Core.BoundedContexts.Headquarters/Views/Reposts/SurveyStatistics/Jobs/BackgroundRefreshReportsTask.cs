@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Configuration;
 using System.Linq;
+using System.Web.WebPages;
 using Quartz;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Jobs
@@ -11,47 +13,62 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Jo
         readonly TriggerKey refreshTriggerKey = new TriggerKey("refresh reports data trigger", GroupName);
 
         readonly IScheduler scheduler;
+        private readonly int refreshDelayMinutes;
+        private readonly int refreshMaximumDelayMinutes;
 
         public BackgroundRefreshReportsTask(IScheduler scheduler)
         {
             this.scheduler = scheduler;
+            this.refreshDelayMinutes = ConfigurationManager.AppSettings["Report.RefreshDelayMinutes"].AsInt(0);
+            this.refreshMaximumDelayMinutes = ConfigurationManager.AppSettings["Report.RefreshMaximumDelayMinutes"].AsInt(0);
         }
 
         public void Run()
         {
-            if (!this.scheduler.CheckExists(RefreshReportJobKey))
+            lock (this.scheduler)
             {
-                IJobDetail job = JobBuilder.Create<RefreshReportsJob>()
-                    .WithIdentity(RefreshReportJobKey)
-                    .StoreDurably()
-                    .Build();
+                if (!this.scheduler.CheckExists(RefreshReportJobKey))
+                {
+                    IJobDetail job = JobBuilder.Create<RefreshReportsJob>()
+                        .WithIdentity(RefreshReportJobKey)
+                        .StoreDurably()
+                        .Build();
 
-                this.scheduler.AddJob(job, true);
+                    this.scheduler.AddJob(job, true);
+                }
+
+                this.ScheduleDelayedReportsRefresh();
             }
-
-            this.ScheduleDelayedReportsRefresh();
         }
 
         private void ScheduleDelayedReportsRefresh()
         {
-            var trigger = this.scheduler.GetTrigger(refreshTriggerKey);
-            if (trigger != null)
+            lock (this.scheduler)
             {
-                if (!trigger.JobDataMap.ContainsKey("force"))
+                var trigger = this.scheduler.GetTrigger(refreshTriggerKey);
+                if (trigger != null)
                 {
-                    this.scheduler.UnscheduleJob(this.refreshTriggerKey);
+                    if (!trigger.JobDataMap.ContainsKey("force"))
+                    {
+                        this.scheduler.UnscheduleJob(this.refreshTriggerKey);
+                    }
+                    else
+                    {
+                        return;
+                    }
                 }
-                else
+
+                if(this.refreshMaximumDelayMinutes == 0 || this.refreshDelayMinutes == 0)
                 {
                     return;
                 }
+
+                this.scheduler.ScheduleJob(TriggerBuilder.Create()
+                    .WithIdentity(refreshTriggerKey)
+                    .ForJob(RefreshReportJobKey)
+                    .StartAt(DateBuilder.FutureDate(refreshDelayMinutes, IntervalUnit.Minute))
+                    .Build());
             }
-            
-            this.scheduler.ScheduleJob(TriggerBuilder.Create()
-                .WithIdentity(refreshTriggerKey)
-                .ForJob(RefreshReportJobKey)
-                .StartAt(DateBuilder.FutureDate(30, IntervalUnit.Second))
-                .Build());
         }
 
         public void ForceRefresh()
@@ -71,7 +88,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Jo
             if (existingTrigger != null)
             {
                 if (RefreshFinishTime != null && // make sure that we build report at least every hour
-                    DateTime.UtcNow - RefreshFinishTime > TimeSpan.FromHours(1)) return;
+                    DateTime.UtcNow - RefreshFinishTime > TimeSpan.FromMinutes(refreshMaximumDelayMinutes)) return;
 
                 if (!existingTrigger.JobDataMap.ContainsKey("force")) // do not kill force trigger
                 {
