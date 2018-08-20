@@ -9,6 +9,7 @@ using Ncqrs.Eventing.Storage;
 using NHibernate;
 using NSubstitute;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Main.Core.Events;
 using NHibernate.Linq;
@@ -50,8 +51,10 @@ using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services.OfflineSync;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
+using WB.Core.BoundedContexts.Interviewer.Synchronization;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
+using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.BoundedContexts.Supervisor.Services.Implementation;
 using WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSyncHandlers;
 using WB.Core.BoundedContexts.Supervisor.ViewModel;
@@ -94,6 +97,7 @@ using WB.Core.SharedKernels.Enumerator.Denormalizer;
 using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization.Steps;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation;
@@ -330,7 +334,7 @@ namespace WB.Tests.Abc.TestFactories
             IStatefulInterviewRepository interviewRepository,
             IEnumeratorSettings settings)
         {
-            return new InterviewViewModelFactory(questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
+            return new InterviewerInterviewViewModelFactory(questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 settings ?? Mock.Of<IEnumeratorSettings>());
         }
@@ -531,7 +535,8 @@ namespace WB.Tests.Abc.TestFactories
             IAssignmentDocumentsStorage assignmentsRepository = null,
             IQuestionnaireDownloader questionnaireDownloader = null,
             IQuestionnaireStorage questionnaireStorage = null,
-            IPlainStorage<InterviewView> interviewViewRepository = null)
+            IPlainStorage<InterviewView> interviewViewRepository = null,
+            IPlainStorage<InterviewerDocument> interviewerViewRepository = null)
         {
             return new AssignmentsSynchronizer(
                 synchronizationService ?? Mock.Of<ISynchronizationService>(),
@@ -541,7 +546,8 @@ namespace WB.Tests.Abc.TestFactories
                 new AssignmentDocumentFromDtoBuilder( 
                 Mock.Of<IAnswerToStringConverter>(),
                 Mock.Of<IInterviewAnswerSerializer>()),
-                interviewViewRepository ?? Mock.Of<IPlainStorage<InterviewView>>());
+                interviewViewRepository ?? Mock.Of<IPlainStorage<InterviewView>>(),
+                interviewerViewRepository ?? Mock.Of<IPlainStorage<InterviewerDocument>>());
         }
 
         public IAnswerToStringConverter AnswerToStringConverter()
@@ -817,16 +823,17 @@ namespace WB.Tests.Abc.TestFactories
                 interviewerPrincipal ?? Mock.Of<IInterviewerPrincipal>(),
                 Mock.Of< IInterviewerQuestionnaireAccessor>(),
                 Mock.Of<IPlainStorage<InterviewView>>(),
-                Mock.Of<IEnumeratorSettings>());
+                Mock.Of<IEnumeratorSettings>(),
+                Mock.Of<IDeviceSettings>());
         }
 
-        public SupervisorCanSynchronizeHandler SupervisorCanSynchronizeHandler(
+        public SupervisorSynchronizeHandler SupervisorSynchronizeHandler(
             IPlainStorage<InterviewerDocument> interviewerViewRepository = null,
-            IEnumeratorSettings settings = null)
+            ISupervisorSettings settings = null)
         {
-            return new SupervisorCanSynchronizeHandler(
+            return new SupervisorSynchronizeHandler(
                 interviewerViewRepository ?? Mock.Of<IPlainStorage<InterviewerDocument>>(),
-                settings ?? Mock.Of<IEnumeratorSettings>());
+                settings ?? Mock.Of<ISupervisorSettings>());
         }
 
         public SupervisorInterviewsHandler SupervisorInterviewsHandler(ILiteEventBus eventBus = null,
@@ -862,6 +869,83 @@ namespace WB.Tests.Abc.TestFactories
         {
             return new SupervisorAssignmentsHandler(assignmentDocumentsStorage ??
                                                     Create.Storage.AssignmentDocumentsInmemoryStorage());
+        }
+
+        public InterviewerDownloadInterviews InterviewerDownloadInterviews(
+            ISynchronizationService synchronizationService = null,
+            IQuestionnaireDownloader questionnaireDownloader = null, 
+            IPlainStorage<InterviewSequenceView, Guid> interviewSequenceViewRepository = null, 
+            IPlainStorage<InterviewView> interviewViewRepository = null, 
+            ILiteEventBus eventBus = null, 
+            IEnumeratorEventStorage eventStore = null, 
+            ILogger logger = null, 
+            IInterviewsRemover interviewsRemover = null)
+        {
+            var interviewerDownloadInterviews = new InterviewerDownloadInterviews(
+                synchronizationService ?? Mock.Of<ISynchronizationService>(),
+                questionnaireDownloader ?? Mock.Of<IQuestionnaireDownloader>(),
+                interviewSequenceViewRepository ?? new InMemoryPlainStorage<InterviewSequenceView, Guid>(),
+                interviewViewRepository ?? new InMemoryPlainStorage<InterviewView>(),
+                eventBus ?? Create.Service.LiteEventBus(),
+                eventStore ?? Mock.Of<IEnumeratorEventStorage>(),
+                logger ?? Mock.Of<ILogger>(),
+                interviewsRemover ?? Mock.Of<IInterviewsRemover>(),
+                0
+            );
+            interviewerDownloadInterviews.Context = new EnumeratorSynchonizationContext
+            {
+                Progress = new Progress<SyncProgressInfo>(),
+                Statistics = new SynchronizationStatistics()
+            };
+
+            return interviewerDownloadInterviews;
+        }
+
+        public CensusQuestionnairesSynchronization CensusQuestionnairesSynchronization(
+            ISynchronizationService synchronizationService = null, 
+            IInterviewerQuestionnaireAccessor questionnairesAccessor = null, 
+            IQuestionnaireDownloader questionnaireDownloader = null)
+        {
+            var censusQuestionnairesSynchronization = new CensusQuestionnairesSynchronization(
+                synchronizationService ?? Mock.Of<ISynchronizationService>(),
+                questionnairesAccessor ?? Mock.Of<IInterviewerQuestionnaireAccessor>(),
+                questionnaireDownloader ?? Mock.Of<IQuestionnaireDownloader>(),
+                Mock.Of<ILogger>(),
+                10
+            );
+            censusQuestionnairesSynchronization.Context = new EnumeratorSynchonizationContext
+            {
+                CancellationToken = CancellationToken.None,
+                Progress = new Progress<SyncProgressInfo>(),
+                Statistics = new SynchronizationStatistics()
+            };
+
+            return censusQuestionnairesSynchronization;
+        }
+
+        public RemoveObsoleteQuestionnaires RemoveObsoleteQuestionnaires(ISynchronizationService synchronizationService = null,
+            IInterviewerQuestionnaireAccessor questionnairesAccessor = null,
+            IPlainStorage<InterviewView> interviewViewRepository = null,
+            IAttachmentsCleanupService attachmentsCleanupService = null,
+            IInterviewsRemover interviewsRemover = null)
+        {
+            var result = new RemoveObsoleteQuestionnaires(
+                synchronizationService ?? Mock.Of<ISynchronizationService>(),
+                questionnairesAccessor ?? Mock.Of<IInterviewerQuestionnaireAccessor>(),
+                interviewViewRepository ?? new InMemoryPlainStorage<InterviewView>(),
+                attachmentsCleanupService ?? Mock.Of<IAttachmentsCleanupService>(),
+                interviewsRemover ?? Mock.Of<IInterviewsRemover>(),
+                Mock.Of<ILogger>(),
+                10
+                );
+            result.Context = new EnumeratorSynchonizationContext
+            {
+                CancellationToken = CancellationToken.None,
+                Progress = new Progress<SyncProgressInfo>(),
+                Statistics = new SynchronizationStatistics()
+            };
+
+            return result;
         }
     }
 

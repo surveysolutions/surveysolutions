@@ -19,6 +19,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
         private readonly IPlainStorage<SupervisorIdentity> supervisorsPlainStorage;
         private readonly ISupervisorSynchronizationService synchronizationService;
 
+
         public FinishInstallationViewModel(
             IViewModelNavigationService viewModelNavigationService,
             IPrincipal principal,
@@ -27,13 +28,17 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             IDeviceSettings deviceSettings,
             ISupervisorSynchronizationService synchronizationService,
             ILogger logger,
-            IUserInteractionService userInteractionService) : base(viewModelNavigationService, principal, deviceSettings, synchronizationService, logger, userInteractionService)
+            IQRBarcodeScanService qrBarcodeScanService,
+            ISerializer serializer,
+            IUserInteractionService userInteractionService) 
+            : base(viewModelNavigationService, principal, deviceSettings, synchronizationService, 
+                logger, qrBarcodeScanService, serializer, userInteractionService)
         {
             this.passwordHasher = passwordHasher;
             this.supervisorsPlainStorage = interviewersPlainStorage;
             this.synchronizationService = synchronizationService;
         }
-
+        
         public override async Task Initialize()
         {
             await base.Initialize();

@@ -76,7 +76,7 @@
       <HintPath>..\..\..\..\packages\CaptchaMvc.Mvc5.1.5.0\lib\net45-full\CaptchaMvc.dll</HintPath>
     </Reference>
     <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Castle.Core.4.2.1\lib\net45\Castle.Core.dll</HintPath>
+      <HintPath>..\..\..\..\packages\Castle.Core.4.3.1\lib\net45\Castle.Core.dll</HintPath>
     </Reference>
     <Reference Include="Common.Logging, Version=3.4.1.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Common.Logging.3.4.1\lib\net40\Common.Logging.dll</HintPath>
@@ -1899,6 +1899,7 @@
     <Compile Include="API\DataCollection\Supervisor\v1\SettingsV1Controller.cs" />
     <Compile Include="API\DataCollection\Supervisor\v1\InterviewersApiController.cs" />
     <Compile Include="API\DataCollection\Supervisor\v1\TranslationsApiV1Controller.cs" />
+    <Compile Include="API\DataCollection\Supervisor\v1\UpdatesApiV1Controller.cs" />
     <Compile Include="API\DataCollection\TranslationsControllerBase.cs" />
     <Compile Include="API\Helpers.cs" />
     <Compile Include="API\DataCollection\Interviewer\v2\AssignmentsApiV2Controller.cs" />
@@ -2312,6 +2313,7 @@
     <Compile Include="Migrations\PlainStore\M001-100\M201805141242_CreateSyncPackageTrackingTable.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201806191234_AddErrorsCountToInterviewSummary.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201806191240_FillErrorsCountInInterviewSummary.cs" />
+    <Compile Include="Migrations\ReadSide\M001-100\M201808131420_AddIndicesForInterviewSummariesAndComments.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201806271400_AddUniqueConstraintOnInterviewEntities.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\QuestionnaireEntityMigration.cs" />
     <Compile Include="Migrations\Users\M005_AddDeviceAppVersionToProfile.cs" />

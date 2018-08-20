@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 
 namespace WB.Core.SharedKernels.Enumerator.Services
 {
@@ -16,5 +17,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services
 
         Task<string> SelectOneOptionFromList(string message,
             string[] options);
+
+        void ShowGoogleApiErrorDialog(int errorCode, int requestCode, Action onCancel = null);
     }
 }
