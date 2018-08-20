@@ -15,11 +15,4 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Messages
         {
         }
     }
-
-    public class InterviewRemovedMessage : MvxMessage
-    {
-        public InterviewRemovedMessage(object sender) : base(sender)
-        {
-        }
-    }
 }
