@@ -4,6 +4,7 @@ using Android.Graphics.Drawables;
 using Android.Support.V4.Content;
 using Android.Widget;
 using MvvmCross.Binding;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings

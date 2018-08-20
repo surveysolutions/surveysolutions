@@ -123,22 +123,16 @@
   <data name="OfflineSync_ReceivingInterviewsFromDevices" xml:space="preserve">
     <value>Получение интервью
 с других устройств</value>
-    <comment>Получение итревью
-с других устройств</comment>
   </data>
   <data name="OfflineSync_ReceivingInterviews" xml:space="preserve">
     <value>Получение интервью</value>
-    <comment>Получение интервью</comment>
   </data>
   <data name="OfflineSync_NoDevicesDetectedFormat" xml:space="preserve">
     <value>Передающих устройств не найдено.
 Идентификатор Вашего устройства - '{0}'</value>
-    <comment>Передающих устройств не найдено.
-Идентификатор Вашего устройства - '{0}'</comment>
   </data>
   <data name="OfflineSync_WaitingInterviewers" xml:space="preserve">
     <value>Ожидание действий от устройств интервьюверов</value>
-    <comment>Ожидание действий от устройств интервьюверов</comment>
   </data>
   <data name="Synchronization_UploadExceptions" xml:space="preserve">
     <value>Загрузка ошибок с планшетов интревьюеров</value>
@@ -148,5 +142,19 @@
   </data>
   <data name="Synchronization_UploadStatisticsStats" xml:space="preserve">
     <value>Загружено {0} из {1}</value>
+  </data>
+    <data name="Synchronization_Synchronize_HQ" xml:space="preserve">
+    <value>Синхронизировать с Хедквотером</value>
+  </data>
+  <data name="Synchronization_Synchronize_Offline" xml:space="preserve">
+    <value>Синхронизировать с Интервьюерами</value>
+  </data>
+    <data name="Synchronization_Download_Interviewer_App_Patches" xml:space="preserve">
+    <value>Загрузка обновлений для интервьюер приложения</value>
+    <comment>Загрузка обновлений для интервьюер приложения</comment>
+  </data>
+    <data name="Synchronization_Download_Interviewer_App_Patches_Format" xml:space="preserve">
+    <value>Загрузка обновлений. {0} из {1} загружено</value>
+    <comment>Загрузка обновлений. {0} из {1} загружено</comment>
   </data>
 </root>

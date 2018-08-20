@@ -19,7 +19,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private string title;
         public string Title
         {
-            get { return this.title; }
+            get => this.title;
             set { this.title = value; this.RaisePropertyChanged(); }
         }
 
@@ -27,7 +27,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public bool Selected
         {
-            get { return this.selected; }
+            get => this.selected;
 
             set
             {

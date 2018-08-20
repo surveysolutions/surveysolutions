@@ -1,5 +1,6 @@
 using System;
 using FluentAssertions;
+using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
@@ -11,7 +12,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
 {
     internal class when_roster_row_title_changed_and_question_is_linked_on_it : MultiOptionLinkedQuestionViewModelTestsContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [OneTimeSetUp] 
+        public void context () {
             questionId = Create.Identity(Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA"), RosterVector.Empty);
             rosterId = Create.Identity(Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), RosterVector.Empty);
 
@@ -27,16 +29,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
 
             viewModel = CreateMultiOptionRosterLinkedQuestionViewModel(interviewRepository: interviewRepository, questionnaireStorage: questionnaireRepository);
             viewModel.Init("interview", questionId, Create.Other.NavigationState());
-            BecauseOf();
+            viewModel.Handle(Create.Event.RosterInstancesTitleChanged(rosterId: rosterId.Id, rosterTitle: "title", outerRosterVector: rosterId.RosterVector, instanceId: 1));
         }
 
-        public void BecauseOf() 
-        {
-            viewModel.Handle(Create.Event.RosterInstancesTitleChanged(rosterId: rosterId.Id, rosterTitle: "title",
-                outerRosterVector: rosterId.RosterVector, instanceId: 1));
-        }
-
-        [NUnit.Framework.Test] public void should_insert_new_option () => viewModel.Options.Count.Should().Be(1);
+        [Test] 
+        public void should_insert_new_option () => viewModel.Options.Count.Should().Be(1);
 
         static MultiOptionLinkedToRosterQuestionViewModel viewModel;
         static StatefulInterview interview;

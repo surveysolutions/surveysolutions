@@ -310,17 +310,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Activities\Dashboard\DashboardSearchActivity.cs" />
     <Compile Include="Activities\Dashboard\DashboardActivity.cs" />
     <Compile Include="Activities\Dashboard\CompletedInterviewsFragment.cs" />
     <Compile Include="Activities\Dashboard\QuestionnairesFragment.cs" />
-    <Compile Include="Activities\Dashboard\RecyclerViewAdapter.cs" />
     <Compile Include="Activities\Dashboard\RecyclerViewFragment.cs" />
     <Compile Include="Activities\Dashboard\RejectedInterviewsFragment.cs" />
     <Compile Include="Activities\Dashboard\StartedInterviewsFragment.cs" />
     <Compile Include="Activities\DiagnosticsActivity.cs" />
     <Compile Include="Activities\InterviewActivity.cs" />
     <Compile Include="Activities\FinishInstallationActivity.cs" />
+    <Compile Include="Activities\InterviewerSearchActivity.cs" />
     <Compile Include="Activities\LoadingActivity.cs" />
     <Compile Include="Activities\MapsActivity.cs" />
     <Compile Include="Activities\PrefilledQuestionsActivity.cs" />
@@ -399,9 +398,6 @@
     <AndroidResource Include="Resources\layout\diagnostics__backup_restore.axml" />
     <AndroidResource Include="Resources\layout\diagnostics__test_bandwidth_to_server.axml" />
     <AndroidResource Include="Resources\layout\loading.axml">
-      <SubType>Designer</SubType>
-    </AndroidResource>
-    <AndroidResource Include="Resources\layout\dashboard_search.axml">
       <SubType>Designer</SubType>
     </AndroidResource>
   </ItemGroup>

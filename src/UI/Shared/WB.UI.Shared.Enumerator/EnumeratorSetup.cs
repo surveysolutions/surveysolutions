@@ -16,10 +16,12 @@ using MvvmCross.Converters;
 using MvvmCross.Droid.Support.V7.AppCompat;
 using MvvmCross.Droid.Support.V7.RecyclerView;
 using MvvmCross.Logging;
+using MvvmCross.Platforms.Android.Presenters;
 using MvvmCross.ViewModels;
 using MvvmCross.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview;
 using WB.UI.Shared.Enumerator.Activities;
@@ -27,13 +29,15 @@ using WB.UI.Shared.Enumerator.Converters;
 using WB.UI.Shared.Enumerator.CustomBindings;
 using WB.UI.Shared.Enumerator.CustomControls;
 using WB.UI.Shared.Enumerator.CustomControls.MaskedEditTextControl;
+using WB.UI.Shared.Enumerator.CustomServices;
 using WB.UI.Shared.Enumerator.ValueCombiners;
 using Xamarin.Controls;
 using BindingFlags = System.Reflection.BindingFlags;
 
 namespace WB.UI.Shared.Enumerator
 {
-    public abstract class EnumeratorSetup<TApplication> : MvxAppCompatSetup<TApplication> 
+    public abstract class 
+        EnumeratorSetup<TApplication> : MvxAppCompatSetup<TApplication> 
         where TApplication : class, IMvxApplication, new()
     {
         protected EnumeratorSetup()
@@ -83,7 +87,8 @@ namespace WB.UI.Shared.Enumerator
                 {typeof (EnumerationStageViewModel), typeof (InterviewEntitiesListFragment)},
                 {typeof(CoverInterviewViewModel), typeof (CoverInterviewFragment)},
                 {typeof(OverviewViewModel), typeof (OverviewFragment)},
-                {typeof(OverviewNodeDetailsViewModel), typeof(OverviewNodeDetailsFragment)}
+                {typeof(OverviewNodeDetailsViewModel), typeof(OverviewNodeDetailsFragment)},
+                {typeof(SelectResponsibleForAssignmentViewModel), typeof(SelectResponsibleForAssignmentFragment)},
             };
 
             var container = Mvx.Resolve<IMvxViewsContainer>();
@@ -166,6 +171,7 @@ namespace WB.UI.Shared.Enumerator
             registry.RegisterCustomBindingFactory<View>("ViewOverviewNodeState", (view) => new ViewOverviewNodeStateBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("TextViewNodeStateTextColor", (view) => new TextViewNodeStateTextColorBinding(view));
             registry.RegisterCustomBindingFactory<TextView>("TextViewAnswerState", (view) => new TextViewAnswerStateBinding(view));
+            registry.RegisterCustomBindingFactory<TextView>("AssignToInterviewerText", (view) => new AssignToInterviewerTextBinding(view));
             MvxAppCompatSetupHelper.FillTargetFactories(registry);
 
             RegisterAutoCompleteTextViewBindings(registry);
