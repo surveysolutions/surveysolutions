@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:local="http://schemas.android.com/apk/res-auto"
+    android:paddingRight="@dimen/Interview_Entity_margin_right"
+    android:paddingLeft="@dimen/Interview_Entity_margin_left"
+    style="@style/FullWidthWrappingLayout">
+    <TableLayout
+        style="@style/Audio_Dialog_Holder"
+        android:background="@drawable/dialog_rounded"
+        android:stretchColumns="0">
+        <TableRow>
+            <LinearLayout style="@style/VerticalFullWidthWrappingLayout">
+                <TextView
+                  android:layout_width="wrap_content"
+                  android:layout_height="wrap_content"
+                  style="@style/Text_Roboto_24"
+                  local:MvxBind="Text Localization('SelectResponsible_Reassign');"/>
+                <TextView
+                  style="@style/Interview_Question_Title_Base"
+                  local:MvxBind="Text Localization('SelectResponsible_ReassignDescription');"/>
+
+            </LinearLayout>
+            <ImageButton style="@style/Interview_Question_RemoveAnswer"
+                         android:layout_marginRight="@dimen/Interview_Audio_Dialog_Remove_Button_Margin_Left"
+                         android:duplicateParentState="true"
+                         local:MvxBind="Click CancelCommand;"
+                         local:srcCompat="@drawable/delete_button"/>
+        </TableRow>
+        <TableRow>
+            <MvxRecyclerView
+                android:layout_column="0"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/Interview_Assign_To_Interviewer_List_Max_Width"
+                android:layout_marginTop="@dimen/Interview_Entity_Title_margin_top"
+                android:scrollbars="vertical"
+                local:MvxItemTemplate="@layout/interview_select_responsible_item"
+                local:MvxBind="ItemsSource UiItems;" />
+        </TableRow>
+        <TableRow>
+            <LinearLayout style="@style/FullWidthWrappingLayout"
+                          android:layout_marginTop="@dimen/Interview_Entity_Title_margin_top"
+                          android:layout_span="2">
+                <Button style="@style/Done_Button"
+                        local:MvxBind="Click ReassignCommand; Enabled CanReassign; Text Localization('SelectResponsible_ReassignButtonText');" />
+                <Button style="@style/Link_Button"
+                        local:MvxBind="Click CancelCommand; Text Localization('Interviewer_RelinkDevice_Cancel');" />
+
+            </LinearLayout>
+        </TableRow>
+    </TableLayout>
+</LinearLayout>
+

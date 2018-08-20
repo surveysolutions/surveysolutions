@@ -27,7 +27,9 @@ namespace WB.UI.Headquarters.Controllers
 
         public ActionResult Supervisor()
         {
-            return View();
+            var model = new DownloadModel();
+            model.QRBase64Apk = qRCodeHelper.GetQRCodeAsBase64StringSrc(qRCodeHelper.GetFullUrl(Url.HttpRouteUrl("DefaultApiWithAction", new { action = "GetLatestSupervisor", controller = "InterviewerSync" })), 250, 250);
+            return View(model);
         }
     }
 }

@@ -51,7 +51,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
         public override async Task ExecuteAsync()
         {
-            var remoteInterviews = await this.SynchronizationService.GetInterviewsAsync(this.Context.CancellationToken);
+            List<InterviewApiView> remoteInterviews = await this.SynchronizationService.GetInterviewsAsync(this.Context.CancellationToken);
             var remoteInterviewWithSequence = remoteInterviews.ToDictionary(k => k.Id, v => v.Sequence);
 
             var localInterviews = this.interviewViewRepository.LoadAll();
@@ -60,11 +60,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             var localInterviewsToRemove = localInterviews.Where(
                 interview => !remoteInterviewWithSequence.ContainsKey(interview.InterviewId) && !interview.CanBeDeleted);
 
-            IEnumerable<Guid> obsoleteInterviews = await this.FindObsoleteInterviewsAsync(localInterviews, remoteInterviews, this.Context.Progress, this.Context.CancellationToken);
+            var obsoleteInterviews = await this.FindObsoleteInterviewsAsync(localInterviews, remoteInterviews, this.Context.Progress, this.Context.CancellationToken);
 
             var localInterviewIdsToRemove = localInterviewsToRemove
-                .Select(interview => interview.InterviewId)
                 .Where(IsNotPresentOnHq)
+                .Select(interview => interview.InterviewId)
                 .Concat(obsoleteInterviews)
                 .ToArray();
 
@@ -73,6 +73,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 .ToList();
 
             this.interviewsRemover.RemoveInterviews(this.Context.Statistics, this.Context.Progress, localInterviewIdsToRemove);
+
+            var interviewsThatAreNotMarkedAsReceived = remoteInterviews.Where(x => !x.IsMarkedAsReceivedByInterviewer && 
+                                                                                   remoteInterviewsToCreate.All(r => r.Id != x.Id));
+            foreach (var interviewApiView in interviewsThatAreNotMarkedAsReceived)
+            {
+                this.Context.CancellationToken.ThrowIfCancellationRequested();
+                await this.SynchronizationService.LogInterviewAsSuccessfullyHandledAsync(interviewApiView.Id);
+            }
 
             await this.CreateInterviewsAsync(remoteInterviewsToCreate, this.Context.Statistics, this.Context.Progress, this.Context.CancellationToken);
         }
@@ -96,7 +104,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         Title = InterviewerUIResources.Synchronization_Download_Title,
                         Description = string.Format(InterviewerUIResources.Synchronization_Download_Description_Format,
                             statistics.RejectedInterviewsCount + statistics.NewInterviewsCount + 1, interviews.Count,
-                            InterviewerUIResources.Synchronization_Interviews)
+                            InterviewerUIResources.Synchronization_Interviews),
+                        Stage = SyncStage.UpdatingAssignments
                     });
 
                     await this.questionnaireDownloader.DownloadQuestionnaireAsync(interview.QuestionnaireIdentity, statistics, transferProgress, cancellationToken);
@@ -140,9 +149,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         }
 
         
-        private bool IsNotPresentOnHq(Guid interviewId)
+        private bool IsNotPresentOnHq(InterviewView interview)
         {
-            return interviewSequenceViewRepository.GetById(interviewId) != null;
+            return interview.FromHqSyncDateTime == null;
         }
 
         private bool ShouldBeDownloadedBasedOnEventSequence(InterviewApiView interview)

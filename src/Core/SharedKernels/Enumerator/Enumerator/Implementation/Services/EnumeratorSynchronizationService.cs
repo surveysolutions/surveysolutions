@@ -51,9 +51,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         protected readonly ICheckVersionUriProvider checkVersionUriProvider;
         protected readonly ILogger logger;
         protected readonly IEnumeratorSettings enumeratorSettings;
-
-        public string ApiDownloadAppPrefixUrl => "/api/interviewersync";
-
+        
         protected RestCredentials restCredentials => this.principal.CurrentUserIdentity == null
             ? null
             : new RestCredentials {
@@ -479,6 +477,17 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         }
 
         #endregion
+
+        public Task<byte[]> GetFileAsync(string url, IProgress<TransferProgress> transferProgress, CancellationToken token)
+            => this.TryGetRestResponseOrThrowAsync(async () =>
+            {
+                var restFile = await this.restService.DownloadFileAsync(
+                    url: url,
+                    transferProgress: transferProgress,
+                    token: token,
+                    credentials: this.restCredentials).ConfigureAwait(false);
+                return restFile.Content;
+            });
 
         protected async Task TryGetRestResponseOrThrowAsync(Func<Task> restRequestTask)
         {

@@ -29,19 +29,16 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             ISupervisorSynchronizationService synchronizationService,
             ILogger logger,
             IQRBarcodeScanService qrBarcodeScanService,
+            ISerializer serializer,
             IUserInteractionService userInteractionService) 
-            : base(viewModelNavigationService, principal, deviceSettings, synchronizationService, logger, qrBarcodeScanService, userInteractionService)
+            : base(viewModelNavigationService, principal, deviceSettings, synchronizationService, 
+                logger, qrBarcodeScanService, serializer, userInteractionService)
         {
             this.passwordHasher = passwordHasher;
             this.supervisorsPlainStorage = interviewersPlainStorage;
             this.synchronizationService = synchronizationService;
         }
-
-        protected override string GetAppPrefixUrl()
-        {
-            return synchronizationService.ApiDownloadAppPrefixUrl;
-        }
-
+        
         public override async Task Initialize()
         {
             await base.Initialize();
