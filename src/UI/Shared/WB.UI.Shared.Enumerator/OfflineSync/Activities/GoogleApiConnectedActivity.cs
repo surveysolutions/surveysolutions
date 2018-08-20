@@ -11,26 +11,12 @@ using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation;
 
 namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
 {
-    public class CancelDialogHandler : Java.Lang.Object, IDialogInterfaceOnCancelListener
-    {
-        private readonly Activity activity;
-
-        public CancelDialogHandler(Activity activity)
-        {
-            this.activity = activity;
-        }
-        public void OnCancel(IDialogInterface dialog)
-        {
-            this.activity.Finish();
-            Toast.MakeText(this.activity, UIResources.OfflineSync_InstallPlayServices, ToastLength.Short).Show();
-        }
-    }
-
     public abstract class GoogleApiConnectedActivity<TViewModel>
         : BaseActivity<TViewModel>,
             GoogleApiClient.IConnectionCallbacks, GoogleApiClient.IOnConnectionFailedListener
@@ -93,6 +79,8 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
             this.RestoreGoogleApiConnectionIfNeeded();
         }
 
+        private IUserInteractionService userInteractionService =>
+            ServiceLocator.Current.GetInstance<IUserInteractionService>();
         /// <summary>
         /// Check the device to make sure it has the Google Play Services APK.
         /// If it doesn't, display a dialog that allows users to download the APK from the Google Play Store 
@@ -106,7 +94,15 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Activities
             if (resultCode == ConnectionResult.Success) return true;
 
             if (apiAvailability.IsUserResolvableError(resultCode))
-                apiAvailability.GetErrorDialog(this, resultCode, RequestCodeRecoverPlayServices, new CancelDialogHandler(this)).Show();
+            {
+                userInteractionService.ShowGoogleApiErrorDialog(resultCode,
+                    RequestCodeRecoverPlayServices,
+                    () =>
+                    {
+                        this.Finish();
+                        userInteractionService.ShowToast(UIResources.OfflineSync_InstallPlayServices);
+                    });
+            }
             else
             {
                 this.Finish();

@@ -56,7 +56,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 Title = InterviewerUIResources.Synchronization_Of_AssignmentsFormat.FormatString(0,
                     remoteAssignments.Count),
                 Statistics = statistics,
-                Status = SynchronizationStatus.Download
+                Status = SynchronizationStatus.Download,
+                Stage = SyncStage.AssignmentsSynchronization
             });
 
             // removing local assignments if needed
@@ -99,7 +100,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         Title = InterviewerUIResources.Synchronization_Of_AssignmentsFormat.FormatString(
                             processedAssignmentsCount, remoteAssignments.Count),
                         Statistics = statistics,
-                        Status = SynchronizationStatus.Download
+                        Status = SynchronizationStatus.Download,
+                        Stage = SyncStage.AssignmentsSynchronization
                     });
 
                     this.assignmentsRepository.Store(local);
@@ -124,8 +126,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         local.ResponsibleName = remoteItem.ResponsibleName;
                     }
 
-                    var interviewsCount =
-                        this.interviewViewRepository.Count(x => x.CanBeDeleted && x.Assignment == local.Id);
+                    var interviewsCount = this.interviewViewRepository.Count(x => x.FromHqSyncDateTime == null && x.Assignment == local.Id);
+                     
                     local.CreatedInterviewsCount = interviewsCount;
                     this.assignmentsRepository.Store(local);
                 }
@@ -140,7 +142,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 Title = InterviewerUIResources.Synchronization_Of_AssignmentsFormat.FormatString(
                     processedAssignmentsCount, remoteAssignments.Count),
                 Statistics = statistics,
-                Status = SynchronizationStatus.Download
+                Status = SynchronizationStatus.Download,
+                Stage = SyncStage.AssignmentsSynchronization
             });
         }
 

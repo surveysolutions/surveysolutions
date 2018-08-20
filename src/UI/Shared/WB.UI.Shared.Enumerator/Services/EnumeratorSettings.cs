@@ -80,6 +80,12 @@ namespace WB.UI.Shared.Enumerator.Services
                 return _userAgent;
             }
         }
+
+        public EnumeratorApplicationType ApplicationType =>
+            this.GetApplicationVersionName()?.ToLower()?.Contains(@"maps") ?? false
+                ? EnumeratorApplicationType.WithMaps
+                : EnumeratorApplicationType.WithoutMaps;
+
         public string GetApplicationVersionName() => this.appPackageInfo.VersionName;
 
         public string GetDeviceTechnicalInformation() => $"Version: {this.GetApplicationVersionName()} {Environment.NewLine}" +

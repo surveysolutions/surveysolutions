@@ -1,13 +1,9 @@
-using System;
 using System.Threading;
 using System.Threading.Tasks;
-using MvvmCross.Commands;
-using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -30,17 +26,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             IInterviewerSynchronizationService synchronizationService,
             ILogger logger,
             IQRBarcodeScanService qrBarcodeScanService,
+            ISerializer serializer,
             IUserInteractionService userInteractionService) 
-            : base(viewModelNavigationService, principal, deviceSettings, synchronizationService, logger, qrBarcodeScanService, userInteractionService)
+            : base(viewModelNavigationService, principal, deviceSettings, synchronizationService, 
+                logger, qrBarcodeScanService, serializer, userInteractionService)
         {
             this.passwordHasher = passwordHasher;
             this.interviewersPlainStorage = interviewersPlainStorage;
             this.synchronizationService = synchronizationService;
-        }
-
-        protected override string GetAppPrefixUrl()
-        {
-            return synchronizationService.ApiDownloadAppPrefixUrl;
         }
 
         protected override async Task RelinkUserToAnotherDeviceAsync(RestCredentials credentials, CancellationToken token)

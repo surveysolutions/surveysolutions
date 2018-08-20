@@ -21,6 +21,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         {
             this.dashboardItemsAccessor = dashboardItemsAccessor;
             this.viewModelFactory = viewModelFactory;
+
+            this.Title = SupervisorDashboard.ToBeAssigned;
         }
 
         public override async Task Initialize()
