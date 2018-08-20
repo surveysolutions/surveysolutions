@@ -24,13 +24,15 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IAssignmentDocumentFromDtoBuilder assignmentDocumentFromDtoBuilder;
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
+        private readonly IPlainStorage<InterviewerDocument> interviewerViewRepository;
 
         public AssignmentsSynchronizer(ISynchronizationService synchronizationService,
             IAssignmentDocumentsStorage assignmentsRepository,
             IQuestionnaireDownloader questionnaireDownloader,
             IQuestionnaireStorage questionnaireStorage,
             IAssignmentDocumentFromDtoBuilder assignmentDocumentFromDtoBuilder,
-            IPlainStorage<InterviewView> interviewViewRepository)
+            IPlainStorage<InterviewView> interviewViewRepository, 
+            IPlainStorage<InterviewerDocument> interviewerViewRepository)
         {
             this.synchronizationService = synchronizationService;
             this.assignmentsRepository = assignmentsRepository;
@@ -38,17 +40,21 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             this.questionnaireStorage = questionnaireStorage;
             this.assignmentDocumentFromDtoBuilder = assignmentDocumentFromDtoBuilder;
             this.interviewViewRepository = interviewViewRepository;
+            this.interviewerViewRepository = interviewerViewRepository;
         }
 
-        public virtual async Task SynchronizeAssignmentsAsync(IProgress<SyncProgressInfo> progress, SynchronizationStatistics statistics, CancellationToken cancellationToken)
+        public virtual async Task SynchronizeAssignmentsAsync(IProgress<SyncProgressInfo> progress,
+            SynchronizationStatistics statistics, CancellationToken cancellationToken)
         {
-            List<AssignmentApiView> remoteAssignments = await this.synchronizationService.GetAssignmentsAsync(cancellationToken);
+            List<AssignmentApiView> remoteAssignments =
+                await this.synchronizationService.GetAssignmentsAsync(cancellationToken);
 
             IReadOnlyCollection<AssignmentDocument> localAssignments = this.assignmentsRepository.LoadAll();
 
             progress.Report(new SyncProgressInfo
             {
-                Title = InterviewerUIResources.Synchronization_Of_AssignmentsFormat.FormatString(0, remoteAssignments.Count),
+                Title = InterviewerUIResources.Synchronization_Of_AssignmentsFormat.FormatString(0,
+                    remoteAssignments.Count),
                 Statistics = statistics,
                 Status = SynchronizationStatus.Download
             });
@@ -72,14 +78,17 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
             foreach (var remoteItem in remoteAssignments)
             {
-                await this.questionnaireDownloader.DownloadQuestionnaireAsync(remoteItem.QuestionnaireId, statistics, transferProgress, cancellationToken);
+                await this.questionnaireDownloader.DownloadQuestionnaireAsync(remoteItem.QuestionnaireId, statistics,
+                    transferProgress, cancellationToken);
 
-                IQuestionnaire questionnaire = this.questionnaireStorage.GetQuestionnaire(remoteItem.QuestionnaireId, null);
+                IQuestionnaire questionnaire =
+                    this.questionnaireStorage.GetQuestionnaire(remoteItem.QuestionnaireId, null);
 
                 var local = localAssignmentsLookup[remoteItem.Id].FirstOrDefault();
                 if (local == null)
                 {
-                    AssignmentApiDocument remote = await this.synchronizationService.GetAssignmentAsync(remoteItem.Id, cancellationToken);
+                    AssignmentApiDocument remote =
+                        await this.synchronizationService.GetAssignmentAsync(remoteItem.Id, cancellationToken);
 
                     local = this.assignmentDocumentFromDtoBuilder.GetAssignmentDocument(remote, questionnaire);
 
@@ -87,7 +96,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
                     progress.Report(new SyncProgressInfo
                     {
-                        Title = InterviewerUIResources.Synchronization_Of_AssignmentsFormat.FormatString(processedAssignmentsCount, remoteAssignments.Count),
+                        Title = InterviewerUIResources.Synchronization_Of_AssignmentsFormat.FormatString(
+                            processedAssignmentsCount, remoteAssignments.Count),
                         Statistics = statistics,
                         Status = SynchronizationStatus.Download
                     });
@@ -98,19 +108,24 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 {
                     if (local.Quantity != remoteItem.Quantity)
                     {
-                        local.ReceivedByInterviewerAt = null;
                         local.Quantity = remoteItem.Quantity;
+                    }
+
+                    if (ReceivedByInterviewerTimeShouldBeReset(remoteItem.ResponsibleId, local.ResponsibleId,
+                        local.OriginalResponsibleId))
+                    {
+                        local.ReceivedByInterviewerAt = null;
                     }
 
                     if (local.OriginalResponsibleId != remoteItem.ResponsibleId)
                     {
-                        local.ReceivedByInterviewerAt = null;
                         local.ResponsibleId = remoteItem.ResponsibleId;
                         local.OriginalResponsibleId = remoteItem.ResponsibleId;
                         local.ResponsibleName = remoteItem.ResponsibleName;
                     }
 
-                    var interviewsCount = this.interviewViewRepository.Count(x => x.CanBeDeleted && x.Assignment == local.Id);
+                    var interviewsCount =
+                        this.interviewViewRepository.Count(x => x.CanBeDeleted && x.Assignment == local.Id);
                     local.CreatedInterviewsCount = interviewsCount;
                     this.assignmentsRepository.Store(local);
                 }
@@ -122,10 +137,30 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
             progress.Report(new SyncProgressInfo
             {
-                Title = InterviewerUIResources.Synchronization_Of_AssignmentsFormat.FormatString(processedAssignmentsCount, remoteAssignments.Count),
+                Title = InterviewerUIResources.Synchronization_Of_AssignmentsFormat.FormatString(
+                    processedAssignmentsCount, remoteAssignments.Count),
                 Statistics = statistics,
                 Status = SynchronizationStatus.Download
             });
+        }
+
+        public bool ReceivedByInterviewerTimeShouldBeReset(Guid remoteResponsibleId, Guid localResponsibleId,
+            Guid localOriginalResponsibleId)
+        {
+            if (remoteResponsibleId == localResponsibleId)
+                return false;
+
+            var hqChangedResponsible = localOriginalResponsibleId != remoteResponsibleId;
+            if (hqChangedResponsible)
+            {
+                // Supervisor's decision was overriden
+                return true;
+            }
+
+            // hopefully users are synched
+            var interviewerDocument = this.interviewerViewRepository.GetById(remoteResponsibleId.FormatGuid());
+            var remoteUserIsStillInterviewer = interviewerDocument != null;
+            return remoteUserIsStillInterviewer;
         }
     }
 }
