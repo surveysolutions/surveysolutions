@@ -58,12 +58,15 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             var localInterviewIds = localInterviews.Select(interview => interview.InterviewId).ToHashSet();
 
             var localInterviewsToRemove = localInterviews.Where(
-                interview => !remoteInterviewWithSequence.ContainsKey(interview.InterviewId) && !interview.CanBeDeleted);
+                interview => !remoteInterviewWithSequence.ContainsKey(interview.InterviewId) && 
+                             interview.FromHqSyncDateTime != null); //were created on tablet and was not synced with hq
+                                                                    //after reject from SV -> Int offline sync
+                                                                    //flac CanBeDeleted is false
 
             var obsoleteInterviews = await this.FindObsoleteInterviewsAsync(localInterviews, remoteInterviews, this.Context.Progress, this.Context.CancellationToken);
 
             var localInterviewIdsToRemove = localInterviewsToRemove
-                .Where(IsNotPresentOnHq)
+                
                 .Select(interview => interview.InterviewId)
                 .Concat(obsoleteInterviews)
                 .ToArray();
@@ -146,12 +149,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         "Failed to create interview, interviewer",
                         exception);
                 }
-        }
-
-        
-        private bool IsNotPresentOnHq(InterviewView interview)
-        {
-            return interview.FromHqSyncDateTime == null;
         }
 
         private bool ShouldBeDownloadedBasedOnEventSequence(InterviewApiView interview)
