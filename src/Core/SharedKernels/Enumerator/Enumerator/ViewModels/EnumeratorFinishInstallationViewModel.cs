@@ -1,12 +1,10 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
@@ -28,6 +26,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private readonly IUserInteractionService userInteractionService;
         private const string StateKey = "identity";
         private readonly IQRBarcodeScanService qrBarcodeScanService;
+        private readonly ISerializer serializer;
 
         protected EnumeratorFinishInstallationViewModel(
             IViewModelNavigationService viewModelNavigationService,
@@ -36,6 +35,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             ISynchronizationService synchronizationService,
             ILogger logger,
             IQRBarcodeScanService qrBarcodeScanService,
+            ISerializer serializer,
             IUserInteractionService userInteractionService) : base(principal, viewModelNavigationService)
         {
             this.viewModelNavigationService = viewModelNavigationService;
@@ -45,10 +45,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.userInteractionService = userInteractionService;
 
             this.qrBarcodeScanService = qrBarcodeScanService;
+            this.serializer = serializer;
         }
-
-        protected abstract string GetAppPrefixUrl();
-
+        
         protected override bool IsAuthenticationRequired => false;
 
         private string endpoint;
@@ -266,25 +265,26 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             {
                 var scanCode = await this.qrBarcodeScanService.ScanAsync();
 
-                if (scanCode != null)
+                if (scanCode?.Code != null)
                 {
-                    if (Uri.TryCreate(scanCode.Code, UriKind.Absolute, out var uriResult))
-                    {
-                        var position = scanCode.Code.IndexOf(GetAppPrefixUrl(), StringComparison.InvariantCultureIgnoreCase);
-                        this.Endpoint = position > 0 ? scanCode.Code.Substring(0, position) : scanCode.Code;
-                    }
+                    // Try parse scanned barcode as url
+                    // For barcode on download page which have a link to interviewer apk
+                    Uri.TryCreate(scanCode.Code, UriKind.Absolute, out var scannedUrl);
+                    if (scannedUrl != null)
+                        this.Endpoint = scannedUrl.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped);
                     else
                     {
-                        var finishInfo = JsonConvert.DeserializeObject<FinishInstallationInfo>(scanCode.Code);
+                        var finishInfo = this.serializer.Deserialize<FinishInstallationInfo>(scanCode.Code);
 
                         this.Endpoint = finishInfo.Url;
                         this.UserName = finishInfo.Login;
-                        this.Password = finishInfo.Password;
                     }
                 }
             }
-            catch
+            catch (Exception e)
             {
+                this.logger.Error("Qrbarcode reader error: ", e);
+                this.ErrorMessage = InterviewerUIResources.FinishInstallation_QrBarcodeReaderErrorMessage;
             }
             finally
             {

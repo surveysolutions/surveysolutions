@@ -216,6 +216,12 @@ namespace WB.UI.Headquarters.Code
                         var request = context.GetActionArgumentOrDefault("knownPackages", new List<ObsoletePackageCheck>());
                         logItem.Log = string.Format(SyncLogMessages.CheckObsoleteInterviews, JsonConvert.SerializeObject(request, Formatting.Indented));
                         break;
+                    case SynchronizationLogType.GetInterviewerAppPatches:
+                        logItem.Log = "Get list of interviewer app patches";
+                        break;
+                    case SynchronizationLogType.GetInterviewerAppPatchByName:
+                        logItem.Log = $"Get interviewer app patch: {context.GetActionArgumentOrDefault("id", string.Empty)}";
+                        break;
                     default:
                         throw new ArgumentException("logAction");
                 }

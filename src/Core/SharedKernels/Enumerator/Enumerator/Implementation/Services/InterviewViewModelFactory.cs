@@ -8,14 +8,17 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
+using WB.Core.SharedKernels.Enumerator.Views;
+using WB.Core.SharedKernels.Enumerator.Views.Dashboard;
 using GroupViewModel = WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups.GroupViewModel;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
-    public class InterviewViewModelFactory : IInterviewViewModelFactory
+    public abstract class InterviewViewModelFactory : IInterviewViewModelFactory
     {
         private enum InterviewEntityType
         {
@@ -266,6 +269,15 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         public T GetNew<T>() where T : class
         {
             return Load<T>();
+        }
+
+        public abstract IDashboardItem GetDashboardAssignment(AssignmentDocument assignment);
+
+        public virtual IDashboardItem GetDashboardInterview(InterviewView interviewView, List<PrefilledQuestion> details)
+        {
+            var result = GetNew<InterviewDashboardItemViewModel>();
+            result.Init(interviewView, details);
+            return result;
         }
     }
 }

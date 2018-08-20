@@ -6,7 +6,6 @@ using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
-using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.Messages;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -18,6 +17,8 @@ using WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
+using WB.Core.SharedKernels.Enumerator.ViewModels.Messages;
 using WB.Core.SharedKernels.Enumerator.Views;
 using InterviewerUIResources = WB.Core.BoundedContexts.Interviewer.Properties.InterviewerUIResources;
 
@@ -327,7 +328,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         }
 
         public IMvxAsyncCommand ShowSearchCommand =>
-            new MvxAsyncCommand(viewModelNavigationService.NavigateToAsync<DashboardSearchViewModel>);
+            new MvxAsyncCommand(viewModelNavigationService.NavigateToAsync<SearchViewModel>);
 
         #region Offline synchronization
 

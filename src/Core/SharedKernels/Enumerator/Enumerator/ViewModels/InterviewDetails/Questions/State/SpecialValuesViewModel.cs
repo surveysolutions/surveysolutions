@@ -13,19 +13,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     public class SpecialValuesViewModel : MvxNotifyPropertyChanged, IDisposable
     {
         private readonly FilteredOptionsViewModel optionsViewModel;
-        private readonly IMvxMainThreadDispatcher mvxMainThreadDispatcher;
         private readonly IStatefulInterviewRepository interviewRepository;
 
         protected SpecialValuesViewModel(){}
 
         public SpecialValuesViewModel(
             FilteredOptionsViewModel optionsViewModel,
-            IMvxMainThreadDispatcher mvxMainThreadDispatcher,
             IStatefulInterviewRepository interviewRepository) 
         {
             this.optionsViewModel = optionsViewModel;
-            this.mvxMainThreadDispatcher = mvxMainThreadDispatcher;
             this.interviewRepository = interviewRepository;
+            ShouldAlwaysRaiseInpcOnUserInterfaceThread(true);
         }
 
         private bool? isSpecialValue;
@@ -85,7 +83,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                return this.allSpecialValues.Contains(Convert.ToInt32(value.Value));
             }
-            catch (System.OverflowException)
+            catch (OverflowException)
             {
                 return false;
             }
@@ -122,10 +120,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (specialValuesViewModels.Any(x => x.Selected) || !interview.GetQuestion(this.questionIdentity).IsAnswered())
             {
                 specialValuesViewModels.ForEach(x => this.SpecialValues.Add(x));
-                this.mvxMainThreadDispatcher.RequestMainThreadAction(() =>
-                {
-                    this.RaisePropertyChanged(() => this.SpecialValues);
-                });
+                this.RaisePropertyChanged(nameof(SpecialValues));
             }
         }
 
@@ -182,10 +177,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 if (SpecialValues.Count == 0 && this.allSpecialValues.Any())
                 {
                     UpdateSpecialValues();
-                    this.mvxMainThreadDispatcher.RequestMainThreadAction(() =>
-                    {
-                        this.RaisePropertyChanged(() => this.SpecialValues);
-                    });
+                    this.RaisePropertyChanged(() => this.SpecialValues);
                 }
 
                 if (answeredOrSelectedValue.HasValue)
@@ -201,10 +193,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             else
             {
                 RemoveSpecialValues();
-                this.mvxMainThreadDispatcher.RequestMainThreadAction(() =>
-                {
-                    this.RaisePropertyChanged(() => this.SpecialValues);
-                });
+                this.RaisePropertyChanged(nameof(SpecialValues));
             }
         }
 

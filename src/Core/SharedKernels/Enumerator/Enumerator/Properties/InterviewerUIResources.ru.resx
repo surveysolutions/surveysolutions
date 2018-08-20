@@ -337,6 +337,12 @@
   <data name="Synchronization_Questionnaires" xml:space="preserve">
     <value>вопросники</value>
   </data>
+  <data name="UpdatingQuestionnaires" xml:space="preserve">
+    <value>Обновление вопросников</value>
+  </data>
+  <data name="TransferringAssignments" xml:space="preserve">
+    <value>Передача назначений</value>
+  </data>
   <data name="Synchronization_LockedAssignments_Text" xml:space="preserve">
     <value>Интервью заблокированы до окончания синхронизации</value>
   </data>
@@ -666,6 +672,9 @@
     <value>Создано интервью: {0}</value>
     <comment>Создано интервью: {0}</comment>
   </data>
+  <data name="AssignmentsSynchronization" xml:space="preserve">
+    <value>Синхронизация заданий</value>
+  </data>
   <data name="Synchronization_Of_AssignmentsFormat" xml:space="preserve">
     <value>Синхронизация {0} из {1} заданий</value>
     <comment>Синхронизация {0} из {1} заданий</comment>
@@ -806,5 +815,34 @@
   <data name="Synchronization_UserDoNotBelongToTeam" xml:space="preserve">
     <value>Пользователь больше не состоит в команде этого супервизора. Пожалуйста свяжитесь с Вашим Хедквотером.</value>
     <comment>Пользователь больше не состоит в команде супервизора {0}. Пожалуйста свяжитесь с Вашим Хедквотером</comment>
+  </data>
+  <data name="DashboardItem_RejectedByHqOn" xml:space="preserve">
+    <value>Отклонено хедквотером {0}</value>
+  </data>
+  <data name="DashboardItem_ApprovedBySupervisor" xml:space="preserve">
+    <value>Утверждено супервизором {0}</value>
+  </data>
+  <data name="FinishInstallation_QrBarcodeReaderErrorMessage" xml:space="preserve">
+    <value>Ошибка сканирования</value>
+  </data>
+    <data name="SelectResponsible_Reassign" xml:space="preserve">
+    <value>Назначить</value>
+    <comment>Назначить</comment>
+  </data>
+    <data name="SelectResponsible_ReassignDescription" xml:space="preserve">
+    <value>Выберите нового ответственного для этого интервью
+он сможет получить его после следующей синхронизации
+</value>
+    <comment>Выберите нового ответственного для этого интервью
+он сможет получить его после следующей синхронизации
+</comment>
+  </data>
+    <data name="SelectResponsible_ReassignButtonText" xml:space="preserve">
+    <value>Назначить</value>
+    <comment>Назначить</comment>
+  </data>
+    <data name="SelectResponsible_CancelButtonText" xml:space="preserve">
+    <value>Отмена</value>
+    <comment>Отмена</comment>
   </data>
 </root>

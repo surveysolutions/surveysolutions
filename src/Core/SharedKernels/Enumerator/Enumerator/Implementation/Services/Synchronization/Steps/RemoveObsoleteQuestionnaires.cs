@@ -37,7 +37,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             {
                 Title = InterviewerUIResources.Synchronization_Check_Obsolete_Questionnaires,
                 Statistics = this.Context.Statistics,
-                Status = SynchronizationStatus.Download
+                Status = SynchronizationStatus.Download,
+                Stage = SyncStage.CheckObsoleteQuestionnaires
             });
 
             var serverQuestionnaires = await this.synchronizationService.GetServerQuestionnairesAsync(this.Context.CancellationToken);
@@ -58,7 +59,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         InterviewerUIResources.Synchronization_Check_Obsolete_Questionnaires_Description,
                         removedQuestionnairesCounter, questionnairesToRemove.Count),
                     Statistics = this.Context.Statistics,
-                    Status = SynchronizationStatus.Download
+                    Status = SynchronizationStatus.Download,
+                    Stage = SyncStage.CheckObsoleteQuestionnaires
                 });
 
                 var questionnaireId = questionnaireIdentity.ToString();
@@ -76,7 +78,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             {
                 this.Context.Progress.Report(new SyncProgressInfo
                 {
-                    Title = InterviewerUIResources.Synchronization_Download_AttachmentsCleanup
+                    Title = InterviewerUIResources.Synchronization_Download_AttachmentsCleanup,
+                    Stage = SyncStage.AttachmentsCleanup
                 });
 
                 this.attachmentsCleanupService.RemovedOrphanedAttachments();
