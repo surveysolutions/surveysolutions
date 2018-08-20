@@ -109,7 +109,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             }).Items.Where(questionnaire => questionnaire.IsDeleted);
 
             var filteredInterviews = inProgressInterviews.Where(
-                    interview => !deletedQuestionnaires.Any(deletedQuestionnaire => deletedQuestionnaire.QuestionnaireId == interview.QuestionnaireId && deletedQuestionnaire.Version == interview.QuestionnaireVersion)
+                    interview => !deletedQuestionnaires.Any(deletedQuestionnaire => deletedQuestionnaire.QuestionnaireId == interview.QuestionnaireId 
+                                                                                    && deletedQuestionnaire.Version == interview.QuestionnaireVersion)
                                  && !processigPackages.Any(filename => filename.Contains(interview.InterviewId.FormatGuid())))
                 .Select(interview => new InterviewInformation
                 {
