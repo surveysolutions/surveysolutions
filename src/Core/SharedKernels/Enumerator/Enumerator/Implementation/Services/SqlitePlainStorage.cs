@@ -117,9 +117,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         public IReadOnlyCollection<TEntity> Where(Expression<Func<TEntity, bool>> predicate)
             => this.RunInTransaction(table => table.Where(predicate).ToReadOnlyCollection());
 
-        public IReadOnlyCollection<TResult> WhereSelect<TResult>(Expression<Func<TEntity, bool>> predicate,
+        public IReadOnlyCollection<TResult> WhereSelect<TResult>(Expression<Func<TEntity, bool>> wherePredicate,
             Expression<Func<TEntity, TResult>> selectPredicate) where TResult : class
-            => this.RunInTransaction(table => table.Where(predicate).Select(selectPredicate).ToReadOnlyCollection());
+            => this.RunInTransaction(table => table.Where(wherePredicate).Select(selectPredicate).ToReadOnlyCollection());
 
         public int Count(Expression<Func<TEntity, bool>> predicate)
           => this.RunInTransaction(table => table.Count(predicate));
