@@ -30,7 +30,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         {
             progress.Report(new SyncProgressInfo
             {
-                Title = InterviewerUIResources.Synchronization_DownloadingLogo
+                Title = InterviewerUIResources.Synchronization_DownloadingLogo,
+                Stage = SyncStage.DownloadingLogo
             });
 
             var logoStorageId = CompanyLogo.StorageKey;

@@ -10,5 +10,6 @@ namespace WB.Core.SharedKernels.DataCollection.WebApi
         public bool IsRejected { get; set; }
         public Guid ResponsibleId { get; set; }
         public int? Sequence { get; set; }
+        public bool IsMarkedAsReceivedByInterviewer { get; set; }
     }
 }

@@ -41,7 +41,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             {typeof (YesNoQuestionViewModel), Resource.Layout.interview_question_yesno},
             {typeof (GroupViewModel), Resource.Layout.interview_group},
             {typeof (StartInterviewViewModel), Resource.Layout.prefilled_questions_start_button},
-            {typeof (CompleteInterviewViewModel), Resource.Layout.interview_complete_status_change},
+            {typeof (CompleteInterviewViewModel), Resource.Layout.interview_complete},
             {typeof (MultiOptionQuestionOptionViewModel), Resource.Layout.interview_question_multi_option_item},
             {typeof (MultiOptionLinkedQuestionOptionViewModel), Resource.Layout.interview_question_multi_option_item},
             {typeof (SingleOptionQuestionOptionViewModel), Resource.Layout.interview_question_single_option_item},

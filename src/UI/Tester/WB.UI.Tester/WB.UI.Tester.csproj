@@ -392,9 +392,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\drawable\dashboard_search_icon.xml" />
-  </ItemGroup>
-  <ItemGroup>
     <AndroidResource Include="Resources\drawable\dashboard_refresh_icon.png" />
   </ItemGroup>
   <ItemGroup>

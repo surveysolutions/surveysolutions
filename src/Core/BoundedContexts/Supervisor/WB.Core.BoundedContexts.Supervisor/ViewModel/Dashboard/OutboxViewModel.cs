@@ -31,6 +31,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         {
             this.dashboardItemsAccessor = dashboardItemsAccessor;
             this.viewModelFactory = viewModelFactory;
+
+            this.Title = SupervisorDashboard.Outbox;
         }
 
         public override GroupStatus InterviewStatus => GroupStatus.Completed;

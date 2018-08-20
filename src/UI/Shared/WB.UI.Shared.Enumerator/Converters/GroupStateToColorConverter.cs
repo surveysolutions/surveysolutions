@@ -3,6 +3,7 @@ using System.Globalization;
 using MvvmCross.Converters;
 using MvvmCross.Platforms.Android;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.UI.Shared.Enumerator.Converters

@@ -97,6 +97,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Synchronizing assignment(s).
+        /// </summary>
+        public static string AssignmentsSynchronization {
+            get {
+                return ResourceManager.GetString("AssignmentsSynchronization", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Assign.
         /// </summary>
         public static string Dashboard_Assign {
@@ -435,6 +444,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Approved by Supervisor at {0}.
+        /// </summary>
+        public static string DashboardItem_ApprovedBySupervisor {
+            get {
+                return ResourceManager.GetString("DashboardItem_ApprovedBySupervisor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Assigned on {0}.
         /// </summary>
         public static string DashboardItem_AssignedOn {
@@ -494,6 +512,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string DashboardItem_NotStarted {
             get {
                 return ResourceManager.GetString("DashboardItem_NotStarted", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Rejected by Headquarters on {0}.
+        /// </summary>
+        public static string DashboardItem_RejectedByHqOn {
+            get {
+                return ResourceManager.GetString("DashboardItem_RejectedByHqOn", resourceCulture);
             }
         }
         
@@ -890,6 +917,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string FinishInstallation_EndpointDiffers {
             get {
                 return ResourceManager.GetString("FinishInstallation_EndpointDiffers", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to An error occurred while scanning.
+        /// </summary>
+        public static string FinishInstallation_QrBarcodeReaderErrorMessage {
+            get {
+                return ResourceManager.GetString("FinishInstallation_QrBarcodeReaderErrorMessage", resourceCulture);
             }
         }
         
@@ -1356,6 +1392,43 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cancel.
+        /// </summary>
+        public static string SelectResponsible_CancelButtonText {
+            get {
+                return ResourceManager.GetString("SelectResponsible_CancelButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reassign.
+        /// </summary>
+        public static string SelectResponsible_Reassign {
+            get {
+                return ResourceManager.GetString("SelectResponsible_Reassign", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Reassign.
+        /// </summary>
+        public static string SelectResponsible_ReassignButtonText {
+            get {
+                return ResourceManager.GetString("SelectResponsible_ReassignButtonText", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Select new responsible for this interview
+        ///it will be able to enumerator after next sync.
+        /// </summary>
+        public static string SelectResponsible_ReassignDescription {
+            get {
+                return ResourceManager.GetString("SelectResponsible_ReassignDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to No connection to the Survey Solutions Supervisor. Please make sure that the website is available..
         /// </summary>
         public static string ServiceUnavailable {
@@ -1752,7 +1825,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to User is no longer belong to this Supervisor team. Please contact You Headquarter for details.
+        ///   Looks up a localized string similar to User is no longer belongs to Supervisor {0} team. Please contact Your Headquarters for details..
         /// </summary>
         public static string Synchronization_UserDoNotBelongToTeam {
             get {
@@ -1784,6 +1857,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Synchronization_UserPassword_Update_Format {
             get {
                 return ResourceManager.GetString("Synchronization_UserPassword_Update_Format", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Transferring assignments.
+        /// </summary>
+        public static string TransferringAssignments {
+            get {
+                return ResourceManager.GetString("TransferringAssignments", resourceCulture);
             }
         }
         
@@ -2036,6 +2118,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string UnexpectedException {
             get {
                 return ResourceManager.GetString("UnexpectedException", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Updating questionnaires.
+        /// </summary>
+        public static string UpdatingQuestionnaires {
+            get {
+                return ResourceManager.GetString("UpdatingQuestionnaires", resourceCulture);
             }
         }
         

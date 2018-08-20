@@ -28,7 +28,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     Description = string.Format(InterviewerUIResources.Synchronization_Download_Description_Format,
                         statistics.DeletedInterviewsCount + 1,
                         interviewIds.Length,
-                        InterviewerUIResources.Synchronization_Interviews)
+                        InterviewerUIResources.Synchronization_Interviews),
+                    Stage = SyncStage.UpdatingAssignments
                 });
 
                 this.interviewFactory.RemoveInterview(interviewId);
