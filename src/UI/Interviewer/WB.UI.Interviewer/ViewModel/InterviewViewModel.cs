@@ -4,26 +4,22 @@ using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
-using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
-using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview;
 using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.UI.Interviewer.ViewModel
 {
     public class InterviewViewModel : BaseInterviewViewModel
     {
-        readonly IViewModelNavigationService viewModelNavigationService;
         private readonly ILastCreatedInterviewStorage lastCreatedInterviewStorage;
         private readonly IAuditLogService auditLogService;
 
@@ -41,7 +37,6 @@ namespace WB.UI.Interviewer.ViewModel
             CoverStateViewModel coverState,
             IInterviewViewModelFactory interviewViewModelFactory,
             ICommandService commandService,
-            IJsonAllTypesSerializer jsonSerializer,
             VibrationViewModel vibrationViewModel,
             IEnumeratorSettings enumeratorSettings,
             ILastCreatedInterviewStorage lastCreatedInterviewStorage,
@@ -50,7 +45,6 @@ namespace WB.UI.Interviewer.ViewModel
                 breadCrumbsViewModel, navigationState, answerNotifier, groupState, interviewState, coverState, principal, viewModelNavigationService,
                 interviewViewModelFactory, commandService, vibrationViewModel, enumeratorSettings)
         {
-            this.viewModelNavigationService = viewModelNavigationService;
             this.lastCreatedInterviewStorage = lastCreatedInterviewStorage;
             this.auditLogService = auditLogService;
         }

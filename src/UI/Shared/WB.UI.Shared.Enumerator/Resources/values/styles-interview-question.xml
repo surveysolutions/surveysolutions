@@ -102,8 +102,14 @@
     <item name="android:layout_marginLeft">@dimen/Interview_Readonly_Question_Layout_margin_left</item>
     <item name="android:layout_marginRight">@dimen/Interview_Readonly_Question_Layout_margin_right</item>
     <item name="android:layout_marginTop">@dimen/Interview_Question_Answer_margin_top</item>
-    <item name="android:layout_marginBottom">@dimen/Interview_Readonly_Question_Layout_margin_bottom</item>
   </style>
+    
+    <style name="Readonly_Devider_Spacer">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+
+        <item name="android:layout_marginBottom">@dimen/Interview_Readonly_Question_Layout_margin_bottom</item>
+    </style>
   
   <style name="Interview_Readonly_Question_Answer">
     <item name="android:maxLines">1</item>
@@ -231,20 +237,23 @@
     <item name="android:gravity">center</item>
   </style>
     
-  <style name="Interview_Question_Answer_Option_Input" parent="Interview_Entity_BasicFont">
-    <item name="android:layout_width">@dimen/zero</item>
-    <item name="android:layout_height">wrap_content</item>
-    <item name="android:layout_weight">1</item>
-    <item name="android:layout_marginLeft">@dimen/Interview_Question_Answer_Option_padding_left</item>
+  <style name="Interview_Question_Answer_Option_Input" parent="Interview_Question_Answer_Option_Input_Base">
     <item name="android:paddingLeft">@dimen/Interview_Question_Answer_Option_padding_left</item>
     <item name="android:paddingRight">@dimen/Interview_Question_Answer_Input_background_padding</item>
-    <item name="android:paddingTop">@dimen/Interview_Question_Answer_Input_background_padding</item>
-    <item name="android:paddingBottom">@dimen/Interview_Question_Answer_Input_background_padding</item>
-    <item name="android:textColor">@drawable/question_option_text_color</item>
-    <item name="android:layout_gravity">center_vertical</item>
-  </style> 
+  </style>
 
-  <style name="Interview_Question_Answer_YesNo_Option" parent="Interview_Entity_BasicFont">
+  <style name="Interview_Question_Answer_Option_Input_Base" parent="Interview_Entity_BasicFont">
+        <item name="android:layout_width">@dimen/zero</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_marginLeft">@dimen/Interview_Question_Answer_Option_padding_left</item>
+        <item name="android:paddingTop">@dimen/Interview_Question_Answer_Input_background_padding</item>
+        <item name="android:paddingBottom">@dimen/Interview_Question_Answer_Input_background_padding</item>
+        <item name="android:textColor">@drawable/question_option_text_color</item>
+        <item name="android:layout_gravity">center_vertical</item>
+  </style>
+
+    <style name="Interview_Question_Answer_YesNo_Option" parent="Interview_Entity_BasicFont">
     <item name="android:layout_width">wrap_content</item>
     <item name="android:layout_height">wrap_content</item>
     <item name="android:paddingLeft">@dimen/one</item>

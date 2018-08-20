@@ -194,7 +194,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     Title = InterviewerUIResources.Synchronization_UserAuthentication_Title,
                     Description = InterviewerUIResources.Synchronization_UserAuthentication_Description,
                     Status = SynchronizationStatus.Started,
-                    Statistics = statistics
+                    Statistics = statistics,
+                    Stage = SyncStage.UserAuthentication
                 });
 
                 this.RestCredentials = this.RestCredentials ?? new RestCredentials
@@ -276,7 +277,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     Title = InterviewerUIResources.Synchronization_Success_Title,
                     Description = SucsessDescription, 
                     Status = SynchronizationStatus.Success,
-                    Statistics = statistics
+                    Statistics = statistics,
+                    Stage = SyncStage.Success
                 });
             }
             catch (OperationCanceledException)
@@ -284,7 +286,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 progress.Report(new SyncProgressInfo
                 {
                     Status = SynchronizationStatus.Stopped,
-                    Statistics = statistics
+                    Statistics = statistics,
+                    Stage = SyncStage.Stopped
                 });
 
                 auditLogService.Write(new SynchronizationCanceledAuditLogEntity());
@@ -304,7 +307,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                             Title = errorTitle,
                             Description = errorDescription,
                             Status = SynchronizationStatus.Canceled,
-                            Statistics = statistics
+                            Statistics = statistics,
+                            Stage = SyncStage.Canceled
                         });
                         auditLogService.Write(new SynchronizationCanceledAuditLogEntity());
                         break;
@@ -314,10 +318,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     case SynchronizationExceptionType.UserLocked:
                         progress.Report(new SyncProgressInfo
                         {
-                            Title = InterviewerUIResources.Synchronization_Fail_Title,
+                            Title = errorTitle,
                             Description = InterviewerUIResources.AccountIsLockedOnServer,
                             Status = SynchronizationStatus.Fail,
-                            Statistics = statistics
+                            Statistics = statistics,
+                            Stage = SyncStage.FailedAccountIsLockedOnServer
                         });
                         break;
                     case SynchronizationExceptionType.UserLinkedToAnotherDevice:
@@ -327,7 +332,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                             Description = InterviewerUIResources.Synchronization_UserLinkedToAnotherDevice_Title,
                             UserIsLinkedToAnotherDevice = true,
                             Status = SynchronizationStatus.Fail,
-                            Statistics = statistics
+                            Statistics = statistics,
+                            Stage = SyncStage.FailedUserLinkedToAnotherDevice
                         });
                         auditLogService.Write(new SynchronizationFailedAuditLogEntity(ex));
                         break;
@@ -337,7 +343,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                             Title = InterviewerUIResources.Synchronization_SupervisorShouldDoOnlineSync_Title,
                             Description = InterviewerUIResources.Synchronization_SupervisorShouldDoOnlineSync,
                             Status = SynchronizationStatus.Fail,
-                            Statistics = statistics
+                            Statistics = statistics,
+                            Stage = SyncStage.FailedSupervisorShouldDoOnlineSync
                         });
                         auditLogService.Write(new SynchronizationFailedAuditLogEntity(ex));
                         break;
@@ -347,7 +354,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                             Title = InterviewerUIResources.UnexpectedException,
                             Description = InterviewerUIResources.UnacceptableSSLCertificate,
                             Status = SynchronizationStatus.Fail,
-                            Statistics = statistics
+                            Statistics = statistics,
+                            Stage = SyncStage.FailedUnacceptableSSLCertificate
+
                         });
                         auditLogService.Write(new SynchronizationFailedAuditLogEntity(ex));
                         break;
@@ -357,7 +366,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                             Title = InterviewerUIResources.UnexpectedException,
                             Description = InterviewerUIResources.Synchronization_UserDoNotBelongToTeam,
                             Status = SynchronizationStatus.Fail,
-                            Statistics = statistics
+                            Statistics = statistics,
+                            Stage = SyncStage.FailedUserDoNotBelongToTeam
                         });
                         auditLogService.Write(new SynchronizationFailedAuditLogEntity(ex));
                         break;
@@ -367,7 +377,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         {
                             Title = InterviewerUIResources.UpgradeRequired,
                             Status = SynchronizationStatus.Fail,
-                            Statistics = statistics
+                            Statistics = statistics,
+                            Stage = SyncStage.FailedUpgradeRequired
                         });
                         break;
                     default:
@@ -376,7 +387,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                             Title = errorTitle,
                             Description = errorDescription,
                             Status = SynchronizationStatus.Fail,
-                            Statistics = statistics
+                            Statistics = statistics,
+                            Stage = SyncStage.Failed
                         });
                         auditLogService.Write(new SynchronizationFailedAuditLogEntity(ex));
                         break;
@@ -389,7 +401,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     Title = InterviewerUIResources.Synchronization_Fail_Title,
                     Description = InterviewerUIResources.Synchronization_Fail_UnexpectedException,
                     Status = SynchronizationStatus.Fail,
-                    Statistics = statistics
+                    Statistics = statistics,
+                    Stage = SyncStage.FailedUnexpectedException
                 });
 
                 await this.TrySendUnexpectedExceptionToServerAsync(ex);
@@ -410,7 +423,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         Title = InterviewerUIResources.Synchronization_Fail_Title,
                         Description = InterviewerUIResources.Unauthorized,
                         Status = SynchronizationStatus.Fail,
-                        Statistics = statistics
+                        Statistics = statistics,
+                        Stage = SyncStage.FailedUnauthorized
                     });
                 }
                 else

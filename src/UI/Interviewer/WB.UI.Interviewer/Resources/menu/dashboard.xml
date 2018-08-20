@@ -3,8 +3,16 @@
     xmlns:local="http://schemas.android.com/apk/res-auto"
       android:id="@+id/menu">
     <item
+        android:id="@+id/menu_synchronization"
+        local:showAsAction="ifRoom" />
+
+    <item
+        android:id="@+id/menu_offline_synchronization"
+        local:showAsAction="ifRoom" />
+
+    <item
         android:id="@+id/menu_search"
-        local:showAsAction="never" />
+        local:showAsAction="ifRoom" />
     <item
         android:id="@+id/menu_settings"
         local:showAsAction="never" />

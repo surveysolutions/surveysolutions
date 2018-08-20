@@ -229,5 +229,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         {
             return Service.LogAssignmentAsHandledAsync(id, cancellationToken);
         }
+
+        public Task<byte[]> GetFileAsync(string url, IProgress<TransferProgress> transferProgress, CancellationToken token) 
+            => Service.GetFileAsync(url, transferProgress, token);
     }
 }

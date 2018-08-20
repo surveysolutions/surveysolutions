@@ -129,5 +129,7 @@ namespace WB.UI.Tester.Infrastructure.Internals.Settings
         {
             throw new NotImplementedException();
         }
+
+        public EnumeratorApplicationType ApplicationType => EnumeratorApplicationType.WithMaps;
     }
 }

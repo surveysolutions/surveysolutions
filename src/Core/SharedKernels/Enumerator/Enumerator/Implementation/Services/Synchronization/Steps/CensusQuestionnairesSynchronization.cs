@@ -46,7 +46,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     Description = string.Format(InterviewerUIResources.Synchronization_Download_Description_Format,
                         processedQuestionnaires,
                         notExistingLocalCensusQuestionnaireIdentities.Count,
-                        InterviewerUIResources.Synchronization_Questionnaires)
+                        InterviewerUIResources.Synchronization_Questionnaires),
+                    Stage = SyncStage.UpdatingQuestionnaires
                 });
 
                 await this.questionnaireDownloader.DownloadQuestionnaireAsync(censusQuestionnaireIdentity,

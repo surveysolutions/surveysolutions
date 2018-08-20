@@ -34,7 +34,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
         {
             progress.Report(new SyncProgressInfo
             {
-                Title = InterviewerUIResources.Synchronization_CheckForObsolete_Interviews
+                Title = InterviewerUIResources.Synchronization_CheckForObsolete_Interviews,
+                Stage = SyncStage.CheckForObsoleteInterviews
             });
 
             var lastKnownEventsWithInterviewIds = localInterviews.Select(x => new ObsoletePackageCheck
