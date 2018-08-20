@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using Moq;
+using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -11,12 +12,12 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Tests.Abc;
 
-
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewModelTests
 {
     internal class when_handling_question_answered_event : YesNoQuestionViewModelTestsContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [OneTimeSetUp] 
+        public void context () {
             questionGuid = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             questionId = Create.Entity.Identity(questionGuid, Empty.RosterVector);
 
@@ -67,14 +68,17 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
             }));
         }
 
-        [NUnit.Framework.Test] public void should_set_checked_order_to_yes_options () 
+        [Test] 
+        public void should_set_checked_order_to_yes_options () 
         {
             viewModel.Options[4].YesAnswerCheckedOrder.Should().Be(1);
             viewModel.Options[1].YesAnswerCheckedOrder.Should().Be(null);
             viewModel.Options[0].YesAnswerCheckedOrder.Should().Be(2);
         }
 
-        [NUnit.Framework.Test] public void should_mark_options_as_checked () => viewModel.Options.Count(x => x.YesSelected).Should().Be(2);
+        [Test] 
+        public void should_mark_options_as_checked () => 
+            viewModel.Options.Count(x => x.YesSelected).Should().Be(2);
 
         static YesNoQuestionViewModel viewModel;
         static Identity questionId;

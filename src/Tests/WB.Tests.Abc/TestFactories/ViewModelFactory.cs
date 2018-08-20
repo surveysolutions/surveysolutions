@@ -140,17 +140,23 @@ namespace WB.Tests.Abc.TestFactories
             IStatefulInterview interview = null,
             ILiteEventRegistry eventRegistry = null,
             QuestionStateViewModel<SingleOptionLinkedQuestionAnswered> questionState = null,
-            AnsweringViewModel answering = null)
-            => new SingleOptionLinkedQuestionViewModel(
-                Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == Mock.Of<IUserIdentity>(y => y.UserId == Guid.NewGuid())),
-                Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == (questionnaire ?? Mock.Of<IQuestionnaire>())),
-                Mock.Of<IStatefulInterviewRepository>(_ => _.Get(It.IsAny<string>()) == (interview ?? Mock.Of<IStatefulInterview>())),
-                eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
-                Stub.MvxMainThreadDispatcher(),
-                questionState ?? Stub<QuestionStateViewModel<SingleOptionLinkedQuestionAnswered>>.WithNotEmptyValues,
-                Mock.Of<QuestionInstructionViewModel>(),
-                answering ?? Mock.Of<AnsweringViewModel>());
-        
+            AnsweringViewModel answering = null) => new SingleOptionLinkedQuestionViewModel(
+            Mock.Of<IPrincipal>(_ =>
+                _.CurrentUserIdentity == Mock.Of<IUserIdentity>(y => y.UserId == Guid.NewGuid())),
+            Mock.Of<IQuestionnaireStorage>(_ =>
+                _.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) ==
+                (questionnaire ?? Mock.Of<IQuestionnaire>())),
+            Mock.Of<IStatefulInterviewRepository>(_ =>
+                _.Get(It.IsAny<string>()) == (interview ?? Mock.Of<IStatefulInterview>())),
+            eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
+            Stub.MvxMainThreadDispatcher(),
+            questionState ?? Stub<QuestionStateViewModel<SingleOptionLinkedQuestionAnswered>>.WithNotEmptyValues,
+            Mock.Of<QuestionInstructionViewModel>(),
+            answering ?? Mock.Of<AnsweringViewModel>())
+        {
+            ThrottlePeriod = 0
+        };
+
         public TextQuestionViewModel TextQuestionViewModel(
             ILiteEventRegistry eventRegistry = null,
             IQuestionnaireStorage questionnaireStorage = null,
