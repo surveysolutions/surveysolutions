@@ -286,7 +286,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                 var interviewException = exception as InterviewException;
                 if (interviewException == null)
                 {
-                    interviewException = interviewException.UnwrapAllInnerExceptions()
+                    interviewException = interviewException?.UnwrapAllInnerExceptions()
                         .OfType<InterviewException>()
                         .FirstOrDefault();
                 }

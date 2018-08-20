@@ -4,11 +4,8 @@ using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
-using WB.Core.BoundedContexts.Interviewer.Implementation.Services.OfflineSync;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
-using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.Messages;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -21,6 +18,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
+using WB.Core.SharedKernels.Enumerator.ViewModels.Messages;
 using WB.Core.SharedKernels.Enumerator.Views;
 using InterviewerUIResources = WB.Core.BoundedContexts.Interviewer.Properties.InterviewerUIResources;
 
@@ -36,9 +34,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         private readonly IAuditLogService auditLogService;
         private readonly ISynchronizationMode synchronizationMode;
         private readonly IOfflineSyncClient syncClient;
+        private readonly IMvxMessenger messenger;
 
-        private readonly MvxSubscriptionToken startingLongOperationMessageSubscriptionToken;
-        private readonly MvxSubscriptionToken stopLongOperationMessageSubscriptionToken;
+        private MvxSubscriptionToken startingLongOperationMessageSubscriptionToken;
+        private MvxSubscriptionToken stopLongOperationMessageSubscriptionToken;
 
         public CreateNewViewModel CreateNew { get; }
         public StartedInterviewsViewModel StartedInterviews { get; }
@@ -64,6 +63,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             IOfflineSyncClient syncClient) : base(principal, viewModelNavigationService, permissionsService,
             nearbyConnection, interviewerSettings, restService)
         {
+            this.messenger = messenger;
             this.viewModelNavigationService = viewModelNavigationService;
             this.principal = principal;
             this.interviewerSettings = interviewerSettings;
@@ -82,10 +82,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.CompletedInterviews = completedInterviewsViewModel;
             this.RejectedInterviews = rejectedInterviewsViewModel;
 
-            startingLongOperationMessageSubscriptionToken =
-                messenger.Subscribe<StartingLongOperationMessage>(this.DashboardItemOnStartingLongOperation);
-            stopLongOperationMessageSubscriptionToken =
-                messenger.Subscribe<StopingLongOperationMessage>(this.DashboardItemOnStopLongOperation);
+            SubscribeOnMessages();
+
             this.Synchronization.Init();
             this.Synchronization.OnCancel += Synchronization_OnCancel;
             this.Synchronization.OnProgressChanged += Synchronization_OnProgressChanged;
@@ -112,7 +110,30 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public override void ViewAppeared()
         {
             base.ViewAppeared();
+
+            SubscribeOnMessages();
+
             this.SynchronizationWithHqEnabled = this.interviewerSettings.AllowSyncWithHq;
+        }
+
+        public override void ViewDisappeared()
+        {
+            UnsubscribeFromMessages();
+            base.ViewDisappeared();
+        }
+
+        private void SubscribeOnMessages()
+        {
+            startingLongOperationMessageSubscriptionToken =
+                messenger.Subscribe<StartingLongOperationMessage>(this.DashboardItemOnStartingLongOperation);
+            stopLongOperationMessageSubscriptionToken =
+                messenger.Subscribe<StopingLongOperationMessage>(this.DashboardItemOnStopLongOperation);
+        }
+
+        private void UnsubscribeFromMessages()
+        {
+            startingLongOperationMessageSubscriptionToken.Dispose();
+            stopLongOperationMessageSubscriptionToken.Dispose();
         }
 
         public bool SynchronizationWithHqEnabled
@@ -177,6 +198,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         {
             this.RaisePropertyChanged(() => this.DashboardTitle);
             this.CreateNew.UpdateAssignment(e.AssignmentId);
+            this.CreateNew.Load(this.Synchronization);
         }
 
         private void OnItemsLoaded(object sender, EventArgs e) =>
@@ -261,8 +283,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         {
             base.Dispose();
 
-            startingLongOperationMessageSubscriptionToken.Dispose();
-            stopLongOperationMessageSubscriptionToken.Dispose();
+            UnsubscribeFromMessages();
 
             syncSubscription.Dispose();
 
@@ -307,7 +328,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         }
 
         public IMvxAsyncCommand ShowSearchCommand =>
-            new MvxAsyncCommand(viewModelNavigationService.NavigateToAsync<DashboardSearchViewModel>);
+            new MvxAsyncCommand(viewModelNavigationService.NavigateToAsync<SearchViewModel>);
 
         #region Offline synchronization
 

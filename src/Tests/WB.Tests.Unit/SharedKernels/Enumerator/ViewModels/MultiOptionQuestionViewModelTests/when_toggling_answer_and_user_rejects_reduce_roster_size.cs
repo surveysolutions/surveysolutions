@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
+using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -15,9 +16,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
 {
     internal class when_toggling_answer_and_user_rejects_reduce_roster_size: MultiOptionQuestionViewModelTestsContext
     {
-        [NUnit.Framework.OneTimeSetUp] public async Task context () {
-            questionGuid = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
-            questionId = Create.Entity.Identity(questionGuid, Empty.RosterVector);
+        [OneTimeSetUp] 
+        public async Task context () {
+            questionId = Create.Entity.Identity(Id.gA, Empty.RosterVector);
 
             var questionnaire = Mock.Of<IQuestionnaire>(_
                 => _.ShouldQuestionRecordAnswersOrder(questionId.Id) == true
@@ -51,12 +52,14 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
             await BecauseOf();
         }
 
-        public async Task BecauseOf() => await viewModel.ToggleAnswerAsync(viewModel.Options.First());
+        public async Task BecauseOf() 
+            => await viewModel.ToggleAnswerAsync(viewModel.Options.First());
 
-        [NUnit.Framework.Test] public void should_undo_checked_property_change () => viewModel.Options.First().Checked.Should().BeTrue();
+        [Test] 
+        public void should_undo_checked_property_change () 
+            => viewModel.Options.First().Checked.Should().BeTrue();
 
         static MultiOptionQuestionViewModel viewModel;
         static Identity questionId;
-        private static Guid questionGuid;
     }
 }

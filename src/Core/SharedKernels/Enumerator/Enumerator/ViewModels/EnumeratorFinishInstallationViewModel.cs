@@ -5,7 +5,7 @@ using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.GenericSubdomains.Portable.Tasks;
+using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;
@@ -25,13 +25,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private CancellationTokenSource cancellationTokenSource;
         private readonly IUserInteractionService userInteractionService;
         private const string StateKey = "identity";
+        private readonly IQRBarcodeScanService qrBarcodeScanService;
+        private readonly ISerializer serializer;
 
         protected EnumeratorFinishInstallationViewModel(
             IViewModelNavigationService viewModelNavigationService,
             IPrincipal principal,
             IDeviceSettings deviceSettings,
             ISynchronizationService synchronizationService,
-            ILogger logger, 
+            ILogger logger,
+            IQRBarcodeScanService qrBarcodeScanService,
+            ISerializer serializer,
             IUserInteractionService userInteractionService) : base(principal, viewModelNavigationService)
         {
             this.viewModelNavigationService = viewModelNavigationService;
@@ -39,8 +43,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             this.synchronizationService = synchronizationService;
             this.logger = logger;
             this.userInteractionService = userInteractionService;
-        }
 
+            this.qrBarcodeScanService = qrBarcodeScanService;
+            this.serializer = serializer;
+        }
+        
         protected override bool IsAuthenticationRequired => false;
 
         private string endpoint;
@@ -243,5 +250,46 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         protected abstract Task SaveUserToLocalStorageAsync(RestCredentials credentials, CancellationToken token);
 
         public void CancellInProgressTask() => this.cancellationTokenSource?.Cancel();
+
+        private IMvxAsyncCommand scanAsyncCommand;
+        public IMvxAsyncCommand ScanCommand
+        {
+            get { return this.scanAsyncCommand ?? (this.scanAsyncCommand = new MvxAsyncCommand(this.ScanAsync, () => !IsInProgress)); }
+        }
+
+        protected async Task ScanAsync()
+        {
+            this.IsInProgress = true;
+
+            try
+            {
+                var scanCode = await this.qrBarcodeScanService.ScanAsync();
+
+                if (scanCode?.Code != null)
+                {
+                    // Try parse scanned barcode as url
+                    // For barcode on download page which have a link to interviewer apk
+                    Uri.TryCreate(scanCode.Code, UriKind.Absolute, out var scannedUrl);
+                    if (scannedUrl != null)
+                        this.Endpoint = scannedUrl.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped);
+                    else
+                    {
+                        var finishInfo = this.serializer.Deserialize<FinishInstallationInfo>(scanCode.Code);
+
+                        this.Endpoint = finishInfo.Url;
+                        this.UserName = finishInfo.Login;
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                this.logger.Error("Qrbarcode reader error: ", e);
+                this.ErrorMessage = InterviewerUIResources.FinishInstallation_QrBarcodeReaderErrorMessage;
+            }
+            finally
+            {
+                this.IsInProgress = false;
+            }
+        }
     }
 }

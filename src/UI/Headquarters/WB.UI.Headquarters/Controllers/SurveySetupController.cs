@@ -332,7 +332,7 @@ namespace WB.UI.Headquarters.Controllers
             if (isFile)
             {
                 preloadedFileInfo = this.assignmentsImportReader.ReadTextFileInfo(model.File.InputStream, model.File.FileName);
-                preloadedFileInfo.QuestionnaireOrRosterName = questionnaire.VariableName;/*we expect that it is main file*/
+                preloadedFileInfo.QuestionnaireOrRosterName = questionnaire.VariableName ?? questionnaire.Title;/*we expect that it is main file*/
             }
             else if (isZip)
             {
@@ -360,7 +360,7 @@ namespace WB.UI.Headquarters.Controllers
 
             try
             {
-                var fileErrors = this.dataVerifier.VerifyFiles(model.File.FileName, new[] {preloadedFileInfo}, questionnaire).Take(10).ToArray();
+                var fileErrors = this.dataVerifier.VerifyFile(model.File.FileName, preloadedFileInfo, questionnaire).Take(10).ToArray();
                 if (fileErrors.Any())
                 {
                     return this.View("InterviewImportVerificationErrors",
