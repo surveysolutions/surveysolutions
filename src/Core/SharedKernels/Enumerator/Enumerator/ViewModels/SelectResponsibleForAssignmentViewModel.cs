@@ -80,7 +80,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             if (!this.CanReassign) return;
             this.CanReassign = false;
 
-            var selectedInterviewer = this.uiItems.First(x => x.IsSelected);
+            var selectedInterviewer = this.uiItems.Single(x => x.IsSelected);
 
             try
             {
@@ -88,6 +88,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                     await this.AssignToInterviewAsync(this.input.InterviewId.Value, selectedInterviewer);
                 else if(this.input.AssignmentId.HasValue)
                     this.AssignToAssignment(this.input.AssignmentId.Value, selectedInterviewer);
+                else throw new NotSupportedException("Reassign dialog support interview or assignment only");
             }
             finally
             {
@@ -105,8 +106,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
             this.assignmentsStorage.Store(assignment);
 
-            this.auditLogService.Write(new AssignResponsibleToAssignmentAuditLogEntity(assignmentId, interviewer.Id, interviewer.Login));
             this.mvxMessenger.Publish(new DashboardChangedMsg(this));
+            this.auditLogService.Write(new AssignResponsibleToAssignmentAuditLogEntity(assignmentId, interviewer.Id, interviewer.Login));
         }
 
         private async Task AssignToInterviewAsync(Guid interviewId, InterviewerToSelectViewModel interviewer)
@@ -116,10 +117,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             var command = new AssignInterviewerCommand(interviewId, this.principal.CurrentUserIdentity.UserId,
                 interviewer.Id);
 
+            this.commandService.Execute(command);
+
             this.auditLogService.Write(new AssignResponsibleToInterviewAuditLogEntity(interviewId,
                 interview.GetInterviewKey().ToString(), interviewer.Id, interviewer.Login));
-
-            this.commandService.Execute(command);
 
             await this.navigationService.NavigateToDashboardAsync(interviewId.FormatGuid());
         }
@@ -156,7 +157,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 return selectedAssignment.ResponsibleId;
             }
 
-            return null;
+            throw new NotSupportedException("Reassign dialog support interview or assignment only");
         }
 
         private class InterviewsQuantity

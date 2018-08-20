@@ -46,21 +46,5 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items
         private Task SelectInterviewerAsync() =>
             this.navigationService.NavigateToAsync<SelectResponsibleForAssignmentViewModel, SelectResponsibleForAssignmentArgs>(
                     new SelectResponsibleForAssignmentArgs(Assignment.Id));
-
-        //private void OnInterviewerSelected(object sender, InterviewerSelectedArgs e)
-        //{
-        //    if (Assignment.ResponsibleId != e.InterviewerId)
-        //        Assignment.ReceivedByInterviewerAt = null;
-        //    Assignment.ResponsibleId = e.InterviewerId;
-        //    Assignment.ResponsibleName = e.Login;
-
-        //    AssignmentsRepository.Store(Assignment);
-
-        //    auditLogService.Write(new AssignResponsibleToAssignmentAuditLogEntity(Assignment.Id, e.InterviewerId, e.Login));
-
-        //    BindTitles();
-
-        //    serviceLocator.GetInstance<IMvxMessenger>().Publish(new DashboardChangedMsg(this));
-        //}
     }
 }
