@@ -5,8 +5,6 @@ using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
-using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.Messages;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -159,7 +157,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 assignmentsRepository.DecreaseInterviewsCount(item.AssignmentId.Value);
 
                 this.UiItems
-                    .OfType<InterviewerAssignmentDashboardItemViewModel>()
+                    .OfType<AssignmentDashboardItemViewModel>()
                     .FirstOrDefault(x => x.AssignmentId == item.AssignmentId.Value)
                     ?.DecreaseInterviewsCount();
             }
