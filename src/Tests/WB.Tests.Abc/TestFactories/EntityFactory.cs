@@ -45,8 +45,10 @@ using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
+using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite.Implementation;
@@ -74,6 +76,7 @@ using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization.S
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.NonConficltingNamespace;
@@ -594,8 +597,7 @@ namespace WB.Tests.Abc.TestFactories
             bool? canBeDeleted = null,
             Guid? responsibleId = null,
             DateTime? receivedByInterviewerAt = null,
-            DateTime? fromHqSyncDateTime = null
-            )
+            DateTime? fromHqSyncDateTime = null)
         {
             interviewId = interviewId ?? Guid.NewGuid();
             return new InterviewView
@@ -2263,5 +2265,15 @@ namespace WB.Tests.Abc.TestFactories
 
         public InterviewerApplicationPatchApiView InterviewerApplicationPatchApiView(string fileName, string url) 
             => new InterviewerApplicationPatchApiView {FileName = fileName, Url = url};
+
+        public InterviewerAssignmentDashboardItemViewModel InterviewerAssignmentDashboardItemViewModel(IServiceLocator serviceLocator)
+        {
+            return new InterviewerAssignmentDashboardItemViewModel(serviceLocator);
+        }
+
+        public DashboardSubTitleViewModel DashboardSubTitleViewModel()
+        {
+            return new DashboardSubTitleViewModel();
+        }
     }
 }

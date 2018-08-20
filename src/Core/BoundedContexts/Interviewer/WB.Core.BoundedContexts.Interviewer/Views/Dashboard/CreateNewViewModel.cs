@@ -111,21 +111,12 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             }
             else
             {
-                // update UI assignment
-                var assignment = this.UiItems.OfType<InterviewerAssignmentDashboardItemViewModel>()
-                    .FirstOrDefault(x => x.AssignmentId == assignmentId.Value);
-
-                if (assignment != null)
-                {
-                    assignment.DecreaseInterviewsCount();
-                }
-                else
-                {
-                    AssignmentDocument assignmentDocument = this.assignmentsRepository.GetById(assignmentId.Value);
-                    if (assignmentDocument == null) return;
-                    assignmentDocument.CreatedInterviewsCount = assignmentDocument.CreatedInterviewsCount - 1;
-                    assignmentsRepository.Store(assignmentDocument);
-                }
+                this.assignmentsRepository.DecreaseInterviewsCount(assignmentId.Value);
+                
+                this.UiItems
+                    .OfType<InterviewerAssignmentDashboardItemViewModel>()
+                    .FirstOrDefault(x => x.AssignmentId == assignmentId.Value)
+                    ?.DecreaseInterviewsCount();
             }
         }
     }

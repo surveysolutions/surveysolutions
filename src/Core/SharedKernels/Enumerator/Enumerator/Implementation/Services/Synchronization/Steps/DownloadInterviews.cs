@@ -63,8 +63,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             var obsoleteInterviews = await this.FindObsoleteInterviewsAsync(localInterviews, remoteInterviews, this.Context.Progress, this.Context.CancellationToken);
 
             var localInterviewIdsToRemove = localInterviewsToRemove
-                .Select(interview => interview.InterviewId)
                 .Where(IsNotPresentOnHq)
+                .Select(interview => interview.InterviewId)
                 .Concat(obsoleteInterviews)
                 .ToArray();
 
@@ -149,9 +149,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         }
 
         
-        private bool IsNotPresentOnHq(Guid interviewId)
+        private bool IsNotPresentOnHq(InterviewView interview)
         {
-            return interviewSequenceViewRepository.GetById(interviewId) != null;
+            return interview.FromHqSyncDateTime == null;
         }
 
         private bool ShouldBeDownloadedBasedOnEventSequence(InterviewApiView interview)
