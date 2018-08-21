@@ -110,13 +110,14 @@ namespace WB.UI.Headquarters
                 new CaptchaModule(settingsProvider.AppSettings.Get("CaptchaService")),
                 new QuestionnaireUpgraderModule(),
                 new FileInfrastructureModule(),
-                new ProductVersionModule(typeof(HeadquartersUIModule).Assembly),
                 new PostgresKeyValueModule(cacheSettings),
                 new PostgresReadSideModule(
                     settingsProvider.ConnectionStrings[dbConnectionStringName].ConnectionString,
                     PostgresReadSideModule.ReadSideSchemaName, DbUpgradeSettings.FromFirstMigration<M001_InitDb>(),
                     cacheSettings,
-                    mappingAssemblies)
+                    mappingAssemblies),
+                new PostgresPlainStorageModule(postgresPlainStorageSettings),
+                new ProductVersionModule(typeof(HeadquartersUIModule).Assembly)
             );
 
             kernel.Load(new HeadquartersUIModule());
@@ -210,7 +211,6 @@ namespace WB.UI.Headquarters
             var mainModule = new MainModule(settingsProvider, applicationSecuritySection, legacyAssemblySettings);
 
             kernel.Load(
-                new PostgresPlainStorageModule(postgresPlainStorageSettings),
                 eventStoreModule,
                 new DataCollectionSharedKernelModule(),
                 new HeadquartersBoundedContextModule(basePath,
