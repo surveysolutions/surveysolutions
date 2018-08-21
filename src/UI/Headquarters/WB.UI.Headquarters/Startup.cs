@@ -74,7 +74,6 @@ namespace WB.UI.Headquarters
             var kernel = ConfigureNinject(app);
             var logger = ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<Startup>();
             logger.Info($@"Starting Headquarters {ServiceLocator.Current.GetInstance<IProductVersion>()}");
-            UpdateAppVersion();
             ConfigureAuth(app);
             InitializeAppShutdown(app);
             InitializeMVC();
@@ -281,9 +280,6 @@ namespace WB.UI.Headquarters
             ViewEngines.Engines.Add(new RazorViewEngine());
             ValueProviderFactories.Factories.Add(new JsonValueProviderFactory());
         }
-
-        private static void UpdateAppVersion()
-            => ServiceLocator.Current.GetInstance<IProductVersionHistory>().RegisterCurrentVersion();
 
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
