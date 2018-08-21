@@ -221,6 +221,9 @@
   </data>
   <data name="ApkRequested" xml:space="preserve">
     <value>New application file requested</value>
+  </data>  
+   <data name="SupervisorApkRequested" xml:space="preserve">
+    <value>New Supervisor application file requested</value>
   </data>
   <data name="ExtendedApkRequested" xml:space="preserve">
     <value>New extended application file requested</value>
@@ -231,6 +234,9 @@
   <data name="PatchRequestedFormat" xml:space="preserve">
     <value>Patch file requested for version {0}</value>
   </data>
+  <data name="SupervisorPatchRequestedFormat" xml:space="preserve">
+    <value>Supervisor patch file requested for version {0}</value>
+  </data>
   <data name="GetInterviewPackageV3" xml:space="preserve">
     <value>&lt;b&gt;V3&lt;/b&gt; Download interview package: {0}</value>
   </data>
@@ -239,5 +245,8 @@
   </data>
   <data name="CheckObsoleteInterviews" xml:space="preserve">
     <value>Check for obsolete interviews. Request: &lt;pre&gt;{0}&lt;/pre&gt;</value>
+  </data>  
+  <data name="CheckIsPackageDuplicatedFormat" xml:space="preserve">
+    <value>Check for duplicated interview. Interview: &lt;pre&gt;{0}&lt;/pre&gt;</value>
   </data>
 </root>

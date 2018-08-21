@@ -336,8 +336,8 @@ namespace WB.Tests.Abc.TestFactories
         public InterviewTreeIntegerQuestion InterviewTreeIntegerQuestion(int answer = 42)
             => new InterviewTreeIntegerQuestion(answer);
 
-        public InterviewBinaryDataDescriptor InterviewBinaryDataDescriptor()
-            => new InterviewBinaryDataDescriptor(Guid.NewGuid(), "test.jpeg", null, () => new byte[0]);
+        public InterviewBinaryDataDescriptor InterviewBinaryDataDescriptor(Guid? interviewId = null, string fileName = null)
+            => new InterviewBinaryDataDescriptor(interviewId ?? Guid.NewGuid(), fileName ?? "test.jpeg", null, () => new byte[0]);
 
         public InterviewComment InterviewComment(string comment = null)
             => new InterviewComment { Comment = comment };
