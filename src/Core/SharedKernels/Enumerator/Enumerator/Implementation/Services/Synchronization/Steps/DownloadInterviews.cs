@@ -108,7 +108,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         Description = string.Format(InterviewerUIResources.Synchronization_Download_Description_Format,
                             statistics.RejectedInterviewsCount + statistics.NewInterviewsCount + 1, interviews.Count,
                             InterviewerUIResources.Synchronization_Interviews),
-                        Stage = SyncStage.UpdatingAssignments
+                        Stage = SyncStage.UpdatingAssignments,
+                        StageExtraInfo = new Dictionary<string, string>()
+                        {
+                            { "processedCount", (statistics.RejectedInterviewsCount + statistics.NewInterviewsCount + 1).ToString() },
+                            { "totalCount", interviews.Count.ToString()}
+                        }
                     });
 
                     await this.questionnaireDownloader.DownloadQuestionnaireAsync(interview.QuestionnaireIdentity, statistics, transferProgress, cancellationToken);
