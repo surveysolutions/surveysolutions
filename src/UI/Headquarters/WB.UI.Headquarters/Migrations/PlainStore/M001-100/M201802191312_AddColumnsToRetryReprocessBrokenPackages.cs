@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using FluentMigrator;
 
 namespace WB.UI.Headquarters.Migrations.PlainStore

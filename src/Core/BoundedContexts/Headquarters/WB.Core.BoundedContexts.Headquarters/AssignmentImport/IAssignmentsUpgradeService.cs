@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade;
-using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport

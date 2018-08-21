@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading;
-using Microsoft;
+
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 {
     internal interface ITabularDataToExternalStatPackageExportService 

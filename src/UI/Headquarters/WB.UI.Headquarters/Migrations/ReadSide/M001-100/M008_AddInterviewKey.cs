@@ -8,7 +8,6 @@ using FluentMigrator;
 using Newtonsoft.Json;
 using NLog;
 using Npgsql;
-using NpgsqlTypes;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;

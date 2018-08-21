@@ -1,7 +1,6 @@
 using System;
 using FluentAssertions;
 using Moq;
-using NHibernate;
 using Npgsql;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
@@ -9,7 +8,6 @@ using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Mappings;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.Transactions;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Tests.Integration.PostgreSQLTests;

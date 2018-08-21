@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Net.Http;
 using System.Web.Http;
-using System.Web.Http.Hosting;
 using Microsoft.Owin.Security;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
@@ -19,7 +18,6 @@ using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Tests.Abc.Storage;
-using WB.UI.Headquarters.API.DataCollection;
 using WB.UI.Headquarters.API.DataCollection.Interviewer;
 using WB.UI.Headquarters.Controllers;
 

@@ -1,6 +1,5 @@
 ﻿using System;
 using Moq;
-using NHibernate;
 using Npgsql;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Mappings;
@@ -74,6 +73,6 @@ namespace WB.Tests.Integration.TeamInterviewsFactoryTests
 
         protected static NpgsqlConnection pgSqlConnection;
         private static string connectionString;
-        private static IUnitOfWork postgresTransactionManager;
+        protected static IUnitOfWork postgresTransactionManager;
     }
 }

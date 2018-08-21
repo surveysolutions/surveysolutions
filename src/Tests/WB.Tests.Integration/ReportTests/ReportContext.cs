@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Infrastructure.Native.Storage;
+using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 
 namespace WB.Tests.Integration.ReportTests
@@ -23,6 +24,8 @@ namespace WB.Tests.Integration.ReportTests
         public readonly SvReport Sv;
         public readonly HqReport Hq;
 
+        protected IUnitOfWork transactionManager;
+
         protected PostgreReadSideStorage<InterviewSummary> CreateInterviewSummaryRepository()
         {
             var sessionFactory = IntegrationCreate.SessionFactory(connectionStringBuilder.ConnectionString, 
@@ -31,7 +34,8 @@ namespace WB.Tests.Integration.ReportTests
                         typeof(QuestionAnswerMap),
                         typeof(InterviewCommentedStatusMap)
                 }, true);
-            transactionManager = new CqrsPostgresTransactionManager(sessionFactory ?? Mock.Of<ISessionFactory>());
+
+            transactionManager = Mock.Of<IUnitOfWork>(x => x.Session == sessionFactory.OpenSession());
 
             pgSqlConnection = new NpgsqlConnection(connectionStringBuilder.ConnectionString);
             pgSqlConnection.Open();

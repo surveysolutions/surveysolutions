@@ -3,9 +3,7 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.Transactions;
 using WB.Core.Infrastructure.Versions;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Models.VersionCheck;
@@ -22,7 +20,7 @@ namespace WB.UI.Headquarters.Services
         private static readonly int DelayOnErrorInSeconds = 3 * 60;
 
         private readonly IPlainKeyValueStorage<VersionCheckingInfo> appSettingsStorage;
-        private IPlainTransactionManager plainTransactionManager => ServiceLocator.Current.GetInstance<IPlainTransactionManager>();
+        
         private readonly IProductVersion productVersion;
 
         public VersionCheckService(IPlainKeyValueStorage<VersionCheckingInfo> appSettingsStorage, IProductVersion productVersion)

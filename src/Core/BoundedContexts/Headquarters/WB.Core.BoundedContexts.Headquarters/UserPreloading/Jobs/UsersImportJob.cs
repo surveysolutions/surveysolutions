@@ -9,8 +9,6 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable.Tasks;
-using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.Transactions;
 
 namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
 {
@@ -19,9 +17,6 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
     {
         private ILogger logger => ServiceLocator.Current.GetInstance<ILoggerProvider>()
             .GetFor<UsersImportJob>();
-
-        private IPlainTransactionManager transactionManager => ServiceLocator.Current
-            .GetInstance<IPlainTransactionManager>();
 
         private IUserImportService importUsersService => ServiceLocator.Current
             .GetInstance<IUserImportService>();

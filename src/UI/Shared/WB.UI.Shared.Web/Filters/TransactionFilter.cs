@@ -1,6 +1,4 @@
 using System.Web.Mvc;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.Infrastructure.Transactions;
 using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.UI.Shared.Web.Filters
