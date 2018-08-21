@@ -51,7 +51,7 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                                 select agg.teamleadname, agg.responsiblename, agg.answer, count(distinct interview_id)
                                 from (
                                     select 
-                                        case when totals then null else s.teamleadid end as teamleadid,
+                                        case when totals then null else s.teamleadid   end as teamleadid,
                                         case when totals then null else s.teamleadname end as teamleadname,
                                         case when detailed  then s.responsiblename else null end as responsiblename, 
                                         v1.interview_id, v1.answer 
