@@ -60,7 +60,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         removedQuestionnairesCounter, questionnairesToRemove.Count),
                     Statistics = this.Context.Statistics,
                     Status = SynchronizationStatus.Download,
-                    Stage = SyncStage.CheckObsoleteQuestionnaires
+                    Stage = SyncStage.CheckObsoleteQuestionnaires,
+                    StageExtraInfo = new Dictionary<string, string>()
+                    {
+                        { "processedCount", removedQuestionnairesCounter.ToString() },
+                        { "totalCount", questionnairesToRemove.Count.ToString()}
+                    }
                 });
 
                 var questionnaireId = questionnaireIdentity.ToString();
