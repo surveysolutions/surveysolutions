@@ -1,7 +1,6 @@
 ﻿using System.Web.Mvc;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.UI.Headquarters.Filters

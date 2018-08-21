@@ -20,7 +20,6 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Infrastructure.Native.Storage.Postgre;
-using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 {

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
@@ -8,7 +7,6 @@ using System.Web.Http.Results;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
-using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;

@@ -9,8 +9,6 @@ using WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Infrastructure.Native.Threading;
 
@@ -31,9 +29,6 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
         private IQuestionnaireStorage questionnaireStorage => ServiceLocator.Current
             .GetInstance<IQuestionnaireStorage>();
 
-        private IPlainTransactionManager plainTransactionManager => ServiceLocator.Current
-            .GetInstance<IPlainTransactionManager>();
-        
         private SampleImportSettings sampleImportSettings => ServiceLocator.Current
             .GetInstance<SampleImportSettings>();
         private AssignmentsImportTask assignmentsImportTask => ServiceLocator.Current

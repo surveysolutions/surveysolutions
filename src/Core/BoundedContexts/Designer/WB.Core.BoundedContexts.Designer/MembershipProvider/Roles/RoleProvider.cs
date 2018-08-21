@@ -4,8 +4,6 @@ using System.Configuration.Provider;
 using System.Linq;
 using System.Web.Hosting;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.Infrastructure.Transactions;
-using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Designer.MembershipProvider.Roles
 {

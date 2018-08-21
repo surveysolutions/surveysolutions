@@ -6,8 +6,6 @@ using Ionic.Zlib;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
-using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 

@@ -1,6 +1,5 @@
 using System;
 using Moq;
-using NHibernate;
 using Npgsql;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Mappings;

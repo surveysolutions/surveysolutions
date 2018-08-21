@@ -5,8 +5,6 @@ using System.Net;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
 using Newtonsoft.Json;
-using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
-using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;

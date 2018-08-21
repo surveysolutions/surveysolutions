@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel;
 using FluentMigrator;
-using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 
 namespace WB.UI.Headquarters.Migrations.PlainStore
 {

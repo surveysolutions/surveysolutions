@@ -1,7 +1,4 @@
 ﻿using Microsoft.AspNet.SignalR.Hubs;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.Transactions;
 
 namespace WB.UI.Headquarters.API.WebInterview.Pipeline
 {

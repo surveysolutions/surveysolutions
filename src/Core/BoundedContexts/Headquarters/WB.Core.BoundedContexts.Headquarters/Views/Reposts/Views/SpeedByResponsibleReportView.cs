@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.Owin.Security.Provider;
+﻿using System.Collections.Generic;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views

@@ -3,8 +3,6 @@ using System.Diagnostics;
 using Quartz;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.Transactions;
 using WB.Infrastructure.Native.Monitoring;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Jobs
@@ -51,8 +49,5 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Jo
         private ILogger logger =>
             ServiceLocator.Current.GetInstance<ILoggerProvider>()
                 .GetFor<RefreshReportsJob>();
-
-        private IPlainTransactionManager transactionManager => ServiceLocator.Current
-            .GetInstance<IPlainTransactionManager>();
     }
 }

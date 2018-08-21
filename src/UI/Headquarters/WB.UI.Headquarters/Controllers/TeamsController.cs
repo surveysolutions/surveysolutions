@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Linq;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Headquarters.Services;

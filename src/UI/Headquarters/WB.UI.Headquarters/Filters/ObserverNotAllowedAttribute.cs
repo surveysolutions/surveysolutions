@@ -3,7 +3,6 @@ using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
-using WB.UI.Headquarters.Resources;
 
 namespace WB.UI.Headquarters.Filters
 {
