@@ -1,4 +1,3 @@
-using Humanizer;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Security

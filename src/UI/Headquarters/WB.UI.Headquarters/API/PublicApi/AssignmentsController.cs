@@ -9,7 +9,6 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
-using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -26,7 +25,6 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Headquarters.API.PublicApi.Models;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Code.CommandTransformation;
-using WB.UI.Headquarters.Services;
 
 namespace WB.UI.Headquarters.API.PublicApi
 {

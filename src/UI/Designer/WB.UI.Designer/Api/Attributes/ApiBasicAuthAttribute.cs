@@ -12,7 +12,6 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membersh
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.Accounts;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.Infrastructure.Transactions;
 using WB.UI.Designer.Resources;
 
 namespace WB.UI.Designer.Api.Attributes

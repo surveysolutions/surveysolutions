@@ -3,7 +3,6 @@ using System.Web.Http.Filters;
 using StackExchange.Exceptional;
 using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Monitoring;
-using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.Filters
 {

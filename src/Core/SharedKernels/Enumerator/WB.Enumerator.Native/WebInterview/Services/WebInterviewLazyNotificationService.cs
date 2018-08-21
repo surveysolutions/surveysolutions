@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Concurrent;
 using System.Threading.Tasks;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 

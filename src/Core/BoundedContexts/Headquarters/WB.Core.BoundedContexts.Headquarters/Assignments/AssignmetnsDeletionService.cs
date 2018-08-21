@@ -1,5 +1,3 @@
-using NHibernate;
-using Ninject;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Infrastructure.Native.Storage.Postgre;
 

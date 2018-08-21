@@ -1,5 +1,4 @@
-﻿using System.Data;
-using FluentMigrator;
+﻿using FluentMigrator;
 
 namespace WB.UI.Headquarters.Migrations.ReadSide
 {

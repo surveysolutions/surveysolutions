@@ -1,10 +1,8 @@
 ﻿using System;
-using System.Linq;
 using Quartz;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 
 namespace WB.Core.BoundedContexts.Headquarters.WebInterview.Jobs

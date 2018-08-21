@@ -3,7 +3,6 @@ using System.Configuration;
 using Npgsql;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 
 namespace WB.Tests.Integration
 {

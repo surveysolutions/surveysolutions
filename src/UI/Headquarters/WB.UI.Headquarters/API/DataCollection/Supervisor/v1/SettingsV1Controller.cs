@@ -1,7 +1,6 @@
 ﻿using System.Net.Http;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Models.CompanyLogo;

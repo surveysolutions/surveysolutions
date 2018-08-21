@@ -12,7 +12,6 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -35,7 +34,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
         protected HqQuestionnaireStorage questionnaireStorage;
         protected InMemoryKeyValueStorage<QuestionnaireDocument> questionnaireDocumentRepository;
         private PostgresPlainStorageRepository<QuestionnaireCompositeItem> compositeItemsRepository;
-        private IUnitOfWork plainTransactionManager;
+        protected IUnitOfWork plainTransactionManager;
 
 
         [OneTimeSetUp]

@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
-using FluentAssertions;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 

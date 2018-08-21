@@ -1,9 +1,5 @@
-using System;
 using System.Threading.Tasks;
-using System.Web;
 using System.Web.Http.Filters;
-using Ninject;
-using Ninject.Web.Common;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
@@ -14,7 +10,6 @@ using WB.UI.Designer.Services;
 using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.Modules;
 using WB.UI.Shared.Web.Settings;
-using IKernel = Ninject.IKernel;
 
 
 namespace WB.UI.Designer.App_Start
