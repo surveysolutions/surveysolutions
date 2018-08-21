@@ -49,6 +49,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.deviceSettings = deviceSettings;
         }
 
+        public async Task<InterviewUploadState> GetInterviewUploadState(Guid interviewId, EventStreamSignatureTag eventStreamSignatureTag, CancellationToken cancellationToken)
+        {
+            var result = await this.syncClient.SendAsync<GetInterviewUploadStateRequest, GetInterviewUploadStateResponse>(new GetInterviewUploadStateRequest
+            {
+                InterviewId = interviewId,
+                Check = eventStreamSignatureTag
+            }, cancellationToken);
+
+            return result.UploadState;
+        }
+
         public Task UploadInterviewAsync(Guid interviewId, InterviewPackageApiView completedInterview,
             IProgress<TransferProgress> transferProgress, CancellationToken token)
         {

@@ -88,6 +88,7 @@ namespace WB.UI.Supervisor.ServiceLocation
         private void BindOfflineServices(IIocRegistry registry)
         {
             registry.Bind<IHandleCommunicationMessage, SupervisorInterviewsHandler>();
+            registry.Bind<IHandleCommunicationMessage, SupervisorInterviewUploadStateHandler>();
             registry.Bind<IHandleCommunicationMessage, SupervisorQuestionnairesHandler>();
             registry.Bind<IHandleCommunicationMessage, SupervisorBinaryHandler>();
             registry.Bind<IHandleCommunicationMessage, SupervisorAuditLogHandler>();

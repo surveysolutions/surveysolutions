@@ -74,7 +74,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             requestHandler.RegisterHandler<UploadInterviewRequest, OkResponse>(UploadInterview);
             requestHandler.RegisterHandler<SupervisorIdRequest, SupervisorIdResponse>(GetSupervisorId);
         }
-
+        
         public Task<OkResponse> UploadInterview(UploadInterviewRequest request)
         {
             var interview = request.Interview;

@@ -130,6 +130,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return Service.GetInterviewDetailsAsync(interviewId, transferProgress, token);
         }
 
+        public Task<InterviewUploadState> GetInterviewUploadState(Guid interviewId, EventStreamSignatureTag eventStreamSignatureTag, CancellationToken cancellationToken)
+        {
+            return Service.GetInterviewUploadState(interviewId, eventStreamSignatureTag, cancellationToken);
+        }
+
         public Task UploadInterviewAsync(Guid interviewId, InterviewPackageApiView completedInterview,
             IProgress<TransferProgress> transferProgress, CancellationToken token)
         {

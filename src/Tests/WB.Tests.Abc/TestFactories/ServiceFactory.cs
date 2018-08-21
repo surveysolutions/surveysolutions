@@ -218,7 +218,8 @@ namespace WB.Tests.Abc.TestFactories
             ISnapshotStoreWithCache snapshotStoreWithCache = null,
             IPlainStorage<InterviewMultimediaView> interviewMultimediaViewRepository = null,
             IPlainStorage<InterviewFileView> interviewFileViewRepository = null,
-            IPlainStorage<InterviewSequenceView, Guid> interviewSequenceStorage = null)
+            IPlainStorage<InterviewSequenceView, Guid> interviewSequenceStorage = null,
+            IInterviewEventStreamOptimizer eventStreamOptimizer = null)
             => new InterviewerInterviewAccessor(
                 questionnaireRepository ?? Mock.Of<IPlainStorage<QuestionnaireView>>(),
                 Mock.Of<IPlainStorage<PrefilledQuestionView>>(),
@@ -231,7 +232,7 @@ namespace WB.Tests.Abc.TestFactories
                 aggregateRootRepositoryWithCache ?? Mock.Of<IEventSourcedAggregateRootRepositoryWithCache>(),
                 snapshotStoreWithCache ?? Mock.Of<ISnapshotStoreWithCache>(),
                 synchronizationSerializer ?? Mock.Of<IJsonAllTypesSerializer>(),
-                Mock.Of<IInterviewEventStreamOptimizer>(),
+                eventStreamOptimizer ?? Mock.Of<IInterviewEventStreamOptimizer>(),
                 Mock.Of<ILiteEventRegistry>(),
                 interviewSequenceStorage ?? Mock.Of<IPlainStorage<InterviewSequenceView, Guid>>());
 
@@ -844,6 +845,7 @@ namespace WB.Tests.Abc.TestFactories
             IPlainStorage<BrokenInterviewPackageView, int?> brokenInterviewStorage = null,
             IPrincipal principal = null,
             IPlainStorage<InterviewerDocument> interviewerViewRepository = null,
+            IPlainStorage<SuperivsorReceivedPackageLogEntry, int> receivedPackagesLog= null,
             IAssignmentDocumentsStorage assignments = null)
         {
             return new SupervisorInterviewsHandler(
@@ -854,7 +856,7 @@ namespace WB.Tests.Abc.TestFactories
                 commandService ?? Mock.Of<ICommandService>(), 
                 Mock.Of<ILogger>(),
                 brokenInterviewStorage ?? Mock.Of<IPlainStorage<BrokenInterviewPackageView, int?>>(),
-                new SqliteInmemoryStorage<SuperivsorReceivedPackageLogEntry, int>(),
+                receivedPackagesLog ?? new SqliteInmemoryStorage<SuperivsorReceivedPackageLogEntry, int>(),
                 principal ?? Mock.Of<IPrincipal>(),
                 assignments ?? Create.Storage.AssignmentDocumentsInmemoryStorage());
         }
@@ -946,6 +948,36 @@ namespace WB.Tests.Abc.TestFactories
             };
 
             return result;
+        }
+
+        public InterviewerUploadInterviews InterviewerUploadInterviews(
+            IInterviewerInterviewAccessor interviewFactory = null,
+            IPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage = null,
+            ILogger logger = null,
+            IPlainStorage<InterviewFileView> imagesStorage = null,
+            IAudioFileStorage audioFileStorage = null,
+            ISynchronizationService synchronizationService = null,
+            int sortOrder = 0,
+            IPlainStorage<InterviewView> interviewViewRepository = null)
+        {
+            var step =  new InterviewerUploadInterviews(
+                interviewFactory ?? Mock.Of<IInterviewerInterviewAccessor>(),
+                interviewMultimediaViewStorage ?? new InMemoryPlainStorage<InterviewMultimediaView>(),
+                logger ?? Mock.Of<ILogger>(),
+                imagesStorage ?? new InMemoryPlainStorage<InterviewFileView>(),
+                audioFileStorage ?? Mock.Of<IAudioFileStorage>(),
+                synchronizationService ?? Mock.Of<ISynchronizationService>(),
+                sortOrder,
+                interviewViewRepository ?? Mock.Of<IPlainStorage<InterviewView>>()
+            );
+
+            step.Context = new EnumeratorSynchonizationContext
+            {
+                Progress = new Progress<SyncProgressInfo>(),
+                Statistics = new SynchronizationStatistics()
+            };
+
+            return step;
         }
     }
 
