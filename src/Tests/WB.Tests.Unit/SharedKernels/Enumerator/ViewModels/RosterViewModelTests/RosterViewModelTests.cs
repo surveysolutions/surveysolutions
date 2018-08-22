@@ -34,11 +34,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
             viewModelFactory.Setup(x => x.GetNew<GroupViewModel>())
                 .Returns(() => new FakeGroupViewModel());
 
+            var questionnaireRepositoryMock = new Mock<IQuestionnaireStorage>{DefaultValue = DefaultValue.Mock };
             return new RosterViewModel(interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 interviewViewModelFactory ?? viewModelFactory.Object,
                 eventRegistry ?? Create.Service.LiteEventRegistry(),
                 Stub.MvxMainThreadDispatcher(),
-                questionnaireRepository?? Mock.Of<IQuestionnaireStorage>());
+                questionnaireRepository ?? questionnaireRepositoryMock.Object);
         }
     }
 }
