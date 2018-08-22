@@ -222,8 +222,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return response.Assignments;
         }
 
-        private static Version interviewerBoundedContextVersion;
-
         public Task<string> LoginAsync(LogonInfo logonInfo, RestCredentials credentials, CancellationToken? token = null)
         {
             return Task.FromResult("offline sync token");
@@ -236,13 +234,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public async Task CanSynchronizeAsync(RestCredentials credentials = null, CancellationToken? token = null)
         {
-            if (interviewerBoundedContextVersion == null)
-            {
-                interviewerBoundedContextVersion = 
-                    ReflectionUtils.GetAssemblyVersion(typeof(InterviewerBoundedContextAssemblyIndicator));
-            }
-
-            var request = new CanSynchronizeRequest(interviewerBoundedContextVersion.Revision, 
+            var request = new CanSynchronizeRequest(this.deviceSettings.GetApplicationVersionCode(), 
                 this.principal.CurrentUserIdentity.UserId,
                 this.principal.CurrentUserIdentity.SecurityStamp,
                 settings.LastHqSyncTimestamp);
