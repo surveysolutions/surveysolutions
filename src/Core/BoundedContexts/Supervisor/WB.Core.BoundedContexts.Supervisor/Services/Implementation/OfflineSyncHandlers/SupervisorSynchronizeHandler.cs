@@ -48,9 +48,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                 });
             }
 
-            var expectedVersion = ReflectionUtils.GetAssemblyVersion(typeof(SupervisorBoundedContextAssemblyIndicator));
-
-            if (expectedVersion.Revision != arg.InterviewerBuildNumber)
+            var supervisorBuildNumber = this.settings.GetApplicationVersionCode();
+            if (supervisorBuildNumber < arg.InterviewerBuildNumber)
             {
                 return Task.FromResult(new CanSynchronizeResponse
                 {
@@ -68,15 +67,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                     Reason = SyncDeclineReason.NotATeamMember
                 });
             }
-
-            //if (user.SecurityStamp != arg.SecurityStamp)
-            //{
-            //    return Task.FromResult(new CanSynchronizeResponse
-            //    {
-            //        CanSyncronize = false,
-            //        Reason = SyncDeclineReason.InvalidPassword
-            //    });
-            //}
 
             if (user.IsLockedByHeadquarters || user.IsLockedBySupervisor)
             {
