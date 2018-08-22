@@ -45,7 +45,7 @@ namespace WB.UI.Headquarters.Controllers
             this.interviewerVersionReader = interviewerVersionReader;
         }
 
-        public ActionResult Index(Guid id, DateTime? startDateTime = null)
+        public ActionResult Index(Guid id, DateTime? startDateTime = null, bool showErrorMessage = false)
         {
             var userView = usersRepository.GetUser(new UserViewInputModel(id));
             if (userView == null || (!userView.IsInterviewer() && !userView.IsSupervisor()))
@@ -76,7 +76,7 @@ namespace WB.UI.Headquarters.Controllers
                 {
                     Time = r.Time,
                     Type = r.Type,
-                    Message = GetUserMessage(r)
+                    Message = GetUserMessage(r, showErrorMessage)
                 }).OrderByDescending(i => i.Time).ToArray()
             }).OrderByDescending(i => i.Date).ToArray();
 
@@ -95,7 +95,7 @@ namespace WB.UI.Headquarters.Controllers
             return View(model);
         }
 
-        public FileResult DownloadTabLog(Guid id)
+        public FileResult DownloadTabLog(Guid id, bool showErrorMessage = false)
         {
             var userView = usersRepository.GetUser(new UserViewInputModel(id));
             if (userView == null || (!userView.IsInterviewer() && !userView.IsSupervisor()))
@@ -124,7 +124,7 @@ namespace WB.UI.Headquarters.Controllers
                     foreach (var record in records)
                     {
                         csvWriter.WriteField(record.Time.ToString(CultureInfo.InvariantCulture));
-                        csvWriter.WriteField(GetUserMessage(record));
+                        csvWriter.WriteField(GetUserMessage(record, showErrorMessage));
                         csvWriter.NextRecord();
                     }
 
@@ -137,7 +137,7 @@ namespace WB.UI.Headquarters.Controllers
             }
         }
 
-        private string GetUserMessage(AuditLogRecord record)
+        private string GetUserMessage(AuditLogRecord record, bool showErrorMessage)
         {
             switch (record.Type)
             {
@@ -198,8 +198,10 @@ namespace WB.UI.Headquarters.Controllers
                         : string.Join(", ", statusMessages);
                     return $"{InterviewerAuditRecord.SynchronizationCompleted} {statusMessage}";
                 case AuditLogEntityType.SynchronizationFailed:
-                    //var synchronizationCompletedAuditLogEntity = record.GetEntity<SynchronizationCompletedAuditLogEntity>();
-                    return InterviewerAuditRecord.SynchronizationFailed;
+                    if (!showErrorMessage)
+                        return InterviewerAuditRecord.SynchronizationFailed;
+                    var synchronizationFailedAuditLogEntity = record.GetEntity<SynchronizationFailedAuditLogEntity>();
+                    return InterviewerAuditRecord.SynchronizationFailed + @" : " + (synchronizationFailedAuditLogEntity.ExceptionMessage ?? @"<empty>");
                 case AuditLogEntityType.OpenApplication:
                     //var openApplicationAuditLogEntity = record.GetEntity<OpenApplicationAuditLogEntity>();
                     return InterviewerAuditRecord.OpenApplication;
