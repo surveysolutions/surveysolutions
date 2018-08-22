@@ -897,6 +897,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             return question?.IsSignature ?? false;
         }
 
+        public bool IsRosterTriggeredByOrderedMultiQuestion(Guid rosterId)
+        {
+            if (!IsRosterGroup(rosterId))
+                return false;
+
+            if (IsFixedRoster(rosterId))
+                return false;
+
+            var rosterSizeQuestionId = GetRosterSizeQuestion(rosterId);
+
+            return ShouldQuestionRecordAnswersOrder(rosterSizeQuestionId);
+        }
+
         public bool HasVariable(Guid variableId) => this.GetVariable(variableId) != null;
         public bool HasStaticText(Guid entityId) => this.GetStaticText(entityId) != null;
 
