@@ -27,7 +27,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
 
         protected RosterViewModel CreateViewModel(IStatefulInterviewRepository interviewRepository = null,
             IInterviewViewModelFactory interviewViewModelFactory = null,
-            ILiteEventRegistry eventRegistry = null)
+            ILiteEventRegistry eventRegistry = null, 
+            IQuestionnaireStorage questionnaireRepository = null)
         {
             var viewModelFactory = new Mock<IInterviewViewModelFactory>();
             viewModelFactory.Setup(x => x.GetNew<GroupViewModel>())
@@ -36,7 +37,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.RosterViewModelTests
             return new RosterViewModel(interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 interviewViewModelFactory ?? viewModelFactory.Object,
                 eventRegistry ?? Create.Service.LiteEventRegistry(),
-                Stub.MvxMainThreadDispatcher());
+                Stub.MvxMainThreadDispatcher(),
+                questionnaireRepository?? Mock.Of<IQuestionnaireStorage>());
         }
     }
 }
