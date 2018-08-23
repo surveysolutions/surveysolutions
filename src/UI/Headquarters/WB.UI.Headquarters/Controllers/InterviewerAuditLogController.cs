@@ -30,19 +30,22 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IUserViewFactory usersRepository;
         private readonly IDeviceSyncInfoRepository deviceSyncInfoRepository;
         private readonly IInterviewerVersionReader interviewerVersionReader;
+        private readonly IAuthorizedUser authorizedUser;
 
         public InterviewerAuditLogController(ICommandService commandService, 
             ILogger logger, 
             IAuditLogFactory auditLogFactory,
             IUserViewFactory usersRepository,
             IDeviceSyncInfoRepository deviceSyncInfoRepository,
-            IInterviewerVersionReader interviewerVersionReader) 
+            IInterviewerVersionReader interviewerVersionReader,
+            IAuthorizedUser authorizedUser) 
             : base(commandService, logger)
         {
             this.auditLogFactory = auditLogFactory;
             this.usersRepository = usersRepository;
             this.deviceSyncInfoRepository = deviceSyncInfoRepository;
             this.interviewerVersionReader = interviewerVersionReader;
+            this.authorizedUser = authorizedUser;
         }
 
         public ActionResult Index(Guid id, DateTime? startDateTime = null, bool showErrorMessage = false)
@@ -76,7 +79,8 @@ namespace WB.UI.Headquarters.Controllers
                 {
                     Time = r.Time,
                     Type = r.Type,
-                    Message = GetUserMessage(r, showErrorMessage)
+                    Message = GetUserMessage(r),
+                    Description = GetMessageDescription(r)
                 }).OrderByDescending(i => i.Time).ToArray()
             }).OrderByDescending(i => i.Date).ToArray();
 
@@ -124,7 +128,12 @@ namespace WB.UI.Headquarters.Controllers
                     foreach (var record in records)
                     {
                         csvWriter.WriteField(record.Time.ToString(CultureInfo.InvariantCulture));
-                        csvWriter.WriteField(GetUserMessage(record, showErrorMessage));
+                        var message = GetUserMessage(record);
+                        if (authorizedUser.IsAdministrator)
+                        {
+                            message += "\r\n" + GetMessageDescription(record);
+                        }
+                        csvWriter.WriteField(message);
                         csvWriter.NextRecord();
                     }
 
@@ -137,7 +146,7 @@ namespace WB.UI.Headquarters.Controllers
             }
         }
 
-        private string GetUserMessage(AuditLogRecord record, bool showErrorMessage)
+        private string GetUserMessage(AuditLogRecord record)
         {
             switch (record.Type)
             {
@@ -198,10 +207,12 @@ namespace WB.UI.Headquarters.Controllers
                         : string.Join(", ", statusMessages);
                     return $"{InterviewerAuditRecord.SynchronizationCompleted} {statusMessage}";
                 case AuditLogEntityType.SynchronizationFailed:
-                    if (!showErrorMessage)
-                        return InterviewerAuditRecord.SynchronizationFailed;
-                    var synchronizationFailedAuditLogEntity = record.GetEntity<SynchronizationFailedAuditLogEntity>();
-                    return InterviewerAuditRecord.SynchronizationFailed + @" : " + (synchronizationFailedAuditLogEntity.ExceptionMessage ?? @"<empty>");
+                    if (authorizedUser?.IsAdministrator ?? false)
+                    {
+                        var synchronizationFailedAuditLogEntity = record.GetEntity<SynchronizationFailedAuditLogEntity>();
+                        return InterviewerAuditRecord.SynchronizationFailed + @" : " + (synchronizationFailedAuditLogEntity.ExceptionMessage ?? @"<empty>");
+                    }
+                    return InterviewerAuditRecord.SynchronizationFailed;
                 case AuditLogEntityType.OpenApplication:
                     //var openApplicationAuditLogEntity = record.GetEntity<OpenApplicationAuditLogEntity>();
                     return InterviewerAuditRecord.OpenApplication;
@@ -213,6 +224,22 @@ namespace WB.UI.Headquarters.Controllers
                     return InterviewerAuditRecord.AssignResponsibleToAssignment.FormatString(assignResponsibleToAssignmentAuditLogEntity.ResponsibleName, assignResponsibleToAssignmentAuditLogEntity.AssignmentId);
                 default:
                     throw new ArgumentException("Unknown audit record type: " + record.Type);
+            }
+        }
+
+        private string GetMessageDescription(AuditLogRecord record)
+        {
+            switch (record.Type)
+            {
+                case AuditLogEntityType.SynchronizationFailed:
+                    if (authorizedUser?.IsAdministrator ?? false)
+                    {
+                        var synchronizationFailedAuditLogEntity = record.GetEntity<SynchronizationFailedAuditLogEntity>();
+                        return synchronizationFailedAuditLogEntity.StackTrace;
+                    }
+                    return null;
+                default:
+                    return null;
             }
         }
     }
@@ -241,5 +268,6 @@ namespace WB.UI.Headquarters.Controllers
         public DateTime Time { get; set; }
         public AuditLogEntityType Type { get; set; }
         public string Message { get; set; }
+        public string Description { get; set; }
     }
 }
