@@ -9,12 +9,10 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewDetailsDataScheduler;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks;
-using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Jobs;
 using WB.Core.BoundedContexts.Headquarters.WebInterview.Jobs;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Aggregates;
-using WB.Core.Infrastructure.DenormalizerStorage;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.EventBus.Lite.Implementation;
 using WB.Core.Infrastructure.Implementation.Aggregates;
@@ -29,12 +27,10 @@ using WB.Infrastructure.Native.Monitoring;
 using WB.Infrastructure.Native.Storage;
 using WB.UI.Headquarters.API.Attributes;
 using WB.UI.Headquarters.API.PublicApi;
-using WB.UI.Headquarters.API.WebInterview;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Implementation.Maps;
 using WB.UI.Headquarters.Implementation.Services;
 using WB.UI.Headquarters.Models.Api;
-using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.MembershipProvider.Accounts;
@@ -122,7 +118,6 @@ namespace WB.UI.Headquarters
             serviceLocator.GetInstance<ExportJobScheduler>().Configure();
             serviceLocator.GetInstance<PauseResumeJobScheduler>().Configure();
             serviceLocator.GetInstance<UpgradeAssignmentJobScheduler>().Configure();
-            serviceLocator.GetInstance<IRefreshReportsTask>().Run();
 
             serviceLocator.GetInstance<IScheduler>().Start();
 
