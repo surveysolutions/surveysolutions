@@ -1,4 +1,3 @@
-using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Infrastructure.Native.Storage.Postgre;
