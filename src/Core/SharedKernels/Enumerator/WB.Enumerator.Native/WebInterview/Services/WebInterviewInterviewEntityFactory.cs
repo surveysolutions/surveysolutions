@@ -249,7 +249,10 @@ namespace WB.Enumerator.Native.WebInterview.Services
                         result = this.Map<StubEntity>(question);
                         break;
                     case InterviewQuestionType.Area:
-                        result = this.Map<InterviewAreaQuestion>(question);
+                        result = this.Map<InterviewAreaQuestion>(question, res =>
+                            {
+                                res.Type = questionnaire.GetQuestionByVariable(question.VariableName).Properties.GeometryType;
+                            });
                         break;
                 }
 

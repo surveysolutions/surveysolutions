@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.UI.Headquarters.Controllers;
+using WB.UI.Shared.Web.Controllers;
 
 namespace WB.UI.Headquarters.Filters
 {
@@ -23,6 +24,7 @@ namespace WB.UI.Headquarters.Filters
 
             if (filterContext.Controller is ControlPanelController) return;
             if (filterContext.Controller is MaintenanceController) return;
+            if (filterContext.Controller is UnderConstructionController) return;
 
             var isInstallController = filterContext.Controller is InstallController;
             

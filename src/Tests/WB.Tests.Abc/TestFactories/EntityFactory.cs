@@ -768,7 +768,8 @@ namespace WB.Tests.Abc.TestFactories
             string validationExpression = null,
             bool useFomatting = false,
             IEnumerable<ValidationCondition> validationConditions = null,
-            int? countOfDecimalPlaces = null)
+            int? countOfDecimalPlaces = null,
+            IEnumerable<Answer> specialValues = null)
             => new NumericQuestion
             {
                 QuestionType = QuestionType.Numeric,
@@ -779,7 +780,8 @@ namespace WB.Tests.Abc.TestFactories
                 ConditionExpression = enablementCondition,
                 ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
                 ValidationExpression = validationExpression,
-                CountOfDecimalPlaces = countOfDecimalPlaces
+                CountOfDecimalPlaces = countOfDecimalPlaces,
+                Answers = new List<Answer>(specialValues ?? new Answer[] { })
             };
 
         public Answer Option(string value = null, string text = null, string parentValue = null, Guid? id = null)

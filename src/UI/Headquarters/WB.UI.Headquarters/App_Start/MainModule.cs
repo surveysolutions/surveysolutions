@@ -23,6 +23,7 @@ using WB.Enumerator.Native.JsonConversion;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Models;
 using WB.Infrastructure.Native;
+using WB.Infrastructure.Native.Monitoring;
 using WB.Infrastructure.Native.Storage;
 using WB.UI.Headquarters.API.Attributes;
 using WB.UI.Headquarters.API.PublicApi;
@@ -119,7 +120,17 @@ namespace WB.UI.Headquarters
             serviceLocator.GetInstance<UpgradeAssignmentJobScheduler>().Configure();
 
             serviceLocator.GetInstance<IScheduler>().Start();
+
+            InitMetrics();
+            MetricsService.Start(serviceLocator);
+
             return Task.CompletedTask;
         }
+
+        private static void InitMetrics()
+        {
+            CommonMetrics.StateFullInterviewsCount.Set(0);
+        }
+
     }
 }

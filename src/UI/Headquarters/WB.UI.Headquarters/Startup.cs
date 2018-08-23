@@ -71,10 +71,9 @@ namespace WB.UI.Headquarters
 
             app.Use(RemoveServerNameFromHeaders);
 
-            var kernel = ConfigureNinject(app);
+            ConfigureNinject(app);
             var logger = ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<Startup>();
             logger.Info($@"Starting Headquarters {ServiceLocator.Current.GetInstance<IProductVersion>()}");
-            UpdateAppVersion();
             ConfigureAuth(app);
             InitializeAppShutdown(app);
             InitializeMVC();
@@ -97,18 +96,10 @@ namespace WB.UI.Headquarters
 
                 AddAllSqlData(exception);
             });
-
-            InitMetrics();
-            
-            MetricsService.Start(kernel, logger);
         }
 
-        private static void InitMetrics()
-        {
-            CommonMetrics.StateFullInterviewsCount.Set(0);
-        }
 
-        private IKernel ConfigureNinject(IAppBuilder app)
+        private void ConfigureNinject(IAppBuilder app)
         {
             var perRequestModule = new OnePerRequestHttpModule();
 
@@ -130,7 +121,6 @@ namespace WB.UI.Headquarters
             var kernel = NinjectConfig.CreateKernel();
             kernel.Inject(perRequestModule); // wiill keep reference to perRequestModule in Kernel instance
             app.UseNinjectMiddleware(() => kernel);
-            return kernel;
         }
 
         private void ConfigureWebApi(IAppBuilder app)
@@ -231,7 +221,7 @@ namespace WB.UI.Headquarters
 
         private static void OnShutdown()
         {
-            InitMetrics();
+            CommonMetrics.StateFullInterviewsCount.Set(0);
 
             var logger = LogManager.GetCurrentClassLogger();
 
@@ -281,9 +271,6 @@ namespace WB.UI.Headquarters
             ViewEngines.Engines.Add(new RazorViewEngine());
             ValueProviderFactories.Factories.Add(new JsonValueProviderFactory());
         }
-
-        private static void UpdateAppVersion()
-            => ServiceLocator.Current.GetInstance<IProductVersionHistory>().RegisterCurrentVersion();
 
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {
