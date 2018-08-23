@@ -31,6 +31,7 @@ using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Implementation.Maps;
 using WB.UI.Headquarters.Implementation.Services;
 using WB.UI.Headquarters.Models.Api;
+using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.MembershipProvider.Accounts;
