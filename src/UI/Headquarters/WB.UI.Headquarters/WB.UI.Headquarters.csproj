@@ -2315,6 +2315,7 @@
     <Compile Include="Migrations\ReadSide\M001-100\M201806191240_FillErrorsCountInInterviewSummary.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201808131420_AddIndicesForInterviewSummariesAndComments.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201806271400_AddUniqueConstraintOnInterviewEntities.cs" />
+    <Compile Include="Migrations\ReadSide\M001-100\M201808210950_AddTabulateReportData.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\QuestionnaireEntityMigration.cs" />
     <Compile Include="Migrations\Users\M005_AddDeviceAppVersionToProfile.cs" />
     <Compile Include="Migrations\Users\M201807241755_ReplaceEmptyEmailToNull.cs" />
