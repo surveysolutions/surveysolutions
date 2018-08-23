@@ -138,7 +138,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
             var responsible = GetResponsible(parameter);
             var interviewerViewModels = this.usersRepository.LoadAll().Where(x => x.InterviewerId != responsible)
-                .Select(ToInterviewerToSelectViewModel);
+                .Select(ToInterviewerToSelectViewModel)
+                .OrderBy(x => $"{x.FullName}{(string.IsNullOrEmpty(x.FullName) ? "" : " - ")}{x.Login}");
 
             this.UiItems = new MvxObservableCollection<InterviewerToSelectViewModel>(interviewerViewModels);
         }
