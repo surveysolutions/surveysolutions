@@ -57,7 +57,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     remoteAssignments.Count),
                 Statistics = statistics,
                 Status = SynchronizationStatus.Download,
-                Stage = SyncStage.AssignmentsSynchronization
+                Stage = SyncStage.AssignmentsSynchronization,
+                StageExtraInfo = new Dictionary<string, string>()
+                {
+                    { "processedCount", "0" },
+                    { "totalCount", remoteAssignments.Count.ToString()}
+                }
             });
 
             // removing local assignments if needed
@@ -101,7 +106,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                             processedAssignmentsCount, remoteAssignments.Count),
                         Statistics = statistics,
                         Status = SynchronizationStatus.Download,
-                        Stage = SyncStage.AssignmentsSynchronization
+                        Stage = SyncStage.AssignmentsSynchronization,
+                        StageExtraInfo = new Dictionary<string, string>()
+                        {
+                            { "processedCount", processedAssignmentsCount.ToString() },
+                            { "totalCount", remoteAssignments.Count.ToString()}
+                        }
                     });
 
                     this.assignmentsRepository.Store(local);
@@ -143,7 +153,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     processedAssignmentsCount, remoteAssignments.Count),
                 Statistics = statistics,
                 Status = SynchronizationStatus.Download,
-                Stage = SyncStage.AssignmentsSynchronization
+                Stage = SyncStage.AssignmentsSynchronization,
+                StageExtraInfo = new Dictionary<string, string>()
+                {
+                    { "processedCount", processedAssignmentsCount.ToString() },
+                    { "totalCount", remoteAssignments.Count.ToString()}
+                }
             });
         }
 

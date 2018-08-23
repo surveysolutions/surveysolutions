@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using Humanizer;
@@ -63,7 +64,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                                 receivedKilobytes.Per(sw.Elapsed).Humanize("00.00"),
                                 (int) downloadProgress.ProgressPercentage),
                             Status = SynchronizationStatus.Download,
-                            Stage = SyncStage.DownloadApplication
+                            Stage = SyncStage.DownloadApplication,
+                            StageExtraInfo = new Dictionary<string, string>()
+                            {
+                                { "receivedKilobytes", receivedKilobytes.Humanize("00.00 MB") },
+                                { "totalKilobytes", totalKilobytes.Humanize("00.00 MB")},
+                                { "receivingRate", receivedKilobytes.Per(sw.Elapsed).Humanize("00.00")},
+                                {"progressPercentage",((int) downloadProgress.ProgressPercentage).ToString()}
+                            }
                         });
                     }));
                 }

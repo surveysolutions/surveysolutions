@@ -29,7 +29,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         statistics.DeletedInterviewsCount + 1,
                         interviewIds.Length,
                         InterviewerUIResources.Synchronization_Interviews),
-                    Stage = SyncStage.UpdatingAssignments
+                    Stage = SyncStage.UpdatingAssignments,
+                    StageExtraInfo = new Dictionary<string, string>()
+                    {
+                        { "processedCount", (statistics.DeletedInterviewsCount + 1).ToString() },
+                        { "totalCount", interviewIds.Length.ToString()}
+                    }
                 });
 
                 this.interviewFactory.RemoveInterview(interviewId);

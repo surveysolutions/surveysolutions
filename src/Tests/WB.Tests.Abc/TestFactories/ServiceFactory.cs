@@ -817,7 +817,8 @@ namespace WB.Tests.Abc.TestFactories
         public OfflineSynchronizationService OfflineSynchronizationService(
             IOfflineSyncClient offlineSyncClient = null, 
             IInterviewerPrincipal interviewerPrincipal = null,
-            IInterviewerQuestionnaireAccessor questionnaireAccessor = null)
+            IInterviewerQuestionnaireAccessor questionnaireAccessor = null,
+            IDeviceSettings deviceSettings = null)
         {
             return new OfflineSynchronizationService(
                 offlineSyncClient ?? Mock.Of<IOfflineSyncClient>(),
@@ -825,7 +826,7 @@ namespace WB.Tests.Abc.TestFactories
                 Mock.Of< IInterviewerQuestionnaireAccessor>(),
                 Mock.Of<IPlainStorage<InterviewView>>(),
                 Mock.Of<IEnumeratorSettings>(),
-                Mock.Of<IDeviceSettings>());
+                deviceSettings: deviceSettings ?? Mock.Of<IDeviceSettings>());
         }
 
         public SupervisorSynchronizeHandler SupervisorSynchronizeHandler(

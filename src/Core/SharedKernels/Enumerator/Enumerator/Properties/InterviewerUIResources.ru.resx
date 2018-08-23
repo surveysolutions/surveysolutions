@@ -313,6 +313,9 @@
   <data name="Synchronization_Upload_Title_Format" xml:space="preserve">
     <value>Отправка {0}</value>
   </data>
+  <data name="Synchronization_Receiving_Title_Format" xml:space="preserve">
+    <value>Получение {0}</value>
+  </data>
   <data name="Synchronization_Upload_Interviews_Text" xml:space="preserve">
     <value>интервью</value>
   </data>
@@ -628,6 +631,9 @@
   <data name="Synchronization_DownloadingLogo" xml:space="preserve">
     <value>Загрузка логотипа</value>
   </data>
+  <data name="Synchronization_UploadingLogo" xml:space="preserve">
+    <value>Отправка логотипа</value>
+  </data>
   <data name="Synchronization_Done" xml:space="preserve">
     <value>Завершить</value>
   </data>
@@ -736,6 +742,9 @@
     <value>Загрузка обновлений</value>
     <comment>Загрузка обновлений</comment>
   </data>
+  <data name="Synchronization_UploadingApplication" xml:space="preserve">
+    <value>Отправка обновлений</value>
+  </data>
   <data name="Synchronization_CheckNewVersionOfApplication" xml:space="preserve">
     <value>Проверка обновлений</value>
     <comment>Проверка обновлений</comment>
@@ -743,6 +752,9 @@
   <data name="Synchronization_DownloadApplication_Description" xml:space="preserve">
     <value>Загружено {0} из {1} при {2} ({3}%)</value>
     <comment>Загружено {0} из {1} ({2}%)</comment>
+  </data>
+  <data name="Synchronization_SendingApplication_Description" xml:space="preserve">
+    <value>Отправлено {0} из {1} при {2} ({3}%)</value>
   </data>
   <data name="Dashboard_SearchResult" xml:space="preserve">
     <value>Найдено {0} элементов</value>
@@ -768,8 +780,11 @@
     <value>Выйти из поиска</value>
   </data>
   <data name="Synchronization_UploadAuditLog" xml:space="preserve">
-    <value>Загрузка на хедквотер аудит информации</value>
-    <comment>Загрузка на хедквотер аудит информации</comment>
+    <value>Загрузка аудит информации</value>
+    <comment>Загрузка аудит информации</comment>
+  </data>
+  <data name="Synchronization_ReceivingAuditLog" xml:space="preserve">
+    <value>Получение аудит информации</value>
   </data>
   <data name="Synchronization_CheckForObsolete_Interviews" xml:space="preserve">
     <value>Проверка устаревших интервью</value>

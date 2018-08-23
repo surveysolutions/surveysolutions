@@ -71,6 +71,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
                     local.PasswordHash = interviewer.PasswordHash;
                     local.PhoneNumber = interviewer.PhoneNumber;
                     local.UserName = interviewer.UserName;
+                    local.FullaName = interviewer.FullName;
                     local.SecurityStamp = interviewer.SecurityStamp;
                     local.IsLockedBySupervisor = interviewer.IsLockedBySupervisor;
                     local.IsLockedByHeadquarters = interviewer.IsLockedByHeadquarters;
