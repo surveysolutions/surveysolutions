@@ -829,8 +829,8 @@ Downloaded {3}%</value>
     <value>Reassign</value>
   </data>
   <data name="SelectResponsible_ReassignDescription" xml:space="preserve">
-    <value>Select new responsible for this interview
-it will be able to enumerator after next sync</value>
+    <value>Select new responsible for interview.
+It will appear on interviewer device after next synchronization</value>
   </data>
   <data name="SelectResponsible_ReassignButtonText" xml:space="preserve">
     <value>Reassign</value>
