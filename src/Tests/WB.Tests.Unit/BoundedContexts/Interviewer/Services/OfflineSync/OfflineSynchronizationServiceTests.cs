@@ -12,6 +12,7 @@ using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Tests.Abc;
 
@@ -42,22 +43,27 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.OfflineSync
         [Test]
         public async Task should_pass_device_build_number_to_can_synchronize_method()
         {
-            var v = ReflectionUtils.GetAssemblyVersion(typeof(InterviewerBoundedContextAssemblyIndicator));
-
-            var clientMock = new Mock<IOfflineSyncClient>();
-            clientMock.Setup(x => x.SendAsync<CanSynchronizeRequest, CanSynchronizeResponse>(
-                    It.Is<CanSynchronizeRequest>(r => r.InterviewerBuildNumber == v.Revision), CancellationToken.None, null))
+            // arrange
+            var appBuldNumber = 12345;
+            var mockOfOfflineSyncClient = new Mock<IOfflineSyncClient>();
+            mockOfOfflineSyncClient.Setup(x => x.SendAsync<CanSynchronizeRequest, CanSynchronizeResponse>(
+                    It.IsAny<CanSynchronizeRequest>(), CancellationToken.None, null))
                 .ReturnsAsync(new CanSynchronizeResponse
                 {
                     CanSyncronize = true
                 });
+            var principal = Create.Service.InterviewerPrincipal(Guid.NewGuid());
+            var deviceSettings = Mock.Of<IDeviceSettings>(x => x.GetApplicationVersionCode() == appBuldNumber);
+            var service = Create.Service.OfflineSynchronizationService(mockOfOfflineSyncClient.Object,
+                interviewerPrincipal: principal, deviceSettings: deviceSettings);
 
-            var interviewerPrincipal = new Mock<IInterviewerPrincipal>();
-            interviewerPrincipal.Setup(x => x.CurrentUserIdentity).Returns(new InterviewerIdentity() { Id = Guid.NewGuid().FormatGuid() });
-
-            var service = Create.Service.OfflineSynchronizationService(clientMock.Object, interviewerPrincipal.Object);
-
+            // act
             await service.CanSynchronizeAsync(null, null);
+
+            // assert
+            mockOfOfflineSyncClient.Verify(x => x.SendAsync<CanSynchronizeRequest, CanSynchronizeResponse>(
+                    It.Is<CanSynchronizeRequest>(y => y.InterviewerBuildNumber == appBuldNumber), It.IsAny<CancellationToken>(), It.IsAny<IProgress<TransferProgress>>()),
+                Times.Once);
         }
         
         [Test]

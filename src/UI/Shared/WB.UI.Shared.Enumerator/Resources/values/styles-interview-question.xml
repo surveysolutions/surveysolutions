@@ -240,10 +240,11 @@
   <style name="Interview_Question_Answer_Option_Input" parent="Interview_Question_Answer_Option_Input_Base">
     <item name="android:paddingLeft">@dimen/Interview_Question_Answer_Option_padding_left</item>
     <item name="android:paddingRight">@dimen/Interview_Question_Answer_Input_background_padding</item>
+    <item name="android:layout_width">@dimen/zero</item>
   </style>
 
   <style name="Interview_Question_Answer_Option_Input_Base" parent="Interview_Entity_BasicFont">
-        <item name="android:layout_width">@dimen/zero</item>
+        <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:layout_weight">1</item>
         <item name="android:layout_marginLeft">@dimen/Interview_Question_Answer_Option_padding_left</item>

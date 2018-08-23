@@ -355,6 +355,9 @@ for further instructions</value>
   <data name="Synchronization_Upload_Title_Format" xml:space="preserve">
     <value>Uploading {0}</value>
   </data>
+  <data name="Synchronization_Receiving_Title_Format" xml:space="preserve">
+    <value>Receiving {0}</value>
+  </data>
   <data name="Synchronization_UserAuthentication_Description" xml:space="preserve">
     <value>Preparing for synchronization</value>
   </data>
@@ -635,7 +638,7 @@ for further instructions</value>
     <value>Event chunk size</value>
   </data>
   <data name="Synchronization_Download_AttachmentsCleanup" xml:space="preserve">
-    <value>Removing obsolete attachments.</value>
+    <value>Removing obsolete attachments</value>
   </data>
   <data name="Synchronization_Check_Obsolete_Questionnaires" xml:space="preserve">
     <value>Check for obsolete questionnaires</value>
@@ -652,8 +655,14 @@ for further instructions</value>
   <data name="Synchronization_DownloadApplication" xml:space="preserve">
     <value>Downloading application updates</value>
   </data>
+  <data name="Synchronization_UploadingApplication" xml:space="preserve">
+    <value>Sending application updates</value>
+  </data>
   <data name="Synchronization_DownloadApplication_Description" xml:space="preserve">
     <value>Received {0} of {1} at {2} ({3}%)</value>
+  </data>
+  <data name="Synchronization_SendingApplication_Description" xml:space="preserve">
+    <value>Sent {0} of {1} at {2} ({3}%)</value>
   </data>
   <data name="Synchronization_CheckNewVersionOfApplication" xml:space="preserve">
     <value>Checking application updates</value>
@@ -682,8 +691,14 @@ for further instructions</value>
   <data name="Synchronization_DownloadingLogo" xml:space="preserve">
     <value>Downloading logo</value>
   </data>
+  <data name="Synchronization_UploadingLogo" xml:space="preserve">
+    <value>Uploading logo</value>
+  </data>
   <data name="Synchronization_UploadAuditLog" xml:space="preserve">
     <value>Upload audit information</value>
+  </data>
+  <data name="Synchronization_ReceivingAuditLog" xml:space="preserve">
+    <value>Receiving audit information</value>
   </data>
   <data name="Dashboard_CreateNewTabText" xml:space="preserve">
     <value>Create new interview using templates</value>
@@ -814,8 +829,8 @@ Downloaded {3}%</value>
     <value>Reassign</value>
   </data>
   <data name="SelectResponsible_ReassignDescription" xml:space="preserve">
-    <value>Select new responsible for this interview
-it will be able to enumerator after next sync</value>
+    <value>Select new responsible for interview.
+It will appear on interviewer device after next synchronization</value>
   </data>
   <data name="SelectResponsible_ReassignButtonText" xml:space="preserve">
     <value>Reassign</value>

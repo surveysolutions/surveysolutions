@@ -78,10 +78,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (!value.HasValue)
                 return false;
 
+            var intPart = Math.Truncate(value.Value);
+            if (intPart != value.Value)
+                return false;
+
             // Double to int conversion can overflow.
             try
             {
-               return this.allSpecialValues.Contains(Convert.ToInt32(value.Value));
+                return this.allSpecialValues.Contains(Convert.ToInt32(intPart));
             }
             catch (OverflowException)
             {

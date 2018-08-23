@@ -31,14 +31,12 @@ namespace WB.UI.Designer
         const int TimedOutExceptionCode = -2147467259;
 
         private readonly ILogger logger = ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<MvcApplication>();
-        private readonly IProductVersionHistory productVersionHistory = ServiceLocator.Current.GetInstance<IProductVersionHistory>();
 
         private static string ProductVersion => ServiceLocator.Current.GetInstance<IProductVersion>().ToString();
 
         protected void Application_Start()
         {
             this.logger.Info($"Starting Designer {ProductVersion}");
-            this.productVersionHistory.RegisterCurrentVersion();
 
             AppDomain.CurrentDomain.UnhandledException += this.CurrentUnhandledException;
 

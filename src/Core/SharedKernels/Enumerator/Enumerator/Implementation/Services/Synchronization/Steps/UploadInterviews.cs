@@ -58,7 +58,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                             Context.Statistics.SuccessfullyUploadedInterviewsCount, Context.Statistics.TotalCompletedInterviewsCount,
                             InterviewerUIResources.Synchronization_Upload_Interviews_Text),
                         Status = SynchronizationStatus.Upload,
-                        Stage = SyncStage.UploadInterviews
+                        Stage = SyncStage.UploadInterviews,
+                        Statistics = Context.Statistics,
+
+                        StageExtraInfo = new Dictionary<string, string>()
+                        {
+                            { "processedCount", Context.Statistics.SuccessfullyUploadedInterviewsCount.ToString() },
+                            { "totalCount", interviewsToUpload.Count.ToString()}
+                        }
                     });
 
                     var eventStreamSignatureTag = this.interviewFactory.GetInterviewEventStreamCheckData(completedInterview.InterviewId);
@@ -99,7 +106,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 }
                 catch (Exception syncException)
                 {
-                    this.Context.Statistics.FailedToUploadInterviwesCount++;
+                    this.Context.Statistics.FailedToUploadInterviewsCount++;
                     await base.TrySendUnexpectedExceptionToServerAsync(syncException);
 
                     this.logger.Error($"Failed to synchronize interview", syncException);

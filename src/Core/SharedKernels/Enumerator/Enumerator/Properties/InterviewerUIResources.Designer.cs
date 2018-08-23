@@ -1419,8 +1419,8 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select new responsible for this interview
-        ///it will be able to enumerator after next sync.
+        ///   Looks up a localized string similar to Select new responsible for interview.
+        ///It will appear on interviewer device after next synchronization.
         /// </summary>
         public static string SelectResponsible_ReassignDescription {
             get {
@@ -1510,7 +1510,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Removing obsolete attachments..
+        ///   Looks up a localized string similar to Removing obsolete attachments.
         /// </summary>
         public static string Synchronization_Download_AttachmentsCleanup {
             get {
@@ -1690,6 +1690,33 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Receiving {0}.
+        /// </summary>
+        public static string Synchronization_Receiving_Title_Format {
+            get {
+                return ResourceManager.GetString("Synchronization_Receiving_Title_Format", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Receiving audit information.
+        /// </summary>
+        public static string Synchronization_ReceivingAuditLog {
+            get {
+                return ResourceManager.GetString("Synchronization_ReceivingAuditLog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sent {0} of {1} at {2} ({3}%).
+        /// </summary>
+        public static string Synchronization_SendingApplication_Description {
+            get {
+                return ResourceManager.GetString("Synchronization_SendingApplication_Description", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to All assignments were updated.
         /// </summary>
         public static string Synchronization_Success_Description {
@@ -1803,6 +1830,24 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string Synchronization_UploadAuditLog {
             get {
                 return ResourceManager.GetString("Synchronization_UploadAuditLog", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sending application updates.
+        /// </summary>
+        public static string Synchronization_UploadingApplication {
+            get {
+                return ResourceManager.GetString("Synchronization_UploadingApplication", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Uploading logo.
+        /// </summary>
+        public static string Synchronization_UploadingLogo {
+            get {
+                return ResourceManager.GetString("Synchronization_UploadingLogo", resourceCulture);
             }
         }
         
