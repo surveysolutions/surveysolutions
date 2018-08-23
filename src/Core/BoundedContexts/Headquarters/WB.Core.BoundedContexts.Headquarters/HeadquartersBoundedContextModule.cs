@@ -72,7 +72,6 @@ using WB.Core.BoundedContexts.Headquarters.Views.Reports;
 using WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Data;
-using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Jobs;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.BoundedContexts.Headquarters.WebInterview.Impl;
@@ -237,7 +236,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.RegisterDenormalizer<InterviewExportedCommentariesDenormalizer>();
             registry.RegisterDenormalizer<InterviewDenormalizer>();
             registry.RegisterDenormalizer<CumulativeChartDenormalizer>();
-            registry.RegisterDenormalizer<ReportTableDataDenormalizer>();
 
             registry.Bind<IInterviewPackagesService, IInterviewBrokenPackagesService, InterviewPackagesService>();
 
@@ -319,7 +317,6 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             registry.BindAsSingleton<IAssignmentsUpgradeService, AssignmentsUpgradeService>();
             registry.Bind<IAssignmentsUpgrader, AssignmentsUpgrader>();
-            registry.BindAsSingleton<IRefreshReportsTask, BackgroundRefreshReportsTask>();
             registry.Bind<IInterviewReportDataRepository, InterviewReportDataRepository>();
         }
 
