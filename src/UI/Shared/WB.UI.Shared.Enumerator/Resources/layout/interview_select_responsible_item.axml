@@ -9,6 +9,7 @@
               android:focusable="false">
     <RadioButton
         style="@style/Interview_Question_Answer_Option_Input_Base"
+        android:width="@dimen/zero"
         local:MvxBind="AssignToInterviewerText .; 
                        Checked IsSelected;
                        Click SelectCommand;" />

@@ -1419,8 +1419,8 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Select new responsible for this interview
-        ///it will be able to enumerator after next sync.
+        ///   Looks up a localized string similar to Select new responsible for interview.
+        ///It will appear on interviewer device after next synchronization.
         /// </summary>
         public static string SelectResponsible_ReassignDescription {
             get {
