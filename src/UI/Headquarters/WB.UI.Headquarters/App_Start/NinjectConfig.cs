@@ -227,7 +227,7 @@ namespace WB.UI.Headquarters
 
             // init
             kernel.Init().Wait();
-
+            
             GlobalHost.DependencyResolver = new NinjectDependencyResolver(kernel.Kernel);
             ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel.Kernel);
 
