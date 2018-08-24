@@ -1,18 +1,16 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Globalization;
 using Ninject;
 using Quartz;
 using Quartz.Spi;
 using WB.Infrastructure.Native.Ioc;
+using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
 {
     public class NinjectJobFactory : IJobFactory
     {
         private readonly IKernel kernel;
-
-        private static ConcurrentDictionary<IJob, NinjectAmbientScope> resolvedJobs = new ConcurrentDictionary<IJob, NinjectAmbientScope>();
 
         public NinjectJobFactory(IKernel kernel)
         {
@@ -44,11 +42,7 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
             Type jobType = jobDetail.JobType;
             try
             {
-                var scope = new NinjectAmbientScope();
-                var job = this.kernel.Get(jobType, new NonRequestScopedParameter()) as IJob;
-                if (job == null) throw new ArgumentNullException(nameof(job));
-                resolvedJobs[job] = scope;
-                return job;
+                return new LazyNinjectJobWripper(jobType, kernel);
             }
             catch (Exception e)
             {
@@ -63,10 +57,38 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
         /// </summary>
         public void ReturnJob(IJob job)
         {
-            if (resolvedJobs.ContainsKey(job))
+        }
+    }
+
+    public class LazyNinjectJobWripper : IJob
+    {
+        private IKernel kernel;
+        private Type jobType;
+
+        public LazyNinjectJobWripper(Type jobType,  IKernel kernel)
+        {
+            this.kernel = kernel;
+            this.jobType = jobType;
+        }
+
+        public void Execute(IJobExecutionContext context)
+        {
+            using (var scope = new NinjectAmbientScope())
             {
-                resolvedJobs.TryGetValue(job, out var scope);
-                scope?.Dispose();
+                var unitOfWork = kernel.Get<IUnitOfWork>();
+                try
+                {
+                    var job = kernel.Get(jobType) as IJob;
+                    if (job == null) throw new ArgumentNullException(nameof(job));
+                    job.Execute(context);
+
+                    unitOfWork.AcceptChanges();
+                }
+                catch (Exception)
+                {
+                    unitOfWork.Dispose();
+                    throw;
+                }
             }
         }
     }
