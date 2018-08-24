@@ -2,9 +2,6 @@
 using System.Diagnostics;
 using System.Threading;
 using NHibernate;
-using NHibernate.Impl;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.Infrastructure.Native.Storage.Postgre
 {
@@ -18,29 +15,24 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         private static int Counter = 0;
         public int Id { get; set; }
 
-        private readonly ILogger logger = ServiceLocator.Current.GetInstance<ILogger>();
-
         public UnitOfWork(ISessionFactory sessionFactory)
         {
             this.sessionFactory = sessionFactory;
             Id = Interlocked.Increment(ref Counter);
 
-            if(session != null) throw new InvalidOperationException("Unit of work already started");
-            if(isDisposed == true) throw new ObjectDisposedException(nameof(UnitOfWork));
+            if (session != null) throw new InvalidOperationException("Unit of work already started");
+            if (isDisposed == true) throw new ObjectDisposedException(nameof(UnitOfWork));
 
             session = this.sessionFactory.OpenSession();
             transaction = session.BeginTransaction();
-
-            logger.Info($"UOW:{Id} sessionId:{(session as SessionImpl)?.SessionId} Thread:{Thread.CurrentThread.ManagedThreadId}");
         }
 
         public void AcceptChanges()
         {
-            if(isDisposed) throw new ObjectDisposedException(nameof(UnitOfWork));
+            if (isDisposed) throw new ObjectDisposedException(nameof(UnitOfWork));
 
             transaction.Commit();
             session.Close();
-            logger.Info($"session closing UOW:{Id} sessionId:{(session as SessionImpl)?.SessionId} Thread:{Thread.CurrentThread.ManagedThreadId}");
             transaction = null;
             session = null;
         }
@@ -49,10 +41,10 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         {
             get
             {
-                if(isDisposed) throw new ObjectDisposedException(nameof(UnitOfWork));
+                if (isDisposed) throw new ObjectDisposedException(nameof(UnitOfWork));
                 return session;
             }
-        } 
+        }
 
         public void Dispose()
         {
@@ -67,7 +59,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             if (session != null)
             {
                 session.Close();
-                logger.Info($"session closing in dispose UOW:{Id} sessionId:{(session as SessionImpl)?.SessionId} Thread:{Thread.CurrentThread.ManagedThreadId}");
                 session = null;
             }
 
