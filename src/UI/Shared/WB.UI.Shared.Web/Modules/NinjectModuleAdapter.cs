@@ -1,10 +1,12 @@
 using System;
 using System.Linq;
 using System.Threading;
+using System.Web;
 using System.Web.Http.Filters;
 using Ninject;
 using Ninject.Activation;
 using Ninject.Extensions.NamedScope;
+using Ninject.Infrastructure;
 using Ninject.Modules;
 using Ninject.Syntax;
 using Ninject.Web.Common;
@@ -222,16 +224,19 @@ namespace WB.UI.Shared.Web.Modules
         {
             InIsolatedThreadScopeOrRequestScopeOrThreadScope(this.Kernel.Bind<T>().ToSelf());
         }
-
+       
         public void BindInIsolatedThreadScopeOrRequestScopeOrThreadScope<T1, T2>() where T2 : T1
         {
+            this.Kernel.Bind<T1>().To<T2>().When(x => HttpContext.Current != null).InRequestScope();
+            this.Kernel.Bind<T1>().To<T2>().When(x => HttpContext.Current == null).InAmbientScope();
+            
+            /*
             this.Kernel.Bind<T1>().To<T2>()
                 .When(x => x.Parameters.OfType<NonRequestScopedParameter>().Any())
-                .InAmbientScope();
-
+                .InAmbientScope(); 
             this.Kernel.Bind<T1>().To<T2>()
                 .When(x => !x.Parameters.OfType<NonRequestScopedParameter>().Any())
-                .InRequestScope();
+                .InRequestScope();*/
         }
 
         public static IBindingNamedWithOrOnSyntax<T> InIsolatedThreadScopeOrRequestScopeOrThreadScope<T>(IBindingInSyntax<T> syntax)
