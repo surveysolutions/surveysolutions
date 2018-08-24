@@ -14,7 +14,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
         {
             return base.BuildIncoming(context =>
             {
-                using (new NinjectAmbientScope())
+                using (var scope = new NinjectAmbientScope())
                 {
                     var unitOfWork = ServiceLocator.Current.GetInstance<IUnitOfWork>();
                     
