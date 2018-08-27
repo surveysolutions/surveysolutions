@@ -80,7 +80,7 @@ namespace WB.UI.Headquarters.Controllers
                     Time = r.Time,
                     Type = r.Type,
                     Message = GetUserMessage(r),
-                    Description = GetMessageDescription(r)?.Replace("\r\n", "<br />")
+                    Description = GetMessageDescription(r)
                 }).OrderByDescending(i => i.Time).ToArray()
             }).OrderByDescending(i => i.Date).ToArray();
 
