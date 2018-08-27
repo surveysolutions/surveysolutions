@@ -146,7 +146,7 @@ namespace WB.UI.Headquarters.API.DataCollection
                 InterviewerName = this.authorizedUser.UserName,
                 LogDate = DateTime.UtcNow,
                 Type = SynchronizationLogType.DeviceUnexpectedException,
-                Log = $@"<font color=""red"">{exception.StackTrace}</font>"
+                Log = $@"<pre><font color=""red"">{exception.StackTrace.Replace("\r\n", "<br />")}</font></pre>"
             }, Guid.NewGuid());
 
             return this.Ok();

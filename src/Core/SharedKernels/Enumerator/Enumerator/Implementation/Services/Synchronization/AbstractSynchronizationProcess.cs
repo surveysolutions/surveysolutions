@@ -104,7 +104,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             {
                 Message = exception.Message,
                 StackTrace = string.Join(Environment.NewLine,
-                    exception.UnwrapAllInnerExceptions().Select(ex => $"{ex.Message} {ex.StackTrace}"))
+                    exception.UnwrapAllInnerExceptions().Select(ex => $"{ex.Message}{Environment.NewLine}{ex.StackTrace}"))
             };
         }
 
