@@ -388,6 +388,22 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             }).Using(new PreloadingValueComparer()));
         }
 
+        [Test]
+        public void when_read_text_file_with_value_with_whitespaces_should_return_value_without_whitespaces()
+        {
+            // arrange
+            var value = " value ";
+            var columns = new[] { "column" };
+            var row = new[] { value };
+
+            var reader = Create.Service.AssignmentsImportReader();
+            var stream = Create.Other.TabDelimitedTextStream(columns, row);
+            // act
+            var file = reader.ReadTextFile(stream, "file.tab");
+            // assert
+            Assert.That(((PreloadingValue)file.Rows[0].Cells[0]).Value, Is.EqualTo("value"));
+        }
+
         private class PreloadingValueComparer : IEqualityComparer<PreloadingValue>
         {
             public bool Equals(PreloadingValue x, PreloadingValue y)
