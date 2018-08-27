@@ -1129,4 +1129,7 @@
   <data name="HelpQuestionnaireVarible" xml:space="preserve">
     <value>Questionnaire variable is used as prefix in forming names for the export files. Variable names and roster IDs may be from {{minLength}} to {{maxLength}} characters long and must contain only following characters: a-z, A-Z, _, or 0-9. The first character cannot be 0-9 or _ and the last one cannot be _.</value>
   </data>
+  <data name="DeleteCommentConfirm" xml:space="preserve">
+    <value>Are you sure you want to delete comment?</value>
+  </data>
 </root>

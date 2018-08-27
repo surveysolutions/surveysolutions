@@ -313,6 +313,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete comment?.
+        /// </summary>
+        public static string DeleteCommentConfirm {
+            get {
+                return ResourceManager.GetString("DeleteCommentConfirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to delete &quot;{{trimmedTitle}}&quot;?.
         /// </summary>
         public static string DeleteConfirmQuestion {
