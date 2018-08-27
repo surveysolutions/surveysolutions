@@ -335,7 +335,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                             Statistics = statistics,
                             Stage = SyncStage.FailedUserLinkedToAnotherDevice
                         });
-                        auditLogService.Write(new SynchronizationFailedAuditLogEntity(ex));
+                        auditLogService.Write(SynchronizationFailedAuditLogEntity.CreateFromException(ex));
                         break;
                     case SynchronizationExceptionType.SupervisorRequireOnlineSync:
                         progress.Report(new SyncProgressInfo
@@ -346,7 +346,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                             Statistics = statistics,
                             Stage = SyncStage.FailedSupervisorShouldDoOnlineSync
                         });
-                        auditLogService.Write(new SynchronizationFailedAuditLogEntity(ex));
+                        auditLogService.Write(SynchronizationFailedAuditLogEntity.CreateFromException(ex));
                         break;
                     case SynchronizationExceptionType.UnacceptableSSLCertificate:
                         progress.Report(new SyncProgressInfo
@@ -358,7 +358,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                             Stage = SyncStage.FailedUnacceptableSSLCertificate
 
                         });
-                        auditLogService.Write(new SynchronizationFailedAuditLogEntity(ex));
+                        auditLogService.Write(SynchronizationFailedAuditLogEntity.CreateFromException(ex));
                         break;
                     case SynchronizationExceptionType.InterviewerFromDifferentTeam:
                         progress.Report(new SyncProgressInfo
@@ -369,7 +369,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                             Statistics = statistics,
                             Stage = SyncStage.FailedUserDoNotBelongToTeam
                         });
-                        auditLogService.Write(new SynchronizationFailedAuditLogEntity(ex));
+                        auditLogService.Write(SynchronizationFailedAuditLogEntity.CreateFromException(ex));
                         break;
 
                     case SynchronizationExceptionType.UpgradeRequired:
@@ -390,7 +390,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                             Statistics = statistics,
                             Stage = SyncStage.Failed
                         });
-                        auditLogService.Write(new SynchronizationFailedAuditLogEntity(ex));
+                        auditLogService.Write(SynchronizationFailedAuditLogEntity.CreateFromException(ex));
                         break;
                 }
             }
@@ -407,7 +407,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
                 await this.TrySendUnexpectedExceptionToServerAsync(ex);
 
-                auditLogService.Write(new SynchronizationFailedAuditLogEntity(ex));
+                auditLogService.Write(SynchronizationFailedAuditLogEntity.CreateFromException(ex));
 
                 this.logger.Error("Synchronization. Unexpected exception", ex);
             }

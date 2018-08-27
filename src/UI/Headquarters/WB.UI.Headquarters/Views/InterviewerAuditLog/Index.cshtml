@@ -72,7 +72,7 @@
                                             @if (!string.IsNullOrEmpty(record.Description))
                                             {
                                                 <br />
-                                                @record.Description
+                                                <pre>@Html.Raw(record.Description)</pre>
                                             }
                                         </span>
                                     </td>

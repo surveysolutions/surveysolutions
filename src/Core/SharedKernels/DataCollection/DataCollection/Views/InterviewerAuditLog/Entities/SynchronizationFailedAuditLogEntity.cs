@@ -7,10 +7,15 @@ namespace WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entitie
         public string ExceptionMessage { get; }
         public string StackTrace { get; }
 
-        public SynchronizationFailedAuditLogEntity(Exception exception) : base(AuditLogEntityType.SynchronizationFailed)
+        public SynchronizationFailedAuditLogEntity(string exceptionMessage, string stackTrace) : base(AuditLogEntityType.SynchronizationFailed)
         {
-            ExceptionMessage = exception?.Message;
-            StackTrace = exception?.StackTrace;
+            ExceptionMessage = exceptionMessage;
+            StackTrace = stackTrace;
+        }
+
+        public static SynchronizationFailedAuditLogEntity CreateFromException(Exception exception) 
+        {
+            return new SynchronizationFailedAuditLogEntity(exception?.Message, exception?.StackTrace);
         }
     }
 }
