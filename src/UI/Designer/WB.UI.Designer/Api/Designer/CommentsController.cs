@@ -86,5 +86,13 @@ namespace WB.UI.Designer.Api.Designer
             commentsService.ResolveComment(commentdId);
             return this.Request.CreateResponse(new JsonResponseResult());
         }
+
+        [HttpDelete]
+        [Route("comment/{commentId:Guid}")]
+        public HttpResponseMessage DeleteComment(Guid id, Guid commentId)
+        {
+            commentsService.DeleteComment(commentId);
+            return this.Request.CreateResponse(new JsonResponseResult());
+        }
     }
 }
