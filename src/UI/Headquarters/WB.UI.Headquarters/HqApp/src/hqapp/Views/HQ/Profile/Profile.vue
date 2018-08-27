@@ -140,7 +140,7 @@
                         zIndex: point.Index === -1 ? 1000 : 1000 + point.Index 
                     });
 
-                    google.maps.event.addListener(marker,  "click",
+                    google.maps.event.addListener(marker, "click",
                         (function(marker, point) {
                             return function() { 
                                 self.loadPointDetails(point.InterviewIds, marker);
@@ -151,10 +151,10 @@
                     bounds.extend(marker.getPosition());
                 });
                 
-                // var markerCluster = new MarkerClusterer(this.map, markers,
-                //     {
-                //         imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'
-                //     });
+                var markerCluster = new MarkerClusterer(this.map, markers,
+                {
+                    imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'
+                });
       
                 var pathPoints = _.map(points, p => {
                     return {
@@ -163,19 +163,19 @@
                     };
                 });
                 
-                for(var i=0; i< pathPoints.length - 1; i++)
-                {
-                    var path = new google.maps.Polyline({
-                        path: [pathPoints[i], pathPoints[i+1]],
-                        icons: [ arrowMarker ],
-                        geodesic: true,
-                        strokeColor: "#2a81cb",
-                        strokeOpacity: 0.75,
-                        strokeWeight: 2
-                    });
+                // for(var i=0; i< pathPoints.length - 1; i++)
+                // {
+                //     var path = new google.maps.Polyline({
+                //         path: [pathPoints[i], pathPoints[i+1]],
+                //         icons: [ arrowMarker ],
+                //         geodesic: true,
+                //         strokeColor: "#2a81cb",
+                //         strokeOpacity: 0.75,
+                //         strokeWeight: 2
+                //     });
 
-                    path.setMap(self.map);
-                }
+                //     path.setMap(self.map);
+                // }
                 self.map.fitBounds(bounds);
             },
             loadPointDetails(interviewIds, marker){
