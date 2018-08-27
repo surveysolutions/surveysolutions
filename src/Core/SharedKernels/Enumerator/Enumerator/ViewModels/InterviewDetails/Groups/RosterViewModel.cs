@@ -115,11 +115,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
                     this.GetGroupViewModel(addedRosterInstance));
             }
 
-            // changeorder
+            // change order
             for (int i = 0; i < interviewRosterInstances.Count; i++)
             {
                 var rosterInstanceViewModel =
                     this.RosterInstances.FirstOrDefault(vm => vm.Identity.Equals(interviewRosterInstances[i]));
+
+                if (rosterInstanceViewModel == null)
+                    continue;
+
                 this.rosterInstances.Remove(rosterInstanceViewModel);
                 this.rosterInstances.Insert(i, rosterInstanceViewModel);
             }
