@@ -22,7 +22,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return formattableString;
         }
 
-        public void SetValue(object value) => this.Value = value;
+        public void SetValue(object value)
+        {
+            if (value is string stringValue)
+            {
+                this.Value = stringValue.RemoveControlChars();
+            }
+            else
+            {
+                this.Value = value;
+            }
+        }
 
         public sealed override SubstitutionText Title { get; protected set; }
 

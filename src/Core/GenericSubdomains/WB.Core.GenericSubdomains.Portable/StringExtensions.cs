@@ -155,7 +155,31 @@ namespace WB.Core.GenericSubdomains.Portable
 
         public static string RemoveControlChars(this string source)
         {
-            return new string(source.Where(c => !Char.IsControl(c)).ToArray());
+            if(!string.IsNullOrEmpty(source)) 
+            {
+                var chars = source.ToCharArray();
+                bool containsControlChar = false;
+                for(int i = 0; i < chars.Length; i++) 
+                {
+                    containsControlChar = Char.IsControl(chars[i]);
+                    if(containsControlChar) 
+                        break;
+                }
+                if(containsControlChar) 
+                {
+                    var sanitizedString = new System.Text.StringBuilder();
+                    for(int i = 0; i < chars.Length; i++) 
+                    {
+                        if(!Char.IsControl(chars[i])) 
+                        {
+                            sanitizedString.Append(chars[i]);
+                        }
+                    }
+                    return sanitizedString.ToString();
+                }
+            }
+
+            return source;
         }
         
         public static bool ToBool(this string value, bool @default)
