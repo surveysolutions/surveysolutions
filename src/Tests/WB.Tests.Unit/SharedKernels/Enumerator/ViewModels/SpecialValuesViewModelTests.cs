@@ -209,5 +209,26 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             Assert.That(model.SpecialValues.Count, Is.EqualTo(2));
             Assert.That(model.IsSpecialValue, Is.Null);
         }
+
+        [Test]
+        public void IsSpecialValueSelected_shoud_react_only_integer_values()
+        {
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.NumericRealQuestion(Id.g2, specialValues: Create.Entity.Options(1, 2)));
+
+            var interview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaire);
+            var optionsModel = Create.ViewModel.FilteredOptionsViewModel(entityIdentity, questionnaire, interview);
+            var model = Create.ViewModel.SpecialValues(optionsModel, interviewRepository: Setup.StatefulInterviewRepository(interview));
+
+            model.Init(interviewId, entityIdentity, Mock.Of<IQuestionStateViewModel>());
+
+            // Act
+            var isSpecialValueSelectedReal = model.IsSpecialValueSelected(2.2m);
+            var isSpecialValueSelectedInt = model.IsSpecialValueSelected(2.00m);
+
+            //Assert
+            Assert.That(isSpecialValueSelectedReal, Is.False);
+            Assert.That(isSpecialValueSelectedInt, Is.True);
+        }
     }
 }

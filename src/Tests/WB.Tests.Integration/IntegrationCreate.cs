@@ -71,8 +71,8 @@ namespace WB.Tests.Integration
             var expressionProcessorGenerator =
                 new QuestionnaireExpressionProcessorGenerator(
                     new RoslynCompiler(),
-                    IntegrationCreate.CodeGenerator(),
-                    IntegrationCreate.CodeGeneratorV2(),
+                    CodeGenerator(),
+                    CodeGeneratorV2(),
                     new DynamicCompilerSettingsProvider());
 
             var latestSupportedVersion = DesignerEngineVersionService().LatestSupportedVersion;

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using Moq;
+using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -15,7 +16,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
 {
     internal class when_handling_question_answered_event : MultiOptionQuestionViewModelTestsContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [OneTimeSetUp] public void context () {
             questionGuid = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             questionId = Create.Entity.Identity(questionGuid, Empty.RosterVector);
 
@@ -55,11 +56,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
             viewModel.Handle(new MultipleOptionsQuestionAnswered(Guid.NewGuid(), questionGuid, Empty.RosterVector, DateTime.Now, new []{2m, 1m}));
         }
 
-        [NUnit.Framework.Test] public void should_set_checked_order_to_options () => viewModel.Options.Second().CheckedOrder.Should().Be(1);
+        [Test] public void should_set_checked_order_to_options () => viewModel.Options.Second().CheckedOrder.Should().Be(1);
 
-        [NUnit.Framework.Test] public void should_mark_options_as_checked () => viewModel.Options.Count(x => x.Checked).Should().Be(2);
+        [Test] public void should_mark_options_as_checked () => viewModel.Options.Count(x => x.Checked).Should().Be(2);
 
-        [NUnit.Framework.Test] public void should_set_checked_order_to_options1 () => viewModel.Options.First().CheckedOrder.Should().Be(2);
+        [Test] public void should_set_checked_order_to_options1 () => viewModel.Options.First().CheckedOrder.Should().Be(2);
 
         static MultiOptionQuestionViewModel viewModel;
         static Identity questionId;

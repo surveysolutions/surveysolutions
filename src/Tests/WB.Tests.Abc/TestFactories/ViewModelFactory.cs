@@ -4,12 +4,12 @@ using Main.Core.Documents;
 using Moq;
 using MvvmCross.Base;
 using MvvmCross.Plugin.Messenger;
-using WB.Core.BoundedContexts.Interviewer.Implementation.Services.OfflineSync;
-using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
-using WB.Core.BoundedContexts.Interviewer.Views;
+using WB.Core.BoundedContexts.Supervisor.Services;
+using WB.Core.BoundedContexts.Supervisor.ViewModel;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services;
+using WB.Core.BoundedContexts.Supervisor.Views;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
@@ -24,14 +24,11 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.Enumerator;
-using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
-using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
@@ -143,17 +140,23 @@ namespace WB.Tests.Abc.TestFactories
             IStatefulInterview interview = null,
             ILiteEventRegistry eventRegistry = null,
             QuestionStateViewModel<SingleOptionLinkedQuestionAnswered> questionState = null,
-            AnsweringViewModel answering = null)
-            => new SingleOptionLinkedQuestionViewModel(
-                Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == Mock.Of<IUserIdentity>(y => y.UserId == Guid.NewGuid())),
-                Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == (questionnaire ?? Mock.Of<IQuestionnaire>())),
-                Mock.Of<IStatefulInterviewRepository>(_ => _.Get(It.IsAny<string>()) == (interview ?? Mock.Of<IStatefulInterview>())),
-                eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
-                Stub.MvxMainThreadDispatcher(),
-                questionState ?? Stub<QuestionStateViewModel<SingleOptionLinkedQuestionAnswered>>.WithNotEmptyValues,
-                Mock.Of<QuestionInstructionViewModel>(),
-                answering ?? Mock.Of<AnsweringViewModel>());
-        
+            AnsweringViewModel answering = null) => new SingleOptionLinkedQuestionViewModel(
+            Mock.Of<IPrincipal>(_ =>
+                _.CurrentUserIdentity == Mock.Of<IUserIdentity>(y => y.UserId == Guid.NewGuid())),
+            Mock.Of<IQuestionnaireStorage>(_ =>
+                _.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) ==
+                (questionnaire ?? Mock.Of<IQuestionnaire>())),
+            Mock.Of<IStatefulInterviewRepository>(_ =>
+                _.Get(It.IsAny<string>()) == (interview ?? Mock.Of<IStatefulInterview>())),
+            eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
+            Stub.MvxMainThreadDispatcher(),
+            questionState ?? Stub<QuestionStateViewModel<SingleOptionLinkedQuestionAnswered>>.WithNotEmptyValues,
+            Mock.Of<QuestionInstructionViewModel>(),
+            answering ?? Mock.Of<AnsweringViewModel>())
+        {
+            ThrottlePeriod = 0
+        };
+
         public TextQuestionViewModel TextQuestionViewModel(
             ILiteEventRegistry eventRegistry = null,
             IQuestionnaireStorage questionnaireStorage = null,
@@ -400,7 +403,6 @@ namespace WB.Tests.Abc.TestFactories
         {
             return new SpecialValuesViewModel(
                 optionsViewModel ?? Mock.Of<FilteredOptionsViewModel>(), 
-                mvxMainThreadDispatcher ?? Mock.Of<IMvxMainThreadDispatcher>(), 
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>());
         }
 
@@ -437,5 +439,30 @@ namespace WB.Tests.Abc.TestFactories
 
             return viewModel;
         }
+
+        public FinishInstallationViewModel FinishInstallationViewModel(
+            IViewModelNavigationService viewModelNavigationService = null,
+            IPrincipal principal = null,
+            IPasswordHasher passwordHasher = null,
+            IPlainStorage<SupervisorIdentity> interviewersPlainStorage = null,
+            IDeviceSettings deviceSettings = null,
+            ISupervisorSynchronizationService synchronizationService = null,
+            ILogger logger = null,
+            IQRBarcodeScanService qrBarcodeScanService = null,
+            ISerializer serializer = null,
+            IUserInteractionService userInteractionService = null)
+            => new FinishInstallationViewModel(viewModelNavigationService ?? Mock.Of<IViewModelNavigationService>(),
+                principal ?? Mock.Of<IPrincipal>(x => x.CurrentUserIdentity == Create.Other.SupervisorIdentity(null, null, null)),
+                passwordHasher?? Mock.Of<IPasswordHasher>(),
+                interviewersPlainStorage ?? Mock.Of<IPlainStorage<SupervisorIdentity>>(),
+                deviceSettings ?? Mock.Of <IDeviceSettings>(),
+                synchronizationService ?? Mock.Of<ISupervisorSynchronizationService>(),
+                logger ?? Mock.Of<ILogger>(),
+                qrBarcodeScanService ?? Mock.Of<IQRBarcodeScanService>(),
+                serializer?? Mock.Of <ISerializer>(),
+                userInteractionService?? Mock.Of<IUserInteractionService>());
+
+        public ConnectedDeviceSynchronizationViewModel ConnectedDeviceSynchronizationViewModel()
+            => new ConnectedDeviceSynchronizationViewModel();
     }
 }

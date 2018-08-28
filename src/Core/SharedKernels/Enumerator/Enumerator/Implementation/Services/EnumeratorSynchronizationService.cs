@@ -10,7 +10,6 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Views;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -51,9 +50,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         protected readonly ICheckVersionUriProvider checkVersionUriProvider;
         protected readonly ILogger logger;
         protected readonly IEnumeratorSettings enumeratorSettings;
-
-        public string ApiDownloadAppPrefixUrl => "/api/interviewersync";
-
+        
         protected RestCredentials restCredentials => this.principal.CurrentUserIdentity == null
             ? null
             : new RestCredentials {
@@ -336,6 +333,28 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             }
         }
 
+        public Task<InterviewUploadState> GetInterviewUploadState(Guid interviewId, EventStreamSignatureTag eventStreamSignatureTag, CancellationToken cancellationToken)
+        {
+            try
+            {
+                return this.TryGetRestResponseOrThrowAsync(
+                    () => this.restService.PostAsync<InterviewUploadState>(
+                        url: string.Concat(this.InterviewsController,"/", interviewId, "/getInterviewUploadState"),
+                        credentials: this.restCredentials, 
+                        token: cancellationToken,
+                        request: eventStreamSignatureTag));
+            }
+            catch (SynchronizationException exception)
+            {
+                var httpStatusCode = (exception.InnerException as RestException)?.StatusCode;
+                if (httpStatusCode == HttpStatusCode.NotFound)
+                    return Task.FromResult(new InterviewUploadState());
+
+                this.logger.Error("Exception on download interview. ID:" + interviewId, exception);
+                throw;
+            }
+        }
+
         public Task UploadInterviewAsync(Guid interviewId, InterviewPackageApiView completedInterview, IProgress<TransferProgress> transferProgress, CancellationToken token)
         {
             return this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
@@ -479,6 +498,17 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         }
 
         #endregion
+
+        public Task<byte[]> GetFileAsync(string url, IProgress<TransferProgress> transferProgress, CancellationToken token)
+            => this.TryGetRestResponseOrThrowAsync(async () =>
+            {
+                var restFile = await this.restService.DownloadFileAsync(
+                    url: url,
+                    transferProgress: transferProgress,
+                    token: token,
+                    credentials: this.restCredentials).ConfigureAwait(false);
+                return restFile.Content;
+            });
 
         protected async Task TryGetRestResponseOrThrowAsync(Func<Task> restRequestTask)
         {

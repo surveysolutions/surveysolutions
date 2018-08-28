@@ -28,6 +28,23 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         }
 
         [Test]
+        public void when_read_text_file_info_with_whitespaces_in_columns_should_return_specified_file_info_with_specified_columns_without_whitespaces()
+        {
+            // arrange
+            var fileName = "text.txt";
+            var columns = new[] { "column1 ", " column2" };
+
+            var reader = Create.Service.AssignmentsImportReader();
+            var stream = Create.Other.TabDelimitedTextStream(columns);
+            // act
+            var fileInfo = reader.ReadTextFileInfo(stream, fileName);
+            // assert
+            Assert.That(fileInfo.FileName, Is.EqualTo(fileName));
+            Assert.That(fileInfo.QuestionnaireOrRosterName, Is.EqualTo("text"));
+            Assert.That(fileInfo.Columns, Is.EquivalentTo(new[] {"column1", "column2"}));
+        }
+
+        [Test]
         public void when_read_zip_file_info_and_file_is_not_an_arhive_should_return_empty_file_infos()
         {
             // arrange
@@ -84,6 +101,41 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             Assert.That(file.FileInfo.FileName, Is.EqualTo(fileName));
             Assert.That(file.FileInfo.QuestionnaireOrRosterName, Is.EqualTo("text"));
             Assert.That(file.FileInfo.Columns, Is.EquivalentTo(columns));
+        }
+
+        [Test]
+        public void when_read_text_file_with_columns_which_have_whitespaces_should_return_preloaded_file_with_columns_without_whitespaces()
+        {
+            // arrange
+            var fileName = "text.txt";
+            var columns = new[] { " column1", "column2 " };
+
+            var reader = Create.Service.AssignmentsImportReader();
+            var stream = Create.Other.TabDelimitedTextStream(columns);
+            // act
+            var file = reader.ReadTextFile(stream, fileName);
+            // assert
+            Assert.That(file.FileInfo.FileName, Is.EqualTo(fileName));
+            Assert.That(file.FileInfo.QuestionnaireOrRosterName, Is.EqualTo("text"));
+            Assert.That(file.FileInfo.Columns, Is.EquivalentTo(new[] {"column1", "column2"}));
+        }
+
+        [Test]
+        public void when_read_text_file_with_columns_which_have_whitespaces_should_return_preloaded_file_with_row_with_cells_which_have_variable_names_without_whitespaces()
+        {
+            // arrange
+            var fileName = "text.txt";
+            var columns = new[] { " column1", "column2 " };
+
+            var reader = Create.Service.AssignmentsImportReader();
+            var stream = Create.Other.TabDelimitedTextStream(columns, new []{ "1", "2" });
+            // act
+            var file = reader.ReadTextFile(stream, fileName);
+            // assert
+            Assert.That(file.Rows[0].Cells[0].VariableOrCodeOrPropertyName, Is.EqualTo("column1"));
+            Assert.That(file.Rows[0].Cells[1].VariableOrCodeOrPropertyName, Is.EqualTo("column2"));
+            Assert.That(((PreloadingValue)file.Rows[0].Cells[0]).Column, Is.EqualTo("column1"));
+            Assert.That(((PreloadingValue)file.Rows[0].Cells[1]).Column, Is.EqualTo("column2"));
         }
 
         [Test]
