@@ -40,7 +40,7 @@
     </HqLayout>
 </template>
 <script>
-import googleMarkers from "js-marker-clusterer";
+import MarkerClusterer from "@google/markerclustererplus";
 import infoBubble from "js-info-bubble";
 import * as toastr from "toastr";
 import Vue from "vue";
