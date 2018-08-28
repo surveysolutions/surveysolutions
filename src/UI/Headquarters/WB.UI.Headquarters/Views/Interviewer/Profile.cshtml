@@ -70,12 +70,12 @@
                     });
             }
         </script>
-        <script async defer
+        @*<script async defer
                 src="@string.Format("{0}/maps/api/js?key={1}", @AppSettings.Instance.GoogleMapApiBaseUrl, ServiceLocator.Current.GetInstance<GoogleApiSettings>().ApiKey)">
-        </script>
+        </script>*@
     }
     <script type="text/javascript"
-            src="@AppSettings.Instance.GoogleMapApiBaseUrl/maps/api/js?key=@AppSettings.Instance.GoogleMapApiKey&sensor=false">
+            src="@AppSettings.Instance.GoogleMapApiBaseUrl/maps/api/js?key=@AppSettings.Instance.GoogleMapApiKey">
     </script>
 }
 <main class="enumerators">

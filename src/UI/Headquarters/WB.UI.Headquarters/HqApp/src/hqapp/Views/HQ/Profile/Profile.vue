@@ -19,34 +19,16 @@
 </template>
 
 <script>
-    import googleMarkers from "js-marker-clusterer";
+    import MarkerClusterer from "@google/markerclustererplus";
     import Vue from "vue";
-
-    const twoColorsMarker = '<svg width="48" height="48" xmlns="http://www.w3.org/2000/svg">\
-        <defs>\
-        <linearGradient id="myGradient" gradientTransform="rotate(90 16 16)">\
-            <stop offset="0%" stop-color="{{color1}}" />\
-            <stop offset="100%" stop-color="{{color2}}" />\
-        </linearGradient>\
-        </defs>\
-        <path fill="url(#myGradient)" d="M 22.6 0.3c-0.6 0.1-1.7 0.5-2.2 0.7 -2.2 1-3.8 1.9-6.1 3.7 -3.7 2.8-7.7 6.8-10.4 10.6 -0.7 1-1.6 2.3-1.9 2.9 -0.4 0.7-1 2-1.1 2.2 0 0.1-0.1 0.2-0.1 0.2 -0.2 0.3-0.6 1.8-0.7 2.7 -0.1 0.7-0.1 0.8 0 1.6 0.1 0.9 0.5 2.4 0.7 2.7 0 0 0.1 0.1 0.1 0.2 0.1 0.2 0.9 2 1.2 2.4 1.8 3.1 4.8 6.8 8 9.8 3.6 3.4 6.9 5.7 10.2 7.2 0.5 0.2 1.8 0.6 2.4 0.7 2.4 0.4 5.5-0.6 9.3-3.2 2.4-1.6 4.3-3.2 6.8-5.7 2.1-2.1 3.9-4.2 5-5.8 0.1-0.1 0.4-0.5 0.6-0.9 1-1.4 2.1-3.3 2.5-4.5 0.1-0.3 0.2-0.5 0.2-0.6 0.1-0.2 0.3-1 0.5-1.6 0.2-1.1 0.2-2.5-0.3-3.8 -0.1-0.2-0.2-0.5-0.2-0.6s-0.1-0.4-0.2-0.6c-0.4-1.2-1.5-3.1-2.5-4.5 -0.3-0.4-0.6-0.8-0.6-0.9 -0.5-0.7-1.8-2.3-2.7-3.4 -1-1.1-3.7-3.8-4.8-4.8 -2.7-2.3-5.5-4.3-7.7-5.4 -2.4-1.2-4.3-1.5-6-1.2z"/>\
-        </svg>';
-
-    const threeColorsMarker = '<svg width="48" height="48" xmlns="http://www.w3.org/2000/svg">\
-        <defs>\
-        <linearGradient id="myGradient" gradientTransform="rotate(90 16 16)">\
-            <stop offset="0%" stop-color="{{color1}}" />\
-            <stop offset="50%" stop-color="{{color2}}" />\
-            <stop offset="100%" stop-color="{{color3}}" />\
-        </linearGradient>\
-        </defs>\
-        <path fill="url(#myGradient)" d="M 22.6 0.3c-0.6 0.1-1.7 0.5-2.2 0.7 -2.2 1-3.8 1.9-6.1 3.7 -3.7 2.8-7.7 6.8-10.4 10.6 -0.7 1-1.6 2.3-1.9 2.9 -0.4 0.7-1 2-1.1 2.2 0 0.1-0.1 0.2-0.1 0.2 -0.2 0.3-0.6 1.8-0.7 2.7 -0.1 0.7-0.1 0.8 0 1.6 0.1 0.9 0.5 2.4 0.7 2.7 0 0 0.1 0.1 0.1 0.2 0.1 0.2 0.9 2 1.2 2.4 1.8 3.1 4.8 6.8 8 9.8 3.6 3.4 6.9 5.7 10.2 7.2 0.5 0.2 1.8 0.6 2.4 0.7 2.4 0.4 5.5-0.6 9.3-3.2 2.4-1.6 4.3-3.2 6.8-5.7 2.1-2.1 3.9-4.2 5-5.8 0.1-0.1 0.4-0.5 0.6-0.9 1-1.4 2.1-3.3 2.5-4.5 0.1-0.3 0.2-0.5 0.2-0.6 0.1-0.2 0.3-1 0.5-1.6 0.2-1.1 0.2-2.5-0.3-3.8 -0.1-0.2-0.2-0.5-0.2-0.6s-0.1-0.4-0.2-0.6c-0.4-1.2-1.5-3.1-2.5-4.5 -0.3-0.4-0.6-0.8-0.6-0.9 -0.5-0.7-1.8-2.3-2.7-3.4 -1-1.1-3.7-3.8-4.8-4.8 -2.7-2.3-5.5-4.3-7.7-5.4 -2.4-1.2-4.3-1.5-6-1.2z"/>\
-        </svg>';
 
     export default {
         data: function() {
             return {
                 map: null,
+                markerCluster: null,
+                points: new Map(),
+                lines: [],
                 interviewerId: this.$route.params.interviewerId,
                 interviewDetailsTooltip: new InfoBubble(),
                 selectedTooltips: {},
@@ -54,7 +36,8 @@
                     red: "#e74924",
                     green: "#2c7613",
                     blue: "#0042c8"
-                }
+                },
+                minimumClusterSize: 5
             };
         },
         mounted() {
@@ -81,39 +64,6 @@
                 
                 return is_ie; 
             },
-            createMarkerIcon(colors)
-            {
-                var icon = {
-                    scale: 1,
-                    size: new google.maps.Size(48,48),
-                    anchor: new google.maps.Point(24,48),
-                    labelOrigin: new google.maps.Point(24, 24),
-                };
-                if (colors.length == 1 || this.isIE())
-                {
-                    icon["path"] = "M 22.6 0.3c-0.6 0.1-1.7 0.5-2.2 0.7 -2.2 1-3.8 1.9-6.1 3.7 -3.7 2.8-7.7 6.8-10.4 10.6 -0.7 1-1.6 2.3-1.9 2.9 -0.4 0.7-1 2-1.1 2.2 0 0.1-0.1 0.2-0.1 0.2 -0.2 0.3-0.6 1.8-0.7 2.7 -0.1 0.7-0.1 0.8 0 1.6 0.1 0.9 0.5 2.4 0.7 2.7 0 0 0.1 0.1 0.1 0.2 0.1 0.2 0.9 2 1.2 2.4 1.8 3.1 4.8 6.8 8 9.8 3.6 3.4 6.9 5.7 10.2 7.2 0.5 0.2 1.8 0.6 2.4 0.7 2.4 0.4 5.5-0.6 9.3-3.2 2.4-1.6 4.3-3.2 6.8-5.7 2.1-2.1 3.9-4.2 5-5.8 0.1-0.1 0.4-0.5 0.6-0.9 1-1.4 2.1-3.3 2.5-4.5 0.1-0.3 0.2-0.5 0.2-0.6 0.1-0.2 0.3-1 0.5-1.6 0.2-1.1 0.2-2.5-0.3-3.8 -0.1-0.2-0.2-0.5-0.2-0.6s-0.1-0.4-0.2-0.6c-0.4-1.2-1.5-3.1-2.5-4.5 -0.3-0.4-0.6-0.8-0.6-0.9 -0.5-0.7-1.8-2.3-2.7-3.4 -1-1.1-3.7-3.8-4.8-4.8 -2.7-2.3-5.5-4.3-7.7-5.4 -2.4-1.2-4.3-1.5-6-1.2z";
-                    icon["fillColor"] = this.colorMap[colors[0]];
-                    icon["fillOpacity"] = 1;
-                    
-                    return icon;
-                }
-
-                var svg = (colors.length == 2 ? twoColorsMarker : threeColorsMarker).replace('{{color1}}', colors[0]);
-                svg = svg.replace('{{color2}}', colors[1]);
-
-                if (colors.length == 2) 
-                {
-                    icon["url"] = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
-                    return icon;                
-                }
-
-                if (colors.length == 3) 
-                {
-                    svg = svg.replace('{{color3}}', colors[2]);
-                    icon["url"] = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
-                    return icon;                
-                }
-            },
             showPointsOnMap(points){
                 const self = this;
                
@@ -129,7 +79,6 @@
                 var markers = [];
                 points.forEach(point => {
                     var marker = new google.maps.Marker({
-                        icon: self.createMarkerIcon(point.Colors),
                         position: new google.maps.LatLng(
                             point.Latitude,
                             point.Longitude,
@@ -139,6 +88,7 @@
                         opacity: 1,
                         zIndex: point.Index === -1 ? 1000 : 1000 + point.Index 
                     });
+                    marker.set("id", point.Index);
 
                     google.maps.event.addListener(marker, "click",
                         (function(marker, point) {
@@ -149,34 +99,105 @@
                     );
                     markers.push(marker);
                     bounds.extend(marker.getPosition());
-                });
-                
-                var markerCluster = new MarkerClusterer(this.map, markers,
-                {
-                    imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'
-                });
-      
-                var pathPoints = _.map(points, p => {
-                    return {
-                        lat: p.Latitude,
-                        lng: p.Longitude
-                    };
-                });
-                
-                // for(var i=0; i< pathPoints.length - 1; i++)
-                // {
-                //     var path = new google.maps.Polyline({
-                //         path: [pathPoints[i], pathPoints[i+1]],
-                //         icons: [ arrowMarker ],
-                //         geodesic: true,
-                //         strokeColor: "#2a81cb",
-                //         strokeOpacity: 0.75,
-                //         strokeWeight: 2
-                //     });
 
-                //     path.setMap(self.map);
-                // }
-                self.map.fitBounds(bounds);
+                    self.points.set(point.Index, { 
+                        index: point.Index,
+                        cluster: 0,
+                        point: {
+                            lat: point.Latitude,
+                            lng: point.Longitude
+                        },
+                        marker: marker
+                    });
+                });
+                
+                this.markerCluster = new MarkerClusterer(this.map, markers,
+                {
+                    imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
+                    enableRetinaIcons: true,
+                    minimumClusterSize: this.minimumClusterSize,
+                    averageCenter: true
+                });
+                
+                google.maps.event.addListener(this.markerCluster, 'clusteringend', () => {
+                    this.drawLines();
+                });
+                
+                this.map.fitBounds(bounds);
+            },
+            drawLines(){
+                if (!this.markerCluster)
+                    return;
+
+                this.points.forEach(point => {
+                    point.cluster = 0;
+                });
+
+                this.lines.forEach(line => {
+                   line.setMap(null);
+                });
+                this.lines = [];
+
+                var clusters = this.markerCluster.getClusters();
+                var clustersMap = new Map();
+
+                for(let i=1;i<clusters.length+1;i++)
+                {
+                    let cluster = clusters[i-1];
+                    let center = cluster.getCenter();
+                    let markers = cluster.getMarkers();
+                    clustersMap.set(i, {
+                        center: center,
+                        size: cluster.getSize()
+                    });
+                    markers.forEach((marker) => {
+                        let markerId = marker.get("id");
+
+                        let point = this.points.get(markerId);
+                        point.cluster = i
+                    });
+                }
+
+                for(let i=1; i< this.points.size; i++)
+                {
+                    let left = this.points.get(i);
+                    let right = this.points.get(i+1);
+
+                    let leftCluster =  clustersMap.get(left.cluster) || { size: -1 };
+                    let rightCluster = clustersMap.get(right.cluster) || { size: -1 };
+
+                    let leftPointsAreGroupedInCluster = leftCluster.size >= this.minimumClusterSize;
+                    let rightPointsAreGroupedInCluster = rightCluster.size >= this.minimumClusterSize;
+
+                    let pointsAreGroupedInTheSameCluster = left.cluster == right.cluster && leftPointsAreGroupedInCluster;
+                    
+                    if (pointsAreGroupedInTheSameCluster) continue;
+
+                    let leftPoint = left.point;
+                    let rightPoint = right.point;
+
+                    if (left.cluster > 0 && leftPointsAreGroupedInCluster)
+                    {
+                        leftPoint = leftCluster.center;
+                    }
+
+                    if (right.cluster > 0 && rightPointsAreGroupedInCluster)
+                    {
+                        rightPoint = rightCluster.center;
+                    }
+                   
+                    var path = new google.maps.Polyline({
+                        path: [leftPoint, rightPoint],
+                        geodesic: true,
+                        strokeColor: "#2a81cb",
+                        strokeOpacity: 0.75,
+                        strokeWeight: 1
+                    });
+
+                    path.setMap(this.map);
+
+                    this.lines.push(path);
+                }
             },
             loadPointDetails(interviewIds, marker){
                 const self = this;
