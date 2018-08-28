@@ -94,6 +94,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             this.answerNotifier.Init(this.interviewId);
             this.answerNotifier.QuestionAnswered += this.QuestionAnswered;
+            this.Tag = "SideBar_Section_" + sectionIdentity;
         }
 
         private void QuestionAnswered(object sender, EventArgs e)
@@ -104,6 +105,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private void OnScreenChanged(ScreenChangedEventArgs eventArgs) => this.UpdateSelection(eventArgs.TargetGroup);
         
+        public string Tag { get; private set; }
+
         public GroupStateViewModel SideBarGroupState { get; private set; }
 
         public NavigationState NavigationState { get; set; }
