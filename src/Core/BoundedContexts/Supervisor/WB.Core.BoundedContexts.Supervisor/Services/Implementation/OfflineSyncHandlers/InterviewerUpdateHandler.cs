@@ -10,10 +10,12 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
     public class InterviewerUpdateHandler : IHandleCommunicationMessage
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
+        private readonly ISupervisorSettings settings;
 
-        public InterviewerUpdateHandler(IFileSystemAccessor fileSystemAccessor)
+        public InterviewerUpdateHandler(IFileSystemAccessor fileSystemAccessor, ISupervisorSettings settings)
         {
             this.fileSystemAccessor = fileSystemAccessor;
+            this.settings = settings;
         }
 
         public void Register(IRequestHandler requestHandler)
@@ -27,7 +29,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
 
             var pathToRootDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
             var patchesDirectory = this.fileSystemAccessor.CombinePath(pathToRootDirectory, "patches");
-            var patchFilePath = this.fileSystemAccessor.CombinePath(patchesDirectory, patchFileName);
+            var patchesDirectoryForSupervisorApp = this.fileSystemAccessor.CombinePath(patchesDirectory, this.settings.GetApplicationVersionCode().ToString());
+            var patchFilePath = this.fileSystemAccessor.CombinePath(patchesDirectoryForSupervisorApp, patchFileName);
 
             return Task.FromResult(new GetInterviewerAppPatchResponse
             {
