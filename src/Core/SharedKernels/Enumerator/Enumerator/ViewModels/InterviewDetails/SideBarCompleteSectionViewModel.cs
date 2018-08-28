@@ -38,6 +38,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             set { this.RaiseAndSetIfChanged(ref this.isSelected, value); }
         }
 
+        public string Tag => "SideBar_Complete";
+
         public ICommand ToggleCommand => new MvxCommand(() => { });
         public ICommand NavigateToSectionCommand => new MvxAsyncCommand(this.NavigateToSection);
 
