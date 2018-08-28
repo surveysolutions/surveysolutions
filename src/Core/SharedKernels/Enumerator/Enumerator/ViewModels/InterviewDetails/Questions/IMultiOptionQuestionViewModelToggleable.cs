@@ -11,5 +11,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         IObservableCollection<MultiOptionQuestionOptionViewModelBase> Options { get; }
 
         Identity QuestionIdentity { get; }
+
+        bool AreAnswersOrdered { get; }
     }
 }

@@ -51,20 +51,23 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
         public override async Task ExecuteAsync()
         {
-            var remoteInterviews = await this.SynchronizationService.GetInterviewsAsync(this.Context.CancellationToken);
+            List<InterviewApiView> remoteInterviews = await this.SynchronizationService.GetInterviewsAsync(this.Context.CancellationToken);
             var remoteInterviewWithSequence = remoteInterviews.ToDictionary(k => k.Id, v => v.Sequence);
 
             var localInterviews = this.interviewViewRepository.LoadAll();
             var localInterviewIds = localInterviews.Select(interview => interview.InterviewId).ToHashSet();
 
             var localInterviewsToRemove = localInterviews.Where(
-                interview => !remoteInterviewWithSequence.ContainsKey(interview.InterviewId) && !interview.CanBeDeleted);
+                interview => !remoteInterviewWithSequence.ContainsKey(interview.InterviewId) && 
+                             interview.FromHqSyncDateTime != null); //were created on tablet and was not synced with hq
+                                                                    //after reject from SV -> Int offline sync
+                                                                    //flac CanBeDeleted is false
 
-            IEnumerable<Guid> obsoleteInterviews = await this.FindObsoleteInterviewsAsync(localInterviews, remoteInterviews, this.Context.Progress, this.Context.CancellationToken);
+            var obsoleteInterviews = await this.FindObsoleteInterviewsAsync(localInterviews, remoteInterviews, this.Context.Progress, this.Context.CancellationToken);
 
             var localInterviewIdsToRemove = localInterviewsToRemove
+                
                 .Select(interview => interview.InterviewId)
-                .Where(IsNotPresentOnHq)
                 .Concat(obsoleteInterviews)
                 .ToArray();
 
@@ -73,6 +76,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 .ToList();
 
             this.interviewsRemover.RemoveInterviews(this.Context.Statistics, this.Context.Progress, localInterviewIdsToRemove);
+
+            var interviewsThatAreNotMarkedAsReceived = remoteInterviews.Where(x => !x.IsMarkedAsReceivedByInterviewer && 
+                                                                                   remoteInterviewsToCreate.All(r => r.Id != x.Id));
+            foreach (var interviewApiView in interviewsThatAreNotMarkedAsReceived)
+            {
+                this.Context.CancellationToken.ThrowIfCancellationRequested();
+                await this.SynchronizationService.LogInterviewAsSuccessfullyHandledAsync(interviewApiView.Id);
+            }
 
             await this.CreateInterviewsAsync(remoteInterviewsToCreate, this.Context.Statistics, this.Context.Progress, this.Context.CancellationToken);
         }
@@ -96,7 +107,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         Title = InterviewerUIResources.Synchronization_Download_Title,
                         Description = string.Format(InterviewerUIResources.Synchronization_Download_Description_Format,
                             statistics.RejectedInterviewsCount + statistics.NewInterviewsCount + 1, interviews.Count,
-                            InterviewerUIResources.Synchronization_Interviews)
+                            InterviewerUIResources.Synchronization_Interviews),
+                        Stage = SyncStage.UpdatingAssignments,
+                        StageExtraInfo = new Dictionary<string, string>()
+                        {
+                            { "processedCount", (statistics.RejectedInterviewsCount + statistics.NewInterviewsCount + 1).ToString() },
+                            { "totalCount", interviews.Count.ToString()}
+                        }
                     });
 
                     await this.questionnaireDownloader.DownloadQuestionnaireAsync(interview.QuestionnaireIdentity, statistics, transferProgress, cancellationToken);
@@ -137,12 +154,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         "Failed to create interview, interviewer",
                         exception);
                 }
-        }
-
-        
-        private bool IsNotPresentOnHq(Guid interviewId)
-        {
-            return interviewSequenceViewRepository.GetById(interviewId) != null;
         }
 
         private bool ShouldBeDownloadedBasedOnEventSequence(InterviewApiView interview)

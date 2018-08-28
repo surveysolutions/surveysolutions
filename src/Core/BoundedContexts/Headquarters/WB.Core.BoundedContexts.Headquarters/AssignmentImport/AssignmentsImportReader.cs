@@ -31,7 +31,8 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             
             foreach (var kv in record)
             {
-                var columnName = kv.Key.ToLower();
+                var sourceColumnName = kv.Key.Trim();
+                var columnName = sourceColumnName.ToLower();
                 var value = (string) kv.Value;
 
                 if (ServiceColumns.AllSystemVariables.Contains(columnName)) continue;
@@ -56,7 +57,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
                 {
                     VariableOrCodeOrPropertyName = variableOrCodeOrPropertyName,
                     Row = rowIndex,
-                    Column = kv.Key,
+                    Column = sourceColumnName,
                     Value = value.Replace(ExportFormatSettings.MissingStringQuestionValue, string.Empty)
                         .Replace(ExportFormatSettings.MissingNumericQuestionValue, string.Empty)
                         .Replace(ExportFormatSettings.MissingQuantityValue, "-1"),
@@ -66,7 +67,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             return new PreloadingRow
             {
                 RowIndex = rowIndex,
-                Cells = cells.Select(x => x.Value.Count == 1 && x.Value.First().Column.ToLower() == x.Value.First().VariableOrCodeOrPropertyName
+                Cells = cells.Select(x => x.Value.Count == 1 && x.Value.First().Column.Trim().ToLower() == x.Value.First().VariableOrCodeOrPropertyName.Trim()
                     ? x.Value[0]
                     : (PreloadingCell) new PreloadingCompositeValue
                     {
@@ -80,27 +81,18 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         {
             FileName = fileName,
             QuestionnaireOrRosterName = Path.GetFileNameWithoutExtension(fileName),
-            Columns = this.csvReader.ReadHeader(inputStream, TabExportFile.Delimiter),
+            Columns = this.csvReader.ReadHeader(inputStream, TabExportFile.Delimiter).Select(x => x?.Trim()).ToArray(),
         };
 
-        public PreloadedFile ReadTextFile(Stream inputStream, string fileName)
+        public PreloadedFile ReadTextFile(Stream inputStream, string fileName) => new PreloadedFile
         {
-            var fileNameWithoutExtension = Path.GetFileNameWithoutExtension(fileName);
-            return new PreloadedFile
-            {
-                FileInfo = new PreloadedFileInfo
-                {
-                    FileName = fileName,
-                    QuestionnaireOrRosterName = fileNameWithoutExtension,
-                    Columns = this.csvReader.ReadHeader(inputStream, TabExportFile.Delimiter),
-                },
-                Rows = this.csvReader.GetRecords(inputStream, TabExportFile.Delimiter)
-                    .Select((record, rowIndex) =>
-                        fileNameWithoutExtension.Equals(ServiceFiles.ProtectedVariables, StringComparison.OrdinalIgnoreCase)
-                            ? (PreloadingRow) this.ToProtectedVariablesRow(rowIndex + 1, record)
-                            : (PreloadingRow) this.ToRow(rowIndex + 1, record)).ToArray()
-            };
-        }
+            FileInfo = this.ReadTextFileInfo(inputStream, fileName),
+            Rows = this.csvReader.GetRecords(inputStream, TabExportFile.Delimiter)
+                .Select((record, rowIndex) =>
+                    Path.GetFileNameWithoutExtension(fileName).Equals(ServiceFiles.ProtectedVariables, StringComparison.OrdinalIgnoreCase)
+                        ? (PreloadingRow) this.ToProtectedVariablesRow(rowIndex + 1, record)
+                        : (PreloadingRow) this.ToRow(rowIndex + 1, record)).ToArray()
+        };
 
         private PreloadingRow ToProtectedVariablesRow(int rowIndex, ExpandoObject record) => new PreloadingRow
         {

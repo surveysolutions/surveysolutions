@@ -4,6 +4,6 @@ namespace WB.UI.Shared.Enumerator.Activities
 {
     public class CompleteInterviewFragment : BaseFragment<CompleteInterviewViewModel>
     {
-        protected override int ViewResourceId => Resource.Layout.interview_complete_status_change;
+        protected override int ViewResourceId => Resource.Layout.interview_complete;
     }
 }

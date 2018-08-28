@@ -12,9 +12,9 @@ namespace WB.Core.BoundedContexts.Supervisor
         public void Load(IIocRegistry registry)
         {
             registry.BindWithConstructorArgument<ISynchronizationStep, SupervisorUploadInterviews>("sortOrder", 0);
-            registry.BindWithConstructorArgument<ISynchronizationStep, SynchronizeAssignments>("sortOrder", 10);
+            registry.BindWithConstructorArgument<ISynchronizationStep, SyncronizeInterviewers>("sortOrder", 10);
             registry.BindWithConstructorArgument<ISynchronizationStep, SynchronizeSupervisor>("sortOrder", 20);
-            registry.BindWithConstructorArgument<ISynchronizationStep, SyncronizeInterviewers>("sortOrder", 30);
+            registry.BindWithConstructorArgument<ISynchronizationStep, SynchronizeAssignments>("sortOrder", 30);
             registry.BindWithConstructorArgument<ISynchronizationStep, DownloadDeletedQuestionnairesList>("sortOrder", 50);
             registry.BindWithConstructorArgument<ISynchronizationStep, RemoveObsoleteQuestionnaires>("sortOrder", 60);
             registry.BindWithConstructorArgument<ISynchronizationStep, SupervisorDownloadInterviews>("sortOrder", 70);
@@ -22,6 +22,7 @@ namespace WB.Core.BoundedContexts.Supervisor
             registry.BindWithConstructorArgument<ISynchronizationStep, SynchronizeLogo>("sortOrder", 90);
             registry.BindWithConstructorArgument<ISynchronizationStep, SynchronizeAuditLog>("sortOrder", 100);
             registry.BindWithConstructorArgument<ISynchronizationStep, SupervisorUpdateApplication>("sortOrder", 110);
+            registry.BindWithConstructorArgument<ISynchronizationStep, DownloadInterviewerAppPatches>("sortOrder", 120);
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)

@@ -207,16 +207,43 @@ body {
   z-index: 2;
 }
 .container-wb-list .header-wb-list header .questionnaire-logo {
-  background: url("../questionnaire/content/i/logo-designer.png") no-repeat;
-  width: 210px;
+  display: table;   
+  width: 250px;
   height: 54px;
   margin: 12px 33px;
   position: absolute;
   top: 0;
   left: 0;
-  text-indent: -9999999px;
-  background-size: 100% auto;
-    
+}
+.questionnaire-logo img{
+    display: inline-block;
+    height: 55px;
+    width: auto;
+    margin-right: 10px;
+}
+.questionnaire-logo a{
+    color: #727d84;
+    font-size: 18px;
+    line-height: 20px;
+    font-weight: bold;
+    display: table-cell;
+}
+.questionnaire-logo a:hover,
+.questionnaire-logo a:focus{
+    text-decoration: none;
+}
+.questionnaire-logo .logo{
+    padding-right: 5px;
+    border-right: 2px solid #727d84;
+}
+.questionnaire-logo .navbar-text{
+    vertical-align: middle;
+    padding-left: 10px;
+    padding-right: 10px;
+    margin: 0;
+    float: none;
+    font-size: 23px;
+    line-height: 25px;
 }
 .container-wb-list .header-wb-list header .nav-tabs {
   width: 100%;

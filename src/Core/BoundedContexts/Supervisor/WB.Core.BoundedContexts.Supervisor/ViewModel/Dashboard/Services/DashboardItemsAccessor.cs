@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items;
-using WB.Core.SharedKernels.DataCollection.Events;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -107,11 +106,12 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services
         private IReadOnlyCollection<InterviewView> GetOutboxInterviews()
         {
             return this.interviews.Where(x =>
-                x.ReceivedByInterviewerAtUtc == null && (
-                x.Status == InterviewStatus.ApprovedBySupervisor
-                || x.ResponsibleId != this.principal.CurrentUserIdentity.UserId && 
-                (x.Status == InterviewStatus.RejectedBySupervisor || 
-                 x.Status == InterviewStatus.InterviewerAssigned)));
+                x.ReceivedByInterviewerAtUtc == null && 
+                    (x.Status == InterviewStatus.ApprovedBySupervisor || 
+                     x.ResponsibleId != this.principal.CurrentUserIdentity.UserId && 
+                        (x.Status == InterviewStatus.RejectedBySupervisor || 
+                         x.Status == InterviewStatus.InterviewerAssigned || 
+                         x.Status == InterviewStatus.Restarted)));
         }
 
         private IEnumerable<AssignmentDocument> GetOutboxAssignments()

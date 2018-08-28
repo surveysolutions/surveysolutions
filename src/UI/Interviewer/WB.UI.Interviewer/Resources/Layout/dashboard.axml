@@ -19,19 +19,7 @@
       android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
       local:popupTheme="@style/ThemeOverlay.AppCompat.Light"
       local:layout_scrollFlags="scroll|enterAlways"
-      local:MvxBind="ColorByInterviewStatus TypeOfInterviews;">
-        <TextView
-            style="@style/ToolbarTitle"
-            local:MvxBind="Text DashboardTitle;" />
-        <ImageButton style="@style/ToolbarIcon"
-                     android:id="@+id/menu_synchronization"
-                     local:MvxBind="Click SynchronizationCommand; Visible SynchronizationWithHqEnabled"
-                     local:srcCompat="@drawable/synchronize_icon"/>
-        <ImageButton style="@style/ToolbarIcon"
-                     android:id="@+id/menu_offline_synchronization"
-                     local:MvxBind="Click StartOfflineSyncCommand; Visible Not(SynchronizationWithHqEnabled)"
-                     local:srcCompat="@drawable/synchronize_offline_icon"/>
-        
+      local:MvxBind="ColorByInterviewStatus TypeOfInterviews; Title DashboardTitle">
     </android.support.v7.widget.Toolbar>
     <android.support.design.widget.TabLayout
         android:id="@+id/tabs"
