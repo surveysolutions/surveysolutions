@@ -111,6 +111,35 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             mockOfSupervisorSettings.Verify(x => x.SetLatestInterviewerAppVersion(version), Times.Once);
         }
 
+        [Test]
+        public async Task when_ExecuteAsync_and_old_patches_by_old_supervisor_version_exists_should_old_patches_be_removed()
+        {
+            // arrange
+            int? version = 12345;
+            int oldSupervisorVersion = 12344;
+
+            var mockOfSupervisorSynchronization = new Mock<ISupervisorSynchronizationService>();
+            mockOfSupervisorSynchronization.Setup(x => x.GetLatestInterviewerAppVersionAsync(It.IsAny<CancellationToken>())).Returns(Task.FromResult(version));
+            mockOfSupervisorSynchronization.Setup(x => x.GetListOfInterviewerAppPatchesAsync(It.IsAny<CancellationToken>())).Returns(Task.FromResult(Array.Empty<InterviewerApplicationPatchApiView>()));
+
+            var mockOfSupervisorSettings = new Mock<ISupervisorSettings>();
+            mockOfSupervisorSettings.Setup(x => x.GetApplicationVersionCode()).Returns(version.Value);
+
+            var mockOfFileSystemAccessor = new Mock<IFileSystemAccessor>();
+            mockOfFileSystemAccessor.Setup(x => x.GetDirectoriesInDirectory(It.IsAny<string>()))
+                .Returns(new[] {version.ToString(), oldSupervisorVersion.ToString()});
+
+            var step = CreateDownloadInterviewerAppPatches(
+                synchronizationService: mockOfSupervisorSynchronization.Object,
+                supervisorSettings: mockOfSupervisorSettings.Object,
+                fileSystemAccessor: mockOfFileSystemAccessor.Object);
+
+            // act
+            await step.ExecuteAsync();
+            // assert
+            mockOfFileSystemAccessor.Verify(x => x.DeleteDirectory(It.Is<string>(y => y.Contains(oldSupervisorVersion.ToString()))), Times.Once);
+        }
+
         private static DownloadInterviewerAppPatches CreateDownloadInterviewerAppPatches(
             ISupervisorSynchronizationService synchronizationService = null,
             ILogger logger = null,
