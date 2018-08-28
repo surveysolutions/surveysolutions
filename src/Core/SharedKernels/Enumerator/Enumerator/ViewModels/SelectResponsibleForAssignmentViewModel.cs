@@ -9,6 +9,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -179,7 +180,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             var assignmentsCount = interviewsQuantityByInterviewer.Sum(x =>
                 x.Quantity == null ? 1 : x.Quantity.GetValueOrDefault() - x.CreatedInterviewsCount.GetValueOrDefault());
 
-            var interviewsCount = this.interviewStorage.Count(y => y.ResponsibleId == interviewer.InterviewerId);
+            var interviewsCount = this.interviewStorage.Count(y =>
+                y.ResponsibleId == interviewer.InterviewerId && 
+                (y.Status == InterviewStatus.RejectedBySupervisor || y.Status == InterviewStatus.RejectedByHeadquarters));
 
             return new InterviewerToSelectViewModel(this)
             {
