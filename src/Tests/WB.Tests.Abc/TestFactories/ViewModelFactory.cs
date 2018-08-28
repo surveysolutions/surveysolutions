@@ -70,14 +70,14 @@ namespace WB.Tests.Abc.TestFactories
             ILiteEventRegistry eventRegistry = null,
             IMvxMessenger messenger = null,
             IUserInterfaceStateService userInterfaceStateService = null,
-            IMvxMainThreadDispatcher mvxMainThreadDispatcher = null,
+            IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher = null,
             ICompositeCollectionInflationService compositeCollectionInflationService = null,
             IVirbationService virbationService = null)
             => new EnumerationStageViewModel(
                 interviewViewModelFactory ?? Mock.Of<IInterviewViewModelFactory>(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 userInterfaceStateService ?? Mock.Of<IUserInterfaceStateService>(),
-                mvxMainThreadDispatcher ?? Stub.MvxMainThreadDispatcher(),
+                mvxMainThreadDispatcher ?? Stub.MvxMainThreadAsyncDispatcher(),
                 Create.ViewModel.DynamicTextViewModel(
                     eventRegistry: eventRegistry,
                     interviewRepository: interviewRepository),

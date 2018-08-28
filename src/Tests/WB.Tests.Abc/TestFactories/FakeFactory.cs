@@ -107,6 +107,7 @@ namespace WB.Tests.Abc.TestFactories
             return result;
         }
 
+        
         public IMvxViewDispatcher MvxMainThreadDispatcher1() => new MockDispatcher();
 
         public class MockDispatcher: MvxMainThreadDispatcher, IMvxViewDispatcher
@@ -154,6 +155,37 @@ namespace WB.Tests.Abc.TestFactories
             return exportFileAccessor.Object;
         }
         
+
+        public IMvxMainThreadAsyncDispatcher MvxMainThreadAsyncDispatcher()
+        {
+            return new FakeMvxMainThreadAsyncDispatcher();
+        }
+
+        private class FakeMvxMainThreadAsyncDispatcher : MvxMainThreadAsyncDispatcher, IMvxViewDispatcher
+        {
+            public readonly List<MvxViewModelRequest> Requests = new List<MvxViewModelRequest>();
+            public readonly List<MvxPresentationHint> Hints = new List<MvxPresentationHint>();
+
+            public override bool RequestMainThreadAction(Action action, bool maskExceptions = true)
+            {
+                action();
+                return true;
+            }
+
+            public override bool IsOnMainThread => true;
+
+            public Task<bool> ShowViewModel(MvxViewModelRequest request)
+            {
+                Requests.Add(request);
+                return Task.FromResult(true);
+            }
+
+            public Task<bool> ChangePresentation(MvxPresentationHint hint)
+            {
+                Hints.Add(hint);
+                return Task.FromResult(true);
+            }
+        }
 
         public IMvxMainThreadDispatcher MvxMainThreadDispatcher() => new FakeMvxMainThreadDispatcher();
 
