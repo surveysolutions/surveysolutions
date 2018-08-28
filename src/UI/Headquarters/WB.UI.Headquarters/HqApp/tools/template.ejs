@@ -1,0 +1,68 @@
+<%
+  var options = htmlWebpackPlugin.options;
+
+  // for hot reload application should point to hot reload devserver public path, 
+  // clsi.e. http://localhost:8080/dist/
+  var devPublicPath =  webpackConfig.devServer != null ? webpackConfig.devServer.publicPath : "";
+
+  // js don't have own trim function
+  function join(a, b) {
+      a = a == null ? '' : a
+      b = b == null ? '' : b
+      if(a.endsWith("/") && b.startsWith("/")) {
+          b = b.substr(1)
+      }
+
+      return a + b;
+  }
+
+  function urlContent(path) {
+      //console.log('DEBUG: urlContent', path, options.isHot)
+      
+
+      if(options.isHot) {
+          const res = join('http://localhost:8080', devPublicPath)
+          
+          return path != devPublicPath ? join(res, path) : res;
+        
+      } else {
+          var result = join(options.assetsPath, path);
+          return '@Url.Content("' + result + '")';
+      }
+  }
+
+%>@{ 
+  var locales = new System.Collections.Generic.Dictionary<string, string> {
+    <%= htmlWebpackPlugin.options.locales.dictionary %>
+  };
+    
+  var current = System.Globalization.CultureInfo.CurrentUICulture.Name.Split('-')[0];
+  if (!locales.ContainsKey(current))
+  {
+      current = "en";
+  }
+  var localePath = Url.Content("<%= options.assetsPath %>" + locales[current]);
+}
+
+<script>
+window.CONFIG.basePath = '@Url.Content("~/")';
+window.CONFIG.assetsPath = '<%= urlContent(devPublicPath) %>';
+window.CONFIG.locale = {
+    locale: '@System.Globalization.CultureInfo.CurrentUICulture.Name',
+    locales: <%= htmlWebpackPlugin.options.locales.json %>
+};
+// JSONP callback to load localization from '@localePath'
+window.__setLocaleData__ = function(data) { window.CONFIG.locale.data = data; }
+</script>
+<% for (var css in htmlWebpackPlugin.files.css) { %>
+<link href='<%= urlContent(htmlWebpackPlugin.files.css[css]) %>' rel="stylesheet">
+<% } %>
+<link href='@Url.Content("~/signalr/hubs")' rel="preload" as="script">
+<script src="@localePath"></script>
+<!-- files.chunks --> 
+<% for (var chunk in htmlWebpackPlugin.files.chunks) { %>
+<!-- files.chunks[<%= chunk %>] --> 
+<!-- files.chunks[<%= htmlWebpackPlugin.files.chunks[chunk].entry %>] --> 
+<script src='<%= urlContent(htmlWebpackPlugin.files.chunks[chunk].entry) %>'></script>
+<% } %>
+
