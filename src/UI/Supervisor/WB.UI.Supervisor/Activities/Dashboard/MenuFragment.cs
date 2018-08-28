@@ -28,8 +28,8 @@ namespace WB.UI.Supervisor.Activities.Dashboard
 
         private IMvxNavigationService mvxNavigationService =>
             ServiceLocator.Current.GetInstance<IMvxNavigationService>();
-        private IMvxMainThreadDispatcher mvxMainThreadDispatcher =>
-            ServiceLocator.Current.GetInstance<IMvxMainThreadDispatcher>();
+        private IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher =>
+            ServiceLocator.Current.GetInstance<IMvxMainThreadAsyncDispatcher>();
 
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
@@ -58,7 +58,7 @@ namespace WB.UI.Supervisor.Activities.Dashboard
             base.OnDestroyView();
         }
 
-        private void MenuFragment_AfterNavigate(object sender, MvvmCross.Navigation.EventArguments.NavigateEventArgs e)
+        private async void MenuFragment_AfterNavigate(object sender, MvvmCross.Navigation.EventArguments.NavigateEventArgs e)
         {
             int? menuItemId = null;
             switch (e.ViewModel)
@@ -78,7 +78,7 @@ namespace WB.UI.Supervisor.Activities.Dashboard
             }
 
             if (menuItemId.HasValue)
-                mvxMainThreadDispatcher.RequestMainThreadAction(() =>
+                await mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
                     this.SelectMenuItem(navigationView.Menu.FindItem(menuItemId.Value)));
         }
 
