@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Microsoft.AspNet.SignalR.Hubs;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -28,7 +29,7 @@ namespace WB.UI.WebTester.Hub
             imageFileStorage,
             audioFileStorage)
         {
-            this.evictionNotify = evictionNotify;
+            this.evictionNotify = evictionNotify ?? throw new ArgumentException(nameof(evictionNotify));
         }
 
         public override void CompleteInterview(CompleteInterviewRequest completeInterviewRequest)
