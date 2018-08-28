@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using Moq;
+using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
 {
     internal class when_toggling_answer : MultiOptionQuestionViewModelTestsContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [OneTimeSetUp] public void context () {
             questionGuid = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             questionId = Create.Entity.Identity(questionGuid, Empty.RosterVector);
 
@@ -57,13 +57,13 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
 
         public void BecauseOf() 
         {
-            Thread.Sleep(1);
             viewModel.Options.Second().Checked = true;
             viewModel.ToggleAnswerAsync(viewModel.Options.Second()).WaitAndUnwrapException();
         }
 
-        [NUnit.Framework.Test] public void should_send_command_to_service () => answeringMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.Is<AnswerMultipleOptionsQuestionCommand>(c => 
-            c.SelectedValues.SequenceEqual(new []{1,2}))));
+        [Test] 
+        public void should_send_command_to_service () 
+            => answeringMock.Verify(x => x.SendAnswerQuestionCommandAsync(Moq.It.Is<AnswerMultipleOptionsQuestionCommand>(c => c.SelectedValues.SequenceEqual(new []{1,2}))));
 
         static MultiOptionQuestionViewModel viewModel;
         static Identity questionId;

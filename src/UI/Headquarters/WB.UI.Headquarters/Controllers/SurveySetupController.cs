@@ -332,7 +332,7 @@ namespace WB.UI.Headquarters.Controllers
             if (isFile)
             {
                 preloadedFileInfo = this.assignmentsImportReader.ReadTextFileInfo(model.File.InputStream, model.File.FileName);
-                preloadedFileInfo.QuestionnaireOrRosterName = questionnaire.VariableName;/*we expect that it is main file*/
+                preloadedFileInfo.QuestionnaireOrRosterName = questionnaire.VariableName ?? questionnaire.Title;/*we expect that it is main file*/
             }
             else if (isZip)
             {

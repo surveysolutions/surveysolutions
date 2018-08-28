@@ -32,7 +32,7 @@
     <Use64BitIISExpress />
     <DependsOnNETStandard>true</DependsOnNETStandard>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' OR '$(Configuration)|$(Platform)' == 'Debug-ESRI|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -1899,6 +1899,7 @@
     <Compile Include="API\DataCollection\Supervisor\v1\SettingsV1Controller.cs" />
     <Compile Include="API\DataCollection\Supervisor\v1\InterviewersApiController.cs" />
     <Compile Include="API\DataCollection\Supervisor\v1\TranslationsApiV1Controller.cs" />
+    <Compile Include="API\DataCollection\Supervisor\v1\UpdatesApiV1Controller.cs" />
     <Compile Include="API\DataCollection\TranslationsControllerBase.cs" />
     <Compile Include="API\Helpers.cs" />
     <Compile Include="API\DataCollection\Interviewer\v2\AssignmentsApiV2Controller.cs" />
@@ -2314,6 +2315,7 @@
     <Compile Include="Migrations\ReadSide\M001-100\M201806191240_FillErrorsCountInInterviewSummary.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201808131420_AddIndicesForInterviewSummariesAndComments.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201806271400_AddUniqueConstraintOnInterviewEntities.cs" />
+    <Compile Include="Migrations\ReadSide\M001-100\M201808210950_AddTabulateReportData.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\QuestionnaireEntityMigration.cs" />
     <Compile Include="Migrations\Users\M005_AddDeviceAppVersionToProfile.cs" />
     <Compile Include="Migrations\Users\M201807241755_ReplaceEmptyEmailToNull.cs" />

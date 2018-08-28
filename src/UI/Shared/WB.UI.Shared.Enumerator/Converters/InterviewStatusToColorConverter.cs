@@ -24,6 +24,12 @@ namespace WB.UI.Shared.Enumerator.Converters
 
                 case DashboardInterviewStatus.Rejected:
                     return Resource.Color.dashboard_rejected_tab;
+
+                case DashboardInterviewStatus.ApprovedBySupervisor:
+                    return Resource.Color.dashboard_approved_by_supervsor;
+
+                case DashboardInterviewStatus.RejectedByHeadquarters:
+                    return Resource.Color.dashboard_rejected_by_headquarter;
             }
 
             throw new ArgumentException("status is unknown - {0}".FormatString(status));

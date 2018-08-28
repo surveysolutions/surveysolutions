@@ -17,6 +17,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         private int interviewsByAssignmentCount;
         private QuestionnaireIdentity questionnaireIdentity;
 
+        public int AssignmentId => this.Assignment.Id;
+
         protected AssignmentDashboardItemViewModel(IServiceLocator serviceLocator) : base(serviceLocator)
         {
             this.serviceLocator = serviceLocator;
@@ -25,7 +27,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         protected IAssignmentDocumentsStorage AssignmentsRepository
             => serviceLocator.GetInstance<IAssignmentDocumentsStorage>();
 
-        protected int InterviewsLeftByAssignmentCount =>
+        public int InterviewsLeftByAssignmentCount =>
             Assignment.Quantity.GetValueOrDefault() - interviewsByAssignmentCount;
 
         public bool HasAdditionalActions => Actions.Any(a => a.ActionType == ActionType.Context);
@@ -91,11 +93,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         public void DecreaseInterviewsCount()
         {
             interviewsByAssignmentCount--;
-
-            // update db assignment
-            Assignment.CreatedInterviewsCount = interviewsByAssignmentCount;
-            AssignmentsRepository.Store(Assignment);
-            
             BindTitles();
         }
 

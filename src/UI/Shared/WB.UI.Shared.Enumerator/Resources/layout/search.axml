@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:local="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+  <LinearLayout style="@style/Dashboard_SearchView_Container" local:MvxBind="Enabled Not(IsInProgressLongOperation); Clickable Not(IsInProgressLongOperation);">
+    <ImageView style="@style/Dashboard_SearchView_SearchIcon" 
+               local:MvxBind="Click ExitSearchCommand"
+               local:srcCompat="@drawable/back_arrow"/>
+    <EditText style="@style/Dashboard_SearchView_FilterInput"
+              local:MvxBind="SetFocus Not(Or(IsInProgressLongOperation, IsInProgressLongOperation)); 
+                                     Watermark EmptySearchText; 
+                                     Text SearchText;
+                                     TextChanged SearchCommand;
+                                     Enabled Not(IsInProgressLongOperation); 
+                                     Clickable Not(IsInProgressLongOperation);" />
+    <ImageButton style="@style/Dashboard_SearchView_DeleteButton"
+                 local:MvxBind="Click ClearSearchCommand; Enabled Not(IsInProgressLongOperation); Clickable Not(IsInProgressLongOperation)"
+                 local:srcCompat="@drawable/delete_button" />
+  </LinearLayout>
+
+  <FrameLayout style="@style/Dashboard_Search_Body">
+
+    <ProgressBar style="@style/Dashboard_Progress_Indicator"
+            local:MvxBind="ShowProgress Or(IsInProgressLongOperation, IsInProgressItemsLoading); Visibility VisibleOrInvisible(Or(IsInProgressLongOperation, IsInProgressItemsLoading))" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:descendantFocusability="blocksDescendants">
+
+        <TextView style="@style/Dashboard_Search_SearchResult" 
+        local:MvxBind="Text SerchResultText;" />
+              
+        <MvxRecyclerView
+            style="@style/FullWidthWrappingLayout"
+            android:id="@+id/dashboard_tab_recycler"
+            android:scrollbars="vertical"
+            local:MvxBind="ItemsSource UiItems;" />
+
+    </LinearLayout>
+    <LinearLayout style="@style/Interview_GroupWithDivider"
+                    local:MvxBind="Enabled Not(Or(IsInProgressLongOperation, IsInProgressItemsLoading)); Clickable Or(IsInProgressLongOperation, IsInProgressItemsLoading);"
+                    android:layout_height="match_parent">
+    </LinearLayout>
+  </FrameLayout>
+</LinearLayout>

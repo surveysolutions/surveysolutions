@@ -74,7 +74,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
             BecauseOf();
         }
 
-        public void BecauseOf() => viewModel.ToggleAnswerAsync(viewModel.Options.Last()).WaitAndUnwrapException();
+        public void BecauseOf() => viewModel.ToggleAnswerAsync(viewModel.Options.Last(), true).WaitAndUnwrapException();
 
         [NUnit.Framework.Test] public void should_not_undo_checked_property_change () => viewModel.Options.Last().Selected.Should().BeNull();
 

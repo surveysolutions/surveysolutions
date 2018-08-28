@@ -16,7 +16,7 @@
                             commentThread.resolvedAreExpanded = false;
                             commentThread.toggleResolvedComments = function() {
                                 this.resolvedAreExpanded = !this.resolvedAreExpanded;
-                            }
+                            };
 
                             _.forEach(commentThread.comments, function(comment) {
                                 comment.date = moment.utc(comment.date).local().format("MMM DD, YYYY HH:mm");
@@ -46,6 +46,17 @@
                 $scope.isFolded = true;
             };
 
+            $rootScope.$on("commentDeleted", function(event, data) {
+                _.each($scope.commentThreads, function(thread) {
+                    thread.comments = _.filter(thread.comments, function(comment) {
+                        return comment.id !== data.id;
+                    });
+                });
+                $scope.commentThreads = _.filter($scope.commentThreads, function(thread) {
+                    return thread.comments.length > 0;
+                });
+            });
+
             $scope.foldback = function () {
                 $scope.isFolded = false;
                 $rootScope.$broadcast("closeComments", {});
@@ -54,7 +65,7 @@
             $scope.showCommentsAndNavigateTo = function(entity) {
                 $rootScope.$broadcast("openCommentEditorRequested", {});
                 $scope.navigateTo(entity);
-            }
+            };
 
             $scope.$on('openComments', function (scope, params) {
                 $scope.unfold();

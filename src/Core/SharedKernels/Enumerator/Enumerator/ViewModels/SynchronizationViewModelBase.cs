@@ -74,12 +74,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 {
                     this.IsSynchronizationInProgress = syncProgressInfo.IsRunning;
 
-                    if (syncProgressInfo.Title != null || syncProgressInfo.Description != null)
-                    {
-                        this.ProcessOperation = syncProgressInfo.Title;
-                        this.ProcessOperationDescription = syncProgressInfo.Description;
-                        this.Status = syncProgressInfo.Status;
-                    }
+                    UpdateProcessStatus(syncProgressInfo);
 
                     this.Statistics = syncProgressInfo.Statistics;
 
@@ -95,6 +90,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
                 OnProgressChanged?.Invoke(this, syncProgressInfo);
             });
+        }
+
+        protected virtual void UpdateProcessStatus(SyncProgressInfo syncProgressInfo)
+        {
+            if (syncProgressInfo.Title != null || syncProgressInfo.Description != null)
+            {
+                this.ProcessOperation = syncProgressInfo.Title;
+                this.ProcessOperationDescription = syncProgressInfo.Description;
+                this.Status = syncProgressInfo.Status;
+            }
         }
 
         public event EventHandler<SyncProgressInfo> OnProgressChanged;

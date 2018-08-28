@@ -9,6 +9,5 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
     public interface IInterviewerSynchronizationService : ISynchronizationService
     {
         Task<InterviewerApiView> GetInterviewerAsync(RestCredentials credentials = null, CancellationToken? token = null);
-        string ApiDownloadAppPrefixUrl { get; }
     }
 }

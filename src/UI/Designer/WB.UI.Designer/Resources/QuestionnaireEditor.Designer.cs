@@ -313,6 +313,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Are you sure you want to delete comment?.
+        /// </summary>
+        public static string DeleteCommentConfirm {
+            get {
+                return ResourceManager.GetString("DeleteCommentConfirm", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to delete &quot;{{trimmedTitle}}&quot;?.
         /// </summary>
         public static string DeleteConfirmQuestion {
@@ -768,6 +777,15 @@ namespace WB.UI.Designer.Resources {
         public static string HelpNewComment {
             get {
                 return ResourceManager.GetString("HelpNewComment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Questionnaire variable is used as prefix in forming names for the export files. Variable names and roster IDs may be from {{minLength}} to {{maxLength}} characters long and must contain only following characters: a-z, A-Z, _, or 0-9. The first character cannot be 0-9 or _ and the last one cannot be _..
+        /// </summary>
+        public static string HelpQuestionnaireVarible {
+            get {
+                return ResourceManager.GetString("HelpQuestionnaireVarible", resourceCulture);
             }
         }
         

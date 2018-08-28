@@ -160,6 +160,27 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             return eventsToSend;
         }
 
+        public EventStreamSignatureTag GetInterviewEventStreamCheckData(Guid interviewId)
+        {
+            List<CommittedEvent> storedEvents = this.eventStore.GetPendingEvents(interviewId).ToList();
+
+            var optimizedEvents = this.eventStreamOptimizer.RemoveEventsNotNeededToBeSent(storedEvents);
+
+            if (optimizedEvents.Count == 0) return null;
+
+            var first = optimizedEvents.First();
+            var last = optimizedEvents.Last();
+
+            return new EventStreamSignatureTag
+            {
+                FirstEventId = first.EventIdentifier,
+                LastEventId = last.EventIdentifier,
+
+                FirstEventTimeStamp = first.EventTimeStamp,
+                LastEventTimeStamp = last.EventTimeStamp
+            };
+        }
+        
         public async Task CreateInterviewAsync(InterviewApiView info, InterviewerInterviewApiView details)
         {
             var questionnaireView = this.questionnaireRepository.GetById(info.QuestionnaireIdentity.ToString());

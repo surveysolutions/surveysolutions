@@ -138,7 +138,7 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
 
         public bool HasBinding<T>()
         {
-            throw new NotImplementedException();
+            return false; 
         }
 
         public void BindInIsolatedThreadScopeOrRequestScopeOrThreadScope<T>()
@@ -202,7 +202,7 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
 
         public void BindToMethodInSingletonScope(Type @interface, Func<IModuleContext, object> func)
         {
-            throw new NotImplementedException();
+            containerBuilder.Register((ctx, p) => func(new AutofacModuleContext(ctx, p))).SingleInstance();
         }
 
         public void BindToMethodInRequestScope<T>(Func<IModuleContext, T> func)

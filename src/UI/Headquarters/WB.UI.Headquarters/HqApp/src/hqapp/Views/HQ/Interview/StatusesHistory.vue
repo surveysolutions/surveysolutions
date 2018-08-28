@@ -51,7 +51,7 @@ export default {
   },
   methods: {
     formatDate(d) {
-      return moment(d).format(DateFormats.dateTimeInList);
+      return moment.utc(d).local().format(DateFormats.dateTimeInList);
     },
     hide() {
       $(this.$refs.modal).modal("hide");

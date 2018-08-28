@@ -19,7 +19,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
         public Stream Compress(string data)
         {
             var output = new MemoryStream();
-
+            
             using (var zip = new GZipStream(output, CompressionMode.Compress, true))
             {
                 using (var writer = new StreamWriter(zip, Encoding.UTF8))

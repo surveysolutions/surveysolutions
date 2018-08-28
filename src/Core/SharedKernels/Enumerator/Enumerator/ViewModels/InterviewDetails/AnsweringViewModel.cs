@@ -7,7 +7,6 @@ using MvvmCross.ViewModels;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
-using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Utils;
 

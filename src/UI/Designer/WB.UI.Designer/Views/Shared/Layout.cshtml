@@ -47,20 +47,31 @@
 <div class="container-wb-list">
     <div class="header-wb-list">
         <header>
-            @Html.ActionLink(QuestionnaireController.Designer, "Index", "Questionnaire", null, new { @class = "questionnaire-logo" })
+
+            <div class="questionnaire-logo">
+                <a class="logo" href="https://mysurvey.solutions/" target="_blank">
+                    <img src="~/questionnaire/content/i/logo.png" alt="Survey Solutions" class="pull-left">
+                    <span class="pull-left">Survey<br>Solutions</span>
+                </a>
+                @Html.ActionLink(QuestionnaireController.Designer, "Index", "Questionnaire", null, new { @class = "navbar-text" })
+            </div>
+
+
+            @*@Html.ActionLink(QuestionnaireController.Designer, "Index", "Questionnaire", null, new { @class = "questionnaire-logo" })*@
+
             <ul class="nav nav-tabs">
 
                 @Html.MenuActionLink(QuestionnaireController.MyQuestionnaires, "Index", "Questionnaire", "presentation")
                 @Html.MenuActionLink(QuestionnaireController.SharedQuestionnaires, "Shared", "Questionnaire", "presentation")
                 @Html.MenuActionLink(QuestionnaireController.PublicQuestionnaires, "Public", "Questionnaire", "presentation")
                 @if (userHelper.WebUser.IsAdmin)
-    {
-            @Html.MenuActionLink(QuestionnaireController.QuestionnaireTreeFolders, "PublicFolders", "Questionnaire", "presentation")
-}
+                {
+                    @Html.MenuActionLink(QuestionnaireController.QuestionnaireTreeFolders, "PublicFolders", "Questionnaire", "presentation")
+                }
                 @if (userHelper.WebUser.IsAdmin)
-    {
-            @Html.MenuActionLink(QuestionnaireController.ManageUsers, "Index", "Admin", "presentation")
-}
+                {
+                    @Html.MenuActionLink(QuestionnaireController.ManageUsers, "Index", "Admin", "presentation")
+                }
                 <li role="presentation" class="create">
                     @Html.ActionLink(QuestionnaireController.CreateNew, "Create", "Questionnaire", null, new { @class = "btn" })
                 </li>
@@ -82,7 +93,7 @@
                         <li>@Html.ActionLink(AccountResources.Logout, "LogOff", "Account")</li>
                     </ul>
                 </div>
-                
+
             </nav>
         </header>
     </div>
