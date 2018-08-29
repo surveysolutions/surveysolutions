@@ -28,6 +28,8 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
     {
         public override void Up()
         {
+            Execute.Sql("UPDATE plainstore.interviewdatas SET value=replace(value::text, '\u0000', '')::json");
+
             var primaryKeyName = "pk_interviews";
 
             Create.Table("interviews")
