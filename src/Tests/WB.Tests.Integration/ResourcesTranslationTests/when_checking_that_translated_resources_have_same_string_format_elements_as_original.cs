@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Text.RegularExpressions;
 using FluentAssertions;
 using NUnit.Framework;
@@ -33,7 +34,12 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
         public void should_find_translated_resource_files() => translatedResourceFiles.Should().NotBeEmpty();
         
         [Test]
-        public void should_find_no_inconsistencies () => translatedResourceStringsNotCorrespondingToOriginal.Should().BeEmpty();
+        public void should_find_no_inconsistencies ()
+        {
+            var translations = translatedResourceStringsNotCorrespondingToOriginal.ToList();
+            
+            Assert.That(translations, Has.Count.EqualTo(0), string.Join("\r\n", translations));
+        }
 
         private IEnumerable<string> translatedResourceFiles;
         private IEnumerable<string> translatedResourceStringsNotCorrespondingToOriginal;
@@ -64,7 +70,7 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
                 string originalStringFormatEntries = GetStringFormatEntriesAsString(originalResourceValue);
 
                 if (translatedStringFormatEntries != originalStringFormatEntries)
-                    yield return $"<{translatedResourceFile}> {translatedResource.Key}: has '{translatedStringFormatEntries}', but should have '{originalStringFormatEntries}'";
+                    yield return $"{translatedResource.Key} <{translatedResourceFile}>: has '{translatedStringFormatEntries}', but should have '{originalStringFormatEntries}'";
             }
         }
     }
