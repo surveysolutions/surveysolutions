@@ -103,7 +103,9 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
 
             request.Headers.UserAgent.ParseAdd(this.restServiceSettings.UserAgent);
             
-            request.Headers.Add("Accept-Encoding", "gzip,deflate");
+            request.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
+            request.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("deflate"));
+            request.Headers.Add("Accept-Language", "en-GB,en;q=0.9,en-US;q=0.8");
 
             if (forceNoCache)
             {
