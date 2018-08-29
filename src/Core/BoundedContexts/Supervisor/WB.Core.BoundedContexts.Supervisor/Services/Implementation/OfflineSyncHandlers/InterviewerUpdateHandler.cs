@@ -27,10 +27,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
         {
             var patchFileName = $@"WBCapi.{request.AppVersion}{(request.AppType == EnumeratorApplicationType.WithMaps ? ".Ext" : "")}.delta";
 
-            var pathToRootDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
-            var patchesDirectory = this.fileSystemAccessor.CombinePath(pathToRootDirectory, "patches");
-            var patchesDirectoryForSupervisorApp = this.fileSystemAccessor.CombinePath(patchesDirectory, this.settings.GetApplicationVersionCode().ToString());
-            var patchFilePath = this.fileSystemAccessor.CombinePath(patchesDirectoryForSupervisorApp, patchFileName);
+            var patchFilePath = this.fileSystemAccessor.CombinePath(this.settings.InterviewerAppPatchesDirectory,
+                this.settings.GetApplicationVersionCode().ToString(), patchFileName);
 
             return Task.FromResult(new GetInterviewerAppPatchResponse
             {

@@ -5,7 +5,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Services
     public interface ISupervisorSettings : IEnumeratorSettings, IDeviceSettings
     {
         void SetShowLocationOnMap(bool showLocationOnMap);
-        int? LatestInterviewerAppVersion { get; }
-        void SetLatestInterviewerAppVersion(int? version);
+        string InterviewerAppPatchesDirectory { get; }
     }
 }

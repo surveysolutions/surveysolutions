@@ -50,11 +50,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
 
             await this.permissions.AssureHasPermission(Permission.Storage);
 
-            var patchesBySupervisorAppVersion = GetPathToPatchesDirectoryBySupervisorAppVersion();
-
             var latestVersionOfInterviewerApp = await this.synchronizationService.GetLatestInterviewerAppVersionAsync(Context.CancellationToken);
-            this.supervisorSettings.SetLatestInterviewerAppVersion(latestVersionOfInterviewerApp);
-            
+            if (latestVersionOfInterviewerApp != this.supervisorSettings.GetApplicationVersionCode()) return;
+
+            var patchesBySupervisorAppVersion = PreparePathToPatchesDirectoryBySupervisorAppVersion();
+
             var listOfPatchesInfo = await this.synchronizationService.GetListOfInterviewerAppPatchesAsync(Context.CancellationToken);
             var listOfMissingPatches = listOfPatchesInfo
                 .Where(x =>
@@ -74,22 +74,21 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
             }
         }
 
-        private string GetPathToPatchesDirectoryBySupervisorAppVersion()
+        private string PreparePathToPatchesDirectoryBySupervisorAppVersion()
         {
-            var pathToRootDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+            var interviewerAppPatchesDirectory = this.supervisorSettings.InterviewerAppPatchesDirectory;
 
-            var patchesDirectory = this.fileSystemAccessor.CombinePath(pathToRootDirectory, "patches");
-            if (!this.fileSystemAccessor.IsDirectoryExists(patchesDirectory))
-                this.fileSystemAccessor.CreateDirectory(patchesDirectory);
+            if (!this.fileSystemAccessor.IsDirectoryExists(interviewerAppPatchesDirectory))
+                this.fileSystemAccessor.CreateDirectory(interviewerAppPatchesDirectory);
 
             var sAppVersion = this.supervisorSettings.GetApplicationVersionCode().ToString();
-            var patchesBySupervisorAppVersion = this.fileSystemAccessor.CombinePath(patchesDirectory, sAppVersion);
+            var patchesBySupervisorAppVersion = this.fileSystemAccessor.CombinePath(interviewerAppPatchesDirectory, sAppVersion);
 
             if (!this.fileSystemAccessor.IsDirectoryExists(patchesBySupervisorAppVersion))
                 this.fileSystemAccessor.CreateDirectory(patchesBySupervisorAppVersion);
 
             // remove old patches by old supervisor app version
-            this.fileSystemAccessor.GetDirectoriesInDirectory(patchesDirectory)
+            this.fileSystemAccessor.GetDirectoriesInDirectory(interviewerAppPatchesDirectory)
                 .Where(x => x != sAppVersion)
                 .ForEach(x => this.fileSystemAccessor.DeleteDirectory(x));
 
