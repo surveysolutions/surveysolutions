@@ -108,43 +108,7 @@ namespace WB.Tests.Abc.TestFactories
         }
 
         
-        public IMvxViewDispatcher MvxMainThreadDispatcher1() => new MockDispatcher();
-
-        public class MockDispatcher: MvxMainThreadDispatcher, IMvxViewDispatcher
-        {
-            public readonly List<MvxViewModelRequest> Requests = new List<MvxViewModelRequest>();
-            public readonly List<MvxPresentationHint> Hints = new List<MvxPresentationHint>();
-
-            public Task<bool> ShowViewModel(MvxViewModelRequest request)
-            {
-                this.Requests.Add(request);
-                return Task.FromResult(true);
-            }
-
-            public Task<bool> ChangePresentation(MvxPresentationHint hint)
-            {
-                this.Hints.Add(hint);
-                return Task.FromResult(true);
-            }
-
-            public Task ExecuteOnMainThreadAsync(Action action, bool maskExceptions = true)
-            {
-                throw new NotImplementedException();
-            }
-
-            public Task ExecuteOnMainThreadAsync(Func<Task> action, bool maskExceptions = true)
-            {
-                throw new NotImplementedException();
-            }
-
-            public override bool RequestMainThreadAction(Action action, bool maskExceptions = true)
-            {
-                action();
-                return true;
-            }
-
-            public override bool IsOnMainThread => true;
-        }
+        public IMvxViewDispatcher MvxMainThreadDispatcher1() => (IMvxViewDispatcher)Stub.MvxMainThreadAsyncDispatcher();
 
         public IDataExportFileAccessor DataExportFileAccessor()
         {
@@ -158,7 +122,11 @@ namespace WB.Tests.Abc.TestFactories
 
         public IMvxMainThreadAsyncDispatcher MvxMainThreadAsyncDispatcher()
         {
-            return new FakeMvxMainThreadAsyncDispatcher();
+            if (FakeMvxMainThreadAsyncDispatcher.Instance == null)
+            {
+                new FakeMvxMainThreadAsyncDispatcher();
+            }
+            return (IMvxMainThreadAsyncDispatcher)FakeMvxMainThreadAsyncDispatcher.Instance;
         }
 
         private class FakeMvxMainThreadAsyncDispatcher : MvxMainThreadAsyncDispatcher, IMvxViewDispatcher
@@ -185,6 +153,8 @@ namespace WB.Tests.Abc.TestFactories
                 Hints.Add(hint);
                 return Task.FromResult(true);
             }
+
+
         }
 
         public IMvxMainThreadAsyncDispatcher MvxMainThreadDispatcher() => new FakeMvxMainThreadDispatcher();
