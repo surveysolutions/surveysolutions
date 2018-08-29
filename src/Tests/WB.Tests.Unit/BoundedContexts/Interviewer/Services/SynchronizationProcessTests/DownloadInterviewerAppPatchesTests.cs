@@ -10,9 +10,7 @@ using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.WebApi;
-using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization.Steps;
 using WB.Core.SharedKernels.Enumerator.Services;
-using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProcessTests
@@ -36,9 +34,11 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         public async Task when_ExecuteAsync_and_interviewer_app_delta_exists_then_should_not_download_delta_from_server_again()
         {
             // arrange
+            int? appVersion = 12345;
             var notExistingFile = "notExistingFile.delta";
             var existingFile = "existingFile.delta";
             var mockOfSupervisorSynchronization = new Mock<ISupervisorSynchronizationService>();
+            mockOfSupervisorSynchronization.Setup(x => x.GetLatestInterviewerAppVersionAsync(It.IsAny<CancellationToken>())).Returns(Task.FromResult(appVersion));
             mockOfSupervisorSynchronization
                 .Setup(x => x.GetListOfInterviewerAppPatchesAsync(It.IsAny<CancellationToken>())).Returns(
                     Task.FromResult(new[]
@@ -53,9 +53,13 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 x.IsFileExists(existingFile) == true &&
                 x.GetFileSize(existingFile) == 1);
 
+            var mockOfSupervisorSettings = new Mock<ISupervisorSettings>();
+            mockOfSupervisorSettings.Setup(x => x.GetApplicationVersionCode()).Returns(appVersion.Value);
+
             var step = CreateDownloadInterviewerAppPatches(
                 synchronizationService: mockOfSupervisorSynchronization.Object,
-                fileSystemAccessor: fileSystemAccessor);
+                fileSystemAccessor: fileSystemAccessor,
+                supervisorSettings: mockOfSupervisorSettings.Object);
             // act
             await step.ExecuteAsync();
             // assert
@@ -67,8 +71,10 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         public async Task when_ExecuteAsync_and_interviewer_app_delta_exists_with_zero_length_then_should_download_delta_from_server_again()
         {
             // arrange
+            int? appVersion = 12345;
             var zeroFileName = "existingFile.delta";
             var mockOfSupervisorSynchronization = new Mock<ISupervisorSynchronizationService>();
+            mockOfSupervisorSynchronization.Setup(x => x.GetLatestInterviewerAppVersionAsync(It.IsAny<CancellationToken>())).Returns(Task.FromResult(appVersion));
             mockOfSupervisorSynchronization
                 .Setup(x => x.GetListOfInterviewerAppPatchesAsync(It.IsAny<CancellationToken>())).Returns(
                     Task.FromResult(new[]
@@ -80,9 +86,13 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 x.IsFileExists(zeroFileName) == true &&
                 x.GetFileSize(zeroFileName) == 0);
 
+            var mockOfSupervisorSettings = new Mock<ISupervisorSettings>();
+            mockOfSupervisorSettings.Setup(x => x.GetApplicationVersionCode()).Returns(appVersion.Value);
+
             var step = CreateDownloadInterviewerAppPatches(
                 synchronizationService: mockOfSupervisorSynchronization.Object,
-                fileSystemAccessor: fileSystemAccessor);
+                fileSystemAccessor: fileSystemAccessor,
+                supervisorSettings: mockOfSupervisorSettings.Object);
             // act
             await step.ExecuteAsync();
             // assert
@@ -90,7 +100,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         }
 
         [Test]
-        public async Task when_ExecuteAsync_should_get_latest_interviewer_app_version_from_server_and_save_it_to_local_settings()
+        public async Task when_ExecuteAsync_should_get_latest_interviewer_app_version_from_server()
         {
             // arrange
             int? version = 12345;
@@ -108,7 +118,29 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             await step.ExecuteAsync();
             // assert
             mockOfSupervisorSynchronization.Verify(x => x.GetLatestInterviewerAppVersionAsync(It.IsAny<CancellationToken>()), Times.Once);
-            mockOfSupervisorSettings.Verify(x => x.SetLatestInterviewerAppVersion(version), Times.Once);
+        }
+
+        [Test]
+        public async Task when_ExecuteAsync_and_latest_interviewer_app_version_higher_then_supervisor_app_version_then_interviewer_app_patches_should_not_be_updated()
+        {
+            // arrange
+            int? interviewerVersion = 12345;
+            int supervisorVersion = 12344;
+
+            var mockOfSupervisorSynchronization = new Mock<ISupervisorSynchronizationService>();
+            mockOfSupervisorSynchronization.Setup(x => x.GetLatestInterviewerAppVersionAsync(It.IsAny<CancellationToken>())).Returns(Task.FromResult(interviewerVersion));
+
+            var mockOfSupervisorSettings = new Mock<ISupervisorSettings>();
+            mockOfSupervisorSettings.Setup(x => x.GetApplicationVersionCode()).Returns(supervisorVersion);
+
+            var step = CreateDownloadInterviewerAppPatches(
+                synchronizationService: mockOfSupervisorSynchronization.Object,
+                supervisorSettings: mockOfSupervisorSettings.Object);
+
+            // act
+            await step.ExecuteAsync();
+            // assert
+            mockOfSupervisorSynchronization.Verify(x => x.GetListOfInterviewerAppPatchesAsync(It.IsAny<CancellationToken>()), Times.Never);
         }
 
         [Test]
