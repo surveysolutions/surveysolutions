@@ -133,15 +133,14 @@ namespace WB.UI.Interviewer
 
             var serviceLocator = ServiceLocator.Current;
 
-            var status = new UnderConstructionInfo
-            {
-                Status = UnderConstructionStatus.Running
-            };
+            var status = new UnderConstructionInfo();
+            status.Run();
+
             foreach (var module in modules)
             {
                 module.Init(serviceLocator, status).Wait();
             }
-            status.Status = UnderConstructionStatus.Finished;
+            status.Finish();
 
             return container;
         }
