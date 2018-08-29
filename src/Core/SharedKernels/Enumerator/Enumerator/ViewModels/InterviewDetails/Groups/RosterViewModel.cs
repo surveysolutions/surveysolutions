@@ -39,7 +39,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
         public RosterViewModel(IStatefulInterviewRepository interviewRepository,
             IInterviewViewModelFactory interviewViewModelFactory,
             ILiteEventRegistry eventRegistry,
-            IMvxMainThreadAsyncDispatcher mainThreadDispatcher, 
+            IMvxMainThreadAsyncDispatcher mainThreadDispatcher,
             IQuestionnaireStorage questionnaireRepository)
         {
             this.interviewRepository = interviewRepository;
