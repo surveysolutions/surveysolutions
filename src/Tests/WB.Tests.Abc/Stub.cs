@@ -36,7 +36,6 @@ namespace WB.Tests.Abc
         public static IMvxMainThreadAsyncDispatcher MvxMainThreadAsyncDispatcher() =>
             Create.Fake.MvxMainThreadAsyncDispatcher();
 
-        public static IMvxMainThreadDispatcher MvxMainThreadDispatcher() => Create.Fake.MvxMainThreadDispatcher();
 
         public static ISideBarSectionViewModelsFactory SideBarSectionViewModelsFactory()
         {

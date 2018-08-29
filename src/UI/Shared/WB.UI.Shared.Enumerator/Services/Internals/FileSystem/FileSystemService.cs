@@ -13,6 +13,8 @@ namespace WB.UI.Shared.Enumerator.Services.Internals.FileSystem
             return Path.Combine(path1, path2);
         }
 
+        public string CombinePath(params string[] pathes) => Path.Combine(pathes);
+
         public string GetFileName(string filePath)
         {
             return Path.GetFileName(filePath);
