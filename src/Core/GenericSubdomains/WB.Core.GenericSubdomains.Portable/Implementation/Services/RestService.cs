@@ -89,7 +89,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
 
             var fullUrl = new Url(this.restServiceSettings.Endpoint, url, queryString);
 
-            var httpClient = new HttpClient(new ExtendedMessageHandler(new HttpClientHandler(), httpStatistician));
+            var httpClient = new HttpClient(/*new ExtendedMessageHandler(new HttpClientHandler(), httpStatistician)*/);
 
             httpClient.Timeout = this.restServiceSettings.Timeout;
 
