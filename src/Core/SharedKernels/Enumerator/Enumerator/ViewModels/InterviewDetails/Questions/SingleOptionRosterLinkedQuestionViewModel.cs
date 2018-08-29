@@ -249,29 +249,28 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public async void Handle(RosterInstancesTitleChanged @event)
+        public void Handle(RosterInstancesTitleChanged @event)
         {
             var optionListShouldBeUpdated = @event.ChangedInstances.Any(x => x.RosterInstance.GroupId == this.linkedToRosterId || 
                                                                              this.parentRosters.Contains(x.RosterInstance.GroupId));
             if (optionListShouldBeUpdated)
             {
-                await this.RefreshOptionsListFromModelAsync();
+                this.RefreshOptionsListFromModelAsync().WaitAndUnwrapException();
             }
         }
 
-        public async void Handle(LinkedOptionsChanged @event)
+        public void Handle(LinkedOptionsChanged @event)
         {
             var optionListShouldBeUpdated = @event.ChangedLinkedQuestions.Any(x => x.QuestionId.Id == this.Identity.Id);
             if (optionListShouldBeUpdated)
             {
-                await this.RefreshOptionsListFromModelAsync();
+                this.RefreshOptionsListFromModelAsync().WaitAndUnwrapException();
             }
         }
 
         private async Task RefreshOptionsListFromModelAsync()
         {
             var optionsToUpdate = this.CreateOptions().ToArray();
-
             await this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
             {
                 this.Options.SynchronizeWith(optionsToUpdate, (s, t) => s.RosterVector.Identical(t.RosterVector) && s.Title == t.Title);

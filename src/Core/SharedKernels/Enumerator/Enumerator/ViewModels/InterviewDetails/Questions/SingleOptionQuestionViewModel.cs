@@ -105,13 +105,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             singleOptionQuestionOptionViewModels.ForEach(x => this.Options.Add(x));
         }
 
-        private async void FilteredOptionsViewModelOnOptionsChanged(object sender, EventArgs eventArgs)
+        private void FilteredOptionsViewModelOnOptionsChanged(object sender, EventArgs eventArgs)
         {
-            await this.mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(()=>
+            this.mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(()=>
             {
                 this.UpdateQuestionOptions();
                 this.RaisePropertyChanged(() => Options);
-            });
+            }).WaitAndUnwrapException();
         }
 
         private async void OptionSelected(object sender, EventArgs eventArgs)
