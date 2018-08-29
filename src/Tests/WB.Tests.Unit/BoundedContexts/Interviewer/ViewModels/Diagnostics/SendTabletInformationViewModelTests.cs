@@ -53,13 +53,13 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.Diagnostics
             SendTabletInformation_when_package_failed_to_be_sent_should_responce_should_contain_exception_message()
         {
             var exceptionMessage = "message";
-            var synchronizationServiceMock = new Mock<ISynchronizationService>();
-            synchronizationServiceMock.Setup(
+            var backupService = new Mock<IBackupRestoreService>();
+            backupService.Setup(
                 x => x.SendBackupAsync(Moq.It.IsAny<string>(), Moq.It.IsAny<CancellationToken>()))
                 .Throws(new SynchronizationException(SynchronizationExceptionType.InternalServerError, exceptionMessage));
 
             var sendTabletInformationViewModel =
-                this.CreateSendTabletInformationViewModel(synchronizationService: synchronizationServiceMock.Object);
+                this.CreateSendTabletInformationViewModel(backupRestoreService: backupService.Object);
 
             sendTabletInformationViewModel.SendBackupCommand.Execute();
 
