@@ -70,15 +70,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.HasComments = !string.IsNullOrWhiteSpace(this.InterviewerComment);
         }
 
-        private void UpdateCommentsFromInterview()
+        private async Task UpdateCommentsFromInterview()
         {
             var comments = interview.GetQuestionComments(this.Identity) ?? new List<AnswerComment>();
 
-            this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
+            await this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
             {
                 this.Comments.Clear();
                 comments.Select(this.ToViewModel).ForEach(x => this.Comments.Add(x));
-            }).WaitAndUnwrapException();
+            });
         }
 
         private CommentViewModel ToViewModel(AnswerComment comment)
@@ -103,19 +103,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 return UIResources.Interview_Comment_Interviewer_Caption;
             }
-            else
+
+            switch (comment.UserRole)
             {
-                switch (comment.UserRole)
-                {
-                    case UserRoles.Headquarter:
-                        return UIResources.Interview_Headquarters_Comment_Caption;
-                    case UserRoles.Supervisor:
-                        return UIResources.Interview_Supervisor_Comment_Caption;
-                    case UserRoles.Interviewer:
-                        return UIResources.Interview_Interviewer_Comment_Caption;
-                    default:
-                        return UIResources.Interview_Other_Comment_Caption;
-                }
+                case UserRoles.Headquarter:
+                    return UIResources.Interview_Headquarters_Comment_Caption;
+                case UserRoles.Supervisor:
+                    return UIResources.Interview_Supervisor_Comment_Caption;
+                case UserRoles.Interviewer:
+                    return UIResources.Interview_Interviewer_Comment_Caption;
+                default:
+                    return UIResources.Interview_Other_Comment_Caption;
             }
         }
 
@@ -166,7 +164,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     rosterVector: this.Identity.RosterVector,
                     comment: this.InterviewerComment)).ConfigureAwait(false);
 
-            this.UpdateCommentsFromInterview();
+            await this.UpdateCommentsFromInterview();
 
             this.InterviewerComment = "";
             this.IsCommentInEditMode = false;
