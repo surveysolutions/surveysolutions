@@ -29,7 +29,6 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Synchronization
         Task<byte[]> GetApplicationAsync(CancellationToken token, IProgress<TransferProgress> transferProgress = null);
         Task<byte[]> GetApplicationPatchAsync(CancellationToken token, IProgress<TransferProgress> transferProgress = null);
         Task<int?> GetLatestApplicationVersionAsync(CancellationToken token);
-        Task SendBackupAsync(string filePath, CancellationToken token);
 
         Task<List<InterviewApiView>> GetInterviewsAsync(CancellationToken token);
 
