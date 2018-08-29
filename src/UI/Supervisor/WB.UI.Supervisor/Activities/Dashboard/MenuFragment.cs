@@ -80,7 +80,7 @@ namespace WB.UI.Supervisor.Activities.Dashboard
 
             if (menuItemId.HasValue)
                 await mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
-                    this.SelectMenuItem(navigationView.Menu.FindItem(menuItemId.Value))).WaitAndUnwrapException();
+                    this.SelectMenuItem(navigationView.Menu.FindItem(menuItemId.Value)));
         }
 
         private void LocalizeMenuItem(int id, string title, string viewModelPropertyName = null)
