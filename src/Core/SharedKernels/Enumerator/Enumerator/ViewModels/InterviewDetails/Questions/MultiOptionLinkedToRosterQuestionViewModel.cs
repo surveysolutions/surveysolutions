@@ -88,14 +88,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        private async void RefreshOptionsFromModel()
+        private void RefreshOptionsFromModel()
         {
             var newOptions = this.CreateOptions();
-            await this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
+             this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
             {
                 this.Options.SynchronizeWith(newOptions.ToList(), (s, t) => s.Value.Identical(t.Value) && s.Title == t.Title);
                 this.RaisePropertyChanged(() => this.HasOptions);
-            });
+            }).WaitAndUnwrapException();
         }
     }
 }

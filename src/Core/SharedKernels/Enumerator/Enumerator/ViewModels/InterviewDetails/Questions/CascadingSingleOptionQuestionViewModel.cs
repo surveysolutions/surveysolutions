@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -77,7 +78,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             await base.SaveAnswerAsync(optionText);
         }
 
-        public async void Handle(SingleOptionQuestionAnswered @event)
+        public void Handle(SingleOptionQuestionAnswered @event)
         {
             if (!this.parentQuestionIdentity.Equals(@event.QuestionId, @event.RosterVector)) return;
 
@@ -86,7 +87,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.answerOnParentQuestion = parentSingleOptionQuestion.GetAnswer().SelectedValue;
 
-            await this.UpdateFilterAndSuggestionsAsync(string.Empty);
+            this.UpdateFilterAndSuggestionsAsync(string.Empty).WaitAndUnwrapException();
         }
     }
 }
