@@ -117,7 +117,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
             try
             {
-                await this.synchronizationService.SendBackupAsync(informationPackageFilePath, cancellationToken);
+                await this.backupRestoreService.SendBackupAsync(informationPackageFilePath, cancellationToken);
                 this.PackageSendingAttemptResponceText = InterviewerUIResources.Troubleshooting_InformationPackageIsSuccessfullySent;
             }
             catch (SynchronizationException ex)
