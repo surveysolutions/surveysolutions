@@ -31,7 +31,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         protected readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IPrincipal userIdentity;
         protected readonly ILiteEventRegistry eventRegistry;
-        protected readonly IMvxMainThreadDispatcher mainThreadDispatcher;
+        protected readonly IMvxMainThreadAsyncDispatcher mainThreadDispatcher;
         protected int? maxAllowedAnswers;
         protected Guid interviewId;
         protected IStatefulInterview interview;
@@ -55,7 +55,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IQuestionnaireStorage questionnaireStorage,
             IPrincipal userIdentity,
             ILiteEventRegistry eventRegistry,
-            IMvxMainThreadDispatcher mainThreadDispatcher)
+            IMvxMainThreadAsyncDispatcher mainThreadDispatcher)
         {
             this.interviewRepository = interviewRepository;
             this.questionnaireStorage = questionnaireStorage;
