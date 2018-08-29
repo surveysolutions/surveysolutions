@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
             IQuestionnaireStorage questionnaireRepository = null,
             IStatefulInterviewRepository interviewRepository = null,
             IUserInteractionService userInteractionService = null,
-            IMvxMainThreadDispatcher mainThreadDispatcher = null)
+            IMvxMainThreadAsyncDispatcher mainThreadDispatcher = null)
         {
             return new TextListQuestionViewModel(
                 principal ?? Mock.Of<IPrincipal>(x => x.IsAuthenticated == true),

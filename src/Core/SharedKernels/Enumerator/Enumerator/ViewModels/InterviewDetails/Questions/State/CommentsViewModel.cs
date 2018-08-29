@@ -8,6 +8,7 @@ using MvvmCross.Base;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -38,7 +39,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IStatefulInterviewRepository interviewRepository;
         private IStatefulInterview interview;
         private readonly ICommandService commandService;
-        private readonly IMvxMainThreadDispatcher mainThreadDispatcher;
+        private readonly IMvxMainThreadAsyncDispatcher mainThreadDispatcher;
         private readonly IPrincipal principal;
 
         protected CommentsViewModel() { }
@@ -47,7 +48,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IStatefulInterviewRepository interviewRepository,
             IPrincipal principal,
             ICommandService commandService,
-            IMvxMainThreadDispatcher mainThreadDispatcher)
+            IMvxMainThreadAsyncDispatcher mainThreadDispatcher)
         {
             this.interviewRepository = interviewRepository;
             this.principal = principal;
@@ -73,11 +74,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             var comments = interview.GetQuestionComments(this.Identity) ?? new List<AnswerComment>();
 
-            this.mainThreadDispatcher.RequestMainThreadAction(() =>
+            this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
             {
                 this.Comments.Clear();
                 comments.Select(this.ToViewModel).ForEach(x => this.Comments.Add(x));
-            });
+            }).WaitAndUnwrapException();
         }
 
         private CommentViewModel ToViewModel(AnswerComment comment)
