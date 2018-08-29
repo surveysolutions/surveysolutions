@@ -398,7 +398,7 @@ namespace WB.Tests.Abc.TestFactories
 
         public SpecialValuesViewModel SpecialValues(
             FilteredOptionsViewModel optionsViewModel = null,
-            IMvxMainThreadDispatcher mvxMainThreadDispatcher = null,
+            IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher = null,
             IStatefulInterviewRepository interviewRepository = null)
         {
             return new SpecialValuesViewModel(

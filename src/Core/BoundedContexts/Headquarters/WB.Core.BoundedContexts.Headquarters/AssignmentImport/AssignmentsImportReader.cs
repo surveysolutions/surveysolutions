@@ -33,7 +33,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             {
                 var sourceColumnName = kv.Key.Trim();
                 var columnName = sourceColumnName.ToLower();
-                var value = (string) kv.Value;
+                var value = ((string) kv.Value)?.Trim();
 
                 if (ServiceColumns.AllSystemVariables.Contains(columnName)) continue;
 
