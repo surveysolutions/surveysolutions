@@ -74,7 +74,7 @@ namespace WB.UI.Shared.Enumerator.Activities
         }
 
         private void OnSectionChange(SectionChangeMessage msg) =>
-            Mvx.Resolve<IMvxMainThreadDispatcher>().RequestMainThreadAction(() =>
+            Mvx.Resolve<IMvxMainThreadAsyncDispatcher>().ExecuteOnMainThreadAsync(() =>
             {
                 try
                 {
