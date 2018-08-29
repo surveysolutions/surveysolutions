@@ -26,7 +26,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
             QuestionStateViewModel<MultipleOptionsQuestionAnswered> questionStateViewmodel = null,
             FilteredOptionsViewModel filteredOptionsViewModel = null,
             QuestionInstructionViewModel instructionViewModel = null,
-            IMvxMainThreadDispatcher mainThreadDispatcher = null)
+            IMvxMainThreadAsyncDispatcher mainThreadDispatcher = null)
         {
             return new MultiOptionQuestionViewModel(
                 questionStateViewmodel ?? Mock.Of<QuestionStateViewModel<MultipleOptionsQuestionAnswered>>(x => x.Validity == Mock.Of<ValidityViewModel>()),

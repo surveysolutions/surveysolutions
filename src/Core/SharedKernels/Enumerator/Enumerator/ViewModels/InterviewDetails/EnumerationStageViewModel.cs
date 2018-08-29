@@ -4,6 +4,7 @@ using System.Linq;
 using MvvmCross.Base;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -104,7 +105,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
                     anchorElementIndex = childItem != null ? this.Items.ToList().IndexOf(childItem) : 0;
                     this.ScrollToIndex = anchorElementIndex;
-                });
+                }).WaitAndUnwrapException();
             }
         }
 
