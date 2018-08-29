@@ -92,7 +92,6 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             var httpClient = new HttpClient(new ExtendedMessageHandler(new HttpClientHandler(), httpStatistician));
 
             httpClient.Timeout = this.restServiceSettings.Timeout;
-            httpClient.DefaultRequestHeaders.ConnectionClose = false;
 
             var request = new HttpRequestMessage()
             {
