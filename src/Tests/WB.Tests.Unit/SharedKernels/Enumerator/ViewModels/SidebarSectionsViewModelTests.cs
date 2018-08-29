@@ -46,7 +46,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
 
             var dispatcher = Create.Fake.MvxMainThreadDispatcher1();
             Ioc.RegisterSingleton<IMvxViewDispatcher>(dispatcher);
-            Ioc.RegisterSingleton<IMvxMainThreadDispatcher>(dispatcher);
+            Ioc.RegisterSingleton<IMvxMainThreadAsyncDispatcher>(dispatcher);
 
             //arrange
             var questionnaire = QuestionnaireDocument;
@@ -95,7 +95,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
 
             var dispatcher = Create.Fake.MvxMainThreadDispatcher1();
             Ioc.RegisterSingleton<IMvxViewDispatcher>(dispatcher);
-            Ioc.RegisterSingleton<IMvxMainThreadDispatcher>(dispatcher);
+            Ioc.RegisterSingleton<IMvxMainThreadAsyncDispatcher>(dispatcher);
 
             //arrange
             var questionnaire = QuestionnaireDocument;
@@ -135,7 +135,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
 
             var dispatcher = Create.Fake.MvxMainThreadDispatcher1();
             Ioc.RegisterSingleton<IMvxViewDispatcher>(dispatcher);
-            Ioc.RegisterSingleton<IMvxMainThreadDispatcher>(dispatcher);
+            Ioc.RegisterSingleton<IMvxMainThreadAsyncDispatcher>(dispatcher);
 
             //arrange
             var questionnaire = QuestionnaireDocument;
@@ -183,7 +183,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
 
             var dispatcher = Create.Fake.MvxMainThreadDispatcher1();
             Ioc.RegisterSingleton<IMvxViewDispatcher>(dispatcher);
-            Ioc.RegisterSingleton<IMvxMainThreadDispatcher>(dispatcher);
+            Ioc.RegisterSingleton<IMvxMainThreadAsyncDispatcher>(dispatcher);
 
             //arrange
             var section1Id = Guid.Parse("11111111111111111111111111111111");

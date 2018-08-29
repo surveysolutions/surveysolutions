@@ -15,6 +15,7 @@ using MvvmCross.Platforms.Android.Presenters.Attributes;
 using WB.Core.BoundedContexts.Supervisor.Properties;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 
 namespace WB.UI.Supervisor.Activities.Dashboard
 {
@@ -28,8 +29,8 @@ namespace WB.UI.Supervisor.Activities.Dashboard
 
         private IMvxNavigationService mvxNavigationService =>
             ServiceLocator.Current.GetInstance<IMvxNavigationService>();
-        private IMvxMainThreadDispatcher mvxMainThreadDispatcher =>
-            ServiceLocator.Current.GetInstance<IMvxMainThreadDispatcher>();
+        private IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher =>
+            ServiceLocator.Current.GetInstance<IMvxMainThreadAsyncDispatcher>();
 
         public override View OnCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
         {
@@ -78,8 +79,8 @@ namespace WB.UI.Supervisor.Activities.Dashboard
             }
 
             if (menuItemId.HasValue)
-                mvxMainThreadDispatcher.RequestMainThreadAction(() =>
-                    this.SelectMenuItem(navigationView.Menu.FindItem(menuItemId.Value)));
+                mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
+                    this.SelectMenuItem(navigationView.Menu.FindItem(menuItemId.Value))).WaitAndUnwrapException();
         }
 
         private void LocalizeMenuItem(int id, string title, string viewModelPropertyName = null)

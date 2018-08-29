@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MvvmCross.Base;
 using MvvmCross.ViewModels;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -24,7 +25,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IInterviewViewModelFactory interviewViewModelFactory;
         private readonly ILiteEventRegistry eventRegistry;
-        private readonly IMvxMainThreadDispatcher mainThreadDispatcher;
+        private readonly IMvxMainThreadAsyncDispatcher mainThreadDispatcher;
         private string interviewId;
         private NavigationState navigationState;
         private readonly CovariantObservableCollection<GroupViewModel> rosterInstances;
@@ -38,7 +39,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
         public RosterViewModel(IStatefulInterviewRepository interviewRepository,
             IInterviewViewModelFactory interviewViewModelFactory,
             ILiteEventRegistry eventRegistry,
-            IMvxMainThreadDispatcher mainThreadDispatcher, 
+            IMvxMainThreadAsyncDispatcher mainThreadDispatcher, 
             IQuestionnaireStorage questionnaireRepository)
         {
             this.interviewRepository = interviewRepository;
@@ -76,7 +77,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 
         private void UpdateFromInterview()
         {
-            this.mainThreadDispatcher.RequestMainThreadAction(
+            this.mainThreadDispatcher.ExecuteOnMainThreadAsync(
                 () =>
                 {
                     var statefulInterview = this.interviewRepository.Get(this.interviewId);
@@ -95,7 +96,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
                     var addedRosterInstances = interviewRosterInstances.Except(notChangedRosterInstances).ToList();
 
                     this.UpdateViewModels(removedRosterInstances, addedRosterInstances, interviewRosterInstances);
-                });
+                }).WaitAndUnwrapException();
         }
 
         private void UpdateViewModels(List<Identity> removedRosterInstances, List<Identity> addedRosterInstances,
