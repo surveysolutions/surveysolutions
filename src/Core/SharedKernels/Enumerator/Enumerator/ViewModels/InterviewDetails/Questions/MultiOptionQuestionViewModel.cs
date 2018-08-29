@@ -137,14 +137,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             set => SetProperty(ref maxAnswersCountMessage, value);
         }
 
-        private async void FilteredOptionsViewModelOnOptionsChanged(object sender, EventArgs eventArgs)
+        private void FilteredOptionsViewModelOnOptionsChanged(object sender, EventArgs eventArgs)
         {
-            await this.mainThreadDispatcher.ExecuteOnMainThreadAsync(
+            this.mainThreadDispatcher.ExecuteOnMainThreadAsync(
                 () =>
                 {
                     this.UpdateQuestionOptions();
                     this.RaisePropertyChanged(() => Options);
-                });
+                }).WaitAndUnwrapException();
         }
 
         public void Dispose()
