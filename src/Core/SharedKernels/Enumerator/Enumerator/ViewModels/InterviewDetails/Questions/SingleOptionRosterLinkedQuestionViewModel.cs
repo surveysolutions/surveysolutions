@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using MvvmCross;
 using MvvmCross.Base;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -32,14 +34,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly ILiteEventRegistry eventRegistry;
-        private readonly IMvxMainThreadDispatcher mainThreadDispatcher;
+        private readonly IMvxMainThreadAsyncDispatcher mainThreadDispatcher;
 
         public SingleOptionRosterLinkedQuestionViewModel(
             IPrincipal principal,
             IQuestionnaireStorage questionnaireRepository,
             IStatefulInterviewRepository interviewRepository,
             ILiteEventRegistry eventRegistry,
-            IMvxMainThreadDispatcher mainThreadDispatcher,
+            IMvxMainThreadAsyncDispatcher mainThreadDispatcher,
             QuestionStateViewModel<SingleOptionLinkedQuestionAnswered> questionStateViewModel,
             QuestionInstructionViewModel instructionViewModel,
             AnsweringViewModel answering)
@@ -53,7 +55,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionnaireRepository = questionnaireRepository;
             this.interviewRepository = interviewRepository;
             this.eventRegistry = eventRegistry;
-            this.mainThreadDispatcher = mainThreadDispatcher ?? MvxMainThreadDispatcher.Instance;
+            this.mainThreadDispatcher = mainThreadDispatcher ?? Mvx.Resolve<IMvxMainThreadAsyncDispatcher>();
 
             this.questionState = questionStateViewModel;
             this.InstructionViewModel = instructionViewModel;
@@ -324,12 +326,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             var optionsToUpdate = this.CreateOptions().ToArray();
 
-            this.mainThreadDispatcher.RequestMainThreadAction(() =>
+            this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
             {
                 this.Options.SynchronizeWith(optionsToUpdate,
                     (s, t) => s.RosterVector.Identical(t.RosterVector) && s.Title == t.Title);
                 this.RaisePropertyChanged(() => this.HasOptions);
-            });
+            }).WaitAndUnwrapException();
         }
     }
 }

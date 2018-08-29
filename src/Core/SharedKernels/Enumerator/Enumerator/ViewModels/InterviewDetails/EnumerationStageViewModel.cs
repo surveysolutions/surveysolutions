@@ -4,6 +4,7 @@ using System.Linq;
 using MvvmCross.Base;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -39,7 +40,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly ICommandService commandService;
 
         readonly IUserInterfaceStateService userInterfaceStateService;
-        private readonly IMvxMainThreadDispatcher mvxMainThreadDispatcher;
+        private readonly IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher;
 
         private NavigationState navigationState;
 
@@ -52,7 +53,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             IInterviewViewModelFactory interviewViewModelFactory,
             IStatefulInterviewRepository interviewRepository,
             IUserInterfaceStateService userInterfaceStateService,
-            IMvxMainThreadDispatcher mvxMainThreadDispatcher,
+            IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher,
             DynamicTextViewModel dynamicTextViewModel, 
             ICompositeCollectionInflationService compositeCollectionInflationService,
             ILiteEventRegistry liteEventRegistry,
@@ -96,14 +97,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
             if (scrollTo != null)
             {
-                this.mvxMainThreadDispatcher.RequestMainThreadAction(() =>
+                this.mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
                 {
                     ICompositeEntity childItem = (this.Items.OfType<GroupViewModel>().FirstOrDefault(x => x.Identity.Equals(scrollTo)) ??
                                                   (ICompositeEntity) this.Items.OfType<QuestionHeaderViewModel>().FirstOrDefault(x => x.Identity.Equals(scrollTo))) ??
                                                  this.Items.OfType<StaticTextViewModel>().FirstOrDefault(x => x.Identity.Equals(scrollTo));
 
                     anchorElementIndex = childItem != null ? this.Items.ToList().IndexOf(childItem) : 0;
-                });
+                }).WaitAndUnwrapException();
             }
             this.ScrollToIndex = anchorElementIndex;
         }

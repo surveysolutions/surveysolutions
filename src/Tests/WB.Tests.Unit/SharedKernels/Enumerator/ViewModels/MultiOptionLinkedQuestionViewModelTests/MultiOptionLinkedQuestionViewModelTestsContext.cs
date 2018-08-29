@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
             IPrincipal userIdentity = null, 
             AnswerNotifier answerNotifier = null,
             ILiteEventRegistry eventRegistry = null,
-            IMvxMainThreadDispatcher mainThreadDispatcher = null)
+            IMvxMainThreadAsyncDispatcher mainThreadDispatcher = null)
         {
             return new MultiOptionLinkedToRosterQuestionQuestionViewModel(
                 questionState ?? Mock.Of<QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered>>(x => x.Validity == Mock.Of<ValidityViewModel>()),
@@ -47,7 +47,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
             IQuestionnaireStorage questionnaireStorage = null,
             IPrincipal userIdentity = null,
             ILiteEventRegistry eventRegistry = null,
-            IMvxMainThreadDispatcher mainThreadDispatcher = null)
+            IMvxMainThreadAsyncDispatcher mainThreadDispatcher = null)
         {
             return
                 new MultiOptionLinkedToRosterQuestionViewModel(

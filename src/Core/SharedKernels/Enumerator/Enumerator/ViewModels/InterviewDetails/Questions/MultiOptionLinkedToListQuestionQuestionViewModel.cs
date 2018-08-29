@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using MvvmCross.Base;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -38,7 +39,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IPrincipal userIdentity;
 
-        protected readonly IMvxMainThreadDispatcher mainThreadDispatcher;
+        protected readonly IMvxMainThreadAsyncDispatcher mainThreadDispatcher;
         private readonly QuestionInstructionViewModel instructionViewModel;
         private readonly QuestionStateViewModel<MultipleOptionsQuestionAnswered> questionState;
 
@@ -80,7 +81,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IStatefulInterviewRepository interviewRepository,
             IQuestionnaireStorage questionnaireStorage,
             IPrincipal userIdentity, ILiteEventRegistry eventRegistry,
-            IMvxMainThreadDispatcher mainThreadDispatcher)
+            IMvxMainThreadAsyncDispatcher mainThreadDispatcher)
         {
             this.Options = new CovariantObservableCollection<MultiOptionQuestionOptionViewModel>();
             this.questionState = questionState;
@@ -317,13 +318,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private void RefreshOptionsFromModel()
         {
             var textListAnswerRows = this.GetTextListAnswerRows();
-            this.mainThreadDispatcher.RequestMainThreadAction(() =>
+            this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
             {
                 this.RemoveOptions(textListAnswerRows);
                 this.InsertOrUpdateOptions(textListAnswerRows);
 
                 this.RaisePropertyChanged(() => this.HasOptions);
-            });
+            }).WaitAndUnwrapException();
         }
 
         private void InsertOrUpdateOptions(List<TextListAnswerRow> textListAnswerRows)
@@ -373,12 +374,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         private void ClearOptions() =>
-            this.mainThreadDispatcher.RequestMainThreadAction(() =>
+            this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
             {
                 this.options.Clear();
                 this.RaisePropertyChanged(() => this.HasOptions);
                 UpateMaxAnswersCountMessage(0);
-            });
+            }).WaitAndUnwrapException();
 
         private MultiOptionQuestionOptionViewModel CreateOptionViewModel(TextListAnswerRow optionValue)
             => new MultiOptionQuestionOptionViewModel(this)
