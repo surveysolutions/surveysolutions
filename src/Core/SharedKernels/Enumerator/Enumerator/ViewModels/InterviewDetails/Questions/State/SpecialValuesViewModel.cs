@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using MvvmCross.Base;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
@@ -69,7 +70,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionState = questionState;
 
             this.optionsViewModel.Init(interviewId, entityIdentity, 200);
-            this.UpdateSpecialValues();
+            this.UpdateSpecialValuesAsync().WaitAndUnwrapException();
 
             allSpecialValues = this.optionsViewModel.GetOptions().Select(x => x.Value).ToHashSet();
             if (this.SpecialValues.Any(x => x.Selected))
@@ -86,7 +87,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                return this.allSpecialValues.Contains(Convert.ToInt32(value.Value));
             }
-            catch (System.OverflowException)
+            catch (OverflowException)
             {
                 return false;
             }
@@ -97,7 +98,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.SpecialValueRemoved?.Invoke(sender, EventArgs.Empty);
         }
 
-        private void UpdateSpecialValues()
+        private async Task UpdateSpecialValuesAsync()
         {
             var interview = this.interviewRepository.Get(interviewId);
             
@@ -123,10 +124,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (specialValuesViewModels.Any(x => x.Selected) || !interview.GetQuestion(this.questionIdentity).IsAnswered())
             {
                 specialValuesViewModels.ForEach(x => this.SpecialValues.Add(x));
-                this.mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
+                await this.mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
                 {
                     this.RaisePropertyChanged(() => this.SpecialValues);
-                }).WaitAndUnwrapException();
+                });
             }
         }
 
@@ -146,11 +147,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             return optionViewModel;
         }
 
-        public void ClearSelectionAndShowValues()
+        public async Task ClearSelectionAndShowValues()
         {
             if (SpecialValues.Count == 0 && this.allSpecialValues.Any())
             {
-                UpdateSpecialValues();
+                await UpdateSpecialValuesAsync();
             }
             else
             {
@@ -182,7 +183,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 if (SpecialValues.Count == 0 && this.allSpecialValues.Any())
                 {
-                    UpdateSpecialValues();
+                    UpdateSpecialValuesAsync();
                     this.mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
                     {
                         this.RaisePropertyChanged(() => this.SpecialValues);
