@@ -61,7 +61,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Error during import of interview with identifying questions {0}. Resposible supervisor is missing.
+        ///   Looks up a localized string similar to Error during import of interview with identifying questions {0}. Responsible supervisor is missing.
         /// </summary>
         public static string ImportInterviews_FailedToImportInterview_NoSupervisor {
             get {

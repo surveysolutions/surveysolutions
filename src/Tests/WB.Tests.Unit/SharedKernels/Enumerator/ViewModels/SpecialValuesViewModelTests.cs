@@ -2,6 +2,7 @@
 using Moq;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Tests.Abc;
@@ -203,7 +204,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             
             // Act
             interview.RemoveAnswer(entityIdentity.Id, entityIdentity.RosterVector, Id.gF, DateTime.Now);
-            model.ClearSelectionAndShowValues();
+            model.ClearSelectionAndShowValues().WaitAndUnwrapException();
 
             //Assert
             Assert.That(model.SpecialValues.Count, Is.EqualTo(2));
