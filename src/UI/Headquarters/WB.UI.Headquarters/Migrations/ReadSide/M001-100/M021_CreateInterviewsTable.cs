@@ -28,8 +28,6 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
     {
         public override void Up()
         {
-            Execute.Sql("UPDATE plainstore.interviewdatas SET value=replace(value::text, '\u0000', '')::json");
-
             var primaryKeyName = "pk_interviews";
 
             Create.Table("interviews")
@@ -62,6 +60,8 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
 
             if (!Schema.Table("interviewdatas").Exists())
                 return;
+
+            Execute.Sql(@"UPDATE readside.interviewdatas SET value=replace(value::text, '\\u0000', '')::json");
 
             Execute.WithConnection((connection, transaction) =>
             {

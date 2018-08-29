@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using MvvmCross.Base;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable.Tasks;
@@ -66,37 +67,34 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             {
                 this.rosterSizeQuestionId = questionnaire.GetRosterSizeQuestion(entityId.Id);
             }
-            this.UpdateFromInterview();
+            
+            this.UpdateFromInterviewAsync();
         }
 
-        public void Handle(RosterInstancesRemoved @event)
+        public async void Handle(RosterInstancesRemoved @event)
         {
             if (@event.Instances.Any(rosterInstance => rosterInstance.GroupId == this.Identity.Id))
-                this.UpdateFromInterview();
+                await this.UpdateFromInterviewAsync();
         }
 
-        private void UpdateFromInterview()
+        private async Task UpdateFromInterviewAsync()
         {
-            this.mainThreadDispatcher.ExecuteOnMainThreadAsync(
-                () =>
-                {
-                    var statefulInterview = this.interviewRepository.Get(this.interviewId);
+            await this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
+            {
+                var statefulInterview = this.interviewRepository.Get(this.interviewId);
 
-                    var interviewRosterInstances =
+                var interviewRosterInstances =
                         statefulInterview.GetRosterInstances(this.navigationState.CurrentGroup, this.Identity.Id)
                             .ToList();
 
-                    var rosterIdentitiesByViewModels =
-                        this.RosterInstances.Select(viewModel => viewModel.Identity).ToList();
-                    var notChangedRosterInstances =
-                        rosterIdentitiesByViewModels.Intersect(interviewRosterInstances).ToList();
+                var rosterIdentitiesByViewModels = this.RosterInstances.Select(viewModel => viewModel.Identity).ToList();
+                var notChangedRosterInstances = rosterIdentitiesByViewModels.Intersect(interviewRosterInstances).ToList();
 
-                    var removedRosterInstances =
-                        rosterIdentitiesByViewModels.Except(notChangedRosterInstances).ToList();
-                    var addedRosterInstances = interviewRosterInstances.Except(notChangedRosterInstances).ToList();
+                var removedRosterInstances = rosterIdentitiesByViewModels.Except(notChangedRosterInstances).ToList();
+                var addedRosterInstances = interviewRosterInstances.Except(notChangedRosterInstances).ToList();
 
-                    this.UpdateViewModels(removedRosterInstances, addedRosterInstances, interviewRosterInstances);
-                }).WaitAndUnwrapException();
+                this.UpdateViewModels(removedRosterInstances, addedRosterInstances, interviewRosterInstances);
+            });
         }
 
         private void UpdateViewModels(List<Identity> removedRosterInstances, List<Identity> addedRosterInstances,
@@ -130,10 +128,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             }
         }
 
-        public void Handle(RosterInstancesAdded @event)
+        public async void Handle(RosterInstancesAdded @event)
         {
             if (@event.Instances.Any(rosterInstance => rosterInstance.GroupId == this.Identity.Id))
-                this.UpdateFromInterview();
+                await this.UpdateFromInterviewAsync();
         }
 
         private GroupViewModel GetGroupViewModel(Identity identity)
@@ -161,7 +159,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             if (@event.QuestionId != this.rosterSizeQuestionId)
                 return;
 
-            this.UpdateFromInterview();
+            this.UpdateFromInterviewAsync();
         }
 
         public void Handle(MultipleOptionsQuestionAnswered @event)
@@ -172,7 +170,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             if (@event.QuestionId != this.rosterSizeQuestionId)
                 return;
 
-            this.UpdateFromInterview();
+            this.UpdateFromInterviewAsync();
         }
     }
 }

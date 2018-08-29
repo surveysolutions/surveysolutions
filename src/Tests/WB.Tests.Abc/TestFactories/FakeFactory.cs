@@ -128,12 +128,14 @@ namespace WB.Tests.Abc.TestFactories
 
             public Task ExecuteOnMainThreadAsync(Action action, bool maskExceptions = true)
             {
-                throw new NotImplementedException();
+                action();
+                return Task.CompletedTask;
             }
 
             public Task ExecuteOnMainThreadAsync(Func<Task> action, bool maskExceptions = true)
             {
-                throw new NotImplementedException();
+                action.Invoke();
+                return Task.CompletedTask;
             }
 
             public override bool RequestMainThreadAction(Action action, bool maskExceptions = true)
