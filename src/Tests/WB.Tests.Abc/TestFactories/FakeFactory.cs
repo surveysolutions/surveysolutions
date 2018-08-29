@@ -159,10 +159,16 @@ namespace WB.Tests.Abc.TestFactories
 
         private class FakeMvxMainThreadDispatcher : IMvxMainThreadAsyncDispatcher
         {
-            public bool RequestMainThreadAction(Action action, bool maskExceptions = true)
+            public Task ExecuteOnMainThreadAsync(Action action, bool maskExceptions = true)
             {
                 action.Invoke();
-                return true;
+                return Task.CompletedTask;
+            }
+
+            public Task ExecuteOnMainThreadAsync(Func<Task> action, bool maskExceptions = true)
+            {
+                action.Invoke();
+                return Task.CompletedTask;
             }
 
             public Task ExecuteOnMainThreadAsync(Action action, bool maskExceptions = true)

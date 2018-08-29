@@ -403,6 +403,7 @@ namespace WB.Tests.Abc.TestFactories
         {
             return new SpecialValuesViewModel(
                 optionsViewModel ?? Mock.Of<FilteredOptionsViewModel>(), 
+                mvxMainThreadDispatcher ?? Create.Fake.MvxMainThreadDispatcher(), 
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>());
         }
 
