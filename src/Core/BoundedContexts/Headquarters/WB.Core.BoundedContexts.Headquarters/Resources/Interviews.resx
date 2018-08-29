@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="ImportInterviews_FailedToImportInterview_NoSupervisor" xml:space="preserve">
-    <value>Error during import of interview with identifying questions {0}. Resposible supervisor is missing</value>
+    <value>Error during import of interview with identifying questions {0}. Responsible supervisor is missing</value>
   </data>
     <data name="ImportInterviews_GenericError" xml:space="preserve">
     <value>Error during import of assignment with answers: {0}. Responsible: {1}, Exception: {2}</value>
