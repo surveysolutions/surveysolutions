@@ -288,9 +288,6 @@
   <data name="WB0062_OptionFilterExpresssionHasIncorrectSyntax" xml:space="preserve">
     <value>تعبير خيار التصفية لديه خطأ نصي</value>
   </data>
-  <data name="WB0063_CategoricalLinkedQuestionUsedInValidationExpression" xml:space="preserve">
-    <value>حجم الاستبيان هو تقريبا {0: ميغابايت وهي كبيرة جدا للعمل بشكل صحيح مع Survey Solutions. حاول تقليل كمية البيانات حتى لا تقل عن {1} ميغابايت.</value>
-  </data>
   <data name="WB0064_CategoricalLinkedQuestionUsedInEnablementCondition" xml:space="preserve">
     <value>لا يمكن استخدام السؤال المرتبط بشكل قاطع في حالة التمكين.</value>
   </data>
@@ -380,9 +377,6 @@
   </data>
   <data name="WB0097_QuestionnaireTitleHasInvalidCharacters" xml:space="preserve">
     <value>يحتوي عنوان الاستبيان على أحرف غير مسموح بها. يسمح ب حروف ال non Unicode  والأرقام والمسافة و _ فقط.</value>
-  </data>
-  <data name="WB0098_QuestionnaireHasSizeMoreThan5MB" xml:space="preserve">
-    <value>حجم الاستبيان هو تقريبا {0} ميغابايت وهي كبيرة جدا للعمل بشكل صحيح مع Survey Solutions. حاول تقليل كمية البيانات حتى لا تقل عن {1} ميغابايت.</value>
   </data>
   <data name="WB0100_MaxNumberOfAnswersForRosterSizeQuestionCannotBeGreaterThen200" xml:space="preserve">
     <value>لا يمكن أن يكون الحد الأقصى لعدد الإجابات عن سؤال حجم السجل أكبر من {0}.</value>

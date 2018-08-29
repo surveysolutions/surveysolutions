@@ -235,14 +235,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.specialValues.Dispose();
         }
 
-        public void Handle(AnswersRemoved @event)
+        public async void Handle(AnswersRemoved @event)
         {
             foreach (var question in @event.Questions)
             {
                 if (this.questionIdentity.Equals(question.Id, question.RosterVector))
                 {
                     this.Answer = null;
-                    this.specialValues.ClearSelectionAndShowValues();
+                    await this.specialValues.ClearSelectionAndShowValues();
                 }
             }
         }

@@ -318,7 +318,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.specialValues.Dispose();
         }
 
-        public void Handle(AnswersRemoved @event)
+        public async void Handle(AnswersRemoved @event)
         {
             foreach (var question in @event.Questions)
             {
@@ -326,7 +326,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 {
                     this.Answer = null;
                     this.previousAnswer = null;
-                    this.specialValues.ClearSelectionAndShowValues();
+                    await this.specialValues.ClearSelectionAndShowValues();
                 }
             }
         }

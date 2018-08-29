@@ -122,8 +122,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 itemCompositeCollections[CompositeItemType.Comments].Add(compositeQuestion.QuestionState.Comments);
                 itemCompositeCollections[CompositeItemType.AnsweringProgress].Add(compositeQuestion.Answering);
             }
-
-        }).WaitAndUnwrapException();
+        });
 
         private enum CompositeItemType
         {

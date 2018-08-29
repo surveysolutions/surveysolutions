@@ -409,10 +409,6 @@
   <data name="MapSyncProvider_SyncronizeMapsAsync_Map_synchronization_succesfuly_finished" xml:space="preserve">
     <value>انتهت مزامنة الخريطة بنجاح</value>
   </data>
-  <data name="MapSyncProvider_SyncronizeMapsAsync_Progress_Report_Format" xml:space="preserve">
-    <value>التعامل مع الخريطة {0}، {1} من {2}.
-  تم تنزيل {3} من {4} ({5}٪) </value>
-  </data>
   <data name="MenuItem_Title_Dashboard" xml:space="preserve">
     <value>لوحة التحكم</value>
   </data>
