@@ -155,6 +155,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             {
                 stopwatch.Stop();
                 logger.Error($"ERROR!!! Request to {url} failed. Time: {stopwatch.Elapsed}.", ex);
+                logger.Error($"ERROR!!! Request headers {ex?.Call?.Request?.Headers}. Response headers {ex?.Call?.Response?.Headers}.");
 
                 if (ex.GetSelfOrInnerAs<TaskCanceledException>() != null || ex.GetSelfOrInnerAs<OperationCanceledException>() != null)
                 {
