@@ -9,7 +9,9 @@ using MvvmCross;
 using MvvmCross.Binding.Bindings.Target.Construction;
 using MvvmCross.Converters;
 using MvvmCross.IoC;
+using MvvmCross.Platforms.Android.Presenters;
 using MvvmCross.Views;
+using WB.Core.BoundedContexts.Interviewer;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
@@ -36,10 +38,10 @@ using WB.UI.Interviewer.Settings;
 using WB.UI.Interviewer.ViewModel;
 using WB.UI.Shared.Enumerator;
 using WB.UI.Shared.Enumerator.Activities;
+using WB.UI.Shared.Enumerator.CustomServices;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Services.Internals;
 using WB.UI.Shared.Enumerator.Services.Logging;
-using MvxIoCProvider = WB.UI.Shared.Enumerator.Autofac.MvxIoCProvider;
 
 namespace WB.UI.Interviewer
 {
@@ -54,7 +56,6 @@ namespace WB.UI.Interviewer
                 {typeof(LoginViewModel), typeof(LoginActivity)},
                 {typeof(FinishInstallationViewModel), typeof(FinishInstallationActivity)},
                 {typeof(DashboardViewModel), typeof(DashboardActivity)},
-                {typeof(DashboardSearchViewModel), typeof(DashboardSearchActivity)},
                 {typeof(DiagnosticsViewModel),typeof(DiagnosticsActivity) },
                 {typeof(LoadingViewModel),typeof(LoadingActivity) },
                 {typeof(InterviewViewModel), typeof(InterviewActivity)},
@@ -62,7 +63,8 @@ namespace WB.UI.Interviewer
                 {typeof(InterviewerCompleteInterviewViewModel), typeof (CompleteInterviewFragment)},
                 {typeof (PrefilledQuestionsViewModel), typeof (PrefilledQuestionsActivity)},
                 {typeof (MapsViewModel), typeof(MapsActivity) },
-                {typeof (PhotoViewViewModel), typeof(PhotoViewActivity) }
+                {typeof (PhotoViewViewModel), typeof(PhotoViewActivity) },
+                {typeof(SearchViewModel), typeof(InterviewerSearchActivity)}
 #if !EXCLUDEEXTENSIONS
                 ,{typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel), typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorActivity)}
 #endif
@@ -90,7 +92,7 @@ namespace WB.UI.Interviewer
 
         protected override IMvxIoCProvider CreateIocProvider()
         {
-            return new MvxIoCProvider(this.CreateAndInitializeIoc());
+            return new Shared.Enumerator.Autofac.MvxIoCProvider(this.CreateAndInitializeIoc());
         }
 
         private IContainer CreateAndInitializeIoc()
@@ -102,6 +104,7 @@ namespace WB.UI.Interviewer
                 new InterviewerInfrastructureModule(),
                 new EnumeratorUIModule(),
                 new EnumeratorSharedKernelModule(),
+                new InterviewerBoundedContextModule(), 
                 new InterviewerUIModule(),
                 };
 
@@ -131,12 +134,13 @@ namespace WB.UI.Interviewer
             var serviceLocator = ServiceLocator.Current;
 
             var status = new UnderConstructionInfo();
-            status.Status = UnderConstructionStatus.Running;
+            status.Run();
+
             foreach (var module in modules)
             {
                 module.Init(serviceLocator, status).Wait();
             }
-            status.Status = UnderConstructionStatus.Finished;
+            status.Finish();
 
             return container;
         }
@@ -164,6 +168,22 @@ namespace WB.UI.Interviewer
                 typeof(Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel).Assembly
 #endif
             });
+        }
+        
+        BackStackHintHandler backStackHandler;
+
+        /// <summary>
+        /// Creates the view presenter.
+        /// </summary>
+        /// <returns>The view presenter.</returns>
+        protected override IMvxAndroidViewPresenter CreateViewPresenter()
+        {
+            var presenter = base.CreateViewPresenter();
+
+            backStackHandler = new BackStackHintHandler(ApplicationContext, typeof(LoginActivity));
+            presenter.AddPresentationHintHandler<OpenLoginScreenHint>(backStackHandler.HandleClearBackstackHint);
+
+            return presenter;
         }
     }
 }

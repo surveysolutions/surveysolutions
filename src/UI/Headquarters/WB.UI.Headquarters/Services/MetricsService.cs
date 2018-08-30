@@ -5,6 +5,8 @@ using Ninject;
 using Npgsql;
 using StackExchange.Exceptional;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Infrastructure.Native.Monitoring;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.UI.Shared.Web.Extensions;
@@ -16,8 +18,10 @@ namespace WB.UI.Headquarters.Services
         public static bool IsEnabled => System.Configuration.ConfigurationManager.AppSettings.GetBool(@"Metrics.Enable", true);
 
         [Localizable(false)]
-        public static void Start(IKernel kernel, Core.GenericSubdomains.Portable.Services.ILogger logger)
+        public static void Start(IServiceLocator serviceLocator)
         {
+            var logger = serviceLocator.GetInstance<ILoggerProvider>().GetFor<MetricsService>();
+
             if (!IsEnabled)
             {
                 logger.Info("Metrics are disabled per configuration");
@@ -25,9 +29,8 @@ namespace WB.UI.Headquarters.Services
             }
             try
             {
-                MetricsRegistry.Instance.RegisterOnDemandCollectors(
-                    new BrokenPackagesStatsCollector(
-                        kernel.Get<ISessionFactory>(PostgresPlainStorageModule.SessionFactoryName)));
+                var sessionFactory = serviceLocator.GetInstance<ISessionFactory>(PostgresPlainStorageModule.SessionFactoryName);
+                MetricsRegistry.Instance.RegisterOnDemandCollectors(new BrokenPackagesStatsCollector(sessionFactory));
 
                 // getting instance name from connection string information
                 var connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["Postgres"];

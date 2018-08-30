@@ -27,7 +27,8 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                     and qe.linked_to_roster_id      is null
                     and qe.cascade_from_question_id is null
                     and qe.is_filtered_combobox   = false
-                    ) a, unnest(a.answer) ans");
+                    ) a, unnest(a.answer) ans
+                WITH NO DATA");
 
             Execute.Sql("create unique index if not exists report_tabulate_data_unq_idx ON readside.report_tabulate_data (entity_id, rostervector, interview_id, answer)");
             Execute.Sql("create index if not exists report_tabulate_data_entity_id_idx ON readside.report_tabulate_data (entity_id)");

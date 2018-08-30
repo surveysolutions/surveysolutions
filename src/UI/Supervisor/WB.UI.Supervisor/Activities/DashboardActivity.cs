@@ -6,15 +6,13 @@ using Android.Support.V4.Widget;
 using Android.Support.V7.App;
 using Android.Support.V7.Widget;
 using Android.Views;
-using MvvmCross;
 using MvvmCross.Platforms.Android.Presenters.Attributes;
+using WB.Core.BoundedContexts.Supervisor.Properties;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services;
-using WB.Core.BoundedContexts.Supervisor.ViewModel.InterviewerSelector;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
-using WB.Core.SharedKernels.Enumerator.Services.MapSynchronization;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.Services;
@@ -92,18 +90,19 @@ namespace WB.UI.Supervisor.Activities
             this.ViewModel.Synchronization.SyncBgService = this;
         }
 
-        protected override void OnStop()
-        {
-            base.OnStop();
-            Mvx.Resolve<IInterviewerSelectorDialog>()?.CloseDialog();
-        }
-
         public override void OnBackPressed() { }
 
         public override bool OnCreateOptionsMenu(IMenu menu)
         {
             this.MenuInflater.Inflate(Resource.Menu.dashboard, menu);
 
+            SetMenuItemIcon(menu, Resource.Id.menu_search, Resource.Drawable.dashboard_search_icon);
+            SetMenuItemIcon(menu, Resource.Id.menu_sync_with_hq, Resource.Drawable.synchronize_icon);
+            SetMenuItemIcon(menu, Resource.Id.menu_sync_offline, Resource.Drawable.receive_interviews_icon);
+
+            menu.LocalizeMenuItem(Resource.Id.menu_search, InterviewerUIResources.MenuItem_Title_Search);
+            menu.LocalizeMenuItem(Resource.Id.menu_sync_with_hq, SupervisorUIResources.Synchronization_Synchronize_HQ);
+            menu.LocalizeMenuItem(Resource.Id.menu_sync_offline, SupervisorUIResources.Synchronization_Synchronize_Offline);
             menu.LocalizeMenuItem(Resource.Id.menu_signout, InterviewerUIResources.MenuItem_Title_SignOut);
             menu.LocalizeMenuItem(Resource.Id.menu_settings, InterviewerUIResources.MenuItem_Title_Settings);
             menu.LocalizeMenuItem(Resource.Id.menu_diagnostics, InterviewerUIResources.MenuItem_Title_Diagnostics);
@@ -127,6 +126,15 @@ namespace WB.UI.Supervisor.Activities
                     break;
                 case Resource.Id.menu_signout:
                     this.ViewModel.SignOutCommand.Execute();
+                    break;
+                case Resource.Id.menu_search:
+                    this.ViewModel.ShowSearchCommand.Execute();
+                    break;
+                case Resource.Id.menu_sync_with_hq:
+                    this.ViewModel.SynchronizationCommand.Execute();
+                    break;
+                case Resource.Id.menu_sync_offline:
+                    this.ViewModel.NavigateToOfflineSyncCommand.Execute();
                     break;
             }
 

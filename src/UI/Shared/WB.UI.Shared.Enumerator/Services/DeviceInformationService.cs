@@ -7,6 +7,7 @@ using Android.Locations;
 using Android.Net;
 using Android.OS;
 using Android.Telephony;
+using Java.Lang;
 using Java.Util;
 using Plugin.DeviceInfo;
 using Plugin.Permissions.Abstractions;
@@ -16,6 +17,7 @@ using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.UI.Shared.Enumerator.Settings;
+using Exception = System.Exception;
 using Permission = Plugin.Permissions.Abstractions.Permission;
 
 namespace WB.UI.Shared.Enumerator.Services
@@ -72,7 +74,7 @@ namespace WB.UI.Shared.Enumerator.Services
             => Application.Context.GetSystemService(Context.LocationService) as LocationManager;
 
         private PowerManager powerManager => Application.Context.GetSystemService(Context.PowerService) as PowerManager;
-        
+
         public async Task<DeviceInfo> GetDeviceInfoAsync() => new DeviceInfo
         {
             DeviceId = this.TryGetDeviceId(),
@@ -320,13 +322,66 @@ namespace WB.UI.Shared.Enumerator.Services
             }
         }
 
+        /// <summary>
+        /// Ported from java snippet https://gist.github.com/flawyte/efd23dd520fc2320f94ba003b9aabfce
+        /// </summary>
         private string TryGetDeviceSerialNumber()
         {
             try
             {
-                return Build.Serial;
+                Java.Lang.String serialnum = null;
+                var emptyJavaString = new Java.Lang.String(new StringBuffer(""));
+                try
+                {
+                    var c = Class.ForName("android.os.SystemProperties");
+                    var get = c.GetMethod("get", Class.FromType(typeof(Java.Lang.String)));
+
+                    // (?) Lenovo Tab (https://stackoverflow.com/a/34819027/1276306)
+                    serialnum = (Java.Lang.String)get.Invoke(c, "gsm.sn1");
+
+                    if (serialnum.Equals(emptyJavaString))
+                        // Samsung Galaxy S5 (SM-G900F) : 6.0.1
+                        // Samsung Galaxy S6 (SM-G920F) : 7.0
+                        // Samsung Galaxy Tab 4 (SM-T530) : 5.0.2
+                        // (?) Samsung Galaxy Tab 2 (https://gist.github.com/jgold6/f46b1c049a1ee94fdb52)
+                        serialnum = (Java.Lang.String)get.Invoke(c, "ril.serialnumber");
+
+                    if (serialnum.Equals(emptyJavaString))
+                        // Google Nexus 5 : 6.0.1
+                        // Honor 5C (NEM-L51) : 7.0
+                        // Honor 5X (KIW-L21) : 6.0.1
+                        // Huawei M2 (M2-801w) : 5.1.1
+                        // (?) HTC Nexus One : 2.3.4 (https://gist.github.com/tetsu-koba/992373)
+                        serialnum = (Java.Lang.String)get.Invoke(c, "ro.serialno");
+
+                    if (serialnum.Equals(emptyJavaString))
+                        // (?) Samsung Galaxy Tab 3 (https://stackoverflow.com/a/27274950/1276306)
+                        serialnum = (Java.Lang.String)get.Invoke(c, "sys.serialnumber");
+
+                }
+                catch (Java.Lang.Exception)
+                {
+                }
+
+                string serial = string.Empty;
+                if (serialnum == null || serialnum.Equals(emptyJavaString))
+                {
+                    try
+                    {
+                        serial = Build.Serial;
+                    }
+                    catch (Exception)
+                    {
+                    }
+                }
+                else
+                {
+                    serial = serialnum.ToString();
+                }
+
+                return serial;
             }
-            catch
+            catch (Exception)
             {
                 return string.Empty;
             }

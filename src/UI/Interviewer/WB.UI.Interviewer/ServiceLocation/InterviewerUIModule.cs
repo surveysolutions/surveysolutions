@@ -12,6 +12,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.CommandBus.Implementation;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Implementation.Services;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization;
@@ -42,12 +43,11 @@ namespace WB.UI.Interviewer.ServiceLocation
             registry.BindAsSingleton<ISnapshotStoreWithCache, InMemorySnapshotStoreWithCache>();
 
             registry.Bind<INetworkService, AndroidNetworkService>();
-            registry.Bind<IHttpClientFactory, AndroidHttpClientFactory>();
             registry.BindAsSingletonWithConstructorArgument<IRestService, RestService>("restServicePointManager", null);
             registry.Bind<IInterviewUniqueKeyGenerator, InterviewerInterviewUniqueKeyGenerator>();
-            registry.Bind<IGroupStateCalculationStrategy, EnumeratorGroupStateCalculationStrategy>();
+            registry.Bind<IGroupStateCalculationStrategy, EnumeratorGroupGroupStateCalculationStrategy>();
+            registry.Bind<IInterviewStateCalculationStrategy, EnumeratorInterviewStateCalculationStrategy>();
 
-            registry.BindAsSingleton<ISynchronizationMode, SynchronizationModeSelector>();
             registry.Bind<ISynchronizationService, SyncronizationServiceWrapper>();
 
             registry.Bind<IInterviewerSynchronizationService, SynchronizationService>();
@@ -70,7 +70,7 @@ namespace WB.UI.Interviewer.ServiceLocation
             registry.Bind<IViewModelNavigationService, ViewModelNavigationService>();
             registry.BindAsSingleton<ILastCreatedInterviewStorage, LastCreatedInterviewStorage>();
 
-            registry.BindAsSingleton<IInterviewViewModelFactory, InterviewViewModelFactory>();
+            registry.BindAsSingleton<IInterviewViewModelFactory, InterviewerInterviewViewModelFactory>();
 
             registry.BindAsSingleton<ICommandService, SequentialCommandService>();
 #if EXCLUDEEXTENSIONS

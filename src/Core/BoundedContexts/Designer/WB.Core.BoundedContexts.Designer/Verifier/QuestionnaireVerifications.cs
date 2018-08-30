@@ -48,6 +48,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             ErrorsByQuestionnaireEntitiesShareSameInternalId,
             ErrorsBySubstitutions,
             ErrorsByInvalidQuestionnaireVariable,
+            Critical_EntitiesWithDuplicateVariableName_WB0026,
             Warning(NotShared, "WB0227", VerificationMessages.WB0227_NotShared),
         };
 
@@ -67,6 +68,54 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             QuestionType.TextList
         };
 
+        private static IEnumerable<QuestionnaireVerificationMessage> Critical_EntitiesWithDuplicateVariableName_WB0026(
+            MultiLanguageQuestionnaireDocument questionnaire)
+        {
+            var rosterVariableNameMappedOnRosters = questionnaire
+                .Find<IGroup>(g => g.IsRoster && !string.IsNullOrEmpty(g.VariableName))
+                .Select(r => new
+                {
+                    Name = r.VariableName,
+                    Reference = QuestionnaireEntityReference.CreateForRoster(r.PublicKey)
+                })
+                .Union(questionnaire.Find<IQuestion>(q => true)
+                    .Where(x => !string.IsNullOrEmpty(x.StataExportCaption))
+                    .Select(r => new
+                    {
+                        Name = r.StataExportCaption,
+                        Reference = CreateReference(r)
+                    }))
+                .Union(questionnaire.LookupTables.Where(x => !string.IsNullOrEmpty(x.Value.TableName))
+                    .Select(r => new
+                    {
+                        Name = r.Value.TableName,
+                        Reference = QuestionnaireEntityReference.CreateForLookupTable(r.Key)
+                    }))
+                .Union(questionnaire.Find<IVariable>(x => !string.IsNullOrEmpty(x.Name))
+                    .Where(x => !string.IsNullOrEmpty(x.Name))
+                    .Select(r => new
+                    {
+                        Name = r.Name,
+                        Reference = CreateReference(r)
+                    })
+                ).Union(questionnaire.VariableName.ToEnumerable()
+                    .Where(x => !string.IsNullOrEmpty(x))
+                    .Select(r => new
+                    {
+                        Name = r,
+                        Reference = QuestionnaireEntityReference.CreateForQuestionnaire(questionnaire.PublicKey)
+                    })
+                ).ToList();
+
+
+            return rosterVariableNameMappedOnRosters
+                .GroupBy(s => s.Name, StringComparer.InvariantCultureIgnoreCase)
+                .Where(group => group.Count() > 1)
+                .Select(group => QuestionnaireVerificationMessage.Critical(
+                    "WB0026",
+                    VerificationMessages.WB0026_ItemsWithTheSameNamesFound,
+                    group.Select(x => x.Reference).ToArray()));
+        }
         
         private IEnumerable<QuestionnaireVerificationMessage> ErrorsByInvalidQuestionnaireVariable(MultiLanguageQuestionnaireDocument questionnaire)
         {

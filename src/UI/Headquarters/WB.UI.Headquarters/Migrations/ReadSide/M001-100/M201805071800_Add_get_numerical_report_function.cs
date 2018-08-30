@@ -40,7 +40,8 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
                      answer::text not in (
                         select value from readside.questionnaire_entities_answers qea 
                         where qea.entity_id = rd.entity_id)
-                 order by answer, entityid;");
+                 order by answer, entityid
+                with no data;");
 
             Execute.Sql("create unique index if not exists report_tabulate_numerical_unq_idx ON readside.report_tabulate_numerical (entity_id, rostervector, interview_id, answer)");
 

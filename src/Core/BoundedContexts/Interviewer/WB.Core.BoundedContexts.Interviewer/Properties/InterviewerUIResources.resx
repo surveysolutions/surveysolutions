@@ -332,7 +332,7 @@ for further instructions</value>
     <value>Synchronization successfully completed</value>
   </data>
   <data name="Synchronization_DoneWithErrors_Title" xml:space="preserve">
-    <value>Synchronization completed with errors</value>
+    <value>Synchronization completed with errors. Please try again later.</value>
   </data>
   <data name="Synchronization_Upload_CompletedAssignments_Text" xml:space="preserve">
     <value>completed assignments</value>

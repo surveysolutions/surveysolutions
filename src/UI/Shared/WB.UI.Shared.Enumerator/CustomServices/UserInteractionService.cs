@@ -2,14 +2,21 @@ using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Android.App;
+using Android.Content;
+using Android.Gms.Common;
+using Android.OS;
+using Android.Runtime;
 using Android.Text;
 using Android.Widget;
+using Java.Lang;
+using Java.Lang.Reflect;
 using MvvmCross;
 using MvvmCross.Platforms.Android;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.Utils;
+using String = System.String;
 
 namespace WB.UI.Shared.Enumerator.CustomServices
 {
@@ -282,6 +289,96 @@ namespace WB.UI.Shared.Enumerator.CustomServices
                 }
             }
             callback?.Invoke();
+        }
+
+        public void ShowGoogleApiErrorDialog(int errorCode, int requestCode, Action onCancel = null)
+        {
+            Field GetAccessibleField(Class clazz, String fieldName)
+            {
+                Field field = clazz.GetDeclaredField(fieldName);
+                AccessibleObject.SetAccessible(new AccessibleObject[] { field }, true);
+                return field;
+            }
+
+            Dialog defaultDialog = GoogleApiAvailability.Instance.GetErrorDialog(this.CurrentActivity, errorCode, requestCode);
+            if (Build.VERSION.SdkInt >= BuildVersionCodes.Lollipop) // Remove this check if custom dialog theme is used
+            {
+                defaultDialog.Show();
+                return;
+            }
+
+            try
+            {
+                Field mAlert = GetAccessibleField(defaultDialog.Class, "mAlert");
+                Java.Lang.Object alertController = mAlert.Get(defaultDialog);
+                Class alertControllerClass = alertController.Class;
+
+                Field mTitle = GetAccessibleField(alertControllerClass, "mTitle");
+                Field mMessage = GetAccessibleField(alertControllerClass, "mMessage");
+                Field mButtonPositiveText = GetAccessibleField(alertControllerClass, "mButtonPositiveText");
+                Field mButtonPositiveMessage = GetAccessibleField(alertControllerClass, "mButtonPositiveMessage");
+
+                var title = (ICharSequence)mTitle.Get(alertController);
+                var message = (ICharSequence)mMessage.Get(alertController);
+                var buttonPositiveText = (ICharSequence)mButtonPositiveText.Get(alertController);
+                var onClickListener = ((Message)mButtonPositiveMessage.Get(alertController)).Obj.JavaCast<IDialogInterfaceOnClickListener>();
+
+                this.ShowAlert(title, message, buttonPositiveText, onClickListener, onCancel);
+            }
+            catch (Throwable)
+            {
+                // Something happened, returning default dialog
+                defaultDialog.Show();
+            }
+        }
+
+        private void ShowAlert(ICharSequence title, ICharSequence message,
+            ICharSequence buttonPositiveText, IDialogInterfaceOnClickListener onClickListener,
+            Action onCancel = null)
+        {
+            var userInteractionId = Guid.NewGuid();
+
+            try
+            {
+                HandleDialogOpen(userInteractionId);
+
+                Application.SynchronizationContext.Post(
+                    ignored =>
+                    {
+                        if (this.CurrentActivity == null)
+                        {
+                            HandleDialogClose(userInteractionId);
+                            return;
+                        }
+
+                        new Android.Support.V7.App.AlertDialog.Builder(this.CurrentActivity)
+                            .SetTitle(title)
+                            .SetMessage(message)
+                            .SetPositiveButton(buttonPositiveText, onClickListener)
+                            .SetOnCancelListener(new CancelDialogHandler(() =>
+                            {
+                                HandleDialogClose(userInteractionId, onCancel);
+                            }))
+                            .Show();
+                    },
+                    null);
+            }
+            catch
+            {
+                HandleDialogClose(userInteractionId);
+                throw;
+            }
+        }
+
+        private class CancelDialogHandler : Java.Lang.Object, IDialogInterfaceOnCancelListener
+        {
+            private readonly Action onCancel;
+
+            public CancelDialogHandler(Action onCancel)
+            {
+                this.onCancel = onCancel;
+            }
+            public void OnCancel(IDialogInterface dialog) => this.onCancel.Invoke();
         }
     }
 }

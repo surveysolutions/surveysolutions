@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
@@ -17,6 +16,18 @@ namespace WB.Tests.Unit.Designer.QuestionnaireVerificationTests
     {
         private static readonly Guid Id1 = Guid.Parse("11111111111111111111111111111111");
         private static readonly Guid Id2 = Guid.Parse("22222222222222222222222222222222");
+
+        [Test]
+        public void questionnaire_variable_and_roster_has_the_same_name()
+            => Create.QuestionnaireDocument("questionnaire_var", Id.gA, "title", children: new IComposite[] {
+                    Create.Group(Id.gB, children: new IComposite[]
+                    {
+                        Create.TextQuestion(Id1),
+                        Create.FixedRoster(Id1, variable: "questionnaire_var")
+                    })
+                })
+                .ExpectCritical("WB0026");
+
 
         [TestCase("1variable", "WB0123")]
         [TestCase("_variable", "WB0123")]

@@ -120,10 +120,6 @@
   <data name="ImportInterviews_FailedToImportInterview_NoSupervisor" xml:space="preserve">
     <value>حدث خطأ أثناء استيراد المقابلة مع تحديد الأسئلة {0}. المشرف المسؤول مفقود</value>
   </data>
-  <data name="ImportInterviews_GenericError" xml:space="preserve">
-    <value>تم إنشاء وثيقة PDF (دقائق).
-الحجم: {1{;كيلوبايت </value>
-  </data>
   <data name="ImportInterviews_IncorrectDatafile" xml:space="preserve">
     <value>ملف البيانات غير صحيح</value>
   </data>

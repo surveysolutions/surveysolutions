@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -12,7 +13,6 @@ using WB.Core.GenericSubdomains.Portable.Implementation.Compression;
 using WB.Core.GenericSubdomains.Portable.Properties;
 using WB.Core.GenericSubdomains.Portable.Services;
 
-
 namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
 {
     public class RestService : IRestService
@@ -22,7 +22,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
         private readonly IJsonAllTypesSerializer synchronizationSerializer;
         private readonly IStringCompressor stringCompressor;
         private readonly IHttpStatistician httpStatistician;
-        private readonly IHttpClientFactory httpClientFactory;
+        private readonly ILogger logger;
 
         public RestService(
             IRestServiceSettings restServiceSettings,
@@ -31,14 +31,14 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             IStringCompressor stringCompressor,
             IRestServicePointManager restServicePointManager,
             IHttpStatistician httpStatistician,
-            IHttpClientFactory httpClientFactory)
+            ILogger logger)
         {
             this.restServiceSettings = restServiceSettings;
             this.networkService = networkService;
             this.synchronizationSerializer = synchronizationSerializer;
             this.stringCompressor = stringCompressor;
             this.httpStatistician = httpStatistician;
-            this.httpClientFactory = httpClientFactory;
+            this.logger = logger;
 
             if (this.restServiceSettings.AcceptUnsignedSslCertificate)
                 restServicePointManager?.AcceptUnsignedSslCertificate();
@@ -89,8 +89,8 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
 
             var fullUrl = new Url(this.restServiceSettings.Endpoint, url, queryString);
 
-            var httpMessageHandler = httpClientFactory.CreateMessageHandler();
-            HttpClient httpClient = httpClientFactory.CreateClient(fullUrl, httpMessageHandler, httpStatistician);
+            var httpClient = new HttpClient(new ExtendedMessageHandler(new HttpClientHandler(), httpStatistician));
+
             httpClient.Timeout = this.restServiceSettings.Timeout;
 
             var request = new HttpRequestMessage()
@@ -100,8 +100,11 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                 Content = httpContent
             };
 
-            request.Headers.Add("User-Agent", this.restServiceSettings.UserAgent);
-            request.Headers.Add("Accept-Encoding", "gzip,deflate");
+            request.Headers.UserAgent.ParseAdd(this.restServiceSettings.UserAgent);
+            
+            request.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
+            request.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("deflate"));
+            request.Headers.Add("Accept-Language", "en-GB,en;q=0.9,en-US;q=0.8");
 
             if (forceNoCache)
             {
@@ -127,8 +130,11 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                 }
             }
 
+            Stopwatch stopwatch = new Stopwatch();
+
             try
             {
+                stopwatch.Start();
 
                 var httpResponseMessage = await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, linkedCancellationTokenSource.Token);
 
@@ -148,6 +154,10 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             }
             catch (ExtendedMessageHandlerException ex)
             {
+                stopwatch.Stop();
+                logger.Error($"ERROR!!! Request to {url} failed. Time: {stopwatch.Elapsed}.", ex);
+                logger.Error($"ERROR!!! Request headers {ex?.Call?.Request?.Headers}. Response headers {ex?.Call?.Response?.Headers}.");
+
                 if (ex.GetSelfOrInnerAs<TaskCanceledException>() != null || ex.GetSelfOrInnerAs<OperationCanceledException>() != null)
                 {
                     if (requestTimeoutToken.IsCancellationRequested)

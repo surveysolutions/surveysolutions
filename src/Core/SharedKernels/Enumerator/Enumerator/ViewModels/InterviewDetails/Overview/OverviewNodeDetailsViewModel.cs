@@ -36,15 +36,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
             this.identity = parameter.TargetEntity;
         }
 
-        public override Task Initialize()
+        public override async Task Initialize()
         {
+            await base.Initialize().ConfigureAwait(false);
+
             var interview = this.interviewRepository.Get(interviewId);
 
             this.Errors = interview.GetFailedValidationMessages(identity, UIResources.Error).Select(ConvertToSafeHtml).ToList();
             this.Warnings = interview.GetFailedWarningMessages(identity, UIResources.Error).Select(ConvertToSafeHtml).ToList();
             this.Comments.Init(this.interviewId, identity, navigationState);
             this.Comments.HasComments = this.Comments.Comments.Count > 0;
-            return Task.CompletedTask;
         }
 
         private string ConvertToSafeHtml(string x)
