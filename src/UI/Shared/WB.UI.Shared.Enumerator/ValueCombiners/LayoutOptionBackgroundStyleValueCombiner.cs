@@ -13,15 +13,15 @@ namespace WB.UI.Shared.Enumerator.ValueCombiners
             bool isProtected = values[3].ConvertToBoolean();
             bool canBeChecked = values[4].ConvertToBoolean();
 
-            if (!canBeChecked)
-                return QuestionStateStyle.MaxAnswersCountReached;
-
             var state = base.GetValue(values);
 
             if (state == QuestionStateStyle.InvalidEnabled || state == QuestionStateStyle.InvalidDisabled)
             {
                 return state;
             }
+
+            if (!canBeChecked)
+                return QuestionStateStyle.MaxAnswersCountReached;
 
             if (isProtected)
             {

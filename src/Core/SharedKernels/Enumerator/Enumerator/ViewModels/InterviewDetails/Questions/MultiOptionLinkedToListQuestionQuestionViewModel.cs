@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Base;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -16,6 +18,7 @@ using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
@@ -36,7 +39,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IPrincipal userIdentity;
 
-        protected readonly IMvxMainThreadDispatcher mainThreadDispatcher;
+        protected readonly IMvxMainThreadAsyncDispatcher mainThreadDispatcher;
         private readonly QuestionInstructionViewModel instructionViewModel;
         private readonly QuestionStateViewModel<MultipleOptionsQuestionAnswered> questionState;
 
@@ -65,6 +68,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         public Identity QuestionIdentity => this.Identity;
+        public bool AreAnswersOrdered => this.areAnswersOrdered;
 
         IObservableCollection<MultiOptionQuestionOptionViewModelBase> IMultiOptionQuestionViewModelToggleable.Options => this.Options;
 
@@ -77,7 +81,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IStatefulInterviewRepository interviewRepository,
             IQuestionnaireStorage questionnaireStorage,
             IPrincipal userIdentity, ILiteEventRegistry eventRegistry,
-            IMvxMainThreadDispatcher mainThreadDispatcher)
+            IMvxMainThreadAsyncDispatcher mainThreadDispatcher)
         {
             this.Options = new CovariantObservableCollection<MultiOptionQuestionOptionViewModel>();
             this.questionState = questionState;
@@ -88,6 +92,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.interviewRepository = interviewRepository;
             this.Answering = answering;
             this.mainThreadDispatcher = mainThreadDispatcher;
+            this.timer = new Timer(async _ => { await SaveAnswer(); }, null, Timeout.Infinite, Timeout.Infinite);
         }
 
         public Identity Identity => this.questionIdentity;
@@ -115,15 +120,52 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     this.optionsBottomBorderViewModel.HasOptions = this.HasOptions;
                 }
             };
-            this.RefreshOptionsFromModel();
-        }
+            this.RefreshOptionsFromModelAsync();
 
+            PreviousOptionsToReset = interview.GetMultiOptionLinkedToListQuestion(this.Identity)?.GetAnswer()?.CheckedValues?.ToList();
+        }
 
         protected void InitFromModel(IQuestionnaire questionnaire)
         {
             this.maxAllowedAnswers = questionnaire.GetMaxSelectedAnswerOptions(questionIdentity.Id);
             this.areAnswersOrdered = questionnaire.ShouldQuestionRecordAnswersOrder(questionIdentity.Id);
             this.linkedToQuestionId = questionnaire.GetQuestionReferencedByLinkedQuestion(questionIdentity.Id);
+        }
+
+        private readonly Timer timer;
+        protected internal int ThrottlePeriod { get; set; } = Constants.ThrottlePeriod;
+        private List<int> previousOptionsToReset = null;
+        private List<int> PreviousOptionsToReset
+        {
+            get => previousOptionsToReset ?? new List<int>();
+            set => this.previousOptionsToReset = value;
+        }
+
+        private List<int> selectedOptionsToSave = null;
+
+        private async Task SaveAnswer()
+        {
+            var command = new AnswerMultipleOptionsQuestionCommand(
+                this.interviewId,
+                this.userId,
+                this.questionIdentity.Id,
+                this.questionIdentity.RosterVector,
+                selectedOptionsToSave.ToArray());
+
+            try
+            {
+                await this.Answering.SendAnswerQuestionCommandAsync(command);
+                if (selectedOptionsToSave.Count == this.maxAllowedAnswers)
+                {
+                    this.Options.Where(o => !o.Checked).ForEach(o => o.CanBeChecked = false);
+                }
+                this.QuestionState.Validity.ExecutedWithoutExceptions();
+            }
+            catch (InterviewException ex)
+            {
+                ResetUiOptions();
+                this.QuestionState.Validity.ProcessException(ex);
+            }
         }
 
         public async Task ToggleAnswerAsync(MultiOptionQuestionOptionViewModelBase changedModel)
@@ -138,31 +180,37 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 changedModel.Checked = false;
                 return;
             }
-
             
-            var selectedValues = allSelectedOptions.Select(x => x.Value).ToArray();
+            selectedOptionsToSave = allSelectedOptions.Select(x => x.Value).ToList();
 
-            var command = new AnswerMultipleOptionsQuestionCommand(
-                this.interviewId,
-                this.userId,
-                this.questionIdentity.Id,
-                this.questionIdentity.RosterVector,
-                selectedValues);
-
-            try
+            if (this.ThrottlePeriod == 0)
             {
-                await this.Answering.SendAnswerQuestionCommandAsync(command);
-                if (selectedValues.Length == this.maxAllowedAnswers)
+                await SaveAnswer();
+            }
+            else
+            {
+                timer.Change(ThrottlePeriod, Timeout.Infinite);
+            }
+
+        }
+
+        private void ResetUiOptions()
+        {
+            var interview = this.interviewRepository.Get(this.interviewId.FormatGuid());
+            var answer = interview.GetMultiOptionLinkedToListQuestion(this.Identity)?.GetAnswer();
+            if (answer == null) return;
+            var checkedOptions = answer.CheckedValues.ToArray();
+            foreach (var option in Options)
+            {
+                var selectedOptionIndex = Array.IndexOf(checkedOptions, option.Value);
+                option.Checked = selectedOptionIndex >= 0;
+                if (this.areAnswersOrdered)
                 {
-                    this.Options.Where(o => !o.Checked).ForEach(o => o.CanBeChecked = false);
+                    option.CheckedOrder = selectedOptionIndex + 1;
                 }
-                this.QuestionState.Validity.ExecutedWithoutExceptions();
             }
-            catch (InterviewException ex)
-            {
-                changedModel.Checked = !changedModel.Checked;
-                this.QuestionState.Validity.ProcessException(ex);
-            }
+
+            PreviousOptionsToReset = answer.CheckedValues.ToList();
         }
 
         public void Dispose()
@@ -195,7 +243,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             if (@event.Questions.All(x => x.Id != this.linkedToQuestionId)) return;
 
-            this.RefreshOptionsFromModel();
+            this.RefreshOptionsFromModelAsync();
         }
 
         public void Handle(QuestionsDisabled @event)
@@ -203,7 +251,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (@event.Questions.All(x => x.Id != this.linkedToQuestionId))
                 return;
 
-            this.ClearOptions();
+            this.ClearOptionsAsync();
         }
 
         public void Handle(AnswersRemoved @event)
@@ -214,10 +262,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
                 foreach (var option in this.options)
                     this.UpdateOptionSelection(option, new List<decimal>());
+
+                PreviousOptionsToReset = null;
             }
 
             if (@event.Questions.Any(question => question.Id == this.linkedToQuestionId))
-                this.ClearOptions();
+                this.ClearOptionsAsync();
         }
 
         public void Handle(MultipleOptionsQuestionAnswered @event)
@@ -261,19 +311,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             if (@event.ChangedLinkedQuestions.All(x => x.QuestionId != this.Identity)) return;
 
-            this.RefreshOptionsFromModel();
+            this.RefreshOptionsFromModelAsync();
         }
 
-        private void RefreshOptionsFromModel()
+        private void RefreshOptionsFromModelAsync()
         {
             var textListAnswerRows = this.GetTextListAnswerRows();
-            this.mainThreadDispatcher.RequestMainThreadAction(() =>
+            this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
             {
                 this.RemoveOptions(textListAnswerRows);
                 this.InsertOrUpdateOptions(textListAnswerRows);
 
                 this.RaisePropertyChanged(() => this.HasOptions);
-            });
+            }).WaitAndUnwrapException();
         }
 
         private void InsertOrUpdateOptions(List<TextListAnswerRow> textListAnswerRows)
@@ -322,13 +372,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             return new List<TextListAnswerRow>(listQuestion.GetAsInterviewTreeTextListQuestion().GetAnswer().Rows);
         }
 
-        private void ClearOptions() =>
-            this.mainThreadDispatcher.RequestMainThreadAction(() =>
+        private void ClearOptionsAsync() =>
+            this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
             {
                 this.options.Clear();
                 this.RaisePropertyChanged(() => this.HasOptions);
                 UpateMaxAnswersCountMessage(0);
-            });
+            }).WaitAndUnwrapException();
 
         private MultiOptionQuestionOptionViewModel CreateOptionViewModel(TextListAnswerRow optionValue)
             => new MultiOptionQuestionOptionViewModel(this)

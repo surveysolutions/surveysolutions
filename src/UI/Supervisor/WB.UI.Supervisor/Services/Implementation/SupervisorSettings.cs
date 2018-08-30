@@ -63,6 +63,9 @@ namespace WB.UI.Supervisor.Services.Implementation
         public void SetGpsDesiredAccuracy(double value) => throw new NotImplementedException();
         public void SetShowLocationOnMap(bool showLocationOnMap) => this.SaveCurrentSettings(settings => settings.ShowLocationOnMap = showLocationOnMap);
 
+        public string InterviewerAppPatchesDirectory =>
+            this.fileSystemAccessor.CombinePath(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "patches");
+
         private void SaveCurrentSettings(Action<ApplicationSettingsView> onChanging)
         {
             var settings = this.currentSettings;

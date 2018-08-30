@@ -6,6 +6,8 @@
         New,
         InProgress,
         Completed,
-        Rejected
+        Rejected,
+        ApprovedBySupervisor,
+        RejectedByHeadquarters
     }
 }

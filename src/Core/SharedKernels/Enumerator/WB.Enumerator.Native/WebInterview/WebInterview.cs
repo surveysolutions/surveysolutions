@@ -44,13 +44,13 @@ namespace WB.Enumerator.Native.WebInterview
             IImageFileStorage imageFileStorage,
             IAudioFileStorage audioFileStorage)
         {
-            this.statefulInterviewRepository = statefulInterviewRepository;
-            this.commandService = commandService;
-            this.questionnaireRepository = questionnaireRepository;
-            this.webInterviewNotificationService = webInterviewNotificationService;
-            this.interviewEntityFactory = interviewEntityFactory;
-            this.audioFileStorage = audioFileStorage;
-            this.imageFileStorage = imageFileStorage;
+            this.statefulInterviewRepository = statefulInterviewRepository ?? throw new ArgumentNullException(nameof(statefulInterviewRepository));
+            this.commandService = commandService ?? throw new ArgumentNullException(nameof(commandService));
+            this.questionnaireRepository = questionnaireRepository ?? throw new ArgumentNullException(nameof(questionnaireRepository));
+            this.webInterviewNotificationService = webInterviewNotificationService ?? throw new ArgumentNullException(nameof(webInterviewNotificationService));
+            this.interviewEntityFactory = interviewEntityFactory ?? throw new ArgumentNullException(nameof(interviewEntityFactory));
+            this.audioFileStorage = audioFileStorage ?? throw new ArgumentNullException(nameof(audioFileStorage));
+            this.imageFileStorage = imageFileStorage ?? throw new ArgumentNullException(nameof(imageFileStorage));
         }
 
         public void FillExceptionData(Dictionary<string, string> data)

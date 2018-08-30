@@ -26,7 +26,13 @@
         <item name="android:paddingTop">@dimen/Interview_Group_button_padding</item>
         <item name="android:paddingBottom">@dimen/Interview_Group_button_padding</item>
     </style>
-    
+    <style name="Interviewer_Selector_Note">
+        <item name="android:textColor">@color/question_title_text</item>
+        <item name="android:textSize">@dimen/textsize_16</item>
+        <item name="android:paddingTop">@dimen/Interview_Group_button_padding</item>
+        <item name="android:paddingBottom">@dimen/Interview_Group_button_padding</item>
+    </style>
+
     <style name="Interviewer_Selector_Item">
         <item name="android:paddingTop">@dimen/Interviewer_Selector_Item_Padding</item>
         <item name="android:paddingBottom">@dimen/Interviewer_Selector_Item_Padding</item>

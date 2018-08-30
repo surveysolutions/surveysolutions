@@ -21,6 +21,7 @@ using WB.Core.SharedKernels.DataCollection.Events;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Enumerator.Native.WebInterview;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
@@ -286,7 +287,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                 var interviewException = exception as InterviewException;
                 if (interviewException == null)
                 {
-                    interviewException = interviewException.UnwrapAllInnerExceptions()
+                    interviewException = interviewException?.UnwrapAllInnerExceptions()
                         .OfType<InterviewException>()
                         .FirstOrDefault();
                 }
@@ -335,23 +336,36 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
 
         private void AssertPackageNotDuplicated(AggregateRootEvent[] aggregateRootEvents)
         {
-            if (aggregateRootEvents.Length > 0)
+            if (aggregateRootEvents.Length <= 0) return;
+
+            var firstEvent = aggregateRootEvents[0];
+            var lastEvent = aggregateRootEvents[aggregateRootEvents.Length - 1];
+
+            var isPackageDuplicated = IsPackageDuplicated(new EventStreamSignatureTag
             {
-                var firstEvent = aggregateRootEvents[0];
-                var lastEvent = aggregateRootEvents[aggregateRootEvents.Length - 1];
+                FirstEventId = firstEvent.EventIdentifier,
+                FirstEventTimeStamp = firstEvent.EventTimeStamp,
+                LastEventId = lastEvent.EventIdentifier,
+                LastEventTimeStamp = lastEvent.EventTimeStamp
+            });
 
-                var existingReceivedPackageLog = this.packagesTracker.Query(_ =>
-                    _.FirstOrDefault(x => x.FirstEventId == firstEvent.EventIdentifier &&
-                                          x.FirstEventTimestamp == firstEvent.EventTimeStamp &&
-                                          x.LastEventId == lastEvent.EventIdentifier &&
-                                          x.LastEventTimestamp == lastEvent.EventTimeStamp));
-
-                if (existingReceivedPackageLog != null)
-                {
-                    throw new InterviewException("Package already received and processed",
-                        InterviewDomainExceptionType.DuplicateSyncPackage);
-                }
+            if (isPackageDuplicated)
+            {
+                throw new InterviewException("Package already received and processed",
+                    InterviewDomainExceptionType.DuplicateSyncPackage);
             }
+        }
+
+        public bool IsPackageDuplicated(EventStreamSignatureTag eventStreamSignatureTag)
+        {
+            var existingReceivedPackageLog = this.packagesTracker.Query(_ =>
+                _.FirstOrDefault(x => x.FirstEventId == eventStreamSignatureTag.FirstEventId &&
+                                      x.FirstEventTimestamp == eventStreamSignatureTag.FirstEventTimeStamp &&
+                                      x.LastEventId == eventStreamSignatureTag.LastEventId &&
+                                      x.LastEventTimestamp == eventStreamSignatureTag.LastEventTimeStamp));
+
+            return existingReceivedPackageLog != null;
+
         }
 
         private bool CheckIfInterviewerWasMovedToAnotherTeam(Guid responsibleId,

@@ -6,6 +6,7 @@ namespace WB.Core.Infrastructure.FileSystem
     public interface IFileSystemAccessor
     {
         string CombinePath(string path1, string path2);
+        string CombinePath(params string[] pathes);
         string GetFileName(string filePath);
         string GetFileNameWithoutExtension(string filePath);
         string GetFileExtension(string filePath);

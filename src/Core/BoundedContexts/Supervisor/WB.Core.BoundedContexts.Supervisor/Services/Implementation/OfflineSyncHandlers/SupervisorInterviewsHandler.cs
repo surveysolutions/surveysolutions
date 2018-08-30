@@ -74,7 +74,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             requestHandler.RegisterHandler<UploadInterviewRequest, OkResponse>(UploadInterview);
             requestHandler.RegisterHandler<SupervisorIdRequest, SupervisorIdResponse>(GetSupervisorId);
         }
-
+        
         public Task<OkResponse> UploadInterview(UploadInterviewRequest request)
         {
             var interview = request.Interview;
@@ -259,7 +259,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
         public Task<GetInterviewsResponse> GetInterviews(GetInterviewsRequest arg)
         {
             var interviewsForUser = this.interviews.Where(x =>
-                (x.Status == InterviewStatus.RejectedBySupervisor || x.Status == InterviewStatus.InterviewerAssigned)
+                (x.Status == InterviewStatus.RejectedBySupervisor || 
+                 x.Status == InterviewStatus.InterviewerAssigned || 
+                 x.Status == InterviewStatus.Restarted)
                 && x.ResponsibleId == arg.UserId);
 
             List<InterviewApiView> response = interviewsForUser.Select(x => new InterviewApiView
@@ -268,6 +270,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                 IsRejected = x.Status == InterviewStatus.RejectedBySupervisor,
                 QuestionnaireIdentity = QuestionnaireIdentity.Parse(x.QuestionnaireId),
                 ResponsibleId = x.ResponsibleId,
+                IsMarkedAsReceivedByInterviewer = x.ReceivedByInterviewerAtUtc != null,
                 Sequence = eventStore.GetMaxSequenceForAnyEvent(x.InterviewId, EventsThatAssignInterviewToResponsibleProvider.GetTypeNames())
             }).ToList();
 

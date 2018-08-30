@@ -184,10 +184,15 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             }
 
             foreach (var file in files)
-            {
-                foreach (var error in this.FileVerifiers.SelectMany(x => x.Invoke(originalFileName, file, questionnaire)))
-                    if (error != null) yield return error;
-            }
+            foreach (var error in this.FileVerifiers.SelectMany(x => x.Invoke(originalFileName, file, questionnaire)))
+                if (error != null) yield return error;
+
+        }
+
+        public IEnumerable<PanelImportVerificationError> VerifyFile(string fileName, PreloadedFileInfo file, IQuestionnaire questionnaire)
+        {
+            foreach (var error in this.SampleFileVerifiers.SelectMany(x => x.Invoke(fileName, file, questionnaire)))
+                if (error != null) yield return error;
         }
 
         public IEnumerable<PanelImportVerificationError> VerifyRosters(List<PreloadingAssignmentRow> allRowsByAllFiles, IQuestionnaire questionnaire)
@@ -212,14 +217,18 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             }
         }
 
-        private IEnumerable<Func<string, PreloadedFileInfo, IQuestionnaire, IEnumerable<PanelImportVerificationError>>> FileVerifiers => new[]
+        private IEnumerable<Func<string, PreloadedFileInfo, IQuestionnaire, IEnumerable<PanelImportVerificationError>>> SampleFileVerifiers => new[]
+        {
+            Errors(OptionalGpsPropertyAndMissingLatitudeAndLongitude, "PL0030", messages.PL0030_GpsFieldsRequired),
+            Errors(DuplicatedColumns, "PL0031", messages.PL0031_ColumnNameDuplicatesFound)
+        };
+
+        private IEnumerable<Func<string, PreloadedFileInfo, IQuestionnaire, IEnumerable<PanelImportVerificationError>>> FileVerifiers => SampleFileVerifiers.Union(new[]
         {
             Error(RosterFileNotFound, "PL0004", messages.PL0004_FileWasntMappedRoster),
             Errors(MissingRosterInstanceColumns, "PL0007", messages.PL0007_ServiceColumnIsAbsent),
-            Errors(OptionalGpsPropertyAndMissingLatitudeAndLongitude, "PL0030", messages.PL0030_GpsFieldsRequired),
-            Errors(DuplicatedColumns, "PL0031", messages.PL0031_ColumnNameDuplicatesFound),
             Errors(ColumnByTextListRosterSizeAnswerNotFound, "PL0052", messages.PL0052_ColumnByTextListRosterSizeAnswerNotFound),
-        };
+        });
 
         private IEnumerable<Func<List<PreloadingAssignmentRow>, IQuestionnaire, IEnumerable<PanelImportVerificationError>>> RosterVerifiers => new[]
         {
@@ -626,7 +635,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             var textMask = questionnaire.GetTextQuestionMask(questionId.Value);
             if (string.IsNullOrWhiteSpace(textMask)) return false;
 
-            return !new MaskedFormatter(textMask).IsTextMaskMatched(answer.Value);
+            return !answer.Value.IsTextMaskMatched(textMask);
         }
 
         private bool DateTime_NotParsed(AssignmentDateTimeAnswer answer)

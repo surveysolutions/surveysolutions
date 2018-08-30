@@ -3,14 +3,18 @@ using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Properties;
-using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization
 {
-    public class CompanyLogoSynchronizer
+    public interface ICompanyLogoSynchronizer
+    {
+        Task DownloadCompanyLogo(IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken);
+    }
+
+    public class CompanyLogoSynchronizer : ICompanyLogoSynchronizer
     {
         private readonly IPlainStorage<CompanyLogo> logoStorage;
         private readonly ISynchronizationService synchronizationService;
@@ -26,7 +30,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         {
             progress.Report(new SyncProgressInfo
             {
-                Title = InterviewerUIResources.Synchronization_DownloadingLogo
+                Title = InterviewerUIResources.Synchronization_DownloadingLogo,
+                Stage = SyncStage.DownloadingLogo
             });
 
             var logoStorageId = CompanyLogo.StorageKey;

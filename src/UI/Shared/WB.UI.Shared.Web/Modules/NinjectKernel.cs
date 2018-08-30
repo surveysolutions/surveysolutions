@@ -57,16 +57,16 @@ namespace WB.UI.Shared.Web.Modules
             return Task.CompletedTask;
         }
 
-        private async Task InitModules(UnderConstructionInfo status)
+        public async Task InitModules(UnderConstructionInfo status)
         {
-            status.Status = UnderConstructionStatus.Running;
+            status.Run();
             foreach (var module in initModules)
             {
                 status.ClearMessage();
                 await module.Init(ServiceLocator.Current, status);
             }
 
-            status.Status = UnderConstructionStatus.Finished;
+            status.Finish();
         }
     }
 }

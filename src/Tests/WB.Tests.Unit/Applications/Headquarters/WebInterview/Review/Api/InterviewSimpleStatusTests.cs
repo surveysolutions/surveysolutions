@@ -2,7 +2,7 @@
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using NUnit.Framework;
-using WB.Enumerator.Native.WebInterview.Models;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Enumerator.Native.WebInterview.Services;
 using WB.Tests.Abc;
 
@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api
             AnswerTextQuestions(SecA_InterviewerQuestion, SecA_Roster_InterviewerQuestion);
             MarkQuestionAsInvalid(SecA_Roster_InterviewerQuestion);
 
-            Assert.That(GetInterviewSimpleStatus(), Is.EqualTo(GroupStatus.Invalid));
+            Assert.That(GetInterviewSimpleStatus(), Is.EqualTo(GroupStatus.StartedInvalid));
         }
 
         [Test]

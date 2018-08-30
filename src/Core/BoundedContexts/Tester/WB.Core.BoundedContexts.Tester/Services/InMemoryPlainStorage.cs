@@ -29,6 +29,10 @@ namespace WB.Core.BoundedContexts.Tester.Services
             return this.inMemroyStorage.Values.AsQueryable().Where(predicate).ToReadOnlyCollection();
         }
 
+        public IReadOnlyCollection<TResult> WhereSelect<TResult>(Expression<Func<TEntity, bool>> wherePredicate,
+            Expression<Func<TEntity, TResult>> selectPredicate) where TResult : class
+            => this.inMemroyStorage.Values.AsQueryable().Where(wherePredicate).Select(selectPredicate).ToReadOnlyCollection();
+
         public TEntity FirstOrDefault()
         {
             return this.inMemroyStorage.Values.AsQueryable().FirstOrDefault();

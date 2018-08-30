@@ -55,6 +55,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
             });
         }
 
+        public void DecreaseInterviewsCount(int assignmentId)
+        {
+            AssignmentDocument assignmentDocument = this.GetById(assignmentId);
+            if (assignmentDocument == null) return;
+            assignmentDocument.CreatedInterviewsCount = assignmentDocument.CreatedInterviewsCount - 1;
+            this.Store(assignmentDocument);
+        }
+
         public override void Store(AssignmentDocument entity)
         {
             RunInTransaction(table => StoreImplementation(table, entity));
