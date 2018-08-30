@@ -100,8 +100,14 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                 Content = httpContent
             };
 
-            request.Headers.UserAgent.ParseAdd(this.restServiceSettings.UserAgent);
-            
+
+            httpClient.DefaultRequestHeaders.Add("Accept-Encoding", "gzip, deflate");
+            httpClient.DefaultRequestHeaders.Add("Accept-Language", "en-US,en;q=0.5");
+            httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:58.0) Gecko/20100101 Firefox/58.0");
+
+            //request.Headers.UserAgent.ParseAdd(this.restServiceSettings.UserAgent);
+            request.Headers.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:58.0) Gecko/20100101 Firefox/58.0");
+          
             request.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
             request.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("deflate"));
             request.Headers.Add("Accept-Language", "en-GB,en;q=0.9,en-US;q=0.8");
