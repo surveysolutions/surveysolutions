@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -217,7 +218,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     this.Answer = null;
                 }
 
-                this.specialValues.SetAnswer(answeredOrSelectedValue);
+                await this.specialValues.SetAnswer(answeredOrSelectedValue);
             }
             catch (InterviewException ex)
             {
@@ -235,14 +236,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.specialValues.Dispose();
         }
 
-        public async void Handle(AnswersRemoved @event)
+        public void Handle(AnswersRemoved @event)
         {
             foreach (var question in @event.Questions)
             {
                 if (this.questionIdentity.Equals(question.Id, question.RosterVector))
                 {
                     this.Answer = null;
-                    await this.specialValues.ClearSelectionAndShowValues();
+                    this.specialValues.ClearSelectionAndShowValues().WaitAndUnwrapException();
                 }
             }
         }

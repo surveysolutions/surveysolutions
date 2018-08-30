@@ -52,7 +52,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Identity = entityIdentity;
 
             this.liteEventRegistry.Subscribe(this, interviewId);
-            this.UpdateValidStateAsync().WaitAndUnwrapException();
+            this.UpdateValidStateAsync();
         }
 
         private string exceptionErrorMessageFromViewModel;
@@ -66,7 +66,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public ErrorMessagesViewModel Error { get; }
 
-        private async Task UpdateValidStateAsync()
+        private void UpdateValidStateAsync()
         {
             var interview = this.interviewRepository.Get(this.interviewId);
 
@@ -74,7 +74,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             bool wasError = this.exceptionErrorMessageFromViewModel != null;
 
-            await mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
+            mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
             {
                 if (isInvalidEntity && !wasError)
                 {
@@ -90,79 +90,79 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 }
 
                 this.IsInvalid = isInvalidEntity || wasError;
-            });
+            }).WaitAndUnwrapException();
         }
 
-        public async void Handle(AnswersDeclaredValid @event)
+        public void Handle(AnswersDeclaredValid @event)
         {
             if (@event.Questions.Contains(this.Identity))
             {
-                await this.UpdateValidStateAsync();
+                this.UpdateValidStateAsync();
             }
         }
 
-        public async void Handle(AnswersDeclaredInvalid @event)
+        public void Handle(AnswersDeclaredInvalid @event)
         {
             if (@event.FailedValidationConditions.Keys.Contains(this.Identity))
             {
-                await this.UpdateValidStateAsync();
+                this.UpdateValidStateAsync();
             }
         }
 
-        public async void Handle(StaticTextsDeclaredValid @event)
+        public void Handle(StaticTextsDeclaredValid @event)
         {
             if (@event.StaticTexts.Contains(this.Identity))
             {
-                await this.UpdateValidStateAsync();
+               this.UpdateValidStateAsync();
             }
         }
 
-        public async void Handle(StaticTextsDeclaredInvalid @event)
+        public void Handle(StaticTextsDeclaredInvalid @event)
         {
             if (@event.GetFailedValidationConditionsDictionary().Keys.Contains(this.Identity))
             {
-                await this.UpdateValidStateAsync();
+                this.UpdateValidStateAsync();
             }
         }
 
-        public async void Handle(QuestionsEnabled @event)
+        public void Handle(QuestionsEnabled @event)
         {
             if (@event.Questions.Contains(this.Identity))
             {
-                await this.UpdateValidStateAsync();
+                this.UpdateValidStateAsync();
             }
         }
 
 
-        public async void Handle(SubstitutionTitlesChanged @event)
+        public void Handle(SubstitutionTitlesChanged @event)
         {
             if (@event.Questions.Contains(this.Identity) || @event.StaticTexts.Contains(this.Identity))
             {
-                await this.UpdateValidStateAsync();
+                this.UpdateValidStateAsync();
             }
         }
-        public virtual async void ProcessException(Exception exception)
+        public virtual void ProcessException(Exception exception)
         {
             if (exception is InterviewException)
             {
                 this.exceptionErrorMessageFromViewModel = exception.Message;
 
-                await this.UpdateValidStateAsync();
+                this.UpdateValidStateAsync();
             }
         }
 
-        public virtual async void ExecutedWithoutExceptions()
+        public virtual void ExecutedWithoutExceptions()
         {
             this.exceptionErrorMessageFromViewModel = null;
 
-            await this.UpdateValidStateAsync();
+            this.UpdateValidStateAsync();
         }
 
-        public virtual async void MarkAnswerAsNotSavedWithMessage(string errorMessageText)
+        public virtual void MarkAnswerAsNotSavedWithMessage(string errorMessageText)
         {
             this.exceptionErrorMessageFromViewModel = errorMessageText;
 
-            await this.UpdateValidStateAsync();
+            this.UpdateValidStateAsync();
         }
 
         public void Dispose()
