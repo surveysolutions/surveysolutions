@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using MvvmCross.Base;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -39,7 +41,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private readonly ICommandService commandService;
 
         readonly IUserInterfaceStateService userInterfaceStateService;
-        private readonly IMvxMainThreadDispatcher mvxMainThreadDispatcher;
+        private readonly IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher;
 
         private NavigationState navigationState;
 
@@ -52,7 +54,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             IInterviewViewModelFactory interviewViewModelFactory,
             IStatefulInterviewRepository interviewRepository,
             IUserInterfaceStateService userInterfaceStateService,
-            IMvxMainThreadDispatcher mvxMainThreadDispatcher,
+            IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher,
             DynamicTextViewModel dynamicTextViewModel, 
             ICompositeCollectionInflationService compositeCollectionInflationService,
             ILiteEventRegistry liteEventRegistry,
@@ -78,25 +80,26 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.navigationState = navigationState ?? throw new ArgumentNullException(nameof(navigationState));
             this.Items = new CompositeCollection<ICompositeEntity>();
 
-            this.InitRegularGroupScreen(groupId, anchoredElementIdentity);
             liteEventRegistry.Subscribe(this, interviewId);
+
+            this.InitRegularGroupScreen(groupId, anchoredElementIdentity);
         }
 
-        private void InitRegularGroupScreen(Identity groupIdentity, Identity anchoredElementIdentity)
+        private async Task InitRegularGroupScreen(Identity groupIdentity, Identity anchoredElementIdentity)
         {
             this.Name.Init(this.interviewId, groupIdentity);
 
             this.LoadFromModel(groupIdentity);
-            this.SetScrollTo(anchoredElementIdentity);
+            await this.SetScrollTo(anchoredElementIdentity);
         }
 
-        private void SetScrollTo(Identity scrollTo)
+        private async Task SetScrollTo(Identity scrollTo)
         {
             var anchorElementIndex = 0;
 
             if (scrollTo != null)
             {
-                this.mvxMainThreadDispatcher.RequestMainThreadAction(() =>
+                await this.mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
                 {
                     ICompositeEntity childItem = (this.Items.OfType<GroupViewModel>().FirstOrDefault(x => x.Identity.Equals(scrollTo)) ??
                                                   (ICompositeEntity) this.Items.OfType<QuestionHeaderViewModel>().FirstOrDefault(x => x.Identity.Equals(scrollTo))) ??
