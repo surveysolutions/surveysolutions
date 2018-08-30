@@ -135,7 +135,9 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             {
                 stopwatch.Start();
 
-                var httpResponseMessage = await httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, linkedCancellationTokenSource.Token);
+                var httpResponseMessage = await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, linkedCancellationTokenSource.Token);
+                logger.Warn($"TEST: Request to {url}, headers {request?.Headers}.");
+                logger.Warn($"TEST: Response status {httpResponseMessage?.StatusCode}, headers {httpResponseMessage?.Headers}.");
 
                 if (httpResponseMessage.IsSuccessStatusCode
                     || httpResponseMessage.StatusCode == HttpStatusCode.NotModified
