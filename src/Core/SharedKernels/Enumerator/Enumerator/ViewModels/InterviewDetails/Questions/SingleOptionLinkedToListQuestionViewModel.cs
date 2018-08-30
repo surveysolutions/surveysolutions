@@ -9,6 +9,7 @@ using MvvmCross.Base;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Tasks;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -125,7 +126,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     this.optionsBottomBorderViewModel.HasOptions = this.HasOptions;
                 }
             };
-            this.RefreshOptionsFromModel();
+            this.RefreshOptionsFromModelAsync().WaitAndUnwrapException();
 
             this.eventRegistry.Subscribe(this, interviewId);
         }
@@ -213,7 +214,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-
         internal async Task OptionSelectedAsync(object sender)
         {
             var selectedOption = (SingleOptionQuestionOptionViewModel) sender;
@@ -238,11 +238,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 : null;
         }
 
-        public void Handle(QuestionsEnabled @event)
+        public async void Handle(QuestionsEnabled @event)
         {
             if (@event.Questions.All(x => x.Id != this.linkedToQuestionId)) return;
 
-            this.RefreshOptionsFromModel();
+            this.RefreshOptionsFromModelAsync().WaitAndUnwrapException();
         }
 
         public void Handle(QuestionsDisabled @event)
@@ -250,7 +250,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (@event.Questions.All(x => x.Id != this.linkedToQuestionId))
                 return;
 
-            this.ClearOptions();
+            this.ClearOptionsAsync().WaitAndUnwrapException();
         }
 
         public void Handle(AnswersRemoved @event)
@@ -267,7 +267,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
 
             if (@event.Questions.Any(question => question.Id == this.linkedToQuestionId))
-                this.ClearOptions();
+                this.ClearOptionsAsync().WaitAndUnwrapException();
         }
 
         public void Handle(TextListQuestionAnswered @event)
@@ -288,7 +288,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             if (@event.ChangedLinkedQuestions.All(x => x.QuestionId != this.Identity)) return;
 
-            this.RefreshOptionsFromModel();
+            this.RefreshOptionsFromModelAsync().WaitAndUnwrapException();
         }
 
         public IObservableCollection<ICompositeEntity> Children
@@ -313,15 +313,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        private void RefreshOptionsFromModel()
+        private async Task RefreshOptionsFromModelAsync()
         {
             var textListAnswerRows = this.GetTextListAnswerRows();
 
-            this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
+            await this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
             {
                 this.RemoveOptions(textListAnswerRows);
                 this.InsertOrUpdateOptions(textListAnswerRows);
-            }).WaitAndUnwrapException();
+            });
 
             this.RaisePropertyChanged(() => this.HasOptions);
         }
@@ -359,12 +359,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        private void ClearOptions() =>
-            this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
+        private async Task ClearOptionsAsync() =>
+            await this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
             {
                 this.options.Clear();
                 this.RaisePropertyChanged(() => this.HasOptions);
-            }).WaitAndUnwrapException();
+            });
 
         private List<TextListAnswerRow> GetTextListAnswerRows()
         {

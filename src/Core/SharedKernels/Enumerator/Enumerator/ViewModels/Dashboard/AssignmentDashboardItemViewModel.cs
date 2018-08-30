@@ -30,6 +30,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         public int InterviewsLeftByAssignmentCount =>
             Assignment.Quantity.GetValueOrDefault() - interviewsByAssignmentCount;
 
+        public int? Quantity => this.Assignment.Quantity;
+
         public bool HasAdditionalActions => Actions.Any(a => a.ActionType == ActionType.Context);
         public string AssignmentIdLabel { get; } = String.Empty;
 

@@ -154,16 +154,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.Name.Dispose();
         }
 
-        public async void Handle(GroupsDisabled @event)
+        public void Handle(GroupsDisabled @event)
         {
             if (@event.Groups.Any(id => id == groupId))
             {
                 var interview = this.interviewRepository.Get(this.interviewId);
                 var firstSection = interview.GetEnabledSections().First();
 
-                await this.commandService.WaitPendingCommandsAsync();
-
-                await this.navigationState.NavigateTo(NavigationIdentity.CreateForGroup(firstSection.Identity));
+                this.commandService.WaitPendingCommandsAsync().WaitAndUnwrapException();
+                this.navigationState.NavigateTo(NavigationIdentity.CreateForGroup(firstSection.Identity)).WaitAndUnwrapException();
             }
         }
     }

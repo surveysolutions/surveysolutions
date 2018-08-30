@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
+using FluentAssertions;
 using Moq;
 using MvvmCross.Plugin.Messenger;
 using NSubstitute;
@@ -18,6 +20,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
 {
+    [TestOf(typeof(CreateNewViewModel))]
     public class CreateNewModelTests
     {
         [Test]
@@ -57,6 +60,36 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
 
             Assert.That(assignment.InterviewsLeftByAssignmentCount, Is.EqualTo(10));
             Assert.That(localAssignmentsRepo.GetById(5).CreatedInterviewsCount, Is.EqualTo(0));
+        }
+
+        [Test]
+        public async Task when_UpdateUiItems_with_unlimited_assignment_then_unlimited_assigmnent_dashbord_item_should_be_in_uiitems_list()
+        {
+            //arrange
+            var assignmentId = 444;
+            var localAssignmentsRepo = Create.Storage.AssignmentDocumentsInmemoryStorage();
+            localAssignmentsRepo.Store(new[]
+            {
+                Create.Entity
+                    .AssignmentDocument(assignmentId, null, 0, Create.Entity.QuestionnaireIdentity(Id.gB).ToString(), Id.g1)
+                    .WithAnswer(Create.Entity.Identity(Id.gA), "1")
+                    .WithAnswer(Create.Entity.Identity(Id.gB), "2")
+                    .Build()
+            });
+
+            var mockOfSynchronizationViewModel = new Mock<LocalSynchronizationViewModel>(
+                Mock.Of<IMvxMessenger>(), new SynchronizationCompleteSource());
+
+            var viewFactory = CreateViewFactory();
+
+            var model = CreateViewModel(assignmentsRepository: localAssignmentsRepo, viewModelFactory: viewFactory);
+            model.Load(mockOfSynchronizationViewModel.Object);
+
+            //act
+            await model.UpdateUiItems();
+
+            //assert
+            model.UiItems.OfType<InterviewerAssignmentDashboardItemViewModel>().FirstOrDefault(x=>x.AssignmentId == assignmentId).Should().NotBeNull();
         }
 
         private IInterviewViewModelFactory CreateViewFactory()

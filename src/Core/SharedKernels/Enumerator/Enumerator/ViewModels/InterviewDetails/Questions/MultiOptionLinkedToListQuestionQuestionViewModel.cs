@@ -120,11 +120,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     this.optionsBottomBorderViewModel.HasOptions = this.HasOptions;
                 }
             };
-            this.RefreshOptionsFromModel();
+            this.RefreshOptionsFromModelAsync();
 
             PreviousOptionsToReset = interview.GetMultiOptionLinkedToListQuestion(this.Identity)?.GetAnswer()?.CheckedValues?.ToList();
         }
-
 
         protected void InitFromModel(IQuestionnaire questionnaire)
         {
@@ -244,7 +243,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             if (@event.Questions.All(x => x.Id != this.linkedToQuestionId)) return;
 
-            this.RefreshOptionsFromModel();
+            this.RefreshOptionsFromModelAsync();
         }
 
         public void Handle(QuestionsDisabled @event)
@@ -252,7 +251,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (@event.Questions.All(x => x.Id != this.linkedToQuestionId))
                 return;
 
-            this.ClearOptions();
+            this.ClearOptionsAsync();
         }
 
         public void Handle(AnswersRemoved @event)
@@ -268,7 +267,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
 
             if (@event.Questions.Any(question => question.Id == this.linkedToQuestionId))
-                this.ClearOptions();
+                this.ClearOptionsAsync();
         }
 
         public void Handle(MultipleOptionsQuestionAnswered @event)
@@ -312,10 +311,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             if (@event.ChangedLinkedQuestions.All(x => x.QuestionId != this.Identity)) return;
 
-            this.RefreshOptionsFromModel();
+            this.RefreshOptionsFromModelAsync();
         }
 
-        private void RefreshOptionsFromModel()
+        private void RefreshOptionsFromModelAsync()
         {
             var textListAnswerRows = this.GetTextListAnswerRows();
             this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
@@ -373,7 +372,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             return new List<TextListAnswerRow>(listQuestion.GetAsInterviewTreeTextListQuestion().GetAnswer().Rows);
         }
 
-        private void ClearOptions() =>
+        private void ClearOptionsAsync() =>
             this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
             {
                 this.options.Clear();

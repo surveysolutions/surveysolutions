@@ -95,7 +95,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 var dashboardItem = this.viewModelFactory.GetNew<InterviewerAssignmentDashboardItemViewModel>();
                 dashboardItem.Init(assignment);
 
-                if (dashboardItem.InterviewsLeftByAssignmentCount > 0)
+                if (!dashboardItem.Quantity.HasValue || dashboardItem.InterviewsLeftByAssignmentCount > 0)
                 {
                     yield return dashboardItem;
                 }
