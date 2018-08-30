@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -84,7 +85,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                         if (!(await this.userInteractionService.ConfirmAsync(message)))
                         {
                             this.Answer = this.previousAnswer;
-                            this.SpecialValues.SetAnswer(this.previousAnswer);
+                            await this.SpecialValues.SetAnswer(this.previousAnswer);
                             return;
                         }
                     }
@@ -274,7 +275,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                         if (!await this.userInteractionService.ConfirmAsync(message))
                         {
                             this.Answer = this.previousAnswer;
-                            this.specialValues.SetAnswer(this.previousAnswer);
+                            await this.specialValues.SetAnswer(this.previousAnswer);
                             return;
                         }
                     }
@@ -300,7 +301,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     this.Answer = null;
                 }
 
-                this.specialValues.SetAnswer(answeredOrSelectedValue);
+                await this.specialValues.SetAnswer(answeredOrSelectedValue);
             }
             catch (InterviewException ex)
             {
@@ -326,7 +327,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 {
                     this.Answer = null;
                     this.previousAnswer = null;
-                    this.specialValues.ClearSelectionAndShowValues();
+                    this.specialValues.ClearSelectionAndShowValues().WaitAndUnwrapException();
                 }
             }
         }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using MvvmCross.Base;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable.Tasks;
@@ -49,7 +50,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Identity = entityIdentity;
 
             this.liteEventRegistry.Subscribe(this, interviewId);
-            this.UpdateValidState();
+            this.UpdateValidStateAsync();
         }
         
         private bool isImplausible;
@@ -61,7 +62,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public ErrorMessagesViewModel Warning { get; }
 
-        private void UpdateValidState()
+        private void UpdateValidStateAsync()
         {
             var interview = this.interviewRepository.Get(this.interviewId);
 
@@ -85,7 +86,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             if (@event.Questions.Contains(this.Identity))
             {
-                this.UpdateValidState();
+                this.UpdateValidStateAsync();
             }
         }
 
@@ -93,7 +94,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             if (@event.GetFailedValidationConditionsDictionary().Keys.Contains(this.Identity))
             {
-                this.UpdateValidState();
+                this.UpdateValidStateAsync();
             }
         }
 
@@ -101,7 +102,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             if (@event.StaticTexts.Contains(this.Identity))
             {
-                this.UpdateValidState();
+                this.UpdateValidStateAsync();
             }
         }
 
@@ -109,7 +110,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             if (@event.GetFailedValidationConditionsDictionary().Keys.Contains(this.Identity))
             {
-                this.UpdateValidState();
+                this.UpdateValidStateAsync();
             }
         }
 
@@ -117,7 +118,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             if (@event.Questions.Contains(this.Identity))
             {
-                this.UpdateValidState();
+                this.UpdateValidStateAsync();
             }
         }
 
@@ -125,7 +126,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             if (@event.Questions.Contains(this.Identity) || @event.StaticTexts.Contains(this.Identity))
             {
-                this.UpdateValidState();
+                this.UpdateValidStateAsync();
             }
         }
 

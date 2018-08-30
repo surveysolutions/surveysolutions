@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="RosterTitle" xml:space="preserve">
-    <value>Roster</value>
+    <value>Roster: {0}</value>
   </data>
   <data name="RosterType_Fixed" xml:space="preserve">
     <value>Ensemble d'éléments fixes</value>

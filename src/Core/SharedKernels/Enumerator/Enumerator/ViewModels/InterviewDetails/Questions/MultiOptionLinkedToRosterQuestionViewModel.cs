@@ -91,7 +91,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private void RefreshOptionsFromModel()
         {
             var newOptions = this.CreateOptions();
-            this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
+             this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
             {
                 this.Options.SynchronizeWith(newOptions.ToList(), (s, t) => s.Value.Identical(t.Value) && s.Title == t.Title);
                 this.RaisePropertyChanged(() => this.HasOptions);

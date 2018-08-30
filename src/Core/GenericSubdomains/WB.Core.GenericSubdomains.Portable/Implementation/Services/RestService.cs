@@ -102,7 +102,9 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
 
             request.Headers.UserAgent.ParseAdd(this.restServiceSettings.UserAgent);
             
-            request.Headers.Add("Accept-Encoding", "gzip,deflate");
+            request.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
+            request.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("deflate"));
+            request.Headers.Add("Accept-Language", "en-GB,en;q=0.9,en-US;q=0.8");
 
             if (forceNoCache)
             {
@@ -154,6 +156,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             {
                 stopwatch.Stop();
                 logger.Error($"ERROR!!! Request to {url} failed. Time: {stopwatch.Elapsed}.", ex);
+                logger.Error($"ERROR!!! Request headers {ex?.Call?.Request?.Headers}. Response headers {ex?.Call?.Response?.Headers}.");
 
                 if (ex.GetSelfOrInnerAs<TaskCanceledException>() != null || ex.GetSelfOrInnerAs<OperationCanceledException>() != null)
                 {

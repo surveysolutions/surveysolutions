@@ -309,7 +309,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 this.parentRosters.Contains(x.RosterInstance.GroupId));
             if (optionListShouldBeUpdated)
             {
-                this.RefreshOptionsListFromModel();
+                this.RefreshOptionsListFromModelAsync().WaitAndUnwrapException();
             }
         }
 
@@ -318,20 +318,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var optionListShouldBeUpdated = @event.ChangedLinkedQuestions.Any(x => x.QuestionId.Id == this.Identity.Id);
             if (optionListShouldBeUpdated)
             {
-                this.RefreshOptionsListFromModel();
+                this.RefreshOptionsListFromModelAsync().WaitAndUnwrapException();
             }
         }
 
-        private void RefreshOptionsListFromModel()
+        private async Task RefreshOptionsListFromModelAsync()
         {
             var optionsToUpdate = this.CreateOptions().ToArray();
-
-            this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
+            await this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
             {
                 this.Options.SynchronizeWith(optionsToUpdate,
                     (s, t) => s.RosterVector.Identical(t.RosterVector) && s.Title == t.Title);
                 this.RaisePropertyChanged(() => this.HasOptions);
-            }).WaitAndUnwrapException();
+            });
         }
     }
 }
