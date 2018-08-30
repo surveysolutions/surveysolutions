@@ -89,7 +89,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
 
             // remove old patches by old supervisor app version
             this.fileSystemAccessor.GetDirectoriesInDirectory(interviewerAppPatchesDirectory)
-                .Where(x => x != sAppVersion)
+                .Where(x => x != patchesBySupervisorAppVersion)
                 .ForEach(x => this.fileSystemAccessor.DeleteDirectory(x));
 
             return patchesBySupervisorAppVersion;
@@ -100,28 +100,15 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
         {
             var patchFilePath = this.fileSystemAccessor.CombinePath(patchesDirectory, patchInfo.FileName);
 
-            Stopwatch sw = null;
             try
             {
                 var patch = await this.synchronizationService.GetFileAsync(patchInfo.Url,
                     new Progress<TransferProgress>(downloadProgress =>
                     {
-                        if (sw == null) sw = Stopwatch.StartNew();
-                        if (downloadProgress.ProgressPercentage % 1 != 0) return;
-
-                        var receivedKilobytes = downloadProgress.BytesReceived.Bytes();
-                        var totalKilobytes = (downloadProgress.TotalBytesToReceive ?? 0).Bytes();
-
                         Context.Progress.Report(new SyncProgressInfo
                         {
                             Title = SupervisorUIResources.Synchronization_Download_Interviewer_App_Patches_Format
                                 .FormatString(patchIndex + 1, patchesCount),
-                            Description = string.Format(
-                                InterviewerUIResources.Synchronization_DownloadApplication_Description,
-                                receivedKilobytes.Humanize("00.00 MB"),
-                                totalKilobytes.Humanize("00.00 MB"),
-                                receivedKilobytes.Per(sw.Elapsed).Humanize("00.00"),
-                                (int) downloadProgress.ProgressPercentage),
                             Status = SynchronizationStatus.Download
                         });
                     }), Context.CancellationToken);

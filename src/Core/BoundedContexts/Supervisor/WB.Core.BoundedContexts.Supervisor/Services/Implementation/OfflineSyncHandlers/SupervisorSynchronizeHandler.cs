@@ -33,14 +33,21 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
 
         private Task<GetLatestApplicationVersionResponse> GetLatestApplicationVersion(
             GetLatestApplicationVersionRequest request)
-            => Task.FromResult(new GetLatestApplicationVersionResponse
+        {
+            var sAppVersion = this.settings.GetApplicationVersionCode().ToString();
+
+            var pathToInterviewerAppPatches = this.fileSystemAccessor.CombinePath(
+                this.settings.InterviewerAppPatchesDirectory, sAppVersion);
+
+            var hasPatches = this.fileSystemAccessor.IsDirectoryExists(pathToInterviewerAppPatches);
+
+            return Task.FromResult(new GetLatestApplicationVersionResponse
             {
-                InterviewerApplicationVersion =
-                    this.fileSystemAccessor.IsDirectoryExists(this.fileSystemAccessor.CombinePath(
-                        this.settings.InterviewerAppPatchesDirectory, this.settings.GetApplicationVersionCode().ToString()))
-                        ? this.settings.GetApplicationVersionCode()
-                        : (int?)null
+                InterviewerApplicationVersion = hasPatches
+                    ? this.settings.GetApplicationVersionCode()
+                    : (int?) null
             });
+        }
 
         public Task<CanSynchronizeResponse> CanSynchronize(CanSynchronizeRequest arg)
         {
