@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using MvvmCross.Base;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Utils;
@@ -13,14 +15,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     public class SpecialValuesViewModel : MvxNotifyPropertyChanged, IDisposable
     {
         private readonly FilteredOptionsViewModel optionsViewModel;
-        private readonly IMvxMainThreadDispatcher mvxMainThreadDispatcher;
+        private readonly IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher;
         private readonly IStatefulInterviewRepository interviewRepository;
 
         protected SpecialValuesViewModel(){}
 
         public SpecialValuesViewModel(
             FilteredOptionsViewModel optionsViewModel,
-            IMvxMainThreadDispatcher mvxMainThreadDispatcher,
+            IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher,
             IStatefulInterviewRepository interviewRepository) 
         {
             this.optionsViewModel = optionsViewModel;
@@ -68,7 +70,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionState = questionState;
 
             this.optionsViewModel.Init(interviewId, entityIdentity, 200);
-            this.UpdateSpecialValues();
+            this.UpdateSpecialValuesAsync().WaitAndUnwrapException();
 
             allSpecialValues = this.optionsViewModel.GetOptions().Select(x => x.Value).ToHashSet();
             if (this.SpecialValues.Any(x => x.Selected))
@@ -85,7 +87,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                return this.allSpecialValues.Contains(Convert.ToInt32(value.Value));
             }
-            catch (System.OverflowException)
+            catch (OverflowException)
             {
                 return false;
             }
@@ -96,7 +98,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.SpecialValueRemoved?.Invoke(sender, EventArgs.Empty);
         }
 
-        private void UpdateSpecialValues()
+        private async Task UpdateSpecialValuesAsync()
         {
             var interview = this.interviewRepository.Get(interviewId);
             
@@ -117,13 +119,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     .ToList();
             }
 
-            RemoveSpecialValues();
+            await RemoveSpecialValuesAsync();
 
             if (specialValuesViewModels.Any(x => x.Selected) || !interview.GetQuestion(this.questionIdentity).IsAnswered())
             {
-                specialValuesViewModels.ForEach(x => this.SpecialValues.Add(x));
-                this.mvxMainThreadDispatcher.RequestMainThreadAction(() =>
+                await this.mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
                 {
+                    specialValuesViewModels.ForEach(x => this.SpecialValues.Add(x));
                     this.RaisePropertyChanged(() => this.SpecialValues);
                 });
             }
@@ -145,11 +147,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             return optionViewModel;
         }
 
-        public void ClearSelectionAndShowValues()
+        public async Task ClearSelectionAndShowValues()
         {
             if (SpecialValues.Count == 0 && this.allSpecialValues.Any())
             {
-                UpdateSpecialValues();
+                await UpdateSpecialValuesAsync();
             }
             else
             {
@@ -162,18 +164,22 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IsSpecialValue = null;
         }
 
-        private void RemoveSpecialValues()
+        private async Task RemoveSpecialValuesAsync()
         {
-            this.SpecialValues.ForEach(option =>
+            await this.mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
             {
-                option.BeforeSelected -= this.SpecialValueSelected;
-                option.AnswerRemoved -= this.RemoveAnswerHandler;
-                option.DisposeIfDisposable();
+                this.SpecialValues.ForEach(option =>
+                {
+                    option.BeforeSelected -= this.SpecialValueSelected;
+                    option.AnswerRemoved -= this.RemoveAnswerHandler;
+                    option.DisposeIfDisposable();
+                });
+                this.SpecialValues.Clear();
+                this.RaisePropertyChanged(() => this.SpecialValues);
             });
-            this.SpecialValues.Clear();
         }
 
-        public void SetAnswer(decimal? answeredOrSelectedValue)
+        public async Task SetAnswer(decimal? answeredOrSelectedValue)
         {
             IsSpecialValue = IsSpecialValueSelected(answeredOrSelectedValue);
 
@@ -181,11 +187,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 if (SpecialValues.Count == 0 && this.allSpecialValues.Any())
                 {
-                    UpdateSpecialValues();
-                    this.mvxMainThreadDispatcher.RequestMainThreadAction(() =>
-                    {
-                        this.RaisePropertyChanged(() => this.SpecialValues);
-                    });
+                    await UpdateSpecialValuesAsync();
                 }
 
                 if (answeredOrSelectedValue.HasValue)
@@ -200,11 +202,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
             else
             {
-                RemoveSpecialValues();
-                this.mvxMainThreadDispatcher.RequestMainThreadAction(() =>
-                {
-                    this.RaisePropertyChanged(() => this.SpecialValues);
-                });
+                await RemoveSpecialValuesAsync();
             }
         }
 
@@ -219,7 +217,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 return result;
             }
         }
-
 
         public void Dispose()
         {

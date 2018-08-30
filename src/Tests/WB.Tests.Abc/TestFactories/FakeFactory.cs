@@ -128,12 +128,14 @@ namespace WB.Tests.Abc.TestFactories
 
             public Task ExecuteOnMainThreadAsync(Action action, bool maskExceptions = true)
             {
-                throw new NotImplementedException();
+                action();
+                return Task.CompletedTask;
             }
 
             public Task ExecuteOnMainThreadAsync(Func<Task> action, bool maskExceptions = true)
             {
-                throw new NotImplementedException();
+                action.Invoke();
+                return Task.CompletedTask;
             }
 
             public override bool RequestMainThreadAction(Action action, bool maskExceptions = true)
@@ -155,14 +157,20 @@ namespace WB.Tests.Abc.TestFactories
         }
         
 
-        public IMvxMainThreadDispatcher MvxMainThreadDispatcher() => new FakeMvxMainThreadDispatcher();
+        public IMvxMainThreadAsyncDispatcher MvxMainThreadDispatcher() => new FakeMvxMainThreadDispatcher();
 
-        private class FakeMvxMainThreadDispatcher : IMvxMainThreadDispatcher
+        private class FakeMvxMainThreadDispatcher : IMvxMainThreadAsyncDispatcher
         {
-            public bool RequestMainThreadAction(Action action, bool maskExceptions = true)
+            public Task ExecuteOnMainThreadAsync(Action action, bool maskExceptions = true)
             {
                 action.Invoke();
-                return true;
+                return Task.CompletedTask;
+            }
+
+            public Task ExecuteOnMainThreadAsync(Func<Task> action, bool maskExceptions = true)
+            {
+                action.Invoke();
+                return Task.CompletedTask;
             }
 
             public bool IsOnMainThread => true;
