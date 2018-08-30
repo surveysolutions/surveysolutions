@@ -80,49 +80,49 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             ICompositeQuestion compositeQuestion, 
             CompositeCollection<ICompositeEntity> allVisibleGroupItems) => 
             this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
+        {
+            if (!itemCompositeCollections[CompositeItemType.Title].Contains(compositeQuestion.QuestionState.Header))
             {
-                if (!itemCompositeCollections[CompositeItemType.Title].Contains(compositeQuestion.QuestionState.Header))
-                {
-                    itemCompositeCollections[CompositeItemType.Title].Add(compositeQuestion.QuestionState.Header);
-                }
+                itemCompositeCollections[CompositeItemType.Title].Add(compositeQuestion.QuestionState.Header);
+            }
 
-                if (!compositeQuestion.QuestionState.Enablement.Enabled)
+            if (!compositeQuestion.QuestionState.Enablement.Enabled)
+            {
+                foreach (var itemCompositeCollection in itemCompositeCollections)
                 {
-                    foreach (var itemCompositeCollection in itemCompositeCollections)
+                    if (itemCompositeCollection.Key == CompositeItemType.Title &&
+                        !compositeQuestion.QuestionState.Enablement.HideIfDisabled)
                     {
-                        if (itemCompositeCollection.Key == CompositeItemType.Title &&
-                            !compositeQuestion.QuestionState.Enablement.HideIfDisabled)
-                        {
-                            allVisibleGroupItems.NotifyItemChanged(compositeQuestion.QuestionState.Header);
-                            continue;
-                        }
+                        allVisibleGroupItems.NotifyItemChanged(compositeQuestion.QuestionState.Header);
+                        continue;
+                    }
 
                     itemCompositeCollection.Value.Clear();
-                    }
                 }
-                else
-                {
-                    if (itemCompositeCollections.ContainsKey(CompositeItemType.Instruction))
-                    {
-                        itemCompositeCollections[CompositeItemType.Instruction].Add(
-                            compositeQuestion.InstructionViewModel);
-                    }
-
-                    itemCompositeCollections[CompositeItemType.Self].Add(compositeQuestion);
-
-                    if (itemCompositeCollections.ContainsKey(CompositeItemType.Childrens))
-                    {
-                        if (compositeQuestion is ICompositeQuestionWithChildren compositeItemWithChildren)
-                            itemCompositeCollections[CompositeItemType.Childrens].AddCollection(
-                                compositeItemWithChildren.Children);
-                    }
-
-                    itemCompositeCollections[CompositeItemType.Validity].Add(compositeQuestion.QuestionState.Validity);
-                    itemCompositeCollections[CompositeItemType.Warnings].Add(compositeQuestion.QuestionState.Warnings);
-                    itemCompositeCollections[CompositeItemType.Comments].Add(compositeQuestion.QuestionState.Comments);
-                    itemCompositeCollections[CompositeItemType.AnsweringProgress].Add(compositeQuestion.Answering);
             }
-        }).WaitAndUnwrapException();
+            else
+            {
+                if (itemCompositeCollections.ContainsKey(CompositeItemType.Instruction))
+                {
+                    itemCompositeCollections[CompositeItemType.Instruction].Add(
+                        compositeQuestion.InstructionViewModel);
+                }
+
+                itemCompositeCollections[CompositeItemType.Self].Add(compositeQuestion);
+
+                if (itemCompositeCollections.ContainsKey(CompositeItemType.Childrens))
+                {
+                    if (compositeQuestion is ICompositeQuestionWithChildren compositeItemWithChildren)
+                        itemCompositeCollections[CompositeItemType.Childrens].AddCollection(
+                            compositeItemWithChildren.Children);
+                }
+
+                itemCompositeCollections[CompositeItemType.Validity].Add(compositeQuestion.QuestionState.Validity);
+                itemCompositeCollections[CompositeItemType.Warnings].Add(compositeQuestion.QuestionState.Warnings);
+                itemCompositeCollections[CompositeItemType.Comments].Add(compositeQuestion.QuestionState.Comments);
+                itemCompositeCollections[CompositeItemType.AnsweringProgress].Add(compositeQuestion.Answering);
+            }
+        });
 
         private enum CompositeItemType
         {

@@ -116,7 +116,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     this.optionsBottomBorderViewModel.HasOptions = this.HasOptions;
                 }
             };
-            this.RefreshOptionsFromModelAsync();
+            this.RefreshOptionsFromModelAsync().WaitAndUnwrapException();
         }
 
         protected void InitFromModel(IQuestionnaire questionnaire)
@@ -191,22 +191,22 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public void Handle(QuestionsEnabled @event)
+        public async void Handle(QuestionsEnabled @event)
         {
             if (@event.Questions.All(x => x.Id != this.linkedToQuestionId)) return;
 
-            this.RefreshOptionsFromModelAsync();
+            await this.RefreshOptionsFromModelAsync();
         }
 
-        public void Handle(QuestionsDisabled @event)
+        public async void Handle(QuestionsDisabled @event)
         {
             if (@event.Questions.All(x => x.Id != this.linkedToQuestionId))
                 return;
 
-            this.ClearOptionsAsync();
+            await this.ClearOptionsAsync();
         }
 
-        public void Handle(AnswersRemoved @event)
+        public async void Handle(AnswersRemoved @event)
         {
             if (@event.Questions.Contains(this.Identity))
             {
@@ -217,7 +217,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
 
             if (@event.Questions.Any(question => question.Id == this.linkedToQuestionId))
-                this.ClearOptionsAsync();
+                await this.ClearOptionsAsync();
         }
 
         public void Handle(MultipleOptionsQuestionAnswered @event)
@@ -257,23 +257,23 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public void Handle(LinkedToListOptionsChanged @event)
+        public async void Handle(LinkedToListOptionsChanged @event)
         {
             if (@event.ChangedLinkedQuestions.All(x => x.QuestionId != this.Identity)) return;
 
-            this.RefreshOptionsFromModelAsync();
+            await this.RefreshOptionsFromModelAsync();
         }
 
-        private void RefreshOptionsFromModelAsync()
+        private async Task RefreshOptionsFromModelAsync()
         {
             var textListAnswerRows = this.GetTextListAnswerRows();
-            this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
+            await this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
             {
                 this.RemoveOptions(textListAnswerRows);
                 this.InsertOrUpdateOptions(textListAnswerRows);
 
                 this.RaisePropertyChanged(() => this.HasOptions);
-            }).WaitAndUnwrapException();
+            });
         }
 
         private void InsertOrUpdateOptions(List<TextListAnswerRow> textListAnswerRows)
@@ -322,13 +322,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             return new List<TextListAnswerRow>(listQuestion.GetAsInterviewTreeTextListQuestion().GetAnswer().Rows);
         }
 
-        private void ClearOptionsAsync() =>
-            this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
+        private async Task ClearOptionsAsync() =>
+            await this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
             {
                 this.options.Clear();
                 this.RaisePropertyChanged(() => this.HasOptions);
                 UpateMaxAnswersCountMessage(0);
-            }).WaitAndUnwrapException();
+            });
 
         private MultiOptionQuestionOptionViewModel CreateOptionViewModel(TextListAnswerRow optionValue)
             => new MultiOptionQuestionOptionViewModel(this)
