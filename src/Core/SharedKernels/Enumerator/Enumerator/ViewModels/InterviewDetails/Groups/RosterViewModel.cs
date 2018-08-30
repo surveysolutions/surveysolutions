@@ -51,13 +51,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
 
             this.eventRegistry.Subscribe(this, interviewId);
             
-            this.UpdateFromInterviewAsync().WaitAndUnwrapException();
+            this.UpdateFromInterviewAsync();
         }
 
-        public void Handle(RosterInstancesRemoved @event)
+        public async void Handle(RosterInstancesRemoved @event)
         {
             if (@event.Instances.Any(rosterInstance => rosterInstance.GroupId == this.Identity.Id))
-               this.UpdateFromInterviewAsync().WaitAndUnwrapException();
+                await this.UpdateFromInterviewAsync();
         }
 
         private async Task UpdateFromInterviewAsync()
@@ -96,10 +96,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             }
         }
 
-        public void Handle(RosterInstancesAdded @event)
+        public async void Handle(RosterInstancesAdded @event)
         {
             if (@event.Instances.Any(rosterInstance => rosterInstance.GroupId == this.Identity.Id))
-               this.UpdateFromInterviewAsync().WaitAndUnwrapException();
+                await this.UpdateFromInterviewAsync();
         }
 
         private GroupViewModel GetGroupViewModel(Identity identity)
