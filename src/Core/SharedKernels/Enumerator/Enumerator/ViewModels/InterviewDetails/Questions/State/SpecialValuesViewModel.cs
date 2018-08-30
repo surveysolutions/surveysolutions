@@ -119,13 +119,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     .ToList();
             }
 
-            RemoveSpecialValues();
+            await RemoveSpecialValues();
 
             if (specialValuesViewModels.Any(x => x.Selected) || !interview.GetQuestion(this.questionIdentity).IsAnswered())
             {
-                specialValuesViewModels.ForEach(x => this.SpecialValues.Add(x));
                 await this.mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
                 {
+                    specialValuesViewModels.ForEach(x => this.SpecialValues.Add(x));
                     this.RaisePropertyChanged(() => this.SpecialValues);
                 });
             }
@@ -164,18 +164,22 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IsSpecialValue = null;
         }
 
-        private void RemoveSpecialValues()
+        private async Task RemoveSpecialValues()
         {
-            this.SpecialValues.ForEach(option =>
+            await this.mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
             {
-                option.BeforeSelected -= this.SpecialValueSelected;
-                option.AnswerRemoved -= this.RemoveAnswerHandler;
-                option.DisposeIfDisposable();
+                this.SpecialValues.ForEach(option =>
+                {
+                    option.BeforeSelected -= this.SpecialValueSelected;
+                    option.AnswerRemoved -= this.RemoveAnswerHandler;
+                    option.DisposeIfDisposable();
+                });
+                this.SpecialValues.Clear();
+                this.RaisePropertyChanged(() => this.SpecialValues);
             });
-            this.SpecialValues.Clear();
         }
 
-        public void SetAnswer(decimal? answeredOrSelectedValue)
+        public async Task SetAnswer(decimal? answeredOrSelectedValue)
         {
             IsSpecialValue = IsSpecialValueSelected(answeredOrSelectedValue);
 
@@ -183,11 +187,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 if (SpecialValues.Count == 0 && this.allSpecialValues.Any())
                 {
-                    UpdateSpecialValuesAsync();
-                    this.mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
-                    {
-                        this.RaisePropertyChanged(() => this.SpecialValues);
-                    }).WaitAndUnwrapException();
+                    await UpdateSpecialValuesAsync();
                 }
 
                 if (answeredOrSelectedValue.HasValue)
@@ -202,11 +202,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
             else
             {
-                RemoveSpecialValues();
-                this.mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
-                {
-                    this.RaisePropertyChanged(() => this.SpecialValues);
-                }).WaitAndUnwrapException();
+                await RemoveSpecialValues();
             }
         }
 
@@ -221,7 +217,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 return result;
             }
         }
-
 
         public void Dispose()
         {
