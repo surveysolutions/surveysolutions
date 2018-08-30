@@ -91,7 +91,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
 
             var httpClient = new HttpClient(new ExtendedMessageHandler(new HttpClientHandler(), httpStatistician));
 
-            httpClient.Timeout = this.restServiceSettings.Timeout;
+            httpClient.Timeout = Timeout.InfiniteTimeSpan;// this.restServiceSettings.Timeout;
 
             var request = new HttpRequestMessage()
             {
