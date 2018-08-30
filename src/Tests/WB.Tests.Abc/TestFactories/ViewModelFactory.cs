@@ -73,7 +73,7 @@ namespace WB.Tests.Abc.TestFactories
             ILiteEventRegistry eventRegistry = null,
             IMvxMessenger messenger = null,
             IUserInterfaceStateService userInterfaceStateService = null,
-            IMvxMainThreadDispatcher mvxMainThreadDispatcher = null,
+            IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher = null,
             ICompositeCollectionInflationService compositeCollectionInflationService = null,
             IVirbationService virbationService = null)
             => new EnumerationStageViewModel(
@@ -395,12 +395,12 @@ namespace WB.Tests.Abc.TestFactories
 
         public SpecialValuesViewModel SpecialValues(
             FilteredOptionsViewModel optionsViewModel = null,
-            IMvxMainThreadDispatcher mvxMainThreadDispatcher = null,
+            IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher = null,
             IStatefulInterviewRepository interviewRepository = null)
         {
             return new SpecialValuesViewModel(
                 optionsViewModel ?? Mock.Of<FilteredOptionsViewModel>(), 
-                mvxMainThreadDispatcher ?? Mock.Of<IMvxMainThreadDispatcher>(), 
+                mvxMainThreadDispatcher ?? Create.Fake.MvxMainThreadDispatcher(), 
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>());
         }
 
