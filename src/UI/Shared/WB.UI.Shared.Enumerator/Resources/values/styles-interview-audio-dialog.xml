@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <resources>
   <style name="Audio_Dialog_Holder" parent="VerticalFullWidthWrappingLayout">
-    <item name="android:background">@android:color/white</item>
+    <item name="android:background">@drawable/dialog_rounded</item>
     <item name="android:paddingBottom">10dp</item>
     <item name="android:paddingTop">28dp</item>
     <item name="android:paddingLeft">30dp</item>

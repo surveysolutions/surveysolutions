@@ -7,7 +7,12 @@ using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
-    public class AttachmentsCleanupService
+    public interface IAttachmentsCleanupService
+    {
+        void RemovedOrphanedAttachments();
+    }
+
+    public class AttachmentsCleanupService : IAttachmentsCleanupService
     {
         private readonly IInterviewerQuestionnaireAccessor questionnairesAccessor;
         private readonly IPlainStorage<AttachmentContentMetadata> attachmentContentMetadataRepository;

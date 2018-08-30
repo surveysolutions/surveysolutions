@@ -10,6 +10,18 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="FullStackIntegration\Hq\assembly.dll" />
+    <None Remove="FullStackIntegration\Hq\Enumerator Questions Automation.zip" />
+    <None Remove="FullStackIntegration\Hq\expectedExport.zip" />
+    <None Remove="FullStackIntegration\Hq\syncPackage.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="FullStackIntegration\Hq\assembly.dll" />
+    <EmbeddedResource Include="FullStackIntegration\Hq\Enumerator Questions Automation.zip" />
+    <EmbeddedResource Include="FullStackIntegration\Hq\expectedExport.zip" />
+    <EmbeddedResource Include="FullStackIntegration\Hq\syncPackage.json" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\WB.Core.BoundedContexts.Interviewer.csproj" />
     <ProjectReference Include="..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\WB.Core.BoundedContexts.Designer.csproj" />
     <ProjectReference Include="..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\WB.Core.BoundedContexts.Headquarters.csproj" />
@@ -30,7 +42,7 @@
   <ItemGroup>
     <PackageReference Include="Antlr3.Runtime" Version="3.5.1" />
     <PackageReference Include="AppDomainToolkit" Version="1.0.4.3" />
-    <PackageReference Include="Castle.Core" Version="4.2.1" />
+    <PackageReference Include="Castle.Core" Version="4.3.1" />
     <PackageReference Include="Dapper" Version="1.50.4" />
     <PackageReference Include="EntityFramework" Version="6.2.0" />
     <PackageReference Include="EntityFramework6.Npgsql" Version="3.1.1" />
@@ -48,7 +60,7 @@
     <PackageReference Include="Microsoft.CodeAnalysis.Scripting.Common" Version="2.7.0" />
     <PackageReference Include="Microsoft.NETCore.Platforms" Version="2.0.1" />
     <PackageReference Include="Microsoft.Win32.Primitives" Version="4.3.0" />
-    <PackageReference Include="Moq" Version="4.8.2" />
+    <PackageReference Include="Moq" Version="4.9.0" />
     <PackageReference Include="MvvmCross.Plugin.Messenger" Version="6.1.2" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="NHibernate" Version="5.1.2" />

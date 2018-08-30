@@ -10,7 +10,9 @@ using MvvmCross;
 using MvvmCross.Binding.Bindings.Target.Construction;
 using MvvmCross.Converters;
 using MvvmCross.IoC;
+using MvvmCross.Platforms.Android.Presenters;
 using MvvmCross.Views;
+using WB.Core.BoundedContexts.Supervisor;
 using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.BoundedContexts.Supervisor.ViewModel;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard;
@@ -31,6 +33,7 @@ using WB.UI.Shared.Enumerator;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.Converters;
 using WB.UI.Shared.Enumerator.CustomBindings;
+using WB.UI.Shared.Enumerator.CustomServices;
 using WB.UI.Shared.Enumerator.Services;
 using WB.UI.Shared.Enumerator.Services.Internals;
 using WB.UI.Shared.Enumerator.Services.Logging;
@@ -58,8 +61,9 @@ namespace WB.UI.Supervisor
                 {typeof(SupervisorResolveInterviewViewModel), typeof (SupervisorCompleteFragment)},
                 {typeof(MapsViewModel), typeof (MapsActivity)},
                 {typeof(PhotoViewViewModel), typeof(PhotoViewActivity) },
+                {typeof(SearchViewModel), typeof(SupervisorSearchActivity)}
 #if !EXCLUDEEXTENSIONS
-                {typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel), typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorActivity)}
+                , {typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorViewModel), typeof (Shared.Extensions.CustomServices.AreaEditor.AreaEditorActivity)}
 #endif
             };
 
@@ -98,6 +102,7 @@ namespace WB.UI.Supervisor
                 new EnumeratorUIModule(),
                 new EnumeratorSharedKernelModule(),
                 new SupervisorInfrastructureModule(),
+                new SupervisorBoundedContextModule(), 
                 new SupervisorUiModule(),
                 };
 
@@ -126,12 +131,14 @@ namespace WB.UI.Supervisor
             var serviceLocator = ServiceLocator.Current;
 
             var status = new UnderConstructionInfo();
-            status.Status = UnderConstructionStatus.Running;
+            status.Run();
+
             foreach (var module in modules)
             {
                 module.Init(serviceLocator, status).Wait();
             }
-            status.Status = UnderConstructionStatus.Finished;
+
+            status.Finish();
 
             return container;
         }
@@ -156,6 +163,22 @@ namespace WB.UI.Supervisor
                 typeof(SupervisorSetup).Assembly,
                 typeof(DashboardViewModel).Assembly
             });
+        }
+
+        BackStackHintHandler backStackHandler;
+
+        /// <summary>
+        /// Creates the view presenter.
+        /// </summary>
+        /// <returns>The view presenter.</returns>
+        protected override IMvxAndroidViewPresenter CreateViewPresenter()
+        {
+            var presenter = base.CreateViewPresenter();
+
+            backStackHandler = new BackStackHintHandler(ApplicationContext, typeof(LoginActivity));
+            presenter.AddPresentationHintHandler<OpenLoginScreenHint>(backStackHandler.HandleClearBackstackHint);
+
+            return presenter;
         }
     }
 }

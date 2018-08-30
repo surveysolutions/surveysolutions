@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using Moq;
+using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -15,7 +16,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
 {
     internal class when_handling_question_answered_event_of_another_question : MultiOptionQuestionViewModelTestsContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [OneTimeSetUp] 
+        public void context () {
             questionGuid = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             questionId = Create.Entity.Identity(questionGuid, Empty.RosterVector);
 
@@ -23,7 +25,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
                 => _.ShouldQuestionRecordAnswersOrder(questionId.Id) == true
                 && _.GetMaxSelectedAnswerOptions(questionId.Id) == 1
                 && _.IsRosterSizeQuestion(questionId.Id) == false
-
             );
 
             var filteredOptionsViewModel = Setup.FilteredOptionsViewModel(new List<CategoricalOption>
@@ -56,7 +57,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
             viewModel.Handle(new MultipleOptionsQuestionAnswered(Guid.NewGuid(), Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB"), Empty.RosterVector, DateTime.Now, new[] { 2m, 1m }));
         }
 
-        [NUnit.Framework.Test] public void should_set_not_set_checked_order_to_options () => viewModel.Options.First().CheckedOrder.Should().BeNull();
+        [Test] 
+        public void should_set_not_set_checked_order_to_options () 
+            => viewModel.Options.First().CheckedOrder.Should().BeNull();
 
         static MultiOptionQuestionViewModel viewModel;
         static Identity questionId;

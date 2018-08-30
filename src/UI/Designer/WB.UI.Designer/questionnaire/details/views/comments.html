@@ -1,6 +1,7 @@
 ﻿<form role="form" id="comments-editor" name="addCommentForm" unsaved-warning-form>
     <div class="form-holder">
         <div ng-repeat="comment in comments" class="comment" ng-class="{isResolved : comment.isResolved}">
+            <button type="button" class="btn btn-sm btn-link pull-right" ng-click="deleteComment(comment.id)" ng-i18next="Delete"></button>
             <button ng-hide="comment.isResolved" type="button" class="btn btn-sm btn-link pull-right" ng-click="resolveComment(comment)" ng-i18next="CommentEditorResolve"></button>
             <span class="author">{{comment.userEmail}}</span>
             <span class="date">{{comment.date}}</span>

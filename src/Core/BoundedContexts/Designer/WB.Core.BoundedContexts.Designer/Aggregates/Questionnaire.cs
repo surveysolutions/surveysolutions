@@ -36,8 +36,6 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 {
     internal class Questionnaire : IPlainAggregateRoot
     {
-        public static string DefaultQuestionnaireVariableName = "Questionnaire";
-
         private const int MaxChapterItemsCount = 400;
         private const int MaxGroupDepth = 10;
 

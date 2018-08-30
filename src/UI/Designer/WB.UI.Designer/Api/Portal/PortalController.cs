@@ -68,14 +68,12 @@ namespace WB.UI.Designer.Api.Portal
             var questionnaires = questionnaireHelper.GetQuestionnaires(
                 viewerId: account.ProviderUserKey,
                 isAdmin: false, 
-                type: QuestionnairesType.My, 
+                type: QuestionnairesType.My | QuestionnairesType.Shared, 
                 folderId: null, 
                 pageIndex: 1,
                 sortBy: null, 
                 sortOrder: null, 
                 searchFor: filter);
-
-           
 
             return new PagedQuestionnaireCommunicationPackage
             {

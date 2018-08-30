@@ -33,7 +33,9 @@ namespace WB.Tests.Abc
             return new TestInMemoryWriter<TEntity>();
         }
 
-        public static IMvxMainThreadDispatcher MvxMainThreadDispatcher() => Create.Fake.MvxMainThreadDispatcher();
+        public static IMvxMainThreadAsyncDispatcher MvxMainThreadAsyncDispatcher() =>
+            Create.Fake.MvxMainThreadAsyncDispatcher();
+
 
         public static ISideBarSectionViewModelsFactory SideBarSectionViewModelsFactory()
         {

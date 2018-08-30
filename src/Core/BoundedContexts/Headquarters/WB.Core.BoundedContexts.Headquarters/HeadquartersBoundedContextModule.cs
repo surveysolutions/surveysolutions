@@ -58,6 +58,7 @@ using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers.Implementation;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.InterviewerAuditLog;
 using WB.Core.BoundedContexts.Headquarters.Services.Internal;
@@ -71,7 +72,6 @@ using WB.Core.BoundedContexts.Headquarters.Views.Reports;
 using WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Data;
-using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Jobs;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.BoundedContexts.Headquarters.WebInterview.Impl;
@@ -81,8 +81,11 @@ using WB.Enumerator.Native.Questionnaire;
 using WB.Enumerator.Native.Questionnaire.Impl;
 using WB.Enumerator.Native.WebInterview;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog;
+using WB.Infrastructure.Native.Files.Implementation.FileSystem;
+using WB.Infrastructure.Native.Storage;
 
 namespace WB.Core.BoundedContexts.Headquarters
 {
@@ -152,6 +155,12 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             registry.Bind<IExportFileNameService, ExportExportFileNameService>();
 
+            registry.BindAsSingleton<IStringCompressor, JsonCompressor>();
+            registry.Bind<ISerializer, NewtonJsonSerializer>();
+            registry.Bind<IJsonAllTypesSerializer, JsonAllTypesSerializer>();
+            registry.Bind<IAttachmentContentService, AttachmentContentService>();
+            registry.Bind<IInterviewAnswerSerializer, NewtonInterviewAnswerJsonSerializer>();
+
             registry.BindAsSingletonWithConstructorArgument<IMapStorageService, FileSystemMapStorageService>("folderPath", this.currentFolderPath);
 
             //commented because auto registered somewhere 
@@ -170,6 +179,9 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IExportViewFactory, ExportViewFactory>();
             registry.Bind<IQuestionnaireVersionProvider, QuestionnaireVersionProvider>();
             registry.Bind<ITranslationManagementService, TranslationManagementService>();
+            registry.Bind<IAssemblyService, AssemblyService>();
+            registry.Bind<IExportSettings, Implementation.ExportSettings>();
+            registry.Bind<IArchiveUtils, IProtectedArchiveUtils, ZipArchiveUtils>();
             
             registry.Bind<IAllInterviewsFactory, AllInterviewsFactory>();
             registry.Bind<ITeamInterviewsFactory, TeamInterviewsFactory>();
@@ -210,9 +222,12 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.BindToConstant<SyncPackagesProcessorBackgroundJobSetting>(() => this.syncPackagesProcessorBackgroundJobSetting);
             registry.Bind<InterviewDetailsBackgroundSchedulerTask>();
 
+            registry.Bind<IEnumeratorGroupStateCalculationStrategy, EnumeratorGroupGroupStateCalculationStrategy>();
+            registry.Bind<ISupervisorGroupStateCalculationStrategy, SupervisorGroupStateCalculationStrategy>();
+
             registry.BindWithConstructorArgument<ITabletInformationService, FileBasedTabletInformationService>("parentFolder", this.currentFolderPath);
 
-            registry.BindAsSingleton<IPasswordHasher, PasswordHasher>(); // external class which cannot be put to self-describing module because ninject is not portable
+            registry.BindAsSingleton<IPasswordHasher, PasswordHasher>(); 
 
             registry.Bind<IExportFactory, ExportFactory>();
 
@@ -221,7 +236,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.RegisterDenormalizer<InterviewExportedCommentariesDenormalizer>();
             registry.RegisterDenormalizer<InterviewDenormalizer>();
             registry.RegisterDenormalizer<CumulativeChartDenormalizer>();
-            registry.RegisterDenormalizer<ReportTableDataDenormalizer>();
 
             registry.Bind<IInterviewPackagesService, IInterviewBrokenPackagesService, InterviewPackagesService>();
 
@@ -262,6 +276,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<CommentsExporter>();
             registry.Bind<InterviewActionsExporter>();
             registry.Bind<DiagnosticsExporter>();
+            registry.Bind<IExportServiceDataProvider, ExportServiceDataProvider>();
 
             registry.Bind<ITabularDataToExternalStatPackageExportService, TabularDataToExternalStatPackageExportService>();
             registry.Bind<ITabFileReader, TabFileReader>();
@@ -302,7 +317,6 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             registry.BindAsSingleton<IAssignmentsUpgradeService, AssignmentsUpgradeService>();
             registry.Bind<IAssignmentsUpgrader, AssignmentsUpgrader>();
-            registry.BindAsSingleton<IRefreshReportsTask, BackgroundRefreshReportsTask>();
             registry.Bind<IInterviewReportDataRepository, InterviewReportDataRepository>();
         }
 
@@ -311,7 +325,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             CommandRegistry
                 .Setup<Questionnaire>()
                 .ResolvesIdFrom<QuestionnaireCommand>(command => command.QuestionnaireId)
-                .InitializesWith<ImportFromDesigner>(aggregate => aggregate.ImportFromDesigner, config => config.ValidatedBy<QuestionnaireNameValidator>())
+                .InitializesWith<ImportFromDesigner>(aggregate => aggregate.ImportFromDesigner, config => config.ValidatedBy<QuestionnaireImportValidator>())
                 .InitializesWith<RegisterPlainQuestionnaire>(aggregate => aggregate.RegisterPlainQuestionnaire)
                 .InitializesWith<DeleteQuestionnaire>(aggregate => aggregate.DeleteQuestionnaire)
                 .InitializesWith<DisableQuestionnaire>(aggregate => aggregate.DisableQuestionnaire)

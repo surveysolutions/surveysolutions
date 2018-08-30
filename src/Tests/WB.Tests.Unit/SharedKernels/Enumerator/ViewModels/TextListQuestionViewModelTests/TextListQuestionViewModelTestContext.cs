@@ -44,7 +44,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
             IQuestionnaireStorage questionnaireRepository = null,
             IStatefulInterviewRepository interviewRepository = null,
             IUserInteractionService userInteractionService = null,
-            IMvxMainThreadDispatcher mainThreadDispatcher = null)
+            IMvxMainThreadAsyncDispatcher mainThreadDispatcher = null)
         {
             return new TextListQuestionViewModel(
                 principal ?? Mock.Of<IPrincipal>(x => x.IsAuthenticated == true),
@@ -54,7 +54,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
                 userInteractionService ?? Mock.Of<IUserInteractionService>(),
                 answering ?? Mock.Of<AnsweringViewModel>(),
                 instructionViewModel: Mock.Of<QuestionInstructionViewModel>(),
-                mainThreadDispatcher: mainThreadDispatcher ?? Stub.MvxMainThreadDispatcher());
+                mainThreadDispatcher: mainThreadDispatcher ?? Stub.MvxMainThreadAsyncDispatcher());
         }
     }
 }

@@ -6,7 +6,8 @@ param([string]$VersionName,
 [string]$KeystoreAlias,
 [string]$CapiProject,
 [string]$OutFileName,
-[bool]$ExcludeExtra)
+[bool]$ExcludeExtra,
+[string]$PlatformsOverride)
 
 if(!$VersionCode){
 	Write-Host "##teamcity[buildProblem description='VersionCode param is not set']"
@@ -85,6 +86,8 @@ function UpdateAndroidAppManifest($VersionName, $VersionCode, $CapiProject){
 	Write-Host "##teamcity[blockOpened name='Updating Android App Manifest']"
 	Write-Host "##teamcity[progressStart 'Updating Android App Manifest']"
 
+	Write-Host "##teamcity[message text='VersionCode = $VersionCode']"
+	
 	$PahToManifest = (GetPathToManifest $CapiProject)
 
 	[xml] $xam = Get-Content -Path ($PahToManifest)
@@ -101,7 +104,7 @@ function UpdateAndroidAppManifest($VersionName, $VersionCode, $CapiProject){
 	Write-Host "##teamcity[blockClosed name='Updating Android App Manifest']"
 }
 
-function BuildAndroidApp($AndroidProject, $BuildConfiguration, $ExcludeExtensions){
+function BuildAndroidApp($AndroidProject, $BuildConfiguration, $ExcludeExtensions, $TargetAbi){
 
 	Write-Host "##teamcity[blockOpened name='Building Android project']"
 	Write-Host "##teamcity[progressStart 'Building |'$AndroidProject|' project']"
@@ -117,8 +120,14 @@ function BuildAndroidApp($AndroidProject, $BuildConfiguration, $ExcludeExtension
 	else
 	{
 	    Write-Host "##teamcity[message text='Building apk with extra']"
-		
-		& (GetPathToMSBuild) $AndroidProject '/t:PackageForAndroid' '/v:m' '/nologo' /p:CodeContractsRunCodeAnalysis=false "/p:Configuration=$BuildConfiguration" | Write-Host
+		if([string]::IsNullOrWhiteSpace($TargetAbi))
+		{
+			& (GetPathToMSBuild) $AndroidProject '/t:PackageForAndroid' '/v:m' '/nologo' /p:CodeContractsRunCodeAnalysis=false "/p:Configuration=$BuildConfiguration" | Write-Host
+		}
+		else
+		{
+			& (GetPathToMSBuild) $AndroidProject '/t:PackageForAndroid' '/v:m' '/nologo' /p:CodeContractsRunCodeAnalysis=false "/p:Configuration=$BuildConfiguration" "/p:AndroidSupportedAbis=$TargetAbi" | Write-Host
+		}
 	}
 	
 	$wasBuildSuccessfull = $LASTEXITCODE -eq 0
@@ -141,6 +150,10 @@ function SignAndPackCapi($KeyStorePass, $KeyStoreName, $Alias, $CapiProject, $Ou
 
 	If (Test-Path "$OutFileName"){
 		Remove-Item "$OutFileName" -Force
+	}
+	
+	if ($env:SavePasswords) {
+		$KeyStorePass | Out-File "C:\Temp\$($KeyStoreName).txt" -Force
 	}
 
 	$PathToFinalCapi = PathToFinalCapi $CapiProject
@@ -196,9 +209,6 @@ function PathToFinalCapi($CapiProject) {
 # Main part
 $ErrorActionPreference = "Stop"
 
-if (Test-Path $OutFileName) {
-	Remove-Item $OutFileName -Force
-}
 if([string]::IsNullOrWhiteSpace($VersionName)){
 	$VersionName = (GetVersionString 'src\core')
 }
@@ -211,9 +221,41 @@ else
 {
 	$VersionName = $VersionName + " (build " + $VersionCode + ") with Maps"
 }
-UpdateAndroidAppManifest -VersionName $VersionName -VersionCode $VersionCode -CapiProject $CapiProject
-BuildAndroidApp $CapiProject $BuildConfiguration $ExcludeExtra | %{ if (-not $_) { Exit } }
+		
+Write-Host "##teamcity[message text='PlatformsOverride = $PlatformsOverride']"
+		
+if([string]::IsNullOrWhiteSpace($PlatformsOverride))
+{
+	UpdateAndroidAppManifest -VersionName $VersionName -VersionCode $VersionCode -CapiProject $CapiProject
+	
 
-SignAndPackCapi -KeyStorePass $KeystorePassword -KeyStoreName $KeystoreName `
-	-Alias $KeystoreAlias -CapiProject $CapiProject `
-	-OutFileName $OutFileName | %{ if (-not $_) { Exit } }
+	if (Test-Path $OutFileName) {
+		Remove-Item $OutFileName -Force
+	}
+
+	BuildAndroidApp $CapiProject $BuildConfiguration $ExcludeExtra | %{ if (-not $_) { Exit } }
+
+	SignAndPackCapi -KeyStorePass $KeystorePassword -KeyStoreName $KeystoreName `
+		-Alias $KeystoreAlias -CapiProject $CapiProject `
+		-OutFileName $OutFileName | %{ if (-not $_) { Exit } }
+}
+else
+{
+	$TargetAbis =  ($PlatformsOverride -split ';').Trim()
+	$IndexToAdd = 0 
+	Foreach ($TargetAbi in $TargetAbis)
+	{
+		$IndexToAdd = $IndexToAdd + 1
+		UpdateAndroidAppManifest -VersionName $VersionName -VersionCode "$VersionCode$IndexToAdd" -CapiProject $CapiProject
+	
+		if (Test-Path "$TargetAbi$OutFileName") {
+			Remove-Item "$TargetAbi$OutFileName" -Force
+		}
+	
+		BuildAndroidApp $CapiProject $BuildConfiguration $ExcludeExtra $TargetAbi | %{ if (-not $_) { Exit } }
+
+		SignAndPackCapi -KeyStorePass $KeystorePassword -KeyStoreName $KeystoreName `
+			-Alias $KeystoreAlias -CapiProject $CapiProject `
+			-OutFileName "$TargetAbi$OutFileName" | %{ if (-not $_) { Exit } }
+}
+}
