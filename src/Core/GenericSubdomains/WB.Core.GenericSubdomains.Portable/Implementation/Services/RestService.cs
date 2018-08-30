@@ -90,7 +90,6 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             var fullUrl = new Url(this.restServiceSettings.Endpoint, url, queryString);
 
             var httpClient = new HttpClient(new ExtendedMessageHandler(new HttpClientHandler(), httpStatistician));
-
             httpClient.Timeout = Timeout.InfiniteTimeSpan;// this.restServiceSettings.Timeout;
 
             var request = new HttpRequestMessage()
@@ -100,8 +99,14 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                 Content = httpContent
             };
 
+
+            httpClient.DefaultRequestHeaders.Add("Accept-Encoding", "gzip, deflate");
+            httpClient.DefaultRequestHeaders.Add("Accept-Language", "en-US,en;q=0.5");
+            //httpClient.DefaultRequestHeaders.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:58.0) Gecko/20100101 Firefox/58.0");
+
             request.Headers.UserAgent.ParseAdd(this.restServiceSettings.UserAgent);
-            
+            //request.Headers.UserAgent.ParseAdd("Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:58.0) Gecko/20100101 Firefox/58.0");
+          
             request.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
             request.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("deflate"));
             request.Headers.Add("Accept-Language", "en-GB,en;q=0.9,en-US;q=0.8");
@@ -136,7 +141,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             {
                 stopwatch.Start();
 
-                var httpResponseMessage = await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, linkedCancellationTokenSource.Token);
+                var httpResponseMessage = await httpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, linkedCancellationTokenSource.Token);
 
                 if (httpResponseMessage.IsSuccessStatusCode
                     || httpResponseMessage.StatusCode == HttpStatusCode.NotModified
