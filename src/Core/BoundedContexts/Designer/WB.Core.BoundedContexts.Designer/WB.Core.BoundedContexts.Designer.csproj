@@ -20,7 +20,7 @@
     <PackageReference Include="HtmlSanitizer" Version="4.0.185" />
     <PackageReference Include="Microsoft.AspNet.WebPages.Data" Version="3.2.3" />
     <PackageReference Include="Microsoft.AspNet.WebPages.WebData" Version="3.2.3" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="2.7.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="2.9.0" />
     <PackageReference Include="Ninject" Version="3.3.4" />
   </ItemGroup>
   <ItemGroup>
