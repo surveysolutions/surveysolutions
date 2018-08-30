@@ -90,7 +90,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             var fullUrl = new Url(this.restServiceSettings.Endpoint, url, queryString);
 
             var httpClient = new HttpClient(new ExtendedMessageHandler(new HttpClientHandler(), httpStatistician));
-            httpClient.Timeout = Timeout.InfiniteTimeSpan;// this.restServiceSettings.Timeout;
+            httpClient.Timeout = this.restServiceSettings.Timeout;
 
             var request = new HttpRequestMessage()
             {
@@ -136,8 +136,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                 stopwatch.Start();
 
                 var httpResponseMessage = await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, linkedCancellationTokenSource.Token);
-                logger.Warn($"TEST: Request to {url}, headers {request?.Headers}.");
-                logger.Warn($"TEST: Response status {httpResponseMessage?.StatusCode}, headers {httpResponseMessage?.Headers}.");
+                logger.Warn($"Request to {url} - {httpResponseMessage?.StatusCode}.");
 
                 if (httpResponseMessage.IsSuccessStatusCode
                     || httpResponseMessage.StatusCode == HttpStatusCode.NotModified
@@ -378,6 +377,8 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                     }
                     responseContent = ms.ToArray();
                 }
+
+                await responseStream.FlushAsync(token).ConfigureAwait(false);
             }
 
             return new RestResponse
