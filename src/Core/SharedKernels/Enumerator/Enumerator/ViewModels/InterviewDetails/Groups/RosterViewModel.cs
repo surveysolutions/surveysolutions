@@ -68,13 +68,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
                 this.rosterSizeQuestionId = questionnaire.GetRosterSizeQuestion(entityId.Id);
             }
             
-            this.UpdateFromInterviewAsync();
+            this.UpdateFromInterviewAsync().WaitAndUnwrapException();
         }
 
-        public async void Handle(RosterInstancesRemoved @event)
+        public void Handle(RosterInstancesRemoved @event)
         {
             if (@event.Instances.Any(rosterInstance => rosterInstance.GroupId == this.Identity.Id))
-                await this.UpdateFromInterviewAsync();
+               this.UpdateFromInterviewAsync().WaitAndUnwrapException();
         }
 
         private async Task UpdateFromInterviewAsync()
@@ -128,10 +128,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             }
         }
 
-        public async void Handle(RosterInstancesAdded @event)
+        public void Handle(RosterInstancesAdded @event)
         {
             if (@event.Instances.Any(rosterInstance => rosterInstance.GroupId == this.Identity.Id))
-                await this.UpdateFromInterviewAsync();
+               this.UpdateFromInterviewAsync().WaitAndUnwrapException();
         }
 
         private GroupViewModel GetGroupViewModel(Identity identity)

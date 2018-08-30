@@ -214,7 +214,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-
         internal async Task OptionSelectedAsync(object sender)
         {
             var selectedOption = (SingleOptionQuestionOptionViewModel) sender;
@@ -243,18 +242,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             if (@event.Questions.All(x => x.Id != this.linkedToQuestionId)) return;
 
-            await this.RefreshOptionsFromModelAsync();
+            this.RefreshOptionsFromModelAsync().WaitAndUnwrapException();
         }
 
-        public async void Handle(QuestionsDisabled @event)
+        public void Handle(QuestionsDisabled @event)
         {
             if (@event.Questions.All(x => x.Id != this.linkedToQuestionId))
                 return;
 
-            await this.ClearOptionsAsync();
+            this.ClearOptionsAsync().WaitAndUnwrapException();
         }
 
-        public async void Handle(AnswersRemoved @event)
+        public void Handle(AnswersRemoved @event)
         {
             if (@event.Questions.Contains(this.Identity))
             {
@@ -268,7 +267,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
 
             if (@event.Questions.Any(question => question.Id == this.linkedToQuestionId))
-                await this.ClearOptionsAsync();
+                this.ClearOptionsAsync().WaitAndUnwrapException();
         }
 
         public void Handle(TextListQuestionAnswered @event)
@@ -285,11 +284,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public async void Handle(LinkedToListOptionsChanged @event)
+        public void Handle(LinkedToListOptionsChanged @event)
         {
             if (@event.ChangedLinkedQuestions.All(x => x.QuestionId != this.Identity)) return;
 
-            await this.RefreshOptionsFromModelAsync();
+            this.RefreshOptionsFromModelAsync().WaitAndUnwrapException();
         }
 
         public IObservableCollection<ICompositeEntity> Children

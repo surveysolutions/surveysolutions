@@ -262,22 +262,22 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public async void Handle(LinkedOptionsChanged @event)
+        public void Handle(LinkedOptionsChanged @event)
         {
             ChangedLinkedOptions changedLinkedQuestion = @event.ChangedLinkedQuestions.SingleOrDefault(x => x.QuestionId == this.Identity);
 
             if (changedLinkedQuestion != null)
             {
-                await this.RefreshOptionsFromModelAsync();
+                this.RefreshOptionsFromModelAsync().WaitAndUnwrapException();
             }
         }
 
-        public async void Handle(RosterInstancesTitleChanged @event)
+        public void Handle(RosterInstancesTitleChanged @event)
         {
             var optionListShouldBeUpdated = @event.ChangedInstances.Any(x => this.parentRosterIds.Contains(x.RosterInstance.GroupId));
             if (optionListShouldBeUpdated)
             {
-                await this.RefreshOptionsFromModelAsync();
+                this.RefreshOptionsFromModelAsync().WaitAndUnwrapException();
             }
         }
 
