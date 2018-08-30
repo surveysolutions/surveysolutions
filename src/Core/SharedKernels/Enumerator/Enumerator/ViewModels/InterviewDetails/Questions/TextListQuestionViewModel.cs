@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using MvvmCross.Base;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
@@ -133,10 +134,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.Answers.Remove(listItem);
 
-            this.SaveAnswers();
+            await this.SaveAnswers();
         }
 
-        private void ListItemAdded(object sender, TextListItemAddedEventArgrs e)
+        private async void ListItemAdded(object sender, TextListItemAddedEventArgrs e)
         {
             var answerViewModels = this.Answers.OfType<TextListItemViewModel>().ToList();
             var maxValue = answerViewModels.Count == 0
@@ -146,7 +147,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Answers.Insert(this.Answers.Count - 1,
                 this.CreateListItemViewModel(maxValue, e.NewText, this.interviewRepository.Get(this.interviewId)));
 
-            this.SaveAnswers();
+            await this.SaveAnswers();
 
             if (this.addNewItemViewModel != null)
                 this.addNewItemViewModel.Text = string.Empty;
@@ -154,7 +155,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private void ListItemEdited(object sender, EventArgs eventArgs) => this.SaveAnswers();
 
-        private async void SaveAnswers()
+        private async Task SaveAnswers()
         {
             if (!this.principal.IsAuthenticated) return;
 

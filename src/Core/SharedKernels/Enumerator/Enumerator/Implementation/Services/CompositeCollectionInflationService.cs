@@ -75,11 +75,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             return allVisibleGroupItems;
         }
 
-        private void OnEnablementChanged(
+        private async Task OnEnablementChanged(
             Dictionary<CompositeItemType, CompositeCollection<ICompositeEntity>> itemCompositeCollections,
             ICompositeQuestion compositeQuestion, 
             CompositeCollection<ICompositeEntity> allVisibleGroupItems) => 
-            this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
+            await this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
         {
             if (!itemCompositeCollections[CompositeItemType.Title].Contains(compositeQuestion.QuestionState.Header))
             {
