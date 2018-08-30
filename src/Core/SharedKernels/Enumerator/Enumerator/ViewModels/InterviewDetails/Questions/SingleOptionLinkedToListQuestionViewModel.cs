@@ -117,9 +117,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     this.optionsBottomBorderViewModel.HasOptions = this.HasOptions;
                 }
             };
-            this.RefreshOptionsFromModelAsync().WaitAndUnwrapException();
-
+            
             this.eventRegistry.Subscribe(this, interviewId);
+
+            this.RefreshOptionsFromModelAsync();
         }
 
         public void Dispose()
