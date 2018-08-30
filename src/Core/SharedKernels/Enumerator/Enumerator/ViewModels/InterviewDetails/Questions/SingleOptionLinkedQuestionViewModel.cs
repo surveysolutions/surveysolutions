@@ -268,7 +268,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             if (changedLinkedQuestion != null)
             {
-                this.RefreshOptionsFromModel();
+                this.RefreshOptionsFromModelAsync().WaitAndUnwrapException();
             }
         }
 
@@ -277,7 +277,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var optionListShouldBeUpdated = @event.ChangedInstances.Any(x => this.parentRosterIds.Contains(x.RosterInstance.GroupId));
             if (optionListShouldBeUpdated)
             {
-                this.RefreshOptionsFromModel();
+                this.RefreshOptionsFromModelAsync().WaitAndUnwrapException();
             }
         }
 
@@ -303,9 +303,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        private void RefreshOptionsFromModel()
+        private async Task RefreshOptionsFromModelAsync()
         {
-            this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
+            await this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
             {
                 var newOptions = this.CreateOptions();
                 var removedItems = this.Options.SynchronizeWith(newOptions.ToList(), (s, t) => s.RosterVector.Identical(t.RosterVector) && s.Title == t.Title);
@@ -316,7 +316,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 });
 
                 this.RaisePropertyChanged(() => this.HasOptions);
-            }).WaitAndUnwrapException();
+            });
         }
 
         private SingleOptionLinkedQuestionOptionViewModel CreateOptionViewModel(RosterVector linkedOption, RosterVector answeredOption, IStatefulInterview interview)

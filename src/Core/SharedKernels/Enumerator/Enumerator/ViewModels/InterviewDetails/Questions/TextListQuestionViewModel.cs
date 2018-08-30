@@ -3,6 +3,7 @@ using System.Linq;
 using MvvmCross.Base;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -112,7 +113,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        private async void ListItemDeleted(object sender, EventArgs eventArgs)
+        private void ListItemDeleted(object sender, EventArgs eventArgs)
         {
             var listItem = sender as TextListItemViewModel;
 
@@ -122,7 +123,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (this.isRosterSizeQuestion )
             {
                 var message = string.Format(UIResources.Interview_Questions_RemoveRowFromRosterMessage, 1);
-                if (!(await this.userInteractionService.ConfirmAsync(message)))
+                if (!(this.userInteractionService.ConfirmAsync(message).Result))
                 {
                     return;
                 }
@@ -131,7 +132,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             listItem.ItemEdited -= this.ListItemEdited;
             listItem.ItemDeleted -= this.ListItemDeleted;
 
-            this.Answers.Remove(listItem);
+            this.mainThreadDispatcher.ExecuteOnMainThreadAsync(()=> this.Answers.Remove(listItem)).WaitAndUnwrapException();
 
             this.SaveAnswers();
         }
@@ -143,8 +144,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 ? 1
                 : answerViewModels.Max(x => x.Value) + 1;
 
-            this.Answers.Insert(this.Answers.Count - 1,
-                this.CreateListItemViewModel(maxValue, e.NewText, this.interviewRepository.Get(this.interviewId)));
+            this.mainThreadDispatcher.ExecuteOnMainThreadAsync(()=>
+                this.Answers.Insert(this.Answers.Count - 1,
+                    this.CreateListItemViewModel(maxValue, e.NewText, this.interviewRepository.Get(this.interviewId)))
+                ).WaitAndUnwrapException();
 
             this.SaveAnswers();
 
@@ -154,7 +157,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private void ListItemEdited(object sender, EventArgs eventArgs) => this.SaveAnswers();
 
-        private async void SaveAnswers()
+        private void SaveAnswers()
         {
             if (!this.principal.IsAuthenticated) return;
 
@@ -177,9 +180,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             try
             {
-                await this.Answering.SendAnswerQuestionCommandAsync(command);
+                this.Answering.SendAnswerQuestionCommandAsync(command).WaitAndUnwrapException();
                 this.questionState.Validity.ExecutedWithoutExceptions();
-                await this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() => this.ShowOrHideAddNewItem());
+                this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() => this.ShowOrHideAddNewItem()).WaitAndUnwrapException();
             }
             catch (InterviewException ex)
             {
