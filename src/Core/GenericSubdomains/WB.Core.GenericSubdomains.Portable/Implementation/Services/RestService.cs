@@ -99,7 +99,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                 Content = httpContent
             };
 
-            request.Headers.Add("Connection", "close");
+            //request.Headers.Add("Connection", "close");
             request.Headers.UserAgent.ParseAdd(this.restServiceSettings.UserAgent);
             request.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
             request.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("deflate"));
