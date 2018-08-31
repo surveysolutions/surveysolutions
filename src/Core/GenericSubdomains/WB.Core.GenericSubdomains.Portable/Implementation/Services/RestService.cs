@@ -195,6 +195,10 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
 
                 throw new RestException(message: "Unexpected web exception", innerException: ex);
             }
+            finally
+            {
+                httpClient.Dispose();
+            }
         }
 
         public Task GetAsync(string url, object queryString, RestCredentials credentials, bool forceNoCache, 
