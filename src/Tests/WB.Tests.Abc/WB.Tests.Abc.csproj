@@ -45,8 +45,6 @@
     <PackageReference Include="NUnit.Extension.NUnitV2Driver" Version="3.7.0" />
     <PackageReference Include="NUnit.Extension.NUnitV2ResultWriter" Version="3.6.0" />
     <PackageReference Include="NUnit.Extension.TeamCityEventListener" Version="1.0.4" />
-    <PackageReference Include="NUnit.Extension.VSProjectLoader" Version="3.7.0" />
-    <PackageReference Include="NUnit.framework" Version="2.63.0" />
     <PackageReference Include="Quartz" Version="2.6.1" />
     <PackageReference Include="ReflectionMagic" Version="3.1.0" />
     <PackageReference Include="Remotion.Linq" Version="2.2.0" />
@@ -58,7 +56,6 @@
     <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3.osx" Version="1.1.11" />
     <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3.v110_xp" Version="1.1.11" />
     <PackageReference Include="SQLitePCLRaw.provider.e_sqlite3.net45" Version="1.1.11" />
-    <PackageReference Include="System.Collections.Immutable" Version="1.4.0" />
-    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.4.0" />
+    <PackageReference Include="System.Collections.Immutable" Version="1.5.0" />
   </ItemGroup>
 </Project>
