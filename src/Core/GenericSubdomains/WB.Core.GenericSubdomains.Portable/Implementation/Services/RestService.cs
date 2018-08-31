@@ -121,7 +121,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
 
             var messageHandler = new ExtendedMessageHandler(new HttpClientHandler(), httpStatistician);
             var httpClient = new HttpClient(messageHandler);
-            httpClient.Timeout = Timeout.InfiniteTimeSpan;// becouse we set timeout in CancellationTokenSource;
+            httpClient.Timeout = TimeSpan.FromHours(1);// becouse we set timeout in CancellationTokenSource;
             //httpClient.Timeout =this.restServiceSettings.Timeout;
 
             var request = new HttpRequestMessage()
@@ -166,7 +166,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             {
                 stopwatch.Start();
 
-                using (var httpResponseMessage = await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, linkedCancellationTokenSource.Token))
+                using (var httpResponseMessage = await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead/*, linkedCancellationTokenSource.Token*/))
                 {
                     logger.Warn($"Request to {url} - {httpResponseMessage?.StatusCode}.");
 
