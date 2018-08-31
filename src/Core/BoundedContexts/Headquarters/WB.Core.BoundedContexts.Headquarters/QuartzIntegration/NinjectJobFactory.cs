@@ -1,20 +1,19 @@
 ﻿using System;
 using System.Globalization;
-using Ninject;
+using Autofac;
 using Quartz;
 using Quartz.Spi;
-using WB.Infrastructure.Native.Ioc;
-using WB.Infrastructure.Native.Storage.Postgre;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 
 namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
 {
-    public class NinjectJobFactory : IJobFactory
+    public class AutofacJobFactory : IJobFactory
     {
-        private readonly IKernel kernel;
+        private readonly IContainer kernel;
 
-        public NinjectJobFactory(IKernel kernel)
+        public AutofacJobFactory(/*IContainer kernel*/)
         {
-            this.kernel = kernel;
+            //this.kernel = kernel;
         }
 
         /// <summary>
@@ -42,7 +41,7 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
             Type jobType = jobDetail.JobType;
             try
             {
-                return new LazyNinjectJobWripper(jobType, kernel);
+                return new AsyncScopedJobDecorator(jobType, ServiceLocator.Current.GetInstance<IContainer>());
             }
             catch (Exception e)
             {
@@ -57,39 +56,6 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
         /// </summary>
         public void ReturnJob(IJob job)
         {
-        }
-    }
-
-    public class LazyNinjectJobWripper : IJob
-    {
-        private IKernel kernel;
-        private Type jobType;
-
-        public LazyNinjectJobWripper(Type jobType,  IKernel kernel)
-        {
-            this.kernel = kernel;
-            this.jobType = jobType;
-        }
-
-        public void Execute(IJobExecutionContext context)
-        {
-            using (var scope = new NinjectAmbientScope())
-            {
-                var unitOfWork = kernel.Get<IUnitOfWork>();
-                try
-                {
-                    var job = kernel.Get(jobType) as IJob;
-                    if (job == null) throw new ArgumentNullException(nameof(job));
-                    job.Execute(context);
-
-                    unitOfWork.AcceptChanges();
-                }
-                catch (Exception)
-                {
-                    unitOfWork.Dispose();
-                    throw;
-                }
-            }
         }
     }
 }

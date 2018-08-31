@@ -6,6 +6,7 @@ using Autofac;
 using Autofac.Features.ResolveAnything;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.UI.Shared.Enumerator.Services.Internals;
+using WB.UI.Shared.Web.Modules;
 
 namespace WB.Core.Infrastructure.Modularity.Autofac
 {
@@ -19,11 +20,23 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
         private readonly ContainerBuilder containerBuilder;
         private readonly List<IInitModule> initModules = new List<IInitModule>();
 
+        public ContainerBuilder ContainerBuilder => containerBuilder;
+
         public IContainer Container { get; set; }
 
         public void Load(params IModule[] modules)
         {
             var autofacModules = modules.Select(module => module.AsAutofac()).ToArray();
+            foreach (var autofacModule in autofacModules)
+            {
+                this.containerBuilder.RegisterModule(autofacModule);
+            }
+            initModules.AddRange(modules.Select(m => m as IInitModule).Where(m => m != null));
+        }
+
+        public void Load(params IWebModule[] modules)
+        {
+            var autofacModules = modules.Select(module => module.AsWebAutofac()).ToArray();
             foreach (var autofacModule in autofacModules)
             {
                 this.containerBuilder.RegisterModule(autofacModule);

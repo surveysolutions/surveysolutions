@@ -228,12 +228,22 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             registry.BindWithConstructorArgument<ITabletInformationService, FileBasedTabletInformationService>("parentFolder", this.currentFolderPath);
 
-            registry.BindAsSingleton<IPasswordHasher, PasswordHasher>(); 
-
+            registry.BindAsSingleton<IPasswordHasher, PasswordHasher>();
             registry.Bind<IExportFactory, ExportFactory>();
 
-            registry.RegisterDenormalizer<InterviewSummaryCompositeDenormalizer>();
             registry.RegisterDenormalizer<InterviewLifecycleEventHandler>();
+
+            //TODO:AF figgure out registration for ninject was made somewhere else
+            //remove it
+            //
+            //registry.Bind<InterviewSummaryDenormalizer>();
+            //registry.Bind<StatusChangeHistoryDenormalizerFunctional>();
+            //registry.Bind<InterviewStatusTimeSpanDenormalizer>();
+            //
+
+            //registry.RegisterDenormalizer<InterviewSummaryDenormalizer>();
+            registry.RegisterDenormalizer<InterviewSummaryCompositeDenormalizer>();
+            
             registry.RegisterDenormalizer<InterviewExportedCommentariesDenormalizer>();
             registry.RegisterDenormalizer<InterviewDenormalizer>();
             registry.RegisterDenormalizer<CumulativeChartDenormalizer>();

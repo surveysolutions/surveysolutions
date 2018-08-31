@@ -3,11 +3,11 @@ using Quartz.Impl;
 
 namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
 {
-    public class NinjectSchedulerFactory : StdSchedulerFactory
+    public class AutofacSchedulerFactory : StdSchedulerFactory
     {
-        private readonly NinjectJobFactory ninjectJobFactory;
+        private readonly AutofacJobFactory ninjectJobFactory;
 
-        public NinjectSchedulerFactory(NinjectJobFactory ninjectJobFactory)
+        public AutofacSchedulerFactory(AutofacJobFactory ninjectJobFactory)
         {
             this.ninjectJobFactory = ninjectJobFactory;
         }

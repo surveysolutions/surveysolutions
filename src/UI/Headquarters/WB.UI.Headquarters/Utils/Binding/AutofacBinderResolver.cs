@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Web.Mvc;
-using Ninject;
+using Autofac;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Binding
 {
     /// <summary>
     /// The generic binder resolver.
     /// </summary>
-    public class GenericBinderResolver : DefaultModelBinder
+    public class AutofacBinderResolver : DefaultModelBinder
     {
         #region Static Fields
 
@@ -23,19 +23,13 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Binding
         /// <summary>
         /// The _kernel.
         /// </summary>
-        private readonly IKernel _kernel;
+        private readonly IContainer _kernel;
 
         #endregion
 
         #region Constructors and Destructors
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="GenericBinderResolver"/> class.
-        /// </summary>
-        /// <param name="kernel">
-        /// The kernel.
-        /// </param>
-        public GenericBinderResolver(IKernel kernel)
+       public AutofacBinderResolver(IContainer kernel)
         {
             this._kernel = kernel;
         }
@@ -70,8 +64,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Utils.Binding
 
             Type genericBinderType = BinderType.MakeGenericType(bindingContext.ModelType);
 
-            var binder = this._kernel.TryGet(genericBinderType) as IModelBinder;
-            if (null != binder)
+            this._kernel.TryResolve(genericBinderType, out var outbinder);
+
+            if (outbinder is IModelBinder binder)
             {
                 return binder.BindModel(controllerContext, bindingContext);
             }

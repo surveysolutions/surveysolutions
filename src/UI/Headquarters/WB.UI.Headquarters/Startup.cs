@@ -12,17 +12,18 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using System.Web.SessionState;
+using Autofac;
+using Autofac.Integration.Mvc;
+using Autofac.Integration.SignalR;
+using Autofac.Integration.WebApi;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
+using Microsoft.AspNet.SignalR;
 using Microsoft.Owin;
 using Microsoft.Owin.BuilderProperties;
 using Microsoft.Owin.Extensions;
 using Microsoft.Owin.Security.Cookies;
 using NConfig;
-using Ninject;
-using Ninject.Web.Common.OwinHost;
-using Ninject.Web.Common.WebHost;
-using Ninject.Web.WebApi.OwinHost;
 using NLog;
 using Owin;
 using Quartz;
@@ -33,12 +34,14 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Versions;
+using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Binding;
 using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Monitoring;
 using WB.UI.Headquarters.API.WebInterview;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Services;
+using WB.UI.Shared.Enumerator.Services.Internals;
 using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.DataAnnotations;
 using WB.UI.Shared.Web.Filters;
@@ -67,18 +70,72 @@ namespace WB.UI.Headquarters
         public void Configuration(IAppBuilder app)
         {
             EnsureJsonStorageForErrorsExists();
-
             app.Use(RemoveServerNameFromHeaders);
+            
+            var autofacKernel = AutofacConfig.CreateKernel();
 
-            var kernel = ConfigureNinject(app);
+            autofacKernel.ContainerBuilder.RegisterHubs(Assembly.GetAssembly(typeof(WebInterviewHub)));
+            autofacKernel.ContainerBuilder.RegisterControllers(typeof(Startup).Assembly);
+            autofacKernel.ContainerBuilder.RegisterApiControllers(typeof(Startup).Assembly);
+
+            //autofacKernel.ContainerBuilder.RegisterSource(new AnyConcreteTypeNotAlreadyRegisteredSource());
+
+            autofacKernel.ContainerBuilder.RegisterType<Autofac.Integration.SignalR.AutofacDependencyResolver>().As<Microsoft.AspNet.SignalR.IDependencyResolver>().SingleInstance();
+
+            autofacKernel.Init().Wait();
+
+            var container = autofacKernel.Container;
+
+            var config = new HttpConfiguration();
+            var resolver = new AutofacWebApiDependencyResolver(container);
+
+            config.DependencyResolver = resolver;
+            GlobalConfiguration.Configuration.DependencyResolver = resolver;
+            
+            HubConfiguration hubConfig = new HubConfiguration();
+
+
+            hubConfig.Resolver = container.Resolve<Microsoft.AspNet.SignalR.IDependencyResolver>();
+            GlobalHost.DependencyResolver = container.Resolve<Microsoft.AspNet.SignalR.IDependencyResolver>();
+
+            
+            DependencyResolver.SetResolver(new Autofac.Integration.Mvc.AutofacDependencyResolver(container));
+            ModelBinders.Binders.DefaultBinder = new AutofacBinderResolver(container);
+
+            ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(container));
+
+            //TODO:AF resolve
+            /*var perRequestModule = new OnePerRequestHttpModule();
+            // onPerRequest scope implementation. Collecting all perRequest instances after all requests
+            app.Use(async (ctx, next) =>
+            {
+                try
+                {
+                    if (ctx.Request.CallCancelled.IsCancellationRequested) return;
+
+                    await next();
+                }
+                finally
+                {
+                    perRequestModule.DeactivateInstancesForCurrentHttpRequest();
+                }
+            });
+            kernel.Inject(perRequestModule); // wiill keep reference to perRequestModule in Kernel instance
+*/
+
+            app.UseAutofacMiddleware(container);
+            app.UseWebApi(config);
+
             var logger = ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<Startup>();
             logger.Info($@"Starting Headquarters {ServiceLocator.Current.GetInstance<IProductVersion>()}");
-            UpdateAppVersion();
+            
             ConfigureAuth(app);
             InitializeAppShutdown(app);
             InitializeMVC();
             ConfigureWebApi(app);
-            
+
+            UpdateAppVersion();
+
             Exceptional.Settings.ExceptionActions.AddHandler<TargetInvocationException>((error, exception) =>
             {
                 void AddAllSqlData(Exception e)
@@ -99,37 +156,12 @@ namespace WB.UI.Headquarters
 
             InitMetrics();
             
-            MetricsService.Start(kernel, logger);
+            MetricsService.Start(logger);
         }
 
         private static void InitMetrics()
         {
             CommonMetrics.StateFullInterviewsCount.Set(0);
-        }
-
-        private IKernel ConfigureNinject(IAppBuilder app)
-        {
-            var perRequestModule = new OnePerRequestHttpModule();
-
-            // onPerRequest scope implementation. Collecting all perRequest instances after all requests
-            app.Use(async (ctx, next) =>
-            {
-                try
-                {
-                    if (ctx.Request.CallCancelled.IsCancellationRequested) return;
-
-                    await next();
-                }
-                finally
-                {
-                    perRequestModule.DeactivateInstancesForCurrentHttpRequest();
-                }
-            });
-
-            var kernel = NinjectConfig.CreateKernel();
-            kernel.Inject(perRequestModule); // wiill keep reference to perRequestModule in Kernel instance
-            app.UseNinjectMiddleware(() => kernel);
-            return kernel;
         }
 
         private void ConfigureWebApi(IAppBuilder app)
@@ -145,7 +177,7 @@ namespace WB.UI.Headquarters
             WebInterviewModule.Configure(app, HqWebInterviewModule.HubPipelineModules);
             app.Use(SetSessionStateBehavior).UseStageMarker(PipelineStage.MapHandler);
 
-            app.UseNinjectWebApi(config);
+            app.UseAutofacWebApi(config);
         }
 
         private void ConfigureAuth(IAppBuilder app)

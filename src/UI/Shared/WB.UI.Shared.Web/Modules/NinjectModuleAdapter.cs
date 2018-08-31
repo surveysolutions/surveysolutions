@@ -5,8 +5,6 @@ using System.Web;
 using System.Web.Http.Filters;
 using Ninject;
 using Ninject.Activation;
-using Ninject.Extensions.NamedScope;
-using Ninject.Infrastructure;
 using Ninject.Modules;
 using Ninject.Syntax;
 using Ninject.Web.Common;
@@ -66,7 +64,7 @@ namespace WB.UI.Shared.Web.Modules
         {
             this.Kernel.Bind(@interface).To(implementation);
         }
-
+       
         void IIocRegistry.Bind<TInterface1, TInterface2, TImplementation>() 
         {
             this.Kernel.Bind<TInterface1, TInterface2>().To<TImplementation>();
@@ -155,12 +153,12 @@ namespace WB.UI.Shared.Web.Modules
             this.Kernel.Bind<T>().ToMethod(ctx => func(new NinjectModuleContext(ctx))).InSingletonScope();
         }
 
-        public void BindToConstructorInSingletonScope<T>(Func<IConstructorContext, T> func)
+        /*public void BindToConstructorInSingletonScope<T>(Func<IConstructorContext, T> func)
         //public void BindToConstructorInSingletonScope<T>(Func<IConstructorContext, T> func)
         {
             //this.Kernel.Bind<T>().ToConstructor(ctx => func(new NinjectConstructorContext(ctx))).InSingletonScope();
             this.Kernel.Bind<T>().ToMethod(ctx => func(new NinjectConstructorContext(ctx))).InSingletonScope();
-        }
+        }*/
 
         void IIocRegistry.BindAsSingleton(Type @interface, Type implementation)
         {
@@ -220,16 +218,14 @@ namespace WB.UI.Shared.Web.Modules
             return this.Kernel.GetBindings(typeof(T)).Any();
         }
 
-        public void BindInIsolatedThreadScopeOrRequestScopeOrThreadScope<T>()
+        public void BindInPerLifetimeScope<T1, T2>() where T2 : T1
         {
-            InIsolatedThreadScopeOrRequestScopeOrThreadScope(this.Kernel.Bind<T>().ToSelf());
-        }
-       
-        public void BindInIsolatedThreadScopeOrRequestScopeOrThreadScope<T1, T2>() where T2 : T1
-        {
-            this.Kernel.Bind<T1>().To<T2>().When(x => HttpContext.Current != null).InRequestScope();
-            this.Kernel.Bind<T1>().To<T2>().When(x => HttpContext.Current == null).InAmbientScope();
-            
+            this.Kernel.Bind<T1>().To<T2>().When(x => HttpContext.Current != null).InRequestScope(); //scope: web & webAPI
+
+            this.Kernel.Bind<T1>().To<T2>().When(x => HttpContext.Current == null).InAmbientScope(); //scope: jobs 
+
+            this.Kernel.Bind<T1>().To<T2>().When(x => HttpContext.Current == null).InThreadScope(); // hub
+
             /*
             this.Kernel.Bind<T1>().To<T2>()
                 .When(x => x.Parameters.OfType<NonRequestScopedParameter>().Any())

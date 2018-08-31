@@ -32,7 +32,12 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<HQPlainStorageDbContext>();
 
             registry.Bind<IUserStore<HqUser, Guid>, HqUserStore>();
+
+            
             registry.Bind<HqUserManager>();
+
+            registry.Bind<UserManager<HqUser, Guid>, HqUserManager>();
+
             registry.Bind<HqSignInManager>();
 
             registry.Bind<IApiTokenProvider<Guid>, ApiAuthTokenProvider<HqUser, Guid>>();
