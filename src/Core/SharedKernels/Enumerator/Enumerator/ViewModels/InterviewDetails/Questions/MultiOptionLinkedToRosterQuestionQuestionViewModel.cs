@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MvvmCross.Base;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -28,7 +29,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IStatefulInterviewRepository interviewRepository,
             IQuestionnaireStorage questionnaireStorage,
             IPrincipal userIdentity, ILiteEventRegistry eventRegistry,
-            IMvxMainThreadDispatcher mainThreadDispatcher)
+            IMvxMainThreadAsyncDispatcher mainThreadDispatcher)
             : base(questionState, answering, instructionViewModel, interviewRepository, questionnaireStorage, userIdentity, eventRegistry,
                 mainThreadDispatcher)
         {
@@ -59,11 +60,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             var newOptions = this.CreateOptions();
 
-            this.mainThreadDispatcher.RequestMainThreadAction(() =>
+            this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
             {
                 this.Options.SynchronizeWith(newOptions.ToList(), (s, t) => s.Value.Identical(t.Value));
                 this.RaisePropertyChanged(() => HasOptions);
-            });
+            }).WaitAndUnwrapException();
         }
 
         public void Handle(RosterInstancesTitleChanged @event)
@@ -72,11 +73,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (optionListShouldBeUpdated)
             {
                 var newOptions = this.CreateOptions();
-                this.mainThreadDispatcher.RequestMainThreadAction(() =>
+                this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
                 {
                     this.Options.SynchronizeWith(newOptions.ToList(), (s, t) => s.Value.Identical(t.Value) && s.Title == t.Title);
                     this.RaisePropertyChanged(() => HasOptions);
-                });
+                }).WaitAndUnwrapException();
             }
         }
 

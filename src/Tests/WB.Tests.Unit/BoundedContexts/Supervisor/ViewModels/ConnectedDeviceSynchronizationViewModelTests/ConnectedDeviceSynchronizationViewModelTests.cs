@@ -18,7 +18,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels.ConnectedDeviceSyn
             base.Setup();
             var dispatcher = Create.Fake.MvxMainThreadDispatcher1();
             Ioc.RegisterSingleton<IMvxViewDispatcher>(dispatcher);
-            Ioc.RegisterSingleton<IMvxMainThreadDispatcher>(dispatcher);
+            Ioc.RegisterSingleton<IMvxMainThreadAsyncDispatcher>(dispatcher);
 
             var viewModel = Create.ViewModel.ConnectedDeviceSynchronizationViewModel();
             var progress = new SyncProgressInfo()
@@ -47,7 +47,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels.ConnectedDeviceSyn
             base.Setup();
             var dispatcher = Create.Fake.MvxMainThreadDispatcher1();
             Ioc.RegisterSingleton<IMvxViewDispatcher>(dispatcher);
-            Ioc.RegisterSingleton<IMvxMainThreadDispatcher>(dispatcher);
+            Ioc.RegisterSingleton<IMvxMainThreadAsyncDispatcher>(dispatcher);
 
             var viewModel = Create.ViewModel.ConnectedDeviceSynchronizationViewModel();
             var progress = new SyncProgressInfo()
@@ -76,7 +76,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels.ConnectedDeviceSyn
             base.Setup();
             var dispatcher = Create.Fake.MvxMainThreadDispatcher1();
             Ioc.RegisterSingleton<IMvxViewDispatcher>(dispatcher);
-            Ioc.RegisterSingleton<IMvxMainThreadDispatcher>(dispatcher);
+            Ioc.RegisterSingleton<IMvxMainThreadAsyncDispatcher>(dispatcher);
 
 
             var viewModel = Create.ViewModel.ConnectedDeviceSynchronizationViewModel();

@@ -1,4 +1,4 @@
-@inherits System.Web.Mvc.WebViewPage
+﻿@inherits System.Web.Mvc.WebViewPage
 <!doctype html>
 <!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
@@ -17,13 +17,19 @@
     <!-- build:css(.) styles/vendor.css -->
     <!-- bower:css -->
     <!-- libs:css -->
-    <link rel="stylesheet" href="../build/libs-2c3a995065.css">
+    <link href="~/questionnaire/node_modules/angular-ui-tree/dist/angular-ui-tree.min.css" rel="stylesheet" />
+    <link href="~/questionnaire/node_modules/angular-loading-bar/build/loading-bar.css" rel="stylesheet" />
+    <link href="~/questionnaire/node_modules/angular-hotkeys/build/hotkeys.css" rel="stylesheet" />
+    <link href="~/questionnaire/node_modules/pnotify/dist/pnotify.css" rel="stylesheet" />
+    <link href="~/questionnaire/node_modules/pnotify/dist/pnotify.buttons.css" rel="stylesheet" />
+    <link href="~/questionnaire/node_modules/angular-block-ui/dist/angular-block-ui.css" rel="stylesheet" />
+    <link href="~/questionnaire/node_modules/perfect-scrollbar/dist/css/perfect-scrollbar.css" rel="stylesheet" />
     <!-- endinject -->
     <!-- endbower -->
     <!-- endbuild -->
     <!-- build:css(.tmp) styles/main.css -->
     <!-- inject:css -->
-    <link rel="stylesheet" href="../build/markup-e80ffb60f9.css.css">
+    <link rel="stylesheet" href="../content/markup.css.css">
     <!-- endinject -->
     <!-- endbuild -->
     <link rel="icon" sizes="192x192" href="~/Content/identity/favicon-designer-192x192.png">
@@ -55,9 +61,109 @@
     <!-- build:js(.) scripts/oldieshim.js -->
     <!-- endbuild -->
     <!-- inject:js -->
-    <script src="../build/libs-e5bfc53374.js"></script>
-    <script src="../build/app-8dd3aca84b.js"></script>
-    <script src="../build/templates-6ea2af03af.js"></script>
+    <!-- build:js(.) scripts/vendor.js -->
+    <!-- bower:js -->
+    <script src="~/questionnaire/node_modules/jquery/dist/jquery.js"></script>
+    <script src="~/questionnaire/node_modules/js-cookie/src/js.cookie.js"></script>
+    <script src="~/questionnaire/node_modules/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="~/questionnaire/node_modules/underscore/underscore.js"></script>
+    <script src="~/questionnaire/node_modules/ace-builds/src-noconflict/ace.js"></script>
+    <script src="~/questionnaire/node_modules/angular/angular.js"></script>
+    <script src="~/questionnaire/node_modules/angular-cookies/angular-cookies.js"></script>
+    <script src="~/questionnaire/node_modules/angular-animate/angular-animate.js"></script>
+    <script src="~/questionnaire/node_modules/angular-sanitize/angular-sanitize.js"></script>
+    <script src="~/questionnaire/node_modules/angular-ui-bootstrap/dist/ui-bootstrap.js"></script>
+    <script src="~/questionnaire/node_modules/angular-ui-bootstrap/dist/ui-bootstrap-tpls.js"></script>
+    <script src="~/questionnaire/node_modules/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="~/questionnaire/node_modules/angular-ui-utils/modules/utils.js"></script>
+    <script src="~/questionnaire/details/scripts/modules/ng-context-menu.js"></script>
+    <script src="~/questionnaire/node_modules/ng-file-upload/dist/ng-file-upload.js"></script>
+    <script src="~/questionnaire/details/scripts/modules/perfect_scrollbar.js"></script>
+    <script src="~/questionnaire/details/scripts/modules/ui-ace.js"></script>
+    <script src="~/questionnaire/node_modules/angular-ui-utils/modules/highlight/highlight.js"></script>
+    <script src="~/questionnaire/details/scripts/modules/positionCalculator.js"></script>
+    <script src="~/questionnaire/node_modules/angular-ui-tree/dist/angular-ui-tree.js"></script>
+    <script src="~/questionnaire/node_modules/angular-hotkeys/build/hotkeys.js"></script>
+    <script src="~/questionnaire/node_modules/angular-resource/angular-resource.js"></script>
+    <script src="~/questionnaire/node_modules/angular-loading-bar/build/loading-bar.js"></script>
+    <script src="~/questionnaire/node_modules/angular-block-ui/dist/angular-block-ui.js"></script>
+    <script src="~/questionnaire/node_modules/jquery-mousewheel/jquery.mousewheel.js"></script>
+    <script src="~/questionnaire/details/scripts/modules/unsavedChanges.js"></script>
+
+    <script src="~/questionnaire/node_modules/pnotify/dist/pnotify.js"></script>
+    <script src="~/questionnaire/node_modules/pnotify/dist/pnotify.confirm.js"></script>
+    <script src="~/questionnaire/node_modules/pnotify/dist/pnotify.buttons.js"></script>
+    <script src="~/questionnaire/node_modules/angular-pnotify/src/angular-pnotify.js"></script>
+    <script src="~/questionnaire/node_modules/perfect-scrollbar/dist/js/perfect-scrollbar.jquery.js"></script>
+    <script src="~/questionnaire/node_modules/jquery.scrollTo/jquery.scrollTo.js"></script>
+    <script src="~/questionnaire/node_modules/jquery-mousewheel/jquery.mousewheel.js"></script>
+
+
+
+    <script src="~/questionnaire/node_modules/ace-builds/src-noconflict/ext-language_tools.js"></script>
+    <script src="~/questionnaire/node_modules/ng-file-upload/dist/ng-file-upload-shim.js"></script><!-- for no html5 browsers support -->
+    <script src="~/questionnaire/node_modules/moment/moment.js"></script>
+    <script src="~/questionnaire/node_modules/moment/locale/ru.js"></script>
+    <script src="~/questionnaire/node_modules/angular-moment/angular-moment.js"></script>
+
+    <script src="~/questionnaire/node_modules/xss/dist/xss.js"></script>
+    <script src="~/questionnaire/node_modules/i18next/i18next.js"></script>
+    <script src="~/questionnaire/node_modules/i18next-browser-languagedetector/i18nextBrowserLanguageDetector.js"></script>
+    <script src="~/questionnaire/node_modules/i18next-xhr-backend/i18nextXHRBackend.js"></script>
+    <script src="~/questionnaire/node_modules/ng-i18next/dist/ng-i18next.js"></script>
+    <script src="~/questionnaire/node_modules/angular-elastic/elastic.js"></script>
+
+    <!-- endbower -->
+    <!-- endbuild -->
+    <!-- build:js({.tmp,app}) scripts/scripts.js -->
+    <script src="scripts/app.js"></script>
+    <script src="scripts/controllers/main.js"></script>
+    <script src="scripts/controllers/leftMenu.js"></script>
+    <script src="scripts/controllers/lookupTables.js"></script>
+    <script src="scripts/controllers/attachments.js"></script>
+    <script src="scripts/controllers/comments.js"></script>
+    <script src="scripts/controllers/translations.js"></script>
+    <script src="scripts/controllers/macros.js"></script>
+    <script src="scripts/controllers/findReplace.js"></script>
+    <script src="scripts/controllers/chapters.js"></script>
+    <script src="scripts/controllers/group.js"></script>
+    <script src="scripts/controllers/variable.js"></script>
+    <script src="scripts/controllers/question.js"></script>
+    <script src="scripts/controllers/roster.js"></script>
+    <script src="scripts/controllers/commentsEditor.js"></script>
+    <script src="scripts/controllers/share.js"></script>
+    <script src="scripts/controllers/tree.js"></script>
+    <script src="scripts/controllers/alert.js"></script>
+    <script src="scripts/controllers/confirm.js"></script>
+    <script src="scripts/controllers/staticText.js"></script>
+    <script src="scripts/controllers/metadata.js"></script>
+    <script src="scripts/services/commandService.js"></script>
+    <script src="scripts/services/questionnaireService.js"></script>
+    <script src="scripts/services/commentsService.js"></script>
+    <script src="scripts/services/verificationService.js"></script>
+    <script src="scripts/services/webTesterService.js"></script>
+    <script src="scripts/services/optionsService.js"></script>
+    <script src="scripts/services/utilityService.js"></script>
+    <script src="scripts/services/shareService.js"></script>
+    <script src="scripts/services/alertService.js"></script>
+    <script src="scripts/services/confirmService.js"></script>
+    <script src="scripts/services/errorReportingService.js"></script>
+    <script src="scripts/services/helpMessages.js"></script>
+    <script src="scripts/directives/directives.js"></script>
+    <script src="scripts/directives/animations.js"></script>
+    <script src="scripts/directives/itemBreadcrumbs.js"></script>
+    <script src="scripts/directives/help.js"></script>
+    <script src="scripts/services/authorizationinterceptor.js"></script>
+    <script src="scripts/decorators/exceptionhandlerdecorator.js"></script>
+    <script src="scripts/filters/escapeFilter.js"></script>
+    <script src="scripts/directives/matchOptionsPattern.js"></script>
+    <script src="scripts/extensions/ace/mode-text-extended.js"></script>
+    <script src="scripts/extensions/ace/mode-csharp-extended.js"></script>
+    <script src="scripts/extensions/ace/theme-github-extended.js"></script>
+    <script src="scripts/services/userService.js"></script>
+    <script src="scripts/ui-js.js"></script>
+    <script src="~/questionnaire/details/scripts/services/translate.js"></script>
+    <!-- endbuild -->
     <!-- endinject -->
 </body>
 </html>

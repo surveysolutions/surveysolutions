@@ -131,12 +131,14 @@ namespace WB.UI.Supervisor
             var serviceLocator = ServiceLocator.Current;
 
             var status = new UnderConstructionInfo();
-            status.Status = UnderConstructionStatus.Running;
+            status.Run();
+
             foreach (var module in modules)
             {
                 module.Init(serviceLocator, status).Wait();
             }
-            status.Status = UnderConstructionStatus.Finished;
+
+            status.Finish();
 
             return container;
         }

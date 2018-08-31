@@ -62,7 +62,9 @@ namespace WB.UI.Supervisor.Services.Implementation
         public void SetGpsResponseTimeout(int timeout) => throw new NotImplementedException();
         public void SetGpsDesiredAccuracy(double value) => throw new NotImplementedException();
         public void SetShowLocationOnMap(bool showLocationOnMap) => this.SaveCurrentSettings(settings => settings.ShowLocationOnMap = showLocationOnMap);
-        public int? LatestInterviewerAppVersion => this.currentSettings.LatestInterviewerAppVersion;
+
+        public string InterviewerAppPatchesDirectory =>
+            this.fileSystemAccessor.CombinePath(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "patches");
 
         private void SaveCurrentSettings(Action<ApplicationSettingsView> onChanging)
         {
@@ -73,8 +75,5 @@ namespace WB.UI.Supervisor.Services.Implementation
 
         protected override void SaveSettings(EnumeratorSettingsView settings)
             => this.settingsStorage.Store((ApplicationSettingsView)settings);
-
-        public void SetLatestInterviewerAppVersion(int? version) =>
-            this.SaveCurrentSettings(settings => settings.LatestInterviewerAppVersion = version);
     }
 }

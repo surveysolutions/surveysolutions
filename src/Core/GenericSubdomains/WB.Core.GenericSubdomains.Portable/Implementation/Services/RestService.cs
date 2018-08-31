@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -21,6 +22,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
         private readonly IJsonAllTypesSerializer synchronizationSerializer;
         private readonly IStringCompressor stringCompressor;
         private readonly IHttpStatistician httpStatistician;
+        private readonly ILogger logger;
 
         public RestService(
             IRestServiceSettings restServiceSettings,
@@ -28,13 +30,15 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             IJsonAllTypesSerializer synchronizationSerializer,
             IStringCompressor stringCompressor,
             IRestServicePointManager restServicePointManager,
-            IHttpStatistician httpStatistician)
+            IHttpStatistician httpStatistician,
+            ILogger logger)
         {
             this.restServiceSettings = restServiceSettings;
             this.networkService = networkService;
             this.synchronizationSerializer = synchronizationSerializer;
             this.stringCompressor = stringCompressor;
             this.httpStatistician = httpStatistician;
+            this.logger = logger;
 
             if (this.restServiceSettings.AcceptUnsignedSslCertificate)
                 restServicePointManager?.AcceptUnsignedSslCertificate();
@@ -98,7 +102,9 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
 
             request.Headers.UserAgent.ParseAdd(this.restServiceSettings.UserAgent);
             
-            request.Headers.Add("Accept-Encoding", "gzip,deflate");
+            request.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
+            request.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("deflate"));
+            request.Headers.Add("Accept-Language", "en-GB,en;q=0.9,en-US;q=0.8");
 
             if (forceNoCache)
             {
@@ -124,8 +130,11 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                 }
             }
 
+            Stopwatch stopwatch = new Stopwatch();
+
             try
             {
+                stopwatch.Start();
 
                 var httpResponseMessage = await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, linkedCancellationTokenSource.Token);
 
@@ -145,6 +154,10 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             }
             catch (ExtendedMessageHandlerException ex)
             {
+                stopwatch.Stop();
+                logger.Error($"ERROR!!! Request to {url} failed. Time: {stopwatch.Elapsed}.", ex);
+                logger.Error($"ERROR!!! Request headers {ex?.Call?.Request?.Headers}. Response headers {ex?.Call?.Response?.Headers}.");
+
                 if (ex.GetSelfOrInnerAs<TaskCanceledException>() != null || ex.GetSelfOrInnerAs<OperationCanceledException>() != null)
                 {
                     if (requestTimeoutToken.IsCancellationRequested)

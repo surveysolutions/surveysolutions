@@ -19,7 +19,7 @@ namespace WB.UI.Shared.Enumerator.Services
     {
         private readonly ISyncProtocolVersionProvider syncProtocolVersionProvider;
         private readonly IQuestionnaireContentVersionProvider questionnaireContentVersionProvider;
-        private readonly IFileSystemAccessor fileSystemAccessor;
+        protected readonly IFileSystemAccessor fileSystemAccessor;
 
         private PackageInfo appPackageInfo =>
             Application.Context.PackageManager.GetPackageInfo(Application.Context.PackageName, PackageInfoFlags.MetaData);
