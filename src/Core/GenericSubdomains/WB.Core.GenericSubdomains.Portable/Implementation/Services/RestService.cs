@@ -383,8 +383,6 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                     }
                     responseContent = ms.ToArray();
                 }
-
-                await responseStream.FlushAsync(token).ConfigureAwait(false);
             }
 
             return new RestResponse
