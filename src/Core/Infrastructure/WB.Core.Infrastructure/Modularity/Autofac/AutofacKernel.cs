@@ -49,14 +49,20 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
 
         private async Task InitModules(UnderConstructionInfo status)
         {
-            status.Status = UnderConstructionStatus.Running;
-            foreach (var module in initModules)
-            {
-                status.ClearMessage();
-                await module.Init(ServiceLocator.Current, status);
-            }
+            status.Run();
 
-            status.Status = UnderConstructionStatus.Finished;
+            try
+            {
+                foreach (var module in initModules)
+                {
+                    status.ClearMessage();
+                    await module.Init(ServiceLocator.Current, status);
+                }
+            }
+            finally
+            {
+                status.Finish();
+            }
         }
     }
 }

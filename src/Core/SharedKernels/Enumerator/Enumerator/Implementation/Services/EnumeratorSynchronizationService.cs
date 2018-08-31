@@ -15,6 +15,7 @@ using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
+using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Questionnaire.Api;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 
@@ -93,7 +94,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             }
             catch (RestException ex)
             {
-                throw this.CreateSynchronizationExceptionByRestException(ex);
+                throw ex.ToSynchronizationException();
             }
         }
 
@@ -476,27 +477,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             });
         }
 
-        public Task SendBackupAsync(string filePath, CancellationToken token)
-        {
-            var backupHeaders = new Dictionary<string, string>()
-            {
-                { "DeviceId", this.deviceSettings.GetDeviceId() },
-            };
-
-            return this.TryGetRestResponseOrThrowAsync(async () =>
-            {
-                using (var fileStream = this.fileSystemAccessor.ReadFile(filePath))
-                {
-                    await this.restService.SendStreamAsync(
-                        stream: fileStream,
-                        customHeaders: backupHeaders,
-                        url: string.Concat(ApplicationUrl, "/tabletInfo"),
-                        credentials: this.restCredentials,
-                        token: token).ConfigureAwait(false);
-                }
-            });
-        }
-
         #endregion
 
         public Task<byte[]> GetFileAsync(string url, IProgress<TransferProgress> transferProgress, CancellationToken token)
@@ -520,7 +500,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             }
             catch (RestException ex)
             {
-                throw this.CreateSynchronizationExceptionByRestException(ex);
+                throw ex.ToSynchronizationException();
             }
         }
 
@@ -534,113 +514,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             }
             catch (RestException ex)
             {
-                throw this.CreateSynchronizationExceptionByRestException(ex);
+                throw ex.ToSynchronizationException();
             }
-        }
-
-        private SynchronizationException CreateSynchronizationExceptionByRestException(RestException ex)
-        {
-            string exceptionMessage = InterviewerUIResources.UnexpectedException;
-            SynchronizationExceptionType exceptionType = SynchronizationExceptionType.Unexpected;
-            switch (ex.Type)
-            {
-                case RestExceptionType.RequestByTimeout:
-                    exceptionMessage = InterviewerUIResources.RequestTimeout;
-                    exceptionType = SynchronizationExceptionType.RequestByTimeout;
-                    break;
-                case RestExceptionType.RequestCanceledByUser:
-                    exceptionMessage = InterviewerUIResources.RequestCanceledByUser;
-                    exceptionType = SynchronizationExceptionType.RequestCanceledByUser;
-                    break;
-                case RestExceptionType.HostUnreachable:
-                    exceptionMessage = InterviewerUIResources.HostUnreachable;
-                    exceptionType = SynchronizationExceptionType.HostUnreachable;
-                    break;
-                case RestExceptionType.InvalidUrl:
-                    exceptionMessage = InterviewerUIResources.InvalidEndpoint;
-                    exceptionType = SynchronizationExceptionType.InvalidUrl;
-                    break;
-                case RestExceptionType.NoNetwork:
-                    exceptionMessage = InterviewerUIResources.NoNetwork;
-                    exceptionType = SynchronizationExceptionType.NoNetwork;
-                    break;
-                case RestExceptionType.UnacceptableCertificate:
-                    exceptionMessage = InterviewerUIResources.UnacceptableSSLCertificate;
-                    exceptionType = SynchronizationExceptionType.UnacceptableSSLCertificate;
-                    break;
-                case RestExceptionType.Unexpected:
-                    switch (ex.StatusCode)
-                    {
-                        case HttpStatusCode.Unauthorized:
-                            if (ex.Message.Contains("lock"))
-                            {
-                                exceptionMessage = InterviewerUIResources.AccountIsLockedOnServer;
-                                exceptionType = SynchronizationExceptionType.UserLocked;
-                            }
-                            else if (ex.Message.Contains("not approved"))
-                            {
-                                exceptionMessage = InterviewerUIResources.AccountIsNotApprovedOnServer;
-                                exceptionType = SynchronizationExceptionType.UserNotApproved;
-                            }
-                            else if (ex.Message.Contains("not have an interviewer role"))
-                            {
-                                exceptionMessage = InterviewerUIResources.AccountIsNotAnInterviewer;
-                                exceptionType = SynchronizationExceptionType.UserIsNotInterviewer;
-                            }
-                            else
-                            {
-                                exceptionMessage = InterviewerUIResources.Unauthorized;
-                                exceptionType = SynchronizationExceptionType.Unauthorized;
-                            }
-                            break;
-                        case HttpStatusCode.ServiceUnavailable:
-                            var isMaintenance = ex.Message.Contains("maintenance");
-
-                            if (isMaintenance)
-                            {
-                                exceptionMessage = InterviewerUIResources.Maintenance;
-                                exceptionType = SynchronizationExceptionType.Maintenance;
-                            }
-                            else
-                            {
-                                this.logger.Warn("Server error", ex);
-
-                                exceptionMessage = InterviewerUIResources.ServiceUnavailable;
-                                exceptionType = SynchronizationExceptionType.ServiceUnavailable;
-                            }
-                            break;
-                        case HttpStatusCode.NotAcceptable:
-                            exceptionMessage = InterviewerUIResources.NotSupportedServerSyncProtocolVersion;
-                            exceptionType = SynchronizationExceptionType.NotSupportedServerSyncProtocolVersion;
-                            break;
-                        case HttpStatusCode.UpgradeRequired:
-                            exceptionMessage = InterviewerUIResources.UpgradeRequired;
-                            exceptionType = SynchronizationExceptionType.UpgradeRequired;
-                            break;
-                        case HttpStatusCode.BadRequest:
-                        case HttpStatusCode.Redirect:
-                            exceptionMessage = InterviewerUIResources.InvalidEndpoint;
-                            exceptionType = SynchronizationExceptionType.InvalidUrl;
-                            break;
-                        case HttpStatusCode.NotFound:
-                            this.logger.Warn("Server error", ex);
-                            exceptionMessage = InterviewerUIResources.InvalidEndpoint;
-                            exceptionType = SynchronizationExceptionType.InvalidUrl;
-                            break;
-                        case HttpStatusCode.InternalServerError:
-                            this.logger.Warn("Server error", ex);
-
-                            exceptionMessage = InterviewerUIResources.InternalServerError;
-                            exceptionType = SynchronizationExceptionType.InternalServerError;
-                            break;
-                        case HttpStatusCode.Forbidden:
-                            exceptionType = SynchronizationExceptionType.UserLinkedToAnotherDevice;
-                            break;
-                    }
-                    break;
-            }
-
-            return new SynchronizationException(exceptionType, exceptionMessage, ex);
         }
 
         public async Task<CompanyLogoInfo> GetCompanyLogo(string storedClientEtag, CancellationToken cancellationToken)

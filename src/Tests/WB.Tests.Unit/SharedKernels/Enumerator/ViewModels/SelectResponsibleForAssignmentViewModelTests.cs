@@ -9,6 +9,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -152,8 +153,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
                 Create.Entity.AssignmentDocument(1, responsibleId: assignmentResponsibleId, quantity: 1).Build());
 
             var interviewsRepository = Create.Storage.SqliteInmemoryStorage(
-                Create.Entity.InterviewView(responsibleId: responsibleInListId),
-                Create.Entity.InterviewView(responsibleId: responsibleInListId));
+                Create.Entity.InterviewView(responsibleId: responsibleInListId, status: InterviewStatus.RejectedByHeadquarters),
+                Create.Entity.InterviewView(responsibleId: responsibleInListId, status: InterviewStatus.RejectedBySupervisor));
 
             var viewModel = CreateSelectResponsibleForAssignmentViewModel(
                 usersRepository: usersRepository,
@@ -182,8 +183,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
                 Create.Entity.AssignmentDocument(2, responsibleId: responsibleInListId, quantity: 2).Build());
 
             var interviewsRepository = Create.Storage.SqliteInmemoryStorage(
-                Create.Entity.InterviewView(responsibleId: responsibleInListId),
-                Create.Entity.InterviewView(responsibleId: responsibleInListId));
+                Create.Entity.InterviewView(responsibleId: responsibleInListId, status: InterviewStatus.RejectedByHeadquarters),
+                Create.Entity.InterviewView(responsibleId: responsibleInListId, status: InterviewStatus.RejectedBySupervisor));
 
             var viewModel = CreateSelectResponsibleForAssignmentViewModel(
                 usersRepository: usersRepository,
@@ -294,6 +295,34 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             // assert
             Assert.That(viewModel.UiItems[0].IsSelected, Is.False);
             Assert.That(viewModel.CanReassign, Is.True);
+        }
+
+        [Test]
+        public void when_prepare_and_interviewer_in_list_has_1_completed_interview_then_InterviewsCount_should_be_0()
+        {
+            // arrange
+            var assignmentResponsibleId = Guid.Parse("11111111111111111111111111111111");
+            var responsibleInListId = Guid.Parse("22222222222222222222222222222222");
+
+            var usersRepository = Create.Storage.SqliteInmemoryStorage(
+                Create.Entity.InterviewerDocument(assignmentResponsibleId),
+                Create.Entity.InterviewerDocument(responsibleInListId));
+
+            var assignmentsRepository = Create.Storage.SqliteInmemoryStorage<AssignmentDocument, int>(
+                Create.Entity.AssignmentDocument(1, responsibleId: assignmentResponsibleId, quantity: 1).Build());
+
+            var interviewsRepository = Create.Storage.SqliteInmemoryStorage(
+                Create.Entity.InterviewView(responsibleId: responsibleInListId, status: InterviewStatus.Completed));
+
+            var viewModel = CreateSelectResponsibleForAssignmentViewModel(
+                usersRepository: usersRepository, 
+                interviewStorage: interviewsRepository,
+                assignmentsStorage: assignmentsRepository);
+
+            // act
+            viewModel.Prepare(new SelectResponsibleForAssignmentArgs(1));
+            // assert
+            Assert.That(viewModel.UiItems[0].InterviewsCount, Is.EqualTo(0));
         }
 
         private static SelectResponsibleForAssignmentViewModel CreateSelectResponsibleForAssignmentViewModel(

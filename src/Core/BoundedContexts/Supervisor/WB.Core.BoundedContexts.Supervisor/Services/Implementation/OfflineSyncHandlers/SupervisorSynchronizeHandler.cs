@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -12,13 +13,16 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
     {
         private readonly IPlainStorage<InterviewerDocument> interviewerViewRepository;
         private readonly ISupervisorSettings settings;
+        private readonly IFileSystemAccessor fileSystemAccessor;
 
         public SupervisorSynchronizeHandler(
             IPlainStorage<InterviewerDocument> interviewerViewRepository,
-            ISupervisorSettings settings)
+            ISupervisorSettings settings,
+            IFileSystemAccessor fileSystemAccessor)
         {
             this.interviewerViewRepository = interviewerViewRepository;
             this.settings = settings;
+            this.fileSystemAccessor = fileSystemAccessor;
         }
 
         public void Register(IRequestHandler requestHandler)
@@ -27,13 +31,15 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             requestHandler.RegisterHandler<GetLatestApplicationVersionRequest, GetLatestApplicationVersionResponse>(GetLatestApplicationVersion);
         }
 
-        private Task<GetLatestApplicationVersionResponse> GetLatestApplicationVersion(GetLatestApplicationVersionRequest request)
+        private Task<GetLatestApplicationVersionResponse> GetLatestApplicationVersion(
+            GetLatestApplicationVersionRequest request)
             => Task.FromResult(new GetLatestApplicationVersionResponse
             {
                 InterviewerApplicationVersion =
-                    this.settings.LatestInterviewerAppVersion <= this.settings.GetApplicationVersionCode()
-                        ? this.settings.LatestInterviewerAppVersion
-                        : null
+                    this.fileSystemAccessor.IsDirectoryExists(this.fileSystemAccessor.CombinePath(
+                        this.settings.InterviewerAppPatchesDirectory, this.settings.GetApplicationVersionCode().ToString()))
+                        ? this.settings.GetApplicationVersionCode()
+                        : (int?)null
             });
 
         public Task<CanSynchronizeResponse> CanSynchronize(CanSynchronizeRequest arg)

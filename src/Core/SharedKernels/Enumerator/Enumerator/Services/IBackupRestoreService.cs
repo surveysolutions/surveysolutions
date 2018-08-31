@@ -1,3 +1,4 @@
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace WB.Core.SharedKernels.Enumerator.Services
@@ -8,5 +9,6 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         Task<string> BackupAsync(string backupToFolderPath);
         Task RestoreAsync(string backupFilePath);
         Task<RestorePackageInfo> GetRestorePackageInfo(string restoreFolder);
+        Task SendBackupAsync(string filePath, CancellationToken token);
     }
 }
