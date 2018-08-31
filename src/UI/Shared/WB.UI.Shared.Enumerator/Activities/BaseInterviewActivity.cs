@@ -84,7 +84,7 @@ namespace WB.UI.Shared.Enumerator.Activities
                 {
                     //ignore System.ArgumentExceptionHandle must be valid. Parameter name: instance
                 }
-            }).WaitAndUnwrapException();
+            });
 
         protected override void OnPostCreate(Bundle savedInstanceState)
         {

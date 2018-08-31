@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using MvvmCross.Base;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
@@ -79,32 +80,33 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.navigationState = navigationState ?? throw new ArgumentNullException(nameof(navigationState));
             this.Items = new CompositeCollection<ICompositeEntity>();
 
-            this.InitRegularGroupScreen(groupId, anchoredElementIdentity);
             liteEventRegistry.Subscribe(this, interviewId);
+
+            this.InitRegularGroupScreen(groupId, anchoredElementIdentity);
         }
 
-        private void InitRegularGroupScreen(Identity groupIdentity, Identity anchoredElementIdentity)
+        private async Task InitRegularGroupScreen(Identity groupIdentity, Identity anchoredElementIdentity)
         {
             this.Name.Init(this.interviewId, groupIdentity);
 
             this.LoadFromModel(groupIdentity);
-            this.SetScrollTo(anchoredElementIdentity);
+            await this.SetScrollTo(anchoredElementIdentity);
         }
 
-        private void SetScrollTo(Identity scrollTo)
+        private async Task SetScrollTo(Identity scrollTo)
         {
             var anchorElementIndex = 0;
 
             if (scrollTo != null)
             {
-                this.mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
+                await this.mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
                 {
                     ICompositeEntity childItem = (this.Items.OfType<GroupViewModel>().FirstOrDefault(x => x.Identity.Equals(scrollTo)) ??
                                                   (ICompositeEntity) this.Items.OfType<QuestionHeaderViewModel>().FirstOrDefault(x => x.Identity.Equals(scrollTo))) ??
                                                  this.Items.OfType<StaticTextViewModel>().FirstOrDefault(x => x.Identity.Equals(scrollTo));
 
                     anchorElementIndex = childItem != null ? this.Items.ToList().IndexOf(childItem) : 0;
-                }).WaitAndUnwrapException();
+                });
             }
             this.ScrollToIndex = anchorElementIndex;
         }
@@ -154,15 +156,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.Name.Dispose();
         }
 
-        public void Handle(GroupsDisabled @event)
+        public async void Handle(GroupsDisabled @event)
         {
             if (@event.Groups.Any(id => id == groupId))
             {
                 var interview = this.interviewRepository.Get(this.interviewId);
                 var firstSection = interview.GetEnabledSections().First();
 
-                this.commandService.WaitPendingCommandsAsync().WaitAndUnwrapException();
-                this.navigationState.NavigateTo(NavigationIdentity.CreateForGroup(firstSection.Identity)).WaitAndUnwrapException();
+                await this.commandService.WaitPendingCommandsAsync();
+
+                await this.navigationState.NavigateTo(NavigationIdentity.CreateForGroup(firstSection.Identity));
             }
         }
     }
