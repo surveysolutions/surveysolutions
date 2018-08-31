@@ -91,7 +91,8 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
 
             var messageHandler = new ExtendedMessageHandler(new HttpClientHandler(), httpStatistician);
             var httpClient = new HttpClient(messageHandler);
-            httpClient.Timeout = this.restServiceSettings.Timeout;
+            httpClient.Timeout = Timeout.InfiniteTimeSpan;// becouse we set timeout in CancellationTokenSource;
+            //httpClient.Timeout =this.restServiceSettings.Timeout;
 
             var request = new HttpRequestMessage()
             {
