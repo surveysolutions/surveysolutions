@@ -62,13 +62,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public ErrorMessagesViewModel Warning { get; }
 
-        private void UpdateValidStateAsync()
+        private async Task UpdateValidStateAsync()
         {
             var interview = this.interviewRepository.Get(this.interviewId);
 
             bool isInvalidEntity = !interview.IsEntityPlausible(this.Identity);
 
-            this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
+            await this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
             {
                 if (isInvalidEntity)
                 {
@@ -79,54 +79,54 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 }
 
                 this.IsImplausible = isInvalidEntity;
-            }).WaitAndUnwrapException();
+            });
         }
 
-        public void Handle(AnswersDeclaredPlausible @event)
+        public async void Handle(AnswersDeclaredPlausible @event)
         {
             if (@event.Questions.Contains(this.Identity))
             {
-                this.UpdateValidStateAsync();
+                await this.UpdateValidStateAsync();
             }
         }
 
-        public void Handle(AnswersDeclaredImplausible @event)
+        public async void Handle(AnswersDeclaredImplausible @event)
         {
             if (@event.GetFailedValidationConditionsDictionary().Keys.Contains(this.Identity))
             {
-                this.UpdateValidStateAsync();
+                await this.UpdateValidStateAsync();
             }
         }
 
-        public void Handle(StaticTextsDeclaredPlausible @event)
+        public async void Handle(StaticTextsDeclaredPlausible @event)
         {
             if (@event.StaticTexts.Contains(this.Identity))
             {
-                this.UpdateValidStateAsync();
+                await this.UpdateValidStateAsync();
             }
         }
 
-        public void Handle(StaticTextsDeclaredImplausible @event)
+        public async void Handle(StaticTextsDeclaredImplausible @event)
         {
             if (@event.GetFailedValidationConditionsDictionary().Keys.Contains(this.Identity))
             {
-                this.UpdateValidStateAsync();
+                await this.UpdateValidStateAsync();
             }
         }
 
-        public void Handle(QuestionsEnabled @event)
+        public async void Handle(QuestionsEnabled @event)
         {
             if (@event.Questions.Contains(this.Identity))
             {
-                this.UpdateValidStateAsync();
+                await this.UpdateValidStateAsync();
             }
         }
 
-        public void Handle(SubstitutionTitlesChanged @event)
+        public async void Handle(SubstitutionTitlesChanged @event)
         {
             if (@event.Questions.Contains(this.Identity) || @event.StaticTexts.Contains(this.Identity))
             {
-                this.UpdateValidStateAsync();
+                await this.UpdateValidStateAsync();
             }
         }
 

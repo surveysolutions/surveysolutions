@@ -144,13 +144,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             UpateMaxAnswersCountMessage(checkedYesNoAnswerOptions.Count(x => x.Yes));
         }
 
-        private void FilteredOptionsViewModelOnOptionsChanged(object sender, EventArgs eventArgs)
+        private async void FilteredOptionsViewModelOnOptionsChanged(object sender, EventArgs eventArgs)
         {
-            this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
+            await this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
             {
                 this.UpdateQuestionOptions();
                 this.RaisePropertyChanged(() => Options);
-            }).WaitAndUnwrapException();
+            });
         }
 
         private YesNoQuestionOptionViewModel ToViewModel(CategoricalOption model,
