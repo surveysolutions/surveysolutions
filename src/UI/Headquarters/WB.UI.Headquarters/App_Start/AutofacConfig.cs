@@ -5,10 +5,10 @@ using System.Data.Entity;
 using System.Globalization;
 using System.Reflection;
 using System.Web.Hosting;
-using System.Web.Mvc;
-using Microsoft.AspNet.SignalR;
-using Microsoft.AspNet.SignalR.Ninject;
-using Ninject;
+using System.Web.Http;
+using Autofac;
+using Autofac.Integration.Mvc;
+using Autofac.Integration.WebApi;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
@@ -22,10 +22,10 @@ using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
-using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Binding;
 using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native;
 using WB.Infrastructure.Native.Files;
@@ -49,9 +49,9 @@ using WB.UI.Shared.Web.Versions;
 namespace WB.UI.Headquarters
 {
     [Localizable(false)]
-    public static class NinjectConfig
+    public static class AutofacConfig
     {
-        public static IKernel CreateKernel()
+        public static AutofacKernel CreateKernel()
         {
             var settingsProvider = new SettingsProvider();
             
@@ -98,23 +98,6 @@ namespace WB.UI.Headquarters
                 PlainStoreUpgradeSettings = new DbUpgradeSettings(typeof(M001_Init).Assembly, typeof(M001_Init).Namespace),
                 ReadSideUpgradeSettings = new DbUpgradeSettings(typeof(M001_Init).Assembly, typeof(M001_InitDb).Namespace)
             };
-
-
-            var kernel = new NinjectKernel();
-            kernel.Load(
-                new NLogLoggingModule(),
-                new EventSourcedInfrastructureModule(),
-                new InfrastructureModule(),
-                new NcqrsModule(),
-                new WebConfigurationModule(),
-                new CaptchaModule(settingsProvider.AppSettings.Get("CaptchaService")),
-                new QuestionnaireUpgraderModule(),
-                new FileInfrastructureModule(),
-                new ProductVersionModule(typeof(HeadquartersUIModule).Assembly),
-                new OrmModule(connectionSettings)
-            );
-
-            kernel.Load(new HeadquartersUIModule());
             
             var eventStoreSettings = new PostgreConnectionSettings
             {
@@ -124,6 +107,32 @@ namespace WB.UI.Headquarters
 
             var eventStoreModule = new PostgresWriteSideModule(eventStoreSettings,
                 new DbUpgradeSettings(typeof(M001_AddEventSequenceIndex).Assembly, typeof(M001_AddEventSequenceIndex).Namespace));
+
+            AutofacKernel autofacKernel = new AutofacKernel();
+
+            //ContainerBuilder builder = new ContainerBuilder();
+
+
+
+            /*
+
+                        builder.RegisterModule(new NLogLoggingModule().AsAutofac());
+                        builder.RegisterModule(new EventSourcedInfrastructureModule().AsAutofac());
+                        builder.RegisterModule(new InfrastructureModule().AsAutofac());
+                        builder.RegisterModule(new NcqrsModule().AsAutofac());
+                        builder.RegisterModule(new WebConfigurationModule().AsAutofac());
+                        builder.RegisterModule(new CaptchaModule(settingsProvider.AppSettings.Get("CaptchaService")).AsAutofac());
+                        builder.RegisterModule(new QuestionnaireUpgraderModule().AsAutofac());
+                        builder.RegisterModule(new FileInfrastructureModule().AsAutofac());
+                        builder.RegisterModule(new ProductVersionModule(typeof(HeadquartersUIModule).Assembly).AsAutofac());
+                        builder.RegisterModule(new OrmModule(connectionSettings).AsAutofac());
+            */
+
+
+            autofacKernel.ContainerBuilder.RegisterFilterProvider();
+            var config = GlobalConfiguration.Configuration;
+            autofacKernel.ContainerBuilder.RegisterWebApiFilterProvider(config);
+            autofacKernel.ContainerBuilder.RegisterWebApiModelBinderProvider();
 
             var interviewCountLimitString = settingsProvider.AppSettings["Limits.MaxNumberOfInterviews"];
             int? interviewCountLimit = string.IsNullOrEmpty(interviewCountLimitString)
@@ -202,12 +211,26 @@ namespace WB.UI.Headquarters
             var trackingSettings = GetTrackingSettings(settingsProvider);
 
             var owinSecurityModule = new OwinSecurityModule();
-            var mainModule = new MainModule(settingsProvider, applicationSecuritySection, legacyAssemblySettings);
 
-            kernel.Load(
-                //new PostgresPlainStorageModule(postgresPlainStorageSettings),
+            autofacKernel.Load(new NLogLoggingModule(),
+                new EventSourcedInfrastructureModule(),
+                new InfrastructureModule(),
+                new NcqrsModule(),
+                new WebConfigurationModule(),
+                new CaptchaModule(settingsProvider.AppSettings.Get("CaptchaService")),
+                new QuestionnaireUpgraderModule(),
+                new FileInfrastructureModule(),
+                new ProductVersionModule(typeof(HeadquartersUIModule).Assembly),
+                new OrmModule(connectionSettings),
+
                 eventStoreModule,
                 new DataCollectionSharedKernelModule(),
+                new FileStorageModule(basePath),
+                new QuartzModule(),
+                new WebInterviewModule(),
+                new HqWebInterviewModule(),
+                owinSecurityModule,
+
                 new HeadquartersBoundedContextModule(basePath,
                     interviewDetailsDataLoaderSettings,
                     userPreloadingSettings,
@@ -217,21 +240,14 @@ namespace WB.UI.Headquarters
                     synchronizationSettings,
                     trackingSettings,
                     interviewCountLimit,
-                    externalStoragesSettings: externalStoragesSettings),
-                new FileStorageModule(basePath),
-                new QuartzModule(),
-                new WebInterviewModule(),
-                new HqWebInterviewModule(),
-                owinSecurityModule);
-            kernel.Load(mainModule);
+                    externalStoragesSettings: externalStoragesSettings)
 
-            // init
-            kernel.Init().Wait();
-            
-            GlobalHost.DependencyResolver = new NinjectDependencyResolver(kernel.Kernel);
-            ModelBinders.Binders.DefaultBinder = new GenericBinderResolver(kernel.Kernel);
+                );
 
-            return kernel.Kernel;
+            autofacKernel.Load(new HeadquartersUIModule(),
+                               new MainModule(settingsProvider, applicationSecuritySection, legacyAssemblySettings));
+
+            return autofacKernel;
         }
 
         private static TrackingSettings GetTrackingSettings(SettingsProvider settingsProvider)
@@ -244,4 +260,19 @@ namespace WB.UI.Headquarters
             return new TrackingSettings(TimeSpan.FromMinutes(2));
         }
     }
+
+    /*public class CustomHubActivator : IHubActivator
+    {
+        private readonly IKernel _container;
+
+        public CustomHubActivator(IKernel container)
+        {
+            _container = container;
+        }
+
+        public IHub Create(HubDescriptor descriptor)
+        {
+            return _container.Get(descriptor.HubType) as IHub;
+        }
+    }*/
 }

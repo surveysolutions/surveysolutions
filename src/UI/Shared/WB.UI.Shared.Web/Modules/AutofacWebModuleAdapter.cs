@@ -1,16 +1,19 @@
-using System;
-using System.Collections.Generic;
+﻿using System;
+using System.Web.Http.Filters;
 using Autofac;
-using Autofac.Core;
+using WB.Core.Infrastructure.Modularity;
+using WB.Core.Infrastructure.Modularity.Autofac;
+using FilterScope = System.Web.Mvc.FilterScope;
 
-namespace WB.Core.Infrastructure.Modularity.Autofac
+namespace WB.UI.Shared.Web.Modules
 {
-    public class AutofacModuleAdapter : Module, IIocRegistry
+    //todo:AF clean merge code from AutofacModuleAdapter
+    public class AutofacWebModuleAdapter : Module, IWebIocRegistry
     {
-        private readonly IModule module;
+        private readonly IWebModule module;
         private ContainerBuilder containerBuilder;
 
-        public AutofacModuleAdapter(IModule module)
+        public AutofacWebModuleAdapter(IWebModule module)
         {
             this.module = module;
         }
@@ -46,17 +49,9 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
         public void Bind<TInterface, TImplementation>(params ConstructorArgument[] constructorArguments) where TImplementation : TInterface
         {
             var registrationBuilder = containerBuilder.RegisterType<TImplementation>().As<TInterface>();
-            
             foreach (var constructorArgument in constructorArguments)
             {
-                //object Callback(IContext context) => constructorArgument.Value.Invoke(new NinjectModuleContext(context));
-                registrationBuilder.WithParameter(
-                    new ResolvedParameter(
-                        (pi, ctx) => pi.Name == constructorArgument.Name, //pi.ParameterType == typeof(string) &&
-                        (pi, ctx) => constructorArgument.Value.Invoke(new AutofacModuleContext(ctx, new List<Parameter>())))
-
-                    //constructorArgument.Name, constructorArgument.Value.Invoke()
-                    );
+                registrationBuilder.WithParameter(constructorArgument.Name, constructorArgument.Value);
             }
         }
 
@@ -71,9 +66,9 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
                 .WithParameter(argumentName, argumentValue);
         }
 
-        public void BindGeneric(Type implementation)
+        public void BindGeneric(Type implemenation)
         {
-            containerBuilder.RegisterGeneric(implementation);
+            containerBuilder.RegisterGeneric(implemenation);
         }
 
         public void Unbind<T>()
@@ -82,13 +77,14 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
 
         public bool HasBinding<T>()
         {
-            return false; 
+            return false;
         }
 
         public void BindInPerLifetimeScope<T1, T2>() where T2 : T1
         {
             containerBuilder.RegisterType<T2>().As<T1>().InstancePerLifetimeScope();
         }
+
 
         void IIocRegistry.BindAsSingleton<TInterface, TImplementation>()
         {
@@ -157,17 +153,7 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
         {
             containerBuilder.Register((ctx, p) => func(new AutofacModuleContext(ctx, p))).SingleInstance();
         }
-
-        /*public void BindToConstructorInSingletonScope<T>(Func<IConstructorContext, T> func)
-        {
-            containerBuilder.Register((ctx, p) => func(new AutofacConstructorContext(ctx, p))).SingleInstance();
-        }*/
-
-        /*public void BindToConstructorInSingletonScope<T>(Func<IModuleContext, T> func)
-        {
-            throw new NotImplementedException();
-        }*/
-
+       
         public void BindAsSingleton(Type @interface, Type implementation)
         {
             if (@interface.IsGenericType)
@@ -178,6 +164,45 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
             {
                 containerBuilder.RegisterType(implementation).As(@interface).SingleInstance();
             }
+        }
+
+
+       
+        /// ////////////////////////////////////////////////////////////
+       
+
+
+        public void BindMvcFilter<T>(FilterScope filterScope, int? order)
+        {
+            //this.Kernel.BindFilter<T>(filterScope, order);
+        }
+
+        public void BindMvcFilterWhenActionMethodHasNoAttribute<T, TAttribute>(FilterScope filterScope, int? order)
+        {
+            //throw new NotImplementedException();
+        }
+
+        public void BindHttpFilter<T>(System.Web.Http.Filters.FilterScope filterScope, int? order) where T : IFilter
+        {
+            //throw new NotImplementedException();
+        }
+
+        public void BindHttpFilterWhenActionMethodHasNoAttribute<T, TAttribute>(System.Web.Http.Filters.FilterScope filterScope, int? order = null) where T : IFilter
+        {
+            //throw new NotImplementedException();
+        }
+
+        public void BindHttpFilterWhenControllerHasAttribute<T, TAttribute>(System.Web.Http.Filters.FilterScope filterScope, int? order = null) where T : IFilter
+        {
+            //throw new NotImplementedException();
+        }
+
+        public void BindHttpFilterWhenControllerHasAttribute<T, TAttribute>(System.Web.Http.Filters.FilterScope filterScope,
+            ConstructorArgument constructorArgument) where T : IFilter
+        {
+            //throw new NotImplementedException();
+            //translate from
+            //this.containerBuilder.BindHttpFilter<T>(filterScope).WhenControllerHas<TAttribute>();
         }
     }
 }

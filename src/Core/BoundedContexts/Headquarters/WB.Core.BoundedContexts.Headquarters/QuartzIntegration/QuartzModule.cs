@@ -9,7 +9,10 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
     {
         public void Load(IIocRegistry registry)
         {
-            registry.Bind<ISchedulerFactory, NinjectSchedulerFactory>();
+            //todo:af bind to self was made auto in ninject
+            //registry.Bind<AutofacJobFactory>();
+            
+            registry.Bind<ISchedulerFactory, AutofacSchedulerFactory>();
             registry.BindToMethodInSingletonScope<IScheduler>(ctx => ctx.Get<ISchedulerFactory>().GetScheduler());
         }
 

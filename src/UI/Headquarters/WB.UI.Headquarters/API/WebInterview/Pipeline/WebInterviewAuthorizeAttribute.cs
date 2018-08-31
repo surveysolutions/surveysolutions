@@ -76,6 +76,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
         {
             var isReview = hub.QueryString[@"review"].ToBool(false);
             var interviewId = hub.QueryString.Get(@"interviewId");
+
             if (!isReview)
             {
                 this.webInterviewAllowService.CheckWebInterviewAccessPermissions(interviewId);
