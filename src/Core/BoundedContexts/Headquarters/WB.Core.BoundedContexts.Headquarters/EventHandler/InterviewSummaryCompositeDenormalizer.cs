@@ -4,9 +4,11 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 {
-    internal class InterviewSummaryCompositeDenormalizer : AbstractCompositeFunctionalEventHandler<InterviewSummary, IReadSideRepositoryWriter<InterviewSummary>>
+    internal class InterviewSummaryCompositeDenormalizer : 
+        AbstractCompositeFunctionalEventHandler<InterviewSummary, IReadSideRepositoryWriter<InterviewSummary>>
     {
-        public InterviewSummaryCompositeDenormalizer(IReadSideRepositoryWriter<InterviewSummary> readSideStorage,
+        public InterviewSummaryCompositeDenormalizer(
+            IReadSideRepositoryWriter<InterviewSummary> readSideStorage,
             InterviewSummaryDenormalizer interviewSummaryDenormalizer,
             StatusChangeHistoryDenormalizerFunctional historyDenormalizerFunctional,
             InterviewStatusTimeSpanDenormalizer statusTimeSpanDenormalizer) : base(readSideStorage)

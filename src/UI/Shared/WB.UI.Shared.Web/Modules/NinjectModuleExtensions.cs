@@ -3,7 +3,7 @@ using WB.Core.Infrastructure.Modularity;
 
 namespace WB.UI.Shared.Web.Modules
 {
-    public static class ModuleExtensions
+    public static class NinjectModuleExtensions
     {
         public static NinjectModule AsNinject<TModule>(this TModule module)
             where TModule : IModule

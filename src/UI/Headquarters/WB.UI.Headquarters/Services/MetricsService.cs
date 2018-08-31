@@ -1,10 +1,10 @@
 ﻿using System;
 using System.ComponentModel;
 using NHibernate;
-using Ninject;
 using Npgsql;
 using StackExchange.Exceptional;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Infrastructure.Native.Monitoring;
 using WB.UI.Shared.Web.Extensions;
 
@@ -15,7 +15,7 @@ namespace WB.UI.Headquarters.Services
         public static bool IsEnabled => System.Configuration.ConfigurationManager.AppSettings.GetBool(@"Metrics.Enable", true);
 
         [Localizable(false)]
-        public static void Start(IKernel kernel, Core.GenericSubdomains.Portable.Services.ILogger logger)
+        public static void Start(Core.GenericSubdomains.Portable.Services.ILogger logger)
         {
             if (!IsEnabled)
             {
@@ -26,7 +26,7 @@ namespace WB.UI.Headquarters.Services
             {
                 MetricsRegistry.Instance.RegisterOnDemandCollectors(
                     new BrokenPackagesStatsCollector(
-                        kernel.Get<ISessionFactory>()));
+                        ServiceLocator.Current.GetInstance<ISessionFactory>()));
 
                 // getting instance name from connection string information
                 var connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["Postgres"];

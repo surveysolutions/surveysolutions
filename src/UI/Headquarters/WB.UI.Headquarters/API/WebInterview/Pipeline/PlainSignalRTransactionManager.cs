@@ -12,9 +12,27 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
         public override Func<IHubIncomingInvokerContext, Task<object>> BuildIncoming(
             Func<IHubIncomingInvokerContext, Task<object>> invoke)
         {
-            return base.BuildIncoming(context =>
+
+            return async context =>
             {
-                using (var scope = new NinjectAmbientScope())
+                try
+                {
+                    // This is responsible for invoking every server-side Hub method in your SignalR app.
+                    return await invoke(context);
+                }
+                catch (Exception e)
+                {
+                    // If a Hub method throws, have it return the error message instead.
+                    return e.Message;
+                }
+            };
+
+            /*return base.BuildIncoming(context =>
+            {
+                scope = new NinjectAmbientScope();
+                return base.BuildIncoming(invoke);
+
+                /*using (var scope = new NinjectAmbientScope())
                 {
                     var unitOfWork = ServiceLocator.Current.GetInstance<IUnitOfWork>();
                     
@@ -29,8 +47,8 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
                         unitOfWork.Dispose();
                         throw;
                     }
-                }
-            });
+                }#1#
+            });*/
         }
 
         protected override bool OnBeforeIncoming(IHubIncomingInvokerContext context)
@@ -41,11 +59,15 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
 
         protected override object OnAfterIncoming(object result, IHubIncomingInvokerContext context)
         {
+            var unitOfWork = ServiceLocator.Current.GetInstance<IUnitOfWork>();
+            unitOfWork.AcceptChanges();
             return base.OnAfterIncoming(result, context);
         }
 
         protected override void OnIncomingError(ExceptionContext exceptionContext, IHubIncomingInvokerContext invokerContext)
         {
+            var unitOfWork = ServiceLocator.Current.GetInstance<IUnitOfWork>();
+            unitOfWork.Dispose();
             base.OnIncomingError(exceptionContext, invokerContext);
         }
     }
