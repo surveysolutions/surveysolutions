@@ -61,6 +61,8 @@ namespace WB.UI.Headquarters.Migrations.ReadSide
             if (!Schema.Table("interviewdatas").Exists())
                 return;
 
+            Execute.Sql(@"UPDATE readside.interviewdatas SET value=replace(value::text, '\\u0000', '')::json");
+
             Execute.WithConnection((connection, transaction) =>
             {
                 var npgsqlConnection = connection as NpgsqlConnection;

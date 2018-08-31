@@ -18,7 +18,7 @@ namespace WB.UI.Shared.Web.Filters
         public override Task OnActionExecutingAsync(HttpActionContext actionContext, CancellationToken cancellationToken)
         {
             var status = ServiceLocator.Current.GetInstance<UnderConstructionInfo>();
-
+#if RELEASE
             if (status.Status != UnderConstructionStatus.Finished)
             {
                 actionContext.Response = new HttpResponseMessage(System.Net.HttpStatusCode.OK)
@@ -27,6 +27,9 @@ namespace WB.UI.Shared.Web.Filters
                 };
                 return Task.CompletedTask;
             }
+#elif DEBUG
+            status.Completed.Wait(cancellationToken);
+#endif
 
             return base.OnActionExecutingAsync(actionContext, cancellationToken);
         }
@@ -40,14 +43,18 @@ namespace WB.UI.Shared.Web.Filters
             {
                 var status = ServiceLocator.Current.GetInstance<UnderConstructionInfo>();
 
+#if RELEASE
                 if (status.Status != UnderConstructionStatus.Finished)
                 {
                     filterContext.Result = new RedirectToRouteResult("", new RouteValueDictionary(new {controller = "UnderConstruction", action = "Index"}));
                     return;
                 }
+#elif DEBUG
+                status.Completed.Wait();
+#endif
             }
 
-            base.OnActionExecuting(filterContext); 
+            base.OnActionExecuting(filterContext);
         }
     }
 }

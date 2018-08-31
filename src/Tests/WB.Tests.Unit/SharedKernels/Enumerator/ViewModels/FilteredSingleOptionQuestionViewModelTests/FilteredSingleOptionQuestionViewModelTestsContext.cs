@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.FilteredSingleOption
 
             var dispatcher = Create.Fake.MvxMainThreadDispatcher1();
             Ioc.RegisterSingleton<IMvxViewDispatcher>(dispatcher);
-            Ioc.RegisterSingleton<IMvxMainThreadDispatcher>(dispatcher);
+            Ioc.RegisterSingleton<IMvxMainThreadAsyncDispatcher>(dispatcher);
         }
 
         protected static FilteredSingleOptionQuestionViewModel CreateFilteredSingleOptionQuestionViewModel(

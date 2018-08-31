@@ -265,6 +265,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.Services.CompositeCollectionInf
         }
 
         private static CompositeCollectionInflationService CreateCompositeCollectionInflationService()
-            => new CompositeCollectionInflationService(Stub.MvxMainThreadDispatcher());
+            => new CompositeCollectionInflationService(Stub.MvxMainThreadAsyncDispatcher());
     }
 }

@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
-                Stub.MvxMainThreadDispatcher(),
+                Stub.MvxMainThreadAsyncDispatcher(),
                 questionStateViewmodel ?? Mock.Of<QuestionStateViewModel<YesNoQuestionAnswered>>(x => x.Validity == Mock.Of<ValidityViewModel>()),
                 answeringViewModel ?? Mock.Of<AnsweringViewModel>(),
                 userInteractionService ?? Mock.Of<IUserInteractionService>(),

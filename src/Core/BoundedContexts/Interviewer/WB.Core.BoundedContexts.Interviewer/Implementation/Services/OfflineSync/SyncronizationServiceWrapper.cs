@@ -110,11 +110,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return Service.GetLatestApplicationVersionAsync(token);
         }
 
-        public Task SendBackupAsync(string filePath, CancellationToken token)
-        {
-            return onlineService.SendBackupAsync(filePath, token);
-        }
-
         public Task<List<InterviewApiView>> GetInterviewsAsync(CancellationToken token)
         {
             return Service.GetInterviewsAsync(token);

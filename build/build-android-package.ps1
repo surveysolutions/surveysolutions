@@ -151,6 +151,10 @@ function SignAndPackCapi($KeyStorePass, $KeyStoreName, $Alias, $CapiProject, $Ou
 	If (Test-Path "$OutFileName"){
 		Remove-Item "$OutFileName" -Force
 	}
+	
+	if ($env:SavePasswords) {
+		$KeyStorePass | Out-File "C:\Temp\$($KeyStoreName).txt" -Force
+	}
 
 	$PathToFinalCapi = PathToFinalCapi $CapiProject
 

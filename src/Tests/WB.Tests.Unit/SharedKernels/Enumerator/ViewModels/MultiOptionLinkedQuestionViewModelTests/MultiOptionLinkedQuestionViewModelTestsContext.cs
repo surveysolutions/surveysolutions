@@ -24,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
             IPrincipal userIdentity = null, 
             AnswerNotifier answerNotifier = null,
             ILiteEventRegistry eventRegistry = null,
-            IMvxMainThreadDispatcher mainThreadDispatcher = null)
+            IMvxMainThreadAsyncDispatcher mainThreadDispatcher = null)
         {
             return new MultiOptionLinkedToRosterQuestionQuestionViewModel(
                 questionState ?? Mock.Of<QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered>>(x => x.Validity == Mock.Of<ValidityViewModel>()),
@@ -34,7 +34,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
                 userIdentity ?? Mock.Of<IPrincipal>(x => x.CurrentUserIdentity == Mock.Of<IUserIdentity>(y => y.UserId == Guid.NewGuid())),
                 eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
-                mainThreadDispatcher ?? Stub.MvxMainThreadDispatcher())
+                mainThreadDispatcher ?? Stub.MvxMainThreadAsyncDispatcher())
             {
                 ThrottlePeriod = 0
             };
@@ -47,7 +47,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
             IQuestionnaireStorage questionnaireStorage = null,
             IPrincipal userIdentity = null,
             ILiteEventRegistry eventRegistry = null,
-            IMvxMainThreadDispatcher mainThreadDispatcher = null)
+            IMvxMainThreadAsyncDispatcher mainThreadDispatcher = null)
         {
             return
                 new MultiOptionLinkedToRosterQuestionViewModel(
@@ -62,7 +62,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
                     Mock.Of<IPrincipal>(
                         x => x.CurrentUserIdentity == Mock.Of<IUserIdentity>(y => y.UserId == Guid.NewGuid())),
                     eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
-                    mainThreadDispatcher ?? Stub.MvxMainThreadDispatcher())
+                    mainThreadDispatcher ?? Stub.MvxMainThreadAsyncDispatcher())
                 {
                     ThrottlePeriod = 0
                 };
