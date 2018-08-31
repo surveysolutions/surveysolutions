@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using MvvmCross.Base;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Tasks;
@@ -69,33 +70,33 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 CanBeChecked = answeredOptions.Contains(linkedOption) || !this.maxAllowedAnswers.HasValue || answeredOptions.Length < this.maxAllowedAnswers
             };
 
-        public void Handle(LinkedOptionsChanged @event)
+        public async void Handle(LinkedOptionsChanged @event)
         {
             var optionListShouldBeUpdated = @event.ChangedLinkedQuestions.Any(x => x.QuestionId.Id == this.Identity.Id);
             if (optionListShouldBeUpdated)
             {
-                this.RefreshOptionsFromModel();
+                await this.RefreshOptionsFromModel();
             }
         }
 
-        public void Handle(RosterInstancesTitleChanged @event)
+        public async void Handle(RosterInstancesTitleChanged @event)
         {
             var optionListShouldBeUpdated = @event.ChangedInstances.Any(x => x.RosterInstance.GroupId == this.linkedToRosterId ||
                                                                              this.parentRosters.Contains(x.RosterInstance.GroupId));
             if (optionListShouldBeUpdated)
             {
-                this.RefreshOptionsFromModel();
+                await this.RefreshOptionsFromModel();
             }
         }
 
-        private void RefreshOptionsFromModel()
+        private async Task RefreshOptionsFromModel()
         {
             var newOptions = this.CreateOptions();
-             this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
+            await this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
             {
                 this.Options.SynchronizeWith(newOptions.ToList(), (s, t) => s.Value.Identical(t.Value) && s.Title == t.Title);
                 this.RaisePropertyChanged(() => this.HasOptions);
-            }).WaitAndUnwrapException();
+            });
         }
     }
 }
