@@ -391,6 +391,7 @@
     <Compile Include="Services\DevicePasswordHasher.cs" />
     <Compile Include="Services\EnumeratorSettings.cs" />
     <Compile Include="Services\EnumeratorTabletDiagnosticService.cs" />
+    <Compile Include="Services\Internals\AndroidHttpClientFactory.cs" />
     <Compile Include="Services\Internals\CrashReporting.cs" />
     <Compile Include="Services\Internals\FileSystem\FileSystemService.cs" />
     <Compile Include="Services\Internals\GpsLocationService.cs" />
