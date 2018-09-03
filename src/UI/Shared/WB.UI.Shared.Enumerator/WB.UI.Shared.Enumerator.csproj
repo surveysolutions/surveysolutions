@@ -71,9 +71,6 @@
       <HintPath>..\..\..\..\packages\MessagePack.1.7.3.4\lib\netstandard2.0\MessagePack.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="ModernHttpClient, Version=2.7.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\modernhttpclient-updated.2.7.2\lib\monoandroid80\ModernHttpClient.dll</HintPath>
-    </Reference>
     <Reference Include="Mono.Android" />
     <Reference Include="Mono.Android.Export" />
     <Reference Include="MvvmCross, Version=6.1.2.0, Culture=neutral, processorArchitecture=MSIL">
@@ -157,12 +154,6 @@
     </Reference>
     <Reference Include="SQLitePCLRaw.provider.e_sqlite3, Version=1.1.11.121, Culture=neutral, PublicKeyToken=9c301db686d0bd12, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\SQLitePCLRaw.provider.e_sqlite3.android.1.1.11\lib\MonoAndroid\SQLitePCLRaw.provider.e_sqlite3.dll</HintPath>
-    </Reference>
-    <Reference Include="Square.OkHttp3, Version=3.8.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Square.OkHttp3.3.8.1\lib\MonoAndroid\Square.OkHttp3.dll</HintPath>
-    </Reference>
-    <Reference Include="Square.OkIO, Version=1.13.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Square.OkIO.1.13.0\lib\MonoAndroid\Square.OkIO.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Collections.Immutable, Version=1.2.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
@@ -400,7 +391,6 @@
     <Compile Include="Services\DevicePasswordHasher.cs" />
     <Compile Include="Services\EnumeratorSettings.cs" />
     <Compile Include="Services\EnumeratorTabletDiagnosticService.cs" />
-    <Compile Include="Services\Internals\AndroidHttpClientFactory.cs" />
     <Compile Include="Services\Internals\CrashReporting.cs" />
     <Compile Include="Services\Internals\FileSystem\FileSystemService.cs" />
     <Compile Include="Services\Internals\GpsLocationService.cs" />
