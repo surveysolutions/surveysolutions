@@ -56,28 +56,28 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             base.UpateMaxAnswersCountMessage(answeredOptions.Length);
         }
 
-        public void Handle(LinkedOptionsChanged @event)
+        public async void Handle(LinkedOptionsChanged @event)
         {
             var newOptions = this.CreateOptions();
 
-            this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
+            await this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
             {
                 this.Options.SynchronizeWith(newOptions.ToList(), (s, t) => s.Value.Identical(t.Value));
                 this.RaisePropertyChanged(() => HasOptions);
-            }).WaitAndUnwrapException();
+            });
         }
 
-        public void Handle(RosterInstancesTitleChanged @event)
+        public async void Handle(RosterInstancesTitleChanged @event)
         {
             var optionListShouldBeUpdated = @event.ChangedInstances.Any(x => this.parentRosterIds.Contains(x.RosterInstance.GroupId));
             if (optionListShouldBeUpdated)
             {
                 var newOptions = this.CreateOptions();
-                this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
+                await this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
                 {
                     this.Options.SynchronizeWith(newOptions.ToList(), (s, t) => s.Value.Identical(t.Value) && s.Title == t.Title);
                     this.RaisePropertyChanged(() => HasOptions);
-                }).WaitAndUnwrapException();
+                });
             }
         }
 

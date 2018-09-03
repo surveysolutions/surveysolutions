@@ -18,7 +18,6 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
 
         protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            //var call = HttpCall.Get(request);
             var call = new HttpCall(request);
 
             call.StartedUtc = DateTime.UtcNow;

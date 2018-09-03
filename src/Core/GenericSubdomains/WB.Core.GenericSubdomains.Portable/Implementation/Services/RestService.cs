@@ -1,6 +1,5 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -13,6 +12,7 @@ using WB.Core.GenericSubdomains.Portable.Implementation.Compression;
 using WB.Core.GenericSubdomains.Portable.Properties;
 using WB.Core.GenericSubdomains.Portable.Services;
 
+
 namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
 {
     public class RestService : IRestService
@@ -22,7 +22,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
         private readonly IJsonAllTypesSerializer synchronizationSerializer;
         private readonly IStringCompressor stringCompressor;
         private readonly IHttpStatistician httpStatistician;
-        private readonly ILogger logger;
+        private readonly IHttpClientFactory httpClientFactory;
 
         public RestService(
             IRestServiceSettings restServiceSettings,
@@ -31,14 +31,14 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             IStringCompressor stringCompressor,
             IRestServicePointManager restServicePointManager,
             IHttpStatistician httpStatistician,
-            ILogger logger)
+            IHttpClientFactory httpClientFactory)
         {
             this.restServiceSettings = restServiceSettings;
             this.networkService = networkService;
             this.synchronizationSerializer = synchronizationSerializer;
             this.stringCompressor = stringCompressor;
             this.httpStatistician = httpStatistician;
-            this.logger = logger;
+            this.httpClientFactory = httpClientFactory;
 
             if (this.restServiceSettings.AcceptUnsignedSslCertificate)
                 restServicePointManager?.AcceptUnsignedSslCertificate();
@@ -89,8 +89,8 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
 
             var fullUrl = new Url(this.restServiceSettings.Endpoint, url, queryString);
 
-            var httpClient = new HttpClient(new ExtendedMessageHandler(new HttpClientHandler(), httpStatistician));
-
+            var httpMessageHandler = httpClientFactory.CreateMessageHandler();
+            HttpClient httpClient = httpClientFactory.CreateClient(fullUrl, httpMessageHandler, httpStatistician);
             httpClient.Timeout = this.restServiceSettings.Timeout;
 
             var request = new HttpRequestMessage()
@@ -101,10 +101,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             };
 
             request.Headers.UserAgent.ParseAdd(this.restServiceSettings.UserAgent);
-            
-            request.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
-            request.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("deflate"));
-            request.Headers.Add("Accept-Language", "en-GB,en;q=0.9,en-US;q=0.8");
+            request.Headers.Add("Accept-Encoding", "gzip,deflate");
 
             if (forceNoCache)
             {
@@ -130,11 +127,8 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                 }
             }
 
-            Stopwatch stopwatch = new Stopwatch();
-
             try
             {
-                stopwatch.Start();
 
                 var httpResponseMessage = await httpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, linkedCancellationTokenSource.Token);
 
@@ -154,10 +148,6 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             }
             catch (ExtendedMessageHandlerException ex)
             {
-                stopwatch.Stop();
-                logger.Error($"ERROR!!! Request to {url} failed. Time: {stopwatch.Elapsed}.", ex);
-                logger.Error($"ERROR!!! Request headers {ex?.Call?.Request?.Headers}. Response headers {ex?.Call?.Response?.Headers}.");
-
                 if (ex.GetSelfOrInnerAs<TaskCanceledException>() != null || ex.GetSelfOrInnerAs<OperationCanceledException>() != null)
                 {
                     if (requestTimeoutToken.IsCancellationRequested)
@@ -181,14 +171,14 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                     var innerException = ex.InnerException;
                     if (innerException?.GetType().FullName == "Java.Net.ConnectException")
                     {
-                        throw new RestException(message: innerException.Message, 
+                        throw new RestException(message: innerException.Message,
                             innerException: innerException,
                             type: RestExceptionType.HostUnreachable);
                     }
 
                     if (innerException?.GetType().Name == "SSLHandshakeException")
                     {
-                        throw new RestException(message: innerException.Message, 
+                        throw new RestException(message: innerException.Message,
                             innerException: innerException,
                             type: RestExceptionType.UnacceptableCertificate);
                     }
@@ -198,7 +188,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             }
         }
 
-        public Task GetAsync(string url, object queryString, RestCredentials credentials, bool forceNoCache, 
+        public Task GetAsync(string url, object queryString, RestCredentials credentials, bool forceNoCache,
             Dictionary<string, string> customHeaders, CancellationToken? token)
         {
             return this.ExecuteRequestAsync(url: url,
@@ -213,7 +203,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
 
         public Task PostAsync(string url, object request = null, RestCredentials credentials = null, CancellationToken? token = null)
         {
-            return this.ExecuteRequestAsync(url: url, 
+            return this.ExecuteRequestAsync(url: url,
                 credentials: credentials,
                 method: HttpMethod.Post,
                 request: request,
@@ -236,14 +226,14 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             RestCredentials credentials = null, CancellationToken? token = null)
         {
             var response = this.ExecuteRequestAsync(url: url, credentials: credentials, method: HttpMethod.Post,
-                request: request,progress: transferProgress, userCancellationToken: token);
+                request: request, progress: transferProgress, userCancellationToken: token);
 
             return this.ReceiveCompressedJsonWithProgressAsync<T>(response: response, token: token ?? default(CancellationToken),
                 transferProgress: transferProgress);
         }
 
         public async Task<RestFile> DownloadFileAsync(string url,
-            IProgress<TransferProgress> transferProgress, 
+            IProgress<TransferProgress> transferProgress,
             RestCredentials credentials = null,
             CancellationToken? token = null,
             Dictionary<string, string> customHeaders = null)
@@ -257,16 +247,16 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             var fileContent = this.GetDecompressedContentFromHttpResponseMessage(restResponse);
 
             return new RestFile(content: fileContent, contentType: restResponse.RawContentType,
-                contentHash: restResponse.ETag, contentLength: restResponse.Length, fileName: restResponse.FileName, 
+                contentHash: restResponse.ETag, contentLength: restResponse.Length, fileName: restResponse.FileName,
                 statusCode: restResponse.StatusCode);
         }
 
-        public async Task<RestStreamResult> GetResponseStreamAsync(string url, RestCredentials credentials = null, 
+        public async Task<RestStreamResult> GetResponseStreamAsync(string url, RestCredentials credentials = null,
             CancellationToken? ctoken = null, object queryString = null, Dictionary<string, string> customHeaders = null)
         {
             var response = this.ExecuteRequestAsync(url: url, credentials: credentials, method: HttpMethod.Get,
                 userCancellationToken: ctoken, request: null, queryString: queryString, customHeaders: customHeaders);
-            
+
             var responseMessage = await response.ConfigureAwait(false);
             var contentLength = responseMessage.Content.Headers.ContentLength;
 
@@ -368,9 +358,9 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                         ms.Write(buffer, 0, read);
 
                         if (transferProgress == null) continue;
-                        
+
                         if (contentLength != null)
-                            downloadProgressChangedEventArgs.ProgressPercentage = Math.Round((decimal) (100 * ms.Length) / contentLength.Value, 2);
+                            downloadProgressChangedEventArgs.ProgressPercentage = Math.Round((decimal)(100 * ms.Length) / contentLength.Value, 2);
 
                         downloadProgressChangedEventArgs.BytesReceived = ms.Length;
                         transferProgress.Report(downloadProgressChangedEventArgs);

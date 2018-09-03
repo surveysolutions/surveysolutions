@@ -123,7 +123,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     .ToList();
             }
 
-            await RemoveSpecialValues();
+            await RemoveSpecialValuesAsync();
 
             if (specialValuesViewModels.Any(x => x.Selected) || !interview.GetQuestion(this.questionIdentity).IsAnswered())
             {
@@ -168,7 +168,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IsSpecialValue = null;
         }
 
-        private async Task RemoveSpecialValues()
+        private async Task RemoveSpecialValuesAsync()
         {
             await this.mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
             {
@@ -206,7 +206,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
             else
             {
-                await RemoveSpecialValues();
+                await RemoveSpecialValuesAsync();
             }
         }
 
