@@ -90,7 +90,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             var fullUrl = new Url(this.restServiceSettings.Endpoint, url, queryString);
 
             var httpMessageHandler = httpClientFactory.CreateMessageHandler();
-            HttpClient httpClient = new HttpClient(new ExtendedMessageHandler(httpMessageHandler, httpStatistician));
+            HttpClient httpClient = httpClientFactory.CreateClient(fullUrl, httpMessageHandler, httpStatistician);
             httpClient.Timeout = this.restServiceSettings.Timeout;
 
             var request = new HttpRequestMessage()
