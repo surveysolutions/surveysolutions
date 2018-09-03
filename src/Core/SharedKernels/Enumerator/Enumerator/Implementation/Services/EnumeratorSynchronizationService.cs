@@ -141,7 +141,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
         public Task LogAssignmentAsHandledAsync(int id, CancellationToken cancellationToken)
         {
-            return Task.CompletedTask;
+            var response = this.TryGetRestResponseOrThrowAsync(() => this.restService.PostAsync(
+                url: $"{this.AssignmentsController}/{id}/Received", credentials: this.restCredentials, token: cancellationToken));
+
+            return response;
         }
 
         public Task<AssignmentApiDocument> GetAssignmentAsync(int id, CancellationToken cancellationToken)

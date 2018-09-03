@@ -232,6 +232,42 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Received by tablet.
+        /// </summary>
+        public static string ReceivedByTablet {
+            get {
+                return ResourceManager.GetString("ReceivedByTablet", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show all.
+        /// </summary>
+        public static string ReceivedByTablet_All {
+            get {
+                return ResourceManager.GetString("ReceivedByTablet_All", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Not received by tablet.
+        /// </summary>
+        public static string ReceivedByTablet_NotReceived {
+            get {
+                return ResourceManager.GetString("ReceivedByTablet_NotReceived", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Received by tablet.
+        /// </summary>
+        public static string ReceivedByTablet_Received {
+            get {
+                return ResourceManager.GetString("ReceivedByTablet_Received", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Select existing questionnaire to upgrade assignments from.
         /// </summary>
         public static string SelectQuestionnaire {
@@ -309,6 +345,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string Tooltip_Filter_Questionnaire {
             get {
                 return ResourceManager.GetString("Tooltip_Filter_Questionnaire", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show only assignments that were or were not received by tablets.
+        /// </summary>
+        public static string Tooltip_Filter_Received {
+            get {
+                return ResourceManager.GetString("Tooltip_Filter_Received", resourceCulture);
             }
         }
         
