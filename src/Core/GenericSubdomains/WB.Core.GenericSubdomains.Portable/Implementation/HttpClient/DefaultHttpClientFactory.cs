@@ -15,11 +15,4 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
             return new HttpClientHandler();
         }
     }
-
-    public interface IHttpClientFactory
-    {
-        HttpClient CreateClient(Url url, HttpMessageHandler handler, IHttpStatistician statistician = null);
-
-        HttpMessageHandler CreateMessageHandler();
-    }
 }
