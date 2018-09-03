@@ -90,7 +90,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             var fullUrl = new Url(this.restServiceSettings.Endpoint, url, queryString);
 
             var httpMessageHandler = httpClientFactory.CreateMessageHandler();
-            HttpClient httpClient = httpClientFactory.CreateClient(fullUrl, httpMessageHandler, httpStatistician);
+            HttpClient httpClient = new HttpClient(new ExtendedMessageHandler(httpMessageHandler, httpStatistician));
             httpClient.Timeout = this.restServiceSettings.Timeout;
 
             var request = new HttpRequestMessage()
@@ -101,7 +101,8 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             };
 
             request.Headers.UserAgent.ParseAdd(this.restServiceSettings.UserAgent);
-            request.Headers.Add("Accept-Encoding", "gzip,deflate");
+            request.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
+            request.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("deflate"));
 
             if (forceNoCache)
             {
