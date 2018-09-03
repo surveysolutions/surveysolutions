@@ -65,6 +65,7 @@ namespace WB.UI.Headquarters.Injections
 
             registry.BindAsSingleton<IRestServiceSettings, DesignerQuestionnaireApiRestServiceSettings>();
 
+            registry.Bind<IHttpClientFactory, DefaultHttpClientFactory>();
             registry.Bind<IRestService, RestService>(
                 new ConstructorArgument("networkService", _ => null),
                 new ConstructorArgument("restServicePointManager", _ => null),
