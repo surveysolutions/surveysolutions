@@ -4,8 +4,7 @@ namespace WB.UI.Shared.Web.Modules
 {
     public static class AutofacModuleExtensions
     {
-        public static Module AsWebAutofac<TModule>(this TModule module)
-            where TModule : IWebModule
+        public static Module AsWebAutofac(this IWebModule module)
         {
             return new AutofacWebModuleAdapter(module);
         }

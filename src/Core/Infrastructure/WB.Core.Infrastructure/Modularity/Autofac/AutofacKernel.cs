@@ -17,8 +17,8 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
             this.containerBuilder = new ContainerBuilder();
         }
 
-        private readonly ContainerBuilder containerBuilder;
-        private readonly List<IInitModule> initModules = new List<IInitModule>();
+        protected readonly ContainerBuilder containerBuilder;
+        protected readonly List<IInitModule> initModules = new List<IInitModule>();
 
         public ContainerBuilder ContainerBuilder => containerBuilder;
 
@@ -34,16 +34,7 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
             initModules.AddRange(modules.Select(m => m as IInitModule).Where(m => m != null));
         }
 
-        public void Load(params IWebModule[] modules)
-        {
-            var autofacModules = modules.Select(module => module.AsWebAutofac()).ToArray();
-            foreach (var autofacModule in autofacModules)
-            {
-                this.containerBuilder.RegisterModule(autofacModule);
-            }
-            initModules.AddRange(modules.Select(m => m as IInitModule).Where(m => m != null));
-        }
-
+        
         public Task Init()
         {
             containerBuilder.RegisterSource(new AnyConcreteTypeNotAlreadyRegisteredSource());
