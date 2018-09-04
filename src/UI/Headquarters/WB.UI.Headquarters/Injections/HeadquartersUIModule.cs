@@ -63,13 +63,22 @@ namespace WB.UI.Headquarters.Injections
                 new ConstructorArgument("restServicePointManager", _ => null),
                 new ConstructorArgument("httpStatistican", _ => _.Resolve<IHttpStatistician>()));
 
+
+
             registry.BindHttpFilter<UnderConstructionHttpFilter>(System.Web.Http.Filters.FilterScope.Global, 0);
             registry.BindMvcFilter<UnderConstructionMvcFilter>(FilterScope.First, 0);
 
+
             registry.BindMvcFilterWhenActionMethodHasNoAttribute<GlobalNotificationAttribute, NoTransactionAttribute>(FilterScope.Global, 5);
 
-            registry.BindMvcFilterWhenActionMethodHasNoAttribute<TransactionFilter, NoTransactionAttribute>(FilterScope.First, 1);
-            registry.BindHttpFilterWhenActionMethodHasNoAttribute<ApiTransactionFilter, NoTransactionAttribute>(System.Web.Http.Filters.FilterScope.Global, 1);
+
+            GlobalFilters.Filters.Add(new TransactionFilter());
+
+            //registry.BindMvcFilterWhenActionMethodHasNoAttribute<TransactionFilter, NoTransactionAttribute>(FilterScope.First, 1);
+
+            System.Web.Http.GlobalConfiguration.Configuration.Filters.Add(new ApiTransactionFilter());
+
+            //registry.BindHttpFilterWhenActionMethodHasNoAttribute<ApiTransactionFilter, NoTransactionAttribute>(System.Web.Http.Filters.FilterScope.Global, 1);
 
             registry.Bind<ICommandDeserializer, SurveyManagementCommandDeserializer>();
             registry.Bind<IInterviewerVersionReader, InterviewerVersionReader>();

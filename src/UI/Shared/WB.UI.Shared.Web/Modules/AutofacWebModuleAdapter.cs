@@ -165,8 +165,6 @@ namespace WB.UI.Shared.Web.Modules
                 containerBuilder.RegisterType(implementation).As(@interface).SingleInstance();
             }
         }
-
-
        
         /// ////////////////////////////////////////////////////////////
        
@@ -174,32 +172,43 @@ namespace WB.UI.Shared.Web.Modules
 
         public void BindMvcFilter<T>(FilterScope filterScope, int? order)
         {
+            containerBuilder.RegisterType<T>().PropertiesAutowired().InstancePerLifetimeScope();
             //this.Kernel.BindFilter<T>(filterScope, order);
         }
 
         public void BindMvcFilterWhenActionMethodHasNoAttribute<T, TAttribute>(FilterScope filterScope, int? order)
         {
+
+            containerBuilder.RegisterType<T>().PropertiesAutowired().InstancePerLifetimeScope();
             //throw new NotImplementedException();
         }
 
         public void BindHttpFilter<T>(System.Web.Http.Filters.FilterScope filterScope, int? order) where T : IFilter
         {
+            containerBuilder.RegisterType<T>().PropertiesAutowired().InstancePerLifetimeScope();
+
             //throw new NotImplementedException();
         }
 
         public void BindHttpFilterWhenActionMethodHasNoAttribute<T, TAttribute>(System.Web.Http.Filters.FilterScope filterScope, int? order = null) where T : IFilter
         {
+            //containerBuilder.Register(c => new T()).AsActionFilterFor<Controller>().InstancePerHttpRequest();
+
+            containerBuilder.RegisterType<T>().PropertiesAutowired().InstancePerLifetimeScope();
             //throw new NotImplementedException();
         }
 
         public void BindHttpFilterWhenControllerHasAttribute<T, TAttribute>(System.Web.Http.Filters.FilterScope filterScope, int? order = null) where T : IFilter
         {
+            containerBuilder.RegisterType<T>().PropertiesAutowired().InstancePerLifetimeScope();
             //throw new NotImplementedException();
         }
 
         public void BindHttpFilterWhenControllerHasAttribute<T, TAttribute>(System.Web.Http.Filters.FilterScope filterScope,
             ConstructorArgument constructorArgument) where T : IFilter
         {
+            containerBuilder.RegisterType<T>().PropertiesAutowired().InstancePerLifetimeScope();
+
             //throw new NotImplementedException();
             //translate from
             //this.containerBuilder.BindHttpFilter<T>(filterScope).WhenControllerHas<TAttribute>();

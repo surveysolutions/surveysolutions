@@ -48,10 +48,14 @@ namespace WB.UI.Designer.Code
 
         public void Load(IWebIocRegistry registry)
         {
+
+
             registry.BindHttpFilter<UnderConstructionHttpFilter>(System.Web.Http.Filters.FilterScope.Controller, 0);
             registry.BindMvcFilter<UnderConstructionMvcFilter>(FilterScope.First, 0);
             registry.BindMvcFilterWhenActionMethodHasNoAttribute<TransactionFilter, NoTransactionAttribute>(FilterScope.First, 1);
             registry.BindHttpFilterWhenActionMethodHasNoAttribute<ApiTransactionFilter, NoTransactionAttribute>(System.Web.Http.Filters.FilterScope.Global, 1);
+
+
 
             registry.Bind<ICommandInflater, CommandInflater>();
             registry.Bind<IQuestionnaireHelper, QuestionnaireHelper>();

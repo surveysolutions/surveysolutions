@@ -42,5 +42,11 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
         {
             return this.container.BeginLifetimeScope(@override);
         }
+
+        public ILifetimeScope CreateChildContainer()
+        {
+            return this.container.BeginLifetimeScope();
+        }
     }
+
 }

@@ -174,12 +174,7 @@ namespace WB.UI.Shared.Web.Modules
         {
             this.Kernel.BindFilter<T>(filterScope, order);
         }
-
-        public void BindMvcFilterInSingletonScope<T>(FilterScope filterScope, int? order)
-        {
-            this.Kernel.BindFilter<T>(filterScope, order).InSingletonScope();
-        }
-
+        
         void IWebIocRegistry.BindMvcFilterWhenActionMethodHasNoAttribute<T, TAttribute>(System.Web.Mvc.FilterScope filterScope, int? order)
         {
             this.Kernel.BindFilter<T>(filterScope, order).WhenActionMethodHasNo<TAttribute>();

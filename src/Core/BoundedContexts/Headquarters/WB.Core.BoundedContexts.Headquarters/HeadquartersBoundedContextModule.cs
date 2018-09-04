@@ -240,8 +240,9 @@ namespace WB.Core.BoundedContexts.Headquarters
             //registry.Bind<StatusChangeHistoryDenormalizerFunctional>();
             //registry.Bind<InterviewStatusTimeSpanDenormalizer>();
             //
-
             //registry.RegisterDenormalizer<InterviewSummaryDenormalizer>();
+
+            
             registry.RegisterDenormalizer<InterviewSummaryCompositeDenormalizer>();
             
             registry.RegisterDenormalizer<InterviewExportedCommentariesDenormalizer>();
