@@ -28,6 +28,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             var questionnaireChangeRecord = this.questionnaireChangeItemStorage.GetById(historyReferenceId.FormatGuid());
             if (questionnaireChangeRecord == null)
                 return null;
+
             if (questionnaireChangeRecord.ResultingQuestionnaireDocument != null)
             {
                 var resultingQuestionnaireDocument = questionnaireChangeRecord.ResultingQuestionnaireDocument;
@@ -40,28 +41,56 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                        (from hh in _ 
                         where hh.ResultingQuestionnaireDocument != null 
                               && hh.Sequence < questionnaireChangeRecord.Sequence
-                        select hh.Sequence).Max()
+                              && hh.QuestionnaireId == questionnaireChangeRecord.QuestionnaireId
+                        select (int?)hh.Sequence).Max()
+                      && h.QuestionnaireId == questionnaireChangeRecord.QuestionnaireId
                 select new
                 {
                     h.Sequence,
                     h.ResultingQuestionnaireDocument
                 }).FirstOrDefault());
 
-            var patches = this.questionnaireChangeItemStorage.Query(_ => _
-                .Where(x => x.Sequence <= questionnaireChangeRecord.Sequence && x.Sequence > existingSnapshot.Sequence)
-                .OrderBy(x => x.Sequence)
-                .Select(x =>
-                    new
-                    {
-                        x.DiffWithPrevisousVersion
-                    }));
-            string result = existingSnapshot.ResultingQuestionnaireDocument;
-            foreach (var patch in patches)
+            if (existingSnapshot != null)
             {
-                result = this.patchApplier.Apply(result, patch.DiffWithPrevisousVersion);
-            }
+                var patches = this.questionnaireChangeItemStorage.Query(_ => _
+                    .Where(x => x.Sequence <= questionnaireChangeRecord.Sequence
+                                && x.Sequence > existingSnapshot.Sequence
+                                && x.QuestionnaireId == questionnaireChangeRecord.QuestionnaireId)
+                    .OrderBy(x => x.Sequence)
+                    .Select(x =>
+                        new
+                        {
+                            DiffWithPrevisousVersion = x.DiffWithPreviousVersion
+                        }));
+                string result = existingSnapshot.ResultingQuestionnaireDocument;
+                foreach (var patch in patches)
+                {
+                    result = this.patchApplier.Apply(result, patch.DiffWithPrevisousVersion);
+                }
 
-            return this.entitySerializer.Deserialize(result);
+                return this.entitySerializer.Deserialize(result);
+            }
+            else
+            {
+                var entireHistory = this.questionnaireChangeItemStorage.Query(_ => (
+                    from h in _
+                    where h.QuestionnaireId == questionnaireChangeRecord.QuestionnaireId &&
+                          h.Sequence <= questionnaireChangeRecord.Sequence
+                    orderby h.Sequence
+                    select new
+                    {
+                        DiffWithPrevisousVersion = h.DiffWithPreviousVersion
+                    }).ToList());
+
+                string fullHistoryResult = null;
+                foreach (var historyPatch in entireHistory)
+                {
+                    fullHistoryResult =
+                        this.patchApplier.Apply(fullHistoryResult, historyPatch.DiffWithPrevisousVersion);
+                }
+
+                return this.entitySerializer.Deserialize(fullHistoryResult);
+            }
         }
 
         public string GetResultingQuestionnaireDocument(QuestionnaireDocument questionnaireDocument)
