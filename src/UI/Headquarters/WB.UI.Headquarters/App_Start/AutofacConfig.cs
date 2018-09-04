@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data.Entity;
 using System.Globalization;
+using System.Linq;
 using System.Reflection;
 using System.Web.Hosting;
 using System.Web.Http;
@@ -22,6 +23,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.SharedKernels.DataCollection;
@@ -51,7 +53,7 @@ namespace WB.UI.Headquarters
     [Localizable(false)]
     public static class AutofacConfig
     {
-        public static AutofacKernel CreateKernel()
+        public static AutofacWebKernel CreateKernel()
         {
             var settingsProvider = new SettingsProvider();
             
@@ -108,7 +110,7 @@ namespace WB.UI.Headquarters
             var eventStoreModule = new PostgresWriteSideModule(eventStoreSettings,
                 new DbUpgradeSettings(typeof(M001_AddEventSequenceIndex).Assembly, typeof(M001_AddEventSequenceIndex).Namespace));
 
-            AutofacKernel autofacKernel = new AutofacKernel();
+            var autofacKernel = new AutofacWebKernel();
 
             //ContainerBuilder builder = new ContainerBuilder();
 
@@ -258,6 +260,19 @@ namespace WB.UI.Headquarters
                 return new TrackingSettings(timespan);
             }
             return new TrackingSettings(TimeSpan.FromMinutes(2));
+        }
+    }
+
+    public class AutofacWebKernel : AutofacKernel
+    {
+        public void Load(params IWebModule[] modules)
+        {
+            var autofacModules = modules.Select(module => module.AsWebAutofac()).ToArray();
+            foreach (var autofacModule in autofacModules)
+            {
+                this.containerBuilder.RegisterModule(autofacModule);
+            }
+            initModules.AddRange(modules.Select(m => m as IInitModule).Where(m => m != null));
         }
     }
 
