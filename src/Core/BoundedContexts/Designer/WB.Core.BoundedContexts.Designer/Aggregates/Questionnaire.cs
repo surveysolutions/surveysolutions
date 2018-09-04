@@ -2391,7 +2391,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         {
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
 
-            var historyReferanceId = command.HistoryReferanceId;
+            var historyReferanceId = command.HistoryReferenceId;
             var questionnire = questionnireHistoryVersionsService.GetByHistoryVersion(historyReferanceId);
             if (questionnire == null)
                 throw new ArgumentException(string.Format(ExceptionMessages.QuestionnaireRevisionCantBeFound, Id, historyReferanceId));

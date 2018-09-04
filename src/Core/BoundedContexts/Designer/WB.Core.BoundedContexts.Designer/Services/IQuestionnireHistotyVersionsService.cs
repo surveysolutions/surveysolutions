@@ -5,7 +5,7 @@ namespace WB.Core.BoundedContexts.Designer.Services
 {
     public interface IQuestionnireHistoryVersionsService
     {
-        QuestionnaireDocument GetByHistoryVersion(Guid historyReferanceId);
+        QuestionnaireDocument GetByHistoryVersion(Guid historyReferenceId);
         string GetResultingQuestionnaireDocument(QuestionnaireDocument questionnaireDocument);
     }
 }

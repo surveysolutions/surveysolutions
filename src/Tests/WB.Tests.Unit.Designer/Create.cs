@@ -600,6 +600,7 @@ namespace WB.Tests.Unit.Designer
             QuestionnaireItemType? targetType = null,
             string resultingQuestionnaireDocument = null,
             int? sequence = null,
+            string diffWithPreviousVersion = null,
             params QuestionnaireChangeReference[] reference)
         {
             return new QuestionnaireChangeRecord()
@@ -611,7 +612,8 @@ namespace WB.Tests.Unit.Designer
                 TargetItemType = targetType ?? QuestionnaireItemType.Section,
                 References = reference.ToHashSet(),
                 Sequence = sequence ?? 1,
-                ResultingQuestionnaireDocument = resultingQuestionnaireDocument
+                ResultingQuestionnaireDocument = resultingQuestionnaireDocument,
+                DiffWithPrevisousVersion = diffWithPreviousVersion
             };
         }
 
@@ -1218,11 +1220,18 @@ namespace WB.Tests.Unit.Designer
 
         public static QuestionnireHistoryVersionsService QuestionnireHistoryVersionsService(
             IPlainStorageAccessor<QuestionnaireChangeRecord> questionnaireChangeItemStorage = null,
-            IEntitySerializer<QuestionnaireDocument> entitySerializer = null)
+            IEntitySerializer<QuestionnaireDocument> entitySerializer = null,
+            IPatchApplier patchApplier = null)
         {
             return new QuestionnireHistoryVersionsService(
                 questionnaireChangeItemStorage ?? Mock.Of<IPlainStorageAccessor<QuestionnaireChangeRecord>>(),
-                entitySerializer ?? new EntitySerializer<QuestionnaireDocument>());
+                entitySerializer ?? new EntitySerializer<QuestionnaireDocument>(),
+                patchApplier ?? Create.PatchApplier());
+        }
+
+        private static IPatchApplier PatchApplier()
+        {
+            return new JsonPatchService();
         }
 
         public static ITopologicalSorter<T> TopologicalSorter<T>()
@@ -1417,6 +1426,11 @@ namespace WB.Tests.Unit.Designer
         public static IAccountRepository AccountRepository()
         {
             return Mock.Of<IAccountRepository>();
+        }
+
+        public static IPatchGenerator PatchGenerator()
+        {
+            return new JsonPatchService();
         }
     }
 }
