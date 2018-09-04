@@ -27,6 +27,7 @@ namespace WB.UI.Designer
         public void Load(IWebIocRegistry registry)
         {
             //registry.Bind<ILog>().ToConstant(new Log()).InSingletonScope();
+
             registry.BindMvcFilter<CustomHandleErrorFilter>(FilterScope.Global, 20);
             registry.BindMvcFilter<CustomAuthorizeFilter>(FilterScope.Global, 20);
 

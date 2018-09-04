@@ -16,5 +16,15 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
 
             throw new NotImplementedException();
         }
+
+        public static ILifetimeScope CreateChildContainer(this IServiceLocator serviceLocator)
+        {
+            if (serviceLocator is AutofacServiceLocatorAdapter autofac)
+            {
+                return autofac.CreateChildContainer();
+            }
+
+            throw new NotImplementedException();
+        }
     }
 }

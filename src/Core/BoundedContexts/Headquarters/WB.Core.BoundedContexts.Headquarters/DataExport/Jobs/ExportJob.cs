@@ -14,8 +14,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Jobs
     [DisallowConcurrentExecution]
     internal class ExportJob : IJob
     {
-        private IDataExportProcessesService exportService => ServiceLocator.Current
-            .GetInstance<IDataExportProcessesService>();
+        private IDataExportProcessesService exportService => 
+            ServiceLocator.Current.GetInstance<IDataExportProcessesService>();
 
         private ILogger logger => ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<ExportJob>();
 

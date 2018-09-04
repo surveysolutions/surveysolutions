@@ -10,7 +10,9 @@ using System.Web.Http;
 using Autofac;
 using Autofac.Integration.Mvc;
 using Autofac.Integration.WebApi;
+using Quartz;
 using WB.Core.BoundedContexts.Headquarters;
+using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
@@ -248,6 +250,18 @@ namespace WB.UI.Headquarters
 
             autofacKernel.Load(new HeadquartersUIModule(),
                                new MainModule(settingsProvider, applicationSecuritySection, legacyAssemblySettings));
+
+            //todo:af check to do without it
+
+            //autofacKernel.ContainerBuilder.RegisterType<UpgradeAssignmentJob>().InstancePerDependency();
+            //autofacKernel.ContainerBuilder.RegisterType<SyncPackagesReprocessorBackgroundJob>().InstancePerDependency();
+            
+/*
+
+            autofacKernel.ContainerBuilder.RegisterAssemblyTypes(typeof(UpgradeAssignmentJob).Assembly)
+                .Where(type => !type.IsAbstract && typeof(IJob).IsAssignableFrom(type))
+                .AsSelf().InstancePerLifetimeScope();
+*/
 
             return autofacKernel;
         }

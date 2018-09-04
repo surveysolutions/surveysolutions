@@ -41,7 +41,7 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
             Type jobType = jobDetail.JobType;
             try
             {
-                return new AsyncScopedJobDecorator(jobType, ServiceLocator.Current.GetInstance<IContainer>());
+                return new AsyncScopedJobDecorator(jobType);
             }
             catch (Exception e)
             {
