@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using DiffMatchPatch;
+using JsonDiffPatchDotNet;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -15,6 +17,7 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
+using WB.Core.BoundedContexts.Designer.Implementation.Repositories;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.GenericSubdomains.Portable;
@@ -25,6 +28,7 @@ using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.QuestionnairePostProcessors
 {
+    [RequiresPreprocessor(typeof(HistoryPreProcessor))]
     internal class HistoryPostProcessor : 
         ICommandPostProcessor<Questionnaire, ImportQuestionnaire>,
         ICommandPostProcessor<Questionnaire, CloneQuestionnaire>,
@@ -88,6 +92,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         private IQuestionnireHistoryVersionsService questionnireHistoryVersionsService 
             => ServiceLocator.Current.GetInstance<IQuestionnireHistoryVersionsService>();
 
+        private OriginalQuestionnaireStorage originalQuestionnaireDocumentStorage
+            => ServiceLocator.Current.GetInstance<OriginalQuestionnaireStorage>();
+
+        private IPatchGenerator patchGenerator
+            => ServiceLocator.Current.GetInstance<IPatchGenerator>();
+        
         private QuestionnaireHistorySettings questionnaireHistorySettings 
             => ServiceLocator.Current.GetInstance<QuestionnaireHistorySettings>();
 
@@ -682,7 +692,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             Guid targetId,
             string targetTitle,
             string targetNewTitle,
-            int? affecedEntries,
+            int? affectedEntries,
             DateTime? targetDateTime,
             QuestionnaireDocument questionnaireDocument,
             QuestionnaireChangeReference reference = null)
@@ -705,7 +715,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
                 TargetItemTitle = targetTitle,
                 TargetItemType = targetType,
                 TargetItemNewTitle = targetNewTitle,
-                AffectedEntriesCount = affecedEntries,
+                AffectedEntriesCount = affectedEntries,
                 TargetItemDateTime = targetDateTime,
             };
 
@@ -715,7 +725,9 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
                 questionnaireChangeItem.References.Add(reference);
             }
             
-            questionnaireChangeItem.ResultingQuestionnaireDocument = questionnireHistoryVersionsService.GetResultingQuestionnaireDocument(questionnaireDocument);
+            var resultingQuestionnaire = questionnireHistoryVersionsService.GetResultingQuestionnaireDocument(questionnaireDocument);
+            var left = this.originalQuestionnaireDocumentStorage.Pop();
+            questionnaireChangeItem.DiffWithPrevisousVersion = patchGenerator.Diff(left, resultingQuestionnaire);
 
             this.questionnaireChangeItemStorage.Store(questionnaireChangeItem, questionnaireChangeItem.QuestionnaireChangeRecordId);
 
@@ -908,7 +920,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             var creatorId = aggregate.QuestionnaireDocument.CreatedBy ?? Guid.Empty;
             UpdateFullQuestionnaireState(aggregate.QuestionnaireDocument, command.QuestionnaireId, creatorId);
 
-            var itemToRevert = this.questionnaireChangeItemStorage.GetById(command.HistoryReferanceId.FormatGuid());
+            var itemToRevert = this.questionnaireChangeItemStorage.GetById(command.HistoryReferenceId.FormatGuid());
 
             AddQuestionnaireChangeItem(command.QuestionnaireId,
                 command.ResponsibleId,
