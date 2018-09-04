@@ -11,17 +11,18 @@ using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
+using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.QuestionnairePostProcessors;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Infrastructure.Native.Storage;
 using WB.Tests.Abc;
-
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
 {
@@ -29,6 +30,26 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
     [TestFixture]
     public class QuestionnaireHistoryPostProcessorTests
     {
+        private IEntitySerializer<QuestionnaireDocument> oldEntitySerializer;
+        private IPatchGenerator oldPatchGenerator;
+
+        [OneTimeSetUp]
+        public void TestFixtureSetup()
+        {
+            oldEntitySerializer = ServiceLocator.Current.GetInstance<IEntitySerializer<QuestionnaireDocument>>();
+            Setup.InstanceToMockedServiceLocator<IEntitySerializer<QuestionnaireDocument>>(new EntitySerializer<QuestionnaireDocument>());
+
+            oldPatchGenerator = ServiceLocator.Current.GetInstance<IPatchGenerator>();
+            Setup.InstanceToMockedServiceLocator<IPatchGenerator>(new JsonPatchService());
+        }
+
+        [OneTimeTearDown]
+        public void TestFixtureTearDown()
+        {
+            Setup.InstanceToMockedServiceLocator<IEntitySerializer<QuestionnaireDocument>>(oldEntitySerializer);
+            Setup.InstanceToMockedServiceLocator<IPatchGenerator>(oldPatchGenerator);
+        }
+
         #region Gherkin
 
         private static GherkinGiven Given() => new GherkinGiven();
@@ -188,7 +209,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         #endregion
 
         [Test]
-        public void When_CloneQuestionnaire_Then_new_history_item_should_be_added_with_spacified_parameters()
+        public void When_CloneQuestionnaire_Then_new_history_item_should_be_added_with_specified_parameters()
         {
             // arrange
             Guid questionnaireId = Id.g1;
@@ -209,8 +230,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
 
             Setup.InstanceToMockedServiceLocator<IQuestionnireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
             Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
-
-            SetupEntitySerializer();
 
             var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId, userId: questionnaireOwner);
             var questionnaire = Create.Questionnaire();
@@ -241,7 +260,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         }
 
         [Test]
-        public void When_CreateQuestionnaire_Then_new_history_item_should_be_added_with_spacified_parameters()
+        public void When_CreateQuestionnaire_Then_new_history_item_should_be_added_with_specified_parameters()
         {
             // arrange
             Guid questionnaireId = Id.g1;
@@ -262,8 +281,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
 
             Setup.InstanceToMockedServiceLocator<IQuestionnireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
             Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
-
-            SetupEntitySerializer();
 
             var questionnaireDocument = new QuestionnaireDocument()
             {
@@ -300,11 +317,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(questionnaireHistoryItem.TargetItemTitle, Is.EqualTo(command.Title));
 
             Assert.That(stateTracker.GroupsState.Keys.Count, Is.EqualTo(2));
-            Assert.That(questionnaireHistoryItem.ResultingQuestionnaireDocument, Is.Not.Null);
+            Assert.That(questionnaireHistoryItem.DiffWithPreviousVersion, Is.Not.Null);
         }
       
         [Test]
-        public void When_ImportQuestionnaire_Then_new_history_item_should_be_added_with_spacified_parameters()
+        public void When_ImportQuestionnaire_Then_new_history_item_should_be_added_with_specified_parameters()
         {
             Guid questionnaireId = Id.g1;
             Guid questionnaireOwner = Id.g3;
@@ -347,11 +364,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             questionnaireHistoryItem.TargetItemType.Should().Be(QuestionnaireItemType.Questionnaire);
             questionnaireHistoryItem.TargetItemId.Should().Be(questionnaireId);
             questionnaireHistoryItem.TargetItemTitle.Should().Be(questionnnaireTitle);
-            questionnaireHistoryItem.ResultingQuestionnaireDocument.Should().NotBeNull();
+            questionnaireHistoryItem.DiffWithPreviousVersion.Should().NotBeNull();
         }
 
         [Test]
-        public void When_DeleteQuestionnaire_Then_new_history_item_should_be_added_with_spacified_parameters()
+        public void When_DeleteQuestionnaire_Then_new_history_item_should_be_added_with_specified_parameters()
         {
             // arrange
             Guid questionnaireId = Id.g1;
@@ -373,15 +390,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
                 new QuestionnaireStateTracker
                 {
                     CreatedBy = questionnaireOwnerId,
-                    GroupsState = new Dictionary<Guid, string>() {{questionnaireId, questionnaireTitle}}
+                    GroupsState = new Dictionary<Guid, string> {
+                    {
+                        questionnaireId, questionnaireTitle
+                    }}
                 },
                 questionnaireId.FormatGuid());
             Setup.InstanceToMockedServiceLocator<IPlainKeyValueStorage<QuestionnaireStateTracker>>(questionnaireStateTackerStorage);
 
             Setup.InstanceToMockedServiceLocator<IQuestionnireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
             Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
-
-            SetupEntitySerializer();
 
             var questionnaire = Create.Questionnaire();
             questionnaire.Initialize(questionnaireId, Create.QuestionnaireDocumentWithOneChapter(), Enumerable.Empty<SharedPerson>());
@@ -406,11 +424,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(questionnaireHistoryItem.TargetItemType, Is.EqualTo(QuestionnaireItemType.Questionnaire));
             Assert.That(questionnaireHistoryItem.TargetItemId, Is.EqualTo(questionnaireId));
             Assert.That(questionnaireHistoryItem.TargetItemTitle, Is.EqualTo(questionnaireTitle));
-            Assert.That(questionnaireHistoryItem.ResultingQuestionnaireDocument, Is.Null);
+            Assert.That(questionnaireHistoryItem.DiffWithPreviousVersion, Is.Null);
         }
 
         [Test]
-        public void When_DeleteAttachment_Then_new_history_item_should_be_added_with_spacified_parameters()
+        public void When_DeleteAttachment_Then_new_history_item_should_be_added_with_specified_parameters()
         {
             // arrange
             Guid questionnaireId = Id.g1;
@@ -440,8 +458,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Setup.InstanceToMockedServiceLocator<IQuestionnireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
             Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
 
-            SetupEntitySerializer();
-
             var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter();
             var questionnaire = Create.Questionnaire(responsibleId, questionnaireDocument);
             questionnaire.Initialize(questionnaireId, questionnaireDocument, Enumerable.Empty<SharedPerson>());
@@ -466,11 +482,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(questionnaireHistoryItem.TargetItemType, Is.EqualTo(QuestionnaireItemType.Attachment));
             Assert.That(questionnaireHistoryItem.TargetItemId, Is.EqualTo(attachmentId));
             Assert.That(questionnaireHistoryItem.TargetItemTitle, Is.EqualTo(attachmentName));
-            Assert.That(questionnaireHistoryItem.ResultingQuestionnaireDocument, Is.Not.Null);
+            Assert.That(questionnaireHistoryItem.DiffWithPreviousVersion, Is.Not.Null);
         }
 
         [Test]
-        public void When_UpdateQuestionnaire_Then_new_history_item_should_be_added_with_spacified_parameters()
+        public void When_UpdateQuestionnaire_Then_new_history_item_should_be_added_with_specified_parameters()
         {
             // arrange
             Guid questionnaireId = Id.g1;
@@ -490,7 +506,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
                 new QuestionnaireStateTracker
                 {
                     CreatedBy = responsibleId,
-                    GroupsState = new Dictionary<Guid, string>() { { questionnaireId, "title" } },
+                    GroupsState = new Dictionary<Guid, string> { { questionnaireId, "title" } },
                 },
                 questionnaireId.FormatGuid());
             Setup.InstanceToMockedServiceLocator<IPlainKeyValueStorage<QuestionnaireStateTracker>>(questionnaireStateTackerStorage);
@@ -498,8 +514,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
 
             Setup.InstanceToMockedServiceLocator<IQuestionnireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
             Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
-
-            SetupEntitySerializer();
 
             var questionnaire = Create.Questionnaire();
             var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter();
@@ -525,11 +539,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(questionnaireHistoryItem.TargetItemType, Is.EqualTo(QuestionnaireItemType.Questionnaire));
             Assert.That(questionnaireHistoryItem.TargetItemId, Is.EqualTo(questionnaireId));
             Assert.That(questionnaireHistoryItem.TargetItemTitle, Is.EqualTo(command.Title));
-            Assert.That(questionnaireHistoryItem.ResultingQuestionnaireDocument, Is.Not.Null);
+            Assert.That(questionnaireHistoryItem.DiffWithPreviousVersion, Is.Not.Null);
         }
 
         [Test]
-        public void When_AddSharedPersonToQuestionnaire_Then_new_history_item_should_be_added_with_spacified_parameters()
+        public void When_AddSharedPersonToQuestionnaire_Then_new_history_item_should_be_added_with_specified_parameters()
         {
             // arrange
             Guid questionnaireId = Id.g1;
@@ -549,8 +563,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
 
             Setup.InstanceToMockedServiceLocator<IQuestionnireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
             Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
-
-            SetupEntitySerializer();
 
             var questionnaire = Create.Questionnaire();
             var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter();
@@ -577,11 +589,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(questionnaireHistoryItem.TargetItemType, Is.EqualTo(QuestionnaireItemType.Person));
             Assert.That(questionnaireHistoryItem.TargetItemId, Is.EqualTo(sharedWithId));
             Assert.That(questionnaireHistoryItem.TargetItemTitle, Is.EqualTo(sharedWithUserName + "email"));
-            Assert.That(questionnaireHistoryItem.ResultingQuestionnaireDocument, Is.Null);
+            Assert.That(questionnaireHistoryItem.DiffWithPreviousVersion, Is.Null);
         }
 
         [Test]
-        public void When_RemoveSharedPersonFromQuestionnaire_Then_new_history_item_should_be_added_with_spacified_parameters()
+        public void When_RemoveSharedPersonFromQuestionnaire_Then_new_history_item_should_be_added_with_specified_parameters()
         {
             // arrange
             Guid questionnaireId = Id.g1;
@@ -601,8 +613,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
 
             Setup.InstanceToMockedServiceLocator<IQuestionnireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
             Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
-
-            SetupEntitySerializer();
 
             var questionnaire = Create.Questionnaire();
             var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter();
@@ -628,11 +638,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(questionnaireHistoryItem.TargetItemType, Is.EqualTo(QuestionnaireItemType.Person));
             Assert.That(questionnaireHistoryItem.TargetItemId, Is.EqualTo(sharedWithId));
             Assert.That(questionnaireHistoryItem.TargetItemTitle, Is.EqualTo(sharedWithUserName + "email"));
-            Assert.That(questionnaireHistoryItem.ResultingQuestionnaireDocument, Is.Null);
+            Assert.That(questionnaireHistoryItem.DiffWithPreviousVersion, Is.Null);
         }
 
         [Test]
-        public void When_UpdateAttachment_Then_new_history_item_should_be_added_with_spacified_parameters()
+        public void When_UpdateAttachment_Then_new_history_item_should_be_added_with_specified_parameters()
         {
             // arrange
             Guid questionnaireId = Id.g1;
@@ -652,7 +662,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Setup.InstanceToMockedServiceLocator<IQuestionnireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
             Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
 
-            SetupEntitySerializer();
             var command = new AddOrUpdateAttachment(questionnaireId, attachmentId, responsibleId, attachmentName, "", null);
 
             var questionnaire = Create.Questionnaire();
@@ -678,11 +687,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(questionnaireHistoryItem.TargetItemType, Is.EqualTo(QuestionnaireItemType.Attachment));
             Assert.That(questionnaireHistoryItem.TargetItemId, Is.EqualTo(attachmentId));
             Assert.That(questionnaireHistoryItem.TargetItemTitle, Is.EqualTo(attachmentName));
-            Assert.That(questionnaireHistoryItem.ResultingQuestionnaireDocument, Is.Not.Null);
+            Assert.That(questionnaireHistoryItem.DiffWithPreviousVersion, Is.Not.Null);
         }
 
         [Test]
-        public void When_UpdateStaticText_Then_new_history_item_should_be_added_with_spacified_parameters()
+        public void When_UpdateStaticText_Then_new_history_item_should_be_added_with_specified_parameters()
         {
             // arrange
             Guid questionnaireId = Id.g1;
@@ -701,8 +710,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
 
             Setup.InstanceToMockedServiceLocator<IQuestionnireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
             Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
-
-            SetupEntitySerializer();
 
             var questionnaire = Create.Questionnaire();
             var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter();
@@ -728,12 +735,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(questionnaireHistoryItem.TargetItemType, Is.EqualTo(QuestionnaireItemType.StaticText));
             Assert.That(questionnaireHistoryItem.TargetItemId, Is.EqualTo(staticTextId));
             Assert.That(questionnaireHistoryItem.TargetItemTitle, Is.EqualTo(staticText));
-            Assert.That(questionnaireHistoryItem.ResultingQuestionnaireDocument, Is.Not.Null);
+            Assert.That(questionnaireHistoryItem.DiffWithPreviousVersion, Is.Not.Null);
         }
 
         
         [Test]
-        public void When_UpdateVariable_Then_new_history_item_should_be_added_with_spacified_parameters()
+        public void When_UpdateVariable_Then_new_history_item_should_be_added_with_specified_parameters()
         {
             // arrange
             Guid questionnaireId = Id.g1;
@@ -752,8 +759,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
 
             Setup.InstanceToMockedServiceLocator<IQuestionnireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
             Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
-
-            SetupEntitySerializer();
 
             var questionnaire = Create.Questionnaire();
             var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter();
@@ -783,7 +788,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         }
 
         [Test]
-        public void When_UpdateGroup_Then_new_history_item_should_be_added_with_spacified_parameters()
+        public void When_UpdateGroup_Then_new_history_item_should_be_added_with_specified_parameters()
         {
             // arrange
             Guid questionnaireId = Id.g1;
@@ -802,8 +807,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
 
             Setup.InstanceToMockedServiceLocator<IQuestionnireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
             Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
-
-            SetupEntitySerializer();
 
             var questionnaireStateTackerStorage = new InMemoryKeyValueStorage<QuestionnaireStateTracker>();
             questionnaireStateTackerStorage.Store(
@@ -839,11 +842,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(questionnaireHistoryItem.TargetItemType, Is.EqualTo(QuestionnaireItemType.Section));
             Assert.That(questionnaireHistoryItem.TargetItemId, Is.EqualTo(groupId));
             Assert.That(questionnaireHistoryItem.TargetItemTitle, Is.EqualTo(variable));
-            Assert.That(questionnaireHistoryItem.ResultingQuestionnaireDocument, Is.Not.Null);
+            Assert.That(questionnaireHistoryItem.DiffWithPreviousVersion, Is.Not.Null);
         }
 
         [Test]
-        public void When_UpdateGroup_and_group_became_a_roster_Then_new_history_item_should_be_added_with_spacified_parameters()
+        public void When_UpdateGroup_and_group_became_a_roster_Then_new_history_item_should_be_added_with_specified_parameters()
         {
             // arrange
             Guid questionnaireId = Id.g1;
@@ -862,8 +865,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
 
             Setup.InstanceToMockedServiceLocator<IQuestionnireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
             Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
-
-            SetupEntitySerializer();
 
             var questionnaireStateTackerStorage = new InMemoryKeyValueStorage<QuestionnaireStateTracker>();
             questionnaireStateTackerStorage.Store(
@@ -900,7 +901,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(updateGroupHistoryItem.TargetItemType, Is.EqualTo(QuestionnaireItemType.Section));
             Assert.That(updateGroupHistoryItem.TargetItemId, Is.EqualTo(rosterId));
             Assert.That(updateGroupHistoryItem.TargetItemTitle, Is.EqualTo(variable));
-            Assert.That(updateGroupHistoryItem.ResultingQuestionnaireDocument, Is.Not.Null);
+            Assert.That(updateGroupHistoryItem.DiffWithPreviousVersion, Is.Not.Null);
 
 
             var groupBecameARosterHistoryItem = allHistoryItems[1];
@@ -927,11 +928,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(updateRosterHistoryItem.TargetItemType, Is.EqualTo(QuestionnaireItemType.Roster));
             Assert.That(updateRosterHistoryItem.TargetItemId, Is.EqualTo(rosterId));
             Assert.That(updateRosterHistoryItem.TargetItemTitle, Is.EqualTo(variable));
-            Assert.That(updateRosterHistoryItem.ResultingQuestionnaireDocument, Is.Not.Null);
+            Assert.That(updateRosterHistoryItem.DiffWithPreviousVersion, Is.Not.Null);
         }
 
         [Test]
-        public void When_UpdateRoster_and_roster_became_a_group_Then_new_history_item_should_be_added_with_spacified_parameters()
+        public void When_UpdateRoster_and_roster_became_a_group_Then_new_history_item_should_be_added_with_specified_parameters()
         {
             // arrange
             Guid questionnaireId = Id.g1;
@@ -950,8 +951,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
 
             Setup.InstanceToMockedServiceLocator<IQuestionnireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
             Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
-
-            SetupEntitySerializer();
 
             var questionnaireStateTackerStorage = new InMemoryKeyValueStorage<QuestionnaireStateTracker>();
             questionnaireStateTackerStorage.Store(
@@ -987,7 +986,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(updateRosterHistoryItem.TargetItemType, Is.EqualTo(QuestionnaireItemType.Roster));
             Assert.That(updateRosterHistoryItem.TargetItemId, Is.EqualTo(groupId));
             Assert.That(updateRosterHistoryItem.TargetItemTitle, Is.EqualTo(variable));
-            Assert.That(updateRosterHistoryItem.ResultingQuestionnaireDocument, Is.Not.Null);
+            Assert.That(updateRosterHistoryItem.DiffWithPreviousVersion, Is.Not.Null);
 
 
             var rosterBecameAGroupHistoryItem = historyStorage.Query(
@@ -1003,7 +1002,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(rosterBecameAGroupHistoryItem.TargetItemType, Is.EqualTo(QuestionnaireItemType.Roster));
             Assert.That(rosterBecameAGroupHistoryItem.TargetItemId, Is.EqualTo(groupId));
             Assert.That(rosterBecameAGroupHistoryItem.TargetItemTitle, Is.EqualTo(variable));
-            Assert.That(rosterBecameAGroupHistoryItem.ResultingQuestionnaireDocument, Is.Not.Null);
+            Assert.That(rosterBecameAGroupHistoryItem.DiffWithPreviousVersion, Is.Not.Null);
         }
 
         [Test]
@@ -1037,8 +1036,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
 
             Setup.InstanceToMockedServiceLocator<IQuestionnireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
             Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
-
-            SetupEntitySerializer();
 
             var questionnaire = Create.Questionnaire();
             questionnaire.Initialize(questionnaireId, Create.QuestionnaireDocumentWithOneChapter(), Enumerable.Empty<SharedPerson>());
@@ -1097,8 +1094,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Setup.InstanceToMockedServiceLocator<IQuestionnireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
             Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
 
-            SetupEntitySerializer();
-
             var questionnaireDocument = new QuestionnaireDocument()
             {
                 Children = new List<IComposite>()
@@ -1140,7 +1135,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
 
 
         [Test]
-        public void When_deletting_questionnire_after_rename()
+        public void When_deleting_questionnaire_after_rename()
         {
             // arrange
             Guid questionnaireId = Id.g1;
@@ -1165,7 +1160,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Setup.InstanceToMockedServiceLocator<IPlainKeyValueStorage<QuestionnaireStateTracker>>(questionnaireStateTackerStorage);
             Setup.InstanceToMockedServiceLocator<IQuestionnireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
             Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
-            SetupEntitySerializer();
 
             var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId);
             
@@ -1228,8 +1222,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Setup.InstanceToMockedServiceLocator<IQuestionnireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
             Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
 
-            SetupEntitySerializer();
-
             var questionnaire = Create.Questionnaire();
             questionnaire.Initialize(questionnaireId, Create.QuestionnaireDocumentWithOneChapter(), Enumerable.Empty<SharedPerson>());
 
@@ -1249,7 +1241,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         }
 
         [Test]
-        public void When_amout_of_records_exceed_the_limit_Then_questionnaire_should_be_set_to_null_for_older_records()
+        public void When_amount_of_records_exceed_the_limit_Then_questionnaire_should_be_set_to_null_for_older_records()
         {
             // arrange
             Guid questionnaireId = Id.g1;
@@ -1309,8 +1301,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Setup.InstanceToMockedServiceLocator<IQuestionnireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
             Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(2));
 
-            SetupEntitySerializer();
-
             var questionnaire = Create.Questionnaire();
             questionnaire.Initialize(questionnaireId, Create.QuestionnaireDocumentWithOneChapter(), Enumerable.Empty<SharedPerson>());
 
@@ -1362,8 +1352,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Setup.InstanceToMockedServiceLocator<IQuestionnireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
             Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
 
-            SetupEntitySerializer();
-
             var questionnaire = Create.Questionnaire();
             var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter();
             questionnaireDocument.Translations.Add(new Core.SharedKernels.SurveySolutions.Documents.Translation
@@ -1394,13 +1382,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(questionnaireHistoryItem.TargetItemType, Is.EqualTo(QuestionnaireItemType.Translation));
             Assert.That(questionnaireHistoryItem.TargetItemId, Is.EqualTo(questionnaireId));
             Assert.That(questionnaireHistoryItem.TargetItemTitle, Is.EqualTo("Mova"));
-            Assert.That(questionnaireHistoryItem.ResultingQuestionnaireDocument, Is.Not.Null);
-        }
-
-
-        private void SetupEntitySerializer()
-        {
-            Setup.InstanceToMockedServiceLocator<IEntitySerializer<QuestionnaireDocument>>(new EntitySerializer<QuestionnaireDocument>());
+            Assert.That(questionnaireHistoryItem.DiffWithPreviousVersion, Is.Not.Null);
         }
 
         private static HistoryPostProcessor CreateHistoryPostProcessor() => Create.HistoryPostProcessor();

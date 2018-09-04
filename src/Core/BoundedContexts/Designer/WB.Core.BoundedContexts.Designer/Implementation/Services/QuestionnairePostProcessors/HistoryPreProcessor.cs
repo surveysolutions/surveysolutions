@@ -96,7 +96,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
         public void Process(Questionnaire aggregate, CreateQuestionnaire command)
         {
-            StoreOriginalDocument(aggregate);
         }
 
         public void Process(Questionnaire aggregate, UpdateQuestionnaire command)

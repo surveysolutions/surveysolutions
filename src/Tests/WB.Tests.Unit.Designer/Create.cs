@@ -613,7 +613,7 @@ namespace WB.Tests.Unit.Designer
                 References = reference.ToHashSet(),
                 Sequence = sequence ?? 1,
                 ResultingQuestionnaireDocument = resultingQuestionnaireDocument,
-                DiffWithPrevisousVersion = diffWithPreviousVersion
+                DiffWithPreviousVersion = diffWithPreviousVersion
             };
         }
 
@@ -1340,7 +1340,8 @@ namespace WB.Tests.Unit.Designer
         public static QuestionnaireListView QuestionnaireListView(params QuestionnaireListViewItem[] items)
             => new QuestionnaireListView(1, 10, items.Length, items, string.Empty);
 
-        public static HistoryPostProcessor HistoryPostProcessor() => new HistoryPostProcessor();
+        public static HistoryPostProcessor HistoryPostProcessor() => 
+            new HistoryPostProcessor();
 
         public static CustomWebApiAuthorizeFilter CustomWebApiAuthorizeFilter()
         {
