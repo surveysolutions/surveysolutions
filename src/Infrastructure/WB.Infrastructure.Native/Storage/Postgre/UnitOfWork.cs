@@ -38,25 +38,43 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
         public void AcceptChanges()
         {
-            if (isDisposed) throw new ObjectDisposedException(nameof(UnitOfWork));
+            if (isDisposed)
+            {
+                logger.Info($"Error accepting. Is disposed. UOW:{Id} old sessionId:{sessionId} Thread:{Thread.CurrentThread.ManagedThreadId}");
+                throw new ObjectDisposedException(nameof(UnitOfWork));
+            }
+            
+            if (session == null)
+            {
+                logger.Info($"Error accepting. Sesion is Null. UOW:{Id} old sessionId:{sessionId} Thread:{Thread.CurrentThread.ManagedThreadId}");
+                throw new Exception(nameof(UnitOfWork));
+            }
 
             transaction.Commit();
             session.Close();
             logger.Info($"session closing UOW:{Id} sessionId:{(session as SessionImpl)?.SessionId} Thread:{Thread.CurrentThread.ManagedThreadId}");
             transaction = null;
             session = null;
+
+            Dispose();
         }
 
         public ISession Session
         {
             get
             {
-                if (isDisposed)
+                if (isDisposed )
                 {
                     logger.Info($"Error getting session. UOW:{Id} old sessionId:{sessionId} Thread:{Thread.CurrentThread.ManagedThreadId}");
                     throw new ObjectDisposedException(nameof(UnitOfWork));
                 }
-            return session;
+                if (session == null)
+                {
+                    logger.Info($"Error getting session. Sesion is Null. UOW:{Id} old sessionId:{sessionId} Thread:{Thread.CurrentThread.ManagedThreadId}");
+                    throw new Exception(nameof(UnitOfWork));
+                }
+
+                return session;
             }
         }
 

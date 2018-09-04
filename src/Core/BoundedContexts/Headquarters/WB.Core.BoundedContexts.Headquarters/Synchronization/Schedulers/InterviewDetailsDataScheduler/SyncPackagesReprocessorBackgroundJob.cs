@@ -11,8 +11,12 @@ using WB.Enumerator.Native.WebInterview;
 namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewDetailsDataScheduler
 {
     [DisallowConcurrentExecution]
-    internal class SyncPackagesReprocessorBackgroundJob : IJob
+    public class SyncPackagesReprocessorBackgroundJob : IJob
     {
+        public SyncPackagesReprocessorBackgroundJob()
+        {
+        }
+
         ILogger logger => ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<SyncPackagesReprocessorBackgroundJob>();
         IInterviewBrokenPackagesService InterviewBrokenPackagesService => ServiceLocator.Current.GetInstance<IInterviewBrokenPackagesService>();
         SyncPackagesProcessorBackgroundJobSetting interviewPackagesJobSetings => ServiceLocator.Current.GetInstance<SyncPackagesProcessorBackgroundJobSetting>();

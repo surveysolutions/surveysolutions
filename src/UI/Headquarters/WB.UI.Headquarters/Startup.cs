@@ -86,77 +86,81 @@ namespace WB.UI.Headquarters
 
             var container = autofacKernel.Container;
 
+
             var config = new HttpConfiguration();
             var resolver = new AutofacWebApiDependencyResolver(container);
 
             config.DependencyResolver = resolver;
             GlobalConfiguration.Configuration.DependencyResolver = resolver;
-            
+
             HubConfiguration hubConfig = new HubConfiguration();
 
 
-            hubConfig.Resolver = container.Resolve<Microsoft.AspNet.SignalR.IDependencyResolver>();
-            GlobalHost.DependencyResolver = container.Resolve<Microsoft.AspNet.SignalR.IDependencyResolver>();
+                hubConfig.Resolver = container.Resolve<Microsoft.AspNet.SignalR.IDependencyResolver>();
+                GlobalHost.DependencyResolver = container.Resolve<Microsoft.AspNet.SignalR.IDependencyResolver>();
 
-            
-            DependencyResolver.SetResolver(new Autofac.Integration.Mvc.AutofacDependencyResolver(container));
-            ModelBinders.Binders.DefaultBinder = new AutofacBinderResolver(container);
 
-            ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(container));
+                DependencyResolver.SetResolver(new Autofac.Integration.Mvc.AutofacDependencyResolver(container));
+                ModelBinders.Binders.DefaultBinder = new AutofacBinderResolver(container);
 
-            //TODO:AF resolve
-            /*var perRequestModule = new OnePerRequestHttpModule();
-            // onPerRequest scope implementation. Collecting all perRequest instances after all requests
-            app.Use(async (ctx, next) =>
-            {
-                try
+                ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(container));
+
+                //TODO:AF resolve
+                /*var perRequestModule = new OnePerRequestHttpModule();
+                // onPerRequest scope implementation. Collecting all perRequest instances after all requests
+                app.Use(async (ctx, next) =>
                 {
-                    if (ctx.Request.CallCancelled.IsCancellationRequested) return;
-
-                    await next();
-                }
-                finally
-                {
-                    perRequestModule.DeactivateInstancesForCurrentHttpRequest();
-                }
-            });
-            kernel.Inject(perRequestModule); // wiill keep reference to perRequestModule in Kernel instance
-*/
-
-            app.UseAutofacMiddleware(container);
-            app.UseWebApi(config);
-
-            var logger = ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<Startup>();
-            logger.Info($@"Starting Headquarters {ServiceLocator.Current.GetInstance<IProductVersion>()}");
-            
-            ConfigureAuth(app);
-            InitializeAppShutdown(app);
-            InitializeMVC();
-            ConfigureWebApi(app);
-
-            UpdateAppVersion();
-
-            Exceptional.Settings.ExceptionActions.AddHandler<TargetInvocationException>((error, exception) =>
-            {
-                void AddAllSqlData(Exception e)
-                {
-                    if (e is Npgsql.PostgresException pe)
+                    try
                     {
-                        error.AddCommand(new Command(@"NpgSql", pe.Statement.SQL));
+                        if (ctx.Request.CallCancelled.IsCancellationRequested) return;
+    
+                        await next();
+                    }
+                    finally
+                    {
+                        perRequestModule.DeactivateInstancesForCurrentHttpRequest();
+                    }
+                });
+                kernel.Inject(perRequestModule); // wiill keep reference to perRequestModule in Kernel instance
+                */
+
+                //GlobalFilters.Filters.Add(new TransactionFilter());
+                //config.Filters.Add(new ApiTransactionFilter());
+
+                app.UseAutofacMiddleware(container);
+                app.UseWebApi(config);
+
+                var logger = ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<Startup>();
+                logger.Info($@"Starting Headquarters {ServiceLocator.Current.GetInstance<IProductVersion>()}");
+
+                ConfigureAuth(app);
+                InitializeAppShutdown(app);
+                InitializeMVC();
+                ConfigureWebApi(app);
+
+                UpdateAppVersion();
+
+                Exceptional.Settings.ExceptionActions.AddHandler<TargetInvocationException>((error, exception) =>
+                {
+                    void AddAllSqlData(Exception e)
+                    {
+                        if (e is Npgsql.PostgresException pe)
+                        {
+                            error.AddCommand(new Command(@"NpgSql", pe.Statement.SQL));
+                        }
+
+                        if (e.InnerException != null)
+                        {
+                            AddAllSqlData(e.InnerException);
+                        }
                     }
 
-                    if (e.InnerException != null)
-                    {
-                        AddAllSqlData(e.InnerException);
-                    }
-                }
+                    AddAllSqlData(exception);
+                });
 
-                AddAllSqlData(exception);
-            });
-
-            InitMetrics();
-            
-            MetricsService.Start(logger);
+                InitMetrics();
+                MetricsService.Start(logger);
+           
         }
 
         private static void InitMetrics()
