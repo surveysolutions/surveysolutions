@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using DiffMatchPatch;
-using JsonDiffPatchDotNet;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -727,25 +725,45 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             
             var resultingQuestionnaire = questionnireHistoryVersionsService.GetResultingQuestionnaireDocument(questionnaireDocument);
             var left = this.originalQuestionnaireDocumentStorage.Pop();
-            questionnaireChangeItem.DiffWithPrevisousVersion = patchGenerator.Diff(left, resultingQuestionnaire);
+            questionnaireChangeItem.DiffWithPreviousVersion = patchGenerator.Diff(left, resultingQuestionnaire);
 
             this.questionnaireChangeItemStorage.Store(questionnaireChangeItem, questionnaireChangeItem.QuestionnaireChangeRecordId);
 
+            RemoveOldQuestionnaireHistory(sQuestionnaireId, maxSequenceByQuestionnaire);
+        }
+
+        private void RemoveOldQuestionnaireHistory(string sQuestionnaireId, int? maxSequenceByQuestionnaire)
+        {
             var minSequence = (maxSequenceByQuestionnaire ?? 0) -
                               questionnaireHistorySettings.QuestionnaireChangeHistoryLimit + 2;
             if (minSequence < 0) return;
 
             List<string> changeRecordIdsToRemove = this.questionnaireChangeItemStorage.Query(_ => _
-                    .Where(x => x.QuestionnaireId == sQuestionnaireId && x.Sequence < minSequence
-                        && x.ResultingQuestionnaireDocument != null)
-                    .Select(x => x.QuestionnaireChangeRecordId)
-                    .ToList());
+                .Where(x => x.QuestionnaireId == sQuestionnaireId && x.Sequence < minSequence
+                                                                  && (x.ResultingQuestionnaireDocument != null || x.DiffWithPreviousVersion != null))
+                .OrderBy(x => x.Sequence)
+                .Select(x => x.QuestionnaireChangeRecordId)
+                .ToList());
 
-            foreach (var changeRecordIdToRemove in changeRecordIdsToRemove)
+            if (changeRecordIdsToRemove.Count > 0)
             {
-                var itemdToRemoveQuestionnaire = this.questionnaireChangeItemStorage.GetById(changeRecordIdToRemove);
-                itemdToRemoveQuestionnaire.ResultingQuestionnaireDocument = null;
-                this.questionnaireChangeItemStorage.Store(itemdToRemoveQuestionnaire, changeRecordIdToRemove);
+                string lastItem = changeRecordIdsToRemove.Last();
+                QuestionnaireDocument resultingQuestionnaireForLastStoredRecord =
+                    this.questionnireHistoryVersionsService.GetByHistoryVersion(Guid.Parse(lastItem));
+                var change = this.questionnaireChangeItemStorage.GetById(lastItem);
+
+                change.ResultingQuestionnaireDocument = 
+                    this.questionnireHistoryVersionsService.GetResultingQuestionnaireDocument(resultingQuestionnaireForLastStoredRecord);
+                change.DiffWithPreviousVersion = null;
+                this.questionnaireChangeItemStorage.Store(change, change.QuestionnaireChangeRecordId);
+
+                foreach (var changeRecordIdToRemove in changeRecordIdsToRemove.Where(x => x != lastItem))
+                {
+                    var itemToRemoveQuestionnaire = this.questionnaireChangeItemStorage.GetById(changeRecordIdToRemove);
+                    itemToRemoveQuestionnaire.ResultingQuestionnaireDocument = null;
+                    itemToRemoveQuestionnaire.DiffWithPreviousVersion = null;
+                    this.questionnaireChangeItemStorage.Store(itemToRemoveQuestionnaire, changeRecordIdToRemove);
+                }
             }
         }
 

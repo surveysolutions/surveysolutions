@@ -12,55 +12,55 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Infrastructure.Native.Storage;
 using WB.Tests.Abc;
+using WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests;
 
-
-namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
+namespace WB.Tests.Unit.Designer.QuestionnaireTests
 {
     internal class RevertVersionTests : QuestionnaireTestsContext
     {
         [Test]
-        public void RevertVersion_When_question_version_specified_Then_should_restore_questionnire()
+        public void RevertVersion_When_question_version_specified_Then_should_restore_questionnaire()
         {
             // Arrange
             Guid responsibleId = Guid.NewGuid();
             Guid questionnaireId = Guid.NewGuid();
-            Guid historyReferanceId = Guid.NewGuid();
-            var currentQuestionnireDocument = CreateQuestionnaireDocument(createdBy: responsibleId);
-            var oldQuestionnireDocument = CreateQuestionnaireDocument();
+            Guid historyReferenceId = Guid.NewGuid();
+            var currentQuestionnaireDocument = CreateQuestionnaireDocument(createdBy: responsibleId);
+            var oldQuestionnaireDocument = CreateQuestionnaireDocument();
 
-            var historyVersionsService = Mock.Of<IQuestionnireHistoryVersionsService>(s => s.GetByHistoryVersion(historyReferanceId) == oldQuestionnireDocument);
+            var historyVersionsService = Mock.Of<IQuestionnireHistoryVersionsService>(s => s.GetByHistoryVersion(historyReferenceId) == oldQuestionnaireDocument);
             var questionnaire = Create.Questionnaire(historyVersionsService: historyVersionsService);
-            questionnaire.Initialize(questionnaireId, currentQuestionnireDocument, null);
-            var command = Create.Command.RevertVersionQuestionnaire(questionnaireId, historyReferanceId, responsibleId);
+            questionnaire.Initialize(questionnaireId, currentQuestionnaireDocument, null);
+            var command = Create.Command.RevertVersionQuestionnaire(questionnaireId, historyReferenceId, responsibleId);
             
             // Act
             questionnaire.RevertVersion(command);
 
             // Assert
-            Assert.That(questionnaire.QuestionnaireDocument, Is.EqualTo(oldQuestionnireDocument));
+            Assert.That(questionnaire.QuestionnaireDocument, Is.EqualTo(oldQuestionnaireDocument));
         }
 
         [Test]
-        public void RevertVersion_When_shared_person_try_to_restore_questionnire_Then_should_restore_questionnire()
+        public void RevertVersion_When_shared_person_try_to_restore_questionnaire_Then_should_restore_questionnaire()
         {
             // Arrange
             Guid ownerId = Guid.NewGuid();
             Guid sharedPersonId = Guid.NewGuid();
             Guid questionnaireId = Guid.NewGuid();
-            Guid historyReferanceId = Guid.NewGuid();
-            var currentQuestionnireDocument = CreateQuestionnaireDocument(createdBy: ownerId);
-            var oldQuestionnireDocument = CreateQuestionnaireDocument();
+            Guid historyReferenceId = Guid.NewGuid();
+            var currentQuestionnaireDocument = CreateQuestionnaireDocument(createdBy: ownerId);
+            var oldQuestionnaireDocument = CreateQuestionnaireDocument();
 
-            var historyVersionsService = Mock.Of<IQuestionnireHistoryVersionsService>(s => s.GetByHistoryVersion(historyReferanceId) == oldQuestionnireDocument);
+            var historyVersionsService = Mock.Of<IQuestionnireHistoryVersionsService>(s => s.GetByHistoryVersion(historyReferenceId) == oldQuestionnaireDocument);
             var questionnaire = Create.Questionnaire(historyVersionsService: historyVersionsService);
-            questionnaire.Initialize(questionnaireId, currentQuestionnireDocument, new[] { new SharedPerson() { UserId = sharedPersonId} });
-            var command = Create.Command.RevertVersionQuestionnaire(questionnaireId, historyReferanceId, sharedPersonId);
+            questionnaire.Initialize(questionnaireId, currentQuestionnaireDocument, new[] { new SharedPerson() { UserId = sharedPersonId} });
+            var command = Create.Command.RevertVersionQuestionnaire(questionnaireId, historyReferenceId, sharedPersonId);
             
             // Act
             questionnaire.RevertVersion(command);
 
             // Assert
-            Assert.That(questionnaire.QuestionnaireDocument, Is.EqualTo(oldQuestionnireDocument));
+            Assert.That(questionnaire.QuestionnaireDocument, Is.EqualTo(oldQuestionnaireDocument));
         }
 
 
@@ -69,16 +69,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
         {
             // Arrange
             Guid responsibleId = Guid.NewGuid();
-            Guid personWhitoutPermissions = Guid.NewGuid();
+            Guid personWhithNoPermissions = Guid.NewGuid();
             Guid questionnaireId = Guid.NewGuid();
-            Guid historyReferanceId = Guid.NewGuid();
-            var currentQuestionnireDocument = CreateQuestionnaireDocument(createdBy: responsibleId);
-            var oldQuestionnireDocument = CreateQuestionnaireDocument();
+            Guid historyReferenceId = Guid.NewGuid();
+            var currentQuestionnaireDocument = CreateQuestionnaireDocument(createdBy: responsibleId);
+            var oldQuestionnaireDocument = CreateQuestionnaireDocument();
 
-            var historyVersionsService = Mock.Of<IQuestionnireHistoryVersionsService>(s => s.GetByHistoryVersion(historyReferanceId) == oldQuestionnireDocument);
+            var historyVersionsService = Mock.Of<IQuestionnireHistoryVersionsService>(s => s.GetByHistoryVersion(historyReferenceId) == oldQuestionnaireDocument);
             var questionnaire = Create.Questionnaire(historyVersionsService: historyVersionsService);
-            questionnaire.Initialize(questionnaireId, currentQuestionnireDocument, null);
-            var command = Create.Command.RevertVersionQuestionnaire(questionnaireId, historyReferanceId, personWhitoutPermissions);
+            questionnaire.Initialize(questionnaireId, currentQuestionnaireDocument, null);
+            var command = Create.Command.RevertVersionQuestionnaire(questionnaireId, historyReferenceId, personWhithNoPermissions);
 
             // Act
             var exception = Assert.Throws<QuestionnaireException>(() => questionnaire.RevertVersion(command));
@@ -105,6 +105,42 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
             historyStorage.Store(Create.QuestionnaireChangeRecord(questionnaireChangeRecordId: initialChangeId,
                 sequence: 1,
                 resultingQuestionnaireDocument: documentBeforeChange), initialChangeId);
+
+            document.UpdateQuestion(questionId, q => q.QuestionText = "edited text");
+            var documentAfterChange = serializer.Serialize(document);
+
+            var secondChangeId = Id.gB.FormatGuid();
+            historyStorage.Store(Create.QuestionnaireChangeRecord(questionnaireChangeRecordId: secondChangeId,
+                sequence: 2,
+                diffWithPreviousVersion: patchGenerator.Diff(documentBeforeChange, documentAfterChange)), secondChangeId);
+
+            var service = Create.QuestionnireHistoryVersionsService(historyStorage);
+
+            // Act
+            QuestionnaireDocument patchedDocument = service.GetByHistoryVersion(Guid.Parse(secondChangeId));
+
+            // Assert
+            Assert.That(patchedDocument.GetQuestion<TextQuestion>(questionId).QuestionText, Is.EqualTo("edited text"));
+        }
+
+        [Test]
+        public void should_be_able_to_restore_questionnaire_from_only_diffs()
+        {
+            var serializer =  new EntitySerializer<QuestionnaireDocument>();
+            IPlainStorageAccessor<QuestionnaireChangeRecord> historyStorage = new Abc.Storage.TestPlainStorage<QuestionnaireChangeRecord>();
+            var patchGenerator = Create.PatchGenerator();
+
+            var questionId = Id.g1;
+            var document = Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            {
+                Create.TextQuestion(questionId: questionId, text: "not edited text")
+            });
+
+            var initialChangeId = Id.gA.FormatGuid();
+            var documentBeforeChange = serializer.Serialize(document);
+            historyStorage.Store(Create.QuestionnaireChangeRecord(questionnaireChangeRecordId: initialChangeId,
+                sequence: 1,
+                diffWithPreviousVersion: patchGenerator.Diff(null, documentBeforeChange)), initialChangeId);
 
             document.UpdateQuestion(questionId, q => q.QuestionText = "edited text");
             var documentAfterChange = serializer.Serialize(document);
