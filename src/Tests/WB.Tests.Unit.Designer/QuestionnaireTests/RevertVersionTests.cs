@@ -1,9 +1,17 @@
 ﻿using System;
+using Main.Core.Documents;
+using Main.Core.Entities.Composite;
+using Main.Core.Entities.SubEntities.Question;
 using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Exceptions;
 using WB.Core.BoundedContexts.Designer.Services;
+using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.PlainStorage;
+using WB.Infrastructure.Native.Storage;
+using WB.Tests.Abc;
 
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
@@ -77,6 +85,42 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
 
             // Assert
             Assert.That(exception.ErrorType, Is.EqualTo(DomainExceptionType.DoesNotHavePermissionsForEdit));
+        }
+
+        [Test]
+        public void when_there_is_diff_and_full_copy_of_document_present_in_history_Should_use_snapshot_to_restore()
+        {
+            var serializer =  new EntitySerializer<QuestionnaireDocument>();
+            IPlainStorageAccessor<QuestionnaireChangeRecord> historyStorage = new Abc.Storage.TestPlainStorage<QuestionnaireChangeRecord>();
+            var patchGenerator = Create.PatchGenerator();
+
+            var questionId = Id.g1;
+            var document = Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+            {
+                Create.TextQuestion(questionId: questionId, text: "not edited text")
+            });
+
+            var initialChangeId = Id.gA.FormatGuid();
+            var documentBeforeChange = serializer.Serialize(document);
+            historyStorage.Store(Create.QuestionnaireChangeRecord(questionnaireChangeRecordId: initialChangeId,
+                sequence: 1,
+                resultingQuestionnaireDocument: documentBeforeChange), initialChangeId);
+
+            document.UpdateQuestion(questionId, q => q.QuestionText = "edited text");
+            var documentAfterChange = serializer.Serialize(document);
+
+            var secondChangeId = Id.gB.FormatGuid();
+            historyStorage.Store(Create.QuestionnaireChangeRecord(questionnaireChangeRecordId: secondChangeId,
+                sequence: 2,
+                diffWithPreviousVersion: patchGenerator.Diff(documentBeforeChange, documentAfterChange)), secondChangeId);
+
+            var service = Create.QuestionnireHistoryVersionsService(historyStorage);
+
+            // Act
+            QuestionnaireDocument patchedDocument = service.GetByHistoryVersion(Guid.Parse(secondChangeId));
+
+            // Assert
+            Assert.That(patchedDocument.GetQuestion<TextQuestion>(questionId).QuestionText, Is.EqualTo("edited text"));
         }
     }
 }

@@ -29,6 +29,7 @@ namespace WB.Core.BoundedContexts.Designer.Mappings
             Property(x => x.AffectedEntriesCount);
             Property(x => x.TargetItemType);
             Property(x => x.TargetItemDateTime);
+            Property(x => x.DiffWithPrevisousVersion);
 
             Set(x => x.References, set =>
             {
