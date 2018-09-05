@@ -13,13 +13,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         public string Diff(string left, string right)
         {
             diff_match_patch patcher = new diff_match_patch();
-            
-            //List<Diff> diff = patcher.diff_main(
-            //    left ?? emptyJson,
-            //    right ?? emptyJson);
-
-            //patcher.diff_cleanupSemantic(diff);
-
             List<Patch> patches = patcher.patch_make(left ?? emptyJson,
                                                      right ?? emptyJson);
             if (patches.Count == 0) return null;

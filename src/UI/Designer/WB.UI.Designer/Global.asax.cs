@@ -37,7 +37,7 @@ namespace WB.UI.Designer
         protected void Application_Start()
         {
             this.logger.Info($"Starting Designer {ProductVersion}");
-            HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();
+            //HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();
 
             AppDomain.CurrentDomain.UnhandledException += this.CurrentUnhandledException;
 
