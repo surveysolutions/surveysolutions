@@ -1,13 +1,35 @@
-﻿using System.Net.Http;
+﻿using System;
+using System.Net.Http;
+using ModernHttpClient;
 using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Core.GenericSubdomains.Portable.Services;
 
 namespace WB.UI.Shared.Enumerator.Services.Internals
 {
-    public class AndroidHttpClientFactory : DefaultHttpClientFactory
+    public class AndroidHttpClientFactory : IHttpClientFactory
     {
-        public override HttpMessageHandler CreateMessageHandler()
+        private readonly IRestServiceSettings restServiceSettings;
+
+        public AndroidHttpClientFactory(IRestServiceSettings restServiceSettings)
         {
-            return new Xamarin.Android.Net.AndroidClientHandler();
+            this.restServiceSettings = restServiceSettings;
+        }
+
+        public HttpClient CreateClient(Url url, HttpMessageHandler handler, IHttpStatistician statistician)
+        {
+            return new HttpClient(new ExtendedMessageHandler(handler, statistician));
+        }
+
+        public HttpMessageHandler CreateMessageHandler()
+        {
+            var messageHandler = new NativeMessageHandler()
+            {
+                Timeout = restServiceSettings.Timeout,
+                EnableUntrustedCertificates = restServiceSettings.AcceptUnsignedSslCertificate,
+                DisableCaching = true,
+            };
+
+            return messageHandler;
         }
     }
 }
