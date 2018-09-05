@@ -121,7 +121,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             cfg.AddDeserializedMapping(plainMaps, "");
             cfg.SetProperty(NHibernate.Cfg.Environment.WrapResultSets, "true");
 
-            File.WriteAllText(@"D:\Temp\Mapping.xml" , Serialize(maps)); // Can be used to check mappings
+            //File.WriteAllText(@"D:\Temp\Mapping.xml" , Serialize(maps)); // Can be used to check mappings
 
             cfg.SessionFactory().GenerateStatistics();
 

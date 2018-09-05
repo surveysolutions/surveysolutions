@@ -136,9 +136,14 @@ namespace WB.UI.Headquarters
                 ConfigureAuth(app);
                 InitializeAppShutdown(app);
                 InitializeMVC();
-                ConfigureWebApi(app);
 
-                UpdateAppVersion();
+                using (var scope = container.BeginLifetimeScope())
+                {
+                    ConfigureWebApi(app);
+
+                    scope.Resolve<IProductVersionHistory>().RegisterCurrentVersion();
+
+                }
 
                 Exceptional.Settings.ExceptionActions.AddHandler<TargetInvocationException>((error, exception) =>
                 {
@@ -316,9 +321,6 @@ namespace WB.UI.Headquarters
             ViewEngines.Engines.Add(new RazorViewEngine());
             ValueProviderFactories.Factories.Add(new JsonValueProviderFactory());
         }
-
-        private static void UpdateAppVersion()
-            => ServiceLocator.Current.GetInstance<IProductVersionHistory>().RegisterCurrentVersion();
 
         public static void RegisterGlobalFilters(GlobalFilterCollection filters)
         {

@@ -31,7 +31,6 @@ namespace WB.UI.Headquarters.API.WebInterview
             typeof(HandlePauseEventPipelineModule),
             typeof(WebInterviewStateManager),
             typeof(PlainSignalRTransactionManager),
-            typeof(WebInterviewStateManager),
             typeof(WebInterviewConnectionsCounter)
         };
 
