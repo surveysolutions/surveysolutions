@@ -48,10 +48,15 @@ namespace WB.UI.Interviewer.ServiceLocation
             registry.Bind<IInterviewUniqueKeyGenerator, InterviewerInterviewUniqueKeyGenerator>();
             registry.Bind<IGroupStateCalculationStrategy, EnumeratorGroupGroupStateCalculationStrategy>();
             registry.Bind<IInterviewStateCalculationStrategy, EnumeratorInterviewStateCalculationStrategy>();
+            
+            registry.Bind<IInterviewerSynchronizationService, OnlineSynchronizationService>();
+            registry.BindToRegisteredInterface<IOnlineSynchronizationService, IInterviewerSynchronizationService>();
+            registry.Bind<IOfflineSynchronizationService, OfflineSynchronizationService>();
+            registry.BindToMethod(x =>
+                x.Get<IInterviewerSettings>().AllowSyncWithHq
+                    ? x.Get<IOnlineSynchronizationService>()
+                    : (ISynchronizationService)x.Get<IOfflineSynchronizationService>());
 
-            registry.Bind<ISynchronizationService, SyncronizationServiceWrapper>();
-
-            registry.Bind<IInterviewerSynchronizationService, SynchronizationService>();
             registry.Bind<IBattery, AndroidBattery>();
             registry.Bind<IDeviceOrientation, AndroidDeviceOrientation>();
             registry.Bind<IDeviceInformationService, DeviceInformationService>();
@@ -62,7 +67,13 @@ namespace WB.UI.Interviewer.ServiceLocation
             registry.BindAsSingleton<ISupervisorSyncProtocolVersionProvider, SupervisorSyncProtocolVersionProvider>();
             registry.BindAsSingleton<IQuestionnaireContentVersionProvider, QuestionnaireContentVersionProvider>();
 
-            registry.Bind<ISynchronizationProcess, InterviewerSynchronizationProcess>();
+            registry.Bind<IOnlineSynchronizationProcess, InterviewerOnlineSynchronizationProcess>();
+            registry.Bind<IOfflineSynchronizationProcess, InterviewerOfflineSynchronizationProcess>();
+            registry.BindToMethod(x =>
+                x.Get<IInterviewerSettings>().AllowSyncWithHq
+                    ? x.Get<IOnlineSynchronizationProcess>()
+                    : (ISynchronizationProcess) x.Get<IOfflineSynchronizationProcess>());
+
             registry.Bind<IQuestionnaireDownloader, QuestionnaireDownloader>();
             
             registry.Bind<IAuditLogSynchronizer, AuditLogSynchronizer>();

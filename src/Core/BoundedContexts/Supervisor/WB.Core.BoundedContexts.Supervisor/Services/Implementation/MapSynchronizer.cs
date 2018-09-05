@@ -1,6 +1,7 @@
 ﻿using WB.Core.BoundedContexts.Supervisor.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchronization;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -19,7 +20,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
         private readonly IPrincipal principal;
 
         public MapSyncProvider(IMapService mapService, 
-            ISynchronizationService synchronizationService, 
+            IOnlineSynchronizationService synchronizationService, 
             ILogger logger, 
             IHttpStatistician httpStatistician, 
             IUserInteractionService userInteractionService,
@@ -28,9 +29,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
             IPlainStorage<SupervisorIdentity> supervisorPlainStorage, 
             IPlainStorage<InterviewView> interviewViewRepository, 
             IAuditLogService auditLogService,
-            IEnumeratorSettings enumeratorSettings) 
-            : base(mapService, synchronizationService, logger, httpStatistician, userInteractionService, principal, 
-                interviewViewRepository, auditLogService, enumeratorSettings)
+            IEnumeratorSettings enumeratorSettings, 
+            IServiceLocator serviceLocator) 
+            : base(mapService, synchronizationService, logger, httpStatistician, principal, 
+                interviewViewRepository, auditLogService, enumeratorSettings, userInteractionService, serviceLocator)
         {
             this.supervisorPlainStorage = supervisorPlainStorage;
             this.passwordHasher = passwordHasher;

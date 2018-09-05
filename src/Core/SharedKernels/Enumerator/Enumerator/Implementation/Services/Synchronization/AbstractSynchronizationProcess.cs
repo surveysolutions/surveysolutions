@@ -7,9 +7,9 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization.Steps;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -23,12 +23,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
     {
         private readonly ISynchronizationService synchronizationService;
         private readonly ILogger logger;
-        private readonly IUserInteractionService userInteractionService;
         private readonly IPrincipal principal;
         private readonly IHttpStatistician httpStatistician;
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
-        private readonly IAuditLogService auditLogService;
+        protected readonly IAuditLogService auditLogService;
         private readonly IEnumeratorSettings enumeratorSettings;
+        private readonly IServiceLocator serviceLocator;
 
         private bool remoteLoginRequired;
         private bool shouldUpdatePasswordOfResponsible;
@@ -38,48 +38,50 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
         protected abstract string SucsessDescription { get; }
 
-        protected virtual SynchronizationType SynchronizationType => SynchronizationType.Online;
-
         protected AbstractSynchronizationProcess(
             ISynchronizationService synchronizationService, 
             ILogger logger,
-            IHttpStatistician httpStatistician, 
-            IUserInteractionService userInteractionService,
+            IHttpStatistician httpStatistician,
             IPrincipal principal,
             IPlainStorage<InterviewView> interviewViewRepository,
             IAuditLogService auditLogService, 
-            IEnumeratorSettings enumeratorSettings)
+            IEnumeratorSettings enumeratorSettings,
+            IServiceLocator serviceLocator)
         {
             this.logger = logger;
             this.synchronizationService = synchronizationService;
             this.httpStatistician = httpStatistician;
-            this.userInteractionService = userInteractionService;
             this.principal = principal;
             this.interviewViewRepository = interviewViewRepository;
             this.auditLogService = auditLogService;
             this.enumeratorSettings = enumeratorSettings;
+            this.serviceLocator = serviceLocator;
         }
 
-        public abstract Task Synchronize(IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken,
-            SynchronizationStatistics statistics);
+        public virtual async Task Synchronize(IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken,
+            SynchronizationStatistics statistics)
+        {
+            var steps = this.serviceLocator.GetAllInstances<ISynchronizationStep>();
+
+            var context = new EnumeratorSynchonizationContext
+            {
+                Progress = progress,
+                CancellationToken = cancellationToken,
+                Statistics = statistics
+            };
+
+            foreach (var step in steps.OrderBy(x => x.SortOrder))
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                step.Context = context;
+                await step.ExecuteAsync();
+            }
+        }
 
         public abstract SyncStatisticsApiView ToSyncStatisticsApiView(SynchronizationStatistics statistics,
             Stopwatch stopwatch);
 
-        protected Task<string> GetNewPasswordAsync()
-        {
-            if (SynchronizationType == SynchronizationType.Offline)
-                return Task.FromResult((string)null);
-
-            var message =
-                InterviewerUIResources.Synchronization_UserPassword_Update_Format.FormatString(this.principal
-                    .CurrentUserIdentity.Name);
-            return this.userInteractionService.ConfirmWithTextInputAsync(
-                message,
-                okButton: UIResources.LoginText,
-                cancelButton: InterviewerUIResources.Synchronization_Cancel,
-                isTextInputPassword: true);
-        }
+        protected abstract Task<string> GetNewPasswordAsync();
 
         protected async Task TrySendUnexpectedExceptionToServerAsync(Exception exception)
         {
@@ -182,7 +184,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             var statistics = new SynchronizationStatistics();
             try
             {
-                auditLogService.Write(new SynchronizationStartedAuditLogEntity(SynchronizationType));
+                this.WriteToAuditLogStartSyncMessage();
 
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
@@ -435,6 +437,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 }
             }
         }
+
+        protected abstract void WriteToAuditLogStartSyncMessage();
 
         protected virtual void OnSuccesfullSynchronization() { }
 

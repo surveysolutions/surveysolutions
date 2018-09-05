@@ -8,8 +8,6 @@ using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Tasks;
-using WB.Core.SharedKernels.Enumerator.Services;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Tests.Abc;
@@ -50,9 +48,9 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             PrincipalMock.Verify(x => x.SignInWithHash("name", "hash", true), Times.Once);
         }
 
-        static InterviewerSynchronizationProcess viewModel;
+        static InterviewerOnlineSynchronizationProcess viewModel;
         static readonly Mock<IPlainStorage<InterviewerIdentity>> InterviewerStorageMock = new Mock<IPlainStorage<InterviewerIdentity>>();
         static Mock<IInterviewerPrincipal> PrincipalMock = new Mock<IInterviewerPrincipal>();
-        static readonly Mock<ISynchronizationService>  SynchronizationServiceMock =new Mock<ISynchronizationService>();
+        static readonly Mock<IInterviewerSynchronizationService>  SynchronizationServiceMock =new Mock<IInterviewerSynchronizationService>();
     }
 }
