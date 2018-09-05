@@ -60,7 +60,6 @@
     <PackageReference Include="EPPlus" Version="4.5.2.1" />
     <PackageReference Include="FluentAssertions" Version="5.4.1" />
     <PackageReference Include="Iesi.Collections" Version="4.0.4" />
-    <PackageReference Include="jsondiffpatch.net" Version="2.1.0" />
     <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.3" />
     <PackageReference Include="Microsoft.AspNet.Razor" Version="3.2.3" />
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.2.3" />
