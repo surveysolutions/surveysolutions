@@ -255,7 +255,7 @@
   <data name="Download" xml:space="preserve">
     <value>Скачать</value>
   </data>
-    <data name="DownloadSupervisor" xml:space="preserve">
+  <data name="DownloadSupervisor" xml:space="preserve">
     <value>Скачать приложения Супервизор</value>
   </data>
   <data name="Open" xml:space="preserve">
@@ -306,8 +306,11 @@
     <value>Доступна новая версия:</value>
     <comment>Доступна новая версия:</comment>
   </data>
-    <data name="NothingSelected" xml:space="preserve">
+  <data name="NothingSelected" xml:space="preserve">
     <value>Ничего не выбрано</value>
     <comment>Ничего не выбрано</comment>
+  </data>
+  <data name="Supervisor" xml:space="preserve">
+    <value>Супервизор</value>
   </data>
 </root>

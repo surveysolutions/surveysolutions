@@ -505,7 +505,8 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             var input = new StatusDurationInputModel
             {
                 Orders = request.GetSortOrderRequestItems(),
-                MinutesOffsetToUtc = request.Timezone
+                MinutesOffsetToUtc = request.Timezone,
+                SupervisorId = request.SupervisorId
             };
 
             if (!string.IsNullOrEmpty(request.QuestionnaireId))
