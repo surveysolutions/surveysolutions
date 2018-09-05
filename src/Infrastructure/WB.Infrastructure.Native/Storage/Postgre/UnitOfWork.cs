@@ -56,7 +56,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             transaction = null;
             session = null;
 
-            Dispose();
+            //Dispose();
         }
 
         public ISession Session
