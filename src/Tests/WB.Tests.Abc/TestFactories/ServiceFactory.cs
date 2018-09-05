@@ -117,7 +117,6 @@ using WB.UI.Shared.Web.Captcha;
 using WB.UI.Shared.Web.Configuration;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 using AttachmentContent = WB.Core.BoundedContexts.Headquarters.Views.Questionnaire.AttachmentContent;
-using SynchronizationService = WB.Core.BoundedContexts.Interviewer.Implementation.Services.SynchronizationService;
 
 namespace WB.Tests.Abc.TestFactories
 {
@@ -445,12 +444,12 @@ namespace WB.Tests.Abc.TestFactories
         public IPrincipal Principal(Guid userId)
             => Mock.Of<IPrincipal>(x => x.IsAuthenticated == true && x.CurrentUserIdentity == Mock.Of<IUserIdentity>(u => u.UserId == userId));
 
-        public InterviewerSynchronizationProcess SynchronizationProcess(
+        public InterviewerOnlineSynchronizationProcess SynchronizationProcess(
             IPlainStorage<InterviewView> interviewViewRepository = null,
             IPlainStorage<InterviewerIdentity> interviewersPlainStorage = null,
             IPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage = null,
             IPlainStorage<InterviewFileView> interviewFileViewStorage = null,
-            ISynchronizationService synchronizationService = null,
+            IInterviewerSynchronizationService synchronizationService = null,
             ILogger logger = null,
             IUserInteractionService userInteractionService = null,
             IPasswordHasher passwordHasher = null,
@@ -462,48 +461,34 @@ namespace WB.Tests.Abc.TestFactories
             IEventBus eventBus = null,
             IInterviewerSynchronizationService interviewerSynchronizationService = null)
         {
-            var syncServiceMock = synchronizationService ?? Mock.Of<ISynchronizationService>();
+            var syncServiceMock = synchronizationService ?? Mock.Of<IInterviewerSynchronizationService>();
 
-            return new InterviewerSynchronizationProcess(
+            return new InterviewerOnlineSynchronizationProcess(
                 syncServiceMock,
                 interviewersPlainStorage ?? Mock.Of<IPlainStorage<InterviewerIdentity>>(),
                 interviewViewRepository ?? new InMemoryPlainStorage<InterviewView>(),
                 principal ?? Mock.Of<IInterviewerPrincipal>(),
                 logger ?? Mock.Of<ILogger>(),
-                userInteractionService ?? Mock.Of<IUserInteractionService>(),
-                questionnaireFactory ?? Mock.Of<IInterviewerQuestionnaireAccessor>(x => x.GetCensusQuestionnaireIdentities() == new List<QuestionnaireIdentity>() &&
-                                                                                        x.GetAllQuestionnaireIdentities() == new List<QuestionnaireIdentity>() 
-                                                                                        ),
-                interviewFactory ?? Mock.Of<IInterviewerInterviewAccessor>(),
-                interviewMultimediaViewStorage ?? Mock.Of<IPlainStorage<InterviewMultimediaView>>(),
-                interviewFileViewStorage ?? Mock.Of<IPlainStorage<InterviewFileView>>(),
-                new CompanyLogoSynchronizer(new InMemoryPlainStorage<CompanyLogo>(), syncServiceMock),
-                Mock.Of<AttachmentsCleanupService>(),
                 passwordHasher ?? Mock.Of<IPasswordHasher>(),
                 Mock.Of<IAssignmentsSynchronizer>(),
-                Mock.Of<IQuestionnaireDownloader>(),
                 httpStatistician ?? Mock.Of<IHttpStatistician>(),
                 Mock.Of<IAssignmentDocumentsStorage>(),
-                Mock.Of<IAudioFileStorage>(),
-                Mock.Of<ITabletDiagnosticService>(),
                 Mock.Of<IInterviewerSettings>(),
                 Mock.Of<IAuditLogSynchronizer>(),
                 Mock.Of<IAuditLogService>(),
-                eventBus ?? Mock.Of<IEventBus>(),
-                interviewerEventStorage ?? Mock.Of<IEnumeratorEventStorage>(),
-                Mock.Of<ISynchronizationMode>(),
-                Mock.Of<IPlainStorage<InterviewSequenceView, Guid>>(),
-                interviewerSynchronizationService ?? Mock.Of<IInterviewerSynchronizationService>());
+                interviewerSynchronizationService ?? Mock.Of<IInterviewerSynchronizationService>(),
+                userInteractionService ?? Mock.Of<IUserInteractionService>(),
+                Mock.Of<IServiceLocator>());
         }
 
-        public SynchronizationService SynchronizationService(IPrincipal principal = null,
+        public OnlineSynchronizationService SynchronizationService(IPrincipal principal = null,
             IRestService restService = null,
             IInterviewerSettings interviewerSettings = null,
             IInterviewerSyncProtocolVersionProvider syncProtocolVersionProvider = null,
             IFileSystemAccessor fileSystemAccessor = null,
             ILogger logger = null)
         {
-            return new SynchronizationService(
+            return new OnlineSynchronizationService(
                 principal ?? Mock.Of<IPrincipal>(),
                 restService ?? Mock.Of<IRestService>(),
                 interviewerSettings ?? Mock.Of<IInterviewerSettings>(),

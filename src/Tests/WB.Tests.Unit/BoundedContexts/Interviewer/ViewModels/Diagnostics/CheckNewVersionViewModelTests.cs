@@ -70,35 +70,18 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.Diagnostics
         [Test]
         public void CheckVersion_When_new_version_exists_Then_check_new_version_should_be_finished_with_message_that_app_could_be_updated()
         {
-            var synchronizationServiceMock = new Mock<ISynchronizationService>();
+            var synchronizationServiceMock = new Mock<IOnlineSynchronizationService>();
             synchronizationServiceMock.Setup(x => x.GetLatestApplicationVersionAsync(Moq.It.IsAny<CancellationToken>()))
                 .Returns(Task.FromResult<int?>(3));
-
-            var syncModeSelector = new Mock<ISynchronizationMode>();
-           
+            
             var checkNewVersionViewModel = CreateCheckNewVersionViewModel(
-                synchronizationService: synchronizationServiceMock.Object,
-                synchronizationMode: syncModeSelector.Object);
+                synchronizationService: synchronizationServiceMock.Object);
 
             checkNewVersionViewModel.CheckVersionCommand.Execute();
 
             Assert.That(checkNewVersionViewModel.IsVersionCheckInProgress, Is.EqualTo(false));
             Assert.That(checkNewVersionViewModel.IsNewVersionAvaliable, Is.EqualTo(true));
             Assert.That(checkNewVersionViewModel.CheckNewVersionResult, Is.Null);
-            syncModeSelector.Verify(s => s.Set(SynchronizationMode.Online), Times.Once);
-        }
-
-        [Test]
-        public void CheckVersion_should_always_set_online_mode_for_synchronization()
-        {
-            var syncModeSelector = new Mock<ISynchronizationMode>();
-
-            var checkNewVersionViewModel = CreateCheckNewVersionViewModel(
-                synchronizationMode: syncModeSelector.Object);
-
-            checkNewVersionViewModel.CheckVersionCommand.Execute();
-
-            syncModeSelector.Verify(s => s.Set(SynchronizationMode.Online), Times.Once);
         }
 
         [Test]
@@ -106,7 +89,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.Diagnostics
         {
             var exceptionMessage = "message";
 
-            var synchronizationServiceMock = new Mock<ISynchronizationService>();
+            var synchronizationServiceMock = new Mock<IOnlineSynchronizationService>();
             synchronizationServiceMock.Setup(x => x.GetLatestApplicationVersionAsync(
                 Moq.It.IsAny<CancellationToken>())).Throws(new Exception(exceptionMessage));
 
@@ -131,16 +114,15 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.Diagnostics
             Assert.That(checkNewVersionViewModel.IsNewVersionAvaliable, Is.EqualTo(false));
         }
 
-        private CheckNewVersionViewModel CreateCheckNewVersionViewModel(ISynchronizationService synchronizationService = null,
+        private CheckNewVersionViewModel CreateCheckNewVersionViewModel(
+            IOnlineSynchronizationService synchronizationService = null,
             IInterviewerSettings interviewerSettings = null,
-            ITabletDiagnosticService tabletDiagnosticService = null,
-            ISynchronizationMode synchronizationMode = null)
+            ITabletDiagnosticService tabletDiagnosticService = null)
         {
             return new CheckNewVersionViewModel(
-                synchronizationService ?? Mock.Of<ISynchronizationService>(),
+                synchronizationService ?? Mock.Of<IOnlineSynchronizationService>(),
                 interviewerSettings ?? Mock.Of<IInterviewerSettings>(_ => _.Endpoint == "endpoint" && _.GetApplicationVersionCode()==1),
-                tabletDiagnosticService ?? Mock.Of<ITabletDiagnosticService>(), Mock.Of<ILogger>(),
-                synchronizationMode ?? new SynchronizationModeSelector());
+                tabletDiagnosticService ?? Mock.Of<ITabletDiagnosticService>(), Mock.Of<ILogger>());
         }
     }
 }

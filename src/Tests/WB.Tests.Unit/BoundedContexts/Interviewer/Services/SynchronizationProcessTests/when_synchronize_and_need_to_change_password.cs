@@ -4,22 +4,19 @@ using System.Threading.Tasks;
 using Moq;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services;
-using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
-using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProcessTests
 {
-    [NUnit.Framework.TestOf(typeof(InterviewerSynchronizationProcess))]
+    [NUnit.Framework.TestOf(typeof(InterviewerOnlineSynchronizationProcess))]
     internal class when_synchronize_and_need_to_change_password
     {
         [NUnit.Framework.Test]
@@ -29,7 +26,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
 
             Mock<IPlainStorage<InterviewerIdentity>> interviewerStorageMock = new Mock<IPlainStorage<InterviewerIdentity>>();
             Mock<IUserInteractionService> userInteractionServiceMock = new Mock<IUserInteractionService>();
-            Mock<ISynchronizationService> synchronizationServiceMock = new Mock<ISynchronizationService>();
+            Mock<IInterviewerSynchronizationService> synchronizationServiceMock = new Mock<IInterviewerSynchronizationService>();
             Mock<IPasswordHasher> passwordHasherMock = new Mock<IPasswordHasher>();
 
             var principalMock = Mock.Get(Setup.InterviewerPrincipal(interviewerIdentity));

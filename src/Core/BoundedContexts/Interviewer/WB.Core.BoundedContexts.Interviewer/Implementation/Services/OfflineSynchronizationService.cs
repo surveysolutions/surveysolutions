@@ -16,7 +16,6 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
-using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Questionnaire.Api;
 using WB.Core.SharedKernels.Questionnaire.Translations;
@@ -24,7 +23,7 @@ using WB.Core.SharedKernels.Questionnaire.Translations;
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
     [ExcludeFromCodeCoverage]
-    public class OfflineSynchronizationService : ISynchronizationService
+    public class OfflineSynchronizationService : IOfflineSynchronizationService
     {
         private readonly IOfflineSyncClient syncClient;
         private readonly IInterviewerPrincipal principal;

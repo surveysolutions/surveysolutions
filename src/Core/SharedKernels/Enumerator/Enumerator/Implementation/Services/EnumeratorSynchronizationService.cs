@@ -21,7 +21,7 @@ using WB.Core.SharedKernels.Questionnaire.Translations;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
-    public abstract class EnumeratorSynchronizationService : ISynchronizationService
+    public abstract class EnumeratorSynchronizationService : IOnlineSynchronizationService
     {
         protected abstract string ApiVersion { get; }
         protected abstract string ApiUrl { get; }
