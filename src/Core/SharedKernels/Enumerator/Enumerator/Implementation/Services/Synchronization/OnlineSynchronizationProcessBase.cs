@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -12,6 +13,7 @@ using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization
 {
+    [ExcludeFromCodeCoverage]
     public abstract class OnlineSynchronizationProcessBase : AbstractOnlineSynchronizationProcess, IOnlineSynchronizationProcess
     {
         private readonly IHttpStatistician httpStatistician;
