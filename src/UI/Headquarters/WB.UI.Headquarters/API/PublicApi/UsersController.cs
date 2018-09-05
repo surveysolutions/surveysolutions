@@ -11,7 +11,7 @@ using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.API.PublicApi
 {
-    [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Administrator, TreatPasswordAsPlain = true)]
+    [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Administrator, TreatPasswordAsPlain = true, FallbackToCookieAuth = true)]
     [RoutePrefix("api/v1")]
     public class UsersController : BaseApiServiceController
     {
@@ -36,6 +36,11 @@ namespace WB.UI.Headquarters.API.PublicApi
         [Route("supervisors")]
         public UserApiView Supervisors(int limit = 10, int offset = 1)
             => new UserApiView(this.usersFactory.GetUsersByRole(offset, limit, null, null, false, UserRoles.Supervisor));
+
+        [HttpGet]
+        [Route("supervisors")]
+        public UserApiView Supervisors(string filter, int limit = 10, int offset = 1)
+            => new UserApiView(this.usersFactory.GetUsersByRole(offset, limit, null, filter, false, UserRoles.Supervisor));
 
         /// <summary>
         /// Gets list of interviewers in the specific supervisor team

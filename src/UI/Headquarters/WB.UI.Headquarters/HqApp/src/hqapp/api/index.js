@@ -46,6 +46,22 @@ class SurveyStatistics {
     }
 }
 
+class Users {
+    constructor(http){
+        this.http = http
+    }
+
+    async Supervisors(filter) {
+        return (await this.http.get(`supervisors`, {
+            params: { filter }
+        })).data
+    }
+
+    get SupervisorsUri() {
+        return this.http.defaults.baseURL + '/' + this.supervisors
+    }
+}
+
 class Reports {
     constructor(http, uriOnly = false){
         this.http = http
@@ -70,6 +86,8 @@ class HqApiClient {
     }
 
     get Report() { return new Reports(this.http) }
+
+    get Users() { return new Users(this.http) }
 }
 
 /*  the Plugin */
