@@ -17,7 +17,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private readonly IDeviceSettings deviceSettings;
         private readonly ITabletDiagnosticService tabletDiagnosticService;
         private readonly ILogger logger;
-        private readonly ISynchronizationMode synchronizationMode;
 
         private CancellationTokenSource cancellationTokenSource;
 
@@ -25,17 +24,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private bool isNewVersionAvaliable;
         private string checkNewVersionResult;
 
-        public CheckNewVersionViewModel(ISynchronizationService synchronizationService, 
+        public CheckNewVersionViewModel(
+            IOnlineSynchronizationService synchronizationService, 
             IDeviceSettings deviceSettings, 
             ITabletDiagnosticService tabletDiagnosticService, 
-            ILogger logger,
-            ISynchronizationMode synchronizationMode)
+            ILogger logger)
         {
             this.synchronizationService = synchronizationService;
             this.deviceSettings = deviceSettings;
             this.tabletDiagnosticService = tabletDiagnosticService;
             this.logger = logger;
-            this.synchronizationMode = synchronizationMode;
             this.Version = this.deviceSettings.GetApplicationVersionName();
             this.cancellationTokenSource = new CancellationTokenSource(this.downloadApkTimeout);
         }
@@ -76,7 +74,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             try
             {
                 this.CheckNewVersionResult = InterviewerUIResources.Diagnostics_DownloadingPleaseWait;
-                synchronizationMode.Set(SynchronizationMode.Online);
 
                 await this.tabletDiagnosticService.UpdateTheApp(this.cancellationTokenSource.Token, true,
                     new Progress<TransferProgress>(progress =>
@@ -108,7 +105,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
             try
             {
-                synchronizationMode.Set(SynchronizationMode.Online);
                 var versionFromServer = 
                     await this.synchronizationService.GetLatestApplicationVersionAsync(this.cancellationTokenSource.Token);
 

@@ -53,8 +53,10 @@ namespace WB.UI.Supervisor.ServiceLocation
             registry.Bind<IGroupStateCalculationStrategy, SupervisorGroupStateCalculationStrategy>();
             registry.Bind<IInterviewStateCalculationStrategy, SupervisorInterviewStateCalculationStrategy>();
 
-            registry.Bind<ISynchronizationService, SynchronizationService>();
             registry.Bind<ISupervisorSynchronizationService, SynchronizationService>();
+            registry.BindToRegisteredInterface<IOnlineSynchronizationService, ISupervisorSynchronizationService>();
+            registry.BindToRegisteredInterface<ISynchronizationService, ISupervisorSynchronizationService>();
+
             registry.Bind<IBattery, AndroidBattery>();
             registry.Bind<IDeviceOrientation, AndroidDeviceOrientation>();
             registry.Bind<IDeviceInformationService, DeviceInformationService>();
@@ -65,7 +67,9 @@ namespace WB.UI.Supervisor.ServiceLocation
             registry.BindAsSingleton<IQuestionnaireContentVersionProvider, QuestionnaireContentVersionProvider>();
             registry.BindAsSingleton<ICommandService, SequentialCommandService>();
 
-            registry.Bind<ISynchronizationProcess, SupervisorSynchronizationProcess>();
+            registry.Bind<IOnlineSynchronizationProcess, SupervisorSynchronizationProcess>();
+            registry.BindToRegisteredInterface<ISynchronizationProcess, IOnlineSynchronizationProcess>();
+
             registry.Bind<IQuestionnaireDownloader, QuestionnaireDownloader>();
             registry.Bind<IAuditLogSynchronizer, AuditLogSynchronizer>();
             registry.Bind<ITechInfoSynchronizer, TechInfoSynchronizer>();

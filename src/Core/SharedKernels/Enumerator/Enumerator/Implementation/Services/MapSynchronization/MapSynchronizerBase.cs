@@ -2,8 +2,8 @@
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization;
@@ -18,23 +18,25 @@ using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchronization
 {
-    public abstract class MapSyncProviderBase : AbstractSynchronizationProcess, IMapSyncProvider
+    public abstract class MapSyncProviderBase : AbstractOnlineSynchronizationProcess, IMapSyncProvider
     {
         private readonly ISynchronizationService synchronizationService;
         private readonly ILogger logger;
         private readonly IMapService mapService;
 
         protected MapSyncProviderBase(IMapService mapService, 
-            ISynchronizationService synchronizationService, ILogger logger,
+            IOnlineSynchronizationService synchronizationService,
+            ILogger logger,
             IHttpStatistician httpStatistician, 
-            IUserInteractionService userInteractionService, 
             IPrincipal principal,
             IPlainStorage<InterviewView> interviewViewRepository, 
             IAuditLogService auditLogService,
-            IEnumeratorSettings enumeratorSettings) 
+            IEnumeratorSettings enumeratorSettings,
+            IUserInteractionService userInteractionService,
+            IServiceLocator serviceLocator) 
             : base(synchronizationService, logger,
             httpStatistician, userInteractionService, principal,  
-            interviewViewRepository, auditLogService, enumeratorSettings)
+            interviewViewRepository, auditLogService, enumeratorSettings, serviceLocator)
         {
             this.synchronizationService = synchronizationService;
             this.logger = logger;
