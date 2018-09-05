@@ -64,14 +64,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.principal.SignInWithHash(localInterviewer.Name, localInterviewer.PasswordHash, true);
         }
 
-        protected override void UpdatePasswordOfResponsible(RestCredentials credentials)
-        {
-            var localInterviewer = this.interviewersPlainStorage.FirstOrDefault();
-            localInterviewer.PasswordHash = this.passwordHasher.Hash(credentials.Password);
-            localInterviewer.Token = credentials.Token;
-
-            this.interviewersPlainStorage.Store(localInterviewer);
-            this.principal.SignIn(localInterviewer.Name, credentials.Password, true);
-        }
+        protected override void UpdatePasswordOfResponsible(RestCredentials credentials) 
+            => throw new NotImplementedException("Update password by offline synchronization no supported now");
     }
 }
