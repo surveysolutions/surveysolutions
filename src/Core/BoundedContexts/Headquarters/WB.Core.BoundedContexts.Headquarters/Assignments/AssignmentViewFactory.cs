@@ -204,6 +204,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
                 items = items.Where(textSearchExpression);
             }
 
+            if (input.ReceivedByTablet != AssignmentReceivedState.All)
+            {
+                if (input.ReceivedByTablet == AssignmentReceivedState.NotReceived)
+                {
+                    items = items.Where(x => x.ReceivedByTabletAtUtc == null);
+                }
+                else if (input.ReceivedByTablet == AssignmentReceivedState.Received)
+                {
+                    items = items.Where(x => x.ReceivedByTabletAtUtc != null);
+                }
+            }
+
             if (input.QuestionnaireId.HasValue)
             {
                 items = items.Where(x => x.QuestionnaireId.QuestionnaireId == input.QuestionnaireId);
