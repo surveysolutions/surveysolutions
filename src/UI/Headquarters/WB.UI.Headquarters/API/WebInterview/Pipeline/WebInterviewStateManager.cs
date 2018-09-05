@@ -3,6 +3,7 @@ using Main.Core.Entities.SubEntities;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.SignalR.Hubs;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -12,12 +13,12 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
     public class HandlePauseEventPipelineModule : HubPipelineModule
     {
         private readonly IPauseResumeQueue pauseResumeQueue;
-        private readonly IStatefulInterviewRepository statefulInterviewRepository;
+        private IStatefulInterviewRepository statefulInterviewRepository => ServiceLocator.Current.GetInstance<IStatefulInterviewRepository>();
 
-        public HandlePauseEventPipelineModule(IPauseResumeQueue pauseResumeQueue, IStatefulInterviewRepository statefulInterviewRepository)
+        public HandlePauseEventPipelineModule(IPauseResumeQueue pauseResumeQueue/*, IStatefulInterviewRepository statefulInterviewRepository*/)
         {
             this.pauseResumeQueue = pauseResumeQueue ?? throw new ArgumentNullException(nameof(pauseResumeQueue));
-            this.statefulInterviewRepository = statefulInterviewRepository ?? throw new ArgumentNullException(nameof(statefulInterviewRepository));
+            //this.statefulInterviewRepository = statefulInterviewRepository ?? throw new ArgumentNullException(nameof(statefulInterviewRepository));
         }
 
         protected override bool OnBeforeDisconnect(IHub hub, bool stopCalled)
