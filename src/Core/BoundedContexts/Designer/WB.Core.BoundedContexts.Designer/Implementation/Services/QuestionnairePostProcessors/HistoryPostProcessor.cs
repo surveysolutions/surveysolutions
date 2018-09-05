@@ -748,9 +748,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             if (changeRecordIdsToRemove.Count > 0)
             {
                 string lastItem = changeRecordIdsToRemove.Last();
-                QuestionnaireDocument resultingQuestionnaireForLastStoredRecord =
-                    this.questionnireHistoryVersionsService.GetByHistoryVersion(Guid.Parse(lastItem));
                 var change = this.questionnaireChangeItemStorage.GetById(lastItem);
+
+                QuestionnaireDocument resultingQuestionnaireForLastStoredRecord =
+                    this.questionnireHistoryVersionsService.GetByHistoryVersion(Guid.Parse(change.QuestionnaireChangeRecordId));
 
                 change.ResultingQuestionnaireDocument = 
                     this.questionnireHistoryVersionsService.GetResultingQuestionnaireDocument(resultingQuestionnaireForLastStoredRecord);

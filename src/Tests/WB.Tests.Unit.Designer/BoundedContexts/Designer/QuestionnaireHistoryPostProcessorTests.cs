@@ -784,7 +784,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(questionnaireHistoryItem.TargetItemType, Is.EqualTo(QuestionnaireItemType.Variable));
             Assert.That(questionnaireHistoryItem.TargetItemId, Is.EqualTo(variableId));
             Assert.That(questionnaireHistoryItem.TargetItemTitle, Is.EqualTo(variableName));
-            Assert.That(questionnaireHistoryItem.ResultingQuestionnaireDocument, Is.Not.Null);
+            Assert.That(questionnaireHistoryItem.DiffWithPreviousVersion, Is.Not.Null);
         }
 
         [Test]
@@ -915,7 +915,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(groupBecameARosterHistoryItem.TargetItemType, Is.EqualTo(QuestionnaireItemType.Section));
             Assert.That(groupBecameARosterHistoryItem.TargetItemId, Is.EqualTo(rosterId));
             Assert.That(groupBecameARosterHistoryItem.TargetItemTitle, Is.EqualTo(variable));
-            Assert.That(groupBecameARosterHistoryItem.ResultingQuestionnaireDocument, Is.Not.Null);
+            Assert.That(groupBecameARosterHistoryItem.DiffWithPreviousVersion, Is.Not.Null);
 
             var updateRosterHistoryItem = allHistoryItems[2];
 
@@ -1125,7 +1125,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
 
             Assert.That(newHistoryItems.Length, Is.EqualTo(1));
             Assert.That(newHistoryItems[0].TargetItemType, Is.EqualTo(QuestionnaireItemType.Section));
-            Assert.That(newHistoryItems[0].ResultingQuestionnaireDocument, Is.Not.Null);
+            Assert.That(newHistoryItems[0].DiffWithPreviousVersion, Is.Not.Null);
 
             Assert.That(state.VariableState.ContainsKey(variableId));
             Assert.That(state.QuestionsState.ContainsKey(questionId));
@@ -1184,12 +1184,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(newHistoryItems[0].ActionType, Is.EqualTo(QuestionnaireActionType.Update));
             Assert.That(newHistoryItems[0].TargetItemType, Is.EqualTo(QuestionnaireItemType.Questionnaire));
             Assert.That(newHistoryItems[0].TargetItemTitle, Is.EqualTo("new title"));
-            Assert.That(newHistoryItems[0].ResultingQuestionnaireDocument, Is.Not.Null);
+            Assert.That(newHistoryItems[0].DiffWithPreviousVersion, Is.Not.Null);
 
             Assert.That(newHistoryItems[1].ActionType, Is.EqualTo(QuestionnaireActionType.Delete));
             Assert.That(newHistoryItems[1].TargetItemType, Is.EqualTo(QuestionnaireItemType.Questionnaire));
             Assert.That(newHistoryItems[1].TargetItemTitle, Is.EqualTo("new title"));
-            Assert.That(newHistoryItems[1].ResultingQuestionnaireDocument, Is.Null);
+            Assert.That(newHistoryItems[1].DiffWithPreviousVersion, Is.Null);
         }
 
         [Test]
@@ -1253,38 +1253,48 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             AssemblyContext.SetupServiceLocator();
             var historyStorage = new TestPlainStorage<QuestionnaireChangeRecord>();
 
-            historyStorage.Store(
-                Create.QuestionnaireChangeRecord(
-                    questionnaireChangeRecordId: "0",
-                    questionnaireId: Guid.NewGuid().FormatGuid(),
-                    targetId: questionId,
-                    targetType: QuestionnaireItemType.Question,
-                    action: QuestionnaireActionType.Clone,
-                    resultingQuestionnaireDocument: "not target questionnaire",
-                    sequence: 0,
-                    reference: new[] { Create.QuestionnaireChangeReference() }), "0");
+            var oldJson = ServiceLocator.Current.GetInstance<IEntitySerializer<QuestionnaireDocument>>()
+                .Serialize(Create.QuestionnaireDocumentWithOneChapter());
+
+            var newJson = ServiceLocator.Current.GetInstance<IEntitySerializer<QuestionnaireDocument>>()
+                .Serialize(Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+                {
+                    Create.TextQuestion()
+                }));
 
             historyStorage.Store(
                 Create.QuestionnaireChangeRecord(
-                    questionnaireChangeRecordId: "a",
+                    questionnaireChangeRecordId: Id.gA.FormatGuid(),
                     questionnaireId: questionnaireId.FormatGuid(),
                     targetId: questionId,
                     targetType: QuestionnaireItemType.Question,
                     action: QuestionnaireActionType.Clone,
-                    resultingQuestionnaireDocument: "questionnaire1",
+                    resultingQuestionnaireDocument: oldJson,
                     sequence: 0,
-                    reference: new[] { Create.QuestionnaireChangeReference() }), "a");
+                    reference: new[] { Create.QuestionnaireChangeReference() }), Id.gA.FormatGuid());
 
             historyStorage.Store(
                 Create.QuestionnaireChangeRecord(
-                    questionnaireChangeRecordId: "b",
+                    questionnaireChangeRecordId: Id.gB.FormatGuid(),
+                    questionnaireId: questionnaireId.FormatGuid(),
+                    targetId: questionId,
+                    targetType: QuestionnaireItemType.Question,
+                    action: QuestionnaireActionType.Clone,
+                    resultingQuestionnaireDocument: newJson,
+                    sequence: 1,
+                    reference: new[] { Create.QuestionnaireChangeReference() }), Id.gB.FormatGuid());
+
+            historyStorage.Store(
+                Create.QuestionnaireChangeRecord(
+                    questionnaireChangeRecordId: Id.gC.FormatGuid(),
                     questionnaireId: questionnaireId.FormatGuid(),
                     targetType: QuestionnaireItemType.Question,
                     action: QuestionnaireActionType.Update,
-                    resultingQuestionnaireDocument: "questionnaire2",
-                    sequence: 1,
+                    resultingQuestionnaireDocument: null,
+                    diffWithPreviousVersion: "patch",
+                    sequence: 2,
                     targetId: questionId),
-                "b");
+                Id.gC.FormatGuid());
             Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<QuestionnaireChangeRecord>>(historyStorage);
 
             var tracker = new QuestionnaireStateTracker
@@ -1298,7 +1308,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             questionnaireStateTackerStorage.Store(tracker, questionnaireId.FormatGuid());
             Setup.InstanceToMockedServiceLocator<IPlainKeyValueStorage<QuestionnaireStateTracker>>(questionnaireStateTackerStorage);
 
-            Setup.InstanceToMockedServiceLocator<IQuestionnireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
+            Setup.InstanceToMockedServiceLocator<IQuestionnireHistoryVersionsService>(
+                Create.QuestionnireHistoryVersionsService(historyStorage));
             Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(2));
 
             var questionnaire = Create.Questionnaire();
@@ -1315,10 +1326,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             var newHistoryItems = historyStorage.Query(historyItems => historyItems.ToArray());
 
             Assert.That(newHistoryItems.Length, Is.EqualTo(4));
-            Assert.That(newHistoryItems[0].ResultingQuestionnaireDocument, Is.Not.Null);
-            Assert.That(newHistoryItems[1].ResultingQuestionnaireDocument, Is.Null);
-            Assert.That(newHistoryItems[2].ResultingQuestionnaireDocument, Is.Not.Null);
-            Assert.That(newHistoryItems[2].ResultingQuestionnaireDocument, Is.Not.Null);
+            Assert.That(newHistoryItems[0].ResultingQuestionnaireDocument, Is.Null);
+            Assert.That(newHistoryItems[0].DiffWithPreviousVersion, Is.Null);
+
+            Assert.That(newHistoryItems[1].ResultingQuestionnaireDocument, Is.Not.Null);
+            Assert.That(newHistoryItems[1].DiffWithPreviousVersion, Is.Null);
+
+            Assert.That(newHistoryItems[2].ResultingQuestionnaireDocument, Is.Null);
+            Assert.That(newHistoryItems[2].DiffWithPreviousVersion, Is.Not.Null);
+
+            Assert.That(newHistoryItems[3].ResultingQuestionnaireDocument, Is.Null);
+            Assert.That(newHistoryItems[3].DiffWithPreviousVersion, Is.Not.Null);
         }
 
         [Test]

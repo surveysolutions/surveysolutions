@@ -7,10 +7,28 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDiffTests
     [TestOf(typeof(JsonPatchService))]
     public class JsonPatchServiceTests
     {
-        string TestJson = JsonConvert.SerializeObject(new
+        readonly string TestJson = JsonConvert.SerializeObject(new
         {
-            Test = "test"
+            Foo = "foo"
         });
+
+        readonly string TestJson1 = JsonConvert.SerializeObject(new
+        {
+            Bar = "bar"
+        });
+
+        [Test]
+        public void Should_be_able_to_diff_jsons()
+        {
+            var jsonPatchService = CreateService();
+
+            var diff = jsonPatchService.Diff(TestJson, TestJson1);
+
+            var result = jsonPatchService.Apply(TestJson, diff);
+
+            var deserializeObject = JsonConvert.DeserializeObject<dynamic>(result);
+            Assert.That((string)deserializeObject.Bar, Is.EqualTo("bar"));
+        }
 
         [Test]
         public void should_be_able_to_compare_with_null()
@@ -24,11 +42,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDiffTests
             var patched = jsonPatchService.Apply(null, diff);
 
             var deserializeObject = JsonConvert.DeserializeObject<dynamic>(patched);
-            Assert.That((string)deserializeObject.Test, Is.EqualTo("test"));
+            Assert.That((string)deserializeObject.Foo, Is.EqualTo("foo"));
         }
 
         [Test]
-        public void should_return_null_for_equal_jsons()
+        public void should_return_null_for_equal_json()
         {
             var jsonPatchService = CreateService();
             var diff = jsonPatchService.Diff(TestJson, TestJson);
@@ -54,10 +72,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDiffTests
 
             Assert.That(diff, Is.Not.Empty);
 
-            var patched = jsonPatchService.Apply(null, diff);
+            var patched = jsonPatchService.Apply(TestJson, diff);
 
-            var deserializeObject = JsonConvert.DeserializeObject<dynamic>(patched);
-            Assert.That((string)deserializeObject.Test, Is.EqualTo("test"));
+            Assert.That(patched, Is.Null);
         }
 
         private JsonPatchService CreateService()
