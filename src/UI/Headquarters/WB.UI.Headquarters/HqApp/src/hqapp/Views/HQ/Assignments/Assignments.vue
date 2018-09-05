@@ -24,6 +24,15 @@
                            :fetch-url="config.api.responsible"></Typeahead>
             </FilterBlock>
 
+            <FilterBlock :title="$t('Assignments.ReceivedByTablet')" :tooltip="$t('Assignments.Tooltip_Filter_Received')">
+                  <select class="ddl-receivedByTablet"
+                        v-model="receivedByTablet">
+                    <option v-bind:value="'All'" selected="selected">{{ $t("Assignments.ReceivedByTablet_All") }}</option>
+                    <option v-bind:value="'Received'">{{ $t("Assignments.ReceivedByTablet_Received") }}</option>
+                    <option v-bind:value="'NotReceived'">{{ $t("Assignments.ReceivedByTablet_NotReceived") }}</option>
+                </select>
+            </FilterBlock>
+
             <FilterBlock :title="$t('Assignments.ShowArchived')" :tooltip="$t('Assignments.Tooltip_Filter_ArchivedStatus')">
                 <select class="ddl"
                         v-model="showArchive">
@@ -150,6 +159,7 @@ export default {
             selectedRows: [],
             totalRows: 0,
             showArchive: false,
+            receivedByTablet: 'All',
             newResponsibleId: null,
             editedRowId: null,
             editedQuantity: null
@@ -311,6 +321,7 @@ export default {
             requestData.dateStart = this.dateStart;
             requestData.dateEnd = this.dateEnd;
             requestData.userRole = this.userRole;
+            requestData.receivedByTablet = this.receivedByTablet;
         },
 
         userSelected(newValue) {
@@ -357,6 +368,8 @@ export default {
                 queryString.dateEnd = this.dateEnd;
             if (this.userRole)
                 queryString.userRole = this.userRole;
+            if (this.receivedByTablet)
+                queryString.receivedByTablet = this.receivedByTablet;
 
             this.$router.push({ query: queryString });
         },
@@ -503,6 +516,7 @@ export default {
         this.dateStart = this.$route.query.dateStart;
         this.dateEnd = this.$route.query.dateEnd;
         this.userRole = this.$route.query.userRole;
+        this.receivedByTablet = this.$route.query.receivedByTablet;
 
         self.loadQuestionnaireId((questionnaireId, questionnaireTitle) => {
 
@@ -518,9 +532,10 @@ export default {
                     self.responsibleId = { key: responsibleId, value: self.$route.query.responsible };
 
                 self.reloadTable();
-                self.startWatchers(['responsibleId', 'questionnaireId', 'showArchive'], self.reloadTable.bind(self));
+                self.startWatchers(['responsibleId', 'questionnaireId', 'showArchive', 'receivedByTablet'], self.reloadTable.bind(self));
 
                 $('.ddl').selectpicker('val', self.showArchive.toString());
+                $('.ddl-receivedByTablet').selectpicker('val', self.receivedByTablet);
             });
         });
     }

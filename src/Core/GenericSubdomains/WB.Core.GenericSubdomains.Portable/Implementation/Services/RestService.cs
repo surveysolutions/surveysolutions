@@ -101,7 +101,8 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
             };
 
             request.Headers.UserAgent.ParseAdd(this.restServiceSettings.UserAgent);
-            request.Headers.Add("Accept-Encoding", "gzip,deflate");
+            request.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("gzip"));
+            request.Headers.AcceptEncoding.Add(new StringWithQualityHeaderValue("deflate"));
 
             if (forceNoCache)
             {
@@ -201,12 +202,12 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                 request: null);
         }
 
-        public Task PostAsync(string url, object request = null, RestCredentials credentials = null, CancellationToken? token = null)
+        public Task PostAsync(string url, object request, RestCredentials credentials = null, CancellationToken? token = null)
         {
             return this.ExecuteRequestAsync(url: url,
                 credentials: credentials,
                 method: HttpMethod.Post,
-                request: request,
+                request: request ?? string.Empty,
                 userCancellationToken: token);
         }
 
@@ -222,11 +223,11 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
         }
 
         public Task<T> PostAsync<T>(string url,
-            IProgress<TransferProgress> transferProgress, object request = null,
+            IProgress<TransferProgress> transferProgress, object request,
             RestCredentials credentials = null, CancellationToken? token = null)
         {
             var response = this.ExecuteRequestAsync(url: url, credentials: credentials, method: HttpMethod.Post,
-                request: request, progress: transferProgress, userCancellationToken: token);
+                request: request ?? string.Empty, progress: transferProgress, userCancellationToken: token);
 
             return this.ReceiveCompressedJsonWithProgressAsync<T>(response: response, token: token ?? default(CancellationToken),
                 transferProgress: transferProgress);

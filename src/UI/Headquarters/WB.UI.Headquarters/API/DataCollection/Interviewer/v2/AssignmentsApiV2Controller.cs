@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -40,5 +41,25 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v2
         [HttpGet]
         public override Task<List<AssignmentApiView>> GetAssignmentsAsync(CancellationToken cancellationToken)
             => base.GetAssignmentsAsync(cancellationToken);
+
+        [HttpPost]
+        public HttpResponseMessage Received(int id)
+        {
+            var assignment = this.assignmentsService.GetAssignment(id);
+            if (assignment == null)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Assignment not found");
+            }
+
+            var authorizedUserId = this.authorizedUser.Id;
+            if(assignment.ResponsibleId != authorizedUserId &&
+               assignment.Responsible.ReadonlyProfile.SupervisorId != authorizedUserId)
+            {
+                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Assignment was reassigned");
+            }
+
+            assignment.MarkAsReceivedByTablet();
+            return Request.CreateResponse(HttpStatusCode.OK);
+        }
     }
 }
