@@ -1,3 +1,4 @@
+using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
@@ -13,6 +14,7 @@ using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization
 {
+    [ExcludeFromCodeCoverage]
     public abstract class AbstractOnlineSynchronizationProcess : AbstractSynchronizationProcess
     {
         private readonly IUserInteractionService userInteractionService;
