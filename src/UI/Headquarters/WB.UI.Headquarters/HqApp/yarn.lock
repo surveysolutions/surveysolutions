@@ -4471,10 +4471,6 @@ js-info-bubble@^0.8.0:
   version "0.8.0"
   resolved "https://registry.yarnpkg.com/js-info-bubble/-/js-info-bubble-0.8.0.tgz#762433debe905248975b897c5d1f3eb102b974de"
 
-js-marker-clusterer@^1.0.0:
-  version "1.0.0"
-  resolved "https://registry.yarnpkg.com/js-marker-clusterer/-/js-marker-clusterer-1.0.0.tgz#c94be85ae8896819e51c131f891dd2b55558dd17"
-
 js-stringify@^1.0.1:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/js-stringify/-/js-stringify-1.0.2.tgz#1736fddfd9724f28a3682adc6230ae7e4e9679db"

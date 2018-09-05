@@ -10,6 +10,13 @@
                            noSearch
                            @selected="selectQuestionnaire" />
             </FilterBlock>
+            <FilterBlock :title="$t('Reports.Supervisor')">
+                 <Typeahead :placeholder="$t('Common.AllSupervisors')"
+                           :values="supervisorsList"
+                           :value="supervisorId"
+                           :forceLoadingState="loading.supervisors"
+                           @selected="selectSupervisor" />
+            </FilterBlock>
         </Filters>
         <DataTables ref="table"
                     :tableOptions="tableOptions"
@@ -40,21 +47,43 @@
 export default {
     data() {
         return {
-            questionnaireId: null
+            questionnaireId: null,
+            supervisorId: null,
+            supervisors: [],
+            loading : {
+                supervisors: false
+            }
         }
     },
     watch: {
         questionnaireId: function () {
+            this.reload();
+        },
+        supervisorId: function () {
             this.reload();
         }
     },
     mounted() {
         this.reload();
     },
+    async mounted() {      
+        await this.loadSupervisors();
+        this.$emit("mounted")
+    },
     computed: {
         questionnaires() {
             return this.$config.model.questionnaires
-        },
+        },     
+        supervisorsList() {
+            return _.chain(this.supervisors)
+                .orderBy(['UserName'],['asc'])
+                .map(q => {
+                    return {
+                        key: q.UserId,
+                        value: q.UserName
+                    };
+            }).value();
+        },   
         tableOptions() {
             var self = this;
             return {
@@ -169,9 +198,26 @@ export default {
             this.questionnaireId = value;
         },
 
+        async loadSupervisors(query = null) {
+            this.loading.supervisors = true
+
+            try {   
+                this.supervisors = await this.$hq.Users.Supervisors(query).Users; 
+            } finally {
+                this.loading.supervisors = false
+            }
+        },
+ 
+        selectSupervisor(value) {
+            this.supervisorId = value;
+        },
+
         addFilteringParams(data) {
             if (this.questionnaireId) {
                 data.questionnaireId = this.questionnaireId.key;
+            }
+            if (this.supervisorId) {
+                data.supervisorId = this.supervisorId.key;
             }
             data.timezone = new Date().getTimezoneOffset();
         },
@@ -225,6 +271,6 @@ export default {
                navigator.userLanguage; 
             return value.toLocaleString(language);
         }
-    },
+    }
 }
 </script>
