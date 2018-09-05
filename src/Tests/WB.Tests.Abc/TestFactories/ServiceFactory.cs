@@ -481,6 +481,33 @@ namespace WB.Tests.Abc.TestFactories
                 Mock.Of<IServiceLocator>());
         }
 
+        public InterviewerOfflineSynchronizationProcess OfflineSynchronizationProcess(
+            IPlainStorage<InterviewView> interviewViewRepository = null,
+            IPlainStorage<InterviewerIdentity> interviewersPlainStorage = null,
+            ILogger logger = null,
+            IPasswordHasher passwordHasher = null,
+            IInterviewerPrincipal principal = null,
+            IHttpStatistician httpStatistician = null,
+            IOfflineSynchronizationService synchronizationService = null)
+        {
+            var syncServiceMock = synchronizationService ?? Mock.Of<IOfflineSynchronizationService>();
+
+            return new InterviewerOfflineSynchronizationProcess(
+                syncServiceMock,
+                interviewViewRepository ?? new InMemoryPlainStorage<InterviewView>(),
+                interviewersPlainStorage ?? Mock.Of<IPlainStorage<InterviewerIdentity>>(),
+                principal ?? Mock.Of<IInterviewerPrincipal>(),
+                logger ?? Mock.Of<ILogger>(),
+                passwordHasher ?? Mock.Of<IPasswordHasher>(),
+                Mock.Of<IAssignmentsSynchronizer>(),
+                httpStatistician ?? Mock.Of<IHttpStatistician>(),
+                Mock.Of<IAssignmentDocumentsStorage>(),
+                Mock.Of<IAuditLogSynchronizer>(),
+                Mock.Of<IAuditLogService>(),
+                Mock.Of<IInterviewerSettings>(),
+                Mock.Of<IServiceLocator>());
+        }
+
         public OnlineSynchronizationService SynchronizationService(IPrincipal principal = null,
             IRestService restService = null,
             IInterviewerSettings interviewerSettings = null,
