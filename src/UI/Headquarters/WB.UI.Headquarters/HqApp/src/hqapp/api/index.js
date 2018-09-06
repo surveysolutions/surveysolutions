@@ -52,13 +52,13 @@ class Users {
     }
 
     async Supervisors(filter) {
-        return (await this.http.get(`supervisors`, {
+        return (await this.http.get(`users/supervisors`, {
             params: { filter }
         })).data
     }
 
     get SupervisorsUri() {
-        return this.http.defaults.baseURL + '/' + this.supervisors
+        return this.http.defaults.baseURL + '/users/supervisors'
     }
 }
 
