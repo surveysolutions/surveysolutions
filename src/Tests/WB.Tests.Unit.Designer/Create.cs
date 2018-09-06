@@ -1231,7 +1231,7 @@ namespace WB.Tests.Unit.Designer
 
         private static IPatchApplier PatchApplier()
         {
-            return new JsonPatchService();
+            return new JsonPatchService(new ZipArchiveUtils());
         }
 
         public static ITopologicalSorter<T> TopologicalSorter<T>()
@@ -1431,7 +1431,7 @@ namespace WB.Tests.Unit.Designer
 
         public static IPatchGenerator PatchGenerator()
         {
-            return new JsonPatchService();
+            return new JsonPatchService(new ZipArchiveUtils());
         }
     }
 }
