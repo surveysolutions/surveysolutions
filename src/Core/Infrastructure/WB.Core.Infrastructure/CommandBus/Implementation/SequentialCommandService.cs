@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Linq;
 using System.Threading;
 using Ncqrs.Domain.Storage;
+using Ncqrs.Eventing.Storage;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -35,8 +36,10 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             IServiceLocator serviceLocator, 
             IPlainAggregateRootRepository plainRepository,
             IAggregateLock aggregateLock,
-            IAggregateRootCacheCleaner aggregateRootCacheCleaner)
-            : base(eventSourcedRepository, eventBus, snapshooter, serviceLocator, plainRepository, aggregateLock, aggregateRootCacheCleaner) { }
+            IAggregateRootCacheCleaner aggregateRootCacheCleaner,
+            IEventStore eventStore)
+            : base(eventSourcedRepository, eventBus, snapshooter, serviceLocator, plainRepository, 
+                aggregateLock, aggregateRootCacheCleaner, eventStore) { }
 
         protected override void ExecuteImpl(ICommand command, string origin, CancellationToken cancellationToken)
         {

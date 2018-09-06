@@ -125,7 +125,8 @@ namespace WB.UI.Headquarters
             serviceLocator.GetInstance<UpgradeAssignmentJobScheduler>().Configure();
             serviceLocator.GetInstance<IRefreshReportsTask>().Run();
 
-            serviceLocator.GetInstance<IScheduler>().Start();
+            //todo:af remove comment
+            //serviceLocator.GetInstance<IScheduler>().Start();
             return Task.CompletedTask;
         }
     }
