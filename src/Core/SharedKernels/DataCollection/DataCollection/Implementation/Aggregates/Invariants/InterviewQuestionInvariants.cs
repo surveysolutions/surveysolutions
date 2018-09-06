@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
@@ -32,13 +31,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
             public static readonly string ProtectedAnswer = "ProtectedAnswer";
         }
 
-        private IQuestionOptionsRepository QuestionOptionsRepository => ServiceLocator.Current.GetInstance<IQuestionOptionsRepository>();
+        private readonly IQuestionOptionsRepository questionOptionsRepository;
 
-        public InterviewQuestionInvariants(Identity questionIdentity, IQuestionnaire questionnaire, InterviewTree interviewTree)
+        public InterviewQuestionInvariants(Identity questionIdentity, 
+            IQuestionnaire questionnaire, 
+            InterviewTree interviewTree,
+            IQuestionOptionsRepository questionOptionsRepository)
         {
             this.QuestionIdentity = questionIdentity;
             this.Questionnaire = questionnaire;
             this.InterviewTree = interviewTree;
+            this.questionOptionsRepository = questionOptionsRepository;
         }
 
         public Identity QuestionIdentity { get; }
@@ -725,7 +728,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
             if (!question.IsCascading)
                 return this;
 
-            var answerOption = this.QuestionOptionsRepository.GetOptionForQuestionByOptionValue(questionnaireId,
+            var answerOption = this.questionOptionsRepository.GetOptionForQuestionByOptionValue(questionnaireId,
                 this.QuestionIdentity.Id, answer, translation);
 
             if (!answerOption.ParentValue.HasValue)

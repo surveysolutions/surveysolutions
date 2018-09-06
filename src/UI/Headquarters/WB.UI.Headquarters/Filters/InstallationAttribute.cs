@@ -5,7 +5,6 @@ using System.Web.Routing;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
 using WB.UI.Headquarters.Controllers;
 
@@ -13,7 +12,7 @@ namespace WB.UI.Headquarters.Filters
 {
     public class InstallationAttribute : ActionFilterAttribute
     {
-        private IUserRepository userRepository => ServiceLocator.Current.GetInstance<IUserRepository>();
+        private IUserRepository userRepository => DependencyResolver.Current.GetService<IUserRepository>();
         internal static bool Installed = false;
         
 

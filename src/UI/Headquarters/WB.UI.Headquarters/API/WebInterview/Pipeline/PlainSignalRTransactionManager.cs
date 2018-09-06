@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNet.SignalR.Hubs;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.UI.Headquarters.API.WebInterview.Pipeline
 {
@@ -33,7 +31,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
 
                 /*using (var scope = new NinjectAmbientScope())
                 {
-                    var unitOfWork = ServiceLocator.Current.GetInstance<IUnitOfWork>();
+                    var unitOfWork = Get<IUnitOfWork>();
                     
                     try
                     {
@@ -58,15 +56,11 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
 
         protected override object OnAfterIncoming(object result, IHubIncomingInvokerContext context)
         {
-            /*var unitOfWork = GlobalHost.DependencyResolver.GetInstance<IUnitOfWork>();
-            unitOfWork.AcceptChanges();*/
             return base.OnAfterIncoming(result, context);
         }
 
         protected override void OnIncomingError(ExceptionContext exceptionContext, IHubIncomingInvokerContext invokerContext)
         {
-/*            var unitOfWork = ServiceLocator.Current.GetInstance<IUnitOfWork>();
-            unitOfWork.Dispose();*/
             base.OnIncomingError(exceptionContext, invokerContext);
         }
     }

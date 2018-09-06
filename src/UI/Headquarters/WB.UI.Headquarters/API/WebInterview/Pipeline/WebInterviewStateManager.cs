@@ -13,6 +13,8 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
     public class HandlePauseEventPipelineModule : HubPipelineModule
     {
         private readonly IPauseResumeQueue pauseResumeQueue;
+
+         //resolve from context to preserve scope
         private IStatefulInterviewRepository statefulInterviewRepository => ServiceLocator.Current.GetInstance<IStatefulInterviewRepository>();
 
         public HandlePauseEventPipelineModule(IPauseResumeQueue pauseResumeQueue/*, IStatefulInterviewRepository statefulInterviewRepository*/)

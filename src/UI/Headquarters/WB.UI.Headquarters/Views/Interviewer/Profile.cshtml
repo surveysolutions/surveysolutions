@@ -11,7 +11,7 @@
     ViewBag.ActivePage = MenuItem.Interviewers;
     Layout = "~/Views/Shared/_MainLayoutHq.cshtml";
     ViewBag.Title = string.Format(Pages.InterviewerProfile_TitleFormat, Model.InterviewerName);
-    var authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>();
+    var authorizedUser = DependencyResolver.Current.GetService<IAuthorizedUser>();
 }
 @helper ConnectionType(InterviewerProfileSyncStatistics syncInfo)
 {
@@ -66,7 +66,7 @@
             }
         </script>
         <script async defer
-                src="@string.Format("{0}/maps/api/js?key={1}", @AppSettings.Instance.GoogleMapApiBaseUrl, ServiceLocator.Current.GetInstance<GoogleApiSettings>().ApiKey)">
+                src="@string.Format("{0}/maps/api/js?key={1}", @AppSettings.Instance.GoogleMapApiBaseUrl, DependencyResolver.Current.GetService<GoogleApiSettings>().ApiKey)">
         </script>
     }
     <script type="text/javascript"
