@@ -3,13 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
-using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Dapper;
-using DeltaCompressionDotNet.MsDelta;
-using JsonDiffPatchDotNet;
 using Npgsql;
 
 namespace ShrinkQuestionnaireHistory
@@ -21,7 +18,7 @@ namespace ShrinkQuestionnaireHistory
         {
             var connectionString = new NpgsqlConnectionStringBuilder(args[0]);
 
-            var compression = new MsDeltaCompression(); 
+            var patcher = new DiffMatchPatch.diff_match_patch();
             using (var connection = new NpgsqlConnection(connectionString.ConnectionString))
             {
                 await connection.OpenAsync();
@@ -44,26 +41,30 @@ namespace ShrinkQuestionnaireHistory
                             var existingHistory = connection.Query<(string Id, string Questionnaire)>(
                                 @"SELECT id as Id, resultingquestionnairedocument as Questionnaire 
                                           FROM plainstore.questionnairechangerecords 
-                                          WHERE questionnaireid = @QuestionnaireId AND resultingquestionnairedocument IS NOT NULL
-                                          ORDER BY ""sequence""", new {QuestionnaireId = row});
+                                          WHERE questionnaireid = @questionnaireId AND resultingquestionnairedocument IS NOT NULL
+                                          ORDER BY ""sequence""", new {row});
 
                             string reference = existingHistory.First().Questionnaire;
 
                             foreach (var historyItem in existingHistory.Skip(1))
                             {
-                                File.WriteAllText("source.json", reference);
-                                File.WriteAllText("target.json", historyItem.Questionnaire ?? "");
+                                var diff = patcher.patch_make(reference,
+                                    historyItem.Questionnaire ?? string.Empty);
+                                string textPatch = patcher.patch_toText(diff);
 
-                                compression.CreateDelta("source.json", "target.json", "delta");
-
-                                var delta = File.ReadAllBytes("delta");
+                                var appliedPatch = patcher.patch_apply(diff, reference)[0].ToString();
+                                if (!appliedPatch.Equals(historyItem.Questionnaire))
+                                {
+                                    throw new Exception(
+                                        $"Applied patch for questionnaire {row}. Applied patch does not match target questionnaire. Tested change id {historyItem.Id}");
+                                }
 
                                 connection.Execute(@"UPDATE plainstore.questionnairechangerecords 
-                                                                    SET resultingquestionnairedocument = NULL, binarydiff = @diff 
+                                                                    SET resultingquestionnairedocument = NULL, diffwithpreviousversion = @diff 
                                                                     WHERE id = @id",
                                     new
                                     {
-                                        diff = delta,
+                                        diff = textPatch,
                                         id = historyItem.Id
                                     });
 
@@ -71,7 +72,7 @@ namespace ShrinkQuestionnaireHistory
                             }
 
                             transaction.Commit();
-                            processedCount++;
+                            Interlocked.Increment(ref processedCount);
 
                             if (processedCount % 100 == 0)
                             {
