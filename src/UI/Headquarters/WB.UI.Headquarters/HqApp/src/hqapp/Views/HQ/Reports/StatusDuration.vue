@@ -218,15 +218,27 @@ export default {
             if(data === 0 || row.DT_RowClass == "total-row") 
                 return `<span>${formatedNumber}</span>`;
 
+            var urlParams = {  };
+
+            var startDate = row.startDate == undefined ? '' : row.startDate;
+
+            urlParams['dateStart'] = startDate;
+            urlParams['dateEnd'] = row.endDate;
+            urlParams['userRole'] = userRole;
+
             if (this.questionnaireId != undefined){
                 var questionnaireId = this.questionnaireId.key;
                 var questionnaireVersion = this.questionnaireId.key.split('$')[1];
-                var startDate = row.startDate == undefined ? '' : row.startDate;
-
-                return `<a href='${this.$config.model.assignmentsBaseUrl}?dateStart=${startDate}&dateEnd=${row.endDate}&questionnaireId=${questionnaireId}&version=${questionnaireVersion}&userRole=${userRole}'>${formatedNumber}</a>`;
+                urlParams['questionnaireId'] = questionnaireId;
+                urlParams['version'] = questionnaireVersion;
             }
 
-            return `<a href='${this.$config.model.assignmentsBaseUrl}?dateStart=${row.startDate}&dateEnd=${row.endDate}&userRole=${userRole}'>${formatedNumber}</a>`;
+            if (this.supervisorId != undefined)
+                urlParams['supervisorId'] = this.supervisorId.key;
+
+            var querystring = this.encodeQueryData(urlParams);
+
+            return `<a href='${this.$config.model.assignmentsBaseUrl}?${querystring}'>${formatedNumber}</a>`;
         },
 
         renderInterviewsUrl(row, data, status){
@@ -234,15 +246,24 @@ export default {
             if(data === 0 || row.DT_RowClass == "total-row") 
                 return `<span>${formatedNumber}</span>`;
 
-            var templateId = this.questionnaireId == undefined ? '' : this.formatGuid(this.questionnaireId.key.split('$')[0]);
-            var templateVersion = this.questionnaireId == undefined ? '' : this.questionnaireId.key.split('$')[1];
-            
-            if (row.startDate == undefined)
-                return `<a href='${this.$config.model.interviewsBaseUrl}?unactiveDateEnd=${row.endDate}&status=${status}&templateId=${templateId}&templateVersion=${templateVersion}'>${formatedNumber}</a>`;
-            if (row.endDate == undefined)
-                return `<a href='${this.$config.model.interviewsBaseUrl}?unactiveDateStart=${row.startDate}&status=${status}&templateId=${templateId}&templateVersion=${templateVersion}'>${formatedNumber}</a>`;
+            var urlParams = {  };
 
-            return `<a href='${this.$config.model.interviewsBaseUrl}?unactiveDateStart=${row.startDate}&unactiveDateEnd=${row.endDate}&status=${status}&templateId=${templateId}&templateVersion=${templateVersion}'>${formatedNumber}</a>`;
+            urlParams['templateId'] = this.questionnaireId == undefined ? '' : this.formatGuid(this.questionnaireId.key.split('$')[0]);
+            urlParams['templateVersion'] = this.questionnaireId == undefined ? '' : this.questionnaireId.key.split('$')[1];
+
+            if (row.startDate != undefined)
+                urlParams['unactiveDateStart'] = row.startDate;
+            if (row.endDate != undefined)
+                urlParams['unactiveDateEnd'] = row.endDate;
+
+            urlParams['status'] = status;
+            
+            if (this.supervisorId != undefined)
+                urlParams['teamId'] = this.supervisorId.key;
+
+            var querystring = this.encodeQueryData(urlParams);
+
+            return `<a href='${this.$config.model.interviewsBaseUrl}?${querystring}'>${formatedNumber}</a>`;
         },
 
         formatGuid(guid){
@@ -261,6 +282,12 @@ export default {
                navigator.language || 
                navigator.userLanguage; 
             return value.toLocaleString(language);
+        },
+        encodeQueryData(data) {
+            let ret = [];
+            for (let d in data)
+                ret.push(encodeURIComponent(d) + '=' + encodeURIComponent(data[d]));
+            return ret.join('&');
         }
     }
 }
