@@ -56,7 +56,10 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
             foreach (var module in initModules)
             {
                 status.ClearMessage();
-                await module.Init(ServiceLocator.Current, status);
+                await module.Init(
+
+                    ServiceLocator.Current
+                    , status);
             }
 
             status.Status = UnderConstructionStatus.Finished;

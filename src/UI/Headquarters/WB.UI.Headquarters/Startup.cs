@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,6 +14,7 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using System.Web.SessionState;
 using Autofac;
+using Autofac.Core;
 using Autofac.Integration.Mvc;
 using Autofac.Integration.SignalR;
 using Autofac.Integration.WebApi;
@@ -46,6 +48,7 @@ using WB.UI.Shared.Enumerator.Services.Internals;
 using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.DataAnnotations;
 using WB.UI.Shared.Web.Filters;
+using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 
 namespace WB.UI.Headquarters
 {
@@ -90,6 +93,9 @@ namespace WB.UI.Headquarters
             //handle for signalR
             //doesn't work and would cause captive dependencies
             //autofacKernel.ContainerBuilder.RegisterInstance(HttpRequestScopedFactoryFor<IEventStore>());
+
+            //temp logging
+            autofacKernel.ContainerBuilder.RegisterModule<LogRequestModule>();
 
             autofacKernel.Init().Wait();
 
@@ -389,6 +395,39 @@ namespace WB.UI.Headquarters
         public override object GetService(Type serviceType)
         {
             return base.GetService(serviceType);
+        }
+    }
+
+
+    public class LogRequestModule : Autofac.Module
+    {
+        public int depth = 0;
+
+        private string trace;
+
+        protected override void AttachToComponentRegistration(IComponentRegistry componentRegistry,
+            IComponentRegistration registration)
+        {
+            registration.Preparing += RegistrationOnPreparing;
+            registration.Activating += RegistrationOnActivating;
+            base.AttachToComponentRegistration(componentRegistry, registration);
+        }
+
+        private string GetPrefix()
+        {
+            return new string('-', depth * 2);
+        }
+
+        private void RegistrationOnPreparing(object sender, PreparingEventArgs preparingEventArgs)
+        {
+            trace += ($"{GetPrefix()}Resolving  {preparingEventArgs.Component.Activator.LimitType} \r\n");
+            depth++;
+        }
+
+        private void RegistrationOnActivating(object sender, ActivatingEventArgs<object> activatingEventArgs)
+        {
+            depth--;
+            trace += ($"{GetPrefix()}Activating {activatingEventArgs.Component.Activator.LimitType}\r\n");
         }
     }
 }
