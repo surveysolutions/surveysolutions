@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
+using System.IO;
+using System.IO.Compression;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Dapper;
@@ -14,6 +17,21 @@ namespace ShrinkQuestionnaireHistory
     [Localizable(false)]
     class Program
     {
+        public static string CompressString(string stringToCompress)
+        {
+            var bytes = Encoding.Unicode.GetBytes(stringToCompress);
+            using (var msi = new MemoryStream(bytes))
+            using (var mso = new MemoryStream())
+            {
+                using (var gs = new GZipStream(mso, CompressionMode.Compress))
+                {
+                    msi.CopyTo(gs);
+                }
+                return Convert.ToBase64String(mso.ToArray());
+            }
+        }
+
+
         static async Task Main(string[] args)
         {
             var connectionString = new NpgsqlConnectionStringBuilder(args[0]);
@@ -42,7 +60,7 @@ namespace ShrinkQuestionnaireHistory
                                 @"SELECT id as Id, resultingquestionnairedocument as Questionnaire 
                                           FROM plainstore.questionnairechangerecords 
                                           WHERE questionnaireid = @questionnaireId AND resultingquestionnairedocument IS NOT NULL
-                                          ORDER BY ""sequence""", new {row});
+                                          ORDER BY ""sequence""", new { questionnaireId  = row });
 
                             string reference = existingHistory.First().Questionnaire;
 
@@ -60,11 +78,11 @@ namespace ShrinkQuestionnaireHistory
                                 }
 
                                 connection.Execute(@"UPDATE plainstore.questionnairechangerecords 
-                                                                    SET resultingquestionnairedocument = NULL, diffwithpreviousversion = @diff 
-                                                                    WHERE id = @id",
+                                                    SET resultingquestionnairedocument = NULL, diffwithpreviousversion = @diff 
+                                                    WHERE id = @id",
                                     new
                                     {
-                                        diff = textPatch,
+                                        diff = CompressString(textPatch),
                                         id = historyItem.Id
                                     });
 
