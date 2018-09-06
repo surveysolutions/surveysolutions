@@ -79,6 +79,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.Enumerator.Native", "Cor
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.Core.BoundedContexts.Supervisor", "Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\WB.Core.BoundedContexts.Supervisor.csproj", "{276D7605-A681-4469-B4C0-E62C5CE87E30}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{4F972FD5-1CA4-4D62-A3CD-833718CC3364}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Export", "Export", "{C1810B6D-8EC2-4532-A554-50D1413A014C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.Services.Export.Host", "Services\Export\WB.Services.Export.Host\WB.Services.Export.Host.csproj", "{0B806EAF-7E80-44F3-BE35-C729B7CE3FED}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{983BD71E-C5DC-440B-A3E8-40AE62614820}"
+	ProjectSection(SolutionItems) = preProject
+		WB without Xamarin.sln.startup.json = WB without Xamarin.sln.startup.json
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -97,8 +108,8 @@ Global
 		{3464F3AE-094C-4DEC-8725-59506328E597}.Release|Any CPU.Build.0 = Release|Any CPU
 		{75470164-4087-4E9B-845A-5400C038A499}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{75470164-4087-4E9B-845A-5400C038A499}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{75470164-4087-4E9B-845A-5400C038A499}.Debug-ESRI|Any CPU.ActiveCfg = Debug-ESRI|Any CPU
-		{75470164-4087-4E9B-845A-5400C038A499}.Debug-ESRI|Any CPU.Build.0 = Debug-ESRI|Any CPU
+		{75470164-4087-4E9B-845A-5400C038A499}.Debug-ESRI|Any CPU.ActiveCfg = Debug|Any CPU
+		{75470164-4087-4E9B-845A-5400C038A499}.Debug-ESRI|Any CPU.Build.0 = Debug|Any CPU
 		{75470164-4087-4E9B-845A-5400C038A499}.Deploy-dev|Any CPU.ActiveCfg = Debug|Any CPU
 		{75470164-4087-4E9B-845A-5400C038A499}.Deploy-dev|Any CPU.Build.0 = Debug|Any CPU
 		{75470164-4087-4E9B-845A-5400C038A499}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -255,6 +266,14 @@ Global
 		{276D7605-A681-4469-B4C0-E62C5CE87E30}.Deploy-dev|Any CPU.Build.0 = Debug-ESRI|Any CPU
 		{276D7605-A681-4469-B4C0-E62C5CE87E30}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{276D7605-A681-4469-B4C0-E62C5CE87E30}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0B806EAF-7E80-44F3-BE35-C729B7CE3FED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B806EAF-7E80-44F3-BE35-C729B7CE3FED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B806EAF-7E80-44F3-BE35-C729B7CE3FED}.Debug-ESRI|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B806EAF-7E80-44F3-BE35-C729B7CE3FED}.Debug-ESRI|Any CPU.Build.0 = Debug|Any CPU
+		{0B806EAF-7E80-44F3-BE35-C729B7CE3FED}.Deploy-dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B806EAF-7E80-44F3-BE35-C729B7CE3FED}.Deploy-dev|Any CPU.Build.0 = Debug|Any CPU
+		{0B806EAF-7E80-44F3-BE35-C729B7CE3FED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B806EAF-7E80-44F3-BE35-C729B7CE3FED}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -289,6 +308,8 @@ Global
 		{048BBBA2-7BBF-44A5-A1B1-E4D32BBA2797} = {27286D23-04D1-475F-A9AE-E799855896E5}
 		{30342261-52F3-48D7-8724-385FC7D83230} = {572464F5-0EC9-4ABE-9B6D-C74B6E11C782}
 		{276D7605-A681-4469-B4C0-E62C5CE87E30} = {E3404571-E3D0-47E8-94FC-001982D11D59}
+		{C1810B6D-8EC2-4532-A554-50D1413A014C} = {4F972FD5-1CA4-4D62-A3CD-833718CC3364}
+		{0B806EAF-7E80-44F3-BE35-C729B7CE3FED} = {C1810B6D-8EC2-4532-A554-50D1413A014C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2ABEC548-5E84-4C4E-B783-4A3D2BC44097}

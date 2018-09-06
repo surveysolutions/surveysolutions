@@ -1,0 +1,11 @@
+{
+  "profiles": {
+    "WB.Services.Export.Host": {
+      "commandName": "Project",
+      "commandLineArgs": "--console",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
