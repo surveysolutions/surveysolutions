@@ -20,6 +20,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.Enumerator.Implementation.Utils;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Infrastructure.Native.Storage;
 using WB.Tests.Abc;
@@ -40,7 +41,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Setup.InstanceToMockedServiceLocator<IEntitySerializer<QuestionnaireDocument>>(new EntitySerializer<QuestionnaireDocument>());
 
             oldPatchGenerator = ServiceLocator.Current.GetInstance<IPatchGenerator>();
-            Setup.InstanceToMockedServiceLocator<IPatchGenerator>(new JsonPatchService());
+            Setup.InstanceToMockedServiceLocator<IPatchGenerator>(Create.PatchGenerator());
         }
 
         [OneTimeTearDown]

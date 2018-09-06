@@ -3,6 +3,7 @@ using JsonDiffPatchDotNet;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
+using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDiffTests
 {
@@ -81,7 +82,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDiffTests
 
         private JsonPatchService CreateService()
         {
-            return new JsonPatchService();
+            return new JsonPatchService(new ZipArchiveUtils());
         }
     }
 }
