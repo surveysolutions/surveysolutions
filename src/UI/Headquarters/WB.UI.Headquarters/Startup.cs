@@ -23,6 +23,7 @@ using Microsoft.Owin;
 using Microsoft.Owin.BuilderProperties;
 using Microsoft.Owin.Extensions;
 using Microsoft.Owin.Security.Cookies;
+using Ncqrs.Eventing.Storage;
 using NConfig;
 using NLog;
 using Owin;
@@ -62,16 +63,16 @@ namespace WB.UI.Headquarters
             CultureInfo.DefaultThreadCurrentCulture = new CultureInfo(@"en-US");
             //HibernatingRhinos.Profiler.Appender.NHibernate.NHibernateProfiler.Initialize();
             //HibernatingRhinos.Profiler.Appender.EntityFramework.EntityFrameworkProfiler.Initialize();
-             //NpgsqlLogManager.Provider = new NLogNpgsqlLoggingProvider();
-             //NpgsqlLogManager.IsParameterLoggingEnabled = true;
-            
+            //NpgsqlLogManager.Provider = new NLogNpgsqlLoggingProvider();
+            //NpgsqlLogManager.IsParameterLoggingEnabled = true;
+
         }
 
         public void Configuration(IAppBuilder app)
         {
             EnsureJsonStorageForErrorsExists();
             app.Use(RemoveServerNameFromHeaders);
-            
+
             var autofacKernel = AutofacConfig.CreateKernel();
 
             autofacKernel.ContainerBuilder.RegisterHubs(Assembly.GetAssembly(typeof(WebInterviewHub)));
@@ -81,6 +82,14 @@ namespace WB.UI.Headquarters
             //autofacKernel.ContainerBuilder.RegisterSource(new AnyConcreteTypeNotAlreadyRegisteredSource());
 
             autofacKernel.ContainerBuilder.RegisterType<Autofac.Integration.SignalR.AutofacDependencyResolver>().As<Microsoft.AspNet.SignalR.IDependencyResolver>().SingleInstance();
+
+            //todo:af move out
+            //reference to resolve scope 
+            //for singleton objects
+            //
+            //handle for signalR
+            //doesn't work and would cause captive dependencies
+            //autofacKernel.ContainerBuilder.RegisterInstance(HttpRequestScopedFactoryFor<IEventStore>());
 
             autofacKernel.Init().Wait();
 
@@ -96,76 +105,81 @@ namespace WB.UI.Headquarters
             HubConfiguration hubConfig = new HubConfiguration();
 
 
-                hubConfig.Resolver = container.Resolve<Microsoft.AspNet.SignalR.IDependencyResolver>();
-                GlobalHost.DependencyResolver = container.Resolve<Microsoft.AspNet.SignalR.IDependencyResolver>();
+            hubConfig.Resolver = container.Resolve<Microsoft.AspNet.SignalR.IDependencyResolver>();
+            GlobalHost.DependencyResolver = container.Resolve<Microsoft.AspNet.SignalR.IDependencyResolver>();
 
+            DependencyResolver.SetResolver(new CustomMVCDependencyResolver(container));
+            ModelBinders.Binders.DefaultBinder = new AutofacBinderResolver(container);
 
-                DependencyResolver.SetResolver(new Autofac.Integration.Mvc.AutofacDependencyResolver(container));
-                ModelBinders.Binders.DefaultBinder = new AutofacBinderResolver(container);
+            ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(container));
 
-                ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(container));
-
-                //TODO:AF resolve
-                /*var perRequestModule = new OnePerRequestHttpModule();
-                // onPerRequest scope implementation. Collecting all perRequest instances after all requests
-                app.Use(async (ctx, next) =>
+            //TODO:AF resolve
+            /*var perRequestModule = new OnePerRequestHttpModule();
+            // onPerRequest scope implementation. Collecting all perRequest instances after all requests
+            app.Use(async (ctx, next) =>
+            {
+                try
                 {
-                    try
-                    {
-                        if (ctx.Request.CallCancelled.IsCancellationRequested) return;
-    
-                        await next();
-                    }
-                    finally
-                    {
-                        perRequestModule.DeactivateInstancesForCurrentHttpRequest();
-                    }
-                });
-                kernel.Inject(perRequestModule); // wiill keep reference to perRequestModule in Kernel instance
-                */
+                    if (ctx.Request.CallCancelled.IsCancellationRequested) return;
 
-                //GlobalFilters.Filters.Add(new TransactionFilter());
-                //config.Filters.Add(new ApiTransactionFilter());
-
-                app.UseAutofacMiddleware(container);
-                app.UseWebApi(config);
-
-                var logger = ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<Startup>();
-                logger.Info($@"Starting Headquarters {ServiceLocator.Current.GetInstance<IProductVersion>()}");
-
-                ConfigureAuth(app);
-                InitializeAppShutdown(app);
-                InitializeMVC();
-
-                using (var scope = container.BeginLifetimeScope())
+                    await next();
+                }
+                finally
                 {
-                    ConfigureWebApi(app);
+                    perRequestModule.DeactivateInstancesForCurrentHttpRequest();
+                }
+            });
+            kernel.Inject(perRequestModule); // wiill keep reference to perRequestModule in Kernel instance
+            */
 
-                    scope.Resolve<IProductVersionHistory>().RegisterCurrentVersion();
+            //GlobalFilters.Filters.Add(new TransactionFilter());
+            //config.Filters.Add(new ApiTransactionFilter());
 
+            app.UseAutofacMiddleware(container);
+            app.UseWebApi(config);
+
+            var logger = ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<Startup>();
+            logger.Info($@"Starting Headquarters {ServiceLocator.Current.GetInstance<IProductVersion>()}");
+
+            ConfigureAuth(app);
+            InitializeAppShutdown(app);
+            InitializeMVC();
+
+            ConfigureWebApi(app);
+
+            container.Resolve<Func<IEventStore>>();
+
+            using (var scope = container.BeginLifetimeScope())
+            {
+                scope.Resolve<IProductVersionHistory>().RegisterCurrentVersion();
+            }
+
+            Exceptional.Settings.ExceptionActions.AddHandler<TargetInvocationException>((error, exception) =>
+            {
+                void AddAllSqlData(Exception e)
+                {
+                    if (e is Npgsql.PostgresException pe)
+                    {
+                        error.AddCommand(new Command(@"NpgSql", pe.Statement.SQL));
+                    }
+
+                    if (e.InnerException != null)
+                    {
+                        AddAllSqlData(e.InnerException);
+                    }
                 }
 
-                Exceptional.Settings.ExceptionActions.AddHandler<TargetInvocationException>((error, exception) =>
-                {
-                    void AddAllSqlData(Exception e)
-                    {
-                        if (e is Npgsql.PostgresException pe)
-                        {
-                            error.AddCommand(new Command(@"NpgSql", pe.Statement.SQL));
-                        }
+                AddAllSqlData(exception);
+            });
 
-                        if (e.InnerException != null)
-                        {
-                            AddAllSqlData(e.InnerException);
-                        }
-                    }
+            InitMetrics();
+            MetricsService.Start(logger);
 
-                    AddAllSqlData(exception);
-                });
+        }
 
-                InitMetrics();
-                MetricsService.Start(logger);
-           
+        public Func<T> HttpRequestScopedFactoryFor<T>()
+        {
+            return () => DependencyResolver.Current.GetService<T>();
         }
 
         private static void InitMetrics()
@@ -351,6 +365,30 @@ namespace WB.UI.Headquarters
                     Directory.CreateDirectory(jsonStorePathAbsolute);
                 }
             }
+        }
+    }
+
+    public class CustomMVCDependencyResolver : Autofac.Integration.Mvc.AutofacDependencyResolver
+    {
+        public CustomMVCDependencyResolver(ILifetimeScope container) : base(container)
+        {
+        }
+
+        public CustomMVCDependencyResolver(ILifetimeScope container, Action<ContainerBuilder> configurationAction) : base(container, configurationAction)
+        {
+        }
+
+        public CustomMVCDependencyResolver(ILifetimeScope container, ILifetimeScopeProvider lifetimeScopeProvider) : base(container, lifetimeScopeProvider)
+        {
+        }
+
+        public CustomMVCDependencyResolver(ILifetimeScope container, ILifetimeScopeProvider lifetimeScopeProvider, Action<ContainerBuilder> configurationAction) : base(container, lifetimeScopeProvider, configurationAction)
+        {
+        }
+
+        public override object GetService(Type serviceType)
+        {
+            return base.GetService(serviceType);
         }
     }
 }

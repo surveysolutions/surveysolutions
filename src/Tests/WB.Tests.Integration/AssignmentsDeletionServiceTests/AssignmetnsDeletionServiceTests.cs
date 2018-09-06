@@ -57,7 +57,7 @@ namespace WB.Tests.Integration.AssignmentsDeletionServiceTests
 
             assignments.Store(assignment, null);
 
-            var service = new AssignmetnsDeletionService(sessionFactory);
+            var service = new AssignmetnsDeletionService(plainPostgresTransactionManager);
 
             // act 
             service.Delete(questionnaireIdentity);

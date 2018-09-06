@@ -9,7 +9,6 @@ using Newtonsoft.Json;
 using NHibernate;
 using Npgsql;
 using NpgsqlTypes;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
@@ -26,15 +25,15 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         private readonly string tableName;
         private readonly string[] obsoleteEvents = new[] { "tabletregistered" };
 
-        private IUnitOfWork sessionProvider => ServiceLocator.Current.GetInstance<IUnitOfWork>();
+        private readonly IUnitOfWork sessionProvider; 
 
         public PostgresEventStore(PostgreConnectionSettings connectionSettings, 
-            IEventTypeResolver eventTypeResolver/*,
-            IUnitOfWork sessionProvider*/)
+            IEventTypeResolver eventTypeResolver,
+            IUnitOfWork sessionProvider)
         {
             this.connectionSettings = connectionSettings;
             this.eventTypeResolver = eventTypeResolver;
-            //this.sessionProvider = sessionProvider;
+            this.sessionProvider = sessionProvider;
 
             this.tableName = "events";
             tableNameWithSchema = connectionSettings.SchemaName + "." + this.tableName;
