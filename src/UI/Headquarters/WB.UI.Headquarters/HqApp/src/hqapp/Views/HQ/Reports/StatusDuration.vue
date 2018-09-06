@@ -12,10 +12,12 @@
             </FilterBlock>
             <FilterBlock :title="$t('Reports.Supervisor')">
                  <Typeahead :placeholder="$t('Common.AllSupervisors')"
-                           :values="supervisorsList"
                            :value="supervisorId"
-                           :forceLoadingState="loading.supervisors"
-                           @selected="selectSupervisor" />
+                           @selected="selectSupervisor"
+                           :ajax-params="supervisorsParams"
+                           :fetch-url="supervisorsUrl"
+                           data-vv-name="UserId"
+                           data-vv-as="UserName" />
             </FilterBlock>
         </Filters>
         <DataTables ref="table"
@@ -49,7 +51,7 @@ export default {
         return {
             questionnaireId: null,
             supervisorId: null,
-            supervisors: [],
+            supervisorsParams: { limit: 10 },
             loading : {
                 supervisors: false
             }
@@ -66,14 +68,13 @@ export default {
     mounted() {
         this.reload();
     },
-    async mounted() {      
-        await this.loadSupervisors();
-        this.$emit("mounted")
-    },
     computed: {
         questionnaires() {
             return this.$config.model.questionnaires
-        },     
+        },
+        supervisorsUrl() {
+            return this.$hq.Users.SupervisorsUri
+        },  
         supervisorsList() {
             return _.chain(this.supervisors)
                 .orderBy(['UserName'],['asc'])
@@ -196,16 +197,6 @@ export default {
  
         selectQuestionnaire(value) {
             this.questionnaireId = value;
-        },
-
-        async loadSupervisors(query = null) {
-            this.loading.supervisors = true
-
-            try {   
-                this.supervisors = await this.$hq.Users.Supervisors(query).Users; 
-            } finally {
-                this.loading.supervisors = false
-            }
         },
  
         selectSupervisor(value) {
