@@ -1,4 +1,3 @@
-using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -12,7 +11,6 @@ using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization
 {
-    [ExcludeFromCodeCoverage]
     public abstract class AbstractOfflineSynchronizationProcess : AbstractSynchronizationProcess
     {
         protected AbstractOfflineSynchronizationProcess(
