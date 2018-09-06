@@ -234,7 +234,7 @@ export default {
             }
 
             if (this.supervisorId != undefined)
-                urlParams['supervisorId'] = this.supervisorId.key;
+                urlParams['teamId'] = this.supervisorId.key;
 
             var querystring = this.encodeQueryData(urlParams);
 
