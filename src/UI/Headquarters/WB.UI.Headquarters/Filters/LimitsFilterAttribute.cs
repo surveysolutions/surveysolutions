@@ -2,22 +2,17 @@
 using System.Web.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Filters
 {
     public class LimitsFilterAttribute : ActionFilterAttribute
     {
-        private InterviewPreconditionsServiceSettings InterviewPreconditionsServiceSettings
-        {
-            get { return ServiceLocator.Current.GetInstance<InterviewPreconditionsServiceSettings>(); }
-        }
+        private InterviewPreconditionsServiceSettings InterviewPreconditionsServiceSettings =>
+            DependencyResolver.Current.GetService<InterviewPreconditionsServiceSettings>();
 
-        private IQueryableReadSideRepositoryReader<InterviewSummary> InterviewSummaryStorage
-        {
-            get { return ServiceLocator.Current.GetInstance<IQueryableReadSideRepositoryReader<InterviewSummary>>(); }
-        }
+        private IQueryableReadSideRepositoryReader<InterviewSummary> InterviewSummaryStorage =>
+            DependencyResolver.Current.GetService<IQueryableReadSideRepositoryReader<InterviewSummary>>();
 
         public override void OnActionExecuted(ActionExecutedContext filterContext)
         {

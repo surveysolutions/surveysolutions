@@ -10,7 +10,6 @@ using WB.UI.Headquarters.Resources;
 using System.Threading.Tasks;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 
 namespace WB.UI.Headquarters.Code
 {
@@ -18,9 +17,7 @@ namespace WB.UI.Headquarters.Code
     public class ApiBasicAuthAttribute : AuthorizationFilterAttribute
     {
         public static string AuthHeader = @"WWW-Authenticate";
-
-        private HqSignInManager userManager => ServiceLocator.Current.GetInstance<HqSignInManager>();
-
+        
         public bool TreatPasswordAsPlain { get; set; } = false;
         public bool FallbackToCookieAuth { get; set; } = false;
 
@@ -46,6 +43,9 @@ namespace WB.UI.Headquarters.Code
                 this.RespondWithMessageThatUserDoesNotExists(actionContext);
                 return;
             }
+
+            //resolve respecting curent scope
+            var userManager = actionContext.Request.GetDependencyScope().GetService(typeof(HqSignInManager)) as HqSignInManager;
 
             var result = await userManager.SignInWithAuthTokenAsync(actionContext.Request.Headers?.Authorization?.ToString(), TreatPasswordAsPlain, this.roles);
 

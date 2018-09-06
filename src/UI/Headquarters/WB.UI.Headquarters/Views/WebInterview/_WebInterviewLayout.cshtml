@@ -1,5 +1,4 @@
-﻿@using WB.Core.GenericSubdomains.Portable.ServiceLocation
-@using WB.UI.Shared.Web.Extensions
+﻿@using WB.UI.Shared.Web.Extensions
 @using WB.Core.Infrastructure.Versions
 @{
     Layout = null;
@@ -69,7 +68,7 @@
         <div class="container-fluid">
             <div class="text-center">&copy; @DateTime.Now.Year.ToString() <a href="http://www.worldbankgroup.org">@Common.TheWorldBankGroup</a>, @(Common.AlRightsReserved). <a href="http://go.worldbank.org/OS6V7NIUD0">@Common.Legal</a>.</div>
             <div class="text-center">
-                @(ServiceLocator.Current.GetInstance<IProductVersion>())
+                @(DependencyResolver.Current.GetService<IProductVersion>())
             </div>
         </div>
     </footer>

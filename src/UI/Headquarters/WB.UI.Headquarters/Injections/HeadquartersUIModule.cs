@@ -23,6 +23,7 @@ using WB.Infrastructure.Native.Questionnaire;
 using WB.UI.Headquarters.API.WebInterview;
 using WB.UI.Headquarters.API.WebInterview.Services;
 using WB.UI.Headquarters.Code;
+using WB.UI.Headquarters.Code.CommandTransformation;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web.Attributes;
@@ -81,6 +82,8 @@ namespace WB.UI.Headquarters.Injections
             //registry.BindHttpFilterWhenActionMethodHasNoAttribute<ApiTransactionFilter, NoTransactionAttribute>(System.Web.Http.Filters.FilterScope.Global, 1);
 
             registry.Bind<ICommandDeserializer, SurveyManagementCommandDeserializer>();
+            registry.Bind<ICommandTransformator, CommandTransformator>();
+            
             registry.Bind<IInterviewerVersionReader, InterviewerVersionReader>();
             registry.Bind<IWebInterviewAllowService, WebInterviewAllowService>();
             registry.Bind<IReviewAllowedService, ReviewAllowedService>();

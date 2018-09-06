@@ -108,7 +108,7 @@ namespace WB.UI.Headquarters
             registry.Bind<IEventSourcedAggregateRootRepository, EventSourcedAggregateRootRepositoryWithWebCache>();
             registry.Bind<IAggregateRootCacheCleaner, EventSourcedAggregateRootRepositoryWithWebCache>();
 
-            registry.BindAsSingletonWithConstructorArgument<ILiteEventBus, NcqrCompatibleEventDispatcher>(
+            registry.BindWithConstructorArgument<ILiteEventBus, NcqrCompatibleEventDispatcher>(
                 "eventBusSettings",
                 settingsProvider.GetSection<EventBusConfigSection>("eventBus").GetSettings());
         }

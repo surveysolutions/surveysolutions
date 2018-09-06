@@ -1,5 +1,4 @@
-﻿@using WB.Core.GenericSubdomains.Portable.ServiceLocation
-@using WB.Core.Infrastructure.Versions
+﻿@using WB.Core.Infrastructure.Versions
 @using WB.Core.SharedKernels.SurveyManagement.Web.Code
 @using WB.UI.Headquarters.Services
 <!DOCTYPE html>
@@ -24,7 +23,7 @@
                 © @DateTime.Now.Year.ToString() <a href="http://www.worldbankgroup.org">@Pages.Layout_WorldBank</a>, @Pages.Layout_RightsReserved <a href="http://go.worldbank.org/OS6V7NIUD0">@Pages.Layout_Legal</a>.
             </div>
             <div class="text-center">
-                @(ServiceLocator.Current.GetInstance<IProductVersion>())
+                @(DependencyResolver.Current.GetService<IProductVersion>())
                 
                 @if (AppSettings.IsDebugBuilded)
                 {
@@ -38,10 +37,10 @@
 
                 @RenderSection("interviewerlink", false)
                 
-                @if (ServiceLocator.Current.GetInstance<IVersionCheckService>().DoesNewVersionExist())
+                @if (DependencyResolver.Current.GetService<IVersionCheckService>().DoesNewVersionExist())
                 {
                     <div>
-                        <span style="background-color: #ff8;">@Common.NewVersionAvailable @(ServiceLocator.Current.GetInstance<IVersionCheckService>().GetNewVersionString()) </span>
+                        <span style="background-color: #ff8;">@Common.NewVersionAvailable @(DependencyResolver.Current.GetService<IVersionCheckService>().GetNewVersionString()) </span>
                     </div>
                 }
             </div>

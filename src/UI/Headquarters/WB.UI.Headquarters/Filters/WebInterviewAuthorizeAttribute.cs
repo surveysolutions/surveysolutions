@@ -1,6 +1,5 @@
 ﻿using System.Web;
 using System.Web.Mvc;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Enumerator.Native.WebInterview;
 using WB.UI.Headquarters.API.WebInterview;
 using WB.UI.Headquarters.Models.WebInterview;
@@ -14,7 +13,7 @@ namespace WB.UI.Headquarters.Filters
             this.Order = 30;
         }
 
-        private IWebInterviewAllowService webInterviewAllowService => ServiceLocator.Current.GetInstance<IWebInterviewAllowService>();
+        private IWebInterviewAllowService webInterviewAllowService => DependencyResolver.Current.GetService<IWebInterviewAllowService>();
 
         public string InterviewIdQueryString { get; set; }
 

@@ -20,7 +20,11 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
 
         private readonly IAuthorizedUser authorizedUser;
 
-        public WebInterviewAuthorizeAttribute() : this(ServiceLocator.Current.GetInstance<IWebInterviewNotificationService>(),
+        public WebInterviewAuthorizeAttribute() : 
+            this(
+
+                //resolve from context to preserve scope
+            ServiceLocator.Current.GetInstance<IWebInterviewNotificationService>(),
             ServiceLocator.Current.GetInstance<IWebInterviewAllowService>(),
             ServiceLocator.Current.GetInstance<IReviewAllowedService>(),
             ServiceLocator.Current.GetInstance<IAuthorizedUser>()
@@ -28,7 +32,8 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
         {
         }
 
-        public WebInterviewAuthorizeAttribute(IWebInterviewNotificationService webInterviewNotificationService,
+        public WebInterviewAuthorizeAttribute(
+            IWebInterviewNotificationService webInterviewNotificationService,
             IWebInterviewAllowService webInterviewAllowService,
             IReviewAllowedService reviewAllowedService, 
             IAuthorizedUser authorizedUser)

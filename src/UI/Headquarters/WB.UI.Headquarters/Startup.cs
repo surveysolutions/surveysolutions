@@ -85,22 +85,15 @@ namespace WB.UI.Headquarters
             //autofacKernel.ContainerBuilder.RegisterSource(new AnyConcreteTypeNotAlreadyRegisteredSource());
 
             autofacKernel.ContainerBuilder.RegisterType<Autofac.Integration.SignalR.AutofacDependencyResolver>().As<Microsoft.AspNet.SignalR.IDependencyResolver>().SingleInstance();
-
-            //todo:af move out
-            //reference to resolve scope 
-            //for singleton objects
-            //
-            //handle for signalR
-            //doesn't work and would cause captive dependencies
-            //autofacKernel.ContainerBuilder.RegisterInstance(HttpRequestScopedFactoryFor<IEventStore>());
-
+            
             //temp logging
             autofacKernel.ContainerBuilder.RegisterModule<LogRequestModule>();
 
+
+            //no scope involved activity should be used
             autofacKernel.Init().Wait();
 
             var container = autofacKernel.Container;
-
 
             var config = new HttpConfiguration();
             var resolver = new AutofacWebApiDependencyResolver(container);
@@ -109,7 +102,6 @@ namespace WB.UI.Headquarters
             GlobalConfiguration.Configuration.DependencyResolver = resolver;
 
             HubConfiguration hubConfig = new HubConfiguration();
-
 
             hubConfig.Resolver = container.Resolve<Microsoft.AspNet.SignalR.IDependencyResolver>();
             GlobalHost.DependencyResolver = container.Resolve<Microsoft.AspNet.SignalR.IDependencyResolver>();
@@ -150,10 +142,7 @@ namespace WB.UI.Headquarters
             ConfigureAuth(app);
             InitializeAppShutdown(app);
             InitializeMVC();
-
             ConfigureWebApi(app);
-
-            container.Resolve<Func<IEventStore>>();
 
             using (var scope = container.BeginLifetimeScope())
             {
@@ -180,12 +169,6 @@ namespace WB.UI.Headquarters
 
             InitMetrics();
             MetricsService.Start(logger);
-
-        }
-
-        public Func<T> HttpRequestScopedFactoryFor<T>()
-        {
-            return () => DependencyResolver.Current.GetService<T>();
         }
 
         private static void InitMetrics()

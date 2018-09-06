@@ -1,12 +1,11 @@
 ﻿@using WB.Core.BoundedContexts.Headquarters.Resources
 @using WB.Core.BoundedContexts.Headquarters.Services
-@using WB.Core.GenericSubdomains.Portable.ServiceLocation
 @model WB.Core.BoundedContexts.Headquarters.Views.Reposts.PeriodicStatusReportModel
 @{
     ViewBag.Title = Model.ReportName;
     Layout = "~/Views/Shared/_MainLayout.cshtml";
     var isSpeedReport = ViewBag.ActivePage == MenuItem.SpeedOfCompletingInterviews;
-    var isSupervisor = ServiceLocator.Current.GetInstance<IAuthorizedUser>().IsSupervisor;
+    var isSupervisor = DependencyResolver.Current.GetService<IAuthorizedUser>().IsSupervisor;
 }
 
 @section scripts

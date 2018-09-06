@@ -18,7 +18,8 @@ namespace WB.Infrastructure.Native.Storage
 
         private static readonly ConcurrentDictionary<string, bool> CacheCountTracker = new ConcurrentDictionary<string, bool>();
 
-        public EventSourcedAggregateRootRepositoryWithWebCache(IEventStore eventStore, 
+        public EventSourcedAggregateRootRepositoryWithWebCache(
+            IEventStore eventStore, 
             ISnapshotStore snapshotStore,
             IDomainRepository repository, 
             IAggregateLock aggregateLock)
