@@ -1,176 +1,66 @@
-const gulp = require("gulp")
-const webpack = require("webpack")
-const utils = require('gulp-util')
-const merge = require('webpack-merge');
+const gulp = require("gulp");
+const utils = require("gulp-util");
 const rimraf = require("rimraf");
-//const debug = require('gulp-debug');
-const plugins = require('gulp-load-plugins')();
-//const jest = require('jest-cli');
-const fs = require("fs")
+const plugins = require("gulp-load-plugins")();
+const { spawn } = require("child_process");
 
-const isDevMode = !utils.env.production
+const isDevMode = !utils.env.production;
 
 const config = {
-    dist: 'dist',
-    hqViews: '../Views/Shared',
-    webTester: '../../../WB.UI.WebTester/Content/Dist'
-}
+    dist: "dist",
+    hqViews: "../Views/Shared",
+    webTester: "../../../WB.UI.WebTester/Content/Dist"
+};
 
 config.resources = {
-    source: '../',
+    source: "../",
     dest: "locale/.resources"
-}
+};
 
-gulp.task("webTester", ['build'], function(){
+gulp.task("hot", [], cb => {
+    run("yarn", ["serve"], cb);
+});
 
+gulp.task("build", [], cb => {
+    run("yarn", isDevMode ? ["dev"] : ["build"], cb);
+});
+
+gulp.task("webTester", ["build"], function() {
     const filter = [
-        '**/*.js', 
-        '!**/hq/*',
-        '!**/webinterview/*',
-        '!**/hq.bundle*.js',
-        '!**/webinterview.bundle*.js',
-        '!**/review.bundle*.js',
-        isDevMode ? '**/*.map' : null, 
-        '**/*.css'].filter(x => x)
+        "**/*.js",
+        "**/locale/webtester/*.json",
+        "!**/locale/hq/*",
+        "!**/webinterview/*",
+        "!**/hq.*.js",
+        "!**/webinterview.*.js",
+        "!**/review.*.js",
+        isDevMode ? "**/*.map" : null,
+        "**/*.css"
+    ].filter(x => x);
 
-    return gulp.src(config.dist + "/**/*.*")
+    return gulp
+        .src(config.dist + "/**/*.*")
         .pipe(plugins.filter(filter))
         .pipe(gulp.dest(config.webTester));
 });
 
-gulp.task("default", ['cleanup', 'resx2json', 'build', 'webTester', 'test'].filter((x) => x));
+gulp.task("default", ["cleanup", "build", "webTester"].filter(x => x));
 
-gulp.task("build", ["resx2json", "vendor"], (done) => {
-    const opts = {
-        plugins: []
-    }
-
-    if (isDevMode) {
-        opts.plugins.push(new webpack.ProgressPlugin());
-    } else {
-        process.env.NODE_ENV = 'production';
-    }
-
-    const config = require("./webpack.config.js")
-    return webpack(merge(config, opts), onBuild(done));
-})
-
-gulp.task("hot", ["resx2json", "vendor"], (done) => {
-    const webpackDevServer = require("webpack-dev-server")
-    
-    process.env.NODE_ENV = "hot"
-
-    const config = require('./webpack.config.js');
-    const options = config.devServer;
-
-    webpackDevServer.addDevServerEntrypoints(config, options);
-    const compiler = webpack(config);
-    const server = new webpackDevServer(compiler, options);
-
-    server.listen(config.devServer.port, 'localhost', () => {
-        utils.log('Dev server listening on port ' + config.devServer.port + " for hot reload");
-        utils.log(utils.colors.bgBlue("Waiting for webpack compilation"));
-    });
-})
-
-gulp.task("test", (done) => {
-    var exec = require('child_process').exec;
-    exec('yarn test --ci', (err, stdout, stderr) => {
-        utils.log(stdout);
-        utils.log(stderr);
-        done(err);
-    });
-})
-
-gulp.task('resx2json', ["cleanup"], () => {
-    return gulp.src([
-        "../**/*.resx",
-        "../../../../Core/SharedKernels/Enumerator/WB.Enumerator.Native/Resources/*.resx",
-        "../../../../Core/BoundedContexts/Headquarters/WB.Core.BoundedContexts.Headquarters/Resources/*.resx"
-    ])
-        // .pipe(debug())
-        .pipe(plugins.resx2json())
-        .pipe(plugins.rename((filePath) => {
-            filePath.extname = ".json";
-            if (!filePath.basename.includes('.')) {
-                filePath.basename += ".en";
-            }
-        }))
-        .pipe(gulp.dest(config.resources.dest));
-});
-
-gulp.task('cleanup', (cb) => {
+gulp.task("cleanup", cb => {
     if (!isDevMode || process.env.FORCE_CLEANUP) {
-        rimraf.sync(config.dist + "/**/*.*")
-        rimraf.sync(config.resources.dest + "/**/*.*")
-        rimraf.sync(config.hqViews + "/partial.*.cshtml")
-        rimraf.sync(config.webTester  + "/**/*.*")
+        rimraf.sync(config.dist + "/**/*.*");
+        rimraf.sync(config.resources.dest + "/**/*.*");
+        rimraf.sync(config.hqViews + "/partial.*.cshtml");
+        rimraf.sync(config.webTester + "/**/*.*");
     }
     return cb();
 });
 
-gulp.task("vendor", ["cleanup"], (done) => {
-    fs.stat("./dist/shared_vendor.manifest.json", (err) => {
-        if (err) {
-            utils.log(utils.colors.yellow("Building VENDOR DLL libs"));
-
-            if (!isDevMode) {
-                process.env.NODE_ENV = 'production';
-            }
-
-            const dllConfig = require("./webpack.vendor.config");
-
-            webpack(dllConfig, done, "Shared vendor dll build done", true);
-        } else {
-            done()
-        }
+function run(command, args, cb) {
+    const cmd = spawn(command, args, {
+        shell: true,
+        stdio: "inherit"
     });
-});
 
-gulp.task("watch", ['resx2json', 'vendor'], () => {
-    const compiler = webpack(merge(require("./webpack.config.js"), {
-        plugins: [new webpack.ProgressPlugin()]
-    }));
-
-    utils.log(utils.colors.green('Building and waiting for file changes'));
-
-    const watcher = compiler.watch({
-        ignored: ["node_modules"]
-    }, onBuild(null, utils.colors.green("Build done. Waiting for changes"), false));
-
-    return watcher;
-});
-
-function onBuild(done, onBuildMessage, exitOnError = true) {
-    const moment = require("moment")
-
-    return function (err, stats) {
-        if (err) {
-            utils.log('Error', err);
-            if (exitOnError) throw "Build has failed"
-        }
-        else {
-            const duration = moment.duration(stats.endTime - stats.startTime, "millisecond").asSeconds();
-            utils.log(utils.colors.green("Build in"), utils.colors.magenta(duration + " s"));
-
-            if (stats.hasErrors()) {
-                utils.log(stats.toString());
-                if (exitOnError) throw "Build has failed"
-            }
-
-            if (stats.hasWarnings()) {
-                utils.log(stats.compilation.warnings);
-            }
-
-            if (stats.hasErrors() || stats.hasWarnings()) {
-                utils.log(utils.colors.bgRed("Build completed with warnings"));
-            } else if (onBuildMessage) {
-                utils.log(onBuildMessage);
-            }
-        }
-
-        if (done) {
-            done();
-        }
-    }
+    cmd.on("exit", code => cb(code));
 }
