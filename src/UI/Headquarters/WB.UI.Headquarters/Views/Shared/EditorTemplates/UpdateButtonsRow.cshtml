@@ -1,8 +1,7 @@
 ﻿@using WB.Core.BoundedContexts.Headquarters.Services
-@using WB.Core.GenericSubdomains.Portable.ServiceLocation
 @model UserModelBase
 @{
-    var isObserving = ServiceLocator.Current.GetInstance<IAuthorizedUser>().IsObserving;
+    var isObserving = DependencyResolver.Current.GetService<IAuthorizedUser>().IsObserving;
 }
 <div class="col-sm-12">
     <div class="block-filter">

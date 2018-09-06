@@ -5,7 +5,7 @@
 @using WB.UI.Headquarters.Services
 @using WB.UI.Shared.Web.Extensions
 @{
-    var authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>();
+    var authorizedUser = DependencyResolver.Current.GetService<IAuthorizedUser>();
 }
 <!DOCTYPE html>
 <html>
@@ -125,10 +125,10 @@
                 <text>|</text>
                 <a href="@Url.Action("Index","Download")">@Common.GetInterviewerApp</a>
                  
-                @if (ServiceLocator.Current.GetInstance<IVersionCheckService>().DoesNewVersionExist())
+                @if (DependencyResolver.Current.GetService<IVersionCheckService>().DoesNewVersionExist())
                 {
                     <div>
-                        <span style="background-color: #ff8;">@Common.NewVersionAvailable @(ServiceLocator.Current.GetInstance<IVersionCheckService>().GetNewVersionString()) </span>
+                        <span style="background-color: #ff8;">@Common.NewVersionAvailable @(DependencyResolver.Current.GetService<IVersionCheckService>().GetNewVersionString()) </span>
                     </div>
                 }
             </div>

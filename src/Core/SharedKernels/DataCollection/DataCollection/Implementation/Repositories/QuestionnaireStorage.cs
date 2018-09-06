@@ -7,6 +7,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using System.Collections.Concurrent;
 using System.Linq;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
@@ -20,12 +21,20 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
 
         private static ConcurrentDictionary<string, QuestionnaireDocument> questionnaireDocumentsCache = new ConcurrentDictionary<string, QuestionnaireDocument>();
         private static ConcurrentDictionary<string, PlainQuestionnaire> plainQuestionnairesCache = new ConcurrentDictionary<string, PlainQuestionnaire>();
+        private readonly IQuestionOptionsRepository questionOptionsRepository;
+        private ISubstitutionService substitutionService;
 
-        public QuestionnaireStorage(IPlainKeyValueStorage<QuestionnaireDocument> repository, ITranslationStorage translationStorage, IQuestionnaireTranslator translator)
+        public QuestionnaireStorage(IPlainKeyValueStorage<QuestionnaireDocument> repository, 
+            ITranslationStorage translationStorage, 
+            IQuestionnaireTranslator translator,
+            IQuestionOptionsRepository questionOptionsRepository,
+            ISubstitutionService substitutionService)
         {
             this.repository = repository;
             this.translationStorage = translationStorage;
             this.translator = translator;
+            this.questionOptionsRepository = questionOptionsRepository;
+            this.substitutionService = substitutionService;
         }
 
         public IQuestionnaire GetQuestionnaire(QuestionnaireIdentity identity, string language)
@@ -54,7 +63,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
                 questionnaireDocument = this.translator.Translate(questionnaireDocument, translation);
             }
 
-            var plainQuestionnaire = new PlainQuestionnaire(questionnaireDocument, identity.Version, translationId);
+            var plainQuestionnaire = new PlainQuestionnaire(questionnaireDocument, identity.Version, 
+                questionOptionsRepository, substitutionService,translationId);
 
             plainQuestionnaire.WarmUpPriorityCaches();
 

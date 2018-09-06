@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Documents;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Enumerator.Native.Questionnaire;
@@ -12,10 +14,16 @@ namespace WB.UI.WebTester.Infrastructure
     {
         private readonly IQuestionnaireTranslator translator;
         private List<TranslationInstance> translationsList;
+        private readonly IQuestionOptionsRepository questionOptionsRepository;
+        private readonly ISubstitutionService substitutionService;
 
-        public WebTesterTranslationStorage(IQuestionnaireTranslator translator)
+        public WebTesterTranslationStorage(IQuestionnaireTranslator translator, 
+            IQuestionOptionsRepository questionOptionsRepository,
+            ISubstitutionService substitutionService)
         {
             this.translator = translator;
+            this.questionOptionsRepository = questionOptionsRepository;
+            this.substitutionService = substitutionService;
         }
 
         public void Store(List<TranslationInstance> translations)
@@ -39,7 +47,7 @@ namespace WB.UI.WebTester.Infrastructure
                 result = this.translator.Translate(questionnaire, translation);
             }
 
-            return new PlainQuestionnaire(result, version, translationId);
+            return new PlainQuestionnaire(result, version, questionOptionsRepository, substitutionService, translationId);
         }
     }
 }

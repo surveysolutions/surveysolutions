@@ -7,8 +7,6 @@ using System.Reflection;
 using Ncqrs.Domain;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
-using Ncqrs.Eventing.Storage;
-
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -23,21 +21,19 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
         private readonly Dictionary<Type, EventHandlerWrapper> registredHandlers = new Dictionary<Type, EventHandlerWrapper>();
         private readonly Type[] handlersToIgnore;
         private readonly Func<InProcessEventBus> getInProcessEventBus;
-        //private readonly Func<IEventStore> eventStore;
+        
         private readonly EventBusSettings eventBusSettings;
         private readonly ILogger logger;
         
         public NcqrCompatibleEventDispatcher(
-            /*Func<IEventStore> eventStore,*/ 
             EventBusSettings eventBusSettings, 
             ILogger logger, 
             IEnumerable<IEventHandler> eventHandlers)
         {
-            //this.eventStore = eventStore;
             this.eventBusSettings = eventBusSettings;
             this.logger = logger;
             this.handlersToIgnore = eventBusSettings.DisabledEventHandlerTypes;
-            this.getInProcessEventBus = () => new InProcessEventBus(/*eventStore(),*/ eventBusSettings, logger);
+            this.getInProcessEventBus = () => new InProcessEventBus(eventBusSettings, logger);
 
             foreach (var handler in eventHandlers)
             {

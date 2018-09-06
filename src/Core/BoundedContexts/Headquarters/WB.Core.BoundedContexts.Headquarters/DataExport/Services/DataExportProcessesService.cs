@@ -15,13 +15,15 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
     internal class DataExportProcessesService : IDataExportProcessesService
     {
         private readonly IAuditLog auditLog;
-        private static readonly ConcurrentDictionary<string, DataExportProcessDetails> processes = new ConcurrentDictionary<string, DataExportProcessDetails>();
+        private static readonly ConcurrentDictionary<string, DataExportProcessDetails> processes = 
+            new ConcurrentDictionary<string, DataExportProcessDetails>();
 
-        private IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<QuestionnaireBrowseItem>>();
+        private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires;
 
-        public DataExportProcessesService(IAuditLog auditLog)
+        public DataExportProcessesService(IAuditLog auditLog, IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires)
         {
             this.auditLog = auditLog;
+            this.questionnaires = questionnaires;
         }
 
         public DataExportProcessDetails GetAndStartOldestUnprocessedDataExport()

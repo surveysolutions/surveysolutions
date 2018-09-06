@@ -67,7 +67,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
             this.questionnaireDocumentRepository = new InMemoryKeyValueStorage<QuestionnaireDocument>();
             this.questionnaireStorage = new HqQuestionnaireStorage(new InMemoryKeyValueStorage<QuestionnaireDocument>(),
                 Mock.Of<ITranslationStorage>(), Mock.Of<IQuestionnaireTranslator>(),
-                this.questionnaireItemsRepository);
+                this.questionnaireItemsRepository, Mock.Of<IQuestionOptionsRepository>());
         }
 
         [OneTimeTearDown]

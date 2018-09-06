@@ -10,7 +10,6 @@ using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
@@ -24,8 +23,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
     internal class DeleteQuestionnaireService : IDeleteQuestionnaireService
     {
         private readonly Func<IInterviewsToDeleteFactory> interviewsToDeleteFactory;
-        private IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemReader => 
-            ServiceLocator.Current.GetInstance<IPlainStorageAccessor<QuestionnaireBrowseItem>>();
+        private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemReader;
         private readonly ICommandService commandService;
         private readonly ILogger logger;
         private readonly ITranslationManagementService translations;
@@ -34,13 +32,20 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
 
         private static readonly object DeleteInProcessLockObject = new object();
         private static readonly HashSet<string> DeleteInProcess = new HashSet<string>();
+        private readonly IAssignmetnsDeletionService assignmetnsDeletionService;
+        private readonly IPlainKeyValueStorage<QuestionnaireLookupTable> lookupTablesStorage;
+        private readonly IQuestionnaireStorage questionnaireStorage;
 
         public DeleteQuestionnaireService(Func<IInterviewsToDeleteFactory> interviewsToDeleteFactory, 
             ICommandService commandService,
             ILogger logger, 
             ITranslationManagementService translations,
             IAssignmentsImportService importService,
-            IAuditLog auditLog)
+            IAuditLog auditLog,
+            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemReader,
+            IAssignmetnsDeletionService assignmetnsDeletionService,
+            IPlainKeyValueStorage<QuestionnaireLookupTable> lookupTablesStorage,
+            IQuestionnaireStorage questionnaireStorage)
         {
             this.interviewsToDeleteFactory = interviewsToDeleteFactory;
             this.commandService = commandService;
@@ -48,6 +53,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
             this.translations = translations;
             this.importService = importService;
             this.auditLog = auditLog;
+            this.questionnaireBrowseItemReader = questionnaireBrowseItemReader;
+            this.assignmetnsDeletionService = assignmetnsDeletionService;
+            this.lookupTablesStorage = lookupTablesStorage;
+            this.questionnaireStorage = questionnaireStorage;
         }
 
         public void DisableQuestionnaire(Guid questionnaireId, long questionnaireVersion, Guid? userId)
@@ -112,15 +121,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
 
         private void DeleteAssignments(QuestionnaireIdentity questionnaireIdentity)
         {
-            var sessionProvider = ServiceLocator.Current.GetInstance<IAssignmetnsDeletionService>();
-            sessionProvider.Delete(questionnaireIdentity);
+            assignmetnsDeletionService.Delete(questionnaireIdentity);
         }
 
         private void DeleteLookupTables(QuestionnaireIdentity questionnaireIdentity)
         {
-            var questionnaireStorage = ServiceLocator.Current.GetInstance<IQuestionnaireStorage>();
-            var lookupTablesStorage = ServiceLocator.Current.GetInstance<IPlainKeyValueStorage<QuestionnaireLookupTable>>();
-
             var questionnaireDocument = questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity);
             
             foreach (var lookupTableInfo in questionnaireDocument.LookupTables)

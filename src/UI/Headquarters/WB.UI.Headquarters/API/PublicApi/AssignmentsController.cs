@@ -40,6 +40,7 @@ namespace WB.UI.Headquarters.API.PublicApi
         private readonly IAuditLog auditLog;
         private readonly IInterviewCreatorFromAssignment interviewCreatorFromAssignment;
         private readonly IPreloadedDataVerifier verifier;
+        private readonly ICommandTransformator commandTransformator;
 
         public AssignmentsController(
             IAssignmentViewFactory assignmentViewFactory,
@@ -50,7 +51,8 @@ namespace WB.UI.Headquarters.API.PublicApi
             IQuestionnaireStorage questionnaireStorage,
             IAuditLog auditLog,
             IInterviewCreatorFromAssignment interviewCreatorFromAssignment,
-            IPreloadedDataVerifier verifier) : base(logger)
+            IPreloadedDataVerifier verifier,
+            ICommandTransformator commandTransformator) : base(logger)
         {
             this.assignmentViewFactory = assignmentViewFactory;
             this.assignmentsStorage = assignmentsStorage;
@@ -60,6 +62,7 @@ namespace WB.UI.Headquarters.API.PublicApi
             this.auditLog = auditLog;
             this.interviewCreatorFromAssignment = interviewCreatorFromAssignment;
             this.verifier = verifier;
+            this.commandTransformator = commandTransformator;
         }
 
         /// <summary>
@@ -212,7 +215,7 @@ namespace WB.UI.Headquarters.API.PublicApi
                 KeyValuePair<Guid, AbstractAnswer> answer;
                 try
                 {
-                    answer = CommandTransformator.ParseQuestionAnswer(new UntypedQuestionAnswer
+                    answer = this.commandTransformator.ParseQuestionAnswer(new UntypedQuestionAnswer
                     {
                         Id = identity.Id,
                         Answer = item.Answer,

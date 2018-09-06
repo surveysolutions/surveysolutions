@@ -18,8 +18,9 @@ namespace WB.UI.WebTester.Infrastructure
             IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider, 
             ISubstitutionTextFactory substitutionTextFactory,
             IAppdomainsPerInterviewManager appdomainsPerInterviewManager,
-            IInterviewTreeBuilder treeBuilder) 
-            : base(questionnaireRepository, expressionProcessorStatePrototypeProvider, substitutionTextFactory, treeBuilder)
+            IInterviewTreeBuilder treeBuilder,
+            IQuestionOptionsRepository questionOptionsRepository) 
+            : base(questionnaireRepository, expressionProcessorStatePrototypeProvider, substitutionTextFactory, treeBuilder, questionOptionsRepository)
         {
             this.appdomainsPerInterviewManager = appdomainsPerInterviewManager;
         }

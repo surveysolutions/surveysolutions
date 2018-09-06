@@ -6,7 +6,7 @@
 @model WB.UI.Headquarters.Models.DownloadModel
 @{
     Layout = null;
-    var qRCodeHelper = ServiceLocator.Current.GetInstance<IQRCodeHelper>();
+    var qRCodeHelper = DependencyResolver.Current.GetService<IQRCodeHelper>();
 }
 <!DOCTYPE html>
 <html>
