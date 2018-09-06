@@ -3,32 +3,17 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Dapper;
+using DeltaCompressionDotNet.MsDelta;
+using JsonDiffPatchDotNet;
 using Npgsql;
 
 namespace ShrinkQuestionnaireHistory
 {
-    public class ApplicationArguments
-    {
-        public string ConnectionString { get; set; }
-
-    }
-
-    public class ChangeRecord
-    {
-        public string Id { get; set; }
-
-        public string Questionnaire { get; set; }
-    }
-
-    public class QuestionnaireIdRecord
-    {
-        public string QuestionnaireId { get; set; }
-    }
-
     [Localizable(false)]
     class Program
     {
@@ -36,12 +21,12 @@ namespace ShrinkQuestionnaireHistory
         {
             var connectionString = new NpgsqlConnectionStringBuilder(args[0]);
 
-            var patcher = new DiffMatchPatch.diff_match_patch();
+            var compression = new MsDeltaCompression(); 
             using (var connection = new NpgsqlConnection(connectionString.ConnectionString))
             {
                 await connection.OpenAsync();
 
-                var questionnairesWithHistoryIds = (await connection.QueryAsync<QuestionnaireIdRecord>(
+                var questionnairesWithHistoryIds = (await connection.QueryAsync<string>(
                         "SELECT DISTINCT questionnaireid FROM plainstore.questionnairechangerecords WHERE resultingquestionnairedocument IS NOT NULL")
                     ).ToList();
 
@@ -50,65 +35,57 @@ namespace ShrinkQuestionnaireHistory
                 int processedCount = 0;
                 Stopwatch watch = Stopwatch.StartNew();
 
-                Parallel.ForEach(questionnairesWithHistoryIds, row =>
+                foreach (var row in questionnairesWithHistoryIds)
                 {
-                    using (var localConnection = new NpgsqlConnection(connectionString.ConnectionString))
+                    using (var transaction = connection.BeginTransaction(IsolationLevel.RepeatableRead))
                     {
-                        localConnection.Open();
-                        using (var transaction = localConnection.BeginTransaction(IsolationLevel.RepeatableRead))
+                        try
                         {
-                            try
-                            {
-                                var existingHistory = localConnection.Query<ChangeRecord>(
-                                    @"SELECT id as Id, resultingquestionnairedocument as Questionnaire 
+                            var existingHistory = connection.Query<(string Id, string Questionnaire)>(
+                                @"SELECT id as Id, resultingquestionnairedocument as Questionnaire 
                                           FROM plainstore.questionnairechangerecords 
-                                          WHERE questionnaireid = @questionnaireId AND resultingquestionnairedocument IS NOT NULL
-                                          ORDER BY ""sequence""", new {row.QuestionnaireId});
+                                          WHERE questionnaireid = @QuestionnaireId AND resultingquestionnairedocument IS NOT NULL
+                                          ORDER BY ""sequence""", new {QuestionnaireId = row});
 
-                                string reference = existingHistory.First().Questionnaire;
+                            string reference = existingHistory.First().Questionnaire;
 
-                                foreach (ChangeRecord historyItem in existingHistory.Skip(1))
-                                {
-                                    var diff = patcher.patch_make(reference,
-                                        historyItem.Questionnaire ?? string.Empty);
-                                    string textPatch = patcher.patch_toText(diff);
-
-                                    var appliedPatch = patcher.patch_apply(diff, reference)[0].ToString();
-                                    if (!appliedPatch.Equals(historyItem.Questionnaire))
-                                    {
-                                        throw new Exception(
-                                            $"Applied patch for questionnaire {row}. Applied patch does not match target questionnaire. Tested change id {historyItem.Id}");
-                                    }
-
-                                    localConnection.Execute(@"UPDATE plainstore.questionnairechangerecords 
-                                                                    SET resultingquestionnairedocument = NULL, diffwithpreviousversion = @diff 
-                                                                    WHERE id = @id",
-                                        new
-                                        {
-                                            diff = textPatch,
-                                            id = historyItem.Id
-                                        });
-
-                                    reference = historyItem.Questionnaire;
-                                }
-
-                                transaction.Commit();
-                                Interlocked.Increment(ref processedCount);
-
-                                if (processedCount % 100 == 0)
-                                {
-                                    Console.WriteLine(
-                                        $"Processed {processedCount} questionnaires.Elapsed {watch.Elapsed:g}");
-                                }
-                            }
-                            catch (Exception e)
+                            foreach (var historyItem in existingHistory.Skip(1))
                             {
-                                Console.WriteLine(e.Message);
-                                transaction.Rollback();
+                                File.WriteAllText("source.json", reference);
+                                File.WriteAllText("target.json", historyItem.Questionnaire ?? "");
+
+                                compression.CreateDelta("source.json", "target.json", "delta");
+
+                                var delta = File.ReadAllBytes("delta");
+
+                                connection.Execute(@"UPDATE plainstore.questionnairechangerecords 
+                                                                    SET resultingquestionnairedocument = NULL, binarydiff = @diff 
+                                                                    WHERE id = @id",
+                                    new
+                                    {
+                                        diff = delta,
+                                        id = historyItem.Id
+                                    });
+
+                                reference = historyItem.Questionnaire;
+                            }
+
+                            transaction.Commit();
+                            processedCount++;
+
+                            if (processedCount % 100 == 0)
+                            {
+                                Console.WriteLine(
+                                    $"Processed {processedCount} questionnaires.Elapsed {watch.Elapsed:g}");
                             }
                         }
+                        catch (Exception e)
+                        {
+                            Console.WriteLine(e.Message);
+                            transaction.Rollback();
+                        }
                     }
-                });
+                }
             }
 
             Console.WriteLine("Done migration");
