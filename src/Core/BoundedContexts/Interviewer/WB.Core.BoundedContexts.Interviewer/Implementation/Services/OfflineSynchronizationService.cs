@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 using Ncqrs.Eventing;
@@ -22,7 +21,6 @@ using WB.Core.SharedKernels.Questionnaire.Translations;
 
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
-    [ExcludeFromCodeCoverage]
     public class OfflineSynchronizationService : IOfflineSynchronizationService
     {
         private readonly IOfflineSyncClient syncClient;
