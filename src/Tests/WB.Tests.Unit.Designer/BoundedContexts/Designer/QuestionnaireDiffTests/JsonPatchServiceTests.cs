@@ -79,16 +79,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDiffTests
             Assert.That(patched, Is.Null);
         }
 
-        [Test]
-        public void test_name()
-        {
-            var jdp = new JsonDiffPatch();
-            var diff = jdp.Diff(File.ReadAllText(@"E:\before.json"), File.ReadAllText(@"E:\after.json"));
-
-            Assert.That(diff.Length < 1000);
-        }
-
-
         private JsonPatchService CreateService()
         {
             return new JsonPatchService();
