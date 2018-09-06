@@ -23,20 +23,21 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
         private readonly Dictionary<Type, EventHandlerWrapper> registredHandlers = new Dictionary<Type, EventHandlerWrapper>();
         private readonly Type[] handlersToIgnore;
         private readonly Func<InProcessEventBus> getInProcessEventBus;
-        private readonly Func<IEventStore> eventStore;
+        //private readonly Func<IEventStore> eventStore;
         private readonly EventBusSettings eventBusSettings;
         private readonly ILogger logger;
         
-        public NcqrCompatibleEventDispatcher(Func<IEventStore> eventStore, 
+        public NcqrCompatibleEventDispatcher(
+            /*Func<IEventStore> eventStore,*/ 
             EventBusSettings eventBusSettings, 
             ILogger logger, 
             IEnumerable<IEventHandler> eventHandlers)
         {
-            this.eventStore = eventStore;
+            //this.eventStore = eventStore;
             this.eventBusSettings = eventBusSettings;
             this.logger = logger;
             this.handlersToIgnore = eventBusSettings.DisabledEventHandlerTypes;
-            this.getInProcessEventBus = () => new InProcessEventBus(eventStore(), eventBusSettings, logger);
+            this.getInProcessEventBus = () => new InProcessEventBus(/*eventStore(),*/ eventBusSettings, logger);
 
             foreach (var handler in eventHandlers)
             {
@@ -168,9 +169,10 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
 
         public IEnumerable<CommittedEvent> CommitUncommittedEvents(IEventSourcedAggregateRoot aggregateRoot, string origin)
         {
-            var eventStream = new UncommittedEventStream(origin, aggregateRoot.GetUnCommittedChanges());
+            throw new NotImplementedException();
+            /*var eventStream = new UncommittedEventStream(origin, aggregateRoot.GetUnCommittedChanges());
 
-            return this.eventStore().Store(eventStream);
+            return this.eventStore().Store(eventStream);*/
         }
 
         public void PublishCommittedEvents(IEnumerable<CommittedEvent> committedEvents) => this.Publish(committedEvents);

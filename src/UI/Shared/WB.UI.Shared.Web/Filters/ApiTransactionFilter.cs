@@ -9,10 +9,9 @@ namespace WB.UI.Shared.Web.Filters
     {
         public override void OnActionExecuted(HttpActionExecutedContext actionExecutedContext)
         {
+            //should respect current scope
             var unitOfWork = actionExecutedContext.Request.GetDependencyScope().GetService(typeof(IUnitOfWork)) as IUnitOfWork;
-
-            //var unitOfWork = ServiceLocator.Current.GetInstance<IUnitOfWork>();
-
+            
             if (actionExecutedContext.Exception == null)
             {
                 unitOfWork.AcceptChanges();

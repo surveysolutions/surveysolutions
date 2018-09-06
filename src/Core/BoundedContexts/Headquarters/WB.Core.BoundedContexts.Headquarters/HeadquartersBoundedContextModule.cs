@@ -284,7 +284,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IDdiMetadataAccessor, DdiMetadataAccessor>();
             registry.Bind<IDataExportFileAccessor, DataExportFileAccessor>();
          
-            registry.BindAsSingleton<IDataExportProcessesService, DataExportProcessesService>();
+            registry.Bind<IDataExportProcessesService, DataExportProcessesService>();
             registry.Bind<IInterviewErrorsExporter, InterviewErrorsExporter>();
             registry.Bind<CommentsExporter>();
             registry.Bind<InterviewActionsExporter>();
