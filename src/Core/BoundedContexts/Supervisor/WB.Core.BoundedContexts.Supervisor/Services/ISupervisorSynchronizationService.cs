@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Supervisor.Views;
@@ -20,6 +21,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Services
 
         Task<List<string>> GetListOfDeletedQuestionnairesIds(CancellationToken cancellationToken);
         Task<InterviewerApplicationPatchApiView[]> GetListOfInterviewerAppPatchesAsync(CancellationToken cancellationToken);
+
+        Task<byte[]> GetInterviewerApplicationPatchByNameAsync(string patchName, CancellationToken token,
+            IProgress<TransferProgress> transferProgress);
         Task<int?> GetLatestInterviewerAppVersionAsync(CancellationToken token);
     }
 }

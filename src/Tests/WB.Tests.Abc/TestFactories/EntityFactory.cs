@@ -2266,7 +2266,7 @@ namespace WB.Tests.Abc.TestFactories
             };
 
         public InterviewerApplicationPatchApiView InterviewerApplicationPatchApiView(string fileName, string url) 
-            => new InterviewerApplicationPatchApiView {FileName = fileName, Url = url};
+            => new InterviewerApplicationPatchApiView {FileName = fileName};
 
         public InterviewerAssignmentDashboardItemViewModel InterviewerAssignmentDashboardItemViewModel(IServiceLocator serviceLocator)
         {
