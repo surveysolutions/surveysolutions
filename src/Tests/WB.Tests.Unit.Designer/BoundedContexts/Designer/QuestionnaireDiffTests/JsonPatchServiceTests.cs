@@ -1,6 +1,4 @@
 ﻿using System;
-using System.IO;
-using JsonDiffPatchDotNet;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
