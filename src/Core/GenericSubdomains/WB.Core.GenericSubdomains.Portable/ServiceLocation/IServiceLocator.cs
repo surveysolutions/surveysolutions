@@ -31,7 +31,7 @@ namespace WB.Core.GenericSubdomains.Portable.ServiceLocation
         ///     the service instance.
         /// </exception>
         /// <returns>The requested service instance.</returns>
-        object GetInstance(Type serviceType, string key);
+        //object GetInstance(Type serviceType, string key);
 
         /// <summary>
         ///     Get all instances of the given <paramref name="serviceType" /> currently
@@ -66,7 +66,7 @@ namespace WB.Core.GenericSubdomains.Portable.ServiceLocation
         ///     the service instance.
         /// </exception>
         /// <returns>The requested service instance.</returns>
-        TService GetInstance<TService>(string key);
+        //TService GetInstance<TService>(string key);
 
         /// <summary>
         ///     Get all instances of the given <typeparamref name="TService" /> currently

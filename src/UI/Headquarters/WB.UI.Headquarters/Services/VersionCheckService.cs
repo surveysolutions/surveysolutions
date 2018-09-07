@@ -2,11 +2,14 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Autofac;
 using Newtonsoft.Json;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Versions;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Models.VersionCheck;
+using WB.UI.Shared.Enumerator.Services.Internals;
 
 namespace WB.UI.Headquarters.Services
 {
@@ -71,19 +74,24 @@ namespace WB.UI.Headquarters.Services
 
         private async Task UpdateVersionAsync()
         {
-            try
+            //todo:af remove it after fix thread execution
+            using (var scope = ServiceLocator.Current.CreateChildContainer())
             {
-                var versionInfo = await DoRequestJsonAsync<VersionCheckingInfo>(ApplicationSettings.NewVersionCheckUrl);
+                try
+                {
+                    var versionInfo =
+                        await DoRequestJsonAsync<VersionCheckingInfo>(ApplicationSettings.NewVersionCheckUrl);
 
-                AvailableVersion = versionInfo;
-                LastLoadedAt = DateTime.Now;
-                ErrorOccuredAt = null;
-                
-                this.appSettingsStorage.Store(versionInfo, VersionCheckingInfo.VersionCheckingInfoKey);
-            }
-            catch (Exception)
-            {
-                ErrorOccuredAt = DateTime.Now;
+                    AvailableVersion = versionInfo;
+                    LastLoadedAt = DateTime.Now;
+                    ErrorOccuredAt = null;
+
+                    scope.Resolve<IPlainKeyValueStorage<VersionCheckingInfo>>().Store(versionInfo, VersionCheckingInfo.VersionCheckingInfoKey);
+                }
+                catch (Exception)
+                {
+                    ErrorOccuredAt = DateTime.Now;
+                }
             }
         }
 
