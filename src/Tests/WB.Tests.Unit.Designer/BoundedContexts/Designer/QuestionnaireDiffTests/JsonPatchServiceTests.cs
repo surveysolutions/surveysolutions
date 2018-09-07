@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using JsonDiffPatchDotNet;
 using Newtonsoft.Json;
 using NUnit.Framework;
@@ -64,6 +65,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDiffTests
 
             string result = jsonPatchService.Apply(TestJson, null);
             Assert.That(result, Is.EqualTo(TestJson));
+        }
+
+        [Test]
+        public void should_throw_when_patch_cannot_be_applied()
+        {
+            var jsonPatchService = CreateService();
+
+            string result = jsonPatchService.Diff($"Foo {Environment.NewLine} Test", $"Bar {Environment.NewLine} bar");
+
+            Assert.Throws<ApplicationException>(() => jsonPatchService.Apply(Guid.NewGuid().ToString(), result));
         }
 
         [Test]
