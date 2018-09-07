@@ -63,8 +63,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             // act
             await step.ExecuteAsync();
             // assert
-            mockOfSupervisorSynchronization.Verify(x => x.GetFileAsync(notExistingFile, It.IsAny<IProgress<TransferProgress>>(), It.IsAny<CancellationToken>()), Times.Once);
-            mockOfSupervisorSynchronization.Verify(x => x.GetFileAsync(existingFile, It.IsAny<IProgress<TransferProgress>>(), It.IsAny<CancellationToken>()), Times.Never);
+            mockOfSupervisorSynchronization.Verify(x => x.GetInterviewerApplicationPatchByNameAsync(notExistingFile, It.IsAny<CancellationToken>(), It.IsAny<IProgress<TransferProgress>>()), Times.Once);
+            mockOfSupervisorSynchronization.Verify(x => x.GetInterviewerApplicationPatchByNameAsync(existingFile, It.IsAny<CancellationToken>(), It.IsAny<IProgress<TransferProgress>>()), Times.Never);
         }
 
         [Test]
@@ -79,7 +79,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 .Setup(x => x.GetListOfInterviewerAppPatchesAsync(It.IsAny<CancellationToken>())).Returns(
                     Task.FromResult(new[]
                     {
-                        new InterviewerApplicationPatchApiView {FileName = zeroFileName, Url = zeroFileName},
+                        new InterviewerApplicationPatchApiView {FileName = zeroFileName},
                     }));
             var fileSystemAccessor = Mock.Of<IFileSystemAccessor>(x =>
                 x.CombinePath(It.IsAny<string>(), zeroFileName) == zeroFileName &&
@@ -96,7 +96,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             // act
             await step.ExecuteAsync();
             // assert
-            mockOfSupervisorSynchronization.Verify(x => x.GetFileAsync(zeroFileName, It.IsAny<IProgress<TransferProgress>>(), It.IsAny<CancellationToken>()), Times.Once);
+            mockOfSupervisorSynchronization.Verify(x => x.GetInterviewerApplicationPatchByNameAsync(zeroFileName, It.IsAny<CancellationToken>(), It.IsAny<IProgress<TransferProgress>>()), Times.Once);
         }
 
         [Test]

@@ -1375,7 +1375,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interviews received by Interviewer.
+        ///   Looks up a localized string similar to Assignments received by Interviewer.
         /// </summary>
         public static string InterviewerProfile_DownloadedInterviewsCount {
             get {

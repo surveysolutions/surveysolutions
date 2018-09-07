@@ -555,7 +555,7 @@
     <value>Questionnaires received by Interviewer</value>
   </data>
   <data name="InterviewerProfile_DownloadedInterviewsCount" xml:space="preserve">
-    <value>Interviews received by Interviewer</value>
+    <value>Assignments received by Interviewer</value>
   </data>
   <data name="InterviewerProfile_UploadedInterviewsCount" xml:space="preserve">
     <value>Completed interviews received from Interviewer</value>
