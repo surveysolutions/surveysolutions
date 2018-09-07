@@ -89,6 +89,8 @@ namespace WB.UI.Headquarters
             //temp logging
             autofacKernel.ContainerBuilder.RegisterModule<LogRequestModule>();
 
+            
+            //autofacKernel.ContainerBuilder.Register<IServiceLocator>(() => ServiceLocator.Current);
 
             //no scope involved activity should be used
             autofacKernel.Init().Wait();
@@ -98,6 +100,8 @@ namespace WB.UI.Headquarters
             var config = new HttpConfiguration();
             var resolver = new AutofacWebApiDependencyResolver(container);
 
+            
+
             config.DependencyResolver = resolver;
             GlobalConfiguration.Configuration.DependencyResolver = resolver;
 
@@ -106,7 +110,10 @@ namespace WB.UI.Headquarters
             hubConfig.Resolver = container.Resolve<Microsoft.AspNet.SignalR.IDependencyResolver>();
             GlobalHost.DependencyResolver = container.Resolve<Microsoft.AspNet.SignalR.IDependencyResolver>();
 
-            DependencyResolver.SetResolver(new CustomMVCDependencyResolver(container));
+            var resolv = new CustomMVCDependencyResolver(container);
+            //resolver.
+
+            DependencyResolver.SetResolver(resolv);
             ModelBinders.Binders.DefaultBinder = new AutofacBinderResolver(container);
 
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(container));

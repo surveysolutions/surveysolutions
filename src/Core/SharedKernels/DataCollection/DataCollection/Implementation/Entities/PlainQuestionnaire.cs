@@ -8,7 +8,6 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
@@ -214,6 +213,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             this.translation = translation;
             this.questionOptionsRepository = questionOptionsRepository;
             this.substitutionService = substitutionService;
+
+            this.questionOptionsRepository.SetCurentQuestionnaire(this);
         }
 
         public void WarmUpPriorityCaches()
