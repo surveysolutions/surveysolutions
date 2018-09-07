@@ -37,7 +37,8 @@ namespace WB.Services.Export.Host
         {
             return WebHost.CreateDefaultBuilder(args)
                 .ConfigureAppConfiguration((context, config) =>
-                {// Configure the app here. })
+                {// Configure the app here.
+                 })
                 .UseHttpSys(sys => { sys.UrlPrefixes.Add("http://+:80/export"); })
                 .UseStartup<Startup>();
         }
