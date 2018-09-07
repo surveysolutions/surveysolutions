@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading;
@@ -105,6 +106,19 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
                     url: this.GetUpdatesController,
                     credentials: this.restCredentials,
                     token: cancellationToken));
+
+        public Task<byte[]> GetInterviewerApplicationPatchByNameAsync(string patchName, CancellationToken token, IProgress<TransferProgress> transferProgress)
+            => this.TryGetRestResponseOrThrowAsync(async () =>
+            {
+                var interviewerPatchApiUrl = $"{this.GetUpdatesController}/{patchName}";
+
+                var restFile = await this.restService.DownloadFileAsync(url: interviewerPatchApiUrl,
+                    token: token,
+                    credentials: this.restCredentials,
+                    transferProgress: transferProgress);
+
+                return restFile.Content;
+            });
 
         public Task<int?> GetLatestInterviewerAppVersionAsync(CancellationToken token)
             => this.TryGetRestResponseOrThrowAsync(async () =>
