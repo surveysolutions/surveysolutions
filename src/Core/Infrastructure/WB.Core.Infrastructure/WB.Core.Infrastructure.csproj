@@ -11,6 +11,7 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Autofac" Version="4.8.1" />
+    <PackageReference Include="Autofac.Mvc5" Version="4.0.2" />
     <PackageReference Include="System.Collections.Immutable" Version="1.4.0" />
   </ItemGroup>
   <ItemGroup>
@@ -18,6 +19,9 @@
     <ProjectReference Include="..\..\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Reference Include="Autofac.Integration.Mvc">
+      <HintPath>..\..\..\..\packages\Autofac.Mvc5.4.0.2\lib\net45\Autofac.Integration.Mvc.dll</HintPath>
+    </Reference>
     <Reference Include="WB.UI.Shared.Web">
       <HintPath>..\..\..\UI\WB.UI.WebTester\Bin\WB.UI.Shared.Web.dll</HintPath>
     </Reference>
