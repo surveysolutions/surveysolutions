@@ -36,8 +36,6 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
                 .Select(x => new InterviewerApplicationPatchApiView
                 {
                     FileName = this.fileSystemAccessor.GetFileName(x),
-                    Url = Url.Link(@"GetInterviewerAppPatch",
-                        new {id = this.fileSystemAccessor.GetFileName(x).ToLower()}),
                     SizeInBytes = this.fileSystemAccessor.GetFileSize(x)
                 }).ToArray();
 
