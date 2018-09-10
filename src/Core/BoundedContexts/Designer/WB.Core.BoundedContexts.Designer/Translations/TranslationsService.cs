@@ -216,9 +216,9 @@ namespace WB.Core.BoundedContexts.Designer.Translations
         private TranslationRow GetExcelTranslation(ExcelRange cells, int rowNumber) => new TranslationRow
         {
             EntityId = cells[$"A{rowNumber}"].GetValue<string>(),
-            Type = cells[$"B{rowNumber}"].GetValue<string>(),
-            OptionValueOrValidationIndexOrFixedRosterId = cells[$"C{rowNumber}"].GetValue<string>(),
-            Translation = cells[$"E{rowNumber}"].GetValue<string>()
+            Type = cells[$"C{rowNumber}"].GetValue<string>(),
+            OptionValueOrValidationIndexOrFixedRosterId = cells[$"D{rowNumber}"].GetValue<string>(),
+            Translation = cells[$"F{rowNumber}"].GetValue<string>()
         };
 
         private IEnumerable<TranslationValidationError> Verify(ExcelWorksheet worksheet)
@@ -242,7 +242,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
                 if (!Enum.TryParse(importedTranslation.Type, out TranslationType importedType) || importedType == TranslationType.Unknown)
                 {
-                    var cellAddress = $"B{rowNumber}";
+                    var cellAddress = $"C{rowNumber}";
 
                     yield return new TranslationValidationError
                     {
@@ -253,7 +253,7 @@ namespace WB.Core.BoundedContexts.Designer.Translations
 
                 if (translationTypesWithIndexes.Contains(importedType) && string.IsNullOrWhiteSpace(importedTranslation.OptionValueOrValidationIndexOrFixedRosterId))
                 {
-                    var cellAddress = $"C{rowNumber}";
+                    var cellAddress = $"D{rowNumber}";
 
                     yield return new TranslationValidationError
                     {

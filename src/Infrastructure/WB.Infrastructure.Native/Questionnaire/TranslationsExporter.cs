@@ -18,6 +18,7 @@ namespace WB.Infrastructure.Native.Questionnaire
         private class TranslationRow
         {
             public string EntityId { get; set; }
+            public string Variable { get; set; }
             public string Type { get; set; }
             public string OptionValueOrValidationIndexOrFixedRosterId { get; set; }
             public string OriginalText { get; set; }
@@ -54,10 +55,11 @@ namespace WB.Infrastructure.Native.Questionnaire
                     var worksheet = excelPackage.Workbook.Worksheets.Add(workSheetName);
 
                     worksheet.Cells["A1"].Value = TranslationExcelOptions.EntityIdColumnName;
-                    worksheet.Cells["B1"].Value = TranslationExcelOptions.TranslationTypeColumnName;
-                    worksheet.Cells["C1"].Value = "Index";
-                    worksheet.Cells["D1"].Value = "Original text";
-                    worksheet.Cells["E1"].Value = "Translation";
+                    worksheet.Cells["B1"].Value = "Variable";
+                    worksheet.Cells["C1"].Value = TranslationExcelOptions.TranslationTypeColumnName;
+                    worksheet.Cells["D1"].Value = "Index";
+                    worksheet.Cells["E1"].Value = "Original text";
+                    worksheet.Cells["F1"].Value = "Translation";
 
                     void FormatCell(string address)
                     {
@@ -70,6 +72,7 @@ namespace WB.Infrastructure.Native.Questionnaire
                     FormatCell("C1");
                     FormatCell("D1");
                     FormatCell("E1");
+                    FormatCell("F1");
 
                     int currentRowNumber = 1;
 
@@ -81,25 +84,26 @@ namespace WB.Infrastructure.Native.Questionnaire
 
                         worksheet.Cells[$"A{currentRowNumber}"].Value = translationRow.EntityId;
                         worksheet.Cells[$"A{currentRowNumber}"].Style.WrapText = true;
-                        worksheet.Cells[$"B{currentRowNumber}"].Value = translationRow.Type;
+                        worksheet.Cells[$"B{currentRowNumber}"].Value = translationRow.Variable;
                         worksheet.Cells[$"B{currentRowNumber}"].Style.WrapText = true;
-                        worksheet.Cells[$"C{currentRowNumber}"].Value =
-                            translationRow.OptionValueOrValidationIndexOrFixedRosterId;
+                        worksheet.Cells[$"C{currentRowNumber}"].Value = translationRow.Type;
                         worksheet.Cells[$"C{currentRowNumber}"].Style.WrapText = true;
-                        worksheet.Cells[$"D{currentRowNumber}"].Value = CleanUpString(translationRow.OriginalText);
+                        worksheet.Cells[$"D{currentRowNumber}"].Value = translationRow.OptionValueOrValidationIndexOrFixedRosterId;
                         worksheet.Cells[$"D{currentRowNumber}"].Style.WrapText = true;
-                        worksheet.Cells[$"E{currentRowNumber}"].Value = CleanUpString(translationRow.Translation);
+                        worksheet.Cells[$"E{currentRowNumber}"].Value = CleanUpString(translationRow.OriginalText);
                         worksheet.Cells[$"E{currentRowNumber}"].Style.WrapText = true;
+                        worksheet.Cells[$"F{currentRowNumber}"].Value = CleanUpString(translationRow.Translation);
+                        worksheet.Cells[$"F{currentRowNumber}"].Style.WrapText = true;
                     }
 
-                    for (int i = 1; i <= 4; i++)
+                    for (int i = 1; i <= 5; i++)
                     {
                         LockAndAutofitColumn(worksheet, i);
                     }
 
                     worksheet.Cells[worksheet.Dimension.Address].AutoFitColumns();
 
-                    worksheet.Column(5).AutoFit();
+                    worksheet.Column(6).AutoFit();
                     worksheet.Protection.AllowFormatColumns = true;
                 }
 
@@ -169,6 +173,7 @@ namespace WB.Infrastructure.Native.Questionnaire
         private static TranslationRow GetTranslatedTitle(IComposite entity, ITranslation translation) => new TranslationRow
         {
             EntityId = entity.PublicKey.FormatGuid(),
+            Variable = entity.VariableName,
             Type = TranslationType.Title.ToString("G"),
             OriginalText = entity.GetTitle(),
             Translation = translation.GetTitle(entity.PublicKey)
@@ -177,6 +182,7 @@ namespace WB.Infrastructure.Native.Questionnaire
         private static TranslationRow GetTranslatedInstruction(IQuestion question, ITranslation translation) => new TranslationRow
         {
             EntityId = question.PublicKey.FormatGuid(),
+            Variable = question.VariableName,
             Type = TranslationType.Instruction.ToString("G"),
             OriginalText = question.Instructions,
             Translation = translation.GetInstruction(question.PublicKey)
@@ -188,6 +194,7 @@ namespace WB.Infrastructure.Native.Questionnaire
                 select new TranslationRow
                 {
                     EntityId = validatable.PublicKey.FormatGuid(),
+                    Variable = (validatable as IComposite)?.VariableName,
                     Type = TranslationType.ValidationMessage.ToString("G"),
                     OriginalText = validationCondition.Message,
                     Translation = translation.GetValidationMessage(validatable.PublicKey, validationIndex),
@@ -204,6 +211,7 @@ namespace WB.Infrastructure.Native.Questionnaire
                 select new TranslationRow
                 {
                     EntityId = question.PublicKey.FormatGuid(),
+                    Variable = question.VariableName,
                     Type = question.QuestionType == QuestionType.Numeric ? TranslationType.SpecialValue.ToString("G") : TranslationType.OptionTitle.ToString("G"),
                     OriginalText = option.AnswerText,
                     Translation = question.QuestionType == QuestionType.Numeric ? translation.GetSpecialValue(question.PublicKey, option.AnswerValue) : translation.GetAnswerOption(question.PublicKey, option.AnswerValue),
@@ -217,6 +225,7 @@ namespace WB.Infrastructure.Native.Questionnaire
                 select new TranslationRow
                 {
                     EntityId = @group.PublicKey.FormatGuid(),
+                    Variable = @group.VariableName,
                     Type = TranslationType.FixedRosterTitle.ToString("G"),
                     OriginalText = fixedRoster.Title,
                     Translation = translation.GetFixedRosterTitle(@group.PublicKey, fixedRoster.Value),
