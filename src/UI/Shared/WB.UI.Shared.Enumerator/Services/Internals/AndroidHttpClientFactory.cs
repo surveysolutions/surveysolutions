@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Net.Http;
 using ModernHttpClient;
 using WB.Core.GenericSubdomains.Portable.Implementation;
@@ -27,6 +28,7 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
                 Timeout = restServiceSettings.Timeout,
                 EnableUntrustedCertificates = restServiceSettings.AcceptUnsignedSslCertificate,
                 DisableCaching = true,
+                AutomaticDecompression = DecompressionMethods.None
             };
 
             return messageHandler;
