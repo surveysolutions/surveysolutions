@@ -57,9 +57,9 @@ namespace WB.Infrastructure.Native.Questionnaire
                     worksheet.Cells["A1"].Value = TranslationExcelOptions.EntityIdColumnName;
                     worksheet.Cells["B1"].Value = "Variable";
                     worksheet.Cells["C1"].Value = TranslationExcelOptions.TranslationTypeColumnName;
-                    worksheet.Cells["D1"].Value = "Index";
+                    worksheet.Cells["D1"].Value = TranslationExcelOptions.OptionValueOrValidationIndexOrFixedRosterIdIndexColumnName;
                     worksheet.Cells["E1"].Value = "Original text";
-                    worksheet.Cells["F1"].Value = "Translation";
+                    worksheet.Cells["F1"].Value = TranslationExcelOptions.TranslationTextColumnName;
 
                     void FormatCell(string address)
                     {
