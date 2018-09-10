@@ -12,7 +12,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UserTests
 
         private void BecauseOf() =>
             user.Update(userName: "user name", comment: "some comment", email: "user@e.mail", passwordQuestion: "secret question", isLockedOut: true,
-                isConfirmed: true, canImportOnHq: true);
+                isConfirmed: true, canImportOnHq: true, fullName: null);
 
         [NUnit.Framework.Test] public void should_set_IsConfirmed_to_true () =>
                 user.IsConfirmed.Should().Be(true);
