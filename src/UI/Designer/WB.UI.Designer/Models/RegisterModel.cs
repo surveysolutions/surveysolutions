@@ -17,5 +17,7 @@ namespace WB.UI.Designer.Models
         [Display(Name = "User name", Order = 1)]
         [RegularExpression("^[a-zA-Z0-9_]{3,15}$", ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = "User_name_needs_to_be_between_3_and_15_characters")]
         public string UserName { get; set; }
+
+        public string FullName { get; set; }
     }
 }
