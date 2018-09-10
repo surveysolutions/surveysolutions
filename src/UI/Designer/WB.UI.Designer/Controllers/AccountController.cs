@@ -196,7 +196,7 @@ namespace WB.UI.Designer.Controllers
 
                         string userName = model.UserName.ToLower();
                         string confirmationToken = WebSecurity.CreateUserAndAccount(
-                            userName, model.Password, new { Email = model.Email, ProviderUserKey = providerUserKey }, true);
+                            userName, model.Password, new { Email = model.Email, FullName = model.FullName, ProviderUserKey = providerUserKey }, true);
 
                         if (!string.IsNullOrEmpty(confirmationToken))
                         {
@@ -208,7 +208,7 @@ namespace WB.UI.Designer.Controllers
                                 new EmailConfirmationModel()
                                     {
                                         Email = model.Email.ToWBEmailAddress(),
-                                        UserName = userName,
+                                        UserName = model.FullName ?? userName,
                                         ConfirmationToken = confirmationToken
                                     }).SendAsync();
                         }
