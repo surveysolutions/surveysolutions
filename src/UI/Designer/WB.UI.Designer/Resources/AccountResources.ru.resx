@@ -276,4 +276,8 @@
   <data name="InvalidRetrievalAnswer" xml:space="preserve">
     <value>Ответ на вопрос для восстановления пароля недействителен. Проверьте значение и повторите попытку.</value>
   </data>
+    <data name="FullName" xml:space="preserve">
+    <value>ФИО</value>
+    <comment>ФИО</comment>
+  </data>
 </root>
