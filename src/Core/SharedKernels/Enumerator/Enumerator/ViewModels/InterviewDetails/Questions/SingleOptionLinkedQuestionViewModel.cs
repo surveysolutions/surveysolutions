@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,7 +8,6 @@ using MvvmCross;
 using MvvmCross.Base;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -149,30 +149,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private async void OptionSelected(object sender, EventArgs eventArgs) => await this.OptionSelectedAsync(sender);
 
-        private async void RemoveAnswer(object sender, EventArgs e)
-        {
-            try
-            {
-                timer.Change(Timeout.Infinite, Timeout.Infinite);
-                await this.Answering.SendRemoveAnswerCommandAsync(
-                    new RemoveAnswerCommand(this.interviewId,
-                        this.userId,
-                        this.Identity));
-                this.QuestionState.Validity.ExecutedWithoutExceptions();
-
-                foreach (var option in this.Options.Where(option => option.Selected).ToList())
-                {
-                    option.Selected = false;
-                }
-
-                this.previousOptionToReset = null;
-            }
-            catch (InterviewException exception)
-            {
-                this.QuestionState.Validity.ProcessException(exception);
-            }
-        }
-
         private async Task SaveAnswer()
         {
             if (this.previousOptionToReset != null && this.selectedOptionToSave.SequenceEqual(this.previousOptionToReset))
@@ -218,8 +194,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         private readonly Timer timer;
+
         protected internal int ThrottlePeriod { get; set; } = Constants.ThrottlePeriod;
+
         private decimal[] previousOptionToReset = null;
+
         private decimal[] selectedOptionToSave = null;
 
         internal async Task OptionSelectedAsync(object sender)
@@ -228,6 +207,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.selectedOptionToSave = selectedOption.RosterVector;
 
             this.Options.Where(option => option.Selected && option != selectedOption).ForEach(x => x.Selected = false);
+
+            if (this.Options.All(x => x.Selected == false))
+            {
+                Debug.WriteLine("Shit");
+            }
 
             if (this.ThrottlePeriod == 0)
             {
@@ -244,6 +228,30 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             return value != null 
                 ? this.Options.FirstOrDefault(x => Enumerable.SequenceEqual(x.RosterVector, value))
                 : null;
+        }
+
+        private async void RemoveAnswer(object sender, EventArgs e)
+        {
+            try
+            {
+                timer.Change(Timeout.Infinite, Timeout.Infinite);
+                await this.Answering.SendRemoveAnswerCommandAsync(
+                    new RemoveAnswerCommand(this.interviewId,
+                        this.userId,
+                        this.Identity));
+                this.QuestionState.Validity.ExecutedWithoutExceptions();
+
+                foreach (var option in this.Options.Where(option => option.Selected).ToList())
+                {
+                    option.Selected = false;
+                }
+
+                this.previousOptionToReset = null;
+            }
+            catch (InterviewException exception)
+            {
+                this.QuestionState.Validity.ProcessException(exception);
+            }
         }
 
         public void Handle(AnswersRemoved @event)
