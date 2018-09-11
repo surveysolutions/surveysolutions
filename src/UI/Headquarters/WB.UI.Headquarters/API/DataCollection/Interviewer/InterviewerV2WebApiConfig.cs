@@ -62,6 +62,8 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer
                 c => c.Action<AssignmentsApiV2Controller>(x => x.GetAssignmentsAsync(Param.Any<CancellationToken>())));
             config.TypedRoute("api/interviewer/v2/assignments/{id}",
                 c => c.Action<AssignmentsApiV2Controller>(x => x.GetAssignmentAsync(Param.Any<int>(), Param.Any<CancellationToken>())));
+            config.TypedRoute("api/interviewer/v2/assignments/{id}/Received",
+                c => c.Action<AssignmentsApiV2Controller>(x => x.Received(Param.Any<int>())));
             config.TypedRoute("api/interviewer/v2/maps", c => c.Action<MapsApiV2Controller>(x => x.GetMaps()));
             config.TypedRoute("api/interviewer/v2/maps/{id}",
                 c => c.Action<MapsApiV2Controller>(x => x.GetMapContent((Param.Any<string>()))));

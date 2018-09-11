@@ -105,12 +105,34 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
         {
             foreach (var csproj in csprojFiles)
             {
+                var fi = new FileInfo(csproj);
+                if (fi.Directory == null) continue;
+
+                Console.WriteLine($"Scanning {csproj}");
+
                 using (XmlReader reader = XmlReader.Create(csproj))
                 {
                     while (reader.Read())
                     {
                         if (reader.NodeType == XmlNodeType.Element)
                         {
+                            if (string.Equals(reader.Name, "Project", StringComparison.OrdinalIgnoreCase))
+                            {
+                                var sdk = reader.GetAttribute("Sdk");
+
+                                if (sdk != null)
+                                {
+                                    Console.WriteLine($"Detected new csproj format.");
+                                    foreach (var resx in Directory.EnumerateFiles(fi.Directory.FullName, "*.resx", SearchOption.AllDirectories))
+                                    {
+                                        Console.WriteLine($"Got resx file from file system: {resx}");
+                                        yield return resx;
+                                    }
+
+                                    break;
+                                }
+                            }
+
                             if (string.Equals(reader.Name, "Content", StringComparison.OrdinalIgnoreCase) ||
                                 string.Equals(reader.Name, "EmbeddedResource", StringComparison.OrdinalIgnoreCase))
                             {
@@ -120,8 +142,8 @@ namespace WB.Tests.Integration.ResourcesTranslationTests
                                     {
                                         if (reader.Value.EndsWith(".resx", StringComparison.OrdinalIgnoreCase))
                                         {
-                                            var fi = new FileInfo(csproj);
-                                            yield return Path.Combine(fi.DirectoryName, reader.Value);
+                                            Console.WriteLine($"Got resx file in csproj: {Path.Combine(fi.Directory.Name, reader.Value)}");
+                                            yield return Path.Combine(fi.Directory.FullName, reader.Value);
                                         }
                                     }
                                 }

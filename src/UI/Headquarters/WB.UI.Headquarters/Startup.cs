@@ -181,15 +181,8 @@ namespace WB.UI.Headquarters
 
                 AddAllSqlData(exception);
             });
-
-            InitMetrics();
-            MetricsService.Start(logger);
         }
 
-        private static void InitMetrics()
-        {
-            CommonMetrics.StateFullInterviewsCount.Set(0);
-        }
 
         private void ConfigureWebApi(IAppBuilder app)
         {
@@ -289,7 +282,7 @@ namespace WB.UI.Headquarters
 
         private static void OnShutdown()
         {
-            InitMetrics();
+            CommonMetrics.StateFullInterviewsCount.Set(0);
 
             var logger = LogManager.GetCurrentClassLogger();
 
@@ -396,12 +389,8 @@ namespace WB.UI.Headquarters
 
         public override object GetService(Type serviceType)
         {
+            //to preserve scope
             var serviceLocator = this.RequestLifetimeScope.Resolve<IServiceLocator>(new NamedParameter("kernel", this.RequestLifetimeScope));
-            /*if (serviceType == typeof(IServiceLocator))
-            {
-                return locator ?? (locator = new MvcAutofacDependencyResolverServiceLocatorAdaptor(this));
-            }*/
-            
             return base.GetService(serviceType);
         }
 

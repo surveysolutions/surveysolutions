@@ -596,6 +596,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public IReadOnlyList<Identity> GetRosterInstances(Identity parentIdentity, Guid rosterId)
             => this.GetAllChildrenOrEmptyList(parentIdentity)
                 .Where(roster => roster.Identity.Id == rosterId)
+                .OfType<InterviewTreeRoster>()
+                .OrderBy(roster => roster.SortIndex)
                 .Select(roster => roster.Identity)
                 .ToList();
 

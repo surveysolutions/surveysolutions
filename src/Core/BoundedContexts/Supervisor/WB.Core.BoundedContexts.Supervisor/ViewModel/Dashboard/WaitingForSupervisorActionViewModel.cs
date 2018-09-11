@@ -33,6 +33,8 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
         {
             this.dashboardItemsAccessor = dashboardItemsAccessor;
             this.viewModelFactory = viewModelFactory;
+
+            this.Title = SupervisorDashboard.WaitingForAction;
         }
 
         public override GroupStatus InterviewStatus => GroupStatus.Started;

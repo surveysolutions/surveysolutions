@@ -180,12 +180,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                         and longitude > @SouthWestCornerLongtitude {(northEastCornerLongtitude >= southWestCornerLongtitude ? "AND" : "OR")} 
                             longitude < @NorthEastCornerLongtitude
                 ) 
-                select
-                    interviewid, latitude, longitude
-                from
-                    interviews
-                where
-                    (@supervisorId is null or teamleadid = @supervisorId)
+                select  interviewid, latitude, longitude
+                from interviews
+                where (@supervisorId is null or teamleadid = @supervisorId)
                 limit @MaxCount;",
                 new
                 {
@@ -424,6 +421,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                     }
                 }
             }
+
+            conn.Execute($"DO $$ BEGIN PERFORM readside.update_report_table_data({interview.id}); END $$;");
         }
 
         public IEnumerable<InterviewEntity> GetInterviewEntities(IEnumerable<Guid> interviews)

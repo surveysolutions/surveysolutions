@@ -222,6 +222,20 @@ namespace WB.UI.Headquarters
                 new CaptchaModule(settingsProvider.AppSettings.Get("CaptchaService")),
                 new QuestionnaireUpgraderModule(),
                 new FileInfrastructureModule(),
+
+//
+//resolve after merge
+
+				//new PostgresKeyValueModule(cacheSettings),
+                //new PostgresReadSideModule(
+                //    settingsProvider.ConnectionStrings[dbConnectionStringName].ConnectionString,
+                //    PostgresReadSideModule.ReadSideSchemaName, DbUpgradeSettings.FromFirstMigration<M001_InitDb>(),
+                //    cacheSettings,
+                //    mappingAssemblies),
+                //new PostgresPlainStorageModule(postgresPlainStorageSettings),
+//                
+
+                
                 new ProductVersionModule(typeof(HeadquartersUIModule).Assembly),
                 new OrmModule(connectionSettings),
 

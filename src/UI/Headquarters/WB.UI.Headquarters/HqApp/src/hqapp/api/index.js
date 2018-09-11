@@ -28,7 +28,7 @@ class QuestionnaireApi {
 class SurveyStatistics {
     constructor(http) {
         this.reportPath = "statistics"
-        this.http = http         
+        this.http = http
     }
 
     async Questions(questionnaireId) {
@@ -39,14 +39,6 @@ class SurveyStatistics {
 
     async Questionnaires() {
         return (await this.http.get(`${this.reportPath}/questionnaires`)).data
-    }
-
-    async UpdateNow() {
-        return (await this.http.post(`${this.reportPath}/updateNow`))
-    }
-
-    async GetRefreshStatus() {
-        return (await this.http.post(`${this.reportPath}/status`)).data
     }
 
     get Uri() {

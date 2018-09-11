@@ -112,6 +112,25 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         }
 
         [Test]
+        public void when_verify_answers_and_text_question_has_invalid_regexp_symbols_in_mask_should_not_throw_an_exception()
+        {
+            // arrange
+            var fileName = "mainfile.tab";
+            string textVariableName = "tXt";
+            var answer = "239-991-3634";
+
+            var questionnaire = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.TextQuestion(variable: textVariableName, mask: "+###-###-####")));
+
+            var preloadingRow = Create.Entity.PreloadingAssignmentRow(fileName, answers: new[] { Create.Entity.AssignmentTextAnswer(textVariableName, answer) });
+            var verifier = Create.Service.ImportDataVerifier();
+
+            // act
+            // assert
+            Assert.DoesNotThrow(() => verifier.VerifyAnswers(preloadingRow, questionnaire).ToArray());
+        }
+
+        [Test]
         public void when_verify_answers_and_categorical_single_question_has_unknown_option_code_should_return_PL0014_error()
         {
             // arrange

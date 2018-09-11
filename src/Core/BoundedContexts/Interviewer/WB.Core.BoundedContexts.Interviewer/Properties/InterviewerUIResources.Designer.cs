@@ -1510,7 +1510,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Synchronization completed with errors.
+        ///   Looks up a localized string similar to Synchronization completed with errors. Please try again later..
         /// </summary>
         public static string Synchronization_DoneWithErrors_Title {
             get {

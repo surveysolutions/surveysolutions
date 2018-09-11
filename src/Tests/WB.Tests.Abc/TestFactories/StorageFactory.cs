@@ -83,5 +83,15 @@ namespace WB.Tests.Abc.TestFactories
 
             return storage;
         }
+
+        public IPlainStorage<TEntity, TKey> SqliteInmemoryStorage<TEntity, TKey>(params TEntity[] items)
+            where TEntity : class, IPlainStorageEntity<TKey>, new()
+        {
+            var storage = new SqliteInmemoryStorage<TEntity, TKey>();
+            foreach (var entity in items)
+                storage.Store(entity);
+
+            return storage;
+        }
     }
 }

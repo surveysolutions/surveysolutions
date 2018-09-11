@@ -1,5 +1,6 @@
 ﻿using Android.Widget;
 using MvvmCross.Binding;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings

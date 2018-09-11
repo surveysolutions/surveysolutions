@@ -1,13 +1,17 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Plugin.Permissions.Abstractions;
 using SQLite;
 using SQLitePCL;
+using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
+using WB.Core.SharedKernels.Enumerator.Utils;
 
 namespace WB.UI.Shared.Enumerator.Services
 {
@@ -18,6 +22,8 @@ namespace WB.UI.Shared.Enumerator.Services
         private readonly ILogger logger;
         private readonly IPermissions permissions;
         private readonly IDeviceSettings deviceSettings;
+        private readonly IRestService restService;
+        private readonly IPrincipal principal;
         private readonly string privateStorage;
 
         public BackupRestoreService(
@@ -26,7 +32,9 @@ namespace WB.UI.Shared.Enumerator.Services
             ILogger logger,
             string privateStorage, 
             IPermissions permissions,
-            IDeviceSettings deviceSettings)
+            IDeviceSettings deviceSettings,
+            IRestService restService,
+            IPrincipal principal)
         {
             this.archiver = archiver;
             this.fileSystemAccessor = fileSystemAccessor;
@@ -34,6 +42,8 @@ namespace WB.UI.Shared.Enumerator.Services
             this.privateStorage = privateStorage;
             this.permissions = permissions;
             this.deviceSettings = deviceSettings;
+            this.restService = restService;
+            this.principal = principal;
         }
 
         public async Task<string> BackupAsync()
@@ -64,7 +74,7 @@ namespace WB.UI.Shared.Enumerator.Services
                 await Task.Run(() => this.BackupSqliteDbs()).ConfigureAwait(false);
 
                 this.fileSystemAccessor.CopyFileOrDirectory(this.privateStorage, backupTempFolder, false,
-                    new[] {".log", ".dll", ".back", ".info"});
+                    new[] {".log", ".dll", ".back", ".info", ".delta"});
 
                 var backupFolderFilesPath = this.fileSystemAccessor.CombinePath(backupTempFolder, "files");
 
@@ -103,6 +113,35 @@ namespace WB.UI.Shared.Enumerator.Services
             }
 
             return null;
+        }
+
+        public async Task SendBackupAsync(string filePath, CancellationToken token)
+        {
+            var backupHeaders = new Dictionary<string, string>()
+            {
+                {"DeviceId", this.deviceSettings.GetDeviceId()},
+            };
+
+            using (var fileStream = this.fileSystemAccessor.ReadFile(filePath))
+            {
+                try
+                {
+                    await this.restService.SendStreamAsync(
+                        stream: fileStream,
+                        customHeaders: backupHeaders,
+                        url: "api/interviewer/v2/tabletInfo",
+                        credentials: new RestCredentials
+                        {
+                            Login = this.principal.CurrentUserIdentity.Name,
+                            Token = this.principal.CurrentUserIdentity.Token
+                        },
+                        token: token);
+                }
+                catch (RestException e)
+                {
+                    throw e.ToSynchronizationException();
+                }
+            }
         }
 
         private void Cleanup()

@@ -4,9 +4,12 @@ using Main.Core.Documents;
 using Moq;
 using MvvmCross.Base;
 using MvvmCross.Plugin.Messenger;
+using WB.Core.BoundedContexts.Supervisor.Services;
+using WB.Core.BoundedContexts.Supervisor.ViewModel;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services;
+using WB.Core.BoundedContexts.Supervisor.Views;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
@@ -67,14 +70,14 @@ namespace WB.Tests.Abc.TestFactories
             ILiteEventRegistry eventRegistry = null,
             IMvxMessenger messenger = null,
             IUserInterfaceStateService userInterfaceStateService = null,
-            IMvxMainThreadDispatcher mvxMainThreadDispatcher = null,
+            IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher = null,
             ICompositeCollectionInflationService compositeCollectionInflationService = null,
             IVirbationService virbationService = null)
             => new EnumerationStageViewModel(
                 interviewViewModelFactory ?? Mock.Of<IInterviewViewModelFactory>(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
                 userInterfaceStateService ?? Mock.Of<IUserInterfaceStateService>(),
-                mvxMainThreadDispatcher ?? Stub.MvxMainThreadDispatcher(),
+                mvxMainThreadDispatcher ?? Stub.MvxMainThreadAsyncDispatcher(),
                 Create.ViewModel.DynamicTextViewModel(
                     eventRegistry: eventRegistry,
                     interviewRepository: interviewRepository),
@@ -111,7 +114,7 @@ namespace WB.Tests.Abc.TestFactories
                 Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == (questionnaire ?? Mock.Of<IQuestionnaire>())),
                 Mock.Of<IStatefulInterviewRepository>(_ => _.Get(It.IsAny<string>()) == (interview ?? Mock.Of<IStatefulInterview>())),
                 eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
-                Stub.MvxMainThreadDispatcher(),
+                Stub.MvxMainThreadAsyncDispatcher(),
                 questionState ?? Stub<QuestionStateViewModel<SingleOptionQuestionAnswered>>.WithNotEmptyValues,
                 Mock.Of<QuestionInstructionViewModel>(),
                 answering ?? Mock.Of<AnsweringViewModel>());
@@ -130,24 +133,30 @@ namespace WB.Tests.Abc.TestFactories
                 Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == (questionnaire ?? Mock.Of<IQuestionnaire>())),
                 Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == Mock.Of<IUserIdentity>(y => y.UserId == Guid.NewGuid())),
                 eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
-                Stub.MvxMainThreadDispatcher());
+                Stub.MvxMainThreadAsyncDispatcher());
 
         public SingleOptionLinkedQuestionViewModel SingleOptionLinkedQuestionViewModel(
             IQuestionnaire questionnaire = null,
             IStatefulInterview interview = null,
             ILiteEventRegistry eventRegistry = null,
             QuestionStateViewModel<SingleOptionLinkedQuestionAnswered> questionState = null,
-            AnsweringViewModel answering = null)
-            => new SingleOptionLinkedQuestionViewModel(
-                Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == Mock.Of<IUserIdentity>(y => y.UserId == Guid.NewGuid())),
-                Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == (questionnaire ?? Mock.Of<IQuestionnaire>())),
-                Mock.Of<IStatefulInterviewRepository>(_ => _.Get(It.IsAny<string>()) == (interview ?? Mock.Of<IStatefulInterview>())),
-                eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
-                Stub.MvxMainThreadDispatcher(),
-                questionState ?? Stub<QuestionStateViewModel<SingleOptionLinkedQuestionAnswered>>.WithNotEmptyValues,
-                Mock.Of<QuestionInstructionViewModel>(),
-                answering ?? Mock.Of<AnsweringViewModel>());
-        
+            AnsweringViewModel answering = null) => new SingleOptionLinkedQuestionViewModel(
+            Mock.Of<IPrincipal>(_ =>
+                _.CurrentUserIdentity == Mock.Of<IUserIdentity>(y => y.UserId == Guid.NewGuid())),
+            Mock.Of<IQuestionnaireStorage>(_ =>
+                _.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) ==
+                (questionnaire ?? Mock.Of<IQuestionnaire>())),
+            Mock.Of<IStatefulInterviewRepository>(_ =>
+                _.Get(It.IsAny<string>()) == (interview ?? Mock.Of<IStatefulInterview>())),
+            eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
+            Stub.MvxMainThreadAsyncDispatcher(),
+            questionState ?? Stub<QuestionStateViewModel<SingleOptionLinkedQuestionAnswered>>.WithNotEmptyValues,
+            Mock.Of<QuestionInstructionViewModel>(),
+            answering ?? Mock.Of<AnsweringViewModel>())
+        {
+            ThrottlePeriod = 0
+        };
+
         public TextQuestionViewModel TextQuestionViewModel(
             ILiteEventRegistry eventRegistry = null,
             IQuestionnaireStorage questionnaireStorage = null,
@@ -194,7 +203,7 @@ namespace WB.Tests.Abc.TestFactories
             return new ValidityViewModel(
                 eventRegistry ?? Create.Service.LiteEventRegistry(),
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>(),
-                Stub.MvxMainThreadDispatcher(),
+                Stub.MvxMainThreadAsyncDispatcher(),
                 Create.ViewModel.ErrorMessagesViewModel(
                     questionnaireRepository: questionnaireRepository,
                     interviewRepository: interviewRepository));
@@ -252,7 +261,7 @@ namespace WB.Tests.Abc.TestFactories
             var commentsViewModel = new CommentsViewModel(interviewRepository: interviewRepository,
                                     commandService: Stub<ICommandService>.WithNotEmptyValues,
                                     principal: Stub<IPrincipal>.WithNotEmptyValues,
-                                    mainThreadDispatcher: Stub.MvxMainThreadDispatcher());
+                                    mainThreadDispatcher: Stub.MvxMainThreadAsyncDispatcher());
 
             var answersRemovedNotifier = new AnswersRemovedNotifier(liteEventRegistry);
 
@@ -370,7 +379,7 @@ namespace WB.Tests.Abc.TestFactories
                 Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == (questionnaire ?? Mock.Of<IQuestionnaire>())),
                 Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == Mock.Of<IUserIdentity>(y => y.UserId == Guid.NewGuid())),
                 eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
-                Stub.MvxMainThreadDispatcher());
+                Stub.MvxMainThreadAsyncDispatcher());
 
         public VibrationViewModel VibrationViewModel(ILiteEventRegistry eventRegistry = null,
             IEnumeratorSettings enumeratorSettings = null, IVirbationService virbationService = null)
@@ -389,12 +398,12 @@ namespace WB.Tests.Abc.TestFactories
 
         public SpecialValuesViewModel SpecialValues(
             FilteredOptionsViewModel optionsViewModel = null,
-            IMvxMainThreadDispatcher mvxMainThreadDispatcher = null,
+            IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher = null,
             IStatefulInterviewRepository interviewRepository = null)
         {
             return new SpecialValuesViewModel(
                 optionsViewModel ?? Mock.Of<FilteredOptionsViewModel>(), 
-                mvxMainThreadDispatcher ?? Mock.Of<IMvxMainThreadDispatcher>(), 
+                mvxMainThreadDispatcher ?? Create.Fake.MvxMainThreadDispatcher(), 
                 interviewRepository ?? Mock.Of<IStatefulInterviewRepository>());
         }
 
@@ -431,5 +440,30 @@ namespace WB.Tests.Abc.TestFactories
 
             return viewModel;
         }
+
+        public FinishInstallationViewModel FinishInstallationViewModel(
+            IViewModelNavigationService viewModelNavigationService = null,
+            IPrincipal principal = null,
+            IPasswordHasher passwordHasher = null,
+            IPlainStorage<SupervisorIdentity> interviewersPlainStorage = null,
+            IDeviceSettings deviceSettings = null,
+            ISupervisorSynchronizationService synchronizationService = null,
+            ILogger logger = null,
+            IQRBarcodeScanService qrBarcodeScanService = null,
+            ISerializer serializer = null,
+            IUserInteractionService userInteractionService = null)
+            => new FinishInstallationViewModel(viewModelNavigationService ?? Mock.Of<IViewModelNavigationService>(),
+                principal ?? Mock.Of<IPrincipal>(x => x.CurrentUserIdentity == Create.Other.SupervisorIdentity(null, null, null)),
+                passwordHasher?? Mock.Of<IPasswordHasher>(),
+                interviewersPlainStorage ?? Mock.Of<IPlainStorage<SupervisorIdentity>>(),
+                deviceSettings ?? Mock.Of <IDeviceSettings>(),
+                synchronizationService ?? Mock.Of<ISupervisorSynchronizationService>(),
+                logger ?? Mock.Of<ILogger>(),
+                qrBarcodeScanService ?? Mock.Of<IQRBarcodeScanService>(),
+                serializer?? Mock.Of <ISerializer>(),
+                userInteractionService?? Mock.Of<IUserInteractionService>());
+
+        public ConnectedDeviceSynchronizationViewModel ConnectedDeviceSynchronizationViewModel()
+            => new ConnectedDeviceSynchronizationViewModel();
     }
 }

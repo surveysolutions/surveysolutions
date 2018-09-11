@@ -12,6 +12,7 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
     internal class FileSystemIOAccessor : IFileSystemAccessor
     {
         public string CombinePath(string path1, string path2) => Path.Combine(path1, path2);
+        public string CombinePath(params string[] pathes) => Path.Combine(pathes);
 
         public string ChangeExtension(string path1, string newExtension) => Path.ChangeExtension(path1, newExtension);
         public void MoveFile(string pathToFile, string newPathToFile)

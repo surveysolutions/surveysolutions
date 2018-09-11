@@ -5,18 +5,23 @@ using Npgsql;
 using StackExchange.Exceptional;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Infrastructure.Native.Monitoring;
+using WB.Infrastructure.Native.Storage.Postgre;
 using WB.UI.Shared.Web.Extensions;
 
 namespace WB.UI.Headquarters.Services
 {
     public class MetricsService
     {
+        public const string SessionFactoryName = "PlainSessionFactory";
         public static bool IsEnabled => System.Configuration.ConfigurationManager.AppSettings.GetBool(@"Metrics.Enable", true);
 
         [Localizable(false)]
-        public static void Start(Core.GenericSubdomains.Portable.Services.ILogger logger)
+        public static void Start(IServiceLocator serviceLocator)
         {
+            var logger = serviceLocator.GetInstance<ILoggerProvider>().GetFor<MetricsService>();
+
             if (!IsEnabled)
             {
                 logger.Info("Metrics are disabled per configuration");
@@ -24,9 +29,8 @@ namespace WB.UI.Headquarters.Services
             }
             try
             {
-                MetricsRegistry.Instance.RegisterOnDemandCollectors(
-                    new BrokenPackagesStatsCollector(
-                        ServiceLocator.Current.GetInstance<ISessionFactory>()));
+                var sessionFactory = serviceLocator.GetInstance<ISessionFactory>(SessionFactoryName);
+                MetricsRegistry.Instance.RegisterOnDemandCollectors(new BrokenPackagesStatsCollector(sessionFactory));
 
                 // getting instance name from connection string information
                 var connectionString = System.Configuration.ConfigurationManager.ConnectionStrings["Postgres"];

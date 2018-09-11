@@ -83,5 +83,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
             var ids = identities.Select(id => id.ToString()).ToArray();
             return this.reader.Query(x => x.Where(qbi => ids.Contains(qbi.Id))).ToList();
         }
+
+        public IEnumerable<QuestionnaireIdentity> GetAllQuestionnaireIdentities()
+            => this.reader.Query(queryable => queryable
+                    .Where(x => !x.IsDeleted)
+                    .Select(x => x.Id)
+                    .ToArray())
+                .Select(QuestionnaireIdentity.Parse);
     }
 }

@@ -63,7 +63,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
 
         public void BecauseOf() 
         {
-            Thread.Sleep(1);
             viewModel.Options.First().Checked = true;
             viewModel.ToggleAnswerAsync(viewModel.Options.First()).WaitAndUnwrapException();
         }

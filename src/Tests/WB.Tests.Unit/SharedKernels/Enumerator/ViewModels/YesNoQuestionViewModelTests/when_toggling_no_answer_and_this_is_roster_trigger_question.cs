@@ -59,7 +59,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
             BecauseOf();
         }
 
-        public void BecauseOf() => viewModel.ToggleAnswerAsync(viewModel.Options.Last()).Wait();
+        public void BecauseOf() => viewModel.ToggleAnswerAsync(viewModel.Options.Last(), null).Wait();
 
         [NUnit.Framework.Test] public void should_undo_checked_property_change () => viewModel.Options.Last().YesSelected.Should().BeFalse();
 

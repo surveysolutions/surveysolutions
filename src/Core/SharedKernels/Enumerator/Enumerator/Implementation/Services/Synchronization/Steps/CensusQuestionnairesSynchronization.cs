@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -46,7 +47,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                     Description = string.Format(InterviewerUIResources.Synchronization_Download_Description_Format,
                         processedQuestionnaires,
                         notExistingLocalCensusQuestionnaireIdentities.Count,
-                        InterviewerUIResources.Synchronization_Questionnaires)
+                        InterviewerUIResources.Synchronization_Questionnaires),
+                    Stage = SyncStage.UpdatingQuestionnaires,
+                    StageExtraInfo = new Dictionary<string, string>()
+                    {
+                        { "processedCount", processedQuestionnaires.ToString() },
+                        { "totalCount", notExistingLocalCensusQuestionnaireIdentities.Count.ToString()}
+                    }
                 });
 
                 await this.questionnaireDownloader.DownloadQuestionnaireAsync(censusQuestionnaireIdentity,

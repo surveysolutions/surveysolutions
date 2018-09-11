@@ -400,7 +400,7 @@
     <value>Le titre du questionnaire contient des caractères qui ne sont pas autorisés. Seules les lettres, chiffres,  espaces et _ sont autorisés.</value>
   </data>
   <data name="WB0098_QuestionnaireHasSizeMoreThan5MB" xml:space="preserve">
-    <value>La taille du questionnaire est d'environ {0: 0. ##}Mo et est trop grande pour fonctionner correctement avec Survey Solutions. Essayez de réduire la quantité de données jusqu'à ce qu'elle soit au moins inférieure à {1} Mo.</value>
+    <value>La taille du questionnaire est d'environ {0:0.##}Mo et est trop grande pour fonctionner correctement avec Survey Solutions. Essayez de réduire la quantité de données jusqu'à ce qu'elle soit au moins inférieure à {1} Mo.</value>
   </data>
   <data name="WB0100_MaxNumberOfAnswersForRosterSizeQuestionCannotBeGreaterThen200" xml:space="preserve">
     <value>Le nombre maximum de réponses pour la question qui définie la taille du roster ne peut pas être supérieur à {0}.</value>

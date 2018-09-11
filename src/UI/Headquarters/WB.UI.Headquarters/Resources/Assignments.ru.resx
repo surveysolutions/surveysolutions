@@ -265,4 +265,19 @@
   <data name="UpgradeProgressDoneTitle" xml:space="preserve">
     <value>Обновление заданий из {{from}} в {{to}} завершено</value>
   </data>
+  <data name="ReceivedByTablet" xml:space="preserve">
+    <value>Получено планшетом</value>
+  </data>
+  <data name="ReceivedByTablet_All" xml:space="preserve">
+    <value>Все</value>
+  </data>
+  <data name="ReceivedByTablet_NotReceived" xml:space="preserve">
+    <value>Не получено</value>
+  </data>
+  <data name="ReceivedByTablet_Received" xml:space="preserve">
+    <value>Получено</value>
+  </data>
+  <data name="Tooltip_Filter_Received" xml:space="preserve">
+    <value>Отображать только задания которые получены или не получены планшетами</value>
+  </data>
 </root>

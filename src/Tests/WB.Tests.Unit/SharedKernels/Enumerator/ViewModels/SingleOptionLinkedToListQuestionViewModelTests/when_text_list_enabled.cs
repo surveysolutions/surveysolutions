@@ -20,18 +20,23 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedTo
                 Create.Entity.TextListQuestion(textListQuestionId),
                 Create.Entity.SingleQuestion(singleOptionQuestionId, linkedToQuestionId: textListQuestionId));
 
-            var interview = Create.AggregateRoot.StatefulInterview(questionnaire:questionnaire);
-            interview.AnswerTextListQuestion(Guid.NewGuid(), textListQuestionId, RosterVector.Empty, DateTime.UtcNow, new []
-            {
-                new Tuple<decimal, string>(1, "option 1"),
-                new Tuple<decimal, string>(2, "option 2"),
-                new Tuple<decimal, string>(3, "option 3")
-            });
-            interview.AnswerSingleOptionQuestion(Guid.NewGuid(), singleOptionQuestionId, RosterVector.Empty, DateTime.UtcNow,  3);
+            var interview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaire);
+            interview.AnswerTextListQuestion(Guid.NewGuid(), textListQuestionId, RosterVector.Empty, DateTime.UtcNow,
+                new[]
+                {
+                    new Tuple<decimal, string>(1, "option 1"),
+                    new Tuple<decimal, string>(2, "option 2"),
+                    new Tuple<decimal, string>(3, "option 3")
+                });
+            interview.AnswerSingleOptionQuestion(Guid.NewGuid(), singleOptionQuestionId, RosterVector.Empty,
+                DateTime.UtcNow, 3);
             interview.Apply(Create.Event.QuestionsDisabled(textListQuestionId, RosterVector.Empty));
 
-            var viewModel = Create.ViewModel.SingleOptionLinkedToListQuestionViewModel(Create.Entity.PlainQuestionnaire(questionnaire), interview);
-            viewModel.Init("inerviewid", Identity.Create(singleOptionQuestionId, RosterVector.Empty), Create.Other.NavigationState());
+            var viewModel =
+                Create.ViewModel.SingleOptionLinkedToListQuestionViewModel(
+                    Create.Entity.PlainQuestionnaire(questionnaire), interview);
+            viewModel.Init("inerviewid", Identity.Create(singleOptionQuestionId, RosterVector.Empty),
+                Create.Other.NavigationState());
 
             interview.Apply(Create.Event.QuestionsEnabled(textListQuestionId, RosterVector.Empty));
             //act
@@ -49,6 +54,5 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionLinkedTo
             Assert.That(viewModel.Options[2].Title, Is.EqualTo("option 3"));
             Assert.That(viewModel.Options[2].Selected, Is.True);
         }
-        
     }
 }

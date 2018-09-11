@@ -12,7 +12,10 @@
             android:singleLine="false"
             android:maxLines="3"
             android:ellipsize="end"
-            local:MvxBind="Html Title.PlainText; Bold IsCurrent; TextColor GroupStateToColor(SideBarGroupState.SimpleStatus)" />
+            local:MvxBind="Html Title.PlainText;
+                           Bold IsCurrent; 
+                           TextColor GroupStateToColor(SideBarGroupState.SimpleStatus);
+                           Tag Tag" />
     </TableRow>
   </TableLayout>
 </merge>

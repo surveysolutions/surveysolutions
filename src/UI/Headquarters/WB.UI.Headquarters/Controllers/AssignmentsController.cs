@@ -16,27 +16,24 @@ namespace WB.UI.Headquarters.Controllers
     public class AssignmentsController : BaseController
     {
         private readonly IAuthorizedUser currentUser;
-        private readonly IAuthorizedUser authorizedUser;
 
         public AssignmentsController(ICommandService commandService,
             ILogger logger,
-            IAuthorizedUser currentUser,
-            IAuthorizedUser authorizedUser)
+            IAuthorizedUser currentUser)
             : base(commandService, logger)
         {
             this.currentUser = currentUser;
-            this.authorizedUser = authorizedUser;
         }
         
         [Localizable(false)]
         [ActivePage(MenuItem.Assignments)]
         public ActionResult Index()
         {
-            var model = new AssignmentsFilters
+            var model = new AssignmentsFilters 
             {
                 IsSupervisor = this.currentUser.IsSupervisor,
-                IsObserver = authorizedUser.IsObserver,
-                IsObserving = authorizedUser.IsObserving,
+                IsObserver = this.currentUser.IsObserver,
+                IsObserving = this.currentUser.IsObserving,
                 IsHeadquarter = this.currentUser.IsHeadquarter || this.currentUser.IsAdministrator
             };
 

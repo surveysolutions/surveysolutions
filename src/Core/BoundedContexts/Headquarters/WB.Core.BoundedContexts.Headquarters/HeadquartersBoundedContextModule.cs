@@ -72,7 +72,6 @@ using WB.Core.BoundedContexts.Headquarters.Views.Reports;
 using WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Data;
-using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Jobs;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.BoundedContexts.Headquarters.WebInterview.Impl;
@@ -146,7 +145,7 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             registry.Bind<Questionnaire>();
             registry.Bind<IPlainAggregateRootRepository<Questionnaire>, QuestionnaireRepository>();
-            registry.Bind<IQuestionnaireExportStructureStorage, QuestionnaireExportStructureStorage>();
+            registry.BindAsSingleton<IQuestionnaireExportStructureStorage, QuestionnaireExportStructureStorage>();
             registry.Bind<IQuestionOptionsRepository, QuestionnaireQuestionOptionsRepository>();
 
             registry.Bind<IAndroidPackageReader, AndroidPackageReader>();
@@ -195,7 +194,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IAllUsersAndQuestionnairesFactory, AllUsersAndQuestionnairesFactory>();
             registry.Bind<IQuestionnairePreloadingDataViewFactory, QuestionnairePreloadingDataViewFactory>();
             registry.Bind<ITeamViewFactory, TeamViewFactory>();
-            registry.Bind<IUserViewFactory, UserViewFactory>();
+            registry.BindToMethod<IUserViewFactory>(context => new UserViewFactory());
             registry.Bind<ITeamUsersAndQuestionnairesFactory, TeamUsersAndQuestionnairesFactory>();
             registry.Bind<IInterviewFactory, InterviewFactory>();
             registry.Bind<IInterviewSummaryViewFactory, InterviewSummaryViewFactory>();
@@ -228,27 +227,15 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             registry.BindWithConstructorArgument<ITabletInformationService, FileBasedTabletInformationService>("parentFolder", this.currentFolderPath);
 
-            registry.BindAsSingleton<IPasswordHasher, PasswordHasher>();
+            registry.BindAsSingleton<IPasswordHasher, PasswordHasher>(); 
+
             registry.Bind<IExportFactory, ExportFactory>();
 
-            registry.RegisterDenormalizer<InterviewLifecycleEventHandler>();
-
-            //TODO:AF figgure out registration for ninject was made somewhere else
-            //remove it
-            //
-            //registry.Bind<InterviewSummaryDenormalizer>();
-            //registry.Bind<StatusChangeHistoryDenormalizerFunctional>();
-            //registry.Bind<InterviewStatusTimeSpanDenormalizer>();
-            //
-            //registry.RegisterDenormalizer<InterviewSummaryDenormalizer>();
-
-            
             registry.RegisterDenormalizer<InterviewSummaryCompositeDenormalizer>();
-            
+            registry.RegisterDenormalizer<InterviewLifecycleEventHandler>();
             registry.RegisterDenormalizer<InterviewExportedCommentariesDenormalizer>();
             registry.RegisterDenormalizer<InterviewDenormalizer>();
             registry.RegisterDenormalizer<CumulativeChartDenormalizer>();
-            registry.RegisterDenormalizer<ReportTableDataDenormalizer>();
 
             registry.Bind<IInterviewPackagesService, IInterviewBrokenPackagesService, InterviewPackagesService>();
 
@@ -330,7 +317,6 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             registry.Bind<IAssignmentsUpgradeService, AssignmentsUpgradeService>();
             registry.Bind<IAssignmentsUpgrader, AssignmentsUpgrader>();
-            registry.Bind<IRefreshReportsTask, BackgroundRefreshReportsTask>();
             registry.Bind<IInterviewReportDataRepository, InterviewReportDataRepository>();
         }
 

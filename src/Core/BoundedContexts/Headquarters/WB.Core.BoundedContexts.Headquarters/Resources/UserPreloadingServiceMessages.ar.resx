@@ -120,7 +120,4 @@
   <data name="FileColumnsCantBeMappedFormat" xml:space="preserve">
     <value>يحتوي الملف '{0}' على الأعمدة التالية التي لا يمكن تعيينها إلى أي موقع مستخدم (على سبيل المثال، الاسم الكامل ورقم الهاتف وما إلى ذلك): {1}</value>
   </data>
-  <data name="TheDatasetMaxRecordNumberReachedFormat" xml:space="preserve">
-    <value>يحتوي على مجموعة البيانات {0} السجلات، ولكن الحد الأقصى المسموح به لعدد السجلات هو {1}</value>
-  </data>
 </root>
