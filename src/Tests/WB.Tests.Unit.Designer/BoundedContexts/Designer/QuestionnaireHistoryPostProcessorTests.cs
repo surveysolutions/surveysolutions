@@ -229,7 +229,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             var questionnaireStateTackerStorage = new InMemoryKeyValueStorage<QuestionnaireStateTracker>();
             Setup.InstanceToMockedServiceLocator<IPlainKeyValueStorage<QuestionnaireStateTracker>>(questionnaireStateTackerStorage);
 
-            Setup.InstanceToMockedServiceLocator<IQuestionnaireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
+            Setup.InstanceToMockedServiceLocator<IQuestionnaireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService(historyStorage));
             Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
 
             var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId, userId: questionnaireOwner);
@@ -280,7 +280,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             var questionnaireStateTackerStorage = new InMemoryKeyValueStorage<QuestionnaireStateTracker>();
             Setup.InstanceToMockedServiceLocator<IPlainKeyValueStorage<QuestionnaireStateTracker>>(questionnaireStateTackerStorage);
 
-            Setup.InstanceToMockedServiceLocator<IQuestionnaireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
+            Setup.InstanceToMockedServiceLocator<IQuestionnaireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService(historyStorage));
             Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
 
             var questionnaireDocument = new QuestionnaireDocument()
@@ -318,7 +318,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(questionnaireHistoryItem.TargetItemTitle, Is.EqualTo(command.Title));
 
             Assert.That(stateTracker.GroupsState.Keys.Count, Is.EqualTo(2));
-            Assert.That(questionnaireHistoryItem.DiffWithPreviousVersion, Is.Not.Null);
+            Assert.That(questionnaireHistoryItem.ResultingQuestionnaireDocument, Is.Not.Null);
         }
       
         [Test]
@@ -338,7 +338,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
                 And.QuestionnaireChangeRecordStorage(out historyStorage).
                 And.EntitySerializer<QuestionnaireDocument>().
                 And.AccountDocumentStorage().
-                And.QuestionnireHistoryVersionsService(Create.QuestionnireHistoryVersionsService()).
+                And.QuestionnireHistoryVersionsService(Create.QuestionnireHistoryVersionsService(historyStorage)).
                 And.AccountDocument(questionnaireOwner, ownerName).
                 And.QuestionnaireStateTrackerStorage().
                 And.QuestionnaireDocument(out questionnaireDocument, id: questionnaireId, title: questionnnaireTitle, userId: questionnaireOwner).
@@ -365,7 +365,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             questionnaireHistoryItem.TargetItemType.Should().Be(QuestionnaireItemType.Questionnaire);
             questionnaireHistoryItem.TargetItemId.Should().Be(questionnaireId);
             questionnaireHistoryItem.TargetItemTitle.Should().Be(questionnnaireTitle);
-            questionnaireHistoryItem.DiffWithPreviousVersion.Should().NotBeNull();
+            questionnaireHistoryItem.ResultingQuestionnaireDocument.Should().NotBeNull();
         }
 
         [Test]
@@ -399,7 +399,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
                 questionnaireId.FormatGuid());
             Setup.InstanceToMockedServiceLocator<IPlainKeyValueStorage<QuestionnaireStateTracker>>(questionnaireStateTackerStorage);
 
-            Setup.InstanceToMockedServiceLocator<IQuestionnaireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
+            Setup.InstanceToMockedServiceLocator<IQuestionnaireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService(historyStorage));
             Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
 
             var questionnaire = Create.Questionnaire();
@@ -425,7 +425,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(questionnaireHistoryItem.TargetItemType, Is.EqualTo(QuestionnaireItemType.Questionnaire));
             Assert.That(questionnaireHistoryItem.TargetItemId, Is.EqualTo(questionnaireId));
             Assert.That(questionnaireHistoryItem.TargetItemTitle, Is.EqualTo(questionnaireTitle));
-            Assert.That(questionnaireHistoryItem.DiffWithPreviousVersion, Is.Null);
+            Assert.That(questionnaireHistoryItem.Patch, Is.Null);
         }
 
         [Test]
@@ -456,7 +456,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
                 questionnaireId.FormatGuid());
             Setup.InstanceToMockedServiceLocator<IPlainKeyValueStorage<QuestionnaireStateTracker>>(questionnaireStateTackerStorage);
 
-            Setup.InstanceToMockedServiceLocator<IQuestionnaireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
+            Setup.InstanceToMockedServiceLocator<IQuestionnaireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService(historyStorage));
             Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
 
             var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter();
@@ -483,7 +483,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(questionnaireHistoryItem.TargetItemType, Is.EqualTo(QuestionnaireItemType.Attachment));
             Assert.That(questionnaireHistoryItem.TargetItemId, Is.EqualTo(attachmentId));
             Assert.That(questionnaireHistoryItem.TargetItemTitle, Is.EqualTo(attachmentName));
-            Assert.That(questionnaireHistoryItem.DiffWithPreviousVersion, Is.Not.Null);
+            Assert.That(questionnaireHistoryItem.ResultingQuestionnaireDocument, Is.Not.Null);
         }
 
         [Test]
@@ -511,10 +511,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
                 },
                 questionnaireId.FormatGuid());
             Setup.InstanceToMockedServiceLocator<IPlainKeyValueStorage<QuestionnaireStateTracker>>(questionnaireStateTackerStorage);
-            Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
 
-            Setup.InstanceToMockedServiceLocator<IQuestionnaireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
-            Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
+            Setup.InstanceToMockedServiceLocator<IQuestionnaireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService(historyStorage));
 
             var questionnaire = Create.Questionnaire();
             var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter();
@@ -540,7 +538,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(questionnaireHistoryItem.TargetItemType, Is.EqualTo(QuestionnaireItemType.Questionnaire));
             Assert.That(questionnaireHistoryItem.TargetItemId, Is.EqualTo(questionnaireId));
             Assert.That(questionnaireHistoryItem.TargetItemTitle, Is.EqualTo(command.Title));
-            Assert.That(questionnaireHistoryItem.DiffWithPreviousVersion, Is.Not.Null);
+            Assert.That(questionnaireHistoryItem.ResultingQuestionnaireDocument, Is.Not.Null);
         }
 
         [Test]
@@ -562,7 +560,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             usersStorage.Store(new User { ProviderUserKey = sharedWithId, UserName = sharedWithUserName, Email = sharedWithUserName + "email"}, sharedWithId.FormatGuid());
             Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<User>>(usersStorage);
 
-            Setup.InstanceToMockedServiceLocator<IQuestionnaireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
+            Setup.InstanceToMockedServiceLocator<IQuestionnaireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService(historyStorage));
             Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
 
             var questionnaire = Create.Questionnaire();
@@ -590,7 +588,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(questionnaireHistoryItem.TargetItemType, Is.EqualTo(QuestionnaireItemType.Person));
             Assert.That(questionnaireHistoryItem.TargetItemId, Is.EqualTo(sharedWithId));
             Assert.That(questionnaireHistoryItem.TargetItemTitle, Is.EqualTo(sharedWithUserName + "email"));
-            Assert.That(questionnaireHistoryItem.DiffWithPreviousVersion, Is.Null);
+            Assert.That(questionnaireHistoryItem.Patch, Is.Null);
         }
 
         [Test]
@@ -612,7 +610,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             usersStorage.Store(new User { ProviderUserKey = sharedWithId, UserName = sharedWithUserName, Email = sharedWithUserName + "email" }, sharedWithId.FormatGuid());
             Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<User>>(usersStorage);
 
-            Setup.InstanceToMockedServiceLocator<IQuestionnaireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
+            Setup.InstanceToMockedServiceLocator<IQuestionnaireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService(historyStorage));
             Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
 
             var questionnaire = Create.Questionnaire();
@@ -639,7 +637,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(questionnaireHistoryItem.TargetItemType, Is.EqualTo(QuestionnaireItemType.Person));
             Assert.That(questionnaireHistoryItem.TargetItemId, Is.EqualTo(sharedWithId));
             Assert.That(questionnaireHistoryItem.TargetItemTitle, Is.EqualTo(sharedWithUserName + "email"));
-            Assert.That(questionnaireHistoryItem.DiffWithPreviousVersion, Is.Null);
+            Assert.That(questionnaireHistoryItem.Patch, Is.Null);
         }
 
         [Test]
@@ -660,7 +658,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             usersStorage.Store(new User { ProviderUserKey = responsibleId, UserName = responsibleUserName }, responsibleId.FormatGuid());
             Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<User>>(usersStorage);
 
-            Setup.InstanceToMockedServiceLocator<IQuestionnaireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
+            Setup.InstanceToMockedServiceLocator<IQuestionnaireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService(historyStorage));
             Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
 
             var command = new AddOrUpdateAttachment(questionnaireId, attachmentId, responsibleId, attachmentName, "", null);
@@ -688,7 +686,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(questionnaireHistoryItem.TargetItemType, Is.EqualTo(QuestionnaireItemType.Attachment));
             Assert.That(questionnaireHistoryItem.TargetItemId, Is.EqualTo(attachmentId));
             Assert.That(questionnaireHistoryItem.TargetItemTitle, Is.EqualTo(attachmentName));
-            Assert.That(questionnaireHistoryItem.DiffWithPreviousVersion, Is.Not.Null);
+            Assert.That(questionnaireHistoryItem.ResultingQuestionnaireDocument, Is.Not.Null);
         }
 
         [Test]
@@ -709,7 +707,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             usersStorage.Store(new User { ProviderUserKey = responsibleId, UserName = responsibleUserName }, responsibleId.FormatGuid());
             Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<User>>(usersStorage);
 
-            Setup.InstanceToMockedServiceLocator<IQuestionnaireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
+            Setup.InstanceToMockedServiceLocator<IQuestionnaireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService(historyStorage));
             Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
 
             var questionnaire = Create.Questionnaire();
@@ -736,7 +734,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(questionnaireHistoryItem.TargetItemType, Is.EqualTo(QuestionnaireItemType.StaticText));
             Assert.That(questionnaireHistoryItem.TargetItemId, Is.EqualTo(staticTextId));
             Assert.That(questionnaireHistoryItem.TargetItemTitle, Is.EqualTo(staticText));
-            Assert.That(questionnaireHistoryItem.DiffWithPreviousVersion, Is.Not.Null);
+            Assert.That(questionnaireHistoryItem.ResultingQuestionnaireDocument, Is.Not.Null);
         }
 
         
@@ -758,7 +756,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             usersStorage.Store(new User { ProviderUserKey = responsibleId, UserName = responsibleUserName }, responsibleId.FormatGuid());
             Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<User>>(usersStorage);
 
-            Setup.InstanceToMockedServiceLocator<IQuestionnaireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
+            Setup.InstanceToMockedServiceLocator<IQuestionnaireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService(historyStorage));
             Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
 
             var questionnaire = Create.Questionnaire();
@@ -785,7 +783,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(questionnaireHistoryItem.TargetItemType, Is.EqualTo(QuestionnaireItemType.Variable));
             Assert.That(questionnaireHistoryItem.TargetItemId, Is.EqualTo(variableId));
             Assert.That(questionnaireHistoryItem.TargetItemTitle, Is.EqualTo(variableName));
-            Assert.That(questionnaireHistoryItem.DiffWithPreviousVersion, Is.Not.Null);
+            Assert.That(questionnaireHistoryItem.ResultingQuestionnaireDocument, Is.Not.Null);
         }
 
         [Test]
@@ -806,7 +804,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             usersStorage.Store(new User { ProviderUserKey = responsibleId, UserName = responsibleUserName }, responsibleId.FormatGuid());
             Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<User>>(usersStorage);
 
-            Setup.InstanceToMockedServiceLocator<IQuestionnaireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
+            Setup.InstanceToMockedServiceLocator<IQuestionnaireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService(historyStorage));
             Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
 
             var questionnaireStateTackerStorage = new InMemoryKeyValueStorage<QuestionnaireStateTracker>();
@@ -843,7 +841,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(questionnaireHistoryItem.TargetItemType, Is.EqualTo(QuestionnaireItemType.Section));
             Assert.That(questionnaireHistoryItem.TargetItemId, Is.EqualTo(groupId));
             Assert.That(questionnaireHistoryItem.TargetItemTitle, Is.EqualTo(variable));
-            Assert.That(questionnaireHistoryItem.DiffWithPreviousVersion, Is.Not.Null);
+            Assert.That(questionnaireHistoryItem.ResultingQuestionnaireDocument, Is.Not.Null);
         }
 
         [Test]
@@ -864,8 +862,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             usersStorage.Store(new User { ProviderUserKey = responsibleId, UserName = responsibleUserName }, responsibleId.FormatGuid());
             Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<User>>(usersStorage);
 
-            Setup.InstanceToMockedServiceLocator<IQuestionnaireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
-            Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
+            Setup.InstanceToMockedServiceLocator<IQuestionnaireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService(historyStorage));
 
             var questionnaireStateTackerStorage = new InMemoryKeyValueStorage<QuestionnaireStateTracker>();
             questionnaireStateTackerStorage.Store(
@@ -889,7 +886,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
 
             // assert
 
-            var allHistoryItems = historyStorage.Query(historyItems => historyItems.ToList());
+            var allHistoryItems = historyStorage.Query(historyItems => historyItems.OrderBy(x => x.Sequence).ToList());
 
             var updateGroupHistoryItem = allHistoryItems[0];
 
@@ -902,8 +899,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(updateGroupHistoryItem.TargetItemType, Is.EqualTo(QuestionnaireItemType.Section));
             Assert.That(updateGroupHistoryItem.TargetItemId, Is.EqualTo(rosterId));
             Assert.That(updateGroupHistoryItem.TargetItemTitle, Is.EqualTo(variable));
-            Assert.That(updateGroupHistoryItem.DiffWithPreviousVersion, Is.Not.Null);
-
+            Assert.That(updateGroupHistoryItem.Patch, Is.Null);
 
             var groupBecameARosterHistoryItem = allHistoryItems[1];
 
@@ -916,7 +912,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(groupBecameARosterHistoryItem.TargetItemType, Is.EqualTo(QuestionnaireItemType.Section));
             Assert.That(groupBecameARosterHistoryItem.TargetItemId, Is.EqualTo(rosterId));
             Assert.That(groupBecameARosterHistoryItem.TargetItemTitle, Is.EqualTo(variable));
-            Assert.That(groupBecameARosterHistoryItem.DiffWithPreviousVersion, Is.Not.Null);
+            Assert.That(groupBecameARosterHistoryItem.Patch, Is.Null);
 
             var updateRosterHistoryItem = allHistoryItems[2];
 
@@ -929,7 +925,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(updateRosterHistoryItem.TargetItemType, Is.EqualTo(QuestionnaireItemType.Roster));
             Assert.That(updateRosterHistoryItem.TargetItemId, Is.EqualTo(rosterId));
             Assert.That(updateRosterHistoryItem.TargetItemTitle, Is.EqualTo(variable));
-            Assert.That(updateRosterHistoryItem.DiffWithPreviousVersion, Is.Not.Null);
+            Assert.That(updateRosterHistoryItem.ResultingQuestionnaireDocument, Is.Not.Null);
         }
 
         [Test]
@@ -950,7 +946,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             usersStorage.Store(new User { ProviderUserKey = responsibleId, UserName = responsibleUserName }, responsibleId.FormatGuid());
             Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<User>>(usersStorage);
 
-            Setup.InstanceToMockedServiceLocator<IQuestionnaireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
+            Setup.InstanceToMockedServiceLocator<IQuestionnaireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService(historyStorage));
             Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
 
             var questionnaireStateTackerStorage = new InMemoryKeyValueStorage<QuestionnaireStateTracker>();
@@ -987,8 +983,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(updateRosterHistoryItem.TargetItemType, Is.EqualTo(QuestionnaireItemType.Roster));
             Assert.That(updateRosterHistoryItem.TargetItemId, Is.EqualTo(groupId));
             Assert.That(updateRosterHistoryItem.TargetItemTitle, Is.EqualTo(variable));
-            Assert.That(updateRosterHistoryItem.DiffWithPreviousVersion, Is.Not.Null);
-
+            Assert.That(updateRosterHistoryItem.Patch, Is.Null);
 
             var rosterBecameAGroupHistoryItem = historyStorage.Query(
                 historyItems => historyItems.Last(historyItem =>
@@ -1003,7 +998,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(rosterBecameAGroupHistoryItem.TargetItemType, Is.EqualTo(QuestionnaireItemType.Roster));
             Assert.That(rosterBecameAGroupHistoryItem.TargetItemId, Is.EqualTo(groupId));
             Assert.That(rosterBecameAGroupHistoryItem.TargetItemTitle, Is.EqualTo(variable));
-            Assert.That(rosterBecameAGroupHistoryItem.DiffWithPreviousVersion, Is.Not.Null);
+            Assert.That(rosterBecameAGroupHistoryItem.ResultingQuestionnaireDocument, Is.Not.Null);
         }
 
         [Test]
@@ -1035,7 +1030,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
                 questionnaireId.FormatGuid());
             Setup.InstanceToMockedServiceLocator<IPlainKeyValueStorage<QuestionnaireStateTracker>>(questionnaireStateTackerStorage);
 
-            Setup.InstanceToMockedServiceLocator<IQuestionnaireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
+            Setup.InstanceToMockedServiceLocator<IQuestionnaireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService(historyStorage));
             Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
 
             var questionnaire = Create.Questionnaire();
@@ -1124,7 +1119,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
 
             Assert.That(newHistoryItems.Length, Is.EqualTo(1));
             Assert.That(newHistoryItems[0].TargetItemType, Is.EqualTo(QuestionnaireItemType.Section));
-            Assert.That(newHistoryItems[0].DiffWithPreviousVersion, Is.Not.Null);
+            Assert.That(newHistoryItems[0].ResultingQuestionnaireDocument, Is.Not.Null);
 
             Assert.That(state.VariableState.ContainsKey(variableId));
             Assert.That(state.QuestionsState.ContainsKey(questionId));
@@ -1157,7 +1152,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
                 },
                 questionnaireId.FormatGuid());
             Setup.InstanceToMockedServiceLocator<IPlainKeyValueStorage<QuestionnaireStateTracker>>(questionnaireStateTackerStorage);
-            Setup.InstanceToMockedServiceLocator<IQuestionnaireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
+            Setup.InstanceToMockedServiceLocator<IQuestionnaireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService(historyStorage));
             Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
 
             var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId);
@@ -1183,12 +1178,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(newHistoryItems[0].ActionType, Is.EqualTo(QuestionnaireActionType.Update));
             Assert.That(newHistoryItems[0].TargetItemType, Is.EqualTo(QuestionnaireItemType.Questionnaire));
             Assert.That(newHistoryItems[0].TargetItemTitle, Is.EqualTo("new title"));
-            Assert.That(newHistoryItems[0].DiffWithPreviousVersion, Is.Not.Null);
+            Assert.That(newHistoryItems[0].Patch, Is.Not.Null);
 
             Assert.That(newHistoryItems[1].ActionType, Is.EqualTo(QuestionnaireActionType.Delete));
             Assert.That(newHistoryItems[1].TargetItemType, Is.EqualTo(QuestionnaireItemType.Questionnaire));
             Assert.That(newHistoryItems[1].TargetItemTitle, Is.EqualTo("new title"));
-            Assert.That(newHistoryItems[1].DiffWithPreviousVersion, Is.Null);
+            Assert.That(newHistoryItems[1].Patch, Is.Null);
         }
 
         [Test]
@@ -1218,7 +1213,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
                 questionnaireId.FormatGuid());
             Setup.InstanceToMockedServiceLocator<IPlainKeyValueStorage<QuestionnaireStateTracker>>(questionnaireStateTackerStorage);
 
-            Setup.InstanceToMockedServiceLocator<IQuestionnaireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
+            Setup.InstanceToMockedServiceLocator<IQuestionnaireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService(historyStorage));
             Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
 
             var questionnaire = Create.Questionnaire();
@@ -1308,8 +1303,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Setup.InstanceToMockedServiceLocator<IPlainKeyValueStorage<QuestionnaireStateTracker>>(questionnaireStateTackerStorage);
 
             Setup.InstanceToMockedServiceLocator<IQuestionnaireHistoryVersionsService>(
-                Create.QuestionnireHistoryVersionsService(historyStorage));
-            Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(2));
+                Create.QuestionnireHistoryVersionsService(historyStorage, questionnaireHistorySettings: new QuestionnaireHistorySettings(2)));
 
             var questionnaire = Create.Questionnaire();
             questionnaire.Initialize(questionnaireId, Create.QuestionnaireDocumentWithOneChapter(), Enumerable.Empty<SharedPerson>());
@@ -1326,16 +1320,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
 
             Assert.That(newHistoryItems.Length, Is.EqualTo(4));
             Assert.That(newHistoryItems[0].ResultingQuestionnaireDocument, Is.Null);
-            Assert.That(newHistoryItems[0].DiffWithPreviousVersion, Is.Null);
+            Assert.That(newHistoryItems[0].Patch, Is.Null);
 
-            Assert.That(newHistoryItems[1].ResultingQuestionnaireDocument, Is.Not.Null);
-            Assert.That(newHistoryItems[1].DiffWithPreviousVersion, Is.Null);
+            Assert.That(newHistoryItems[1].ResultingQuestionnaireDocument, Is.Null);
+            Assert.That(newHistoryItems[1].Patch, Is.Null);
 
             Assert.That(newHistoryItems[2].ResultingQuestionnaireDocument, Is.Null);
-            Assert.That(newHistoryItems[2].DiffWithPreviousVersion, Is.Not.Null);
+            Assert.That(newHistoryItems[2].Patch, Is.Not.Null);
 
-            Assert.That(newHistoryItems[3].ResultingQuestionnaireDocument, Is.Null);
-            Assert.That(newHistoryItems[3].DiffWithPreviousVersion, Is.Not.Null);
+            Assert.That(newHistoryItems[3].ResultingQuestionnaireDocument, Is.Not.Null);
+            Assert.That(newHistoryItems[3].Patch, Is.Null);
         }
 
         [Test]
@@ -1366,7 +1360,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Setup.InstanceToMockedServiceLocator<IPlainKeyValueStorage<QuestionnaireStateTracker>>(questionnaireStateTackerStorage);
             Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
 
-            Setup.InstanceToMockedServiceLocator<IQuestionnaireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
+            Setup.InstanceToMockedServiceLocator<IQuestionnaireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService(historyStorage));
             Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
 
             var questionnaire = Create.Questionnaire();
@@ -1399,7 +1393,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(questionnaireHistoryItem.TargetItemType, Is.EqualTo(QuestionnaireItemType.Translation));
             Assert.That(questionnaireHistoryItem.TargetItemId, Is.EqualTo(questionnaireId));
             Assert.That(questionnaireHistoryItem.TargetItemTitle, Is.EqualTo("Mova"));
-            Assert.That(questionnaireHistoryItem.DiffWithPreviousVersion, Is.Not.Null);
+            Assert.That(questionnaireHistoryItem.ResultingQuestionnaireDocument, Is.Not.Null);
         }
 
         private static HistoryPostProcessor CreateHistoryPostProcessor() => Create.HistoryPostProcessor();

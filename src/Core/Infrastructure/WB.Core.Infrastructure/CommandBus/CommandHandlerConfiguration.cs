@@ -38,12 +38,6 @@ namespace WB.Core.Infrastructure.CommandBus
             where TPostProcessor : ICommandPostProcessor<TAggregate, TCommand>
         {
             var item = typeof(TPostProcessor);
-            var preprocessorAttribute = item.GetCustomAttribute<RequiresPreprocessorAttribute>();
-            if (preprocessorAttribute != null)
-            {
-                this.preProcessors.Add(preprocessorAttribute.PreProcessor);
-            }
-
             this.postProcessors.Add(item);
             return this;
         }

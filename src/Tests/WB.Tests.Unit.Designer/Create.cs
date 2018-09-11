@@ -613,7 +613,7 @@ namespace WB.Tests.Unit.Designer
                 References = reference.ToHashSet(),
                 Sequence = sequence ?? 1,
                 ResultingQuestionnaireDocument = resultingQuestionnaireDocument,
-                DiffWithPreviousVersion = diffWithPreviousVersion
+                Patch = diffWithPreviousVersion
             };
         }
 
@@ -1221,11 +1221,13 @@ namespace WB.Tests.Unit.Designer
         public static QuestionnaireHistoryVersionsService QuestionnireHistoryVersionsService(
             IPlainStorageAccessor<QuestionnaireChangeRecord> questionnaireChangeItemStorage = null,
             IEntitySerializer<QuestionnaireDocument> entitySerializer = null,
-            IPatchApplier patchApplier = null)
+            IPatchApplier patchApplier = null,
+            QuestionnaireHistorySettings questionnaireHistorySettings = null)
         {
             return new QuestionnaireHistoryVersionsService(
                 questionnaireChangeItemStorage ?? Mock.Of<IPlainStorageAccessor<QuestionnaireChangeRecord>>(),
                 entitySerializer ?? new EntitySerializer<QuestionnaireDocument>(),
+                questionnaireHistorySettings ?? new QuestionnaireHistorySettings(15), 
                 patchApplier ?? Create.PatchApplier(),
                 Create.PatchGenerator());
         }
