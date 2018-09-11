@@ -57,7 +57,7 @@ namespace WB.UI.Headquarters
 
         public void Load(IWebIocRegistry registry)
         {
-            registry.BindToMethod<IServiceLocator>(() => ServiceLocator.Current);
+            //registry.BindToMethod<IServiceLocator>(() => ServiceLocator.Current);
 
             registry.Bind<ILiteEventRegistry, LiteEventRegistry>();
             registry.BindToConstant<ISettingsProvider>(() => settingsProvider);
