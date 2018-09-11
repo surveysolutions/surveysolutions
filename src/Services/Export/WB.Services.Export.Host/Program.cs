@@ -2,44 +2,71 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 
 namespace WB.Services.Export.Host
 {
     class Program
     {
-        static void Main(string[] args)
+        static async Task Main(string[] args)
         {
             var isService = !(Debugger.IsAttached || args.Contains("--console"));
-            var builder = CreateWebHostBuilder(args.Where(arg => arg != "--console").ToArray());
+            var isWorker = args.Contains("--worker");
 
-            if (isService)
+            args = args.Where(arg => arg != "--console" && arg != "--worker").ToArray();
+
+            if (isWorker)
             {
-                var pathToExe = Process.GetCurrentProcess().MainModule.FileName;
-                var pathToContentRoot = Path.GetDirectoryName(pathToExe);
-                builder.UseContentRoot(pathToContentRoot);
-            }
+                var config = new ConfigurationBuilder()
+                    .AddEnvironmentVariables()
+                    .AddCommandLine(args)
+                    .Build();
 
-            var host = builder.Build();
+                var hostBuilder = new HostBuilder()
+                    .ConfigureHostConfiguration(c => c.AddConfiguration(config))
+                    .ConfigureAppConfiguration(c => c.AddConfiguration(config))
 
-            if (isService)
-            {
-                host.RunAsCustomService();
+                    .ConfigureServices((hostContext, services) =>
+                    {
+                        var startup = new Startup(hostContext.Configuration);
+                        startup.ConfigureServices(services);
+                    });
+
+                await hostBuilder.RunConsoleAsync();
             }
             else
             {
-                host.Run();
+
+                var builder = CreateWebHostBuilder(args);
+
+                if (isService)
+                {
+                    var pathToExe = Process.GetCurrentProcess().MainModule.FileName;
+                    var pathToContentRoot = Path.GetDirectoryName(pathToExe);
+                    builder.UseContentRoot(pathToContentRoot);
+                }
+
+                var host = builder.Build();
+
+                if (isService)
+                {
+                    host.RunAsCustomService();
+                }
+                else
+                {
+                    await host.RunAsync();
+                }
             }
         }
 
         public static IWebHostBuilder CreateWebHostBuilder(string[] args)
         {
             return WebHost.CreateDefaultBuilder(args)
-                .ConfigureAppConfiguration((context, config) =>
-                {// Configure the app here.
-                 })
-                .UseHttpSys(sys => { sys.UrlPrefixes.Add("http://+:80/export"); })
+                .UseHttpSys()
                 .UseStartup<Startup>();
         }
     }
