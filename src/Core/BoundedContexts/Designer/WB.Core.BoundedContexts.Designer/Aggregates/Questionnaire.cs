@@ -109,7 +109,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         private readonly ILookupTableService lookupTableService;
         private readonly IAttachmentService attachmentService;
         private readonly ITranslationsService translationService;
-        private readonly IQuestionnireHistoryVersionsService questionnireHistoryVersionsService;
+        private readonly IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService;
         private int affectedByReplaceEntries;
 
         #endregion
@@ -120,14 +120,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             ILookupTableService lookupTableService, 
             IAttachmentService attachmentService,
             ITranslationsService translationService,
-            IQuestionnireHistoryVersionsService questionnireHistoryVersionsService)
+            IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService)
         {
             this.logger = logger;
             this.clock = clock;
             this.lookupTableService = lookupTableService;
             this.attachmentService = attachmentService;
             this.translationService = translationService;
-            this.questionnireHistoryVersionsService = questionnireHistoryVersionsService;
+            this.questionnaireHistoryVersionsService = questionnaireHistoryVersionsService;
         }
 
         #region Questionnaire command handlers
@@ -2392,7 +2392,7 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.ThrowDomainExceptionIfViewerDoesNotHavePermissionsForEditQuestionnaire(command.ResponsibleId);
 
             var historyReferanceId = command.HistoryReferenceId;
-            var questionnire = questionnireHistoryVersionsService.GetByHistoryVersion(historyReferanceId);
+            var questionnire = questionnaireHistoryVersionsService.GetByHistoryVersion(historyReferanceId);
             if (questionnire == null)
                 throw new ArgumentException(string.Format(ExceptionMessages.QuestionnaireRevisionCantBeFound, Id, historyReferanceId));
 

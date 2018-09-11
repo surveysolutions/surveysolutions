@@ -46,7 +46,7 @@ namespace WB.UI.Designer.Controllers
         private readonly ILogger logger;
         private readonly IQuestionnaireInfoViewFactory questionnaireInfoViewFactory;
         private readonly IPublicFoldersStorage publicFoldersStorage;
-        private IQuestionnireHistoryVersionsService questionnireHistoryVersionsService;
+        private IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService;
 
         public QuestionnaireController(
             ICommandService commandService,
@@ -60,7 +60,7 @@ namespace WB.UI.Designer.Controllers
             ILookupTableService lookupTableService, 
             IQuestionnaireInfoViewFactory questionnaireInfoViewFactory,
             IPublicFoldersStorage publicFoldersStorage, 
-            IQuestionnireHistoryVersionsService questionnireHistoryVersionsService)
+            IQuestionnaireHistoryVersionsService questionnaireHistoryVersionsService)
             : base(userHelper)
         {
             this.commandService = commandService;
@@ -73,7 +73,7 @@ namespace WB.UI.Designer.Controllers
             this.lookupTableService = lookupTableService;
             this.questionnaireInfoViewFactory = questionnaireInfoViewFactory;
             this.publicFoldersStorage = publicFoldersStorage;
-            this.questionnireHistoryVersionsService = questionnireHistoryVersionsService;
+            this.questionnaireHistoryVersionsService = questionnaireHistoryVersionsService;
         }
 
         [NoCache]

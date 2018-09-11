@@ -40,7 +40,7 @@ namespace WB.Tests.Unit.Designer.Applications.QuestionnaireControllerTests
                 Mock.Of<ILookupTableService>(),
                 Mock.Of<IQuestionnaireInfoViewFactory>(),
                 Mock.Of<IPublicFoldersStorage>(),
-                Mock.Of<IQuestionnireHistoryVersionsService>());
+                Mock.Of<IQuestionnaireHistoryVersionsService>());
         }
 
         protected static void SetControllerContextWithSession(Controller controller, string key, object value)

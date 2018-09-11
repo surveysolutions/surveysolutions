@@ -34,7 +34,7 @@ namespace WB.UI.Designer.App_Start
             registry.Bind<IAuthenticationService, AuthenticationService>();
             registry.Bind<IRecaptchaService, RecaptchaService>();
             registry.Bind<QuestionnaireDowngradeService>();
-            registry.Bind<IQuestionnireHistoryVersionsService, QuestionnireHistoryVersionsService>();
+            registry.Bind<IQuestionnaireHistoryVersionsService, QuestionnaireHistoryVersionsService>();
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
