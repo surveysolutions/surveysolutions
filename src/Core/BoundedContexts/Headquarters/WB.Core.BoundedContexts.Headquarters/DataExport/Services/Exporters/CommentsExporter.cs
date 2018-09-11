@@ -50,9 +50,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             new DoExportFileHeader("Id4", "Roster ID of the 4th level of nesting", true),
         };
 
-        protected CommentsExporter(IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage)
+        protected CommentsExporter()
         {
-            this.interviewSummaryStorage = interviewSummaryStorage;
         }
 
         public CommentsExporter(
@@ -61,7 +60,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             ICsvWriter csvWriter,
             IQueryableReadSideRepositoryReader<InterviewCommentaries> interviewCommentariesStorage,
             ITransactionManagerProvider transactionManager,
-            ILogger logger, IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage)
+            ILogger logger, 
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage)
         {
             this.interviewDataExportSettings = interviewDataExportSettings;
             this.fileSystemAccessor = fileSystemAccessor;
