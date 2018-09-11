@@ -53,7 +53,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.I
             commentedStatuses.ForEach(x => x.Timestamp = new DateTime(2017, 12, 31, 14, 45, 30));
 
             interviewStatuses.Store(
-                Create.Entity.InterviewSummary(interviewId: interviewId, questionnaireId: questionnaireId, questionnaireVersion: questionnaireVersion, statuses: commentedStatuses),
+                Create.Entity.InterviewSummary(interviewId: interviewId, key: "11-22-33-44", questionnaireId: questionnaireId, questionnaireVersion: questionnaireVersion, statuses: commentedStatuses),
                 interviewId.FormatGuid());
 
 
@@ -95,7 +95,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.I
         {
             actionsExporter.Export(questionnaireIdentity, new List<Guid> { interviewId }, "", new Progress<int>());
 
-            Assert.That(fileData[0], Is.EqualTo(new []{ "interview__id", "Action", "Originator", "Role", "ResponsibleName", "ResponsibleRole", "Date", "Time" }));
+            Assert.That(fileData[0], Is.EqualTo(new []{ "interview__id", "interview__key", "Action", "Originator", "Role", "ResponsibleName", "ResponsibleRole", "Date", "Time" }));
         }
 
         [Test]
@@ -103,7 +103,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.I
         {
             actionsExporter.Export(questionnaireIdentity, new List<Guid> { interviewId }, "", new Progress<int>());
 
-            Assert.That(fileData[1], Is.EqualTo(new[] { "22222222222222222222222222222222", "Created", "inter", "Interviewer", "inter", "Interviewer", "2017-12-31", "14:45:30" }));
+            Assert.That(fileData[1], Is.EqualTo(new[] { "22222222222222222222222222222222", "11-22-33-44", "Created", "inter", "Interviewer", "inter", "Interviewer", "2017-12-31", "14:45:30" }));
         }
 
         [Test]
@@ -111,7 +111,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.I
         {
             actionsExporter.Export(questionnaireIdentity, new List<Guid> { interviewId }, "", new Progress<int>());
 
-            Assert.That(fileData[2], Is.EqualTo(new[] { "22222222222222222222222222222222", "SupervisorAssigned", "inter", "Interviewer", "supervisor", "Supervisor", "2017-12-31", "14:45:30" }));
+            Assert.That(fileData[2], Is.EqualTo(new[] { "22222222222222222222222222222222", "11-22-33-44", "SupervisorAssigned", "inter", "Interviewer", "supervisor", "Supervisor", "2017-12-31", "14:45:30" }));
         }
 
         [Test]
@@ -119,7 +119,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.I
         {
             actionsExporter.Export(questionnaireIdentity, new List<Guid> { interviewId }, "", new Progress<int>());
 
-            Assert.That(fileData[3], Is.EqualTo(new[] { "22222222222222222222222222222222", "InterviewerAssigned", "inter", "Interviewer", "inter", "Interviewer", "2017-12-31", "14:45:30" }));
+            Assert.That(fileData[3], Is.EqualTo(new[] { "22222222222222222222222222222222", "11-22-33-44", "InterviewerAssigned", "inter", "Interviewer", "inter", "Interviewer", "2017-12-31", "14:45:30" }));
         }
 
         [Test]
@@ -127,7 +127,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.I
         {
             actionsExporter.Export(questionnaireIdentity, new List<Guid> { interviewId }, "", new Progress<int>());
 
-            Assert.That(fileData[4], Is.EqualTo(new[] { "22222222222222222222222222222222", "Completed", "inter", "Interviewer", "supervisor", "Supervisor", "2017-12-31", "14:45:30" }));
+            Assert.That(fileData[4], Is.EqualTo(new[] { "22222222222222222222222222222222", "11-22-33-44", "Completed", "inter", "Interviewer", "supervisor", "Supervisor", "2017-12-31", "14:45:30" }));
         }
 
 
@@ -136,7 +136,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.I
         {
             actionsExporter.Export(questionnaireIdentity, new List<Guid> { interviewId }, "", new Progress<int>());
 
-            Assert.That(fileData[5], Is.EqualTo(new[] { "22222222222222222222222222222222", "RejectedBySupervisor", "supervisor", "Supervisor", "inter", "Interviewer", "2017-12-31", "14:45:30" }));
+            Assert.That(fileData[5], Is.EqualTo(new[] { "22222222222222222222222222222222", "11-22-33-44", "RejectedBySupervisor", "supervisor", "Supervisor", "inter", "Interviewer", "2017-12-31", "14:45:30" }));
         }
 
         [Test]
@@ -144,7 +144,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.I
         {
             actionsExporter.Export(questionnaireIdentity, new List<Guid> { interviewId }, "", new Progress<int>());
 
-            Assert.That(fileData[6], Is.EqualTo(new[] { "22222222222222222222222222222222", "Completed", "inter", "Interviewer", "supervisor", "Supervisor", "2017-12-31", "14:45:30" }));
+            Assert.That(fileData[6], Is.EqualTo(new[] { "22222222222222222222222222222222", "11-22-33-44", "Completed", "inter", "Interviewer", "supervisor", "Supervisor", "2017-12-31", "14:45:30" }));
         }
 
         [Test]
@@ -152,7 +152,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.I
         {
             actionsExporter.Export(questionnaireIdentity, new List<Guid> { interviewId }, "", new Progress<int>());
 
-            Assert.That(fileData[7], Is.EqualTo(new[] { "22222222222222222222222222222222", "Restarted", "inter", "Interviewer", "inter", "Interviewer", "2017-12-31", "14:45:30" }));
+            Assert.That(fileData[7], Is.EqualTo(new[] { "22222222222222222222222222222222", "11-22-33-44", "Restarted", "inter", "Interviewer", "inter", "Interviewer", "2017-12-31", "14:45:30" }));
         }
 
         [Test]
@@ -160,14 +160,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.I
         {
             actionsExporter.Export(questionnaireIdentity, new List<Guid> { interviewId }, "", new Progress<int>());
 
-            Assert.That(fileData[8], Is.EqualTo(new[] { "22222222222222222222222222222222", "InterviewerAssigned", "inter", "Interviewer", "inter", "Interviewer", "2017-12-31", "14:45:30" }));
+            Assert.That(fileData[8], Is.EqualTo(new[] { "22222222222222222222222222222222", "11-22-33-44", "InterviewerAssigned", "inter", "Interviewer", "inter", "Interviewer", "2017-12-31", "14:45:30" }));
         }
 
         [Test]
         public void should_record_specified_9_row()
         {
             actionsExporter.Export(questionnaireIdentity, new List<Guid> { interviewId }, "", new Progress<int>());
-            Assert.That(fileData[9], Is.EqualTo(new[] { "22222222222222222222222222222222", "Completed", "inter", "Interviewer", "supervisor", "Supervisor", "2017-12-31", "14:45:30" }));
+            Assert.That(fileData[9], Is.EqualTo(new[] { "22222222222222222222222222222222", "11-22-33-44", "Completed", "inter", "Interviewer", "supervisor", "Supervisor", "2017-12-31", "14:45:30" }));
         }
 
         [Test]
@@ -175,7 +175,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.I
         {
             actionsExporter.Export(questionnaireIdentity, new List<Guid> { interviewId }, "", new Progress<int>());
 
-            Assert.That(fileData[10], Is.EqualTo(new[] { "22222222222222222222222222222222", "ApprovedBySupervisor", "supervisor", "Supervisor", Strings.AnyHeadquarters, "Headquarter", "2017-12-31", "14:45:30" }));
+            Assert.That(fileData[10], Is.EqualTo(new[] { "22222222222222222222222222222222", "11-22-33-44", "ApprovedBySupervisor", "supervisor", "Supervisor", Strings.AnyHeadquarters, "Headquarter", "2017-12-31", "14:45:30" }));
         }
 
         [Test]
@@ -183,7 +183,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.I
         {
             actionsExporter.Export(questionnaireIdentity, new List<Guid> { interviewId }, "", new Progress<int>());
 
-            Assert.That(fileData[11], Is.EqualTo(new[] { "22222222222222222222222222222222", "RejectedByHeadquarter", "hq", "Headquarter", "supervisor", "Supervisor", "2017-12-31", "14:45:30" }));
+            Assert.That(fileData[11], Is.EqualTo(new[] { "22222222222222222222222222222222", "11-22-33-44", "RejectedByHeadquarter", "hq", "Headquarter", "supervisor", "Supervisor", "2017-12-31", "14:45:30" }));
         }
 
         [Test]
@@ -191,7 +191,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.I
         {
             actionsExporter.Export(questionnaireIdentity, new List<Guid> { interviewId }, "", new Progress<int>());
 
-            Assert.That(fileData[12], Is.EqualTo(new[] { "22222222222222222222222222222222", "ApprovedBySupervisor", "supervisor", "Supervisor", Strings.AnyHeadquarters, "Headquarter", "2017-12-31", "14:45:30" }));
+            Assert.That(fileData[12], Is.EqualTo(new[] { "22222222222222222222222222222222", "11-22-33-44", "ApprovedBySupervisor", "supervisor", "Supervisor", Strings.AnyHeadquarters, "Headquarter", "2017-12-31", "14:45:30" }));
         }
 
         [Test]
@@ -199,7 +199,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.I
         {
             actionsExporter.Export(questionnaireIdentity, new List<Guid> { interviewId }, "", new Progress<int>());
 
-            Assert.That(fileData[13], Is.EqualTo(new[] { "22222222222222222222222222222222", "ApprovedByHeadquarter", "hq", "Headquarter", "", "", "2017-12-31", "14:45:30" }));
+            Assert.That(fileData[13], Is.EqualTo(new[] { "22222222222222222222222222222222", "11-22-33-44", "ApprovedByHeadquarter", "hq", "Headquarter", "", "", "2017-12-31", "14:45:30" }));
         }
 
         [Test]
@@ -207,7 +207,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.I
         {
             actionsExporter.Export(questionnaireIdentity, new List<Guid> { interviewId }, "", new Progress<int>());
 
-            Assert.That(fileData[14], Is.EqualTo(new[] { "22222222222222222222222222222222", "UnapprovedByHeadquarter", "hq", "Headquarter", "supervisor", "Supervisor", "2017-12-31", "14:45:30" }));
+            Assert.That(fileData[14], Is.EqualTo(new[] { "22222222222222222222222222222222", "11-22-33-44", "UnapprovedByHeadquarter", "hq", "Headquarter", "supervisor", "Supervisor", "2017-12-31", "14:45:30" }));
         }
 
         private static InterviewActionsExporter actionsExporter;
@@ -219,4 +219,3 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.I
         private static readonly QuestionnaireIdentity questionnaireIdentity = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
     }
 }
- 
