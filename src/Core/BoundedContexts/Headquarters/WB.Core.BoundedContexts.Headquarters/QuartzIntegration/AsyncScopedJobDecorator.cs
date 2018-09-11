@@ -21,6 +21,8 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
         {
             using (var scope = ServiceLocator.Current.CreateChildContainer())
             {
+                //preserve scope
+                var serviceLocator = scope.Resolve<IServiceLocator>(new NamedParameter("kernel", scope));
                 var unitOfWork = scope.Resolve<IUnitOfWork>();
                 try
                 {

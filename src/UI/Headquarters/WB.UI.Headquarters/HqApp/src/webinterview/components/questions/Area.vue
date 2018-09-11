@@ -5,15 +5,23 @@
                 <div class="field" :class="{answered: $me.isAnswered}" v-if="$me.isAnswered">
                     <div class="block-with-data">
                         <ul class="list-unstyled">
-                            <li>
-                                {{this.$t('Pages.AreaQestion_Area')}}: {{area}} {{this.$t('Pages.AreaQestion_AreaUnitMeter')}}
+                            <li v-if="isPolygon">
+                                {{this.$t('Pages.AreaQestion_Area')}}: {{$me.answer.area}} {{this.$t('Pages.AreaQestion_AreaUnitMeter')}}
+                            </li>
+                            <li v-if="isPolygon || isPolyline">
+                                {{this.$t('Pages.AreaQestion_Length')}}: {{$me.answer.length}} {{this.$t('Pages.AreaQestion_AreaMeter')}}
+                            </li>
+                            <li v-if="isMultiPoints">
+                                {{this.$t('Pages.AreaQestion_Points')}}: {{$me.answer.selectedPoints.length}}
                             </li>
                             <li v-if="!coordinatesShown">
                                 <button class="btn btn-link" type="button" @click="showCoordinates">
                                     {{this.$t('Details.Area_ShowCoordinates')}}
                                 </button>
                             </li>
-                            <li v-else>{{this.$me.coordinates}}</li>
+                            <li v-else v-for="selectedPoint in $me.answer.selectedPoints">
+                                <a v-bind:href="`${$config.googleMapsBaseUrl}/maps?q=${selectedPoint.latitude},${selectedPoint.longitude}`" :title="$t('WebInterviewUI.ShowOnMap')" target="_blank">{{selectedPoint.latitude}}, {{selectedPoint.longitude}}</a>
+                            </li>
                         </ul>
                     </div>
 
@@ -42,8 +50,14 @@
             answerUrl() {
                 return `${this.$store.getters.basePath}Interview/InterviewAreaFrame/${this.interviewId}?questionId=${this.$me.id}`
             },
-            area() {
-                return this.$me.answer
+            isPolygon() {
+                return this.$me.type == 0
+            },
+            isPolyline() {
+                return this.$me.type == 1
+            },
+            isMultiPoints() {
+                return this.$me.type == 3
             }
         },
         methods: {

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Main.Core.Entities.Composite;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
@@ -14,13 +13,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
         public void should_not_set_answers_order()
         {
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
-                chapterId: Id.gA,
-                children: new IComposite[]
-                {
-                    Create.Entity.YesNoQuestion(Id.g1, answers: new int[] {1, 2}, ordered: false, maxAnswersCount: 2)
-                });
+                Create.Entity.YesNoQuestion(Id.g1, answers: new int[] {1, 2}, ordered: false, maxAnswersCount: 2)
+            );
             var questionnaireStorage = Create.Fake.QuestionnaireRepositoryWithOneQuestionnaire(questionnaire);
-
             
             var filteredOptionsViewModel = Setup.FilteredOptionsViewModel(new List<CategoricalOption>
             {

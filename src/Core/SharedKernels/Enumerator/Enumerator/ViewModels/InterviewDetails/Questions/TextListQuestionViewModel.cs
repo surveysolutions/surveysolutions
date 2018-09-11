@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using MvvmCross.Base;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
@@ -34,7 +35,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public QuestionInstructionViewModel InstructionViewModel { get; private set; }
         private readonly QuestionStateViewModel<TextListQuestionAnswered> questionState;
-        private IMvxMainThreadDispatcher mainThreadDispatcher;
+        private IMvxMainThreadAsyncDispatcher mainThreadDispatcher;
 
         private TextListAddNewItemViewModel addNewItemViewModel
             => this.Answers?.OfType<TextListAddNewItemViewModel>().FirstOrDefault();
@@ -52,7 +53,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IUserInteractionService userInteractionService,
             AnsweringViewModel answering,
             QuestionInstructionViewModel instructionViewModel,
-            IMvxMainThreadDispatcher mainThreadDispatcher)
+            IMvxMainThreadAsyncDispatcher mainThreadDispatcher)
         {
             this.principal = principal;
             this.questionnaireRepository = questionnaireRepository;
@@ -133,10 +134,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.Answers.Remove(listItem);
 
-            this.SaveAnswers();
+            await this.SaveAnswers();
         }
 
-        private void ListItemAdded(object sender, TextListItemAddedEventArgrs e)
+        private async void ListItemAdded(object sender, TextListItemAddedEventArgrs e)
         {
             var answerViewModels = this.Answers.OfType<TextListItemViewModel>().ToList();
             var maxValue = answerViewModels.Count == 0
@@ -146,7 +147,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Answers.Insert(this.Answers.Count - 1,
                 this.CreateListItemViewModel(maxValue, e.NewText, this.interviewRepository.Get(this.interviewId)));
 
-            this.SaveAnswers();
+            await this.SaveAnswers();
 
             if (this.addNewItemViewModel != null)
                 this.addNewItemViewModel.Text = string.Empty;
@@ -154,7 +155,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private void ListItemEdited(object sender, EventArgs eventArgs) => this.SaveAnswers();
 
-        private async void SaveAnswers()
+        private async Task SaveAnswers()
         {
             if (!this.principal.IsAuthenticated) return;
 
@@ -179,7 +180,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 await this.Answering.SendAnswerQuestionCommandAsync(command);
                 this.questionState.Validity.ExecutedWithoutExceptions();
-                this.mainThreadDispatcher.RequestMainThreadAction(this.ShowOrHideAddNewItem);
+                await this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() => this.ShowOrHideAddNewItem());
             }
             catch (InterviewException ex)
             {

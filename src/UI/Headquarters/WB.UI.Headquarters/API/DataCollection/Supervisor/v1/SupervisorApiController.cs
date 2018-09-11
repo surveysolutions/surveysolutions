@@ -63,12 +63,12 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
 
         private HttpResponseMessage HttpResponseMessage(string appName, string responseFileName)
         {
-            string pathToInterviewerApp = this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(PHYSICALPATHTOAPPLICATION), appName);
+            string pathToSupervisorApp = this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(PHYSICALPATHTOAPPLICATION), appName);
 
-            if (!this.fileSystemAccessor.IsFileExists(pathToInterviewerApp))
+            if (!this.fileSystemAccessor.IsFileExists(pathToSupervisorApp))
                 return this.Request.CreateErrorResponse(HttpStatusCode.NotFound, TabletSyncMessages.FileWasNotFound);
 
-            Stream fileStream = new FileStream(pathToInterviewerApp, FileMode.Open, FileAccess.Read);
+            Stream fileStream = new FileStream(pathToSupervisorApp, FileMode.Open, FileAccess.Read);
             var response = new ProgressiveDownload(this.Request).ResultMessage(fileStream,
                 @"application/vnd.android.package-archive");
 

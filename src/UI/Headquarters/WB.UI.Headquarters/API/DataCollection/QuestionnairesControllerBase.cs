@@ -43,12 +43,9 @@ namespace WB.UI.Headquarters.API.DataCollection
 
         public virtual HttpResponseMessage List()
         {
-            var questionnaireBrowseView = this.questionnaireBrowseViewFactory.Load(new QuestionnaireBrowseInputModel { Page = 1, PageSize = int.MaxValue });
-            var resultValue = questionnaireBrowseView.Items
-                .Select(x => new QuestionnaireIdentity(x.QuestionnaireId, x.Version))
-                .ToList();
+            var allQuestionnaireIdentities = this.questionnaireBrowseViewFactory.GetAllQuestionnaireIdentities();
 
-            var response = this.Request.CreateResponse(resultValue);
+            var response = this.Request.CreateResponse(allQuestionnaireIdentities);
             response.Headers.CacheControl = new CacheControlHeaderValue
             {
                 Public = false,

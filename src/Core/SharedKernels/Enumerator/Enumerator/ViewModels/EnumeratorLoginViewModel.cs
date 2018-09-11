@@ -1,6 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
+using MvvmCross.Navigation;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -18,7 +19,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
     public abstract class EnumeratorLoginViewModel : BaseViewModel
     {
-        private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly ILogger logger;
         private readonly IAuditLogService auditLogService;
         private readonly IPasswordHasher passwordHasher;
@@ -35,7 +35,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             IAuditLogService auditLogService)
             : base(principal, viewModelNavigationService)
         {
-            this.viewModelNavigationService = viewModelNavigationService;
             this.passwordHasher = passwordHasher;
             this.logoStorage = logoStorage;
             this.synchronizationService = synchronizationService;
@@ -131,6 +130,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             }
 
             await this.viewModelNavigationService.NavigateToDashboardAsync();
+            await this.viewModelNavigationService.Close(this);
         }
 
         private async Task RemoteSignInAsync()

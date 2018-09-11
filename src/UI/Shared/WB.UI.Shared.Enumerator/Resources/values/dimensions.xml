@@ -42,7 +42,7 @@
     <dimen name="Interview_Readonly_Question_Answer_margin_left">14dp</dimen>
     <dimen name="Interview_Readonly_Question_Answer_padding">14dp</dimen>
     <dimen name="Interview_Readonly_Question_Icon_margin_top">14dp</dimen>
-    <dimen name="Interview_Readonly_Question_Layout_margin_bottom">40dp</dimen>
+    <dimen name="Interview_Readonly_Question_Layout_margin_bottom">30dp</dimen>
 
     <dimen name="Interview_Overview_unanswered_background_padding">26dp</dimen>
     <dimen name="Interview_Overview_background_padding_outer">36dp</dimen>

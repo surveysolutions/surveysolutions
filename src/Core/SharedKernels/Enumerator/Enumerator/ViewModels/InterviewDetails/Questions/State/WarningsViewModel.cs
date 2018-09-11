@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Linq;
+using System.Threading.Tasks;
 using MvvmCross.Base;
 using MvvmCross.ViewModels;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
@@ -22,13 +24,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     {
         private readonly ILiteEventRegistry liteEventRegistry;
         private readonly IStatefulInterviewRepository interviewRepository;
-        private readonly IMvxMainThreadDispatcher mainThreadDispatcher;
+        private readonly IMvxMainThreadAsyncDispatcher mainThreadDispatcher;
 
         protected WarningsViewModel() { }
 
         public WarningsViewModel(ILiteEventRegistry liteEventRegistry,
             IStatefulInterviewRepository interviewRepository,
-            IMvxMainThreadDispatcher mainThreadDispatcher,
+            IMvxMainThreadAsyncDispatcher mainThreadDispatcher,
             ErrorMessagesViewModel errorMessagesViewModel)
         {
             this.liteEventRegistry = liteEventRegistry;
@@ -48,7 +50,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Identity = entityIdentity;
 
             this.liteEventRegistry.Subscribe(this, interviewId);
-            this.UpdateValidState();
+            this.UpdateValidStateAsync();
         }
         
         private bool isImplausible;
@@ -60,13 +62,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public ErrorMessagesViewModel Warning { get; }
 
-        private void UpdateValidState()
+        private async Task UpdateValidStateAsync()
         {
             var interview = this.interviewRepository.Get(this.interviewId);
 
             bool isInvalidEntity = !interview.IsEntityPlausible(this.Identity);
 
-            this.mainThreadDispatcher.RequestMainThreadAction(() =>
+            await this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
             {
                 if (isInvalidEntity)
                 {
@@ -80,51 +82,51 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             });
         }
 
-        public void Handle(AnswersDeclaredPlausible @event)
+        public async void Handle(AnswersDeclaredPlausible @event)
         {
             if (@event.Questions.Contains(this.Identity))
             {
-                this.UpdateValidState();
+                await this.UpdateValidStateAsync();
             }
         }
 
-        public void Handle(AnswersDeclaredImplausible @event)
+        public async void Handle(AnswersDeclaredImplausible @event)
         {
             if (@event.GetFailedValidationConditionsDictionary().Keys.Contains(this.Identity))
             {
-                this.UpdateValidState();
+                await this.UpdateValidStateAsync();
             }
         }
 
-        public void Handle(StaticTextsDeclaredPlausible @event)
+        public async void Handle(StaticTextsDeclaredPlausible @event)
         {
             if (@event.StaticTexts.Contains(this.Identity))
             {
-                this.UpdateValidState();
+                await this.UpdateValidStateAsync();
             }
         }
 
-        public void Handle(StaticTextsDeclaredImplausible @event)
+        public async void Handle(StaticTextsDeclaredImplausible @event)
         {
             if (@event.GetFailedValidationConditionsDictionary().Keys.Contains(this.Identity))
             {
-                this.UpdateValidState();
+                await this.UpdateValidStateAsync();
             }
         }
 
-        public void Handle(QuestionsEnabled @event)
+        public async void Handle(QuestionsEnabled @event)
         {
             if (@event.Questions.Contains(this.Identity))
             {
-                this.UpdateValidState();
+                await this.UpdateValidStateAsync();
             }
         }
 
-        public void Handle(SubstitutionTitlesChanged @event)
+        public async void Handle(SubstitutionTitlesChanged @event)
         {
             if (@event.Questions.Contains(this.Identity) || @event.StaticTexts.Contains(this.Identity))
             {
-                this.UpdateValidState();
+                await this.UpdateValidStateAsync();
             }
         }
 

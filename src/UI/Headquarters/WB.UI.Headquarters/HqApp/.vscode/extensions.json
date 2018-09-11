@@ -1,9 +1,0 @@
-{
-    "recommendations": [
-        "dbaeumer.vscode-eslint",
-        "octref.vetur",
-        "EditorConfig.editorconfig",
-        "christian-kohler.npm-intellisense",
-        "Orta.vscode-jest"
-    ]
-}

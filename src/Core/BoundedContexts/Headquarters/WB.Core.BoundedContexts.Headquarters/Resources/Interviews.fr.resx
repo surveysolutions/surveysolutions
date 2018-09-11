@@ -127,6 +127,6 @@
     <value>Le questionnaire n'a pas été trouvé</value>
   </data>
   <data name="ImportInterviews_GenericError" xml:space="preserve">
-    <value>Erreur lors de l'importation de l'entretien avec des questions d'identification {0}. EnquêteurId {1}, QuestionnaireId {2}, Exception: {3}</value>
+    <value>Erreur lors de l'importation de l'entretien avec des questions d'identification {0}. EnquêteurId {1}, Exception: {2}</value>
   </data>
 </root>

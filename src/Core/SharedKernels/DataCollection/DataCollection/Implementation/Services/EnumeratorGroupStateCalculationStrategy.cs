@@ -34,6 +34,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Services
                 }
             }
 
+            ;
+
             return groupStatus;
         }
     }

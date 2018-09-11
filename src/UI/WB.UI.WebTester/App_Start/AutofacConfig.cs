@@ -24,7 +24,7 @@ namespace WB.UI.WebTester
             builder.RegisterModule(new CaptchaModule("recaptcha").AsAutofac());
             builder.RegisterModule(new WebInterviewModule().AsAutofac());
             builder.RegisterModule(new WebTesterModule().AsAutofac());
-            builder.RegisterModule(new ProductVersionModule(typeof(Startup).Assembly).AsAutofac());
+            builder.RegisterModule(new ProductVersionModule(typeof(Startup).Assembly, shouldStoreVersionToDb: false).AsAutofac());
 
             return builder;
         }

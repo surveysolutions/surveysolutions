@@ -1236,4 +1236,16 @@
     <value>Показать действия пользователя</value>
     <comment>Показать действия пользователя</comment>
   </data>
+    <data name="AreaQestion_Length" xml:space="preserve">
+    <value>Длинна</value>
+    <comment>Длинна</comment>
+  </data>
+    <data name="AreaQestion_AreaMeter" xml:space="preserve">
+    <value>метра(ов)</value>
+    <comment>метров</comment>
+  </data>
+    <data name="AreaQestion_Points" xml:space="preserve">
+    <value>Кол-во точек</value>
+    <comment>Кол-во точек</comment>
+  </data>
 </root>

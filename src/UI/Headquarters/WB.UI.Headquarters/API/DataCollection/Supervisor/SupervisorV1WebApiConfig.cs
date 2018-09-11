@@ -75,6 +75,8 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor
                 c => c.Action<AssignmentsApiV1Controller>(x => x.GetAssignmentsAsync(Param.Any<CancellationToken>())));
             config.TypedRoute("api/supervisor/v1/assignments/{id}",
                 c => c.Action<AssignmentsApiV1Controller>(x => x.GetAssignmentAsync(Param.Any<int>(), Param.Any<CancellationToken>())));
+            config.TypedRoute("api/supervisor/v1/assignments/{id}/Received",
+                c => c.Action<AssignmentsApiV1Controller>(x => x.Received(Param.Any<int>())));
             config.TypedRoute("api/supervisor/v1/maps", c => c.Action<MapsApiV1Controller>(x => x.GetMaps()));
             config.TypedRoute("api/supervisor/v1/maps/{id}",
                 c => c.Action<MapsApiV1Controller>(x => x.GetMapContent((Param.Any<string>()))));
@@ -108,9 +110,16 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor
                 c => c.Action<InterviewsApiV1Controller>(x => x.PostImage(Param.Any<PostFileRequest>())));
             config.TypedRoute("api/supervisor/v1/interviews/{id:guid}/audio",
                 c => c.Action<InterviewsApiV1Controller>(x => x.PostAudio(Param.Any<PostFileRequest>())));
+            config.TypedRoute("api/supervisor/v1/interviews/{id:guid}/getInterviewUploadState",
+                c => c.Action<InterviewsApiV1Controller>(x => x.GetInterviewUploadState(Param.Any<Guid>(), Param.Any<EventStreamSignatureTag>())));
 
             // INTERVIEWERS
             config.TypedRoute("api/supervisor/v1/interviewers", c => c.Action<InterviewersApiController>(x => x.Get()));
+
+            // Interviewer updates
+            config.TypedRoute("api/supervisor/v1/updates", c => c.Action<UpdatesApiV1Controller>(x => x.Get()));
+            config.TypedRoute("api/supervisor/v1/updates/latestversion", c => c.Action<UpdatesApiV1Controller>(x => x.GetLatestVersion()));
+            config.TypedRoute("api/supervisor/v1/updates/{id}", c => c.Action<UpdatesApiV1Controller>(x => x.Patch(Param.Any<string>())));
 
         }
 

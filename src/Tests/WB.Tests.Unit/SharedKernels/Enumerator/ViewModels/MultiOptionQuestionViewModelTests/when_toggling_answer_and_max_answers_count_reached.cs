@@ -30,7 +30,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionQuestionV
                 Create.Entity.CategoricalQuestionOption(2, "item2"),
             });
 
-
             var multiOptionAnswer = Create.Entity.InterviewTreeMultiOptionQuestion(new[] { 1m });
 
             var interview = Mock.Of<IStatefulInterview>(x => x.GetMultiOptionQuestion(questionId) == multiOptionAnswer);

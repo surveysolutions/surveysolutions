@@ -110,11 +110,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return Service.GetLatestApplicationVersionAsync(token);
         }
 
-        public Task SendBackupAsync(string filePath, CancellationToken token)
-        {
-            return onlineService.SendBackupAsync(filePath, token);
-        }
-
         public Task<List<InterviewApiView>> GetInterviewsAsync(CancellationToken token)
         {
             return Service.GetInterviewsAsync(token);
@@ -128,6 +123,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         public Task<List<CommittedEvent>> GetInterviewDetailsAsync(Guid interviewId, IProgress<TransferProgress> transferProgress, CancellationToken token)
         {
             return Service.GetInterviewDetailsAsync(interviewId, transferProgress, token);
+        }
+
+        public Task<InterviewUploadState> GetInterviewUploadState(Guid interviewId, EventStreamSignatureTag eventStreamSignatureTag, CancellationToken cancellationToken)
+        {
+            return Service.GetInterviewUploadState(interviewId, eventStreamSignatureTag, cancellationToken);
         }
 
         public Task UploadInterviewAsync(Guid interviewId, InterviewPackageApiView completedInterview,
@@ -229,5 +229,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         {
             return Service.LogAssignmentAsHandledAsync(id, cancellationToken);
         }
+
+        public Task<byte[]> GetFileAsync(string url, IProgress<TransferProgress> transferProgress, CancellationToken token) 
+            => Service.GetFileAsync(url, transferProgress, token);
     }
 }

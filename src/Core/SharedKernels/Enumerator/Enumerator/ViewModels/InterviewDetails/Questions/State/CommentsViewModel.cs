@@ -8,6 +8,7 @@ using MvvmCross.Base;
 using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -38,7 +39,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IStatefulInterviewRepository interviewRepository;
         private IStatefulInterview interview;
         private readonly ICommandService commandService;
-        private readonly IMvxMainThreadDispatcher mainThreadDispatcher;
+        private readonly IMvxMainThreadAsyncDispatcher mainThreadDispatcher;
         private readonly IPrincipal principal;
 
         protected CommentsViewModel() { }
@@ -47,7 +48,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IStatefulInterviewRepository interviewRepository,
             IPrincipal principal,
             ICommandService commandService,
-            IMvxMainThreadDispatcher mainThreadDispatcher)
+            IMvxMainThreadAsyncDispatcher mainThreadDispatcher)
         {
             this.interviewRepository = interviewRepository;
             this.principal = principal;
@@ -69,11 +70,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.HasComments = !string.IsNullOrWhiteSpace(this.InterviewerComment);
         }
 
-        private void UpdateCommentsFromInterview()
+        private async Task UpdateCommentsFromInterview()
         {
             var comments = interview.GetQuestionComments(this.Identity) ?? new List<AnswerComment>();
 
-            this.mainThreadDispatcher.RequestMainThreadAction(() =>
+            await this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
             {
                 this.Comments.Clear();
                 comments.Select(this.ToViewModel).ForEach(x => this.Comments.Add(x));
@@ -102,19 +103,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 return UIResources.Interview_Comment_Interviewer_Caption;
             }
-            else
+
+            switch (comment.UserRole)
             {
-                switch (comment.UserRole)
-                {
-                    case UserRoles.Headquarter:
-                        return UIResources.Interview_Headquarters_Comment_Caption;
-                    case UserRoles.Supervisor:
-                        return UIResources.Interview_Supervisor_Comment_Caption;
-                    case UserRoles.Interviewer:
-                        return UIResources.Interview_Interviewer_Comment_Caption;
-                    default:
-                        return UIResources.Interview_Other_Comment_Caption;
-                }
+                case UserRoles.Headquarter:
+                    return UIResources.Interview_Headquarters_Comment_Caption;
+                case UserRoles.Supervisor:
+                    return UIResources.Interview_Supervisor_Comment_Caption;
+                case UserRoles.Interviewer:
+                    return UIResources.Interview_Interviewer_Comment_Caption;
+                default:
+                    return UIResources.Interview_Other_Comment_Caption;
             }
         }
 
@@ -165,7 +164,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     rosterVector: this.Identity.RosterVector,
                     comment: this.InterviewerComment)).ConfigureAwait(false);
 
-            this.UpdateCommentsFromInterview();
+            await this.UpdateCommentsFromInterview();
 
             this.InterviewerComment = "";
             this.IsCommentInEditMode = false;

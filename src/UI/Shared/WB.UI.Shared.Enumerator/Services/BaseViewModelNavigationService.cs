@@ -40,6 +40,11 @@ namespace WB.UI.Shared.Enumerator.Services
                                                     this.userInteractionService.HasPendingUserInterations ||
                                                     this.userInterfaceStateService.IsUserInferfaceLocked;
 
+        public Task Close(IMvxViewModel viewModel)
+        {
+            return this.navigationService.Close(viewModel);
+        }
+
         public abstract Task NavigateToLoginAsync();
         public abstract Task NavigateToFinishInstallationAsync();
 

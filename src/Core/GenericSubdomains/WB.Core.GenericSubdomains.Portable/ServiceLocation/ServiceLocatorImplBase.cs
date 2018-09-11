@@ -42,7 +42,7 @@ namespace WB.Core.GenericSubdomains.Portable.ServiceLocation
         /// <exception cref="ActivationException">if there is an error resolving
         /// the service instance.</exception>
         /// <returns>The requested service instance.</returns>
-        private object GetInstance(Type serviceType, string key)
+        public virtual object GetInstance(Type serviceType, string key)
         {
             try
             {
@@ -99,7 +99,7 @@ namespace WB.Core.GenericSubdomains.Portable.ServiceLocation
         /// <exception cref="ActivationException">if there is are errors resolving
         /// the service instance.</exception>
         /// <returns>The requested service instance.</returns>
-        private TService GetInstance<TService>(string key)
+        public virtual TService GetInstance<TService>(string key)
         {
             return (TService)GetInstance(typeof(TService), key);
         }

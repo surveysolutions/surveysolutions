@@ -30,6 +30,8 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer
                 c => c.Action<InterviewsApiV3Controller>(x => x.PostImage(Param.Any<PostFileRequest>())));
             config.TypedRoute("api/interviewer/v3/interviews/{id:guid}/audio",
                 c => c.Action<InterviewsApiV3Controller>(x => x.PostAudio(Param.Any<PostFileRequest>())));
+            config.TypedRoute("api/interviewer/v3/interviews/{id:guid}/getInterviewUploadState",
+                c => c.Action<InterviewsApiV3Controller>(x => x.GetInterviewUploadState(Param.Any<Guid>(), Param.Any<EventStreamSignatureTag>())));
         }
 
 #pragma warning restore 4014

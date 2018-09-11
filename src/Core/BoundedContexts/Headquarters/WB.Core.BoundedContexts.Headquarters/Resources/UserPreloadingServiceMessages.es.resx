@@ -120,28 +120,4 @@
   <data name="FileColumnsCantBeMappedFormat" xml:space="preserve">
     <value>El archivo '{0}' contiene las siguientes columnas que no se pueden asignar a ninguna propiedad del usuario (por ejemplo, nombre completo, número de teléfono, etc.): {1}</value>
   </data>
-  <data name="TheDatasetMaxRecordNumberReachedFormat" xml:space="preserve">
-    <value>El conjunto de datos contiene {0} registros, pero el número máximo permitido de registros es {1}</value>
-  </data>
-  <data name="userPreloadingProcessCantBeFinishedFormat" xml:space="preserve">
-    <value>El proceso de precarga del usuario con id '{0}' no se puede finalizar porque {1} se creó a partir de {2}</value>
-  </data>
-  <data name="UserPreloadingProcessIsInStateButMustBeInStateOneOfTheFollowingStatesFormat" xml:space="preserve">
-    <value>El proceso de precarga del usuario '{0}' está en el estado '{1}', no está permitido eliminar procesos en estados: {2}.</value>
-  </data>
-  <data name="UserPreloadingProcessWithIdCantCreateMoreUsersFormat" xml:space="preserve">
-    <value>El proceso de precarga del usuario con id '{0}' no puede crear más usuarios que {1}</value>
-  </data>
-  <data name="UserPreloadingProcessWithIdHasErrorsFormat" xml:space="preserve">
-    <value>El proceso de precarga del usuario con id '{0}' tiene {1} error (s).</value>
-  </data>
-  <data name="UserPreloadingProcessWithIdIisMissingFormat" xml:space="preserve">
-    <value>Hace falta el proceso de precarga del usuario con id '{0}' </value>
-  </data>
-  <data name="UserPreloadingProcessWithIdInInvalidStateFormat" xml:space="preserve">
-    <value>El proceso de precarga del usuario con id '{0}' está en estado '{1}', pero debe estar en estado '{2}'</value>
-  </data>
-  <data name="validationProgressInPercentsCantBeNegativeOrGreaterThen100Format" xml:space="preserve">
-    <value>El progreso de validación en porcentajes no puede ser negativo o mayor que 100, pero el valor es {0}</value>
-  </data>
 </root>

@@ -5,7 +5,7 @@
         public ResponsibleComboboxModel(ResponsibleComboboxOptionModel[] options, int? total = null)
         {
             this.Options = options ?? new ResponsibleComboboxOptionModel[0];
-            this.Total = total ?? options.Length;
+            this.Total = total ?? Options.Length;
         }
         public ResponsibleComboboxOptionModel[] Options { get; private set; }
         public int Total { get; private set; }

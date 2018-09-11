@@ -11,6 +11,9 @@
         function patch(url, data) {
             return sendRequest('PATCH', url, data);
         }
+        var deleteRequest = function(url, data) {
+            return sendRequest('DELETE', url, data);
+        };
         function sendRequest(method, url, data) {
             blockUI.start();
             return $http({
@@ -45,6 +48,11 @@
         commentsService.postComment = function(questionnaireId, itemId, comment) {
             var url = utilityService.format('{0}/entity/addComment', utilityService.format(urlBase, questionnaireId));
             return post(url, comment);
+        };
+            
+        commentsService.deleteComment = function(questionnaireId, itemId) {
+            var url = utilityService.format('{0}/comment/{1}', utilityService.format(urlBase, questionnaireId), itemId);
+            return deleteRequest(url);
         };
 
         return commentsService;

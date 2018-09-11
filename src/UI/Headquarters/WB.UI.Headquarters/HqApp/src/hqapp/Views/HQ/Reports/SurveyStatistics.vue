@@ -21,12 +21,7 @@
             v-if="isFiltersLoaded"
             noSearch exportable multiorder hasTotalRow noSelect
             :tableOptions="tableOptions" :pageLength="isPivot ? this.filter.condition.Answers.length : 15"
-            :addParamsToRequest="addFilteringParams"        
-            @ajaxComplete="reportDataRecieved">
-                <hr v-if="status.isRunning" />                
-                <p class="text-right" v-if="status.isRunning">
-                    <small>{{ $t("Reports.Updating") }}</small>
-                </p>
+            :addParamsToRequest="addFilteringParams">
         </DataTables>
     </HqLayout>
 </template>
@@ -34,7 +29,6 @@
 <script>
 import QuestionDetail from "./QuestionDetail"
 import SurveyStatisticsFilter from "./SurveyStatisticsFilter"
-import moment from "moment"
 
 export default {
     components: {
@@ -63,20 +57,6 @@ export default {
         };
     },
 
-    watch: {
-        "status.isRunning"(to) {
-            if(this.$refs.table == null) return;
-            
-            const self = this
-            if(this._timer != null) {
-                window.clearInterval(this._timer)
-            }
-            if(to) {                
-                this._timer = window.setInterval(() => self.refreshStatus(), 1000)
-            }
-        }
-    },
-
     methods: {
         filterChanged(filter) {
             Object.keys(filter).forEach(key => {
@@ -97,11 +77,6 @@ export default {
             this.isFiltersLoaded = true
         },
 
-        async refreshStatus() {
-            const status = await this.$hq.Report.SurveyStatistics.GetRefreshStatus() 
-            this.status = status.status
-        },
-
         addFilteringParams(data) {
             data.questionnaireId = this.filter.questionnaireId
             data.question = this.filter.questionId
@@ -117,20 +92,12 @@ export default {
                     data.Condition = _.map(this.filter.conditionAnswers, 'Answer')
                 }
             }
-        },
-
-        reportDataRecieved() {
-            this.refreshStatus();
         }
     },
 
     computed: {        
         isSupervisor() {
             return this.$config.model.isSupervisor
-        },
-
-        infoMessage() {
-            return this.$t("Reports.Updated").replace("{0}", moment(this.status.lastRefresh).fromNow())
         },
 
         isPivot() {
