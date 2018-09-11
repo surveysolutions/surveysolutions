@@ -61,7 +61,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
 
         [HttpPost]
         [WriteToSyncLog(SynchronizationLogType.CheckIsPackageDuplicated)]
-        public override InterviewUploadState GetInterviewUploadState(Guid id, [FromBody] EventStreamSignatureTag eventStreamSignatureTag)
-            => base.GetInterviewUploadState(id, eventStreamSignatureTag);
+        public InterviewUploadState GetInterviewUploadState(Guid id, [FromBody] EventStreamSignatureTag eventStreamSignatureTag)
+            => base.GetInterviewUploadStateImpl(id, eventStreamSignatureTag);
     }
 }
