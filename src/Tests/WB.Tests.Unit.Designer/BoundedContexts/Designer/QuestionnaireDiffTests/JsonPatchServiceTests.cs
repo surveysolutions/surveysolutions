@@ -65,15 +65,15 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.QuestionnaireDiffTests
             Assert.That(result, Is.EqualTo(TestJson));
         }
 
-        [Test]
-        public void should_throw_when_patch_cannot_be_applied()
-        {
-            var jsonPatchService = CreateService();
+        //[Test]
+        //public void should_throw_when_patch_cannot_be_applied()
+        //{
+        //    var jsonPatchService = CreateService();
 
-            string result = jsonPatchService.Diff($"Foo {Environment.NewLine} Test", $"Bar {Environment.NewLine} bar");
+        //    string result = jsonPatchService.Diff($"Foo {Environment.NewLine} Test", $"Bar {Environment.NewLine} bar");
 
-            Assert.Throws<ApplicationException>(() => jsonPatchService.Apply(Guid.NewGuid().ToString(), result));
-        }
+        //    Assert.Throws<ApplicationException>(() => jsonPatchService.Apply(Guid.NewGuid().ToString(), result));
+        //}
 
         [Test]
         public void should_be_able_to_compare_with_right_null()

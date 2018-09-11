@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using DiffMatchPatch;
+﻿using JsonDiffPatchDotNet;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services
@@ -10,7 +7,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
     public class JsonPatchService : IPatchGenerator, IPatchApplier
     {
         private readonly IArchiveUtils archiveUtils;
-        private const string emptyJson = "";
+        private const string emptyJson = "{}";
 
         public JsonPatchService(IArchiveUtils archiveUtils)
         {
@@ -19,14 +16,14 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
         public string Diff(string left, string right)
         {
-            diff_match_patch patcher = new diff_match_patch();
-            List<Patch> patches = patcher.patch_make(left ?? emptyJson,
-                                                     right ?? emptyJson);
-            if (patches.Count == 0) return null;
+            var jdp = new JsonDiffPatch();
+            var patch = jdp.Diff(left ?? emptyJson, right ?? emptyJson);
+            if (string.IsNullOrEmpty(patch))
+            {
+                return null;
+            }
 
-            string result = patcher.patch_toText(patches);
-
-            string stringPatch = archiveUtils.CompressString(result);
+            string stringPatch = archiveUtils.CompressString(patch);
             return stringPatch;
         }
 
@@ -34,21 +31,17 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
         {
             if (patch == null) return document;
 
-            diff_match_patch patcher = new diff_match_patch();
+            var jdp = new JsonDiffPatch();
 
-            List<Patch> patches = patcher.patch_fromText(this.archiveUtils.DecompressString(patch));
+            var patchText = this.archiveUtils.DecompressString(patch);
 
-            var stringDiff = patcher.patch_apply(patches, string.IsNullOrEmpty(document) ? emptyJson : document);
-            foreach (bool applyResult in (bool[])stringDiff[1])
+            var stringDiff = jdp.Patch(string.IsNullOrEmpty(document) ? emptyJson : document, patchText);
+            if (stringDiff.Equals(emptyJson))
             {
-                if (applyResult == false)
-                {
-                    throw new ApplicationException("Failed to apply patch");
-                }
+                return null;
             }
 
-            var apply = (string)stringDiff[0];
-            return apply.IsNullOrEmpty() ? null : apply;
+            return stringDiff;
         }
     }
 }
