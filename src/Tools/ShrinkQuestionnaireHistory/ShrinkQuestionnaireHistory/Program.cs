@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Dapper;
+using JsonDiffPatchDotNet;
 using Npgsql;
 
 namespace ShrinkQuestionnaireHistory
@@ -31,12 +32,13 @@ namespace ShrinkQuestionnaireHistory
             }
         }
 
+        private const string emptyJson = "{}";
 
         static async Task Main(string[] args)
         {
             var connectionString = new NpgsqlConnectionStringBuilder(args[0]);
 
-            var patcher = new DiffMatchPatch.diff_match_patch();
+            var jdp = new JsonDiffPatch();
             using (var connection = new NpgsqlConnection(connectionString.ConnectionString))
             {
                 await connection.OpenAsync();
@@ -60,29 +62,21 @@ namespace ShrinkQuestionnaireHistory
                                 @"SELECT id as Id, resultingquestionnairedocument as Questionnaire 
                                           FROM plainstore.questionnairechangerecords 
                                           WHERE questionnaireid = @questionnaireId AND resultingquestionnairedocument IS NOT NULL
-                                          ORDER BY ""sequence""", new { questionnaireId  = row });
+                                          ORDER BY ""sequence"" desc", new { questionnaireId  = row });
 
                             string reference = existingHistory.First().Questionnaire;
 
                             foreach (var historyItem in existingHistory.Skip(1))
                             {
-                                var diff = patcher.patch_make(reference,
-                                    historyItem.Questionnaire ?? string.Empty);
-                                string textPatch = patcher.patch_toText(diff);
+                                string textPatch = jdp.Diff(reference ?? emptyJson, historyItem.Questionnaire ?? emptyJson);
 
-                                var appliedPatch = patcher.patch_apply(diff, reference)[0].ToString();
-                                if (!appliedPatch.Equals(historyItem.Questionnaire))
-                                {
-                                    throw new Exception(
-                                        $"Applied patch for questionnaire {row}. Applied patch does not match target questionnaire. Tested change id {historyItem.Id}");
-                                }
-
+                                var compressString = CompressString(textPatch);
                                 connection.Execute(@"UPDATE plainstore.questionnairechangerecords 
-                                                    SET resultingquestionnairedocument = NULL, diffwithpreviousversion = @diff 
+                                                    SET resultingquestionnairedocument = NULL, ""patch"" = @diff 
                                                     WHERE id = @id",
                                     new
                                     {
-                                        diff = CompressString(textPatch),
+                                        diff = compressString,
                                         id = historyItem.Id
                                     });
 
