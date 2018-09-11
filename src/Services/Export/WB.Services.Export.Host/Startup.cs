@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Prometheus;
 
 namespace WB.Services.Export.Host
 {
@@ -28,7 +29,8 @@ namespace WB.Services.Export.Host
             {
                 app.UseDeveloperExceptionPage();
             }
-            
+
+            app.UseMetricServer();
             app.UseMvc();
         }
     }
