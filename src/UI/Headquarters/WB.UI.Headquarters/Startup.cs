@@ -1,13 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Hosting;
 using System.Web.Http;
+using System.Web.Http.Dependencies;
 using System.Web.Http.Filters;
 using System.Web.Mvc;
 using System.Web.Optimization;
@@ -15,6 +16,7 @@ using System.Web.Routing;
 using System.Web.SessionState;
 using Autofac;
 using Autofac.Core;
+using Autofac.Core.Lifetime;
 using Autofac.Integration.Mvc;
 using Autofac.Integration.SignalR;
 using Autofac.Integration.WebApi;
@@ -25,7 +27,6 @@ using Microsoft.Owin;
 using Microsoft.Owin.BuilderProperties;
 using Microsoft.Owin.Extensions;
 using Microsoft.Owin.Security.Cookies;
-using Ncqrs.Eventing.Storage;
 using NConfig;
 using NLog;
 using Owin;
@@ -36,6 +37,7 @@ using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Binding;
 using WB.Enumerator.Native.WebInterview;
@@ -48,7 +50,6 @@ using WB.UI.Shared.Enumerator.Services.Internals;
 using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.DataAnnotations;
 using WB.UI.Shared.Web.Filters;
-using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 
 namespace WB.UI.Headquarters
 {
@@ -84,13 +85,22 @@ namespace WB.UI.Headquarters
 
             //autofacKernel.ContainerBuilder.RegisterSource(new AnyConcreteTypeNotAlreadyRegisteredSource());
 
-            autofacKernel.ContainerBuilder.RegisterType<Autofac.Integration.SignalR.AutofacDependencyResolver>().As<Microsoft.AspNet.SignalR.IDependencyResolver>().SingleInstance();
+            autofacKernel.ContainerBuilder.RegisterType<Autofac.Integration.SignalR.AutofacDependencyResolver>()
+                .As<Microsoft.AspNet.SignalR.IDependencyResolver>().SingleInstance();
             
+            //todo:af remove
             //temp logging
             autofacKernel.ContainerBuilder.RegisterModule<LogRequestModule>();
-
             
-            //autofacKernel.ContainerBuilder.Register<IServiceLocator>(() => ServiceLocator.Current);
+            autofacKernel.ContainerBuilder
+                .RegisterType<CustomMVCDependencyResolver>()
+                .As<System.Web.Mvc.IDependencyResolver>()
+                .SingleInstance();
+
+            autofacKernel.ContainerBuilder
+                .RegisterType<AutofacServiceLocatorAdapter>()
+                .As<IServiceLocator>()
+                .InstancePerLifetimeScope();
 
             //no scope involved activity should be used
             autofacKernel.Init().Wait();
@@ -98,9 +108,7 @@ namespace WB.UI.Headquarters
             var container = autofacKernel.Container;
 
             var config = new HttpConfiguration();
-            var resolver = new AutofacWebApiDependencyResolver(container);
-
-            
+            var resolver = new CustomWebApiDependencyResolver(container);
 
             config.DependencyResolver = resolver;
             GlobalConfiguration.Configuration.DependencyResolver = resolver;
@@ -110,7 +118,7 @@ namespace WB.UI.Headquarters
             hubConfig.Resolver = container.Resolve<Microsoft.AspNet.SignalR.IDependencyResolver>();
             GlobalHost.DependencyResolver = container.Resolve<Microsoft.AspNet.SignalR.IDependencyResolver>();
 
-            var resolv = new CustomMVCDependencyResolver(container);
+            var resolv = container.Resolve<System.Web.Mvc.IDependencyResolver>();
             //resolver.
 
             DependencyResolver.SetResolver(resolv);
@@ -134,7 +142,7 @@ namespace WB.UI.Headquarters
                     perRequestModule.DeactivateInstancesForCurrentHttpRequest();
                 }
             });
-            kernel.Inject(perRequestModule); // wiill keep reference to perRequestModule in Kernel instance
+            kernel.Inject(perRequestModule); // will keep reference to perRequestModule in Kernel instance
             */
 
             //GlobalFilters.Filters.Add(new TransactionFilter());
@@ -366,6 +374,10 @@ namespace WB.UI.Headquarters
 
     public class CustomMVCDependencyResolver : Autofac.Integration.Mvc.AutofacDependencyResolver
     {
+        //todo:af
+        //try to extract to bindings
+        //private IServiceLocator locator;
+
         public CustomMVCDependencyResolver(ILifetimeScope container) : base(container)
         {
         }
@@ -384,10 +396,68 @@ namespace WB.UI.Headquarters
 
         public override object GetService(Type serviceType)
         {
+            var serviceLocator = this.RequestLifetimeScope.Resolve<IServiceLocator>(new NamedParameter("kernel", this.RequestLifetimeScope));
+            /*if (serviceType == typeof(IServiceLocator))
+            {
+                return locator ?? (locator = new MvcAutofacDependencyResolverServiceLocatorAdaptor(this));
+            }*/
+            
             return base.GetService(serviceType);
+        }
+
+        public override IEnumerable<object> GetServices(Type serviceType)
+        {
+            var serviceLocator = this.RequestLifetimeScope.Resolve<IServiceLocator>(new NamedParameter("kernel", this.RequestLifetimeScope));
+            return base.GetServices(serviceType);
         }
     }
 
+
+    /// <summary>
+    /// Autofac implementation of the <see cref="T:System.Web.Http.Dependencies.IDependencyResolver" /> interface.
+    /// </summary>
+    public class CustomWebApiDependencyResolver : AutofacWebApiDependencyResolver
+    {
+        /// <summary>Try to get a service of the given type.</summary>
+        /// <param name="serviceType">Type of service to request.</param>
+        /// <returns>An instance of the service, or null if the service is not found.</returns>
+        public new object GetService(Type serviceType)
+        {
+            var scope = (BeginScope() as AutofacWebApiDependencyScope).LifetimeScope;
+            var serviceLocator = scope.Resolve<IServiceLocator>(new NamedParameter("kernel", scope));
+
+            return base.GetService(serviceType);
+        }
+
+        public new IEnumerable<object> GetServices(Type serviceType)
+        {
+            var scope = (BeginScope() as AutofacWebApiDependencyScope).LifetimeScope;
+            var serviceLocator = scope.Resolve<IServiceLocator>(new NamedParameter("kernel", scope));
+
+            return base.GetServices(serviceType);
+        }
+
+        public CustomWebApiDependencyResolver(ILifetimeScope container) : base(container)
+        {
+        }
+    }
+
+    /*public class CustomWebApiDependencyResolver : AutofacWebApiDependencyResolver
+    {
+        public CustomWebApiDependencyResolver(ILifetimeScope container) : base(container)
+        {
+        }
+        public override object GetService(Type serviceType)
+        {
+            var serviceLocator = this.RequestLifetimeScope.Resolve<IServiceLocator>(new NamedParameter("kernel", this.RequestLifetimeScope));
+            /*if (serviceType == typeof(IServiceLocator))
+            {
+                return locator ?? (locator = new MvcAutofacDependencyResolverServiceLocatorAdaptor(this));
+            }#1#
+
+            return base.GetService(serviceType);
+        }
+    }*/
 
     public class LogRequestModule : Autofac.Module
     {
@@ -405,7 +475,7 @@ namespace WB.UI.Headquarters
 
         private string GetPrefix()
         {
-            return new string('-', depth * 2);
+            return new string('-', /*depth **/ 2);
         }
 
         private void RegistrationOnPreparing(object sender, PreparingEventArgs preparingEventArgs)

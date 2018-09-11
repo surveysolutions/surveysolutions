@@ -9,9 +9,9 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
 {
     public class AutofacServiceLocatorAdapter : ServiceLocatorImplBase
     {
-        private readonly IContainer container;
+        private readonly ILifetimeScope container;
 
-        public AutofacServiceLocatorAdapter(IContainer kernel)
+        public AutofacServiceLocatorAdapter(ILifetimeScope kernel)
         {
             this.container = kernel;
         }
