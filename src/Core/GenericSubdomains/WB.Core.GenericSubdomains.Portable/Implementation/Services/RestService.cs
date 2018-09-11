@@ -169,18 +169,19 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation.Services
                 }
                 else
                 {
-                    var innerException = ex.InnerException;
-                    if (innerException?.GetType().FullName == "Java.Net.ConnectException")
+                    var javaNetConnectionException = ex.GetSelfOrInner(e => e?.GetType().FullName == "Java.Net.ConnectException");
+                    if (javaNetConnectionException != null)
                     {
-                        throw new RestException(message: innerException.Message,
-                            innerException: innerException,
+                        throw new RestException(message: javaNetConnectionException.Message,
+                            innerException: javaNetConnectionException,
                             type: RestExceptionType.HostUnreachable);
                     }
 
-                    if (innerException?.GetType().Name == "SSLHandshakeException")
+                    var sslHandshakeException = ex.GetSelfOrInner(e => e?.GetType().Name == "SSLHandshakeException");
+                    if (sslHandshakeException != null)
                     {
-                        throw new RestException(message: innerException.Message,
-                            innerException: innerException,
+                        throw new RestException(message: sslHandshakeException.Message,
+                            innerException: sslHandshakeException,
                             type: RestExceptionType.UnacceptableCertificate);
                     }
                 }
