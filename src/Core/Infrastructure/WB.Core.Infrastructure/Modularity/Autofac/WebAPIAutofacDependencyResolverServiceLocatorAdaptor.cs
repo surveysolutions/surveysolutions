@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using Autofac.Integration.Mvc;
+using Autofac.Integration.WebApi;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 
 namespace WB.Core.Infrastructure.Modularity.Autofac
 {
-    public class MvcAutofacDependencyResolverServiceLocatorAdaptor : ServiceLocatorImplBase
+    public class WebAPIAutofacDependencyResolverServiceLocatorAdaptor : ServiceLocatorImplBase
     {
-        private AutofacDependencyResolver resolver;
+        private AutofacWebApiDependencyResolver resolver;
 
-        public MvcAutofacDependencyResolverServiceLocatorAdaptor(AutofacDependencyResolver resolver)
+        public WebAPIAutofacDependencyResolverServiceLocatorAdaptor(AutofacWebApiDependencyResolver resolver)
         {
             this.resolver = resolver;
         }
