@@ -10,8 +10,8 @@
                            noSearch
                            @selected="selectQuestionnaire" />
             </FilterBlock>
-            <FilterBlock :title="$t('Reports.Supervisor')">
-                 <Typeahead :placeholder="$t('Common.AllSupervisors')"
+            <FilterBlock :title="$t('Strings.Teams')">
+                 <Typeahead :placeholder="$t('Strings.AllTeams')"
                            :value="supervisorId"
                            @selected="selectSupervisor"
                            :ajax-params="supervisorsParams"
