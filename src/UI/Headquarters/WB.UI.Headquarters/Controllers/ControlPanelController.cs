@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using Main.Core.Entities.SubEntities;
 using StackExchange.Exceptional;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -13,9 +14,12 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.UI.Headquarters.API.Filters;
+using WB.UI.Headquarters.Models.Admin;
 using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web.Attributes;
 using WB.UI.Shared.Web.Filters;
@@ -29,18 +33,21 @@ namespace WB.UI.Headquarters.Controllers
         private readonly HqUserManager userManager;
         private readonly IServiceLocator serviceLocator;
         private readonly ISettingsProvider settingsProvider;
+        private readonly IPlainKeyValueStorage<ExportServiceSettings> exportServiceSettings;
 
         public ControlPanelController(
             IServiceLocator serviceLocator,
             ICommandService commandService,
             HqUserManager userManager,
             ILogger logger,
-            ISettingsProvider settingsProvider)
+            ISettingsProvider settingsProvider,
+            IPlainKeyValueStorage<ExportServiceSettings> exportServiceSettings)
              : base(commandService: commandService, logger: logger)
         {
             this.userManager = userManager;
             this.serviceLocator = serviceLocator;
             this.settingsProvider = settingsProvider;
+            this.exportServiceSettings = exportServiceSettings;
         }
 
         public ActionResult CreateHeadquarters()
@@ -151,8 +158,11 @@ namespace WB.UI.Headquarters.Controllers
 
         public ActionResult Settings()
         {
-            IEnumerable<ApplicationSetting> settings = this.settingsProvider.GetSettings().OrderBy(setting => setting.Name);
-            return this.View(settings);
+            var model = new SettingsModel();
+            model.Settings = this.settingsProvider.GetSettings().OrderBy(setting => setting.Name);
+            model.ExportSettings = this.exportServiceSettings.GetById(AppSetting.ExportServiceStorageKey);
+
+            return this.View(model);
         }
 
         public ActionResult RepeatLastInterviewStatus(Guid? interviewId)

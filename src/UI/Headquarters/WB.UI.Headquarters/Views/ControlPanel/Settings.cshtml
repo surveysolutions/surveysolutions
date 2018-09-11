@@ -2,9 +2,29 @@
     this.Layout = "~/Views/Shared/_ControlPanelLayout.cshtml";
     this.ViewBag.Title = "Control Panel: Settings";
 }
-@model IEnumerable<WB.UI.Shared.Web.Settings.ApplicationSetting>
+@model WB.UI.Headquarters.Models.Admin.SettingsModel
 
 <div class="panel panel-default">
+    <div class="panel-heading">
+        Export service settings
+    </div>
+    <div class="panel-body">
+        <table class="table table-condensed">
+            <tr>
+                <th>Key</th>
+                <th>Value</th>
+            </tr>
+            <tr>
+                <td>Api key</td>
+                <td>@Model.ExportSettings.Key</td>
+            </tr>
+        </table>
+    </div>
+</div>
+
+<div class="panel panel-default">
+
+
     <div class="panel-heading">
         All settings with values
     </div>
@@ -14,7 +34,7 @@
                 <th>Key</th>
                 <th>Value</th>
             </tr>
-            @foreach (var setting in Model)
+            @foreach (var setting in Model.Settings)
             {
                 <tr>
                     <td>@setting.Name</td>
