@@ -133,7 +133,7 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
             eventStore.Store(initialStoredStream);
 
             // Act 
-            var page1 = await eventStore.GetEventsFeedAsync(TODO, 0, 2);
+            var page1 = await eventStore.GetEventsFeedAsync(0, 2);
 
             // Assert
             Assert.That(page1.Events, Has.Count.EqualTo(2));
@@ -142,7 +142,7 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
 
 
             // Act
-            var page2 = await eventStore.GetEventsFeedAsync(TODO, page1.Events[1].GlobalSequence, 2);
+            var page2 = await eventStore.GetEventsFeedAsync(page1.Events[1].GlobalSequence, 2);
 
             // Assert
             Assert.That(page2.Events, Has.Count.EqualTo(1));
