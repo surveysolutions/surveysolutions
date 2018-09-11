@@ -15,7 +15,6 @@ using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.StaticText;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Variable;
-using WB.Core.BoundedContexts.Designer.Implementation.Repositories;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.GenericSubdomains.Portable;
@@ -26,7 +25,6 @@ using WB.Core.SharedKernels.QuestionnaireEntities;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.QuestionnairePostProcessors
 {
-    [RequiresPreprocessor(typeof(HistoryPreProcessor))]
     internal class HistoryPostProcessor : 
         ICommandPostProcessor<Questionnaire, ImportQuestionnaire>,
         ICommandPostProcessor<Questionnaire, CloneQuestionnaire>,
@@ -89,12 +87,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
 
         private IQuestionnaireHistoryVersionsService QuestionnaireHistoryVersionsService 
             => ServiceLocator.Current.GetInstance<IQuestionnaireHistoryVersionsService>();
-
-        private IPatchGenerator patchGenerator
-            => ServiceLocator.Current.GetInstance<IPatchGenerator>();
-        
-        private QuestionnaireHistorySettings questionnaireHistorySettings 
-            => ServiceLocator.Current.GetInstance<QuestionnaireHistorySettings>();
 
         #region Questionnaire
 
@@ -692,44 +684,18 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             QuestionnaireDocument questionnaireDocument,
             QuestionnaireChangeReference reference = null)
         {
-            var sQuestionnaireId = questionnaireId.FormatGuid();
-
-            var maxSequenceByQuestionnaire = this.questionnaireChangeItemStorage.Query(x => x
-                .Where(y => y.QuestionnaireId == sQuestionnaireId).Select(y => (int?) y.Sequence).Max());
-
-            var questionnaireChangeItem = new QuestionnaireChangeRecord
-            {
-                QuestionnaireChangeRecordId = Guid.NewGuid().FormatGuid(),
-                QuestionnaireId = questionnaireId.FormatGuid(),
-                UserId = responsibleId,
-                UserName = this.GetUserName(responsibleId),
-                Timestamp = DateTime.UtcNow,
-                Sequence = maxSequenceByQuestionnaire + 1 ?? 0,
-                ActionType = actionType,
-                TargetItemId = targetId,
-                TargetItemTitle = targetTitle,
-                TargetItemType = targetType,
-                TargetItemNewTitle = targetNewTitle,
-                AffectedEntriesCount = affectedEntries,
-                TargetItemDateTime = targetDateTime,
-            };
-
-            if (reference != null)
-            {
-                reference.QuestionnaireChangeRecord = questionnaireChangeItem;
-                questionnaireChangeItem.References.Add(reference);
-            }
-
-            if (questionnaireDocument != null)
-            {
-                questionnaireChangeItem.DiffWithPreviousVersion = this.QuestionnaireHistoryVersionsService.GetDiffWithPreviousStoredVersion(questionnaireDocument);
-            }
-
-            this.questionnaireChangeItemStorage.Store(questionnaireChangeItem, questionnaireChangeItem.QuestionnaireChangeRecordId);
-
-            this.QuestionnaireHistoryVersionsService.RemoveOldQuestionnaireHistory(sQuestionnaireId, 
-                maxSequenceByQuestionnaire, 
-                questionnaireHistorySettings.QuestionnaireChangeHistoryLimit);
+            this.QuestionnaireHistoryVersionsService.AddQuestionnaireChangeItem(questionnaireId, 
+                responsibleId, 
+                GetUserName(responsibleId),
+                actionType,
+                targetType,
+                targetId,
+                targetTitle,
+                targetNewTitle,
+                affectedEntries,
+                targetDateTime,
+                questionnaireDocument,
+                reference);
         }
 
         private string GetUserName(Guid? userId)

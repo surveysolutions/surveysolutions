@@ -9,12 +9,12 @@ namespace WB.UI.Designer.Migrations.PlainStore
     {
         public override void Up()
         {
-            Create.Column("diffwithpreviousversion").OnTable("questionnairechangerecords").AsString().Nullable();
+            Create.Column("patch").OnTable("questionnairechangerecords").AsString().Nullable();
         }
 
         public override void Down()
         {
-            Delete.Column("diffwithpreviousversion").FromTable("questionnairechangerecords");
+            Delete.Column("patch").FromTable("questionnairechangerecords");
         }
     }
 }
