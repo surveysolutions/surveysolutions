@@ -11,6 +11,7 @@ using WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles;
 using WB.Core.BoundedContexts.Headquarters.MoveUserToAnotherTeam;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
+using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -58,6 +59,8 @@ namespace WB.UI.Headquarters.Injections
             registry.BindAsSingleton<IAudioProcessingService, AudioProcessingService>();
 
             registry.BindAsSingleton<IRestServiceSettings, DesignerQuestionnaireApiRestServiceSettings>();
+
+            registry.Bind<IHttpClientFactory, DefaultHttpClientFactory>();
 
             registry.Bind<IRestService, RestService>(
                 new ConstructorArgument("networkService", _ => null),

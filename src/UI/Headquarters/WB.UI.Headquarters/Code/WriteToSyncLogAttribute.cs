@@ -191,11 +191,17 @@ namespace WB.UI.Headquarters.Code
                     case SynchronizationLogType.GetApk:
                         logItem.Log = SyncLogMessages.ApkRequested;
                         break;
+                    case SynchronizationLogType.GetSupervisorApk:
+                        logItem.Log = SyncLogMessages.SupervisorApkRequested;
+                        break;
                     case SynchronizationLogType.GetExtendedApk:
                         logItem.Log = SyncLogMessages.ExtendedApkRequested;
                         break;
                     case SynchronizationLogType.GetApkPatch:
                         logItem.Log = SyncLogMessages.PatchRequestedFormat.FormatString(context.GetActionArgumentOrDefault<string>("deviceVersion", string.Empty));
+                        break;
+                    case SynchronizationLogType.GetSupervisorApkPatch:
+                        logItem.Log = SyncLogMessages.SupervisorPatchRequestedFormat.FormatString(context.GetActionArgumentOrDefault<string>("deviceVersion", string.Empty));
                         break;
                     case SynchronizationLogType.GetExtendedApkPatch:
                         logItem.Log = SyncLogMessages.ExtendedPatchRequestedFormat.FormatString(context.GetActionArgumentOrDefault<string>("deviceVersion", string.Empty));
@@ -212,6 +218,17 @@ namespace WB.UI.Headquarters.Code
                     case SynchronizationLogType.CheckObsoleteInterviews:
                         var request = context.GetActionArgumentOrDefault("knownPackages", new List<ObsoletePackageCheck>());
                         logItem.Log = string.Format(SyncLogMessages.CheckObsoleteInterviews, JsonConvert.SerializeObject(request, Formatting.Indented));
+                        break;
+                    case SynchronizationLogType.CheckIsPackageDuplicated:
+                        var duplicatedPackageCheckId = context.GetActionArgumentOrDefault<Guid>("id", Guid.Empty);
+                        logItem.Log = SyncLogMessages.CheckIsPackageDuplicatedFormat.FormatString(duplicatedPackageCheckId.ToString());
+                        logItem.InterviewId = duplicatedPackageCheckId;
+                        break;
+                    case SynchronizationLogType.GetInterviewerAppPatches:
+                        logItem.Log = "Get list of interviewer app patches";
+                        break;
+                    case SynchronizationLogType.GetInterviewerAppPatchByName:
+                        logItem.Log = $"Get interviewer app patch: {context.GetActionArgumentOrDefault("id", string.Empty)}";
                         break;
                     default:
                         throw new ArgumentException("logAction");

@@ -20,7 +20,6 @@ using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics;
-using WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Jobs;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -44,7 +43,6 @@ namespace WB.UI.Headquarters.API.PublicApi
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IExportFactory exportFactory;
-        private readonly IRefreshReportsTask refreshReportsTask;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IAuthorizedUser authorizedUser;
         private readonly IInterviewReportDataRepository interviewReportDataRepository;
@@ -61,7 +59,6 @@ namespace WB.UI.Headquarters.API.PublicApi
             IQuestionnaireStorage questionnaireStorage,
             IFileSystemAccessor fileSystemAccessor,
             IExportFactory exportFactory,
-            IRefreshReportsTask refreshReportsTask,
             IAuthorizedUser authorizedUser,
             IInterviewReportDataRepository interviewReportDataRepository,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory)
@@ -70,7 +67,6 @@ namespace WB.UI.Headquarters.API.PublicApi
             this.questionnaireStorage = questionnaireStorage;
             this.fileSystemAccessor = fileSystemAccessor;
             this.exportFactory = exportFactory;
-            this.refreshReportsTask = refreshReportsTask;
             this.authorizedUser = authorizedUser;
             this.interviewReportDataRepository = interviewReportDataRepository;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
@@ -271,31 +267,7 @@ namespace WB.UI.Headquarters.API.PublicApi
             }
 
             return ReturnEmptyResult(query);
-        }
-
-        [HttpPost]
-        [Route("status")]
-        public IHttpActionResult GetRefreshStatus()
-        {
-            var refreshState = this.refreshReportsTask.GetReportState();
-            return Json(new
-            {
-                status = new
-                {
-                    isRunning = refreshState == RefreshReportsState.Refreshing || refreshState == RefreshReportsState.ScheduledForRefresh,
-                    lastRefresh = this.refreshReportsTask.LastRefreshTime()
-                }
-            });
-        }
-
-        [HttpPost]
-        [Route("forceRefresh")]
-        public HttpResponseMessage ForceRefresh()
-        {
-            this.refreshReportsTask.ForceRefresh();
-
-            return Request.CreateResponse(HttpStatusCode.OK);
-        }
+        }      
 
         private HttpResponseMessage CreateReportResponse(ExportFileType exportType, ReportView report,
             string reportName)

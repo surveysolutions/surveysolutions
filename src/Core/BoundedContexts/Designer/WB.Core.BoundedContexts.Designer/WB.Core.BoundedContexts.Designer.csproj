@@ -13,14 +13,32 @@
     <NoWarn>1701;1702;1705;618;1030</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="AngleSharp" Version="0.9.9.2" />
+    <None Remove="ReferencedAssemblies\System.Collections.dll" />
+    <None Remove="ReferencedAssemblies\System.Linq.dll" />
+    <None Remove="ReferencedAssemblies\System.Linq.Expressions.dll" />
+    <None Remove="ReferencedAssemblies\System.Runtime.dll" />
+    <None Remove="ReferencedAssemblies\System.Runtime.Extensions.dll" />
+    <None Remove="ReferencedAssemblies\System.Runtime.Numerics.dll" />
+    <None Remove="ReferencedAssemblies\System.Text.RegularExpressions.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="ReferencedAssemblies\System.Collections.dll" />
+    <EmbeddedResource Include="ReferencedAssemblies\System.Linq.dll" />
+    <EmbeddedResource Include="ReferencedAssemblies\System.Linq.Expressions.dll" />
+    <EmbeddedResource Include="ReferencedAssemblies\System.Runtime.dll" />
+    <EmbeddedResource Include="ReferencedAssemblies\System.Runtime.Extensions.dll" />
+    <EmbeddedResource Include="ReferencedAssemblies\System.Runtime.Numerics.dll" />
+    <EmbeddedResource Include="ReferencedAssemblies\System.Text.RegularExpressions.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="AngleSharp" Version="0.9.10" />
     <PackageReference Include="CsQuery" Version="1.3.4" />
     <PackageReference Include="CsvHelper" Version="6.1.0" />
     <PackageReference Include="EPPlus" Version="4.5.2.1" />
-    <PackageReference Include="HtmlSanitizer" Version="4.0.185" />
+    <PackageReference Include="HtmlSanitizer" Version="4.0.187" />
     <PackageReference Include="Microsoft.AspNet.WebPages.Data" Version="3.2.3" />
     <PackageReference Include="Microsoft.AspNet.WebPages.WebData" Version="3.2.3" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="2.7.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="2.9.0" />
     <PackageReference Include="Ninject" Version="3.3.4" />
   </ItemGroup>
   <ItemGroup>

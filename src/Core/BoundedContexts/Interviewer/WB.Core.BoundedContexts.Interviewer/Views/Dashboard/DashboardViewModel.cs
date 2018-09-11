@@ -6,7 +6,6 @@ using MvvmCross.Plugin.Messenger;
 using MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
-using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.Messages;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -19,6 +18,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
+using WB.Core.SharedKernels.Enumerator.ViewModels.Messages;
 using WB.Core.SharedKernels.Enumerator.Views;
 using InterviewerUIResources = WB.Core.BoundedContexts.Interviewer.Properties.InterviewerUIResources;
 
@@ -82,10 +82,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.CompletedInterviews = completedInterviewsViewModel;
             this.RejectedInterviews = rejectedInterviewsViewModel;
 
-            startingLongOperationMessageSubscriptionToken =
-                messenger.Subscribe<StartingLongOperationMessage>(this.DashboardItemOnStartingLongOperation);
-            stopLongOperationMessageSubscriptionToken =
-                messenger.Subscribe<StopingLongOperationMessage>(this.DashboardItemOnStopLongOperation);
+            SubscribeOnMessages();
+
             this.Synchronization.Init();
             this.Synchronization.OnCancel += Synchronization_OnCancel;
             this.Synchronization.OnProgressChanged += Synchronization_OnProgressChanged;
@@ -113,20 +111,29 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         {
             base.ViewAppeared();
 
-            startingLongOperationMessageSubscriptionToken =
-                messenger.Subscribe<StartingLongOperationMessage>(this.DashboardItemOnStartingLongOperation);
-            stopLongOperationMessageSubscriptionToken =
-                messenger.Subscribe<StopingLongOperationMessage>(this.DashboardItemOnStopLongOperation);
-            
+            SubscribeOnMessages();
+
             this.SynchronizationWithHqEnabled = this.interviewerSettings.AllowSyncWithHq;
         }
 
         public override void ViewDisappeared()
         {
+            UnsubscribeFromMessages();
+            base.ViewDisappeared();
+        }
+
+        private void SubscribeOnMessages()
+        {
+            startingLongOperationMessageSubscriptionToken =
+                messenger.Subscribe<StartingLongOperationMessage>(this.DashboardItemOnStartingLongOperation);
+            stopLongOperationMessageSubscriptionToken =
+                messenger.Subscribe<StopingLongOperationMessage>(this.DashboardItemOnStopLongOperation);
+        }
+
+        private void UnsubscribeFromMessages()
+        {
             startingLongOperationMessageSubscriptionToken.Dispose();
             stopLongOperationMessageSubscriptionToken.Dispose();
-
-            base.ViewDisappeared();
         }
 
         public bool SynchronizationWithHqEnabled
@@ -191,6 +198,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         {
             this.RaisePropertyChanged(() => this.DashboardTitle);
             this.CreateNew.UpdateAssignment(e.AssignmentId);
+            this.CreateNew.Load(this.Synchronization);
         }
 
         private void OnItemsLoaded(object sender, EventArgs e) =>
@@ -275,8 +283,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         {
             base.Dispose();
 
-            startingLongOperationMessageSubscriptionToken.Dispose();
-            stopLongOperationMessageSubscriptionToken.Dispose();
+            UnsubscribeFromMessages();
 
             syncSubscription.Dispose();
 
@@ -321,7 +328,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         }
 
         public IMvxAsyncCommand ShowSearchCommand =>
-            new MvxAsyncCommand(viewModelNavigationService.NavigateToAsync<DashboardSearchViewModel>);
+            new MvxAsyncCommand(viewModelNavigationService.NavigateToAsync<SearchViewModel>);
 
         #region Offline synchronization
 

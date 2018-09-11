@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Base;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -17,6 +20,7 @@ using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 {
@@ -42,13 +46,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private Guid userId;
         private bool isRosterSizeQuestion;
         private bool areAnswersOrdered;
-        private readonly IMvxMainThreadDispatcher mainThreadDispatcher;
+        private readonly IMvxMainThreadAsyncDispatcher mainThreadDispatcher;
         private int? maxAllowedAnswers;
         private string maxAnswersCountMessage;
 
         public QuestionInstructionViewModel InstructionViewModel => this.instructionViewModel;
         public IQuestionStateViewModel QuestionState => this.questionState;
         public AnsweringViewModel Answering { get; }
+        public bool AreAnswersOrdered => this.areAnswersOrdered;
 
         public MultiOptionQuestionViewModel(
             QuestionStateViewModel<MultipleOptionsQuestionAnswered> questionStateViewModel,
@@ -60,7 +65,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             AnsweringViewModel answering,
             FilteredOptionsViewModel filteredOptionsViewModel,
             QuestionInstructionViewModel instructionViewModel,
-            IMvxMainThreadDispatcher mainThreadDispatcher)
+            IMvxMainThreadAsyncDispatcher mainThreadDispatcher)
         {
             this.Options = new CovariantObservableCollection<MultiOptionQuestionOptionViewModel>();
             this.questionState = questionStateViewModel;
@@ -73,6 +78,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.interviewRepository = interviewRepository;
             this.Answering = answering;
             this.mainThreadDispatcher = mainThreadDispatcher;
+            this.timer = new Timer(async _ => { await SaveAnswer(); }, null, Timeout.Infinite, Timeout.Infinite);
         }
 
         public Identity Identity => this.questionIdentity;
@@ -98,6 +104,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.isRosterSizeQuestion = questionnaire.IsRosterSizeQuestion(entityIdentity.Id);
 
             this.UpdateQuestionOptions();
+
+            PreviousOptionsToReset = interview.GetMultiOptionQuestion(this.Identity)?.GetAnswer()?.CheckedValues?.ToList();
 
             filteredOptionsViewModel.OptionsChanged += FilteredOptionsViewModelOnOptionsChanged;
         }
@@ -136,9 +144,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             set => SetProperty(ref maxAnswersCountMessage, value);
         }
 
-        private void FilteredOptionsViewModelOnOptionsChanged(object sender, EventArgs eventArgs)
+        private async void FilteredOptionsViewModelOnOptionsChanged(object sender, EventArgs eventArgs)
         {
-            this.mainThreadDispatcher.RequestMainThreadAction(
+            await this.mainThreadDispatcher.ExecuteOnMainThreadAsync(
                 () =>
                 {
                     this.UpdateQuestionOptions();
@@ -182,32 +190,42 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             return result;
         }
 
-        public async Task ToggleAnswerAsync(MultiOptionQuestionOptionViewModelBase changedModel)
+        private readonly Timer timer;
+        protected internal int ThrottlePeriod { get; set; } = Constants.ThrottlePeriod;
+        private List<int> previousOptionsToReset = null;
+        private List<int> PreviousOptionsToReset
         {
-            List<MultiOptionQuestionOptionViewModel> allSelectedOptions =
-                this.areAnswersOrdered ?
-                this.Options.Where(x => x.Checked).OrderBy(x => x.CheckedOrder ?? 0).ToList() :
-                this.Options.Where(x => x.Checked).ToList();
+            get => previousOptionsToReset ?? new List<int>();
+            set => this.previousOptionsToReset = value;
+        }
 
-            if (this.maxAllowedAnswers.HasValue && allSelectedOptions.Count > this.maxAllowedAnswers)
+        private List<int> selectedOptionsToSave = null;
+
+        private async Task SaveAnswer()
+        {
+            if (this.userInteraction.HasPendingUserInterations)
             {
-                changedModel.Checked = false;
+                await this.userInteraction.WaitPendingUserInteractionsAsync();
+                ResetUiOptions();
                 return;
             }
 
-            if (this.isRosterSizeQuestion && !changedModel.Checked)
+            if (this.isRosterSizeQuestion)
             {
-                var amountOfRostersToRemove = 1;
-                var message = string.Format(UIResources.Interview_Questions_RemoveRowFromRosterMessage,
-                    amountOfRostersToRemove);
-                if (!await this.userInteraction.ConfirmAsync(message))
+                var itemsToDelete = PreviousOptionsToReset.Except(selectedOptionsToSave).ToList();
+                if (itemsToDelete.Any())
                 {
-                    changedModel.Checked = true;
-                    return;
+                    var amountOfRostersToRemove = itemsToDelete.Count;
+                    var message = string.Format(UIResources.Interview_Questions_RemoveRowFromRosterMessage, amountOfRostersToRemove);
+                    if (!await this.userInteraction.ConfirmAsync(message))
+                    {
+                        ResetUiOptions();
+                        return;
+                    }
                 }
             }
 
-            var selectedValues = allSelectedOptions.Select(x => x.Value).ToArray();
+            var selectedValues = selectedOptionsToSave.ToArray();
 
             var command = new AnswerMultipleOptionsQuestionCommand(
                 this.interviewId,
@@ -219,7 +237,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             try
             {
                 await this.Answering.SendAnswerQuestionCommandAsync(command);
-
+                PreviousOptionsToReset = selectedValues.ToList();
+                
                 if (selectedValues.Length == this.maxAllowedAnswers)
                 {
                     this.Options.Where(o => !o.Checked).ForEach(o => o.CanBeChecked = false);
@@ -233,8 +252,52 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
             catch (InterviewException ex)
             {
-                changedModel.Checked = !changedModel.Checked;
+                ResetUiOptions();
                 this.QuestionState.Validity.ProcessException(ex);
+            }
+        }
+
+        private void ResetUiOptions()
+        {
+            var interview = this.interviewRepository.Get(this.interviewId.FormatGuid());
+            var answer = interview.GetMultiOptionQuestion(this.Identity)?.GetAnswer();
+            if (answer == null) return;
+            var checkedOptions = answer.CheckedValues.ToArray();
+            foreach (var option in Options)
+            {
+                var selectedOptionIndex = Array.IndexOf(checkedOptions, option.Value);
+                option.Checked = selectedOptionIndex >= 0;
+                if (this.areAnswersOrdered)
+                {
+                    option.CheckedOrder = selectedOptionIndex + 1;
+                }
+            }
+
+            PreviousOptionsToReset = answer.CheckedValues.ToList();
+        }
+
+        public async Task ToggleAnswerAsync(MultiOptionQuestionOptionViewModelBase changedModel)
+        {
+            List<int> allSelectedOptions =
+                this.areAnswersOrdered ?
+                    this.Options.Where(x => x.Checked).OrderBy(x => x.CheckedOrder ?? 0).Select(x => x.Value).ToList() :
+                    this.Options.Where(x => x.Checked).Select(x => x.Value).ToList();
+
+            if (this.maxAllowedAnswers.HasValue && allSelectedOptions.Count > this.maxAllowedAnswers)
+            {
+                changedModel.Checked = false;
+                return;
+            }
+
+            selectedOptionsToSave = allSelectedOptions;
+
+            if (this.ThrottlePeriod == 0)
+            {
+                await SaveAnswer();
+            }
+            else
+            {
+                timer.Change(ThrottlePeriod, Timeout.Infinite);
             }
         }
 
@@ -249,6 +312,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     option.CanBeChecked = true;
                 }
 
+                PreviousOptionsToReset = null;
                 UpateMaxAnswersCountMessage(0);
             }
         }

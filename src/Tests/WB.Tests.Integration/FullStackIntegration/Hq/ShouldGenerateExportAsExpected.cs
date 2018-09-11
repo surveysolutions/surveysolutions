@@ -287,7 +287,7 @@ namespace WB.Tests.Integration.FullStackIntegration.Hq
                 new FileInfrastructureModule(),
                 new EventSourcedInfrastructureModule(),
                 new NcqrsModule(),
-                new ProductVersionModule(typeof(HeadquartersUIModule).Assembly),
+                new ProductVersionModule(typeof(HeadquartersUIModule).Assembly, false),
                 new TestModule(),
                 eventStoreModule,
                 new OrmModule(unitOfWorkModule),

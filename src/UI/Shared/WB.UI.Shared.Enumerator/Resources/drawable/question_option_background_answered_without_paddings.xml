@@ -1,0 +1,36 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:local="http://schemas.android.com/apk/res-auto">
+    <item>
+        <shape android:shape="rectangle">
+            <padding
+                android:top="@dimen/Interview_Question_Option_vertical_padding"
+                android:bottom="@dimen/Interview_Question_Option_vertical_padding"
+                android:left="@dimen/zero"
+                android:right="@dimen/zero" />
+            <solid android:color="@android:color/transparent"/>
+            <corners android:radius="@dimen/Interview_Question_Answer_Input_background_corners_radius"/>
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <padding
+                android:top="@dimen/Interview_Question_Answer_Input_background_stroke_width"
+                android:bottom="@dimen/Interview_Question_Answer_Input_background_stroke_width"
+                android:left="@dimen/Interview_Question_Answer_Input_background_stroke_width"
+                android:right="@dimen/Interview_Question_Answer_Input_background_stroke_width" />
+            <stroke
+                android:width="@dimen/Interview_Question_Answer_Input_background_stroke_width"
+                android:color="@android:color/transparent"/>
+        </shape>
+    </item>
+    <item>
+        <shape android:shape="rectangle">
+            <solid android:color="@color/sections_list_background_color" />
+            <stroke
+                android:width="@dimen/Interview_Question_Answer_Input_background_stroke_width"
+                android:color="@color/editorAnsweredBorder"/>
+            <corners android:radius="@dimen/Interview_Question_Answer_Input_background_corners_radius"/>
+        </shape>
+    </item>
+</layer-list>

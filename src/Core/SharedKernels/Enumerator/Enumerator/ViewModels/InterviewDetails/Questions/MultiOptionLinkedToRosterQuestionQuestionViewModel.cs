@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using MvvmCross.Base;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -28,7 +29,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IStatefulInterviewRepository interviewRepository,
             IQuestionnaireStorage questionnaireStorage,
             IPrincipal userIdentity, ILiteEventRegistry eventRegistry,
-            IMvxMainThreadDispatcher mainThreadDispatcher)
+            IMvxMainThreadAsyncDispatcher mainThreadDispatcher)
             : base(questionState, answering, instructionViewModel, interviewRepository, questionnaireStorage, userIdentity, eventRegistry,
                 mainThreadDispatcher)
         {
@@ -55,24 +56,24 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             base.UpateMaxAnswersCountMessage(answeredOptions.Length);
         }
 
-        public void Handle(LinkedOptionsChanged @event)
+        public async void Handle(LinkedOptionsChanged @event)
         {
             var newOptions = this.CreateOptions();
 
-            this.mainThreadDispatcher.RequestMainThreadAction(() =>
+            await this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
             {
                 this.Options.SynchronizeWith(newOptions.ToList(), (s, t) => s.Value.Identical(t.Value));
                 this.RaisePropertyChanged(() => HasOptions);
             });
         }
 
-        public void Handle(RosterInstancesTitleChanged @event)
+        public async void Handle(RosterInstancesTitleChanged @event)
         {
             var optionListShouldBeUpdated = @event.ChangedInstances.Any(x => this.parentRosterIds.Contains(x.RosterInstance.GroupId));
             if (optionListShouldBeUpdated)
             {
                 var newOptions = this.CreateOptions();
-                this.mainThreadDispatcher.RequestMainThreadAction(() =>
+                await this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
                 {
                     this.Options.SynchronizeWith(newOptions.ToList(), (s, t) => s.Value.Identical(t.Value) && s.Title == t.Title);
                     this.RaisePropertyChanged(() => HasOptions);

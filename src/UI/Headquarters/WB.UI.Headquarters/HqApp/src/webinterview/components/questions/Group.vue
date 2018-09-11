@@ -79,8 +79,10 @@
                     case GroupStatus.NotStarted: 
                         return this.$t("WebInterview.Interview_Group_Status_NotStarted")
                     case GroupStatus.Started: 
+                    case GroupStatus.StartedInvalid: 
                         return this.$t("WebInterview.Interview_Group_Status_StartedIncompleteFormat", {value: this.getInformationByQuestionsAndAnswers})
                     case GroupStatus.Completed: 
+                    case GroupStatus.CompletedInvalid: 
                         return this.$t("WebInterview.Interview_Group_Status_CompletedFormat", {value: this.getInformationByQuestionsAndAnswers})
                 }
             },

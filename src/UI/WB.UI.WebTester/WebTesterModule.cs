@@ -71,6 +71,8 @@ namespace WB.UI.WebTester
 
             registry.BindAsSingleton<IEvictionObservable, IEvictionNotifier, TokenEviction>();
 
+            registry.Bind<IEnumeratorGroupStateCalculationStrategy, EnumeratorGroupGroupStateCalculationStrategy>();
+            registry.Bind<ISupervisorGroupStateCalculationStrategy, SupervisorGroupStateCalculationStrategy>();
             registry.BindAsSingleton<IEventSourcedAggregateRootRepository, IAggregateRootCacheFiller, WebTesterAggregateRootRepository>();
             registry.BindAsSingleton<IWebInterviewNotificationService, WebInterviewNotificationService>();
             registry.BindAsSingleton<ICommandService, WebTesterCommandService>();

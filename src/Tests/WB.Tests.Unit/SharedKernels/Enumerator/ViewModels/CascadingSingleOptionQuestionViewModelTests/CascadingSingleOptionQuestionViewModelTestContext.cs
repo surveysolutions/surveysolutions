@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.CascadingSingleOptio
 
             var dispatcher = Create.Fake.MvxMainThreadDispatcher1();
             Ioc.RegisterSingleton<IMvxViewDispatcher>(dispatcher);
-            Ioc.RegisterSingleton<IMvxMainThreadDispatcher>(dispatcher);
+            Ioc.RegisterSingleton<IMvxMainThreadAsyncDispatcher>(dispatcher);
         }
 
         protected static CascadingSingleOptionQuestionViewModel CreateCascadingSingleOptionQuestionViewModel(

@@ -7,7 +7,7 @@ namespace WB.UI.Headquarters.Models.ComponentModels
         public ComboboxModel(ComboboxOptionModel[] options, int? total = null)
         {
             this.Options = options ?? new ComboboxOptionModel[0];
-            this.Total = total ?? options.Length;
+            this.Total = total ?? Options.Length;
         }
         public ComboboxOptionModel[] Options { get; private set; }
         public int Total { get; private set; }

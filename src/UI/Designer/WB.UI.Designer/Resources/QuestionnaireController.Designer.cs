@@ -295,7 +295,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Questionnaire designer.
+        ///   Looks up a localized string similar to Designer.
         /// </summary>
         public static string Designer {
             get {

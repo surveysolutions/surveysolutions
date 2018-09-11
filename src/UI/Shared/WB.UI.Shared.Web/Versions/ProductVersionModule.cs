@@ -8,10 +8,12 @@ namespace WB.UI.Shared.Web.Versions
 {
     public class ProductVersionModule : IModule
     {
+        private readonly bool shouldStoreVersionToDb;
         private readonly ProductVersion productVersion;
 
-        public ProductVersionModule(Assembly versionAssembly)
+        public ProductVersionModule(Assembly versionAssembly, bool shouldStoreVersionToDb = true)
         {
+            this.shouldStoreVersionToDb = shouldStoreVersionToDb;
             this.productVersion = new ProductVersion(versionAssembly);
         }
 
@@ -23,6 +25,9 @@ namespace WB.UI.Shared.Web.Versions
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
+            if (shouldStoreVersionToDb)
+                serviceLocator.GetInstance<IProductVersionHistory>().RegisterCurrentVersion();
+
             return Task.CompletedTask;
         }
     }

@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Supervisor.Views;
 using WB.Core.GenericSubdomains.Portable.Implementation;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 
@@ -20,7 +20,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Services
             CancellationToken cancellationToken);
 
         Task<List<string>> GetListOfDeletedQuestionnairesIds(CancellationToken cancellationToken);
+        Task<InterviewerApplicationPatchApiView[]> GetListOfInterviewerAppPatchesAsync(CancellationToken cancellationToken);
 
-        string ApiDownloadAppPrefixUrl { get; }
+        Task<byte[]> GetInterviewerApplicationPatchByNameAsync(string patchName, CancellationToken token,
+            IProgress<TransferProgress> transferProgress);
+        Task<int?> GetLatestInterviewerAppVersionAsync(CancellationToken token);
     }
 }

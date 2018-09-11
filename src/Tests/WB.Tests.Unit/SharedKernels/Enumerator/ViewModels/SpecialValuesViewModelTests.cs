@@ -2,6 +2,7 @@
 using Moq;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Tests.Abc;
@@ -203,11 +204,32 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             
             // Act
             interview.RemoveAnswer(entityIdentity.Id, entityIdentity.RosterVector, Id.gF, DateTime.Now);
-            model.ClearSelectionAndShowValues();
+            model.ClearSelectionAndShowValues().WaitAndUnwrapException();
 
             //Assert
             Assert.That(model.SpecialValues.Count, Is.EqualTo(2));
             Assert.That(model.IsSpecialValue, Is.Null);
+        }
+
+        [Test]
+        public void IsSpecialValueSelected_shoud_react_only_integer_values()
+        {
+            var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.NumericRealQuestion(Id.g2, specialValues: Create.Entity.Options(1, 2)));
+
+            var interview = Create.AggregateRoot.StatefulInterview(questionnaire: questionnaire);
+            var optionsModel = Create.ViewModel.FilteredOptionsViewModel(entityIdentity, questionnaire, interview);
+            var model = Create.ViewModel.SpecialValues(optionsModel, interviewRepository: Setup.StatefulInterviewRepository(interview));
+
+            model.Init(interviewId, entityIdentity, Mock.Of<IQuestionStateViewModel>());
+
+            // Act
+            var isSpecialValueSelectedReal = model.IsSpecialValueSelected(2.2m);
+            var isSpecialValueSelectedInt = model.IsSpecialValueSelected(2.00m);
+
+            //Assert
+            Assert.That(isSpecialValueSelectedReal, Is.False);
+            Assert.That(isSpecialValueSelectedInt, Is.True);
         }
     }
 }

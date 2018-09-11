@@ -9,6 +9,7 @@ using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
@@ -22,8 +23,13 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
     [ApiBasicAuth(new[] { UserRoles.Supervisor })]
     public class InterviewsApiV1Controller : SupervisorInterviewsControllerBase
     {
+        private readonly IImageFileStorage imageFileStorage;
+        private readonly IAudioFileStorage audioFileStorage;
+
         public InterviewsApiV1Controller(IImageFileStorage imageFileStorage, IAudioFileStorage audioFileStorage, IAuthorizedUser authorizedUser, IInterviewInformationFactory interviewsFactory, IInterviewPackagesService packagesService, ICommandService commandService, IMetaInfoBuilder metaBuilder, IJsonAllTypesSerializer synchronizationSerializer, IHeadquartersEventStore eventStore) : base(imageFileStorage, audioFileStorage, authorizedUser, interviewsFactory, packagesService, commandService, metaBuilder, synchronizationSerializer, eventStore)
         {
+            this.imageFileStorage = imageFileStorage;
+            this.audioFileStorage = audioFileStorage;
         }
 
         [HttpGet]
@@ -48,5 +54,9 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
         [HttpPost]
         public override void PostAudio(PostFileRequest request) => base.PostAudio(request);
 
+        [HttpPost]
+        [WriteToSyncLog(SynchronizationLogType.CheckIsPackageDuplicated)]
+        public InterviewUploadState GetInterviewUploadState(Guid id, [FromBody] EventStreamSignatureTag eventStreamSignatureTag)
+            => base.GetInterviewUploadStateImpl(id, eventStreamSignatureTag);
     }
 }

@@ -69,6 +69,18 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Messages
         public InterviewPackageApiView Interview { get; set; }
     }
 
+    public class GetInterviewUploadStateRequest : ICommunicationMessage
+    {
+        public Guid InterviewId { get; set; }
+        public EventStreamSignatureTag Check { get; set; }
+    }
+
+    public class GetInterviewUploadStateResponse : ICommunicationMessage
+    {
+        public Guid InterviewId { get; set; }
+        public InterviewUploadState UploadState { get; set; }
+    }
+
     public class GetAssignmentRequest : ICommunicationMessage
     {
         public int Id { get; set; }

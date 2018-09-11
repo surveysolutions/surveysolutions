@@ -232,11 +232,38 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to meters.
+        /// </summary>
+        public static string AreaQestion_AreaMeter {
+            get {
+                return ResourceManager.GetString("AreaQestion_AreaMeter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to square meters.
         /// </summary>
         public static string AreaQestion_AreaUnitMeter {
             get {
                 return ResourceManager.GetString("AreaQestion_AreaUnitMeter", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Length.
+        /// </summary>
+        public static string AreaQestion_Length {
+            get {
+                return ResourceManager.GetString("AreaQestion_Length", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Points.
+        /// </summary>
+        public static string AreaQestion_Points {
+            get {
+                return ResourceManager.GetString("AreaQestion_Points", resourceCulture);
             }
         }
         
@@ -1348,7 +1375,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Interviews received by Interviewer.
+        ///   Looks up a localized string similar to Assignments received by Interviewer.
         /// </summary>
         public static string InterviewerProfile_DownloadedInterviewsCount {
             get {
