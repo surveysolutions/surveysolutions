@@ -102,7 +102,7 @@ namespace WB.UI.Headquarters.API.DataCollection
                 Convert.FromBase64String(request.Data), request.ContentType);
         }
 
-        public virtual InterviewUploadState GetInterviewUploadState(Guid id, [FromBody] EventStreamSignatureTag eventStreamSignatureTag)
+        protected InterviewUploadState GetInterviewUploadStateImpl(Guid id, [FromBody] EventStreamSignatureTag eventStreamSignatureTag)
         {
             var doesEventsExists = this.packagesService.IsPackageDuplicated(eventStreamSignatureTag);
 
