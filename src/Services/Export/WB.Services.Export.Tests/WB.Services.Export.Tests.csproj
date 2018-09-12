@@ -17,7 +17,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\WB.Services.Export.Host\WB.Services.Export.Host.csproj" />
+    <ProjectReference Include="..\WB.Services.Export.Host\WB.Services.Export.Host.csproj" />
   </ItemGroup>
 
 </Project>
