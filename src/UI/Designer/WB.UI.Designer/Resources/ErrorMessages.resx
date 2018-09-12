@@ -246,4 +246,7 @@
   <data name="NoQuestionnaireIdToValidatePremissions" xml:space="preserve">
     <value>Questionnaire id was not provided to validate permissions</value>
   </data>
+  <data name="UnhandledExceptionDuringUpdateUserInfo" xml:space="preserve">
+    <value>Could not update user information. Please, try again later.</value>
+  </data>
 </root>

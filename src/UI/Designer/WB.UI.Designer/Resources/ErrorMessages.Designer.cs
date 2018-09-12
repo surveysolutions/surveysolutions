@@ -323,6 +323,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Could not update user information. Please, try again later..
+        /// </summary>
+        internal static string UnhandledExceptionDuringUpdateUserInfo {
+            get {
+                return ResourceManager.GetString("UnhandledExceptionDuringUpdateUserInfo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to User {0} already confirmed in system. Please enter your login and password to start using Designer..
         /// </summary>
         internal static string User_already_confirmed_in_system {

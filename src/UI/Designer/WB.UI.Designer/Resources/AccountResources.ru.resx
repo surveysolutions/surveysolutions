@@ -280,4 +280,16 @@
     <value>ФИО</value>
     <comment>ФИО</comment>
   </data>
+    <data name="ManageAccount" xml:space="preserve">
+    <value>Управление учётной записью</value>
+    <comment>Управление учётной записью</comment>
+  </data>
+    <data name="EditProfile" xml:space="preserve">
+    <value>Редактирование профиля</value>
+    <comment>Редактирование профиля</comment>
+  </data>
+    <data name="AccountInfoUpdated" xml:space="preserve">
+    <value>Сведения об учетной записи успешно обновлены</value>
+    <comment>Сведения об учетной записи успешно обновлены</comment>
+  </data>
 </root>

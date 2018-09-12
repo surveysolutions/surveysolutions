@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Configuration.Provider;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using System.Web.Security;
 using System.Web.UI;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.BoundedContexts.Designer.Services.Accounts;
 using WB.Core.GenericSubdomains.Portable;
@@ -77,18 +79,78 @@ namespace WB.UI.Designer.Controllers
                 this.Success(message.Value.ToUIMessage());
             }
 
-            this.ViewBag.ReturnUrl = this.Url.Action("manage");
-            return this.View(new LocalPasswordModel());
+            this.ViewBag.ReturnUrl = this.Url.Action("Manage");
+            return this.View(new ManageAccountModel
+            {
+                ChangePassword = new ChangePasswordModel(),
+                UserProfile = new UpdateUserProfileModel
+                {
+                    FullName = this.UserHelper.WebUser.MembershipUser.FullName,
+                    Email = this.UserHelper.WebUser.MembershipUser.Email
+                }
+            });
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None", Location = OutputCacheLocation.None)]
-        public ActionResult Manage(LocalPasswordModel model)
+        public ActionResult Manage(UpdateUserProfileModel model)
         {
-            this.ViewBag.ReturnUrl = this.Url.Action("manage");
+            this.ViewBag.ReturnUrl = this.Url.Action("Manage");
             if (this.ModelState.IsValid)
             {
+                try
+                {
+                    var user = (DesignerMembershipUser) Membership.GetUser(this.UserHelper.WebUser.UserId, false);
+
+                    Membership.UpdateUser(
+                        new DesignerMembershipUser(
+                            providerName: user.ProviderName,
+                            name: user.UserName,
+                            providerUserKey: user.ProviderUserKey,
+                            email: model.Email,
+                            passwordQuestion: user.PasswordQuestion,
+                            comment: user.Comment,
+                            isApproved: user.IsApproved,
+                            isLockedOut: user.IsLockedOut,
+                            creationDate: user.CreationDate,
+                            lastLoginDate: user.LastLoginDate,
+                            lastActivityDate: user.LastActivityDate,
+                            lastPasswordChangedDate: user.LastPasswordChangedDate,
+                            lastLockoutDate: user.LastLockoutDate,
+                            canImportOnHq: user.CanImportOnHq,
+                            fullName: model.FullName));
+
+                    return this.RedirectToAction("Manage", new {message = AccountManageMessageId.UpdateUserProfileSuccess});
+                }
+                catch (ProviderException e)
+                {
+                    this.Error(e.Message);
+                }
+                catch (Exception e)
+                {
+                    this.logger.Error("User update exception", e);
+                    this.Error(ErrorMessages.UnhandledExceptionDuringUpdateUserInfo);
+                }
+            }
+
+            // If we got this far, something failed, redisplay form
+            return this.View(new ManageAccountModel
+            {
+                ChangePassword = new ChangePasswordModel(),
+                UserProfile = model
+            });
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [OutputCache(NoStore = true, Duration = 0, VaryByParam = "None", Location = OutputCacheLocation.None)]
+        public ActionResult ChangePassword(ChangePasswordModel model)
+        {
+            this.ViewBag.ReturnUrl = this.Url.Action("Manage");
+            if (this.ModelState.IsValid)
+            {
+
                 // ChangePassword will throw an exception rather than return false in certain failure scenarios.
                 bool changePasswordSucceeded;
                 try
@@ -103,7 +165,8 @@ namespace WB.UI.Designer.Controllers
 
                 if (changePasswordSucceeded)
                 {
-                    return this.RedirectToAction("manage", new { message = AccountManageMessageId.ChangePasswordSuccess });
+                    return this.RedirectToAction("Manage",
+                        new {message = AccountManageMessageId.ChangePasswordSuccess});
                 }
                 else
                 {
@@ -112,7 +175,15 @@ namespace WB.UI.Designer.Controllers
             }
 
             // If we got this far, something failed, redisplay form
-            return View(model);
+            return this.View("Manage", new ManageAccountModel
+            {
+                ChangePassword = model,
+                UserProfile = new UpdateUserProfileModel
+                {
+                    FullName = this.UserHelper.WebUser.MembershipUser.FullName,
+                    Email = this.UserHelper.WebUser.MembershipUser.Email
+                }
+            });
         }
 
         [HttpGet]
