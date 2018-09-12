@@ -534,9 +534,6 @@
   <data name="InterviewerProfile_DeviceSerial" xml:space="preserve">
     <value>მოწყობილობის სერიული ნომერი</value>
   </data>
-  <data name="InterviewerProfile_DownloadedInterviewsCount" xml:space="preserve">
-    <value>ინტერვიუერის მიერ მიღებული ინტერვიუები</value>
-  </data>
   <data name="InterviewerProfile_DownloadedQuestionnairesCount" xml:space="preserve">
     <value>ინტერვიუერის მიერ მიღებული კითხვარები</value>
   </data>

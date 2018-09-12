@@ -770,7 +770,7 @@
     <value>Количество опросников отправленных на устройство</value>
   </data>
   <data name="InterviewerProfile_DownloadedInterviewsCount" xml:space="preserve">
-    <value>Количество интервью отправленных на устройство</value>
+    <value>Количество назначений отправленных на устройство</value>
   </data>
   <data name="InterviewerProfile_UploadedInterviewsCount" xml:space="preserve">
     <value>Количество интервью полученных с устройства</value>

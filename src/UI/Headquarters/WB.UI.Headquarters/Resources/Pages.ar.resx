@@ -528,9 +528,6 @@
   <data name="InterviewerProfile_DeviceSerial" xml:space="preserve">
     <value>الرقم التسلسلي للجهاز</value>
   </data>
-  <data name="InterviewerProfile_DownloadedInterviewsCount" xml:space="preserve">
-    <value>المقابلات التي تم استلامها من الباحث</value>
-  </data>
   <data name="InterviewerProfile_DownloadedQuestionnairesCount" xml:space="preserve">
     <value>الاستبيانات المستلمة بواسطة المقابل</value>
   </data>
