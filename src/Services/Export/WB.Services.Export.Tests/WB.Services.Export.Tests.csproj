@@ -4,8 +4,8 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <IsPackable>false</IsPackable>
     <OutputType>Library</OutputType>
-     <TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
-    
+      <!--<TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>-->
+     <RuntimeFrameworkVersion>2.1.4</RuntimeFrameworkVersion>
   </PropertyGroup>
 
   <ItemGroup>
