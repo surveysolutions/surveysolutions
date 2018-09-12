@@ -672,9 +672,6 @@
   <data name="InterviewerProfile_DeviceSerial" xml:space="preserve">
     <value>设备序列号</value>
   </data>
-  <data name="InterviewerProfile_DownloadedInterviewsCount" xml:space="preserve">
-    <value>调查员已收到的访谈</value>
-  </data>
   <data name="InterviewerProfile_DownloadedQuestionnairesCount" xml:space="preserve">
     <value>调查员已收到的问卷</value>
   </data>
