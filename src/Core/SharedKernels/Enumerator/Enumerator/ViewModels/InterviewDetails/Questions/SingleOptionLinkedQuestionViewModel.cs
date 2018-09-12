@@ -208,11 +208,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.Options.Where(option => option.Selected && option != selectedOption).ForEach(x => x.Selected = false);
 
-            if (this.Options.All(x => x.Selected == false))
-            {
-                Debug.WriteLine("Shit");
-            }
-
             if (this.ThrottlePeriod == 0)
             {
                 await SaveAnswer();
