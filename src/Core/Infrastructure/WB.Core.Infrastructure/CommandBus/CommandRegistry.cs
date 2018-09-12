@@ -310,12 +310,12 @@ namespace WB.Core.Infrastructure.CommandBus
 
         private static Action<IAggregateRoot, ICommand> GetProcessingAction(Type processorType, Type aggregateType, Type commandType, IServiceLocator serviceLocator)
         {
-            object postProcessorInstance = serviceLocator.GetInstance(processorType);
+            object processorInstance = serviceLocator.GetInstance(processorType);
 
-            if (postProcessorInstance == null)
+            if (processorInstance == null)
                 throw new CommandRegistryException($"Unable to get instance of post processor {processorType.Name} for command {commandType.Name} and aggregate {aggregateType.Name}.");
 
-            MethodInfo processMethod = processorType.GetTypeInfo().GetMethod("Process", new[] { aggregateType, commandType });
+            MethodInfo processMethod = processorInstance.GetType().GetMethod("Process", new[] { aggregateType, commandType });
 
             if (processMethod == null)
                 throw new CommandRegistryException($"Unable to resolve process method of post processor {processorType.Name} for command {commandType.Name} and aggregate {aggregateType.Name}.");
@@ -324,7 +324,7 @@ namespace WB.Core.Infrastructure.CommandBus
             {
                 try
                 {
-                    processMethod.Invoke(postProcessorInstance, new object[] { aggregate, command });
+                    processMethod.Invoke(processorInstance, new object[] { aggregate, command });
                 }
                 catch (TargetInvocationException exception)
                 {
