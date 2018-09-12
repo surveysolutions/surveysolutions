@@ -14,7 +14,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="2.1.4" />
+     <!--<PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.4" />-->     
+    
+    <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.1.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.1.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Formatters.Json" Version="2.1.2" />        
+    <PackageReference Include="Microsoft.AspNetCore.Server.HttpSys" Version="2.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="2.1.1" />
+        
     <PackageReference Include="Microsoft.AspNetCore.Hosting.WindowsServices" Version="2.1.1" />
     <PackageReference Include="prometheus-net" Version="2.1.2" />
     <PackageReference Include="prometheus-net.AspNetCore" Version="2.1.2" />
