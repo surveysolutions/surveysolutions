@@ -1,5 +1,4 @@
 using Moq;
-using WB.Core.SharedKernels.SurveySolutions;
 
 namespace WB.Tests.Unit.Designer
 {
@@ -13,14 +12,6 @@ namespace WB.Tests.Unit.Designer
             var mock = new Mock<TInterface>();
             mock.SetReturnsDefault(value);
             return mock.Object;
-        }
-    }
-
-    internal class Stub
-    {
-        public static TestInMemoryWriter<TEntity> ReadSideRepository<TEntity>() where TEntity : class, IReadSideRepositoryEntity
-        {
-            return new TestInMemoryWriter<TEntity>();
         }
     }
 }
