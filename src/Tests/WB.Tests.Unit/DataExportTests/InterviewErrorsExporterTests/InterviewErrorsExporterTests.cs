@@ -63,12 +63,13 @@ namespace WB.Tests.Unit.DataExportTests.InterviewErrorsExporterTests
             var export = exporter.Export(
                 Create.Entity.QuestionnaireExportStructure(questionnaireDocumentWithOneChapter), 
                 exportedEntities,
-                "");
+                "",
+                "10-20-30-40");
 
             // Assert
             Assert.That(export, Has.Count.EqualTo(2));
-            Assert.That(export[0], Is.EqualTo(new[] { "numeric1", EntityType.Question.ToString(), interviewId.FormatGuid(), 1.ToString(), messageForQuestion }));
-            Assert.That(export[1], Is.EqualTo(new[] { "", EntityType.StaticText.ToString(), interviewId.FormatGuid(), 2.ToString(), message1ForStaticText }));
+            Assert.That(export[0], Is.EqualTo(new[] { "numeric1", EntityType.Question.ToString(), interviewId.FormatGuid(),"10-20-30-40", 1.ToString(), messageForQuestion }));
+            Assert.That(export[1], Is.EqualTo(new[] { "", EntityType.StaticText.ToString(), interviewId.FormatGuid(), "10-20-30-40", 2.ToString(), message1ForStaticText }));
         }
 
         [Test]
@@ -124,12 +125,13 @@ namespace WB.Tests.Unit.DataExportTests.InterviewErrorsExporterTests
             var export = exporter.Export(
                 Create.Entity.QuestionnaireExportStructure(questionnaireDocumentWithOneChapter),
                 exportedEntities,
-                "");
+                "",
+                "10-20-30-40");
 
             // Assert
             Assert.That(export, Has.Count.EqualTo(2));
-            Assert.That(export[0], Is.EqualTo(new[] { "numeric1", EntityType.Question.ToString(), interviewId.FormatGuid(), 1.ToString(), messageForQuestion }));
-            Assert.That(export[1], Is.EqualTo(new[] { "", EntityType.StaticText.ToString(), interviewId.FormatGuid(), 2.ToString(), message1ForStaticText }));
+            Assert.That(export[0], Is.EqualTo(new[] { "numeric1", EntityType.Question.ToString(), interviewId.FormatGuid(), "10-20-30-40", 1.ToString(), messageForQuestion }));
+            Assert.That(export[1], Is.EqualTo(new[] { "", EntityType.StaticText.ToString(), interviewId.FormatGuid(), "10-20-30-40", 2.ToString(), message1ForStaticText }));
         }
 
         [Test]
@@ -170,12 +172,13 @@ namespace WB.Tests.Unit.DataExportTests.InterviewErrorsExporterTests
             // Act
             var export = exporter.Export(Create.Entity.QuestionnaireExportStructure(questionnaireDocumentWithOneChapter),
                 exportedEntities,
-                "");
+                "",
+                "10-20-30-40");
 
             // Assert
             Assert.That(export, Has.Count.EqualTo(2));
-            Assert.That(export[0], Is.EqualTo(new[] { "", EntityType.StaticText.ToString(), "fixed_roster1", interviewId.FormatGuid(), "0", "", "1", staticTextInvalid }));
-            Assert.That(export[1], Is.EqualTo(new[] { "numeric1", EntityType.Question.ToString(), "fixed_roster_2", interviewId.FormatGuid(), "0", "1", "2", questionMsg }));
+            Assert.That(export[0], Is.EqualTo(new[] { "", EntityType.StaticText.ToString(), "fixed_roster1", interviewId.FormatGuid(), "10-20-30-40", "0", "", "1", staticTextInvalid }));
+            Assert.That(export[1], Is.EqualTo(new[] { "numeric1", EntityType.Question.ToString(), "fixed_roster_2", interviewId.FormatGuid(), "10-20-30-40", "0", "1", "2", questionMsg }));
         }
 
         private InterviewErrorsExporter CreateExporter(IInterviewFactory interviewFactory = null, 

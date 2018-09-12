@@ -123,7 +123,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
             foreach (var imageView in imageViews)
             {
-                if (uploadState.BinaryFilesNames.Contains(imageView.FileName)) continue;
+                if (uploadState.ImagesFilesNames.Contains(imageView.FileName)) continue;
 
                 cancellationToken.ThrowIfCancellationRequested();
                 var fileView = this.imagesStorage.GetById(imageView.FileId);
@@ -149,7 +149,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
             foreach (var audioFile in audioFiles)
             {
-                if (uploadState.BinaryFilesNames.Contains(audioFile.FileName)) continue;
+                if (uploadState.AudioFilesNames.Contains(audioFile.FileName)) continue;
 
                 cancellationToken.ThrowIfCancellationRequested();
                 var fileData = audioFile.GetData();
