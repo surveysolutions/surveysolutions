@@ -26,7 +26,7 @@ namespace WB.Services.Export.Host
                     .AddCommandLine(args)
                     .Build();
 
-                var hostBuilder = new HostBuilder()
+                var hostBuilder = new  HostBuilder()
                     .ConfigureHostConfiguration(c => c.AddConfiguration(config))
                     .ConfigureAppConfiguration(c => c.AddConfiguration(config))
 
