@@ -15,7 +15,7 @@ namespace WB.Core.Infrastructure
         {
             registry.Bind<IClock, DateTimeBasedClock>();
             registry.BindAsSingleton<IAggregateLock, AggregateLock>();
-            registry.Bind<ICommandService, CommandService>();
+            registry.BindInPerLifetimeScope<ICommandService, CommandService>();
             registry.Bind<IPlainAggregateRootRepository, PlainAggregateRootRepository>();
         }
 

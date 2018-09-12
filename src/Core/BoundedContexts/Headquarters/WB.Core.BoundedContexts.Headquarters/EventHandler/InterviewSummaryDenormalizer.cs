@@ -22,7 +22,7 @@ using WB.Core.SharedKernels.Questionnaire.Documents;
 namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 {
     public class InterviewSummaryDenormalizer :
-        BaseDenormalizer,
+        //BaseDenormalizer,
         ICompositeFunctionalPartEventHandler<InterviewSummary, IReadSideRepositoryWriter<InterviewSummary>>,
         IUpdateHandler<InterviewSummary, InterviewCreated>,
         IUpdateHandler<InterviewSummary, InterviewFromPreloadedDataCreated>,
@@ -431,6 +431,6 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
 
         public string Name => "Interview Summary Denormalizer";
         public object[] Readers => new object[0];
-        public override object[] Writers => new object[0];
+        //public override object[] Writers => new object[0];
     }
 }

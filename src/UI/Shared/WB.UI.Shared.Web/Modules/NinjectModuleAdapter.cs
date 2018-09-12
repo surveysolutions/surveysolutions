@@ -91,6 +91,13 @@ namespace WB.UI.Shared.Web.Modules
             this.Kernel.Bind<TInterface>().To<TImplementation>().WithConstructorArgument(argumentName, argumentValue);
         }
 
+        public void BindWithConstructorArgumentInPerLifetimeScope<TInterface, TImplementation>(string argumentName, object argumentValue) where TImplementation : TInterface
+        {
+            this.Kernel.Bind<TInterface>().To<TImplementation>()
+                .InRequestScope()
+                .WithConstructorArgument(argumentName, argumentValue);
+        }
+
         void IIocRegistry.BindAsSingleton<TInterface, TImplementation>()
         {
             this.Kernel.Bind<TInterface>().To<TImplementation>().InSingletonScope();

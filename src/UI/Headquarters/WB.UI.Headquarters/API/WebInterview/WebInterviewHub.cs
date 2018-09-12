@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Microsoft.AspNet.SignalR.Hubs;
+using SignalR.Extras.Autofac;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -15,14 +17,18 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Interview.Overview;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Models;
+using WB.Infrastructure.Native.Storage.Postgre;
 using WB.UI.Headquarters.API.WebInterview.Pipeline;
+using WB.UI.Shared.Enumerator.Services.Internals;
 
 namespace WB.UI.Headquarters.API.WebInterview
 {
     [HubName(@"interview")]
     [WebInterviewAuthorize]
-    public class WebInterviewHub : Enumerator.Native.WebInterview.WebInterview
+    public class WebInterviewHub : Enumerator.Native.WebInterview.WebInterview, ILifetimeHub
     {
+        private readonly IServiceLocator locator;
+        
         private readonly IInterviewBrokenPackagesService interviewBrokenPackagesService;
         private readonly IAuthorizedUser authorizedUser;
         private readonly IChangeStatusFactory changeStatusFactory;
@@ -30,32 +36,24 @@ namespace WB.UI.Headquarters.API.WebInterview
         private readonly IStatefullInterviewSearcher statefullInterviewSearcher;
         private readonly IInterviewOverviewService overviewService;
 
-        public WebInterviewHub(IStatefulInterviewRepository statefulInterviewRepository,
-            ICommandService commandService,
-            IQuestionnaireStorage questionnaireRepository,
-            IWebInterviewNotificationService webInterviewNotificationService,
-            IWebInterviewInterviewEntityFactory interviewEntityFactory,
-            IImageFileStorage imageFileStorage,
-            IInterviewBrokenPackagesService interviewBrokenPackagesService,
-            IAudioFileStorage audioFileStorage,
-            IAuthorizedUser authorizedUser,
-            IChangeStatusFactory changeStatusFactory,
-            IInterviewFactory interviewFactory,
-            IStatefullInterviewSearcher statefullInterviewSearcher,
-            IInterviewOverviewService overviewService) : base(statefulInterviewRepository,
-            commandService,
-            questionnaireRepository,
-            webInterviewNotificationService,
-            interviewEntityFactory,
-            imageFileStorage,
-            audioFileStorage)
+        //separate interview logic into interface implementation from hub logic and inject it 
+        public WebInterviewHub(
+            IServiceLocator locator) : base(
+            locator.GetInstance<IStatefulInterviewRepository>(),
+            locator.GetInstance<ICommandService>(),
+            locator.GetInstance<IQuestionnaireStorage>(),
+            locator.GetInstance<IWebInterviewNotificationService>(),
+            locator.GetInstance<IWebInterviewInterviewEntityFactory>(),
+            locator.GetInstance<IImageFileStorage>(),
+            locator.GetInstance<IAudioFileStorage>())
         {
-            this.interviewBrokenPackagesService = interviewBrokenPackagesService;
-            this.authorizedUser = authorizedUser;
-            this.changeStatusFactory = changeStatusFactory;
-            this.interviewFactory = interviewFactory;
-            this.statefullInterviewSearcher = statefullInterviewSearcher;
-            this.overviewService = overviewService;
+            this.locator = locator;
+            this.interviewBrokenPackagesService = locator.GetInstance<IInterviewBrokenPackagesService>(); ;
+            this.authorizedUser = locator.GetInstance <IAuthorizedUser>();
+            this.changeStatusFactory = locator.GetInstance<IChangeStatusFactory>();
+            this.interviewFactory = locator.GetInstance<IInterviewFactory>();
+            this.statefullInterviewSearcher = locator.GetInstance<IStatefullInterviewSearcher>();
+            this.overviewService = locator.GetInstance<IInterviewOverviewService>();
         }
 
         protected override bool IsReviewMode =>
@@ -185,6 +183,21 @@ namespace WB.UI.Headquarters.API.WebInterview
             var interviewDetails = base.GetInterviewDetails();
             interviewDetails.DoesBrokenPackageExist = this.interviewBrokenPackagesService.IsNeedShowBrokenPackageNotificationForInterview(Guid.Parse(this.CallerInterviewId));
             return interviewDetails;
+        }
+        
+        public event EventHandler OnDisposing;
+
+        protected override void Dispose(bool disposing)
+        {
+            var uow = locator.GetInstance<IUnitOfWork>();
+            uow.AcceptChanges();
+
+            base.Dispose(disposing);
+            if (disposing)
+            {
+                var handler = OnDisposing;
+                handler?.Invoke(this, EventArgs.Empty);
+            }
         }
     }
 }

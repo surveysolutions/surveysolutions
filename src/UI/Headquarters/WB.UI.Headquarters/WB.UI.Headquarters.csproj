@@ -239,6 +239,9 @@
     <Reference Include="Remotion.Linq.EagerFetching, Version=2.2.0.0, Culture=neutral, PublicKeyToken=fee00910d6e5f53b, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Remotion.Linq.EagerFetching.2.2.0\lib\net45\Remotion.Linq.EagerFetching.dll</HintPath>
     </Reference>
+    <Reference Include="SignalR.Extras.Autofac, Version=1.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\SignalR.Extras.Autofac.1.2.0\lib\net45\SignalR.Extras.Autofac.dll</HintPath>
+    </Reference>
     <Reference Include="StackExchange.Exceptional, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\StackExchange.Exceptional.2.0.0-alpha3-00183\lib\net451\StackExchange.Exceptional.dll</HintPath>
     </Reference>
@@ -939,6 +942,7 @@
     </Content>
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <EmbeddedResource Include="Migrations\ReadSide\M001-100\interview_update.sql" />
+    <Content Include="readme.txt" />
     <Content Include="Scripts\bloodhound.js" />
     <Content Include="Scripts\bootbox.js" />
     <Content Include="Scripts\bootbox.min.js" />

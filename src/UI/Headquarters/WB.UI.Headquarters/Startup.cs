@@ -31,6 +31,7 @@ using NConfig;
 using NLog;
 using Owin;
 using Quartz;
+using SignalR.Extras.Autofac;
 using StackExchange.Exceptional;
 using StackExchange.Exceptional.Stores;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
@@ -101,6 +102,8 @@ namespace WB.UI.Headquarters
                 .RegisterType<AutofacServiceLocatorAdapter>()
                 .As<IServiceLocator>()
                 .InstancePerLifetimeScope();
+
+            autofacKernel.ContainerBuilder.RegisterLifetimeHubManager();
 
             //no scope involved activity should be used
             autofacKernel.Init().Wait();

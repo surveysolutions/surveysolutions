@@ -24,6 +24,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
             this(
 
                 //resolve from context to preserve scope
+                //create new scope instead
             ServiceLocator.Current.GetInstance<IWebInterviewNotificationService>(),
             ServiceLocator.Current.GetInstance<IWebInterviewAllowService>(),
             ServiceLocator.Current.GetInstance<IReviewAllowedService>(),

@@ -80,7 +80,7 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
                 return;
 
             var functionalHandlers =
-               this.registredHandlers.Values.Where(h => h.Handler.IsAssignableFrom(typeof(IFunctionalEventHandler))).ToList();
+               this.registredHandlers.Values.Where(h => typeof(IFunctionalEventHandler).IsAssignableFrom(h.Handler)).ToList();
 
             var oldStyleHandlers =
                this.registredHandlers.Values.Except(functionalHandlers).ToList();
