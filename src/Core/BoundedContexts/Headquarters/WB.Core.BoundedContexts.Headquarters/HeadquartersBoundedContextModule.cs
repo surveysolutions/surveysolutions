@@ -204,6 +204,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IMapBrowseViewFactory, MapBrowseViewFactory>();
             registry.Bind<IOldschoolChartStatisticsDataProvider, OldschoolChartStatisticsDataProvider>();
             registry.Bind<IInterviewDiagnosticsFactory, InterviewDiagnosticsFactory>();
+            registry.Bind<IInterviewsToExportViewFactory, InterviewsToExportViewFactory>();
 
             registry.Bind<ITeamsAndStatusesReport, TeamsAndStatusesReport>();
             registry.Bind<ISurveysAndStatusesReport, SurveysAndStatusesReport>();

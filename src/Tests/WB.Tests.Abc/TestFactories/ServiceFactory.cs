@@ -68,6 +68,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.CommandBus.Implementation;
+using WB.Core.Infrastructure.DenormalizerStorage;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.EventBus.Lite.Implementation;
@@ -981,6 +982,13 @@ namespace WB.Tests.Abc.TestFactories
             };
 
             return step;
+        }
+
+        public InterviewsToExportViewFactory InterviewsToExportViewFactory(
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries)
+        {
+            return new InterviewsToExportViewFactory(interviewSummaries ??
+                                                     new InMemoryReadSideRepositoryAccessor<InterviewSummary>());
         }
     }
 

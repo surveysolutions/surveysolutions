@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using Ninject;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.Export;
@@ -132,6 +133,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                              $"Took {exportWatch.Elapsed:c} to export {interviewIdsToExport.Count} interviews");
         }
 
+        [Obsolete("Should be removed when export code is moved to windows service")]
         public IEnumerable<InterviewToExport> GetInterviewsToExport(QuestionnaireIdentity questionnaireIdentity,
             InterviewStatus? status, CancellationToken cancellationToken, DateTime? fromDate, DateTime? toDate)
         {
