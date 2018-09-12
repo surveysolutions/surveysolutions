@@ -13,9 +13,9 @@
     <VersionPrefix Condition="'$(VersionPrefix)' == ''">18.10.0-development-$(COMPUTERNAME)</VersionPrefix>
   </PropertyGroup>
 
-  <ItemGroup>
-     <!--<PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.4" />-->     
-    
+  <ItemGroup>  
+    <PackageReference Include="Hangfire.Core" Version="1.6.20" />
+    <PackageReference Include="Hangfire.PostgreSql" Version="1.4.8.2" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.1.2" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Formatters.Json" Version="2.1.2" />        
@@ -23,6 +23,7 @@
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="2.1.1" />
         
     <PackageReference Include="Microsoft.AspNetCore.Hosting.WindowsServices" Version="2.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="2.1.1" />
     <PackageReference Include="prometheus-net" Version="2.1.2" />
     <PackageReference Include="prometheus-net.AspNetCore" Version="2.1.2" />
   </ItemGroup>
