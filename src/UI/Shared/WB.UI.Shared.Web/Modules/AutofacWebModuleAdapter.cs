@@ -66,6 +66,12 @@ namespace WB.UI.Shared.Web.Modules
                 .WithParameter(argumentName, argumentValue);
         }
 
+        public void BindWithConstructorArgumentInPerLifetimeScope<TInterface, TImplementation>(string argumentName, object argumentValue) where TImplementation : TInterface
+        {
+            containerBuilder.RegisterType<TImplementation>().As<TInterface>()
+                .WithParameter(argumentName, argumentValue).InstancePerLifetimeScope();
+        }
+
         public void BindGeneric(Type implemenation)
         {
             containerBuilder.RegisterGeneric(implemenation);

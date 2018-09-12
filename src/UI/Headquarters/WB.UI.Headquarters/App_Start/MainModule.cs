@@ -106,8 +106,10 @@ namespace WB.UI.Headquarters
 
             registry.Bind<IEventSourcedAggregateRootRepository, EventSourcedAggregateRootRepositoryWithWebCache>();
             registry.Bind<IAggregateRootCacheCleaner, EventSourcedAggregateRootRepositoryWithWebCache>();
-
-            registry.BindWithConstructorArgument<ILiteEventBus, NcqrCompatibleEventDispatcher>(
+            
+            //could be expensive
+            //rethink registration
+            registry.BindWithConstructorArgumentInPerLifetimeScope<ILiteEventBus, NcqrCompatibleEventDispatcher>(
                 "eventBusSettings",
                 settingsProvider.GetSection<EventBusConfigSection>("eventBus").GetSettings());
         }
@@ -123,7 +125,7 @@ namespace WB.UI.Headquarters
             serviceLocator.GetInstance<PauseResumeJobScheduler>().Configure();
             serviceLocator.GetInstance<UpgradeAssignmentJobScheduler>().Configure();
 
-            serviceLocator.GetInstance<IScheduler>().Start();
+            //serviceLocator.GetInstance<IScheduler>().Start();
 
             InitMetrics();
             MetricsService.Start(serviceLocator);

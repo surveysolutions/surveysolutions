@@ -61,6 +61,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers.Impl
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.InterviewerAuditLog;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services.Internal;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
@@ -194,7 +195,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IAllUsersAndQuestionnairesFactory, AllUsersAndQuestionnairesFactory>();
             registry.Bind<IQuestionnairePreloadingDataViewFactory, QuestionnairePreloadingDataViewFactory>();
             registry.Bind<ITeamViewFactory, TeamViewFactory>();
-            registry.BindToMethod<IUserViewFactory>(context => new UserViewFactory());
+            registry.BindToMethod<IUserViewFactory>(context => new UserViewFactory(context.Resolve<IUserRepository>()));
             registry.Bind<ITeamUsersAndQuestionnairesFactory, TeamUsersAndQuestionnairesFactory>();
             registry.Bind<IInterviewFactory, InterviewFactory>();
             registry.Bind<IInterviewSummaryViewFactory, InterviewSummaryViewFactory>();
