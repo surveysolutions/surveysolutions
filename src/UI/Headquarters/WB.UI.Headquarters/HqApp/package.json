@@ -16,7 +16,7 @@
     "axios": "^0.18.0",
     "bootbox": "^4.4.0",
     "bootstrap": "^3.3.7",
-    "bootstrap-select": "^1.12.4",
+    "bootstrap-select": "1.12.4",
     "datatables.net": "^1.10.16",
     "datatables.net-select": "^1.2.5",
     "es6-promise": "^4.2.2",
@@ -113,6 +113,8 @@
       "**/tests/unit/**/*.spec.(js|jsx|ts|tsx)|**/__tests__/*.(js|jsx|ts|tsx)"
     ],
     "testURL": "http://localhost/",
-    "testPathIgnorePatterns": ["/locale/\/.resources/"]
+    "testPathIgnorePatterns": [
+      "/locale//.resources/"
+    ]
   }
 }

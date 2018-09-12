@@ -59,21 +59,9 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
         [HttpPost]
         public override void PostAudio(PostFileRequest request) => base.PostAudio(request);
 
-        [WriteToSyncLog(SynchronizationLogType.CheckIsPackageDuplicated)]
         [HttpPost]
+        [WriteToSyncLog(SynchronizationLogType.CheckIsPackageDuplicated)]
         public InterviewUploadState GetInterviewUploadState(Guid id, [FromBody] EventStreamSignatureTag eventStreamSignatureTag)
-        {
-            var doesEventsExists = this.packagesService.IsPackageDuplicated(eventStreamSignatureTag);
-
-            var binaries = this.imageFileStorage.GetBinaryFilesForInterview(id)
-                .Union(this.audioFileStorage.GetBinaryFilesForInterview(id))
-                .Select(bf => bf.FileName);
-
-            return new InterviewUploadState
-            {
-                IsEventsUploaded = doesEventsExists,
-                BinaryFilesNames = binaries.ToHashSet()
-            };
-        }
+            => base.GetInterviewUploadStateImpl(id, eventStreamSignatureTag);
     }
 }
