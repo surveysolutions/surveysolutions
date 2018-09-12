@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
-namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
+namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
 {
     public struct InterviewToExport
     {
