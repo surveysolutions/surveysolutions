@@ -11,6 +11,7 @@ using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.API.Export
 {
+    [RoutePrefix("api/export/v1")]
     public class EventsApiController : ApiController
     {
         private readonly IHeadquartersEventStore headquartersEventStore;
@@ -20,9 +21,10 @@ namespace WB.UI.Headquarters.API.Export
             this.headquartersEventStore = headquartersEventStore;
         }
 
-        [Route("api/v1/interview/events", Name = "EventsFeed")]
+        [Route("interview/events", Name = "EventsFeed")]
         [ServiceApiKeyAuthorization]
         [HttpGet]
+        [ApiNoCache]
         public async Task<HttpResponseMessage> Get(int globalSequence = 0, int pageSize = 500)
         {
             var events = await headquartersEventStore.GetEventsFeedAsync(globalSequence, pageSize);
@@ -36,7 +38,7 @@ namespace WB.UI.Headquarters.API.Export
             return Request.CreateResponse(eventsFeedPage);
         }
 
-        [Route("api/v1/interview/events/{id:guid}", Name = "InterviewEventsFeed")]
+        [Route("interview/events/{id:guid}", Name = "InterviewEventsFeed")]
         [ServiceApiKeyAuthorization]
         [HttpGet]
         [ApiNoCache]
