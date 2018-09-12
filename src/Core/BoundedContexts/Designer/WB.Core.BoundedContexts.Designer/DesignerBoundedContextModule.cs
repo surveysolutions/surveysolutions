@@ -62,6 +62,8 @@ namespace WB.Core.BoundedContexts.Designer
             registry.Bind<ISubstitutionService, SubstitutionService>();
 
             registry.Bind<IPlainAggregateRootRepository<User>, UserRepository>();
+            registry.Bind<IPatchGenerator, JsonPatchService>();
+            registry.Bind<IPatchApplier, JsonPatchService>();
             registry.Bind<IPlainAggregateRootRepository<Questionnaire>, QuestionnaireRepository>();
             registry.BindToMethod<IFindReplaceService>(c => new FindReplaceService(c.Get<IPlainAggregateRootRepository<Questionnaire>>()));
 
@@ -82,6 +84,7 @@ namespace WB.Core.BoundedContexts.Designer
 
             registry.BindAsSingleton<IStringCompressor, JsonCompressor>();
             registry.Bind<ISerializer, NewtonJsonSerializer>();
+            registry.BindInIsolatedThreadScopeOrRequestScopeOrThreadScope<OriginalQuestionnaireStorage>();
 
             registry.Unbind<IExpressionProcessor>();
             registry.BindAsSingleton<IExpressionProcessor, RoslynExpressionProcessor>();

@@ -11,17 +11,19 @@ using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Attachments;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Translations;
+using WB.Core.BoundedContexts.Designer.Implementation.Services;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.QuestionnairePostProcessors;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.Enumerator.Implementation.Utils;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Infrastructure.Native.Storage;
 using WB.Tests.Abc;
-
 
 namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
 {
@@ -29,6 +31,26 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
     [TestFixture]
     public class QuestionnaireHistoryPostProcessorTests
     {
+        private IEntitySerializer<QuestionnaireDocument> oldEntitySerializer;
+        private IPatchGenerator oldPatchGenerator;
+
+        [OneTimeSetUp]
+        public void TestFixtureSetup()
+        {
+            oldEntitySerializer = ServiceLocator.Current.GetInstance<IEntitySerializer<QuestionnaireDocument>>();
+            Setup.InstanceToMockedServiceLocator<IEntitySerializer<QuestionnaireDocument>>(new EntitySerializer<QuestionnaireDocument>());
+
+            oldPatchGenerator = ServiceLocator.Current.GetInstance<IPatchGenerator>();
+            Setup.InstanceToMockedServiceLocator<IPatchGenerator>(Create.PatchGenerator());
+        }
+
+        [OneTimeTearDown]
+        public void TestFixtureTearDown()
+        {
+            Setup.InstanceToMockedServiceLocator<IEntitySerializer<QuestionnaireDocument>>(oldEntitySerializer);
+            Setup.InstanceToMockedServiceLocator<IPatchGenerator>(oldPatchGenerator);
+        }
+
         #region Gherkin
 
         private static GherkinGiven Given() => new GherkinGiven();
@@ -111,9 +133,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
 
                 return this.Fluent;
             }
-            public FluentSyntax QuestionnireHistoryVersionsService(IQuestionnireHistoryVersionsService historyVersionsService)
+            public FluentSyntax QuestionnireHistoryVersionsService(IQuestionnaireHistoryVersionsService historyVersionsService)
             {
-                Setup.InstanceToMockedServiceLocator<IQuestionnireHistoryVersionsService>(historyVersionsService);
+                Setup.InstanceToMockedServiceLocator<IQuestionnaireHistoryVersionsService>(historyVersionsService);
                 return this.Fluent;
             }
 
@@ -188,7 +210,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         #endregion
 
         [Test]
-        public void When_CloneQuestionnaire_Then_new_history_item_should_be_added_with_spacified_parameters()
+        public void When_CloneQuestionnaire_Then_new_history_item_should_be_added_with_specified_parameters()
         {
             // arrange
             Guid questionnaireId = Id.g1;
@@ -207,10 +229,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             var questionnaireStateTackerStorage = new InMemoryKeyValueStorage<QuestionnaireStateTracker>();
             Setup.InstanceToMockedServiceLocator<IPlainKeyValueStorage<QuestionnaireStateTracker>>(questionnaireStateTackerStorage);
 
-            Setup.InstanceToMockedServiceLocator<IQuestionnireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
+            Setup.InstanceToMockedServiceLocator<IQuestionnaireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService(historyStorage));
             Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
-
-            SetupEntitySerializer();
 
             var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId, userId: questionnaireOwner);
             var questionnaire = Create.Questionnaire();
@@ -241,7 +261,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         }
 
         [Test]
-        public void When_CreateQuestionnaire_Then_new_history_item_should_be_added_with_spacified_parameters()
+        public void When_CreateQuestionnaire_Then_new_history_item_should_be_added_with_specified_parameters()
         {
             // arrange
             Guid questionnaireId = Id.g1;
@@ -260,10 +280,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             var questionnaireStateTackerStorage = new InMemoryKeyValueStorage<QuestionnaireStateTracker>();
             Setup.InstanceToMockedServiceLocator<IPlainKeyValueStorage<QuestionnaireStateTracker>>(questionnaireStateTackerStorage);
 
-            Setup.InstanceToMockedServiceLocator<IQuestionnireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
+            Setup.InstanceToMockedServiceLocator<IQuestionnaireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService(historyStorage));
             Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
-
-            SetupEntitySerializer();
 
             var questionnaireDocument = new QuestionnaireDocument()
             {
@@ -304,7 +322,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         }
       
         [Test]
-        public void When_ImportQuestionnaire_Then_new_history_item_should_be_added_with_spacified_parameters()
+        public void When_ImportQuestionnaire_Then_new_history_item_should_be_added_with_specified_parameters()
         {
             Guid questionnaireId = Id.g1;
             Guid questionnaireOwner = Id.g3;
@@ -320,7 +338,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
                 And.QuestionnaireChangeRecordStorage(out historyStorage).
                 And.EntitySerializer<QuestionnaireDocument>().
                 And.AccountDocumentStorage().
-                And.QuestionnireHistoryVersionsService(Create.QuestionnireHistoryVersionsService()).
+                And.QuestionnireHistoryVersionsService(Create.QuestionnireHistoryVersionsService(historyStorage)).
                 And.AccountDocument(questionnaireOwner, ownerName).
                 And.QuestionnaireStateTrackerStorage().
                 And.QuestionnaireDocument(out questionnaireDocument, id: questionnaireId, title: questionnnaireTitle, userId: questionnaireOwner).
@@ -351,7 +369,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         }
 
         [Test]
-        public void When_DeleteQuestionnaire_Then_new_history_item_should_be_added_with_spacified_parameters()
+        public void When_DeleteQuestionnaire_Then_new_history_item_should_be_added_with_specified_parameters()
         {
             // arrange
             Guid questionnaireId = Id.g1;
@@ -373,15 +391,16 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
                 new QuestionnaireStateTracker
                 {
                     CreatedBy = questionnaireOwnerId,
-                    GroupsState = new Dictionary<Guid, string>() {{questionnaireId, questionnaireTitle}}
+                    GroupsState = new Dictionary<Guid, string> {
+                    {
+                        questionnaireId, questionnaireTitle
+                    }}
                 },
                 questionnaireId.FormatGuid());
             Setup.InstanceToMockedServiceLocator<IPlainKeyValueStorage<QuestionnaireStateTracker>>(questionnaireStateTackerStorage);
 
-            Setup.InstanceToMockedServiceLocator<IQuestionnireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
+            Setup.InstanceToMockedServiceLocator<IQuestionnaireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService(historyStorage));
             Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
-
-            SetupEntitySerializer();
 
             var questionnaire = Create.Questionnaire();
             questionnaire.Initialize(questionnaireId, Create.QuestionnaireDocumentWithOneChapter(), Enumerable.Empty<SharedPerson>());
@@ -406,11 +425,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(questionnaireHistoryItem.TargetItemType, Is.EqualTo(QuestionnaireItemType.Questionnaire));
             Assert.That(questionnaireHistoryItem.TargetItemId, Is.EqualTo(questionnaireId));
             Assert.That(questionnaireHistoryItem.TargetItemTitle, Is.EqualTo(questionnaireTitle));
-            Assert.That(questionnaireHistoryItem.ResultingQuestionnaireDocument, Is.Null);
+            Assert.That(questionnaireHistoryItem.Patch, Is.Null);
         }
 
         [Test]
-        public void When_DeleteAttachment_Then_new_history_item_should_be_added_with_spacified_parameters()
+        public void When_DeleteAttachment_Then_new_history_item_should_be_added_with_specified_parameters()
         {
             // arrange
             Guid questionnaireId = Id.g1;
@@ -437,10 +456,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
                 questionnaireId.FormatGuid());
             Setup.InstanceToMockedServiceLocator<IPlainKeyValueStorage<QuestionnaireStateTracker>>(questionnaireStateTackerStorage);
 
-            Setup.InstanceToMockedServiceLocator<IQuestionnireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
+            Setup.InstanceToMockedServiceLocator<IQuestionnaireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService(historyStorage));
             Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
-
-            SetupEntitySerializer();
 
             var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter();
             var questionnaire = Create.Questionnaire(responsibleId, questionnaireDocument);
@@ -470,7 +487,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         }
 
         [Test]
-        public void When_UpdateQuestionnaire_Then_new_history_item_should_be_added_with_spacified_parameters()
+        public void When_UpdateQuestionnaire_Then_new_history_item_should_be_added_with_specified_parameters()
         {
             // arrange
             Guid questionnaireId = Id.g1;
@@ -490,16 +507,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
                 new QuestionnaireStateTracker
                 {
                     CreatedBy = responsibleId,
-                    GroupsState = new Dictionary<Guid, string>() { { questionnaireId, "title" } },
+                    GroupsState = new Dictionary<Guid, string> { { questionnaireId, "title" } },
                 },
                 questionnaireId.FormatGuid());
             Setup.InstanceToMockedServiceLocator<IPlainKeyValueStorage<QuestionnaireStateTracker>>(questionnaireStateTackerStorage);
-            Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
 
-            Setup.InstanceToMockedServiceLocator<IQuestionnireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
-            Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
-
-            SetupEntitySerializer();
+            Setup.InstanceToMockedServiceLocator<IQuestionnaireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService(historyStorage));
 
             var questionnaire = Create.Questionnaire();
             var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter();
@@ -529,7 +542,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         }
 
         [Test]
-        public void When_AddSharedPersonToQuestionnaire_Then_new_history_item_should_be_added_with_spacified_parameters()
+        public void When_AddSharedPersonToQuestionnaire_Then_new_history_item_should_be_added_with_specified_parameters()
         {
             // arrange
             Guid questionnaireId = Id.g1;
@@ -547,10 +560,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             usersStorage.Store(new User { ProviderUserKey = sharedWithId, UserName = sharedWithUserName, Email = sharedWithUserName + "email"}, sharedWithId.FormatGuid());
             Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<User>>(usersStorage);
 
-            Setup.InstanceToMockedServiceLocator<IQuestionnireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
+            Setup.InstanceToMockedServiceLocator<IQuestionnaireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService(historyStorage));
             Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
-
-            SetupEntitySerializer();
 
             var questionnaire = Create.Questionnaire();
             var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter();
@@ -577,11 +588,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(questionnaireHistoryItem.TargetItemType, Is.EqualTo(QuestionnaireItemType.Person));
             Assert.That(questionnaireHistoryItem.TargetItemId, Is.EqualTo(sharedWithId));
             Assert.That(questionnaireHistoryItem.TargetItemTitle, Is.EqualTo(sharedWithUserName + "email"));
-            Assert.That(questionnaireHistoryItem.ResultingQuestionnaireDocument, Is.Null);
+            Assert.That(questionnaireHistoryItem.Patch, Is.Null);
         }
 
         [Test]
-        public void When_RemoveSharedPersonFromQuestionnaire_Then_new_history_item_should_be_added_with_spacified_parameters()
+        public void When_RemoveSharedPersonFromQuestionnaire_Then_new_history_item_should_be_added_with_specified_parameters()
         {
             // arrange
             Guid questionnaireId = Id.g1;
@@ -599,10 +610,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             usersStorage.Store(new User { ProviderUserKey = sharedWithId, UserName = sharedWithUserName, Email = sharedWithUserName + "email" }, sharedWithId.FormatGuid());
             Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<User>>(usersStorage);
 
-            Setup.InstanceToMockedServiceLocator<IQuestionnireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
+            Setup.InstanceToMockedServiceLocator<IQuestionnaireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService(historyStorage));
             Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
-
-            SetupEntitySerializer();
 
             var questionnaire = Create.Questionnaire();
             var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter();
@@ -628,11 +637,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(questionnaireHistoryItem.TargetItemType, Is.EqualTo(QuestionnaireItemType.Person));
             Assert.That(questionnaireHistoryItem.TargetItemId, Is.EqualTo(sharedWithId));
             Assert.That(questionnaireHistoryItem.TargetItemTitle, Is.EqualTo(sharedWithUserName + "email"));
-            Assert.That(questionnaireHistoryItem.ResultingQuestionnaireDocument, Is.Null);
+            Assert.That(questionnaireHistoryItem.Patch, Is.Null);
         }
 
         [Test]
-        public void When_UpdateAttachment_Then_new_history_item_should_be_added_with_spacified_parameters()
+        public void When_UpdateAttachment_Then_new_history_item_should_be_added_with_specified_parameters()
         {
             // arrange
             Guid questionnaireId = Id.g1;
@@ -649,10 +658,9 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             usersStorage.Store(new User { ProviderUserKey = responsibleId, UserName = responsibleUserName }, responsibleId.FormatGuid());
             Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<User>>(usersStorage);
 
-            Setup.InstanceToMockedServiceLocator<IQuestionnireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
+            Setup.InstanceToMockedServiceLocator<IQuestionnaireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService(historyStorage));
             Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
 
-            SetupEntitySerializer();
             var command = new AddOrUpdateAttachment(questionnaireId, attachmentId, responsibleId, attachmentName, "", null);
 
             var questionnaire = Create.Questionnaire();
@@ -682,7 +690,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         }
 
         [Test]
-        public void When_UpdateStaticText_Then_new_history_item_should_be_added_with_spacified_parameters()
+        public void When_UpdateStaticText_Then_new_history_item_should_be_added_with_specified_parameters()
         {
             // arrange
             Guid questionnaireId = Id.g1;
@@ -699,10 +707,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             usersStorage.Store(new User { ProviderUserKey = responsibleId, UserName = responsibleUserName }, responsibleId.FormatGuid());
             Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<User>>(usersStorage);
 
-            Setup.InstanceToMockedServiceLocator<IQuestionnireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
+            Setup.InstanceToMockedServiceLocator<IQuestionnaireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService(historyStorage));
             Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
-
-            SetupEntitySerializer();
 
             var questionnaire = Create.Questionnaire();
             var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter();
@@ -733,7 +739,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
 
         
         [Test]
-        public void When_UpdateVariable_Then_new_history_item_should_be_added_with_spacified_parameters()
+        public void When_UpdateVariable_Then_new_history_item_should_be_added_with_specified_parameters()
         {
             // arrange
             Guid questionnaireId = Id.g1;
@@ -750,10 +756,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             usersStorage.Store(new User { ProviderUserKey = responsibleId, UserName = responsibleUserName }, responsibleId.FormatGuid());
             Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<User>>(usersStorage);
 
-            Setup.InstanceToMockedServiceLocator<IQuestionnireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
+            Setup.InstanceToMockedServiceLocator<IQuestionnaireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService(historyStorage));
             Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
-
-            SetupEntitySerializer();
 
             var questionnaire = Create.Questionnaire();
             var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter();
@@ -783,7 +787,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         }
 
         [Test]
-        public void When_UpdateGroup_Then_new_history_item_should_be_added_with_spacified_parameters()
+        public void When_UpdateGroup_Then_new_history_item_should_be_added_with_specified_parameters()
         {
             // arrange
             Guid questionnaireId = Id.g1;
@@ -800,10 +804,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             usersStorage.Store(new User { ProviderUserKey = responsibleId, UserName = responsibleUserName }, responsibleId.FormatGuid());
             Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<User>>(usersStorage);
 
-            Setup.InstanceToMockedServiceLocator<IQuestionnireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
+            Setup.InstanceToMockedServiceLocator<IQuestionnaireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService(historyStorage));
             Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
-
-            SetupEntitySerializer();
 
             var questionnaireStateTackerStorage = new InMemoryKeyValueStorage<QuestionnaireStateTracker>();
             questionnaireStateTackerStorage.Store(
@@ -843,7 +845,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         }
 
         [Test]
-        public void When_UpdateGroup_and_group_became_a_roster_Then_new_history_item_should_be_added_with_spacified_parameters()
+        public void When_UpdateGroup_and_group_became_a_roster_Then_new_history_item_should_be_added_with_specified_parameters()
         {
             // arrange
             Guid questionnaireId = Id.g1;
@@ -860,10 +862,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             usersStorage.Store(new User { ProviderUserKey = responsibleId, UserName = responsibleUserName }, responsibleId.FormatGuid());
             Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<User>>(usersStorage);
 
-            Setup.InstanceToMockedServiceLocator<IQuestionnireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
-            Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
-
-            SetupEntitySerializer();
+            Setup.InstanceToMockedServiceLocator<IQuestionnaireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService(historyStorage));
 
             var questionnaireStateTackerStorage = new InMemoryKeyValueStorage<QuestionnaireStateTracker>();
             questionnaireStateTackerStorage.Store(
@@ -887,7 +886,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
 
             // assert
 
-            var allHistoryItems = historyStorage.Query(historyItems => historyItems.ToList());
+            var allHistoryItems = historyStorage.Query(historyItems => historyItems.OrderBy(x => x.Sequence).ToList());
 
             var updateGroupHistoryItem = allHistoryItems[0];
 
@@ -900,8 +899,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(updateGroupHistoryItem.TargetItemType, Is.EqualTo(QuestionnaireItemType.Section));
             Assert.That(updateGroupHistoryItem.TargetItemId, Is.EqualTo(rosterId));
             Assert.That(updateGroupHistoryItem.TargetItemTitle, Is.EqualTo(variable));
-            Assert.That(updateGroupHistoryItem.ResultingQuestionnaireDocument, Is.Not.Null);
-
+            Assert.That(updateGroupHistoryItem.Patch, Is.Null);
 
             var groupBecameARosterHistoryItem = allHistoryItems[1];
 
@@ -914,7 +912,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(groupBecameARosterHistoryItem.TargetItemType, Is.EqualTo(QuestionnaireItemType.Section));
             Assert.That(groupBecameARosterHistoryItem.TargetItemId, Is.EqualTo(rosterId));
             Assert.That(groupBecameARosterHistoryItem.TargetItemTitle, Is.EqualTo(variable));
-            Assert.That(groupBecameARosterHistoryItem.ResultingQuestionnaireDocument, Is.Not.Null);
+            Assert.That(groupBecameARosterHistoryItem.Patch, Is.Null);
 
             var updateRosterHistoryItem = allHistoryItems[2];
 
@@ -931,7 +929,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         }
 
         [Test]
-        public void When_UpdateRoster_and_roster_became_a_group_Then_new_history_item_should_be_added_with_spacified_parameters()
+        public void When_UpdateRoster_and_roster_became_a_group_Then_new_history_item_should_be_added_with_specified_parameters()
         {
             // arrange
             Guid questionnaireId = Id.g1;
@@ -948,10 +946,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             usersStorage.Store(new User { ProviderUserKey = responsibleId, UserName = responsibleUserName }, responsibleId.FormatGuid());
             Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<User>>(usersStorage);
 
-            Setup.InstanceToMockedServiceLocator<IQuestionnireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
+            Setup.InstanceToMockedServiceLocator<IQuestionnaireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService(historyStorage));
             Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
-
-            SetupEntitySerializer();
 
             var questionnaireStateTackerStorage = new InMemoryKeyValueStorage<QuestionnaireStateTracker>();
             questionnaireStateTackerStorage.Store(
@@ -987,8 +983,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(updateRosterHistoryItem.TargetItemType, Is.EqualTo(QuestionnaireItemType.Roster));
             Assert.That(updateRosterHistoryItem.TargetItemId, Is.EqualTo(groupId));
             Assert.That(updateRosterHistoryItem.TargetItemTitle, Is.EqualTo(variable));
-            Assert.That(updateRosterHistoryItem.ResultingQuestionnaireDocument, Is.Not.Null);
-
+            Assert.That(updateRosterHistoryItem.Patch, Is.Null);
 
             var rosterBecameAGroupHistoryItem = historyStorage.Query(
                 historyItems => historyItems.Last(historyItem =>
@@ -1035,10 +1030,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
                 questionnaireId.FormatGuid());
             Setup.InstanceToMockedServiceLocator<IPlainKeyValueStorage<QuestionnaireStateTracker>>(questionnaireStateTackerStorage);
 
-            Setup.InstanceToMockedServiceLocator<IQuestionnireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
+            Setup.InstanceToMockedServiceLocator<IQuestionnaireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService(historyStorage));
             Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
-
-            SetupEntitySerializer();
 
             var questionnaire = Create.Questionnaire();
             questionnaire.Initialize(questionnaireId, Create.QuestionnaireDocumentWithOneChapter(), Enumerable.Empty<SharedPerson>());
@@ -1094,10 +1087,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
                 questionnaireId.FormatGuid());
             Setup.InstanceToMockedServiceLocator<IPlainKeyValueStorage<QuestionnaireStateTracker>>(questionnaireStateTackerStorage);
 
-            Setup.InstanceToMockedServiceLocator<IQuestionnireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
+            Setup.InstanceToMockedServiceLocator<IQuestionnaireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService(historyStorage));
             Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
-
-            SetupEntitySerializer();
 
             var questionnaireDocument = new QuestionnaireDocument()
             {
@@ -1119,8 +1110,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             var pastAfterCommand = Create.Command.PasteAfter(questionnaireId, targetGroupId, groupId, questionnaireId, groupId, responsibleId);
             var historyPostProcessor = CreateHistoryPostProcessor();
 
-            //questionnaireStateTackerStorage
-
             // act
             historyPostProcessor.Process(questionnaire, pastAfterCommand);
 
@@ -1140,7 +1129,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
 
 
         [Test]
-        public void When_deletting_questionnire_after_rename()
+        public void When_deleting_questionnaire_after_rename()
         {
             // arrange
             Guid questionnaireId = Id.g1;
@@ -1163,9 +1152,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
                 },
                 questionnaireId.FormatGuid());
             Setup.InstanceToMockedServiceLocator<IPlainKeyValueStorage<QuestionnaireStateTracker>>(questionnaireStateTackerStorage);
-            Setup.InstanceToMockedServiceLocator<IQuestionnireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
+            Setup.InstanceToMockedServiceLocator<IQuestionnaireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService(historyStorage));
             Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
-            SetupEntitySerializer();
 
             var questionnaireDocument = Create.QuestionnaireDocument(questionnaireId);
             
@@ -1190,12 +1178,12 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(newHistoryItems[0].ActionType, Is.EqualTo(QuestionnaireActionType.Update));
             Assert.That(newHistoryItems[0].TargetItemType, Is.EqualTo(QuestionnaireItemType.Questionnaire));
             Assert.That(newHistoryItems[0].TargetItemTitle, Is.EqualTo("new title"));
-            Assert.That(newHistoryItems[0].ResultingQuestionnaireDocument, Is.Not.Null);
+            Assert.That(newHistoryItems[0].Patch, Is.Not.Null);
 
             Assert.That(newHistoryItems[1].ActionType, Is.EqualTo(QuestionnaireActionType.Delete));
             Assert.That(newHistoryItems[1].TargetItemType, Is.EqualTo(QuestionnaireItemType.Questionnaire));
             Assert.That(newHistoryItems[1].TargetItemTitle, Is.EqualTo("new title"));
-            Assert.That(newHistoryItems[1].ResultingQuestionnaireDocument, Is.Null);
+            Assert.That(newHistoryItems[1].Patch, Is.Null);
         }
 
         [Test]
@@ -1225,10 +1213,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
                 questionnaireId.FormatGuid());
             Setup.InstanceToMockedServiceLocator<IPlainKeyValueStorage<QuestionnaireStateTracker>>(questionnaireStateTackerStorage);
 
-            Setup.InstanceToMockedServiceLocator<IQuestionnireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
+            Setup.InstanceToMockedServiceLocator<IQuestionnaireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService(historyStorage));
             Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
-
-            SetupEntitySerializer();
 
             var questionnaire = Create.Questionnaire();
             questionnaire.Initialize(questionnaireId, Create.QuestionnaireDocumentWithOneChapter(), Enumerable.Empty<SharedPerson>());
@@ -1249,7 +1235,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
         }
 
         [Test]
-        public void When_amout_of_records_exceed_the_limit_Then_questionnaire_should_be_set_to_null_for_older_records()
+        public void When_amount_of_records_exceed_the_limit_Then_questionnaire_should_be_set_to_null_for_older_records()
         {
             // arrange
             Guid questionnaireId = Id.g1;
@@ -1261,38 +1247,48 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             AssemblyContext.SetupServiceLocator();
             var historyStorage = new TestPlainStorage<QuestionnaireChangeRecord>();
 
-            historyStorage.Store(
-                Create.QuestionnaireChangeRecord(
-                    questionnaireChangeRecordId: "0",
-                    questionnaireId: Guid.NewGuid().FormatGuid(),
-                    targetId: questionId,
-                    targetType: QuestionnaireItemType.Question,
-                    action: QuestionnaireActionType.Clone,
-                    resultingQuestionnaireDocument: "not target questionnaire",
-                    sequence: 0,
-                    reference: new[] { Create.QuestionnaireChangeReference() }), "0");
+            var oldJson = ServiceLocator.Current.GetInstance<IEntitySerializer<QuestionnaireDocument>>()
+                .Serialize(Create.QuestionnaireDocumentWithOneChapter());
+
+            var newJson = ServiceLocator.Current.GetInstance<IEntitySerializer<QuestionnaireDocument>>()
+                .Serialize(Create.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
+                {
+                    Create.TextQuestion()
+                }));
 
             historyStorage.Store(
                 Create.QuestionnaireChangeRecord(
-                    questionnaireChangeRecordId: "a",
+                    questionnaireChangeRecordId: Id.gA.FormatGuid(),
                     questionnaireId: questionnaireId.FormatGuid(),
                     targetId: questionId,
                     targetType: QuestionnaireItemType.Question,
                     action: QuestionnaireActionType.Clone,
-                    resultingQuestionnaireDocument: "questionnaire1",
+                    resultingQuestionnaireDocument: oldJson,
                     sequence: 0,
-                    reference: new[] { Create.QuestionnaireChangeReference() }), "a");
+                    reference: new[] { Create.QuestionnaireChangeReference() }), Id.gA.FormatGuid());
 
             historyStorage.Store(
                 Create.QuestionnaireChangeRecord(
-                    questionnaireChangeRecordId: "b",
+                    questionnaireChangeRecordId: Id.gB.FormatGuid(),
+                    questionnaireId: questionnaireId.FormatGuid(),
+                    targetId: questionId,
+                    targetType: QuestionnaireItemType.Question,
+                    action: QuestionnaireActionType.Clone,
+                    resultingQuestionnaireDocument: newJson,
+                    sequence: 1,
+                    reference: new[] { Create.QuestionnaireChangeReference() }), Id.gB.FormatGuid());
+
+            historyStorage.Store(
+                Create.QuestionnaireChangeRecord(
+                    questionnaireChangeRecordId: Id.gC.FormatGuid(),
                     questionnaireId: questionnaireId.FormatGuid(),
                     targetType: QuestionnaireItemType.Question,
                     action: QuestionnaireActionType.Update,
-                    resultingQuestionnaireDocument: "questionnaire2",
-                    sequence: 1,
+                    resultingQuestionnaireDocument: null,
+                    diffWithPreviousVersion: "patch",
+                    sequence: 2,
                     targetId: questionId),
-                "b");
+                Id.gC.FormatGuid());
             Setup.InstanceToMockedServiceLocator<IPlainStorageAccessor<QuestionnaireChangeRecord>>(historyStorage);
 
             var tracker = new QuestionnaireStateTracker
@@ -1306,10 +1302,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             questionnaireStateTackerStorage.Store(tracker, questionnaireId.FormatGuid());
             Setup.InstanceToMockedServiceLocator<IPlainKeyValueStorage<QuestionnaireStateTracker>>(questionnaireStateTackerStorage);
 
-            Setup.InstanceToMockedServiceLocator<IQuestionnireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
-            Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(2));
-
-            SetupEntitySerializer();
+            Setup.InstanceToMockedServiceLocator<IQuestionnaireHistoryVersionsService>(
+                Create.QuestionnireHistoryVersionsService(historyStorage, questionnaireHistorySettings: new QuestionnaireHistorySettings(2)));
 
             var questionnaire = Create.Questionnaire();
             questionnaire.Initialize(questionnaireId, Create.QuestionnaireDocumentWithOneChapter(), Enumerable.Empty<SharedPerson>());
@@ -1325,10 +1319,17 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             var newHistoryItems = historyStorage.Query(historyItems => historyItems.ToArray());
 
             Assert.That(newHistoryItems.Length, Is.EqualTo(4));
-            Assert.That(newHistoryItems[0].ResultingQuestionnaireDocument, Is.Not.Null);
+            Assert.That(newHistoryItems[0].ResultingQuestionnaireDocument, Is.Null);
+            Assert.That(newHistoryItems[0].Patch, Is.Null);
+
             Assert.That(newHistoryItems[1].ResultingQuestionnaireDocument, Is.Null);
-            Assert.That(newHistoryItems[2].ResultingQuestionnaireDocument, Is.Not.Null);
-            Assert.That(newHistoryItems[2].ResultingQuestionnaireDocument, Is.Not.Null);
+            Assert.That(newHistoryItems[1].Patch, Is.Null);
+
+            Assert.That(newHistoryItems[2].ResultingQuestionnaireDocument, Is.Null);
+            Assert.That(newHistoryItems[2].Patch, Is.Not.Null);
+
+            Assert.That(newHistoryItems[3].ResultingQuestionnaireDocument, Is.Not.Null);
+            Assert.That(newHistoryItems[3].Patch, Is.Null);
         }
 
         [Test]
@@ -1359,10 +1360,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Setup.InstanceToMockedServiceLocator<IPlainKeyValueStorage<QuestionnaireStateTracker>>(questionnaireStateTackerStorage);
             Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
 
-            Setup.InstanceToMockedServiceLocator<IQuestionnireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService());
+            Setup.InstanceToMockedServiceLocator<IQuestionnaireHistoryVersionsService>(Create.QuestionnireHistoryVersionsService(historyStorage));
             Setup.InstanceToMockedServiceLocator(new QuestionnaireHistorySettings(10));
-
-            SetupEntitySerializer();
 
             var questionnaire = Create.Questionnaire();
             var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter();
@@ -1395,12 +1394,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(questionnaireHistoryItem.TargetItemId, Is.EqualTo(questionnaireId));
             Assert.That(questionnaireHistoryItem.TargetItemTitle, Is.EqualTo("Mova"));
             Assert.That(questionnaireHistoryItem.ResultingQuestionnaireDocument, Is.Not.Null);
-        }
-
-
-        private void SetupEntitySerializer()
-        {
-            Setup.InstanceToMockedServiceLocator<IEntitySerializer<QuestionnaireDocument>>(new EntitySerializer<QuestionnaireDocument>());
         }
 
         private static HistoryPostProcessor CreateHistoryPostProcessor() => Create.HistoryPostProcessor();

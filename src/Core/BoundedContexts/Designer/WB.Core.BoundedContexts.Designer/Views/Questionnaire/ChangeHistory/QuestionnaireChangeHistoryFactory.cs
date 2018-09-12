@@ -43,7 +43,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
             var historyItemIds = questionnaireHistory.Select(x => x.QuestionnaireChangeRecordId).ToArray();
 
             var hasHistory = questionnaireChangeHistoryStorage
-                                 .Query(_ => _.Where(x => historyItemIds.Contains(x.QuestionnaireChangeRecordId) && x.ResultingQuestionnaireDocument != null)
+                                 .Query(_ => _.Where(x => historyItemIds.Contains(x.QuestionnaireChangeRecordId) 
+                                                          && (x.ResultingQuestionnaireDocument != null || x.Patch != null))
                                               .Select(x => x.QuestionnaireChangeRecordId)
                                               .ToList().ToHashSet());
             
@@ -54,7 +55,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
 
         private QuestionnaireChangeHistoricalRecord CreateQuestionnaireChangeHistoryWebItem(QuestionnaireDocument questionnaire, 
             QuestionnaireChangeRecord questionnaireChangeRecord, 
-            HashSet<string> recordWithRevertAvaialbe)
+            HashSet<string> recordWithRevertAvailable)
         {
             var references =
                 questionnaireChangeRecord.References.Select(
@@ -71,7 +72,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
                 questionnaireChangeRecord.TargetItemType,
                 questionnaireChangeRecord.TargetItemNewTitle,
                 questionnaireChangeRecord.AffectedEntriesCount,
-                recordWithRevertAvaialbe.Contains(questionnaireChangeRecord.QuestionnaireChangeRecordId),
+                recordWithRevertAvailable.Contains(questionnaireChangeRecord.QuestionnaireChangeRecordId),
                 questionnaireChangeRecord.TargetItemDateTime,
                 references);
         }
