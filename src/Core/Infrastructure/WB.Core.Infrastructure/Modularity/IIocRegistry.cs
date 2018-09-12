@@ -27,5 +27,8 @@ namespace WB.Core.Infrastructure.Modularity
         void Unbind<T>();
         bool HasBinding<T>();
         void BindInPerLifetimeScope<T1, T2>() where T2 : T1;
+
+        void BindWithConstructorArgumentInPerLifetimeScope<TInterface, TImplementation>(string argumentName,
+            object argumentValue) where TImplementation : TInterface;
     }
 }

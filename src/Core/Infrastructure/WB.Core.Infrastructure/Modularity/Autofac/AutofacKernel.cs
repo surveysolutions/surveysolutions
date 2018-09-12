@@ -56,10 +56,15 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
 
             try
             {
-                foreach (var module in initModules)
+                using (var scope = ServiceLocator.Current.CreateChildContainer())
                 {
-                    status.ClearMessage();
-                    await module.Init(ServiceLocator.Current, status);
+                    var serviceLocator = scope.Resolve<IServiceLocator>(new NamedParameter("kernel", scope));
+
+                    foreach (var module in initModules)
+                    {
+                        status.ClearMessage();
+                        await module.Init(serviceLocator, status);
+                    }
                 }
             }
             finally
