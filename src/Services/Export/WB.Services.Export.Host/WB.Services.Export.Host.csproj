@@ -5,11 +5,11 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <LangVersion>7.1</LangVersion>
-    <TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>
+    <!--<TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>-->
+    <RuntimeFrameworkVersion>2.1.4</RuntimeFrameworkVersion>
     <Company>World Bank</Company>
     <PackageId>WB.Services.Export.Host</PackageId>
     <Product>Survey Solutions Export Service</Product>
-    <RepositoryType>git</RepositoryType>
     <VersionPrefix Condition="'$(VersionPrefix)' == ''">18.10.0-development-$(COMPUTERNAME)</VersionPrefix>
   </PropertyGroup>
 
