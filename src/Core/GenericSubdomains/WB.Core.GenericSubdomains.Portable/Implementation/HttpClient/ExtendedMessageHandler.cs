@@ -48,23 +48,8 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
             {
                 return await base.SendAsync(request, cancellationToken).ConfigureAwait(false);
             }
-            catch (ExtendedMessageHandlerException)
-            {
-                throw;
-            }
             catch (Exception ex)
             {
-                var sslHandshakeException = ex.GetSelfOrInner(e => e?.GetType().FullName == "Javax.Net.Ssl.SSLException");
-                var socketException = ex.GetSelfOrInner(e => e?.GetType().FullName == "Java.Net.SocketException");
-                if (sslHandshakeException != null || socketException != null)
-                {
-                    if (times > 0)
-                    {
-                        await Task.Delay(1000, cancellationToken);
-                        return await InnerSendAsync(call, request, cancellationToken, times - 1).ConfigureAwait(false);
-                    }
-                }
-
                 throw new ExtendedMessageHandlerException(call, ex);
             }
         }
