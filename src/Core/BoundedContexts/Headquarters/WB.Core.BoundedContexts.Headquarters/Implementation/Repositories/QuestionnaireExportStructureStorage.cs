@@ -7,6 +7,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Repositories
 {
+    [Obsolete("KP-11815")]
     internal class QuestionnaireExportStructureStorage: IQuestionnaireExportStructureStorage
     {
         private readonly IExportViewFactory exportViewFactory;

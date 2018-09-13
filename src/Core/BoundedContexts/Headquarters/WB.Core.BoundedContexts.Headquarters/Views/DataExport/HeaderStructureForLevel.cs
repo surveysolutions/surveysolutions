@@ -4,6 +4,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
 {
+    [Obsolete("KP-11815")]
     public class HeaderStructureForLevel
     {
         public ValueVector<Guid> LevelScopeVector { get; set; }

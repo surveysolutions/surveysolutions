@@ -50,5 +50,15 @@ namespace WB.UI.Headquarters.API.Export
 
             return Request.CreateResponse(HttpStatusCode.OK, entities);
         }
+
+        [Route("api/export/v1/interview/{id:guid}/commentaries")]
+        [ServiceApiKeyAuthorization]
+        [HttpGet]
+        [ApiNoCache]
+        public HttpResponseMessage GetInterviewCommentaries(Guid id)
+        {
+            var entities = this.viewFactory.GetInterviewComments(id);
+            return Request.CreateResponse(HttpStatusCode.OK, entities);
+        }
     }
 }
