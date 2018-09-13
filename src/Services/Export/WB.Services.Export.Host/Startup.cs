@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Prometheus;
+using WB.Services.Export.Host.Infra;
 using WB.Services.Export.Host.Scheduler;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
@@ -26,6 +27,7 @@ namespace WB.Services.Export.Host
             services.AddMvcCore()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
                 .AddJsonFormatters();            
+
             services.Configure<BackgroundJobsConfig>(Configuration.GetSection("Scheduler"));
             
             services.AddScoped<IBackgroundJobClient, BackgroundJobClient>();
@@ -40,6 +42,7 @@ namespace WB.Services.Export.Host
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseApplicationVersion("/.version");
             app.UseMetricServer();
             app.UseMvc();
         }
