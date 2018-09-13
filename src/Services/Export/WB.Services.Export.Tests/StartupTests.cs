@@ -14,18 +14,18 @@ namespace WB.Services.Export.Tests
             factory = new WebApplicationFactory<Startup>();
         }
 
-        [Test]
-        public async Task Get_EndpointsReturnSuccessAndCorrectContentType()
-        {
-            // Arrange
+        //[Test]
+        //public async Task Get_EndpointsReturnSuccessAndCorrectContentType()
+        //{
+        //    // Arrange
             
-            var client = factory.CreateClient();
+        //    var client = factory.CreateClient();
 
-            // Act
-            var response = await client.GetAsync("/metrics");
+        //    // Act
+        //    var response = await client.GetAsync("/metrics");
 
-            // Assert
-            response.EnsureSuccessStatusCode(); // Status Code 200-299
-        }
+        //    // Assert
+        //    response.EnsureSuccessStatusCode(); // Status Code 200-299
+        //}
     }
 }
