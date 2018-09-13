@@ -32,7 +32,11 @@
     <ProjectReference Include="..\WB.Services.Export\WB.Services.Export.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
+<ItemGroup>
+    <Content Update="appsettings.vgl.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  
     <Content Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

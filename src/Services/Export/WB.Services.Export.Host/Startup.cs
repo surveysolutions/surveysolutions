@@ -22,18 +22,23 @@ namespace WB.Services.Export.Host
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
-        {
+        {          
             services.AddMvcCore()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
                 .AddJsonFormatters();            
             services.Configure<BackgroundJobsConfig>(Configuration.GetSection("Scheduler"));
-            services.AddSingleton<IHostedService, BackgroundJobsService>();
-            services.AddScoped<IBackgroundJobClient, BackgroundJobClient>();
+            
+            // services.AddScoped<IBackgroundJobClient, BackgroundJobClient>();
+         //   services.AddSingleton<IHostedService, BackgroundJobsService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
+            System.Console.WriteLine("ENVVAR: " + System.Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT"));
+            System.Console.WriteLine("HOSTENV: " + env.EnvironmentName);
+            System.Console.WriteLine(Configuration.GetConnectionString("DefaultConnection"));
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
