@@ -10,9 +10,11 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultiOptionQuest
 {
     internal class when_updating_multi_option_question_and_user_dont_have_permissions : QuestionnaireTestsContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [Test]
+        public void should_throw_exception()
+        {
             questionnaire = CreateQuestionnaire(responsibleId: responsibleId);
-            questionnaire.AddGroup(chapterId, responsibleId:responsibleId);
+            questionnaire.AddGroup(chapterId, responsibleId: responsibleId);
             questionnaire.AddQRBarcodeQuestion(questionId,
                         chapterId,
                         responsibleId,
@@ -20,12 +22,6 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultiOptionQuest
                         variableName: "old_variable_name",
                         instructions: "old instructions",
                         enablementCondition: "old condition");
-            BecauseOf();
-
-            exception.Message.ToLower().ToSeparateWords().Should().Contain(new[] { "don't", "have", "permissions" });
-        }
-
-        private void BecauseOf() =>
             exception = Assert.Throws<QuestionnaireException>(() =>
                 questionnaire.UpdateMultiOptionQuestion(
                     questionId: questionId,
@@ -42,7 +38,10 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateMultiOptionQuest
                     areAnswersOrdered: areAnswersOrdered,
                     maxAllowedAnswers: maxAllowedAnswers,
                     yesNoView: yesNoView, validationConditions: new System.Collections.Generic.List<WB.Core.SharedKernels.QuestionnaireEntities.ValidationCondition>(),
-                linkedFilterExpression: null, properties: Create.QuestionProperties()));
+                    linkedFilterExpression: null, properties: Create.QuestionProperties()));
+
+            exception.Message.ToLower().ToSeparateWords().Should().Contain(new[] { "don't", "have", "permissions" });
+        }
 
         private static Questionnaire questionnaire;
         private static Exception exception;

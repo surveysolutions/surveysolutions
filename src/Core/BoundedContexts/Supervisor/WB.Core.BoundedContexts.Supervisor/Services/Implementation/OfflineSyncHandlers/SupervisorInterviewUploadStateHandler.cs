@@ -38,9 +38,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                      x.LastEventId == request.Check.LastEventId &&
                      x.LastEventTimestamp == request.Check.LastEventTimeStamp).Count;
 
-            var binaries = this.audioFileStorage.GetBinaryFilesForInterview(request.InterviewId)
-                .Union(this.imageFileStorage.GetBinaryFilesForInterview(request.InterviewId))
-                .Select(bf => bf.FileName);
+            var audioNames = this.audioFileStorage.GetBinaryFilesForInterview(request.InterviewId).Select(bf => bf.FileName).ToHashSet();
+            var imagesNames = this.imageFileStorage.GetBinaryFilesForInterview(request.InterviewId).Select(bf => bf.FileName).ToHashSet();
 
             return Task.FromResult(new GetInterviewUploadStateResponse
             {
@@ -48,7 +47,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
                 UploadState = new InterviewUploadState
                 {
                     IsEventsUploaded = existingReceivedPackageLog > 0,
-                    BinaryFilesNames = binaries.ToHashSet()
+                    AudioFilesNames = audioNames,
+                    ImagesFilesNames = imagesNames
                 }
             });
         }

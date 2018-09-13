@@ -53,7 +53,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             foreach (var linkedOption in linkedQuestion.Options)
                 yield return this.CreateOptionViewModel(linkedOption, answeredOptions, interview);
 
-            base.UpateMaxAnswersCountMessage(answeredOptions.Length);
+            base.UpdateMaxAnswersCountMessage(answeredOptions.Length);
         }
 
         public async void Handle(LinkedOptionsChanged @event)

@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using Humanizer;
 using Plugin.Permissions.Abstractions;
 using WB.Core.BoundedContexts.Supervisor.Properties;
 using WB.Core.BoundedContexts.Supervisor.Services;
@@ -12,7 +10,6 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization.Steps;
-using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Views;
@@ -102,7 +99,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
 
             try
             {
-                var patch = await this.synchronizationService.GetFileAsync(patchInfo.Url,
+                var patch = await this.synchronizationService.GetInterviewerApplicationPatchByNameAsync(
+                    patchInfo.FileName, Context.CancellationToken,
                     new Progress<TransferProgress>(downloadProgress =>
                     {
                         Context.Progress.Report(new SyncProgressInfo
@@ -111,7 +109,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
                                 .FormatString(patchIndex + 1, patchesCount),
                             Status = SynchronizationStatus.Download
                         });
-                    }), Context.CancellationToken);
+                    }));
 
                 if (patch != null) this.fileSystemAccessor.WriteAllBytes(patchFilePath, patch);
             }
