@@ -2,8 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using System.Web.Http;
+using Moq;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.BoundedContexts.Supervisor.Services;
+using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services;
+using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.UI.Headquarters;
 using WB.UI.Headquarters.Filters;
@@ -87,6 +98,111 @@ namespace WB.Tests.Unit.Applications.Headquarters.ApiTests
             CollectionAssert.IsEmpty(methodWithoutOverride);
         }
 
+        [Test]
+        public void all_urls_used_in_Interviewer_SynchronizationService_should_be_declared_in_routes()
+        {
+            var restService = new DummyRestSeviceForCollectUrls();
+
+            var checkVersionUrl = "CheckVersionUrl";
+
+            var interviewerSynchronizationService = new WB.Core.BoundedContexts.Interviewer.Implementation.Services.SynchronizationService(
+                Mock.Of<IPrincipal>(),
+                restService,
+                Mock.Of<IInterviewerSettings>(m => m.GetSupportedQuestionnaireContentVersion() == new Version(1, 1, 1)
+                                                   && m.GetDeviceId() == "DeviceId"),
+                Mock.Of<IInterviewerSyncProtocolVersionProvider>(),
+                Mock.Of<IFileSystemAccessor>(),
+                Mock.Of<ICheckVersionUriProvider>(m => m.CheckVersionUrl == checkVersionUrl),
+                Mock.Of<ILogger>()
+            );
+
+            all_urls_used_in_SynchronizationService_should_be_declared_in_routes(
+                interviewerSynchronizationService,
+                restService,
+                checkVersionUrl);
+        }
+
+        //[Test]
+        public void all_urls_used_in_Supervisor_SynchronizationService_should_be_declared_in_routes()
+        {
+            var restService = new DummyRestSeviceForCollectUrls();
+
+            var checkVersionUrl = "CheckVersionUrl";
+
+            var supervisorSynchronizationService = new WB.Core.BoundedContexts.Supervisor.Services.Implementation.SynchronizationService(
+                Mock.Of<IPrincipal>(),
+                restService,
+                Mock.Of<ISupervisorSettings>(m => m.GetSupportedQuestionnaireContentVersion() == new Version(1, 1, 1)
+                                                   && m.GetDeviceId() == "DeviceId"),
+                Mock.Of<ISupervisorSyncProtocolVersionProvider>(),
+                Mock.Of<IFileSystemAccessor>(),
+                Mock.Of<ICheckVersionUriProvider>(m => m.CheckVersionUrl == checkVersionUrl),
+                Mock.Of<ILogger>()
+            );
+
+            all_urls_used_in_SynchronizationService_should_be_declared_in_routes(supervisorSynchronizationService,
+                restService,
+                checkVersionUrl);
+        }
+
+
+        private void all_urls_used_in_SynchronizationService_should_be_declared_in_routes(
+            EnumeratorSynchronizationService synchronizationService,
+            DummyRestSeviceForCollectUrls restService,
+            string checkVersionUrl)
+        {
+            var config = new HttpConfiguration();
+            WebApiConfig.Register(config);
+            var typedRoutes = TypedDirectRouteProvider.Routes.SelectMany(kv => kv.Value.Values);
+            var routeTemplates = typedRoutes.OrderBy(r => r.Template)
+                .Select(r => GenerateRegexFromTemplate(r.Template))
+                .ToList();
+
+            var allPublicMethods = synchronizationService.GetType()
+                .GetMethods(BindingFlags.Public | BindingFlags.Instance)
+                .Where(m => !m.IsSpecialName && m.IsPublic);
+
+            foreach (var method in allPublicMethods)
+            {
+                try
+                {
+                    var parameters = method.GetParameters();
+                    var objectParameters = parameters.Select(p =>
+                    {
+                        if (p.ParameterType == typeof(string))
+                            return "test";
+                        if (p.ParameterType == typeof(byte[]))
+                            return new byte[0];
+                        if (p.ParameterType == typeof(IProgress<TransferProgress>))
+                            return new DummyTransferProgress();
+
+                        return Activator.CreateInstance(p.ParameterType);
+                    }).ToArray();
+                    method.Invoke(synchronizationService, objectParameters);
+                }
+                catch(SynchronizationException ex) when (ex.Type == SynchronizationExceptionType.InvalidUrl)
+                {
+                    /* ignore */
+                }
+            }
+
+            var urlWithoutRoute = restService.Urls.Where(url => 
+                !url.StartsWith(checkVersionUrl)
+                && !routeTemplates.Any(regex => regex.IsMatch(url))
+            ).ToList();
+
+            CollectionAssert.IsNotEmpty(restService.Urls);
+            CollectionAssert.IsEmpty(urlWithoutRoute);
+        }
+
+        private static readonly Regex RegexReplaceTemplateVariables = new Regex(@"{[\w:]+}", RegexOptions.Singleline | RegexOptions.Compiled);
+
+        private Regex GenerateRegexFromTemplate(string template)
+        {
+            var regexTemplate = RegexReplaceTemplateVariables.Replace(template, ".*");
+            return new Regex($"^{regexTemplate}$", RegexOptions.Singleline);
+        }
+
         private static List<MethodInfo> GetAllPublicApiMethods()
         {
             var assembly = Assembly.GetAssembly(typeof(WebApiConfig));
@@ -101,6 +217,5 @@ namespace WB.Tests.Unit.Applications.Headquarters.ApiTests
             ).ToList();
             return allPublicMethods;
         }
-
     }
 }
