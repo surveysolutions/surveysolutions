@@ -1,5 +1,8 @@
-﻿namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
+﻿using System;
+
+namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
 {
+    [Obsolete()]
     public enum QuestionSubtype
     {
         MultyOption_YesNo = 1,

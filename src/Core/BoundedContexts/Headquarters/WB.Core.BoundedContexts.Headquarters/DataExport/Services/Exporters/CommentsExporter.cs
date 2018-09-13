@@ -20,6 +20,7 @@ using WB.Core.Infrastructure.Transactions;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 {
+    [Obsolete("KP-11815")]
     internal class CommentsExporter
     {
         private readonly InterviewDataExportSettings interviewDataExportSettings;

@@ -1,5 +1,8 @@
-﻿namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
+﻿using System;
+
+namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 {
+    [Obsolete("KP-11815")]
     public class DoExportFileHeader
     {
         public DoExportFileHeader(string title, string description)
