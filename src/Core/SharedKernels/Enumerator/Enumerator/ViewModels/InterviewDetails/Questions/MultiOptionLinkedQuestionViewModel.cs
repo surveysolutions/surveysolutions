@@ -233,7 +233,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
 
-        protected void UpateMaxAnswersCountMessage(int answersCount)
+        protected void UpdateMaxAnswersCountMessage(int answersCount)
         {
             if (this.maxAllowedAnswers.HasValue && this.HasOptions)
             {
@@ -242,14 +242,22 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        public string MaxAnswersCountMessage { get; set; }
+        private string maxAnswersCountMessage;
+        public string MaxAnswersCountMessage
+        {
+            get => maxAnswersCountMessage;
+            set => SetProperty(ref maxAnswersCountMessage, value);
+        }
 
         public void Handle(MultipleOptionsLinkedQuestionAnswered @event)
         {
-            if (this.areAnswersOrdered && @event.QuestionId == this.questionIdentity.Id && @event.RosterVector.Identical(this.questionIdentity.RosterVector))
+            if (@event.QuestionId == this.questionIdentity.Id && @event.RosterVector.Identical(this.questionIdentity.RosterVector))
             {
-                this.PutOrderOnOptions(@event);
-                UpateMaxAnswersCountMessage(@event.SelectedRosterVectors?.Length ?? 0);
+                if (this.areAnswersOrdered)
+                {
+                    this.PutOrderOnOptions(@event);
+                }
+                UpdateMaxAnswersCountMessage(@event.SelectedRosterVectors?.Length ?? 0);
             }
         }
 
@@ -265,7 +273,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 }
 
                 PreviousOptionsToReset = null;
-                UpateMaxAnswersCountMessage(0);
+                UpdateMaxAnswersCountMessage(0);
             }
         }
 

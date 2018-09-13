@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.DataExportTests.InterviewsExporterTests
             transactionManagerProvider.Setup(x => x.GetTransactionManager()).Returns(Mock.Of<ITransactionManager>());
 
             errorsExporter = new Mock<IInterviewErrorsExporter>();
-            errorsExporter.Setup(x => x.Export(It.IsAny<QuestionnaireExportStructure>(), It.IsAny<List<InterviewEntity>>(), It.IsAny<string>()))
+            errorsExporter.Setup(x => x.Export(It.IsAny<QuestionnaireExportStructure>(), It.IsAny<List<InterviewEntity>>(), It.IsAny<string>(), It.IsAny<string>()))
                 .Returns(() => new List<string[]>());
 
             fileSystemAccessor
