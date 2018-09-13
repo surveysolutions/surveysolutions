@@ -36,7 +36,7 @@ namespace WB.Services.Export.Host.Scheduler
 
         public Task StopAsync(CancellationToken cancellationToken)
         {
-            server.Dispose();
+            server?.Dispose();
             return Task.CompletedTask;
         }
     }
