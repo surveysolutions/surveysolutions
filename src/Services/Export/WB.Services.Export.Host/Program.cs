@@ -26,7 +26,7 @@ namespace WB.Services.Export.Host
                     .AddCommandLine(args)
                     .Build();
 
-                var hostBuilder = new  HostBuilder()
+                var hostBuilder = new HostBuilder()
                     .ConfigureHostConfiguration(c => c.AddConfiguration(config))
                     .ConfigureAppConfiguration(c => c.AddConfiguration(config))
 
@@ -40,14 +40,7 @@ namespace WB.Services.Export.Host
             }
             else
             {
-
                 var builder = CreateWebHostBuilder(args);
-
-                builder.ConfigureAppConfiguration(c =>
-                {
-                    var env = System.Environment.GetEnvironmentVariable("Computername");
-                    c.AddJsonFile($"appsettings.{env}.json", true);
-                });
 
                 if (isService)
                 {
@@ -72,8 +65,17 @@ namespace WB.Services.Export.Host
         public static IWebHostBuilder CreateWebHostBuilder(string[] args)
         {
             return WebHost.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration(c =>
+                {
+                    c.AddJsonFile($"appsettings.{Environment.MachineName}.json", true);
+                    c.AddCommandLine(args);
+                })                
+                .UseUrls(GetCommandLineUrls(args))
                 .UseHttpSys()
                 .UseStartup<Startup>();
         }
+
+        private static string GetCommandLineUrls(string[] args) => 
+            new ConfigurationBuilder().AddCommandLine(args).Build()["urls"];
     }
 }
