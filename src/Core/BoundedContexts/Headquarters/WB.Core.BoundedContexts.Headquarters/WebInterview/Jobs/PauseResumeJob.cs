@@ -10,17 +10,22 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview.Jobs
     [DisallowConcurrentExecution]
     internal class PauseResumeJob : IJob
     {
-        public ILogger Logger => ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<PauseResumeJob>();
+        public PauseResumeJob(IServiceLocator serviceLocator)
+        {
+            this.serviceLocator = serviceLocator;
+        }
+        public ILogger Logger => serviceLocator.GetInstance<ILoggerProvider>().GetFor<PauseResumeJob>();
         
         private IPauseResumeQueue queue;
+        private IServiceLocator serviceLocator;
 
         public IPauseResumeQueue Queue
         {
-            get => queue ?? ServiceLocator.Current.GetInstance<IPauseResumeQueue>();
+            get => queue ?? serviceLocator.GetInstance<IPauseResumeQueue>();
             set => queue = value;
         }
 
-        public ICommandService CommandService => ServiceLocator.Current.GetInstance<ICommandService>();
+        public ICommandService CommandService => serviceLocator.GetInstance<ICommandService>();
 
         public void Execute(IJobExecutionContext context)
         {

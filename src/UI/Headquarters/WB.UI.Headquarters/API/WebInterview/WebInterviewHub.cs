@@ -8,7 +8,6 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -27,7 +26,7 @@ namespace WB.UI.Headquarters.API.WebInterview
     [WebInterviewAuthorize]
     public class WebInterviewHub : Enumerator.Native.WebInterview.WebInterview, ILifetimeHub
     {
-        private readonly IServiceLocator locator;
+        //private readonly IServiceLocator locator;
         
         private readonly IInterviewBrokenPackagesService interviewBrokenPackagesService;
         private readonly IAuthorizedUser authorizedUser;
@@ -35,25 +34,38 @@ namespace WB.UI.Headquarters.API.WebInterview
         private readonly IInterviewFactory interviewFactory;
         private readonly IStatefullInterviewSearcher statefullInterviewSearcher;
         private readonly IInterviewOverviewService overviewService;
+        private IUnitOfWork unitOfWork;
 
         //separate interview logic into interface implementation from hub logic and inject it 
-        public WebInterviewHub(
-            IServiceLocator locator) : base(
-            locator.GetInstance<IStatefulInterviewRepository>(),
-            locator.GetInstance<ICommandService>(),
-            locator.GetInstance<IQuestionnaireStorage>(),
-            locator.GetInstance<IWebInterviewNotificationService>(),
-            locator.GetInstance<IWebInterviewInterviewEntityFactory>(),
-            locator.GetInstance<IImageFileStorage>(),
-            locator.GetInstance<IAudioFileStorage>())
+        //make sure that IServiceLocator is not used
+        public WebInterviewHub(IStatefulInterviewRepository statefulInterviewRepository,
+            ICommandService commandService,
+            IQuestionnaireStorage questionnaireRepository,
+            IWebInterviewNotificationService webInterviewNotificationService,
+            IWebInterviewInterviewEntityFactory interviewEntityFactory,
+            IImageFileStorage imageFileStorage,
+            IInterviewBrokenPackagesService interviewBrokenPackagesService,
+            IAudioFileStorage audioFileStorage,
+            IAuthorizedUser authorizedUser,
+            IChangeStatusFactory changeStatusFactory,
+            IInterviewFactory interviewFactory,
+            IStatefullInterviewSearcher statefullInterviewSearcher,
+            IInterviewOverviewService overviewService,
+            IUnitOfWork unitOfWork) : base(statefulInterviewRepository,
+            commandService,
+            questionnaireRepository,
+            webInterviewNotificationService,
+            interviewEntityFactory,
+            imageFileStorage,
+            audioFileStorage)
         {
-            this.locator = locator;
-            this.interviewBrokenPackagesService = locator.GetInstance<IInterviewBrokenPackagesService>(); ;
-            this.authorizedUser = locator.GetInstance <IAuthorizedUser>();
-            this.changeStatusFactory = locator.GetInstance<IChangeStatusFactory>();
-            this.interviewFactory = locator.GetInstance<IInterviewFactory>();
-            this.statefullInterviewSearcher = locator.GetInstance<IStatefullInterviewSearcher>();
-            this.overviewService = locator.GetInstance<IInterviewOverviewService>();
+            this.interviewBrokenPackagesService = interviewBrokenPackagesService;
+            this.authorizedUser = authorizedUser;
+            this.changeStatusFactory = changeStatusFactory;
+            this.interviewFactory = interviewFactory;
+            this.statefullInterviewSearcher = statefullInterviewSearcher;
+            this.overviewService = overviewService;
+            this.unitOfWork = unitOfWork;
         }
 
         protected override bool IsReviewMode =>
@@ -189,8 +201,9 @@ namespace WB.UI.Headquarters.API.WebInterview
 
         protected override void Dispose(bool disposing)
         {
-            var uow = locator.GetInstance<IUnitOfWork>();
-            uow.AcceptChanges();
+            //todo:af 
+            //move it to more proper place
+            unitOfWork.AcceptChanges();
 
             base.Dispose(disposing);
             if (disposing)

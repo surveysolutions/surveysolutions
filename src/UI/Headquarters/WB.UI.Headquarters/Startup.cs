@@ -43,6 +43,7 @@ using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Binding;
 using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Monitoring;
+using WB.Infrastructure.Native.Storage.Postgre;
 using WB.UI.Headquarters.API.WebInterview;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
@@ -394,6 +395,13 @@ namespace WB.UI.Headquarters
         {
             //to preserve scope
             var serviceLocator = this.RequestLifetimeScope.Resolve<IServiceLocator>(new NamedParameter("kernel", this.RequestLifetimeScope));
+
+//            if (ApplicationContainer.IsRegistered(typeof(UnitOfWork)))
+//            {
+//                //alarm
+//                throw new Exception();
+//           }
+
             return base.GetService(serviceType);
         }
 
@@ -417,7 +425,7 @@ namespace WB.UI.Headquarters
         {
             var scope = (BeginScope() as AutofacWebApiDependencyScope).LifetimeScope;
             var serviceLocator = scope.Resolve<IServiceLocator>(new NamedParameter("kernel", scope));
-
+            
             return base.GetService(serviceType);
         }
 
@@ -434,23 +442,7 @@ namespace WB.UI.Headquarters
         }
     }
 
-    /*public class CustomWebApiDependencyResolver : AutofacWebApiDependencyResolver
-    {
-        public CustomWebApiDependencyResolver(ILifetimeScope container) : base(container)
-        {
-        }
-        public override object GetService(Type serviceType)
-        {
-            var serviceLocator = this.RequestLifetimeScope.Resolve<IServiceLocator>(new NamedParameter("kernel", this.RequestLifetimeScope));
-            /*if (serviceType == typeof(IServiceLocator))
-            {
-                return locator ?? (locator = new MvcAutofacDependencyResolverServiceLocatorAdaptor(this));
-            }#1#
-
-            return base.GetService(serviceType);
-        }
-    }*/
-
+    
     public class LogRequestModule : Autofac.Module
     {
         public int depth = 0;
@@ -467,7 +459,7 @@ namespace WB.UI.Headquarters
 
         private string GetPrefix()
         {
-            return new string('-', /*depth **/ 2);
+            return new string('-', /*depth * */ 2);
         }
 
         private void RegistrationOnPreparing(object sender, PreparingEventArgs preparingEventArgs)
@@ -479,7 +471,7 @@ namespace WB.UI.Headquarters
         private void RegistrationOnActivating(object sender, ActivatingEventArgs<object> activatingEventArgs)
         {
             depth--;
-            trace += ($"{GetPrefix()}Activating {activatingEventArgs.Component.Activator.LimitType}\r\n");
+            trace += ($"{GetPrefix()}Activating {activatingEventArgs.Component.Activator.LimitType} lifetime:{activatingEventArgs.Component.Lifetime}\r\n");
         }
     }
 }

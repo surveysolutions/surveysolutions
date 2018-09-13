@@ -9,15 +9,22 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
     [DisallowConcurrentExecution]
     public class UpgradeAssignmentJob : IJob
     {
-        private readonly IAssignmentsUpgradeService upgradeService =
-            ServiceLocator.Current.GetInstance<IAssignmentsUpgradeService>();
+        public UpgradeAssignmentJob(IServiceLocator serviceLocator)
+        {
+            this.serviceLocator = serviceLocator;
+        }
+        
+        private IServiceLocator serviceLocator;
 
         public void Execute(IJobExecutionContext context)
         {
+            IAssignmentsUpgradeService upgradeService = serviceLocator.GetInstance<IAssignmentsUpgradeService>();
+
             var processToRun = upgradeService.DequeueUpgrade();
             if (processToRun != null)
             {
-                ServiceLocator.Current.GetInstance<IAssignmentsUpgrader>().Upgrade(processToRun.ProcessId, processToRun.From, processToRun.To, upgradeService.GetCancellationToken(processToRun.ProcessId));
+                serviceLocator.GetInstance<IAssignmentsUpgrader>().Upgrade(processToRun.ProcessId, processToRun.From, processToRun.To, 
+                    upgradeService.GetCancellationToken(processToRun.ProcessId));
             }
         }
     }

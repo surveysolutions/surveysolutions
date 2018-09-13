@@ -146,7 +146,7 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             registry.Bind<Questionnaire>();
             registry.Bind<IPlainAggregateRootRepository<Questionnaire>, QuestionnaireRepository>();
-            registry.BindAsSingleton<IQuestionnaireExportStructureStorage, QuestionnaireExportStructureStorage>();
+            registry.Bind<IQuestionnaireExportStructureStorage, QuestionnaireExportStructureStorage>();
             registry.Bind<IQuestionOptionsRepository, QuestionnaireQuestionOptionsRepository>();
 
             registry.Bind<IAndroidPackageReader, AndroidPackageReader>();
