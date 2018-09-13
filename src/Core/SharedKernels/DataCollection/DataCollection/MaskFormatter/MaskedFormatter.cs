@@ -9,7 +9,7 @@ namespace WB.Core.SharedKernels.DataCollection.MaskFormatter
         private const char CharacterKey = '~';
         private const char AnythingKey = '*';
 
-        public static bool IsTextMaskMatched(this string text, string mask)
+        public static bool IsTextMaskMatched(string text, string mask)
         {
             var sb = new StringBuilder();
             foreach (var maskChar in mask)
