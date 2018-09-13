@@ -16,10 +16,12 @@ namespace WB.Services.Export.Host.Scheduler
         public BackgroundJobsService(IConfiguration configuration, IOptions<BackgroundJobsConfig> jobsConfig)
         {
             this.jobsConfig = jobsConfig;
-            GlobalConfiguration.Configuration.UsePostgreSqlStorage(configuration.GetConnectionString("DefaultConnection"), new PostgreSqlStorageOptions
-            {
-                SchemaName = "scheduler"
-            });
+            GlobalConfiguration.Configuration.UsePostgreSqlStorage(
+                configuration.GetConnectionString("DefaultConnection"),
+                new PostgreSqlStorageOptions
+                {
+                    SchemaName = "scheduler"
+                });
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
