@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
+using Autofac;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
@@ -10,28 +11,31 @@ using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Threading;
+using WB.UI.Shared.Enumerator.Services.Internals;
 
 namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
 {
     [DisallowConcurrentExecution]
     internal class AssignmentsVerificationJob : IJob
     {
-        private ILogger logger => ServiceLocator.Current.GetInstance<ILoggerProvider>()
+        private readonly IServiceLocator serviceLocator;
+
+        public AssignmentsVerificationJob(IServiceLocator locator)
+        {
+            this.serviceLocator = locator;
+        }
+
+        private ILogger logger => serviceLocator.GetInstance<ILoggerProvider>()
             .GetFor<AssignmentsVerificationJob>();
         
-        private IAssignmentsImportService importAssignmentsService => ServiceLocator.Current
+        private IAssignmentsImportService importAssignmentsService => serviceLocator
             .GetInstance<IAssignmentsImportService>();
 
-        private IPreloadedDataVerifier importAssignmentsVerifier => ServiceLocator.Current
-            .GetInstance<IPreloadedDataVerifier>();
-
-        private IQuestionnaireStorage questionnaireStorage => ServiceLocator.Current
-            .GetInstance<IQuestionnaireStorage>();
-
-        private SampleImportSettings sampleImportSettings => ServiceLocator.Current
+        private SampleImportSettings sampleImportSettings => serviceLocator
             .GetInstance<SampleImportSettings>();
-        private AssignmentsImportTask assignmentsImportTask => ServiceLocator.Current
+        private AssignmentsImportTask assignmentsImportTask => serviceLocator
             .GetInstance<AssignmentsImportTask>();
 
         public void Execute(IJobExecutionContext context)
@@ -52,31 +56,34 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
                     new ParallelOptions { MaxDegreeOfParallelism = this.sampleImportSettings.InterviewsImportParallelTasksLimit },
                     assignmentId =>
                     {
-                        try
+                        using (var scope = serviceLocator.CreateChildContainer())
                         {
-                            ThreadMarkerManager.MarkCurrentThreadAsIsolated();
+                            //preserve scope
+                            var threadServiceLocator = scope.Resolve<IServiceLocator>(new NamedParameter("kernel", scope));
 
-                            var assignmentToVerify = this.importAssignmentsService.GetAssignmentById(assignmentId);
+                            var threadImportAssignmentsService = threadServiceLocator.GetInstance<IAssignmentsImportService>();
+                            IQuestionnaireStorage threadQuestionnaireStorage = threadServiceLocator.GetInstance<IQuestionnaireStorage>();
+                            IPreloadedDataVerifier threadImportAssignmentsVerifier = threadServiceLocator.GetInstance<IPreloadedDataVerifier>();
+
+                            var assignmentToVerify = threadImportAssignmentsService.GetAssignmentById(assignmentId);
                             if (assignmentToVerify == null) return;
 
-                            var questionnaire =  this.questionnaireStorage.GetQuestionnaire(importProcess.QuestionnaireIdentity, null);
+                            var questionnaire = threadQuestionnaireStorage.GetQuestionnaire(importProcess.QuestionnaireIdentity, null);
                             if (questionnaire == null)
                             {
-                                this.importAssignmentsService.RemoveAssignmentToImport(assignmentToVerify.Id);
+                                threadImportAssignmentsService.RemoveAssignmentToImport(assignmentToVerify.Id);
                                 return;
                             }
 
-                            var error = 
-                                this.importAssignmentsVerifier.VerifyWithInterviewTree(
+                            var error =
+                                threadImportAssignmentsVerifier.VerifyWithInterviewTree(
                                     assignmentToVerify.Answers,
                                     assignmentToVerify.Interviewer ?? assignmentToVerify.Supervisor,
                                     questionnaire);
 
-                            this.importAssignmentsService.SetVerifiedToAssignment(assignmentToVerify.Id, error?.ErrorMessage);
-                        }
-                        finally
-                        {
-                            ThreadMarkerManager.ReleaseCurrentThreadFromIsolation();
+                            threadImportAssignmentsService.SetVerifiedToAssignment(assignmentToVerify.Id, error?.ErrorMessage);
+
+                            serviceLocator.GetInstance<IUnitOfWork>().AcceptChanges();
                         }
                     });
 

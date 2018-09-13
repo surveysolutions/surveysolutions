@@ -24,16 +24,20 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
         
         private readonly EventBusSettings eventBusSettings;
         private readonly ILogger logger;
-        
+        private IServiceLocator serviceLocator;
+
         public NcqrCompatibleEventDispatcher(
+            IServiceLocator serviceLocator,
             EventBusSettings eventBusSettings, 
-            ILogger logger, 
+            ILogger logger,
             IEnumerable<IEventHandler> eventHandlers)
         {
             this.eventBusSettings = eventBusSettings;
             this.logger = logger;
             this.handlersToIgnore = eventBusSettings.DisabledEventHandlerTypes;
             this.getInProcessEventBus = () => new InProcessEventBus(eventBusSettings, logger);
+
+            this.serviceLocator = serviceLocator;
 
             foreach (var handler in eventHandlers)
             {
@@ -94,7 +98,7 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
 
             foreach (var functionalEventHandler in functionalHandlers)
             {
-                var handler = (IFunctionalEventHandler)ServiceLocator.Current.GetInstance(functionalEventHandler.Handler);
+                var handler = (IFunctionalEventHandler)this.serviceLocator.GetInstance(functionalEventHandler.Handler);
 
                 functionalEventHandler.Bus.OnCatchingNonCriticalEventHandlerException +=
                         this.OnCatchingNonCriticalEventHandlerException;

@@ -6,7 +6,7 @@
     Layout = "~/Views/Shared/_MainLayout.cshtml";
     ViewBag.Title = Dashboard.Questionnaires;
 
-    var authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>();
+    var authorizedUser = DependencyResolver.Current.GetService<IAuthorizedUser>();
     var isObserver = authorizedUser.IsObserver;
     var isAdmin = authorizedUser.IsAdministrator;
 }

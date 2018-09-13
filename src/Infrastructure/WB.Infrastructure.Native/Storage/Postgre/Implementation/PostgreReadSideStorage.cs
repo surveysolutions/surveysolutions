@@ -19,10 +19,14 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             INativeReadSideStorage<TEntity>
         where TEntity : class, IReadSideRepositoryEntity
     {
+        private IServiceLocator serviceLocator;
+
         public PostgreReadSideStorage(
             IUnitOfWork unitOfWork, 
-            ILogger logger) : base(unitOfWork, logger)
+            ILogger logger,
+            IServiceLocator serviceLocator) : base(unitOfWork, logger)
         {
+            this.serviceLocator = serviceLocator;
         }
     }
 
@@ -161,7 +165,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         private void FastBulkStore(List<Tuple<TEntity, TKey>> bulk)
         {
-            var sessionFactory = ServiceLocator.Current.GetInstance<ISessionFactory>();
+            var sessionFactory = serviceLocator.GetInstance<ISessionFactory>();
 
             foreach (var subBulk in bulk.Batch(2048))
             {
@@ -183,7 +187,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         private void SlowBulkStore(List<Tuple<TEntity, TKey>> bulk)
         {
-            var sessionFactory = ServiceLocator.Current.GetInstance<ISessionFactory>();
+            var sessionFactory = serviceLocator.GetInstance<ISessionFactory>();
             using (ISession session = sessionFactory.OpenSession())
             using (ITransaction transaction = session.BeginTransaction())
             {

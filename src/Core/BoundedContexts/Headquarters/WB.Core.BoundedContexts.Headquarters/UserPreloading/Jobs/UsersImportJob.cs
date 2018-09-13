@@ -15,11 +15,17 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
     [DisallowConcurrentExecution]
     internal class UsersImportJob : IJob
     {
-        private ILogger logger => ServiceLocator.Current.GetInstance<ILoggerProvider>()
+        private IServiceLocator serviceLocator;
+
+        public UsersImportJob(IServiceLocator serviceLocator)
+        {
+            this.serviceLocator = serviceLocator;
+        }
+
+        private ILogger logger => this.serviceLocator.GetInstance<ILoggerProvider>()
             .GetFor<UsersImportJob>();
 
-        private IUserImportService importUsersService => ServiceLocator.Current
-            .GetInstance<IUserImportService>();
+        private IUserImportService importUsersService => this.serviceLocator.GetInstance<IUserImportService>();
 
         public void Execute(IJobExecutionContext context)
         {
