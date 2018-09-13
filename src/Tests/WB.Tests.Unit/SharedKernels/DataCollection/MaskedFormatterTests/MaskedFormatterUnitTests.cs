@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.MaskedFormatterTests
         [TestCase("a*-###-~###", "a9-123-s123", true)]
         public void when_IsTextMaskMatched_called_for_text(string mask, string value, bool isMatched)
         {
-            var isTextMaskMatched = value.IsTextMaskMatched(mask);
+            var isTextMaskMatched = MaskedFormatter.IsTextMaskMatched(value , mask);
 
             Assert.AreEqual(isTextMaskMatched, isMatched);
         }
@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.MaskedFormatterTests
             string mask = "@*-###-@###";
             string value = "19-123-s123";
             //act 
-            var result = value.IsTextMaskMatched(mask);
+            var result = MaskedFormatter.IsTextMaskMatched(value, mask);
             //assert
             Assert.That(result, Is.False);
         }

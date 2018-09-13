@@ -43,23 +43,6 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v2
             => base.GetAssignmentsAsync(cancellationToken);
 
         [HttpPost]
-        public HttpResponseMessage Received(int id)
-        {
-            var assignment = this.assignmentsService.GetAssignment(id);
-            if (assignment == null)
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Assignment not found");
-            }
-
-            var authorizedUserId = this.authorizedUser.Id;
-            if(assignment.ResponsibleId != authorizedUserId &&
-               assignment.Responsible.ReadonlyProfile.SupervisorId != authorizedUserId)
-            {
-                return Request.CreateErrorResponse(HttpStatusCode.NotFound, "Assignment was reassigned");
-            }
-
-            assignment.MarkAsReceivedByTablet();
-            return Request.CreateResponse(HttpStatusCode.OK);
-        }
+        public override HttpResponseMessage Received(int id) => base.Received(id);
     }
 }

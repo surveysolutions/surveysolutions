@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Net.Http;
 using ModernHttpClient;
 using WB.Core.GenericSubdomains.Portable.Implementation;
@@ -17,7 +18,10 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
 
         public HttpClient CreateClient(Url url, HttpMessageHandler handler, IHttpStatistician statistician)
         {
-            return new HttpClient(new ExtendedMessageHandler(handler, statistician));
+            var httpClient = new HttpClient(new ExtendedMessageHandler(handler, statistician));
+            httpClient.DefaultRequestHeaders.ConnectionClose = true;
+            //httpClient.DefaultRequestHeaders.Add("Connection", "close");
+            return httpClient;
         }
 
         public HttpMessageHandler CreateMessageHandler()
@@ -27,6 +31,8 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
                 Timeout = restServiceSettings.Timeout,
                 EnableUntrustedCertificates = restServiceSettings.AcceptUnsignedSslCertificate,
                 DisableCaching = true,
+                AutomaticDecompression = DecompressionMethods.None,
+                AllowAutoRedirect = true,
             };
 
             return messageHandler;
