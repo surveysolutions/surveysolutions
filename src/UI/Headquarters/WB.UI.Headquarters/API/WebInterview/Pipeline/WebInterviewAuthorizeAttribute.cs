@@ -22,7 +22,6 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
 
         public WebInterviewAuthorizeAttribute() : 
             this(
-
                 //resolve from context to preserve scope
                 //create new scope instead
             ServiceLocator.Current.GetInstance<IWebInterviewNotificationService>(),

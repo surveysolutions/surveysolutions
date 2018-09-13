@@ -13,14 +13,12 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
     public class HandlePauseEventPipelineModule : HubPipelineModule
     {
         private readonly IPauseResumeQueue pauseResumeQueue;
+        private IServiceLocator serviceLocator;
 
-         //resolve from context to preserve scope
-        private IStatefulInterviewRepository statefulInterviewRepository => ServiceLocator.Current.GetInstance<IStatefulInterviewRepository>();
-
-        public HandlePauseEventPipelineModule(IPauseResumeQueue pauseResumeQueue/*, IStatefulInterviewRepository statefulInterviewRepository*/)
+        public HandlePauseEventPipelineModule(IPauseResumeQueue pauseResumeQueue, IServiceLocator serviceLocator)
         {
             this.pauseResumeQueue = pauseResumeQueue ?? throw new ArgumentNullException(nameof(pauseResumeQueue));
-            //this.statefulInterviewRepository = statefulInterviewRepository ?? throw new ArgumentNullException(nameof(statefulInterviewRepository));
+            this.serviceLocator = serviceLocator;
         }
 
         protected override bool OnBeforeDisconnect(IHub hub, bool stopCalled)
@@ -39,7 +37,9 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
             var isSupervisor = hub.Context.User.IsInRole(UserRoles.Supervisor.ToString());
 
             var interviewId = hub.Context.QueryString[@"interviewId"];
-            var interview = this.statefulInterviewRepository.Get(interviewId);
+
+            //resolve from context to preserve scope
+            var interview = serviceLocator.GetInstance<IStatefulInterviewRepository>().Get(interviewId);
             Guid userId = Guid.Parse(hub.Context.User.Identity.GetUserId());
 
             if (isInterviewer && !interview.IsCompleted)

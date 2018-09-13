@@ -7,23 +7,26 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers.Impl
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Infrastructure.Native.Threading;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Jobs
 {
     [DisallowConcurrentExecution]
     internal class ExportJob : IJob
     {
-        private IDataExportProcessesService exportService => 
-            ServiceLocator.Current.GetInstance<IDataExportProcessesService>();
+        private IServiceLocator serviceLocator;
 
-        private ILogger logger => ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<ExportJob>();
+        public ExportJob(IServiceLocator serviceLocator)
+        {
+            this.serviceLocator = serviceLocator;
+        }
+
+        private IDataExportProcessesService exportService =>
+            serviceLocator.GetInstance<IDataExportProcessesService>();
+
+        private ILogger logger => serviceLocator.GetInstance<ILoggerProvider>().GetFor<ExportJob>();
 
         public void Execute(IJobExecutionContext context)
         {
-            ThreadMarkerManager.MarkCurrentThreadAsIsolated();
-            ThreadMarkerManager.RemoveCurrentThreadFromNoTransactional();
-
             var pendingExportProcess = this.exportService.GetAndStartOldestUnprocessedDataExport();
             if (pendingExportProcess == null) return;
 
@@ -43,11 +46,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Jobs
 
                this.logger.Error("Export job failed", e);
             }
-            finally
-            {
-                ThreadMarkerManager.ReleaseCurrentThreadFromIsolation();
-                ThreadMarkerManager.RemoveCurrentThreadFromNoTransactional();
-            }
         }
 
         private AbstractExternalStorageDataExportHandler GetExternalStorageExportHandler(ExternalStorageType storageType)
@@ -55,11 +53,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Jobs
             switch (storageType)
             {
                 case ExternalStorageType.OneDrive:
-                    return ServiceLocator.Current.GetInstance<OnedriveBinaryDataExportHandler>();
+                    return serviceLocator.GetInstance<OnedriveBinaryDataExportHandler>();
                 case ExternalStorageType.Dropbox:
-                    return ServiceLocator.Current.GetInstance<DropboxBinaryDataExportHandler>();
+                    return serviceLocator.GetInstance<DropboxBinaryDataExportHandler>();
                 case ExternalStorageType.GoogleDrive:
-                    return ServiceLocator.Current.GetInstance<GoogleDriveBinaryDataExportHandler>();
+                    return serviceLocator.GetInstance<GoogleDriveBinaryDataExportHandler>();
                 default:
                     throw new NotSupportedException($"Export handler for '{Enum.GetName(typeof(ExternalStorageType), storageType)}' not found");
             }
@@ -68,15 +66,15 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Jobs
             switch (format)
             {
                     case DataExportFormat.Binary:
-                        return ServiceLocator.Current.GetInstance<BinaryFormatDataExportHandler>();
+                        return serviceLocator.GetInstance<BinaryFormatDataExportHandler>();
                     case DataExportFormat.Paradata:
-                        return ServiceLocator.Current.GetInstance<TabularFormatParaDataExportProcessHandler>();
+                        return serviceLocator.GetInstance<TabularFormatParaDataExportProcessHandler>();
                 case DataExportFormat.Tabular:
-                        return ServiceLocator.Current.GetInstance<TabularFormatDataExportHandler>();
+                        return serviceLocator.GetInstance<TabularFormatDataExportHandler>();
                     case DataExportFormat.SPSS:
-                        return ServiceLocator.Current.GetInstance<SpssFormatExportHandler>();
+                        return serviceLocator.GetInstance<SpssFormatExportHandler>();
                     case DataExportFormat.STATA:
-                        return ServiceLocator.Current.GetInstance<StataFormatExportHandler>();
+                        return serviceLocator.GetInstance<StataFormatExportHandler>();
                 default:
                     throw new NotSupportedException($"Export handler for '{format}' not found");
             }

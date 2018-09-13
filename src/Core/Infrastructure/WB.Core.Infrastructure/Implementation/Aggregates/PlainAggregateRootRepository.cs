@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
-using Ncqrs;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Aggregates;
 
@@ -9,6 +8,13 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
 {
     internal class PlainAggregateRootRepository : IPlainAggregateRootRepository
     {
+        private IServiceLocator serviceLocator;
+        public PlainAggregateRootRepository(IServiceLocator serviceLocator)
+        {
+            this.serviceLocator = serviceLocator;
+
+        }
+
         private readonly Type genericRepositoryType = typeof(IPlainAggregateRootRepository<>);
 
         public T Get<T>(Guid aggregateId) where T : class, IPlainAggregateRoot
@@ -40,9 +46,9 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
             methodInfo.Invoke(specificRepository, new object[] { aggregateRoot });
         }
 
-        private static object GetSpecificRepositoryOrThrow(Type aggregateRootType, Type specificRepositoryType)
+        private object GetSpecificRepositoryOrThrow(Type aggregateRootType, Type specificRepositoryType)
         {
-            var repositoryInstances = ServiceLocator.Current.GetAllInstances(specificRepositoryType).ToList();
+            var repositoryInstances = this.serviceLocator.GetAllInstances(specificRepositoryType).ToList();
 
             if (!repositoryInstances.Any())
                 throw new NotSupportedException(
