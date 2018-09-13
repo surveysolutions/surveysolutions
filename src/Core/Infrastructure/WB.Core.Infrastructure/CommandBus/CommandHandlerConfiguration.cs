@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using WB.Core.Infrastructure.Aggregates;
 
 namespace WB.Core.Infrastructure.CommandBus
@@ -36,7 +37,8 @@ namespace WB.Core.Infrastructure.CommandBus
         public CommandHandlerConfiguration<TAggregate, TCommand> PostProcessBy<TPostProcessor>()
             where TPostProcessor : ICommandPostProcessor<TAggregate, TCommand>
         {
-            this.postProcessors.Add(typeof(TPostProcessor));
+            var item = typeof(TPostProcessor);
+            this.postProcessors.Add(item);
             return this;
         }
 
