@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects.Export;
 using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
+using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -27,6 +28,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         private readonly string dataFileExtension = "tab";
         public readonly string CommentsFileName = "interview__comments";
         private readonly IQueryableReadSideRepositoryReader<InterviewCommentaries> interviewCommentariesStorage;
+       private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage;
         private readonly ITransactionManagerProvider transactionManager;
         private readonly ILogger logger;
 
@@ -39,6 +41,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             new DoExportFileHeader("Time", "Time when the comment was left"),
             new DoExportFileHeader("Variable", "Variable name for the commented question"),
             new DoExportFileHeader("interview__id", "Unique 32-character long identifier of the interview"),
+            new DoExportFileHeader("interview__key", "Identifier of the interview"),
             new DoExportFileHeader("Comment", "Text of the comment"),
             new DoExportFileHeader("Roster", "Name of the roster containing the variable"),
             new DoExportFileHeader("Id1", "Roster ID of the 1st level of nesting", true),
@@ -57,7 +60,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             ICsvWriter csvWriter,
             IQueryableReadSideRepositoryReader<InterviewCommentaries> interviewCommentariesStorage,
             ITransactionManagerProvider transactionManager,
-            ILogger logger)
+            ILogger logger, 
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage)
         {
             this.interviewDataExportSettings = interviewDataExportSettings;
             this.fileSystemAccessor = fileSystemAccessor;
@@ -65,6 +69,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             this.interviewCommentariesStorage = interviewCommentariesStorage;
             this.transactionManager = transactionManager;
             this.logger = logger;
+            this.interviewSummaryStorage = interviewSummaryStorage;
         }
 
         public void Export(QuestionnaireExportStructure questionnaireExportStructure,
@@ -86,15 +91,25 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             
             foreach (var interviewsChunk in interviewIdsToExport.Batch(batchSize))
             {
-                var interviewIdsStrings = interviewsChunk.Select(x => x.FormatGuid()).ToArray();
-
+                var interviewIdsChunk = interviewsChunk.ToHashSet();
+                var interviewIdsStrings = interviewIdsChunk.Select(x => x.FormatGuid()).ToArray();
+                
                 Expression<Func<InterviewCommentaries, bool>> whereClauseForComments = 
                     x => interviewIdsStrings.Contains(x.InterviewId);
-                
+
+                var interviewKeysMap = this.transactionManager
+                    .GetTransactionManager()
+                    .ExecuteInQueryTransaction(() =>
+                        this.interviewSummaryStorage.Query(_ => _
+                            .Where(x => interviewIdsChunk.Contains(x.InterviewId))
+                            .Select(x => new {x.InterviewId, x.Key})
+                            .ToList()))
+                    .ToDictionary(x => x.InterviewId.FormatGuid(), x => x.Key);
+
                 var exportComments = this.transactionManager
                                            .GetTransactionManager()
                                            .ExecuteInQueryTransaction(
-                                                () => this.QueryCommentsChunkFromReadSide(whereClauseForComments, maxRosterDepthInQuestionnaire, hasAtLeastOneRoster));
+                                                () => this.QueryCommentsChunkFromReadSide(whereClauseForComments, maxRosterDepthInQuestionnaire, hasAtLeastOneRoster, interviewKeysMap));
 
                 this.csvWriter.WriteData(commentsFilePath, exportComments, ExportFileSettings.DataFileSeparator.ToString());
                 totalProcessed += interviewIdsStrings.Length;
@@ -158,6 +173,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                 commentsHeader.Add("Roster");
 
             commentsHeader.Add("interview__id");
+            commentsHeader.Add("interview__key");
 
             for (int i = 1; i <= maxRosterDepthInQuestionnaire; i++)
             {
@@ -168,8 +184,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             return commentsHeader;
         }
 
-        private List<string[]> QueryCommentsChunkFromReadSide(Expression<Func<InterviewCommentaries, bool>> queryComments, 
-            int maxRosterDepthInQuestionnaire, bool hasAtLeastOneRoster)
+        private List<string[]> QueryCommentsChunkFromReadSide(
+            Expression<Func<InterviewCommentaries, bool>> queryComments,
+            int maxRosterDepthInQuestionnaire, bool hasAtLeastOneRoster, Dictionary<string, string> interviewKeysMap)
         {
             var comments = this.interviewCommentariesStorage.Query(
                             _ =>
@@ -177,20 +194,18 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                                     .SelectMany(
                                         interviewComments => interviewComments.Commentaries,
                                         (interview, comment) => new { interview.InterviewId, Comments = comment })
-                                    .Select(
-                                        i =>
-                                            new
-                                            {
-                                                i.InterviewId,
-                                                i.Comments.CommentSequence,
-                                                i.Comments.OriginatorName,
-                                                i.Comments.OriginatorRole,
-                                                i.Comments.Timestamp,
-                                                i.Comments.Variable,
-                                                i.Comments.Roster,
-                                                i.Comments.RosterVector,
-                                                i.Comments.Comment
-                                            }).OrderBy(i => i.Timestamp).ToList());
+                                    .Select(i => new
+                                        {
+                                            i.InterviewId,
+                                            i.Comments.CommentSequence,
+                                            i.Comments.OriginatorName,
+                                            i.Comments.OriginatorRole,
+                                            i.Comments.Timestamp,
+                                            i.Comments.Variable,
+                                            i.Comments.Roster,
+                                            i.Comments.RosterVector,
+                                            i.Comments.Comment
+                                        }).OrderBy(i => i.Timestamp).ToList());
 
             var result = new List<string[]>();
 
@@ -210,6 +225,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                     resultRow.Add(interview.Roster);
 
                 resultRow.Add(interview.InterviewId);
+                resultRow.Add(interviewKeysMap[interview.InterviewId]);
 
                 for (int i = 0; i < maxRosterDepthInQuestionnaire; i++)
                 {

@@ -16,7 +16,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 {
     internal interface IInterviewErrorsExporter
     {
-        List<string[]> Export(QuestionnaireExportStructure exportStructure, List<InterviewEntity> entitiesToExport, string basePath);
+        List<string[]> Export(QuestionnaireExportStructure exportStructure, List<InterviewEntity> entitiesToExport, string path, string interviewKey);
         void WriteHeader(bool hasAtLeastOneRoster, int maxRosterDepthInQuestionnaire, string filePath);
         void WriteDoFile(QuestionnaireExportStructure questionnaireExportStructure, string basePath);
 
@@ -36,6 +36,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             new DoExportFileHeader("variable", "Variable name for the question, where validation error occurred"),
             new DoExportFileHeader("type", "Type of the variable where the validation error occurred"),
             new DoExportFileHeader("interview__id", "Unique 32-character long identifier of the interview"),
+            new DoExportFileHeader("interview__key", "Identifier of the interview"),
             new DoExportFileHeader("message_number", "Numeric index of the validation rule that has fired"),
             new DoExportFileHeader("message", "Text of the error message"),
             new DoExportFileHeader("roster", "Name of the roster containing the variable"),
@@ -55,7 +56,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             this.fileSystemAccessor = fileSystemAccessor;
         }
 
-        public List<string[]> Export(QuestionnaireExportStructure exportStructure, List<InterviewEntity> entitiesToExport, string basePath)
+        public List<string[]> Export(QuestionnaireExportStructure exportStructure,
+            List<InterviewEntity> entitiesToExport, string path, string interviewKey)
         {
             var questionnaire = questionnaireStorage.GetQuestionnaire(exportStructure.Identity, null);
             List<string[]> exportRecords = new List<string[]>();
@@ -67,7 +69,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             {
                 foreach (var failedValidationConditionIndex in interviewEntity.InvalidValidations)
                 {
-                    string[] exportRow = CreateExportRow(questionnaire, interviewEntity, exportStructure.MaxRosterDepth, failedValidationConditionIndex);
+                    string[] exportRow = CreateExportRow(questionnaire, interviewEntity, exportStructure.MaxRosterDepth, failedValidationConditionIndex, interviewKey);
                     exportRecords.Add(exportRow);
                 }
             }
@@ -75,7 +77,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             return exportRecords;
         }
 
-        public List<string[]> DoExport(QuestionnaireExportStructure exportStructure, List<InterviewEntity> entitiesToExport, string basePath)
+        public List<string[]> DoExport(QuestionnaireExportStructure exportStructure, List<InterviewEntity> entitiesToExport, string basePath, string interviewKey)
         {
             var questionnaire = questionnaireStorage.GetQuestionnaire(exportStructure.Identity, null);
             List<string[]> exportRecords = new List<string[]>();
@@ -87,7 +89,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             {
                 foreach (var failedValidationConditionIndex in interviewEntity.InvalidValidations)
                 {
-                    string[] exportRow = CreateExportRow(questionnaire, interviewEntity, exportStructure.MaxRosterDepth, failedValidationConditionIndex);
+                    string[] exportRow = CreateExportRow(questionnaire, interviewEntity, exportStructure.MaxRosterDepth, failedValidationConditionIndex, interviewKey);
                     exportRecords.Add(exportRow);
                 }
             }
@@ -96,17 +98,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         }
 
         private static string[] CreateExportRow(IQuestionnaire questionnaire, InterviewEntity error,
-            int maxRosterDepthInQuestionnaire, int failedValidationConditionIndex)
+            int maxRosterDepthInQuestionnaire, int failedValidationConditionIndex, string interviewKey)
         {
             List<string> exportRow = new List<string>();
-            if (error.EntityType == EntityType.Question)
-            {
-                exportRow.Add(questionnaire.GetQuestionVariableName(error.Identity.Id));
-            }
-            else
-            {
-                exportRow.Add("");
-            }
+            exportRow.Add(error.EntityType == EntityType.Question
+                ? questionnaire.GetQuestionVariableName(error.Identity.Id)
+                : "");
             exportRow.Add(error.EntityType.ToString());
 
             if (error.Identity.RosterVector.Length > 0)
@@ -123,18 +120,13 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             }
 
             exportRow.Add(error.InterviewId.FormatGuid());
+            exportRow.Add(interviewKey);
 
             for (int i = 0; i < maxRosterDepthInQuestionnaire; i++)
             {
-                if (error.Identity.RosterVector.Length > i)
-                {
-                    exportRow.Add(error.Identity.RosterVector[i].ToString());
-                }
-                else 
-                {
-                    exportRow.Add("");
-                }
+                exportRow.Add(error.Identity.RosterVector.Length > i ? error.Identity.RosterVector[i].ToString() : "");
             }
+
             exportRow.Add((failedValidationConditionIndex + 1).ToString());
             exportRow.Add(questionnaire.GetValidationMessage(error.Identity.Id, failedValidationConditionIndex).RemoveHtmlTags());
             return exportRow.ToArray();
@@ -198,6 +190,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                 headers.Add("roster");
 
             headers.Add("interview__id");
+            headers.Add("interview__key");
 
             for (int i = 1; i <= maxRosterDepthInQuestionnaire; i++)
             {

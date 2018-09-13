@@ -283,7 +283,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             List<InterviewEntity> interview, QuestionnaireExportStructure exportStructure, IQuestionnaire questionnaire, string basePath)
         {
             exportProcessingStopwatch.Start();
-            List<string[]> errors = errorsExporter.Export(exportStructure, interview, basePath);
+            List<string[]> errors = errorsExporter.Export(exportStructure, interview, basePath, interviewToExport.Key);
 
             var interviewData = new InterviewData
             {

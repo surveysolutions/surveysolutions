@@ -99,7 +99,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 .ReturnsAsync(new InterviewUploadState
                 {
                     IsEventsUploaded = true,
-                    BinaryFilesNames = new HashSet<string> { "pic1.jpg", "audio1.flac" }
+                    ImagesFilesNames = new HashSet<string> { "pic1.jpg" },
+                    AudioFilesNames = new HashSet<string> { "audio1.flac" }
                 });
 
             await fixture.Create<InterviewerUploadInterviews>().ExecuteAsync();

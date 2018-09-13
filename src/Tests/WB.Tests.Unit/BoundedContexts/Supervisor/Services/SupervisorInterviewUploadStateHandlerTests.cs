@@ -80,8 +80,8 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
                 Check = new EventStreamSignatureTag()
             });
 
-            Assert.That(response.UploadState.BinaryFilesNames, Contains.Item("audio.jpg"));
-            Assert.That(response.UploadState.BinaryFilesNames, Contains.Item("pic1.jpg"));
+            Assert.That(response.UploadState.AudioFilesNames, Contains.Item("audio.jpg"));
+            Assert.That(response.UploadState.ImagesFilesNames, Contains.Item("pic1.jpg"));
         }
     }
 }
