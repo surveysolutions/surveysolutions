@@ -31,6 +31,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 {
+    [Obsolete("KP-11815")]
     internal class ReadSideToTabularFormatExportService : ITabularFormatExportService
     {
         private readonly string dataFileExtension = "tab";

@@ -11,6 +11,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers.Implementation
 {
+    [Obsolete("KP-11815")]
     internal abstract class TabBasedFormatExportHandler : AbstractDataExportHandler
     {
         private readonly ITabularFormatExportService tabularFormatExportService;
