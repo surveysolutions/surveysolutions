@@ -43,6 +43,12 @@ namespace WB.Services.Export.Host
 
                 var builder = CreateWebHostBuilder(args);
 
+                builder.ConfigureAppConfiguration(c =>
+                {
+                    var env = System.Environment.GetEnvironmentVariable("Computername");
+                    c.AddJsonFile($"appsettings.{env}.json", true);
+                });
+
                 if (isService)
                 {
                     var pathToExe = Process.GetCurrentProcess().MainModule.FileName;
