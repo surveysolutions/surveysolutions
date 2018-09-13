@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Hangfire;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -27,6 +28,7 @@ namespace WB.Services.Export.Host
                 .AddJsonFormatters();            
             services.Configure<BackgroundJobsConfig>(Configuration.GetSection("Scheduler"));
             services.AddSingleton<IHostedService, BackgroundJobsService>();
+            services.AddScoped<IBackgroundJobClient, BackgroundJobClient>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
