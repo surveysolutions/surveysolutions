@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 using Ncqrs.Eventing;
+using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
@@ -24,7 +25,7 @@ using WB.Core.SharedKernels.Questionnaire.Translations;
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
     [ExcludeFromCodeCoverage]
-    public class OfflineSynchronizationService : ISynchronizationService
+    public class OfflineSynchronizationService : IInterviewerSynchronizationService
     {
         private readonly IOfflineSyncClient syncClient;
         private readonly IInterviewerPrincipal principal;
@@ -179,6 +180,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         public Task<RestStreamResult> GetMapContentStream(string mapName, CancellationToken cancellationToken)
         {
             return Task.FromResult<RestStreamResult>(null);
+        }
+
+        public Task<InterviewerApiView> GetInterviewerAsync(RestCredentials credentials = null, CancellationToken? token = null)
+        {
+            throw new NotSupportedException("Offline mode is not support this method");
         }
 
         public async Task<Guid> GetCurrentSupervisor(CancellationToken cancellationToken, RestCredentials credentials)

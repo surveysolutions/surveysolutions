@@ -122,7 +122,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.ApiTests
                 checkVersionUrl);
         }
 
-        //[Test]
+        [Test]
         public void all_urls_used_in_Supervisor_SynchronizationService_should_be_declared_in_routes()
         {
             var restService = new DummyRestSeviceForCollectUrls();
@@ -182,7 +182,10 @@ namespace WB.Tests.Unit.Applications.Headquarters.ApiTests
                 }
                 catch(SynchronizationException ex) when (ex.Type == SynchronizationExceptionType.InvalidUrl)
                 {
-                    /* ignore */
+                    if (method.Name == "CanSynchronizeAsync")
+                        return; /* ignore */
+
+                    throw;
                 }
             }
 
