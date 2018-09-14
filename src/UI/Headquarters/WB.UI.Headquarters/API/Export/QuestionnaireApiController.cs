@@ -28,14 +28,13 @@ namespace WB.UI.Headquarters.API.Export
         [Route("questionnaire/{id}")]
         [ServiceApiKeyAuthorization]
         [HttpGet]
-        public JsonResult<QuestionnaireDocument> Get(string id)
+        public HttpResponseMessage Get(string id)
         {
             var questionnaireIdentity = QuestionnaireIdentity.Parse(id);
             QuestionnaireDocument questionnaireDocumentVersioned = this.questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity);
-            return Json(questionnaireDocumentVersioned, new JsonSerializerSettings
-            {
-                TypeNameHandling = TypeNameHandling.All
-            });
+            var response = new HttpResponseMessage();
+            response.Content = new StringContent(this.serializer.Serialize(questionnaireDocumentVersioned), Encoding.UTF8, "application/json");
+            return response;
         }
     }
 }
