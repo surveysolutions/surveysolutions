@@ -7,6 +7,7 @@ using Moq;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using NUnit.Framework;
+using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Synchronization;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.GenericSubdomains.Portable;
@@ -29,7 +30,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         {
             var obsoleteInterviewId = Id.g1;
 
-            var syncService = new Mock<ISynchronizationService>();
+            var syncService = new Mock<IInterviewerSynchronizationService>();
             syncService.Setup(x => x.CheckObsoleteInterviewsAsync(It.Is<List<ObsoletePackageCheck>>(y => y.Any(o => o.InterviewId == obsoleteInterviewId)), CancellationToken.None))
                 .ReturnsAsync(new List<Guid> {obsoleteInterviewId});
             syncService.Setup(x => x.GetCensusQuestionnairesAsync(CancellationToken.None))
