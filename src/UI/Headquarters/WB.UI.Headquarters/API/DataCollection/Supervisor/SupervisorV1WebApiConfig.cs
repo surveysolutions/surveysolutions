@@ -110,6 +110,8 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor
                 c => c.Action<InterviewsApiV1Controller>(x => x.PostImage(Param.Any<PostFileRequest>())));
             config.TypedRoute("api/supervisor/v1/interviews/{id:guid}/audio",
                 c => c.Action<InterviewsApiV1Controller>(x => x.PostAudio(Param.Any<PostFileRequest>())));
+            config.TypedRoute("api/supervisor/v1/interviews/{id:guid}/getInterviewUploadState",
+                c => c.Action<InterviewsApiV1Controller>(x => x.GetInterviewUploadState(Param.Any<Guid>(), Param.Any<EventStreamSignatureTag>())));
 
             // INTERVIEWERS
             config.TypedRoute("api/supervisor/v1/interviewers", c => c.Action<InterviewersApiController>(x => x.Get()));
