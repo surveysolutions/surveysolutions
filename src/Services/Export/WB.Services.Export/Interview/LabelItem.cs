@@ -1,4 +1,4 @@
-﻿using Main.Core.Entities.SubEntities;
+﻿using WB.Services.Export.Questionnaire;
 
 namespace WB.Services.Export.Interview
 {

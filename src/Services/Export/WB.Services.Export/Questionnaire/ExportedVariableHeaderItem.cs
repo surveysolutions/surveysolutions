@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Services.Export.Interview;
 
 namespace WB.Services.Export.Questionnaire

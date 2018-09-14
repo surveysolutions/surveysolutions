@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Main.Core.Entities.SubEntities;
 using WB.Services.Export.Interview;
 
 namespace WB.Services.Export.Questionnaire
