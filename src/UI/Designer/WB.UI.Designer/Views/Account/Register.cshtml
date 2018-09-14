@@ -37,7 +37,7 @@
     if (AppSettings.Instance.IsReCaptchaEnabled)
     {
         <div style="line-height: 0">
-            @Html.RenderCaptcha()
+            @Html.RenderCaptcha(DependencyResolver.Current.GetService<ICaptchaProvider>())
         </div>
     }
 

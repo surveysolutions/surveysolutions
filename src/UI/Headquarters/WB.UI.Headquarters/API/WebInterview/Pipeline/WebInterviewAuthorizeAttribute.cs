@@ -40,7 +40,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
                     if (hubIncomingInvokerContext.MethodDescriptor.Attributes.Any(x =>
                         x.TypeId.ToString() == ObserverNotAllowedAttribute.Id))
                     {
-                        if (serviceLocator.GetInstance<IAuthorizedUser>().IsObserving)
+                        if (serviceLocatorLocal.GetInstance<IAuthorizedUser>().IsObserving)
                             return false;
                     }
 
