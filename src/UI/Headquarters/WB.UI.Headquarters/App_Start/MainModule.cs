@@ -107,6 +107,7 @@ namespace WB.UI.Headquarters
             registry.Bind<IEventSourcedAggregateRootRepository, EventSourcedAggregateRootRepositoryWithWebCache>();
             registry.Bind<IAggregateRootCacheCleaner, EventSourcedAggregateRootRepositoryWithWebCache>();
             
+            //todo:af
             //could be expensive
             //rethink registration
             registry.BindWithConstructorArgumentInPerLifetimeScope<ILiteEventBus, NcqrCompatibleEventDispatcher>(

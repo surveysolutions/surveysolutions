@@ -27,7 +27,6 @@ using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Code.CommandTransformation;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Services;
-using WB.UI.Shared.Web.Attributes;
 using WB.UI.Shared.Web.CommandDeserialization;
 using WB.UI.Shared.Web.Modules;
 using WB.UI.Shared.Web.Services;
@@ -69,19 +68,27 @@ namespace WB.UI.Headquarters.Injections
 
 
 
-            registry.BindHttpFilter<UnderConstructionHttpFilter>(System.Web.Http.Filters.FilterScope.Global, 0);
-            registry.BindMvcFilter<UnderConstructionMvcFilter>(FilterScope.First, 0);
+            System.Web.Http.GlobalConfiguration.Configuration.Filters.Add(new UnderConstructionHttpFilter());
+            GlobalFilters.Filters.Add(new UnderConstructionMvcFilter());
 
 
-            registry.BindMvcFilterWhenActionMethodHasNoAttribute<GlobalNotificationAttribute, NoTransactionAttribute>(FilterScope.Global, 5);
+            //registry.BindHttpFilter<UnderConstructionHttpFilter>(System.Web.Http.Filters.FilterScope.Global, 0);
+            //registry.BindMvcFilter<UnderConstructionMvcFilter>(FilterScope.First, 0);
 
+            GlobalFilters.Filters.Add(new GlobalNotificationAttribute());
+            
+            //registry.BindMvcFilterWhenActionMethodHasNoAttribute<GlobalNotificationAttribute, NoTransactionAttribute>(FilterScope.Global, 5);
 
+            //todo:af
+            //filters should have order
             GlobalFilters.Filters.Add(new TransactionFilter());
-
+            
+            //no need any more
             //registry.BindMvcFilterWhenActionMethodHasNoAttribute<TransactionFilter, NoTransactionAttribute>(FilterScope.First, 1);
 
             System.Web.Http.GlobalConfiguration.Configuration.Filters.Add(new ApiTransactionFilter());
 
+            //no need
             //registry.BindHttpFilterWhenActionMethodHasNoAttribute<ApiTransactionFilter, NoTransactionAttribute>(System.Web.Http.Filters.FilterScope.Global, 1);
 
             registry.Bind<ICommandDeserializer, SurveyManagementCommandDeserializer>();

@@ -17,14 +17,12 @@ using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Enumerator.Native.WebInterview;
-using WB.UI.Shared.Web.Attributes;
 using WB.UI.Shared.Web.Filters;
 
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 {
     [ControlPanelAccess]
-    [NoTransaction]
     public class ControlPanelApiController : ApiController
     {
         public class VersionsInfo
@@ -74,7 +72,6 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
             this.serializer = serializer;
         }
         
-        [NoTransaction]
         public VersionsInfo GetVersions()
         {
             return new VersionsInfo(
