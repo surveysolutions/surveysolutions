@@ -133,6 +133,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Options =
                 new CovariantObservableCollection<SingleOptionLinkedQuestionOptionViewModel>(this.CreateOptions());
 
+            var question = interview.GetLinkedSingleOptionQuestion(this.Identity);
+            this.previousOptionToReset = question.IsAnswered() ? (decimal[])question.GetAnswer()?.SelectedValue : (decimal[])null;
+
             this.Options.CollectionChanged += (sender, args) =>
             {
                 if (this.optionsTopBorderViewModel != null)
@@ -174,42 +177,24 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             await this.OptionSelectedAsync(sender);
         }
 
-        private async void RemoveAnswer(object sender, EventArgs e)
-        {
-            try
-            {
-                timer.Change(Timeout.Infinite, Timeout.Infinite);
-                await this.Answering.SendRemoveAnswerCommandAsync(
-                    new RemoveAnswerCommand(this.interviewId,
-                        this.userId,
-                        this.questionIdentity));
-                this.QuestionState.Validity.ExecutedWithoutExceptions();
-
-                foreach (var option in this.Options.Where(option => option.Selected).ToList())
-                {
-                    option.Selected = false;
-                }
-
-                this.previousOptionToReset = null;
-            }
-            catch (InterviewException exception)
-            {
-                this.QuestionState.Validity.ProcessException(exception);
-            }
-        }
-
         private readonly Timer timer;
+
         protected internal int ThrottlePeriod { get; set; } = Constants.ThrottlePeriod;
+
         private decimal[] previousOptionToReset = null;
+
         private decimal[] selectedOptionToSave = null;
 
         private async Task SaveAnswer()
         {
-            var selectedOption = this.GetOptionByValue(this.selectedOptionToSave);
-            if (selectedOption == null)
+            if (this.previousOptionToReset != null && this.selectedOptionToSave.SequenceEqual(this.previousOptionToReset))
                 return;
 
+            var selectedOption = this.GetOptionByValue(this.selectedOptionToSave);
             var previousOption = this.GetOptionByValue(this.previousOptionToReset);
+
+            if (selectedOption == null)
+                return;
 
             var command = new AnswerSingleOptionLinkedQuestionCommand(
                 this.interviewId,
@@ -226,6 +211,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 }
 
                 await this.Answering.SendAnswerQuestionCommandAsync(command);
+
+                this.previousOptionToReset = this.selectedOptionToSave;
 
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
             }
@@ -254,10 +241,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             var selectedOption = (SingleOptionLinkedQuestionOptionViewModel) sender;
             this.selectedOptionToSave = selectedOption.RosterVector;
 
-            if (this.previousOptionToReset == null)
-                this.previousOptionToReset = this.Options
-                    .SingleOrDefault(option => option.Selected && option != selectedOption)?.RosterVector;
-
             this.Options.Where(x => x.Selected && x != selectedOption).ForEach(x => x.Selected = false);
 
             if (this.ThrottlePeriod == 0)
@@ -267,6 +250,46 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             else
             {
                 timer.Change(ThrottlePeriod, Timeout.Infinite);
+            }
+        }
+
+        private async void RemoveAnswer(object sender, EventArgs e)
+        {
+            try
+            {
+                timer.Change(Timeout.Infinite, Timeout.Infinite);
+                await this.Answering.SendRemoveAnswerCommandAsync(
+                    new RemoveAnswerCommand(this.interviewId,
+                        this.userId,
+                        this.questionIdentity));
+                this.QuestionState.Validity.ExecutedWithoutExceptions();
+
+                foreach (var option in this.Options.Where(option => option.Selected).ToList())
+                {
+                    option.Selected = false;
+                }
+
+                this.previousOptionToReset = null;
+            }
+            catch (InterviewException exception)
+            {
+                this.QuestionState.Validity.ProcessException(exception);
+            }
+        }
+
+        public void Handle(AnswersRemoved @event)
+        {
+            foreach (var question in @event.Questions)
+            {
+                if (this.questionIdentity.Equals(question.Id, question.RosterVector))
+                {
+                    foreach (var option in this.Options.Where(option => option.Selected))
+                    {
+                        option.Selected = false;
+                    }
+
+                    this.previousOptionToReset = null;
+                }
             }
         }
 
@@ -286,20 +309,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             optionViewModel.AnswerRemoved += this.RemoveAnswer;
 
             return optionViewModel;
-        }
-
-        public void Handle(AnswersRemoved @event)
-        {
-            foreach (var question in @event.Questions)
-            {
-                if (this.questionIdentity.Equals(question.Id, question.RosterVector))
-                {
-                    foreach (var option in this.Options.Where(option => option.Selected))
-                    {
-                        option.Selected = false;
-                    }
-                }
-            }
         }
 
         public async void Handle(RosterInstancesTitleChanged @event)

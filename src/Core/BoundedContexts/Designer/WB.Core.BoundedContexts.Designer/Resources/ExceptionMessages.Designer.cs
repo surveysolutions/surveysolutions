@@ -394,7 +394,7 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Question with id {0} can&apos;t be found..
+        ///   Looks up a localized string similar to Question with public key {0} can&apos;t be found..
         /// </summary>
         public static string QuestionCannotBeFound {
             get {
@@ -444,6 +444,15 @@ namespace WB.Core.BoundedContexts.Designer.Resources {
         public static string QuestionTypeIsNotSupported {
             get {
                 return ResourceManager.GetString("QuestionTypeIsNotSupported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Header {0} was not found in excel file.
+        /// </summary>
+        public static string RequiredHeaderWasNotFound {
+            get {
+                return ResourceManager.GetString("RequiredHeaderWasNotFound", resourceCulture);
             }
         }
         
