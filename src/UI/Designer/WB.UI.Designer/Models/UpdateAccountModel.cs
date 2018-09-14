@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using WB.UI.Designer.Resources;
 
 namespace WB.UI.Designer.Models
 {
@@ -25,6 +26,7 @@ namespace WB.UI.Designer.Models
         public string UserName { get; set; }
 
         [Display(Name = "Full name", Order = 2)]
+        [StringLength(RegisterModel.FullNameMaxLength, ErrorMessageResourceName = nameof(ErrorMessages.FullNameMaxLengthError), ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessage = null)]
         public string FullName { get; set; }
     }
 }

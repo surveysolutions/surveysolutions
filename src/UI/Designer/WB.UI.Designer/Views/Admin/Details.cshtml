@@ -15,8 +15,7 @@
         <b>Email:</b> @Model.Email
     </div>
     <div class="form-group">
-        @Html.TextBoxFor(x => x.FullName, new { @class = "form-control", @type = "text", placeholder = "Full Name" })
-        @Html.ValidationMessageFor(x => x.FullName, null, new { @class = "help-inline" })
+        <b>Full name:</b> @Model.FullName
     </div>
     <div class="form-group">
         @Html.CheckBoxFor(x => x.IsApproved, new { @id = "is-approved", @class = "wb-checkbox", @disabled = "disabled" })
