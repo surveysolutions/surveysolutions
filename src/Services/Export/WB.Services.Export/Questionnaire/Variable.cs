@@ -10,15 +10,21 @@ namespace WB.Services.Export.Questionnaire
             this.Children = new List<IQuestionnaireEntity>();
         }
 
-        public Guid PublicKey { get; set; }
-        public IEnumerable<IQuestionnaireEntity> Children { get; set; }
+        public Guid PublicKey { get; set;  }
+
+        public IEnumerable<IQuestionnaireEntity> Children { get; set;  }
 
         public IQuestionnaireEntity GetParent()
         {
-            return Parent;
+            return parent;
         }
 
-        public IQuestionnaireEntity Parent { get; set; }
+        public void SetParent(IQuestionnaireEntity parent)
+        {
+            this.parent = parent;
+        }
+
+        private IQuestionnaireEntity parent;
 
         public VariableType Type { get; set; }
         public string Name { get; set; }

@@ -7,8 +7,9 @@ namespace WB.Services.Export.Questionnaire
     {
         Guid PublicKey { get; }
 
-        IEnumerable<IQuestionnaireEntity> Children { get; set; }
+        IEnumerable<IQuestionnaireEntity> Children { get; }
 
         IQuestionnaireEntity GetParent();
+        void SetParent(IQuestionnaireEntity parent);
     }
 }

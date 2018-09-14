@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -53,23 +54,26 @@ namespace WB.Services.Export.Services.Implementation
             var fullUrl = uri + $"?{ApiKeyUriArgumentName}={tenantId}";
             var response = await client.GetAsync(fullUrl);
             var responseString = await response.Content.ReadAsStringAsync();
-            return JsonConvert.DeserializeObject<QuestionnaireDocument>(responseString, new JsonSerializerSettings
+            var questionnaireDocument = JsonConvert.DeserializeObject<QuestionnaireDocument>(responseString, new JsonSerializerSettings
             {
-                SerializationBinder = new QuestionnaireDocumentSerializationBinder()
+                SerializationBinder = new QuestionnaireDocumentSerializationBinder(),
+                TypeNameHandling = TypeNameHandling.Auto
             });
+            questionnaireDocument.ConnectChildrenWithParent();
+            return questionnaireDocument;
         }
     }
 
     internal class QuestionnaireDocumentSerializationBinder : DefaultSerializationBinder
     {
         private static readonly Assembly Assembly = typeof(QuestionnaireDocument).Assembly;
-        private static readonly Dictionary<string, Type> ResolvedTypes = new Dictionary<string, Type>();
+        private static readonly ConcurrentDictionary<string, Type> ResolvedTypes = new ConcurrentDictionary<string, Type>();
 
         public override Type BindToType(string assemblyName, string typeName)
         {
             if (!ResolvedTypes.ContainsKey(typeName))
             {
-                var type = Assembly.GetTypes().FirstOrDefault(x => x.Name.Equals(typeName, StringComparison.Ordinal));
+                var type = Assembly.GetTypes().FirstOrDefault(x => x.IsPublic && x.Name.Equals(typeName, StringComparison.Ordinal));
                 ResolvedTypes[typeName] = type;
             }
 
