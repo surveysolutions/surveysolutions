@@ -98,13 +98,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             }
         }
 
-        public Task<Guid> GetCurrentSupervisor(CancellationToken token, RestCredentials credentials)
-        {
-            return this.TryGetRestResponseOrThrowAsync(() =>
-                this.restService.GetAsync<Guid>(url: string.Concat(this.UsersController, "/supervisor"),
-                    credentials: credentials ?? this.restCredentials, token: token));
-        }
-
         public Task<bool> IsAutoUpdateEnabledAsync(CancellationToken token)
             => this.TryGetRestResponseOrThrowAsync(() =>
                 this.restService.GetAsync<bool>(url: AutoUpdateUrl, credentials: this.restCredentials, token: token));
@@ -243,13 +236,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 transferProgress: transferProgress,
                 token: token,
                 credentials: this.restCredentials));
-        }
-        
-        public Task<List<QuestionnaireIdentity>> GetCensusQuestionnairesAsync(CancellationToken token)
-        {
-            return this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<List<QuestionnaireIdentity>>(
-                url: string.Concat(this.QuestionnairesController, "/census"),
-                credentials: this.restCredentials, token: token));
         }
 
         public Task<List<QuestionnaireIdentity>> GetServerQuestionnairesAsync(CancellationToken cancellationToken)
