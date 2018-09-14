@@ -225,7 +225,7 @@ namespace WB.UI.Designer.Controllers
                         new EmailConfirmationModel()
                             {
                                 Email = user.Email.ToWBEmailAddress(),
-                                UserName = user.UserName,
+                                UserName = user.FullName ?? user.UserName,
                                 ConfirmationToken = confirmationToken
                             }).SendAsync();
 
