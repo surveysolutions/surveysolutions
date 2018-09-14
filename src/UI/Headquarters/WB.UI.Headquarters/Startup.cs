@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -21,6 +22,7 @@ using Autofac.Integration.WebApi;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.Owin;
 using Microsoft.AspNet.SignalR;
+using Microsoft.AspNet.SignalR.Hubs;
 using Microsoft.Owin;
 using Microsoft.Owin.BuilderProperties;
 using Microsoft.Owin.Extensions;
@@ -99,7 +101,8 @@ namespace WB.UI.Headquarters
                 .As<IServiceLocator>()
                 .InstancePerLifetimeScope();
 
-            autofacKernel.ContainerBuilder.RegisterLifetimeHubManager();
+            autofacKernel.ContainerBuilder.RegisterType<CustomLifetimeHubManager>().SingleInstance();
+            autofacKernel.ContainerBuilder.RegisterType<CustomAutofacHubActivator>().As<IHubActivator>().SingleInstance();
 
             //no scope involved activity should be used
             autofacKernel.Init().Wait();
@@ -449,6 +452,60 @@ namespace WB.UI.Headquarters
         {
             depth--;
             trace += ($"{GetPrefix()}Activating {activatingEventArgs.Component.Activator.LimitType} lifetime:{activatingEventArgs.Component.Lifetime}\r\n");
+        }
+    }
+
+    public class CustomLifetimeHubManager : IDisposable
+    {
+        private readonly ConcurrentDictionary<IHub, ILifetimeScope> _hubLifetimeScopes = new ConcurrentDictionary<IHub, ILifetimeScope>();
+
+        public T ResolveHub<T>(Type type, ILifetimeScope lifetimeScope) where T : ILifetimeHub
+        {
+            ILifetimeScope context = lifetimeScope.BeginLifetimeScope(ScopeLifetimeTag.RequestLifetimeScopeTag);
+            var serviceLocatorLocal = context.Resolve<IServiceLocator>(new NamedParameter("kernel", context));
+
+            T obj = (T)context.Resolve(type);
+            obj.OnDisposing += new EventHandler(this.HubOnDisposing);
+            this._hubLifetimeScopes.TryAdd((IHub)obj, context);
+            return obj;
+        }
+
+        public void Dispose()
+        {
+            this.Dispose(true);
+            GC.SuppressFinalize((object)this);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            foreach (IDisposable key in (IEnumerable<IHub>)this._hubLifetimeScopes.Keys)
+                key.Dispose();
+        }
+
+        private void HubOnDisposing(object sender, EventArgs eventArgs)
+        {
+            IHub key = sender as IHub;
+            ILifetimeScope lifetimeScope;
+            if (key == null || !this._hubLifetimeScopes.TryRemove(key, out lifetimeScope) || lifetimeScope == null)
+                return;
+            lifetimeScope.Dispose();
+        }
+    }
+
+    class CustomAutofacHubActivator : IHubActivator
+    {
+        private readonly ILifetimeScope _lifetimeScope;
+        private readonly CustomLifetimeHubManager _lifetimeHubManager;
+
+        public CustomAutofacHubActivator(CustomLifetimeHubManager lifetimeHubManager, ILifetimeScope lifetimeScope)
+        {
+            this._lifetimeScope = lifetimeScope;
+            this._lifetimeHubManager = lifetimeHubManager;
+        }
+
+        public IHub Create(HubDescriptor descriptor)
+        {
+            return typeof(ILifetimeHub).IsAssignableFrom(descriptor.HubType) ? (IHub)this._lifetimeHubManager.ResolveHub<ILifetimeHub>(descriptor.HubType, this._lifetimeScope) : this._lifetimeScope.Resolve(descriptor.HubType) as IHub;
         }
     }
 }
