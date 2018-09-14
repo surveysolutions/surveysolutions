@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using MvvmCross.Commands;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
@@ -42,7 +43,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.interviewerSettings = interviewerSettings;
         }
 
-        public void Load(LocalSynchronizationViewModel sync)
+        public async Task LoadAsync(LocalSynchronizationViewModel sync)
         {
             this.synchronization = sync;
             this.Title = InterviewerUIResources.Dashboard_AssignmentsTabTitle;
@@ -52,7 +53,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
             this.ItemsCount = censusQuestionnairesCount + assignmentsCount;
 
-            this.UpdateUiItems();
+            await this.UpdateUiItemsAsync();
         }
 
         private void RunSynchronization()

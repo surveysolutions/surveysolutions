@@ -1,4 +1,5 @@
-﻿using NHibernate.Mapping.ByCode;
+﻿using System.ComponentModel;
+using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.Infrastructure.PlainStorage;
@@ -6,6 +7,7 @@ using WB.Core.Infrastructure.PlainStorage;
 namespace WB.Core.BoundedContexts.Designer.Mappings
 {
     [PlainStorage]
+    [Localizable(false)]
     public class QuestionnaireChangeRecordMap : ClassMapping<QuestionnaireChangeRecord>
     {
         public QuestionnaireChangeRecordMap()
@@ -29,6 +31,7 @@ namespace WB.Core.BoundedContexts.Designer.Mappings
             Property(x => x.AffectedEntriesCount);
             Property(x => x.TargetItemType);
             Property(x => x.TargetItemDateTime);
+            Property(x => x.Patch);
 
             Set(x => x.References, set =>
             {
