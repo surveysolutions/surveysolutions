@@ -502,6 +502,7 @@
     <Content Include="Content\pdf.min.css">
       <DependentUpon>pdf.css</DependentUpon>
     </Content>
+    <Compile Include="Migrations\PlainStore\M001-100\M201809041548_AddDiffWithPreviousVersionColumn.cs" />
     <Content Include="questionnaire\content\fonts\glyphicons-halflings-regular.svg" />
     <Content Include="questionnaire\content\i\chekboxes.png" />
     <Content Include="questionnaire\content\i\chekboxes2k.png" />
