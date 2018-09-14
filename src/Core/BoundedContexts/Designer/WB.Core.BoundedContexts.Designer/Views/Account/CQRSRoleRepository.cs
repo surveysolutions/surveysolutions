@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using WB.Core.BoundedContexts.Designer.Commands.Account;
 using WB.Core.BoundedContexts.Designer.MembershipProvider.Roles;
@@ -8,6 +9,7 @@ using WB.Core.Infrastructure.ReadSide;
 
 namespace WB.Core.BoundedContexts.Designer.Views.Account
 {
+    [ExcludeFromCodeCoverage]
     public class CQRSRoleRepository : IRoleRepository
     {
         private readonly ICommandService commandService;

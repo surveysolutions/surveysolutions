@@ -85,11 +85,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
         private IPlainKeyValueStorage<QuestionnaireStateTracker> questionnaireStateTrackerStorage
             => ServiceLocator.Current.GetInstance<IPlainKeyValueStorage<QuestionnaireStateTracker>>();
 
-        private IQuestionnireHistoryVersionsService questionnireHistoryVersionsService 
-            => ServiceLocator.Current.GetInstance<IQuestionnireHistoryVersionsService>();
-
-        private QuestionnaireHistorySettings questionnaireHistorySettings 
-            => ServiceLocator.Current.GetInstance<QuestionnaireHistorySettings>();
+        private IQuestionnaireHistoryVersionsService QuestionnaireHistoryVersionsService 
+            => ServiceLocator.Current.GetInstance<IQuestionnaireHistoryVersionsService>();
 
         #region Questionnaire
 
@@ -682,59 +679,23 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             Guid targetId,
             string targetTitle,
             string targetNewTitle,
-            int? affecedEntries,
+            int? affectedEntries,
             DateTime? targetDateTime,
             QuestionnaireDocument questionnaireDocument,
             QuestionnaireChangeReference reference = null)
         {
-            var sQuestionnaireId = questionnaireId.FormatGuid();
-
-            var maxSequenceByQuestionnaire = this.questionnaireChangeItemStorage.Query(x => x
-                .Where(y => y.QuestionnaireId == sQuestionnaireId).Select(y => (int?) y.Sequence).Max());
-
-            var questionnaireChangeItem = new QuestionnaireChangeRecord
-            {
-                QuestionnaireChangeRecordId = Guid.NewGuid().FormatGuid(),
-                QuestionnaireId = questionnaireId.FormatGuid(),
-                UserId = responsibleId,
-                UserName = this.GetUserName(responsibleId),
-                Timestamp = DateTime.UtcNow,
-                Sequence = maxSequenceByQuestionnaire + 1 ?? 0,
-                ActionType = actionType,
-                TargetItemId = targetId,
-                TargetItemTitle = targetTitle,
-                TargetItemType = targetType,
-                TargetItemNewTitle = targetNewTitle,
-                AffectedEntriesCount = affecedEntries,
-                TargetItemDateTime = targetDateTime,
-            };
-
-            if (reference != null)
-            {
-                reference.QuestionnaireChangeRecord = questionnaireChangeItem;
-                questionnaireChangeItem.References.Add(reference);
-            }
-            
-            questionnaireChangeItem.ResultingQuestionnaireDocument = questionnireHistoryVersionsService.GetResultingQuestionnaireDocument(questionnaireDocument);
-
-            this.questionnaireChangeItemStorage.Store(questionnaireChangeItem, questionnaireChangeItem.QuestionnaireChangeRecordId);
-
-            var minSequence = (maxSequenceByQuestionnaire ?? 0) -
-                              questionnaireHistorySettings.QuestionnaireChangeHistoryLimit + 2;
-            if (minSequence < 0) return;
-
-            List<string> changeRecordIdsToRemove = this.questionnaireChangeItemStorage.Query(_ => _
-                    .Where(x => x.QuestionnaireId == sQuestionnaireId && x.Sequence < minSequence
-                        && x.ResultingQuestionnaireDocument != null)
-                    .Select(x => x.QuestionnaireChangeRecordId)
-                    .ToList());
-
-            foreach (var changeRecordIdToRemove in changeRecordIdsToRemove)
-            {
-                var itemdToRemoveQuestionnaire = this.questionnaireChangeItemStorage.GetById(changeRecordIdToRemove);
-                itemdToRemoveQuestionnaire.ResultingQuestionnaireDocument = null;
-                this.questionnaireChangeItemStorage.Store(itemdToRemoveQuestionnaire, changeRecordIdToRemove);
-            }
+            this.QuestionnaireHistoryVersionsService.AddQuestionnaireChangeItem(questionnaireId, 
+                responsibleId, 
+                GetUserName(responsibleId),
+                actionType,
+                targetType,
+                targetId,
+                targetTitle,
+                targetNewTitle,
+                affectedEntries,
+                targetDateTime,
+                questionnaireDocument,
+                reference);
         }
 
         private string GetUserName(Guid? userId)
@@ -908,7 +869,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Questionnaire
             var creatorId = aggregate.QuestionnaireDocument.CreatedBy ?? Guid.Empty;
             UpdateFullQuestionnaireState(aggregate.QuestionnaireDocument, command.QuestionnaireId, creatorId);
 
-            var itemToRevert = this.questionnaireChangeItemStorage.GetById(command.HistoryReferanceId.FormatGuid());
+            var itemToRevert = this.questionnaireChangeItemStorage.GetById(command.HistoryReferenceId.FormatGuid());
 
             AddQuestionnaireChangeItem(command.QuestionnaireId,
                 command.ResponsibleId,
