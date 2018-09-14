@@ -340,4 +340,7 @@
   <data name="Median" xml:space="preserve">
     <value>Медиана</value>
   </data>
+  <data name="Supervisor" xml:space="preserve">
+    <value>Супервизор</value>
+  </data>
 </root>

@@ -25,6 +25,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public DateTime? UnactiveDateStart { get; set; }
 
         public DateTime? UnactiveDateEnd { get; set; }
+
+        public Guid? TeamId { get; set; }
     }
 
     public class InterviewsWithoutPrefilledInputModel : ListViewModelBase
@@ -44,6 +46,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public string InterviewKey { get; set; }
 
         public Guid? InterviewId { get; set; }
+
         public Guid? SupervisorId { get; set; }
     }
 }
