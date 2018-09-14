@@ -19,14 +19,13 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             INativeReadSideStorage<TEntity>
         where TEntity : class, IReadSideRepositoryEntity
     {
-        private IServiceLocator serviceLocator;
+        
 
         public PostgreReadSideStorage(
             IUnitOfWork unitOfWork, 
             ILogger logger,
-            IServiceLocator serviceLocator) : base(unitOfWork, logger)
+            IServiceLocator serviceLocator) : base(unitOfWork, logger, serviceLocator)
         {
-            this.serviceLocator = serviceLocator;
         }
     }
 
@@ -36,12 +35,15 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
     {
         private readonly IUnitOfWork sessionProvider;
         private readonly ILogger logger;
+        private IServiceLocator serviceLocator;
 
         public PostgreReadSideStorage(IUnitOfWork unitOfWork, 
-            ILogger logger)
+            ILogger logger,
+            IServiceLocator serviceLocator)
         {
             this.sessionProvider = unitOfWork;
             this.logger = logger;
+            this.serviceLocator = serviceLocator;
         }
 
         public virtual int Count()
