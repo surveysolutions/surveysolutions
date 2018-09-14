@@ -1,12 +1,15 @@
 using System;
+using FluentAssertions;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 
-namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UserTests
+namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
 {
     [TestOf(typeof(User))]
-    internal class UserTests : UserTestsContext
+    internal class UserTests
     {
+        public static User CreateUser() => new User();
+
         [Test]
         public void when_updating_user()
         {
@@ -57,6 +60,49 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UserTests
             Assert.That(user.IsConfirmed, Is.EqualTo(isConfirmed));
             Assert.That(user.ConfirmationToken, Is.EqualTo(confirmationToken));
             Assert.That(user.FullName, Is.EqualTo(fullName));
+        }
+
+        [Test]
+        public void when_updating_locked_user_and_specifying_is_locked_false()
+        {
+            // arrange
+            var user = CreateUser();
+            user.IsLockedOut = true;
+
+            // act
+            user.Update(userName: "username", comment: null, email: null, passwordQuestion: null, isLockedOut: false,
+                isConfirmed: false, canImportOnHq: false, fullName: null);
+
+            // assert
+            user.IsLockedOut.Should().Be(false);
+        }
+
+        [Test]
+        public void when_updating_not_confirmed_user_and_specifying_is_confirmed_true()
+        {
+            // arrange
+            var user = CreateUser();
+
+            // act
+            user.Update(userName: "user name", comment: "some comment", email: "user@e.mail", passwordQuestion: "secret question", isLockedOut: true,
+                isConfirmed: true, canImportOnHq: true, fullName: null);
+
+            // assert
+            user.IsConfirmed.Should().Be(true);
+        }
+
+        [Test]
+        public void when_updating_unlocked_user_and_specifying_is_locked_true()
+        {
+            // arrange
+            var user = CreateUser();
+
+            // act
+            user.Update(userName: "username", comment: null, email: null, passwordQuestion: null, isLockedOut: true,
+                isConfirmed: false, canImportOnHq: false, fullName: null);
+
+            // assert
+            user.IsLockedOut.Should().Be(true);
         }
 
     }

@@ -124,6 +124,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Full name cannot contain more than {1} characters.
+        /// </summary>
+        internal static string FullNameMaxLengthError {
+            get {
+                return ResourceManager.GetString("FullNameMaxLengthError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Login or password is incorrect. Please try again..
         /// </summary>
         internal static string IncorrectUserNameOrPassword {

@@ -146,7 +146,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
             }
 
             IAccountView account = this.GetUser(accountEmail: email);
-            return account == null ? string.Empty : account.UserName;
+            return account == null ? string.Empty : account.FullName ?? account.UserName;
         }
 
         public MembershipCreateStatus Register(IMembershipAccount account)
