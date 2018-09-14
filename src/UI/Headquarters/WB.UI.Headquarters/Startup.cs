@@ -90,9 +90,9 @@ namespace WB.UI.Headquarters
             autofacKernel.ContainerBuilder.RegisterType<Autofac.Integration.SignalR.AutofacDependencyResolver>()
                 .As<Microsoft.AspNet.SignalR.IDependencyResolver>().SingleInstance();
             
-            //todo:af remove
+            
             //temp logging
-            autofacKernel.ContainerBuilder.RegisterModule<LogRequestModule>();
+            //autofacKernel.ContainerBuilder.RegisterModule<LogRequestModule>();
             
             autofacKernel.ContainerBuilder
                 .RegisterType<CustomMVCDependencyResolver>()
@@ -371,10 +371,6 @@ namespace WB.UI.Headquarters
 
     public class CustomMVCDependencyResolver : Autofac.Integration.Mvc.AutofacDependencyResolver
     {
-        //todo:af
-        //try to extract to bindings
-        //private IServiceLocator locator;
-
         public CustomMVCDependencyResolver(ILifetimeScope container) : base(container)
         {
         }
@@ -395,13 +391,6 @@ namespace WB.UI.Headquarters
         {
             //to preserve scope
             var serviceLocator = this.RequestLifetimeScope.Resolve<IServiceLocator>(new NamedParameter("kernel", this.RequestLifetimeScope));
-
-//            if (ApplicationContainer.IsRegistered(typeof(UnitOfWork)))
-//            {
-//                //alarm
-//                throw new Exception();
-//           }
-
             return base.GetService(serviceType);
         }
 
@@ -459,7 +448,7 @@ namespace WB.UI.Headquarters
 
         private string GetPrefix()
         {
-            return new string('-', /*depth * */ 2);
+            return new string('-', Math.Max(depth *  2, 2));
         }
 
         private void RegistrationOnPreparing(object sender, PreparingEventArgs preparingEventArgs)

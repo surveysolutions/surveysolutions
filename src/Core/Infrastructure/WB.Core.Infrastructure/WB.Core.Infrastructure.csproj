@@ -26,6 +26,9 @@
     <Reference Include="Autofac.Integration.WebApi">
       <HintPath>..\..\..\..\packages\Autofac.WebApi2.4.0.0\lib\net45\Autofac.Integration.WebApi.dll</HintPath>
     </Reference>
+    <Reference Include="WB.Infrastructure.Native">
+      <HintPath>..\..\..\UI\WB.UI.WebTester\Bin\WB.Infrastructure.Native.dll</HintPath>
+    </Reference>
     <Reference Include="WB.UI.Shared.Web">
       <HintPath>..\..\..\UI\WB.UI.WebTester\Bin\WB.UI.Shared.Web.dll</HintPath>
     </Reference>

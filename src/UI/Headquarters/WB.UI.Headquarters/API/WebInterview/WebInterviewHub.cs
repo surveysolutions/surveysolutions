@@ -203,6 +203,7 @@ namespace WB.UI.Headquarters.API.WebInterview
         {
             //todo:af 
             //move it to more proper place
+            
             unitOfWork.AcceptChanges();
 
             base.Dispose(disposing);

@@ -263,10 +263,6 @@ namespace WB.UI.Headquarters
             autofacKernel.Load(new HeadquartersUIModule(),
                                new MainModule(settingsProvider, applicationSecuritySection, legacyAssemblySettings));
 
-            //todo:af check to do without it
-
-            //autofacKernel.ContainerBuilder.RegisterType<UpgradeAssignmentJob>().InstancePerDependency();
-            //autofacKernel.ContainerBuilder.RegisterType<SyncPackagesReprocessorBackgroundJob>().InstancePerDependency();
             
 /*
 

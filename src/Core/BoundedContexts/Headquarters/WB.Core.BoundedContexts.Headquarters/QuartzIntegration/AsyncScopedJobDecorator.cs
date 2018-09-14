@@ -23,7 +23,7 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
             {
                 //preserve scope
                 var serviceLocator = scope.Resolve<IServiceLocator>(new NamedParameter("kernel", scope));
-                var unitOfWork = scope.Resolve<IUnitOfWork>();
+                var unitOfWork = serviceLocator.GetInstance<IUnitOfWork>();
                 try
                 {
                     var job = scope.Resolve(jobType) as IJob;
@@ -38,6 +38,7 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
                     unitOfWork.Dispose();
                     throw;
                 }
+                
             }
         }
     }
