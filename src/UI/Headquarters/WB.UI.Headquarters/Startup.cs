@@ -8,7 +8,6 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Hosting;
 using System.Web.Http;
-using System.Web.Http.Dependencies;
 using System.Web.Http.Filters;
 using System.Web.Mvc;
 using System.Web.Optimization;
@@ -16,7 +15,6 @@ using System.Web.Routing;
 using System.Web.SessionState;
 using Autofac;
 using Autofac.Core;
-using Autofac.Core.Lifetime;
 using Autofac.Integration.Mvc;
 using Autofac.Integration.SignalR;
 using Autofac.Integration.WebApi;
@@ -38,16 +36,13 @@ using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Binding;
 using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Monitoring;
-using WB.Infrastructure.Native.Storage.Postgre;
 using WB.UI.Headquarters.API.WebInterview;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
-using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Enumerator.Services.Internals;
 using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.DataAnnotations;
@@ -92,7 +87,7 @@ namespace WB.UI.Headquarters
             
             
             //temp logging
-            //autofacKernel.ContainerBuilder.RegisterModule<LogRequestModule>();
+            autofacKernel.ContainerBuilder.RegisterModule<LogRequestModule>();
             
             autofacKernel.ContainerBuilder
                 .RegisterType<CustomMVCDependencyResolver>()
@@ -155,18 +150,13 @@ namespace WB.UI.Headquarters
             app.UseAutofacMiddleware(container);
             app.UseWebApi(config);
 
-            var logger = ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<Startup>();
-            logger.Info($@"Starting Headquarters {ServiceLocator.Current.GetInstance<IProductVersion>()}");
+            var logger = container.Resolve<ILoggerProvider>().GetFor<Startup>();
+            logger.Info($@"Starting Headquarters {container.Resolve<IProductVersion>()}");
 
             ConfigureAuth(app);
             InitializeAppShutdown(app);
             InitializeMVC();
             ConfigureWebApi(app);
-
-            using (var scope = container.BeginLifetimeScope())
-            {
-                scope.Resolve<IProductVersionHistory>().RegisterCurrentVersion();
-            }
 
             Exceptional.Settings.ExceptionActions.AddHandler<TargetInvocationException>((error, exception) =>
             {
@@ -401,7 +391,6 @@ namespace WB.UI.Headquarters
         }
     }
 
-
     /// <summary>
     /// Autofac implementation of the <see cref="T:System.Web.Http.Dependencies.IDependencyResolver" /> interface.
     /// </summary>
@@ -430,7 +419,6 @@ namespace WB.UI.Headquarters
         {
         }
     }
-
     
     public class LogRequestModule : Autofac.Module
     {

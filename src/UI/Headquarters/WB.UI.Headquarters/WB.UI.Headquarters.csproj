@@ -1779,8 +1779,6 @@
     <Content Include="Views\HealthCheck\Index.cshtml" />
     <Content Include="Views\Interviewer\Create.cshtml" />
     <Content Include="Views\Interviewer\Edit.cshtml" />
-    <Content Include="Views\Maintenance\ReadSideIsOutdated.cshtml" />
-    <Content Include="Views\Maintenance\WaitForReadSideRebuild.cshtml" />
     <Content Include="Views\Reports\SpeedAndQuantity.cshtml" />
     <Content Include="Views\Reports\SurveysAndStatusesForSv.cshtml" />
     <Content Include="Views\Survey\Interviews.cshtml" />
@@ -2258,7 +2256,6 @@
     <Compile Include="Controllers\InterviewController.cs" />
     <Compile Include="Controllers\Profile\InterviewerController.cs" />
     <Compile Include="Controllers\InterviewersController.cs" />
-    <Compile Include="Controllers\MaintenanceController.cs" />
     <Compile Include="Controllers\ReportsController.cs" />
     <Compile Include="Controllers\ResourceController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
