@@ -23,13 +23,17 @@ namespace WB.UI.Headquarters.Services
         private static readonly int DelayOnErrorInSeconds = 3 * 60;
 
         private readonly IPlainKeyValueStorage<VersionCheckingInfo> appSettingsStorage;
-        
-        private readonly IProductVersion productVersion;
 
-        public VersionCheckService(IPlainKeyValueStorage<VersionCheckingInfo> appSettingsStorage, IProductVersion productVersion)
+        private readonly IProductVersion productVersion;
+        private IServiceLocator serviceLocator;
+
+        public VersionCheckService(IPlainKeyValueStorage<VersionCheckingInfo> appSettingsStorage,
+            IProductVersion productVersion,
+            IServiceLocator serviceLocator)
         {
             this.appSettingsStorage = appSettingsStorage;
             this.productVersion = productVersion;
+            this.serviceLocator = serviceLocator;
         }
 
         public bool DoesNewVersionExist()
@@ -40,7 +44,7 @@ namespace WB.UI.Headquarters.Services
             }
 
             this.SetVersion();
-            
+
             return AvailableVersion?.Build > productVersion.GetBildNumber();
         }
 
@@ -60,7 +64,7 @@ namespace WB.UI.Headquarters.Services
 
                 var isCacheExpired = (DateTime.Now - LastLoadedAt)?.Seconds > SecondsForCacheIsValid;
 
-                if(LastLoadedAt == null || isCacheExpired)
+                if (LastLoadedAt == null || isCacheExpired)
                 {
                     var isErrorDelayExpired = ErrorOccuredAt != null && (DateTime.Now - ErrorOccuredAt)?.Seconds > DelayOnErrorInSeconds;
 
@@ -74,25 +78,26 @@ namespace WB.UI.Headquarters.Services
 
         private async Task UpdateVersionAsync()
         {
-            //todo:af remove it after fix thread execution
-            using (var scope = ServiceLocator.Current.CreateChildContainer())
+            try
             {
-                try
-                {
-                    var versionInfo =
-                        await DoRequestJsonAsync<VersionCheckingInfo>(ApplicationSettings.NewVersionCheckUrl);
+                var versionInfo =
+                    await DoRequestJsonAsync<VersionCheckingInfo>(ApplicationSettings.NewVersionCheckUrl);
 
-                    AvailableVersion = versionInfo;
-                    LastLoadedAt = DateTime.Now;
-                    ErrorOccuredAt = null;
-
-                    scope.Resolve<IPlainKeyValueStorage<VersionCheckingInfo>>().Store(versionInfo, VersionCheckingInfo.VersionCheckingInfoKey);
-                }
-                catch (Exception)
+                AvailableVersion = versionInfo;
+                LastLoadedAt = DateTime.Now;
+                ErrorOccuredAt = null;
+                this.serviceLocator.ExecuteActionInScope((serviceLocatorLocal) =>
                 {
-                    ErrorOccuredAt = DateTime.Now;
-                }
+                    serviceLocatorLocal.GetInstance<IPlainKeyValueStorage<VersionCheckingInfo>>()
+                        .Store(versionInfo, VersionCheckingInfo.VersionCheckingInfoKey);
+                });
+
             }
+            catch (Exception)
+            {
+                ErrorOccuredAt = DateTime.Now;
+            }
+
         }
 
         private async Task<T> DoRequestJsonAsync<T>(string uri)

@@ -3,66 +3,66 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Autofac;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.UI.Shared.Enumerator.Services.Internals;
 
 namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewDetailsDataScheduler
 {
     [DisallowConcurrentExecution]
     internal class SyncPackagesProcessorBackgroundJob : IJob
     {
-        ILogger logger => ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<SyncPackagesProcessorBackgroundJob>();
-        IInterviewPackagesService interviewPackagesService => ServiceLocator.Current.GetInstance<IInterviewPackagesService>();
-        SyncPackagesProcessorBackgroundJobSetting interviewPackagesJobSetings => ServiceLocator.Current.GetInstance<SyncPackagesProcessorBackgroundJobSetting>();
+        private readonly IServiceLocator serviceLocator;
+
+        public SyncPackagesProcessorBackgroundJob(IServiceLocator servicelocator)
+        {
+            this.serviceLocator = servicelocator;
+        }
 
         public void Execute(IJobExecutionContext context)
         {
+            ILogger logger = this.serviceLocator.GetInstance<ILoggerProvider>().GetFor<SyncPackagesProcessorBackgroundJob>();
+
             try
             {
                 Stopwatch stopwatch = Stopwatch.StartNew();
 
-                IReadOnlyCollection<string> packageIds = this.ExecuteInQueryTransaction(() =>
-                    this.interviewPackagesService.GetTopPackageIds(
-                        this.interviewPackagesJobSetings.SynchronizationBatchCount));
+                IReadOnlyCollection<string> packageIds = null;
+
+                serviceLocator.ExecuteActionInScope((serviceLocatorLocal) =>
+                {
+                    packageIds = serviceLocatorLocal.GetInstance<IInterviewPackagesService>().GetTopPackageIds(
+                        serviceLocator.GetInstance<SyncPackagesProcessorBackgroundJobSetting>().SynchronizationBatchCount);
+                });
 
                 if (packageIds == null || !packageIds.Any()) return;
 
-                this.logger.Debug($"Interview packages job: Received {packageIds.Count} packages for procession. Took {stopwatch.Elapsed:g}.");
+                logger.Debug($"Interview packages job: Received {packageIds.Count} packages for procession. Took {stopwatch.Elapsed:g}.");
                 stopwatch.Restart();
 
                 Parallel.ForEach(packageIds,
                     new ParallelOptions
                     {
-                        MaxDegreeOfParallelism =
-                            this.interviewPackagesJobSetings.SynchronizationParallelExecutorsCount
+                        MaxDegreeOfParallelism = serviceLocator.GetInstance<SyncPackagesProcessorBackgroundJobSetting>().SynchronizationParallelExecutorsCount
                     },
                     packageId =>
                     {
-                        this.ExecuteInPlainTransaction(() =>
+                        serviceLocator.ExecuteActionInScope((serviceLocatorLocal) =>
                         {
-                            this.interviewPackagesService.ProcessPackage(packageId);
+                            serviceLocatorLocal.GetInstance<IInterviewPackagesService>().ProcessPackage(packageId);
                         });
                     });
 
-                this.logger.Info($"Interview packages job: Processed {packageIds.Count} packages. Took {stopwatch.Elapsed:g}.");
+                logger.Info($"Interview packages job: Processed {packageIds.Count} packages. Took {stopwatch.Elapsed:g}.");
                 stopwatch.Stop();
             }
             catch (Exception ex)
             {
-                this.logger.Error($"Interview packages job: FAILED. Reason: {ex.Message} ", ex);
+                logger.Error($"Interview packages job: FAILED. Reason: {ex.Message} ", ex);
             }
-        }
-
-        private T ExecuteInQueryTransaction<T>(Func<T> query)
-        {
-            return query();
-        }
-
-        private void ExecuteInPlainTransaction(Action query)
-        {
-            query();
         }
     }
 }
