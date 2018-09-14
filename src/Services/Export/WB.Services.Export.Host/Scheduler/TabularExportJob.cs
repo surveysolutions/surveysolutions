@@ -30,7 +30,7 @@ namespace WB.Services.Export.Host.Scheduler
                 status,
                 hostingEnvironment.ContentRootPath,
                 fromDate,
-                toDate).Wait();
+                toDate).GetAwaiter().GetResult();
         }
     }
 }

@@ -13,7 +13,7 @@ namespace WB.Services.Export.Questionnaire
 
         public bool IsRoster { get; set; }
 
-        public Guid? RosterSizeQuestionId { get; set; }
+        public Guid? RosterSizeQuestionId { get; set;  }
 
         public bool IsFixedRoster => IsRoster && RosterSizeQuestionId == null;
 
@@ -21,19 +21,28 @@ namespace WB.Services.Export.Questionnaire
 
         public FixedRosterTitle[] FixedRosterTitles { get; set; }
         
-        public string VariableName { get; set; }
+        public string VariableName { get; set;  }
 
-        public string Title { get; set; }
+        public string Title { get; set;  }
 
-        public Guid? RosterTitleQuestionId { get; set; }
+        public Guid? RosterTitleQuestionId { get; set;  }
 
-        public Guid PublicKey { get; set; }
+        public Guid PublicKey { get; set;  }
 
         public IEnumerable<IQuestionnaireEntity> Children { get; set; }
 
         public IQuestionnaireEntity GetParent()
         {
             return Parent;
+        }
+
+        public void SetParent(IQuestionnaireEntity parent)
+        {
+            this.Parent = parent;
+            foreach (var questionnaireEntity in Children)
+            {
+                questionnaireEntity.SetParent(this);
+            }
         }
     }
 }
