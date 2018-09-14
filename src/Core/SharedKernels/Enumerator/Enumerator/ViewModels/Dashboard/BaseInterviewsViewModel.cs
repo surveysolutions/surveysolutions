@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
@@ -46,14 +47,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         private int GetDbItemsCount()
             => this.interviewViewRepository.Count(this.GetDbQuery());
 
-        public void Load(Guid? lastVisitedInterviewId)
+        public async Task LoadAsync(Guid? lastVisitedInterviewId)
         {
             this.lastVisitedInterviewId = lastVisitedInterviewId;
 
             this.ItemsCount = this.GetDbItemsCount();
             this.UpdateTitle();
 
-            this.UpdateUiItems();
+            await this.UpdateUiItemsAsync();
         }
 
         protected override IEnumerable<IDashboardItem> GetUiItems()

@@ -28,8 +28,16 @@
     <None Remove="BoundedContexts\Designer\TranslationServiceTests\testTranslationsWithDuplicates.xlsx" />
     <None Remove="BoundedContexts\Designer\TranslationServiceTests\testTranslationsWithHtml.xlsx" />
     <None Remove="BoundedContexts\Designer\TranslationServiceTests\testTranslationsWithMissingTranslations.xlsx" />
+    <None Remove="BoundedContexts\Designer\TranslationServiceTests\testTranslationsWithoutEntityIdColumn.xlsx" />
+    <None Remove="BoundedContexts\Designer\TranslationServiceTests\testTranslationsWithoutVariableColumn - Copy.xlsx" />
+    <None Remove="BoundedContexts\Designer\TranslationServiceTests\testTranslationsWithoutVariableColumn.xlsx" />
     <None Remove="BoundedContexts\Designer\TranslationServiceTests\testTranslationsWithPermittedTags.xlsx" />
+    <None Remove="BoundedContexts\Designer\TranslationServiceTests\testTranslationsWithRandomOrderColumns.xlsx" />
     <None Remove="BoundedContexts\Designer\TranslationServiceTests\translationsForDifferentQuestionnaire.xlsx" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="BoundedContexts\Designer\TranslationServiceTests\testTranslationsWithoutEntityIdColumn.xlsx" />
+    <EmbeddedResource Include="BoundedContexts\Designer\TranslationServiceTests\testTranslationsWithoutVariableColumn.xlsx" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="BoundedContexts\Designer\TranslationServiceTests\testTranslationsWithHtml.xlsx" />
@@ -37,6 +45,7 @@
     <EmbeddedResource Include="BoundedContexts\Designer\TranslationServiceTests\testTranslationsWithDuplicates.xlsx" />
     <EmbeddedResource Include="BoundedContexts\Designer\TranslationServiceTests\testTranslationsWithMissingTranslations.xlsx" />
     <EmbeddedResource Include="BoundedContexts\Designer\TranslationServiceTests\testTranslationsWithPermittedTags.xlsx" />
+    <EmbeddedResource Include="BoundedContexts\Designer\TranslationServiceTests\testTranslationsWithRandomOrderColumns.xlsx" />
     <EmbeddedResource Include="BoundedContexts\Designer\TranslationServiceTests\translationsForDifferentQuestionnaire.xlsx" />
   </ItemGroup>
   <ItemGroup>
@@ -69,7 +78,6 @@
     <PackageReference Include="Microsoft.AspNet.WebPages.WebData" Version="3.2.3" />
     <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="2.9.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="2.9.0" />
-    <PackageReference Include="microsoft.csharp" Version="4.5.0" />
     <PackageReference Include="Microsoft.Web.Infrastructure" Version="1.0.0.0" />
     <PackageReference Include="Moq" Version="4.9.0" />
     <PackageReference Include="MultipartDataMediaFormatter" Version="1.1.0.0" />
@@ -85,7 +93,6 @@
     <PackageReference Include="T4Scaffolding.Core" Version="1.0.0" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="System.Configuration" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.ApplicationServices" />
   </ItemGroup>
