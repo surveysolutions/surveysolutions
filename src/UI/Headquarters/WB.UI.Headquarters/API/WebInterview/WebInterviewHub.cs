@@ -18,7 +18,6 @@ using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Models;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.UI.Headquarters.API.WebInterview.Pipeline;
-using WB.UI.Shared.Enumerator.Services.Internals;
 
 namespace WB.UI.Headquarters.API.WebInterview
 {
