@@ -1,10 +1,25 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace WB.Services.Export.Questionnaire
 {
-    public class Variable
+    public class Variable : IQuestionnaireEntity
     {
+        public Variable()
+        {
+            this.Children = new List<IQuestionnaireEntity>();
+        }
+
         public Guid PublicKey { get; set; }
+        public IEnumerable<IQuestionnaireEntity> Children { get; set; }
+
+        public IQuestionnaireEntity GetParent()
+        {
+            return Parent;
+        }
+
+        public IQuestionnaireEntity Parent { get; set; }
+
         public VariableType Type { get; set; }
         public string Name { get; set; }
         public string Label { get; set; }

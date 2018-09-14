@@ -3,12 +3,12 @@ using System.Collections.Generic;
 
 namespace WB.Services.Export.Questionnaire
 {
-    public class Question : IQuestionnaireEntity
+    public abstract class Question : IQuestionnaireEntity
     {
         public Question()
         {
             this.Answers = new List<Answer>();
-            this.Children = Array.Empty<IQuestionnaireEntity>();
+            this.Children = new List<IQuestionnaireEntity>();
         }
 
         public Guid PublicKey { get; set; }
@@ -30,7 +30,7 @@ namespace WB.Services.Export.Questionnaire
         public Guid? LinkedToQuestionId { get; set; }
         public Guid? LinkedToRosterId { get; set; }
 
-        public virtual bool IsQuestionLinked()
+        public bool IsQuestionLinked()
         {
             return LinkedToQuestionId != null || LinkedToRosterId != null;
         }
@@ -63,9 +63,36 @@ namespace WB.Services.Export.Questionnaire
         public int? MaxAnswerCount { get; set; }
     }
 
-    public class GpsCoordinateQuestion : Question
+    public class GpsCoordinateQuestion : Question { }
+
+    public class AreaQuestion : Question { }
+
+    public class AudioQuestion : Question { }
+
+    public class MultimediaQuestion : Question { }
+
+    public class NumericQuestion : Question { }
+
+    public class QRBarcodeQuestion : Question { }
+
+    public class StaticText : IQuestionnaireEntity
     {
+        public StaticText()
+        {
+            this.Children = new List<IQuestionnaireEntity>();
+        }
+
+        public Guid PublicKey { get; }
+        public IEnumerable<IQuestionnaireEntity> Children { get; set; }
+        public IQuestionnaireEntity GetParent()
+        {
+            return Parent;
+        }
+
+        public IQuestionnaireEntity Parent { get; set; }
     }
+
+    public class TextQuestion : Question { }
 
     public enum QuestionType
     {
