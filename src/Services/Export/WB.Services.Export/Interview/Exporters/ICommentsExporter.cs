@@ -12,6 +12,7 @@ using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview.Entities;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Services;
+using WB.Services.Export.Tenant;
 using WB.Services.Export.Utils;
 
 namespace WB.Services.Export.Interview.Exporters
@@ -21,7 +22,8 @@ namespace WB.Services.Export.Interview.Exporters
         Task Export(QuestionnaireExportStructure questionnaireExportStructure,
             List<Guid> interviewIdsToExport,
             string basePath,
-            string tenantId,
+            string tenantBaseUrl,
+            TenantId tenantId,
             IProgress<int> progress,
             CancellationToken cancellationToken);
     }
@@ -74,8 +76,9 @@ namespace WB.Services.Export.Interview.Exporters
         public async Task Export(QuestionnaireExportStructure questionnaireExportStructure,
             List<Guid> interviewIdsToExport,
             string basePath,
-            string tenantId,
-            IProgress<int> progress, 
+            string tenantBaseUrl,
+            TenantId tenantId,
+            IProgress<int> progress,
             CancellationToken cancellationToken)
         {
             //var batchSize = this.interviewDataExportSettings.MaxRecordsCountPerOneExportQuery;
@@ -92,7 +95,7 @@ namespace WB.Services.Export.Interview.Exporters
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                List<InterviewComment> comments = await interviewCommentariesStorage.GetInterviewCommentsAsync(interviewId, tenantId);
+                List<InterviewComment> comments = await interviewCommentariesStorage.GetInterviewCommentsAsync(tenantBaseUrl, tenantId, interviewId);
                 var rows = ConvertToCsvStrings(comments, maxRosterDepthInQuestionnaire, hasAtLeastOneRoster);
                 this.csvWriter.WriteData(commentsFilePath, rows, ExportFileSettings.DataFileSeparator.ToString());
                 totalProcessed++;

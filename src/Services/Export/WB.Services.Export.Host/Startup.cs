@@ -11,6 +11,7 @@ using WB.Services.Export.Host.Infra;
 using WB.Services.Export.Host.Scheduler;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Infrastructure.Implementation;
+using WB.Services.Export.Services;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace WB.Services.Export.Host
@@ -35,9 +36,8 @@ namespace WB.Services.Export.Host
             
             services.AddScoped<IBackgroundJobClient, BackgroundJobClient>();
             services.AddSingleton<IHostedService, BackgroundJobsService>();
-            services.AddTransient<IFileSystemAccessor, FileSystemAccessor>();
-            services.AddTransient<ICsvWriter, CsvWriter>();
-            services.AddSingleton<ICache, Cache>();
+            services.AddTransient<TabularExportJob>();
+            ServicesRegistry.Configure(services);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

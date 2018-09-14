@@ -12,6 +12,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
         List<InterviewToExport> GetInterviewsToExport(QuestionnaireIdentity questionnaireIdentity,
             InterviewStatus? status, DateTime? fromDate, DateTime? toDate);
 
-        List<InterviewComment> GetInterviewComments(Guid interviewId);
+        List<InterviewApiComment> GetInterviewComments(Guid interviewId);
     }
 }

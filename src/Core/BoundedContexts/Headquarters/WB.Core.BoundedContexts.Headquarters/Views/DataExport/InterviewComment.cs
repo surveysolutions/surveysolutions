@@ -3,6 +3,7 @@ using Main.Core.Entities.SubEntities;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
 {
+    [Obsolete("Moved to export service")]
     public class InterviewComment
     {
         public InterviewComment()

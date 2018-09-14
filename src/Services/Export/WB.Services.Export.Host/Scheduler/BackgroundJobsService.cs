@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Hangfire;
 using Hangfire.PostgreSql;
@@ -13,7 +14,9 @@ namespace WB.Services.Export.Host.Scheduler
         private readonly IOptions<BackgroundJobsConfig> jobsConfig;
         private BackgroundJobServer server;
 
-        public BackgroundJobsService(IConfiguration configuration, IOptions<BackgroundJobsConfig> jobsConfig)
+        public BackgroundJobsService(IConfiguration configuration, 
+            IOptions<BackgroundJobsConfig> jobsConfig,
+            IServiceProvider serviceProvider)
         {
             this.jobsConfig = jobsConfig;
             GlobalConfiguration.Configuration.UsePostgreSqlStorage(
@@ -22,6 +25,7 @@ namespace WB.Services.Export.Host.Scheduler
                 {
                     SchemaName = "scheduler"
                 });
+            GlobalConfiguration.Configuration.UseActivator(new HangfireActivator(serviceProvider));
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
@@ -40,4 +44,19 @@ namespace WB.Services.Export.Host.Scheduler
             return Task.CompletedTask;
         }
     }
+
+    public class HangfireActivator : JobActivator
+    {
+        private readonly IServiceProvider serviceProvider;
+
+        public HangfireActivator(IServiceProvider serviceProvider)
+        {
+            this.serviceProvider = serviceProvider;
+        }
+
+        public override object ActivateJob(Type type)
+        {
+            return serviceProvider.GetService(type);
+        }
+    } 
 }

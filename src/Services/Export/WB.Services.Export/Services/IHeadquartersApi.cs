@@ -5,18 +5,22 @@ using System.Threading.Tasks;
 using Main.Core.Documents;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Interview.Entities;
+using WB.Services.Export.Questionnaire;
+using WB.Services.Export.Tenant;
 
 namespace WB.Services.Export.Services
 {
     public interface IHeadquartersApi
     {
-        Task<List<InterviewComment>> GetInterviewCommentsAsync(Guid interviewId, string tenantId);
-        Task<List<InterviewToExport>> GetInterviewsToExportAsync(string questionnaireIdentity,
+        Task<List<InterviewComment>> GetInterviewCommentsAsync(string tenantBaseUrl, TenantId tenantId,
+            Guid interviewId);
+        Task<List<InterviewToExport>> GetInterviewsToExportAsync(string tenantBaseUrl,
+            TenantId tenantId,
+            QuestionnaireId questionnaireIdentity,
             InterviewStatus? status,
-            DateTime? fromDate, 
-            DateTime? toDate,
-            string tenantId,
-            CancellationToken cancellationToken);
-        Task<QuestionnaireDocument> GetQuestionnaireAsync(string questionnaireId, string tenantId);
+            DateTime? fromDate,
+            DateTime? toDate);
+        Task<QuestionnaireDocument> GetQuestionnaireAsync(string tenantBaseUrl, TenantId tenantId,
+            QuestionnaireId questionnaireId);
     }
 }

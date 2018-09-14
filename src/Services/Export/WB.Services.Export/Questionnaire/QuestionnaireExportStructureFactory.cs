@@ -11,6 +11,7 @@ using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Services;
+using WB.Services.Export.Tenant;
 using WB.Services.Export.Utils;
 
 namespace WB.Services.Export.Questionnaire
@@ -27,13 +28,13 @@ namespace WB.Services.Export.Questionnaire
             this.headquartersApi = headquartersApi;
         }
 
-        public async Task<QuestionnaireExportStructure> GetQuestionnaireExportStructure(string questionnaireId,
-            string tenantId)
+        public async Task<QuestionnaireExportStructure> GetQuestionnaireExportStructure(QuestionnaireId questionnaireId,
+            string tenantBaseUrl, TenantId tenantId)
         {
             var cachedQuestionnaireExportStructure = this.cache.Get(questionnaireId, tenantId);
             if (cachedQuestionnaireExportStructure == null)
             {
-                QuestionnaireDocument questionnaire = await this.headquartersApi.GetQuestionnaireAsync(questionnaireId, tenantId);
+                QuestionnaireDocument questionnaire = await this.headquartersApi.GetQuestionnaireAsync(tenantBaseUrl, tenantId, questionnaireId);
 
                 cachedQuestionnaireExportStructure = CreateQuestionnaireExportStructure(questionnaire);
 

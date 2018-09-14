@@ -988,7 +988,8 @@ namespace WB.Tests.Abc.TestFactories
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaries)
         {
             return new InterviewsToExportViewFactory(interviewSummaries ??
-                                                     new InMemoryReadSideRepositoryAccessor<InterviewSummary>());
+                                                     new InMemoryReadSideRepositoryAccessor<InterviewSummary>(),
+                new InMemoryReadSideRepositoryAccessor<InterviewCommentaries>());
         }
     }
 
