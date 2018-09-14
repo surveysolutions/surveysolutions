@@ -18,7 +18,7 @@
                     <input type="text"
                     ref="searchBox" 
                     :id="inputId" 
-                    placeholder="Search" 
+                    :placeholder="$t('Common.Search')"
                     @input="updateOptionsList" 
                     @keyup.down="onSearchBoxDownKey" 
                     v-model="searchTerm" />

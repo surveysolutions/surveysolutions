@@ -219,6 +219,9 @@
   <data name="AllTeams" xml:space="preserve">
     <value>All teams</value>
   </data>
+  <data name="Teams" xml:space="preserve">
+    <value>Teams</value>
+  </data>
   <data name="AllPeriods" xml:space="preserve">
     <value>All periods</value>
   </data>

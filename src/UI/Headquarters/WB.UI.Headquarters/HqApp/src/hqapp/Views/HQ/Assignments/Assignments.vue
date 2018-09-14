@@ -322,6 +322,7 @@ export default {
             requestData.dateEnd = this.dateEnd;
             requestData.userRole = this.userRole;
             requestData.receivedByTablet = this.receivedByTablet;
+            requestData.teamId = this.teamId;
         },
 
         userSelected(newValue) {
@@ -370,6 +371,8 @@ export default {
                 queryString.userRole = this.userRole;
             if (this.receivedByTablet)
                 queryString.receivedByTablet = this.receivedByTablet;
+            if (this.teamId)
+                queryString.teamId = this.teamId;
 
             this.$router.push({ query: queryString });
         },
@@ -517,6 +520,7 @@ export default {
         this.dateEnd = this.$route.query.dateEnd;
         this.userRole = this.$route.query.userRole;
         this.receivedByTablet = this.$route.query.receivedByTablet;
+        this.teamId = this.$route.query.teamId;
 
         self.loadQuestionnaireId((questionnaireId, questionnaireTitle) => {
 
