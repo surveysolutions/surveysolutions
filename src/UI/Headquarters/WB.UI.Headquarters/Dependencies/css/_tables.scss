@@ -360,56 +360,33 @@
 .dataTables_wrapper{
     position: relative;
     .dataTables_filter{
-        @include absolute(-65px, -10px);
+        @include absolute(-50px, -10px);
         z-index: 2;
         label{
             font-size: 0;
             color: transparent;
             margin-bottom: 0;
             min-height: 30px; 
-            &:after{
-                @include absolute(10px,  10px, null, null);
-                display: block;
-                content: "";
-                @include square(20px);
-                background: url('#{$assetsPath}/img/search.png') no-repeat;
-                background-position: 0 0;
-                background-size: 80px 20px;
-                @include image-2x("#{$assetsPath}/img/search2k.png", 80px, 20px);
-                cursor: pointer;
-            }
-            &:hover{
-                &:after{
-                    background-position: -20px 0;
-                }
-            }
-            &.active{
-                &:after{background-position: -40px 0;}
-                &:hover{
-                    &:after{
-                       background-position: -60px 0; 
-                    } 
-                }
-                input{
-                    border: 1px solid $gray_form;
-                    @extend %visibility-visible;
-                    width: $width-search-input;
-                    padding: 5px 10px;
-
-                }
-            }
             input{
                 height: 40px;
                 @extend .add-transition;
-                @extend %visibility-hidden;
-                width: 0;
-                margin-right: 40px;
                 font-size: 13px;
                 line-height: 15px;
                 color: $gray_text;
                 border-radius: 5px;
                 outline: none;
-                padding: 5px 0;
+
+                margin-right: 10px;
+                border: 1px solid $gray_form;
+                width: $width-search-input;
+                padding: 5px 30px 5px 10px;
+                &:hover, &:focus, &:active{
+                    border-color: $gray-highlight-font;
+                }
+                &:not(:placeholder-shown) + .btn-clear{
+                    @extend %visibility-visible;
+                    right: 10px;
+                }
             }
         }
     }

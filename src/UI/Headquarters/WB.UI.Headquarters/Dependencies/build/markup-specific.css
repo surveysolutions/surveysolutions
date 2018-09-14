@@ -121,12 +121,8 @@
             flex-direction: column; }
 
 .signed-name {
-  width: 35%;
   font-size: 13px;
-  line-height: 15px;
-  margin: 30px 15px 0 0;
-  float: right;
-  text-align: right; }
+  line-height: 15px; }
   .signed-name span {
     color: #2a81cb; }
   .signed-name a {
@@ -184,44 +180,6 @@
   .import-interview tbody .parameters {
     font-style: normal; }
 
-.import-wrapper .dataTables_wrapper .dataTables_paginate > .paginate_button {
-  color: #3ca21a; }
-  .import-wrapper .dataTables_wrapper .dataTables_paginate > .paginate_button.disabled, .import-wrapper .dataTables_wrapper .dataTables_paginate > .paginate_button.disabled:hover, .import-wrapper .dataTables_wrapper .dataTables_paginate > .paginate_button.disabled:active {
-    color: #a6a8a9;
-    text-decoration: none;
-    cursor: not-allowed; }
-
-.import-wrapper .dataTables_wrapper .dataTables_paginate {
-  padding-left: 10px; }
-  .import-wrapper .dataTables_wrapper .dataTables_paginate > span {
-    left: 8px; }
-
-.import-wrapper .dataTables_wrapper {
-  position: relative; }
-  .import-wrapper .dataTables_wrapper .dataTables_filter {
-    position: absolute;
-    top: -10px;
-    right: auto;
-    left: 0; }
-    .import-wrapper .dataTables_wrapper .dataTables_filter label:after {
-      position: absolute;
-      top: 15px;
-      right: auto;
-      left: 10px; }
-    .import-wrapper .dataTables_wrapper .dataTables_filter label input {
-      margin-right: 0;
-      margin-left: 40px; }
-
-@media only screen and (max-width: 1450px) {
-  .import-wrapper .dataTables_wrapper .dataTables_filter {
-    top: -15px; }
-  .import-wrapper .search {
-    top: -10px; }
-  .import-wrapper .active-search .search {
-    top: -12px; }
-    .import-wrapper .active-search .search .btn-search {
-      top: -3px; } }
-
 @media (max-width: 1210px) {
   .import-interview tr {
     -webkit-transition: all 0.1s linear 0s;
@@ -239,12 +197,8 @@
     .import-wrapper .dataTables_wrapper .dataTables_filter label.active input {
       margin-right: 0; }
   .signed-name {
-    width: 100%;
-    float: none;
-    margin: 0;
+    margin-bottom: 10px;
     padding: 0 3%; }
-  .signed-name {
-    margin-bottom: 20px; }
   .import-interview tbody tr td:first-child {
     font-size: 12px;
     line-height: 14px;
