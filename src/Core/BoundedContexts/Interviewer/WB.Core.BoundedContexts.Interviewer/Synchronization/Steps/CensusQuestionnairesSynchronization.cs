@@ -2,20 +2,22 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization.Steps;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 
-namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization.Steps
+namespace WB.Core.BoundedContexts.Interviewer.Synchronization.Steps
 {
     public class CensusQuestionnairesSynchronization : SynchronizationStep
     {
-        private readonly ISynchronizationService synchronizationService;
+        private readonly IInterviewerSynchronizationService synchronizationService;
         private readonly IInterviewerQuestionnaireAccessor questionnairesAccessor;
         private readonly IQuestionnaireDownloader questionnaireDownloader;
 
-        public CensusQuestionnairesSynchronization(ISynchronizationService synchronizationService, 
+        public CensusQuestionnairesSynchronization(IInterviewerSynchronizationService synchronizationService, 
             IInterviewerQuestionnaireAccessor questionnairesAccessor, 
             IQuestionnaireDownloader questionnaireDownloader, 
             ILogger logger,
