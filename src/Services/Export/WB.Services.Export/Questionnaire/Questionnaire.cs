@@ -9,9 +9,16 @@ namespace WB.Services.Export.Questionnaire
 
         public QuestionnaireDocument()
         {
-            this.Children = new List<IQuestionnaireEntity>();
         }
 
-        public string Id { get; set; }
+        public string Id { get; set;}
+
+        public void ConnectChildrenWithParent()
+        {
+            foreach (var child in Children)
+            {
+                child.SetParent(this);
+            }
+        }
     }
 }
