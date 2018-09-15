@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Autofac.Core.Lifetime;
 using Hangfire;
 using Hangfire.PostgreSql;
 using Microsoft.Extensions.Configuration;
@@ -25,14 +26,15 @@ namespace WB.Services.Export.Host.Scheduler
                 {
                     SchemaName = "scheduler"
                 });
-            GlobalConfiguration.Configuration.UseActivator(new HangfireActivator(serviceProvider));
+            GlobalConfiguration.Configuration.UseColouredConsoleLogProvider();
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
             server = new BackgroundJobServer(new BackgroundJobServerOptions
             {
-                WorkerCount = jobsConfig.Value.JobsCount
+                WorkerCount = jobsConfig.Value.JobsCount,
+                
             });
 
             return Task.CompletedTask;
@@ -57,6 +59,12 @@ namespace WB.Services.Export.Host.Scheduler
         public override object ActivateJob(Type type)
         {
             return serviceProvider.GetService(type);
+        }
+
+        public override JobActivatorScope BeginScope(JobActivatorContext context)
+        {
+
+            return base.BeginScope(context);
         }
     } 
 }

@@ -3,9 +3,8 @@ using System.Collections.Concurrent;
 using System.Linq;
 using System.Reflection;
 using Newtonsoft.Json.Serialization;
-using WB.Services.Export.Questionnaire;
 
-namespace WB.Services.Export.Services.Implementation
+namespace WB.Services.Export.Questionnaire.Services.Implementation
 {
     internal class QuestionnaireDocumentSerializationBinder : DefaultSerializationBinder
     {

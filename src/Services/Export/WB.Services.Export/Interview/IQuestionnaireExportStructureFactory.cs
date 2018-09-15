@@ -6,8 +6,6 @@ namespace WB.Services.Export.Interview
 {
     internal interface IQuestionnaireExportStructureFactory
     {
-        Task<QuestionnaireExportStructure> GetQuestionnaireExportStructure(QuestionnaireId questionnaireId,
-            string tenantBaseUrl,
-            TenantId tenantId);
+        Task<QuestionnaireExportStructure> GetQuestionnaireExportStructure(QuestionnaireId questionnaireId, TenantInfo tenant);
     }
 }

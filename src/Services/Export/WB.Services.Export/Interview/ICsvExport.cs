@@ -8,8 +8,7 @@ namespace WB.Services.Export.Interview
 {
     public interface ICsvExport
     {
-        Task ExportInterviewsInTabularFormat(string tenantBaseUrl,
-            TenantId tenantId,
+        Task ExportInterviewsInTabularFormat(TenantInfo tenant,
             QuestionnaireId questionnaireIdentity,
             InterviewStatus? status,
             string basePath,
