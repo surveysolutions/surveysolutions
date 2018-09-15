@@ -1,23 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Refit;
 using WB.Services.Export.Interview;
+using WB.Services.Export.Interview.Exporters;
 using WB.Services.Export.Questionnaire;
-using WB.Services.Export.Tenant;
 
 namespace WB.Services.Export.Services
 {
+    /// <summary>
+    /// Should not be injected
+    /// </summary>
     public interface IHeadquartersApi
     {
-        Task<List<InterviewComment>> GetInterviewCommentsAsync(string tenantBaseUrl, TenantId tenantId,
-            Guid interviewId);
-        Task<List<InterviewToExport>> GetInterviewsToExportAsync(string tenantBaseUrl,
-            TenantId tenantId,
-            QuestionnaireId questionnaireIdentity,
+        [Get("/api/export/v1/interview?questionnaireIdentity={questionnaireIdentity}")]
+        Task<List<InterviewToExport>> GetInterviewsToExportAsync([Refit.AliasAs("questionnaireIdentity")]QuestionnaireId questionnaireIdentity,
             InterviewStatus? status,
             DateTime? fromDate,
             DateTime? toDate);
-        Task<QuestionnaireDocument> GetQuestionnaireAsync(string tenantBaseUrl, TenantId tenantId,
-            QuestionnaireId questionnaireId);
+
+        [Get("/api/export/v1/questionnaire/{id}")]
+        Task<string> GetQuestionnaireAsync([AliasAs("id")] QuestionnaireId questionnaireId);
+
+        [Get("/api/export/v1/interview/batch/diagnosticsInfo")]
+        Task<InterviewDiagnosticsInfo[]> GetInterviewDiagnosticsInfoBatchAsync(
+            [Query(CollectionFormat.Multi), AliasAs("id")] Guid[] interviewIds);
+
+        [Get("/api/export/v1/interview/batch/commentaries")]
+        Task<List<InterviewComment>> GetInterviewCommentsBatchAsync([Query(CollectionFormat.Multi), AliasAs("id")] Guid[] interviewIds);
     }
 }

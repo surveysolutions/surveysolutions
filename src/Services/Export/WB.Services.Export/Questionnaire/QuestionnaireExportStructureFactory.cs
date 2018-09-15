@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Interview.Entities;
-using WB.Services.Export.Services;
+using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Export.Tenant;
 using WB.Services.Export.Utils;
 
@@ -15,29 +15,29 @@ namespace WB.Services.Export.Questionnaire
     internal class QuestionnaireExportStructureFactory: IQuestionnaireExportStructureFactory
     {
         private readonly ICache cache;
-        private readonly IHeadquartersApi headquartersApi;
+        private readonly IQuestionnaireStorage questionnaireStorage;
         private const string GeneratedTitleExportFormat = "{0}__{1}";
 
-        public QuestionnaireExportStructureFactory(ICache cache, IHeadquartersApi headquartersApi)
+        public QuestionnaireExportStructureFactory(ICache cache, IQuestionnaireStorage questionnaireStorage)
         {
             this.cache = cache;
-            this.headquartersApi = headquartersApi;
+            this.questionnaireStorage = questionnaireStorage;
         }
 
         public async Task<QuestionnaireExportStructure> GetQuestionnaireExportStructure(QuestionnaireId questionnaireId,
-            string tenantBaseUrl, TenantId tenantId)
+            TenantInfo tenant)
         {
-            var cachedQuestionnaireExportStructure = this.cache.Get(questionnaireId, tenantId);
+            var cachedQuestionnaireExportStructure = this.cache.Get(questionnaireId, tenant.Id);
             if (cachedQuestionnaireExportStructure == null)
             {
-                QuestionnaireDocument questionnaire = await this.headquartersApi.GetQuestionnaireAsync(tenantBaseUrl, tenantId, questionnaireId);
+                var questionnaire = await this.questionnaireStorage.GetQuestionnaireAsync(tenant, questionnaireId);
 
                 cachedQuestionnaireExportStructure = CreateQuestionnaireExportStructure(questionnaire);
 
                 if (cachedQuestionnaireExportStructure == null)
                     return null;
 
-                this.cache.Set(questionnaire.Id, cachedQuestionnaireExportStructure, tenantId);
+                this.cache.Set(questionnaire.Id, cachedQuestionnaireExportStructure, tenant.Id);
             }
 
             return (QuestionnaireExportStructure) cachedQuestionnaireExportStructure;
