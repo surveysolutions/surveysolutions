@@ -1,4 +1,7 @@
-﻿using Hangfire;
+﻿using System;
+using Autofac;
+using Autofac.Extensions.DependencyInjection;
+using Hangfire;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -25,8 +28,10 @@ namespace WB.Services.Export.Host
 
         public IConfiguration Configuration { get; }
 
+        public IContainer ApplicationContainer { get; private set; }
+        
         // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        public IServiceProvider ConfigureServices(IServiceCollection services)
         {          
             services.AddMvcCore()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
@@ -38,6 +43,16 @@ namespace WB.Services.Export.Host
             services.AddSingleton<IHostedService, BackgroundJobsService>();
             services.AddTransient<TabularExportJob>();
             ServicesRegistry.Configure(services);
+
+            var builder = new ContainerBuilder();
+            builder.Populate(services);
+            builder.AddTenantApi();
+            this.ApplicationContainer = builder.Build();
+
+            GlobalConfiguration.Configuration.UseAutofacActivator(ApplicationContainer);
+            
+            // Create the IServiceProvider based on the container.
+            return new AutofacServiceProvider(this.ApplicationContainer);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -47,7 +62,7 @@ namespace WB.Services.Export.Host
             {
                 app.UseDeveloperExceptionPage();
             }
-
+            
             app.UseApplicationVersion("/.version");
             app.UseMetricServer();
             app.UseMvc();

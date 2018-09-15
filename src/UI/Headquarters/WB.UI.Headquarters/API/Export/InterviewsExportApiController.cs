@@ -5,7 +5,10 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
+using System.Web.ModelBinding;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
+using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -18,26 +21,34 @@ namespace WB.UI.Headquarters.API.Export
     {
         private readonly IInterviewsToExportViewFactory viewFactory;
         private readonly IInterviewFactory interviewFactory;
+        private readonly IInterviewDiagnosticsFactory interviewDiagnosticsFactory;
 
-        public InterviewsExportApiController(IInterviewsToExportViewFactory viewFactory,
-            IInterviewFactory interviewFactory)
+        public InterviewsExportApiController(
+            IInterviewsToExportViewFactory viewFactory,
+            IInterviewFactory interviewFactory,
+            IInterviewDiagnosticsFactory interviewDiagnosticsFactory)
         {
             this.viewFactory = viewFactory ?? throw new ArgumentNullException(nameof(viewFactory));
             this.interviewFactory = interviewFactory ?? throw new ArgumentNullException(nameof(interviewFactory));
+            this.interviewDiagnosticsFactory = interviewDiagnosticsFactory;
         }
 
         [Route("api/export/v1/interview")]
         [ServiceApiKeyAuthorization]
         [HttpGet]
         [ApiNoCache]
-        public HttpResponseMessage Get(string questionnaireIdentity,
-            InterviewStatus? status, 
-            DateTime? fromDate,
-            DateTime? toDate)
+        public HttpResponseMessage Get([QueryString] string questionnaireIdentity, [FromUri] GetInterviewsArgs args)
         {
-            var result = viewFactory.GetInterviewsToExport(QuestionnaireIdentity.Parse(questionnaireIdentity), status, fromDate, toDate);
+            var result = viewFactory.GetInterviewsToExport(QuestionnaireIdentity.Parse(questionnaireIdentity), args?.status, args?.fromDate, args?.toDate);
 
             return Request.CreateResponse(HttpStatusCode.OK, result);
+        }
+
+        public class GetInterviewsArgs
+        {
+            public InterviewStatus? status { get; set; }
+            public DateTime? fromDate { get; set; }
+            public DateTime? toDate { get; set; }
         }
 
         [Route("api/export/v1/interview/{id:guid}")]
@@ -51,13 +62,30 @@ namespace WB.UI.Headquarters.API.Export
             return Request.CreateResponse(HttpStatusCode.OK, entities);
         }
 
-        [Route("api/export/v1/interview/{id:guid}/commentaries")]
+        [Route("api/export/v1/interview/batch/commentaries")]
         [ServiceApiKeyAuthorization]
         [HttpGet]
         [ApiNoCache]
-        public HttpResponseMessage GetInterviewCommentaries(Guid id)
+        public HttpResponseMessage GetInterviewCommentariesBatch([FromUri] Guid[] id)
         {
-            var entities = this.viewFactory.GetInterviewComments(id);
+            var response = new List<(Guid id, List<InterviewApiComment> comments)>();
+
+            foreach (var interviewId in id)
+            {
+                var entities = this.viewFactory.GetInterviewComments(interviewId);
+                response.Add((interviewId, entities));
+            }
+            
+            return Request.CreateResponse(HttpStatusCode.OK, response);
+        }
+
+        [Route("api/export/v1/interview/batch/diagnosticsInfo")]
+        [ServiceApiKeyAuthorization]
+        [HttpGet]
+        [ApiNoCache]
+        public HttpResponseMessage GetInterviewDiagnosticsBatch([FromUri] Guid[] id)
+        {
+            var entities = this.interviewDiagnosticsFactory.GetByBatchIds(id);
             return Request.CreateResponse(HttpStatusCode.OK, entities);
         }
     }

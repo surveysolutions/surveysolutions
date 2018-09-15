@@ -19,11 +19,10 @@ namespace WB.Services.Export.Interview.Exporters
 {
     public interface ICommentsExporter
     {
-        Task Export(QuestionnaireExportStructure questionnaireExportStructure,
+        Task ExportAsync(QuestionnaireExportStructure questionnaireExportStructure,
             List<Guid> interviewIdsToExport,
             string basePath,
-            string tenantBaseUrl,
-            TenantId tenantId,
+            TenantInfo tenant,
             IProgress<int> progress,
             CancellationToken cancellationToken);
     }
@@ -35,7 +34,7 @@ namespace WB.Services.Export.Interview.Exporters
         private readonly ICsvWriter csvWriter;
         private readonly string dataFileExtension = "tab";
         public readonly string CommentsFileName = "interview__comments";
-        private readonly IHeadquartersApi interviewCommentariesStorage;
+        private readonly ITenantApi<IHeadquartersApi> tenantApi;
         private readonly ILogger<CommentsExporter> logger;
 
         public readonly DoExportFileHeader[] CommentsFileColumns =
@@ -63,25 +62,24 @@ namespace WB.Services.Export.Interview.Exporters
             IOptions<InterviewDataExportSettings> interviewDataExportSettings,
             IFileSystemAccessor fileSystemAccessor,
             ICsvWriter csvWriter,
-            IHeadquartersApi interviewCommentariesStorage,
+            ITenantApi<IHeadquartersApi> tenantApi,
             ILogger<CommentsExporter> logger)
         {
             this.interviewDataExportSettings = interviewDataExportSettings.Value;
             this.fileSystemAccessor = fileSystemAccessor;
             this.csvWriter = csvWriter;
-            this.interviewCommentariesStorage = interviewCommentariesStorage;
+            this.tenantApi = tenantApi;
             this.logger = logger;
         }
 
-        public async Task Export(QuestionnaireExportStructure questionnaireExportStructure,
+        public async Task ExportAsync(QuestionnaireExportStructure questionnaireExportStructure,
             List<Guid> interviewIdsToExport,
             string basePath,
-            string tenantBaseUrl,
-            TenantId tenantId,
+            TenantInfo tenant,
             IProgress<int> progress,
             CancellationToken cancellationToken)
         {
-            //var batchSize = this.interviewDataExportSettings.MaxRecordsCountPerOneExportQuery;
+            var batchSize = this.interviewDataExportSettings.MaxRecordsCountPerOneExportQuery;
 
             string commentsFilePath = Path.Combine(basePath, Path.ChangeExtension(this.CommentsFileName, this.dataFileExtension));
             int maxRosterDepthInQuestionnaire = questionnaireExportStructure.HeaderToLevelMap.Values.Max(x => x.LevelScopeVector.Count);
@@ -91,11 +89,12 @@ namespace WB.Services.Export.Interview.Exporters
             long totalProcessed = 0;
             var stopwatch = Stopwatch.StartNew();
 
-            foreach (var interviewId in interviewIdsToExport)
+            foreach (var interviewIds in interviewIdsToExport.Batch(batchSize))
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                List<InterviewComment> comments = await interviewCommentariesStorage.GetInterviewCommentsAsync(tenantBaseUrl, tenantId, interviewId);
+                var comments = await tenantApi.For(tenant).GetInterviewCommentsBatchAsync(interviewIds.ToArray());
+
                 var rows = ConvertToCsvStrings(comments, maxRosterDepthInQuestionnaire, hasAtLeastOneRoster);
                 this.csvWriter.WriteData(commentsFilePath, rows, ExportFileSettings.DataFileSeparator.ToString());
                 totalProcessed++;

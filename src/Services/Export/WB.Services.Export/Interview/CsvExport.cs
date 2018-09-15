@@ -20,7 +20,7 @@ namespace WB.Services.Export.Interview
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ICsvWriter csvWriter;
         private readonly ILogger<CsvExport> logger;
-        private readonly IHeadquartersApi headquartersApi;
+        private readonly ITenantApi<IHeadquartersApi> headquartersApi;
 
         private readonly ICommentsExporter commentsExporter;
         private readonly IInterviewActionsExporter interviewActionsExporter;
@@ -33,10 +33,11 @@ namespace WB.Services.Export.Interview
         public CsvExport(IFileSystemAccessor fileSystemAccessor,
             ICsvWriter csvWriter, 
             ILogger<CsvExport> logger,
-            IOptions<InterviewDataExportSettings> exportSettings, 
-            IHeadquartersApi headquartersApi,
+            IOptions<InterviewDataExportSettings> exportSettings,
+            ITenantApi<IHeadquartersApi> headquartersApi,
             IProductVersion productVersion,
             ICommentsExporter commentsExporter,
+            IDiagnosticsExporter diagnosticsExporter,
             IQuestionnaireExportStructureFactory exportStructureFactory)
         {
             this.fileSystemAccessor = fileSystemAccessor;
@@ -51,17 +52,14 @@ namespace WB.Services.Export.Interview
         }
 
         public async Task ExportInterviewsInTabularFormat(
-            string tenantBaseUrl,
-            TenantId tenantId,
+            TenantInfo tenant,
             QuestionnaireId questionnaireIdentity,
             InterviewStatus? status,
             string basePath,
-            //IProgress<int> progress, 
-            //CancellationToken cancellationToken, 
             DateTime? fromDate,
             DateTime? toDate)
         {
-            QuestionnaireExportStructure questionnaireExportStructure = await this.GetQuestionnaireExportStructure(questionnaireIdentity, tenantBaseUrl, tenantId);
+            QuestionnaireExportStructure questionnaireExportStructure = await this.exportStructureFactory.GetQuestionnaireExportStructure(questionnaireIdentity, tenant);
 
             var exportInterviewsProgress = new Progress<int>();
             var exportCommentsProgress = new Progress<int>();
@@ -75,23 +73,23 @@ namespace WB.Services.Export.Interview
             //proggressAggregator.ProgressChanged += (sender, overallProgress) => progress.Report(overallProgress);
 
             var cancellationToken = CancellationToken.None;
-            var interviewsToExport = await headquartersApi.GetInterviewsToExportAsync(tenantBaseUrl, tenantId, questionnaireIdentity, status, fromDate, toDate);
+
+            var api = this.headquartersApi.For(tenant);
+            var interviewsToExport = await api.GetInterviewsToExportAsync(questionnaireIdentity, status, fromDate, toDate);
             var interviewIdsToExport = interviewsToExport.Select(x => x.Id).ToList();
 
             Stopwatch exportWatch = Stopwatch.StartNew();
 
-            await this.commentsExporter.Export(questionnaireExportStructure, interviewIdsToExport, basePath, tenantBaseUrl, tenantId, exportCommentsProgress, cancellationToken);
+            await Task.WhenAll(
+            this.commentsExporter.ExportAsync(questionnaireExportStructure, interviewIdsToExport, basePath, tenant, exportCommentsProgress, cancellationToken),
             //this.interviewActionsExporter.Export(questionnaireIdentity, interviewIdsToExport, basePath, exportInterviewActionsProgress);
             //this.interviewsExporter.Export(questionnaireExportStructure, interviewsToExport, basePath, exportInterviewsProgress, cancellationToken);
-            //this.diagnosticsExporter.Export(interviewIdsToExport, basePath, exportInterviewsProgress, cancellationToken);
+            this.diagnosticsExporter.ExportAsync(interviewIdsToExport, basePath, tenant, exportInterviewsProgress, cancellationToken));
 
             exportWatch.Stop();
 
             this.logger.Log(LogLevel.Information, $"Export with all steps finished for questionnaire {questionnaireIdentity}. " +
                              $"Took {exportWatch.Elapsed:c} to export {interviewIdsToExport.Count} interviews");
         }
-
-        private Task<QuestionnaireExportStructure> GetQuestionnaireExportStructure(QuestionnaireId questionnaireId, string tenantBaseUrl, TenantId tenantId)
-            => this.exportStructureFactory.GetQuestionnaireExportStructure(questionnaireId, tenantBaseUrl, tenantId);
     }
 }
