@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,7 +21,7 @@ namespace WB.Services.Export.Interview
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ICsvWriter csvWriter;
         private readonly ILogger<CsvExport> logger;
-        private readonly ITenantApi<IHeadquartersApi> headquartersApi;
+        private readonly ITenantApi<IHeadquartersApi> tenantApi;
 
         private readonly ICommentsExporter commentsExporter;
         private readonly IInterviewActionsExporter interviewActionsExporter;
@@ -34,20 +35,22 @@ namespace WB.Services.Export.Interview
             ICsvWriter csvWriter, 
             ILogger<CsvExport> logger,
             IOptions<InterviewDataExportSettings> exportSettings,
-            ITenantApi<IHeadquartersApi> headquartersApi,
+            ITenantApi<IHeadquartersApi> tenantApi,
             IProductVersion productVersion,
             ICommentsExporter commentsExporter,
             IDiagnosticsExporter diagnosticsExporter,
+            IInterviewActionsExporter interviewActionsExporter,
             IQuestionnaireExportStructureFactory exportStructureFactory)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.csvWriter = csvWriter;
             this.logger = logger;
-            this.headquartersApi = headquartersApi;
+            this.tenantApi = tenantApi;
             this.exportSettings = exportSettings.Value;
             this.productVersion = productVersion;
             this.commentsExporter = commentsExporter;
             this.diagnosticsExporter = diagnosticsExporter;
+            this.interviewActionsExporter = interviewActionsExporter;
             this.exportStructureFactory = exportStructureFactory;
         }
 
@@ -74,17 +77,20 @@ namespace WB.Services.Export.Interview
 
             var cancellationToken = CancellationToken.None;
 
-            var api = this.headquartersApi.For(tenant);
+            var api = this.tenantApi.For(tenant);
             var interviewsToExport = await api.GetInterviewsToExportAsync(questionnaireIdentity, status, fromDate, toDate);
             var interviewIdsToExport = interviewsToExport.Select(x => x.Id).ToList();
 
             Stopwatch exportWatch = Stopwatch.StartNew();
+            basePath = Path.Combine(basePath, ".export", tenant.Id.ToString());
+            Directory.CreateDirectory(basePath);
 
             await Task.WhenAll(
             this.commentsExporter.ExportAsync(questionnaireExportStructure, interviewIdsToExport, basePath, tenant, exportCommentsProgress, cancellationToken),
-            //this.interviewActionsExporter.Export(questionnaireIdentity, interviewIdsToExport, basePath, exportInterviewActionsProgress);
-            //this.interviewsExporter.Export(questionnaireExportStructure, interviewsToExport, basePath, exportInterviewsProgress, cancellationToken);
-            this.diagnosticsExporter.ExportAsync(interviewIdsToExport, basePath, tenant, exportInterviewsProgress, cancellationToken));
+            this.interviewActionsExporter.ExportAsync(tenant, questionnaireIdentity, interviewIdsToExport, basePath, exportInterviewActionsProgress),
+            //this.interviewsExporter.Export(questionnaireExportStructure, interviewsToExport, basePath, exportInterviewsProgress, cancellationToken),
+            this.diagnosticsExporter.ExportAsync(interviewIdsToExport, basePath, tenant, exportInterviewsProgress, cancellationToken)
+         );
 
             exportWatch.Stop();
 

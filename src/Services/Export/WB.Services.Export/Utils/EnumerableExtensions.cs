@@ -1,9 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace WB.Services.Export.Utils
 {
+    public static class CommonExtensions
+    {
+        [DebuggerStepThrough]
+        public static string FormatGuid(this Guid guid)
+        {
+            return guid.ToString("N");
+        }
+    }
+
     public static class EnumerableExtensions
     {
         /// <summary>
