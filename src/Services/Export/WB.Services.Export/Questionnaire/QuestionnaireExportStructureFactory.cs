@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Interview.Entities;
@@ -348,7 +348,7 @@ namespace WB.Services.Export.Questionnaire
                 rosterScopes[levelVector].Type == RosterScopeType.TextList)
             {
                 structures.IsTextListScope = true;
-                structures.ReferencedNames = new string[] { rosterScopes[levelVector].SizeQuestionTitle };
+                structures.ReferencedNames = new [] { rosterScopes[levelVector].SizeQuestionTitle };
             }
 
             return structures;

@@ -28,6 +28,7 @@ namespace WB.Services.Export
             services.AddTransient<IQuestionnaireExportStructureFactory, QuestionnaireExportStructureFactory>();
             services.AddTransient<IDiagnosticsExporter, DiagnosticsExporter>();
             services.AddTransient<IQuestionnaireStorage, QuestionnaireStorage>();
+            services.AddTransient<IInterviewActionsExporter, InterviewActionsExporter>();
 
             // Singletons
             services.AddSingleton<ICache, Cache>();

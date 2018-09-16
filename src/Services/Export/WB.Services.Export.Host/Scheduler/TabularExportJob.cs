@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using WB.Services.Export.Interview;
@@ -24,15 +25,18 @@ namespace WB.Services.Export.Host.Scheduler
             QuestionnaireId questionnaireIdentity,
             InterviewStatus? status,
             DateTime? fromDate,
-            DateTime? toDate)
+            DateTime? toDate, CancellationToken cancellationToken)
         {
-            logger.LogInformation("Start processing ");
+            logger.LogInformation($"Started {GetType().Name} processing");
+
             csvExport.ExportInterviewsInTabularFormat(tenant,
                 questionnaireIdentity,
                 status,
                 hostingEnvironment.ContentRootPath,
                 fromDate,
-                toDate).GetAwaiter().GetResult();
+                toDate).Wait(cancellationToken);
+
+            logger.LogInformation($"Completed {GetType().Name} processing");
         }
     }
 }

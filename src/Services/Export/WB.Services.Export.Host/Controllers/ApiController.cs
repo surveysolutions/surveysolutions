@@ -1,12 +1,10 @@
 ﻿using System;
+using System.Threading;
 using Hangfire;
 using Hangfire.Client;
 using Hangfire.Common;
 using Hangfire.Server;
-using Hangfire.States;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using WB.Services.Export.Host.Scheduler;
 using WB.Services.Export.Interview;
@@ -24,14 +22,9 @@ namespace WB.Services.Export.Host.Controllers
 
         public JobController(IBackgroundJobClient backgroundJobClient, ILogger<JobController> logger)
         {
-            this.backgroundJobClient = backgroundJobClient ?? throw new ArgumentNullException(nameof(backgroundJobClient));
+            this.backgroundJobClient =
+                backgroundJobClient ?? throw new ArgumentNullException(nameof(backgroundJobClient));
             this.logger = logger;
-        }
-
-        [HttpGet]
-        public string Get()
-        {
-            return "Hello world, " + RouteData.Values["tenant"];
         }
 
         [HttpPut]
@@ -47,9 +40,9 @@ namespace WB.Services.Export.Host.Controllers
                 new QuestionnaireId(questionnaireId),
                 status,
                 from,
-                to));
+                to, CancellationToken.None));
 
-            logger.LogInformation("Enequed job " + jobId);
+            logger.LogInformation("Enqueue job " + jobId);
 
             return Ok();
         }

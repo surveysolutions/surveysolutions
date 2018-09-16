@@ -28,5 +28,8 @@ namespace WB.Services.Export.Services
 
         [Get("/api/export/v1/interview/batch/commentaries")]
         Task<List<InterviewComment>> GetInterviewCommentsBatchAsync([Query(CollectionFormat.Multi), AliasAs("id")] Guid[] interviewIds);
+
+        [Get("/api/export/v1/interview/batch/summaries")]
+        Task<List<InterviewSummary>> GetInterviewSummariesBatchAsync([Query(CollectionFormat.Multi), AliasAs("id")] Guid[] interviewIds);
     }
 }
