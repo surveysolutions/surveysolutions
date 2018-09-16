@@ -5,10 +5,15 @@ namespace WB.Services.Export.Questionnaire
 {
     public class Group : IQuestionnaireEntity
     {
-        public Group()
+        public Group(List<IQuestionnaireEntity> children = null)
         {
-            Children = Array.Empty<IQuestionnaireEntity>();
-            FixedRosterTitles = Array.Empty<FixedRosterTitle>();
+            if (children == null)
+                this.Children = new List<IQuestionnaireEntity>();
+            else
+            {
+                this.Children = children;
+                this.ConnectChildrenWithParent();
+            }
         }
 
         public bool IsRoster { get; set; }
@@ -19,7 +24,7 @@ namespace WB.Services.Export.Questionnaire
 
         public IQuestionnaireEntity Parent { get; private set; }
 
-        public FixedRosterTitle[] FixedRosterTitles { get; set; }
+        public FixedRosterTitle[] FixedRosterTitles { get; set; } = Array.Empty<FixedRosterTitle>();
         
         public string VariableName { get; set;  }
 
@@ -29,7 +34,7 @@ namespace WB.Services.Export.Questionnaire
 
         public Guid PublicKey { get; set;  }
 
-        public IEnumerable<IQuestionnaireEntity> Children { get; set; }
+        public IEnumerable<IQuestionnaireEntity> Children { get; set; } = new List<IQuestionnaireEntity>();
 
         public IQuestionnaireEntity GetParent()
         {
@@ -42,6 +47,19 @@ namespace WB.Services.Export.Questionnaire
             foreach (var questionnaireEntity in Children)
             {
                 questionnaireEntity.SetParent(this);
+            }
+        }
+
+        public virtual void ConnectChildrenWithParent()
+        {
+            foreach (var item in this.Children)
+            {
+                item.SetParent(this);
+
+                if (item is Group innerGroup)
+                {
+                    innerGroup.ConnectChildrenWithParent();
+                }
             }
         }
     }

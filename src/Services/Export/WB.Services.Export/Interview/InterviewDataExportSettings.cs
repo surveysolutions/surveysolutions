@@ -2,6 +2,6 @@
 {
     internal class InterviewDataExportSettings
     {
-        public int MaxRecordsCountPerOneExportQuery { get; set; }
+        public int MaxRecordsCountPerOneExportQuery { get; set; } = 100;
     }
 }
