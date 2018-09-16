@@ -23,6 +23,7 @@ using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 {
+    [Obsolete("KP-11815")]
     internal class InterviewActionsExporter
     {
         private readonly InterviewDataExportSettings interviewDataExportSettings;

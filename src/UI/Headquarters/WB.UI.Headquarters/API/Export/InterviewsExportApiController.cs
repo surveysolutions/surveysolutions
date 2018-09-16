@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.Headquarters.API.Filters;
@@ -22,15 +23,17 @@ namespace WB.UI.Headquarters.API.Export
         private readonly IInterviewsToExportViewFactory viewFactory;
         private readonly IInterviewFactory interviewFactory;
         private readonly IInterviewDiagnosticsFactory interviewDiagnosticsFactory;
-
+        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatuses;
         public InterviewsExportApiController(
             IInterviewsToExportViewFactory viewFactory,
             IInterviewFactory interviewFactory,
-            IInterviewDiagnosticsFactory interviewDiagnosticsFactory)
+            IInterviewDiagnosticsFactory interviewDiagnosticsFactory, 
+            IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatuses)
         {
             this.viewFactory = viewFactory ?? throw new ArgumentNullException(nameof(viewFactory));
             this.interviewFactory = interviewFactory ?? throw new ArgumentNullException(nameof(interviewFactory));
-            this.interviewDiagnosticsFactory = interviewDiagnosticsFactory;
+            this.interviewDiagnosticsFactory = interviewDiagnosticsFactory ?? throw new ArgumentNullException(nameof(interviewDiagnosticsFactory));
+            this.interviewStatuses = interviewStatuses ?? throw new ArgumentNullException(nameof(interviewStatuses));
         }
 
         [Route("api/export/v1/interview")]
@@ -87,6 +90,35 @@ namespace WB.UI.Headquarters.API.Export
         {
             var entities = this.interviewDiagnosticsFactory.GetByBatchIds(id);
             return Request.CreateResponse(HttpStatusCode.OK, entities);
+        }
+
+        [Route("api/export/v1/interview/batch/summaries")]
+        [ServiceApiKeyAuthorization]
+        [HttpGet]
+        [ApiNoCache]
+        public HttpResponseMessage GetInterviewSummariesBatch([FromUri] Guid[] id)
+        {
+            var interviews =
+                this.interviewStatuses.Query(_ => _
+                    .Where(i => id.Contains(i.InterviewId))
+                    .SelectMany(interviewWithStatusHistory => interviewWithStatusHistory.InterviewCommentedStatuses,
+                        (interview, status) => new { interview.InterviewId, interview.Key, StatusHistory = status })
+                    .Select(i => new
+                    {
+                        i.InterviewId,
+                        i.Key,
+                        i.StatusHistory.Status,
+                        i.StatusHistory.StatusChangeOriginatorName,
+                        i.StatusHistory.StatusChangeOriginatorRole,
+                        i.StatusHistory.Timestamp,
+                        i.StatusHistory.SupervisorName,
+                        i.StatusHistory.InterviewerName,
+                        i.StatusHistory.Position
+                    })
+                    .OrderBy(x => x.InterviewId)
+                    .ThenBy(x => x.Position).ToList());
+
+            return Request.CreateResponse(HttpStatusCode.OK, interviews);
         }
     }
 }
