@@ -6,13 +6,7 @@ namespace WB.Services.Export.Questionnaire
     public abstract class Question : IQuestionnaireEntity
     {
         private IQuestionnaireEntity parent;
-
-        public Question()
-        {
-            Answers = new List<Answer>();
-            Children = new List<IQuestionnaireEntity>();
-        }
-
+        
         public QuestionType QuestionType { get; set; }
 
         public bool Featured { get; set;  }
@@ -23,7 +17,7 @@ namespace WB.Services.Export.Questionnaire
 
         public string QuestionText { get; set; }
 
-        public List<Answer> Answers { get; set; }
+        public List<Answer> Answers { get; set; } = new List<Answer>();
 
         public Guid? LinkedToQuestionId { get; set; }
 
@@ -31,7 +25,7 @@ namespace WB.Services.Export.Questionnaire
 
         public Guid PublicKey { get; set; }
 
-        public IEnumerable<IQuestionnaireEntity> Children { get; }
+        public IEnumerable<IQuestionnaireEntity> Children { get; } = new List<IQuestionnaireEntity>();
 
         public IQuestionnaireEntity GetParent()
         {

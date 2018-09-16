@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Interview.Entities;
@@ -294,7 +295,7 @@ namespace WB.Services.Export.Questionnaire
 
         private static Dictionary<Guid, int> GetMaxValuesForRosterSizeQuestions(QuestionnaireDocument document)
         {
-            var rosterGroups = document.Find<Group>(@group => group.IsRoster && @group.RosterSizeQuestionId.HasValue);
+            var rosterGroups = document.Find<Group>(@group => group.IsRoster && @group.RosterSizeQuestionId.HasValue).ToList();
 
             var fixedRosterGroups =
                 document.Find<Group>(@group => @group.IsRoster && group.IsFixedRoster);
@@ -331,12 +332,13 @@ namespace WB.Services.Export.Questionnaire
         private HeaderStructureForLevel BuildHeaderByTemplate(QuestionnaireDocument questionnaire, bool supportVariables, ValueVector<Guid> levelVector,
             Dictionary<ValueVector<Guid>, RosterScopeDescription> rosterScopes, Dictionary<Guid, int> maxValuesForRosterSizeQuestions)
         {
-            IEnumerable<Group> rootGroups = this.GetRootGroupsForLevel(questionnaire, rosterScopes, levelVector);
+            var rootGroups = this.GetRootGroupsForLevel(questionnaire, rosterScopes, levelVector).ToList();
 
             if (!rootGroups.Any())
                 throw new InvalidOperationException("level is absent in template");
 
             var firstRootGroup = rootGroups.First();
+
             var levelTitle = firstRootGroup.VariableName ?? firstRootGroup.Title.MakeStataCompatibleFileName();
 
             var structures = this.CreateHeaderStructureForLevel(levelTitle, rootGroups, questionnaire, supportVariables,
@@ -574,12 +576,14 @@ namespace WB.Services.Export.Questionnaire
                 {
                     if (group.IsRoster)
                         rosterSizes.Add(group.RosterSizeQuestionId ?? group.PublicKey);
-
                 }
+
                 entity = entity.GetParent();
             }
+
             rosterSizes.Reverse();
-            return rosterSizes.ToArray();
+
+            return new ValueVector<Guid>(rosterSizes);
         }
 
         private int? GetLengthOfRosterVectorWhichNeedToBeExported(Question question, QuestionnaireDocument questionnaire)

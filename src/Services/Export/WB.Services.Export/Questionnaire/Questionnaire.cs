@@ -1,24 +1,24 @@
 ﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
 
 namespace WB.Services.Export.Questionnaire
 {
     public class QuestionnaireDocument : Group
     {
-        private bool childrenWereConnected;
+        private bool childrenWereConnected = false;
 
-        public QuestionnaireDocument()
+        public QuestionnaireDocument(List<IQuestionnaireEntity> children = null) : base(children)
         {
         }
 
         public string Id { get; set;}
 
-        public void ConnectChildrenWithParent()
+        public override void ConnectChildrenWithParent()
         {
-            foreach (var child in Children)
-            {
-                child.SetParent(this);
-            }
+            if (childrenWereConnected) return;
+
+            base.ConnectChildrenWithParent();
+
+            childrenWereConnected = true;
         }
     }
 }

@@ -12,7 +12,7 @@ namespace WB.Services.Export.Services
         public DateTime Timestamp { get; set; }
         public string Variable { get; set; }
         public string Roster { get; set; }
-        public int[] RosterVector { get; set; }
+        public int[] RosterVector { get; set; } = Array.Empty<int>();
         public string Comment { get; set; }
     }
 }
