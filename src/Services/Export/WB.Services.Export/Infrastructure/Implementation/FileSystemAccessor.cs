@@ -1,4 +1,6 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
+using System.Text.RegularExpressions;
 
 namespace WB.Services.Export.Infrastructure.Implementation
 {
@@ -15,5 +17,18 @@ namespace WB.Services.Export.Infrastructure.Implementation
         }
 
         public void WriteAllText(string pathToFile, string content) => File.WriteAllText(pathToFile, content);
+
+        public string MakeValidFileName(string name)
+        {
+            if (string.IsNullOrEmpty(name))
+                return string.Empty;
+
+            var invalidChars = Regex.Escape(new string(Path.GetInvalidFileNameChars()));
+            var invalidReStr = string.Format(@"([{0}]*\.+$)|([{0}]+)", invalidChars);
+            var fileNameWithReplaceInvalidChars = Regex.Replace(name, invalidReStr, "_");
+            return fileNameWithReplaceInvalidChars.Substring(0, Math.Min(fileNameWithReplaceInvalidChars.Length, 128));
+        }
+
+        public string Combine(params string[] parts) => Path.Combine(parts);
     }
 }

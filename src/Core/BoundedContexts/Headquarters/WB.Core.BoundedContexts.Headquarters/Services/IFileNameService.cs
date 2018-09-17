@@ -13,5 +13,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
             DataExportFormat format, string statusSuffix, DateTime? fromDate = null, DateTime? toDate = null);
 
         string GetFileNameForAssignmentTemplate(QuestionnaireIdentity identity);
+        string GetQuestionnaireTitleWithVersion(QuestionnaireIdentity identity);
     }
 }

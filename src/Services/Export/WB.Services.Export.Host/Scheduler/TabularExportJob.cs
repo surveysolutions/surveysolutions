@@ -1,9 +1,8 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using WB.Services.Export.Interview;
-using WB.Services.Export.Questionnaire;
+using WB.Services.Export.Services.Processing;
 using WB.Services.Export.Tenant;
 
 namespace WB.Services.Export.Host.Scheduler
@@ -22,19 +21,17 @@ namespace WB.Services.Export.Host.Scheduler
         }
 
         public void Execute(TenantInfo tenant,
-            QuestionnaireId questionnaireIdentity,
-            InterviewStatus? status,
-            DateTime? fromDate,
-            DateTime? toDate, CancellationToken cancellationToken)
+            DataExportProcessDetails details,   
+            CancellationToken cancellationToken)
         {
             logger.LogInformation($"Started {GetType().Name} processing");
 
             csvExport.ExportInterviewsInTabularFormat(tenant,
-                questionnaireIdentity,
-                status,
+                details.Questionnaire,
+                details.InterviewStatus,
                 hostingEnvironment.ContentRootPath,
-                fromDate,
-                toDate).Wait(cancellationToken);
+                details.FromDate,
+                details.ToDate).Wait(cancellationToken);
 
             logger.LogInformation($"Completed {GetType().Name} processing");
         }
