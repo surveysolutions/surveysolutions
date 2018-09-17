@@ -1,12 +1,12 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Web.Configuration;
+using Autofac.Integration.Mvc;
+using Autofac.Integration.WebApi;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
-using Ninject;
-using Ninject.Web.Common;
-using Ninject.Web.Common.WebHost;
 using WB.Core.BoundedContexts.Designer;
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Infrastructure.Native.Files;
 using WB.Infrastructure.Native.Logging;
@@ -17,33 +17,31 @@ using WB.UI.Designer.Code.ConfigurationManager;
 using WB.UI.Designer.CommandDeserialization;
 using WB.UI.Shared.Web.Captcha;
 using WB.UI.Shared.Web.Extensions;
+using WB.UI.Shared.Web.Kernel;
 using WB.UI.Shared.Web.Modules;
 using WB.UI.Shared.Web.Settings;
 using WB.UI.Shared.Web.Versions;
 using WebActivatorEx;
 
-[assembly: PreApplicationStartMethod(typeof (NinjectWebCommon), "Start")]
-[assembly: ApplicationShutdownMethod(typeof (NinjectWebCommon), "Stop")]
+[assembly: PreApplicationStartMethod(typeof (AutofacWebCommon), "Start")]
+[assembly: ApplicationShutdownMethod(typeof (AutofacWebCommon), "Stop")]
 
 namespace WB.UI.Designer.App_Start
 {
-    public static class NinjectWebCommon
+    public static class AutofacWebCommon
     {
-        private static readonly Bootstrapper bootstrapper = new Bootstrapper();
-
         public static void Start()
         {
-            DynamicModuleUtility.RegisterModule(typeof (OnePerRequestHttpModule));
-            DynamicModuleUtility.RegisterModule(typeof (NinjectHttpModule));
-            bootstrapper.Initialize(CreateKernel);
+            var autofacKernel = CreateKernel();
+
+
         }
 
         public static void Stop()
         {
-            bootstrapper.ShutDown();
         }
 
-        private static IKernel CreateKernel()
+        private static AutofacWebKernel CreateKernel()
         {
             var settingsProvider = new SettingsProvider();
 
@@ -72,7 +70,7 @@ namespace WB.UI.Designer.App_Start
             };
 
 
-            var kernel = new NinjectKernel();
+            var kernel = new AutofacWebKernel();
             kernel.Load(
                 new EventFreeInfrastructureModule(),
                 new InfrastructureModule(),
@@ -94,10 +92,14 @@ namespace WB.UI.Designer.App_Start
                 new NinjectWebCommonModule()
                 );
 
+            kernel.ContainerBuilder.RegisterControllers(typeof(AutofacWebCommon).Assembly);
+            kernel.ContainerBuilder.RegisterApiControllers(typeof(AutofacWebCommon).Assembly);
+
+
             // init
             kernel.Init().Wait();
 
-            return kernel.Kernel;
+            return kernel;
         }
     }
 }
