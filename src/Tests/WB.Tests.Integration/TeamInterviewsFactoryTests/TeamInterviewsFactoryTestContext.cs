@@ -5,6 +5,7 @@ using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Mappings;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
@@ -30,8 +31,8 @@ namespace WB.Tests.Integration.TeamInterviewsFactoryTests
             pgSqlConnection = new NpgsqlConnection(connectionString);
             pgSqlConnection.Open();
 
-            reader = new PostgreReadSideStorage<InterviewSummary>(postgresTransactionManager, Mock.Of<ILogger>());
-            featuredQuestionAnswersReader = new PostgreReadSideStorage<QuestionAnswer>(postgresTransactionManager, Mock.Of<ILogger>());
+            reader = new PostgreReadSideStorage<InterviewSummary>(postgresTransactionManager, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
+            featuredQuestionAnswersReader = new PostgreReadSideStorage<QuestionAnswer>(postgresTransactionManager, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
 
             return new TeamInterviewsFactory(
                 reader ?? CreateInterviewSummaryRepository());
@@ -44,7 +45,7 @@ namespace WB.Tests.Integration.TeamInterviewsFactoryTests
             pgSqlConnection = new NpgsqlConnection(connectionString);
             pgSqlConnection.Open();
 
-            return new PostgreReadSideStorage<InterviewSummary>(postgresTransactionManager, Mock.Of<ILogger>());
+            return new PostgreReadSideStorage<InterviewSummary>(postgresTransactionManager, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
         }
 
         protected static PostgreReadSideStorage<QuestionAnswer> CreateQuestionAnswerRepository()
@@ -55,7 +56,7 @@ namespace WB.Tests.Integration.TeamInterviewsFactoryTests
             pgSqlConnection = new NpgsqlConnection(connectionString);
             pgSqlConnection.Open();
 
-            return new PostgreReadSideStorage<QuestionAnswer>(postgresTransactionManager, Mock.Of<ILogger>());
+            return new PostgreReadSideStorage<QuestionAnswer>(postgresTransactionManager, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
         }
 
         protected static void ExecuteInCommandTransaction(Action action)

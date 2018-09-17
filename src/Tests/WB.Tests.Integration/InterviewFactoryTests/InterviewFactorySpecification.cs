@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
@@ -61,13 +62,14 @@ namespace WB.Tests.Integration.InterviewFactoryTests
             Abc.Setup.InstanceToMockedServiceLocator<IEntitySerializer<AudioAnswer>>(new EntitySerializer<AudioAnswer>());
             Abc.Setup.InstanceToMockedServiceLocator<IEntitySerializer<Area>>(new EntitySerializer<Area>());
 
-            this.interviewSummaryRepository = new PostgreReadSideStorage<InterviewSummary>(this.plainTransactionManager, Mock.Of<ILogger>());
-            this.questionnaireItemsRepository = new PostgreReadSideStorage<QuestionnaireCompositeItem, int>(this.plainTransactionManager, Mock.Of<ILogger>());
+            this.interviewSummaryRepository = new PostgreReadSideStorage<InterviewSummary>(this.plainTransactionManager, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
+            this.questionnaireItemsRepository = new PostgreReadSideStorage<QuestionnaireCompositeItem, int>(this.plainTransactionManager, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
             this.compositeItemsRepository = new PostgresPlainStorageRepository<QuestionnaireCompositeItem>(this.plainTransactionManager);
             this.questionnaireDocumentRepository = new InMemoryKeyValueStorage<QuestionnaireDocument>();
             this.questionnaireStorage = new HqQuestionnaireStorage(new InMemoryKeyValueStorage<QuestionnaireDocument>(),
                 Mock.Of<ITranslationStorage>(), Mock.Of<IQuestionnaireTranslator>(),
-                this.questionnaireItemsRepository, Mock.Of<IQuestionOptionsRepository>());
+                this.questionnaireItemsRepository, Mock.Of<IQuestionOptionsRepository>(),
+                Mock.Of<ISubstitutionService>());
         }
 
         [OneTimeTearDown]

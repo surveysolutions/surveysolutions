@@ -30,10 +30,10 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
             plainQuestionnaire = Create.Entity.PlainQuestionnaire(document: questionnaire);
 
             var questionnaireRepository = Mock.Of<IQuestionnaireStorage>(repository
-                => repository.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>()) == Create.Entity.PlainQuestionnaire(questionnaire, 1, null));
+                => repository.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>()) == Create.Entity.PlainQuestionnaire(questionnaire, 1));
 
             Setup.InstanceToMockedServiceLocator<IQuestionnaireStorage>(questionnaireRepository);
-            Setup.InstanceToMockedServiceLocator<IQuestionOptionsRepository>(new QuestionnaireQuestionOptionsRepository(questionnaireRepository));
+            Setup.InstanceToMockedServiceLocator<IQuestionOptionsRepository>(new QuestionnaireQuestionOptionsRepository());
             BecauseOf();
         }  
 

@@ -6,6 +6,7 @@ using WB.Core.BoundedContexts.Headquarters.Mappings;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
@@ -40,7 +41,7 @@ namespace WB.Tests.Integration.ReportTests
             pgSqlConnection = new NpgsqlConnection(connectionStringBuilder.ConnectionString);
             pgSqlConnection.Open();
 
-           return new PostgreReadSideStorage<InterviewSummary>(transactionManager, Mock.Of<ILogger>());
+           return new PostgreReadSideStorage<InterviewSummary>(transactionManager, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
         }
 
         internal class SvReport

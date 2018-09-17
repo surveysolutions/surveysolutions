@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Factories;
 using WB.Core.BoundedContexts.Headquarters.Mappings;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
@@ -28,7 +29,7 @@ namespace WB.Tests.Integration.OldschoolChartStatisticsDataProviderTests
 
             cumulativeReportStatusChangeStorage =
                 new PostgreReadSideStorage<CumulativeReportStatusChange>(postgresTransactionManager,
-                    Mock.Of<ILogger>());
+                    Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
 
             var cumulativeReportStatusChangeBegin =
                 IntegrationCreate.CumulativeReportStatusChange(questionnaireId, questionnaireVersion, beginDate);

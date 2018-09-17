@@ -65,9 +65,8 @@ namespace WB.Tests.Abc.TestFactories
                     syncVersionProvider ?? Mock.Of<IInterviewerSyncProtocolVersionProvider>(),
                     authorizedUser ?? Mock.Of<IAuthorizedUser>(),
                     productVersion ?? Mock.Of<IProductVersion>(),
-                    signInManager ?? new HqSignInManager(Create.Storage.HqUserManager(), Mock.Of<IAuthenticationManager>()),
-                    questionnaireBrowseViewFactory ??
-                    Mock.Of<IQuestionnaireBrowseViewFactory>(x => x.GetByIds(It.IsAny<QuestionnaireIdentity[]>()) == new List<QuestionnaireBrowseItem>()),
+                    signInManager ?? new HqSignInManager(Create.Storage.HqUserManager(), Mock.Of<IAuthenticationManager>(), Mock.Of<IHashCompatibilityProvider>()),
+                    questionnaireBrowseViewFactory ?? Mock.Of<IQuestionnaireBrowseViewFactory>(x => x.GetByIds(It.IsAny<QuestionnaireIdentity[]>()) == new List<QuestionnaireBrowseItem>()),
                     assignmentsService ?? Mock.Of<IAssignmentsService>()
                 );
                 result.Request = new HttpRequestMessage();

@@ -60,6 +60,21 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             }
         }
 
+        public T ExecuteInQueryTransaction<T>(Func<T> func)
+        {
+            throw new NotImplementedException();
+        }
+
+        public T ExecuteInPlainTransaction<T>(Func<T> func)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ExecuteInPlainTransaction(Action action)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Dispose()
         {
             if (isDisposed) return;

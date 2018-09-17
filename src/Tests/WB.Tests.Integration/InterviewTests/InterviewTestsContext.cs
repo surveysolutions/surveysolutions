@@ -57,7 +57,8 @@ namespace WB.Tests.Integration.InterviewTests
                 => repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == Create.Entity.PlainQuestionnaire(questionnaireDocument, 1));
 
             Setup.InstanceToMockedServiceLocator(questionnaireRepository);
-            Setup.InstanceToMockedServiceLocator<IQuestionOptionsRepository>(new QuestionnaireQuestionOptionsRepository(questionnaireRepository));
+            var questionOptionsRepository = new QuestionnaireQuestionOptionsRepository();
+            Setup.InstanceToMockedServiceLocator<IQuestionOptionsRepository>(questionOptionsRepository);
 
             var state = GetLatestExpressionStorage(questionnaireDocument);
 
@@ -124,7 +125,7 @@ namespace WB.Tests.Integration.InterviewTests
                 Create.Entity.PlainQuestionnaire(questionnaireDocument),
                 questionnaireIdentity.Version);
 
-            Setup.InstanceToMockedServiceLocator<IQuestionOptionsRepository>(new QuestionnaireQuestionOptionsRepository(questionnaireRepository));
+            Setup.InstanceToMockedServiceLocator<IQuestionOptionsRepository>(new QuestionnaireQuestionOptionsRepository());
 
             var interview = IntegrationCreate.StatefulInterview(
                 questionnaireIdentity,
@@ -160,13 +161,15 @@ namespace WB.Tests.Integration.InterviewTests
                                               Create.Entity.PlainQuestionnaire(questionnaireDocument),
                                               questionnaireIdentity.Version);
 
-            Setup.InstanceToMockedServiceLocator<IQuestionOptionsRepository>(new QuestionnaireQuestionOptionsRepository(questionnaireRepository));
+            var questionOptionsRepository = new QuestionnaireQuestionOptionsRepository();
+            Setup.InstanceToMockedServiceLocator<IQuestionOptionsRepository>(questionOptionsRepository);
 
             var interview = new StatefulInterview(
                 questionnaireRepository,
                 statePrototypeProvider,
                 Create.Service.SubstitutionTextFactory(),
-                Create.Service.InterviewTreeBuilder());
+                Create.Service.InterviewTreeBuilder(),
+                questionOptionsRepository);
 
             return interview;
         }
@@ -187,7 +190,7 @@ namespace WB.Tests.Integration.InterviewTests
                 => repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == Create.Entity.PlainQuestionnaire(questionnaireDocument, 1));
 
             Setup.InstanceToMockedServiceLocator(questionnaireRepository);
-            Setup.InstanceToMockedServiceLocator<IQuestionOptionsRepository>(new QuestionnaireQuestionOptionsRepository(questionnaireRepository));
+            Setup.InstanceToMockedServiceLocator<IQuestionOptionsRepository>(new QuestionnaireQuestionOptionsRepository());
 
             var state = GetLatestExpressionStorage(questionnaireDocument);
 
