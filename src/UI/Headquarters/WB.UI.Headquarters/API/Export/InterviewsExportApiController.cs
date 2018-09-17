@@ -60,7 +60,7 @@ namespace WB.UI.Headquarters.API.Export
         [ApiNoCache]
         public HttpResponseMessage GetInterview(Guid id)
         {
-            var entities = this.interviewFactory.GetInterviewEntities(id);
+            List<InterviewEntity> entities = this.interviewFactory.GetInterviewEntities(id);
 
             return Request.CreateResponse(HttpStatusCode.OK, entities);
         }

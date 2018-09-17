@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -21,7 +20,7 @@ namespace WB.Services.Export.Interview.Exporters
     [Localizable(false)]
     internal class InterviewsExporter : IInterviewsExporter
     {
-        public Task Export(TenantInfo tenant, 
+        public async Task ExportAsync(TenantInfo tenant, 
             QuestionnaireExportStructure questionnaireExportStructure,
             QuestionnaireDocument questionnaire,
             List<InterviewToExport> interviewsToExport,
@@ -31,11 +30,10 @@ namespace WB.Services.Export.Interview.Exporters
         {
             Stopwatch stopwatch = Stopwatch.StartNew();
 
-            this.DoExport(questionnaireExportStructure, questionnaire, basePath, interviewsToExport, progress, cancellationToken);
+            await this.DoExport(questionnaireExportStructure, questionnaire, basePath, interviewsToExport, progress, cancellationToken);
             stopwatch.Stop();
             this.logger.Log(LogLevel.Information, $"Export of {interviewsToExport.Count:N0} interview datas for questionnaire" +
                                                   $" {questionnaireExportStructure.QuestionnaireId} finised. Took {stopwatch.Elapsed:c} to complete");
-            return Task.CompletedTask;
         }
 
         private readonly IInterviewFactory interviewFactory;
@@ -63,7 +61,7 @@ namespace WB.Services.Export.Interview.Exporters
         }
 
         
-        private void DoExport(QuestionnaireExportStructure questionnaireExportStructure,
+        private Task DoExport(QuestionnaireExportStructure questionnaireExportStructure,
             QuestionnaireDocument questionnaire,
             string basePath,
             List<InterviewToExport> interviewIdsToExport,
@@ -71,7 +69,7 @@ namespace WB.Services.Export.Interview.Exporters
             CancellationToken cancellationToken)
         {
             this.CreateDataSchemaForInterviewsInTabular(questionnaireExportStructure, basePath);
-            this.ExportInterviews(interviewIdsToExport, basePath, questionnaireExportStructure, questionnaire, progress, cancellationToken);
+            return this.ExportInterviews(interviewIdsToExport, basePath, questionnaireExportStructure, questionnaire, progress, cancellationToken);
         }
 
         private void CreateDataSchemaForInterviewsInTabular(QuestionnaireExportStructure questionnaireExportStructure, string basePath)
@@ -109,37 +107,7 @@ namespace WB.Services.Export.Interview.Exporters
             this.errorsExporter.WriteHeader(hasAtLeastOneRoster, questionnaireExportStructure.MaxRosterDepth, errorsExportFilePath);
         }
 
-        void ReadInterviewsFromDatabase(BlockingCollection<List<InterviewToExport>> interviewsToProcess,
-            List<InterviewToExport> interviewIdsToExport, int batchSize, Action<string> log,
-            CancellationToken cancellationToken)
-        {
-            try
-            {
-                foreach (IEnumerable<InterviewToExport> batchIds in interviewIdsToExport.Batch(batchSize))
-                {
-                    var batch = batchIds.ToDictionary(b => b.Id);
-
-                    getDbDataStopwatch.Restart();
-
-                    IEnumerable<InterviewEntity> interviews = interviewFactory.GetInterviewEntities(batch.Keys);
-
-                    foreach (var interviewEntity in interviews)
-                    {
-                        batch[interviewEntity.InterviewId].Entities.Add(interviewEntity);
-                    }
-
-                    getDbDataStopwatch.Stop();
-
-                    interviewsToProcess.Add(batch.Values.ToList(), cancellationToken);
-                }
-            }
-            finally
-            {
-                interviewsToProcess.CompleteAdding();
-            }
-        }
-
-        private void ExportInterviews(List<InterviewToExport> interviewIdsToExport,
+        private async Task ExportInterviews(List<InterviewToExport> interviewIdsToExport,
             string basePath,
             QuestionnaireExportStructure questionnaireExportStructure,
             QuestionnaireDocument questionnaire,
@@ -147,58 +115,23 @@ namespace WB.Services.Export.Interview.Exporters
             CancellationToken cancellationToken)
         {
             long totalInterviewsProcessed = 0;
-            var batchSize = this.interviewDataExportSettings.MaxRecordsCountPerOneExportQuery;
 
-            void LogDebug(string task)
-            {
-                this.logger.Log(LogLevel.Debug, $"Interview export for { questionnaireExportStructure.QuestionnaireId}: {task}");
-            }
-
-            // producer/consumer queue with backpressure limitation
-            // it will block collection till there is 3 batches in queue, but make sure that we don't pause DB read for data processing
-            var interviewsToProcess = new BlockingCollection<List<InterviewToExport>>(3);
-
-            var dbReaderTask = Task.Factory.StartNew(
-                () => ReadInterviewsFromDatabase(interviewsToProcess, interviewIdsToExport, batchSize, LogDebug, cancellationToken),
-                cancellationToken);
-
-            var exportStopwatch = Stopwatch.StartNew();
-
-            foreach (var batch in interviewsToProcess.GetConsumingEnumerable(cancellationToken))
+            foreach (InterviewToExport batch in interviewIdsToExport)
             {
                 var exportBulk = new List<InterviewExportedDataRecord>();
-                Stopwatch batchWatch = Stopwatch.StartNew();
+                cancellationToken.ThrowIfCancellationRequested();
 
-                foreach (var interview in batch)
-                {
-                    cancellationToken.ThrowIfCancellationRequested();
+                var interviewEntities = await this.interviewFactory.GetInterviewEntities(batch.Id);
+                exportBulk.Add(this.ExportSingleInterview(batch,
+                    interviewEntities.ToList(),
+                    questionnaireExportStructure,
+                    questionnaire,
+                    basePath));
 
-                    exportBulk.Add(this.ExportSingleInterview(interview,
-                        interview.Entities,
-                        questionnaireExportStructure,
-                        questionnaire,
-                        basePath));
-
-                    interview.Entities.Clear(); // needed to free ram as yearly as possible
-
-                    ++totalInterviewsProcessed;
-                    progress.Report(totalInterviewsProcessed.PercentOf(interviewIdsToExport.Count));
-                }
-
-                batchWatch.Stop();
-                Stopwatch writeToFilesWatch = Stopwatch.StartNew();
+                ++totalInterviewsProcessed;
+                progress.Report(totalInterviewsProcessed.PercentOf(interviewIdsToExport.Count));
 
                 this.WriteInterviewDataToCsvFile(basePath, exportBulk);
-
-                LogDebug($"Exported {totalInterviewsProcessed:N0} of {interviewIdsToExport.Count:N0} interviews in {batchWatch.Elapsed:g}. " +
-                         $"Write to file: {writeToFilesWatch.Elapsed:g}");
-            }
-
-            dbReaderTask.Wait(cancellationToken);
-
-            if (dbReaderTask.IsFaulted && dbReaderTask.Exception != null)
-            {
-                throw dbReaderTask.Exception;
             }
 
             progress.Report(100);
@@ -247,14 +180,13 @@ namespace WB.Services.Export.Interview.Exporters
             }
         }
 
-        private readonly Stopwatch getDbDataStopwatch = new Stopwatch();
         private readonly Stopwatch exportProcessingStopwatch = new Stopwatch();
 
         private InterviewExportedDataRecord ExportSingleInterview(InterviewToExport interviewToExport,
             List<InterviewEntity> interview, QuestionnaireExportStructure exportStructure, QuestionnaireDocument questionnaire, string basePath)
         {
             exportProcessingStopwatch.Start();
-            List<string[]> errors = errorsExporter.Export(exportStructure, interview, basePath, interviewToExport.Key);
+            List<string[]> errors = errorsExporter.Export(exportStructure, questionnaire, interview, basePath, interviewToExport.Key);
 
             var interviewData = new InterviewData
             {
@@ -382,8 +314,7 @@ namespace WB.Services.Export.Interview.Exporters
             return result.ToArray();
         }
 
-
-        private string GetTextValueForTextListQuestion(InterviewData interview, decimal[] rosterVector, Guid id)
+        private string GetTextValueForTextListQuestion(InterviewData interview, RosterVector rosterVector, Guid id)
         {
             decimal itemToSearch = rosterVector.Last();
 
@@ -391,7 +322,7 @@ namespace WB.Services.Export.Interview.Exporters
             {
                 var levelForVector =
                     interview.Levels.GetOrNull(
-                        this.CreateLevelIdFromPropagationVector(rosterVector.Take(rosterVector.Length - i).ToArray()));
+                        this.CreateLevelIdFromPropagationVector(rosterVector.Take(rosterVector.Length - i)));
 
                 var questionToCheck = levelForVector?.QuestionsSearchCache.GetOrNull(id);
 
@@ -412,7 +343,7 @@ namespace WB.Services.Export.Interview.Exporters
             return string.Empty;
         }
 
-        private string CreateLevelIdFromPropagationVector(decimal[] vector)
+        private string CreateLevelIdFromPropagationVector(RosterVector vector)
         {
             return vector.Length == 0 ? "#" : vector.ToString();
         }
@@ -422,7 +353,13 @@ namespace WB.Services.Export.Interview.Exporters
             if (!levelVector.Any())
             {
                 var levels = interview.Levels.Values.Where(level => level.ScopeVectors.ContainsKey(new ValueVector<Guid>())).ToList();
-                return levels.Any() ? levels : new List<InterviewLevel> {new  InterviewLevel() {RosterVector = new decimal[0]}} ;
+                return levels.Any() ? levels : new List<InterviewLevel>
+                {
+                    new  InterviewLevel
+                    {
+                        RosterVector = RosterVector.Empty
+                    }
+                } ;
             }
             return interview.Levels.Values.Where(level => level.ScopeVectors.ContainsKey(levelVector)).ToList();
         }
