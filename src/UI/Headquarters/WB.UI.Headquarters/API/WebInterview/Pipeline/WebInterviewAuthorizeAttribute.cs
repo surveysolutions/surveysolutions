@@ -7,6 +7,7 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Enumerator.Native.WebInterview;
+using WB.Infrastructure.Native.Storage;
 using WB.UI.Shared.Enumerator.Services.Internals;
 
 namespace WB.UI.Headquarters.API.WebInterview.Pipeline

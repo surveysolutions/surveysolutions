@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Autofac;
 using Autofac.Features.ResolveAnything;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Infrastructure.Native.Storage.Postgre;
 using WB.UI.Shared.Enumerator.Services.Internals;
 
 namespace WB.Core.Infrastructure.Modularity.Autofac
@@ -57,18 +56,11 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
 
             try
             {
-                using (var scope = ServiceLocator.Current.CreateChildContainer())
-                {
-                    var serviceLocator = scope.Resolve<IServiceLocator>(new NamedParameter("kernel", scope));
-
-                    foreach (var module in initModules)
+                foreach (var module in initModules)
                     {
                         status.ClearMessage();
-                        await module.Init(serviceLocator, status);
+                        await module.Init(ServiceLocator.Current, status);
                     }
-
-                    serviceLocator.GetInstance<IUnitOfWork>().AcceptChanges();
-                }
             }
             finally
             {

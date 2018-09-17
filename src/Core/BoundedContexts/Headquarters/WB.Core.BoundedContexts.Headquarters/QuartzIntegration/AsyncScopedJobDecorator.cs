@@ -2,8 +2,8 @@
 using Autofac;
 using Quartz;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
-using WB.UI.Shared.Enumerator.Services.Internals;
 
 namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
 {
