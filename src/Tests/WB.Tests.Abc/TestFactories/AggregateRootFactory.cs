@@ -32,14 +32,15 @@ namespace WB.Tests.Abc.TestFactories
             questionnaireDocument.IsUsingExpressionStorage = true;
 
             var questionnaireDefaultRepository = Mock.Of<IQuestionnaireStorage>(repository =>
-                repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == Create.Entity.PlainQuestionnaire(questionnaireDocument, 1, null) &&
+                repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == Create.Entity.PlainQuestionnaire(questionnaireDocument, 1) &&
                 repository.GetQuestionnaireDocument(It.IsAny<QuestionnaireIdentity>()) == questionnaireDocument);
 
             var textFactoryMock = new Mock<ISubstitutionTextFactory> {DefaultValue = DefaultValue.Mock};
             var interview = new Interview(questionnaireRepository ?? questionnaireDefaultRepository,
                 expressionProcessorStatePrototypeProvider ?? Stub.InterviewExpressionStateProvider(),
                 textFactory ?? textFactoryMock.Object,
-                Create.Service.InterviewTreeBuilder());
+                Create.Service.InterviewTreeBuilder(),
+                Mock.Of<IQuestionOptionsRepository>());
 
             interview.SetId(interviewId ?? Guid.NewGuid());
 
@@ -104,7 +105,8 @@ namespace WB.Tests.Abc.TestFactories
                 questionnaireRepository,
                 CreateDefaultInterviewExpressionStateProvider(setupLevel),
                 Create.Service.SubstitutionTextFactory(),
-                Create.Service.InterviewTreeBuilder());
+                Create.Service.InterviewTreeBuilder(),
+                Mock.Of<IQuestionOptionsRepository>());
 
             if (shouldBeInitialized)
             {
@@ -130,7 +132,8 @@ namespace WB.Tests.Abc.TestFactories
                 questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 CreateDefaultInterviewExpressionStateProvider(setupLevel),
                 Create.Service.SubstitutionTextFactory(),
-                Create.Service.InterviewTreeBuilder());
+                Create.Service.InterviewTreeBuilder(),
+                Mock.Of<IQuestionOptionsRepository>());
 
             if (shouldBeInitialized)
             {

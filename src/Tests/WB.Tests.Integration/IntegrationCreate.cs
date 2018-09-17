@@ -9,6 +9,7 @@ using Main.Core.Events;
 using Moq;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing;
+using Ncqrs.Eventing.Storage;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Cfg.MappingSchema;
@@ -139,7 +140,8 @@ namespace WB.Tests.Integration
             var interview = new Interview(questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>(),
                 Create.Service.SubstitutionTextFactory(),
-                Create.Service.InterviewTreeBuilder());
+                Create.Service.InterviewTreeBuilder(),
+                Mock.Of<IQuestionOptionsRepository>());
 
             interview.CreateInterview(Create.Command.CreateInterview(
                 interviewId: interview.EventSourceId, 
@@ -161,7 +163,8 @@ namespace WB.Tests.Integration
             var interview = new StatefulInterview(questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>(),
                 Create.Service.SubstitutionTextFactory(),
-                Create.Service.InterviewTreeBuilder());
+                Create.Service.InterviewTreeBuilder(),
+                Mock.Of<IQuestionOptionsRepository>());
           
             interview.CreateInterview(Create.Command.CreateInterview(
                 interviewId: Guid.NewGuid(),
@@ -201,7 +204,8 @@ namespace WB.Tests.Integration
                 questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 expressionProcessorStatePrototypeProvider ?? Stub<IInterviewExpressionStatePrototypeProvider>.WithNotEmptyValues,
                 Create.Service.SubstitutionTextFactory(),
-                Create.Service.InterviewTreeBuilder());
+                Create.Service.InterviewTreeBuilder(),
+                Mock.Of<IQuestionOptionsRepository>());
 
             interview.CreateInterview(Create.Command.CreateInterview(
                 interviewId: interview.EventSourceId,
@@ -251,7 +255,8 @@ namespace WB.Tests.Integration
                 snapshooter ?? Mock.Of<IAggregateSnapshotter>(), Mock.Of<IServiceLocator>(),
                 Mock.Of<IPlainAggregateRootRepository>(),
                 new AggregateLock(),
-                Mock.Of<IAggregateRootCacheCleaner>());
+                Mock.Of<IAggregateRootCacheCleaner>(),
+                Mock.Of<IEventStore>());
         }
 
         public static Answer Answer(string answer, decimal value, decimal? parentValue = null)
@@ -365,7 +370,8 @@ namespace WB.Tests.Integration
         {
             return new PostgreReadSideStorage<TEntity>(
                 sessionProvider ?? Mock.Of<IUnitOfWork>(),
-                Mock.Of<ILogger>());
+                Mock.Of<ILogger>(),
+                Mock.Of<IServiceLocator>());
         }
 
         public static AnswerNotifier AnswerNotifier(ILiteEventRegistry registry = null)

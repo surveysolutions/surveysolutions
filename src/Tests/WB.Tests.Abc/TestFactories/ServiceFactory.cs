@@ -134,7 +134,8 @@ namespace WB.Tests.Abc.TestFactories
                 serviceLocator ?? Mock.Of<IServiceLocator>(),
                 plainRepository ?? Mock.Of<IPlainAggregateRootRepository>(),
                 aggregateLock ?? Stub.Lock(),
-                aggregateRootCacheCleaner ?? Mock.Of<IAggregateRootCacheCleaner>());
+                aggregateRootCacheCleaner ?? Mock.Of<IAggregateRootCacheCleaner>(),
+                Mock.Of<IEventStore>());
         }
 
         public IAsyncRunner AsyncRunner() => new SyncAsyncRunner();
@@ -248,7 +249,8 @@ namespace WB.Tests.Abc.TestFactories
         public NcqrCompatibleEventDispatcher NcqrCompatibleEventDispatcher(EventBusSettings eventBusSettings = null,
             ILogger logger = null, params IEventHandler[] handlers)
             => new NcqrCompatibleEventDispatcher(
-                eventStore: () => Mock.Of<IEventStore>(),
+                //eventStore: () => Mock.Of<IEventStore>(),
+                serviceLocator: Mock.Of<IServiceLocator>(),
                 eventBusSettings: eventBusSettings ?? Create.Entity.EventBusSettings(),
                 logger: logger ?? Mock.Of<ILogger>(),
                 eventHandlers: handlers);
@@ -724,7 +726,8 @@ namespace WB.Tests.Abc.TestFactories
             IUserViewFactory userViewFactory = null)
             => new ImportDataVerifier(fileSystem ?? new FileSystemIOAccessor(),
                 interviewTreeBuilder ?? Mock.Of<IInterviewTreeBuilder>(),
-                userViewFactory ?? Mock.Of<IUserViewFactory>());
+                userViewFactory ?? Mock.Of<IUserViewFactory>(),
+                Mock.Of<IQuestionOptionsRepository>());
 
         public IAssignmentsUpgrader AssignmentsUpgrader(IPreloadedDataVerifier importService = null,
             IQuestionnaireStorage questionnaireStorage = null,
