@@ -28,6 +28,7 @@
     self.TemplateName = ko.observable();
     self.UnactiveDateStart = ko.observable();
     self.UnactiveDateEnd = ko.observable();
+    self.TeamId = ko.observable();
 
     self.getFormattedPrefilledQuestions = function(prefilledQuestions) {
         prefilledQuestions.forEach(function(prefilledQuestion) {
@@ -58,6 +59,7 @@
         self.Url.query['assignmentId'] = self.AssignmentId() || "";
         self.Url.query['unactiveDateStart'] = self.UnactiveDateStart() || "";
         self.Url.query['unactiveDateEnd'] = self.UnactiveDateEnd() || "";
+        self.Url.query['teamId'] = self.TeamId() || "";
         
         if (Modernizr.history) {
             window.history.pushState({}, "Interviews", self.Url.toString());
@@ -71,7 +73,8 @@
             SearchBy: self.SearchBy,
             AssignmentId: self.AssignmentId,
             UnactiveDateStart: self.UnactiveDateStart,
-            UnactiveDateEnd: self.UnactiveDateEnd
+            UnactiveDateEnd: self.UnactiveDateEnd,
+            TeamId: self.TeamId
         };
     };
 
@@ -87,6 +90,7 @@
         self.SearchBy(decodeURIComponent(self.QueryString['searchBy'] || ""));
         self.UnactiveDateStart(self.QueryString['unactiveDateStart']);
         self.UnactiveDateEnd(self.QueryString['unactiveDateEnd']);
+        self.TeamId(self.QueryString['teamId']);
 
         updateTemplateName(self.SelectedTemplate());
 

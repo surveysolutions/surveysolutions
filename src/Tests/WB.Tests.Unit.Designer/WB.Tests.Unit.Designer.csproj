@@ -28,8 +28,16 @@
     <None Remove="BoundedContexts\Designer\TranslationServiceTests\testTranslationsWithDuplicates.xlsx" />
     <None Remove="BoundedContexts\Designer\TranslationServiceTests\testTranslationsWithHtml.xlsx" />
     <None Remove="BoundedContexts\Designer\TranslationServiceTests\testTranslationsWithMissingTranslations.xlsx" />
+    <None Remove="BoundedContexts\Designer\TranslationServiceTests\testTranslationsWithoutEntityIdColumn.xlsx" />
+    <None Remove="BoundedContexts\Designer\TranslationServiceTests\testTranslationsWithoutVariableColumn - Copy.xlsx" />
+    <None Remove="BoundedContexts\Designer\TranslationServiceTests\testTranslationsWithoutVariableColumn.xlsx" />
     <None Remove="BoundedContexts\Designer\TranslationServiceTests\testTranslationsWithPermittedTags.xlsx" />
+    <None Remove="BoundedContexts\Designer\TranslationServiceTests\testTranslationsWithRandomOrderColumns.xlsx" />
     <None Remove="BoundedContexts\Designer\TranslationServiceTests\translationsForDifferentQuestionnaire.xlsx" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="BoundedContexts\Designer\TranslationServiceTests\testTranslationsWithoutEntityIdColumn.xlsx" />
+    <EmbeddedResource Include="BoundedContexts\Designer\TranslationServiceTests\testTranslationsWithoutVariableColumn.xlsx" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="BoundedContexts\Designer\TranslationServiceTests\testTranslationsWithHtml.xlsx" />
@@ -37,6 +45,7 @@
     <EmbeddedResource Include="BoundedContexts\Designer\TranslationServiceTests\testTranslationsWithDuplicates.xlsx" />
     <EmbeddedResource Include="BoundedContexts\Designer\TranslationServiceTests\testTranslationsWithMissingTranslations.xlsx" />
     <EmbeddedResource Include="BoundedContexts\Designer\TranslationServiceTests\testTranslationsWithPermittedTags.xlsx" />
+    <EmbeddedResource Include="BoundedContexts\Designer\TranslationServiceTests\testTranslationsWithRandomOrderColumns.xlsx" />
     <EmbeddedResource Include="BoundedContexts\Designer\TranslationServiceTests\translationsForDifferentQuestionnaire.xlsx" />
   </ItemGroup>
   <ItemGroup>

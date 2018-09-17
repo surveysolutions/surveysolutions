@@ -31,7 +31,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             InterviewerStorageMock.Setup(x => x.FirstOrDefault()).Returns(interviewerIdentity);
 
             viewModel = Create.Service.SynchronizationProcess(principal: PrincipalMock.Object,
-                synchronizationService: SynchronizationServiceMock.Object,
+                interviewerSynchronizationService: SynchronizationServiceMock.Object,
                 interviewersPlainStorage: InterviewerStorageMock.Object);
 
             viewModel

@@ -52,6 +52,7 @@ using WB.Core.BoundedContexts.Interviewer.Implementation.Services.OfflineSync;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Synchronization;
+using WB.Core.BoundedContexts.Interviewer.Synchronization.Steps;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.BoundedContexts.Supervisor.Services;
@@ -454,11 +455,7 @@ namespace WB.Tests.Abc.TestFactories
             IUserInteractionService userInteractionService = null,
             IPasswordHasher passwordHasher = null,
             IInterviewerPrincipal principal = null,
-            IInterviewerQuestionnaireAccessor questionnaireFactory = null,
-            IInterviewerInterviewAccessor interviewFactory = null,
             IHttpStatistician httpStatistician = null,
-            IEnumeratorEventStorage interviewerEventStorage = null,
-            IEventBus eventBus = null,
             IInterviewerSynchronizationService interviewerSynchronizationService = null)
         {
             var syncServiceMock = synchronizationService ?? Mock.Of<IInterviewerSynchronizationService>();
@@ -919,12 +916,12 @@ namespace WB.Tests.Abc.TestFactories
         }
 
         public CensusQuestionnairesSynchronization CensusQuestionnairesSynchronization(
-            ISynchronizationService synchronizationService = null, 
+            IInterviewerSynchronizationService synchronizationService = null, 
             IInterviewerQuestionnaireAccessor questionnairesAccessor = null, 
             IQuestionnaireDownloader questionnaireDownloader = null)
         {
             var censusQuestionnairesSynchronization = new CensusQuestionnairesSynchronization(
-                synchronizationService ?? Mock.Of<ISynchronizationService>(),
+                synchronizationService ?? Mock.Of<IInterviewerSynchronizationService>(),
                 questionnairesAccessor ?? Mock.Of<IInterviewerQuestionnaireAccessor>(),
                 questionnaireDownloader ?? Mock.Of<IQuestionnaireDownloader>(),
                 Mock.Of<ILogger>(),
