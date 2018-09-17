@@ -59,6 +59,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             return $"{questionnaireTitle}.tab";
         }
 
+        public string GetQuestionnaireTitleWithVersion(QuestionnaireIdentity identity)
+        {
+            return $"{GetQuestionnaireTitle(identity)}_{identity.Version}";
+        }
+
         private string GetQuestionnaireTitle(QuestionnaireIdentity identity)
         {
             var questionnaire = this.transactionManager.ExecuteInQueryTransaction(() => this.questionnaires.GetById(identity.ToString()));
