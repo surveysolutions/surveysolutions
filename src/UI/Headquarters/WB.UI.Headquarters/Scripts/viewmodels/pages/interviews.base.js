@@ -181,22 +181,6 @@
     };
 
     self.InitPrefilledColumnsAndShowSearchBarIfNeed = function() {
-        $('.dataTables_filter label').on('click', function (e) {
-            if (e.target !== this)
-                return;
-
-            if ($(this).hasClass("active")) {
-                $(this).removeClass("active");
-            } else {
-                $(this).addClass("active");
-                $(this).children("input[type='search']").delay(200).queue(function () { $(this).focus(); $(this).dequeue(); });
-            }
-        });
-
-        if (self.Url.query['searchBy'].length > 0) {
-            $('.dataTables_filter label').addClass("active");
-        }
-
         var contextMenuOptions = {
             autoHide: true,
             build: function ($trigger, e) {
@@ -214,10 +198,10 @@
         $.contextMenu(_.assign({ selector: ".row-unit" }, contextMenuOptions));
     };
 
-    self.ShowStatusHistory = function (url, interview) {
+    self.ShowStatusHistory = function(url, interview) {
         var statusHistoryTemplateId = "#interview-status-history-template";
         var modalId = '#statusHistoryModal';
-        
+
         self.SendRequest(url,
             { interviewId: interview.InterviewId() },
             function(statusHistory) {
@@ -236,13 +220,18 @@
                 };
 
                 $('body').append($("<div/>").html($(statusHistoryTemplateId).html())[0]);
-               
+
                 ko.applyBindings(historyModalModel, $(modalId)[0]);
 
                 $(modalId).modal('show', { backdrop: true });
             },
             false,
             false);
-    }
+    };
+
+    self.clearSearch = function() {
+        self.SearchBy('');
+        self.filter();
+    };
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.InterviewsBase, Supervisor.VM.ListView);

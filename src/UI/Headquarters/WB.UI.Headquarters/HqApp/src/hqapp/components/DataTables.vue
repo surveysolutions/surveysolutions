@@ -89,6 +89,9 @@ export default {
         },
         noSelect: {
             type: Boolean, default: false
+        },
+        search: {
+            caseInsensitive: true
         }
     },
 
@@ -302,21 +305,30 @@ export default {
         },
 
         onTableInitComplete() {
-            $(this.$refs.table).parents('.dataTables_wrapper').find('.dataTables_filter label').on('click', function(e) {
-                if (e.target !== this)
-                    return;
-                if ($(this).hasClass("active")) {
-                    $(this).removeClass("active");
-                }
-                else {
-                    $(this).addClass("active");
-                    $(this).children("input[type='search']").delay(200).queue(function() { $(this).focus(); $(this).dequeue(); });
-                }
-            });
-
             this.initContextMenu()
             this.initHeaderCheckBox()
-            this.initProcessingBox()            
+            this.initProcessingBox()  
+            
+            const self = this;
+            const clearSearchButton = $('<button type="button" class="btn btn-link btn-clear"><span></span></button>');
+            const searchInput = $(this.$refs.table).parents('.dataTables_wrapper').find('.dataTables_filter label input');
+
+            searchInput.after(clearSearchButton);
+
+            clearSearchButton.on('click', function() {
+                searchInput.val('');
+                self.table.search('').draw();
+            });
+
+            searchInput
+                .off()
+                .on('keyup', function(e) {
+                    if((e.ctrlKey && e.keyCode === 86) || (e.key === "Enter")){
+                        searchInput.val(searchInput.val().trim());
+                    }
+                    
+                    self.table.search(this.value.trim()).draw();
+                });
         },
 
         initProcessingBox() {
