@@ -6,6 +6,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Factories
 {
+    [Obsolete("KP-11815")]
     public interface IExportViewFactory
     {
         QuestionnaireExportStructure CreateQuestionnaireExportStructure(Guid id, long version);

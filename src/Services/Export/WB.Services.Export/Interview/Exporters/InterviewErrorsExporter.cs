@@ -2,33 +2,16 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
-using WB.Core.BoundedContexts.Headquarters.ValueObjects.Export;
-using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
-using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Infrastructure.Native.Sanitizer;
+using WB.Services.Export.Infrastructure;
+using WB.Services.Export.Interview.Entities;
+using WB.Services.Export.Questionnaire;
+using WB.Services.Export.Utils;
 
-namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
+namespace WB.Services.Export.Interview.Exporters
 {
-    internal interface IInterviewErrorsExporter
-    {
-        List<string[]> Export(QuestionnaireExportStructure exportStructure, List<InterviewEntity> entitiesToExport, string path, string interviewKey);
-        void WriteHeader(bool hasAtLeastOneRoster, int maxRosterDepthInQuestionnaire, string filePath);
-        void WriteDoFile(QuestionnaireExportStructure questionnaireExportStructure, string basePath);
-
-        DoExportFileHeader[] GetHeader();
-        string GetFileName();
-    }
-
-     [Obsolete("KP-11815")]
     internal class InterviewErrorsExporter : IInterviewErrorsExporter
     {
         private readonly ICsvWriter csvWriter;
-        private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IFileSystemAccessor fileSystemAccessor;
         public const string FileName = "interview__errors";
 
@@ -49,18 +32,19 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
 
 
         public InterviewErrorsExporter(ICsvWriter csvWriter,
-            IQuestionnaireStorage questionnaireStorage,
             IFileSystemAccessor fileSystemAccessor)
         {
             this.csvWriter = csvWriter ?? throw new ArgumentNullException(nameof(csvWriter));
-            this.questionnaireStorage = questionnaireStorage ?? throw new ArgumentNullException(nameof(questionnaireStorage));
             this.fileSystemAccessor = fileSystemAccessor;
         }
 
-        public List<string[]> Export(QuestionnaireExportStructure exportStructure,
-            List<InterviewEntity> entitiesToExport, string path, string interviewKey)
+        public List<string[]> Export(
+            QuestionnaireExportStructure exportStructure,
+            QuestionnaireDocument questionnaire,
+            List<InterviewEntity> entitiesToExport, 
+            string path, 
+            string interviewKey)
         {
-            var questionnaire = questionnaireStorage.GetQuestionnaire(exportStructure.Identity, null);
             List<string[]> exportRecords = new List<string[]>();
 
             foreach (var interviewEntity in entitiesToExport.Where(
@@ -78,27 +62,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             return exportRecords;
         }
 
-        public List<string[]> DoExport(QuestionnaireExportStructure exportStructure, List<InterviewEntity> entitiesToExport, string basePath, string interviewKey)
-        {
-            var questionnaire = questionnaireStorage.GetQuestionnaire(exportStructure.Identity, null);
-            List<string[]> exportRecords = new List<string[]>();
-
-            foreach (var interviewEntity in entitiesToExport.Where(
-                x => (x.EntityType == EntityType.Question  || x.EntityType == EntityType.StaticText) 
-                     && x.InvalidValidations?.Length > 0 
-                     && x.IsEnabled))
-            {
-                foreach (var failedValidationConditionIndex in interviewEntity.InvalidValidations)
-                {
-                    string[] exportRow = CreateExportRow(questionnaire, interviewEntity, exportStructure.MaxRosterDepth, failedValidationConditionIndex, interviewKey);
-                    exportRecords.Add(exportRow);
-                }
-            }
-
-            return exportRecords;
-        }
-
-        private static string[] CreateExportRow(IQuestionnaire questionnaire, InterviewEntity error,
+        private static string[] CreateExportRow(QuestionnaireDocument questionnaire, InterviewEntity error,
             int maxRosterDepthInQuestionnaire, int failedValidationConditionIndex, string interviewKey)
         {
             List<string> exportRow = new List<string>();
@@ -169,7 +133,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             }
 
             var fileName = $"{FileName}.{DoFile.ContentFileNameExtension}";
-            var contentFilePath = this.fileSystemAccessor.CombinePath(basePath, fileName);
+            var contentFilePath = Path.Combine(basePath, fileName);
 
             this.fileSystemAccessor.WriteAllText(contentFilePath, doContent.ToString());
         }

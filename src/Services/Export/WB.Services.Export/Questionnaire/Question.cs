@@ -3,10 +3,15 @@ using System.Collections.Generic;
 
 namespace WB.Services.Export.Questionnaire
 {
-    public abstract class Question : IQuestionnaireEntity
+    public abstract class Question : IValidatableQuestionnaireEntity
     {
         private IQuestionnaireEntity parent;
-        
+
+        protected Question()
+        {
+            this.ValidationConditions = new List<ValidationCondition>();
+        }
+
         public QuestionType QuestionType { get; set; }
 
         public bool Featured { get; set;  }
@@ -41,5 +46,7 @@ namespace WB.Services.Export.Questionnaire
         {
             return LinkedToQuestionId != null || LinkedToRosterId != null;
         }
+
+        public IList<ValidationCondition> ValidationConditions { get; set; }
     }
 }

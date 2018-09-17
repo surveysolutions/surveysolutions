@@ -29,6 +29,7 @@ using WB.Infrastructure.Native.Sanitizer;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
 {
+    [Obsolete("KP-11815")]
     internal class ExportViewFactory : IExportViewFactory
     {
         private const string GeneratedTitleExportFormat = "{0}__{1}";
