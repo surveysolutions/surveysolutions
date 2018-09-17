@@ -663,7 +663,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
                 isYesNo: true);
 
             //act
-            question.SetAnswer(YesNoAnswer.FromCheckedYesNoAnswerOptions(new List<CheckedYesNoAnswerOption>()));
+            question.SetAnswer(YesNoAnswer.FromCheckedYesNoAnswerOptions(new List<CheckedYesNoAnswerOption>()), DateTime.UtcNow);
 
             //assert
             Assert.That(question.IsAnswered, Is.False);
@@ -682,7 +682,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
                 answer: new[] { new Tuple<decimal, string>(1, "1") });
 
             //act
-            question.SetAnswer(TextListAnswer.FromTupleArray(new Tuple<decimal, string>[] {}));
+            question.SetAnswer(TextListAnswer.FromTupleArray(new Tuple<decimal, string>[] {}), DateTime.UtcNow);
 
             //assert
             Assert.That(question.IsAnswered, Is.False);
