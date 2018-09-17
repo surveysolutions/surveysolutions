@@ -13,7 +13,6 @@ namespace WB.Services.Export.Services
             Key = key;
             ErrorsCount = errorsCount;
             Status = status;
-            this.Entities = new List<InterviewEntity>();
         }
 
         public Guid Id { get; }
@@ -21,6 +20,5 @@ namespace WB.Services.Export.Services
         public string Key { get; }
         public int ErrorsCount { get; }
         public InterviewStatus Status { get; }
-        public List<InterviewEntity> Entities { get; set; }
     }
 }

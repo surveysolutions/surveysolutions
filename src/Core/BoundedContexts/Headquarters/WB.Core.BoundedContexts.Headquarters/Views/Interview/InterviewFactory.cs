@@ -577,9 +577,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         public static string CreateLevelIdFromPropagationVector(decimal[] vector)
         {
+
             if (vector.Length == 0)
                 return "#";
-            return vector.CreateLeveKeyFromPropagationVector();
+            return vector.ToString();
         }
         #endregion
 

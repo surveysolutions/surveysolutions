@@ -87,5 +87,31 @@ namespace WB.Services.Export.Questionnaire
             var entity = this.Find<IValidatableQuestionnaireEntity>(publicKey);
             return entity.ValidationConditions[conditionIndex].Message;
         }
+
+        public Guid[] GetRosterSizeSourcesForEntity(Guid entityId)
+        {
+            var entity = this.Find<IQuestionnaireEntity>(entityId);
+            var rosterSizes = new List<Guid>();
+
+            while (entity != this)
+            {
+                if (entity is Group group)
+                {
+                    if (group.IsRoster)
+                        rosterSizes.Insert(0, this.GetRosterSource(group.PublicKey));
+                }
+
+                entity = entity.GetParent();
+            }
+
+            return rosterSizes.ToArray();
+        }
+
+        private Guid GetRosterSource(Guid rosterId)
+        {
+            Group roster = this.Find<Group>(rosterId);
+
+            return roster.RosterSizeQuestionId ?? roster.PublicKey;
+        }
     }
 }

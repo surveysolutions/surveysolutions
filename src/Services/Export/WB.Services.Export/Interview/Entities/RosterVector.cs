@@ -35,6 +35,48 @@ namespace WB.Services.Export.Interview.Entities
 
             return false;
         }
+        
+        public int Last()
+        {
+            return this.coordinates[this.Length - 1];
+        }
+
+        public RosterVector Take(int targetLength)
+        {
+            if (targetLength > this.coordinates.Length)
+            {
+                return this;
+            }
+
+            return this.Shrink(targetLength);
+        }
+
+        public RosterVector Shrink(int targetLength)
+        {
+            if (targetLength == 0)
+                return Empty;
+
+            if (targetLength == this.Length)
+                return this;
+
+            if (targetLength > this.Length)
+                throw new ArgumentException(
+                    $"Cannot shrink roster vector {this} with length {this.Length} to bigger length {targetLength}.");
+
+            switch (targetLength)
+            {
+                case 0:
+                    return new RosterVector(Array.Empty<int>());
+                case 1:
+                    return new RosterVector(new[] {this.coordinates[0]});
+                case 2:
+                    return new RosterVector(new[] { this.coordinates[0], this.coordinates[1] });
+                case 3:
+                    return new RosterVector(new[] { this.coordinates[0], this.coordinates[1], this.coordinates[2] });
+            }
+
+            return new RosterVector(this.coordinates.Take(targetLength));
+        }
 
         public override int GetHashCode()
         {

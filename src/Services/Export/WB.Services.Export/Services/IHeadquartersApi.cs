@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Refit;
 using WB.Services.Export.Interview;
+using WB.Services.Export.Interview.Entities;
 using WB.Services.Export.Interview.Exporters;
 using WB.Services.Export.Questionnaire;
 
@@ -31,5 +32,8 @@ namespace WB.Services.Export.Services
 
         [Get("/api/export/v1/interview/batch/summaries")]
         Task<List<InterviewSummary>> GetInterviewSummariesBatchAsync([Query(CollectionFormat.Multi), AliasAs("id")] Guid[] interviewIds);
+
+        [Get("api/export/v1/interview/{id}")]
+        Task<List<InterviewEntity>> GetInterviewAsync([Query] Guid id);
     }
 }
