@@ -110,5 +110,7 @@ namespace WB.Services.Export.Interview.Entities
 
             return false;
         }
+
+        public int this[int index] => this.coordinates[index];
     }
 }
