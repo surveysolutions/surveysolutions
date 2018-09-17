@@ -307,3 +307,172 @@ body > .ui-pnotify{
         }
     }
 }
+
+#overview{
+    .modal-content{
+        padding: 0;
+        .modal-header{
+            padding: 20px;
+    
+        }
+    }
+    .modal-dialog{
+        max-width: 500px;
+    }
+    .modal-header{
+        background-color: $gray-highlight-font;
+        color: #fff;
+        h3{
+            margin-bottom: 0;
+            font-size: 18px;
+            line-height: 20px;
+        }
+        .close{
+            span{
+                &:before, &:after{
+                    background-color: $gray-highlighting;
+                }
+                &:hover, &:focus, &:active{
+                    opacity: 1;
+                    &::before, &::after{
+                        background-color: #fff;
+                        
+                    }
+                }
+            }
+        }
+    }
+    
+}
+.overview-item{
+    display: flex;
+	flex-direction: row;
+	flex-wrap: nowrap;
+	justify-content: flex-start;
+	align-items: stretch;
+	align-content: stretch;
+    padding-right: 35px;
+    position: relative;
+    .date{
+        min-width: 65px;
+        text-align: right;
+        padding: 10px;
+        font-style: italic;
+        font-size: 12px;
+        line-height: 14px;
+        color: $gray_text;
+        div:first-of-type{
+            color: $gray_form;
+        }
+    }
+    .item-content{
+        flex-grow: 1;
+        padding: 10px;
+        width: calc(100% - 65px);
+        h4{
+            margin-top: 0;
+            margin-bottom: 5px;
+            font-size: 16px;
+            line-height: 18px;
+        }
+        p{
+            font-family: "Robotobold";
+            margin: 0;
+        }
+    }
+    &.unanswered{
+        .item-content{
+            background-color: $gray-super-light;
+            p{
+                color: $blue;
+                font-style: italic;
+            }
+        }
+        .date div:last-of-type{
+            color: $gray_form;
+        }
+        &.hasComment{
+
+            .item-content{
+                position: relative;
+                *{
+                    position: relative;
+                    z-index: 10;
+                }
+                &:after{
+                    display: block;
+                    content: "";
+                    position: absolute; 
+                    width: 100%;
+                    height: 100%;
+                    top: 0;
+                    left: 0;
+                    background-color: rgba(245, 168, 226, 0.4);
+                }
+            }
+        }
+    }
+    &.unanswered + .unanswered{
+        .item-content{
+            border-top: 1px solid $gray_form;
+        }
+    }
+    &.invalid{
+        color: $red_error;
+        .item-content{
+            background-color: $red-super-light;
+        }
+        .date div:last-of-type{
+            color: $red_error;  
+        }
+        &.hasComment{
+
+            .item-content{
+                position: relative;
+                *{
+                    position: relative;
+                    z-index: 10;
+                }
+                &:after{
+                    display: block;
+                    content: "";
+                    position: absolute; 
+                    width: 100%;
+                    height: 100%;
+                    top: 0;
+                    left: 0;
+                    background-color: rgba(245, 168, 226, 0.4);
+                }
+            }
+        }
+    }
+    &.hasComment{
+        
+        background-color: rgba(245, 168, 226, 0.4);
+    }
+    &.section{
+        &:first-of-type{
+            border-top: none;
+            margin-top: 0;
+        }
+        display: block;
+        border-top: 2px solid $gray_form;
+        padding: 0 35px 0 65px;
+        margin-top: 10px;
+        h4{
+            font: 20px/22px "RobotoBold";
+        }
+    }
+}
+.custom-popover{
+    display: none;
+    border-radius: 7px;
+    position: absolute;
+    top: -50%; 
+    right: -325px;
+    width: 295px;
+    background-color: #fff;
+    .popover-content{
+        padding: 10px;
+    }
+}
