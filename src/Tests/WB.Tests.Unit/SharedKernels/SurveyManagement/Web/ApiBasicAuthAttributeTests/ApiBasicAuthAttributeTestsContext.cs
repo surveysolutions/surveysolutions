@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiBasicAuthAttribute
         {
             var hqUserManager = Create.Storage.HqUserManager(userStore);
             var auth = new Mock<IAuthenticationManager>();
-            var hqSignInManager = new HqSignInManager(hqUserManager, auth.Object);
+            var hqSignInManager = new HqSignInManager(hqUserManager, auth.Object, Mock.Of<IHashCompatibilityProvider>());
             Setup.InstanceToMockedServiceLocator(hqSignInManager);
 
             return new ApiBasicAuthAttribute(UserRoles.Interviewer);

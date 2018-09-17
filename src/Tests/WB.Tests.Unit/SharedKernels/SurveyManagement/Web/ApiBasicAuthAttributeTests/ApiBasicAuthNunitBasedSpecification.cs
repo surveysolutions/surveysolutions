@@ -35,7 +35,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiBasicAuthAttribute
         {
             this.userManager = Create.Storage.HqUserManager(this.UserStore.Object, this.HashCompatibilityProvider.Object);
             var auth = new Mock<IAuthenticationManager>();
-            var hqSignInManager = new HqSignInManager(userManager, auth.Object, this.ApiTokenProviderProvider.Object);
+            var hashCompatibilityProvider = Mock.Of<IHashCompatibilityProvider>();
+            var hqSignInManager = new HqSignInManager(userManager, auth.Object, hashCompatibilityProvider, this.ApiTokenProviderProvider.Object);
             Setup.InstanceToMockedServiceLocator(hqSignInManager);
             Setup.InstanceToMockedServiceLocator(this.HashCompatibilityProvider.Object);
 
