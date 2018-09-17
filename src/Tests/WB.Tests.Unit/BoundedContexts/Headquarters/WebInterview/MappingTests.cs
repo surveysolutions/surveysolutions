@@ -1,4 +1,5 @@
-﻿using AutoMapper;
+﻿using System;
+using AutoMapper;
 using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection;
@@ -31,7 +32,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
             {
                 new TextListAnswerRow(0, "test"),
                 new TextListAnswerRow(1, "test")
-            }));
+            }), DateTime.UtcNow);
 
             var dto = this.mapper.Map<InterviewTextListQuestion>(question);
 

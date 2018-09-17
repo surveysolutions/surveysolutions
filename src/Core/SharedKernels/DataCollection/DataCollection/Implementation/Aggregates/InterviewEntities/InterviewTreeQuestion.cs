@@ -319,7 +319,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return this.InterviewQuestion.InterviewQuestionType.ToString("D");
         }
 
-        public void SetAnswer(AbstractAnswer answer)
+        public void SetAnswer(AbstractAnswer answer, DateTime? answerTimeUtc)
         {
             if (answer == null)
             {
