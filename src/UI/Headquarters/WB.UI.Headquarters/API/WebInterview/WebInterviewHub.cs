@@ -25,8 +25,6 @@ namespace WB.UI.Headquarters.API.WebInterview
     [WebInterviewAuthorize]
     public class WebInterviewHub : Enumerator.Native.WebInterview.WebInterview, ILifetimeHub
     {
-        //private readonly IServiceLocator locator;
-        
         private readonly IInterviewBrokenPackagesService interviewBrokenPackagesService;
         private readonly IAuthorizedUser authorizedUser;
         private readonly IChangeStatusFactory changeStatusFactory;
@@ -36,7 +34,8 @@ namespace WB.UI.Headquarters.API.WebInterview
         private IUnitOfWork unitOfWork;
 
         //separate interview logic into interface implementation from hub logic and inject it 
-        //make sure that IServiceLocator is not used
+        
+
         public WebInterviewHub(IStatefulInterviewRepository statefulInterviewRepository,
             ICommandService commandService,
             IQuestionnaireStorage questionnaireRepository,
