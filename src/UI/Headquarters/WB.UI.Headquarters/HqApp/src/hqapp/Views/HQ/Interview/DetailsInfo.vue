@@ -51,6 +51,7 @@
                 </button>
             </div>
         </div>
+        <OverviewModal ref="overview" id="overview" slot="modals" class="overviewModal" />
         <StatusesHistory ref="statusesHistory" id="statusesHistory" slot="modals" class="statusHistoryModal" />
         <Confirm ref="confirmApprove" id="confirmApprove" slot="modals" :title="$t('Pages.ApproveRejectPartialView_ApproveLabel')">
             <label for="txtApproveComment">
@@ -83,6 +84,7 @@
 <script>
 import SwitchLanguage from "./SwitchLanguage";
 import StatusesHistory from "./StatusesHistory";
+import OverviewModal from "./OverviewModal";
 import Vue from "vue";
 
 export default {
@@ -125,7 +127,8 @@ export default {
       this.$refs.statusesHistory.show();
     },
     showOverview() {
-        this.$router.push({name: "Overview"})
+        //this.$router.push({name: "Overview"})
+        this.$refs.overview.show();
     }
   },
   
@@ -179,7 +182,8 @@ export default {
 
   components: {
     SwitchLanguage,
-    StatusesHistory
+    StatusesHistory,
+    OverviewModal
   }
 };
 </script>
