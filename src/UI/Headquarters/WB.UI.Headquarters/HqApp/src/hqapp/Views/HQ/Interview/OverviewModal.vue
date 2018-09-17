@@ -1,17 +1,7 @@
 <template>
-    <ModalFrame ref="modal" id="overviewModal">
+    <ModalFrame ref="modal" id="overview">
         <div slot="title">
             <h3>{{$t("Pages.InterviewOverview")}}</h3>
-        </div>
-
-        <div v-if="currentSection" ref="breadcrumb" class="unit-title break-line" style="position: fixed; width: 100%">
-            <ol class="breadcrumb">
-                <li v-for="breadcrumb in currentSection.breadcrumbs" :key="breadcrumb.target">
-                    <a href="javascript:void(0)">{{breadcrumb.title}}</a>
-                </li>
-            </ol>
-
-            <h3>{{currentSection.Title}}</h3>
         </div>
 
         <OverviewItem v-for="item in items" :key="item.id" :item="item" @mount="registerItemToStick" />
@@ -80,7 +70,10 @@ export default {
             this.$store.dispatch("loadOverviewData");
             document.addEventListener("scroll", this.handleScroll);
 
-            this.$refs.modal.modal();
+            this.$refs.modal.modal({
+                backdrop: 'static',
+                keyboard: false
+            });
         },
         breadcrumbsOffset() {
             const el = this.$refs.breadcrumb;

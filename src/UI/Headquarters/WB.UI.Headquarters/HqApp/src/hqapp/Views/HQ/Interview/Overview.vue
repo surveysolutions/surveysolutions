@@ -1,15 +1,5 @@
 <template>
     <div>
-        <div v-if="currentSection" ref="breadcrumb" class="unit-title break-line" style="position: fixed; width: 100%">
-            <ol class="breadcrumb">
-                <li v-for="breadcrumb in currentSection.breadcrumbs" :key="breadcrumb.target">
-                    <a href="javascript:void(0)">{{breadcrumb.title}}</a>
-                </li>
-            </ol>
-
-            <h3>{{currentSection.Title}}</h3>
-        </div>
-
         <OverviewItem v-for="item in items" :key="item.id" :item="item" @mount="registerItemToStick" />
 
         <infinite-loading ref="loader" v-if="overview.total > 0 && items.length > 0" @infinite="infiniteHandler" :distance="1000">
