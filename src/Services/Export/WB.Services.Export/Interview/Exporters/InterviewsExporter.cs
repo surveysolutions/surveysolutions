@@ -30,7 +30,7 @@ namespace WB.Services.Export.Interview.Exporters
         {
             Stopwatch stopwatch = Stopwatch.StartNew();
 
-            await this.DoExport(questionnaireExportStructure, questionnaire, basePath, interviewsToExport, progress, cancellationToken);
+            await this.DoExport(tenant, questionnaireExportStructure, questionnaire, basePath, interviewsToExport, progress, cancellationToken);
             stopwatch.Stop();
             this.logger.Log(LogLevel.Information, $"Export of {interviewsToExport.Count:N0} interview datas for questionnaire" +
                                                   $" {questionnaireExportStructure.QuestionnaireId} finised. Took {stopwatch.Elapsed:c} to complete");
@@ -40,13 +40,11 @@ namespace WB.Services.Export.Interview.Exporters
         private readonly string dataFileExtension = "tab";
 
         private readonly ILogger<InterviewsExporter> logger;
-        private readonly InterviewDataExportSettings interviewDataExportSettings;
         private readonly ICsvWriter csvWriter;
         private readonly IInterviewErrorsExporter errorsExporter;
         private readonly IExportQuestionService exportQuestionService;
 
         public InterviewsExporter(ILogger<InterviewsExporter> logger,
-            InterviewDataExportSettings interviewDataExportSettings,
             ICsvWriter csvWriter,
             IInterviewErrorsExporter errorsExporter,
             IInterviewFactory interviewFactory, 
@@ -55,13 +53,13 @@ namespace WB.Services.Export.Interview.Exporters
             this.exportQuestionService = exportQuestionService;
             this.interviewFactory = interviewFactory ?? throw new ArgumentNullException(nameof(interviewFactory));
             this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
-            this.interviewDataExportSettings = interviewDataExportSettings ?? throw new ArgumentNullException(nameof(interviewDataExportSettings));
             this.csvWriter = csvWriter ?? throw new ArgumentNullException(nameof(csvWriter));
             this.errorsExporter = errorsExporter ?? throw new ArgumentNullException(nameof(errorsExporter));
         }
 
         
-        private Task DoExport(QuestionnaireExportStructure questionnaireExportStructure,
+        private Task DoExport(TenantInfo tenant, 
+            QuestionnaireExportStructure questionnaireExportStructure,
             QuestionnaireDocument questionnaire,
             string basePath,
             List<InterviewToExport> interviewIdsToExport,
@@ -69,7 +67,7 @@ namespace WB.Services.Export.Interview.Exporters
             CancellationToken cancellationToken)
         {
             this.CreateDataSchemaForInterviewsInTabular(questionnaireExportStructure, basePath);
-            return this.ExportInterviews(interviewIdsToExport, basePath, questionnaireExportStructure, questionnaire, progress, cancellationToken);
+            return this.ExportInterviews(tenant, interviewIdsToExport, basePath, questionnaireExportStructure, questionnaire, progress, cancellationToken);
         }
 
         private void CreateDataSchemaForInterviewsInTabular(QuestionnaireExportStructure questionnaireExportStructure, string basePath)
@@ -107,7 +105,7 @@ namespace WB.Services.Export.Interview.Exporters
             this.errorsExporter.WriteHeader(hasAtLeastOneRoster, questionnaireExportStructure.MaxRosterDepth, errorsExportFilePath);
         }
 
-        private async Task ExportInterviews(List<InterviewToExport> interviewIdsToExport,
+        private async Task ExportInterviews(TenantInfo tenant, List<InterviewToExport> interviewIdsToExport,
             string basePath,
             QuestionnaireExportStructure questionnaireExportStructure,
             QuestionnaireDocument questionnaire,
@@ -121,7 +119,7 @@ namespace WB.Services.Export.Interview.Exporters
                 var exportBulk = new List<InterviewExportedDataRecord>();
                 cancellationToken.ThrowIfCancellationRequested();
 
-                var interviewEntities = await this.interviewFactory.GetInterviewEntities(batch.Id);
+                var interviewEntities = await this.interviewFactory.GetInterviewEntities(tenant, batch.Id);
                 exportBulk.Add(this.ExportSingleInterview(batch,
                     interviewEntities.ToList(),
                     questionnaireExportStructure,

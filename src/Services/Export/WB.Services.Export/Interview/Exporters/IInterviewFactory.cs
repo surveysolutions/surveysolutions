@@ -3,30 +3,33 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview.Entities;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Services;
+using WB.Services.Export.Tenant;
 
 namespace WB.Services.Export.Interview.Exporters
 {
     public interface IInterviewFactory
     {
-        Task<IEnumerable<InterviewEntity>> GetInterviewEntities(Guid interviewId);
+        Task<IEnumerable<InterviewEntity>> GetInterviewEntities(TenantInfo tenant, Guid interviewId);
         Dictionary<string, InterviewLevel> GetInterviewDataLevels(QuestionnaireDocument questionnaire, List<InterviewEntity> interviewEntities);
     }
 
     internal class InterviewFactory : IInterviewFactory
     {
-        private readonly IHeadquartersApi headquartersApi;
+        private readonly ITenantApi<IHeadquartersApi> headquartersApi;
 
-        public InterviewFactory(IHeadquartersApi headquartersApi)
+        public InterviewFactory(ITenantApi<IHeadquartersApi> headquartersApi)
         {
             this.headquartersApi = headquartersApi;
         }
 
-        public async Task<IEnumerable<InterviewEntity>> GetInterviewEntities(Guid interviewId)
+        public async Task<IEnumerable<InterviewEntity>> GetInterviewEntities(TenantInfo tenant, Guid interviewId)
         {
-            var entities = await headquartersApi.GetInterviewAsync(interviewId);
+            var api = this.headquartersApi.For(tenant);
+            var entities = await api.GetInterviewAsync(interviewId);
             return entities;
         }
 
@@ -78,7 +81,7 @@ namespace WB.Services.Export.Interview.Exporters
                         interviewLevel.QuestionsSearchCache.Add(entity.Identity.Id, entity);
                         break;
                     case EntityType.Variable:
-                        interviewLevel.Variables.Add(entity.Identity.Id, ToObjectAnswer(entity));
+                        interviewLevel.Variables.Add(entity.Identity.Id, entity.AsObject());
                         if (entity.IsEnabled == false)
                             interviewLevel.DisabledVariables.Add(entity.Identity.Id);
                         break;
@@ -87,12 +90,5 @@ namespace WB.Services.Export.Interview.Exporters
 
             return interviewLevel;
         }
-
-        private object ToObjectAnswer(InterviewEntity entity) => entity.AsString ?? entity.AsInt ?? entity.AsDouble ??
-                                                                 entity.AsDateTime ?? entity.AsLong ??
-                                                                 entity.AsBool ?? entity.AsGps ?? entity.AsIntArray ??
-                                                                 entity.AsList ?? entity.AsYesNo ??
-                                                                 entity.AsIntMatrix ?? entity.AsArea ??
-                                                                 (object)entity.AsAudio;
     }
 }

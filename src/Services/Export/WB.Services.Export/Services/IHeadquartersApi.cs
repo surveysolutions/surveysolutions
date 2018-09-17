@@ -33,7 +33,7 @@ namespace WB.Services.Export.Services
         [Get("/api/export/v1/interview/batch/summaries")]
         Task<List<InterviewSummary>> GetInterviewSummariesBatchAsync([Query(CollectionFormat.Multi), AliasAs("id")] Guid[] interviewIds);
 
-        [Get("api/export/v1/interview/{id}")]
+        [Get("/api/export/v1/interview/{id}")]
         Task<List<InterviewEntity>> GetInterviewAsync([Query] Guid id);
     }
 }

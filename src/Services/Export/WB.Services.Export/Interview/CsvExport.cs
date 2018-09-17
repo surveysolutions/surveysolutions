@@ -9,6 +9,7 @@ using Microsoft.Extensions.Options;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview.Exporters;
 using WB.Services.Export.Questionnaire;
+using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Export.Services;
 using WB.Services.Export.Tenant;
 
@@ -27,6 +28,7 @@ namespace WB.Services.Export.Interview
         private readonly IInterviewActionsExporter interviewActionsExporter;
         private readonly IDiagnosticsExporter diagnosticsExporter;
         private readonly IQuestionnaireExportStructureFactory exportStructureFactory;
+        private readonly IQuestionnaireStorage questionnaireStorage;
 
         private readonly InterviewDataExportSettings exportSettings;
         private readonly IProductVersion productVersion;
@@ -42,7 +44,8 @@ namespace WB.Services.Export.Interview
             ICommentsExporter commentsExporter,
             IDiagnosticsExporter diagnosticsExporter,
             IInterviewActionsExporter interviewActionsExporter,
-            IQuestionnaireExportStructureFactory exportStructureFactory)
+            IQuestionnaireExportStructureFactory exportStructureFactory,
+            IQuestionnaireStorage questionnaireStorage)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.csvWriter = csvWriter;
@@ -55,6 +58,7 @@ namespace WB.Services.Export.Interview
             this.diagnosticsExporter = diagnosticsExporter;
             this.interviewActionsExporter = interviewActionsExporter;
             this.exportStructureFactory = exportStructureFactory;
+            this.questionnaireStorage = questionnaireStorage;
         }
 
         public async Task ExportInterviewsInTabularFormat(
@@ -65,7 +69,9 @@ namespace WB.Services.Export.Interview
             DateTime? fromDate,
             DateTime? toDate)
         {
-            QuestionnaireExportStructure questionnaireExportStructure = await this.exportStructureFactory.GetQuestionnaireExportStructure(questionnaireIdentity, tenant);
+            var questionnaire = await this.questionnaireStorage.GetQuestionnaireAsync(tenant, questionnaireIdentity);
+
+            QuestionnaireExportStructure questionnaireExportStructure = this.exportStructureFactory.GetQuestionnaireExportStructure(questionnaire, tenant);
 
             var exportInterviewsProgress = new Progress<int>();
             var exportCommentsProgress = new Progress<int>();
@@ -91,7 +97,7 @@ namespace WB.Services.Export.Interview
             await Task.WhenAll(
             this.commentsExporter.ExportAsync(questionnaireExportStructure, interviewIdsToExport, basePath, tenant, exportCommentsProgress, cancellationToken),
             this.interviewActionsExporter.ExportAsync(tenant, questionnaireIdentity, interviewIdsToExport, basePath, exportInterviewActionsProgress),
-            this.interviewsExporter.ExportAsync(tenant, questionnaireExportStructure, null, interviewsToExport, basePath, exportInterviewsProgress, cancellationToken),
+            this.interviewsExporter.ExportAsync(tenant, questionnaireExportStructure, questionnaire, interviewsToExport, basePath, exportInterviewsProgress, cancellationToken),
             this.diagnosticsExporter.ExportAsync(interviewIdsToExport, basePath, tenant, exportInterviewsProgress, cancellationToken)
          );
 
