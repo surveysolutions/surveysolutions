@@ -68,14 +68,10 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 .ReturnsAsync(new List<QuestionnaireIdentity>(new[] { questionnaireIdentity }));
             synchronizationServiceMock.Setup(x => x.GetInterviewsAsync(It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new List<InterviewApiView>());
-            synchronizationServiceMock.Setup(x =>
-                    x.CheckObsoleteInterviewsAsync(It.IsAny<List<ObsoletePackageCheck>>(), CancellationToken.None))
+            synchronizationServiceMock.Setup(x => x.CheckObsoleteInterviewsAsync(It.IsAny<List<ObsoletePackageCheck>>(), CancellationToken.None))
                 .ReturnsAsync(new List<Guid>());
-
-            var interviewerQuestionnaireAccessor = Mock.Of<IInterviewerQuestionnaireAccessor>(
-                x => x.GetCensusQuestionnaireIdentities() == new List<QuestionnaireIdentity>(new[] { questionnaireIdentity })
-                     && x.GetAllQuestionnaireIdentities() == new List<QuestionnaireIdentity>(new[] { questionnaireIdentity })
-            );
+            synchronizationServiceMock.Setup(x => x.GetInterviewerAsync(It.IsAny<RestCredentials>(), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(new InterviewerApiView());
 
             this.httpStatistician = new Mock<IHttpStatistician>();
 
@@ -86,23 +82,14 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                     Duration = this.totalDuration
                 });
 
-            var mockOfInterviewAccessor = new Mock<IInterviewerInterviewAccessor>();
-
-            var interviewerSyncService = new Mock<IInterviewerSynchronizationService>();
-            interviewerSyncService.Setup(x => x.GetInterviewerAsync(It.IsAny<RestCredentials>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(new InterviewerApiView());
-
             IPlainStorage<InterviewerIdentity> localInterviewers = new InMemoryPlainStorage<InterviewerIdentity>();
             localInterviewers.Store(Create.Other.InterviewerIdentity());
 
             var viewModel = Create.Service.SynchronizationProcess(principal: principal,
                 interviewersPlainStorage: localInterviewers,
                 interviewViewRepository: interviewViewRepository,
-                synchronizationService: synchronizationServiceMock.Object,
-                questionnaireFactory: interviewerQuestionnaireAccessor,
-                interviewFactory: mockOfInterviewAccessor.Object,
                 httpStatistician: httpStatistician.Object,
-                interviewerSynchronizationService: interviewerSyncService.Object
+                interviewerSynchronizationService: synchronizationServiceMock.Object
             );
 
             this.sw = new Stopwatch();

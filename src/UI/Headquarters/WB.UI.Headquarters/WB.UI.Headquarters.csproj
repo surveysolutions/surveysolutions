@@ -1932,10 +1932,12 @@
     <Compile Include="API\PublicApi\Models\QuestionApiView.cs" />
     <Compile Include="API\PublicApi\Models\InterviewApiStatistics.cs" />
     <Compile Include="API\PublicApi\Models\QuestionAnswerView.cs" />
+    <Compile Include="API\PublicApi\Models\TypeaheadApiView.cs" />
     <Compile Include="API\PublicApi\StatisticsController.cs" />
     <Compile Include="API\PublicApi\Models\Statistics\QuestionnaireDto.cs" />
     <Compile Include="API\PublicApi\Models\Statistics\QuestionDto.cs" />
     <Compile Include="API\PublicApi\Models\Statistics\SurveyStatisticsQuery.cs" />
+    <Compile Include="API\PublicApi\UsersTypeaheadController.cs" />
     <Compile Include="API\ReportDataApiController.Dto.cs" />
     <Compile Include="API\DataCollection\Supervisor\v1\SupervisorApiController.cs" />
     <Compile Include="API\DataCollection\Supervisor\v1\DevicesApiV1Controller.cs" />

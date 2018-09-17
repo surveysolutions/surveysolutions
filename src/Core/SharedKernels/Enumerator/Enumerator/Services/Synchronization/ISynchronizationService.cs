@@ -22,7 +22,6 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Synchronization
 
         Task<byte[]> GetQuestionnaireAssemblyAsync(QuestionnaireIdentity questionnaire, IProgress<TransferProgress> transferProgress, CancellationToken token);
         Task<QuestionnaireApiView> GetQuestionnaireAsync(QuestionnaireIdentity questionnaire, IProgress<TransferProgress> transferProgress, CancellationToken token);
-        Task<List<QuestionnaireIdentity>> GetCensusQuestionnairesAsync(CancellationToken token);
         Task LogQuestionnaireAsSuccessfullyHandledAsync(QuestionnaireIdentity questionnaire);
         Task LogQuestionnaireAssemblyAsSuccessfullyHandledAsync(QuestionnaireIdentity questionnaire);
 
@@ -50,7 +49,6 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Synchronization
         
         Task<List<MapView>> GetMapList(CancellationToken cancellationToken);
         Task<RestStreamResult> GetMapContentStream(string mapName, CancellationToken cancellationToken);
-        Task<Guid> GetCurrentSupervisor(CancellationToken token, RestCredentials credentials);
 
         Task<bool> IsAutoUpdateEnabledAsync(CancellationToken token);
         Task UploadAuditLogEntityAsync(AuditLogEntitiesApiView auditLogEntity, CancellationToken cancellationToken);
@@ -58,6 +56,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Synchronization
         Task<AssignmentApiDocument> GetAssignmentAsync(int id, CancellationToken cancellationToken);
         Task<List<AssignmentApiView>> GetAssignmentsAsync(CancellationToken cancellationToken);
         Task LogAssignmentAsHandledAsync(int id, CancellationToken cancellationToken);
-        Task<byte[]> GetFileAsync(string url, IProgress<TransferProgress> transferProgress, CancellationToken token);
+        Task<List<QuestionnaireIdentity>> GetCensusQuestionnairesAsync(CancellationToken token);
+        Task<Guid> GetCurrentSupervisor(CancellationToken token, RestCredentials credentials);
     }
 }

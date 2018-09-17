@@ -237,4 +237,8 @@
     <value>С ошибками</value>
     <comment>С ошибками</comment>
   </data>
+    <data name="Teams" xml:space="preserve">
+    <value>Команды</value>
+    <comment>Команды</comment>
+  </data>
 </root>

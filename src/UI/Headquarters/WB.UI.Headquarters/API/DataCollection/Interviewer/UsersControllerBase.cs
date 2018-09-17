@@ -7,12 +7,12 @@ using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.API.DataCollection.Interviewer
 {
-    public class UsersControllerBase : ApiController
+    public abstract class UsersControllerBase : ApiController
     {
         protected readonly IAuthorizedUser authorizedUser;
         protected readonly IUserViewFactory userViewFactory;
 
-        public UsersControllerBase(
+        protected UsersControllerBase(
             IAuthorizedUser authorizedUser,
             IUserViewFactory userViewFactory)
         {

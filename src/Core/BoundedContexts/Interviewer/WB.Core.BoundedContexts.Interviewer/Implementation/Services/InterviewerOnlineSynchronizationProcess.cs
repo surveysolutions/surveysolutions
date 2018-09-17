@@ -50,7 +50,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         protected override async Task CheckAfterStartSynchronization(CancellationToken cancellationToken)
         {
-            var currentSupervisorId = await this.synchronizationService.GetCurrentSupervisor(token: cancellationToken, credentials: this.RestCredentials);
+            var currentSupervisorId = await this.interviewerSynchronizationService.GetCurrentSupervisor(token: cancellationToken, credentials: this.RestCredentials);
             if (currentSupervisorId != this.principal.CurrentUserIdentity.SupervisorId)
             {
                 this.UpdateSupervisorOfInterviewer(currentSupervisorId);

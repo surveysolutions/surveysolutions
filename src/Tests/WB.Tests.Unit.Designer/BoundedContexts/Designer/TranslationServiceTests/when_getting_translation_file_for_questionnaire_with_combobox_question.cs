@@ -59,14 +59,14 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
 
         [NUnit.Framework.Test] public void should_export_translation_on__Translations_combobox__sheet_in_2_row () 
         {
-            comboboxCells[2, 4].GetValue<string>().Should().Be("Option");
-            comboboxCells[2, 5].GetValue<string>().Should().Be("Опция");
+            comboboxCells[2, TranslationsServiceTestsContext.originalTextColumn].GetValue<string>().Should().Be("Option");
+            comboboxCells[2, TranslationsServiceTestsContext.translactionColumn].GetValue<string>().Should().Be("Опция");
         }
 
         [NUnit.Framework.Test] public void should_export_translation_on__Translations_cascading__sheet_in_2_row () 
         {
-            cascadingCells[2, 4].GetValue<string>().Should().Be("Cascading Option");
-            cascadingCells[2, 5].GetValue<string>().Should().Be("Каскадная Опция");
+            cascadingCells[2, TranslationsServiceTestsContext.originalTextColumn].GetValue<string>().Should().Be("Cascading Option");
+            cascadingCells[2, TranslationsServiceTestsContext.translactionColumn].GetValue<string>().Should().Be("Каскадная Опция");
         }
 
         static TranslationsService service;
