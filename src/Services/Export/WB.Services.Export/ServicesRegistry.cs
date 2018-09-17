@@ -31,6 +31,8 @@ namespace WB.Services.Export
             services.AddTransient<IInterviewActionsExporter, InterviewActionsExporter>();
             services.AddTransient<IInterviewsExporter, InterviewsExporter>();
             services.AddTransient<IInterviewFactory, InterviewFactory>();
+            services.AddTransient<IInterviewErrorsExporter, InterviewErrorsExporter>();
+            services.AddTransient<IExportQuestionService, ExportQuestionService>();
 
             // Singletons
             services.AddSingleton<ICache, Cache>();

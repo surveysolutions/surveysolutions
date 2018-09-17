@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -6,7 +7,7 @@ using System.Linq;
 namespace WB.Services.Export.Interview.Entities
 {
      [DebuggerDisplay("{" + nameof(ToString) + "()}")]
-    public class RosterVector
+    public class RosterVector : IEnumerable<int>
     {
         private int? cachedHashCode;
         public static readonly RosterVector Empty = new RosterVector(Array.Empty<int>());
@@ -21,6 +22,11 @@ namespace WB.Services.Export.Interview.Entities
         }
 
         public IReadOnlyCollection<int> Coordinates => this.coordinates;
+
+        public IEnumerator<int> GetEnumerator()
+        {
+            return Coordinates.GetEnumerator();
+        }
 
         public override bool Equals(object obj)
         {
@@ -65,8 +71,6 @@ namespace WB.Services.Export.Interview.Entities
 
             switch (targetLength)
             {
-                case 0:
-                    return new RosterVector(Array.Empty<int>());
                 case 1:
                     return new RosterVector(new[] {this.coordinates[0]});
                 case 2:
@@ -108,6 +112,11 @@ namespace WB.Services.Export.Interview.Entities
             if (this.coordinates.Length > 0)
                 return $"_{string.Join("-", this.coordinates.Select(c => c))}";
             return string.Empty;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
         }
 
         public int Length => this.Coordinates.Count;
@@ -154,5 +163,7 @@ namespace WB.Services.Export.Interview.Entities
         }
 
         public int this[int index] => this.coordinates[index];
+
+        public static implicit operator RosterVector(int[] array) => new RosterVector(array);
     }
 }

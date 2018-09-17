@@ -35,5 +35,14 @@ namespace WB.Services.Export.Interview.Entities
         }
 
         public override int GetHashCode() => this.InterviewId.GetHashCode() ^ this.Identity.GetHashCode();
+
+        public object AsObject()
+            => this.AsString ?? this.AsInt ?? this.AsDouble ??
+               this.AsDateTime ?? this.AsLong ??
+               this.AsBool ?? this.AsGps ?? this.AsIntArray ??
+               this.AsList ?? this.AsYesNo ??
+               this.AsIntMatrix ?? this.AsArea ??
+               (object) this.AsAudio;
+
     }
 }
