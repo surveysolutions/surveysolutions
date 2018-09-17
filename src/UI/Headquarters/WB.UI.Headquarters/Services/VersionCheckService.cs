@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Versions;
+using WB.Infrastructure.Native.Storage;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Models.VersionCheck;
 using WB.UI.Shared.Enumerator.Services.Internals;
