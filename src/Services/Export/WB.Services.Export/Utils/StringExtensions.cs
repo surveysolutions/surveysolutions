@@ -20,6 +20,16 @@ namespace WB.Services.Export.Utils
             return string.IsNullOrWhiteSpace(clippedResult) ? "_" : clippedResult;
         }
 
+        public static string EmptyIfNull(this string input)
+        {
+            if (input == null)
+            {
+                return string.Empty;
+            }
+
+            return input;
+        }
+
         public static string RemoveNonAscii(this string s) => Regex.Replace(s, @"[^\u0000-\u007F]", string.Empty);
 
         public static string MakeValidFileName(this string name)

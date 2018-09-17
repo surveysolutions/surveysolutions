@@ -2,5 +2,6 @@
 {
     public class NumericQuestion : Question
     {
+        public bool IsInteger { get; set; }
     }
 }

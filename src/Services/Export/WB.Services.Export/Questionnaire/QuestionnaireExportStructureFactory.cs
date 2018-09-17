@@ -96,7 +96,7 @@ namespace WB.Services.Export.Questionnaire
             return headerStructureForLevel;
         }
 
-        protected ExportedVariableHeaderItem CreateExportedVariableHeaderItem(Variable variable)
+        private ExportedVariableHeaderItem CreateExportedVariableHeaderItem(Variable variable)
         {
             var exportedHeaderItem = new ExportedVariableHeaderItem();
 
@@ -134,7 +134,7 @@ namespace WB.Services.Export.Questionnaire
             }
         }
 
-        protected ExportedQuestionHeaderItem CreateExportedQuestionHeaderItem(Question question, int? lengthOfRosterVectorWhichNeedToBeExported)
+        private ExportedQuestionHeaderItem CreateExportedQuestionHeaderItem(Question question, int? lengthOfRosterVectorWhichNeedToBeExported)
         {
             var exportedHeaderItem = new ExportedQuestionHeaderItem();
 
@@ -476,7 +476,7 @@ namespace WB.Services.Export.Questionnaire
                     this.GetLengthOfRosterVectorWhichNeedToBeExported(question, questionnaire)));
         }
 
-        protected void AddHeaderForSingleColumnExportQuestion(IDictionary<Guid, IExportedHeaderItem> headerItems, Question question,
+        private void AddHeaderForSingleColumnExportQuestion(IDictionary<Guid, IExportedHeaderItem> headerItems, Question question,
             QuestionnaireDocument questionnaire)
         {
             headerItems.Add(question.PublicKey,
@@ -484,7 +484,7 @@ namespace WB.Services.Export.Questionnaire
                     this.GetLengthOfRosterVectorWhichNeedToBeExported(question, questionnaire)));
         }
 
-        protected void AddHeadersForMultiOptions(IDictionary<Guid, IExportedHeaderItem> headerItems, Question question,
+        private void AddHeadersForMultiOptions(IDictionary<Guid, IExportedHeaderItem> headerItems, Question question,
             QuestionnaireDocument questionnaire)
         {
             headerItems.Add(question.PublicKey,
@@ -492,7 +492,7 @@ namespace WB.Services.Export.Questionnaire
                     this.GetLengthOfRosterVectorWhichNeedToBeExported(question, questionnaire)));
         }
 
-        protected void AddHeadersForTextList(IDictionary<Guid, IExportedHeaderItem> headerItems, Question question,
+        private void AddHeadersForTextList(IDictionary<Guid, IExportedHeaderItem> headerItems, Question question,
             QuestionnaireDocument questionnaire)
         {
             var textListQuestion = question as TextListQuestion;
@@ -515,7 +515,7 @@ namespace WB.Services.Export.Questionnaire
                      this.GetLengthOfRosterVectorWhichNeedToBeExported(question, questionnaire)));
         }
 
-        protected void AddHeadersForGpsQuestion(IDictionary<Guid, IExportedHeaderItem> headerItems, Question question,
+        private void AddHeadersForGpsQuestion(IDictionary<Guid, IExportedHeaderItem> headerItems, Question question,
             QuestionnaireDocument questionnaire)
         {
             var gpsColumns = GeoPosition.PropertyNames;
@@ -567,7 +567,7 @@ namespace WB.Services.Export.Questionnaire
             return null;
         }
 
-        public ValueVector<Guid> GetRosterSizeSourcesForEntity(IQuestionnaireEntity entity)
+        private ValueVector<Guid> GetRosterSizeSourcesForEntity(IQuestionnaireEntity entity)
         {
             var rosterSizes = new List<Guid>();
             while (!(entity is QuestionnaireDocument))

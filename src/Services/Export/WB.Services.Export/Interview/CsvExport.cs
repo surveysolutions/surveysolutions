@@ -30,6 +30,7 @@ namespace WB.Services.Export.Interview
 
         private readonly InterviewDataExportSettings exportSettings;
         private readonly IProductVersion productVersion;
+        private readonly IInterviewsExporter interviewsExporter;
 
         public CsvExport(IFileSystemAccessor fileSystemAccessor,
             ICsvWriter csvWriter, 
@@ -37,6 +38,7 @@ namespace WB.Services.Export.Interview
             IOptions<InterviewDataExportSettings> exportSettings,
             ITenantApi<IHeadquartersApi> tenantApi,
             IProductVersion productVersion,
+            IInterviewsExporter interviewsExporter,
             ICommentsExporter commentsExporter,
             IDiagnosticsExporter diagnosticsExporter,
             IInterviewActionsExporter interviewActionsExporter,
@@ -48,6 +50,7 @@ namespace WB.Services.Export.Interview
             this.tenantApi = tenantApi;
             this.exportSettings = exportSettings.Value;
             this.productVersion = productVersion;
+            this.interviewsExporter = interviewsExporter;
             this.commentsExporter = commentsExporter;
             this.diagnosticsExporter = diagnosticsExporter;
             this.interviewActionsExporter = interviewActionsExporter;
@@ -88,7 +91,7 @@ namespace WB.Services.Export.Interview
             await Task.WhenAll(
             this.commentsExporter.ExportAsync(questionnaireExportStructure, interviewIdsToExport, basePath, tenant, exportCommentsProgress, cancellationToken),
             this.interviewActionsExporter.ExportAsync(tenant, questionnaireIdentity, interviewIdsToExport, basePath, exportInterviewActionsProgress),
-            //this.interviewsExporter.Export(questionnaireExportStructure, interviewsToExport, basePath, exportInterviewsProgress, cancellationToken),
+            this.interviewsExporter.Export(tenant, questionnaireExportStructure, null, interviewsToExport, basePath, exportInterviewsProgress, cancellationToken),
             this.diagnosticsExporter.ExportAsync(interviewIdsToExport, basePath, tenant, exportInterviewsProgress, cancellationToken)
          );
 
