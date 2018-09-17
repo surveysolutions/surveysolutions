@@ -43,6 +43,7 @@ using WB.UI.Headquarters.Migrations.Users;
 using WB.UI.Shared.Web.Captcha;
 using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.Extensions;
+using WB.UI.Shared.Web.Kernel;
 using WB.UI.Shared.Web.Modules;
 using WB.UI.Shared.Web.Settings;
 using WB.UI.Shared.Web.Versions;
@@ -285,18 +286,7 @@ namespace WB.UI.Headquarters
         }
     }
 
-    public class AutofacWebKernel : AutofacKernel
-    {
-        public void Load(params IWebModule[] modules)
-        {
-            var autofacModules = modules.Select(module => module.AsWebAutofac()).ToArray();
-            foreach (var autofacModule in autofacModules)
-            {
-                this.containerBuilder.RegisterModule(autofacModule);
-            }
-            initModules.AddRange(modules.Select(m => m as IInitModule).Where(m => m != null));
-        }
-    }
+
 
     /*public class CustomHubActivator : IHubActivator
     {
