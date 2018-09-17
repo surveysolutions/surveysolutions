@@ -1,12 +1,16 @@
 <template>
     <div :class="itemClass" class="overview-item">
+        <div class="date">
+            <div v-if="hasDate">{{answerDate}}</div>
+            <div v-if="hasDate">{{answerTime}}</div>
+        </div>
         <div class="item-content">
-            <h6>
+            <h4>
                 <span v-html="item.Title"></span>
                 <template v-if="item.rosterTitle != null"><span> - </span>
                 <i v-if="item.rosterTitle != null" v-html="item.rosterTitle"></i>
                 </template>
-            </h6>
+            </h4>
             <p class="answer" v-if="item.State != 3">{{item.Answer}}</p>
             <p class="btn-link" v-else>{{$t("WebInterviewUI.Interview_Overview_NotAnswered")}}</p>
         </div>
@@ -59,6 +63,23 @@ export default {
                 invalid: this.item.State == State.Invalid,
                 hasComment: this.item.HasComment
             };
+        },
+        hasDate(){
+            if (!this.item.AnswerTimeUtc)
+                return false;
+            if  (this.item.isGroup || this.item.isSection)
+                return false;
+            return true;
+        },
+        answerDate(){
+            if (!this.hasDate) return;   
+            let local = moment.utc(this.item.AnswerTimeUtc).local();
+            return local.format("MMM DD");
+        },
+        answerTime(){
+            if (!this.hasDate) return;
+            let local = moment.utc(this.item.AnswerTimeUtc).local();
+            return local.format("HH:mm");
         }
     }
 };

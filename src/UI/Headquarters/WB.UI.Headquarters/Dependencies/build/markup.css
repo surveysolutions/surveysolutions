@@ -8307,6 +8307,139 @@ body > .ui-pnotify {
     .ui-pnotify .input-group {
       width: 100%; } }
 
+#overview .modal-content {
+  padding: 0; }
+  #overview .modal-content .modal-header {
+    padding: 20px; }
+
+#overview .modal-dialog {
+  max-width: 500px; }
+
+#overview .modal-header {
+  background-color: #6b6b6b;
+  color: #fff; }
+  #overview .modal-header h3 {
+    margin-bottom: 0;
+    font-size: 18px;
+    line-height: 20px; }
+  #overview .modal-header .close span:before, #overview .modal-header .close span:after {
+    background-color: #f3f3f3; }
+  #overview .modal-header .close span:hover, #overview .modal-header .close span:focus, #overview .modal-header .close span:active {
+    opacity: 1; }
+    #overview .modal-header .close span:hover::before, #overview .modal-header .close span:hover::after, #overview .modal-header .close span:focus::before, #overview .modal-header .close span:focus::after, #overview .modal-header .close span:active::before, #overview .modal-header .close span:active::after {
+      background-color: #fff; }
+
+.overview-item {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: row;
+          flex-direction: row;
+  -ms-flex-wrap: nowrap;
+      flex-wrap: nowrap;
+  -webkit-box-pack: start;
+      -ms-flex-pack: start;
+          justify-content: flex-start;
+  -webkit-box-align: stretch;
+      -ms-flex-align: stretch;
+          align-items: stretch;
+  -ms-flex-line-pack: stretch;
+      align-content: stretch;
+  padding-right: 35px;
+  position: relative; }
+  .overview-item .date {
+    min-width: 65px;
+    text-align: right;
+    padding: 10px;
+    font-style: italic;
+    font-size: 12px;
+    line-height: 14px;
+    color: #3f3f3f; }
+    .overview-item .date div:first-of-type {
+      color: #dbdfe2; }
+  .overview-item .item-content {
+    -webkit-box-flex: 1;
+        -ms-flex-positive: 1;
+            flex-grow: 1;
+    padding: 10px;
+    width: calc(100% - 65px); }
+    .overview-item .item-content h4 {
+      margin-top: 0;
+      margin-bottom: 5px;
+      font-size: 16px;
+      line-height: 18px; }
+    .overview-item .item-content p {
+      font-family: "Robotobold";
+      margin: 0; }
+  .overview-item.unanswered .item-content {
+    background-color: #ececec; }
+    .overview-item.unanswered .item-content p {
+      color: #2a81cb;
+      font-style: italic; }
+  .overview-item.unanswered .date div:last-of-type {
+    color: #dbdfe2; }
+  .overview-item.unanswered.hasComment .item-content {
+    position: relative; }
+    .overview-item.unanswered.hasComment .item-content * {
+      position: relative;
+      z-index: 10; }
+    .overview-item.unanswered.hasComment .item-content:after {
+      display: block;
+      content: "";
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      background-color: rgba(245, 168, 226, 0.4); }
+  .overview-item.unanswered + .unanswered .item-content {
+    border-top: 1px solid #dbdfe2; }
+  .overview-item.invalid {
+    color: #e74924; }
+    .overview-item.invalid .item-content {
+      background-color: #f6d6d0; }
+    .overview-item.invalid .date div:last-of-type {
+      color: #e74924; }
+    .overview-item.invalid.hasComment .item-content {
+      position: relative; }
+      .overview-item.invalid.hasComment .item-content * {
+        position: relative;
+        z-index: 10; }
+      .overview-item.invalid.hasComment .item-content:after {
+        display: block;
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        background-color: rgba(245, 168, 226, 0.4); }
+  .overview-item.hasComment {
+    background-color: rgba(245, 168, 226, 0.4); }
+  .overview-item.section {
+    display: block;
+    border-top: 2px solid #dbdfe2;
+    padding: 0 35px 0 65px;
+    margin-top: 10px; }
+    .overview-item.section:first-of-type {
+      border-top: none;
+      margin-top: 0; }
+    .overview-item.section h4 {
+      font: 20px/22px "RobotoBold"; }
+
+.custom-popover {
+  display: none;
+  border-radius: 7px;
+  position: absolute;
+  top: -50%;
+  right: -325px;
+  width: 295px;
+  background-color: #fff; }
+  .custom-popover .popover-content {
+    padding: 10px; }
+
 .table {
   color: #3f3f3f;
   width: 100% !important;
