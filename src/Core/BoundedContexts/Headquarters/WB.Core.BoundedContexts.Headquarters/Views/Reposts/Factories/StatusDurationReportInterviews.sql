@@ -14,6 +14,7 @@
 		)
 		AND (isum.questionnaireid = @questionnaireid OR @questionnaireid is NULL)
 		AND (isum.questionnaireversion = @questionnaireversion OR @questionnaireversion is NULL)
+		AND (isum.teamleadid = @supervisorid OR @supervisorid is NULL)
 	) tmp 
 where rnk = 1
 GROUP BY status, Days

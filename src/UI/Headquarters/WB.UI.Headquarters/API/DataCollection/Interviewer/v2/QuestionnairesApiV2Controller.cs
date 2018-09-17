@@ -36,7 +36,28 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v2
         }
 
         [HttpGet]
-        public override HttpResponseMessage Census() => base.Census();
+        [WriteToSyncLog(SynchronizationLogType.GetCensusQuestionnaires)]
+        public HttpResponseMessage Census()
+        {
+            var query = new QuestionnaireBrowseInputModel()
+            {
+                Page = 1,
+                PageSize = int.MaxValue,
+                OnlyCensus = true
+            };
+
+            var censusQuestionnaires = this.questionnaireBrowseViewFactory.Load(query).Items
+                .Select(questionnaire => new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version))
+                .ToList();
+
+            var response = this.Request.CreateResponse(censusQuestionnaires);
+            response.Headers.CacheControl = new CacheControlHeaderValue
+            {
+                NoCache = true
+            };
+            return response;
+        }
+
         [HttpGet]
         public override HttpResponseMessage List() => base.List();
         [HttpGet]
