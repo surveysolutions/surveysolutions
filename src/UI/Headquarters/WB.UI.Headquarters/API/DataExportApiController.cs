@@ -114,7 +114,9 @@ namespace WB.UI.Headquarters.API
 
             try
             {
-                this.dataExportProcessesService.AddDataExport(new DataExportProcessDetails(format, questionnaireIdentity, questionnaireBrowseItem.Title)
+
+                this.dataExportProcessesService.AddDataExport(
+                    new DataExportProcessDetails(format, questionnaireIdentity, questionnaireBrowseItem.Title)
                 {
                     FromDate = from?.ToUniversalTime(),
                     ToDate = to?.ToUniversalTime(),

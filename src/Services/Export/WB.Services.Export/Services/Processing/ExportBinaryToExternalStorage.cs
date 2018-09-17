@@ -1,8 +1,7 @@
 ﻿using System;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Services.Export.Questionnaire;
 
-namespace WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails
+namespace WB.Services.Export.Services.Processing
 {
     public class ExportBinaryToExternalStorage : DataExportProcessDetails
     {
@@ -10,7 +9,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails
 
         public ExternalStorageType StorageType { get; set; }
         public string AccessToken { get; set; }
-        public ExportBinaryToExternalStorage(DataExportFormat format, QuestionnaireIdentity questionnaire, string questionnaireTitle) 
+        public ExportBinaryToExternalStorage(DataExportFormat format, QuestionnaireId questionnaire, string questionnaireTitle) 
             : base(format, questionnaire, questionnaireTitle)
         {
         }
