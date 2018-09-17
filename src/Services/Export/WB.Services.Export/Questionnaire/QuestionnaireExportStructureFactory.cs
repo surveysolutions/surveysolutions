@@ -16,23 +16,19 @@ namespace WB.Services.Export.Questionnaire
     internal class QuestionnaireExportStructureFactory: IQuestionnaireExportStructureFactory
     {
         private readonly ICache cache;
-        private readonly IQuestionnaireStorage questionnaireStorage;
         private const string GeneratedTitleExportFormat = "{0}__{1}";
 
-        public QuestionnaireExportStructureFactory(ICache cache, IQuestionnaireStorage questionnaireStorage)
+        public QuestionnaireExportStructureFactory(ICache cache)
         {
             this.cache = cache;
-            this.questionnaireStorage = questionnaireStorage;
         }
 
-        public async Task<QuestionnaireExportStructure> GetQuestionnaireExportStructure(QuestionnaireId questionnaireId,
+        public QuestionnaireExportStructure GetQuestionnaireExportStructure(QuestionnaireDocument questionnaire,
             TenantInfo tenant)
         {
-            var cachedQuestionnaireExportStructure = this.cache.Get(questionnaireId, tenant.Id);
+            var cachedQuestionnaireExportStructure = this.cache.Get(new QuestionnaireId(questionnaire.Id), tenant.Id);
             if (cachedQuestionnaireExportStructure == null)
             {
-                var questionnaire = await this.questionnaireStorage.GetQuestionnaireAsync(tenant, questionnaireId);
-
                 cachedQuestionnaireExportStructure = CreateQuestionnaireExportStructure(questionnaire);
 
                 if (cachedQuestionnaireExportStructure == null)
