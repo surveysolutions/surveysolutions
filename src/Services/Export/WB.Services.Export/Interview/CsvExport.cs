@@ -91,7 +91,7 @@ namespace WB.Services.Export.Interview
             await Task.WhenAll(
             this.commentsExporter.ExportAsync(questionnaireExportStructure, interviewIdsToExport, basePath, tenant, exportCommentsProgress, cancellationToken),
             this.interviewActionsExporter.ExportAsync(tenant, questionnaireIdentity, interviewIdsToExport, basePath, exportInterviewActionsProgress),
-            this.interviewsExporter.Export(tenant, questionnaireExportStructure, null, interviewsToExport, basePath, exportInterviewsProgress, cancellationToken),
+            this.interviewsExporter.ExportAsync(tenant, questionnaireExportStructure, null, interviewsToExport, basePath, exportInterviewsProgress, cancellationToken),
             this.diagnosticsExporter.ExportAsync(interviewIdsToExport, basePath, tenant, exportInterviewsProgress, cancellationToken)
          );
 

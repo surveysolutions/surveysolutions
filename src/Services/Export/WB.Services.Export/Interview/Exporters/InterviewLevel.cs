@@ -14,14 +14,14 @@ namespace WB.Services.Export.Interview.Exporters
             this.Variables = new Dictionary<Guid, object>();
             this.DisabledVariables = new HashSet<Guid>();
         }
-        public InterviewLevel(ValueVector<Guid> scopeVector, int? sortIndex, decimal[] vector)
+        public InterviewLevel(ValueVector<Guid> scopeVector, int? sortIndex, RosterVector vector)
             : this()
         {
             this.ScopeVectors = new Dictionary<ValueVector<Guid>, int?> { { scopeVector, sortIndex } };
             this.RosterVector = vector;
         }
 
-        public decimal[] RosterVector { get; set; }
+        public RosterVector RosterVector { get; set; }
         public Dictionary<ValueVector<Guid>, int?> ScopeVectors { get; set; }
         public Dictionary<Guid, string> RosterRowTitles { get; set; }
         public Dictionary<Guid, InterviewEntity> QuestionsSearchCache { get; set; }

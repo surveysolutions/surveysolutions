@@ -11,7 +11,7 @@ namespace WB.Services.Export.Interview.Exporters
 {
     public interface IInterviewsExporter
     {
-        Task Export(TenantInfo tenant, QuestionnaireExportStructure questionnaireExportStructure,
+        Task ExportAsync(TenantInfo tenant, QuestionnaireExportStructure questionnaireExportStructure,
             QuestionnaireDocument questionnaire, List<InterviewToExport> interviewsToExport, string basePath,
             Progress<int> progress, CancellationToken cancellationToken);
     }
