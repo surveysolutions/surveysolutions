@@ -73,7 +73,8 @@ namespace WB.Tests.Integration.AssignmentsDeletionServiceTests
                 npgsqlCommand.CommandText = "SELECT COUNT(*) from plainstore.assignmentsidentifyinganswers";
                 var identifyingQuestionsCount = await npgsqlCommand.ExecuteScalarAsync();
 
-                Assert.That(identifyingQuestionsCount, Is.EqualTo(0), "All identifying question answers should be removed with assignment`");
+                Assert.That(identifyingQuestionsCount, Is.EqualTo(0), 
+                    "All identifying question answers should be removed with assignment`");
             }
         }
 
