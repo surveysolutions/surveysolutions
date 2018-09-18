@@ -2,5 +2,6 @@
 {
     internal interface IProductVersion
     {
+        string ToString();
     }
 }
