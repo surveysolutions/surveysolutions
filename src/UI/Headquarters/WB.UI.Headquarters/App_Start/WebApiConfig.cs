@@ -56,9 +56,6 @@ namespace WB.UI.Headquarters
             config.Routes.MapHttpRoute("QuestionnairesApiAction", "api/{apiVersion}/questionnaires/{action}", new { controller = "questionnaires" });
             config.Routes.MapHttpRoute("QuestionnairesApiWithActionA", "api/{apiVersion}/questionnaires/{action}/{id}", new { controller = "questionnaires", id = RouteParameter.Optional });
 
-            //support json for browser requests
-            config.Formatters.JsonFormatter.SupportedMediaTypes.Add(new MediaTypeHeaderValue("text/html"));
-
             config.MessageHandlers.Add(new EnforceHttpsHandler());
 
             config.Services.Add(typeof(IExceptionLogger), new NLogExceptionLogger());
