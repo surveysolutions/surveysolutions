@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Reflection;
 using System.Web.Configuration;
+using System.Web.Http;
+using System.Web.Mvc;
 using Autofac.Integration.Mvc;
 using Autofac.Integration.WebApi;
 using Microsoft.Web.Infrastructure.DynamicModuleHelper;
@@ -32,16 +34,14 @@ namespace WB.UI.Designer.App_Start
     {
         public static void Start()
         {
-            var autofacKernel = CreateKernel();
-
-
+            CreateKernel();
         }
 
         public static void Stop()
         {
         }
 
-        private static AutofacWebKernel CreateKernel()
+        private static void CreateKernel()
         {
             var settingsProvider = new SettingsProvider();
 
@@ -99,7 +99,18 @@ namespace WB.UI.Designer.App_Start
             // init
             kernel.Init().Wait();
 
-            return kernel;
+            // DependencyResolver
+            var config = new HttpConfiguration();
+
+            DependencyResolver.SetResolver(new Autofac.Integration.Mvc.AutofacDependencyResolver(kernel.Container));
+            config.DependencyResolver = new AutofacWebApiDependencyResolver(kernel.Container);
+
+            WebApiConfig.Register(config);
+
+//            app.UseAutofacMiddleware(kernel.Container);
+//            app.UseAutofacWebApi(config);
+//            app.UseWebApi(config);
+
         }
     }
 }
