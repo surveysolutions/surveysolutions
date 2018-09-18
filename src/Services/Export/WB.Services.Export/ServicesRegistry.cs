@@ -5,6 +5,8 @@ using Newtonsoft.Json;
 using Refit;
 using WB.Services.Export.CsvExport;
 using WB.Services.Export.CsvExport.Exporters;
+using WB.Services.Export.CsvExport.Implementation.DoFiles;
+using WB.Services.Export.DescriptionGenerator;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Infrastructure.Implementation;
 using WB.Services.Export.Interview;
@@ -34,6 +36,8 @@ namespace WB.Services.Export
             services.AddTransient<IInterviewFactory, InterviewFactory>();
             services.AddTransient<IInterviewErrorsExporter, InterviewErrorsExporter>();
             services.AddTransient<IExportQuestionService, ExportQuestionService>();
+            services.AddTransient<IDescriptionGenerator, DescriptionGenerator.DescriptionGenerator>();
+            services.AddTransient<IEnvironmentContentService, StataEnvironmentContentService>();
 
             // Singletons
             services.AddSingleton<ICache, Cache>();

@@ -5,8 +5,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using WB.Services.Export.CsvExport.Exporters;
+using WB.Services.Export.DescriptionGenerator;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Questionnaire;
@@ -20,8 +20,6 @@ namespace WB.Services.Export.CsvExport.Implementation
     {
         private readonly string dataFileExtension = "tab";
 
-        private readonly IFileSystemAccessor fileSystemAccessor;
-        private readonly ICsvWriter csvWriter;
         private readonly ILogger<CsvExport> logger;
         private readonly ITenantApi<IHeadquartersApi> tenantApi;
 
@@ -30,36 +28,32 @@ namespace WB.Services.Export.CsvExport.Implementation
         private readonly IDiagnosticsExporter diagnosticsExporter;
         private readonly IQuestionnaireExportStructureFactory exportStructureFactory;
         private readonly IQuestionnaireStorage questionnaireStorage;
+        private readonly IDescriptionGenerator descriptionGenerator;
+        private readonly IEnvironmentContentService environmentContentService;
 
-        private readonly InterviewDataExportSettings exportSettings;
-        private readonly IProductVersion productVersion;
         private readonly IInterviewsExporter interviewsExporter;
 
-        public CsvExport(IFileSystemAccessor fileSystemAccessor,
-            ICsvWriter csvWriter,
-            ILogger<CsvExport> logger,
-            IOptions<InterviewDataExportSettings> exportSettings,
+        public CsvExport(ILogger<CsvExport> logger,
             ITenantApi<IHeadquartersApi> tenantApi,
-            IProductVersion productVersion,
             IInterviewsExporter interviewsExporter,
             ICommentsExporter commentsExporter,
             IDiagnosticsExporter diagnosticsExporter,
             IInterviewActionsExporter interviewActionsExporter,
             IQuestionnaireExportStructureFactory exportStructureFactory,
-            IQuestionnaireStorage questionnaireStorage)
+            IQuestionnaireStorage questionnaireStorage,
+            IDescriptionGenerator descriptionGenerator,
+            IEnvironmentContentService environmentContentService)
         {
-            this.fileSystemAccessor = fileSystemAccessor;
-            this.csvWriter = csvWriter;
             this.logger = logger;
             this.tenantApi = tenantApi;
-            this.exportSettings = exportSettings.Value;
-            this.productVersion = productVersion;
             this.interviewsExporter = interviewsExporter;
             this.commentsExporter = commentsExporter;
             this.diagnosticsExporter = diagnosticsExporter;
             this.interviewActionsExporter = interviewActionsExporter;
             this.exportStructureFactory = exportStructureFactory;
             this.questionnaireStorage = questionnaireStorage;
+            this.descriptionGenerator = descriptionGenerator;
+            this.environmentContentService = environmentContentService;
         }
 
         public async Task ExportInterviewsInTabularFormat(
@@ -108,6 +102,9 @@ namespace WB.Services.Export.CsvExport.Implementation
             this.logger.Log(LogLevel.Information, $"Export with all steps finished for questionnaire {questionnaireIdentity}. " +
                              $"Took {exportWatch.Elapsed:c} to export {interviewIdsToExport.Count} interviews");
 
+            this.descriptionGenerator.GenerateDescriptionFile(questionnaireExportStructure, basePath, ExportFileSettings.TabDataFileExtension);
+
+            this.environmentContentService.CreateEnvironmentFiles(questionnaireExportStructure, basePath, cancellationToken);
         }
     }
 }
