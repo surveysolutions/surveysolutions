@@ -7,5 +7,6 @@ namespace WB.UI.Headquarters.API.WebInterview
     public interface IInterviewOverviewService
     {
         IEnumerable<OverviewNode> GetOverview(IStatefulInterview interview);
+        OverviewItemAdditionalInfo GetOverviewItemAdditionalInfo(IStatefulInterview interview, string id);
     }
 }
