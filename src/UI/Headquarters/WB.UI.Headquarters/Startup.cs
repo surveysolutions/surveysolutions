@@ -49,6 +49,7 @@ using WB.UI.Shared.Enumerator.Services.Internals;
 using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.DataAnnotations;
 using WB.UI.Shared.Web.Filters;
+using WB.UI.Shared.Web.Kernel;
 
 namespace WB.UI.Headquarters
 {
@@ -362,66 +363,6 @@ namespace WB.UI.Headquarters
         }
     }
 
-    public class CustomMVCDependencyResolver : Autofac.Integration.Mvc.AutofacDependencyResolver
-    {
-        public CustomMVCDependencyResolver(ILifetimeScope container) : base(container)
-        {
-        }
-
-        public CustomMVCDependencyResolver(ILifetimeScope container, Action<ContainerBuilder> configurationAction) : base(container, configurationAction)
-        {
-        }
-
-        public CustomMVCDependencyResolver(ILifetimeScope container, ILifetimeScopeProvider lifetimeScopeProvider) : base(container, lifetimeScopeProvider)
-        {
-        }
-
-        public CustomMVCDependencyResolver(ILifetimeScope container, ILifetimeScopeProvider lifetimeScopeProvider, Action<ContainerBuilder> configurationAction) : base(container, lifetimeScopeProvider, configurationAction)
-        {
-        }
-
-        public override object GetService(Type serviceType)
-        {
-            //to preserve scope
-            var serviceLocator = this.RequestLifetimeScope.Resolve<IServiceLocator>(new NamedParameter("kernel", this.RequestLifetimeScope));
-            return base.GetService(serviceType);
-        }
-
-        public override IEnumerable<object> GetServices(Type serviceType)
-        {
-            var serviceLocator = this.RequestLifetimeScope.Resolve<IServiceLocator>(new NamedParameter("kernel", this.RequestLifetimeScope));
-            return base.GetServices(serviceType);
-        }
-    }
-
-    /// <summary>
-    /// Autofac implementation of the <see cref="T:System.Web.Http.Dependencies.IDependencyResolver" /> interface.
-    /// </summary>
-    public class CustomWebApiDependencyResolver : AutofacWebApiDependencyResolver
-    {
-        /// <summary>Try to get a service of the given type.</summary>
-        /// <param name="serviceType">Type of service to request.</param>
-        /// <returns>An instance of the service, or null if the service is not found.</returns>
-        public new object GetService(Type serviceType)
-        {
-            var scope = (BeginScope() as AutofacWebApiDependencyScope).LifetimeScope;
-            var serviceLocator = scope.Resolve<IServiceLocator>(new NamedParameter("kernel", scope));
-            
-            return base.GetService(serviceType);
-        }
-
-        public new IEnumerable<object> GetServices(Type serviceType)
-        {
-            var scope = (BeginScope() as AutofacWebApiDependencyScope).LifetimeScope;
-            var serviceLocator = scope.Resolve<IServiceLocator>(new NamedParameter("kernel", scope));
-
-            return base.GetServices(serviceType);
-        }
-
-        public CustomWebApiDependencyResolver(ILifetimeScope container) : base(container)
-        {
-        }
-    }
     
     public class LogRequestModule : Autofac.Module
     {

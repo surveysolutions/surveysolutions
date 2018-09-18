@@ -38,7 +38,7 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
         {
             this.containerBuilder.RegisterSource(new AnyConcreteTypeNotAlreadyRegisteredSource());
 
-            this.containerBuilder.Register<IServiceLocator>(ctx => ServiceLocator.Current).SingleInstance();
+            this.containerBuilder.RegisterType<AutofacServiceLocatorAdapter>().As<IServiceLocator>().InstancePerLifetimeScope();
 
             var status = new UnderConstructionInfo();
             this.containerBuilder.Register((ctx, p) => status).SingleInstance();

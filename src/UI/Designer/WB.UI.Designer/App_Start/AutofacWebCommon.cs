@@ -3,10 +3,14 @@ using System.Reflection;
 using System.Web.Configuration;
 using System.Web.Http;
 using System.Web.Mvc;
+using Autofac;
 using Autofac.Integration.Mvc;
 using Autofac.Integration.WebApi;
+using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using WB.Core.BoundedContexts.Designer;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure;
+using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Infrastructure.Native.Files;
 using WB.Infrastructure.Native.Logging;
@@ -15,6 +19,7 @@ using WB.UI.Designer.App_Start;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Code.ConfigurationManager;
 using WB.UI.Designer.CommandDeserialization;
+using WB.UI.Shared.Enumerator.Services.Internals;
 using WB.UI.Shared.Web.Captcha;
 using WB.UI.Shared.Web.Extensions;
 using WB.UI.Shared.Web.Kernel;
@@ -90,20 +95,39 @@ namespace WB.UI.Designer.App_Start
                 new NinjectWebCommonModule()
                 );
 
+            //var config = new HttpConfiguration();
+            var config = GlobalConfiguration.Configuration;
+
+
+            kernel.ContainerBuilder.RegisterType<CustomMVCDependencyResolver>().As<System.Web.Mvc.IDependencyResolver>().SingleInstance();
+
+            //WebApiConfig.Register(config);
+
             kernel.ContainerBuilder.RegisterControllers(typeof(AutofacWebCommon).Assembly);
             kernel.ContainerBuilder.RegisterApiControllers(typeof(AutofacWebCommon).Assembly);
 
+            //kernel.ContainerBuilder.RegisterWebApiFilterProvider(config);
+            //kernel.ContainerBuilder.RegisterWebApiModelBinderProvider();
 
             // init
             kernel.Init().Wait();
 
             // DependencyResolver
-            var config = new HttpConfiguration();
+            var resolver = new CustomWebApiDependencyResolver(kernel.Container);
 
-            DependencyResolver.SetResolver(new AutofacDependencyResolver(kernel.Container));
-            config.DependencyResolver = new AutofacWebApiDependencyResolver(kernel.Container);
+            config.DependencyResolver = resolver;
+            GlobalConfiguration.Configuration.DependencyResolver = resolver;
 
-            WebApiConfig.Register(config);
+            var resolv = kernel.Container.Resolve<System.Web.Mvc.IDependencyResolver>();
+            //DependencyResolver.SetResolver(new Autofac.Integration.Mvc.AutofacDependencyResolver(kernel.Container));
+            DependencyResolver.SetResolver(resolv);
+            //ModelBinders.Binders.DefaultBinder = new AutofacBinderResolver(kernel.Container);
+
+
+            //            app.UseAutofacMiddleware(kernel.Container);
+            //            app.UseAutofacWebApi(config);
+            //            app.UseWebApi(config);
+
         }
     }
 }
