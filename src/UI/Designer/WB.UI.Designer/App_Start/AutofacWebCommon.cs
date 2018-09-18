@@ -5,10 +5,8 @@ using System.Web.Http;
 using System.Web.Mvc;
 using Autofac.Integration.Mvc;
 using Autofac.Integration.WebApi;
-using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using WB.Core.BoundedContexts.Designer;
 using WB.Core.Infrastructure;
-using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Infrastructure.Native.Files;
 using WB.Infrastructure.Native.Logging;
@@ -102,15 +100,10 @@ namespace WB.UI.Designer.App_Start
             // DependencyResolver
             var config = new HttpConfiguration();
 
-            DependencyResolver.SetResolver(new Autofac.Integration.Mvc.AutofacDependencyResolver(kernel.Container));
+            DependencyResolver.SetResolver(new AutofacDependencyResolver(kernel.Container));
             config.DependencyResolver = new AutofacWebApiDependencyResolver(kernel.Container);
 
             WebApiConfig.Register(config);
-
-//            app.UseAutofacMiddleware(kernel.Container);
-//            app.UseAutofacWebApi(config);
-//            app.UseWebApi(config);
-
         }
     }
 }
