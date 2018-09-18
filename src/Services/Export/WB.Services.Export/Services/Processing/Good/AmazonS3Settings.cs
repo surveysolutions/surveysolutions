@@ -1,7 +1,7 @@
 ﻿using Amazon;
 using Amazon.S3;
 
-namespace WB.Services.Export.Services.Processing
+namespace WB.Services.Export.Services.Processing.Good
 {
     public class AmazonS3Settings
     {

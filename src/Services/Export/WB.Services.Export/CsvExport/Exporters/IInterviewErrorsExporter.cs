@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using WB.Services.Export.Interview.Entities;
 using WB.Services.Export.Questionnaire;
-using WB.Services.Export.Tenant;
 
-namespace WB.Services.Export.Interview.Exporters
+namespace WB.Services.Export.CsvExport.Exporters
 {
     internal interface IInterviewErrorsExporter
     {

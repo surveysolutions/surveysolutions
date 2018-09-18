@@ -1,5 +1,6 @@
 ﻿using System;
 using WB.Services.Export.Questionnaire;
+using WB.Services.Export.Services.Processing.Good;
 
 namespace WB.Services.Export.Services.Processing
 {
