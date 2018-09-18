@@ -130,11 +130,14 @@ namespace WB.UI.Shared.Enumerator.Services
                         stream: fileStream,
                         customHeaders: backupHeaders,
                         url: "api/interviewer/v2/tabletInfo",
-                        credentials: new RestCredentials
-                        {
-                            Login = this.principal.CurrentUserIdentity.Name,
-                            Token = this.principal.CurrentUserIdentity.Token
-                        },
+                        credentials:
+                        this.principal.IsAuthenticated
+                            ? new RestCredentials
+                            {
+                                Login = this.principal.CurrentUserIdentity.Name,
+                                Token = this.principal.CurrentUserIdentity.Token
+                            }
+                            : null,
                         token: token);
                 }
                 catch (RestException e)
