@@ -40,9 +40,7 @@ namespace WB.Services.Export.Services.Processing.Good
 
         public TenantInfo Tenant { get; set; }
         public QuestionnaireId Questionnaire { get; }
-        public ExternalStorageType? StorageType { get; set; }
-        public string AccessToken { get; set; }
-
+        public string ArchivePassword { get; set; }
         public string QuestionnaireTitle { get; }
 
         public override string NaturalId => $"{InterviewStatusString()}${this.Format}${this.Questionnaire}" +

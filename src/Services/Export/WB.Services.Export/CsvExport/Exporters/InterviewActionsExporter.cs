@@ -20,7 +20,7 @@ namespace WB.Services.Export.CsvExport.Exporters
 {
     internal class InterviewActionsExporter: IInterviewActionsExporter
     {
-        private readonly InterviewDataExportSettings interviewDataExportSettings;
+        private readonly IOptions<InterviewDataExportSettings> interviewDataExportSettings;
         public readonly string InterviewActionsFileName = "interview__actions";
 
         public static readonly DoExportFileHeader[] ActionFileColumns =
@@ -47,7 +47,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             ITenantApi<IHeadquartersApi> tenantApi,
             ILogger<InterviewActionsExporter> logger)
         {
-            this.interviewDataExportSettings = interviewDataExportSettings.Value;
+            this.interviewDataExportSettings = interviewDataExportSettings;
             this.csvWriter = csvWriter;
             this.tenantApi = tenantApi;
             this.logger = logger;
@@ -57,7 +57,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             string basePath, IProgress<int> progress)
         {
             var actionFilePath = Path.Combine(basePath, Path.ChangeExtension(this.InterviewActionsFileName, this.dataFileExtension));
-            var batchSize = this.interviewDataExportSettings.MaxRecordsCountPerOneExportQuery;
+            var batchSize = this.interviewDataExportSettings.Value.MaxRecordsCountPerOneExportQuery;
 
             var fileColumns = ActionFileColumns.Select(a => a.Title).ToArray();
             this.csvWriter.WriteData(actionFilePath, new[] { fileColumns }, ExportFileSettings.DataFileSeparator.ToString());

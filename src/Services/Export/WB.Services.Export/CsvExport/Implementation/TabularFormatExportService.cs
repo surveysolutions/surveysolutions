@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -16,11 +17,11 @@ using WB.Services.Export.Tenant;
 
 namespace WB.Services.Export.CsvExport.Implementation
 {
-    internal class CsvExport : ICsvExport
+    internal class TabularFormatExportService : ITabularFormatExportService
     {
         private readonly string dataFileExtension = "tab";
 
-        private readonly ILogger<CsvExport> logger;
+        private readonly ILogger<TabularFormatExportService> logger;
         private readonly ITenantApi<IHeadquartersApi> tenantApi;
 
         private readonly ICommentsExporter commentsExporter;
@@ -31,9 +32,11 @@ namespace WB.Services.Export.CsvExport.Implementation
         private readonly IDescriptionGenerator descriptionGenerator;
         private readonly IEnvironmentContentService environmentContentService;
 
+        private readonly IProductVersion productVersion;
+        private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IInterviewsExporter interviewsExporter;
 
-        public CsvExport(ILogger<CsvExport> logger,
+        public TabularFormatExportService(ILogger<TabularFormatExportService> logger,
             ITenantApi<IHeadquartersApi> tenantApi,
             IInterviewsExporter interviewsExporter,
             ICommentsExporter commentsExporter,
@@ -42,7 +45,7 @@ namespace WB.Services.Export.CsvExport.Implementation
             IQuestionnaireExportStructureFactory exportStructureFactory,
             IQuestionnaireStorage questionnaireStorage,
             IDescriptionGenerator descriptionGenerator,
-            IEnvironmentContentService environmentContentService)
+            IEnvironmentContentService environmentContentService, IProductVersion productVersion, IFileSystemAccessor fileSystemAccessor)
         {
             this.logger = logger;
             this.tenantApi = tenantApi;
@@ -54,6 +57,8 @@ namespace WB.Services.Export.CsvExport.Implementation
             this.questionnaireStorage = questionnaireStorage;
             this.descriptionGenerator = descriptionGenerator;
             this.environmentContentService = environmentContentService;
+            this.productVersion = productVersion;
+            this.fileSystemAccessor = fileSystemAccessor;
         }
 
         public async Task ExportInterviewsInTabularFormat(
@@ -62,11 +67,13 @@ namespace WB.Services.Export.CsvExport.Implementation
             InterviewStatus? status,
             string basePath,
             DateTime? fromDate,
-            DateTime? toDate)
+            DateTime? toDate,
+            IProgress<int> progress,
+            CancellationToken cancellationToken)
         {
             var questionnaire = await this.questionnaireStorage.GetQuestionnaireAsync(tenant, questionnaireIdentity);
 
-            QuestionnaireExportStructure questionnaireExportStructure = this.exportStructureFactory.GetQuestionnaireExportStructure(questionnaire, tenant);
+            QuestionnaireExportStructure questionnaireExportStructure = this.exportStructureFactory.GetQuestionnaireExportStructure(tenant, questionnaire);
 
             var exportInterviewsProgress = new Progress<int>();
             var exportCommentsProgress = new Progress<int>();
@@ -78,8 +85,6 @@ namespace WB.Services.Export.CsvExport.Implementation
             //proggressAggregator.Add(exportInterviewActionsProgress, 0.1);
 
             //proggressAggregator.ProgressChanged += (sender, overallProgress) => progress.Report(overallProgress);
-
-            var cancellationToken = CancellationToken.None;
 
             var api = this.tenantApi.For(tenant);
             var interviewsToExport = await api.GetInterviewsToExportAsync(questionnaireIdentity, status, fromDate, toDate);
@@ -106,5 +111,30 @@ namespace WB.Services.Export.CsvExport.Implementation
 
             this.environmentContentService.CreateEnvironmentFiles(questionnaireExportStructure, basePath, cancellationToken);
         }
+        
+        public void GenerateDescriptionFile(TenantInfo tenant, QuestionnaireId questionnaireId, string basePath, string dataFilesExtension)
+        {
+            QuestionnaireExportStructure questionnaireExportStructure = this.exportStructureFactory.GetQuestionnaireExportStructure(tenant, questionnaireId);
+
+            var descriptionBuilder = new StringBuilder();
+            descriptionBuilder.AppendLine(
+                $"Exported from Survey Solutions Headquarters {this.productVersion} on {DateTime.Today:D}");
+
+            foreach (var level in questionnaireExportStructure.HeaderToLevelMap.Values)
+            {
+                string fileName = $"{level.LevelName}{dataFilesExtension}";
+                var variables = level.HeaderItems.Values.Select(question => question.VariableName);
+
+                descriptionBuilder.AppendLine();
+                descriptionBuilder.AppendLine(fileName);
+                descriptionBuilder.AppendLine(string.Join(", ", variables));
+            }
+
+            this.fileSystemAccessor.WriteAllText(
+                Path.Combine(basePath, "export__readme.txt"),
+                descriptionBuilder.ToString());
+        }
+
+
     }
 }
