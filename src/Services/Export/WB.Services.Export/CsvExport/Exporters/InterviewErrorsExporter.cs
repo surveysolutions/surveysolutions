@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using WB.Services.Export.Infrastructure;
+using WB.Services.Export.Interview;
 using WB.Services.Export.Interview.Entities;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Utils;
 
-namespace WB.Services.Export.Interview.Exporters
+namespace WB.Services.Export.CsvExport.Exporters
 {
     internal class InterviewErrorsExporter : IInterviewErrorsExporter
     {

@@ -9,13 +9,14 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using WB.Services.Export.Infrastructure;
+using WB.Services.Export.Interview;
 using WB.Services.Export.Interview.Entities;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Services;
 using WB.Services.Export.Tenant;
 using WB.Services.Export.Utils;
 
-namespace WB.Services.Export.Interview.Exporters
+namespace WB.Services.Export.CsvExport.Exporters
 {
     internal class CommentsExporter : ICommentsExporter
     {

@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using WB.Services.Export.Tenant;
 
-namespace WB.Services.Export.Interview.Exporters
+namespace WB.Services.Export.CsvExport.Exporters
 {
     public interface IDiagnosticsExporter
     {

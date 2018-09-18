@@ -3,7 +3,7 @@ using System.Globalization;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace WB.Services.Export.Interview.Exporters
+namespace WB.Services.Export.CsvExport.Exporters
 {
     internal class DoFile
     {

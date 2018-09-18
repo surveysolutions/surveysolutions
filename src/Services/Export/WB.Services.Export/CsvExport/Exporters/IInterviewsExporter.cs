@@ -3,11 +3,10 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using WB.Services.Export.Questionnaire;
-using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Export.Services;
 using WB.Services.Export.Tenant;
 
-namespace WB.Services.Export.Interview.Exporters
+namespace WB.Services.Export.CsvExport.Exporters
 {
     public interface IInterviewsExporter
     {

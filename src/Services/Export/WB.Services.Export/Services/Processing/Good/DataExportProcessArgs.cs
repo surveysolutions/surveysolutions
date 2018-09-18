@@ -3,7 +3,7 @@ using WB.Services.Export.Interview;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Tenant;
 
-namespace WB.Services.Export.Services.Processing
+namespace WB.Services.Export.Services.Processing.Good
 {
     //public class DataExportProcessArgs
     //{

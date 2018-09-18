@@ -1,4 +1,4 @@
-﻿namespace WB.Services.Export.Interview.Exporters
+﻿namespace WB.Services.Export.CsvExport.Exporters
 {
     public enum InterviewExportedAction
     {
