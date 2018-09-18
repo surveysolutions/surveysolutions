@@ -60,7 +60,8 @@ namespace WB.Tests.Integration.CommandServiceTests
 
             snapshooterMock = new Mock<IAggregateSnapshotter>();
 
-            commandService = Abc.Create.Service.CommandService(repository: repository, eventBus: eventBus, snapshooter: snapshooterMock.Object);
+            commandService = Abc.Create.Service.CommandService(repository: repository, eventBus: eventBus, 
+                snapshooter: snapshooterMock.Object);
             BecauseOf();
         }
 
