@@ -4,7 +4,7 @@
             <div v-if="hasDate">{{answerDate}}</div>
             <div v-if="hasDate">{{answerTime}}</div>
         </div>
-        <div class="item-content">
+        <div ref="itemContent" class="item-content" @click="showAdditionalDetails">
             <h4>
                 <span v-html="item.Title"></span>
                 <template v-if="item.rosterTitle != null"><span> - </span>
@@ -14,6 +14,8 @@
             <p class="answer" v-if="item.State != 3">{{item.Answer}}</p>
             <p class="btn-link" v-else>{{$t("WebInterviewUI.Interview_Overview_NotAnswered")}}</p>
         </div>
+
+        <AdditionalInfo ref="additionalInfo" :item="item" />
     </div>
 </template>
 
@@ -24,6 +26,8 @@ const State = {
     Invalid: 2,
     Unanswered: 3
 };
+import Vue from "vue";
+import AdditionalInfo from './OverviewItemAdditionalInfo'
 
 export default {
     props: {
@@ -53,7 +57,15 @@ export default {
             this.watcher.destroy();
         }
     },
-
+    methods: {
+        showAdditionalDetails(){
+            this.$emit("showAdditionalInfo", this);
+            this.$refs.additionalInfo.show();
+        },
+        hideAdditionalDetails(){
+            this.$refs.additionalInfo.close();
+        }
+    },
     computed: {
         itemClass() {
             return {
@@ -81,6 +93,9 @@ export default {
             let local = moment.utc(this.item.AnswerTimeUtc).local();
             return local.format("HH:mm");
         }
+    },
+    components: {
+        AdditionalInfo
     }
 };
 </script>

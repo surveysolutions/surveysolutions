@@ -4,7 +4,7 @@
             <h3>{{$t("Pages.InterviewOverview")}}</h3>
         </div>
 
-        <OverviewItem v-for="item in items" :key="item.id" :item="item" @mount="registerItemToStick" />
+        <OverviewItem v-for="item in items" :key="item.id" :item="item" @showAdditionalInfo="onShowAdditionalInfo" />
 
         <infinite-loading ref="loader" v-if="overview.total > 0 && items.length > 0" @infinite="infiniteHandler" :distance="1000">
             <span slot="no-more"></span>
@@ -29,7 +29,8 @@ export default {
             loaded: 100,
             sticked: [],
             scroll: 0,
-            scrollable: null
+            scrollable: null,
+            itemWithAdditionalInfo: null
         };
     },
     computed: {
@@ -39,20 +40,7 @@ export default {
 
         items() {
             return _.slice(this.overview.entities, 0, this.loaded);
-        },
-
-        currentSection() {
-            if (this.sticked.length == 0) return null;
-
-            const index = _.sortedIndexBy(
-                this.sticked,
-                { top: this.scroll + this.breadcrumbsOffset() },
-                it => it.top
-            );
-
-            const item = this.sticked[index > 0 ? index - 1 : index];
-            return item.item;
-        }      
+        }       
     },
     watch: {
         "overview.isLoaded"(to, from) {
@@ -66,6 +54,7 @@ export default {
             document.removeEventListener("scroll", this.handleScroll);
             $(this.$refs.modal).modal("hide");
         },
+
         async show() {
             this.$store.dispatch("loadOverviewData");
             document.addEventListener("scroll", this.handleScroll);
@@ -74,12 +63,6 @@ export default {
                 backdrop: 'static',
                 keyboard: false
             });
-        },
-        breadcrumbsOffset() {
-            const el = this.$refs.breadcrumb;
-            if (el == null) return 0;
-
-            return el.offsetTop + el.clientHeight;
         },
 
         infiniteHandler($state) {
@@ -97,12 +80,13 @@ export default {
             this.scroll = window.scrollY;
         },
 
-        registerItemToStick(arg) {
-            const item = arg.item;
-            const top = arg.el.offsetTop;
-
-            const index = _.sortedIndexBy(this.sticked, { top }, it => it.top);
-            this.sticked.splice(index, 0, { top, item });
+        onShowAdditionalInfo(itemToShow)
+        {
+            if (this.itemWithAdditionalInfo)
+            {
+                this.itemWithAdditionalInfo.hideAdditionalDetails();
+            }
+            this.itemWithAdditionalInfo = itemToShow;
         }
     }
 };
