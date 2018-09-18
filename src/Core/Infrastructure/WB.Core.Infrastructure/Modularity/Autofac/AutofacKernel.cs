@@ -36,7 +36,10 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
         
         public Task Init()
         {
-            containerBuilder.RegisterSource(new AnyConcreteTypeNotAlreadyRegisteredSource());
+            this.containerBuilder.RegisterSource(new AnyConcreteTypeNotAlreadyRegisteredSource());
+
+            this.containerBuilder.Register<IServiceLocator>(ctx => ServiceLocator.Current).SingleInstance();
+
             var status = new UnderConstructionInfo();
             this.containerBuilder.Register((ctx, p) => status).SingleInstance();
 

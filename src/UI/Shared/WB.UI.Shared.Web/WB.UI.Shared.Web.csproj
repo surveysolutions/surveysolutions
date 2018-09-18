@@ -177,11 +177,7 @@
     <Compile Include="Modules\IWebIocRegistry.cs" />
     <Compile Include="Modules\IWebModule.cs" />
     <Compile Include="Modules\AutofacModuleExtensions.cs" />
-    <Compile Include="Modules\NinjectModuleExtensions.cs" />
     <Compile Include="MembershipProvider\Settings\PasswordPolicyFactory.cs" />
-    <Compile Include="Modules\NinjectKernel.cs" />
-    <Compile Include="Modules\NinjectModuleAdapter.cs" />
-    <Compile Include="Modules\NinjectModuleContext.cs" />
     <Compile Include="Modules\WebConfigurationModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Captcha.Designer.cs">

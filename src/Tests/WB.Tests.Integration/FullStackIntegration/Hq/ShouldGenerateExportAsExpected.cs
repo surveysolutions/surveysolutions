@@ -39,6 +39,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Modularity;
+using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Core.Infrastructure.Ncqrs;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
@@ -58,6 +59,7 @@ using WB.UI.Headquarters.Injections;
 using WB.UI.Headquarters.Migrations.PlainStore;
 using WB.UI.Headquarters.Migrations.ReadSide;
 using WB.UI.Headquarters.Migrations.Users;
+using WB.UI.Shared.Enumerator.Services.Internals;
 using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.MembershipProvider.Accounts;
 using WB.UI.Shared.Web.Modules;
@@ -248,7 +250,7 @@ namespace WB.Tests.Integration.FullStackIntegration.Hq
 
         private void ConfigureIoc()
         {
-            var kernel = new NinjectKernel();
+            var kernel = new AutofacKernel();
 
             var unitOfWorkModule = new UnitOfWorkConnectionSettings();
             unitOfWorkModule.ConnectionString = ConnectionStringBuilder.ConnectionString;
@@ -298,10 +300,7 @@ namespace WB.Tests.Integration.FullStackIntegration.Hq
 
             oldServiceLocator = ServiceLocator.Current;
 
-            ServiceLocator.SetLocatorProvider(() => new NativeNinjectServiceLocatorAdapter(kernel.Kernel));
-            kernel.Kernel.Bind<IServiceLocator>().ToConstant(ServiceLocator.Current);
-
-            kernel.InitModules(new UnderConstructionInfo()).Wait();
+            kernel.Init().Wait();
         }
 
         private async Task<Mock<IRestService>> SetupMockOfDesigner()
