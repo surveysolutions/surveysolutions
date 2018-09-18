@@ -17,14 +17,23 @@ namespace WB.Services.Export.Questionnaire
     {
         private readonly ICache cache;
         private const string GeneratedTitleExportFormat = "{0}__{1}";
+        private IQuestionnaireStorage questionnaireStorage;
 
-        public QuestionnaireExportStructureFactory(ICache cache)
+        public QuestionnaireExportStructureFactory(ICache cache, IQuestionnaireStorage questionnaireStorage)
         {
             this.cache = cache;
+            this.questionnaireStorage = questionnaireStorage;
         }
 
-        public QuestionnaireExportStructure GetQuestionnaireExportStructure(QuestionnaireDocument questionnaire,
-            TenantInfo tenant)
+        public QuestionnaireExportStructure GetQuestionnaireExportStructure(TenantInfo tenant,
+            QuestionnaireId questionnaireId)
+        {
+            var questionnaire = this.questionnaireStorage.GetQuestionnaireAsync(tenant, questionnaireId).Result;
+            return GetQuestionnaireExportStructure(tenant, questionnaireId);
+        }
+
+        public QuestionnaireExportStructure GetQuestionnaireExportStructure(TenantInfo tenant,
+            QuestionnaireDocument questionnaire)
         {
             var cachedQuestionnaireExportStructure = this.cache.Get(new QuestionnaireId(questionnaire.Id), tenant.Id);
             if (cachedQuestionnaireExportStructure == null)

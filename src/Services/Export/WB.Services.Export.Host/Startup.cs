@@ -41,7 +41,7 @@ namespace WB.Services.Export.Host
             
             services.AddScoped<IBackgroundJobClient, BackgroundJobClient>();
             services.AddSingleton<IHostedService, BackgroundJobsService>();
-            services.AddTransient<TabularExportJob>();
+            //services.AddTransient<TabularExportJob>();
             ServicesRegistry.Configure(services);
 
             var builder = new ContainerBuilder();

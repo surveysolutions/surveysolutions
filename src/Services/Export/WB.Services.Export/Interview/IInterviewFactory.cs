@@ -14,6 +14,8 @@ namespace WB.Services.Export.Interview
     {
         Task<IEnumerable<InterviewEntity>> GetInterviewEntities(TenantInfo tenant, Guid interviewId);
         Dictionary<string, InterviewLevel> GetInterviewDataLevels(QuestionnaireDocument questionnaire, List<InterviewEntity> interviewEntities);
+        InterviewStringAnswer[] GetMultimediaAnswersByQuestionnaire(QuestionnaireId settingsQuestionnaireId);
+        InterviewStringAnswer[] GetAudioAnswersByQuestionnaire(QuestionnaireId settingsQuestionnaireId);
     }
 
     internal class InterviewFactory : IInterviewFactory
@@ -40,6 +42,16 @@ namespace WB.Services.Export.Interview
 
             var interviewDataLevels = interviewLevels.ToDictionary(k => CreateLevelIdFromPropagationVector(k.RosterVector), v => v);
             return interviewDataLevels;
+        }
+
+        public InterviewStringAnswer[] GetMultimediaAnswersByQuestionnaire(QuestionnaireId settingsQuestionnaireId)
+        {
+            throw new NotImplementedException();
+        }
+
+        public InterviewStringAnswer[] GetAudioAnswersByQuestionnaire(QuestionnaireId settingsQuestionnaireId)
+        {
+            throw new NotImplementedException();
         }
 
         public static string CreateLevelIdFromPropagationVector(RosterVector vector)

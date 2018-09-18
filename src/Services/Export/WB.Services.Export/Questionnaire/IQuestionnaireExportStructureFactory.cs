@@ -4,7 +4,10 @@ namespace WB.Services.Export.Questionnaire
 {
     internal interface IQuestionnaireExportStructureFactory
     {
-        QuestionnaireExportStructure GetQuestionnaireExportStructure(QuestionnaireDocument questionnaire,
-            TenantInfo tenant);
+        QuestionnaireExportStructure GetQuestionnaireExportStructure(TenantInfo tenant,
+            QuestionnaireDocument questionnaire);
+
+        QuestionnaireExportStructure GetQuestionnaireExportStructure(TenantInfo tenant,
+            QuestionnaireId questionnaireId);
     }
 }

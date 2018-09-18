@@ -30,5 +30,25 @@ namespace WB.Services.Export.Infrastructure.Implementation
         }
 
         public string Combine(params string[] parts) => Path.Combine(parts);
+        public string CombinePath(params string[] parts) => Combine(parts);
+        public bool IsDirectoryExists(string path) => Directory.Exists(path);
+        public void DeleteDirectory(string path) => Directory.Delete(path, true);
+        public void CreateDirectory(string path) => Directory.CreateDirectory(path);
+        public string GetFileName(string path) => Path.GetFileName(path);
+        public void DeleteFile(string path) => File.Delete(path);
+
+        public void MoveFile(string fromPath, string toPath) => File.Move(fromPath, toPath);
+
+        public string[] GetFilesInDirectory(string directoryPath)
+        {
+            return Directory.GetFiles(directoryPath);
+        }
+
+        public bool IsFileExists(string filePath) => File.Exists(filePath);
+        public byte[] ReadAllBytes(string filePath) => File.ReadAllBytes(filePath);
+        public void WriteAllBytes(string filePath, byte[] data)
+        {
+            File.WriteAllBytes(filePath, data);
+        }
     }
 }
