@@ -7,6 +7,8 @@ using WB.Services.Export.CsvExport;
 using WB.Services.Export.CsvExport.Exporters;
 using WB.Services.Export.CsvExport.Implementation.DoFiles;
 using WB.Services.Export.DescriptionGenerator;
+using WB.Services.Export.ExportProcessHandlers.Externals;
+using WB.Services.Export.ExportProcessHandlers.Implementation;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Infrastructure.Implementation;
 using WB.Services.Export.Interview;
@@ -25,7 +27,7 @@ namespace WB.Services.Export
             // Transients
             services.AddTransient<IFileSystemAccessor, FileSystemAccessor>();
             services.AddTransient<ICsvWriter, CsvWriter>();
-            services.AddTransient<ICsvExport, CsvExport.Implementation.CsvExport>();
+            services.AddTransient<ITabularFormatExportService, CsvExport.Implementation.TabularFormatExportService>();
             services.AddTransient<IProductVersion, ProductVersion>();
             services.AddTransient<ICommentsExporter, CommentsExporter>();
             services.AddTransient<IQuestionnaireExportStructureFactory, QuestionnaireExportStructureFactory>();
@@ -41,6 +43,20 @@ namespace WB.Services.Export
 
             // Singletons
             services.AddSingleton<ICache, Cache>();
+
+            RegisterHandlers(services);
+        }
+
+        private static void RegisterHandlers(IServiceCollection services)
+        {
+            services.AddTransient<BinaryFormatDataExportHandler>();
+            //services.AddTransient<TabularFormatParaDataExportProcessHandler>();
+            services.AddTransient<TabularFormatDataExportHandler>();
+            //services.AddTransient<SpssFormatExportHandler>();
+            //services.AddTransient<StataFormatExportHandler>();
+            services.AddTransient<OnedriveBinaryDataExportHandler>();
+            services.AddTransient<DropboxBinaryDataExportHandler>();;
+            services.AddTransient<GoogleDriveBinaryDataExportHandler>();
         }
     }
 }

@@ -20,7 +20,7 @@ namespace WB.Services.Export.CsvExport.Exporters
 {
     internal class CommentsExporter : ICommentsExporter
     {
-        private readonly InterviewDataExportSettings interviewDataExportSettings;
+        private readonly IOptions<InterviewDataExportSettings> interviewDataExportSettings;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ICsvWriter csvWriter;
         private readonly string dataFileExtension = "tab";
@@ -56,7 +56,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             ITenantApi<IHeadquartersApi> tenantApi,
             ILogger<CommentsExporter> logger)
         {
-            this.interviewDataExportSettings = interviewDataExportSettings.Value;
+            this.interviewDataExportSettings = interviewDataExportSettings;
             this.fileSystemAccessor = fileSystemAccessor;
             this.csvWriter = csvWriter;
             this.tenantApi = tenantApi;
@@ -71,7 +71,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             IProgress<int> progress,
             CancellationToken cancellationToken)
         {
-            var batchSize = this.interviewDataExportSettings.MaxRecordsCountPerOneExportQuery;
+            var batchSize = this.interviewDataExportSettings.Value.MaxRecordsCountPerOneExportQuery;
 
             string commentsFilePath = Path.Combine(basePath, Path.ChangeExtension(this.CommentsFileName, this.dataFileExtension));
             int maxRosterDepthInQuestionnaire = questionnaireExportStructure.HeaderToLevelMap.Values.Max(x => x.LevelScopeVector.Count);
