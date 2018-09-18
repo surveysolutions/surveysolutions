@@ -1,7 +1,7 @@
 ﻿using System;
 using WB.Services.Export.Interview.Entities;
 
-namespace WB.Services.Export.Services
+namespace WB.Services.Export.Interview
 {
     public class InterviewComment
     {
