@@ -2757,14 +2757,20 @@ data-urls@^1.0.0:
     whatwg-mimetype "^2.0.0"
     whatwg-url "^6.4.0"
 
-datatables.net-select@^1.2.5:
-  version "1.2.7"
-  resolved "https://registry.yarnpkg.com/datatables.net-select/-/datatables.net-select-1.2.7.tgz#7d5badfca49c438f8b51df04483d8d77857e917c"
+datatables.net-select@1.2.5:
+  version "1.2.5"
+  resolved "https://registry.yarnpkg.com/datatables.net-select/-/datatables.net-select-1.2.5.tgz#4f764669b464d5576a59c576c1250a5d069aa2e9"
   dependencies:
     datatables.net "^1.10.15"
     jquery ">=1.7"
 
-datatables.net@^1.10.15, datatables.net@^1.10.16:
+datatables.net@1.10.16:
+  version "1.10.16"
+  resolved "https://registry.yarnpkg.com/datatables.net/-/datatables.net-1.10.16.tgz#4b052d1082824261b68eed9d22741b711d3d2469"
+  dependencies:
+    jquery ">=1.7"
+
+datatables.net@^1.10.15:
   version "1.10.19"
   resolved "https://registry.yarnpkg.com/datatables.net/-/datatables.net-1.10.19.tgz#97a1ed41c85e62d61040603481b59790a172dd1f"
   dependencies:
