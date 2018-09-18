@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,7 +8,7 @@ using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Services;
 using WB.Services.Export.Tenant;
 
-namespace WB.Services.Export.Interview.Exporters
+namespace WB.Services.Export.Interview
 {
     public interface IInterviewFactory
     {

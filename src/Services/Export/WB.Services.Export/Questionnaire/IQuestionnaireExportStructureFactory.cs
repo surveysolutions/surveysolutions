@@ -1,8 +1,6 @@
-﻿using System.Threading.Tasks;
-using WB.Services.Export.Questionnaire;
-using WB.Services.Export.Tenant;
+﻿using WB.Services.Export.Tenant;
 
-namespace WB.Services.Export.Interview
+namespace WB.Services.Export.Questionnaire
 {
     internal interface IQuestionnaireExportStructureFactory
     {

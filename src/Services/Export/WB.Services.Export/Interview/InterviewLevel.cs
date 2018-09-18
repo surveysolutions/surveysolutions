@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using WB.Services.Export.Interview.Entities;
 
-namespace WB.Services.Export.Interview.Exporters
+namespace WB.Services.Export.Interview
 {
     public class InterviewLevel
     {

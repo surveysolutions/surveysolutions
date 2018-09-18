@@ -6,14 +6,15 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using WB.Services.Export.CsvExport.Exporters;
 using WB.Services.Export.Infrastructure;
-using WB.Services.Export.Interview.Exporters;
+using WB.Services.Export.Interview;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Export.Services;
 using WB.Services.Export.Tenant;
 
-namespace WB.Services.Export.Interview
+namespace WB.Services.Export.CsvExport.Implementation
 {
     internal class CsvExport : ICsvExport
     {
@@ -35,7 +36,7 @@ namespace WB.Services.Export.Interview
         private readonly IInterviewsExporter interviewsExporter;
 
         public CsvExport(IFileSystemAccessor fileSystemAccessor,
-            ICsvWriter csvWriter, 
+            ICsvWriter csvWriter,
             ILogger<CsvExport> logger,
             IOptions<InterviewDataExportSettings> exportSettings,
             ITenantApi<IHeadquartersApi> tenantApi,
@@ -103,8 +104,10 @@ namespace WB.Services.Export.Interview
 
             exportWatch.Stop();
 
+
             this.logger.Log(LogLevel.Information, $"Export with all steps finished for questionnaire {questionnaireIdentity}. " +
                              $"Took {exportWatch.Elapsed:c} to export {interviewIdsToExport.Count} interviews");
+
         }
     }
 }

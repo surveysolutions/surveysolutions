@@ -9,7 +9,7 @@ using Amazon.S3.Transfer;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
-namespace WB.Services.Export.Services.Processing
+namespace WB.Services.Export.Services.Processing.Good
 {
     public class S3FileStorage : IExternalFileStorage
     {

@@ -1,6 +1,7 @@
 ﻿using System;
+using WB.Services.Export.Interview;
 
-namespace WB.Services.Export.Interview.Exporters
+namespace WB.Services.Export.CsvExport.Exporters
 {
     public class InterviewDataExportLevelView
     {
