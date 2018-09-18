@@ -42,7 +42,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     compositeQuestionParts.Add(CompositeItemType.Self, new CompositeCollection<ICompositeEntity>());
 
                     if (compositeQuestion is ICompositeQuestionWithChildren compositeItemWithChildren)
-                        compositeQuestionParts.Add(CompositeItemType.Childrens, new CompositeCollection<ICompositeEntity>());
+                        compositeQuestionParts.Add(CompositeItemType.Children, new CompositeCollection<ICompositeEntity>());
 
                     compositeQuestionParts.Add(CompositeItemType.Validity, new CompositeCollection<ICompositeEntity>());
                     compositeQuestionParts.Add(CompositeItemType.Warnings, new CompositeCollection<ICompositeEntity>());
@@ -110,10 +110,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
                 itemCompositeCollections[CompositeItemType.Self].Add(compositeQuestion);
 
-                if (itemCompositeCollections.ContainsKey(CompositeItemType.Childrens))
+                if (itemCompositeCollections.ContainsKey(CompositeItemType.Children))
                 {
                     if (compositeQuestion is ICompositeQuestionWithChildren compositeItemWithChildren)
-                        itemCompositeCollections[CompositeItemType.Childrens].AddCollection(
+                        itemCompositeCollections[CompositeItemType.Children].AddCollection(
                             compositeItemWithChildren.Children);
                 }
 
@@ -129,7 +129,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             Title = 1,
             Instruction = 2,
             Self = 3,
-            Childrens = 4,
+            Children = 4,
             Validity = 5,
             Warnings = 6,
             Comments = 7,
