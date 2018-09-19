@@ -1,5 +1,4 @@
-﻿using WB.Services.Export.Interview;
-using WB.Services.Export.Questionnaire;
+﻿using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Tenant;
 
 namespace WB.Services.Export.Infrastructure

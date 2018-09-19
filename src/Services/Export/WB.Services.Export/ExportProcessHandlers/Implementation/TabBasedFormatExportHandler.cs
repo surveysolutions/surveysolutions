@@ -5,7 +5,6 @@ using Microsoft.Extensions.Options;
 using WB.Services.Export.CsvExport;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
-using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Services.Processing;
 
 namespace WB.Services.Export.ExportProcessHandlers.Implementation
