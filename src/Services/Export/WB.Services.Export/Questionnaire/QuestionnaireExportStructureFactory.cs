@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Threading.Tasks;
-
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Interview.Entities;
