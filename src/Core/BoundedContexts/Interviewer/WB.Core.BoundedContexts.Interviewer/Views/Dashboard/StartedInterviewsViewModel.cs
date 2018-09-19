@@ -17,21 +17,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public override string TabTitle => InterviewerUIResources.Dashboard_StartedLinkText;
         public override string TabDescription => InterviewerUIResources.Dashboard_StartedTabText;
         
-        private readonly IPrincipal principal;
-
         public event EventHandler<InterviewRemovedArgs> OnInterviewRemoved;
 
         public StartedInterviewsViewModel(IPlainStorage<InterviewView> interviewViewRepository, 
             IInterviewViewModelFactory viewModelFactory,
             IPlainStorage<PrefilledQuestionView> identifyingQuestionsRepo,
-            IPrincipal principal) : base(viewModelFactory, interviewViewRepository, identifyingQuestionsRepo)
+            IPrincipal principal) : base(viewModelFactory, interviewViewRepository, identifyingQuestionsRepo, principal)
         {
-            this.principal = principal;
         }
 
         protected override Expression<Func<InterviewView, bool>> GetDbQuery()
         {
-            var interviewerId = this.principal.CurrentUserIdentity.UserId;
+            var interviewerId = this.Principal.CurrentUserIdentity.UserId;
 
             return interview => interview.ResponsibleId == interviewerId &&
                 (interview.Status == SharedKernels.DataCollection.ValueObjects.Interview.InterviewStatus.InterviewerAssigned ||
