@@ -2,10 +2,7 @@
     <div class="information-block comments-block">
 
         <template v-for="comment in $me.comments">
-            <div :class="{'enumerators-comment': comment.userRole == 4 /*'Interviewer'*/}" :key="comment.commentTimeUtc">
-                <h6>{{ getCommentTitle(comment) }}</h6>
-                <p>{{ comment.text }}</p>
-            </div>
+            <wb-comment-item :userRole="comment.userRole" :text="comment.text" :isOwnComment="comment.isOwnComment" :key="comment.commentTimeUtc" />
         </template>
 
         <div class="comment active" v-if="isShowingAddCommentDialog">
@@ -19,7 +16,9 @@
                             :title="inputTitle"/>
                         <div class="input-group-btn">
                             <button type="button" class="btn btn-default btn-post-comment"
-                                :class="buttonClass" @click="postComment($event)" :disabled="!allowPostComment">
+                                :class="buttonClass" 
+                                @click="postComment($event)" 
+                                :disabled="!allowPostComment">
                                 {{ postBtnText }}
                             </button>
                         </div>

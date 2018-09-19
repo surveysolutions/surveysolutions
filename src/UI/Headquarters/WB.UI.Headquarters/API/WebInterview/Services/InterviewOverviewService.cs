@@ -21,9 +21,9 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                 .Select(x => BuildOverviewNode(x, interview, sections));
         }
 
-        public OverviewItemAdditionalInfo GetOverviewItemAdditionalInfo(IStatefulInterview interview, string id)
+        public OverviewItemAdditionalInfo GetOverviewItemAdditionalInfo(IStatefulInterview interview, string entityId, Guid currentUserId)
         {
-            if (!Identity.TryParse(id, out Identity identity))
+            if (!Identity.TryParse(entityId, out Identity identity))
             {
                 return null;
             }
@@ -31,13 +31,13 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
             var question = interview.GetQuestion(identity);
             if (question != null)
             {
-                return new OverviewItemAdditionalInfo(question, interview);
+                return new OverviewItemAdditionalInfo(question, interview, currentUserId);
             }
 
-            InterviewTreeStaticText staticText = interview.GetStaticText(identity);
+            var staticText = interview.GetStaticText(identity);
             if (staticText != null)
             {
-                return new OverviewItemAdditionalInfo(staticText, interview);
+                return new OverviewItemAdditionalInfo(staticText, interview, currentUserId);
             }
 
             return null;

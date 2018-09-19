@@ -7,39 +7,43 @@
         <div class="popover-content">
             <div v-if="errors.length > 0">
                 <div class="information-block text-danger">
-                    <h6>Data error</h6>
+                    <h6>{{ $t("WebInterviewUI.AnswerIsInvalid") }}</h6>
                     <p v-for="(error, index) in errors" :key="index">{{error}}</p>
                 </div>
                 <hr />
             </div>
             <div v-if="warnings.length > 0">
                 <div class="information-block text-warning">
-                    <h6>Data warning</h6>
+                    <h6>{{ $t("WebInterviewUI.WarningsHeader") }}</h6>
                     <p v-for="(warning, index) in warnings" :key="index">{{warning}}</p>
                 </div>
                 <hr />
             </div>
             <div class="information-block comments-block">
-                <div class="enumerators-comment">
-                    <h6>ENUMERATOR'S comment <span>(dec 12)</span></h6>
-                    <p>Please ask about quantity in total for household</p>
-                </div>
-                <h6>Your comment <span>(dec 12)</span></h6>
-                <p>Value of quantity is correct</p>
-                <div class="enumerators-comment">
-                    <h6>ENUMERATOR'S comment <span>(dec 12)</span></h6>
-                    <p>Please ask about quantity in total for household</p>
-                </div>
-                <h6>Your comment <span>(23 hours ago)</span></h6>
-                <p>Ok</p>
+                <template v-for="comment in comments">
+                    <wb-comment-item :userRole="comment.UserRole" :text="comment.Text" :isOwnComment="comment.IsOwnComment" :key="comment.CommentTimeUtc" />
+                </template>
                 <div class="comment" v-if="isCommentFormIsVisible">
-                    <form class="form-inline">
-                        <label>Enter Your comment</label>
+                    <form class="form-inline" onsubmit="return false;">
+                        <label>{{ $t("WebInterviewUI.CommentYours") }}</label>
                         <div class="form-group">
                             <div class="input-group comment-field">
-                                <input type="text" class="form-control" aria-label="..." placeholder="Tap to enter your comment">
+                                <textarea-autosize 
+                                    autocomplete="off"
+                                    rows="1"
+                                    v-on:keyup.enter="postComment" 
+                                    v-model="comment"
+                                    :placeholder='$t("WebInterviewUI.CommentEnter")' 
+                                    :disabled="!$store.getters.addCommentsAllowed"
+                                    class="form-control"
+                                    :title="inputTitle"/>
                                 <div class="input-group-btn">
-                                    <button @click="postComment" type="button" class="btn btn-default  btn-post-comment">Post</button>
+                                    <button 
+                                        @click="postComment($event)" 
+                                        :disabled="!$store.getters.addCommentsAllowed" 
+                                        type="button" 
+                                        class="btn btn-default  btn-post-comment">
+                                        {{postBtnText}}</button>
                                 </div>
                             </div>
                         </div>
@@ -48,8 +52,8 @@
             </div>
         </div>
         <div class="popover-footer clearftix">
-            <button type="button" @click="showAddCommentForm" class="btn btn-link gray-action-unit pull-left add-comment">Add comment</button>
-            <button type="button" @click="close" class="btn btn-link gray-action-unit pull-right close-popover">close</button>
+            <button type="button" v-if="item.SupportsComments" @click="showAddCommentForm" class="btn btn-link gray-action-unit pull-left add-comment">Add comment</button>
+            <button type="button" @click="close" class="btn btn-link gray-action-unit pull-right close-popover">Close</button>
         </div>
     </div>
 </template>
@@ -66,7 +70,8 @@ export default {
         return {
             isAdditionalInfoVisible: false,
             isCommentFormIsVisible: false,
-            
+            comment: null,
+            postingComment: false
         };
     },
     methods: 
@@ -81,8 +86,25 @@ export default {
         showAddCommentForm(){
             this.isCommentFormIsVisible = true;
         },
-        postComment(){
+        async postComment(evnt){
+            this.postingComment = true;
+            const com = this.comment
+
+            if (!com || !com.trim())
+                return
+
+            await this.$store.dispatch("sendNewComment", { questionId: this.item.Id, comment: com.trim() })
+
+            this.$store.dispatch("loadAdditionalInfo", { id: this.item.Id });
+
+            this.comment = ''
+            if(evnt && evnt.target) {
+                evnt.target.blur()
+            }
+
+            this.item.HasComment = true;
             this.isCommentFormIsVisible = false;
+            this.postingComment = false;
         }
     },
     computed: {
@@ -97,6 +119,15 @@ export default {
         },
         comments() {
             return this.additionalInfo.Comments || [];
+        },
+        postBtnText() {
+            return this.postingComment ? this.$t("WebInterviewUI.CommentPosting") : this.$t("WebInterviewUI.CommentPost")
+        },
+        inputTitle() {
+            if (this.$store.state.webinterview.receivedByInterviewer === true) {
+                return this.$t('WebInterviewUI.InterviewReceivedCantModify')
+            }
+            return "";
         },
     },
 }

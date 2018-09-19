@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
@@ -33,6 +34,7 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Interview.Overview
             this.HasWarnings = interview.GetFailedWarningMessages(treeQuestion.Identity, string.Empty).Any();
             HasComment = treeQuestion.AnswerComments.Count > 0;
             this.AnswerTimeUtc = treeQuestion.AnswerTimeUtc;
+            this.SupportsComments = true;
         }
 
         public bool HasErrors { get; set; }
@@ -50,23 +52,44 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Interview.Overview
 
     public class OverviewItemAdditionalInfo
     {
-        public OverviewItemAdditionalInfo(InterviewTreeQuestion treeQuestion, IStatefulInterview interview)
+        public OverviewItemAdditionalInfo(InterviewTreeQuestion treeQuestion, IStatefulInterview interview, Guid currentUserId)
         {
             this.Errors = interview.GetFailedValidationMessages(treeQuestion.Identity, null).ToArray();
             this.Warnings = interview.GetFailedWarningMessages(treeQuestion.Identity, string.Empty).ToArray();
-            this.Comment = treeQuestion.AnswerComments;
+            this.Comments = GetComments(treeQuestion.AnswerComments, currentUserId).ToList();
         }
 
-        public OverviewItemAdditionalInfo(InterviewTreeStaticText treeText, IStatefulInterview interview)
+        public OverviewItemAdditionalInfo(InterviewTreeStaticText treeText, IStatefulInterview interview, Guid currentUserId)
         {
             this.Errors = interview.GetFailedValidationMessages(treeText.Identity, null).ToArray();
             this.Warnings = interview.GetFailedWarningMessages(treeText.Identity, string.Empty).ToArray();
         }
 
-        public List<AnswerComment> Comment { get; set; } = new List<AnswerComment>();
+        private static IEnumerable<OverviewAnswerComment> GetComments(List<AnswerComment> answerComments, Guid currentUserId)
+        {
+            return answerComments.Select(x => new OverviewAnswerComment
+            {
+                Text = x.Comment,
+                IsOwnComment = x.UserId == currentUserId,
+                UserRole = x.UserRole,
+                CommentTimeUtc = x.CommentTime,
+                EntityId = x.QuestionIdentity.ToString()
+            });
+        }
+
+        public List<OverviewAnswerComment> Comments { get; set; } = new List<OverviewAnswerComment>();
 
         public string[] Warnings { get; set; }
 
         public string[] Errors { get; set; }
+    }
+
+    public class OverviewAnswerComment 
+    {
+        public string Text { get; set; }
+        public bool IsOwnComment { get; set; }
+        public UserRoles UserRole { get; set; }
+        public DateTime CommentTimeUtc { get; set; }
+        public string EntityId { get; set; }
     }
 }

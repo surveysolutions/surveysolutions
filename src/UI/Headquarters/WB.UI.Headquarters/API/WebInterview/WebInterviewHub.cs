@@ -116,7 +116,8 @@ namespace WB.UI.Headquarters.API.WebInterview
         public OverviewItemAdditionalInfo OverviewItemAdditionalInfo(string id)
         {
             var statefulInterview = this.GetCallerInterview();
-            var additionalInfo = this.overviewService.GetOverviewItemAdditionalInfo(statefulInterview, id);
+            var currentUserId = this.authorizedUser.Id;
+            var additionalInfo = this.overviewService.GetOverviewItemAdditionalInfo(statefulInterview, id, currentUserId);
             return additionalInfo;
         }
 
