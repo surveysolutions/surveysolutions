@@ -7,14 +7,10 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Hosting;
 using Prometheus;
 using WB.Services.Export.Host.Infra;
 using WB.Services.Export.Host.Scheduler;
-using WB.Services.Export.Infrastructure;
-using WB.Services.Export.Infrastructure.Implementation;
-using WB.Services.Export.Services;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace WB.Services.Export.Host

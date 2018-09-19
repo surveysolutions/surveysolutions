@@ -1,6 +1,4 @@
-﻿using Autofac;
-using WB.Services.Export.Infrastructure.Implementation;
-using WB.Services.Export.Tenant;
+﻿using WB.Services.Export.Tenant;
 
 namespace WB.Services.Export.Infrastructure
 {

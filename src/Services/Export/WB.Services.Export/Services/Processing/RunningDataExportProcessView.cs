@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Concurrent;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Questionnaire;
-using WB.Services.Export.Questionnaire.Services;
 
 namespace WB.Services.Export.Services.Processing
 {

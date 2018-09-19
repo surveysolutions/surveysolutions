@@ -121,6 +121,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                 cancellationToken.ThrowIfCancellationRequested();
 
                 var interviewEntities = await this.interviewFactory.GetInterviewEntities(tenant, batch.Id);
+
                 exportBulk.Add(this.ExportSingleInterview(batch,
                     interviewEntities.ToList(),
                     questionnaireExportStructure,

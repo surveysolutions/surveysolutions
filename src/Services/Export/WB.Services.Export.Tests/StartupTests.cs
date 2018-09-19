@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc.Testing;
-using NUnit.Framework;
+﻿using Microsoft.AspNetCore.Mvc.Testing;
 using WB.Services.Export.Host;
 
 namespace WB.Services.Export.Tests
