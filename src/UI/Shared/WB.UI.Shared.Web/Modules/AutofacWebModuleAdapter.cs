@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web.Http.Filters;
 using Autofac;
+using Autofac.Integration.Mvc;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.Modularity.Autofac;
 using FilterScope = System.Web.Mvc.FilterScope;
@@ -178,6 +179,10 @@ namespace WB.UI.Shared.Web.Modules
 
         public void BindMvcFilter<T>(FilterScope filterScope, int? order)
         {
+//            containerBuilder.Register(c => new CustomFilterAttribute(c.Resolve<IProperty>()))
+//                .AsActionFilterFor<HomeController>(c => c.Index())
+//                .InstancePerHttpRequest();
+
             containerBuilder.RegisterType<T>().PropertiesAutowired().InstancePerLifetimeScope();
             //this.Kernel.BindFilter<T>(filterScope, order);
         }
@@ -213,6 +218,22 @@ namespace WB.UI.Shared.Web.Modules
         public void BindHttpFilterWhenControllerHasAttribute<T, TAttribute>(System.Web.Http.Filters.FilterScope filterScope,
             ConstructorArgument constructorArgument) where T : IFilter
         {
+//            switch (filterScope)
+//            {
+//                case System.Web.Http.Filters.FilterScope.Global:
+//                    containerBuilder.RegisterType(typeof(T)).AsActionFilterFor<System.Web.Mvc.Controller>().InstancePerRequest();
+//                    return;
+//                case System.Web.Http.Filters.FilterScope.Controller:
+//                    containerBuilder.RegisterType(typeof(T)).AsFilterActionFilterFor<System.Web.Mvc.Controller>().InstancePerRequest();
+//                    return;
+//                case System.Web.Http.Filters.FilterScope.Action:
+//                    containerBuilder.RegisterType(typeof(T)).AsActionFilterFor<System.Web.Mvc.Controller>().InstancePerRequest();
+//                    return;
+//
+//                default:
+//                    throw new ArgumentException("Unknown ");
+//            }
+
             containerBuilder.RegisterType<T>().PropertiesAutowired().InstancePerLifetimeScope();
 
             //throw new NotImplementedException();

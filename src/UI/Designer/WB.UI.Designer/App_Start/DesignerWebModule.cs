@@ -27,9 +27,10 @@ namespace WB.UI.Designer
         public void Load(IWebIocRegistry registry)
         {
             //registry.Bind<ILog>().ToConstant(new Log()).InSingletonScope();
-
-            registry.BindMvcFilter<CustomHandleErrorFilter>(FilterScope.Global, 20);
-            registry.BindMvcFilter<CustomAuthorizeFilter>(FilterScope.Global, 20);
+            registry.Bind<CustomHandleErrorFilter>();
+            registry.Bind<CustomAuthorizeFilter>();
+            //            registry.BindMvcFilter<CustomHandleErrorFilter>(FilterScope.Global, 20);
+            //            registry.BindMvcFilter<CustomAuthorizeFilter>(FilterScope.Global, 20);
 
             registry.Bind<IJsonAllTypesSerializer, JsonAllTypesSerializer>();
 
@@ -58,6 +59,9 @@ namespace WB.UI.Designer
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
+            System.Web.Mvc.GlobalFilters.Filters.Add(serviceLocator.GetInstance<CustomHandleErrorFilter> ());
+            System.Web.Mvc.GlobalFilters.Filters.Add(serviceLocator.GetInstance<CustomAuthorizeFilter>());
+
             return Task.CompletedTask;
         }
     }
