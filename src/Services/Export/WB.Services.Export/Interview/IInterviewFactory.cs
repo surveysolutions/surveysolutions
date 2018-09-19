@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview.Entities;
 using WB.Services.Export.Questionnaire;
+using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Export.Services;
 using WB.Services.Export.Tenant;
 
@@ -14,22 +16,36 @@ namespace WB.Services.Export.Interview
     {
         Task<IEnumerable<InterviewEntity>> GetInterviewEntities(TenantInfo tenant, Guid interviewId);
         Dictionary<string, InterviewLevel> GetInterviewDataLevels(QuestionnaireDocument questionnaire, List<InterviewEntity> interviewEntities);
-        InterviewStringAnswer[] GetMultimediaAnswersByQuestionnaire(QuestionnaireId settingsQuestionnaireId);
-        InterviewStringAnswer[] GetAudioAnswersByQuestionnaire(QuestionnaireId settingsQuestionnaireId);
+        Task<List<MultimediaAnswer>> GetMultimediaAnswersByQuestionnaire(TenantInfo tenant,
+            QuestionnaireDocument questionnaire, Guid[] interviewIds, CancellationToken cancellationToken);
+    }
+
+    public struct MultimediaAnswer
+    {
+        public Guid InterviewId { get; set; }
+        public string Answer { get; set; }
+        public MultimediaType Type { get; set; }
+    }
+
+    public enum MultimediaType
+    {
+        Image, Audio
     }
 
     internal class InterviewFactory : IInterviewFactory
     {
-        private readonly ITenantApi<IHeadquartersApi> headquartersApi;
+        private readonly ITenantApi<IHeadquartersApi> tenantApi;
+        private readonly IQuestionnaireStorage questionnaireStorage;
 
-        public InterviewFactory(ITenantApi<IHeadquartersApi> headquartersApi)
+        public InterviewFactory(ITenantApi<IHeadquartersApi> tenantApi, IQuestionnaireStorage questionnaireStorage)
         {
-            this.headquartersApi = headquartersApi;
+            this.tenantApi = tenantApi;
+            this.questionnaireStorage = questionnaireStorage;
         }
 
         public async Task<IEnumerable<InterviewEntity>> GetInterviewEntities(TenantInfo tenant, Guid interviewId)
         {
-            var api = this.headquartersApi.For(tenant);
+            var api = this.tenantApi.For(tenant);
             var entities = await api.GetInterviewAsync(interviewId);
             return entities;
         }
@@ -43,15 +59,46 @@ namespace WB.Services.Export.Interview
             var interviewDataLevels = interviewLevels.ToDictionary(k => CreateLevelIdFromPropagationVector(k.RosterVector), v => v);
             return interviewDataLevels;
         }
-
-        public InterviewStringAnswer[] GetMultimediaAnswersByQuestionnaire(QuestionnaireId settingsQuestionnaireId)
+        
+        public async Task<List<MultimediaAnswer>> GetMultimediaAnswersByQuestionnaire(TenantInfo tenant,
+            QuestionnaireDocument questionnaire, Guid[] interviewIds, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
-        }
+            var entities = questionnaire.Children.TreeToEnumerable(c => c.Children)
+                .Where(c => c is MultimediaQuestion || c is AudioQuestion)
+                .Select(c => (c.PublicKey, c.GetType()))
+                .ToDictionary(c => c.Item1, c => c.Item2);
 
-        public InterviewStringAnswer[] GetAudioAnswersByQuestionnaire(QuestionnaireId settingsQuestionnaireId)
-        {
-            throw new NotImplementedException();
+            var api = this.tenantApi.For(tenant);
+            
+            var answerLines = await api.GetInterviewBatchAsync(interviewIds, entities.Keys.ToArray());
+
+            return answerLines.Select(a =>
+            {
+                var type = entities[a.Identity.Id];
+
+                if (type == typeof(MultimediaQuestion))
+                {
+                    return new MultimediaAnswer
+                    {
+                        Answer = a.AsString,
+                        InterviewId = a.InterviewId,
+                        Type = MultimediaType.Image
+                    };
+                }
+
+                if (type == typeof(AudioQuestion))
+                {
+                    return new MultimediaAnswer
+                    {
+                        Answer = a.AsAudio.FileName,
+                        InterviewId = a.InterviewId,
+                        Type = MultimediaType.Audio
+                    };
+                }
+
+                throw new NotSupportedException();
+
+            }).ToList();
         }
 
         public static string CreateLevelIdFromPropagationVector(RosterVector vector)

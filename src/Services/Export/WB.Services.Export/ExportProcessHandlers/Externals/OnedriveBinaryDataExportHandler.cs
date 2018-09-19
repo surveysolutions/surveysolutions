@@ -5,11 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Microsoft.Graph;
 using Microsoft.OneDrive.Sdk;
+using WB.Services.Export.ExportProcessHandlers.Implementation;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
-using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Export.Services.Processing;
-using WB.Services.Export.Services.Storage;
 
 namespace WB.Services.Export.ExportProcessHandlers.Externals
 {
@@ -17,17 +16,13 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
     {
         public OnedriveBinaryDataExportHandler(
             IFileSystemAccessor fileSystemAccessor,
-            IImageFileStorage imageFileRepository,
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor,
             IOptions<InterviewDataExportSettings> interviewDataExportSettings,
-            IInterviewFactory interviewFactory,
             IDataExportProcessesService dataExportProcessesService,
-            IQuestionnaireStorage questionnaireStorage,
-            IDataExportFileAccessor dataExportFileAccessor,
-            IAudioFileStorage audioFileStorage)
+            IBinaryDataSource binaryDataSource,
+            IDataExportFileAccessor dataExportFileAccessor)
             : base(fileSystemAccessor, filebasedExportedDataAccessor, interviewDataExportSettings,
-                dataExportProcessesService, dataExportFileAccessor, questionnaireStorage,
-                interviewFactory, imageFileRepository, audioFileStorage)
+                dataExportProcessesService, dataExportFileAccessor, binaryDataSource)
         {
         }
 
@@ -47,14 +42,15 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
             return null;
         }
 
-        protected override string CreateApplicationFolder() => "Survey Solutions";
+        protected override Task<string> CreateApplicationFolderAsync() => Task.FromResult("Survey Solutions");
 
-        protected override string CreateFolder(string applicationFolder, string folderName) => $"{applicationFolder}/{folderName}";
+        protected override Task<string> CreateFolderAsync(string applicationFolder, string folderName) 
+            =>Task.FromResult($"{applicationFolder}/{folderName}");
 
-        protected override void UploadFile(string folder, byte[] fileContent, string fileName)
+        protected override async Task UploadFileAsync(string folder, byte[] fileContent, string fileName)
         {
             var request = oneDriveClient.Drive.Root.ItemWithPath($"{folder}/{fileName}").Content.Request();
-            request.PutAsync<Item>(new MemoryStream(fileContent)).Wait();
+            await request.PutAsync<Item>(new MemoryStream(fileContent));
         }
     }
 }

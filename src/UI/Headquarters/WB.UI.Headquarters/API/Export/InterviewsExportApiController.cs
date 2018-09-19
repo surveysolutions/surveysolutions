@@ -27,7 +27,7 @@ namespace WB.UI.Headquarters.API.Export
         public InterviewsExportApiController(
             IInterviewsToExportViewFactory viewFactory,
             IInterviewFactory interviewFactory,
-            IInterviewDiagnosticsFactory interviewDiagnosticsFactory, 
+            IInterviewDiagnosticsFactory interviewDiagnosticsFactory,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatuses)
         {
             this.viewFactory = viewFactory ?? throw new ArgumentNullException(nameof(viewFactory));
@@ -58,9 +58,20 @@ namespace WB.UI.Headquarters.API.Export
         [ServiceApiKeyAuthorization]
         [HttpGet]
         [ApiNoCache]
-        public HttpResponseMessage GetInterview(Guid id)
+        public HttpResponseMessage GetInterview(Guid id, [FromUri] Guid[] entityId = null)
         {
             List<InterviewEntity> entities = this.interviewFactory.GetInterviewEntities(id);
+
+            return Request.CreateResponse(HttpStatusCode.OK, entities);
+        }
+
+        [Route("api/export/v1/interviews")]
+        [ServiceApiKeyAuthorization]
+        [HttpGet]
+        [ApiNoCache]
+        public HttpResponseMessage GetInterviews([FromUri]Guid[] id, [FromUri] Guid[] entityId = null)
+        {
+            var entities = this.interviewFactory.GetInterviewEntities(id, entityId);
 
             return Request.CreateResponse(HttpStatusCode.OK, entities);
         }
@@ -78,7 +89,7 @@ namespace WB.UI.Headquarters.API.Export
                 var entities = this.viewFactory.GetInterviewComments(interviewId);
                 response.Add((interviewId, entities));
             }
-            
+
             return Request.CreateResponse(HttpStatusCode.OK, response);
         }
 
