@@ -59,11 +59,22 @@ export default {
     },
     methods: {
         showAdditionalDetails(){
+            if (this.item.isGroup || this.item.isSection) 
+                return;
+            
+            const cantLeaveCommentAndNoWarningsNoErrors = !this.item.SupportsComments 
+                && !this.item.HasWarnings 
+                && !this.item.HasErrors;
+
+            if (cantLeaveCommentAndNoWarningsNoErrors)
+                return;
+
             this.$emit("showAdditionalInfo", this);
             this.$refs.additionalInfo.show();
         },
         hideAdditionalDetails(){
-            this.$refs.additionalInfo.close();
+            if (this.$refs.additionalInfo)
+                this.$refs.additionalInfo.close();
         }
     },
     computed: {

@@ -8481,6 +8481,7 @@ body > .ui-pnotify {
   .custom-popover .popover-footer {
     padding: 0 10px; }
   .custom-popover .comments-block .comment {
+    display: block;
     margin-bottom: 15px; }
     .custom-popover .comments-block .comment label {
       color: #3f3f3f; }

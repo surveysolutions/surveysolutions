@@ -533,6 +533,7 @@ body > .ui-pnotify{
         padding: 0 10px;
     }
     .comments-block .comment{
+        display: block;
         label{
             color: $gray_text;
         }
