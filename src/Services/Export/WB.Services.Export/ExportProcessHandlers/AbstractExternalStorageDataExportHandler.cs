@@ -1,12 +1,11 @@
 ﻿using System;
-using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
+using WB.Services.Export.ExportProcessHandlers.Implementation;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
-using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Export.Services.Processing;
-using WB.Services.Export.Services.Storage;
 using WB.Services.Export.Utils;
 
 namespace WB.Services.Export.ExportProcessHandlers
@@ -14,11 +13,7 @@ namespace WB.Services.Export.ExportProcessHandlers
     internal abstract class AbstractExternalStorageDataExportHandler : AbstractDataExportHandler,
         IExportProcessHandler<ExportBinaryToExternalStorage>
     {
-        private readonly IQuestionnaireStorage questionnaireStorage;
-        
-        private readonly IInterviewFactory interviewFactory;
-        private readonly IImageFileStorage imageFileRepository;
-        private readonly IAudioFileStorage audioFileStorage;
+        private readonly IBinaryDataSource binaryDataSource;
         
 
         protected AbstractExternalStorageDataExportHandler(IFileSystemAccessor fileSystemAccessor,
@@ -26,17 +21,11 @@ namespace WB.Services.Export.ExportProcessHandlers
             IOptions<InterviewDataExportSettings> interviewDataExportSettings,
             IDataExportProcessesService dataExportProcessesService, 
             IDataExportFileAccessor dataExportFileAccessor,
-            IQuestionnaireStorage questionnaireStorage,
-            IInterviewFactory interviewFactory,
-            IImageFileStorage imageFileRepository,
-            IAudioFileStorage audioFileStorage) :
+            IBinaryDataSource binaryDataSource) :
             base(fileSystemAccessor, filebasedExportedDataAccessor, interviewDataExportSettings,
                 dataExportProcessesService, dataExportFileAccessor)
         {
-            this.questionnaireStorage = questionnaireStorage;
-            this.interviewFactory = interviewFactory;
-            this.imageFileRepository = imageFileRepository;
-            this.audioFileStorage = audioFileStorage;
+            this.binaryDataSource = binaryDataSource;
         }
 
         protected override DataExportFormat Format => DataExportFormat.Binary;
@@ -45,58 +34,66 @@ namespace WB.Services.Export.ExportProcessHandlers
         protected override void ExportDataIntoDirectory(ExportSettings settings, IProgress<int> progress,
             CancellationToken cancellationToken)
         {
-            var questionnaire = this.questionnaireStorage.GetQuestionnaireAsync(settings.Tenant, settings.QuestionnaireId).Result;
+            //var questionnaire = this.questionnaireStorage.GetQuestionnaireAsync(settings.Tenant, settings.QuestionnaireId).Result;
 
-            cancellationToken.ThrowIfCancellationRequested();
+            //cancellationToken.ThrowIfCancellationRequested();
 
-            var allMultimediaAnswers = this.interviewFactory.GetMultimediaAnswersByQuestionnaire(settings.QuestionnaireId);
+            //var allMultimediaAnswers = this.interviewFactory.GetMultimediaAnswersByQuestionnaire(settings.QuestionnaireId);
 
-            cancellationToken.ThrowIfCancellationRequested();
+            //cancellationToken.ThrowIfCancellationRequested();
 
-            var allAudioAnswers = this.interviewFactory.GetAudioAnswersByQuestionnaire(settings.QuestionnaireId);
+            //var allAudioAnswers = this.interviewFactory.GetAudioAnswersByQuestionnaire(settings.QuestionnaireId);
 
-            var interviewIds = allMultimediaAnswers.Select(x => x.InterviewId)
-                .Union(allAudioAnswers.Select(x => x.InterviewId)).Distinct().ToList();
+            //var interviewIds = allMultimediaAnswers.Select(x => x.InterviewId)
+            //    .Union(allAudioAnswers.Select(x => x.InterviewId)).Distinct().ToList();
 
-            cancellationToken.ThrowIfCancellationRequested();
+            //cancellationToken.ThrowIfCancellationRequested();
 
             long totalInterviewsProcessed = 0;
 
-            if (!interviewIds.Any()) return;
+            //if (!interviewIds.Any()) return;
 
             using (this.GetClient(this.accessToken))
             {
-                var applicationFolder = this.CreateApplicationFolder();
+                var applicationFolder = this.CreateApplicationFolderAsync().Result;
 
                 string GetInterviewFolder(Guid interviewId) => $"{settings.ArchiveName})/{interviewId.FormatGuid()}";
-               
-                foreach (var interviewId in interviewIds)
+
+                binaryDataSource.ForEachMultimediaAnswerAsync(settings, async data =>
                 {
-                    cancellationToken.ThrowIfCancellationRequested();
+                    var interviewFolderPath = await this.CreateFolderAsync(applicationFolder, GetInterviewFolder(data.InterviewId));
+                    await this.UploadFileAsync(interviewFolderPath, data.Content, data.Answer);
 
-                    var interviewFolderPath = this.CreateFolder(applicationFolder, GetInterviewFolder(interviewId));
+                }, cancellationToken).Wait();
+                
+               
+                //foreach (var interviewId in interviewIds)
+                //{
+                //    cancellationToken.ThrowIfCancellationRequested();
 
-                    foreach (var imageFileName in allMultimediaAnswers.Where(x => x.InterviewId == interviewId)
-                        .Select(x => x.Answer))
-                    {
-                        var fileContent = imageFileRepository.GetInterviewBinaryData(interviewId, imageFileName);
+                //    var interviewFolderPath = this.CreateFolder(applicationFolder, GetInterviewFolder(interviewId));
 
-                        if (fileContent != null)
-                            this.UploadFile(interviewFolderPath, fileContent, imageFileName);
-                    }
+                //    foreach (var imageFileName in allMultimediaAnswers.Where(x => x.InterviewId == interviewId)
+                //        .Select(x => x.Answer))
+                //    {
+                //        var fileContent = imageFileRepository.GetInterviewBinaryData(interviewId, imageFileName);
 
-                    foreach (var audioFileName in allAudioAnswers.Where(x => x.InterviewId == interviewId)
-                        .Select(x => x.Answer))
-                    {
-                        var fileContent = audioFileStorage.GetInterviewBinaryData(interviewId, audioFileName);
+                //        if (fileContent != null)
+                //            this.UploadFile(interviewFolderPath, fileContent, imageFileName);
+                //    }
 
-                        if (fileContent != null)
-                            this.UploadFile(interviewFolderPath, fileContent, audioFileName);
-                    }
+                //    foreach (var audioFileName in allAudioAnswers.Where(x => x.InterviewId == interviewId)
+                //        .Select(x => x.Answer))
+                //    {
+                //        var fileContent = audioFileStorage.GetInterviewBinaryData(interviewId, audioFileName);
 
-                    totalInterviewsProcessed++;
-                    progress.Report(totalInterviewsProcessed.PercentOf(interviewIds.Count));
-                }
+                //        if (fileContent != null)
+                //            this.UploadFile(interviewFolderPath, fileContent, audioFileName);
+                //    }
+
+                //    totalInterviewsProcessed++;
+                //    progress.Report(totalInterviewsProcessed.PercentOf(interviewIds.Count));
+                //}
             }
         }
 
@@ -109,9 +106,9 @@ namespace WB.Services.Export.ExportProcessHandlers
         protected abstract IDisposable GetClient(string accessToken);
         private string accessToken;
 
-        protected abstract string CreateApplicationFolder();
-        protected abstract string CreateFolder(string applicationFolder, string folderName);
+        protected abstract Task<string> CreateApplicationFolderAsync();
+        protected abstract Task<string> CreateFolderAsync(string applicationFolder, string folderName);
 
-        protected abstract void UploadFile(string folder, byte[] fileContent, string fileName);
+        protected abstract Task UploadFileAsync(string folder, byte[] fileContent, string fileName);
     }
 }

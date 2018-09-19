@@ -9,19 +9,19 @@ using WB.Services.Export.Tenant;
 
 namespace WB.Services.Export.ExportProcessHandlers
 {
+    public class ExportSettings
+    {
+        public QuestionnaireId QuestionnaireId { get; set; }
+        public InterviewStatus? InterviewStatus { get; set; }
+        public DateTime? FromDate { get; set; }
+        public DateTime? ToDate { get; set; }
+        public string ExportDirectory { get; set; }
+        public TenantInfo Tenant { get; set; }
+        public string ArchiveName { get; set; }
+    }
+
     abstract class BaseAbstractDataExportHandler : IExportProcessHandler<DataExportProcessDetails>
     {
-        protected class ExportSettings
-        {
-            public QuestionnaireId QuestionnaireId { get; set; }
-            public InterviewStatus? InterviewStatus { get; set; }
-            public DateTime? FromDate { get; set; }
-            public DateTime? ToDate { get; set; }
-            public string ExportDirectory { get; set; }
-            public TenantInfo Tenant { get; set; }
-            public string ArchiveName { get; set; }
-        }
-
         protected readonly IFileSystemAccessor fileSystemAccessor;
         protected readonly IFilebasedExportedDataAccessor filebasedExportedDataAccessor;
         protected readonly IOptions<InterviewDataExportSettings> interviewDataExportSettings;

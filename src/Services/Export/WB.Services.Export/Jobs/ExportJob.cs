@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using WB.Services.Export.ExportProcessHandlers;
 using WB.Services.Export.ExportProcessHandlers.Externals;
@@ -47,7 +46,7 @@ namespace WB.Services.Export.Jobs
             this.logger = logger;
         }
 
-        public async Task Execute(DataExportProcessDetails pendingExportProcess, CancellationToken cancellationToken)
+        public void Execute(DataExportProcessDetails pendingExportProcess, CancellationToken cancellationToken)
         {
             try
             {
