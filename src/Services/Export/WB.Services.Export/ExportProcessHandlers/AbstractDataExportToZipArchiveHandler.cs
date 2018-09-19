@@ -24,7 +24,9 @@ namespace WB.Services.Export.ExportProcessHandlers
             this.dataExportFileAccessor = dataExportFileAccessor;
         }
 
-        protected override void DoExport(DataExportProcessDetails dataExportProcessDetails, ExportSettings exportSettings, string archiveName,
+        protected override void DoExport(
+            DataExportProcessDetails dataExportProcessDetails, 
+            ExportSettings exportSettings, string archiveName,
             IProgress<int> exportProgress)
         {
             var tempArchivePath = this.fileSystemAccessor.CombinePath(this.exportTempDirectoryPath, this.fileSystemAccessor.GetFileName(archiveName));

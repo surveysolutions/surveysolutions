@@ -34,6 +34,15 @@ namespace WB.Services.Export.Services
         Task<List<InterviewSummary>> GetInterviewSummariesBatchAsync([Query(CollectionFormat.Multi), AliasAs("id")] Guid[] interviewIds);
 
         [Get("/api/export/v1/interview/{id}")]
-        Task<List<InterviewEntity>> GetInterviewAsync([Query] Guid id);
+        Task<List<InterviewEntity>> GetInterviewAsync([Query] Guid id, [Query(CollectionFormat.Multi)] Guid[] entityId = null);
+
+        [Get("/api/export/v1/interview/batch")]
+        Task<List<InterviewEntity>> GetInterviewBatchAsync(
+            [Query(CollectionFormat.Multi), AliasAs("id")]
+            Guid[] interviewId, 
+            [Query(CollectionFormat.Multi)]
+            Guid[] entityId = null);
+
+        Task<byte[]> GetInterviewAudioAsync(Guid answerInterviewId, string answerAnswer);
     }
 }

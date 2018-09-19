@@ -5,6 +5,7 @@ using Npgsql;
 using NpgsqlTypes;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.Caching;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
@@ -430,20 +431,34 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             conn.Execute($"DO $$ BEGIN PERFORM readside.update_report_table_data({interview.id}); END $$;");
         }
 
-        public IEnumerable<InterviewEntity> GetInterviewEntities(IEnumerable<Guid> interviews)
+        [SuppressMessage("ReSharper", "StringLiteralTypo")]
+        public IEnumerable<InterviewEntity> GetInterviewEntities(IEnumerable<Guid> interviews, Guid[] entityIds = null)
         {
             var connection = sessionProvider.GetSession().Connection;
 
             var ids = string.Join(",", interviews.Select(i => "'" + i.ToString() + "'"));
-
+            
             // for some reason Postgres decide that it's good to sequence scan whole interviews table
             // following line will ensure that Postgres will not do that
             connection.Execute("set enable_seqscan=false");
 
-            var queryResult = connection.Query<InterviewEntityDto>(
-                "SELECT interviewid, entityid, rostervector, isenabled, isreadonly, invalidvalidations, warnings, asstring, asint," +
-                " aslong, asdouble, asdatetime, aslist, asintarray, asintmatrix, asgps, asbool, asyesno, asaudio, asarea, hasflag, entity_type as EntityType " +
-                $" from {Table.InterviewsView} where {Column.InterviewId} in ({ids})", commandTimeout: 0, buffered: false);
+            string queryBase =
+                $@"SELECT interviewid, entityid, rostervector, isenabled, 
+                         isreadonly, invalidvalidations, warnings, asstring, asint,
+                         aslong, asdouble, asdatetime, aslist, asintarray, asintmatrix, 
+                         asgps, asbool, asyesno, asaudio, asarea, hasflag, entity_type as EntityType 
+                         from {Table.InterviewsView} ";
+
+            var query = queryBase + $" where {Column.InterviewId} in ({ids})";
+
+            if (entityIds != null && entityIds.Length > 0)
+            {
+                var entityIdCondition = string.Join(",", entityIds.Select(i => "'" + i.ToString() + "'"));
+
+                query += $" and entityid in ({entityIdCondition})";
+            }
+
+            var queryResult = connection.Query<InterviewEntityDto>(query, commandTimeout: 0, buffered: false);
 
             foreach (var result in queryResult)
             {
