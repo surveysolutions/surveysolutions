@@ -45,7 +45,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 }
             });
 
-            var synchronizationService = Mock.Of<ISynchronizationService>(
+            var synchronizationService = Mock.Of<IInterviewerSynchronizationService>(
                 x =>
                     x.GetCensusQuestionnairesAsync(It.IsAny<CancellationToken>()) == Task.FromResult(new List<QuestionnaireIdentity>()) &&
                     x.GetServerQuestionnairesAsync(It.IsAny<CancellationToken>()) == Task.FromResult(new List<QuestionnaireIdentity>()) &&

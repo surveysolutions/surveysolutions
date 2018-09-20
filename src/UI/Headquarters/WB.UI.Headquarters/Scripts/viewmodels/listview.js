@@ -46,7 +46,7 @@
     self.SortOrder = ko.observable("");
     self.SortDirection = ko.observable(false);
     self.OrderBy = function () {
-        return self.SortOrder() == "" ? [] : [{ Direction: self.SortDirection() == false ? 0 : 1, Field: self.SortOrder() }];
+        return self.SortOrder() === "" ? [] : [{ Direction: self.SortDirection() == false ? 0 : 1, Field: self.SortOrder() }];
     };
 
     self.sort = function (so) {
@@ -56,8 +56,8 @@
             return;
         }
         
-        if ((so || "") != "") {
-            if (self.SortOrder() == so) {
+        if ((so || "") !== "") {
+            if (self.SortOrder() === so) {
                 self.SortDirection(!self.SortDirection());
             } else {
                 self.SortDirection(false);
@@ -69,6 +69,8 @@
     };
 
     self.filter = function (onSuccess, onDone) {
+        self.SearchBy(self.SearchBy().trim());
+
         if (self.Pager().CurrentPage() !== 1) 
             self.SetCurrentPageWithoutRunSubscribers(1);
 
@@ -252,7 +254,12 @@
                 }
             },
             order: self.defaultOrder,
+            search: {
+                caseInsensitive: true
+            },
             initComplete: function (settings, json) {
+                self.initSearchControl();
+
                 if (!_.isUndefined(onTableInitComplete))
                     onTableInitComplete();
 
@@ -263,6 +270,8 @@
                 $input.off().on('keyup cut paste',
                     _.debounce(function() { api.search($input.val()).draw(); },
                     searchDelay));
+
+                
             }
         });
     };
@@ -273,5 +282,25 @@
 
     self.getDataTableColumns = function () { return []; }
 
+    self.initSearchControl = function() {
+        var clearSearchButton = $('<button type="button" class="btn btn-link btn-clear"><span></span></button>');
+        var searchInput = $(self.Datatable.table().container()).find('.dataTables_filter label input');
+
+        searchInput.after(clearSearchButton);
+
+        clearSearchButton.on('click', function() {
+            searchInput.val('');
+            self.Datatable.search('').draw();
+        });
+
+        searchInput
+            .off()
+            .on('keyup', function(e) {
+                if((e.ctrlKey && e.keyCode === 86)||(e.key === "Enter")){
+                    searchInput.val(searchInput.val().trim());
+                }
+                self.Datatable.search(searchInput.val().trim()).draw();
+            });
+    };
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.ListView, Supervisor.VM.BasePage);

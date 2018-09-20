@@ -379,7 +379,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (this.maxAllowedAnswers.HasValue)
             {
                 this.MaxAnswersCountMessage = string.Format(UIResources.Interview_MaxAnswersCount,
-                    answersCount, this.maxAllowedAnswers);
+                    answersCount, Math.Min(this.maxAllowedAnswers.Value, this.Options.Count));
             }
         }
     }

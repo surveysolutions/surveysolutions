@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Interviewer.Synchronization;
+using WB.Core.BoundedContexts.Interviewer.Synchronization.Steps;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization;

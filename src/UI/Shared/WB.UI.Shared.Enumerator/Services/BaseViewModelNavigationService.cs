@@ -90,8 +90,7 @@ namespace WB.UI.Shared.Enumerator.Services
             else
             {
                 this.principal.SignOut();
-                await this.NavigateToLoginAsync().ConfigureAwait(false);
-                this.FinishActivity();
+                await this.NavigateToLoginAsync();
             }
         }
 
