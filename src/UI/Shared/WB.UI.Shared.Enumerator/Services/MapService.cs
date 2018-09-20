@@ -135,6 +135,14 @@ namespace WB.UI.Shared.Enumerator.Services
             this.fileSystemAccessor.MoveFile(tempFileName, newName);
         }
 
+        public void RemoveMap(string mapName)
+        {
+            var filename = this.fileSystemAccessor.CombinePath(this.mapsLocation, mapName);
+
+            if (this.fileSystemAccessor.IsFileExists(filename))
+                this.fileSystemAccessor.DeleteFile(filename);
+        }
+
         public List<ShapefileDescription> GetAvailableShapefiles()
         {
             if (!this.fileSystemAccessor.IsDirectoryExists(this.shapefilesLocation))

@@ -556,6 +556,15 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Supervisor.
+        /// </summary>
+        internal static string Supervisor {
+            get {
+                return ResourceManager.GetString("Supervisor", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Supervisor assigned.
         /// </summary>
         internal static string SupervisorAssigned {

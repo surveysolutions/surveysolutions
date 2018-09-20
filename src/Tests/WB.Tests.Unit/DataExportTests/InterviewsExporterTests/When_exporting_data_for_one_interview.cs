@@ -59,15 +59,22 @@ namespace WB.Tests.Unit.DataExportTests.InterviewsExporterTests
             var plQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaire);
 
             var questionnaireExportStructure = Create.Entity.QuestionnaireExportStructure(questionnaire);
-            var interviewIdsToExport = new List<InterviewToExport> { new InterviewToExport(interviewId, interviewKey, 1, InterviewStatus.Completed) };
+            var interviewIdsToExport = new List<InterviewToExport>
+            {
+                new InterviewToExport(interviewId, interviewKey, 1, InterviewStatus.Completed)
+            };
 
             var exportViewFactory = new Mock<IExportViewFactory>();
             string[][] answers = { new string[1] };
             answers[0][0] = "1";
 
+            var systemVariables = ServiceColumns.SystemVariables.Values;
+            var systemVariableValues = new string[systemVariables.Count];
+            systemVariableValues[ServiceColumns.SystemVariables[ServiceVariableType.InterviewRandom].Index] = "5";
+
             exportViewFactory.SetReturnsDefault(Create.Entity.InterviewDataExportView(
                 levels: Create.Entity.InterviewDataExportLevelView(interviewId, 
-                    Create.Entity.InterviewDataExportRecord(interviewId, systemVariableValues: new []{"5"}, answers: answers))));
+                    Create.Entity.InterviewDataExportRecord(interviewId, systemVariableValues: systemVariableValues, answers: answers))));
 
             var exporter = new InterviewsExporter(logger.Object,
                 interviewDataExportSettings,
@@ -83,6 +90,9 @@ namespace WB.Tests.Unit.DataExportTests.InterviewsExporterTests
 
             //assert
             Assert.That(dataInCsvFile[0].File, Is.EqualTo("MyQuestionnaire.tab"));
+
+            Assert.That(dataInCsvFile[0].Data[0], Has.Length.EqualTo(dataInCsvFile[1].Data[0].Length), 
+                "Length of header columns should be equal to data columns length");
 
             Assert.That(dataInCsvFile[0].Data[0][3], Is.EqualTo(ServiceColumns.Key));
             Assert.That(dataInCsvFile[1].Data[0][3], Is.EqualTo(interviewKey));
