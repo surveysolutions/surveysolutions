@@ -23,7 +23,7 @@
     "filemanager-webpack-plugin": "^2.0.2",
     "flatpickr": "^3.0.7",
     "fuse.js": "^3.2.0",
-    "i18next": "^11.6.0",
+    "i18next": "^11.9.0",
     "jquery": "^3.2.1",
     "jquery-contextmenu": "^2.6.3",
     "jquery-highlight": "^3.4.0",
