@@ -17,6 +17,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.Infrastructure.Transactions;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
@@ -196,15 +197,16 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                 var exportBulk = new List<InterviewExportedDataRecord>();
                 Stopwatch batchWatch = Stopwatch.StartNew();
 
-                foreach (var interview in batch)
+                foreach (InterviewToExport interview in batch)
                 {
                     cancellationToken.ThrowIfCancellationRequested();
 
-                    exportBulk.Add(this.ExportSingleInterview(interview,
-                        interview.Entities,
+                    var dataRecords = this.ExportSingleInterview(interview,
                         questionnaireExportStructure,
                         questionnaire,
-                        basePath));
+                        basePath);
+
+                    exportBulk.Add(dataRecords);
 
                     interview.Entities.Clear(); // needed to free ram as yearly as possible
 
@@ -278,10 +280,18 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         private readonly Stopwatch getDbDataStopwatch = new Stopwatch();
         private readonly Stopwatch exportProcessingStopwatch = new Stopwatch();
 
-        private InterviewExportedDataRecord ExportSingleInterview(InterviewToExport interviewToExport,
-            List<InterviewEntity> interview, QuestionnaireExportStructure exportStructure, IQuestionnaire questionnaire, string basePath)
+        private InterviewExportedDataRecord ExportSingleInterview(
+            InterviewToExport interviewToExport,
+            QuestionnaireExportStructure exportStructure, 
+            IQuestionnaire questionnaire, 
+            string basePath)
         {
             exportProcessingStopwatch.Start();
+
+            FilterOutDisabledByParentsQuestions(interviewToExport, questionnaire);
+
+            var interview = interviewToExport.Entities;
+
             List<string[]> errors = errorsExporter.Export(exportStructure, interview, basePath, interviewToExport.Key);
 
             var interviewData = new InterviewData
@@ -295,6 +305,60 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             exportedData.Data[InterviewErrorsExporter.FileName] = errors.Select(x => string.Join(dataFileSeparator, x.Select(v => v?.Replace(dataFileSeparator, "")))).ToArray();
             exportProcessingStopwatch.Stop();
             return exportedData;
+        }
+
+        private void FilterOutDisabledByParentsQuestions(InterviewToExport interviewToExport, IQuestionnaire questionnaire)
+        {
+            var disabledEntitiesToExport = interviewToExport.Entities
+                .Where(x => !x.IsEnabled)
+                .Where(x => (x.EntityType == EntityType.Question || x.EntityType == EntityType.Variable))
+                .ToList();
+
+            if (disabledEntitiesToExport.Count == 0)
+                return;
+
+            var disabledParents = interviewToExport.Entities
+                .Where(x => !x.IsEnabled)
+                .Where(x => x.EntityType == EntityType.Section)
+                .Select(x => x.Identity)
+                .GroupBy(x => x.Id)
+                .ToDictionary(x => x.Key, x => x.ToHashSet());
+
+            if (disabledParents.Count == 0)
+                return;
+
+            foreach (var disabledIdentity in disabledEntitiesToExport)
+            {
+                var parentIds = questionnaire.GetParentsStartingFromTop(disabledIdentity.Identity.Id);
+
+                foreach (var parentId in parentIds)
+                {
+                    disabledParents.TryGetValue(parentId, out HashSet<Identity> parentIdentities);
+                    
+                    if (parentIdentities == null)
+                        continue;
+
+                    if (parentIdentities.Count == 0)
+                        continue;
+
+                    var parentRosterVectorLength = parentIdentities.First().RosterVector.Length;
+
+                    var targetParentIdentity = new Identity(parentId, disabledIdentity.Identity.RosterVector.Take(parentRosterVectorLength));
+
+                    if (parentIdentities.Contains(targetParentIdentity))
+                    {
+                        interviewToExport.Entities.Remove(disabledIdentity);
+                        break;
+                    }
+                }
+            }
+
+            var disabledParentEntities = interviewToExport.Entities
+                .Where(x => !x.IsEnabled)
+                .Where(x => x.EntityType == EntityType.Section)
+                .ToList();
+
+            disabledParentEntities.ForEach(x => interviewToExport.Entities.Remove(x));
         }
 
         private InterviewExportedDataRecord CreateInterviewExportedData(InterviewDataExportView interviewDataExportView, InterviewToExport interviewId)
