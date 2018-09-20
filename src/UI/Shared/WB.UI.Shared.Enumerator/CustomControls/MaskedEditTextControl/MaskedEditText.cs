@@ -77,12 +77,18 @@ namespace WB.UI.Shared.Enumerator.CustomControls.MaskedEditTextControl
         private void UpdateInputType()
         {
             var inputTypes = this.InputType;
-            var inputTypeOverride = InputTypes.TextFlagNoSuggestions | InputTypes.TextVariationPassword | InputTypes.TextFlagMultiLine;
+            var inputTypeOverride = InputTypes.TextFlagNoSuggestions | InputTypes.TextVariationPassword;
 
             if (this.Mask.IsNullOrEmpty())
+            {
                 inputTypes &= ~inputTypeOverride;
+                this.SetMaxLines(int.MaxValue);
+                this.SetSingleLine(false);
+            }
             else
+            {
                 inputTypes |= inputTypeOverride;
+            }
 
             this.SetRawInputType(inputTypes);
         }
