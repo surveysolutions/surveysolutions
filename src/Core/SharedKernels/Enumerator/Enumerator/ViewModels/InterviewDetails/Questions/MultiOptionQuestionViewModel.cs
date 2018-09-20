@@ -117,7 +117,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             int[] answerOnMultiOptionQuestion =
                 interview.GetMultiOptionQuestion(this.questionIdentity).GetAnswer()?.CheckedValues?.ToArray();
 
-            UpdateMaxAnswersCountMessage(answerOnMultiOptionQuestion?.Length ?? 0);
             var optionViewModels = this.filteredOptionsViewModel.GetOptions()
                 .Select((x, index) => this.ToViewModel(x, answerOnMultiOptionQuestion, interview))
                 .ToList();
@@ -127,6 +126,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             optionViewModels.ForEach(x => this.Options.Add(x));
 
+            UpdateMaxAnswersCountMessage(optionViewModels.Count);
         }
 
         private void UpdateMaxAnswersCountMessage(int answersCount)
@@ -134,7 +134,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (this.maxAllowedAnswers.HasValue && this.HasOptions)
             {
                 this.MaxAnswersCountMessage = string.Format(UIResources.Interview_MaxAnswersCount,
-                    answersCount, this.maxAllowedAnswers);
+                    answersCount, Math.Min(this.maxAllowedAnswers.Value, this.Options.Count));
             }
         }
 

@@ -277,7 +277,7 @@
     <value>Not received by tablet</value>
   </data>
   <data name="Tooltip_Filter_Received" xml:space="preserve">
-    <value>Show only assignments that were or were not received by tablets</value>
+    <value>Show only assignments that were or were not received by tablets.</value>
   </data>
   <data name="ReceivedByTablet" xml:space="preserve">
     <value>Received by tablet</value>
