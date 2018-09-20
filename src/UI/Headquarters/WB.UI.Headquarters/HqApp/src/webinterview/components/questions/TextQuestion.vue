@@ -21,6 +21,7 @@
                         <textarea-autosize v-else ref="inputTextArea"
                                autocomplete="off"
                                rows="1"
+                               :maxlength="$me.maxLength"
                                class="field-to-fill"
                                :placeholder="noAnswerWatermark"
                                :value="$me.answer"

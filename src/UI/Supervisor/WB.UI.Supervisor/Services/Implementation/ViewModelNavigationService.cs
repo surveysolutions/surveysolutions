@@ -55,7 +55,7 @@ namespace WB.UI.Supervisor.Services.Implementation
             });
         }
 
-        public override Task NavigateToLoginAsync() => this.navigationService.ChangePresentation(new OpenLoginScreenHint());
+        public override Task NavigateToLoginAsync() => this.NavigateToAsync<LoginViewModel>();
 
         public override Task NavigateToFinishInstallationAsync() => this.NavigateToAsync<FinishInstallationViewModel>();
 

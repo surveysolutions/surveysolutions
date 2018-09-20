@@ -63,38 +63,36 @@
 }
 
 <main class="import-wrapper">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="page-header">
-                <div class="signed-name">
-                    <div>
+        <div class="container-fluid">
+            <div class="row">
+                <div class="page-header">
+                    <ol class="breadcrumb">
+                        <li>
+                            @Html.ActionLink(MainMenu.SurveySetup, "Index", "SurveySetup")
+                        </li>
+                        <li>
+                            @Html.ActionLink(QuestionnaireImport.ListOfMyQuestionnaires, "Import")
+                        </li>
+                    </ol>
+                    <h1>@ImportQuestionnaire.PageHeader</h1>
+                    <div class="signed-name">
                         @Html.Raw(string.Format(@ImportQuestionnaire.SignedInBlock, string.Format("<span>{0}</span>", @Model.DesignerUserName))) <a href="@Url.Action("LogoutFromDesigner")">@ImportQuestionnaire.SignOut</a>
                     </div>
                 </div>
-                <ol class="breadcrumb">
-                    <li>
-                        @Html.ActionLink(MainMenu.SurveySetup, "Index", "SurveySetup")
-                    </li>
-                    <li>
-                        @Html.ActionLink(QuestionnaireImport.ListOfMyQuestionnaires, "Import")
-                    </li>
-                </ol>
-                <h1>@ImportQuestionnaire.PageHeader</h1>
             </div>
         </div>
-    </div>
 
-    <div class="container-fluid">
-        <div class="row">
-            <table id="data_holder" class="table table-hover table-ordered import-interview">
-                <thead>
-                    <tr>
-                        <th class="column-questionnaire-title with-search">@ImportQuestionnaire.Table_Title</th>
-                        <th>@ImportQuestionnaire.Table_LastModified</th>
-                        <th class="created-by">@ImportQuestionnaire.Table_CreatedBy</th>
-                    </tr>
-                </thead>
-            </table>
+        <div class="container-fluid">
+            <div class="row">
+                <table id="data_holder" class="table table-hover table-ordered import-interview">
+                    <thead>
+                        <tr>
+                            <th>@ImportQuestionnaire.Table_Title</th>
+                            <th>@ImportQuestionnaire.Table_LastModified</th>
+                            <th class="created-by">@ImportQuestionnaire.Table_CreatedBy</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
         </div>
-    </div>
-</main>
+    </main>

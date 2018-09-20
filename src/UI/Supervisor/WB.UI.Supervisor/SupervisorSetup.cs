@@ -164,21 +164,5 @@ namespace WB.UI.Supervisor
                 typeof(DashboardViewModel).Assembly
             });
         }
-
-        BackStackHintHandler backStackHandler;
-
-        /// <summary>
-        /// Creates the view presenter.
-        /// </summary>
-        /// <returns>The view presenter.</returns>
-        protected override IMvxAndroidViewPresenter CreateViewPresenter()
-        {
-            var presenter = base.CreateViewPresenter();
-
-            backStackHandler = new BackStackHintHandler(ApplicationContext, typeof(LoginActivity));
-            presenter.AddPresentationHintHandler<OpenLoginScreenHint>(backStackHandler.HandleClearBackstackHint);
-
-            return presenter;
-        }
     }
 }

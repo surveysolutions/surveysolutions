@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 
@@ -54,6 +55,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
     {
         public string Mask { get; set; }
         public string Answer { get; set; }
+        public int MaxLength => AnswerUtils.TextAnswerMaxLength;
     }
 
     public class InterviewIntegerQuestion : GenericQuestion

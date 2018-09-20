@@ -300,4 +300,7 @@
   <data name="VariableWithIdWasNotFound" xml:space="preserve">
     <value>Variable with id {0} was not found in questionnaire {1}</value>
   </data>
+  <data name="RequiredHeaderWasNotFound" xml:space="preserve">
+    <value>Header {0} was not found in excel file</value>
+  </data>
 </root>
