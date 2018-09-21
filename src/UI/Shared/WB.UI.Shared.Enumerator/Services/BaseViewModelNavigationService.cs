@@ -1,6 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Android.App;
 using Android.Content;
+using Android.OS;
+using Android.Support.V4.App;
+using Android.Support.V4.Content;
+using Java.Lang;
 using MvvmCross.Navigation;
 using MvvmCross.Platforms.Android;
 using MvvmCross.ViewModels;
@@ -44,6 +49,36 @@ namespace WB.UI.Shared.Enumerator.Services
         {
             return this.navigationService.Close(viewModel);
         }
+
+        public void InstallNewApp(string pathToApk)
+        {
+            Intent promptInstall;
+            if (Build.VERSION.SdkInt < BuildVersionCodes.N)
+            {
+                promptInstall =
+                    new Intent(Intent.ActionView)
+                        .SetDataAndType(global::Android.Net.Uri.FromFile(new Java.IO.File(pathToApk)), "application/vnd.android.package-archive")
+                        .AddFlags(ActivityFlags.NewTask)
+                        .AddFlags(ActivityFlags.GrantReadUriPermission);
+            }
+            else
+            {
+                var uriForFile = FileProvider.GetUriForFile(this.topActivity.Activity.BaseContext,
+                    this.topActivity.Activity.ApplicationContext.PackageName + ".fileprovider",
+                    new Java.IO.File(pathToApk));
+
+                promptInstall = ShareCompat.IntentBuilder.From(this.topActivity.Activity)
+                    .SetStream(uriForFile)
+                    .Intent
+                    .SetAction(Intent.ActionView)
+                    .SetDataAndType(uriForFile, "application/vnd.android.package-archive")
+                    .AddFlags(ActivityFlags.GrantReadUriPermission);
+            }
+
+            Application.Context.StartActivity(promptInstall);
+        }
+
+        public void CloseApplication() => JavaSystem.Exit(0);
 
         public abstract Task NavigateToLoginAsync();
         public abstract Task NavigateToFinishInstallationAsync();
