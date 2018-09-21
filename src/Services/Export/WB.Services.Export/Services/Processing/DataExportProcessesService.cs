@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using Hangfire;
+using Hangfire.Server;
 using WB.Services.Export.Jobs;
 using WB.Services.Export.Services.Processing.Good;
 
@@ -9,16 +10,20 @@ namespace WB.Services.Export.Services.Processing
 {
     public class DataExportProcessesService : IDataExportProcessesService
     {
-        private readonly IBackgroundJobClient backgroundJobClient;
+       // private readonly IBackgroundJobClient backgroundJobClient;
 
-        public DataExportProcessesService(IBackgroundJobClient backgroundJobClient)
+        public DataExportProcessesService()//IBackgroundJobClient backgroundJobClient)
         {
-            this.backgroundJobClient = backgroundJobClient;
+            //this.backgroundJobClient = backgroundJobClient;
         }
 
         public string AddDataExport(DataExportProcessDetails args)
         {
-            var job = backgroundJobClient.Enqueue<ExportJob>(j => j.Execute(args, CancellationToken.None));
+            
+            var job = new BackgroundJobClient(JobStorage.Current)
+                //.backgroundJobClient
+                .Enqueue<ExportJob>(j => j.Execute(args, null, CancellationToken.None));
+            
             return job;
         }
 
@@ -34,27 +39,27 @@ namespace WB.Services.Export.Services.Processing
 
         public void FinishExportSuccessfully(string processId)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         public void FinishExportWithError(string processId, Exception e)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         public void UpdateDataExportProgress(string processId, int progressInPercents)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
         }
 
         public void DeleteDataExport(string processId)
         {
-            throw new NotImplementedException();
+          //  throw new NotImplementedException();
         }
 
         public void ChangeStatusType(string processId, DataExportStatus status)
         {
-            throw new NotImplementedException();
+           // throw new NotImplementedException();
         }
     }
 }

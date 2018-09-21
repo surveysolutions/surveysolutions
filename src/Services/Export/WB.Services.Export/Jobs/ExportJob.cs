@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using Amazon.S3;
+using Hangfire.Server;
 using Microsoft.Extensions.Logging;
 using WB.Services.Export.ExportProcessHandlers;
 using WB.Services.Export.ExportProcessHandlers.Externals;
@@ -19,11 +20,13 @@ namespace WB.Services.Export.Jobs
         private readonly Lazy<TabularFormatDataExportHandler> tabularFormatDataExportHandler;
         //private readonly Lazy<SpssFormatExportHandler> spssFormatExportHandler;
         //private readonly Lazy<StataFormatExportHandler> stataFormatExportHandler;
-        private readonly Lazy<OnedriveBinaryDataExportHandler> onedriveBinaryDataExportHandler;
+    //    private readonly Lazy<OnedriveBinaryDataExportHandler> onedriveBinaryDataExportHandler;
         private readonly Lazy<DropboxBinaryDataExportHandler> dropboxBinaryDataExportHandler;
         private readonly Lazy<GoogleDriveBinaryDataExportHandler> googleDriveBinaryDataExportHandler;
 
         private readonly ILogger<ExportJob> logger;
+
+        private static AsyncLocal<Guid?> workerId = new AsyncLocal<Guid?>();
 
         public ExportJob(IDataExportProcessesService exportService,
             Lazy<BinaryFormatDataExportHandler> binaryFormatDataExportHandler,
@@ -31,7 +34,7 @@ namespace WB.Services.Export.Jobs
             Lazy<TabularFormatDataExportHandler> tabularFormatDataExportHandler,
             //Lazy<SpssFormatExportHandler> spssFormatExportHandler,
             //Lazy<StataFormatExportHandler> stataFormatExportHandler,
-            Lazy<OnedriveBinaryDataExportHandler> onedriveBinaryDataExportHandler,
+        //    Lazy<OnedriveBinaryDataExportHandler> onedriveBinaryDataExportHandler,
             Lazy<DropboxBinaryDataExportHandler> dropboxBinaryDataExportHandler,
             Lazy<GoogleDriveBinaryDataExportHandler> googleDriveBinaryDataExportHandler,
             ILogger<ExportJob> logger)
@@ -43,15 +46,17 @@ namespace WB.Services.Export.Jobs
             this.tabularFormatDataExportHandler = tabularFormatDataExportHandler;
             //this.spssFormatExportHandler = spssFormatExportHandler;
             //this.stataFormatExportHandler = stataFormatExportHandler;
-            this.onedriveBinaryDataExportHandler = onedriveBinaryDataExportHandler;
+         //   this.onedriveBinaryDataExportHandler = onedriveBinaryDataExportHandler;
             this.dropboxBinaryDataExportHandler = dropboxBinaryDataExportHandler;
             this.googleDriveBinaryDataExportHandler = googleDriveBinaryDataExportHandler;
             this.logger = logger;
+
+            // this will store unique worker Id
+            //workerId.Value = workerId.Value ?? Guid.NewGuid();
         }
 
-        public void Execute(DataExportProcessDetails pendingExportProcess, CancellationToken cancellationToken)
+        public void Execute(DataExportProcessDetails pendingExportProcess, PerformContext context, CancellationToken cancellationToken)
         {
-            logger.LogTrace("Do Execute:" + pendingExportProcess.Tenant.BaseUrl);
             try
             {
                 if (pendingExportProcess is ExportBinaryToExternalStorage exportToExternalStorageProcess)
@@ -80,8 +85,8 @@ namespace WB.Services.Export.Jobs
         {
             switch (storageType)
             {
-                case ExternalStorageType.OneDrive:
-                    return onedriveBinaryDataExportHandler.Value;
+                //case ExternalStorageType.OneDrive:
+                //    return onedriveBinaryDataExportHandler.Value;
                 case ExternalStorageType.Dropbox:
                     return dropboxBinaryDataExportHandler.Value;
                 case ExternalStorageType.GoogleDrive:

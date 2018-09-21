@@ -19,5 +19,6 @@ namespace WB.Services.Export.Infrastructure
         bool IsFileExists(string filePath);
         byte[] ReadAllBytes(string filePath);
         void WriteAllBytes(string filePath, byte[] data);
+        string GetTempPath(string basePath);
     }
 }

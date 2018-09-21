@@ -292,8 +292,7 @@ namespace WB.Services.Export.CsvExport.Exporters
 
         private string ConvertAnswerToString(object obj, QuestionType questionType, QuestionSubtype? questionSubType)
         {
-            var formattable = obj as IFormattable;
-            if (formattable != null)
+            if (obj is IFormattable formattable)
             {
                 var isDateTimeQuestion = questionType == QuestionType.DateTime;
                 var isTimestampQuestion = isDateTimeQuestion && questionSubType.HasValue && questionSubType == QuestionSubtype.DateTime_Timestamp;
@@ -307,7 +306,11 @@ namespace WB.Services.Export.CsvExport.Exporters
             var answersSeparator = ExportFileSettings.NotReadableAnswersSeparator.ToString();
 
             if (questionType == QuestionType.TextList)
+            {
+                if (obj is String ans) return ans;
+                
                 return ((InterviewTextListAnswer)obj)?.Answer.Replace(answersSeparator, String.Empty);
+            }
 
             return obj.ToString().Replace(answersSeparator, string.Empty);
         }
