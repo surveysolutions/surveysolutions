@@ -16,6 +16,7 @@ namespace WB.Services.Export.Host
         {
             AppDomain.CurrentDomain.UnhandledException += (sender, eventArgs) =>
             {
+                Console.WriteLine(eventArgs.ExceptionObject.GetType().FullName);
                 Console.WriteLine(eventArgs.ExceptionObject.ToString());
             };
 

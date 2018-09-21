@@ -3,40 +3,37 @@ using Microsoft.Extensions.Options;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Questionnaire;
+using WB.Services.Export.Tenant;
 
 namespace WB.Services.Export.Services.Processing
 {
     public interface IFilebasedExportedDataAccessor
     {
-        string GetArchiveFilePathForExportedData(string archiveName,
+        string GetArchiveFilePathForExportedData(TenantInfo tenant, string archiveName,
             DataExportFormat format,
             InterviewStatus? status = null, DateTime? fromDate = null, DateTime? toDate = null);
 
-        string GetExportDirectory();
+        string GetExportDirectory(TenantInfo tenant);
         void MoveExportArchive(string tempArchivePath, string archiveName);
     }
 
     class FilebasedExportedDataAccessor : IFilebasedExportedDataAccessor
     {
-        private const string ExportedDataFolderName = "ExportedData";
         private readonly IExportFileNameService exportFileNameService;
-
         private readonly IOptions<InterviewDataExportSettings> interviewDataExportSettings;
         private readonly IFileSystemAccessor fileSystemAccessor;
-        private string pathToExportedData;
 
-        public FilebasedExportedDataAccessor(IExportFileNameService exportFileNameService, IFileSystemAccessor fileSystemAccessor, IOptions<InterviewDataExportSettings> interviewDataExportSettings)
+        public FilebasedExportedDataAccessor(
+            IExportFileNameService exportFileNameService, 
+            IFileSystemAccessor fileSystemAccessor, 
+            IOptions<InterviewDataExportSettings> interviewDataExportSettings)
         {
             this.exportFileNameService = exportFileNameService;
             this.fileSystemAccessor = fileSystemAccessor;
             this.interviewDataExportSettings = interviewDataExportSettings;
-            this.pathToExportedData = fileSystemAccessor.CombinePath(interviewDataExportSettings.Value.DirectoryPath, ExportedDataFolderName);
-
-            if (!fileSystemAccessor.IsDirectoryExists(this.pathToExportedData))
-                fileSystemAccessor.CreateDirectory(this.pathToExportedData);
         }
-
-        public string GetArchiveFilePathForExportedData(string archiveName, DataExportFormat format,
+        
+        public string GetArchiveFilePathForExportedData(TenantInfo tenant, string archiveName, DataExportFormat format,
             InterviewStatus? status = null, DateTime? fromDate = null, DateTime? toDate = null)
         {
             fromDate = format == DataExportFormat.Binary ? null : fromDate;
@@ -44,13 +41,24 @@ namespace WB.Services.Export.Services.Processing
 
             var statusSuffix = status != null && format != DataExportFormat.Binary ? status.ToString() : "All";
 
+            var exportDirectory = GetExportDirectory(tenant);
+            CreateIfNeeded(exportDirectory);
+
             return this.exportFileNameService.GetFileNameForTabByQuestionnaire(
-                archiveName, this.pathToExportedData, format, statusSuffix, fromDate, toDate);
+                archiveName, GetExportDirectory(tenant), format, statusSuffix, fromDate, toDate);
         }
 
-        public string GetExportDirectory()
+        private void CreateIfNeeded(string path)
         {
-            throw new NotImplementedException();
+            if (!fileSystemAccessor.IsDirectoryExists(path))
+                fileSystemAccessor.CreateDirectory(path);
+        }
+
+        public string GetExportDirectory(TenantInfo tenant)
+        {
+            return this.fileSystemAccessor.CombinePath(
+                interviewDataExportSettings.Value.DirectoryPath,
+                tenant.Id.ToString());
         }
 
         public void MoveExportArchive(string tempArchivePath, string archiveName)

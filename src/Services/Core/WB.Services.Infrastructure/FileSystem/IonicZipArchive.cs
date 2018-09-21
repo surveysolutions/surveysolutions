@@ -46,12 +46,15 @@ namespace WB.Services.Infrastructure.FileSystem
         public void CreateEntry(string path, byte[] content)
         {
             var entry = new ZipEntry(path);
+            
             zipStream.PutNextEntry(entry);
 
             if (content.Length != 0)
             {
                 zipStream.Write(content, 0, content.Length);
             }
+
+            zipStream.CloseEntry();
         }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.IO;
+using System.Threading;
 using Microsoft.Extensions.Options;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
@@ -15,9 +17,22 @@ namespace WB.Services.Export.ExportProcessHandlers
         public InterviewStatus? InterviewStatus { get; set; }
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
-        public string ExportDirectory { get; set; }
+        public string ExportTempDirectory { get; set; }
         public TenantInfo Tenant { get; set; }
         public string ArchiveName { get; set; }
+    }
+
+    internal interface ITempPathProvider
+    {
+        string GetTempPath(string basePath);
+    }
+
+    class ManagedThreadAwareTempPathProvider : ITempPathProvider
+    {
+        public string GetTempPath(string basePath)
+        {
+            return Path.Combine(basePath, ".temp", "worker_" + Thread.CurrentThread.ManagedThreadId.ToString());
+        }
     }
 
     abstract class BaseAbstractDataExportHandler : IExportProcessHandler<DataExportProcessDetails>
@@ -27,7 +42,7 @@ namespace WB.Services.Export.ExportProcessHandlers
         protected readonly IOptions<InterviewDataExportSettings> interviewDataExportSettings;
         protected readonly IDataExportProcessesService dataExportProcessesService;
 
-        protected readonly string exportTempDirectoryPath;
+        protected string exportTempDirectoryPath;
 
         protected BaseAbstractDataExportHandler(
             IFileSystemAccessor fileSystemAccessor,
@@ -39,13 +54,12 @@ namespace WB.Services.Export.ExportProcessHandlers
             this.dataExportProcessesService = dataExportProcessesService;
             this.filebasedExportedDataAccessor = filebasedExportedDataAccessor;
             this.interviewDataExportSettings = interviewDataExportSettings;
-
-            exportTempDirectoryPath = this.fileSystemAccessor.CombinePath(
-                interviewDataExportSettings.Value.DirectoryPath, "ExportTemp");
         }
 
         public void ExportData(DataExportProcessDetails dataExportProcessDetails)
         {
+            exportTempDirectoryPath = this.fileSystemAccessor.GetTempPath(interviewDataExportSettings.Value.DirectoryPath);
+
             dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
 
             this.RecreateExportTempDirectory();
@@ -64,13 +78,17 @@ namespace WB.Services.Export.ExportProcessHandlers
                 InterviewStatus = dataExportProcessDetails.InterviewStatus,
                 FromDate = dataExportProcessDetails.FromDate,
                 ToDate = dataExportProcessDetails.ToDate,
-                ExportDirectory = this.exportTempDirectoryPath,
-                Tenant = dataExportProcessDetails.Tenant
+                ExportTempDirectory = this.exportTempDirectoryPath,
+                Tenant = dataExportProcessDetails.Tenant,
+                ArchiveName = dataExportProcessDetails.ArchiveName
             };
 
             var archiveName = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(
-                dataExportProcessDetails.ArchiveName, Format, dataExportProcessDetails.InterviewStatus,
-                dataExportProcessDetails.FromDate, dataExportProcessDetails.ToDate);
+                dataExportProcessDetails.Tenant, 
+                dataExportProcessDetails.ArchiveName, 
+                Format, 
+                dataExportProcessDetails.InterviewStatus,
+                fromDate: dataExportProcessDetails.FromDate, toDate: dataExportProcessDetails.ToDate);
 
             DoExport(dataExportProcessDetails, exportSettings, archiveName, exportProgress);
 

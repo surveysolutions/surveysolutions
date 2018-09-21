@@ -4,6 +4,7 @@ using WB.Services.Export.CsvExport;
 using WB.Services.Export.CsvExport.Exporters;
 using WB.Services.Export.CsvExport.Implementation.DoFiles;
 using WB.Services.Export.DescriptionGenerator;
+using WB.Services.Export.ExportProcessHandlers;
 using WB.Services.Export.ExportProcessHandlers.Externals;
 using WB.Services.Export.ExportProcessHandlers.Implementation;
 using WB.Services.Export.Infrastructure;
@@ -49,6 +50,7 @@ namespace WB.Services.Export
             services.AddTransient<IExportFileNameService, ExportExportFileNameService>();
             services.AddTransient<IArchiveUtils, ZipArchiveUtils>();
             services.AddTransient<IExternalFileStorage, S3FileStorage>();
+            services.AddTransient<ITempPathProvider, ManagedThreadAwareTempPathProvider>();
 
             // Singletons
             services.AddSingleton<ICache, Cache>();
@@ -60,7 +62,6 @@ namespace WB.Services.Export
             FileStorageModule.Register(services, configuration);
 
             // options
-
             services.Configure<InterviewDataExportSettings>(configuration.GetSection("export"));
         }
 
@@ -71,7 +72,7 @@ namespace WB.Services.Export
             services.AddTransient<TabularFormatDataExportHandler>();
             //services.AddTransient<SpssFormatExportHandler>();
             //services.AddTransient<StataFormatExportHandler>();
-            services.AddTransient<OnedriveBinaryDataExportHandler>();
+            //services.AddTransient<OnedriveBinaryDataExportHandler>();
             services.AddTransient<DropboxBinaryDataExportHandler>(); ;
             services.AddTransient<GoogleDriveBinaryDataExportHandler>();
         }

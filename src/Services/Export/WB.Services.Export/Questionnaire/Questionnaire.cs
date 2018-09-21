@@ -6,7 +6,7 @@ namespace WB.Services.Export.Questionnaire
 {
     public class QuestionnaireDocument : Group
     {
-        private bool childrenWereConnected = false;
+      //  private bool childrenWereConnected = false;
 
         public QuestionnaireDocument(List<IQuestionnaireEntity> children = null) : base(children)
         {
@@ -16,11 +16,11 @@ namespace WB.Services.Export.Questionnaire
 
         public override void ConnectChildrenWithParent()
         {
-            if (childrenWereConnected) return;
+            //if (childrenWereConnected) return;
 
             base.ConnectChildrenWithParent();
 
-            childrenWereConnected = true;
+          //  childrenWereConnected = true;
         }
 
         public bool IsIntegerQuestion(Guid publicKey)
@@ -91,9 +91,11 @@ namespace WB.Services.Export.Questionnaire
         public Guid[] GetRosterSizeSourcesForEntity(Guid entityId)
         {
             var entity = this.Find<IQuestionnaireEntity>(entityId);
+
+
             var rosterSizes = new List<Guid>();
 
-            while (entity != this)
+            while (entity != this && entity != null)
             {
                 if (entity is Group group)
                 {
