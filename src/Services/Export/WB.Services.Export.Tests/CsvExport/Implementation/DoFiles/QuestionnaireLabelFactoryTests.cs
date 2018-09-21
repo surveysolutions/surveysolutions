@@ -1,8 +1,7 @@
 ﻿using NUnit.Framework;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
-using WB.Tests.Abc;
+using WB.Services.Export.CsvExport.Implementation.DoFiles;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.Factories
+namespace WB.Services.Export.Tests.CsvExport.Implementation.DoFiles
 {
     [TestOf(typeof(QuestionnaireLabelFactory))]
     public class QuestionnaireLabelFactoryTests
@@ -10,9 +9,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.F
         [Test]
         public void should_remove_html_tags_from_question_title()
         {
-            var questionnaire = Create.Entity.QuestionnaireDocument(children: 
-                Create.Entity.TextListQuestion(questionText: "test <strong>html</strong>", maxAnswerCount: 25));
-            var exportStructure = Create.Entity.QuestionnaireExportStructure(questionnaire);
+            var questionnaire = Create.QuestionnaireDocument(children: 
+                Create.TextQuestion(questionText: "test <strong>html</strong>"));
+            var exportStructure = Create.QuestionnaireExportStructure(questionnaire);
             var factory = new QuestionnaireLabelFactory();
 
             // Act

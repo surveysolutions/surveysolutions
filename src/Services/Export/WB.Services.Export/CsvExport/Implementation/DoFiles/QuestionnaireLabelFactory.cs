@@ -8,7 +8,7 @@ using WB.Services.Export.Utils;
 
 namespace WB.Services.Export.CsvExport.Implementation.DoFiles
 {
-    internal class QuestionnaireLabelFactory : IQuestionnaireLabelFactory
+    public class QuestionnaireLabelFactory : IQuestionnaireLabelFactory
     {
         private QuestionnaireLevelLabels CreateLabelsForQuestionnaireLevel(
             QuestionnaireExportStructure structure,

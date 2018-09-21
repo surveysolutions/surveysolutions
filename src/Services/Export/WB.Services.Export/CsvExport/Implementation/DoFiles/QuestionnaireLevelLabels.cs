@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace WB.Services.Export.CsvExport.Implementation.DoFiles
 {
-    internal class QuestionnaireLevelLabels
+    public class QuestionnaireLevelLabels
     {
         private readonly Dictionary<string, DataExportVariable> variableLabels;
 
