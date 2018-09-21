@@ -12,7 +12,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Tests.Abc;
 
-namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProcessTests
+namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
 {
     [TestOf(typeof(DownloadInterviewerApplications))]
     internal class DownloadInterviewerApplicationsTests
