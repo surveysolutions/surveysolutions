@@ -2,7 +2,7 @@
 
 namespace WB.Services.Export.CsvExport.Implementation.DoFiles
 {
-    internal interface IQuestionnaireLabelFactory
+    public interface IQuestionnaireLabelFactory
     {
         QuestionnaireLevelLabels[] CreateLabelsForQuestionnaire(QuestionnaireExportStructure structure);
     }

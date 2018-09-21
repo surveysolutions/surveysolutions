@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Threading;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
-using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
-using WB.Core.SharedKernels.DataCollection.ValueObjects;
-using WB.Tests.Abc;
+using WB.Services.Export.CsvExport.Implementation.DoFiles;
+using WB.Services.Export.Interview;
+using WB.Services.Export.Questionnaire;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.StataEnvironmentContentGeneratorTests
+namespace WB.Services.Export.Tests.CsvExport.Implementation.DoFiles
 {
     
     internal class StataEnvironmentContentGeneratorTests : StataEnvironmentContentGeneratorTestContext
@@ -14,25 +13,20 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
         [Test]
         public void when_HeaderStructureForLevel_has_illegal_level_labels()
         {
-            StataEnvironmentContentService stataEnvironmentContentService;
-            HeaderStructureForLevel oneQuestionHeaderStructureForLevel;
-
             string dataFileName = "data file name";
 
             string stataGeneratedContent = "";
-            QuestionnaireExportStructure questionnaireExportStructure;
 
-            oneQuestionHeaderStructureForLevel = CreateHeaderStructureForLevel(dataFileName);
+            var oneQuestionHeaderStructureForLevel = CreateHeaderStructureForLevel(dataFileName);
             oneQuestionHeaderStructureForLevel.LevelLabels =
                 new[] {CreateLabelItem("c1", "t1"), CreateLabelItem("c2", "t2")};
 
 
-            questionnaireExportStructure = Create.Entity.QuestionnaireExportStructure();
+            var questionnaireExportStructure = Create.QuestionnaireExportStructure("questionnaire");
             questionnaireExportStructure.HeaderToLevelMap.Add(new ValueVector<Guid>(),
                 oneQuestionHeaderStructureForLevel);
 
-            stataEnvironmentContentService =
-                CreateStataEnvironmentContentGenerator(CreateFileSystemAccessor((c) => stataGeneratedContent = c));
+            var stataEnvironmentContentService = CreateStataEnvironmentContentGenerator(CreateFileSystemAccessor((c) => stataGeneratedContent = c));
             stataEnvironmentContentService.CreateEnvironmentFiles(questionnaireExportStructure, "",
                 default(CancellationToken));
 
@@ -53,7 +47,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
                     CreateHeaderStructureForLevel(dataFileName);
                 oneQuestionHeaderStructureForLevel.LevelLabels = new[] { CreateLabelItem("1", "t1"), CreateLabelItem("2", "t2") };
 
-                questionnaireExportStructure = Create.Entity.QuestionnaireExportStructure();
+                questionnaireExportStructure = Create.QuestionnaireExportStructure("questionnaire");
                 questionnaireExportStructure.HeaderToLevelMap.Add(new ValueVector<Guid>(),
                     oneQuestionHeaderStructureForLevel);
 
@@ -72,23 +66,19 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
         [Test]
         public void when_HeaderStructureForLevel_has_one_question_with_labels()
         {
-            StataEnvironmentContentService stataEnvironmentContentService;
-            HeaderStructureForLevel oneQuestionHeaderStructureForLevel;
-            QuestionnaireExportStructure questionnaireExportStructure;
             string dataFileName = "data file name";
 
             string questionsVariableName = "var1";
             string questionsTitle = "title1";
             string stataGeneratedContent = "";
 
-            oneQuestionHeaderStructureForLevel =
-                    CreateHeaderStructureForLevel(dataFileName, exportedQuestionHeaderItems: new[] { CreateExportedHeaderItem(questionsVariableName, questionsTitle, CreateLabelItem("1", "t1`\r"), CreateLabelItem("2", "t2\r'")) });
+            var oneQuestionHeaderStructureForLevel = CreateHeaderStructureForLevel(dataFileName, exportedQuestionHeaderItems: new[] { CreateExportedHeaderItem(questionsVariableName, questionsTitle, CreateLabelItem("1", "t1`\r"), CreateLabelItem("2", "t2\r'")) });
 
-                questionnaireExportStructure = Create.Entity.QuestionnaireExportStructure();
+                var questionnaireExportStructure = Create.QuestionnaireExportStructure("questionnaire");
                 questionnaireExportStructure.HeaderToLevelMap.Add(new ValueVector<Guid>(),
                     oneQuestionHeaderStructureForLevel);
 
-                stataEnvironmentContentService = CreateStataEnvironmentContentGenerator(CreateFileSystemAccessor((c) => stataGeneratedContent = c));
+                var stataEnvironmentContentService = CreateStataEnvironmentContentGenerator(CreateFileSystemAccessor((c) => stataGeneratedContent = c));
             
             stataEnvironmentContentService.CreateEnvironmentFiles(questionnaireExportStructure, "", default(CancellationToken))/*.CreateContentOfAdditionalFile(oneQuestionHeaderStructureForLevel,dataFileName, contentFilePath)*/;
 

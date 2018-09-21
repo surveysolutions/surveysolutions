@@ -4,7 +4,7 @@ using WB.Services.Export.Questionnaire;
 
 namespace WB.Services.Export.CsvExport.Exporters
 {
-    internal interface IInterviewErrorsExporter
+    public interface IInterviewErrorsExporter
     {
         void WriteHeader(bool hasAtLeastOneRoster, int maxRosterDepth, string errorsExportFilePath);
         void ExportDoFile(QuestionnaireExportStructure questionnaireExportStructure, string basePath);
