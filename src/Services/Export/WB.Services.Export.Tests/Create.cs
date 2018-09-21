@@ -1,9 +1,11 @@
 ﻿using System;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
 using WB.Services.Export.CsvExport.Exporters;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
+using WB.Services.Export.Interview.Entities;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Export.Services;
@@ -112,6 +114,38 @@ namespace WB.Services.Export.Tests
                 Mock.Of<ICache>(),
                 Mock.Of<IQuestionnaireStorage>());
             return exportViewFactory.GetQuestionnaireExportStructure(Create.Tenant(), questionnaire);
+        }
+
+        public static InterviewSummary InterviewSummary( InterviewExportedAction status = InterviewExportedAction.ApprovedBySupervisor,
+            string originatorName = "inter",
+            UserRoles originatorRole = UserRoles.Interviewer,
+            Guid? interviewId = null,
+            DateTime? timestamp = null,
+            string key = null)
+            => new InterviewSummary
+            {
+                Status = status,
+                InterviewId = interviewId ?? Guid.NewGuid(),
+                Timestamp = timestamp ?? DateTime.Now,
+                Key = key,
+                StatusChangeOriginatorRole = originatorRole,
+                StatusChangeOriginatorName = originatorName,
+                InterviewerName = "inter",
+                SupervisorName = "supervisor",
+            };
+
+        public static InterviewActionsExporter InterviewActionsExporter(ITenantApi<IHeadquartersApi> tenantApi,
+            ICsvWriter csvWriter = null)
+        {
+            return new InterviewActionsExporter(InterviewDataExportSettings(),
+                csvWriter ?? Mock.Of<ICsvWriter>(),
+                tenantApi ?? HeadquartersApi(),
+                Mock.Of<ILogger<InterviewActionsExporter>>());
+        }
+
+        public static IOptions<InterviewDataExportSettings> InterviewDataExportSettings()
+        {
+            return Mock.Of<IOptions<InterviewDataExportSettings>>(x => x.Value == new InterviewDataExportSettings());
         }
     }
 
