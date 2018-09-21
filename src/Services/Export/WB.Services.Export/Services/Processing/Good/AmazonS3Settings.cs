@@ -5,6 +5,12 @@ namespace WB.Services.Export.Services.Processing.Good
 {
     public class AmazonS3Settings
     {
+        public AmazonS3Settings()
+        {
+            
+        }
+
+        public bool IsEnabled { get; set; } = false;
         public string BucketName { get; set; }
         public string Region { get; set; } = "us-east-1";
         public string Prefix { get; set; }

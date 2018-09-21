@@ -8,10 +8,10 @@ namespace WB.Services.Export.Services.Processing
 {
     class DataExportFileAccessor : IDataExportFileAccessor
     {
-        private readonly IProtectedArchiveUtils archiveUtils;
+        private readonly IArchiveUtils archiveUtils;
         private readonly IExternalFileStorage externalFileStorage;
 
-        public DataExportFileAccessor(IProtectedArchiveUtils archiveUtils, IExternalFileStorage externalFileStorage)
+        public DataExportFileAccessor(IArchiveUtils archiveUtils, IExternalFileStorage externalFileStorage)
         {
             this.archiveUtils = archiveUtils;
             this.externalFileStorage = externalFileStorage;
@@ -25,7 +25,8 @@ namespace WB.Services.Export.Services.Processing
 
         public void RecreateExportArchive(string exportTempDirectoryPath, string archiveName, string archivePassword, IProgress<int> exportProgress)
         {
-            this.archiveUtils.ZipDirectory(exportTempDirectoryPath, archiveName, archivePassword, exportProgress);
+            throw new NotImplementedException();
+            //this.archiveUtils.ZipDirectory(exportTempDirectoryPath, archiveName, archivePassword, exportProgress);
         }
 
         public void PubishArchiveToExternalStorage(string archiveFile, IProgress<int> exportProgress)

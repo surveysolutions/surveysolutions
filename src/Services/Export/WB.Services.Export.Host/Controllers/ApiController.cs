@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http;
 using Hangfire;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -22,7 +23,7 @@ namespace WB.Services.Export.Host.Controllers
 
         public JobController(IBackgroundJobClient backgroundJobClient,
             IDataExportProcessesService exportProcessesService,
-            IDataExportStatusReader dataExportStatusReader,
+        //    IDataExportStatusReader dataExportStatusReader,
             ILogger<JobController> logger)
         {
             this.backgroundJobClient =
@@ -35,15 +36,22 @@ namespace WB.Services.Export.Host.Controllers
         [HttpPut]
         public ActionResult RequestUpdate(string questionnaireId,
             DataExportFormat format, InterviewStatus? status, DateTime? from, DateTime? to, 
-            string apiKey,
+            string archiveName, string archivePassword, string apiKey,
             [FromHeader(Name = "Origin")]string tenantBaseUrl)
         {
+            if (string.IsNullOrWhiteSpace(archiveName))
+            {
+                return BadRequest("ArchiveName is required");
+            }
+
             var args = new DataExportProcessDetails(format, new QuestionnaireId(questionnaireId), null)
             {
                 Tenant = new TenantInfo(tenantBaseUrl, apiKey),
                 InterviewStatus = status,
                 FromDate = from,
-                ToDate = to
+                ToDate = to,
+                ArchivePassword = archivePassword,
+                ArchiveName = archiveName
             };
 
             exportProcessesService.AddDataExport(args);

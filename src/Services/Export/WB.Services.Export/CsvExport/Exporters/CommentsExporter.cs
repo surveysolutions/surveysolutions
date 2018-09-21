@@ -132,7 +132,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             return result;
         }
 
-        public void ExportCommentsDoFile(QuestionnaireExportStructure questionnaireExportStructure, string basePath)
+        public void ExportDoFile(QuestionnaireExportStructure questionnaireExportStructure, string basePath)
         {
             var doContent = new DoFile();
 
