@@ -54,6 +54,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
             var versionFromServer = await
                 this.synchronizationService.GetLatestApplicationVersionAsync(Context.CancellationToken);
 
+            Context.CancellationToken.ThrowIfCancellationRequested();
+
             if (versionFromServer.HasValue && versionFromServer > interviewerSettings.GetApplicationVersionCode())
             {
                 await this.permissions.AssureHasPermission(Permission.Storage);
