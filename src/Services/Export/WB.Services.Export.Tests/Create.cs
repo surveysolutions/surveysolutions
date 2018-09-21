@@ -4,6 +4,7 @@ using Moq;
 using WB.Services.Export.CsvExport.Exporters;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
+using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Services;
 using WB.Services.Export.Tenant;
 
@@ -65,6 +66,19 @@ namespace WB.Services.Export.Tests
         public static TenantInfo Tenant()
         {
             return new TenantInfo();
+        }
+
+        public static QuestionnaireExportStructure QuestionnaireExportStructure(string questionnaireId)
+        {
+            return new QuestionnaireExportStructure()
+            {
+                QuestionnaireId = questionnaireId
+            };
+        }
+
+        public static HeaderStructureForLevel HeaderStructureForLevel()
+        {
+            return new HeaderStructureForLevel { LevelScopeVector = new ValueVector<Guid>() };
         }
     }
 
