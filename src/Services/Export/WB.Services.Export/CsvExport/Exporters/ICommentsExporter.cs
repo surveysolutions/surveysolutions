@@ -15,5 +15,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             TenantInfo tenant,
             IProgress<int> progress,
             CancellationToken cancellationToken);
+
+        void ExportDoFile(QuestionnaireExportStructure questionnaireExportStructure, string folderPath);
     }
 }

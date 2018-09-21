@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using Amazon.S3;
 using Microsoft.Extensions.Logging;
 using WB.Services.Export.ExportProcessHandlers;
 using WB.Services.Export.ExportProcessHandlers.Externals;
@@ -12,6 +13,7 @@ namespace WB.Services.Export.Jobs
     internal class ExportJob
     {
         private readonly IDataExportProcessesService exportService;
+
         private readonly Lazy<BinaryFormatDataExportHandler> binaryFormatDataExportHandler;
         //private readonly Lazy<TabularFormatParaDataExportProcessHandler> tabularFormatParaDataExportProcessHandler;
         private readonly Lazy<TabularFormatDataExportHandler> tabularFormatDataExportHandler;
@@ -34,6 +36,7 @@ namespace WB.Services.Export.Jobs
             Lazy<GoogleDriveBinaryDataExportHandler> googleDriveBinaryDataExportHandler,
             ILogger<ExportJob> logger)
         {
+            logger.LogTrace("Constructed instance");
             this.exportService = exportService;
             this.binaryFormatDataExportHandler = binaryFormatDataExportHandler;
             //this.tabularFormatParaDataExportProcessHandler = tabularFormatParaDataExportProcessHandler;
@@ -48,12 +51,19 @@ namespace WB.Services.Export.Jobs
 
         public void Execute(DataExportProcessDetails pendingExportProcess, CancellationToken cancellationToken)
         {
+            logger.LogTrace("Do Execute:" + pendingExportProcess.Tenant.BaseUrl);
             try
             {
                 if (pendingExportProcess is ExportBinaryToExternalStorage exportToExternalStorageProcess)
-                    this.GetExternalStorageExportHandler(exportToExternalStorageProcess.StorageType).ExportData(exportToExternalStorageProcess);
+                {
+                    var handler = this.GetExternalStorageExportHandler(exportToExternalStorageProcess.StorageType);
+                    handler.ExportData(exportToExternalStorageProcess);
+                }
                 else
-                    this.GetExportHandler(pendingExportProcess.Format).ExportData(pendingExportProcess);
+                {
+                    var handler = this.GetExportHandler(pendingExportProcess.Format);
+                    handler.ExportData(pendingExportProcess);
+                }
 
                 this.exportService.FinishExportSuccessfully(pendingExportProcess.NaturalId);
 

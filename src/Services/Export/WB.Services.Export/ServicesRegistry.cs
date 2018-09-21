@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using WB.Services.Export.CsvExport;
 using WB.Services.Export.CsvExport.Exporters;
 using WB.Services.Export.CsvExport.Implementation.DoFiles;
@@ -8,17 +9,23 @@ using WB.Services.Export.ExportProcessHandlers.Implementation;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Infrastructure.Implementation;
 using WB.Services.Export.Interview;
+using WB.Services.Export.Jobs;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Export.Questionnaire.Services.Implementation;
 using WB.Services.Export.Services;
 using WB.Services.Export.Services.Implementation;
+using WB.Services.Export.Services.Processing;
+using WB.Services.Export.Services.Processing.Good;
+using WB.Services.Export.Storage;
+using WB.Services.Export.Utils;
+using WB.Services.Infrastructure.FileSystem;
 
 namespace WB.Services.Export
 {
     public class ServicesRegistry
     {
-        public static void Configure(IServiceCollection services)
+        public static void Configure(IServiceCollection services, IConfiguration configuration)
         {
             // Transients
             services.AddTransient<IFileSystemAccessor, FileSystemAccessor>();
@@ -36,11 +43,25 @@ namespace WB.Services.Export
             services.AddTransient<IExportQuestionService, ExportQuestionService>();
             services.AddTransient<IDescriptionGenerator, DescriptionGenerator.DescriptionGenerator>();
             services.AddTransient<IEnvironmentContentService, StataEnvironmentContentService>();
+            services.AddTransient<IFilebasedExportedDataAccessor, FilebasedExportedDataAccessor>();
+            services.AddTransient<IDataExportFileAccessor, DataExportFileAccessor>();
+            services.AddTransient<IQuestionnaireLabelFactory, QuestionnaireLabelFactory>();
+            services.AddTransient<IExportFileNameService, ExportExportFileNameService>();
+            services.AddTransient<IArchiveUtils, ZipArchiveUtils>();
+            services.AddTransient<IExternalFileStorage, S3FileStorage>();
 
             // Singletons
             services.AddSingleton<ICache, Cache>();
 
             RegisterHandlers(services);
+
+            services.AddTransient<ExportJob>();
+            services.AddTransient<IDataExportProcessesService, DataExportProcessesService>();
+            FileStorageModule.Register(services, configuration);
+
+            // options
+
+            services.Configure<InterviewDataExportSettings>(configuration.GetSection("export"));
         }
 
         private static void RegisterHandlers(IServiceCollection services)
@@ -51,7 +72,7 @@ namespace WB.Services.Export
             //services.AddTransient<SpssFormatExportHandler>();
             //services.AddTransient<StataFormatExportHandler>();
             services.AddTransient<OnedriveBinaryDataExportHandler>();
-            services.AddTransient<DropboxBinaryDataExportHandler>();;
+            services.AddTransient<DropboxBinaryDataExportHandler>(); ;
             services.AddTransient<GoogleDriveBinaryDataExportHandler>();
         }
     }

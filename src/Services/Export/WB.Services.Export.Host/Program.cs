@@ -14,6 +14,11 @@ namespace WB.Services.Export.Host
     {
         static async Task Main(string[] args)
         {
+            AppDomain.CurrentDomain.UnhandledException += (sender, eventArgs) =>
+            {
+                Console.WriteLine(eventArgs.ExceptionObject.ToString());
+            };
+
             var isService = !(Debugger.IsAttached || args.Contains("--console"));
             var isWorker = args.Contains("--worker");
 

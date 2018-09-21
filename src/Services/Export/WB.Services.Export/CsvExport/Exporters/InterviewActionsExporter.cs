@@ -90,7 +90,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             progress.Report(100);
         }
 
-        public void ExportActionsDoFile(string basePath)
+        public void ExportDoFile(QuestionnaireExportStructure questionnaireExportStructure, string basePath)
         {
             var doContent = new DoFile();
 

@@ -12,18 +12,18 @@ namespace WB.Services.Export.CsvExport.Implementation.DoFiles
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IQuestionnaireLabelFactory questionnaireLabelFactory;
-        private readonly InterviewActionsExporter interviewActionsExporter;
-        private readonly CommentsExporter commentsExporter;
+        private readonly IInterviewActionsExporter interviewActionsExporter;
+        private readonly ICommentsExporter commentsExporter;
         private readonly IInterviewErrorsExporter interviewErrorsExporter;
-        private readonly DiagnosticsExporter diagnosticsExporter;
+        private readonly IDiagnosticsExporter diagnosticsExporter;
 
         public StataEnvironmentContentService(
             IFileSystemAccessor fileSystemAccessor,
             IQuestionnaireLabelFactory questionnaireLabelFactory,
-            InterviewActionsExporter interviewActionsExporter,
-            CommentsExporter commentsExporter,
+            IInterviewActionsExporter interviewActionsExporter,
+            ICommentsExporter commentsExporter,
             IInterviewErrorsExporter interviewErrorsExporter,
-            DiagnosticsExporter diagnosticsExporter)
+            IDiagnosticsExporter diagnosticsExporter)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.questionnaireLabelFactory = questionnaireLabelFactory;
@@ -32,7 +32,6 @@ namespace WB.Services.Export.CsvExport.Implementation.DoFiles
             this.interviewErrorsExporter = interviewErrorsExporter;
             this.diagnosticsExporter = diagnosticsExporter;
         }
-
 
         public void CreateEnvironmentFiles(QuestionnaireExportStructure questionnaireExportStructure, string folderPath, CancellationToken cancellationToken)
         {
@@ -47,9 +46,9 @@ namespace WB.Services.Export.CsvExport.Implementation.DoFiles
                     ExportFileSettings.GetContentFileName(questionnaireLevelLabels.LevelName), folderPath);
             }
 
-            interviewActionsExporter.ExportActionsDoFile(folderPath);
-            commentsExporter.ExportCommentsDoFile(questionnaireExportStructure, folderPath);
-            interviewErrorsExporter.WriteDoFile(questionnaireExportStructure, folderPath);
+            interviewActionsExporter.ExportDoFile(questionnaireExportStructure, folderPath);
+            commentsExporter.ExportDoFile(questionnaireExportStructure, folderPath);
+            interviewErrorsExporter.ExportDoFile(questionnaireExportStructure, folderPath);
             diagnosticsExporter.ExportDoFile(questionnaireExportStructure, folderPath);
         }
 

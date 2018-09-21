@@ -105,7 +105,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             this.csvWriter.WriteData(filePath, new[] { headers.ToArray() }, ExportFileSettings.DataFileSeparator.ToString());
         }
 
-        public void WriteDoFile(QuestionnaireExportStructure questionnaireExportStructure, string basePath)
+        public void ExportDoFile(QuestionnaireExportStructure questionnaireExportStructure, string basePath)
         {
             var doContent = new DoFile();
             
