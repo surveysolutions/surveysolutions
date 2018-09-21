@@ -16,7 +16,7 @@ using WB.Services.Export.Utils;
 
 namespace WB.Services.Export.CsvExport.Exporters
 {
-    internal class DiagnosticsExporter : IDiagnosticsExporter
+    public class DiagnosticsExporter : IDiagnosticsExporter
     {
         private readonly IOptions<InterviewDataExportSettings> interviewDataExportSettings;
         private readonly IFileSystemAccessor fileSystemAccessor;
@@ -48,7 +48,6 @@ namespace WB.Services.Export.CsvExport.Exporters
             IOptions<InterviewDataExportSettings> interviewDataExportSettings,
             IFileSystemAccessor fileSystemAccessor,
             ICsvWriter csvWriter,
-            //ILogger logger,
             ITenantApi<IHeadquartersApi> tenantApi)
         {
             this.interviewDataExportSettings = interviewDataExportSettings;
