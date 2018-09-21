@@ -5,8 +5,10 @@ using WB.Services.Export.CsvExport.Exporters;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Questionnaire;
+using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Export.Services;
 using WB.Services.Export.Tenant;
+using WB.Services.Export.Utils;
 
 namespace WB.Services.Export.Tests
 {
@@ -79,6 +81,37 @@ namespace WB.Services.Export.Tests
         public static HeaderStructureForLevel HeaderStructureForLevel()
         {
             return new HeaderStructureForLevel { LevelScopeVector = new ValueVector<Guid>() };
+        }
+
+        public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, params IQuestionnaireEntity[] children)
+        {
+            return new QuestionnaireDocument
+            {
+                PublicKey = id ?? Guid.NewGuid(),
+                Children = children
+            };
+        }
+
+        public static TextQuestion TextQuestion(string questionText)
+        {
+            return new TextQuestion
+            {
+                QuestionText = questionText,
+                VariableName = Guid.NewGuid().FormatGuid()
+            };
+        }
+
+        public static QuestionnaireExportStructure QuestionnaireExportStructure(QuestionnaireDocument questionnaire)
+        {
+            var fileSystemAccessor = new Mock<IFileSystemAccessor>();
+            fileSystemAccessor
+                .Setup(x => x.MakeValidFileName(It.IsAny<string>()))
+                .Returns((string f) => f);
+
+            var exportViewFactory = new QuestionnaireExportStructureFactory(
+                Mock.Of<ICache>(),
+                Mock.Of<IQuestionnaireStorage>());
+            return exportViewFactory.GetQuestionnaireExportStructure(Create.Tenant(), questionnaire);
         }
     }
 

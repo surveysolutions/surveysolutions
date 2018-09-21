@@ -8,7 +8,7 @@ using WB.Services.Export.Interview;
 namespace WB.Services.Export.CsvExport.Implementation.DoFiles
 {
     [DebuggerDisplay("{VariableName} {Label}")]
-    internal class DataExportVariable
+    public class DataExportVariable
     {
         private readonly Dictionary<string, VariableValueLabel> variableValueLabels;
 

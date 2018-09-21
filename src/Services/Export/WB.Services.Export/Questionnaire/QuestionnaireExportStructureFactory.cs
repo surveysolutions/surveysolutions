@@ -13,7 +13,7 @@ using WB.Services.Export.Utils;
 
 namespace WB.Services.Export.Questionnaire
 {
-    internal class QuestionnaireExportStructureFactory: IQuestionnaireExportStructureFactory
+    public class QuestionnaireExportStructureFactory: IQuestionnaireExportStructureFactory
     {
         private readonly ICache cache;
         private const string GeneratedTitleExportFormat = "{0}__{1}";
