@@ -18,7 +18,7 @@ using WB.Services.Export.Utils;
 
 namespace WB.Services.Export.CsvExport.Exporters
 {
-    internal class CommentsExporter : ICommentsExporter
+    public class CommentsExporter : ICommentsExporter
     {
         private readonly IOptions<InterviewDataExportSettings> interviewDataExportSettings;
         private readonly IFileSystemAccessor fileSystemAccessor;
