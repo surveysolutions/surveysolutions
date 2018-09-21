@@ -2265,9 +2265,6 @@ namespace WB.Tests.Abc.TestFactories
                 Progress = progress ?? Mock.Of<IProgress<SyncProgressInfo>>()
             };
 
-        public InterviewerApplicationPatchApiView InterviewerApplicationPatchApiView(string fileName, string url) 
-            => new InterviewerApplicationPatchApiView {FileName = fileName};
-
         public InterviewerAssignmentDashboardItemViewModel InterviewerAssignmentDashboardItemViewModel(IServiceLocator serviceLocator)
         {
             return new InterviewerAssignmentDashboardItemViewModel(serviceLocator);

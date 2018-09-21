@@ -4,7 +4,6 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
-using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSyncHandlers
@@ -34,12 +33,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
         private Task<GetLatestApplicationVersionResponse> GetLatestApplicationVersion(
             GetLatestApplicationVersionRequest request)
         {
+            
             var sAppVersion = this.settings.GetApplicationVersionCode().ToString();
 
-            var pathToInterviewerAppPatches = this.fileSystemAccessor.CombinePath(
-                this.settings.InterviewerAppPatchesDirectory, sAppVersion);
+            var pathToInterviewerApks = this.fileSystemAccessor.CombinePath(
+                this.settings.InterviewerApplicationsDirectory, sAppVersion);
 
-            var hasPatches = this.fileSystemAccessor.IsDirectoryExists(pathToInterviewerAppPatches);
+            var hasPatches = this.fileSystemAccessor.IsDirectoryExists(pathToInterviewerApks);
 
             return Task.FromResult(new GetLatestApplicationVersionResponse
             {

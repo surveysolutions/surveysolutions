@@ -100,18 +100,18 @@ namespace WB.Core.BoundedContexts.Supervisor.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Downloading updates for interviewer application.
         /// </summary>
-        public static string Synchronization_Download_Interviewer_App_Patches {
+        public static string Synchronization_Download_Interviewer_Apps {
             get {
-                return ResourceManager.GetString("Synchronization_Download_Interviewer_App_Patches", resourceCulture);
+                return ResourceManager.GetString("Synchronization_Download_Interviewer_Apps", resourceCulture);
             }
         }
         
         /// <summary>
         ///   Looks up a localized string similar to Downloading updates. {0} of {1} downloaded.
         /// </summary>
-        public static string Synchronization_Download_Interviewer_App_Patches_Format {
+        public static string Synchronization_Download_Interviewer_Apps_Format {
             get {
-                return ResourceManager.GetString("Synchronization_Download_Interviewer_App_Patches_Format", resourceCulture);
+                return ResourceManager.GetString("Synchronization_Download_Interviewer_Apps_Format", resourceCulture);
             }
         }
         
