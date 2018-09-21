@@ -53,6 +53,7 @@ namespace WB.Services.Export.Services.Processing.Good
 
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
+        public string ArchiveName { get; set; }
 
         private string InterviewStatusString() => InterviewStatus?.ToString() ?? "All";
     }

@@ -20,5 +20,6 @@ namespace WB.Services.Infrastructure.FileSystem
         string CompressString(string stringToCompress);
         string DecompressString(string stringToDecompress);
         IEnumerable<ExtractedFile> GetFilesFromArchive(Stream inputStream);
+        IZipArchive CreateArchive(Stream outputStream, string password, System.IO.Compression.CompressionLevel compressionLevel);
     }
 }

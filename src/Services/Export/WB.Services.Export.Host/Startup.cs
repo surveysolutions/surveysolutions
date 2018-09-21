@@ -11,6 +11,7 @@ using Microsoft.Extensions.Hosting;
 using Prometheus;
 using WB.Services.Export.Host.Infra;
 using WB.Services.Export.Host.Scheduler;
+using WB.Services.Export.Services.Processing.Good;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace WB.Services.Export.Host
@@ -28,7 +29,7 @@ namespace WB.Services.Export.Host
         
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
-        {          
+        {
             services.AddMvcCore()
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
                 .AddJsonFormatters();            
@@ -38,7 +39,7 @@ namespace WB.Services.Export.Host
             services.AddScoped<IBackgroundJobClient, BackgroundJobClient>();
             services.AddSingleton<IHostedService, BackgroundJobsService>();
             //services.AddTransient<TabularExportJob>();
-            ServicesRegistry.Configure(services);
+            ServicesRegistry.Configure(services, Configuration);
 
             var builder = new ContainerBuilder();
             builder.Populate(services);

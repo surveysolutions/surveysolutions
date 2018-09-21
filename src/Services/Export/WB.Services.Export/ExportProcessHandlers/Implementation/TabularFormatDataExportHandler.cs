@@ -15,7 +15,6 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
     {
         private readonly ITabularFormatExportService tabularFormatExportService;
         private readonly IEnvironmentContentService environmentContentService;
-
         private readonly IQuestionnaireExportStructureFactory questionnaireExportStructureStorage;
 
         public TabularFormatDataExportHandler(

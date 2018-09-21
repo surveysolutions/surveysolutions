@@ -134,7 +134,5 @@ namespace WB.Services.Export.CsvExport.Implementation
                 Path.Combine(basePath, "export__readme.txt"),
                 descriptionBuilder.ToString());
         }
-
-
     }
 }

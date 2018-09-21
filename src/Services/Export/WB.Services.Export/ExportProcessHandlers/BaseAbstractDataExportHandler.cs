@@ -64,11 +64,12 @@ namespace WB.Services.Export.ExportProcessHandlers
                 InterviewStatus = dataExportProcessDetails.InterviewStatus,
                 FromDate = dataExportProcessDetails.FromDate,
                 ToDate = dataExportProcessDetails.ToDate,
-                ExportDirectory = this.exportTempDirectoryPath
+                ExportDirectory = this.exportTempDirectoryPath,
+                Tenant = dataExportProcessDetails.Tenant
             };
 
             var archiveName = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(
-                dataExportProcessDetails.Questionnaire, Format, dataExportProcessDetails.InterviewStatus,
+                dataExportProcessDetails.ArchiveName, Format, dataExportProcessDetails.InterviewStatus,
                 dataExportProcessDetails.FromDate, dataExportProcessDetails.ToDate);
 
             DoExport(dataExportProcessDetails, exportSettings, archiveName, exportProgress);

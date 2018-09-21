@@ -15,7 +15,7 @@ namespace WB.Services.Export.Questionnaire
     {
         private readonly ICache cache;
         private const string GeneratedTitleExportFormat = "{0}__{1}";
-        private IQuestionnaireStorage questionnaireStorage;
+        private readonly IQuestionnaireStorage questionnaireStorage;
 
         public QuestionnaireExportStructureFactory(ICache cache, IQuestionnaireStorage questionnaireStorage)
         {
@@ -27,7 +27,7 @@ namespace WB.Services.Export.Questionnaire
             QuestionnaireId questionnaireId)
         {
             var questionnaire = this.questionnaireStorage.GetQuestionnaireAsync(tenant, questionnaireId).Result;
-            return GetQuestionnaireExportStructure(tenant, questionnaireId);
+            return GetQuestionnaireExportStructure(tenant, questionnaire);
         }
 
         public QuestionnaireExportStructure GetQuestionnaireExportStructure(TenantInfo tenant,
