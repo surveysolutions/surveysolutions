@@ -126,7 +126,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             optionViewModels.ForEach(x => this.Options.Add(x));
 
-            UpdateMaxAnswersCountMessage(optionViewModels.Count);
+            UpdateMaxAnswersCountMessage(optionViewModels.Count(o => o.Checked));
         }
 
         private void UpdateMaxAnswersCountMessage(int answersCount)
