@@ -17,7 +17,7 @@ using WB.Services.Export.Tenant;
 
 namespace WB.Services.Export.CsvExport.Implementation
 {
-    internal class TabularFormatExportService : ITabularFormatExportService
+    public class TabularFormatExportService : ITabularFormatExportService
     {
         private readonly string dataFileExtension = "tab";
 

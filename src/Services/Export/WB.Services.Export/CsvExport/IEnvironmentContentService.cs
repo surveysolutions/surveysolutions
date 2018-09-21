@@ -3,7 +3,7 @@ using WB.Services.Export.Questionnaire;
 
 namespace WB.Services.Export.CsvExport
 {
-    internal interface IEnvironmentContentService
+    public interface IEnvironmentContentService
     {
         void CreateEnvironmentFiles(QuestionnaireExportStructure questionnaireExportStructure, string folderPath, CancellationToken cancellationToken);
     }

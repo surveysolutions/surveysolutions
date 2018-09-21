@@ -2,7 +2,10 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
+using WB.Services.Export.CsvExport;
 using WB.Services.Export.CsvExport.Exporters;
+using WB.Services.Export.CsvExport.Implementation;
+using WB.Services.Export.DescriptionGenerator;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Interview.Entities;
@@ -146,6 +149,25 @@ namespace WB.Services.Export.Tests
         public static IOptions<InterviewDataExportSettings> InterviewDataExportSettings()
         {
             return Mock.Of<IOptions<InterviewDataExportSettings>>(x => x.Value == new InterviewDataExportSettings());
+        }
+
+        public static TabularFormatExportService ReadSideToTabularFormatExportService(QuestionnaireExportStructure questionnaireExportStructure,
+            ITenantApi<IHeadquartersApi> tenantApi,
+            IFileSystemAccessor fileSystemAccessor = null,
+            ICsvWriter csvWriter = null)
+        {
+            return new TabularFormatExportService(Mock.Of<ILogger<TabularFormatExportService>>(),
+                tenantApi,
+                Mock.Of<IInterviewsExporter>(),
+                Mock.Of<ICommentsExporter>(),
+                Mock.Of<IDiagnosticsExporter>(),
+                Mock.Of<IInterviewActionsExporter>(),
+                Mock.Of<IQuestionnaireExportStructureFactory>(x => x.GetQuestionnaireExportStructure(It.IsAny<TenantInfo>(), It.IsAny<QuestionnaireId>()) == questionnaireExportStructure),
+                Mock.Of<IQuestionnaireStorage>(),
+                Mock.Of<IDescriptionGenerator>(),
+                Mock.Of<IEnvironmentContentService>(),
+                Mock.Of<IProductVersion>(),
+                fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>());
         }
     }
 

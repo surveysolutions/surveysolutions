@@ -23,49 +23,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.R
     internal class ReadSideToTabularFormatExportServiceTests : ReadSideToTabularFormatExportServiceTestContext
     {
         [Test]
-        public void When_generating_description_file_Then_should_generate_it_with_data_about_questionnaire_and_files()
-        {
-            // arrange
-            string description = null;
-            var fileSystemAccessor = new Mock<IFileSystemAccessor>();
-            fileSystemAccessor
-                .Setup(accessor => accessor.WriteAllText(@"x:\export__readme.txt", It.IsAny<string>()))
-                .Callback<string, string>((file, content) => description = content);
-
-            var questionnaireExportStructure = CreateQuestionnaireExportStructure(levels: new[]
-            {
-                CreateHeaderStructureForLevel("questionnaire", headerItems: new []
-                {
-                    ExportedQuestionHeaderItem(variableName: "x"),
-                    ExportedQuestionHeaderItem(variableName: "y"),
-                }),
-                CreateHeaderStructureForLevel("roster", levelScopeVector: ValueVector.Create(Guid.NewGuid()), headerItems: new []
-                {
-                    ExportedQuestionHeaderItem(variableName: "name"),
-                    ExportedQuestionHeaderItem(variableName: "age"),
-                }),
-            });
-
-            var exportService = Create.Service.ReadSideToTabularFormatExportService(
-                fileSystemAccessor: fileSystemAccessor.Object,
-                questionnaireExportStructure: questionnaireExportStructure);
-
-            // act
-            exportService.GenerateDescriptionFile(Create.Entity.QuestionnaireIdentity(), @"x:\", ".xlsx");
-
-            // assert
-            Assert.That(description, Is.Not.Empty);
-            var lines = description.Split(new [] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
-            CollectionAssert.AreEqual(lines.Skip(1), new[]
-            {
-                "questionnaire.xlsx",
-                "x, y",
-                "roster.xlsx",
-                "name, age",
-            });
-        }
-
-        [Test]
         public void when_creating_template_for_preloading_from_questionnaire_export_structure1()
         {
             //a
