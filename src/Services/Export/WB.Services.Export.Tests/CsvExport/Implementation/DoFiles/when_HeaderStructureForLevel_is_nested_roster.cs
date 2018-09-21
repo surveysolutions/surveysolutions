@@ -1,17 +1,17 @@
 using System;
 using System.Threading;
-using FluentAssertions;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
-using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
-using WB.Core.SharedKernels.DataCollection.ValueObjects;
+using NUnit.Framework;
+using WB.Services.Export.CsvExport.Implementation.DoFiles;
+using WB.Services.Export.Interview;
+using WB.Services.Export.Questionnaire;
 using WB.Tests.Abc;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.StataEnvironmentContentGeneratorTests
+namespace WB.Services.Export.Tests.CsvExport.Implementation.DoFiles
 {
     internal class when_HeaderStructureForLevel_is_nested_roster : StataEnvironmentContentGeneratorTestContext
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
-            questionnaireExportStructure = Create.Entity.QuestionnaireExportStructure();
+            questionnaireExportStructure = Create.QuestionnaireExportStructure();
 
             var topHeaderStructureForLevel =
                 CreateHeaderStructureForLevel("top");
@@ -20,12 +20,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
             var parentRosterId = Guid.NewGuid();
             var parentRosterHeaderStructureForLevel =
                 CreateHeaderStructureForLevel("parent");
-            parentRosterHeaderStructureForLevel.LevelScopeVector = new ValueVector<Guid>(new[] { questionnaireExportStructure.QuestionnaireId });
+            parentRosterHeaderStructureForLevel.LevelScopeVector = new ValueVector<Guid>(new[] { Id.g1 });
 
             nestedRosterHeaderStructureForLevel =
                 CreateHeaderStructureForLevel(dataFileName);
             nestedRosterHeaderStructureForLevel.LevelScopeVector =
-                new ValueVector<Guid>(new[] {questionnaireExportStructure.QuestionnaireId, parentRosterId});
+                new ValueVector<Guid>(new[] {Id.g1, parentRosterId});
 
             questionnaireExportStructure.HeaderToLevelMap.Add(topHeaderStructureForLevel.LevelScopeVector,
                 topHeaderStructureForLevel);
@@ -44,13 +44,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
                     default(CancellationToken));
 
         [NUnit.Framework.Test] public void should_contain_stata_script_for_insheet_file () =>
-            stataGeneratedContent.Should().Contain(string.Format("insheet using \"{0}.tab\", tab case names\r\n", dataFileName));
+            Assert.That(stataGeneratedContent, Does.Contain(string.Format("insheet using \"{0}.tab\", tab case names\r\n", dataFileName)));
 
         [NUnit.Framework.Test] public void should_contain_stata_variable_parent2_on_InterviewId_mapping () =>
-            stataGeneratedContent.Should().Contain("label variable interview__id `\"InterviewId\"'");
+            Assert.That(stataGeneratedContent, Does.Contain("label variable interview__id `\"InterviewId\"'"));
 
         [NUnit.Framework.Test] public void should_contain_stata_variable_parent1_on_parent_roster_mapping () =>
-            stataGeneratedContent.Should().Contain("label variable parent__id `\"Id in \"parent\"\"'");
+            Assert.That(stataGeneratedContent, Does.Contain("label variable parent__id `\"Id in \"parent\"\"'"));
 
         private static StataEnvironmentContentService stataEnvironmentContentService;
         private static HeaderStructureForLevel nestedRosterHeaderStructureForLevel;

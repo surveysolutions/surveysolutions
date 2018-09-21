@@ -1,24 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Main.Core.Entities.SubEntities;
 using Moq;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters;
-using WB.Core.BoundedContexts.Headquarters.Factories;
-using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
-using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
-using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.FileSystem;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.Infrastructure.Transactions;
-using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.ValueObjects;
-using WB.Infrastructure.Native.Storage.Postgre.Implementation;
+using WB.Services.Export.CsvExport.Implementation.DoFiles;
+using WB.Services.Export.Infrastructure;
+using WB.Services.Export.Interview;
+using WB.Services.Export.Questionnaire;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.StataEnvironmentContentGeneratorTests
+namespace WB.Services.Export.Tests.CsvExport.Implementation.DoFiles
 {
     [NUnit.Framework.TestOf(typeof(StataEnvironmentContentService))]
     internal class StataEnvironmentContentGeneratorTestContext
@@ -28,33 +17,16 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
         {
             return new StataEnvironmentContentService(fileSystemAccessor, 
                 new QuestionnaireLabelFactory(),
-                new InterviewActionsExporter(Mock.Of<InterviewDataExportSettings>(), 
-                    Mock.Of<IFileSystemAccessor>(), 
-                    Mock.Of<ICsvWriter>(),
-                    Mock.Of<ITransactionManagerProvider>(),
-                    Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(),
-                    Mock.Of<ILogger>(),
-                    Mock.Of<ISessionProvider>()),
-                new CommentsExporter(Mock.Of<InterviewDataExportSettings>(),
-                    Mock.Of<IFileSystemAccessor>(),
-                    Mock.Of<ICsvWriter>(),
-                    Mock.Of<IQueryableReadSideRepositoryReader<InterviewCommentaries>>(),
-                    Mock.Of<ITransactionManagerProvider>(),
-                    Mock.Of<ILogger>(),
-                    Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>()),
-                new InterviewErrorsExporter(Mock.Of<ICsvWriter>(), Mock.Of<IQuestionnaireStorage>(), Mock.Of<IFileSystemAccessor>()),
-                new DiagnosticsExporter(Mock.Of<InterviewDataExportSettings>(), 
-                    Mock.Of<IFileSystemAccessor>(),
-                    Mock.Of<ICsvWriter>(),
-                    Mock.Of<ILogger>(),
-                    Mock.Of<IInterviewDiagnosticsFactory>(),
-                    Mock.Of<ITransactionManagerProvider>()));
+                Create.InterviewActionsExporter(Create.HeadquartersApi()),
+                Create.CommentsExporter(),
+                Create.InterviewErrorsExporter(),
+                Create.DiagnosticsExporter());
         }
 
         protected static IFileSystemAccessor CreateFileSystemAccessor(Action<string> returnContentAction)
         {
             var fileSystemAccessorMock = new Mock<IFileSystemAccessor>();
-            fileSystemAccessorMock.Setup(x => x.MakeStataCompatibleFileName(Moq.It.IsAny<string>()))
+            fileSystemAccessorMock.Setup(x => x.MakeValidFileName(Moq.It.IsAny<string>()))
                 .Returns<string>(s => s);
             fileSystemAccessorMock.Setup(x => x.WriteAllText(Moq.It.IsAny<string>(), Moq.It.IsAny<string>()))
                 .Callback<string, string>((path, content) => returnContentAction(content));

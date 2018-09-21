@@ -1,19 +1,18 @@
 using System;
 using System.Threading;
-using FluentAssertions;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
-using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
-using WB.Core.SharedKernels.DataCollection.ValueObjects;
-using WB.Tests.Abc;
+using NUnit.Framework;
+using WB.Services.Export.CsvExport.Implementation.DoFiles;
+using WB.Services.Export.Interview;
+using WB.Services.Export.Questionnaire;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.StataEnvironmentContentGeneratorTests
+namespace WB.Services.Export.Tests.CsvExport.Implementation.DoFiles
 {
     internal class when_HeaderStructureForLevel_has_one_question_with_no_labels : StataEnvironmentContentGeneratorTestContext
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
             oneQuestionHeaderStructureForLevel =
                 CreateHeaderStructureForLevel(dataFileName, exportedQuestionHeaderItems: new [] { CreateExportedHeaderItem(questionsVariableName, questionsTitle)});
-            questionnaireExportStructure = Create.Entity.QuestionnaireExportStructure();
+            questionnaireExportStructure = Create.QuestionnaireExportStructure();
             questionnaireExportStructure.HeaderToLevelMap.Add(new ValueVector<Guid>(),
                 oneQuestionHeaderStructureForLevel);
             stataEnvironmentContentService =
@@ -26,10 +25,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
                     default(CancellationToken));//stataEnvironmentContentService.CreateContentOfAdditionalFile(oneQuestionHeaderStructureForLevel,dataFileName, contentFilePath);
 
         [NUnit.Framework.Test] public void should_contain_stata_script_for_insheet_file () =>
-            stataGeneratedContent.Should().Contain(string.Format("insheet using \"{0}.tab\", tab case names\r\n", dataFileName));
+            Assert.That(stataGeneratedContent, Does.Contain(string.Format("insheet using \"{0}.tab\", tab case names\r\n", dataFileName)));
 
         [NUnit.Framework.Test] public void should_contain_stata_variable_on_title_mapping () =>
-           stataGeneratedContent.Should().Contain(string.Format("label variable {0} `\"{1}\"'",questionsVariableName,questionsTitle));
+          Assert.That(stataGeneratedContent, Does.Contain(string.Format("label variable {0} `\"{1}\"'",questionsVariableName,questionsTitle)));
 
         private static StataEnvironmentContentService stataEnvironmentContentService;
         private static HeaderStructureForLevel oneQuestionHeaderStructureForLevel;

@@ -8,7 +8,7 @@ using WB.Services.Export.Questionnaire;
 
 namespace WB.Services.Export.CsvExport.Implementation.DoFiles
 {
-    internal class StataEnvironmentContentService : IEnvironmentContentService
+    public class StataEnvironmentContentService : IEnvironmentContentService
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IQuestionnaireLabelFactory questionnaireLabelFactory;
@@ -71,7 +71,7 @@ namespace WB.Services.Export.CsvExport.Implementation.DoFiles
             return $"{levelName}.{DoFile.ContentFileNameExtension}";
         }
 
-        protected void BuildLabelsForLevel(DoFile doContent, QuestionnaireLevelLabels questionnaireLevelLabels)
+        private void BuildLabelsForLevel(DoFile doContent, QuestionnaireLevelLabels questionnaireLevelLabels)
         {
             foreach (var variableLabel in questionnaireLevelLabels.LabeledVariable)
             {

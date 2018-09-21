@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
@@ -75,9 +76,9 @@ namespace WB.Services.Export.Tests
             return new TenantInfo();
         }
 
-        public static QuestionnaireExportStructure QuestionnaireExportStructure(string questionnaireId)
+        public static QuestionnaireExportStructure QuestionnaireExportStructure(string questionnaireId = null)
         {
-            return new QuestionnaireExportStructure()
+            return new QuestionnaireExportStructure
             {
                 QuestionnaireId = questionnaireId
             };
@@ -168,6 +169,48 @@ namespace WB.Services.Export.Tests
                 Mock.Of<IEnvironmentContentService>(),
                 Mock.Of<IProductVersion>(),
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>());
+        }
+
+        public static CommentsExporter CommentsExporter()
+        {
+            return new CommentsExporter(Create.InterviewDataExportSettings(),
+                Mock.Of<IFileSystemAccessor>(),
+                Mock.Of<ICsvWriter>(),
+                Create.HeadquartersApi(),
+                Mock.Of<ILogger<CommentsExporter>>());
+        }
+
+        public static IInterviewErrorsExporter InterviewErrorsExporter()
+        {
+            return new InterviewErrorsExporter(Mock.Of<ICsvWriter>(), Mock.Of<IFileSystemAccessor>());
+        }
+
+        public static MultyOptionsQuestion MultyOptionsQuestion(Guid? id = null,
+            IEnumerable<Answer> options = null, 
+            Guid? linkedToQuestionId = null,
+            string variable = null,
+            bool yesNoView = false,
+            Guid? linkedToRosterId = null,
+            bool areAnswersOrdered = false)
+            => new MultyOptionsQuestion
+            {
+                QuestionType = QuestionType.MultyOption,
+                PublicKey = id ?? Guid.NewGuid(),
+                Answers = linkedToQuestionId.HasValue ? null : new List<Answer>(options ?? new Answer[] { }),
+                LinkedToQuestionId = linkedToQuestionId,
+                LinkedToRosterId = linkedToRosterId,
+                VariableName = variable,
+                YesNoView = yesNoView,
+                AreAnswersOrdered = areAnswersOrdered
+            };
+
+        public static Answer Option(string text, string value)
+        {
+            return new Answer
+            {
+                AnswerText = text ?? "text",
+                AnswerValue = value ?? "1",
+            };
         }
     }
 

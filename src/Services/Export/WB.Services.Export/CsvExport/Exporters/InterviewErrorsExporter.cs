@@ -10,7 +10,7 @@ using WB.Services.Export.Utils;
 
 namespace WB.Services.Export.CsvExport.Exporters
 {
-    internal class InterviewErrorsExporter : IInterviewErrorsExporter
+    public class InterviewErrorsExporter : IInterviewErrorsExporter
     {
         private readonly ICsvWriter csvWriter;
         private readonly IFileSystemAccessor fileSystemAccessor;
