@@ -1,6 +1,6 @@
 ﻿namespace WB.Services.Export.CsvExport.Exporters
 {
-    internal class VariableValueLabel
+    public class VariableValueLabel
     {
         public VariableValueLabel(string value, string label)
         {
