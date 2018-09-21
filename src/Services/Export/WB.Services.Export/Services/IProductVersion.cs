@@ -1,6 +1,6 @@
 ﻿namespace WB.Services.Export.Services
 {
-    internal interface IProductVersion
+    public interface IProductVersion
     {
         string ToString();
     }
