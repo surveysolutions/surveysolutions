@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using WB.Services.Export.CsvExport.Exporters;
 using WB.Services.Export.DescriptionGenerator;
+using WB.Services.Export.ExportProcessHandlers;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Questionnaire;
@@ -62,15 +63,23 @@ namespace WB.Services.Export.CsvExport.Implementation
         }
 
         public async Task ExportInterviewsInTabularFormat(
-            TenantInfo tenant,
-            QuestionnaireId questionnaireIdentity,
-            InterviewStatus? status,
-            string basePath,
-            DateTime? fromDate,
-            DateTime? toDate,
+            ExportSettings settings,
+            //TenantInfo tenant,
+            //QuestionnaireId questionnaireIdentity,
+            //InterviewStatus? status,
+            //string basePath,
+            //DateTime? fromDate,
+            //DateTime? toDate,
             IProgress<int> progress,
             CancellationToken cancellationToken)
         {
+            var tenant = settings.Tenant;
+            var questionnaireIdentity = settings.QuestionnaireId;
+            var basePath = settings.ExportTempDirectory;
+            var status = settings.InterviewStatus;
+            var fromDate = settings.FromDate;
+            var toDate = settings.ToDate;
+
             var questionnaire = await this.questionnaireStorage.GetQuestionnaireAsync(tenant, questionnaireIdentity);
 
             QuestionnaireExportStructure questionnaireExportStructure = this.exportStructureFactory.GetQuestionnaireExportStructure(tenant, questionnaire);
@@ -91,8 +100,7 @@ namespace WB.Services.Export.CsvExport.Implementation
             var interviewIdsToExport = interviewsToExport.Select(x => x.Id).ToList();
 
             Stopwatch exportWatch = Stopwatch.StartNew();
-            basePath = Path.Combine(basePath, ".export", tenant.Id.ToString());
-            Directory.CreateDirectory(basePath);
+            // Directory.CreateDirectory(basePath);
 
             await Task.WhenAll(
             this.commentsExporter.ExportAsync(questionnaireExportStructure, interviewIdsToExport, basePath, tenant, exportCommentsProgress, cancellationToken),
