@@ -288,8 +288,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         {
             exportProcessingStopwatch.Start();
 
-            FilterOutDisabledByParentsQuestions(interviewToExport, questionnaire);
-
             var interview = interviewToExport.Entities;
 
             List<string[]> errors = errorsExporter.Export(exportStructure, interview, basePath, interviewToExport.Key);
@@ -305,60 +303,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
             exportedData.Data[InterviewErrorsExporter.FileName] = errors.Select(x => string.Join(dataFileSeparator, x.Select(v => v?.Replace(dataFileSeparator, "")))).ToArray();
             exportProcessingStopwatch.Stop();
             return exportedData;
-        }
-
-        private void FilterOutDisabledByParentsQuestions(InterviewToExport interviewToExport, IQuestionnaire questionnaire)
-        {
-            var disabledEntitiesToExport = interviewToExport.Entities
-                .Where(x => !x.IsEnabled)
-                .Where(x => (x.EntityType == EntityType.Question || x.EntityType == EntityType.Variable))
-                .ToList();
-
-            if (disabledEntitiesToExport.Count == 0)
-                return;
-
-            var disabledParents = interviewToExport.Entities
-                .Where(x => !x.IsEnabled)
-                .Where(x => x.EntityType == EntityType.Section)
-                .Select(x => x.Identity)
-                .GroupBy(x => x.Id)
-                .ToDictionary(x => x.Key, x => x.ToHashSet());
-
-            if (disabledParents.Count == 0)
-                return;
-
-            foreach (var disabledIdentity in disabledEntitiesToExport)
-            {
-                var parentIds = questionnaire.GetParentsStartingFromTop(disabledIdentity.Identity.Id);
-
-                foreach (var parentId in parentIds)
-                {
-                    disabledParents.TryGetValue(parentId, out HashSet<Identity> parentIdentities);
-                    
-                    if (parentIdentities == null)
-                        continue;
-
-                    if (parentIdentities.Count == 0)
-                        continue;
-
-                    var parentRosterVectorLength = parentIdentities.First().RosterVector.Length;
-
-                    var targetParentIdentity = new Identity(parentId, disabledIdentity.Identity.RosterVector.Take(parentRosterVectorLength));
-
-                    if (parentIdentities.Contains(targetParentIdentity))
-                    {
-                        interviewToExport.Entities.Remove(disabledIdentity);
-                        break;
-                    }
-                }
-            }
-
-            var disabledParentEntities = interviewToExport.Entities
-                .Where(x => !x.IsEnabled)
-                .Where(x => x.EntityType == EntityType.Section)
-                .ToList();
-
-            disabledParentEntities.ForEach(x => interviewToExport.Entities.Remove(x));
         }
 
         private InterviewExportedDataRecord CreateInterviewExportedData(InterviewDataExportView interviewDataExportView, InterviewToExport interviewId)
