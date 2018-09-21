@@ -2,22 +2,21 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
-using WB.Core.BoundedContexts.Headquarters.Factories;
-using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Tests.Abc;
+using WB.Services.Export.CsvExport.Exporters;
+using WB.Services.Export.Infrastructure;
+using WB.Services.Export.Interview;
+using WB.Services.Export.Services;
 
-
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport
+namespace WB.Services.Export.Tests.CsvExport.Exporters
 {
     [TestFixture]
     internal class DiagnosticsExporterTests
     {
         [Test]
-        public void when_exporting_interview_diagnostics()
+        public async Task when_exporting_interview_diagnostics()
         {
             var interviewId1 = Guid.Parse("11111111111111111111111111111111");
             var interviewId2 = Guid.Parse("22222222222222222222222222222222");
@@ -25,12 +24,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport
 
             var fileSystemAccessor = new Mock<IFileSystemAccessor>();
             fileSystemAccessor.Setup(x => x.IsDirectoryExists(It.IsAny<string>())).Returns(false);
-            fileSystemAccessor.Setup(x => x.GetFilesInDirectory(It.IsAny<string>(), It.IsAny<bool>())).Returns(new[] { "1.tab", "2.txt" });
-            fileSystemAccessor.Setup(x => x.CombinePath(It.IsAny<string>(), It.IsAny<string>())).Returns<string, string>(Path.Combine);
+            fileSystemAccessor.Setup(x => x.GetFilesInDirectory(It.IsAny<string>())).Returns(new[] { "1.tab", "2.txt" });
 
-            var diagnosticsInfo = new List<InterviewDiagnosticsInfo>
+            List<InterviewDiagnosticsInfo> diagnosticsInfo = new List<InterviewDiagnosticsInfo>
             {
-                Create.Entity.InterviewDiagnosticsInfo(
+                Create.InterviewDiagnosticsInfo(
                     interviewId1,
                     interviewKey: "key1",
                     status: InterviewStatus.InterviewerAssigned,
@@ -43,7 +41,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport
                     numberUnansweredQuestions: 6,
                     numberCommentedQuestions: 7,
                     interviewDuration: 100000),
-                Create.Entity.InterviewDiagnosticsInfo(
+                Create.InterviewDiagnosticsInfo(
                     interviewId2,
                     interviewKey: "key2",
                     status: InterviewStatus.RejectedByHeadquarters,
@@ -56,7 +54,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport
                     numberUnansweredQuestions: 4,
                     numberCommentedQuestions: 3,
                     interviewDuration: 200000),
-                Create.Entity.InterviewDiagnosticsInfo(
+                Create.InterviewDiagnosticsInfo(
                     interviewId3,
                     interviewKey: "key3",
                     status: InterviewStatus.RejectedBySupervisor,
@@ -71,8 +69,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport
                     interviewDuration: 1758237000),
             };
 
-            var diagnosticsFactory = new Mock<IInterviewDiagnosticsFactory>();
-            diagnosticsFactory.Setup(x => x.GetByBatchIds(It.IsAny<IEnumerable<Guid>>())).Returns(diagnosticsInfo);
+            var hqApi = new Mock<IHeadquartersApi>();
+            hqApi.SetupIgnoreArgs(x => x.GetInterviewDiagnosticsInfoBatchAsync(null))
+                .ReturnsAsync(diagnosticsInfo.ToArray);
 
             var fileData = new List<string[]>();
 
@@ -84,12 +83,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport
                     fileData.AddRange(data);
                 });
 
-            var exporter = Create.Service.DiagnisticsExporter(csvWriter: csvWriterMock.Object,
+            var exporter = Create.DiagnosticsExporter(csvWriter: csvWriterMock.Object,
                 fileSystemAccessor: fileSystemAccessor.Object,
-                diagnosticsFactory: diagnosticsFactory.Object);
+                headquartersApi: Create.TenantHeadquartersApi(hqApi.Object));
 
 
-            exporter.Export(new List<Guid>() { interviewId1, interviewId2, interviewId3 }, "", new Progress<int>(), CancellationToken.None);
+            await exporter.ExportAsync(new List<Guid>() { interviewId1, interviewId2, interviewId3 }, "", Create.Tenant(), new Progress<int>(), CancellationToken.None);
 
             Assert.That(fileData.Count, Is.EqualTo(3 /*interviews*/ + 1 /*header*/));
             Assert.That(fileData[0], Is.EqualTo(new[] { "interview__id", "interview__key", "interview_status", "responsible", "n_of_Interviewers", "n_rejections_by_supervisor", "n_rejections_by_hq", "n_entities_errors", "n_questions_comments", "interview_duration" }));
