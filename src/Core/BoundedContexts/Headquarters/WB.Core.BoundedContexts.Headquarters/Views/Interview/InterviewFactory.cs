@@ -319,12 +319,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 entity.AsArea = answer.AsArea;
             });
 
-            SaveInterviewStateItem(state.Id, perEntity.Values.Where(IsNeeded).ToList());
-
-            bool IsNeeded(InterviewEntity entity)
-            {
-                return entity.EntityType != EntityType.Section;
-            }
+            SaveInterviewStateItem(state.Id, perEntity.Values);
         }
 
         private Dictionary<Guid, int> GetQuestionnaireEntities(string questionnaireIdentity)
