@@ -2,7 +2,7 @@
 {
     public class MultyOptionsQuestion : Question
     {
-        public bool YesNoView { get; }
-        public bool AreAnswersOrdered { get; }
+        public bool YesNoView { get; set; }
+        public bool AreAnswersOrdered { get; set; }
     }
 }

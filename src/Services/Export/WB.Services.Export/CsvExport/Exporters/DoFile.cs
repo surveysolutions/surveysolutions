@@ -5,7 +5,7 @@ using System.Text.RegularExpressions;
 
 namespace WB.Services.Export.CsvExport.Exporters
 {
-    internal class DoFile
+    public class DoFile
     {
         public const string ContentFileNameExtension = "do";
         private readonly StringBuilder doContent = new StringBuilder();

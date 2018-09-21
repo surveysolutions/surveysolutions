@@ -1,18 +1,17 @@
 using System;
 using System.Threading;
-using FluentAssertions;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
-using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
-using WB.Core.SharedKernels.DataCollection.ValueObjects;
-using WB.Tests.Abc;
+using NUnit.Framework;
+using WB.Services.Export.CsvExport.Implementation.DoFiles;
+using WB.Services.Export.Interview;
+using WB.Services.Export.Questionnaire;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.StataEnvironmentContentGeneratorTests
+namespace WB.Services.Export.Tests.CsvExport.Implementation.DoFiles
 {
     internal class when_HeaderStructureForLevel_has_no_questions : StataEnvironmentContentGeneratorTestContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [OneTimeSetUp] public void context () {
             emptyHeaderStructureForLevel = CreateHeaderStructureForLevel(dataFileName);
-            questionnaireExportStructure = Create.Entity.QuestionnaireExportStructure();
+            questionnaireExportStructure = Create.QuestionnaireExportStructure();
             questionnaireExportStructure.HeaderToLevelMap.Add(new ValueVector<Guid>(),
                 emptyHeaderStructureForLevel);
 
@@ -24,7 +23,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.S
                     default(CancellationToken)); //stataEnvironmentContentService.CreateContentOfAdditionalFile(emptyHeaderStructureForLevel,dataFileName, contentFilePath);
 
         [NUnit.Framework.Test] public void should_contain_stata_script_for_insheet_file () =>
-            stataGeneratedContent.Should().Contain($"insheet using \"{dataFileName}.tab\", tab case names\r\n");
+            Assert.That(stataGeneratedContent, Does.Contain($"insheet using \"{dataFileName}.tab\", tab case names\r\n"));
 
         private static StataEnvironmentContentService stataEnvironmentContentService;
         private static HeaderStructureForLevel emptyHeaderStructureForLevel;
