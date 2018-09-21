@@ -18,7 +18,7 @@ using WB.Services.Export.Utils;
 
 namespace WB.Services.Export.CsvExport.Exporters
 {
-    internal class InterviewActionsExporter: IInterviewActionsExporter
+    public class InterviewActionsExporter: IInterviewActionsExporter
     {
         private readonly IOptions<InterviewDataExportSettings> interviewDataExportSettings;
         public readonly string InterviewActionsFileName = "interview__actions";

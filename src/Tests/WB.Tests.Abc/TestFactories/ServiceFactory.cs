@@ -578,20 +578,6 @@ namespace WB.Tests.Abc.TestFactories
             return new InterviewTreeBuilder(Create.Service.SubstitutionTextFactory());
         }
 
-        public InterviewActionsExporter InterviewActionsExporter(ICsvWriter csvWriter = null,
-            IFileSystemAccessor fileSystemAccessor = null,
-            IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatuses = null,
-            QuestionnaireExportStructure questionnaireExportStructure = null)
-        {
-            return new InterviewActionsExporter(new InterviewDataExportSettings(),
-                fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
-                csvWriter ?? Mock.Of<ICsvWriter>(),
-                Create.Service.TransactionManagerProvider(),
-                interviewStatuses ?? new TestInMemoryWriter<InterviewSummary>(),
-                Mock.Of<ILogger>(),
-                Mock.Of<ISessionProvider>());
-        }
-
         public InterviewStatusTimeSpanDenormalizer InterviewStatusTimeSpanDenormalizer()
         {
             return new InterviewStatusTimeSpanDenormalizer();
