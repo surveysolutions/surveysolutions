@@ -141,6 +141,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         ReadOnlyCollection<Guid> GetAllGroups();
 
+        ReadOnlyCollection<Guid> GetAllRosters();
+
         IEnumerable<Guid> GetAllUnderlyingQuestions(Guid groupId);
 
         IEnumerable<Guid> GetAllUnderlyingQuestionsOutsideRosters(Guid? groupId);

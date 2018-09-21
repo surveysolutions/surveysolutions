@@ -103,7 +103,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             InterviewData interview = CreateInterviewData();
             var vector = new decimal[] { 0 };
             var interviewLevel = new InterviewLevel(new ValueVector<Guid> { numericRosterSizeId }, 0, vector);
-            interviewLevel.ScopeVectors.Add(new ValueVector<Guid> { listRosterSizeId }, 0);
+            interviewLevel.RosterScope = new ValueVector<Guid> { listRosterSizeId };
             interviewLevel.QuestionsSearchCache.Add(questionInNumericRosterId, new InterviewQuestion(questionInNumericRosterId));
             interviewLevel.QuestionsSearchCache[questionInNumericRosterId].Answer = 22;
             interview.Levels.Add(string.Join(",", vector), interviewLevel);

@@ -8,7 +8,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
     {
         public InterviewLevel()
         {
-            this.ScopeVectors = new Dictionary<ValueVector<Guid>, int?>();
             this.RosterRowTitles = new Dictionary<Guid, string>();
             this.QuestionsSearchCache = new Dictionary<Guid, InterviewQuestion>();
             this.Variables = new Dictionary<Guid, object>();
@@ -17,15 +16,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public InterviewLevel(ValueVector<Guid> scopeVector, int? sortIndex, decimal[] vector)
             : this()
         {
-            this.ScopeVectors = new Dictionary<ValueVector<Guid>, int?> { { scopeVector, sortIndex } };
+            this.RosterScope = scopeVector;
             this.RosterVector = vector;
         }
 
         public decimal[] RosterVector { get; set; }
-        public Dictionary<ValueVector<Guid>, int?> ScopeVectors { get; set; }
         public Dictionary<Guid, string> RosterRowTitles { get; set; }
         public Dictionary<Guid, InterviewQuestion> QuestionsSearchCache { get; set; }
         public Dictionary<Guid, object> Variables { get; set; }
         public HashSet<Guid> DisabledVariables { get; set; }
+
+        public ValueVector<Guid> RosterScope { get; set; }
     }
 }

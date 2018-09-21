@@ -14,7 +14,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFactoryTests
 {
-    internal class when_creating_interview_export_view_by_interview_with_1_answerd_datetime_question : ExportViewFactoryTestsContext
+    internal class when_creating_interview_export_view_by_interview_with_1_answered_datetime_question : ExportViewFactoryTestsContext
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
             dateTimeQuestionId = Guid.Parse("10000000000000000000000000000000");
