@@ -109,8 +109,12 @@ namespace WB.UI.Designer.App_Start
             //kernel.ContainerBuilder.RegisterWebApiFilterProvider(config);
             //kernel.ContainerBuilder.RegisterWebApiModelBinderProvider();
 
+            //temp logging
+            kernel.ContainerBuilder.RegisterModule<LogRequestModule>();
+
             // init
             kernel.Init().Wait();
+
 
             // DependencyResolver
             var resolver = new CustomWebApiDependencyResolver(kernel.Container);
