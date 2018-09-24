@@ -743,6 +743,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public ReadOnlyCollection<Guid> GetAllGroups()
             => this.AllGroups.Select(question => question.PublicKey).ToReadOnlyCollection();
 
+        public ReadOnlyCollection<Guid> GetAllRosters()
+            => this.AllGroups.Where(x => x.IsRoster).Select(question => question.PublicKey).ToReadOnlyCollection();
+
         public IEnumerable<Guid> GetAllUnderlyingQuestions(Guid groupId)
             => this.cacheOfUnderlyingQuestions.GetOrAdd(groupId, this.GetAllUnderlyingQuestionsImpl);
 

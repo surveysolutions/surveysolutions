@@ -1,4 +1,5 @@
 using System;
+using System.Diagnostics;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
@@ -35,7 +36,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         public EntityType EntityType { get; set; }
     }
 
-
+    [DebuggerDisplay("{Identity} {EntityType} {IsEnabled}")]
     public class InterviewEntity : IView
     {
         public virtual Guid InterviewId { get; set; }

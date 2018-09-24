@@ -969,6 +969,17 @@ namespace WB.Tests.Abc.TestFactories
                 auditLogService ?? Mock.Of<IAuditLogService>(),
                 enumeratorSettings ?? Mock.Of<IEnumeratorSettings>());
         }
+
+        public InterviewFactory InterviewFactory(
+            IQueryableReadSideRepositoryReader<InterviewSummary> summaryRepository = null,
+            ISessionProvider sessionProvider = null,
+            IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireItems = null)
+        {
+            return new InterviewFactory(
+                summaryRepository ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(),
+                sessionProvider ?? Mock.Of<ISessionProvider>(),
+                questionnaireItems ?? Mock.Of<IPlainStorageAccessor<QuestionnaireCompositeItem>>());
+        }
     }
 
     internal static class GoogleConnectionsRequestHandlerExtensions
