@@ -1,9 +1,8 @@
 using FluentAssertions;
-using Main.Core.Entities.SubEntities;
-using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
-using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
+using WB.Services.Export.Interview.Entities;
+using WB.Services.Export.Questionnaire;
 
-namespace WB.Tests.Unit.DataExportTests.ExportedQuestionTests
+namespace WB.Services.Export.Tests.CsvExport.Exporters.ExportedQuestionTests
 {
     public class when_creating_export_structure_for_yes_no_question : ExportedQuestionTestContext
     {
@@ -15,7 +14,7 @@ namespace WB.Tests.Unit.DataExportTests.ExportedQuestionTests
 
         public void BecauseOf() 
         {
-            filledQuestion = CreateFilledExportedQuestion(QuestionType.MultyOption, 3, new object[2]
+            filledQuestion = CreateFilledExportedQuestion(QuestionType.MultyOption, 3, new AnsweredYesNoOption[2]
             {
                 new AnsweredYesNoOption(2, true),
                 new AnsweredYesNoOption(0, false),

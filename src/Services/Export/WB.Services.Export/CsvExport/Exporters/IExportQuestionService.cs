@@ -14,7 +14,7 @@ namespace WB.Services.Export.CsvExport.Exporters
         string[] GetExportedVariable(object variable, ExportedVariableHeaderItem header, bool isDisabled);
     }
 
-    internal class ExportQuestionService : IExportQuestionService
+    public class ExportQuestionService : IExportQuestionService
     {
         private static readonly CultureInfo ExportCulture = CultureInfo.InvariantCulture;
 
@@ -85,16 +85,15 @@ namespace WB.Services.Export.CsvExport.Exporters
                 case QuestionType.QRBarcode:
                 case QuestionType.Area:
                 case QuestionType.Audio:
-                    return new string[] { this.ConvertAnswerToStringValue(question.AsAudio, header) };
+                    return new string[] { this.ConvertAnswerToStringValue(question.AsObject(), header) };
 
                 case QuestionType.MultyOption:
                 case QuestionType.SingleOption:
                 case QuestionType.TextList:
-                    return this.BuildAnswerListForQuestionByHeader(question.AsList, header);
+                    return this.BuildAnswerListForQuestionByHeader(question.AsObject(), header);
                 default:
                     return new string[0];
             }
-
         }
 
         private static string[] BuildMissingValueAnswer(ExportedQuestionHeaderItem header)

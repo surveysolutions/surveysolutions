@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
-using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
-using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.Services.Export.CsvExport.Exporters;
+using WB.Services.Export.Interview;
+using WB.Services.Export.Questionnaire;
 
-namespace WB.Tests.Unit.DataExportTests.ExportedQuestionTests
+namespace WB.Services.Export.Tests.CsvExport.Exporters.ExportedQuestionTests
 {
     [TestFixture()]
     public class ExportQuestion_Variable_Tests

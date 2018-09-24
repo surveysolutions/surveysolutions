@@ -13,7 +13,7 @@ namespace WB.Services.Export.Questionnaire
             ValidationConditions = new List<ValidationCondition>();
         }
 
-        public Guid PublicKey { get; }
+        public Guid PublicKey { get; set; }
 
         public IEnumerable<IQuestionnaireEntity> Children { get; }
 

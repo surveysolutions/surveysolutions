@@ -1,8 +1,8 @@
 using System;
-using FluentAssertions;
-using Main.Core.Entities.SubEntities;
+using NUnit.Framework;
+using WB.Services.Export.Questionnaire;
 
-namespace WB.Tests.Unit.DataExportTests.ExportedQuestionTests
+namespace WB.Services.Export.Tests.CsvExport.Exporters.ExportedQuestionTests
 {
     public class when_creating_export_structure_for_datetime_question : ExportedQuestionTestContext
     {
@@ -19,9 +19,9 @@ namespace WB.Tests.Unit.DataExportTests.ExportedQuestionTests
             missingQuestion = CreateMissingValueExportedQuestion(QuestionType.DateTime);
         }
 
-        [NUnit.Framework.Test] public void should_return_correct_filled_answer () => filledQuestion.Should().BeEquivalentTo("2016-08-15");
-        [NUnit.Framework.Test] public void should_return_correct_disabled_answer () => disabledQuestion.Should().BeEquivalentTo(DisableValue);
-        [NUnit.Framework.Test] public void should_return_correct_missing_answer () => missingQuestion.Should().BeEquivalentTo(MissingStringQuestionValue);
+        [NUnit.Framework.Test] public void should_return_correct_filled_answer () => Assert.That(filledQuestion, Is.EquivalentTo(new []{"2016-08-15"}));
+        [NUnit.Framework.Test] public void should_return_correct_disabled_answer () => Assert.That(disabledQuestion, Is.EquivalentTo(new []{DisableValue}));
+        [NUnit.Framework.Test] public void should_return_correct_missing_answer () => Assert.That(missingQuestion, Is.EquivalentTo(new []{MissingStringQuestionValue}));
 
         private static string[] filledQuestion;
         private static string[] disabledQuestion;
