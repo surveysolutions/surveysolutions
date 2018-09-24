@@ -58,6 +58,12 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters.ExportedQuestionTests
                 case QuestionType.GpsCoordinates:
                     interviewQuestion.AsGps = (GeoPosition) value;
                     break;
+                case QuestionType.Audio:
+                    interviewQuestion.AsAudio = (AudioAnswer) value;
+                    break;
+                case QuestionType.TextList:
+                    interviewQuestion.AsList = (InterviewTextListAnswer[]) value;
+                    break;
             }
 
             int columnIndex = 0;
