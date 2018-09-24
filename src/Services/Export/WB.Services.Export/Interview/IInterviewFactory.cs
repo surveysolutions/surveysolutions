@@ -32,7 +32,7 @@ namespace WB.Services.Export.Interview
         Image, Audio
     }
 
-    internal class InterviewFactory : IInterviewFactory
+    public class InterviewFactory : IInterviewFactory
     {
         private readonly ITenantApi<IHeadquartersApi> tenantApi;
         private readonly IQuestionnaireStorage questionnaireStorage;

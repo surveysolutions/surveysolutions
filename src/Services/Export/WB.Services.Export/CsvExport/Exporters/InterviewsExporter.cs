@@ -201,7 +201,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             return exportedData;
         }
 
-        private InterviewDataExportView CreateInterviewDataExportView(QuestionnaireExportStructure exportStructure,
+        public InterviewDataExportView CreateInterviewDataExportView(QuestionnaireExportStructure exportStructure,
             InterviewData interview, QuestionnaireDocument questionnaire)
         {
             var interviewDataExportLevelViews = new List<InterviewDataExportLevelView>();

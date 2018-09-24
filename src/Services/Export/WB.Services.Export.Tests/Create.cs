@@ -101,12 +101,13 @@ namespace WB.Services.Export.Tests
             };
         }
 
-        public static TextQuestion TextQuestion(string questionText)
+        public static TextQuestion TextQuestion(Guid? id = null, string questionText = null)
         {
             return new TextQuestion
             {
                 QuestionText = questionText,
-                VariableName = Guid.NewGuid().FormatGuid()
+                VariableName = Guid.NewGuid().FormatGuid(),
+                PublicKey = id ?? Guid.NewGuid()
             };
         }
 
@@ -260,7 +261,7 @@ namespace WB.Services.Export.Tests
             };
         }
 
-        public static IInterviewsExporter InterviewsExporter(
+        public static InterviewsExporter InterviewsExporter(
             ICsvWriter csvWriter = null,
             IInterviewFactory interviewFactory = null)
         {
@@ -284,8 +285,12 @@ namespace WB.Services.Export.Tests
         {
             return new Identity(id ?? Guid.NewGuid(), rosterVector ?? RosterVector.Empty);
         }
-        public static InterviewEntity InterviewEntity(Guid? interviewId = null, EntityType entityType = EntityType.Question, Identity identity = null, 
-            int[] invalidValidations = null, bool isEnabled = true)
+        public static InterviewEntity InterviewEntity(Guid? interviewId = null, 
+            EntityType entityType = EntityType.Question, 
+            Identity identity = null, 
+            int[] invalidValidations = null, 
+            bool isEnabled = true,
+            int? asInt = null)
         {
             return new InterviewEntity
             {
@@ -293,13 +298,15 @@ namespace WB.Services.Export.Tests
                 EntityType = entityType,
                 Identity = identity ?? Create.Identity(),
                 InvalidValidations = invalidValidations ?? Array.Empty<int>(),
-                IsEnabled = isEnabled
+                IsEnabled = isEnabled,
+                AsInt = asInt
             };
         }
 
         public static Group Roster(Guid? rosterId = null,
             IEnumerable<IQuestionnaireEntity> children = null,
             string variable = "roster_var",
+            Guid? rosterSizeQuestionId = null,
             FixedRosterTitle[] fixedTitles = null) => new Group
         {
             PublicKey = rosterId ?? Guid.NewGuid(),
@@ -329,6 +336,27 @@ namespace WB.Services.Export.Tests
         {
             return columnNames?.Select(x => new HeaderColumn() { Name = x, Title = x }).ToList() ?? new List<HeaderColumn>();
         }
-    }
 
+        public static TextListQuestion TextListQuestion(Guid? questionId = null, 
+            string variable = null,
+            string text = "Question T",
+            bool preFilled = false,
+            string label = null,
+            IEnumerable<ValidationCondition> validationConditions = null)
+            => new TextListQuestion
+            {
+                PublicKey = questionId ?? Guid.NewGuid(),
+                QuestionText = text,
+                QuestionType = QuestionType.Text,
+                VariableName = variable ?? "vv" + Guid.NewGuid().ToString("N"),
+                Featured = preFilled,
+                VariableLabel = label,
+                ValidationConditions = validationConditions?.ToList()
+            };
+
+        public static IInterviewFactory InterviewFactory()
+        {
+            return new InterviewFactory(Create.HeadquartersApi(), Mock.Of<IQuestionnaireStorage>());
+        }
+    }
 }
