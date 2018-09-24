@@ -98,6 +98,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             var nestedRosterSizeId = Guid.Parse("55555555555555555555555555555555");
 
             var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(
+                variable: null,
                 children: new IQuestionnaireEntity[]
                 {
                     Create.NumericIntegerQuestion(rosterSizeId),
