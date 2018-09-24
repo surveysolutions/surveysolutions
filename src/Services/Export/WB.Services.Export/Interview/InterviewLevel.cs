@@ -27,5 +27,6 @@ namespace WB.Services.Export.Interview
         public Dictionary<Guid, InterviewEntity> QuestionsSearchCache { get; set; }
         public Dictionary<Guid, object> Variables { get; set; }
         public HashSet<Guid> DisabledVariables { get; set; }
+        public ValueVector<Guid> RosterScope { get; set; }
     }
 }

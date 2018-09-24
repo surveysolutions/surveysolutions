@@ -352,18 +352,13 @@ namespace WB.Services.Export.CsvExport.Exporters
         {
             if (!levelVector.Any())
             {
-                var levels = interview.Levels.Values.Where(level => level.ScopeVectors.ContainsKey(new ValueVector<Guid>())).ToList();
-                return levels.Any() ? levels : new List<InterviewLevel>
-                {
-                    new  InterviewLevel
-                    {
-                        RosterVector = RosterVector.Empty
-                    }
-                } ;
+                var levels = interview.Levels.Values.Where(level => level.RosterScope.Equals(new ValueVector<Guid>())).ToList();
+                return levels.Any()
+                    ? levels
+                    : new List<InterviewLevel> { new InterviewLevel { RosterVector = RosterVector.Empty } };
             }
-            return interview.Levels.Values.Where(level => level.ScopeVectors.ContainsKey(levelVector)).ToList();
+            return interview.Levels.Values.Where(level => level.RosterScope.Equals(levelVector)).ToList();
         }
-
 
         private InterviewExportedDataRecord CreateInterviewExportedData(InterviewDataExportView interviewDataExportView, InterviewToExport interviewId)
         {

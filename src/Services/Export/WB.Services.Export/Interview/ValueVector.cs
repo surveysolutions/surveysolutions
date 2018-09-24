@@ -21,7 +21,7 @@ namespace WB.Services.Export.Interview
 
         public ValueVector(IEnumerable<T> values)
         {
-            this.values = values.ToList();
+            this.values = values is List<T> list ? list : values.ToList();
         }
 
         public IEnumerator<T> GetEnumerator()
