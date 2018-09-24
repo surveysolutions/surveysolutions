@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
+using WB.Services.Export.Interview;
 
 namespace WB.Services.Export.Questionnaire
 {
@@ -13,16 +15,7 @@ namespace WB.Services.Export.Questionnaire
         }
 
         public string Id { get; set;}
-
-        public override void ConnectChildrenWithParent()
-        {
-            //if (childrenWereConnected) return;
-
-            base.ConnectChildrenWithParent();
-
-          //  childrenWereConnected = true;
-        }
-
+        
         public bool IsIntegerQuestion(Guid publicKey)
         {
             var result = this.Find<NumericQuestion>(x => x.PublicKey == publicKey && x.QuestionType == QuestionType.Numeric && x.IsInteger);
@@ -116,6 +109,41 @@ namespace WB.Services.Export.Questionnaire
             Group roster = this.Find<Group>(rosterId);
 
             return roster.RosterSizeQuestionId ?? roster.PublicKey;
+        }
+
+        public ImmutableList<Guid> GetAllGroups()
+            => this.GroupsCache.Values.Select(question => question.PublicKey).ToImmutableList();
+
+        private Dictionary<ValueVector<Guid>, Guid[]> rostersInLevelCache = null;
+
+        public Guid[] GetRostersInLevel(ValueVector<Guid> rosterScope)
+        {
+            if (rostersInLevelCache == null)
+            {
+                rostersInLevelCache = GetAllGroups()
+                    .Select(x => new
+                    {
+                        RosterScope = new ValueVector<Guid>(GetRosterSizeSourcesForEntity(x)),
+                        RosterId = x
+                    })
+                    .GroupBy(x => x.RosterScope)
+                    .ToDictionary(x => x.Key, x => x.Select(e => e.RosterId).ToArray());
+            }
+
+            return rostersInLevelCache[rosterScope];
+        }
+
+        private Dictionary<Guid, Group> groupsCache;
+        private Dictionary<Guid, Group> GroupsCache
+        {
+            get
+            {
+                return this.groupsCache ?? (
+                           this.groupsCache = this.Find<Group>(_ => true)
+                               .ToDictionary(
+                                   group => group.PublicKey,
+                                   group => group));
+            }
         }
     }
 }
