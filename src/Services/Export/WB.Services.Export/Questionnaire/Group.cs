@@ -1,8 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace WB.Services.Export.Questionnaire
 {
+    public enum RosterSizeSourceType
+    {
+        Question = 0,
+        FixedTitles = 1
+    }
+
+    [DebuggerDisplay("Group {PublicKey}")]
     public class Group : IQuestionnaireEntity
     {
         public Group(List<IQuestionnaireEntity> children = null)
@@ -16,11 +24,13 @@ namespace WB.Services.Export.Questionnaire
             }
         }
 
-        public bool IsRoster { get; set; }
+        public virtual bool IsRoster { get; set; }
 
         public Guid? RosterSizeQuestionId { get; set;  }
 
-        public bool IsFixedRoster => IsRoster && RosterSizeQuestionId == null;
+        public RosterSizeSourceType RosterSizeSource { get; set;  }
+
+        public bool IsFixedRoster => this.IsRoster && this.RosterSizeSource == RosterSizeSourceType.FixedTitles;
 
         public IQuestionnaireEntity Parent { get; private set; }
 

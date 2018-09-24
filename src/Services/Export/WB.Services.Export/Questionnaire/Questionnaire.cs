@@ -35,6 +35,8 @@ namespace WB.Services.Export.Questionnaire
             return result?.VariableName;
         }
 
+        public override bool IsRoster => false;
+
         public IEnumerable<Guid> GetRostersFromTopToSpecifiedEntity(Guid entityId)
         {
             return this

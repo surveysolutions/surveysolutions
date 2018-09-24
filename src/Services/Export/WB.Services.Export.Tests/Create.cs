@@ -313,14 +313,20 @@ namespace WB.Services.Export.Tests
             Children = children ?? Enumerable.Empty<IQuestionnaireEntity>(),
             VariableName = variable ?? "var1",
             FixedRosterTitles = fixedTitles ?? Array.Empty<FixedRosterTitle>(),
-            IsRoster = true
+            IsRoster = true,
+            RosterSizeQuestionId = rosterSizeQuestionId,
+            RosterSizeSource = rosterSizeQuestionId.HasValue ? RosterSizeSourceType.Question : RosterSizeSourceType.FixedTitles
         };
 
-        public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Guid? chapterId = null, Guid? id = null, params IQuestionnaireEntity[] children)
-            => new QuestionnaireDocument
+        public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Guid? chapterId = null, 
+            Guid? id = null,
+            string variable =null,
+            params IQuestionnaireEntity[] children)
+        {
+            var questionnaireDocumentWithOneChapter = new QuestionnaireDocument
             {
                 Title = "Questionnaire",
-                VariableName = "MyQuestionnaire",
+                VariableName = variable,
                 PublicKey = id ?? Guid.NewGuid(),
                 Children = new List<IQuestionnaireEntity>
                 {
@@ -331,6 +337,9 @@ namespace WB.Services.Export.Tests
                     }
                 }
             };
+            questionnaireDocumentWithOneChapter.ConnectChildrenWithParent();
+            return questionnaireDocumentWithOneChapter;
+        }
 
         public static List<HeaderColumn> ColumnHeaders(string[] columnNames)
         {
