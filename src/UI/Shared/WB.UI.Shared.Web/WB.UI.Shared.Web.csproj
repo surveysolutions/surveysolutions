@@ -180,6 +180,7 @@
     <Compile Include="Modules\IWebModule.cs" />
     <Compile Include="Modules\AutofacModuleExtensions.cs" />
     <Compile Include="MembershipProvider\Settings\PasswordPolicyFactory.cs" />
+    <Compile Include="Modules\LogRequestModule.cs" />
     <Compile Include="Modules\WebConfigurationModule.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Resources\Captcha.Designer.cs">
