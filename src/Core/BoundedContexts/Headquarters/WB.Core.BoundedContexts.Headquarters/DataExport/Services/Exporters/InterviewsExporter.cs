@@ -18,6 +18,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.Infrastructure.Transactions;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
@@ -199,15 +200,16 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                 var exportBulk = new List<InterviewExportedDataRecord>();
                 Stopwatch batchWatch = Stopwatch.StartNew();
 
-                foreach (var interview in batch)
+                foreach (InterviewToExport interview in batch)
                 {
                     cancellationToken.ThrowIfCancellationRequested();
 
-                    exportBulk.Add(this.ExportSingleInterview(interview,
-                        interview.Entities,
+                    var dataRecords = this.ExportSingleInterview(interview,
                         questionnaireExportStructure,
                         questionnaire,
-                        basePath));
+                        basePath);
+
+                    exportBulk.Add(dataRecords);
 
                     interview.Entities.Clear(); // needed to free ram as yearly as possible
 
@@ -281,10 +283,16 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         private readonly Stopwatch getDbDataStopwatch = new Stopwatch();
         private readonly Stopwatch exportProcessingStopwatch = new Stopwatch();
 
-        private InterviewExportedDataRecord ExportSingleInterview(InterviewToExport interviewToExport,
-            List<InterviewEntity> interview, QuestionnaireExportStructure exportStructure, IQuestionnaire questionnaire, string basePath)
+        private InterviewExportedDataRecord ExportSingleInterview(
+            InterviewToExport interviewToExport,
+            QuestionnaireExportStructure exportStructure, 
+            IQuestionnaire questionnaire, 
+            string basePath)
         {
             exportProcessingStopwatch.Start();
+
+            var interview = interviewToExport.Entities;
+
             List<string[]> errors = errorsExporter.Export(exportStructure, interview, basePath, interviewToExport.Key);
 
             var interviewData = new InterviewData

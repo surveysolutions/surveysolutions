@@ -14,7 +14,8 @@ namespace WB.Core.BoundedContexts.Interviewer
     {
         public void Load(IIocRegistry registry)
         {
-            registry.BindWithConstructorArgument<ISynchronizationStep, InterviewerUploadInterviews>("sortOrder", 0);
+            registry.BindWithConstructorArgument<ISynchronizationStep, OfflineInterviewerUpdateApplication>("sortOrder", 0);
+            registry.BindWithConstructorArgument<ISynchronizationStep, InterviewerUploadInterviews>("sortOrder", 5);
             registry.BindWithConstructorArgument<ISynchronizationStep, SynchronizeAssignments>("sortOrder", 10);
             registry.BindWithConstructorArgument<ISynchronizationStep, CensusQuestionnairesSynchronization>("sortOrder", 20);
             registry.BindWithConstructorArgument<ISynchronizationStep, RemoveObsoleteQuestionnaires>("sortOrder", 30);
