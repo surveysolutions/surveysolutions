@@ -134,17 +134,17 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
                     systemVariableValues = this.GetSystemValues(interview, ServiceColumns.SystemVariables.Values);
                 else
                 {
-                    var rosterIndexAjustment = headerStructureForLevel.LevelScopeVector
+                    var rosterIndexAdjustment = headerStructureForLevel.LevelScopeVector
                         .Select(x => (questionnaire.IsQuestion(x) && questionnaire.IsQuestionInteger(x)) ? 1 : 0)
                         .ToArray();
                     
-                    recordId = (dataByLevel.RosterVector.Last() + rosterIndexAjustment.Last())
+                    recordId = (dataByLevel.RosterVector.Last() + rosterIndexAdjustment.Last())
                         .ToString(CultureInfo.InvariantCulture);
 
                     parentRecordIds[0] = interview.InterviewId.FormatGuid();
                     for (int i = 0; i < vectorLength - 1; i++)
                     {
-                        parentRecordIds[i + 1] = (dataByLevel.RosterVector[i] + rosterIndexAjustment[i]).ToString(CultureInfo.InvariantCulture);
+                        parentRecordIds[i + 1] = (dataByLevel.RosterVector[i] + rosterIndexAdjustment[i]).ToString(CultureInfo.InvariantCulture);
                     }
 
                     parentRecordIds = parentRecordIds.Reverse().ToArray();
@@ -269,10 +269,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
         {
             if (!levelVector.Any())
             {
-                var levels = interview.Levels.Values.Where(level => level.ScopeVectors.ContainsKey(new ValueVector<Guid>())).ToList();
-                return levels.Any() ? levels : new List<InterviewLevel> {new  InterviewLevel() {RosterVector = new decimal[0]}} ;
+                var levels = interview.Levels.Values.Where(level => level.RosterScope.Equals(new ValueVector<Guid>())).ToList();
+                return levels.Any() 
+                    ? levels 
+                    : new List<InterviewLevel> {new  InterviewLevel {RosterVector = new decimal[0]}} ;
             }
-            return interview.Levels.Values.Where(level => level.ScopeVectors.ContainsKey(levelVector)).ToList();
+            return interview.Levels.Values.Where(level => level.RosterScope.Equals(levelVector)).ToList();
         }
 
         protected HeaderStructureForLevel CreateHeaderStructureForLevel(

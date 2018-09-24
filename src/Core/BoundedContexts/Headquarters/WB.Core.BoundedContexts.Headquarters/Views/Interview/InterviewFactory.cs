@@ -320,12 +320,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 entity.AsArea = answer.AsArea;
             });
 
-            SaveInterviewStateItem(state.Id, perEntity.Values.Where(IsNeeded).ToList());
-
-            bool IsNeeded(InterviewEntity entity)
-            {
-                return entity.EntityType != EntityType.Section;
-            }
+            SaveInterviewStateItem(state.Id, perEntity.Values);
         }
 
         private Dictionary<Guid, int> GetQuestionnaireEntities(string questionnaireIdentity)
@@ -504,56 +499,108 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             return GetInterviewEntities(new[] { interviews }).ToList();
         }
 
-        public Dictionary<string, InterviewLevel> GetInterviewDataLevels(IQuestionnaire questionnaire, List<InterviewEntity> interviewEntities)
+        public Dictionary<string, InterviewLevel> GetInterviewDataLevels(
+            IQuestionnaire questionnaire,
+            List<InterviewEntity> interviewEntities)
         {
-            var interviewLevels = interviewEntities
-                .GroupBy(x => x.Identity?.RosterVector ?? RosterVector.Empty)
-                .Select(x => ToInterviewLevel(x.Key, x.ToArray(), questionnaire));
+            var levels = new Dictionary<string, InterviewLevel>();
 
-            var interviewDataLevels = interviewLevels.ToDictionary(k => CreateLevelIdFromPropagationVector(k.RosterVector), v => v);
-            return interviewDataLevels;
-        }
-
-        private InterviewLevel ToInterviewLevel(RosterVector rosterVector, InterviewEntity[] interviewDbEntities, IQuestionnaire questionnaire)
-        {
-            Dictionary<ValueVector<Guid>, int?> scopeVectors = new Dictionary<ValueVector<Guid>, int?>();
-            if (rosterVector.Length > 0)
-            {
-                // too slow
-                scopeVectors = interviewDbEntities
-                    .Select(x => questionnaire.GetRosterSizeSourcesForEntity(x.Identity.Id))
-                    .Select(x => new ValueVector<Guid>(x))
-                    .Distinct()
-                    .ToDictionary(x => x, x => (int?)0);
-            }
-            else
-            {
-                scopeVectors.Add(new ValueVector<Guid>(), 0);
-            }
-
-            var interviewLevel = new InterviewLevel
-            {
-                ScopeVectors = scopeVectors,
-                RosterVector = rosterVector
-            };
-
-            foreach (var entity in interviewDbEntities)
-            {
-                switch (entity.EntityType)
+            var rostersInLevels = questionnaire.GetAllGroups()
+                .Select(x => new
                 {
-                    case EntityType.Question:
-                        var question = ToQuestion(entity);
-                        interviewLevel.QuestionsSearchCache.Add(question.Id, question);
-                        break;
-                    case EntityType.Variable:
-                        interviewLevel.Variables.Add(entity.Identity.Id, ToObjectAnswer(entity));
-                        if (entity.IsEnabled == false)
-                            interviewLevel.DisabledVariables.Add(entity.Identity.Id);
-                        break;
+                    RosterScope = new ValueVector<Guid>(questionnaire.GetRosterSizeSourcesForEntity(x)),
+                    RosterId = x
+                })
+                .GroupBy(x => x.RosterScope)
+                .ToDictionary(x => x.Key, x => x.Select(e => e.RosterId).ToList());
+
+            var entitiesByRosterScope = interviewEntities
+                .Select(x => new
+                {
+                    // store this in DB for each entity. Static info
+                    RosterScope = new ValueVector<Guid>(questionnaire.GetRosterSizeSourcesForEntity(x.Identity.Id)),
+                    Entity = x
+                })
+                .GroupBy(x => x.RosterScope)
+                .ToDictionary(x => x.Key, x => x.Select(e => e.Entity).ToList());
+
+            foreach (var scopedEntities in entitiesByRosterScope)
+            {
+                var entities = scopedEntities.Value;
+                var rosterScope = scopedEntities.Key;
+
+                var rosterVectors = entities.Select(x => x.Identity?.RosterVector ?? RosterVector.Empty).Distinct()
+                    .ToList();
+
+                foreach (var rosterVector in rosterVectors)
+                {
+                    if (rosterVector.Length > 0)
+                    {
+                        var rosterIdentitiesInLevel = rostersInLevels[rosterScope].Select(x => new Identity(x, rosterVector));
+                        var allGroupAreDisabled = CheckIfAllRostersAreDisabled(rosterIdentitiesInLevel, interviewEntities);
+
+                        if (allGroupAreDisabled)
+                            continue;
+                    }
+
+                    var interviewLevel = new InterviewLevel
+                    {
+                        RosterVector = rosterVector,
+                        RosterScope = rosterScope
+                    };    
+
+                    foreach (var entity in  entities.Where(x => x.Identity.RosterVector == rosterVector))
+                    {
+                        switch (entity.EntityType)
+                        {
+                            case EntityType.Question:
+                                var question = ToQuestion(entity);
+                                interviewLevel.QuestionsSearchCache.Add(question.Id, question);
+                                break;
+                            case EntityType.Variable:
+                                interviewLevel.Variables.Add(entity.Identity.Id, ToObjectAnswer(entity));
+                                if (entity.IsEnabled == false)
+                                    interviewLevel.DisabledVariables.Add(entity.Identity.Id);
+                                break;
+                            case EntityType.Section:
+                                break;
+                            case EntityType.StaticText:
+                                break;
+                        }
+                    }
+
+                    var keyParts = rosterScope.Select(x => x.FormatGuid()).ToList();
+                    if (rosterVector.Length == 0)
+                        keyParts.Add("#");
+                    else
+                    {
+                        rosterVector.Select(x => x.ToString()).ForEach(x => keyParts.Add(x));
+                    }
+                    
+                    var levelKey = string.Join("-", keyParts);
+                    levels.Add(levelKey, interviewLevel);
                 }
             }
 
-            return interviewLevel;
+            return levels;
+        }
+
+        private bool CheckIfAllRostersAreDisabled(IEnumerable<Identity> rosterIdentitiesInLevel, List<InterviewEntity> interviewEntities)
+        {
+            foreach (var rosterIdentity in rosterIdentitiesInLevel)
+            {
+                var roster = interviewEntities.FirstOrDefault(x => x.Identity.Equals(rosterIdentity));
+                if (roster == null)
+                {
+                    // no records in DB that roster was disabled, because disablement event hasn't been raised 
+                    return false;
+                }
+
+                if (roster.IsEnabled)
+                    return false;
+            }
+
+            return true;
         }
 
         private InterviewQuestion ToQuestion(InterviewEntity entity)
