@@ -1,19 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using Main.Core.Entities.Composite;
 using Moq;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
-using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.ValueObjects;
+using WB.Services.Export.Interview;
+using WB.Services.Export.Interview.Entities;
+using WB.Services.Export.Questionnaire;
+using WB.Services.Export.Questionnaire.Services;
 using WB.Tests.Abc;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFactoryTests
+namespace WB.Services.Export.Tests.Questionnaire.QuestionnaireExportStructureFactoryTests
 {
-    [TestOf(typeof(ExportViewFactory))]
+    [TestOf(typeof(QuestionnaireExportStructureFactory))]
     internal class ExportViewFactoryTests : ExportViewFactoryTestsContext
     {
         [Test]
@@ -27,24 +24,27 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Factories.ExportViewFacto
             var nestedRosterSizeId = Guid.Parse("55555555555555555555555555555555");
 
             var questionnaireDocument = CreateQuestionnaireDocumentWithOneChapter(
-                Create.Entity.NumericIntegerQuestion(rosterSizeId),
-                Create.Entity.NumericRoster(rosterId: rosterId, rosterSizeQuestionId: rosterSizeId,
-                    children: new IComposite[]
-                    {
-                        Create.Entity.NumericIntegerQuestion(nestedRosterSizeId),
-                        Create.Entity.NumericRoster(rosterId: nestedRosterId, rosterSizeQuestionId: nestedRosterSizeId,
-                            children: new IComposite[]
-                            {
-                                Create.Entity.TextQuestion(questionInsideRosterGroupId)
-                            })
-                    }));
+                chapterChildren: new IQuestionnaireEntity[]
+                {
+                    Create.NumericIntegerQuestion(rosterSizeId),
+                    Create.Roster(rosterId: rosterId, rosterSizeQuestionId: rosterSizeId,
+                        children: new IQuestionnaireEntity[]
+                        {
+                            Create.NumericIntegerQuestion(nestedRosterSizeId),
+                            Create.Roster(rosterId: nestedRosterId,
+                                rosterSizeQuestionId: nestedRosterSizeId,
+                                children: new IQuestionnaireEntity[]
+                                {
+                                    Create.TextQuestion(questionInsideRosterGroupId)
+                                })
+                        })
+                });
 
             var questionnaireMockStorage = new Mock<IQuestionnaireStorage>();
-            IQuestionnaire questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument, 1, null);
-            questionnaireMockStorage.Setup(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>())).Returns(questionnaire);
-            questionnaireMockStorage.Setup(x => x.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>())).Returns(questionnaireDocument);
-            var exportViewFactory = CreateExportViewFactory(questionnaireMockStorage.Object);
+            questionnaireMockStorage.SetupIgnoreArgs(x => x.GetQuestionnaireAsync(null, null))
+                .ReturnsAsync(questionnaireDocument);
 
+            var exportViewFactory = CreateExportViewFactory(questionnaireMockStorage.Object);
 
             //act
             var result = exportViewFactory.CreateInterviewDataExportView(exportViewFactory.CreateQuestionnaireExportStructure(new QuestionnaireIdentity(questionnaireDocument.PublicKey, 1)),

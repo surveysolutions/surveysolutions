@@ -1,10 +1,9 @@
 using System;
-using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
-using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
-using WB.Core.SharedKernels.DataCollection.Views.Interview;
-using WB.Tests.Unit.DataExportTests.ExportedQuestionTests;
+using WB.Services.Export.CsvExport.Exporters;
+using WB.Services.Export.Interview.Entities;
+using WB.Services.Export.Questionnaire;
+using WB.Services.Export.Tests.CsvExport.Exporters.ExportedQuestionTests;
 
 namespace WB.Tests.Unit.DataExportTests
 {
