@@ -5,13 +5,10 @@ using WB.Services.Export.Interview;
 
 namespace WB.Services.Export.Questionnaire
 {
-    public class RosterScopesFiller
+     public class RosterScopesFiller
     {
         private readonly QuestionnaireDocument document;
-        private List<Group> rostersFromQuestion;
-        private List<Group> fixedRosters;
-
-        //private ILookup<RosterSizeSourceType, Group> groupsByRosterSizeSourceLookup;
+        private ILookup<RosterSizeSourceType, Group> groupsByRosterSizeSourceLookup;
         private Dictionary<Guid, Guid> groupsMappedOnPropagatableQuestion;
         private Dictionary<Guid, Question> questionsByPublicKeyDictionary;
         private List<Question> rosterSizeQuestions;
@@ -26,23 +23,22 @@ namespace WB.Services.Export.Questionnaire
 
         public void FillRosterScopes()
         {
-            this.rostersFromQuestion = this.document.Find<Group>().Where(g => g.IsRoster && !g.IsFixedRoster).ToList();
-            this.fixedRosters = this.document.Find<Group>().Where(g => g.IsRoster && g.IsFixedRoster).ToList();
+            this.groupsByRosterSizeSourceLookup = this.document.Find<Group>().Where(g => g.IsRoster).ToLookup(r => r.RosterSizeSource);
             this.groupsMappedOnPropagatableQuestion = this.GetAllRosterScopesGroupedByRosterId();
             this.questionsByPublicKeyDictionary = this.document.Find<Question>().ToDictionary(q => q.PublicKey);
-            this.rosterGroups = this.rostersFromQuestion.ToLookup(@group => @group.RosterSizeQuestionId);
+            this.rosterGroups = this.groupsByRosterSizeSourceLookup[RosterSizeSourceType.Question].ToLookup(@group => @group.RosterSizeQuestionId);
             this.rosterSizeQuestions = this.document.Find<Question>(question => this.rosterGroups[question.PublicKey].Any()).ToList();
             
             foreach (var rosterSizeQuestion in this.rosterSizeQuestions)
             {
-                var scopeVectorsOfTriggers = this.rosterGroups[rosterSizeQuestion.PublicKey].Select(this.GetScopeOfQuestionnaireItem).GroupBy(k => k);
+                var scopeVectorsOfTriggers = this.rosterGroups[rosterSizeQuestion.PublicKey].Select(this.GetScopeOfQuestionnaireItem).GroupBy(k => k).ToList();
 
                 foreach (var scopeVectorsOfTrigger in scopeVectorsOfTriggers)
                 {
                     var rosterIdWithTitleQuestionIds =
                         this.GetRosterIdToRosterTitleQuestionIdMapByRostersInScope(
                             this.rosterGroups[rosterSizeQuestion.PublicKey].Where(group => this.GetScopeOfQuestionnaireItem(group)
-                                .SequenceEqual(scopeVectorsOfTrigger.Key)));
+                                    .SequenceEqual(scopeVectorsOfTrigger.Key)));
 
                     var rosterDescription = new RosterScopeDescription(scopeVectorsOfTrigger.Key, rosterSizeQuestion.VariableName,
                         this.GetRosterScopeTypeByQuestionType(rosterSizeQuestion.QuestionType), rosterIdWithTitleQuestionIds);
@@ -51,7 +47,7 @@ namespace WB.Services.Export.Questionnaire
                 }
             }
 
-            foreach (var fixedRosterGroup in this.fixedRosters)
+            foreach (var fixedRosterGroup in this.groupsByRosterSizeSourceLookup[RosterSizeSourceType.FixedTitles])
             {
                 var scopeVector = this.GetScopeOfQuestionnaireItem(fixedRosterGroup);
 
@@ -78,9 +74,9 @@ namespace WB.Services.Export.Questionnaire
 
         private Dictionary<Guid, Guid> GetAllRosterScopesGroupedByRosterId()
         {
-            var result = this.rostersFromQuestion.ToDictionary(roster => roster.PublicKey, roster => roster.RosterSizeQuestionId.Value);
+            var result = this.groupsByRosterSizeSourceLookup[RosterSizeSourceType.Question].ToDictionary(roster => roster.PublicKey, roster => roster.RosterSizeQuestionId.Value);
 
-            foreach (var roster in this.fixedRosters)
+            foreach (var roster in this.groupsByRosterSizeSourceLookup[RosterSizeSourceType.FixedTitles])
             {
                 result.Add(roster.PublicKey, roster.PublicKey);
             }
@@ -95,7 +91,8 @@ namespace WB.Services.Export.Questionnaire
 
             while (questionParent != null)
             {
-                if (questionParent is Group group && (group.IsRoster))
+                var group = questionParent as Group;
+                if (group != null && (group.IsRoster))
                 {
                     result.Insert(0, groupsMappedOnPropagatableQuestion[group.PublicKey]);
                 }
@@ -121,7 +118,7 @@ namespace WB.Services.Export.Questionnaire
             if (this.questionsByPublicKeyDictionary.TryGetValue(questionId.Value, out question))
             {
                 return new RosterTitleQuestionDescription(question.PublicKey,
-                    this.questionsByPublicKeyDictionary[questionId.Value].Answers.ToDictionary(a => a.AnswerValue, a => a.AnswerText));
+                   this.questionsByPublicKeyDictionary[questionId.Value].Answers.ToDictionary(a => a.AnswerValue, a => a.AnswerText));
             }
 
             return null;
