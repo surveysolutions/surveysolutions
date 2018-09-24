@@ -1,9 +1,9 @@
 using FluentAssertions;
-using Main.Core.Entities.SubEntities;
+using WB.Services.Export.Questionnaire;
 
-namespace WB.Tests.Unit.DataExportTests.ExportedQuestionTests
+namespace WB.Services.Export.Tests.CsvExport.Exporters.ExportedQuestionTests
 {
-    public class when_creating_export_structure_for_multimedia_question : ExportedQuestionTestContext
+    public class when_creating_export_structure_for_qr_barcode_question : ExportedQuestionTestContext
     {
         [NUnit.Framework.OneTimeSetUp]
         public void context()
@@ -13,12 +13,12 @@ namespace WB.Tests.Unit.DataExportTests.ExportedQuestionTests
 
         public void BecauseOf() 
         {
-            filledQuestion = CreateFilledExportedQuestion(QuestionType.Multimedia, "image file");
-            disabledQuestion = CreateDisabledExportedQuestion(QuestionType.Multimedia);
-            missingQuestion = CreateMissingValueExportedQuestion(QuestionType.Multimedia);
+            filledQuestion = CreateFilledExportedQuestion(QuestionType.QRBarcode, "qr bar code");
+            disabledQuestion = CreateDisabledExportedQuestion(QuestionType.QRBarcode);
+            missingQuestion = CreateMissingValueExportedQuestion(QuestionType.QRBarcode);
         }
 
-        [NUnit.Framework.Test] public void should_return_correct_filled_answer () => filledQuestion.Should().BeEquivalentTo(new []{ "image file" });
+        [NUnit.Framework.Test] public void should_return_correct_filled_answer () => filledQuestion.Should().BeEquivalentTo(new []{ "qr bar code" });
         [NUnit.Framework.Test] public void should_return_correct_disabled_answer () => disabledQuestion.Should().BeEquivalentTo(new []{ DisableValue });
         [NUnit.Framework.Test] public void should_return_correct_missing_answer () => missingQuestion.Should().BeEquivalentTo(new []{ MissingStringQuestionValue });
 

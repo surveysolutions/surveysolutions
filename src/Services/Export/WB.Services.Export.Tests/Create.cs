@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
@@ -14,6 +15,7 @@ using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Export.Services;
 using WB.Services.Export.Tenant;
+using WB.Services.Export.Tests.CsvExport.Exporters;
 using WB.Services.Export.Utils;
 
 namespace WB.Services.Export.Tests
@@ -89,12 +91,13 @@ namespace WB.Services.Export.Tests
             return new HeaderStructureForLevel { LevelScopeVector = new ValueVector<Guid>() };
         }
 
-        public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, params IQuestionnaireEntity[] children)
+        public static QuestionnaireDocument QuestionnaireDocument(Guid? id = null, string variableName = null, params IQuestionnaireEntity[] children)
         {
             return new QuestionnaireDocument
             {
                 PublicKey = id ?? Guid.NewGuid(),
-                Children = children
+                Children = children,
+                VariableName = variableName
             };
         }
 
@@ -211,6 +214,120 @@ namespace WB.Services.Export.Tests
                 AnswerText = text ?? "text",
                 AnswerValue = value ?? "1",
             };
+        }
+
+        public static ICsvWriter CsvWriter(List<CsvData> writeTo)
+        {
+            var csvWriterMock = new Mock<ICsvWriter>();
+            csvWriterMock
+                .Setup(x => x.WriteData(It.IsAny<string>(), It.IsAny<IEnumerable<string[]>>(), It.IsAny<string>()))
+                .Callback((string s, IEnumerable<string[]> p, string t) =>
+                {
+                    writeTo.Add(new CsvData
+                    {
+                        File = s,
+                        Data = p.ToList()
+                    });
+                });
+            return csvWriterMock.Object;
+        }
+
+        public class CsvData
+        {
+            public string File { get; set; }
+            public List<string[]> Data { get; set; }
+        }
+
+        public static NumericQuestion NumericIntegerQuestion(Guid? id = null,
+            string variable = "numeric_question",
+            bool isPrefilled = false,
+            string questionText = null,
+            Guid? linkedToRosterId = null,
+            IEnumerable<Answer> specialValues = null,
+            IEnumerable<ValidationCondition> validationConditions = null)
+        {
+            return new NumericQuestion
+            {
+                QuestionText = questionText ?? "text",
+                QuestionType = QuestionType.Numeric,
+                PublicKey = id ?? Guid.NewGuid(),
+                VariableName = variable,
+                IsInteger = true,
+                Featured = isPrefilled,
+                LinkedToRosterId = linkedToRosterId,
+                Answers = new List<Answer>(specialValues ?? new Answer[] { }),
+                ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>()
+            };
+        }
+
+        public static IInterviewsExporter InterviewsExporter(
+            ICsvWriter csvWriter = null,
+            IInterviewFactory interviewFactory = null)
+        {
+            return new InterviewsExporter(Mock.Of<ILogger<InterviewsExporter>>(),
+                csvWriter ?? Mock.Of<ICsvWriter>(),
+                Create.InterviewErrorsExporter(),
+                interviewFactory ?? Mock.Of<IInterviewFactory>(),
+                Mock.Of<IExportQuestionService>());
+        }
+
+        public static StaticText StaticText(
+            Guid? publicKey = null,
+            List<ValidationCondition> validationConditions = null)
+            => new StaticText()
+            {
+                PublicKey = publicKey ?? Guid.NewGuid(),
+                ValidationConditions = validationConditions
+            };
+
+        public static Identity Identity(Guid? id = null, params int[] rosterVector)
+        {
+            return new Identity(id ?? Guid.NewGuid(), rosterVector ?? RosterVector.Empty);
+        }
+        public static InterviewEntity InterviewEntity(Guid? interviewId = null, EntityType entityType = EntityType.Question, Identity identity = null, 
+            int[] invalidValidations = null, bool isEnabled = true)
+        {
+            return new InterviewEntity
+            {
+                InterviewId = interviewId ?? Guid.NewGuid(),
+                EntityType = entityType,
+                Identity = identity ?? Create.Identity(),
+                InvalidValidations = invalidValidations ?? Array.Empty<int>(),
+                IsEnabled = isEnabled
+            };
+        }
+
+        public static Group Roster(Guid? rosterId = null,
+            IEnumerable<IQuestionnaireEntity> children = null,
+            string variable = "roster_var",
+            FixedRosterTitle[] fixedTitles = null) => new Group
+        {
+            PublicKey = rosterId ?? Guid.NewGuid(),
+            Children = children ?? Enumerable.Empty<IQuestionnaireEntity>(),
+            VariableName = variable ?? "var1",
+            FixedRosterTitles = fixedTitles ?? Array.Empty<FixedRosterTitle>(),
+            IsRoster = true
+        };
+
+        public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Guid? chapterId = null, Guid? id = null, params IQuestionnaireEntity[] children)
+            => new QuestionnaireDocument
+            {
+                Title = "Questionnaire",
+                VariableName = "MyQuestionnaire",
+                PublicKey = id ?? Guid.NewGuid(),
+                Children = new List<IQuestionnaireEntity>
+                {
+                    new Group
+                    {
+                        PublicKey = chapterId.GetValueOrDefault(),
+                        Children = children ?? Array.Empty<IQuestionnaireEntity>()
+                    }
+                }
+            };
+
+        public static List<HeaderColumn> ColumnHeaders(string[] columnNames)
+        {
+            return columnNames?.Select(x => new HeaderColumn() { Name = x, Title = x }).ToList() ?? new List<HeaderColumn>();
         }
     }
 

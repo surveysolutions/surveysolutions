@@ -1,7 +1,7 @@
 using FluentAssertions;
-using Main.Core.Entities.SubEntities;
+using WB.Services.Export.Questionnaire;
 
-namespace WB.Tests.Unit.DataExportTests.ExportedQuestionTests
+namespace WB.Services.Export.Tests.CsvExport.Exporters.ExportedQuestionTests
 {
     public class when_creating_export_structure_for_single_option_question : ExportedQuestionTestContext
     {

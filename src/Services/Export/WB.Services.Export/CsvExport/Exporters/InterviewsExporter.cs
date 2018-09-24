@@ -19,7 +19,7 @@ using WB.Services.Export.Utils;
 namespace WB.Services.Export.CsvExport.Exporters
 {
     [Localizable(false)]
-    internal class InterviewsExporter : IInterviewsExporter
+    public class InterviewsExporter : IInterviewsExporter
     {
         public async Task ExportAsync(TenantInfo tenant, 
             QuestionnaireExportStructure questionnaireExportStructure,
