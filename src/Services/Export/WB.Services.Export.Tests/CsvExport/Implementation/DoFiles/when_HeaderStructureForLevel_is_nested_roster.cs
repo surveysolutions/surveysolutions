@@ -4,7 +4,6 @@ using NUnit.Framework;
 using WB.Services.Export.CsvExport.Implementation.DoFiles;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Questionnaire;
-using WB.Tests.Abc;
 
 namespace WB.Services.Export.Tests.CsvExport.Implementation.DoFiles
 {

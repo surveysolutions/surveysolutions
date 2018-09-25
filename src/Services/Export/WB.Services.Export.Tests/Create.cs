@@ -101,12 +101,12 @@ namespace WB.Services.Export.Tests
             };
         }
 
-        public static TextQuestion TextQuestion(Guid? id = null, string questionText = null)
+        public static TextQuestion TextQuestion(Guid? id = null, string questionText = null, string variable = null)
         {
             return new TextQuestion
             {
                 QuestionText = questionText,
-                VariableName = Guid.NewGuid().FormatGuid(),
+                VariableName = variable ?? Guid.NewGuid().FormatGuid(),
                 PublicKey = id ?? Guid.NewGuid()
             };
         }
@@ -118,10 +118,10 @@ namespace WB.Services.Export.Tests
                 .Setup(x => x.MakeValidFileName(It.IsAny<string>()))
                 .Returns((string f) => f);
 
-            var exportViewFactory = new QuestionnaireExportStructureFactory(
+            var QuestionnaireExportStructureFactory = new QuestionnaireExportStructureFactory(
                 Mock.Of<ICache>(),
                 Mock.Of<IQuestionnaireStorage>());
-            return exportViewFactory.GetQuestionnaireExportStructure(Create.Tenant(), questionnaire);
+            return QuestionnaireExportStructureFactory.GetQuestionnaireExportStructure(Create.Tenant(), questionnaire);
         }
 
         public static InterviewSummary InterviewSummary( InterviewExportedAction status = InterviewExportedAction.ApprovedBySupervisor,
@@ -269,7 +269,7 @@ namespace WB.Services.Export.Tests
                 csvWriter ?? Mock.Of<ICsvWriter>(),
                 Create.InterviewErrorsExporter(),
                 interviewFactory ?? Mock.Of<IInterviewFactory>(),
-                Mock.Of<IExportQuestionService>());
+                new ExportQuestionService());
         }
 
         public static StaticText StaticText(
@@ -290,7 +290,14 @@ namespace WB.Services.Export.Tests
             Identity identity = null, 
             int[] invalidValidations = null, 
             bool isEnabled = true,
-            int? asInt = null)
+            int? asInt = null,
+            DateTime? asDateTime = null,
+            double? asDouble = null,
+            string asString = null,
+            GeoPosition asGps = null,
+            int[] asIntArray = null,
+            AnsweredYesNoOption[] asYesNo = null,
+            InterviewTextListAnswer[] asList = null)
         {
             return new InterviewEntity
             {
@@ -299,7 +306,15 @@ namespace WB.Services.Export.Tests
                 Identity = identity ?? Create.Identity(),
                 InvalidValidations = invalidValidations ?? Array.Empty<int>(),
                 IsEnabled = isEnabled,
-                AsInt = asInt
+                AsInt = asInt,
+                AsDateTime = asDateTime,
+                AsDouble = asDouble,
+                AsString = asString,
+                AsGps = asGps,
+                AsIntArray = asIntArray,
+                AsList = asList,
+                AsYesNo = asYesNo
+
             };
         }
 
@@ -307,16 +322,30 @@ namespace WB.Services.Export.Tests
             IEnumerable<IQuestionnaireEntity> children = null,
             string variable = "roster_var",
             Guid? rosterSizeQuestionId = null,
-            FixedRosterTitle[] fixedTitles = null) => new Group
+            FixedRosterTitle[] fixedTitles = null,
+            RosterSizeSourceType? rosterSizeSourceType = null,
+            string[] obsoleteFixedTitles = null)
         {
-            PublicKey = rosterId ?? Guid.NewGuid(),
-            Children = children ?? Enumerable.Empty<IQuestionnaireEntity>(),
-            VariableName = variable ?? "var1",
-            FixedRosterTitles = fixedTitles ?? Array.Empty<FixedRosterTitle>(),
-            IsRoster = true,
-            RosterSizeQuestionId = rosterSizeQuestionId,
-            RosterSizeSource = rosterSizeQuestionId.HasValue ? RosterSizeSourceType.Question : RosterSizeSourceType.FixedTitles
-        };
+            var rosterSizeSource = rosterSizeSourceType ?? (rosterSizeQuestionId.HasValue ? RosterSizeSourceType.Question : RosterSizeSourceType.FixedTitles);
+            return new Group
+            {
+                PublicKey = rosterId ?? Guid.NewGuid(),
+                Children = children ?? Enumerable.Empty<IQuestionnaireEntity>(),
+                VariableName = variable ?? "var1",
+                FixedRosterTitles = fixedTitles ??
+                                    obsoleteFixedTitles?.Select((i, x) => new FixedRosterTitle(x, i)).ToArray() ??
+                                    Array.Empty<FixedRosterTitle>(),
+                IsRoster = true,
+                RosterSizeQuestionId = rosterSizeQuestionId,
+                RosterSizeSource = rosterSizeSource
+            };
+        }
+
+        public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(
+            params IQuestionnaireEntity[] children)
+        {
+            return QuestionnaireDocumentWithOneChapter(chapterId: null, children: children);
+        }
 
         public static QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Guid? chapterId = null, 
             Guid? id = null,
@@ -351,6 +380,7 @@ namespace WB.Services.Export.Tests
             string text = "Question T",
             bool preFilled = false,
             string label = null,
+            int? maxAnswersCount = null,
             IEnumerable<ValidationCondition> validationConditions = null)
             => new TextListQuestion
             {
@@ -360,12 +390,80 @@ namespace WB.Services.Export.Tests
                 VariableName = variable ?? "vv" + Guid.NewGuid().ToString("N"),
                 Featured = preFilled,
                 VariableLabel = label,
-                ValidationConditions = validationConditions?.ToList()
+                ValidationConditions = validationConditions?.ToList(),
+                MaxAnswerCount = maxAnswersCount
+               
             };
 
         public static IInterviewFactory InterviewFactory()
         {
             return new InterviewFactory(Create.HeadquartersApi(), Mock.Of<IQuestionnaireStorage>());
+        }
+
+        public static Variable Variable(Guid? id = null, VariableType type = VariableType.LongInteger)
+            => new Variable()
+            {
+                PublicKey = id ?? Guid.NewGuid(),
+                Type = type
+            };
+
+        public static GpsCoordinateQuestion GpsCoordinateQuestion(Guid? questionId = null, string variable = "var1", bool isPrefilled = false, string title = null,
+            string label=null)
+            => new GpsCoordinateQuestion
+            {
+                PublicKey = questionId ?? Guid.NewGuid(),
+                VariableName = variable,
+                QuestionType = QuestionType.GpsCoordinates,
+                Featured = isPrefilled,
+                QuestionText = title,
+                VariableLabel = label
+            };
+
+        public static Answer Answer(string title, int value)
+        {
+            return new Answer
+            {
+                AnswerValue = value.ToString(),
+                AnswerText = title
+            };
+        }
+
+        public static Group Group(Guid? groupId = null, params IQuestionnaireEntity[] children)
+        {
+            return new Group(children: children.ToList())
+            {
+                PublicKey = groupId ?? Guid.NewGuid()
+            };
+        }
+
+        public static DateTimeQuestion DateTimeQuestion(
+            Guid? questionId = null, 
+            string variable = null, string text = null, bool isTimestamp = false)
+            => new DateTimeQuestion()
+            {
+                PublicKey = questionId ?? Guid.NewGuid(),
+                QuestionText = text,
+                QuestionType = QuestionType.DateTime,
+                VariableName = variable,
+                IsTimestamp = isTimestamp
+            };
+
+        public static NumericQuestion NumericRealQuestion(Guid? id = null,
+            string variable = null,
+            IEnumerable<ValidationCondition> validationConditions = null
+            )
+            => new NumericQuestion
+            {
+                QuestionType = QuestionType.Numeric,
+                PublicKey = id ?? Guid.NewGuid(),
+                VariableName = variable,
+                IsInteger = false,
+                ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>()
+            };
+
+        public static AnsweredYesNoOption AnsweredYesNoOption(decimal value, bool isYes)
+        {
+            return new AnsweredYesNoOption(value, isYes);
         }
     }
 }

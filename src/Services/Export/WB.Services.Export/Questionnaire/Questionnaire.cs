@@ -18,7 +18,7 @@ namespace WB.Services.Export.Questionnaire
         
         public bool IsIntegerQuestion(Guid publicKey)
         {
-            var result = this.Find<NumericQuestion>(x => x.PublicKey == publicKey && x.QuestionType == QuestionType.Numeric && x.IsInteger);
+            var result = this.Find<NumericQuestion>(x => x.PublicKey == publicKey && x.QuestionType == QuestionType.Numeric && x.IsInteger).FirstOrDefault();
             return result != null;
         }
 

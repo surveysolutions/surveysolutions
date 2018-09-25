@@ -47,7 +47,7 @@ namespace WB.Services.Export.Questionnaire
             return (QuestionnaireExportStructure) cachedQuestionnaireExportStructure;
         }
 
-        private QuestionnaireExportStructure CreateQuestionnaireExportStructure(QuestionnaireDocument questionnaire)
+        public QuestionnaireExportStructure CreateQuestionnaireExportStructure(QuestionnaireDocument questionnaire)
         {
             var result = new QuestionnaireExportStructure
             {

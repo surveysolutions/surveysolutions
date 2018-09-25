@@ -5,7 +5,7 @@ using WB.Services.Export.Interview.Entities;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Tests.CsvExport.Exporters.ExportedQuestionTests;
 
-namespace WB.Tests.Unit.DataExportTests
+namespace WB.Services.Export.Tests.CsvExport.Exporters
 {
     [TestOf(typeof(ExportQuestionService))]
     public class ExportQuestionServiceTests : ExportedQuestionTestContext
