@@ -90,7 +90,6 @@ export default {
                     statusupdater(uploadingErrorMessage);
                 }
             });  
-            this.$refs.uploader.value = '';             
     },
 
     }
