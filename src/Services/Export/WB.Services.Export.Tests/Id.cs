@@ -1,7 +1,7 @@
 using System;
 using WB.Services.Export.Interview.Entities;
 
-namespace WB.Tests.Abc
+namespace WB.Services.Export.Tests
 {
     internal class Id
     {
