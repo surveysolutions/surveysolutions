@@ -2,9 +2,9 @@
 
 namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Messages
 {
-    public class GetInterviewerAppPatchRequest : ICommunicationMessage
+    public class GetInterviewerAppRequest : ICommunicationMessage
     {
-        public GetInterviewerAppPatchRequest(int appVersion, EnumeratorApplicationType appType)
+        public GetInterviewerAppRequest(int appVersion, EnumeratorApplicationType appType)
         {
             this.AppVersion = appVersion;
             this.AppType = appType;
@@ -13,7 +13,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Messages
         public int AppVersion { get; }
         public EnumeratorApplicationType AppType { get; }
     }
-    public class GetInterviewerAppPatchResponse : ICommunicationMessage
+    public class GetInterviewerAppResponse : ICommunicationMessage
     {
         public byte[] Content { get; set; }
     }

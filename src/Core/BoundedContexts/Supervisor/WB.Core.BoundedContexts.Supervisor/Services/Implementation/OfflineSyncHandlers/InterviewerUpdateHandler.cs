@@ -20,17 +20,17 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
 
         public void Register(IRequestHandler requestHandler)
         {
-            requestHandler.RegisterHandler<GetInterviewerAppPatchRequest, GetInterviewerAppPatchResponse>(GetInterviewerAppPatch);
+            requestHandler.RegisterHandler<GetInterviewerAppRequest, GetInterviewerAppResponse>(GetInterviewerApp);
         }
 
-        private Task<GetInterviewerAppPatchResponse> GetInterviewerAppPatch(GetInterviewerAppPatchRequest request)
+        private Task<GetInterviewerAppResponse> GetInterviewerApp(GetInterviewerAppRequest request)
         {
-            var patchFileName = $@"WBCapi.{request.AppVersion}{(request.AppType == EnumeratorApplicationType.WithMaps ? ".Ext" : "")}.delta";
+            var patchFileName = $@"interviewer{(request.AppType == EnumeratorApplicationType.WithMaps ? ".maps" : "")}.apk";
 
-            var patchFilePath = this.fileSystemAccessor.CombinePath(this.settings.InterviewerAppPatchesDirectory,
+            var patchFilePath = this.fileSystemAccessor.CombinePath(this.settings.InterviewerApplicationsDirectory,
                 this.settings.GetApplicationVersionCode().ToString(), patchFileName);
 
-            return Task.FromResult(new GetInterviewerAppPatchResponse
+            return Task.FromResult(new GetInterviewerAppResponse
             {
                 Content = this.fileSystemAccessor.IsFileExists(patchFilePath) ? this.fileSystemAccessor.ReadAllBytes(patchFilePath) : null
             });
