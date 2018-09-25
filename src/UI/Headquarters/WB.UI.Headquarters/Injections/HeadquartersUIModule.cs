@@ -68,25 +68,18 @@ namespace WB.UI.Headquarters.Injections
 
 
 
-            System.Web.Http.GlobalConfiguration.Configuration.Filters.Add(new UnderConstructionHttpFilter());
-            GlobalFilters.Filters.Add(new UnderConstructionMvcFilter());
 
 
             //registry.BindHttpFilter<UnderConstructionHttpFilter>(System.Web.Http.Filters.FilterScope.Global, 0);
             //registry.BindMvcFilter<UnderConstructionMvcFilter>(FilterScope.First, 0);
 
-            GlobalFilters.Filters.Add(new GlobalNotificationAttribute());
             
             //registry.BindMvcFilterWhenActionMethodHasNoAttribute<GlobalNotificationAttribute, NoTransactionAttribute>(FilterScope.Global, 5);
 
-            //todo:af
-            //filters should have order
-            GlobalFilters.Filters.Add(new TransactionFilter());
             
             //no need any more
             //registry.BindMvcFilterWhenActionMethodHasNoAttribute<TransactionFilter, NoTransactionAttribute>(FilterScope.First, 1);
 
-            System.Web.Http.GlobalConfiguration.Configuration.Filters.Add(new ApiTransactionFilter());
 
             //no need
             //registry.BindHttpFilterWhenActionMethodHasNoAttribute<ApiTransactionFilter, NoTransactionAttribute>(System.Web.Http.Filters.FilterScope.Global, 1);
@@ -106,6 +99,15 @@ namespace WB.UI.Headquarters.Injections
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
+            System.Web.Http.GlobalConfiguration.Configuration.Filters.Add(new UnderConstructionHttpFilter());
+            GlobalFilters.Filters.Add(new UnderConstructionMvcFilter());
+
+            //todo:af
+            //filters should have order
+            GlobalFilters.Filters.Add(serviceLocator.GetInstance<TransactionFilter>());
+            GlobalFilters.Filters.Add(new GlobalNotificationAttribute());
+            System.Web.Http.GlobalConfiguration.Configuration.Filters.Add(new ApiTransactionFilter());
+
             return Task.CompletedTask;
         }
     }

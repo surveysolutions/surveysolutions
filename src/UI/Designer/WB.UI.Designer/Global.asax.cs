@@ -18,6 +18,7 @@ using StackExchange.Exceptional;
 using StackExchange.Exceptional.Stores;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Versions;
+using WB.UI.Shared.Web.Kernel;
 
 namespace WB.UI.Designer
 {
@@ -185,6 +186,16 @@ namespace WB.UI.Designer
                 this.logger.Info("ShutDownMessage: " + shutDownMessage);
                 this.logger.Info("ShutDownStack: " + shutDownStack);
             }
+        }
+
+        protected void Application_BeginRequest(object sender, EventArgs e)
+        {
+            ScopeManager.BeginScope();
+        }
+
+        protected void Application_EndRequest(object sender, EventArgs e)
+        {
+            ScopeManager.EndAllScope();
         }
 
         private void EnsureJsonStorageForErrorsExists()

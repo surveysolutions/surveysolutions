@@ -170,6 +170,7 @@
     <Compile Include="Kernel\AutofacWebKernel.cs" />
     <Compile Include="Kernel\CustomMVCDependencyResolver.cs" />
     <Compile Include="Kernel\CustomWebApiDependencyResolver.cs" />
+    <Compile Include="Kernel\AutofacServiceLocatorAdapterWithChildrenScopes.cs" />
     <Compile Include="Mappings\ProductVersionChangeMap.cs" />
     <Compile Include="MembershipProvider\Accounts\PasswordPolicy.cs" />
     <Compile Include="MembershipProvider\Settings\MembershipProviderSettings.cs" />

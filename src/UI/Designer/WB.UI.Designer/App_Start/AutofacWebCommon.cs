@@ -99,15 +99,11 @@ namespace WB.UI.Designer.App_Start
             var config = GlobalConfiguration.Configuration;
 
 
-            kernel.ContainerBuilder.RegisterType<CustomMVCDependencyResolver>().As<System.Web.Mvc.IDependencyResolver>().SingleInstance();
-
-            //WebApiConfig.Register(config);
+            //kernel.ContainerBuilder.RegisterType<CustomMVCDependencyResolver>().As<System.Web.Mvc.IDependencyResolver>().SingleInstance();
+            kernel.ContainerBuilder.RegisterType<AutofacDependencyResolver>().As<IDependencyResolver>();
 
             kernel.ContainerBuilder.RegisterControllers(typeof(AutofacWebCommon).Assembly);
             kernel.ContainerBuilder.RegisterApiControllers(typeof(AutofacWebCommon).Assembly);
-
-            //kernel.ContainerBuilder.RegisterWebApiFilterProvider(config);
-            //kernel.ContainerBuilder.RegisterWebApiModelBinderProvider();
 
             //temp logging
             kernel.ContainerBuilder.RegisterModule<LogRequestModule>();
@@ -122,9 +118,9 @@ namespace WB.UI.Designer.App_Start
             config.DependencyResolver = resolver;
             GlobalConfiguration.Configuration.DependencyResolver = resolver;
 
-            var resolv = kernel.Container.Resolve<System.Web.Mvc.IDependencyResolver>();
+            var resolv = kernel.Container.Resolve<IDependencyResolver>();
             //DependencyResolver.SetResolver(new Autofac.Integration.Mvc.AutofacDependencyResolver(kernel.Container));
-            DependencyResolver.SetResolver(resolv);
+            //DependencyResolver.SetResolver(resolv);
             //ModelBinders.Binders.DefaultBinder = new AutofacBinderResolver(kernel.Container);
 
 
@@ -132,6 +128,12 @@ namespace WB.UI.Designer.App_Start
             //            app.UseAutofacWebApi(config);
             //            app.UseWebApi(config);
 
+            //ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(kernel.Container));
+            var adapterWithChildrenScopes = new AutofacServiceLocatorAdapterWithChildrenScopes(kernel.Container);
+            ScopeManager.SetScopeAdapter(adapterWithChildrenScopes);
+            ServiceLocator.SetLocatorProvider(() => adapterWithChildrenScopes);
+            DependencyResolver.SetResolver(t => ServiceLocator.Current.GetInstance(t), t => ServiceLocator.Current.GetAllInstances(t));
+            //DependencyResolver.SetResolver(new AutofacDependencyResolver());
         }
     }
 }
