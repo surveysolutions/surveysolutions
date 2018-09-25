@@ -533,6 +533,7 @@
     <EmbeddedResource Include="Resources\AccountResources.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>AccountResources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\AccountResources.ru.resx">
       <DependentUpon>AccountResources.resx</DependentUpon>

@@ -1,8 +1,10 @@
 using System.Reflection;
 using System.Threading.Tasks;
+using NHibernate;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.Versions;
+using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.UI.Shared.Web.Versions
 {
@@ -26,7 +28,13 @@ namespace WB.UI.Shared.Web.Versions
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
             if (shouldStoreVersionToDb)
-                serviceLocator.GetInstance<IProductVersionHistory>().RegisterCurrentVersion();
+            {
+                using (var unitOfWork = new UnitOfWork(serviceLocator.GetInstance<ISessionFactory>()))
+                {
+                    serviceLocator.GetInstance<IProductVersionHistory>().RegisterCurrentVersion();
+                    unitOfWork.AcceptChanges();
+                }
+            }
 
             return Task.CompletedTask;
         }
