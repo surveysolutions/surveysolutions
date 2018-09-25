@@ -1920,7 +1920,6 @@
     <Compile Include="API\DataCollection\Supervisor\v1\SettingsV1Controller.cs" />
     <Compile Include="API\DataCollection\Supervisor\v1\InterviewersApiController.cs" />
     <Compile Include="API\DataCollection\Supervisor\v1\TranslationsApiV1Controller.cs" />
-    <Compile Include="API\DataCollection\Supervisor\v1\UpdatesApiV1Controller.cs" />
     <Compile Include="API\DataCollection\TranslationsControllerBase.cs" />
     <Compile Include="API\Helpers.cs" />
     <Compile Include="API\DataCollection\Interviewer\v2\AssignmentsApiV2Controller.cs" />
@@ -2130,7 +2129,7 @@
     <Compile Include="API\PublicApi\BaseApiServiceController.cs" />
     <Compile Include="API\PublicApi\IncludeOnlyPublicApiDocumentFilter.cs" />
     <Compile Include="API\PublicApi\ExportController.cs" />
-    <Compile Include="API\InterviewerApkInfo.cs" />
+    <Compile Include="API\ClientApkInfo.cs" />
     <Compile Include="API\DataCollection\Interviewer\v2\SettingsV2Controller.cs" />
     <Compile Include="API\DataCollection\Interviewer\v2\TranslationsApiV2Controller.cs" />
     <Compile Include="API\MetricsController.cs" />

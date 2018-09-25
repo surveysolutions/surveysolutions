@@ -30,7 +30,7 @@ a.disabled{
 .btn-link{
 	@extend %gray-uppercase;
 	color: $blue;
-	&:hover, &:focus{
+	&::hover, &::focus{
 		text-decoration: none;
 		color: darken($blue, 15%);
 	}
@@ -467,9 +467,4 @@ a.disabled{
 		text-decoration: none;
 		color: $gray_light;
 	}
-}
-.btn-link-look{
-	padding: 0;
-	text-transform: initial;
-	font: inherit;
 }
