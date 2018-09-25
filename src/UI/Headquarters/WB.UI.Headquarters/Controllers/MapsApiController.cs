@@ -216,7 +216,7 @@ namespace WB.UI.Headquarters.Controllers
         {
             if (file == null)
             {
-                this.Request.CreateResponse(HttpStatusCode.NotAcceptable, Maps.MappingsLoadingError);
+                return this.Request.CreateResponse(HttpStatusCode.NotAcceptable, Maps.MappingsLoadingError);
             }
 
             if (TabExportFile.Extention != this.fileSystemAccessor.GetFileExtension(file.FileName).ToLower())
