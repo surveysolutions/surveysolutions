@@ -57,8 +57,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
 
             var apksBySupervisorAppVersion = this.PreparePathToInterviewerApksDirectoryBySupervisorAppVersion();
 
-            await DownloadInterviewerApksAsync(apksBySupervisorAppVersion);
+            await DownloadInterviewerApksAsync(apksBySupervisorAppVersion).ConfigureAwait(false);
 
+            this.RemoveOldInterviewerApps();
         }
 
         private string PreparePathToInterviewerApksDirectoryBySupervisorAppVersion()
@@ -74,12 +75,18 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
             if (!this.fileSystemAccessor.IsDirectoryExists(apksBySupervisorAppVersion))
                 this.fileSystemAccessor.CreateDirectory(apksBySupervisorAppVersion);
 
-            // remove old patches by old supervisor app version
+            return apksBySupervisorAppVersion;
+        }
+
+        private void RemoveOldInterviewerApps()
+        {
+            var interviewerApksDirectory = this.supervisorSettings.InterviewerApplicationsDirectory;
+            var sAppVersion = this.supervisorSettings.GetApplicationVersionCode().ToString();
+            var apksBySupervisorAppVersion = this.fileSystemAccessor.CombinePath(interviewerApksDirectory, sAppVersion);
+
             this.fileSystemAccessor.GetDirectoriesInDirectory(interviewerApksDirectory)
                 .Where(x => x != apksBySupervisorAppVersion)
                 .ForEach(x => this.fileSystemAccessor.DeleteDirectory(x));
-
-            return apksBySupervisorAppVersion;
         }
 
         private async Task DownloadInterviewerApksAsync(string interviewerApksDirectory)
