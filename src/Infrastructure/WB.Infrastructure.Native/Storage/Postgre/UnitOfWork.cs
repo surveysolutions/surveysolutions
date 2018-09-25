@@ -42,6 +42,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
             transaction.Commit();
             session.Close();
+            transaction.Dispose();
+            session.Dispose();
             logger.Info($"session closing UOW:{Id} sessionId:{(session as SessionImpl)?.SessionId} Thread:{Thread.CurrentThread.ManagedThreadId}");
             transaction = null;
             session = null;
@@ -79,18 +81,15 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         {
             if (isDisposed) return;
 
-            if (transaction != null)
-            {
-                transaction.Rollback();
-                transaction = null;
-            }
+            transaction?.Rollback();
+            session?.Close();
+            transaction?.Dispose();
+            session?.Dispose();
 
-            if (session != null)
-            {
-                session.Close();
-                logger.Info($"session closing in dispose UOW:{Id} sessionId:{(session as SessionImpl)?.SessionId} Thread:{Thread.CurrentThread.ManagedThreadId}");
-                session = null;
-            }
+            logger.Info($"session closing in dispose UOW:{Id} sessionId:{(session as SessionImpl)?.SessionId} Thread:{Thread.CurrentThread.ManagedThreadId}");
+
+            transaction = null;
+            session = null;
 
             isDisposed = true;
         }
