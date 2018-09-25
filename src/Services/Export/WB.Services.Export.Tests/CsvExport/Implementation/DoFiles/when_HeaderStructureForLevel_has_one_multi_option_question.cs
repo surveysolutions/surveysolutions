@@ -7,7 +7,6 @@ using WB.Services.Export.CsvExport.Exporters;
 using WB.Services.Export.CsvExport.Implementation.DoFiles;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Questionnaire.Services;
-using WB.Tests.Abc;
 
 namespace WB.Services.Export.Tests.CsvExport.Implementation.DoFiles
 {

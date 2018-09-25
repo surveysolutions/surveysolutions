@@ -7,7 +7,6 @@ using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview.Entities;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Utils;
-using WB.Tests.Abc;
 
 namespace WB.Services.Export.Tests.CsvExport.Exporters
 {
