@@ -1878,6 +1878,7 @@
     <Content Include="Views\SurveySetup\InterviewImportIsInProgress.cshtml" />
     <Content Include="Views\UnderConstruction\Index.cshtml" />
     <Content Include="Views\Download\Supervisor.cshtml" />
+    <Content Include="Views\ControlPanel\AppUpdates.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
