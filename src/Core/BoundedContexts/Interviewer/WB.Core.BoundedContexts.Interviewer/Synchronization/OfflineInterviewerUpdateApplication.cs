@@ -77,17 +77,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
                                 Title = InterviewerUIResources.Synchronization_DownloadApplication,
                                 Description = string.Format(
                                     InterviewerUIResources.Synchronization_DownloadApplication_Description,
-                                    receivedKilobytes.Humanize("00.00 MB"),
-                                    totalKilobytes.Humanize("00.00 MB"),
-                                    receivedKilobytes.Per(sw.Elapsed).Humanize("00.00"),
+                                    receivedKilobytes.Humanize("0.00"),
+                                    totalKilobytes.Humanize("0.00"),
+                                    receivedKilobytes.Per(sw.Elapsed).Humanize("0.00"),
                                     (int)downloadProgress.ProgressPercentage),
                                 Status = SynchronizationStatus.Download,
                                 Stage = SyncStage.DownloadApplication,
                                 StageExtraInfo = new Dictionary<string, string>()
                                 {
-                                    { "receivedKilobytes", receivedKilobytes.Humanize("00.00 MB") },
-                                    { "totalKilobytes", totalKilobytes.Humanize("00.00 MB")},
-                                    { "receivingRate", receivedKilobytes.Per(sw.Elapsed).Humanize("00.00")},
+                                    { "receivedKilobytes", receivedKilobytes.Humanize("0.00") },
+                                    { "totalKilobytes", totalKilobytes.Humanize("0.00")},
+                                    { "receivingRate", receivedKilobytes.Per(sw.Elapsed).Humanize("0.00")},
                                     {"progressPercentage",((int) downloadProgress.ProgressPercentage).ToString()}
                                 }
                             });

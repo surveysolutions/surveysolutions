@@ -340,6 +340,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to User is not authorized to execute provided action.
+        /// </summary>
+        public static string NoPermissionsToExecute {
+            get {
+                return ResourceManager.GetString("NoPermissionsToExecute", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Observer is not allowed to perform this action.
         /// </summary>
         public static string ObserverNotAllowed {
