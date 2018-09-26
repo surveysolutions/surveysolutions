@@ -995,7 +995,7 @@ namespace WB.Tests.Abc.TestFactories
 
         public Core.BoundedContexts.Interviewer.Implementation.Services.MapSyncProvider MapSyncProvider(
             IMapService mapService = null,
-            ISynchronizationService synchronizationService = null,
+            IOnlineSynchronizationService synchronizationService = null,
             ILogger logger = null,
             IHttpStatistician httpStatistician = null,
             IUserInteractionService userInteractionService = null,
@@ -1008,16 +1008,17 @@ namespace WB.Tests.Abc.TestFactories
         {
             return new Core.BoundedContexts.Interviewer.Implementation.Services.MapSyncProvider(
                 mapService ?? Mock.Of<IMapService>(),
-                synchronizationService ?? Mock.Of<ISynchronizationService>(),
+                synchronizationService ?? Mock.Of<IOnlineSynchronizationService>(),
                 logger ?? Mock.Of<ILogger>(),
                 httpStatistician ?? Mock.Of<IHttpStatistician>(),
-                userInteractionService ?? Mock.Of<IUserInteractionService>(),
                 principal ?? Mock.Of<IPrincipal>(),
                 passwordHasher ?? Mock.Of<IPasswordHasher>(),
                 interviewers ?? Mock.Of<IPlainStorage<InterviewerIdentity>>(),
                 interviews ?? Mock.Of<IPlainStorage<InterviewView>>(),
                 auditLogService ?? Mock.Of<IAuditLogService>(),
-                enumeratorSettings ?? Mock.Of<IEnumeratorSettings>());
+                enumeratorSettings ?? Mock.Of<IEnumeratorSettings>(),
+                userInteractionService ?? Mock.Of<IUserInteractionService>(),
+                Mock.Of<IServiceLocator>());
         }
 
         public InterviewFactory InterviewFactory(
