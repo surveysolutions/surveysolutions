@@ -5,11 +5,12 @@ using Microsoft.Extensions.Options;
 using WB.Services.Export.CsvExport;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
+using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Services.Processing;
+using WB.Services.Export.Tenant;
 
 namespace WB.Services.Export.ExportProcessHandlers.Implementation
 {
-    [Obsolete("KP-11815")]
     internal abstract class TabBasedFormatExportHandler : AbstractDataExportHandler
     {
         private readonly ITabularFormatExportService tabularFormatExportService;
@@ -26,24 +27,24 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             this.tabularFormatExportService = tabularFormatExportService;
         }
 
-        //protected void GenerateDescriptionTxt(QuestionnaireId questionnaireIdentity, string directoryPath, string dataFilesExtension)
-        //    => this.tabularFormatExportService.GenerateDescriptionFile(questionnaireIdentity, directoryPath, dataFilesExtension);
+        protected void GenerateDescriptionTxt(TenantInfo tenant, QuestionnaireId questionnaireIdentity,
+            string directoryPath, string dataFilesExtension)
+            => this.tabularFormatExportService.GenerateDescriptionFile(tenant, questionnaireIdentity, directoryPath, dataFilesExtension);
 
-        //protected string[] CreateTabularDataFiles(QuestionnaireId questionnaireIdentity, InterviewStatus? status, string directoryPath, IProgress<int> progress, CancellationToken cancellationToken, DateTime? fromDate, DateTime? toDate)
-        //{
-        //    cancellationToken.ThrowIfCancellationRequested();
+        protected string[] CreateTabularDataFiles(ExportSettings exportSettings, IProgress<int> progress, CancellationToken cancellationToken)
+        {
+            cancellationToken.ThrowIfCancellationRequested();
 
-        //    var exportProgress = new Progress<int>();
+            var exportProgress = new Progress<int>();
 
-        //    exportProgress.ProgressChanged +=
-        //        (sender, donePercent) => progress.Report(donePercent / 2);
+            exportProgress.ProgressChanged +=
+                (sender, donePercent) => progress.Report(donePercent / 2);
 
-        //    this.tabularFormatExportService.ExportInterviewsInTabularFormat(
-        //        questionnaireIdentity, status,
-        //        directoryPath, exportProgress, cancellationToken, fromDate, toDate);
+            this.tabularFormatExportService.ExportInterviewsInTabularFormat(
+                exportSettings, exportProgress, cancellationToken);
 
-        //    return this.fileSystemAccessor.GetFilesInDirectory(directoryPath);
-        //}
+            return this.fileSystemAccessor.GetFilesInDirectory(exportSettings.ExportTempDirectory);
+        }
 
         protected void DeleteTabularDataFiles(string[] tabDataFiles, CancellationToken cancellationToken)
         {

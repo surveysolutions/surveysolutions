@@ -5,6 +5,7 @@ using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Services.Processing;
 using WB.Services.Export.Services.Processing.Good;
+using WB.Services.Export.Tenant;
 
 namespace WB.Services.Export.ExportProcessHandlers
 {
@@ -42,7 +43,8 @@ namespace WB.Services.Export.ExportProcessHandlers
 
         protected virtual bool CompressExportedData => true;
 
-        protected abstract void ExportDataIntoDirectory(ExportSettings settings, IProgress<int> progress,
+        protected abstract void ExportDataIntoDirectory(ExportSettings settings,
+            IProgress<int> progress,
             CancellationToken cancellationToken);
     }
 }

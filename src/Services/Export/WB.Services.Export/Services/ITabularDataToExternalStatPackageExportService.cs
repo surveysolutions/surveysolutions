@@ -1,11 +1,13 @@
-﻿//using System;
-//using System.Threading;
+﻿using System;
+using System.Threading;
+using WB.Services.Export.Questionnaire;
+using WB.Services.Export.Tenant;
 
-//namespace WB.Services.Export.Services
-//{
-//    internal interface ITabularDataToExternalStatPackageExportService 
-//    {
-//        string[] CreateAndGetStataDataFilesForQuestionnaire(Guid questionnaireId, long questionnaireVersion, string[] tabularDataFiles, IProgress<int> progress, CancellationToken cancellationToken);
-//        string[] CreateAndGetSpssDataFilesForQuestionnaire(Guid questionnaireId, long questionnaireVersion, string[] tabularDataFiles, IProgress<int> progress, CancellationToken cancellationToken);
-//    }
-//}
+namespace WB.Services.Export.Services
+{
+    internal interface ITabularDataToExternalStatPackageExportService
+    {
+        string[] CreateAndGetStataDataFilesForQuestionnaire(TenantInfo tenant, QuestionnaireId questionnaireId, string[] tabularDataFiles, IProgress<int> progress, CancellationToken cancellationToken);
+        string[] CreateAndGetSpssDataFilesForQuestionnaire(TenantInfo tenant, QuestionnaireId questionnaireId, string[] tabularDataFiles, IProgress<int> progress, CancellationToken cancellationToken);
+    }
+}

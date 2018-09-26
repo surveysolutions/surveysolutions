@@ -36,7 +36,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
 
         protected override DataExportFormat Format => DataExportFormat.Tabular;
 
-        protected override void ExportDataIntoDirectory(ExportSettings settings, 
+        protected override void ExportDataIntoDirectory(ExportSettings settings,
             IProgress<int> progress, CancellationToken cancellationToken)
         {
             this.GenerateDescriptionTxt(settings.Tenant, settings.QuestionnaireId, settings.ExportTempDirectory);
