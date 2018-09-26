@@ -1,10 +1,8 @@
-using System;
-using StatData.Writers;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
+﻿using StatData.Writers;
+using WB.Services.Export.Services.Processing;
 
-namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
+namespace WB.Services.Export.Services.Implementation
 {
-    [Obsolete("KP-11815")]
     internal class DatasetWriterFactory : IDatasetWriterFactory
     {
         public IDatasetWriter CreateDatasetWriter(DataExportFormat format)
@@ -18,7 +16,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Factories
                 case DataExportFormat.SPSS:
                     writer = new SpssWriter();
                     break;
-                case DataExportFormat.Tabular:
                 default:
                     writer = new TabWriter();
                     break;

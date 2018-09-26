@@ -1,59 +1,61 @@
-﻿//using System;
-//using System.Threading;
-//using Microsoft.Extensions.Logging;
-//using Microsoft.Extensions.Options;
-//using WB.Services.Export.Infrastructure;
-//using WB.Services.Export.Interview;
-//using WB.Services.Export.Questionnaire;
-//using WB.Services.Export.Services.Processing;
+﻿using System;
+using System.Threading;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using WB.Services.Export.CsvExport;
+using WB.Services.Export.Infrastructure;
+using WB.Services.Export.Interview;
+using WB.Services.Export.Questionnaire;
+using WB.Services.Export.Services;
+using WB.Services.Export.Services.Processing;
+using WB.Services.Export.Tenant;
 
-//namespace WB.Services.Export.ExportProcessHandlers.Implementation
-//{
-//    internal class SpssFormatExportHandler : TabBasedFormatExportHandler
-//    {
-//       // private readonly ITabularDataToExternalStatPackageExportService tabularDataToExternalStatPackageExportService;
+namespace WB.Services.Export.ExportProcessHandlers.Implementation
+{
+    internal class SpssFormatExportHandler : TabBasedFormatExportHandler
+    {
+        private readonly ITabularDataToExternalStatPackageExportService tabularDataToExternalStatPackageExportService;
 
-//        public SpssFormatExportHandler(IFileSystemAccessor fileSystemAccessor,
-//            IOptions<InterviewDataExportSettings> interviewDataExportSettings, 
-//            ITabularFormatExportService tabularFormatExportService, 
-//            IFilebasedExportedDataAccessor filebasedExportedDataAccessor, 
-//            ITabularDataToExternalStatPackageExportService tabularDataToExternalStatPackageExportService, 
-//            IDataExportProcessesService dataExportProcessesService,
-//            ILogger<SpssFormatExportHandler> logger,
-//            IDataExportFileAccessor dataExportFileAccessor)
-//            : base(fileSystemAccessor, filebasedExportedDataAccessor, interviewDataExportSettings, dataExportProcessesService, tabularFormatExportService, logger, dataExportFileAccessor)
-//        {
-//            this.tabularDataToExternalStatPackageExportService = tabularDataToExternalStatPackageExportService;
-//        }
+        public SpssFormatExportHandler(IFileSystemAccessor fileSystemAccessor,
+            IOptions<InterviewDataExportSettings> interviewDataExportSettings,
+            ITabularFormatExportService tabularFormatExportService,
+            IFilebasedExportedDataAccessor filebasedExportedDataAccessor,
+            ITabularDataToExternalStatPackageExportService tabularDataToExternalStatPackageExportService,
+            IDataExportProcessesService dataExportProcessesService,
+            ILogger<SpssFormatExportHandler> logger,
+            IDataExportFileAccessor dataExportFileAccessor)
+            : base(fileSystemAccessor, filebasedExportedDataAccessor, interviewDataExportSettings, dataExportProcessesService, tabularFormatExportService, logger, dataExportFileAccessor)
+        {
+            this.tabularDataToExternalStatPackageExportService = tabularDataToExternalStatPackageExportService;
+        }
 
-//        protected override DataExportFormat Format => DataExportFormat.SPSS;
+        protected override DataExportFormat Format => DataExportFormat.SPSS;
 
-//        protected override void ExportDataIntoDirectory(ExportSettings settings, IProgress<int> progress,
-//            CancellationToken cancellationToken)
-//        {
-//            var tabFiles = this.CreateTabularDataFiles(settings.QuestionnaireId, settings.InterviewStatus,
-//                settings.ExportDirectory, progress, cancellationToken, settings.FromDate, settings.ToDate);
+        protected override void ExportDataIntoDirectory(ExportSettings settings, IProgress<int> progress,
+            CancellationToken cancellationToken)
+        {
+            var tabFiles = this.CreateTabularDataFiles(settings, progress, cancellationToken);
 
-//            this.CreateSpssDataFilesFromTabularDataFiles(settings.QuestionnaireId, tabFiles, progress, cancellationToken);
+            this.CreateSpssDataFilesFromTabularDataFiles(settings.Tenant, settings.QuestionnaireId, tabFiles, progress, cancellationToken);
 
-//            this.DeleteTabularDataFiles(tabFiles, cancellationToken);
+            this.DeleteTabularDataFiles(tabFiles, cancellationToken);
 
-//            this.GenerateDescriptionTxt(settings.QuestionnaireId, settings.ExportDirectory, ExportFileSettings.SpssDataFileExtension);
-//        }
+            this.GenerateDescriptionTxt(settings.Tenant, settings.QuestionnaireId, settings.ExportTempDirectory, ExportFileSettings.SpssDataFileExtension);
+        }
 
-//        private void CreateSpssDataFilesFromTabularDataFiles(QuestionnaireId questionnaireIdentity, string[] tabDataFiles,
-//            IProgress<int> progress, CancellationToken cancellationToken)
-//        {
-//            var exportProgress = new Progress<int>();
-//            exportProgress.ProgressChanged +=
-//                (sender, donePercent) => progress.Report(50 + (donePercent / 2));
+        private void CreateSpssDataFilesFromTabularDataFiles(TenantInfo tenant, QuestionnaireId questionnaireIdentity, string[] tabDataFiles,
+            IProgress<int> progress, CancellationToken cancellationToken)
+        {
+            var exportProgress = new Progress<int>();
+            exportProgress.ProgressChanged +=
+                (sender, donePercent) => progress.Report(50 + (donePercent / 2));
 
-//            tabularDataToExternalStatPackageExportService.CreateAndGetSpssDataFilesForQuestionnaire(
-//                questionnaireIdentity.QuestionnaireId,
-//                questionnaireIdentity.Version,
-//                tabDataFiles,
-//                exportProgress,
-//                cancellationToken);
-//        }
-//    }
-//}
+            tabularDataToExternalStatPackageExportService.CreateAndGetSpssDataFilesForQuestionnaire(
+                tenant,
+                questionnaireIdentity,
+                tabDataFiles,
+                exportProgress,
+                cancellationToken);
+        }
+    }
+}

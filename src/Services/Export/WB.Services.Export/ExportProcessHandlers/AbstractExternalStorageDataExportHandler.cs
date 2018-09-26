@@ -6,6 +6,7 @@ using WB.Services.Export.ExportProcessHandlers.Implementation;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Services.Processing;
+using WB.Services.Export.Tenant;
 using WB.Services.Export.Utils;
 
 namespace WB.Services.Export.ExportProcessHandlers
@@ -31,7 +32,8 @@ namespace WB.Services.Export.ExportProcessHandlers
         protected override DataExportFormat Format => DataExportFormat.Binary;
         protected override bool CompressExportedData => false;
         
-        protected override void ExportDataIntoDirectory(ExportSettings settings, IProgress<int> progress,
+        protected override void ExportDataIntoDirectory(ExportSettings settings,
+            IProgress<int> progress,
             CancellationToken cancellationToken)
         {
             //var questionnaire = this.questionnaireStorage.GetQuestionnaireAsync(settings.Tenant, settings.QuestionnaireId).Result;

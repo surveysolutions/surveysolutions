@@ -1,207 +1,205 @@
-﻿//using System;
-//using System.Collections.Generic;
-//using System.Globalization;
-//using System.Threading;
+﻿using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+using System.Threading;
+using Microsoft.Extensions.Logging;
+using StatData.Core;
+using WB.Services.Export.CsvExport.Implementation.DoFiles;
+using WB.Services.Export.Interview;
+using WB.Services.Export.Questionnaire;
+using WB.Services.Export.Services.Processing;
+using WB.Services.Export.Tenant;
+using WB.Services.Export.Utils;
 
-//namespace WB.Services.Export.Services
-//{
-//    internal class TabularDataToExternalStatPackageExportService : ITabularDataToExternalStatPackageExportService
-//    {
-//        private readonly ITransactionManagerProvider transactionManager;
-//        private readonly IFileSystemAccessor fileSystemAccessor;
-//        private readonly ILogger logger;
+namespace WB.Services.Export.Services
+{
+    internal class TabularDataToExternalStatPackageExportService : ITabularDataToExternalStatPackageExportService
+    {
+        private readonly ILogger<TabularDataToExternalStatPackageExportService> logger;
 
-//        private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
-//        private readonly ITabFileReader tabReader;
-//        private readonly IDatasetWriterFactory datasetWriterFactory;
-//        private readonly IDataQueryFactory dataQueryFactory;
+        private readonly IQuestionnaireExportStructureFactory questionnaireExportStructureStorage;
+        private readonly ITabFileReader tabReader;
+        private readonly IDatasetWriterFactory datasetWriterFactory;
+        private readonly IDataQueryFactory dataQueryFactory;
 
-//        private readonly IQuestionnaireLabelFactory questionnaireLabelFactory;
+        private readonly IQuestionnaireLabelFactory questionnaireLabelFactory;
 
-//        private readonly IExportServiceDataProvider exportSeviceDataProvider;
+        private readonly IExportServiceDataProvider exportSeviceDataProvider;
 
-//        public TabularDataToExternalStatPackageExportService(
-//            IFileSystemAccessor fileSystemAccessor,
-//            ITransactionManagerProvider transactionManager,
-//            ILogger logger,
-//            ITabFileReader tabReader,
-//            IDataQueryFactory dataQueryFactory,
-//            IDatasetWriterFactory datasetWriterFactory, 
-//            IQuestionnaireLabelFactory questionnaireLabelFactory,
-//            IQuestionnaireExportStructureStorage questionnaireExportStructureStorage,
-//            IExportServiceDataProvider exportSeviceDataProvider)
-//        {
-//            this.transactionManager = transactionManager;
-//            this.fileSystemAccessor = fileSystemAccessor;
-//            this.logger = logger;
+        public TabularDataToExternalStatPackageExportService(ILogger<TabularDataToExternalStatPackageExportService> logger,
+            ITabFileReader tabReader,
+            IDataQueryFactory dataQueryFactory,
+            IDatasetWriterFactory datasetWriterFactory,
+            IQuestionnaireLabelFactory questionnaireLabelFactory,
+            IQuestionnaireExportStructureFactory questionnaireExportStructureStorage,
+            IExportServiceDataProvider exportSeviceDataProvider)
+        {
+            this.logger = logger;
 
-//            this.tabReader = tabReader;
-//            this.datasetWriterFactory = datasetWriterFactory;
-//            this.questionnaireLabelFactory = questionnaireLabelFactory;
-//            this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
-//            this.dataQueryFactory = dataQueryFactory;
-//            this.exportSeviceDataProvider = exportSeviceDataProvider;
+            this.tabReader = tabReader;
+            this.datasetWriterFactory = datasetWriterFactory;
+            this.questionnaireLabelFactory = questionnaireLabelFactory;
+            this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
+            this.dataQueryFactory = dataQueryFactory;
+            this.exportSeviceDataProvider = exportSeviceDataProvider;
 
-//        }
+        }
 
-//        private const string StataFileNameExtension = ExportFileSettings.StataDataFileExtension;
-//        private const string SpssFileNameExtension = ExportFileSettings.SpssDataFileExtension;
+        private const string StataFileNameExtension = ExportFileSettings.StataDataFileExtension;
+        private const string SpssFileNameExtension = ExportFileSettings.SpssDataFileExtension;
 
-//        public string[] CreateAndGetStataDataFilesForQuestionnaire(Guid questionnaireId, 
-//            long questionnaireVersion,
-//            string[] tabularDataFiles, 
-//            IProgress<int> progress, 
-//            CancellationToken cancellationToken)
-//        {
-//            return this.CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, DataExportFormat.STATA, tabularDataFiles, progress, cancellationToken);
-//        }
+        public string[] CreateAndGetStataDataFilesForQuestionnaire(TenantInfo tenant, QuestionnaireId questionnaireId,
+            string[] tabularDataFiles,
+            IProgress<int> progress,
+            CancellationToken cancellationToken)
+        {
+            return this.CreateAndGetExportDataFiles(tenant, questionnaireId, DataExportFormat.STATA, tabularDataFiles, progress, cancellationToken);
+        }
 
-//        public string[] CreateAndGetSpssDataFilesForQuestionnaire(Guid questionnaireId, 
-//            long questionnaireVersion, 
-//            string[] tabularDataFiles, 
-//            IProgress<int> progress,
-//            CancellationToken cancellationToken)
-//        {
-//            return this.CreateAndGetExportDataFiles(questionnaireId, questionnaireVersion, DataExportFormat.SPSS, tabularDataFiles, progress, cancellationToken);
-//        }
+        public string[] CreateAndGetSpssDataFilesForQuestionnaire(TenantInfo tenant,QuestionnaireId questionnaireId,
+            string[] tabularDataFiles,
+            IProgress<int> progress,
+            CancellationToken cancellationToken)
+        {
+            return this.CreateAndGetExportDataFiles(tenant, questionnaireId, DataExportFormat.SPSS, tabularDataFiles, progress, cancellationToken);
+        }
 
-//        private string[] CreateAndGetExportDataFiles(Guid questionnaireId, long questionnaireVersion, DataExportFormat format, 
-//            string[] dataFiles, IProgress<int> progress, CancellationToken cancellationToken)
-//        {
-//            string currentDataInfo = string.Empty;
-//            try
-//            {
-//                cancellationToken.ThrowIfCancellationRequested();
+        private string[] CreateAndGetExportDataFiles(TenantInfo tenant,QuestionnaireId questionnaireId, DataExportFormat format,
+            string[] dataFiles, IProgress<int> progress, CancellationToken cancellationToken)
+        {
+            string currentDataInfo = string.Empty;
+            try
+            {
+                cancellationToken.ThrowIfCancellationRequested();
 
-//                var questionnaire = new QuestionnaireIdentity(questionnaireId, questionnaireVersion);
+                var questionnaireExportStructure =
+                        this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(tenant, questionnaireId);
 
-//                var questionnaireExportStructure =
-//                    this.transactionManager.GetTransactionManager().ExecuteInQueryTransaction(() =>
-//                        this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(questionnaire));
+                if (questionnaireExportStructure == null)
+                    return new string[0];
 
-//                if (questionnaireExportStructure == null)
-//                    return new string[0];
+                var labelsForQuestionnaire = this.questionnaireLabelFactory.CreateLabelsForQuestionnaire(questionnaireExportStructure);
 
-//                var labelsForQuestionnaire = this.questionnaireLabelFactory.CreateLabelsForQuestionnaire(questionnaireExportStructure);
+                var serviceDataLabels = this.exportSeviceDataProvider.GetServiceDataLabels();
 
-//                var serviceDataLabels = this.exportSeviceDataProvider.GetServiceDataLabels();
+                var result = new List<string>();
+                string fileExtension = format == DataExportFormat.STATA
+                    ? StataFileNameExtension
+                    : SpssFileNameExtension;
+                var writer = this.datasetWriterFactory.CreateDatasetWriter(format);
+                long processedFiles = 0;
 
-//                var result = new List<string>();
-//                string fileExtention = format == DataExportFormat.STATA
-//                    ? StataFileNameExtension
-//                    : SpssFileNameExtension;
-//                var writer = this.datasetWriterFactory.CreateDatasetWriter(format);
-//                long processdFiles = 0;
+                foreach (var tabFile in dataFiles)
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
 
-//                foreach (var tabFile in dataFiles)
-//                {
-//                    cancellationToken.ThrowIfCancellationRequested();
+                    currentDataInfo = $"filename: {tabFile}";
+                    string dataFilePath = Path.ChangeExtension(tabFile, fileExtension);
 
-//                    currentDataInfo = $"filename: {tabFile}";
-//                    string dataFilePath = this.fileSystemAccessor.ChangeExtension(tabFile, fileExtention);
+                    var meta = this.tabReader.GetMetaFromTabFile(tabFile);
 
-//                    var meta = this.tabReader.GetMetaFromTabFile(tabFile);
+                    var fileName = Path.GetFileNameWithoutExtension(tabFile);
 
-//                    var fileName = this.fileSystemAccessor.GetFileNameWithoutExtension(tabFile);
+                    var questionnaireLevelLabels =
+                        labelsForQuestionnaire.FirstOrDefault(
+                            x => string.Equals(x.LevelName, fileName, StringComparison.InvariantCultureIgnoreCase));
 
-//                    var questionnaireLevelLabels =
-//                        labelsForQuestionnaire.FirstOrDefault(
-//                            x => string.Equals(x.LevelName, fileName, StringComparison.InvariantCultureIgnoreCase));
+                    if (questionnaireLevelLabels != null)
+                        UpdateMetaWithLabels(meta, questionnaireLevelLabels);
+                    else if (serviceDataLabels.ContainsKey(fileName))
+                        UpdateMetaWithLabels(meta, serviceDataLabels[fileName]);
 
-//                    if (questionnaireLevelLabels != null)
-//                        UpdateMetaWithLabels(meta, questionnaireLevelLabels);
-//                    else if (serviceDataLabels.ContainsKey(fileName))
-//                        UpdateMetaWithLabels(meta, serviceDataLabels[fileName]);
+                    meta.ExtendedMissings.Add(ExportFormatSettings.MissingNumericQuestionValue, "missing");
+                    meta.ExtendedStrMissings.Add(ExportFormatSettings.MissingStringQuestionValue, "missing");
 
-//                    meta.ExtendedMissings.Add(ExportFormatSettings.MissingNumericQuestionValue, "missing");
-//                    meta.ExtendedStrMissings.Add(ExportFormatSettings.MissingStringQuestionValue, "missing");
+                    using (IDataQuery tabStreamDataQuery = dataQueryFactory.CreateDataQuery(tabFile))
+                    {
+                        writer.WriteToFile(dataFilePath, meta, tabStreamDataQuery);
+                    }
+                    result.Add(dataFilePath);
 
-//                    using (IDataQuery tabStreamDataQuery = dataQueryFactory.CreateDataQuery(tabFile))
-//                    {
-//                        writer.WriteToFile(dataFilePath, meta, tabStreamDataQuery);
-//                    }
-//                    result.Add(dataFilePath);
+                    processedFiles++;
+                    progress.Report(processedFiles.PercentOf(dataFiles.Length));
 
-//                    processdFiles++;
-//                    progress.Report(processdFiles.PercentOf(dataFiles.Length));
+                }
+                return result.ToArray();
+            }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
+            catch (Exception exc)
+            {
+                this.logger.LogError($"Error on data export (questionnaireId:{questionnaireId}): ", exc);
+                this.logger.LogError(currentDataInfo);
+            }
 
-//                }
-//                return result.ToArray();
-//            }
-//            catch (OperationCanceledException)
-//            {
-//                throw;
-//            }
-//            catch (Exception exc)
-//            {
-//                this.logger.Error($"Error on data export (questionnaireId:{questionnaireId}, questionnaireVersion:{questionnaireVersion}): ", exc);
-//                this.logger.Error(currentDataInfo);
-//            }
+            return new string[0];
+        }
 
-//            return new string[0];
-//        }
+        private static void UpdateMetaWithLabels(IDatasetMeta meta, QuestionnaireLevelLabels questionnaireLevelLabels)
+        {
+            for (int index = 0; index < meta.Variables.Length; index++)
+            {
+                if (!questionnaireLevelLabels.ContainsVariable(meta.Variables[index].VarName))
+                    continue;
 
-//        private static void UpdateMetaWithLabels(IDatasetMeta meta, QuestionnaireLevelLabels questionnaireLevelLabels)
-//        {
-//            for (int index = 0; index < meta.Variables.Length; index++)
-//            {
-//                if (!questionnaireLevelLabels.ContainsVariable(meta.Variables[index].VarName))
-//                    continue;
+                var variableLabels = questionnaireLevelLabels[meta.Variables[index].VarName];
 
-//                var variableLabels = questionnaireLevelLabels[meta.Variables[index].VarName];
+                meta.Variables[index] = new DatasetVariable(meta.Variables[index].VarName)
+                {
+                    Storage = GetGtorageType(variableLabels.ValueType)
+                };
 
-//                meta.Variables[index] = new DatasetVariable(meta.Variables[index].VarName)
-//                {
-//                    Storage = GetGtorageType(variableLabels.ValueType)
-//                };
+                meta.Variables[index].VarLabel = variableLabels.Label;
 
-//                meta.Variables[index].VarLabel = variableLabels.Label;
+                var valueSet = new ValueSet();
 
-//                var valueSet = new ValueSet();
+                foreach (var variableValueLabel in variableLabels.VariableValueLabels)
+                {
+                    double value;
+                    if (double.TryParse(variableValueLabel.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out value))
+                        valueSet.Add(value, variableValueLabel.Label);
+                }
 
-//                foreach (var variableValueLabel in variableLabels.VariableValueLabels)
-//                {
-//                    double value;
-//                    if (double.TryParse(variableValueLabel.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out value))
-//                        valueSet.Add(value, variableValueLabel.Label);
-//                }
+                meta.AssociateValueSet(meta.Variables[index].VarName, valueSet);
+            }
+        }
 
-//                meta.AssociateValueSet(meta.Variables[index].VarName, valueSet);
-//            }
-//        }
+        private static void UpdateMetaWithLabels(IDatasetMeta meta, Dictionary<string, string> serviceLabels)
+        {
+            foreach (var variable in meta.Variables)
+            {
+                if (!serviceLabels.ContainsKey(variable.VarName))
+                    continue;
 
-//        private static void UpdateMetaWithLabels(IDatasetMeta meta, Dictionary<string, string> serviceLabels)
-//        {
-//            foreach (var variable in meta.Variables)
-//            {
-//                if (!serviceLabels.ContainsKey(variable.VarName))
-//                    continue;
+                variable.VarLabel = serviceLabels[variable.VarName];
+            }
+        }
 
-//                variable.VarLabel = serviceLabels[variable.VarName];
-//            }
-//        }
+        private static VariableStorage GetGtorageType(ExportValueType variableLabelsValueType)
+        {
+            switch (variableLabelsValueType)
+            {
+                case ExportValueType.String:
+                    return VariableStorage.StringStorage;
+                case ExportValueType.NumericInt:
+                    return VariableStorage.NumericIntegerStorage;
+                case ExportValueType.Numeric:
+                    return VariableStorage.NumericStorage;
+                case ExportValueType.Date:
+                    return VariableStorage.DateStorage;
+                case ExportValueType.DateTime:
+                    return VariableStorage.DateTimeStorage;
+                case ExportValueType.Boolean:
+                    return VariableStorage.NumericIntegerStorage;
 
-//        private static VariableStorage GetGtorageType(ExportValueType variableLabelsValueType)
-//        {
-//            switch (variableLabelsValueType)
-//            {
-//                case ExportValueType.String:
-//                    return VariableStorage.StringStorage;
-//                case ExportValueType.NumericInt:
-//                    return VariableStorage.NumericIntegerStorage;
-//                case ExportValueType.Numeric:
-//                    return VariableStorage.NumericStorage;
-//                case ExportValueType.Date:
-//                    return VariableStorage.DateStorage;
-//                case ExportValueType.DateTime:
-//                    return VariableStorage.DateTimeStorage;
-//                case ExportValueType.Boolean:
-//                    return VariableStorage.NumericIntegerStorage;
-
-//                case ExportValueType.Unknown:
-//                default:
-//                    return VariableStorage.UnknownStorage;
-//            }
-//        }
-//    }
-//}
+                case ExportValueType.Unknown:
+                default:
+                    return VariableStorage.UnknownStorage;
+            }
+        }
+    }
+}
