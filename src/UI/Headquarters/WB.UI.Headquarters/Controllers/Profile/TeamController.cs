@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Main.Core.Entities.SubEntities;
@@ -104,15 +105,34 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         {
             if (this.ModelState.IsValid)
             {
-                var updateResult = await this.UpdateAccountPasswordAsync(model);
+                var updatedAccount = await this.userManager.FindByIdAsync(model.Id);
 
-                if (updateResult.Succeeded)
+                if (this.authorizedUser.IsSupervisor)
                 {
-                    this.Success(Strings.HQ_AccountController_AccountPasswordChangedSuccessfullyFormat.FormatString(model.UserName));
-                    return RedirectToAction("Cancel", model);
+                    if (this.authorizedUser.Id != updatedAccount.Profile?.SupervisorId &&
+                        this.authorizedUser.Id != updatedAccount.Id)
+                    {
+                        return new HttpStatusCodeResult(HttpStatusCode.Forbidden, Strings.NoPermissionsToExcute);
+                    }
                 }
-                else
+
+                if (this.authorizedUser.IsHeadquarter && updatedAccount.IsInRole(UserRoles.Administrator))
+                {
+                    return new HttpStatusCodeResult(HttpStatusCode.Forbidden, Strings.NoPermissionsToExcute);
+                }
+
+                if (this.ModelState.IsValid)
+                {
+                    var updateResult = await this.UpdateAccountPasswordAsync(model);
+
+                    if (updateResult.Succeeded)
+                    {
+                        this.Success(Strings.HQ_AccountController_AccountPasswordChangedSuccessfullyFormat.FormatString(model.UserName));
+                        return RedirectToAction("Cancel", model);
+                    }
+
                     this.ModelState.AddModelError("UpdatePassword." + nameof(UserEditModel.Password), string.Join(@", ", updateResult.Errors));
+                }
             }
 
             return View("Edit", model);
