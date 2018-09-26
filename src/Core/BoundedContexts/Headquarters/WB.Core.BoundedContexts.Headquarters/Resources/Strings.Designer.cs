@@ -342,9 +342,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Resources {
         /// <summary>
         ///   Looks up a localized string similar to User is not authorized to execute provided action.
         /// </summary>
-        public static string NoPermissionsToExcute {
+        public static string NoPermissionsToExecute {
             get {
-                return ResourceManager.GetString("NoPermissionsToExcute", resourceCulture);
+                return ResourceManager.GetString("NoPermissionsToExecute", resourceCulture);
             }
         }
         

@@ -43,7 +43,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 return IdentityResult.Failed(FieldsAndValidations.CannotUpdate_CurrentUserDoesNotExists);
             if(appUser.IsArchived)
                 return IdentityResult.Failed(FieldsAndValidations.CannotUpdate_CurrentUserIsArchived);
-            
+
+            if (!CurrentUserHasPermissionsToEditProvidedProfile(appUser))
+            {
+                return IdentityResult.Failed(Strings.NoPermissionsToExecute);
+            }
+
             appUser.Email = editModel.Email;
             appUser.FullName = editModel.PersonName;
             appUser.PhoneNumber = editModel.PhoneNumber;
@@ -107,18 +112,9 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             {
                 var updatedAccount = await this.userManager.FindByIdAsync(model.Id);
 
-                if (this.authorizedUser.IsSupervisor)
+                if (!CurrentUserHasPermissionsToEditProvidedProfile(updatedAccount))
                 {
-                    if (this.authorizedUser.Id != updatedAccount.Profile?.SupervisorId &&
-                        this.authorizedUser.Id != updatedAccount.Id)
-                    {
-                        return new HttpStatusCodeResult(HttpStatusCode.Forbidden, Strings.NoPermissionsToExcute);
-                    }
-                }
-
-                if (this.authorizedUser.IsHeadquarter && updatedAccount.IsInRole(UserRoles.Administrator))
-                {
-                    return new HttpStatusCodeResult(HttpStatusCode.Forbidden, Strings.NoPermissionsToExcute);
+                    return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
                 }
 
                 if (this.ModelState.IsValid)
@@ -136,6 +132,27 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             }
 
             return View("Edit", model);
+        }
+
+        private bool CurrentUserHasPermissionsToEditProvidedProfile(HqUser updatedAccount)
+        {
+            if (this.authorizedUser.IsSupervisor)
+            {
+                if (this.authorizedUser.Id != updatedAccount.Profile?.SupervisorId &&
+                    this.authorizedUser.Id != updatedAccount.Id)
+                {
+                    return false;
+                }
+            }
+
+            if (this.authorizedUser.IsHeadquarter && updatedAccount.IsInRole(UserRoles.Administrator))
+            {
+                return false;
+            }
+
+            if (this.authorizedUser.IsInterviewer) return false;
+
+            return true;
         }
 
         public virtual ActionResult Cancel(Guid? id)
