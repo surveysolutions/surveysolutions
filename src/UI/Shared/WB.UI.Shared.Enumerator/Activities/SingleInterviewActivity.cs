@@ -2,19 +2,18 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Android.OS;
-using Android.Support.Design.Widget;
-using Android.Support.V7.Widget;
 using Android.Views;
+using Android.Widget;
 using Humanizer;
 using Humanizer.Localisation;
 using MvvmCross;
 using MvvmCross.Commands;
 using MvvmCross.Plugin.Messenger;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
+using Toolbar = Android.Support.V7.Widget.Toolbar;
 
 namespace WB.UI.Shared.Enumerator.Activities
 {
@@ -100,12 +99,13 @@ namespace WB.UI.Shared.Enumerator.Activities
                         var message = string.Format(UIResources.AnswerRecordedMsg,
                             msg.Elapsed.Humanize(maxUnit: TimeUnit.Minute));
 
-                        var rootLayout = this.FindViewById(Resource.Id.rootLayout);
-                        Snackbar.Make(rootLayout,
-                                message,
-                                Snackbar.LengthIndefinite)
-                            .SetAction(UIResources.AnswerRecordedMsgDismiss, view => { })
-                            .Show();
+                        this.RunOnUiThread(() => Toast.MakeText(this, message, ToastLength.Long).Show());
+                        //var rootLayout = this.FindViewById(Resource.Id.rootLayout);
+                        //Snackbar.Make(rootLayout,
+                        //        message,
+                        //        Snackbar.LengthIndefinite)
+                        //    .SetAction(UIResources.AnswerRecordedMsgDismiss, view => { })
+                        //    .Show();
                     }
                 });
             }
