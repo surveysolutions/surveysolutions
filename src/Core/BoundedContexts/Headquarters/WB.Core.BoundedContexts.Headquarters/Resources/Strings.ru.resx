@@ -241,7 +241,7 @@
     <value>Команды</value>
     <comment>Команды</comment>
   </data>
-  <data name="NoPermissionsToExcute" xml:space="preserve">
+  <data name="NoPermissionsToExecute" xml:space="preserve">
     <value>Пользователь не авторизован выполнять данное действие</value>
   </data>
 </root>
