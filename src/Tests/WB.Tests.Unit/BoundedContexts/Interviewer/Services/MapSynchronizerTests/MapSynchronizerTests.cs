@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.MapSynchronizerTest
         [Test]
         public async Task should_always_delete_map_file()
         {
-            var synchronizationService = new Mock<ISynchronizationService>();
+            var synchronizationService = new Mock<IOnlineSynchronizationService>();
             synchronizationService.Setup(x => x.GetMapList(It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new List<MapView>()
                 {
