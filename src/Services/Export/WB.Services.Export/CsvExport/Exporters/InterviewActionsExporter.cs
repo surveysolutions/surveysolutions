@@ -23,7 +23,7 @@ namespace WB.Services.Export.CsvExport.Exporters
         private readonly IOptions<InterviewDataExportSettings> interviewDataExportSettings;
         public readonly string InterviewActionsFileName = "interview__actions";
 
-        public static readonly DoExportFileHeader[] ActionFileColumns =
+        public readonly DoExportFileHeader[] ActionFileColumns =
         {
             new DoExportFileHeader("interview__id", "Unique 32-character long identifier of the interview"),
             new DoExportFileHeader("interview__key", "Identifier of the interview"),

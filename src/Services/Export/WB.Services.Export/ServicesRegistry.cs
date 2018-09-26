@@ -51,6 +51,11 @@ namespace WB.Services.Export
             services.AddTransient<IArchiveUtils, ZipArchiveUtils>();
             services.AddTransient<IExternalFileStorage, S3FileStorage>();
             services.AddTransient<ITempPathProvider, ManagedThreadAwareTempPathProvider>();
+            services.AddTransient<ITabularDataToExternalStatPackageExportService, TabularDataToExternalStatPackageExportService>();
+            services.AddTransient<ITabFileReader, TabFileReader>();
+            services.AddTransient<IDatasetWriterFactory, DatasetWriterFactory>();
+            services.AddTransient<IDataQueryFactory, DataQueryFactory>();
+            services.AddTransient<IExportServiceDataProvider, ExportServiceDataProvider>();
 
             // Singletons
             services.AddSingleton<ICache, Cache>();

@@ -12,6 +12,7 @@ using IFilebasedExportedDataAccessor = WB.Core.BoundedContexts.Headquarters.Data
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers.Implementation
 {
+    [Obsolete("KP-11815")]
     internal class StataFormatExportHandler : TabBasedFormatExportHandler
     {
         private readonly ITabularDataToExternalStatPackageExportService tabularDataToExternalStatPackageExportService;

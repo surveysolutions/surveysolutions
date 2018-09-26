@@ -12,6 +12,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers.Implementation
 {
+    [Obsolete("KP-11815")]
     internal class SpssFormatExportHandler : TabBasedFormatExportHandler
     {
         private readonly ITabularDataToExternalStatPackageExportService tabularDataToExternalStatPackageExportService;
