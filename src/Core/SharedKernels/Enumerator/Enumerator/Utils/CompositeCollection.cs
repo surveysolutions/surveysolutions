@@ -15,6 +15,7 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
     /// </remarks>
     public class CompositeCollection<T> : IObservableCollection<T>
     {
+        private object lockObject = new object();
         private readonly List<IObservableCollection<T>> collections = new List<IObservableCollection<T>>();
 
         public bool IsReadOnly => true;
@@ -28,7 +29,7 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
 
         public int Count { get ; private set; }
         public bool IsSynchronized => false;
-        public object SyncRoot => (object)null;
+        public object SyncRoot => this.lockObject;
 
         public void Clear()
         {
@@ -51,9 +52,12 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
 
         public IEnumerator<T> GetEnumerator()
         {
-            foreach (var coll in this.collections)
+            lock (SyncRoot)
+            {
+                foreach (var coll in this.collections)
                 foreach (var item in coll ?? Enumerable.Empty<T>())
                     yield return item;
+            }
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -63,7 +67,10 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
 
         public void Add(T item)
         {
-            this.AddCollection(new CovariantObservableCollection<T>(item.ToEnumerable()));
+            lock (SyncRoot)
+            {
+                this.AddCollection(new CovariantObservableCollection<T>(item.ToEnumerable()));
+            }
         }
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;
@@ -72,7 +79,11 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
 
         public void AddCollection(IObservableCollection<T> collection)
         {
-            this.collections.Add(collection);
+            lock (SyncRoot)
+            {
+                this.collections.Add(collection);
+            }
+
             collection.CollectionChanged += this.HandleChildCollectionChanged;
             var offset = this.Count;
 

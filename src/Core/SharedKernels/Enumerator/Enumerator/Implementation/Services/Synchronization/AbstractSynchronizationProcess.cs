@@ -36,7 +36,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
         protected abstract bool SendStatistics { get; }
 
-        protected abstract string SucsessDescription { get; }
+        protected abstract string SuccessDescription { get; }
 
         protected AbstractSynchronizationProcess(
             ISynchronizationService synchronizationService, 
@@ -277,7 +277,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 progress.Report(new SyncProgressInfo
                 {
                     Title = InterviewerUIResources.Synchronization_Success_Title,
-                    Description = SucsessDescription, 
+                    Description = SuccessDescription, 
                     Status = SynchronizationStatus.Success,
                     Statistics = statistics,
                     Stage = SyncStage.Success
