@@ -17,6 +17,7 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
 using WB.Core.Infrastructure.Transactions;
+using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
@@ -196,15 +197,16 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                 var exportBulk = new List<InterviewExportedDataRecord>();
                 Stopwatch batchWatch = Stopwatch.StartNew();
 
-                foreach (var interview in batch)
+                foreach (InterviewToExport interview in batch)
                 {
                     cancellationToken.ThrowIfCancellationRequested();
 
-                    exportBulk.Add(this.ExportSingleInterview(interview,
-                        interview.Entities,
+                    var dataRecords = this.ExportSingleInterview(interview,
                         questionnaireExportStructure,
                         questionnaire,
-                        basePath));
+                        basePath);
+
+                    exportBulk.Add(dataRecords);
 
                     interview.Entities.Clear(); // needed to free ram as yearly as possible
 
@@ -278,10 +280,16 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         private readonly Stopwatch getDbDataStopwatch = new Stopwatch();
         private readonly Stopwatch exportProcessingStopwatch = new Stopwatch();
 
-        private InterviewExportedDataRecord ExportSingleInterview(InterviewToExport interviewToExport,
-            List<InterviewEntity> interview, QuestionnaireExportStructure exportStructure, IQuestionnaire questionnaire, string basePath)
+        private InterviewExportedDataRecord ExportSingleInterview(
+            InterviewToExport interviewToExport,
+            QuestionnaireExportStructure exportStructure, 
+            IQuestionnaire questionnaire, 
+            string basePath)
         {
             exportProcessingStopwatch.Start();
+
+            var interview = interviewToExport.Entities;
+
             List<string[]> errors = errorsExporter.Export(exportStructure, interview, basePath, interviewToExport.Key);
 
             var interviewData = new InterviewData
@@ -323,15 +331,29 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                     if (systemVariableValues.Count > 0) // main file?
                     {
                         var interviewKeyIndex = ServiceColumns.SystemVariables[ServiceVariableType.InterviewKey].Index;
+
                         if (systemVariableValues.Count < interviewKeyIndex + 1)
                             systemVariableValues.Add(interviewId.Key);
+
                         if (string.IsNullOrEmpty(systemVariableValues[interviewKeyIndex]))
                             systemVariableValues[interviewKeyIndex] = interviewId.Key;
 
-                        systemVariableValues.Insert(ServiceColumns.SystemVariables[ServiceVariableType.HasAnyError].Index,
-                            interviewId.ErrorsCount.ToString());
-                        systemVariableValues.Insert(ServiceColumns.SystemVariables[ServiceVariableType.InterviewStatus].Index,
-                            interviewId.Status.ToString());
+                        void InsertOrSetAt(ServiceVariableType type, string value)
+                        {
+                            var index = ServiceColumns.SystemVariables[type].Index;
+
+                            if (systemVariableValues.Count < index + 1)
+                            {
+                                systemVariableValues.Insert(index, value);
+                            }
+                            else
+                            {
+                                systemVariableValues[index] = value;
+                            }
+                        }
+
+                        InsertOrSetAt(ServiceVariableType.HasAnyError, interviewId.ErrorsCount.ToString());
+                        InsertOrSetAt(ServiceVariableType.InterviewStatus, interviewId.Status.ToString());
                     }
 
                     parametersToConcatenate.AddRange(systemVariableValues);

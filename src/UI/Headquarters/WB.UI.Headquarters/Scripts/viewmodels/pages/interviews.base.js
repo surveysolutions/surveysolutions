@@ -1,4 +1,4 @@
-﻿Supervisor.VM.InterviewsBase = function (serviceUrl, interviewDetailsUrl, responsiblesUrl, users, commandExecutionUrl, notifier) {
+Supervisor.VM.InterviewsBase = function (serviceUrl, interviewDetailsUrl, responsiblesUrl, users, commandExecutionUrl, notifier) {
     Supervisor.VM.InterviewsBase.superclass.constructor.apply(this, [serviceUrl, commandExecutionUrl]);
     
     var self = this;
@@ -88,8 +88,8 @@
         }
         self.AssignmentId(self.QueryString['assignmentId']);
         self.SearchBy(decodeURIComponent(self.QueryString['searchBy'] || ""));
-        self.UnactiveDateStart(self.QueryString['unactiveDateStart']);
-        self.UnactiveDateEnd(self.QueryString['unactiveDateEnd']);
+        self.UnactiveDateStart(decodeURIComponent(self.QueryString['unactiveDateStart']));
+        self.UnactiveDateEnd(decodeURIComponent(self.QueryString['unactiveDateEnd']));
         self.TeamId(self.QueryString['teamId']);
 
         updateTemplateName(self.SelectedTemplate());
@@ -100,8 +100,9 @@
         self.Url.query['responsible'] = self.QueryString['responsible'] || "";
         self.Url.query['searchBy'] = self.QueryString['searchBy'] || "";
         self.Url.query['assignmentId'] = self.QueryString['assignmentId'] || "";
-        self.Url.query['unactiveDateStart'] = self.QueryString['unactiveDateStart'] || "";
-        self.Url.query['unactiveDateEnd'] = self.QueryString['unactiveDateEnd'] || "";
+        self.Url.query['unactiveDateStart'] = decodeURIComponent(self.QueryString['unactiveDateStart'] || "");
+        self.Url.query['unactiveDateEnd'] = decodeURIComponent(self.QueryString['unactiveDateEnd'] || "");
+        self.Url.query['teamId'] = self.QueryString['teamId'] || "";
 
         self.SelectedTemplate.subscribe(
             function (value) {

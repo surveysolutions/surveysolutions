@@ -2010,7 +2010,7 @@ namespace WB.Tests.Abc.TestFactories
         }
 
         public InterviewEntity InterviewEntity(Guid? interviewId = null, EntityType entityType = EntityType.Question, Identity identity = null, 
-            int[] invalidValidations = null, bool isEnabled = true)
+            int[] invalidValidations = null, bool isEnabled = true, int? asInt = null)
         {
             return new InterviewEntity
             {
@@ -2018,7 +2018,8 @@ namespace WB.Tests.Abc.TestFactories
                 EntityType = entityType,
                 Identity = identity ?? Create.Identity(),
                 InvalidValidations = invalidValidations ?? Array.Empty<int>(),
-                IsEnabled = isEnabled
+                IsEnabled = isEnabled,
+                AsInt = asInt
             };
         }
 
@@ -2264,9 +2265,6 @@ namespace WB.Tests.Abc.TestFactories
                 CancellationToken = CancellationToken.None,
                 Progress = progress ?? Mock.Of<IProgress<SyncProgressInfo>>()
             };
-
-        public InterviewerApplicationPatchApiView InterviewerApplicationPatchApiView(string fileName, string url) 
-            => new InterviewerApplicationPatchApiView {FileName = fileName};
 
         public InterviewerAssignmentDashboardItemViewModel InterviewerAssignmentDashboardItemViewModel(IServiceLocator serviceLocator)
         {

@@ -49,7 +49,7 @@
                     @cell-clicked="cellClicked"
                     @selectedRowsChanged="rows => selectedRows = rows"
                     @totalRows="(rows) => totalRows = rows"
-                    @ajaxComlete="isLoading = false"
+                    @ajaxComlpete="isLoading = false"
                     @page="resetSelection"
                     :selectable="showSelectors">
             <div class="panel panel-table"

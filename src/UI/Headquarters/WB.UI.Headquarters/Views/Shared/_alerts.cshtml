@@ -1,3 +1,4 @@
+@using Microsoft.Security.Application
 @using WB.UI.Shared.Web.Extensions
 @if (Alerts.ALL.Any(TempData.ContainsKey))
 {
@@ -7,7 +8,7 @@
             <div class="alert alert-warning">
                 <button class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
                 <strong>@Pages.Attention</strong>
-                @Html.Raw(@TempData[Alerts.ATTENTION])
+                @Html.Raw(Sanitizer.GetSafeHtmlFragment(TempData[Alerts.ATTENTION].ToString()))
             </div>
         }
         @foreach (string key in Alerts.ALL.Except(new[] {Alerts.ATTENTION}))
@@ -16,7 +17,7 @@
             {
                 <div class="alert alert-@key">
                     <button class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
-                    @Html.Raw(@TempData[key])
+                    @Html.Raw(Sanitizer.GetSafeHtmlFragment(TempData[key].ToString()))
                 </div>
             }
         }
