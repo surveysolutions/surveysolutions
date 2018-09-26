@@ -74,7 +74,7 @@ namespace WB.UI.Shared.Enumerator.Services
                 await Task.Run(() => this.BackupSqliteDbs()).ConfigureAwait(false);
 
                 this.fileSystemAccessor.CopyFileOrDirectory(this.privateStorage, backupTempFolder, false,
-                    new[] {".log", ".dll", ".back", ".info", ".delta"});
+                    new[] {".log", ".dll", ".back", ".info"});
 
                 var backupFolderFilesPath = this.fileSystemAccessor.CombinePath(backupTempFolder, "files");
 
@@ -130,11 +130,14 @@ namespace WB.UI.Shared.Enumerator.Services
                         stream: fileStream,
                         customHeaders: backupHeaders,
                         url: "api/interviewer/v2/tabletInfo",
-                        credentials: new RestCredentials
-                        {
-                            Login = this.principal.CurrentUserIdentity.Name,
-                            Token = this.principal.CurrentUserIdentity.Token
-                        },
+                        credentials:
+                        this.principal.IsAuthenticated
+                            ? new RestCredentials
+                            {
+                                Login = this.principal.CurrentUserIdentity.Name,
+                                Token = this.principal.CurrentUserIdentity.Token
+                            }
+                            : null,
                         token: token);
                 }
                 catch (RestException e)

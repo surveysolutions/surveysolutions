@@ -106,6 +106,7 @@ using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
+using WB.Core.SharedKernels.Enumerator.Services.MapService;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
@@ -990,6 +991,44 @@ namespace WB.Tests.Abc.TestFactories
             };
 
             return step;
+        }
+
+        public Core.BoundedContexts.Interviewer.Implementation.Services.MapSyncProvider MapSyncProvider(
+            IMapService mapService = null,
+            ISynchronizationService synchronizationService = null,
+            ILogger logger = null,
+            IHttpStatistician httpStatistician = null,
+            IUserInteractionService userInteractionService = null,
+            IPrincipal principal = null,
+            IPasswordHasher passwordHasher = null,
+            IPlainStorage<InterviewerIdentity> interviewers = null,
+            IPlainStorage<InterviewView> interviews = null,
+            IAuditLogService auditLogService = null,
+            IEnumeratorSettings enumeratorSettings = null)
+        {
+            return new Core.BoundedContexts.Interviewer.Implementation.Services.MapSyncProvider(
+                mapService ?? Mock.Of<IMapService>(),
+                synchronizationService ?? Mock.Of<ISynchronizationService>(),
+                logger ?? Mock.Of<ILogger>(),
+                httpStatistician ?? Mock.Of<IHttpStatistician>(),
+                userInteractionService ?? Mock.Of<IUserInteractionService>(),
+                principal ?? Mock.Of<IPrincipal>(),
+                passwordHasher ?? Mock.Of<IPasswordHasher>(),
+                interviewers ?? Mock.Of<IPlainStorage<InterviewerIdentity>>(),
+                interviews ?? Mock.Of<IPlainStorage<InterviewView>>(),
+                auditLogService ?? Mock.Of<IAuditLogService>(),
+                enumeratorSettings ?? Mock.Of<IEnumeratorSettings>());
+        }
+
+        public InterviewFactory InterviewFactory(
+            IQueryableReadSideRepositoryReader<InterviewSummary> summaryRepository = null,
+            ISessionProvider sessionProvider = null,
+            IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireItems = null)
+        {
+            return new InterviewFactory(
+                summaryRepository ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(),
+                sessionProvider ?? Mock.Of<ISessionProvider>(),
+                questionnaireItems ?? Mock.Of<IPlainStorageAccessor<QuestionnaireCompositeItem>>());
         }
     }
 

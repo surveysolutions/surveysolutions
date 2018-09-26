@@ -14,8 +14,8 @@ namespace WB.UI.Supervisor.Services.Implementation
     {
         public TabletDiagnosticService(IFileSystemAccessor fileSystemAccessor, IPermissions permissions,
             ISynchronizationService synchronizationService, IDeviceSettings deviceSettings,
-            IArchivePatcherService archivePatcherService, ILogger logger) : base(fileSystemAccessor, permissions,
-            synchronizationService, deviceSettings, archivePatcherService, logger)
+            IArchivePatcherService archivePatcherService, ILogger logger, IViewModelNavigationService navigationService) : base(fileSystemAccessor, permissions,
+            synchronizationService, deviceSettings, archivePatcherService, logger, navigationService)
         {
         }
 

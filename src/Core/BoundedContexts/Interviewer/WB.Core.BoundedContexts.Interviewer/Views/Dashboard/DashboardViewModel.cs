@@ -68,9 +68,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.auditLogService = auditLogService;
             this.syncClient = syncClient;
             this.Synchronization = synchronization;
-            this.syncSubscription = synchronizationCompleteSource.SynchronizationEvents.Subscribe(r =>
+            this.syncSubscription = synchronizationCompleteSource.SynchronizationEvents.Subscribe(async r =>
             {
-                this.RefreshDashboard();
+                await this.RefreshDashboard();
             });
 
             this.CreateNew = createNewViewModel;
@@ -99,7 +99,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public override async Task Initialize()
         {
             await base.Initialize().ConfigureAwait(false);
-            this.RefreshDashboard(this.LastVisitedInterviewId);
+            await this.RefreshDashboard(this.LastVisitedInterviewId);
             this.SelectTypeOfInterviewsByInterviewId(this.LastVisitedInterviewId);
         }
 
@@ -201,14 +201,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.IsInProgress = !(this.StartedInterviews.IsItemsLoaded && this.RejectedInterviews.IsItemsLoaded &&
                                   this.CompletedInterviews.IsItemsLoaded && this.CreateNew.IsItemsLoaded);
 
-        private async void RefreshDashboard(Guid? lastVisitedInterviewId = null)
+        private async Task RefreshDashboard(Guid? lastVisitedInterviewId = null)
         {
             this.IsInProgress = true;
 
-            await this.CreateNew.LoadAsync(this.Synchronization);
-            await this.StartedInterviews.LoadAsync(lastVisitedInterviewId);
-            await this.RejectedInterviews.LoadAsync(lastVisitedInterviewId);
-            await this.CompletedInterviews.LoadAsync(lastVisitedInterviewId);
+            await Task.WhenAll(this.CreateNew.LoadAsync(this.Synchronization),
+                this.StartedInterviews.LoadAsync(lastVisitedInterviewId),
+                this.RejectedInterviews.LoadAsync(lastVisitedInterviewId),
+                this.CompletedInterviews.LoadAsync(lastVisitedInterviewId));
 
             this.RaisePropertyChanged(() => this.DashboardTitle);
         }

@@ -47,7 +47,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 
         
         protected override bool SendStatistics => true;
-        protected override string SucsessDescription => InterviewerUIResources.Synchronization_Success_Description;
+        protected override string SuccessDescription => InterviewerUIResources.Synchronization_Success_Description;
 
         public override SyncStatisticsApiView ToSyncStatisticsApiView(SynchronizationStatistics statistics, Stopwatch stopwatch)
         {

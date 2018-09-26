@@ -94,6 +94,10 @@ module.exports = {
         quiet: true
     },
 
+    transpileDependencies:[
+        'autonumeric'
+    ],
+
     chainWebpack: config => {
         config.plugin("provide").use(webpack.ProvidePlugin, [
             {

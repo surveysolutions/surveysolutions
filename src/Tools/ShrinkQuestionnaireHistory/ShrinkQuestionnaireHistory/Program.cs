@@ -32,6 +32,20 @@ namespace ShrinkQuestionnaireHistory
             }
         }
 
+        public static string DecompressString(string compressedString)
+        {
+            var bytes = Convert.FromBase64String(compressedString);
+            using (var msi = new MemoryStream(bytes))
+            using (var mso = new MemoryStream())
+            {
+                using (var gs = new GZipStream(msi, CompressionMode.Decompress))
+                {
+                    gs.CopyTo(mso);
+                }
+                return Encoding.Unicode.GetString(mso.ToArray());
+            }
+        }
+
         private const string emptyJson = "{}";
 
         static async Task Main(string[] args)
@@ -52,53 +66,70 @@ namespace ShrinkQuestionnaireHistory
                 int processedCount = 0;
                 Stopwatch watch = Stopwatch.StartNew();
 
-                foreach (var row in questionnairesWithHistoryIds)
+                Parallel.ForEach(questionnairesWithHistoryIds, new ParallelOptions{MaxDegreeOfParallelism = 4}, questionnaireId =>
                 {
-                    using (var transaction = connection.BeginTransaction(IsolationLevel.RepeatableRead))
+                    using (var localConnection = new NpgsqlConnection(connectionString.ConnectionString))
                     {
-                        try
+                        localConnection.Open();
+                        using (var transaction = localConnection.BeginTransaction(IsolationLevel.RepeatableRead))
                         {
-                            var existingHistory = connection.Query<(string Id, string Questionnaire)>(
-                                @"SELECT id as Id, resultingquestionnairedocument as Questionnaire 
-                                          FROM plainstore.questionnairechangerecords 
-                                          WHERE questionnaireid = @questionnaireId AND resultingquestionnairedocument IS NOT NULL
-                                          ORDER BY ""sequence"" desc", new { questionnaireId  = row });
-
-                            string reference = existingHistory.First().Questionnaire;
-
-                            foreach (var historyItem in existingHistory.Skip(1))
+                            try
                             {
-                                string textPatch = jdp.Diff(reference ?? emptyJson, historyItem.Questionnaire ?? emptyJson);
+                                var existingHistory =
+                                    localConnection
+                                        .Query<(string Id, string questionnaireId, string Questionnaire, string patch)>(
+                                            @"SELECT id as Id, questionnaireId, resultingquestionnairedocument, patch as Questionnaire 
+                                          FROM plainstore.questionnairechangerecords 
+                                          WHERE questionnaireid = :questionnaireId AND (resultingquestionnairedocument IS NOT NULL OR patch IS NOT NULL)
+                                          ORDER BY ""sequence"" desc", new {questionnaireId = questionnaireId}, transaction);
 
-                                var compressString = CompressString(textPatch);
-                                connection.Execute(@"UPDATE plainstore.questionnairechangerecords 
+                                string reference = existingHistory.First().Questionnaire;
+
+                                foreach (var historyItem in existingHistory.Skip(1))
+                                {
+                                    if (historyItem.Questionnaire != null)
+                                    {
+
+                                        string textPatch = jdp.Diff(reference ?? emptyJson,
+                                            historyItem.Questionnaire ?? emptyJson);
+
+
+                                        var compressString = textPatch != null ? CompressString(textPatch) : null;
+                                        localConnection.Execute(@"UPDATE plainstore.questionnairechangerecords 
                                                     SET resultingquestionnairedocument = NULL, ""patch"" = @diff 
                                                     WHERE id = @id",
-                                    new
+                                            new
+                                            {
+                                                diff = compressString,
+                                                id = historyItem.Id
+                                            });
+
+                                        reference = historyItem.Questionnaire;
+                                    }
+                                    else
                                     {
-                                        diff = compressString,
-                                        id = historyItem.Id
-                                    });
+                                        var patch = DecompressString(historyItem.patch);
+                                        reference = jdp.Patch(reference, patch);
+                                    }
+                                }
 
-                                reference = historyItem.Questionnaire;
+                                transaction.Commit();
+                                Interlocked.Increment(ref processedCount);
+
+                                if (processedCount % 100 == 0)
+                                {
+                                    Console.WriteLine(
+                                        $"Processed {processedCount} questionnaires.Elapsed {watch.Elapsed:g}");
+                                }
                             }
-
-                            transaction.Commit();
-                            Interlocked.Increment(ref processedCount);
-
-                            if (processedCount % 100 == 0)
+                            catch (Exception e)
                             {
-                                Console.WriteLine(
-                                    $"Processed {processedCount} questionnaires.Elapsed {watch.Elapsed:g}");
+                                Console.WriteLine(e.Message);
+                                transaction.Rollback();
                             }
-                        }
-                        catch (Exception e)
-                        {
-                            Console.WriteLine(e.Message);
-                            transaction.Rollback();
                         }
                     }
-                }
+                });
             }
 
             Console.WriteLine("Done migration");

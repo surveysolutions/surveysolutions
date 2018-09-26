@@ -26,7 +26,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
         protected string InterviewerTabletInfosController => string.Concat(ApplicationUrl, "/interviewerTabletInfos");
         protected string InterviewerStatisticsController => string.Concat(ApplicationUrl, "/interviewerStatistics");
         protected string GetListOfDeletedQuestionnairesController => string.Concat(ApplicationUrl, "/deletedQuestionnairesList");
-        protected string GetUpdatesController => string.Concat(ApplicationUrl, "/updates");
 
         public SynchronizationService(IPrincipal principal, IRestService restService,
             ISupervisorSettings settings, ISupervisorSyncProtocolVersionProvider syncProtocolVersionProvider,
@@ -99,19 +98,11 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
                 token: cancellationToken));
         }
 
-        public Task<InterviewerApplicationPatchApiView[]> GetListOfInterviewerAppPatchesAsync(CancellationToken cancellationToken)
-            => this.TryGetRestResponseOrThrowAsync(() =>
-                this.restService.GetAsync<InterviewerApplicationPatchApiView[]>(
-                    url: this.GetUpdatesController,
-                    credentials: this.restCredentials,
-                    token: cancellationToken));
-
-        public Task<byte[]> GetInterviewerApplicationPatchByNameAsync(string patchName, CancellationToken token, IProgress<TransferProgress> transferProgress)
-            => this.TryGetRestResponseOrThrowAsync(async () =>
+        public Task<byte[]> GetInterviewerApplicationAsync(CancellationToken token, IProgress<TransferProgress> transferProgress = null) =>
+            this.TryGetRestResponseOrThrowAsync(async () =>
             {
-                var interviewerPatchApiUrl = $"{this.GetUpdatesController}/{patchName}";
-
-                var restFile = await this.restService.DownloadFileAsync(url: interviewerPatchApiUrl,
+                var restFile = await this.restService.DownloadFileAsync(
+                    url: string.Concat(ApplicationUrl, "/apk/interviewer"), 
                     token: token,
                     credentials: this.restCredentials,
                     transferProgress: transferProgress);
@@ -119,19 +110,16 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
                 return restFile.Content;
             });
 
-        public Task<int?> GetLatestInterviewerAppVersionAsync(CancellationToken token)
-            => this.TryGetRestResponseOrThrowAsync(async () =>
+        public Task<byte[]> GetInterviewerApplicationWithMapsAsync(CancellationToken token, IProgress<TransferProgress> transferProgress = null) =>
+            this.TryGetRestResponseOrThrowAsync(async () =>
             {
-                try
-                {
-                    return await this.restService.GetAsync<int?>(
-                        url: string.Concat(this.GetUpdatesController, "/latestversion"),
-                        credentials: this.restCredentials, token: token).ConfigureAwait(false);
-                }
-                catch (RestException rest) when (rest.StatusCode == HttpStatusCode.NotFound)
-                {
-                    return null;
-                }
+                var restFile = await this.restService.DownloadFileAsync(
+                    url: string.Concat(ApplicationUrl, "/apk/interviewer-with-maps"), 
+                    token: token,
+                    credentials: this.restCredentials,
+                    transferProgress: transferProgress);
+
+                return restFile.Content;
             });
 
         protected override string CanSynchronizeValidResponse => "158329303";
