@@ -231,4 +231,7 @@
   <data name="AllInterviewers" xml:space="preserve">
     <value>All interviewers</value>
   </data>
+  <data name="NoPermissionsToExecute" xml:space="preserve">
+    <value>User is not authorized to execute provided action</value>
+  </data>
 </root>

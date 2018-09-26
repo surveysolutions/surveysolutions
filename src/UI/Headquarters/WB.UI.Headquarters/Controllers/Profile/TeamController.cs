@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Main.Core.Entities.SubEntities;
@@ -42,7 +43,12 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
                 return IdentityResult.Failed(FieldsAndValidations.CannotUpdate_CurrentUserDoesNotExists);
             if(appUser.IsArchived)
                 return IdentityResult.Failed(FieldsAndValidations.CannotUpdate_CurrentUserIsArchived);
-            
+
+            if (!CurrentUserHasPermissionsToEditProvidedProfile(appUser))
+            {
+                return IdentityResult.Failed(Strings.NoPermissionsToExecute);
+            }
+
             appUser.Email = editModel.Email;
             appUser.FullName = editModel.PersonName;
             appUser.PhoneNumber = editModel.PhoneNumber;
@@ -104,18 +110,49 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
         {
             if (this.ModelState.IsValid)
             {
-                var updateResult = await this.UpdateAccountPasswordAsync(model);
+                var updatedAccount = await this.userManager.FindByIdAsync(model.Id);
 
-                if (updateResult.Succeeded)
+                if (!CurrentUserHasPermissionsToEditProvidedProfile(updatedAccount))
                 {
-                    this.Success(Strings.HQ_AccountController_AccountPasswordChangedSuccessfullyFormat.FormatString(model.UserName));
-                    return RedirectToAction("Cancel", model);
+                    return new HttpStatusCodeResult(HttpStatusCode.Forbidden);
                 }
-                else
+
+                if (this.ModelState.IsValid)
+                {
+                    var updateResult = await this.UpdateAccountPasswordAsync(model);
+
+                    if (updateResult.Succeeded)
+                    {
+                        this.Success(Strings.HQ_AccountController_AccountPasswordChangedSuccessfullyFormat.FormatString(model.UserName));
+                        return RedirectToAction("Cancel", model);
+                    }
+
                     this.ModelState.AddModelError("UpdatePassword." + nameof(UserEditModel.Password), string.Join(@", ", updateResult.Errors));
+                }
             }
 
             return View("Edit", model);
+        }
+
+        private bool CurrentUserHasPermissionsToEditProvidedProfile(HqUser updatedAccount)
+        {
+            if (this.authorizedUser.IsSupervisor)
+            {
+                if (this.authorizedUser.Id != updatedAccount.Profile?.SupervisorId &&
+                    this.authorizedUser.Id != updatedAccount.Id)
+                {
+                    return false;
+                }
+            }
+
+            if (this.authorizedUser.IsHeadquarter && updatedAccount.IsInRole(UserRoles.Administrator))
+            {
+                return false;
+            }
+
+            if (this.authorizedUser.IsInterviewer) return false;
+
+            return true;
         }
 
         public virtual ActionResult Cancel(Guid? id)
