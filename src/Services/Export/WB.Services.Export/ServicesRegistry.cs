@@ -56,14 +56,14 @@ namespace WB.Services.Export
             services.AddTransient<IDatasetWriterFactory, DatasetWriterFactory>();
             services.AddTransient<IDataQueryFactory, DataQueryFactory>();
             services.AddTransient<IExportServiceDataProvider, ExportServiceDataProvider>();
-
+            
             // Singletons
             services.AddSingleton<ICache, Cache>();
 
             RegisterHandlers(services);
 
-            services.AddTransient<ExportJob>();
-            services.AddTransient<IDataExportProcessesService, DataExportProcessesService>();
+            services.AddTransient<IExportJob, ExportJob>();
+            
             FileStorageModule.Register(services, configuration);
 
             // options

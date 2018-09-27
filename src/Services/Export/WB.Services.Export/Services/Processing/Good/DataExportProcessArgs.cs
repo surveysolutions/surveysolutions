@@ -43,7 +43,7 @@ namespace WB.Services.Export.Services.Processing.Good
         public string ArchivePassword { get; set; }
         public string QuestionnaireTitle { get; }
 
-        public override string NaturalId => $"{InterviewStatusString()}${this.Format}${this.Questionnaire}" +
+        public override string NaturalId => $"{Tenant.Id}${InterviewStatusString()}${this.Format}${this.Questionnaire}" +
                                             $"${this.FromDate?.ToString(@"YYYYMMDD") ?? "EMPTY FROM DATE"}" +
                                             $"${this.ToDate?.ToString(@"YYYYMMDD") ?? "EMPTY TO DATE"}";
 

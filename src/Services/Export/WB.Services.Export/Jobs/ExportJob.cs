@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
+using System.Threading.Tasks;
 using Amazon.S3;
-using Hangfire.Server;
 using Microsoft.Extensions.Logging;
 using WB.Services.Export.ExportProcessHandlers;
 using WB.Services.Export.ExportProcessHandlers.Externals;
@@ -11,7 +11,12 @@ using WB.Services.Export.Services.Processing.Good;
 
 namespace WB.Services.Export.Jobs
 {
-    internal class ExportJob
+    public interface IExportJob
+    {
+        Task ExecuteAsync(DataExportProcessDetails args, CancellationToken cancellationToken);
+    }
+
+    internal class ExportJob : IExportJob
     {
         private readonly IDataExportProcessesService exportService;
 
@@ -34,7 +39,7 @@ namespace WB.Services.Export.Jobs
             Lazy<TabularFormatDataExportHandler> tabularFormatDataExportHandler,
             //Lazy<SpssFormatExportHandler> spssFormatExportHandler,
             //Lazy<StataFormatExportHandler> stataFormatExportHandler,
-        //    Lazy<OnedriveBinaryDataExportHandler> onedriveBinaryDataExportHandler,
+            //Lazy<OnedriveBinaryDataExportHandler> onedriveBinaryDataExportHandler,
             Lazy<DropboxBinaryDataExportHandler> dropboxBinaryDataExportHandler,
             Lazy<GoogleDriveBinaryDataExportHandler> googleDriveBinaryDataExportHandler,
             ILogger<ExportJob> logger)
@@ -46,16 +51,13 @@ namespace WB.Services.Export.Jobs
             this.tabularFormatDataExportHandler = tabularFormatDataExportHandler;
             //this.spssFormatExportHandler = spssFormatExportHandler;
             //this.stataFormatExportHandler = stataFormatExportHandler;
-         //   this.onedriveBinaryDataExportHandler = onedriveBinaryDataExportHandler;
+            //this.onedriveBinaryDataExportHandler = onedriveBinaryDataExportHandler;
             this.dropboxBinaryDataExportHandler = dropboxBinaryDataExportHandler;
             this.googleDriveBinaryDataExportHandler = googleDriveBinaryDataExportHandler;
             this.logger = logger;
-
-            // this will store unique worker Id
-            //workerId.Value = workerId.Value ?? Guid.NewGuid();
         }
 
-        public void Execute(DataExportProcessDetails pendingExportProcess, PerformContext context, CancellationToken cancellationToken)
+        public Task ExecuteAsync(DataExportProcessDetails pendingExportProcess, CancellationToken cancellationToken)
         {
             try
             {
@@ -79,6 +81,8 @@ namespace WB.Services.Export.Jobs
 
                 this.logger.LogError("Export job failed", e);
             }
+
+            return Task.CompletedTask;
         }
 
         private AbstractExternalStorageDataExportHandler GetExternalStorageExportHandler(ExternalStorageType storageType)

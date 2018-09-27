@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Net.Http;
-using Hangfire;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using WB.Services.Export.Interview;
@@ -15,19 +14,15 @@ namespace WB.Services.Export.Host.Controllers
     [ApiController]
     public class JobController : ControllerBase
     {
-        private readonly IBackgroundJobClient backgroundJobClient;
         private readonly IDataExportProcessesService exportProcessesService;
         private readonly ILogger<JobController> logger;
         private readonly IDataExportStatusReader dataExportStatusReader;
 
 
-        public JobController(IBackgroundJobClient backgroundJobClient,
-            IDataExportProcessesService exportProcessesService,
+        public JobController(IDataExportProcessesService exportProcessesService,
         //    IDataExportStatusReader dataExportStatusReader,
             ILogger<JobController> logger)
         {
-            this.backgroundJobClient =
-                backgroundJobClient ?? throw new ArgumentNullException(nameof(backgroundJobClient));
             this.exportProcessesService = exportProcessesService;
             this.logger = logger;
             this.dataExportStatusReader = dataExportStatusReader;
