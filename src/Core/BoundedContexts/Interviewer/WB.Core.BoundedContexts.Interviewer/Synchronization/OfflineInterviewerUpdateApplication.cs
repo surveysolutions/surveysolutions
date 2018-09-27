@@ -24,6 +24,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IPermissionsService permissions;
         private readonly IViewModelNavigationService navigationService;
+        private readonly IPathUtils pathUtils;
 
         public OfflineInterviewerUpdateApplication(int sortOrder, 
             ISynchronizationService synchronizationService,
@@ -31,12 +32,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
             IInterviewerSettings interviewerSettings,
             IFileSystemAccessor fileSystemAccessor,
             IPermissionsService permissions,
-            IViewModelNavigationService navigationService) : base(sortOrder, synchronizationService, logger)
+            IViewModelNavigationService navigationService,
+            IPathUtils pathUtils) : base(sortOrder, synchronizationService, logger)
         {
             this.interviewerSettings = interviewerSettings ?? throw new ArgumentNullException(nameof(interviewerSettings));
             this.fileSystemAccessor = fileSystemAccessor;
             this.permissions = permissions;
             this.navigationService = navigationService;
+            this.pathUtils = pathUtils;
         }
 
 
@@ -98,7 +101,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
                     if (apkBytes != null)
                     {
                         var pathToNewApk = this.fileSystemAccessor.CombinePath(
-                            Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "interviewer.apk");
+                            this.pathUtils.GetRootDirectory(), "interviewer.apk");
 
                         this.fileSystemAccessor.WriteAllBytes(pathToNewApk, apkBytes);
 
