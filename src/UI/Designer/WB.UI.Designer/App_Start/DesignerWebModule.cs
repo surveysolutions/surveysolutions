@@ -11,6 +11,7 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.Modularity;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Storage;
+using WB.Infrastructure.Native.Storage.Postgre;
 using WB.UI.Designer.Api.WebTester;
 using WB.UI.Designer.Code;
 using WB.UI.Designer.Implementation.Services;
@@ -55,6 +56,9 @@ namespace WB.UI.Designer
             });
 
             registry.BindAsSingleton<IWebTesterService, WebTesterService>();
+
+            // temp override registration
+            registry.BindInPerUnitOfWorkScope<IUnitOfWork, UnitOfWork>();
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
