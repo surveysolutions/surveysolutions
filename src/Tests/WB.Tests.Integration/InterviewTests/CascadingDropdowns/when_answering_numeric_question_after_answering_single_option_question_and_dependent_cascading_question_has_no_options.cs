@@ -26,7 +26,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
                 var actorId = Guid.Parse("33333333333333333333333333333333");
                 var numericId = Guid.Parse("44444444444444444444444444444444");
 
-                Setup.MockedServiceLocator();
+                SetUp.MockedServiceLocator();
 
                 var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId, Create.Entity.SingleQuestion(parentSingleOptionQuestionId, "q1", options: new List<Answer>
                 {
