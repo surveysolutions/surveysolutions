@@ -28,7 +28,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
         public void BecauseOf() =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
-                Setup.MockedServiceLocator();
+                SetUp.MockedServiceLocator();
 
                 var options = new List<Answer>{ Create.Entity.Option(20), Create.Entity.Option(30) };
 

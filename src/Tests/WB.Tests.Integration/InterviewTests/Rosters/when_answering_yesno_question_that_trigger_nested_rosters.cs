@@ -5,6 +5,7 @@ using AppDomainToolkit;
 using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using NUnit.Framework;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Tests.Abc;
 
@@ -12,15 +13,20 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
 {
     internal class when_answering_yesno_question_that_trigger_nested_rosters : InterviewTestsContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [OneTimeSetUp]
+        public void context () {
+
+            base.Setup();
+
             appDomainContext = AppDomainContext.Create();
+
             BecauseOf();
         }
 
         private void BecauseOf() =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
-                Setup.MockedServiceLocator();
+                SetUp.MockedServiceLocator();
 
                 var questionnaireId = Guid.Parse("77778888000000000000000000000000");
                 var rosterSizeQuestionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
@@ -30,32 +36,32 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 var roster2Id = Guid.Parse("22222222222222222222222222222222");
                 var roster3Id = Guid.Parse("33333333333333333333333333333333");
 
-                var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
-                    Abc.Create.Entity.Group(sectionId, "Section", null, null, false, new IComposite[]
+                var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
+                    Create.Entity.Group(sectionId, "Section", null, null, false, new IComposite[]
                     {
-                        Abc.Create.Entity.MultyOptionsQuestion(rosterSizeQuestionId, variable: "multi", yesNoView: true,
+                        Create.Entity.MultyOptionsQuestion(rosterSizeQuestionId, variable: "multi", yesNoView: true,
                             options: new List<Answer>
                             {
-                                Abc.Create.Entity.Option(value: "10", text: "A"),
-                                Abc.Create.Entity.Option(value: "20", text: "B"),
-                                Abc.Create.Entity.Option(value: "30", text: "C"),
-                                Abc.Create.Entity.Option(value: "40", text: "D")
+                                Create.Entity.Option(value: "10", text: "A"),
+                                Create.Entity.Option(value: "20", text: "B"),
+                                Create.Entity.Option(value: "30", text: "C"),
+                                Create.Entity.Option(value: "40", text: "D")
                             }),
-                        Abc.Create.Entity.Roster(
+                        Create.Entity.Roster(
                             rosterId: roster1Id,
                             rosterSizeSourceType: RosterSizeSourceType.Question,
                             rosterSizeQuestionId: rosterSizeQuestionId,
                             variable: "first",
                             children: new IComposite[]
                             {
-                                Abc.Create.Entity.Roster(
+                                Create.Entity.Roster(
                                     rosterId: roster2Id,
                                     rosterSizeSourceType: RosterSizeSourceType.Question,
                                     rosterSizeQuestionId: rosterSizeQuestionId,
                                     variable: "second",
                                     children: new IComposite[]
                                     {
-                                        Abc.Create.Entity.Roster(
+                                        Create.Entity.Roster(
                                             rosterId: roster3Id,
                                             rosterSizeSourceType: RosterSizeSourceType.Question,
                                             rosterSizeQuestionId: rosterSizeQuestionId,
@@ -72,7 +78,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(questionId: rosterSizeQuestionId, 
                     answeredOptions: new [] { Yes(10), Yes(20), Yes(40) }));
 
-                var sidebarViewModel = Setup.SidebarSectionViewModel(questionnaireDocument, interview);
+                var sidebarViewModel = SetUp.SidebarSectionViewModel(questionnaireDocument, interview);
                 sidebarViewModel.AllVisibleSections.ElementAt(1).ToggleCommand.Execute(null);
 
                 interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(questionId: rosterSizeQuestionId,
@@ -83,10 +89,11 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                 return result;
             });
 
-        [NUnit.Framework.Test] public void should_not_create_duplicates_links_in_sidebar () =>
+        [Test]
+        public void should_not_create_duplicates_links_in_sidebar () =>
             results.FirstSectionContainsDuplicates.Should().BeFalse();
 
-        [NUnit.Framework.OneTimeTearDown] public void CleanUp()
+        [OneTimeTearDown] public void CleanUp()
         {
             appDomainContext.Dispose();
             appDomainContext = null;

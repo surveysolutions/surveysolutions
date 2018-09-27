@@ -89,6 +89,9 @@
     <Reference Include="AutoFixture">
       <HintPath>..\..\..\..\..\Users\Victo\.nuget\packages\autofixture\4.0.1\lib\net452\AutoFixture.dll</HintPath>
     </Reference>
+    <Reference Include="MvvmCross.Tests">
+      <HintPath>C:\Users\slava\.nuget\packages\mvvmcross.tests\6.2.0\lib\netstandard2.0\MvvmCross.Tests.dll</HintPath>
+    </Reference>
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Windows" />
     <Reference Include="WindowsBase" />

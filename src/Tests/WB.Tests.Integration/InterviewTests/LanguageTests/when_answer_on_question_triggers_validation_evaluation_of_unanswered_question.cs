@@ -24,7 +24,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 var answeredQuestionId = Guid.Parse("11111111111111111111111111111111");
                 var dependentOnAnsweredQuestionId = Guid.Parse("22222222222222222222222222222222");
 
-                Setup.MockedServiceLocator();
+                SetUp.MockedServiceLocator();
 
                 var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Abc.Create.Entity.NumericIntegerQuestion(answeredQuestionId, "q1"),
