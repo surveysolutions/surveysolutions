@@ -18,25 +18,25 @@ using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchronization
 {
-    public abstract class MapSyncProviderBase : AbstractOnlineSynchronizationProcess, IMapSyncProvider
+    public abstract class MapSyncProviderBase : AbstractSynchronizationProcess, IMapSyncProvider
     {
         private readonly ISynchronizationService synchronizationService;
         private readonly ILogger logger;
         private readonly IMapService mapService;
 
-        protected MapSyncProviderBase(IMapService mapService, 
-            IOnlineSynchronizationService synchronizationService,
+        protected MapSyncProviderBase(IMapService mapService,
+            ISynchronizationService synchronizationService,
             ILogger logger,
-            IHttpStatistician httpStatistician, 
+            IHttpStatistician httpStatistician,
             IPrincipal principal,
-            IPlainStorage<InterviewView> interviewViewRepository, 
+            IPlainStorage<InterviewView> interviewViewRepository,
             IAuditLogService auditLogService,
             IEnumeratorSettings enumeratorSettings,
             IUserInteractionService userInteractionService,
-            IServiceLocator serviceLocator) 
-            : base(synchronizationService, logger,
-            httpStatistician, userInteractionService, principal,  
-            interviewViewRepository, auditLogService, enumeratorSettings, serviceLocator)
+            IServiceLocator serviceLocator,
+            IAssignmentDocumentsStorage assignmentsStorage)
+            : base(synchronizationService, logger, httpStatistician, principal, interviewViewRepository,
+                auditLogService, enumeratorSettings, serviceLocator, userInteractionService, assignmentsStorage)
         {
             this.synchronizationService = synchronizationService;
             this.logger = logger;

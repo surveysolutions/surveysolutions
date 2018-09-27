@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
         private readonly IPrincipal principal;
 
         public MapSyncProvider(IMapService mapService, 
-            IOnlineSynchronizationService synchronizationService, 
+            ISynchronizationService synchronizationService, 
             ILogger logger, 
             IHttpStatistician httpStatistician, 
             IUserInteractionService userInteractionService,
@@ -30,9 +30,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
             IPlainStorage<InterviewView> interviewViewRepository, 
             IAuditLogService auditLogService,
             IEnumeratorSettings enumeratorSettings, 
-            IServiceLocator serviceLocator) 
+            IServiceLocator serviceLocator,
+            IAssignmentDocumentsStorage assignmentsStorage) 
             : base(mapService, synchronizationService, logger, httpStatistician, principal, 
-                interviewViewRepository, auditLogService, enumeratorSettings, userInteractionService, serviceLocator)
+                interviewViewRepository, auditLogService, enumeratorSettings, userInteractionService, serviceLocator, assignmentsStorage)
         {
             this.supervisorPlainStorage = supervisorPlainStorage;
             this.passwordHasher = passwordHasher;

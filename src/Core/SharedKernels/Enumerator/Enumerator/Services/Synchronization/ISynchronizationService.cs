@@ -56,7 +56,5 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Synchronization
         Task<AssignmentApiDocument> GetAssignmentAsync(int id, CancellationToken cancellationToken);
         Task<List<AssignmentApiView>> GetAssignmentsAsync(CancellationToken cancellationToken);
         Task LogAssignmentAsHandledAsync(int id, CancellationToken cancellationToken);
-        Task<List<QuestionnaireIdentity>> GetCensusQuestionnairesAsync(CancellationToken token);
-        Task<Guid> GetCurrentSupervisor(CancellationToken token, RestCredentials credentials);
     }
 }
