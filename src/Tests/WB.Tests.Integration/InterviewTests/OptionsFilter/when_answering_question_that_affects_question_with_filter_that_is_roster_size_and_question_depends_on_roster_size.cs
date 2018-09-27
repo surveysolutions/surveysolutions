@@ -22,7 +22,7 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
         public void BecauseOf() =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
-                Setup.MockedServiceLocator();
+                SetUp.MockedServiceLocator();
 
                 var options = new List<Answer>
                 {

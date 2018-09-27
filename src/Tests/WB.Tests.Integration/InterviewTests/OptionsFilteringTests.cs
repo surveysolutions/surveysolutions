@@ -26,7 +26,7 @@ namespace WB.Tests.Integration.InterviewTests
 
             var results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
-                Setup.MockedServiceLocator();
+                SetUp.MockedServiceLocator();
 
                 var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Create.Entity.NumericIntegerQuestion(numeric1Id, variable: "i1"),
