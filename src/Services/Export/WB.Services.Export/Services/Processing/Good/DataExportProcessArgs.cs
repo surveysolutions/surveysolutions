@@ -47,13 +47,15 @@ namespace WB.Services.Export.Services.Processing.Good
                                             $"${this.FromDate?.ToString(@"YYYYMMDD") ?? "EMPTY FROM DATE"}" +
                                             $"${this.ToDate?.ToString(@"YYYYMMDD") ?? "EMPTY TO DATE"}";
 
-        public override string Name => $"(ver. {this.Questionnaire}) {this.QuestionnaireTitle}";
+        public override string Name => $"{ArchiveName}" + (StorageType.HasValue ? $" {Enum.GetName(typeof(ExternalStorageType), this.StorageType)}" : "");
 
         public InterviewStatus? InterviewStatus { get; set; }
 
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
         public string ArchiveName { get; set; }
+        public string AccessToken { get; set; }
+        public ExternalStorageType? StorageType { get; set; }
 
         private string InterviewStatusString() => InterviewStatus?.ToString() ?? "All";
     }

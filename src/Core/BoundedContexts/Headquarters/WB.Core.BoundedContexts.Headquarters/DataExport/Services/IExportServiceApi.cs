@@ -18,6 +18,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             DateTime? to,
             string archiveName,
             string archivePassword,
+            string accessToken,
+            ExternalStorageType? storageType,
             string apiKey,
             [Header("Origin")] string tenantBaseUrl
         );

@@ -125,7 +125,6 @@ namespace WB.UI.Headquarters.API
 
             try
             {
-
                 this.dataExportProcessesService.AddDataExportAsync(configurationManager.AppSettings["BaseUrl"],
                     this.exportServiceSettings.GetById(AppSetting.ExportServiceStorageKey).Key,
                     new DataExportProcessDetails(format, questionnaireIdentity, questionnaireBrowseItem.Title)
@@ -200,7 +199,7 @@ namespace WB.UI.Headquarters.API
 
             await this.dataExportProcessesService.AddDataExportAsync(configurationManager.AppSettings["BaseUrl"],
                 this.exportServiceSettings.GetById(AppSetting.ExportServiceStorageKey).Key, 
-                new ExportBinaryToExternalStorage(DataExportFormat.Binary, state.QuestionnaireIdentity, questionnaireBrowseItem.Title)
+                new DataExportProcessDetails(DataExportFormat.Binary, state.QuestionnaireIdentity, questionnaireBrowseItem.Title)
             {
                 AccessToken = model.Access_token,
                 InterviewStatus = state.InterviewStatus,
