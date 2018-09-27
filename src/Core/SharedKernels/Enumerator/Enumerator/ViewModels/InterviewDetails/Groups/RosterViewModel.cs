@@ -151,7 +151,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             }
         }
 
-        public void Handle(YesNoQuestionAnswered @event)
+        public async void Handle(YesNoQuestionAnswered @event)
         {
             if (!isTriggeredByOrderedMultiQuestion)
                 return;
@@ -159,10 +159,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             if (@event.QuestionId != this.rosterSizeQuestionId)
                 return;
 
-            this.UpdateFromInterviewAsync();
+            await this.UpdateFromInterviewAsync();
         }
 
-        public void Handle(MultipleOptionsQuestionAnswered @event)
+        public async void Handle(MultipleOptionsQuestionAnswered @event)
         {
             if (!isTriggeredByOrderedMultiQuestion)
                 return;
@@ -170,7 +170,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups
             if (@event.QuestionId != this.rosterSizeQuestionId)
                 return;
 
-            this.UpdateFromInterviewAsync();
+            await this.UpdateFromInterviewAsync();
         }
     }
 }
