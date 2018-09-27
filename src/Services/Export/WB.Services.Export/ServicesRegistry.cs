@@ -56,7 +56,7 @@ namespace WB.Services.Export
             services.AddTransient<IDatasetWriterFactory, DatasetWriterFactory>();
             services.AddTransient<IDataQueryFactory, DataQueryFactory>();
             services.AddTransient<IExportServiceDataProvider, ExportServiceDataProvider>();
-            
+            services.AddTransient<IBinaryDataSource, BinaryDataSource>();
             // Singletons
             services.AddSingleton<ICache, Cache>();
 
