@@ -7,6 +7,7 @@ using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Moq;
+using MvvmCross.Tests;
 using Ncqrs.Eventing;
 using Ncqrs.Spec;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
@@ -24,12 +25,11 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Enumerator.Native.Questionnaire.Impl;
-using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewTests
 {
-    public class InterviewTestsContext
+    public class InterviewTestsContext : MvxIoCSupportingTest
     {
         internal static AnsweredYesNoOption Yes(decimal value)
         {
@@ -56,8 +56,8 @@ namespace WB.Tests.Integration.InterviewTests
             var questionnaireRepository = Mock.Of<IQuestionnaireStorage>(repository
                 => repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == Create.Entity.PlainQuestionnaire(questionnaireDocument, 1));
 
-            Setup.InstanceToMockedServiceLocator(questionnaireRepository);
-            Setup.InstanceToMockedServiceLocator<IQuestionOptionsRepository>(new QuestionnaireQuestionOptionsRepository(questionnaireRepository));
+            SetUp.InstanceToMockedServiceLocator(questionnaireRepository);
+            SetUp.InstanceToMockedServiceLocator<IQuestionOptionsRepository>(new QuestionnaireQuestionOptionsRepository(questionnaireRepository));
 
             var state = GetLatestExpressionStorage(questionnaireDocument);
 
@@ -124,7 +124,7 @@ namespace WB.Tests.Integration.InterviewTests
                 Create.Entity.PlainQuestionnaire(questionnaireDocument),
                 questionnaireIdentity.Version);
 
-            Setup.InstanceToMockedServiceLocator<IQuestionOptionsRepository>(new QuestionnaireQuestionOptionsRepository(questionnaireRepository));
+            Integration.SetUp.InstanceToMockedServiceLocator<IQuestionOptionsRepository>(new QuestionnaireQuestionOptionsRepository(questionnaireRepository));
 
             var interview = IntegrationCreate.StatefulInterview(
                 questionnaireIdentity,
@@ -160,7 +160,7 @@ namespace WB.Tests.Integration.InterviewTests
                                               Create.Entity.PlainQuestionnaire(questionnaireDocument),
                                               questionnaireIdentity.Version);
 
-            Setup.InstanceToMockedServiceLocator<IQuestionOptionsRepository>(new QuestionnaireQuestionOptionsRepository(questionnaireRepository));
+            Integration.SetUp.InstanceToMockedServiceLocator<IQuestionOptionsRepository>(new QuestionnaireQuestionOptionsRepository(questionnaireRepository));
 
             var interview = new StatefulInterview(
                 questionnaireRepository,
@@ -186,8 +186,8 @@ namespace WB.Tests.Integration.InterviewTests
             var questionnaireRepository = Mock.Of<IQuestionnaireStorage>(repository
                 => repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == Create.Entity.PlainQuestionnaire(questionnaireDocument, 1));
 
-            Setup.InstanceToMockedServiceLocator(questionnaireRepository);
-            Setup.InstanceToMockedServiceLocator<IQuestionOptionsRepository>(new QuestionnaireQuestionOptionsRepository(questionnaireRepository));
+            Integration.SetUp.InstanceToMockedServiceLocator(questionnaireRepository);
+            Integration.SetUp.InstanceToMockedServiceLocator<IQuestionOptionsRepository>(new QuestionnaireQuestionOptionsRepository(questionnaireRepository));
 
             var state = GetLatestExpressionStorage(questionnaireDocument);
 

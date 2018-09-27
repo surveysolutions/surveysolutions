@@ -18,7 +18,7 @@ namespace WB.Tests.Integration.InterviewTests.LinkedQuestions
         private void BecauseOf() =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
-                Setup.MockedServiceLocator();
+                SetUp.MockedServiceLocator();
 
                 var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId, new IComposite[]
                 {

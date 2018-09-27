@@ -20,7 +20,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
             appDomainContext = AppDomainContext.Create();
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
-                Integration.Setup.MockedServiceLocator();
+                Integration.SetUp.MockedServiceLocator();
 
                 var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(children: new IComposite[]
                 {

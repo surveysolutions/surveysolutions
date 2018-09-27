@@ -21,7 +21,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
         public void BecauseOf() =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
-                Setup.MockedServiceLocator();
+                SetUp.MockedServiceLocator();
 
                 var questionnaireDocument = Create.Entity.QuestionnaireDocument(questionnaireId,
                     Create.Entity.Group(children: new IComposite[]
