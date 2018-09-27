@@ -14,7 +14,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
         [OneTimeSetUp]
         public void Setup()
         {
-            Integration.Setup.MockedServiceLocator();
+            Integration.SetUp.MockedServiceLocator();
 
             var questionnaireId = Guid.Parse("77778888000000000000000000000000");
             var priceId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
