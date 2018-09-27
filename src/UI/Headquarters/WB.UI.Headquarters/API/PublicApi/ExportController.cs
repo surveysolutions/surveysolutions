@@ -114,7 +114,7 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// <response code="404">Questionnaire was not found</response>
         [HttpPost]
         [Route(@"{exportType}/{id?}/start")]
-        public IHttpActionResult StartProcess(string id, DataExportFormat exportType, InterviewStatus? status = null, DateTime? from = null, DateTime? to = null)
+        public async Task<IHttpActionResult> StartProcess(string id, DataExportFormat exportType, InterviewStatus? status = null, DateTime? from = null, DateTime? to = null)
         {
             switch (exportType)
             {
@@ -128,13 +128,12 @@ namespace WB.UI.Headquarters.API.PublicApi
                     if (questionnaireBrowseItem == null)
                         return this.Content(HttpStatusCode.NotFound, @"Questionnaire not found");
 
-                    this.dataExportProcessesService.AddDataExport(
-                        new DataExportProcessDetails(exportType, questionnaireIdentity, questionnaireBrowseItem.Title)
-                        {
-                            FromDate = from,
-                            ToDate = to,
-                            InterviewStatus = status
-                        });
+                    await this.dataExportProcessesService.AddDataExportAsync(configurationManager.AppSettings["BaseUrl"], this.exportServiceSettings.GetById(AppSetting.ExportServiceStorageKey).Key, new DataExportProcessDetails(exportType, questionnaireIdentity, questionnaireBrowseItem.Title)
+                    {
+                        FromDate = @from,
+                        ToDate = to,
+                        InterviewStatus = status
+                    });
                     break;
             }
 

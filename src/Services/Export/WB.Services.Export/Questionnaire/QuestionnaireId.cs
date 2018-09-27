@@ -7,7 +7,7 @@
             this.Id = id;
         }
 
-        public string Id { get; }
+        public string Id { get; protected set; }
 
         public override string ToString()
         {

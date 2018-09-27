@@ -5,7 +5,7 @@ namespace WB.Services.Export.Services.Processing
     public class DataExportStatusView
     {
         public DataExportStatusView(
-            QuestionnaireId questionnaireId,
+            string questionnaireId,
             DataExportView[] dataExports,
             RunningDataExportProcessView[] runningDataExportProcesses)
         {
@@ -14,8 +14,8 @@ namespace WB.Services.Export.Services.Processing
             this.RunningDataExportProcesses = runningDataExportProcesses;
         }
 
-        public QuestionnaireId QuestionnaireId { get; }
-        public DataExportView[] DataExports { get;  }
-        public RunningDataExportProcessView[] RunningDataExportProcesses { get; }
+        public string QuestionnaireId { get; set;  }
+        public DataExportView[] DataExports { get; set; }
+        public RunningDataExportProcessView[] RunningDataExportProcesses { get; set; }
     }
 }

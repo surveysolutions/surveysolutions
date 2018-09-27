@@ -29,6 +29,7 @@ namespace WB.Services.Export.Host.Controllers
         }
 
         [HttpPut]
+        [Route("generate")]
         public ActionResult RequestUpdate(string questionnaireId,
             DataExportFormat format,
             InterviewStatus? status,
