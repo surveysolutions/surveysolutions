@@ -45,6 +45,7 @@ namespace WB.UI.Shared.Enumerator
     {
         public void Load(IIocRegistry registry)
         {
+            registry.Bind<IPathUtils, AndroidPathUtils>();
             registry.Bind<IUserInteractionService, UserInteractionService>();
             registry.Bind<IUserInterfaceStateService, UserInterfaceStateService>();
             registry.Bind<IExternalAppLauncher, ExternalAppLauncher>();

@@ -16,8 +16,6 @@ using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
-using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
-using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Questionnaire.Api;
 using WB.Core.SharedKernels.Questionnaire.Translations;
@@ -327,17 +325,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return Task.CompletedTask;
         }
 
-        public Task<byte[]> GetApplicationAsync(CancellationToken token, IProgress<TransferProgress> transferProgress = null)
+        public async Task<byte[]> GetApplicationAsync(CancellationToken token, IProgress<TransferProgress> transferProgress = null)
         {
-            return Task.FromResult<byte[]>(null);
-        }
-
-        public async Task<byte[]> GetApplicationPatchAsync(CancellationToken token, IProgress<TransferProgress> transferProgress = null)
-        {
-            var response = await this.syncClient.SendAsync<GetInterviewerAppPatchRequest, GetInterviewerAppPatchResponse>(
-                new GetInterviewerAppPatchRequest(this.deviceSettings.GetApplicationVersionCode(), this.settings.ApplicationType), token, transferProgress);
+            var response = await this.syncClient.SendAsync<GetInterviewerAppRequest, GetInterviewerAppResponse>(
+                new GetInterviewerAppRequest(this.deviceSettings.GetApplicationVersionCode(), this.settings.ApplicationType), token, transferProgress);
             return response.Content;
         }
+
+        public Task<byte[]> GetApplicationPatchAsync(CancellationToken token, IProgress<TransferProgress> transferProgress = null) 
+            => Task.FromResult<byte[]>(null);
 
         public async Task<int?> GetLatestApplicationVersionAsync(CancellationToken token)
         {

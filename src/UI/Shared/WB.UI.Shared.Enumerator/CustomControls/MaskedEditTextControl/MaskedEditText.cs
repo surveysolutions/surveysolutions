@@ -8,6 +8,7 @@ using Android.Views.InputMethods;
 using Android.Widget;
 using Java.Lang;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.DataCollection.Utils;
 using WB.Core.SharedKernels.Enumerator.Services.MaskText;
 
 namespace WB.UI.Shared.Enumerator.CustomControls.MaskedEditTextControl
@@ -76,12 +77,18 @@ namespace WB.UI.Shared.Enumerator.CustomControls.MaskedEditTextControl
         private void UpdateInputType()
         {
             var inputTypes = this.InputType;
-            var inputTypeOverrided = InputTypes.TextFlagNoSuggestions | InputTypes.TextVariationPassword;
+            var inputTypeOverride = InputTypes.TextFlagNoSuggestions | InputTypes.TextVariationPassword;
 
             if (this.Mask.IsNullOrEmpty())
-                inputTypes &= ~inputTypeOverrided;
+            {
+                inputTypes &= ~inputTypeOverride;
+                this.SetMaxLines(int.MaxValue);
+                this.SetSingleLine(false);
+            }
             else
-                inputTypes |= inputTypeOverrided;
+            {
+                inputTypes |= inputTypeOverride;
+            }
 
             this.SetRawInputType(inputTypes);
         }
@@ -109,7 +116,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls.MaskedEditTextControl
 
         private void Init()
         {
-            this.SetFilters(new IInputFilter[] { this });
+            this.SetFilters(new IInputFilter[] { this, new  InputFilterLengthFilter (AnswerUtils.TextAnswerMaxLength) });
             this.AfterTextChanged += (sender, args) => this.AfterTextChangedHandler(args.Editable);
             this.BeforeTextChanged += (sender, args) => this.BeforeTextChangedHandler(args.Text, args.Start, args.BeforeCount, args.AfterCount);
             this.TextChanged += (sender, args) => this.OnTextChangedHandle(new string(args.Text.ToArray()), args.Start, args.BeforeCount, args.AfterCount);

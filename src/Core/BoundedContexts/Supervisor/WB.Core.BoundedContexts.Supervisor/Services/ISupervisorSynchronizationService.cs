@@ -20,10 +20,9 @@ namespace WB.Core.BoundedContexts.Supervisor.Services
             CancellationToken cancellationToken);
 
         Task<List<string>> GetListOfDeletedQuestionnairesIds(CancellationToken cancellationToken);
-        Task<InterviewerApplicationPatchApiView[]> GetListOfInterviewerAppPatchesAsync(CancellationToken cancellationToken);
-
-        Task<byte[]> GetInterviewerApplicationPatchByNameAsync(string patchName, CancellationToken token,
-            IProgress<TransferProgress> transferProgress);
-        Task<int?> GetLatestInterviewerAppVersionAsync(CancellationToken token);
+        Task<byte[]> GetInterviewerApplicationAsync(CancellationToken token,
+            IProgress<TransferProgress> transferProgress = null);
+        Task<byte[]> GetInterviewerApplicationWithMapsAsync(CancellationToken token,
+            IProgress<TransferProgress> transferProgress = null);
     }
 }

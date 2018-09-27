@@ -478,7 +478,7 @@ body > .ui-pnotify{
             font: 20px/22px "RobotoBold";
         }
     }
-    &.sub-section{
+    &.group{
         .item-content{
             cursor: default;
         }
@@ -538,9 +538,18 @@ body > .ui-pnotify{
             color: $gray_text;
         }
         margin-bottom: 15px;
-         .form-inline .form-control{
-            width: auto;
-            margin-left: 0;
+        .input-group{
+            display: block;
+        }
+        textarea.form-control{
+            width: 100%;
+            margin: 0 0 10px;
+            resize: none;
+            overflow: hidden;
+            min-height: 40px;
+        }
+        .input-group-btn{
+            padding-left: 0;
         }
     }
     &:after{
