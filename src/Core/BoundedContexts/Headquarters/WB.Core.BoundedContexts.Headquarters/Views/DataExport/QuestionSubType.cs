@@ -2,7 +2,7 @@
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
 {
-    [Obsolete()]
+    //[Obsolete()]
     public enum QuestionSubtype
     {
         MultyOption_YesNo = 1,
