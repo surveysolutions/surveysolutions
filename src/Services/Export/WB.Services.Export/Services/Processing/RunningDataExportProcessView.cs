@@ -14,7 +14,7 @@ namespace WB.Services.Export.Services.Processing
         public DataExportType Type { get; set; }
         public DataExportFormat Format { get; set; }
         public InterviewStatus? InterviewStatus { get; set; }
-        public QuestionnaireId QuestionnaireId { get; set; }
+        public string QuestionnaireId { get; set; }
         public DataExportStatus ProcessStatus { get; set; }
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }

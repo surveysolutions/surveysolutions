@@ -76,7 +76,7 @@ namespace WB.Services.Export.Jobs
                 .ToArray();
 
             return new DataExportStatusView(
-                questionnaireId: questionnaireIdentity,
+                questionnaireId: questionnaireIdentity.Id,
                 dataExports: dataExports,
                 runningDataExportProcesses: runningProcesses);
         }
@@ -95,7 +95,7 @@ namespace WB.Services.Export.Jobs
                 Format = dataExportProcessDetails.Format,
                 ProcessStatus = dataExportProcessDetails.Status,
                 Type = exportProcessDetails.Format == DataExportFormat.Paradata ? DataExportType.ParaData : DataExportType.Data,
-                QuestionnaireId = exportProcessDetails.Questionnaire,
+                QuestionnaireId = exportProcessDetails.Questionnaire.Id,
                 InterviewStatus = exportProcessDetails.InterviewStatus,
                 FromDate = exportProcessDetails.FromDate,
                 ToDate = exportProcessDetails.ToDate

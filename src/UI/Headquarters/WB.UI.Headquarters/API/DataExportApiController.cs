@@ -126,10 +126,11 @@ namespace WB.UI.Headquarters.API
             try
             {
 
-                this.dataExportProcessesService.AddDataExport(
+                this.dataExportProcessesService.AddDataExportAsync(configurationManager.AppSettings["BaseUrl"],
+                    this.exportServiceSettings.GetById(AppSetting.ExportServiceStorageKey).Key,
                     new DataExportProcessDetails(format, questionnaireIdentity, questionnaireBrowseItem.Title)
                 {
-                    FromDate = from?.ToUniversalTime(),
+                    FromDate = @from?.ToUniversalTime(),
                     ToDate = to?.ToUniversalTime(),
                     InterviewStatus = status
                 });
@@ -187,7 +188,7 @@ namespace WB.UI.Headquarters.API
 
         [HttpPost]
         [AllowAnonymous]
-        public void ExportToExternalStorage(ExportToExternalStorageModel model)
+        public async Task ExportToExternalStorage(ExportToExternalStorageModel model)
         {
             var state = this.serializer.Deserialize<ExternalStorageStateModel>(model.State);
             if(state == null)
@@ -197,7 +198,9 @@ namespace WB.UI.Headquarters.API
             if (questionnaireBrowseItem == null)
                 throw new HttpException(404, @"Questionnaire not found");
 
-            this.dataExportProcessesService.AddDataExport(new ExportBinaryToExternalStorage(DataExportFormat.Binary, state.QuestionnaireIdentity, questionnaireBrowseItem.Title)
+            await this.dataExportProcessesService.AddDataExportAsync(configurationManager.AppSettings["BaseUrl"],
+                this.exportServiceSettings.GetById(AppSetting.ExportServiceStorageKey).Key, 
+                new ExportBinaryToExternalStorage(DataExportFormat.Binary, state.QuestionnaireIdentity, questionnaireBrowseItem.Title)
             {
                 AccessToken = model.Access_token,
                 InterviewStatus = state.InterviewStatus,

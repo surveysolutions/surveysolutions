@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Refit;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
@@ -8,6 +9,19 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 {
     public interface IExportServiceApi
     {
+        [Put("/api/v1/job/generate")]
+        Task RequestUpdate(
+            string questionnaireId,
+            DataExportFormat format,
+            InterviewStatus? status,
+            DateTime? from,
+            DateTime? to,
+            string archiveName,
+            string archivePassword,
+            string apiKey,
+            [Header("Origin")] string tenantBaseUrl
+        );
+
         [Get("/api/v1/job/status")]
         Task<DataExportStatusView> GetDataExportStatusForQuestionnaireAsync(
             [Query]string questionnaireId,
