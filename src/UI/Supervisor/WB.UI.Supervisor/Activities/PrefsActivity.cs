@@ -36,12 +36,17 @@ namespace WB.UI.Supervisor.Activities
             {
                 var settings = Mvx.Resolve<ISupervisorSettings>();
 
-                this.SetPreferenceTitleAndSummary("interview_settings_category", InterviewerUIResources.Prefs_InterviewSettings, string.Empty);
-                this.SetPreferenceTitleAndSummary("about_category", InterviewerUIResources.Prefs_AboutApplication, string.Empty);
-                this.SetPreferenceTitleAndSummary("connection_settings_category", InterviewerUIResources.Prefs_ConnectionSettings, string.Empty);
+                this.SetPreferenceTitleAndSummary("interview_settings_category",
+                    InterviewerUIResources.Prefs_InterviewSettings, string.Empty);
+                this.SetPreferenceTitleAndSummary("about_category", InterviewerUIResources.Prefs_AboutApplication,
+                    string.Empty);
+                this.SetPreferenceTitleAndSummary("connection_settings_category",
+                    InterviewerUIResources.Prefs_ConnectionSettings, string.Empty);
 
-                this.SetPreferenceTitleAndSummary("version", InterviewerUIResources.Prefs_ApplicationVersionTitle, settings.GetApplicationVersionName());
-                this.SetPreferenceTitleAndSummary("deviceid", InterviewerUIResources.Prefs_DeviceIdTitle, settings.GetDeviceId());
+                this.SetPreferenceTitleAndSummary("version", InterviewerUIResources.Prefs_ApplicationVersionTitle,
+                    settings.GetApplicationVersionName());
+                this.SetPreferenceTitleAndSummary("deviceid", InterviewerUIResources.Prefs_DeviceIdTitle,
+                    settings.GetDeviceId());
 
                 this.FindPreference(SettingsNames.Endpoint).PreferenceChange += (sender, e) =>
                 {
@@ -55,7 +60,8 @@ namespace WB.UI.Supervisor.Activities
                 };
                 this.FindPreference(SettingsNames.HttpResponseTimeout).PreferenceChange += (sender, e) =>
                 {
-                    settings.SetHttpResponseTimeout(ParseIntegerSettingsValue(e.NewValue, (int)settings.Timeout.TotalSeconds));
+                    settings.SetHttpResponseTimeout(ParseIntegerSettingsValue(e.NewValue,
+                        (int) settings.Timeout.TotalSeconds));
                     this.UpdateSettings();
                 };
                 this.FindPreference(SettingsNames.BufferSize).PreferenceChange += (sender, e) =>
@@ -66,6 +72,12 @@ namespace WB.UI.Supervisor.Activities
                 this.FindPreference(SettingsNames.ShowLocationOnMap).PreferenceChange += (sender, e) =>
                 {
                     settings.SetShowLocationOnMap(ParseBooleanSettingsValue(e.NewValue, settings.ShowLocationOnMap));
+                    this.UpdateSettings();
+                };
+                this.FindPreference(SettingsNames.DownloadUpdatesForInterviewerApp).PreferenceChange += (sender, e) =>
+                {
+                    settings.SetDownloadUpdatesForInterviewerApp(ParseBooleanSettingsValue(e.NewValue,
+                        settings.DownloadUpdatesForInterviewerApp));
                     this.UpdateSettings();
                 };
 
@@ -80,18 +92,26 @@ namespace WB.UI.Supervisor.Activities
                     settings.Endpoint, settings.Endpoint);
                 this.SetPreferenceTitleAndSummary(SettingsNames.HttpResponseTimeout,
                     InterviewerUIResources.Prefs_HttpResponseTimeoutTitle,
-                    InterviewerUIResources.Prefs_HttpResponseTimeoutSummary, settings.Timeout.TotalSeconds.ToString(CultureInfo.InvariantCulture));
-                this.SetPreferenceTitleAndSummary(SettingsNames.BufferSize, InterviewerUIResources.Prefs_BufferSizeTitle,
+                    InterviewerUIResources.Prefs_HttpResponseTimeoutSummary,
+                    settings.Timeout.TotalSeconds.ToString(CultureInfo.InvariantCulture));
+                this.SetPreferenceTitleAndSummary(SettingsNames.BufferSize,
+                    InterviewerUIResources.Prefs_BufferSizeTitle,
                     InterviewerUIResources.Prefs_BufferSizeSummary, settings.BufferSize.ToString());
 
-                
-                this.SetPreferenceTitleAndSummary(SettingsNames.EventChunkSize, InterviewerUIResources.Prefs_EventChunkSizeTitle,
+
+                this.SetPreferenceTitleAndSummary(SettingsNames.EventChunkSize,
+                    InterviewerUIResources.Prefs_EventChunkSizeTitle,
                     InterviewerUIResources.Prefs_EventChunkSizeSummary, settings.EventChunkSize.ToString());
 
                 this.SetBooleanPreferenceTitleAndSummary(SettingsNames.ShowLocationOnMap,
                     UIResources.Prefs_ShowLocationOnMap,
                     UIResources.Prefs_ShowLocationOnMapSummary,
                     settings.ShowLocationOnMap);
+
+                this.SetBooleanPreferenceTitleAndSummary(SettingsNames.DownloadUpdatesForInterviewerApp,
+                    UIResources.Prefs_DownloadUpdatesForInterviewerApp,
+                    UIResources.Prefs_DownloadUpdatesForInterviewerAppSummary,
+                    settings.DownloadUpdatesForInterviewerApp);
             }
 
             private static bool ParseBooleanSettingsValue(object settingsValue, bool defaultValue)
@@ -112,7 +132,8 @@ namespace WB.UI.Supervisor.Activities
                 return defaultValue;
             }
 
-            private void SetPreferenceTitleAndSummary(string preferenceKey, string title, string summary, string defaultValue = "")
+            private void SetPreferenceTitleAndSummary(string preferenceKey, string title, string summary,
+                string defaultValue = "")
             {
                 var preference = this.FindPreference(preferenceKey);
 
@@ -126,7 +147,8 @@ namespace WB.UI.Supervisor.Activities
                 }
             }
 
-            private void SetBooleanPreferenceTitleAndSummary(string preferenceKey, string title, string summary, bool defaultValue)
+            private void SetBooleanPreferenceTitleAndSummary(string preferenceKey, string title, string summary,
+                bool defaultValue)
             {
                 var preference = this.FindPreference(preferenceKey);
 

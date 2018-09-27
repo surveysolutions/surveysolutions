@@ -85,28 +85,24 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.InitRegularGroupScreen(groupId, anchoredElementIdentity);
         }
 
-        private async Task InitRegularGroupScreen(Identity groupIdentity, Identity anchoredElementIdentity)
+        private void InitRegularGroupScreen(Identity groupIdentity, Identity anchoredElementIdentity)
         {
             this.Name.Init(this.interviewId, groupIdentity);
 
             this.LoadFromModel(groupIdentity);
-            await this.SetScrollTo(anchoredElementIdentity);
+            this.SetScrollTo(anchoredElementIdentity);
         }
 
-        private async Task SetScrollTo(Identity scrollTo)
+        private void SetScrollTo(Identity scrollTo)
         {
-            var anchorElementIndex = 0;
-
             if (scrollTo != null)
             {
-                await this.mvxMainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
-                {
-                    ICompositeEntity childItem = (this.Items.OfType<GroupViewModel>().FirstOrDefault(x => x.Identity.Equals(scrollTo)) ??
-                                                  (ICompositeEntity) this.Items.OfType<QuestionHeaderViewModel>().FirstOrDefault(x => x.Identity.Equals(scrollTo))) ??
-                                                 this.Items.OfType<StaticTextViewModel>().FirstOrDefault(x => x.Identity.Equals(scrollTo));
+                ICompositeEntity childItem =
+                    (this.Items.OfType<GroupViewModel>().FirstOrDefault(x => x.Identity.Equals(scrollTo)) 
+                            ?? (ICompositeEntity) this.Items.OfType<QuestionHeaderViewModel>().FirstOrDefault(x => x.Identity.Equals(scrollTo))) 
+                            ?? this.Items.OfType<StaticTextViewModel>().FirstOrDefault(x => x.Identity.Equals(scrollTo));
 
-                    anchorElementIndex = childItem != null ? this.Items.ToList().IndexOf(childItem) : 0;
-                });
+                this.ScrollToIndex = childItem != null ? this.Items.ToList().IndexOf(childItem) : 0;
             }
         }
 

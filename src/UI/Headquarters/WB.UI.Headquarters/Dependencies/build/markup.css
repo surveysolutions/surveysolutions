@@ -5864,7 +5864,7 @@ input.wb-checkbox ~ label .tick, .radio input.wb-radio ~ label .tick, input.radi
       background-image: url("../img/questionnaire-sprite2k.png");
       background-size: 793px 18px; } }
 
-.combo-box input:checked ~ .btn-clear, .answered > .btn-clear, .field.answered .btn-clear, .field.has-error .btn-clear, .active-search .search .btn-clear, .combo-box .btn-clear, .aside-menu.open > .dropdown-menu, .dataTables_wrapper .dataTables_filter label input:not(:placeholder-shown) + .btn-clear {
+.combo-box input:checked ~ .btn-clear, .answered > .btn-clear, .active-search .search .btn-clear, .combo-box .btn-clear, .aside-menu.open > .dropdown-menu {
   visibility: visible;
   opacity: 1;
   filter: alpha(opacity=100); }
@@ -5987,7 +5987,7 @@ a.disabled {
 
 .btn-link {
   color: #2a81cb; }
-  .btn-link:hover, .btn-link:focus {
+  .btn-link::hover, .btn-link::focus {
     text-decoration: none;
     color: #1d598c; }
 
@@ -6522,11 +6522,6 @@ a.disabled {
   .gray-link-underline:hover, .gray-link-underline:focus, .gray-link-underline:active {
     text-decoration: none;
     color: #a6a8a9; }
-
-.btn-link-look {
-  padding: 0;
-  text-transform: initial;
-  font: inherit; }
 
 .navbar {
   min-width: 360px;
@@ -8436,17 +8431,17 @@ body > .ui-pnotify {
       margin-top: 0; }
     .overview-item.section h4 {
       font: 20px/22px "RobotoBold"; }
-  .overview-item.sub-section {
+  .overview-item.group {
     display: block;
     border-top: 1px solid #dbdfe2;
     padding: 0 35px 0 65px;
     margin-top: 10px; }
-    .overview-item.sub-section .item-content {
+    .overview-item.group .item-content {
       cursor: default; }
-    .overview-item.sub-section:first-of-type {
+    .overview-item.group:first-of-type {
       border-top: none;
       margin-top: 0; }
-    .overview-item.sub-section h4 {
+    .overview-item.group h4 {
       font: 20px/22px "RobotoRegular"; }
 
 .custom-popover {
@@ -8485,9 +8480,16 @@ body > .ui-pnotify {
     margin-bottom: 15px; }
     .custom-popover .comments-block .comment label {
       color: #3f3f3f; }
-    .custom-popover .comments-block .comment .form-inline .form-control {
-      width: auto;
-      margin-left: 0; }
+    .custom-popover .comments-block .comment .input-group {
+      display: block; }
+    .custom-popover .comments-block .comment textarea.form-control {
+      width: 100%;
+      margin: 0 0 10px;
+      resize: none;
+      overflow: hidden;
+      min-height: 40px; }
+    .custom-popover .comments-block .comment .input-group-btn {
+      padding-left: 0; }
   .custom-popover:after {
     content: " ";
     position: absolute;
@@ -8800,6 +8802,8 @@ body > .ui-pnotify {
         .dataTables_wrapper .dataTables_filter label input:hover, .dataTables_wrapper .dataTables_filter label input:focus, .dataTables_wrapper .dataTables_filter label input:active {
           border-color: #6b6b6b; }
         .dataTables_wrapper .dataTables_filter label input:not(:placeholder-shown) + .btn-clear {
+          opacity: 1;
+          visibility: visible;
           right: 10px; }
 
 .dataTables_wrapper .dataTables_info, .dataTables_wrapper .download-report {

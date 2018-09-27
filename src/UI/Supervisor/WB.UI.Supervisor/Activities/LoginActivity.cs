@@ -45,5 +45,7 @@ namespace WB.UI.Supervisor.Activities
             }
             return base.OnOptionsItemSelected(item);
         }
+
+        public override void OnBackPressed(){ }
     }
 }

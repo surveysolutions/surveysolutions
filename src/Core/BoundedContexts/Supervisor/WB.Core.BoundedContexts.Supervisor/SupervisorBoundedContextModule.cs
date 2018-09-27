@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.Supervisor
             registry.BindWithConstructorArgument<ISynchronizationStep, SynchronizeLogo>("sortOrder", 90);
             registry.BindWithConstructorArgument<ISynchronizationStep, SynchronizeAuditLog>("sortOrder", 100);
             registry.BindWithConstructorArgument<ISynchronizationStep, SupervisorUpdateApplication>("sortOrder", 110);
-            registry.BindWithConstructorArgument<ISynchronizationStep, DownloadInterviewerAppPatches>("sortOrder", 120);
+            registry.BindWithConstructorArgument<ISynchronizationStep, DownloadInterviewerApplications>("sortOrder", 120);
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
