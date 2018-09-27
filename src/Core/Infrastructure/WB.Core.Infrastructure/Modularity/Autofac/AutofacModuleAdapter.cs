@@ -74,6 +74,11 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
                 .WithParameter(argumentName, argumentValue);
         }
 
+        public void BindInPerUnitOfWorkScope<TInterface, TImplementation>() where TImplementation : TInterface
+        {
+            containerBuilder.RegisterType<TImplementation>().As<TInterface>().InstancePerMatchingLifetimeScope(AutofacServiceLocatorAdapterWithChildrenScopes.UnitOfWorkScope);
+        }
+
         public void BindWithConstructorArgumentInPerLifetimeScope<TInterface, TImplementation>(string argumentName, object argumentValue) where TImplementation : TInterface
         {
             containerBuilder.RegisterType<TImplementation>().As<TInterface>()
@@ -83,15 +88,6 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
         public void BindGeneric(Type implementation)
         {
             containerBuilder.RegisterGeneric(implementation);
-        }
-
-        public void Unbind<T>()
-        {
-        }
-
-        public bool HasBinding<T>()
-        {
-            return false; 
         }
 
         public void BindInPerLifetimeScope<T1, T2>() where T2 : T1

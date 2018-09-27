@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using NHibernate;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Modularity;
+using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Core.Infrastructure.Versions;
 using WB.Infrastructure.Native.Storage.Postgre;
 
@@ -29,6 +30,7 @@ namespace WB.UI.Shared.Web.Versions
         {
             if (shouldStoreVersionToDb)
             {
+                using (ScopeManager.BeginScope())
                 using (var unitOfWork = new UnitOfWork(serviceLocator.GetInstance<ISessionFactory>()))
                 {
                     serviceLocator.GetInstance<IProductVersionHistory>().RegisterCurrentVersion();
