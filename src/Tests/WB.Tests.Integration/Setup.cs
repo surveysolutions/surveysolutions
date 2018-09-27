@@ -109,7 +109,8 @@ namespace WB.Tests.Integration
                 statefulInterviewRepository: interviewsRepository,
                 questionnaireRepository: questionnaireRepository,
                 modelsFactory: sideBarSectionViewModelsFactory,
-                eventRegistry: liteEventRegistry);
+                eventRegistry: liteEventRegistry,
+                mainThreadDispatcher: Stub.MvxMainThreadAsyncDispatcher());
 
             sidebarViewModel.Init("", navigationState);
 

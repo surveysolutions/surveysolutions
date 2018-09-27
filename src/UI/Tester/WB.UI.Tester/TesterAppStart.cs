@@ -1,8 +1,7 @@
-﻿using MvvmCross;
+﻿using System.Threading.Tasks;
+using MvvmCross;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.Tester.ViewModels;
-using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
@@ -17,46 +16,46 @@ namespace WB.UI.Tester
         {
         }
 
-        protected override void Startup(object hint = null)
+        protected override async Task<object> ApplicationStartup(object hint = null)
         {
             ClearAttachmentStorage();
             ClearPlainInterviewStorage();
 
-            Mvx.Resolve<IPlainStorage<TranslationInstance>>().RemoveAll();
+            Mvx.IoCProvider.Resolve<IPlainStorage<TranslationInstance>>().RemoveAll();
 
-            base.Startup(hint);
+            return await base.ApplicationStartup(hint);
         }
 
-        protected override void NavigateToFirstViewModel(object hint = null)
+        protected override async Task NavigateToFirstViewModel(object hint = null)
         {
-            IPrincipal principal = Mvx.Resolve<IPrincipal>();
-            IViewModelNavigationService viewModelNavigationService = Mvx.Resolve<IViewModelNavigationService>();
+            IPrincipal principal = Mvx.IoCProvider.Resolve<IPrincipal>();
+            IViewModelNavigationService viewModelNavigationService = Mvx.IoCProvider.Resolve<IViewModelNavigationService>();
 
             if (principal.IsAuthenticated)
             {
-                viewModelNavigationService.NavigateToDashboardAsync().WaitAndUnwrapException();
+                await viewModelNavigationService.NavigateToDashboardAsync();
             }
             else
             {
-                viewModelNavigationService.NavigateToLoginAsync().WaitAndUnwrapException();
+                await viewModelNavigationService.NavigateToLoginAsync();
             }
         }
 
         private void ClearAttachmentStorage()
         {
-            var attachmentContentMetadataStorage = Mvx.Resolve<IPlainStorage<AttachmentContentMetadata>>();
+            var attachmentContentMetadataStorage = Mvx.IoCProvider.Resolve<IPlainStorage<AttachmentContentMetadata>>();
             attachmentContentMetadataStorage.RemoveAll();
 
-            var attachmentContentDataStorage = Mvx.Resolve<IPlainStorage<AttachmentContentData>>();
+            var attachmentContentDataStorage = Mvx.IoCProvider.Resolve<IPlainStorage<AttachmentContentData>>();
             attachmentContentDataStorage.RemoveAll();
         }
 
         private void ClearPlainInterviewStorage()
         {
-            var imageFileStorage = Mvx.Resolve<IImageFileStorage>();
+            var imageFileStorage = Mvx.IoCProvider.Resolve<IImageFileStorage>();
             (imageFileStorage as IPlainFileCleaner)?.Clear();
 
-            var audioFileStorage = Mvx.Resolve<IAudioFileStorage>();
+            var audioFileStorage = Mvx.IoCProvider.Resolve<IAudioFileStorage>();
             (audioFileStorage as IPlainFileCleaner)?.Clear();
         }
     }
