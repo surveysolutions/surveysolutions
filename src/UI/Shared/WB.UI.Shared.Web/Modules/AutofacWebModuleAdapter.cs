@@ -73,7 +73,6 @@ namespace WB.UI.Shared.Web.Modules
         public void BindInPerUnitOfWorkScope<TInterface, TImplementation>() where TImplementation : TInterface
         {
             containerBuilder.RegisterType<TImplementation>().As<TInterface>().InstancePerMatchingLifetimeScope(AutofacServiceLocatorAdapterWithChildrenScopes.UnitOfWorkScope);
-            //containerBuilder.RegisterType<TImplementation>().As<TInterface>().InstancePerRequest();
         }
 
         public void BindWithConstructorArgumentInPerLifetimeScope<TInterface, TImplementation>(string argumentName, object argumentValue) where TImplementation : TInterface
@@ -176,13 +175,13 @@ namespace WB.UI.Shared.Web.Modules
        
 
 
-        public void BindWebApiFilter<T>()
+        public void BindWebApiFilter<T>() where T: class, new ()
         {
 //            containerBuilder.Register(c => new CustomFilterAttribute(c.Resolve<IProperty>()))
 //                .AsActionFilterFor<HomeController>(c => c.Index())
 //                .InstancePerHttpRequest();
 
-            containerBuilder.Register(c => c.Resolve(typeof(T))).AsWebApiActionFilterFor<ApiController>().InstancePerLifetimeScope();
+            containerBuilder.Register(c => new T()).AsWebApiActionFilterFor<ApiController>().InstancePerLifetimeScope();
             //this.Kernel.BindFilter<T>(filterScope, order);
         }
 
