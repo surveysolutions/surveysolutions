@@ -4,6 +4,10 @@ namespace WB.Services.Export.Services.Processing
 {
     public class DataExportStatusView
     {
+        public DataExportStatusView()
+        {
+        }
+
         public DataExportStatusView(
             string questionnaireId,
             DataExportView[] dataExports,
