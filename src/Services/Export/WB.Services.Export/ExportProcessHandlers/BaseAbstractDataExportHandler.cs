@@ -69,7 +69,7 @@ namespace WB.Services.Export.ExportProcessHandlers
             var exportProgress = new Progress<int>();
 
             exportProgress.ProgressChanged += (sender, donePercent) =>
-                this.dataExportProcessesService.UpdateDataExportProgress(dataExportProcessDetails.NaturalId,
+                this.dataExportProcessesService.UpdateDataExportProgress(dataExportProcessDetails.Tenant, dataExportProcessDetails.NaturalId,
                     donePercent);
 
             var exportSettings = new ExportSettings
@@ -95,7 +95,7 @@ namespace WB.Services.Export.ExportProcessHandlers
             this.DeleteExportTempDirectory();
         }
         
-        protected abstract void DoExport(DataExportProcessDetails dataExportProcessDetails,
+        protected abstract void DoExport(DataExportProcessDetails processArgs,
             ExportSettings exportSettings, string archiveName, IProgress<int> exportProgress);
 
         protected abstract DataExportFormat Format { get; }

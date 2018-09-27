@@ -24,21 +24,23 @@ namespace WB.Services.Export.ExportProcessHandlers
             this.dataExportFileAccessor = dataExportFileAccessor;
         }
 
-        protected override void DoExport(DataExportProcessDetails dataExportProcessDetails,
+        protected override void DoExport(DataExportProcessDetails processArgs,
             ExportSettings exportSettings, string archiveName, IProgress<int> exportProgress)
         {
-            this.ExportDataIntoDirectory(exportSettings, exportProgress, dataExportProcessDetails.CancellationToken);
+            this.ExportDataIntoDirectory(exportSettings, exportProgress, processArgs.CancellationToken);
 
             if (!this.CompressExportedData) return;
 
-            dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
+            processArgs.CancellationToken.ThrowIfCancellationRequested();
 
-            this.dataExportProcessesService.UpdateDataExportProgress(dataExportProcessDetails.NaturalId, 0);
-            this.dataExportProcessesService.ChangeStatusType(dataExportProcessDetails.NaturalId,
+            this.dataExportProcessesService.UpdateDataExportProgress(processArgs.Tenant, processArgs.NaturalId, 0);
+            this.dataExportProcessesService.ChangeStatusType(
+                processArgs.Tenant, 
+                processArgs.NaturalId,
                 DataExportStatus.Compressing);
 
             this.dataExportFileAccessor.RecreateExportArchive(this.exportTempDirectoryPath, archiveName, 
-                dataExportProcessDetails.ArchivePassword, exportProgress);
+                processArgs.ArchivePassword, exportProgress);
         }
 
         protected virtual bool CompressExportedData => true;
