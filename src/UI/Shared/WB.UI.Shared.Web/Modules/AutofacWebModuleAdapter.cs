@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Web.Http;
 using System.Web.Http.Filters;
 using Autofac;
 using Autofac.Integration.Mvc;
+using Autofac.Integration.WebApi;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.Modularity.Autofac;
+using WB.UI.Shared.Web.Kernel;
 using FilterScope = System.Web.Mvc.FilterScope;
 
 namespace WB.UI.Shared.Web.Modules
@@ -67,6 +70,12 @@ namespace WB.UI.Shared.Web.Modules
                 .WithParameter(argumentName, argumentValue);
         }
 
+        public void BindInPerUnitOfWorkScope<TInterface, TImplementation>() where TImplementation : TInterface
+        {
+            containerBuilder.RegisterType<TImplementation>().As<TInterface>().InstancePerMatchingLifetimeScope(AutofacServiceLocatorAdapterWithChildrenScopes.UnitOfWorkScope);
+            //containerBuilder.RegisterType<TImplementation>().As<TInterface>().InstancePerRequest();
+        }
+
         public void BindWithConstructorArgumentInPerLifetimeScope<TInterface, TImplementation>(string argumentName, object argumentValue) where TImplementation : TInterface
         {
             containerBuilder.RegisterType<TImplementation>().As<TInterface>()
@@ -78,20 +87,10 @@ namespace WB.UI.Shared.Web.Modules
             containerBuilder.RegisterGeneric(implemenation);
         }
 
-        public void Unbind<T>()
-        {
-        }
-
-        public bool HasBinding<T>()
-        {
-            return false;
-        }
-
         public void BindInPerLifetimeScope<T1, T2>() where T2 : T1
         {
             containerBuilder.RegisterType<T2>().As<T1>().InstancePerLifetimeScope();
         }
-
 
         void IIocRegistry.BindAsSingleton<TInterface, TImplementation>()
         {
@@ -177,13 +176,13 @@ namespace WB.UI.Shared.Web.Modules
        
 
 
-        public void BindMvcFilter<T>(FilterScope filterScope, int? order)
+        public void BindWebApiFilter<T>()
         {
 //            containerBuilder.Register(c => new CustomFilterAttribute(c.Resolve<IProperty>()))
 //                .AsActionFilterFor<HomeController>(c => c.Index())
 //                .InstancePerHttpRequest();
 
-            containerBuilder.RegisterType<T>().PropertiesAutowired().InstancePerLifetimeScope();
+            containerBuilder.Register(c => c.Resolve(typeof(T))).AsWebApiActionFilterFor<ApiController>().InstancePerLifetimeScope();
             //this.Kernel.BindFilter<T>(filterScope, order);
         }
 
