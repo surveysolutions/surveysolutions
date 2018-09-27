@@ -24,6 +24,7 @@ namespace WB.UI.Headquarters.API.Export
         private readonly IInterviewFactory interviewFactory;
         private readonly IInterviewDiagnosticsFactory interviewDiagnosticsFactory;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatuses;
+
         public InterviewsExportApiController(
             IInterviewsToExportViewFactory viewFactory,
             IInterviewFactory interviewFactory,
@@ -71,7 +72,7 @@ namespace WB.UI.Headquarters.API.Export
         [ApiNoCache]
         public HttpResponseMessage GetInterviews([FromUri]Guid[] id, [FromUri] Guid[] entityId = null)
         {
-            var entities = this.interviewFactory.GetInterviewEntities(id, entityId);
+            var entities = this.interviewFactory.GetInterviewEntities(id, entityId).ToList();
 
             return Request.CreateResponse(HttpStatusCode.OK, entities);
         }
@@ -131,5 +132,6 @@ namespace WB.UI.Headquarters.API.Export
 
             return Request.CreateResponse(HttpStatusCode.OK, interviews);
         }
+
     }
 }

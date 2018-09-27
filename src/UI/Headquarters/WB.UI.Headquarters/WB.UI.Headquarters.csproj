@@ -1924,6 +1924,7 @@
     <Compile Include="API\DataCollection\TranslationsControllerBase.cs" />
     <Compile Include="API\Export\EventsApiController.cs" />
     <Compile Include="API\Export\InterviewsExportApiController.cs" />
+    <Compile Include="API\Export\InterviewsExportBinaryApiController.cs" />
     <Compile Include="API\Export\QuestionnaireApiController.cs" />
     <Compile Include="API\Filters\ExportServiceSettings.cs" />
     <Compile Include="API\Filters\ServiceApiKeyAuthorizationAttribute.cs" />

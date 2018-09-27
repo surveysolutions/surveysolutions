@@ -30,9 +30,7 @@ namespace WB.Services.Export.Jobs
         private readonly Lazy<GoogleDriveBinaryDataExportHandler> googleDriveBinaryDataExportHandler;
 
         private readonly ILogger<ExportJob> logger;
-
-        private static AsyncLocal<Guid?> workerId = new AsyncLocal<Guid?>();
-
+        
         public ExportJob(IDataExportProcessesService exportService,
             Lazy<BinaryFormatDataExportHandler> binaryFormatDataExportHandler,
             //Lazy<TabularFormatParaDataExportProcessHandler> tabularFormatParaDataExportProcessHandler,
@@ -79,7 +77,7 @@ namespace WB.Services.Export.Jobs
             {
                 this.exportService.FinishExportWithError(pendingExportProcess.NaturalId, e);
 
-                this.logger.LogError("Export job failed", e);
+                this.logger.LogError(e, "Export job failed");
             }
 
             return Task.CompletedTask;

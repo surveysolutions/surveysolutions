@@ -112,17 +112,16 @@ namespace WB.Services.Export.Host.Scheduler
                     }
                     catch (Exception e)
                     {
-                        logger.LogError("Got error processing job: " + job.NaturalId, e);
+                        logger.LogError(e, "Got error processing job: " + job.NaturalId);
                     }
                     finally
                     {
-                        logger.LogInformation("Competed job: " + job.NaturalId);
+                        logger.LogInformation("Completed job: " + job.NaturalId);
                         currentProcessingJob = null;
                     }
-
-                    logger.LogInformation("Stoppin in-memory job queue");
                 }
 
+                logger.LogInformation("Stopped in-memory job queue");
             }, cancellationToken);
             return Task.CompletedTask;
         }
