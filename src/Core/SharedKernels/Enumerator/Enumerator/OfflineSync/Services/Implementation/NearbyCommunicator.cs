@@ -500,7 +500,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                 ProgressData.BytesReceived = sendBytes;
                 ProgressData.Eta = etaHelper.ETA;
                 ProgressData.Speed = etaHelper.AverageSpeed; //.Bytes().ToString("0.00");
-                ProgressData.ProgressPercentage = Math.Round((decimal)(100 * totalBytes) / sendBytes, 2);
+                ProgressData.ProgressPercentage = ProgressData.Percent ?? 0;
 
                 Progress?.Report(ProgressData);
             }
