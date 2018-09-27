@@ -17,6 +17,7 @@ using MultipartDataMediaFormatter;
 using StackExchange.Exceptional;
 using StackExchange.Exceptional.Stores;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Core.Infrastructure.Versions;
 using WB.UI.Shared.Web.Kernel;
 

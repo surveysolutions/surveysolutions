@@ -85,9 +85,7 @@ namespace WB.Core.BoundedContexts.Designer
             registry.BindAsSingleton<IStringCompressor, JsonCompressor>();
             registry.Bind<ISerializer, NewtonJsonSerializer>();
 
-            registry.Unbind<IExpressionProcessor>();
             registry.BindAsSingleton<IExpressionProcessor, RoslynExpressionProcessor>();
-            registry.Unbind<ICompilerSettings>();
             registry.BindToConstant<ICompilerSettings>(() => this.compilerSettings);
             registry.Bind<IDynamicCompilerSettingsProvider, DynamicCompilerSettingsProvider>();
             registry.Bind<ILookupTableService, LookupTableService>();

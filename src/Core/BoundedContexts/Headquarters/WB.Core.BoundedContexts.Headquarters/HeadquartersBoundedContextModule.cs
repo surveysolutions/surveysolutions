@@ -214,7 +214,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IInterviewUniqueKeyGenerator, InterviewUniqueKeyGenerator>();
             registry.BindAsSingleton<IRandomValuesSource, RandomValuesSource>();
 
-            registry.Unbind<ISupportedVersionProvider>();
             registry.Bind<ISupportedVersionProvider, SupportedVersionProvider>();
 
             registry.BindAsSingleton<IInterviewerSyncProtocolVersionProvider, InterviewerSyncProtocolVersionProvider>();
