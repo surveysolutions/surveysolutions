@@ -25,7 +25,7 @@ namespace WB.Services.Export.ExportProcessHandlers
         }
 
         protected override void DoExport(
-            DataExportProcessDetails dataExportProcessDetails, 
+            DataExportProcessDetails processArgs, 
             ExportSettings exportSettings, string archiveName,
             IProgress<int> exportProgress)
         {
@@ -35,21 +35,21 @@ namespace WB.Services.Export.ExportProcessHandlers
             {
                 using (var archiveFile = fileSystemAccessor.OpenOrCreateFile(tempArchivePath, false))
                 {
-                    using (var archive = dataExportFileAccessor.CreateExportArchive(archiveFile, dataExportProcessDetails.ArchivePassword))
+                    using (var archive = dataExportFileAccessor.CreateExportArchive(archiveFile, processArgs.ArchivePassword))
                     {
                         this.ExportDataIntoArchive(archive, exportSettings, exportProgress,
-                            dataExportProcessDetails.CancellationToken);
+                            processArgs.CancellationToken);
                     }
                 }
 
                 fileSystemAccessor.DeleteFile(archiveName);
                 fileSystemAccessor.MoveFile(tempArchivePath, archiveName);
                 
-                this.dataExportProcessesService.ChangeStatusType(dataExportProcessDetails.NaturalId, DataExportStatus.Compressing);
+                this.dataExportProcessesService.ChangeStatusType(processArgs.Tenant, processArgs.NaturalId, DataExportStatus.Compressing);
                 exportProgress.Report(0);
                 this.dataExportFileAccessor.PubishArchiveToExternalStorage(archiveName, exportProgress);
 
-                dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
+                processArgs.CancellationToken.ThrowIfCancellationRequested();
             }
             finally
             {

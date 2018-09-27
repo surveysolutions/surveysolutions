@@ -1,7 +1,6 @@
 ﻿using System;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
-using Hangfire;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -11,7 +10,7 @@ using Microsoft.Extensions.Hosting;
 using Prometheus;
 using WB.Services.Export.Host.Infra;
 using WB.Services.Export.Host.Scheduler;
-using WB.Services.Export.Services.Processing.Good;
+using WB.Services.Export.Services.Processing;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace WB.Services.Export.Host
@@ -34,19 +33,16 @@ namespace WB.Services.Export.Host
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
                 .AddJsonFormatters();            
 
-            services.Configure<BackgroundJobsConfig>(Configuration.GetSection("Scheduler"));
+            services.AddSingleton<IDataExportProcessesService, DataExportProcessesService>();
+            services.AddSingleton<IHostedService, DataExportProcessesService>(c => c.GetService<IDataExportProcessesService>() 
+                as DataExportProcessesService);
             
-            services.AddScoped<IBackgroundJobClient, BackgroundJobClient>();
-            services.AddSingleton<IHostedService, BackgroundJobsService>();
-            //services.AddTransient<TabularExportJob>();
             ServicesRegistry.Configure(services, Configuration);
 
             var builder = new ContainerBuilder();
             builder.Populate(services);
             builder.AddTenantApi();
             this.ApplicationContainer = builder.Build();
-
-            GlobalConfiguration.Configuration.UseAutofacActivator(ApplicationContainer);
             
             // Create the IServiceProvider based on the container.
             return new AutofacServiceProvider(this.ApplicationContainer);
