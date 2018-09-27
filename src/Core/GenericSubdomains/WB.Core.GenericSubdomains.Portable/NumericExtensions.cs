@@ -12,6 +12,12 @@ namespace WB.Core.GenericSubdomains.Portable
             return (int)((decimal)source / totalCount * 100);
         }
 
+        public static decimal ToPercentOf(this long source, long totalCount)
+        {
+            if (source > totalCount) return 100;
+            return (decimal)source / totalCount * 100;
+        }
+
         public static string FormatDecimal(this decimal source, int precigion = 16)
             => ((decimal?)source).FormatDecimal(precigion);
 
