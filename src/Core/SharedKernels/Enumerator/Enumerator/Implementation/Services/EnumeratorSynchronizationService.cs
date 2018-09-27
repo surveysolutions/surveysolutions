@@ -21,7 +21,7 @@ using WB.Core.SharedKernels.Questionnaire.Translations;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
-    public abstract class EnumeratorSynchronizationService : IOnlineSynchronizationService
+    public abstract class EnumeratorSynchronizationService : ISynchronizationService
     {
         protected abstract string ApiVersion { get; }
         protected abstract string ApiUrl { get; }
@@ -138,20 +138,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 url: $"{this.AssignmentsController}/{id}/Received", credentials: this.restCredentials, token: cancellationToken));
 
             return response;
-        }
-
-        public Task<List<QuestionnaireIdentity>> GetCensusQuestionnairesAsync(CancellationToken token)
-        {
-            return this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<List<QuestionnaireIdentity>>(
-                url: string.Concat(this.QuestionnairesController, "/census"),
-                credentials: this.restCredentials, token: token));
-        }
-
-        public Task<Guid> GetCurrentSupervisor(CancellationToken token, RestCredentials credentials)
-        {
-            return this.TryGetRestResponseOrThrowAsync(() =>
-                this.restService.GetAsync<Guid>(url: string.Concat(this.UsersController, "/supervisor"),
-                    credentials: credentials ?? this.restCredentials, token: token));
         }
 
         public Task<AssignmentApiDocument> GetAssignmentAsync(int id, CancellationToken cancellationToken)

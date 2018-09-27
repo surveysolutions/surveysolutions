@@ -15,7 +15,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
-    public class OnlineSynchronizationService : EnumeratorSynchronizationService, IInterviewerSynchronizationService
+    public class OnlineSynchronizationService : EnumeratorSynchronizationService, IOnlineSynchronizationService
     {
         protected override string ApiVersion => "v2";
         protected override string ApiUrl => "api/interviewer/";
@@ -34,6 +34,20 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         {
             return this.TryGetRestResponseOrThrowAsync(() =>
                 this.restService.GetAsync<InterviewerApiView>(url: string.Concat(this.UsersController, "/current"),
+                    credentials: credentials ?? this.restCredentials, token: token));
+        }
+
+        public Task<List<QuestionnaireIdentity>> GetCensusQuestionnairesAsync(CancellationToken token)
+        {
+            return this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<List<QuestionnaireIdentity>>(
+                url: string.Concat(this.QuestionnairesController, "/census"),
+                credentials: this.restCredentials, token: token));
+        }
+
+        public Task<Guid> GetCurrentSupervisor(CancellationToken token, RestCredentials credentials)
+        {
+            return this.TryGetRestResponseOrThrowAsync(() =>
+                this.restService.GetAsync<Guid>(url: string.Concat(this.UsersController, "/supervisor"),
                     credentials: credentials ?? this.restCredentials, token: token));
         }
 

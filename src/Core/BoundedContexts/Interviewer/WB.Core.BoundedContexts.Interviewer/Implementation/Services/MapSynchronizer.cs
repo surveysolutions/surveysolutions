@@ -1,4 +1,5 @@
-﻿using WB.Core.BoundedContexts.Interviewer.Views;
+﻿using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
@@ -30,9 +31,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             IAuditLogService auditLogService,
             IEnumeratorSettings enumeratorSettings,
             IUserInteractionService userInteractionService,
-            IServiceLocator serviceLocator)
+            IServiceLocator serviceLocator,
+            IAssignmentDocumentsStorage assignmentsStorage)
             : base(mapService, synchronizationService, logger, httpStatistician,
-                principal, interviewViewRepository, auditLogService, enumeratorSettings, userInteractionService, serviceLocator)
+                principal, interviewViewRepository, auditLogService, enumeratorSettings, userInteractionService, serviceLocator, assignmentsStorage)
         {
             this.interviewersPlainStorage = interviewersPlainStorage;
             this.passwordHasher = passwordHasher;

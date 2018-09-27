@@ -1,23 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Supervisor.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
-using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
 {
-    public class SupervisorSynchronizationProcess : OnlineSynchronizationProcessBase
+    public class SupervisorSynchronizationProcess : AbstractSynchronizationProcess
     {
         private readonly IPrincipal principal;
         private readonly IPlainStorage<SupervisorIdentity> supervisorsPlainStorage;
@@ -31,15 +27,13 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
             ILogger logger,
             IUserInteractionService userInteractionService,
             IPasswordHasher passwordHasher,
-            IAssignmentsSynchronizer assignmentsSynchronizer,
             IHttpStatistician httpStatistician,
             IAssignmentDocumentsStorage assignmentsStorage,
             ISupervisorSettings supervisorSettings,
-            IAuditLogSynchronizer auditLogSynchronizer,
             IAuditLogService auditLogService,
-            IServiceLocator serviceLocator) : base(synchronizationService,
-            interviewViewRepository, principal, logger, userInteractionService, assignmentsSynchronizer, httpStatistician,
-            assignmentsStorage, auditLogSynchronizer, auditLogService, supervisorSettings, serviceLocator)
+            IServiceLocator serviceLocator) : base(synchronizationService, logger, httpStatistician, principal,
+            interviewViewRepository, auditLogService, supervisorSettings, serviceLocator, userInteractionService,
+            assignmentsStorage)
         {
             this.principal = principal;
             this.supervisorsPlainStorage = supervisorsPlainStorage;
@@ -57,9 +51,5 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
             this.supervisorsPlainStorage.Store(localSupervisor);
             this.principal.SignIn(localSupervisor.Name, credentials.Password, true);
         }
-
-        protected virtual Task<List<Guid>> FindObsoleteInterviewsAsync(IEnumerable<InterviewView> localInterviews,
-            IEnumerable<InterviewApiView> remoteInterviews, IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken)
-            => Task.FromResult(new List<Guid>());
     }
 }

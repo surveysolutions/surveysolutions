@@ -8,16 +8,14 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
-using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
-    public class InterviewerOnlineSynchronizationProcess : OnlineSynchronizationProcessBase
+    public class InterviewerOnlineSynchronizationProcess : AbstractSynchronizationProcess
     {
         private readonly IInterviewerPrincipal principal;
         private readonly IPlainStorage<InterviewerIdentity> interviewersPlainStorage;
@@ -25,23 +23,20 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly IInterviewerSynchronizationService interviewerSynchronizationService;
 
         public InterviewerOnlineSynchronizationProcess(
-            IInterviewerSynchronizationService synchronizationService,
+            IOnlineSynchronizationService synchronizationService,
             IPlainStorage<InterviewerIdentity> interviewersPlainStorage,
             IPlainStorage<InterviewView> interviewViewRepository,
             IInterviewerPrincipal principal,
             ILogger logger,
             IPasswordHasher passwordHasher,
-            IAssignmentsSynchronizer assignmentsSynchronizer,
             IHttpStatistician httpStatistician,
             IAssignmentDocumentsStorage assignmentsStorage,
             IInterviewerSettings interviewerSettings,
-            IAuditLogSynchronizer auditLogSynchronizer,
             IAuditLogService auditLogService,
-            IInterviewerSynchronizationService interviewerSynchronizationService,
             IUserInteractionService userInteractionService,
-            IServiceLocator serviceLocator) : base(synchronizationService,
-            interviewViewRepository, principal, logger, userInteractionService, assignmentsSynchronizer, httpStatistician,
-            assignmentsStorage, auditLogSynchronizer, auditLogService, interviewerSettings, serviceLocator)
+            IServiceLocator serviceLocator) : base(synchronizationService, logger, httpStatistician, principal,
+            interviewViewRepository, auditLogService, interviewerSettings, serviceLocator, userInteractionService,
+            assignmentsStorage)
         {
             this.principal = principal;
             this.interviewersPlainStorage = interviewersPlainStorage;
