@@ -16,7 +16,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
         private readonly ISupervisorSynchronizationService supervisorSynchronization;
         private readonly IPlainStorage<DeletedQuestionnaire> deletedQuestionnairesStorage;
 
-        public DownloadDeletedQuestionnairesList(int sortOrder, ISynchronizationService synchronizationService, ILogger logger, ISupervisorSynchronizationService supervisorSynchronization, IPlainStorage<DeletedQuestionnaire> deletedQuestionnairesStorage) : base(sortOrder, synchronizationService, logger)
+        public DownloadDeletedQuestionnairesList(int sortOrder, ILogger logger,
+            ISupervisorSynchronizationService supervisorSynchronization,
+            IPlainStorage<DeletedQuestionnaire> deletedQuestionnairesStorage) : base(sortOrder, supervisorSynchronization,
+            logger)
         {
             this.supervisorSynchronization = supervisorSynchronization;
             this.deletedQuestionnairesStorage = deletedQuestionnairesStorage;

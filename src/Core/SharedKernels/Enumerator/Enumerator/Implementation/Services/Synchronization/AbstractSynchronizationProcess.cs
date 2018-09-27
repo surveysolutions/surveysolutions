@@ -7,6 +7,8 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization.Steps;
@@ -19,7 +21,7 @@ using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization
 {
-    public abstract class AbstractSynchronizationProcess
+    public abstract class AbstractSynchronizationProcess: ISynchronizationProcess
     {
         private readonly ISynchronizationService synchronizationService;
         private readonly ILogger logger;
@@ -29,15 +31,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
         protected readonly IAuditLogService auditLogService;
         private readonly IEnumeratorSettings enumeratorSettings;
         private readonly IServiceLocator serviceLocator;
+        private readonly IUserInteractionService userInteractionService;
+        private readonly IAssignmentDocumentsStorage assignmentsStorage;
 
         private bool remoteLoginRequired;
         private bool shouldUpdatePasswordOfResponsible;
         protected RestCredentials RestCredentials;
-
-        protected abstract bool SendStatistics { get; }
-
-        protected abstract string SuccessDescription { get; }
-
+        
         protected AbstractSynchronizationProcess(
             ISynchronizationService synchronizationService, 
             ILogger logger,
@@ -46,7 +46,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             IPlainStorage<InterviewView> interviewViewRepository,
             IAuditLogService auditLogService, 
             IEnumeratorSettings enumeratorSettings,
-            IServiceLocator serviceLocator)
+            IServiceLocator serviceLocator,
+            IUserInteractionService userInteractionService,
+            IAssignmentDocumentsStorage assignmentsStorage)
         {
             this.logger = logger;
             this.synchronizationService = synchronizationService;
@@ -56,6 +58,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             this.auditLogService = auditLogService;
             this.enumeratorSettings = enumeratorSettings;
             this.serviceLocator = serviceLocator;
+            this.userInteractionService = userInteractionService;
+            this.assignmentsStorage = assignmentsStorage;
         }
 
         public virtual async Task Synchronize(IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken,
@@ -77,12 +81,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 await step.ExecuteAsync();
             }
         }
-
-        public abstract SyncStatisticsApiView ToSyncStatisticsApiView(SynchronizationStatistics statistics,
-            Stopwatch stopwatch);
-
-        protected abstract Task<string> GetNewPasswordAsync();
-
+        
         protected async Task TrySendUnexpectedExceptionToServerAsync(Exception exception)
         {
             if (exception.GetSelfOrInnerAs<OperationCanceledException>() != null)
@@ -438,12 +437,57 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             }
         }
 
-        protected abstract void WriteToAuditLogStartSyncMessage();
 
         protected virtual void OnSuccesfullSynchronization() { }
 
         protected abstract Task CheckAfterStartSynchronization(CancellationToken cancellationToken);
 
         protected abstract void UpdatePasswordOfResponsible(RestCredentials credentials);
+
+        protected virtual Task<string> GetNewPasswordAsync()
+        {
+            var message = InterviewerUIResources.Synchronization_UserPassword_Update_Format.FormatString(
+                this.principal.CurrentUserIdentity.Name);
+
+            return this.userInteractionService.ConfirmWithTextInputAsync(
+                message,
+                okButton: UIResources.LoginText,
+                cancelButton: InterviewerUIResources.Synchronization_Cancel,
+                isTextInputPassword: true);
+        }
+
+        protected virtual void WriteToAuditLogStartSyncMessage()
+            => this.auditLogService.Write(new SynchronizationStartedAuditLogEntity(SynchronizationType.Online));
+
+        protected virtual bool SendStatistics => true;
+        protected virtual string SuccessDescription => InterviewerUIResources.Synchronization_Success_Description;
+
+        public virtual SyncStatisticsApiView ToSyncStatisticsApiView(SynchronizationStatistics statistics, Stopwatch stopwatch)
+        {
+            var httpStats = this.httpStatistician.GetStats();
+
+            return new SyncStatisticsApiView
+            {
+                DownloadedInterviewsCount = statistics.NewInterviewsCount,
+                UploadedInterviewsCount = statistics.SuccessfullyUploadedInterviewsCount,
+                DownloadedQuestionnairesCount = statistics.SuccessfullyDownloadedQuestionnairesCount,
+                RejectedInterviewsOnDeviceCount =
+                    this.interviewViewRepository.Count(
+                        inteview => inteview.Status == InterviewStatus.RejectedBySupervisor),
+                NewInterviewsOnDeviceCount =
+                    this.interviewViewRepository.Count(
+                        inteview => inteview.Status == InterviewStatus.InterviewerAssigned && !inteview.CanBeDeleted),
+                RemovedInterviewsCount = statistics.DeletedInterviewsCount,
+
+                NewAssignmentsCount = statistics.NewAssignmentsCount,
+                RemovedAssignmentsCount = statistics.RemovedAssignmentsCount,
+                AssignmentsOnDeviceCount = this.assignmentsStorage.Count(),
+
+                TotalDownloadedBytes = httpStats.DownloadedBytes,
+                TotalUploadedBytes = httpStats.UploadedBytes,
+                TotalConnectionSpeed = httpStats.Speed,
+                TotalSyncDuration = stopwatch.Elapsed
+            };
+        }
     }
 }

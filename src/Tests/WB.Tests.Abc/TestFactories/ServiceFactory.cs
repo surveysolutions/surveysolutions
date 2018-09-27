@@ -451,15 +451,14 @@ namespace WB.Tests.Abc.TestFactories
             IPlainStorage<InterviewerIdentity> interviewersPlainStorage = null,
             IPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage = null,
             IPlainStorage<InterviewFileView> interviewFileViewStorage = null,
-            IInterviewerSynchronizationService synchronizationService = null,
+            IOnlineSynchronizationService synchronizationService = null,
             ILogger logger = null,
             IUserInteractionService userInteractionService = null,
             IPasswordHasher passwordHasher = null,
             IInterviewerPrincipal principal = null,
-            IHttpStatistician httpStatistician = null,
-            IInterviewerSynchronizationService interviewerSynchronizationService = null)
+            IHttpStatistician httpStatistician = null)
         {
-            var syncServiceMock = synchronizationService ?? Mock.Of<IInterviewerSynchronizationService>();
+            var syncServiceMock = synchronizationService ?? Mock.Of<IOnlineSynchronizationService>();
 
             return new InterviewerOnlineSynchronizationProcess(
                 syncServiceMock,
@@ -468,13 +467,10 @@ namespace WB.Tests.Abc.TestFactories
                 principal ?? Mock.Of<IInterviewerPrincipal>(),
                 logger ?? Mock.Of<ILogger>(),
                 passwordHasher ?? Mock.Of<IPasswordHasher>(),
-                Mock.Of<IAssignmentsSynchronizer>(),
                 httpStatistician ?? Mock.Of<IHttpStatistician>(),
                 Mock.Of<IAssignmentDocumentsStorage>(),
                 Mock.Of<IInterviewerSettings>(),
-                Mock.Of<IAuditLogSynchronizer>(),
                 Mock.Of<IAuditLogService>(),
-                interviewerSynchronizationService ?? Mock.Of<IInterviewerSynchronizationService>(),
                 userInteractionService ?? Mock.Of<IUserInteractionService>(),
                 Mock.Of<IServiceLocator>());
         }
@@ -496,14 +492,12 @@ namespace WB.Tests.Abc.TestFactories
                 interviewersPlainStorage ?? Mock.Of<IPlainStorage<InterviewerIdentity>>(),
                 principal ?? Mock.Of<IInterviewerPrincipal>(),
                 logger ?? Mock.Of<ILogger>(),
-                passwordHasher ?? Mock.Of<IPasswordHasher>(),
-                Mock.Of<IAssignmentsSynchronizer>(),
                 httpStatistician ?? Mock.Of<IHttpStatistician>(),
                 Mock.Of<IAssignmentDocumentsStorage>(),
-                Mock.Of<IAuditLogSynchronizer>(),
                 Mock.Of<IAuditLogService>(),
                 Mock.Of<IInterviewerSettings>(),
-                Mock.Of<IServiceLocator>());
+                Mock.Of<IServiceLocator>(),
+                Mock.Of<IUserInteractionService>());
         }
 
         public OnlineSynchronizationService SynchronizationService(IPrincipal principal = null,
@@ -1018,7 +1012,8 @@ namespace WB.Tests.Abc.TestFactories
                 auditLogService ?? Mock.Of<IAuditLogService>(),
                 enumeratorSettings ?? Mock.Of<IEnumeratorSettings>(),
                 userInteractionService ?? Mock.Of<IUserInteractionService>(),
-                Mock.Of<IServiceLocator>());
+                Mock.Of<IServiceLocator>(),
+                Mock.Of<IAssignmentDocumentsStorage>());
         }
 
         public InterviewFactory InterviewFactory(

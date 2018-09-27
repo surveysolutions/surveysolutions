@@ -13,18 +13,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization.Steps
 {
     public class CensusQuestionnairesSynchronization : SynchronizationStep
     {
-        private readonly ISynchronizationService synchronizationService;
+        private readonly IInterviewerSynchronizationService interviewerSynchronizationService;
         private readonly IInterviewerQuestionnaireAccessor questionnairesAccessor;
         private readonly IQuestionnaireDownloader questionnaireDownloader;
 
         public CensusQuestionnairesSynchronization(
-            ISynchronizationService synchronizationService, 
+            IInterviewerSynchronizationService synchronizationService, 
             IInterviewerQuestionnaireAccessor questionnairesAccessor, 
             IQuestionnaireDownloader questionnaireDownloader, 
             ILogger logger,
             int sortOrder) : base (sortOrder, synchronizationService, logger)
         {
-            this.synchronizationService = synchronizationService ?? throw new ArgumentNullException(nameof(synchronizationService));
+            this.interviewerSynchronizationService = synchronizationService ?? throw new ArgumentNullException(nameof(synchronizationService));
             this.questionnairesAccessor = questionnairesAccessor ?? throw new ArgumentNullException(nameof(questionnairesAccessor));
             this.questionnaireDownloader = questionnaireDownloader ?? throw new ArgumentNullException(nameof(questionnaireDownloader));
         }
@@ -32,7 +32,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization.Steps
         public override async Task ExecuteAsync()
         {
             var remoteCensusQuestionnaireIdentities =
-                await this.synchronizationService.GetCensusQuestionnairesAsync(this.Context.CancellationToken);
+                await this.interviewerSynchronizationService.GetCensusQuestionnairesAsync(this.Context.CancellationToken);
             var localCensusQuestionnaireIdentities = this.questionnairesAccessor.GetCensusQuestionnaireIdentities();
 
             var processedQuestionnaires = 0;

@@ -25,7 +25,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private string checkNewVersionResult;
 
         public CheckNewVersionViewModel(
-            IOnlineSynchronizationService synchronizationService, 
+            ISynchronizationService synchronizationService, 
             IDeviceSettings deviceSettings, 
             ITabletDiagnosticService tabletDiagnosticService, 
             ILogger logger)

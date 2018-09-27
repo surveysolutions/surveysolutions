@@ -4,47 +4,50 @@ using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog;
+using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
-using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
-    public class InterviewerOfflineSynchronizationProcess : OfflineSynchronizationProcessBase
+    public class InterviewerOfflineSynchronizationProcess : AbstractSynchronizationProcess
     {
+        private readonly IOfflineSynchronizationService synchronizationService;
         private readonly IPlainStorage<InterviewerIdentity> interviewersPlainStorage;
         private readonly IInterviewerPrincipal principal;
-        private readonly IPasswordHasher passwordHasher;
         private readonly IInterviewerSettings interviewerSettings;
         public InterviewerOfflineSynchronizationProcess(
             IOfflineSynchronizationService synchronizationService,
             IPlainStorage<InterviewView> interviewViewRepository,
             IPlainStorage<InterviewerIdentity> interviewersPlainStorage,
             IInterviewerPrincipal principal, 
-            ILogger logger,
-            IPasswordHasher passwordHasher,
-            IAssignmentsSynchronizer assignmentsSynchronizer, 
+            ILogger logger, 
             IHttpStatistician httpStatistician,
-            IAssignmentDocumentsStorage assignmentsStorage, 
-            IAuditLogSynchronizer auditLogSynchronizer,
+            IAssignmentDocumentsStorage assignmentsStorage,
             IAuditLogService auditLogService, 
             IInterviewerSettings interviewerSettings, 
-            IServiceLocator serviceLocator) :
-            base(synchronizationService, interviewViewRepository, principal, logger, assignmentsSynchronizer,
-                httpStatistician, assignmentsStorage, auditLogSynchronizer, auditLogService, interviewerSettings,
-                serviceLocator)
+            IServiceLocator serviceLocator,
+            IUserInteractionService userInteractionService) :
+            base(synchronizationService, logger, httpStatistician, principal,
+                interviewViewRepository, auditLogService, interviewerSettings,
+                serviceLocator, userInteractionService, assignmentsStorage)
         {
+            this.synchronizationService = synchronizationService;
             this.interviewersPlainStorage = interviewersPlainStorage;
             this.principal = principal;
-            this.passwordHasher = passwordHasher;
             this.interviewerSettings = interviewerSettings;
         }
+
+        protected override Task<string> GetNewPasswordAsync() => Task.FromResult((string)null);
+
+        protected override void WriteToAuditLogStartSyncMessage()
+            => this.auditLogService.Write(new SynchronizationStartedAuditLogEntity(SynchronizationType.Offline));
 
         protected override void OnSuccesfullSynchronization() => this.interviewerSettings.SetOfflineSynchronizationCompleted();
         protected override async Task CheckAfterStartSynchronization(CancellationToken cancellationToken)
