@@ -1,9 +1,11 @@
-using System;
 using System.IO;
+using Android.OS;
+using WB.Core.SharedKernels.Enumerator.Services;
+using Environment = System.Environment;
 
 namespace WB.UI.Shared.Enumerator.Services
 {
-    public class AndroidPathUtils
+    public class AndroidPathUtils : IPathUtils
     {
         public static string GetPathToSubfolderInLocalDirectory(string subFolderName)
         {
@@ -31,5 +33,9 @@ namespace WB.UI.Shared.Enumerator.Services
         {
             return Path.Combine(GetPathToExternalDirectory(), "Supervisor", subFolderName);
         }
+
+        public string GetRootDirectory() => Build.VERSION.SdkInt < BuildVersionCodes.N
+            ? GetPathToExternalDirectory()
+            : GetPathToInternalDirectory();
     }
 }
