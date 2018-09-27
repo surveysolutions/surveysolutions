@@ -94,13 +94,15 @@ namespace WB.UI.Shared.Web.Kernel
 
         public IDependencyScope BeginScope()
         {
-            var lifetimeScope = adapter.BeginLifetimeScope();
-            return new AutofacWebApiDependencyScope(lifetimeScope);
+            //return autofacWebApiDependencyResolver.BeginScope();
+            //var lifetimeScope = adapter.BeginLifetimeScope();
+            //return new AutofacWebApiDependencyScope(lifetimeScope);
+            return new AutofacWebApiDependencyScope(adapter.GetCurrentScope());
         }
 
         public void Dispose()
         {
-            
+            autofacWebApiDependencyResolver.Dispose();
         }
     }
 }
