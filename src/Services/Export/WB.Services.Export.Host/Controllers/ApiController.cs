@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Jobs;
 using WB.Services.Export.Questionnaire;
@@ -74,9 +75,11 @@ namespace WB.Services.Export.Host.Controllers
         {
             var tenant = new TenantInfo(tenantBaseUrl, apiKey);
 
-            return this.jobsStatusReporting.GetDataExportStatusForQuestionnaire(tenant,
+            var dataExportStatusForQuestionnaire = this.jobsStatusReporting.GetDataExportStatusForQuestionnaire(tenant,
                 new QuestionnaireId(questionnaireId),
                 archiveName, status, fromDate, toDate);
+
+            return dataExportStatusForQuestionnaire;
         }
     }
 }
