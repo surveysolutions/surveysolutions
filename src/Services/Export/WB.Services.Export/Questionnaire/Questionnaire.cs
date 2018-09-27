@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using WB.Services.Export.Interview;
 
@@ -111,8 +110,8 @@ namespace WB.Services.Export.Questionnaire
             return roster.RosterSizeQuestionId ?? roster.PublicKey;
         }
 
-        public ImmutableList<Guid> GetAllGroups()
-            => this.GroupsCache.Values.Select(question => question.PublicKey).ToImmutableList();
+        public Guid[] GetAllGroups()
+            => this.GroupsCache.Values.Select(question => question.PublicKey).ToArray();
 
         private Dictionary<ValueVector<Guid>, Guid[]> rostersInLevelCache = null;
 
