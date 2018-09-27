@@ -11,10 +11,6 @@ using WB.Services.Export.Services.Processing.Good;
 
 namespace WB.Services.Export.Jobs
 {
-    public interface IExportJob
-    {
-        Task ExecuteAsync(DataExportProcessDetails args, CancellationToken cancellationToken);
-    }
 
     internal class ExportJob : IExportJob
     {
@@ -23,9 +19,9 @@ namespace WB.Services.Export.Jobs
         private readonly Lazy<BinaryFormatDataExportHandler> binaryFormatDataExportHandler;
         //private readonly Lazy<TabularFormatParaDataExportProcessHandler> tabularFormatParaDataExportProcessHandler;
         private readonly Lazy<TabularFormatDataExportHandler> tabularFormatDataExportHandler;
-        //private readonly Lazy<SpssFormatExportHandler> spssFormatExportHandler;
-        //private readonly Lazy<StataFormatExportHandler> stataFormatExportHandler;
-    //    private readonly Lazy<OnedriveBinaryDataExportHandler> onedriveBinaryDataExportHandler;
+        private readonly Lazy<SpssFormatExportHandler> spssFormatExportHandler;
+        private readonly Lazy<StataFormatExportHandler> stataFormatExportHandler;
+        private readonly Lazy<OnedriveBinaryDataExportHandler> onedriveBinaryDataExportHandler;
         private readonly Lazy<DropboxBinaryDataExportHandler> dropboxBinaryDataExportHandler;
         private readonly Lazy<GoogleDriveBinaryDataExportHandler> googleDriveBinaryDataExportHandler;
 
@@ -35,9 +31,9 @@ namespace WB.Services.Export.Jobs
             Lazy<BinaryFormatDataExportHandler> binaryFormatDataExportHandler,
             //Lazy<TabularFormatParaDataExportProcessHandler> tabularFormatParaDataExportProcessHandler,
             Lazy<TabularFormatDataExportHandler> tabularFormatDataExportHandler,
-            //Lazy<SpssFormatExportHandler> spssFormatExportHandler,
-            //Lazy<StataFormatExportHandler> stataFormatExportHandler,
-            //Lazy<OnedriveBinaryDataExportHandler> onedriveBinaryDataExportHandler,
+            Lazy<SpssFormatExportHandler> spssFormatExportHandler,
+            Lazy<StataFormatExportHandler> stataFormatExportHandler,
+            Lazy<OnedriveBinaryDataExportHandler> onedriveBinaryDataExportHandler,
             Lazy<DropboxBinaryDataExportHandler> dropboxBinaryDataExportHandler,
             Lazy<GoogleDriveBinaryDataExportHandler> googleDriveBinaryDataExportHandler,
             ILogger<ExportJob> logger)
@@ -47,9 +43,9 @@ namespace WB.Services.Export.Jobs
             this.binaryFormatDataExportHandler = binaryFormatDataExportHandler;
             //this.tabularFormatParaDataExportProcessHandler = tabularFormatParaDataExportProcessHandler;
             this.tabularFormatDataExportHandler = tabularFormatDataExportHandler;
-            //this.spssFormatExportHandler = spssFormatExportHandler;
-            //this.stataFormatExportHandler = stataFormatExportHandler;
-            //this.onedriveBinaryDataExportHandler = onedriveBinaryDataExportHandler;
+            this.spssFormatExportHandler = spssFormatExportHandler;
+            this.stataFormatExportHandler = stataFormatExportHandler;
+            this.onedriveBinaryDataExportHandler = onedriveBinaryDataExportHandler;
             this.dropboxBinaryDataExportHandler = dropboxBinaryDataExportHandler;
             this.googleDriveBinaryDataExportHandler = googleDriveBinaryDataExportHandler;
             this.logger = logger;
@@ -87,8 +83,8 @@ namespace WB.Services.Export.Jobs
         {
             switch (storageType)
             {
-                //case ExternalStorageType.OneDrive:
-                //    return onedriveBinaryDataExportHandler.Value;
+                case ExternalStorageType.OneDrive:
+                    return onedriveBinaryDataExportHandler.Value;
                 case ExternalStorageType.Dropbox:
                     return dropboxBinaryDataExportHandler.Value;
                 case ExternalStorageType.GoogleDrive:
@@ -107,10 +103,10 @@ namespace WB.Services.Export.Jobs
                 //    return tabularFormatParaDataExportProcessHandler.Value;
                 case DataExportFormat.Tabular:
                     return tabularFormatDataExportHandler.Value;
-                //case DataExportFormat.SPSS:
-                //    return spssFormatExportHandler.Value;
-                //case DataExportFormat.STATA:
-                //    return stataFormatExportHandler.Value;
+                case DataExportFormat.SPSS:
+                    return spssFormatExportHandler.Value;
+                case DataExportFormat.STATA:
+                    return stataFormatExportHandler.Value;
                 default:
                     throw new NotSupportedException($"Export handler for '{format}' not found");
             }
