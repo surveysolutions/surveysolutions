@@ -21,7 +21,7 @@ namespace WB.Tests.Integration.InterviewTests.CascadingDropdowns
         private void BecauseOf() =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
-                Setup.MockedServiceLocator();
+                SetUp.MockedServiceLocator();
                 var parentSingleOptionQuestionId = Guid.Parse("11111111111111111111111111111111");
                 var childCascadedComboboxId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                 var grandChildCascadedComboboxId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");

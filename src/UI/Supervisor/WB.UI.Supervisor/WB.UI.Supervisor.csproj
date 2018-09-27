@@ -146,8 +146,8 @@
     <Reference Include="MvvmCross.Plugin.Visibility, Version=6.2.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\MvvmCross.Plugin.Visibility.6.2.0\lib\monoandroid81\MvvmCross.Plugin.Visibility.dll</HintPath>
     </Reference>
-    <Reference Include="MvvmCross.Plugin.WebBrowser, Version=6.1.2.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\MvvmCross.Plugin.WebBrowser.6.1.2\lib\monoandroid81\MvvmCross.Plugin.WebBrowser.dll</HintPath>
+    <Reference Include="MvvmCross.Plugin.WebBrowser, Version=6.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\MvvmCross.Plugin.WebBrowser.6.2.0\lib\monoandroid81\MvvmCross.Plugin.WebBrowser.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Newtonsoft.Json.11.0.2\lib\netstandard2.0\Newtonsoft.Json.dll</HintPath>

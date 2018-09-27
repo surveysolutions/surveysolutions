@@ -1,4 +1,5 @@
 ﻿using Moq;
+using MvvmCross.Tests;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
@@ -9,8 +10,15 @@ using WB.Tests.Abc;
 namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AssignmentDashboardItemViewModelTests
 {
     [TestOf(typeof(AssignmentDashboardItemViewModel))]
-    public class AssignmentDashboardItemViewModelTests
+    public class AssignmentDashboardItemViewModelTests : MvxIoCSupportingTest
     {
+        [OneTimeSetUp]
+        public void SetUp()
+        {
+            base.Setup();
+            Ioc.RegisterSingleton(Stub.MvxMainThreadAsyncDispatcher());
+        }
+
         [Test]
         [SetUICulture("en-US")]
         public void when_initialized_should_build_titles()

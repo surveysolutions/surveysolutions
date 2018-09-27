@@ -29,7 +29,7 @@ namespace WB.Tests.Integration.InterviewTests
 
             var results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
-                Setup.MockedServiceLocator();
+                SetUp.MockedServiceLocator();
 
                 var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Abc.Create.Entity.TextListQuestion(textListQuestionId, variable: "l"),
@@ -84,7 +84,7 @@ namespace WB.Tests.Integration.InterviewTests
 
             var results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
-                Setup.MockedServiceLocator();
+                SetUp.MockedServiceLocator();
 
                 var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Abc.Create.Entity.TextListQuestion(textListQuestionId, variable: "tl"),
@@ -148,7 +148,7 @@ namespace WB.Tests.Integration.InterviewTests
 
             var results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
-                Setup.MockedServiceLocator();
+                SetUp.MockedServiceLocator();
 
                 var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(questionnaireId,
                     Abc.Create.Entity.TextListQuestion(textListQuestionId, variable: "tl"),
