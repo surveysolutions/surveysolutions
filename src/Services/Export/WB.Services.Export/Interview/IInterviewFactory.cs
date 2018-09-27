@@ -142,36 +142,48 @@ namespace WB.Services.Export.Interview
                 .ToDictionary(c => c.Item1, c => c.Item2);
 
             var api = this.tenantApi.For(tenant);
-            
+
             var answerLines = await api.GetInterviewBatchAsync(interviewIds, entities.Keys.ToArray());
 
-            return answerLines.Select(a =>
+            IEnumerable<MultimediaAnswer> ToMultimediaAnswer()
             {
-                var type = entities[a.Identity.Id];
-
-                if (type == typeof(MultimediaQuestion))
+                foreach (var a in answerLines)
                 {
-                    return new MultimediaAnswer
+                    var type = entities[a.Identity.Id];
+
+                    if (type == typeof(MultimediaQuestion))
                     {
-                        Answer = a.AsString,
-                        InterviewId = a.InterviewId,
-                        Type = MultimediaType.Image
-                    };
-                }
+                        if (a.AsString == null) continue;
 
-                if (type == typeof(AudioQuestion))
-                {
-                    return new MultimediaAnswer
+                        yield return new MultimediaAnswer
+                        {
+                            Answer = a.AsString,
+                            InterviewId = a.InterviewId,
+                            Type = MultimediaType.Image
+                        };
+
+                        continue;
+                    }
+                    
+                    if (type == typeof(AudioQuestion))
                     {
-                        Answer = a.AsAudio.FileName,
-                        InterviewId = a.InterviewId,
-                        Type = MultimediaType.Audio
-                    };
+                        if (a.AsAudio == null) continue;
+
+                        yield return new MultimediaAnswer
+                        {
+                            Answer = a.AsAudio.FileName,
+                            InterviewId = a.InterviewId,
+                            Type = MultimediaType.Audio
+                        };
+
+                        continue;
+                    }
+
+                    throw new NotSupportedException();
                 }
+            }
 
-                throw new NotSupportedException();
-
-            }).ToList();
+            return ToMultimediaAnswer().ToList();
         }
     }
 }
