@@ -76,9 +76,9 @@ namespace WB.Services.Export
             services.AddTransient<BinaryFormatDataExportHandler>();
             //services.AddTransient<TabularFormatParaDataExportProcessHandler>();
             services.AddTransient<TabularFormatDataExportHandler>();
-            //services.AddTransient<SpssFormatExportHandler>();
-            //services.AddTransient<StataFormatExportHandler>();
-            //services.AddTransient<OnedriveBinaryDataExportHandler>();
+            services.AddTransient<SpssFormatExportHandler>();
+            services.AddTransient<StataFormatExportHandler>();
+            services.AddTransient<OnedriveBinaryDataExportHandler>();
             services.AddTransient<DropboxBinaryDataExportHandler>(); ;
             services.AddTransient<GoogleDriveBinaryDataExportHandler>();
         }
