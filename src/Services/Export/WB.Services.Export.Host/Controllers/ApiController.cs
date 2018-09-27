@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Net.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using WB.Services.Export.Interview;
+using WB.Services.Export.Jobs;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Services.Processing;
 using WB.Services.Export.Services.Processing.Good;
@@ -15,23 +15,28 @@ namespace WB.Services.Export.Host.Controllers
     public class JobController : ControllerBase
     {
         private readonly IDataExportProcessesService exportProcessesService;
+        private readonly IJobsStatusReporting jobsStatusReporting;
         private readonly ILogger<JobController> logger;
-        private readonly IDataExportStatusReader dataExportStatusReader;
-
 
         public JobController(IDataExportProcessesService exportProcessesService,
         //    IDataExportStatusReader dataExportStatusReader,
+            IJobsStatusReporting jobsStatusReporting,
             ILogger<JobController> logger)
         {
             this.exportProcessesService = exportProcessesService;
+            this.jobsStatusReporting = jobsStatusReporting;
             this.logger = logger;
-            this.dataExportStatusReader = dataExportStatusReader;
         }
 
         [HttpPut]
         public ActionResult RequestUpdate(string questionnaireId,
-            DataExportFormat format, InterviewStatus? status, DateTime? from, DateTime? to, 
-            string archiveName, string archivePassword, string apiKey,
+            DataExportFormat format,
+            InterviewStatus? status,
+            DateTime? from,
+            DateTime? to, 
+            string archiveName, 
+            string archivePassword, 
+            string apiKey,
             [FromHeader(Name = "Origin")]string tenantBaseUrl)
         {
             if (string.IsNullOrWhiteSpace(archiveName))
@@ -52,6 +57,25 @@ namespace WB.Services.Export.Host.Controllers
             exportProcessesService.AddDataExport(args);
 
             return Ok();
+        }
+
+        [HttpGet]
+        [ResponseCache(NoStore = true)]
+        [Route("status")]
+        public DataExportStatusView GetDataExportStatusForQuestionnaire(
+            string questionnaireId,
+            string archiveName,
+            InterviewStatus? status,
+            DateTime? fromDate,
+            DateTime? toDate,
+            string apiKey,
+            [FromHeader(Name = "Origin")]string tenantBaseUrl)
+        {
+            var tenant = new TenantInfo(tenantBaseUrl, apiKey);
+
+            return this.jobsStatusReporting.GetDataExportStatusForQuestionnaire(tenant,
+                new QuestionnaireId(questionnaireId),
+                archiveName, status, fromDate, toDate);
         }
     }
 }

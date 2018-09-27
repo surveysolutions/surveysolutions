@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 
 namespace WB.Services.Export.Infrastructure
 {
@@ -20,5 +21,7 @@ namespace WB.Services.Export.Infrastructure
         byte[] ReadAllBytes(string filePath);
         void WriteAllBytes(string filePath, byte[] data);
         string GetTempPath(string basePath);
+        DateTime GetModificationTime(string filePath);
+        long GetFileSize(string filePath);
     }
 }

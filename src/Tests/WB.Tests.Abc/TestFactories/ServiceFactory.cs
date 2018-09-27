@@ -308,25 +308,6 @@ namespace WB.Tests.Abc.TestFactories
             return expressionStatePrototypeProvider.Object;
         }
 
-        public IDataExportStatusReader DataExportStatusReader(
-            IDataExportProcessesService dataExportProcessesService = null,
-            IFilebasedExportedDataAccessor filebasedExportedDataAccessor = null,
-            IFileSystemAccessor fileSystemAccessor = null,
-            IDataExportFileAccessor dataExportFileAccessor = null,
-            IExternalFileStorage externalFileStorage = null,
-            IQuestionnaireExportStructureStorage questionnaireExportStructureStorage = null)
-        {
-            return new DataExportStatusReader(
-                dataExportProcessesService: dataExportProcessesService ?? Substitute.For<IDataExportProcessesService>(),
-                filebasedExportedDataAccessor: filebasedExportedDataAccessor ??
-                                               Substitute.For<IFilebasedExportedDataAccessor>(),
-                fileSystemAccessor: fileSystemAccessor ?? Substitute.For<IFileSystemAccessor>(),
-                externalFileStorage: externalFileStorage ?? Substitute.For<IExternalFileStorage>(),
-                exportFileAccessor: dataExportFileAccessor ?? Substitute.For<IDataExportFileAccessor>(),
-                questionnaireExportStructureStorage: questionnaireExportStructureStorage ??
-                                                     Substitute.For<IQuestionnaireExportStructureStorage>());
-        }
-
         public ISubstitutionTextFactory SubstitutionTextFactory()
         {
             return new SubstitutionTextFactory(Create.Service.SubstitutionService(),
