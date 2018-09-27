@@ -20,5 +20,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         void ShowWaitMessage();
         bool HasPendingOperations { get; }
         Task Close(IMvxViewModel viewModel);
+        void InstallNewApp(string pathToApk);
+        void CloseApplication();
     }
 }

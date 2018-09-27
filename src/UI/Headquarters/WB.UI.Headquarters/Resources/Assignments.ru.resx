@@ -278,6 +278,6 @@
     <value>Получено</value>
   </data>
   <data name="Tooltip_Filter_Received" xml:space="preserve">
-    <value>Отображать только задания которые получены или не получены планшетами</value>
+    <value>Отображать только задания которые получены или не получены планшетами.</value>
   </data>
 </root>

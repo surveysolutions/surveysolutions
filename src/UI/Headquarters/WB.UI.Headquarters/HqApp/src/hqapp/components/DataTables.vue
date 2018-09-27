@@ -269,7 +269,7 @@ export default {
                     const index = cell.index();
 
                     if (index != null && index.column > 0) {
-                        var rowId = self.table.row($el.target).id();
+                        var rowId = self.table.row(index.row).id();
                         var columns = self.table.settings().init().columns;
 
                         self.$emit('cell-clicked', columns[$el.target.cellIndex].name, rowId, cell.data());

@@ -11,7 +11,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
         public TimeSpan Eta { get; set; }
 
         public decimal? Percent => TotalBytesToReceive.HasValue && TotalBytesToReceive.Value != 0
-            ? BytesReceived.PercentOf(TotalBytesToReceive.Value)
+            ? BytesReceived.ToPercentOf(TotalBytesToReceive.Value)
             : (decimal?) null;
 
         public double? Speed { get; set; }

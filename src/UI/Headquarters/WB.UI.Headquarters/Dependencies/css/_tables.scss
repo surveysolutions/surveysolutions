@@ -384,7 +384,8 @@
                     border-color: $gray-highlight-font;
                 }
                 &:not(:placeholder-shown) + .btn-clear{
-                    @extend %visibility-visible;
+                    opacity: 1;
+                    visibility: visible;
                     right: 10px;
                 }
             }

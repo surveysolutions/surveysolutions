@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Humanizer;
 using Main.Core.Entities.SubEntities;
 using StackExchange.Exceptional;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
@@ -16,6 +18,7 @@ using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
+using WB.UI.Headquarters.API;
 using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web.Attributes;
 using WB.UI.Shared.Web.Filters;
@@ -29,16 +32,19 @@ namespace WB.UI.Headquarters.Controllers
         private readonly HqUserManager userManager;
         private readonly IServiceLocator serviceLocator;
         private readonly ISettingsProvider settingsProvider;
+        private readonly IAndroidPackageReader androidPackageReader;
 
         public ControlPanelController(
             IServiceLocator serviceLocator,
             ICommandService commandService,
             HqUserManager userManager,
             ILogger logger,
+            IAndroidPackageReader androidPackageReader,
             ISettingsProvider settingsProvider)
              : base(commandService: commandService, logger: logger)
         {
             this.userManager = userManager;
+            this.androidPackageReader = androidPackageReader;
             this.serviceLocator = serviceLocator;
             this.settingsProvider = settingsProvider;
         }
@@ -108,7 +114,7 @@ namespace WB.UI.Headquarters.Controllers
             // If we got this far, something failed, redisplay form
             return View(model);
         }
-        
+
         public ActionResult ResetPrivilegedUserPassword()
         {
             return this.View(new UserEditModel());
@@ -148,6 +154,26 @@ namespace WB.UI.Headquarters.Controllers
         public ActionResult NConfig() => this.View();
 
         public ActionResult Versions() => this.View();
+
+        public ActionResult AppUpdates()
+        {
+            var folder = Server.MapPath(ClientApkInfo.Directory);
+            var appFiles = Directory.EnumerateFiles(folder);
+
+            return View(appFiles
+                .Select(app => new FileInfo(app))
+                .OrderBy(fi => fi.Name)
+                .Select(fi =>
+                {
+                    int? version = null;
+                    if (fi.Name.EndsWith(".apk", StringComparison.OrdinalIgnoreCase))
+                    {
+                        version = this.androidPackageReader.Read(fi.FullName)?.Version;
+                    }
+
+                    return $"<strong>{fi.Name}{(version.HasValue ? $" [ver. {version}]" : "")}</strong> ({fi.Length.Bytes().ToString("0.00")}) {fi.LastWriteTimeUtc}";
+                }).ToList());
+        }
 
         public ActionResult Settings()
         {
@@ -223,7 +249,7 @@ namespace WB.UI.Headquarters.Controllers
 
         public ActionResult BrokenInterviewPackages() => this.View();
         public ActionResult RejectedInterviewPackages() => this.View();
-        
+
         public Task Exceptions() => ExceptionalModule.HandleRequestAsync(System.Web.HttpContext.Current);
     }
 }

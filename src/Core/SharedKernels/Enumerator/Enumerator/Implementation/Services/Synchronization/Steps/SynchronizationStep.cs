@@ -12,7 +12,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 {
     public abstract class SynchronizationStep : ISynchronizationStep
     {
-        private readonly ISynchronizationService synchronizationService;
+        protected readonly ISynchronizationService synchronizationService;
         protected readonly ILogger logger;
 
         protected SynchronizationStep(int sortOrder, ISynchronizationService synchronizationService, ILogger logger)

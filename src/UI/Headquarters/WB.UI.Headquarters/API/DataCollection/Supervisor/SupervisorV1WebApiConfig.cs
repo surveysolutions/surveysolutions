@@ -27,6 +27,8 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor
             //            config.TypedRoute("api/supervisor/v1", c => c.Action<InterviewerApiV2Controller>(x => x.Get()));
 
             config.TypedRoute(@"api/supervisor/v1/extended", c => c.Action<SupervisorApiController>(x => x.GetSupervisor()));
+            config.TypedRoute(@"api/supervisor/v1/apk/interviewer", c => c.Action<SupervisorApiController>(x => x.GetInterviewer()));
+            config.TypedRoute(@"api/supervisor/v1/apk/interviewer-with-maps", c => c.Action<SupervisorApiController>(x => x.GetInterviewerWithMaps()));
             config.TypedRoute(@"api/supervisor/v1/extended/patch/{deviceVersion}", c => c.Action<SupervisorApiController>(x => x.Patch(Param.Any<int>())));
             config.TypedRoute("api/supervisor/v1/extended/latestversion", c => c.Action<SupervisorApiController>(x => x.GetLatestVersion()));
 
@@ -115,12 +117,6 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor
 
             // INTERVIEWERS
             config.TypedRoute("api/supervisor/v1/interviewers", c => c.Action<InterviewersApiController>(x => x.Get()));
-
-            // Interviewer updates
-            config.TypedRoute("api/supervisor/v1/updates", c => c.Action<UpdatesApiV1Controller>(x => x.Get()));
-            config.TypedRoute("api/supervisor/v1/updates/latestversion", c => c.Action<UpdatesApiV1Controller>(x => x.GetLatestVersion()));
-            config.TypedRoute("api/supervisor/v1/updates/{id}", c => c.Action<UpdatesApiV1Controller>(x => x.Patch(Param.Any<string>())));
-
         }
 
 #pragma warning restore 4014
