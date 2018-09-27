@@ -60,5 +60,9 @@ namespace WB.Services.Export.Infrastructure.Implementation
         }
 
         public string GetTempPath(string basePath) => tempPathProvider.GetTempPath(basePath);
+        public DateTime GetModificationTime(string filePath)
+            => this.IsFileExists(filePath) ? new FileInfo(filePath).LastWriteTime : DateTime.MinValue;
+
+        public long GetFileSize(string filePath) => this.IsFileExists(filePath) ? new FileInfo(filePath).Length : -1;
     }
 }

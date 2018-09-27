@@ -26,7 +26,7 @@ namespace WB.Services.Export.Questionnaire
         public QuestionnaireExportStructure GetQuestionnaireExportStructure(TenantInfo tenant,
             QuestionnaireId questionnaireId)
         {
-            var questionnaire = this.questionnaireStorage.GetQuestionnaireAsync(tenant, questionnaireId).Result;
+            var questionnaire = this.questionnaireStorage.GetQuestionnaireAsync(tenant, questionnaireId).Result; // todo make it async
             return GetQuestionnaireExportStructure(tenant, questionnaire);
         }
 

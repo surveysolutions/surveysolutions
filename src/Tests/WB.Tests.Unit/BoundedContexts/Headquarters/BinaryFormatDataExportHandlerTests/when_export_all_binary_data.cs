@@ -97,7 +97,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.BinaryFormatDataExportHandl
                     imageFileRepository: plainInterviewFileStorageMock.Object,
                     filebasedExportedDataAccessor: filebasedExportedDataAccessor.Object,
                     fileSystemAccessor: fileSystemAccessor.Object,
-                    interviewDataExportSettings: new InterviewDataExportSettings(tempFolder, true),
+                    interviewDataExportSettings: new InterviewDataExportSettings(tempFolder, true, "http://localhost"),
                     dataExportFileAccessor: dataExportFileAccessor,
                     audioFileStorage: audioFileStorage.Object,
                     plainTransactionManagerProvider: plainTransactionManagerProvider.Object,

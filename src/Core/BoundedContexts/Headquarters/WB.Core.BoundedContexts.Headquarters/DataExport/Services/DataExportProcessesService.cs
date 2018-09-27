@@ -4,20 +4,16 @@ using System.Linq;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 {
+    [Obsolete("KP-11815")]
     internal class DataExportProcessesService : IDataExportProcessesService
     {
         private readonly IAuditLog auditLog;
         private readonly ConcurrentDictionary<string, DataExportProcessDetails> processes = new ConcurrentDictionary<string, DataExportProcessDetails>();
-
-        private IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<QuestionnaireBrowseItem>>();
 
         public DataExportProcessesService(IAuditLog auditLog)
         {
@@ -42,10 +38,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         public void AddDataExport(DataExportProcessDetails details)
         {
-            var questionnaireBrowseItem = this.questionnaires.GetById(details.Questionnaire.ToString());
-            if (questionnaireBrowseItem == null)
-                throw new ArgumentException($"Questionnaire {details.Questionnaire} wasn't found");
-            
             this.EnqueueProcessIfNotYetInQueue(details);
         }
 
