@@ -54,12 +54,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Jobs
         {
             switch (storageType)
             {
-                case ExternalStorageType.OneDrive:
-                    return ServiceLocator.Current.GetInstance<OnedriveBinaryDataExportHandler>();
-                case ExternalStorageType.Dropbox:
-                    return ServiceLocator.Current.GetInstance<DropboxBinaryDataExportHandler>();
-                case ExternalStorageType.GoogleDrive:
-                    return ServiceLocator.Current.GetInstance<GoogleDriveBinaryDataExportHandler>();
+              
                 default:
                     throw new NotSupportedException($"Export handler for '{Enum.GetName(typeof(ExternalStorageType), storageType)}' not found");
             }
