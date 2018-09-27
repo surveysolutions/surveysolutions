@@ -1,11 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
-      <RuntimeIdentifier>win-x64</RuntimeIdentifier>
-      <LangVersion>7.1</LangVersion>
-      <!--<TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>-->
-      <RuntimeFrameworkVersion>2.1.4</RuntimeFrameworkVersion>
+    <TargetFramework>netstandard2.0</TargetFramework>
+      <LangVersion>7.3</LangVersion>
   </PropertyGroup>
 
 
