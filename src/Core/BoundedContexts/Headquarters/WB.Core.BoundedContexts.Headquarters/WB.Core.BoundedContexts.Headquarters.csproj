@@ -54,6 +54,7 @@
     <PackageReference Include="Ninject" Version="3.3.4" />
     <PackageReference Include="Owin" Version="1.0" />
     <PackageReference Include="Quartz" Version="2.6.1" />
+    <PackageReference Include="refit" Version="4.6.30" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="ddidotnet">

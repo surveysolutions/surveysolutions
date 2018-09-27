@@ -3,21 +3,26 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Ddi;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.UI.Headquarters.API.Filters;
 using WB.UI.Headquarters.Filters;
+using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.API
@@ -34,6 +39,8 @@ namespace WB.UI.Headquarters.API
 
         private readonly IDdiMetadataAccessor ddiMetadataAccessor;
         private readonly IExternalFileStorage externalFileStorage;
+        private readonly IPlainKeyValueStorage<ExportServiceSettings> exportServiceSettings;
+        private readonly IConfigurationManager configurationManager;
 
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly ISerializer serializer;
@@ -47,6 +54,8 @@ namespace WB.UI.Headquarters.API
             IDdiMetadataAccessor ddiMetadataAccessor,
             ISerializer serializer,
             IExternalFileStorage externalFileStorage,
+            IPlainKeyValueStorage<ExportServiceSettings> exportServiceSettings,
+            IConfigurationManager configurationManager,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory)
         {
             this.fileSystemAccessor = fileSystemAccessor;
@@ -56,6 +65,8 @@ namespace WB.UI.Headquarters.API
             this.exportedFilesAccessor = filebasedExportedDataAccessor;
             this.ddiMetadataAccessor = ddiMetadataAccessor;
             this.externalFileStorage = externalFileStorage;
+            this.exportServiceSettings = exportServiceSettings;
+            this.configurationManager = configurationManager;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.serializer = serializer;
         }
@@ -149,8 +160,14 @@ namespace WB.UI.Headquarters.API
 
         [HttpPost]
         [ObserverNotAllowedApi]
-        public DataExportStatusView GetExportStatus(Guid id, long version, InterviewStatus? status, DateTime? from = null, DateTime? to = null)
-            => this.dataExportStatusReader.GetDataExportStatusForQuestionnaire(new QuestionnaireIdentity(id, version), status, from?.ToUniversalTime(), to?.ToUniversalTime());
+        public Task<DataExportStatusView> GetExportStatus(Guid id, long version, InterviewStatus? status, DateTime? from = null, DateTime? to = null)
+            => this.dataExportStatusReader.GetDataExportStatusForQuestionnaireAsync(
+                configurationManager.AppSettings["BaseUrl"],
+                this.exportServiceSettings.GetById(AppSetting.ExportServiceStorageKey).Key, 
+                new QuestionnaireIdentity(id, version), 
+                status, 
+                fromDate: @from?.ToUniversalTime(), 
+                toDate: to?.ToUniversalTime());
 
         private HttpResponseMessage CreateFile(string filePath)
         {

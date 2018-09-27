@@ -2,6 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
 using Main.Core.Entities.SubEntities;
@@ -11,13 +12,17 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Ddi;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.UI.Headquarters.API.Filters;
 using WB.UI.Headquarters.Code;
+using WB.UI.Shared.Web.Configuration;
 
 namespace WB.UI.Headquarters.API.PublicApi
 {
@@ -33,6 +38,8 @@ namespace WB.UI.Headquarters.API.PublicApi
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IDdiMetadataAccessor ddiMetadataAccessor;
         private readonly IFilebasedExportedDataAccessor filebasedExportedDataAccessor;
+        private readonly IPlainKeyValueStorage<ExportServiceSettings> exportServiceSettings;
+        private readonly IConfigurationManager configurationManager;
         private readonly IDataExportStatusReader dataExportStatusReader;
 
         public ExportController(IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
@@ -40,6 +47,8 @@ namespace WB.UI.Headquarters.API.PublicApi
             IFileSystemAccessor fileSystemAccessor,
             IDdiMetadataAccessor ddiMetadataAccessor,
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor,
+            IPlainKeyValueStorage<ExportServiceSettings> exportServiceSettings,
+            IConfigurationManager configurationManager,
             IDataExportStatusReader dataExportStatusReader)
         {
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
@@ -47,6 +56,8 @@ namespace WB.UI.Headquarters.API.PublicApi
             this.fileSystemAccessor = fileSystemAccessor;
             this.ddiMetadataAccessor = ddiMetadataAccessor;
             this.filebasedExportedDataAccessor = filebasedExportedDataAccessor;
+            this.exportServiceSettings = exportServiceSettings;
+            this.configurationManager = configurationManager;
             this.dataExportStatusReader = dataExportStatusReader;
         }
 
@@ -179,7 +190,7 @@ namespace WB.UI.Headquarters.API.PublicApi
         [HttpGet]
         [Route(@"{exportType}/{id}/details")]
         [ResponseType(typeof(ExportDetails))]
-        public IHttpActionResult ProcessDetails(string id, DataExportFormat exportType, InterviewStatus? status = null, DateTime? from = null, DateTime? to = null)
+        public async Task<IHttpActionResult> ProcessDetails(string id, DataExportFormat exportType, InterviewStatus? status = null, DateTime? from = null, DateTime? to = null)
         {
             if (!QuestionnaireIdentity.TryParse(id, out var questionnaireIdentity))
                 return this.Content(HttpStatusCode.BadRequest, @"Invalid questionnaire identity");
@@ -188,7 +199,9 @@ namespace WB.UI.Headquarters.API.PublicApi
             if (questionnaireBrowseItem == null)
                 return this.Content(HttpStatusCode.NotFound, @"Questionnaire not found");
 
-            var allExportStatuses = this.dataExportStatusReader.GetDataExportStatusForQuestionnaire(questionnaireIdentity);
+
+            var allExportStatuses = await this.dataExportStatusReader.GetDataExportStatusForQuestionnaireAsync(configurationManager.AppSettings["BaseUrl"],
+                this.exportServiceSettings.GetById(AppSetting.ExportServiceStorageKey).Key, questionnaireIdentity);
 
             var exportStatusByExportType = allExportStatuses?.DataExports?.FirstOrDefault(x =>
                 x.DataExportFormat == exportType);

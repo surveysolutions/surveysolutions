@@ -4,6 +4,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 {
+    [Obsolete("KP-11815")]
     public interface IDataExportProcessesService
     {
         DataExportProcessDetails GetAndStartOldestUnprocessedDataExport();
