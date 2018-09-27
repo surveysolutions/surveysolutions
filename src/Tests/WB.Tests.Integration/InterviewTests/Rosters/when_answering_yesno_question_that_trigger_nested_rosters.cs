@@ -5,7 +5,9 @@ using AppDomainToolkit;
 using FluentAssertions;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Ncqrs.Spec;
 using NUnit.Framework;
+using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Tests.Abc;
 
@@ -79,12 +81,34 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
                     answeredOptions: new [] { Yes(10), Yes(20), Yes(40) }));
 
                 var sidebarViewModel = SetUp.SidebarSectionViewModel(questionnaireDocument, interview);
-                sidebarViewModel.AllVisibleSections.ElementAt(1).ToggleCommand.Execute(null);
 
-                interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(questionId: rosterSizeQuestionId,
-                    answeredOptions: new[] { Yes(10), Yes(40), Yes(30) }));
-                
-                result.FirstSectionContainsDuplicates = sidebarViewModel.AllVisibleSections.OfType<ISideBarSectionItem>().Select(x => x.SectionIdentity).Count() > 1;
+
+                using (var eventContext = new EventContext())
+                {
+                    interview.AnswerYesNoQuestion(Create.Command.AnswerYesNoQuestion(questionId: rosterSizeQuestionId,
+                        answeredOptions: new[] { Yes(10), Yes(40), Yes(30) }));
+
+                    foreach (var section in sidebarViewModel.AllVisibleSections.OfType<SideBarSectionViewModel>())
+                    {
+                        section.Handle(eventContext.GetSingleEventOrNull<RosterInstancesAdded>());
+                        section.Handle(eventContext.GetSingleEventOrNull<RosterInstancesRemoved>());
+                    }
+                }
+
+                sidebarViewModel
+                    .AllVisibleSections
+                    .OfType<SideBarSectionViewModel>()
+                    .First(x => x.SectionIdentity.Equals(Create.Identity(sectionId)))
+                    .ToggleCommand
+                    .Execute(null);
+
+                var sectionIdentities = sidebarViewModel
+                    .AllVisibleSections
+                    .OfType<SideBarSectionViewModel>()
+                    .Select(x => x.SectionIdentity)
+                    .ToList();
+
+                result.FirstSectionContainsDuplicates = sectionIdentities.Count != sectionIdentities.Distinct().Count();
 
                 return result;
             });
