@@ -5,7 +5,7 @@ namespace WB.UI.Shared.Web.Modules
 {
     public interface IWebIocRegistry : IIocRegistry
     {
-        void BindMvcFilter<T>(System.Web.Mvc.FilterScope filterScope, int? order);
+        void BindWebApiFilter<T>() where T : class, new();
 
         void BindMvcFilterWhenActionMethodHasNoAttribute<T, TAttribute>(System.Web.Mvc.FilterScope filterScope, int? order);
 
