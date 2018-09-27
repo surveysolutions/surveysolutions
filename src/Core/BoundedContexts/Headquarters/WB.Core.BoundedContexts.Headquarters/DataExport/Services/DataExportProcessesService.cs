@@ -56,8 +56,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
             return api.RequestUpdate(details.Questionnaire.ToString(), details.Format, details.InterviewStatus,
                 details.FromDate, details.ToDate,
-                archiveFileName, GetPasswordFromSettings(), apiKey, baseUrl);
-
+                archiveFileName, GetPasswordFromSettings(),
+                details.AccessToken,
+                details.StorageType,
+                apiKey, baseUrl);
         }
 
         private string GetPasswordFromSettings()

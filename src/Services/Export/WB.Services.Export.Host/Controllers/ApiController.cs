@@ -38,6 +38,8 @@ namespace WB.Services.Export.Host.Controllers
             DateTime? to, 
             string archiveName, 
             string archivePassword, 
+            string accessToken,
+            ExternalStorageType? storageType,
             string apiKey,
             [FromHeader(Name = "Origin")]string tenantBaseUrl)
         {
@@ -53,7 +55,9 @@ namespace WB.Services.Export.Host.Controllers
                 FromDate = from,
                 ToDate = to,
                 ArchivePassword = archivePassword,
-                ArchiveName = archiveName
+                ArchiveName = archiveName,
+                AccessToken = accessToken,
+                StorageType = storageType
             };
 
             exportProcessesService.AddDataExport(args);

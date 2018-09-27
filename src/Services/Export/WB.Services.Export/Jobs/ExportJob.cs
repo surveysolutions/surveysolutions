@@ -55,10 +55,10 @@ namespace WB.Services.Export.Jobs
         {
             try
             {
-                if (pendingExportProcess is ExportBinaryToExternalStorage exportToExternalStorageProcess)
+                if (pendingExportProcess.StorageType.HasValue)
                 {
-                    var handler = this.GetExternalStorageExportHandler(exportToExternalStorageProcess.StorageType);
-                    handler.ExportData(exportToExternalStorageProcess);
+                    var handler = this.GetExternalStorageExportHandler(pendingExportProcess.StorageType.Value);
+                    handler.ExportData(pendingExportProcess);
                 }
                 else
                 {
