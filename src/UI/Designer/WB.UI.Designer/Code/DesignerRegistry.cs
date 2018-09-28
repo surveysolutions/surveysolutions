@@ -52,15 +52,16 @@ namespace WB.UI.Designer.Code
 //            System.Web.Http.GlobalConfiguration.Configuration.Filters.Add(new UnderConstructionHttpFilter());
 //            System.Web.Mvc.GlobalFilters.Filters.Add(new UnderConstructionMvcFilter());
 //            System.Web.Mvc.GlobalFilters.Filters.Add(new TransactionFilter());
-            registry.Bind<ApiTransactionFilter>();
-            registry.Bind<UnderConstructionHttpFilter>();
-            registry.Bind<UnderConstructionMvcFilter>();
-            registry.Bind<TransactionFilter>();
+//            registry.Bind<ApiTransactionFilter>();
+//            registry.Bind<UnderConstructionHttpFilter>();
+//            registry.Bind<UnderConstructionMvcFilter>();
+//            registry.Bind<TransactionFilter>();
 
-            //            registry.BindHttpFilter<UnderConstructionHttpFilter>(System.Web.Http.Filters.FilterScope.Controller, 0);
-            //            registry.BindMvcFilter<UnderConstructionMvcFilter>(FilterScope.First, 0);
-            //            registry.BindMvcFilterWhenActionMethodHasNoAttribute<TransactionFilter, NoTransactionAttribute>(FilterScope.First, 1);
-            //            registry.BindHttpFilterWhenActionMethodHasNoAttribute<ApiTransactionFilter, NoTransactionAttribute>(System.Web.Http.Filters.FilterScope.Global, 1);
+            //registry.BindWebApiFilter<ApiTransactionFilter>();
+            registry.BindMvcFilter<UnderConstructionMvcFilter>();
+            registry.BindWebApiFilter<UnderConstructionHttpFilter>(/*System.Web.Http.Filters.FilterScope.Controller, 0*/);
+            registry.BindMvcFilterWhenActionMethodHasNoAttribute<TransactionFilter, NoTransactionAttribute>(FilterScope.First, 1);
+            registry.BindWebApiFilterWhenActionMethodHasNoAttribute<ApiTransactionFilter, NoTransactionAttribute>(System.Web.Http.Filters.FilterScope.Global, 1);
 
 
 
@@ -85,10 +86,10 @@ namespace WB.UI.Designer.Code
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
-            System.Web.Http.GlobalConfiguration.Configuration.Filters.Add(serviceLocator.GetInstance<ApiTransactionFilter>());
-            System.Web.Http.GlobalConfiguration.Configuration.Filters.Add(serviceLocator.GetInstance<UnderConstructionHttpFilter>());
-            System.Web.Mvc.GlobalFilters.Filters.Add(serviceLocator.GetInstance<UnderConstructionMvcFilter>());
-            System.Web.Mvc.GlobalFilters.Filters.Add(serviceLocator.GetInstance<TransactionFilter>());
+//            System.Web.Http.GlobalConfiguration.Configuration.Filters.Add(serviceLocator.GetInstance<ApiTransactionFilter>());
+//            System.Web.Http.GlobalConfiguration.Configuration.Filters.Add(serviceLocator.GetInstance<UnderConstructionHttpFilter>());
+//            System.Web.Mvc.GlobalFilters.Filters.Add(serviceLocator.GetInstance<UnderConstructionMvcFilter>());
+//            System.Web.Mvc.GlobalFilters.Filters.Add(serviceLocator.GetInstance<TransactionFilter>());
 
             return Task.CompletedTask;
         }

@@ -14,13 +14,13 @@ using WB.UI.Shared.Web.Settings;
 
 namespace WB.UI.Designer.App_Start
 {
-    public class NinjectWebCommonModule : IWebModule
+    public class AutofacWebCommonModule : IWebModule
     {
         public void Load(IWebIocRegistry registry)
         {
             registry.Bind<IAggregateRootCacheCleaner, DummyAggregateRootCacheCleaner>();
 
-            registry.BindHttpFilterWhenControllerHasAttribute<TokenValidationAuthorizationFilter, ApiValidationAntiForgeryTokenAttribute>(
+            registry.BindWebApiFilterWhenControllerHasAttribute<TokenValidationAuthorizationFilter, ApiValidationAntiForgeryTokenAttribute>(
                 FilterScope.Controller,
                 new ConstructorArgument("tokenVerifier", _ => new ApiValidationAntiForgeryTokenVerifier()));
 

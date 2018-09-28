@@ -92,7 +92,7 @@ namespace WB.UI.Designer.App_Start
             kernel.Load(
                 new DesignerRegistry(pdfSettings, deskSettings, settingsProvider.AppSettings.GetInt("QuestionnaireChangeHistoryLimit", 500)),
                 new DesignerWebModule(),
-                new NinjectWebCommonModule()
+                new AutofacWebCommonModule()
                 );
 
             //var config = new HttpConfiguration();
@@ -105,7 +105,7 @@ namespace WB.UI.Designer.App_Start
             kernel.ContainerBuilder.RegisterControllers(Assembly.GetExecutingAssembly());
             kernel.ContainerBuilder.RegisterApiControllers(Assembly.GetExecutingAssembly());
 
-            //kernel.ContainerBuilder.RegisterWebApiFilterProvider(config);
+            kernel.ContainerBuilder.RegisterWebApiFilterProvider(config);
             //kernel.ContainerBuilder.RegisterWebApiModelBinderProvider();
 
             //temp logging

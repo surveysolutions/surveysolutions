@@ -179,6 +179,12 @@
     <Compile Include="Captcha\CaptchaModule.cs" />
     <Compile Include="Modules\ApiControllerExtensions.cs" />
     <Compile Include="Modules\AutofacWebModuleAdapter.cs" />
+    <Compile Include="Modules\Filters\AutofacActionFilter.cs" />
+    <Compile Include="Modules\Filters\WebApiAuthorizationFilter.cs" />
+    <Compile Include="Modules\Filters\WebApiAuthorizationFilterWhenActionMethodHasNoAttribute.cs" />
+    <Compile Include="Modules\Filters\AutofacExceptionFilter.cs" />
+    <Compile Include="Modules\Filters\WebApiExceptionFilterWhenActionMethodHasNoAttribute.cs" />
+    <Compile Include="Modules\Filters\AutofacActionFilterWhenActionMethodHasNoAttribute.cs" />
     <Compile Include="Modules\IWebIocRegistry.cs" />
     <Compile Include="Modules\IWebModule.cs" />
     <Compile Include="Modules\AutofacModuleExtensions.cs" />
