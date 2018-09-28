@@ -144,9 +144,16 @@ namespace WB.UI.Shared.Enumerator.Services.Internals.FileSystem
             File.WriteAllBytes(pathToFile, content);
         }
 
-        public byte[] ReadAllBytes(string pathToFile)
+        public byte[] ReadAllBytes(string pathToFile, long? start = null, long? length = null)
         {
-            return File.ReadAllBytes(pathToFile);
+            if (start != null)
+            {
+                using (var reader = File.OpenRead(pathToFile))
+                {
+                    return reader.ReadExactly(start.Value, length);
+                }
+            }
+            else return File.ReadAllBytes(pathToFile);
         }
 
         public string ReadAllText(string fileName)

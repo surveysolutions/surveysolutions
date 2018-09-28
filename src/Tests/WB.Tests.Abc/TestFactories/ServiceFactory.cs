@@ -208,7 +208,7 @@ namespace WB.Tests.Abc.TestFactories
             IInterviewSummaryViewFactory interviewSummaryViewFactory = null)
             => new InterviewAnswersCommandValidator(
                 interviewSummaryViewFactory ?? Mock.Of<IInterviewSummaryViewFactory>());
-        
+
         public InterviewerInterviewAccessor InterviewerInterviewAccessor(
             IPlainStorage<InterviewView> interviewViewRepository = null,
             IEnumeratorEventStorage eventStore = null,
@@ -259,7 +259,7 @@ namespace WB.Tests.Abc.TestFactories
                 eventBusSettings: eventBusSettings ?? Create.Entity.EventBusSettings(),
                 logger: logger ?? Mock.Of<ILogger>(),
                 eventHandlers: handlers);
-        
+
         public QuestionnaireKeyValueStorage QuestionnaireKeyValueStorage(
             IPlainStorage<QuestionnaireDocumentView> questionnaireDocumentViewRepository = null)
             => new QuestionnaireKeyValueStorage(
@@ -503,7 +503,7 @@ namespace WB.Tests.Abc.TestFactories
                 assignmentsRepository ?? Create.Storage.AssignmentDocumentsInmemoryStorage(),
                 questionnaireDownloader ?? Mock.Of<IQuestionnaireDownloader>(),
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
-                new AssignmentDocumentFromDtoBuilder( 
+                new AssignmentDocumentFromDtoBuilder(
                 Mock.Of<IAnswerToStringConverter>(),
                 Mock.Of<IInterviewAnswerSerializer>()),
                 interviewViewRepository ?? Mock.Of<IPlainStorage<InterviewView>>(),
@@ -694,7 +694,7 @@ namespace WB.Tests.Abc.TestFactories
                 Create.Service.PlainPostgresTransactionManager());
         }
 
-        public AssignmentsImportFileConverter AssignmentsImportFileConverter(IFileSystemAccessor fs = null, IUserViewFactory userViewFactory = null) 
+        public AssignmentsImportFileConverter AssignmentsImportFileConverter(IFileSystemAccessor fs = null, IUserViewFactory userViewFactory = null)
             => new AssignmentsImportFileConverter(fs ?? Create.Service.FileSystemIOAccessor(), userViewFactory ?? Mock.Of<IUserViewFactory>());
 
         public AssignmentsImportReader AssignmentsImportReader(ICsvReader csvReader = null,
@@ -735,9 +735,9 @@ namespace WB.Tests.Abc.TestFactories
 
         public NearbyCommunicator NearbyConnectionManager(IRequestHandler requestHandler = null, int maxBytesLength = 0)
         {
-            return new NearbyCommunicator(requestHandler ?? Mock.Of<IRequestHandler>(), 
-                Create.Fake.PayloadProvider(), 
-                new PayloadSerializer(new JsonAllTypesSerializer()), Mock.Of<IConnectionsApiLimits>( c => c.MaxBytesLength == maxBytesLength), Mock.Of<ILogger>());
+            return new NearbyCommunicator(requestHandler ?? Mock.Of<IRequestHandler>(),
+                Create.Fake.PayloadProvider(),
+                new PayloadSerializer(new JsonAllTypesSerializer()), Mock.Of<IConnectionsApiLimits>(c => c.MaxBytesLength == maxBytesLength), Mock.Of<ILogger>());
         }
 
         public NearbyConnectionsRequestHandler GoogleConnectionsRequestHandler()
@@ -748,7 +748,7 @@ namespace WB.Tests.Abc.TestFactories
         private static IQueryable<TEntity> GetNhQueryable<TEntity>() => Mock.Of<IQueryable<TEntity>>(x => x.Provider == Mock.Of<INhQueryProvider>());
 
         public OfflineSynchronizationService OfflineSynchronizationService(
-            IOfflineSyncClient offlineSyncClient = null, 
+            IOfflineSyncClient offlineSyncClient = null,
             IInterviewerPrincipal interviewerPrincipal = null,
             IInterviewerQuestionnaireAccessor questionnaireAccessor = null,
             IDeviceSettings deviceSettings = null)
@@ -756,7 +756,7 @@ namespace WB.Tests.Abc.TestFactories
             return new OfflineSynchronizationService(
                 offlineSyncClient ?? Mock.Of<IOfflineSyncClient>(),
                 interviewerPrincipal ?? Mock.Of<IInterviewerPrincipal>(),
-                Mock.Of< IInterviewerQuestionnaireAccessor>(),
+                Mock.Of<IInterviewerQuestionnaireAccessor>(),
                 Mock.Of<IPlainStorage<InterviewView>>(),
                 Mock.Of<IEnumeratorSettings>(),
                 deviceSettings: deviceSettings ?? Mock.Of<IDeviceSettings>());
@@ -781,15 +781,15 @@ namespace WB.Tests.Abc.TestFactories
             IPlainStorage<BrokenInterviewPackageView, int?> brokenInterviewStorage = null,
             IPrincipal principal = null,
             IPlainStorage<InterviewerDocument> interviewerViewRepository = null,
-            IPlainStorage<SuperivsorReceivedPackageLogEntry, int> receivedPackagesLog= null,
+            IPlainStorage<SuperivsorReceivedPackageLogEntry, int> receivedPackagesLog = null,
             IAssignmentDocumentsStorage assignments = null)
         {
             return new SupervisorInterviewsHandler(
                 eventBus ?? Mock.Of<ILiteEventBus>(),
                 eventStorage ?? Mock.Of<IEnumeratorEventStorage>(),
                 interviews ?? new InMemoryPlainStorage<InterviewView>(),
-                serializer ?? Mock.Of<IJsonAllTypesSerializer>(s => s.Deserialize<AggregateRootEvent[]>(It.IsAny<string>()) == new AggregateRootEvent[]{}),// new JsonAllTypesSerializer(),
-                commandService ?? Mock.Of<ICommandService>(), 
+                serializer ?? Mock.Of<IJsonAllTypesSerializer>(s => s.Deserialize<AggregateRootEvent[]>(It.IsAny<string>()) == new AggregateRootEvent[] { }),// new JsonAllTypesSerializer(),
+                commandService ?? Mock.Of<ICommandService>(),
                 Mock.Of<ILogger>(),
                 brokenInterviewStorage ?? Mock.Of<IPlainStorage<BrokenInterviewPackageView, int?>>(),
                 receivedPackagesLog ?? new SqliteInmemoryStorage<SuperivsorReceivedPackageLogEntry, int>(),
@@ -809,14 +809,19 @@ namespace WB.Tests.Abc.TestFactories
                                                     Create.Storage.AssignmentDocumentsInmemoryStorage());
         }
 
+        public InterviewerUpdateHandler InterviewerUpdateHandler(IFileSystemAccessor fileSystemAccessor, ISupervisorSettings settings)
+        {
+            return new InterviewerUpdateHandler(fileSystemAccessor, settings);
+        }
+
         public InterviewerDownloadInterviews InterviewerDownloadInterviews(
             ISynchronizationService synchronizationService = null,
-            IQuestionnaireDownloader questionnaireDownloader = null, 
-            IPlainStorage<InterviewSequenceView, Guid> interviewSequenceViewRepository = null, 
-            IPlainStorage<InterviewView> interviewViewRepository = null, 
-            ILiteEventBus eventBus = null, 
-            IEnumeratorEventStorage eventStore = null, 
-            ILogger logger = null, 
+            IQuestionnaireDownloader questionnaireDownloader = null,
+            IPlainStorage<InterviewSequenceView, Guid> interviewSequenceViewRepository = null,
+            IPlainStorage<InterviewView> interviewViewRepository = null,
+            ILiteEventBus eventBus = null,
+            IEnumeratorEventStorage eventStore = null,
+            ILogger logger = null,
             IInterviewsRemover interviewsRemover = null)
         {
             var interviewerDownloadInterviews = new InterviewerDownloadInterviews(
@@ -840,8 +845,8 @@ namespace WB.Tests.Abc.TestFactories
         }
 
         public CensusQuestionnairesSynchronization CensusQuestionnairesSynchronization(
-            IInterviewerSynchronizationService synchronizationService = null, 
-            IInterviewerQuestionnaireAccessor questionnairesAccessor = null, 
+            IInterviewerSynchronizationService synchronizationService = null,
+            IInterviewerQuestionnaireAccessor questionnairesAccessor = null,
             IQuestionnaireDownloader questionnaireDownloader = null)
         {
             var censusQuestionnairesSynchronization = new CensusQuestionnairesSynchronization(
@@ -896,7 +901,7 @@ namespace WB.Tests.Abc.TestFactories
             int sortOrder = 0,
             IPlainStorage<InterviewView> interviewViewRepository = null)
         {
-            var step =  new InterviewerUploadInterviews(
+            var step = new InterviewerUploadInterviews(
                 interviewFactory ?? Mock.Of<IInterviewerInterviewAccessor>(),
                 interviewMultimediaViewStorage ?? new InMemoryPlainStorage<InterviewMultimediaView>(),
                 logger ?? Mock.Of<ILogger>(),

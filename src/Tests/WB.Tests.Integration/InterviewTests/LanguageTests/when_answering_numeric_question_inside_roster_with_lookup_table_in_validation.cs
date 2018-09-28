@@ -22,7 +22,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
         public void BecauseOf() =>
             result = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
-                Setup.MockedServiceLocator();
+                SetUp.MockedServiceLocator();
 
                 var questionnaireId = Guid.Parse("ffffffffffffffffffffffffffffffff");
                 var questionA = Guid.Parse("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
@@ -40,7 +40,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
                 var lookupTableServiceMock = new Mock<ILookupTableService>();
                 lookupTableServiceMock.SetReturnsDefault(lookupTableContent);
 
-                Setup.InstanceToMockedServiceLocator<ILookupTableService>(lookupTableServiceMock.Object);
+                SetUp.InstanceToMockedServiceLocator<ILookupTableService>(lookupTableServiceMock.Object);
 
                 var assetsTitles = new[]
                 {

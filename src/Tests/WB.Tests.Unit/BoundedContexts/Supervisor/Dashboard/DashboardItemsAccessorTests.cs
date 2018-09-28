@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using Moq;
+using MvvmCross.Tests;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Items;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard.Services;
@@ -20,8 +21,15 @@ using WB.Tests.Abc.Storage;
 namespace WB.Tests.Unit.BoundedContexts.Supervisor.Dashboard
 {
     [TestOf(typeof(DashboardItemsAccessor))]
-    public class DashboardItemsAccessorTests
+    public class DashboardItemsAccessorTests : MvxIoCSupportingTest
     {
+        [OneTimeSetUp]
+        public void SetUp()
+        {
+            base.Setup();
+            Ioc.RegisterSingleton(Stub.MvxMainThreadAsyncDispatcher());
+        }
+
         [Test]
         public void should_show_items_with_filled_received_at_date_in_the_sent_box()
         {
