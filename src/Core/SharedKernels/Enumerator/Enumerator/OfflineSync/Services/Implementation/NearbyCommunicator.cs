@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Reactive.Linq;
 using System.Reactive.Subjects;
 using System.Threading;
@@ -156,7 +157,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             }
         }
 
-        public async Task RecievePayloadAsync(INearbyConnection nearbyConnection, string endpoint, IPayload payload)
+        public async Task ReceivePayloadAsync(INearbyConnection nearbyConnection, string endpoint, IPayload payload)
         {
             incomingPayloads.GetOrAdd(payload.Id, payload);
 
@@ -194,7 +195,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             }
         }
 
-        public async void RecievePayloadTransferUpdate(INearbyConnection connection, string endpoint,
+        public async void ReceivePayloadTransferUpdate(INearbyConnection connection, string endpoint,
             NearbyPayloadTransferUpdate update)
         {
             var isIncoming = false;
@@ -209,7 +210,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             }
             else
             {
-                throw new ApplicationException("Recieve payload transfer update before RecievePayload call");
+                throw new ApplicationException("Receive payload transfer update before ReceivePayload call");
             }
 
             PayloadHeader header;
@@ -421,6 +422,8 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             public ICommunicationMessage Payload { get; }
         }
 
+        [SuppressMessage("ReSharper", "MemberCanBePrivate.Local")]
+        [SuppressMessage("ReSharper", "UnusedAutoPropertyAccessor.Local")]
         private class PayloadHeader
         {
             // ReSharper disable once UnusedMember.Local - used by Newtonsoft.Json

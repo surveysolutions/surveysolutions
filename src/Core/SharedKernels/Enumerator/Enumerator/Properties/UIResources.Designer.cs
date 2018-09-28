@@ -1467,7 +1467,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to If interviewers don&apos;t have an access to the internet, this functionality should be enabled, because it make possibility to update their applications diring offline synchronization with Supervisor application.
+        ///   Looks up a localized string similar to If interviewers don&apos;t have an access to the internet, this functionality should be enabled, because it make possibility to update their applications during offline synchronization with Supervisor application.
         /// </summary>
         public static string Prefs_DownloadUpdatesForInterviewerAppSummary {
             get {

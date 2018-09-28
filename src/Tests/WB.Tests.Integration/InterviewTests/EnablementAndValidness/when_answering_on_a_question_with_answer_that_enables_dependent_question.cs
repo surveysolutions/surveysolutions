@@ -25,7 +25,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 
         public void BecauseOf() => results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
         {
-            Setup.MockedServiceLocator();
+            SetUp.MockedServiceLocator();
 
             var answeredQuestionId = Guid.Parse("11111111111111111111111111111111");
             var dependentQuestionId = Guid.Parse("22222222222222222222222222222222");

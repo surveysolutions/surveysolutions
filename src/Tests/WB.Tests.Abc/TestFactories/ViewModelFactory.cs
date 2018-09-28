@@ -354,11 +354,13 @@ namespace WB.Tests.Abc.TestFactories
                 .Returns((Func<SideBarSectionViewModel>) SideBarSectionViewModel);
             Setup.InstanceToMockedServiceLocator(Mock.Of<InterviewStateViewModel>());
 
+
             var sidebarViewModel = new SideBarSectionsViewModel(
                 statefulInterviewRepository: interviewsRepository,
                 questionnaireRepository: questionnaireRepository,
                 modelsFactory: sideBarSectionViewModelsFactory,
-                eventRegistry: liteEventRegistry);
+                eventRegistry: liteEventRegistry,
+                mainThreadDispatcher: Stub.MvxMainThreadAsyncDispatcher());
 
             sidebarViewModel.Init("", navigationState);
 

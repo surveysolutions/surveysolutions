@@ -20,7 +20,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
         public void BecauseOf() =>
            result = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
            {
-               Setup.MockedServiceLocator();
+               SetUp.MockedServiceLocator();
 
                var userId = Guid.NewGuid();
 

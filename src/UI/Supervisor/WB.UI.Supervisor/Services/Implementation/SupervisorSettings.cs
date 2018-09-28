@@ -67,7 +67,7 @@ namespace WB.UI.Supervisor.Services.Implementation
         public string InterviewerApplicationsDirectory =>
             this.fileSystemAccessor.CombinePath(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "patches");
 
-        public bool DownloadUpdatesForInterviewerApp => this.currentSettings.DownloadUpdatesForInterviewerApp;
+        public bool DownloadUpdatesForInterviewerApp => this.currentSettings.DownloadUpdatesForInterviewerApp ?? true;
 
         public void SetDownloadUpdatesForInterviewerApp(bool downloadUpdatesForInterviewerApp) 
             => this.SaveCurrentSettings(settings => settings.DownloadUpdatesForInterviewerApp = downloadUpdatesForInterviewerApp);

@@ -1,12 +1,10 @@
 ﻿using System.Diagnostics;
+using System.Threading.Tasks;
 using MvvmCross;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views;
-using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.Enumerator.Denormalizer;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -28,31 +26,31 @@ namespace WB.UI.Interviewer
             //base.ResetStart();
         }
 
-        protected override void Startup(object hint = null)
+        protected override async Task<object> ApplicationStartup(object hint = null)
         {
-            Mvx.Resolve<InterviewDashboardEventHandler>();
+            Mvx.IoCProvider.Resolve<InterviewDashboardEventHandler>();
 
-            var logger = Mvx.Resolve<ILoggerProvider>().GetFor<InterviewerAppStart>();
+            var logger = Mvx.IoCProvider.Resolve<ILoggerProvider>().GetFor<InterviewerAppStart>();
             logger.Warn($"Application started. Version: {typeof(SplashActivity).Assembly.GetName().Version}");
 
             this.BackwardCompatibility();
            
-            base.Startup(hint);
+            return await base.ApplicationStartup(hint);
         }
 
-        protected override void NavigateToFirstViewModel(object hint = null)
+        protected override async Task NavigateToFirstViewModel(object hint = null)
         {
-            var viewModelNavigationService = Mvx.Resolve<IViewModelNavigationService>();
-            var interviewersPlainStorage = Mvx.Resolve<IPlainStorage<InterviewerIdentity>>();
+            var viewModelNavigationService = Mvx.IoCProvider.Resolve<IViewModelNavigationService>();
+            var interviewersPlainStorage = Mvx.IoCProvider.Resolve<IPlainStorage<InterviewerIdentity>>();
             InterviewerIdentity currentInterviewer = interviewersPlainStorage.FirstOrDefault();
 
             if (currentInterviewer == null)
             {
-                viewModelNavigationService.NavigateToFinishInstallationAsync().WaitAndUnwrapException();
+                await viewModelNavigationService.NavigateToFinishInstallationAsync();
             }
             else
             {
-                viewModelNavigationService.NavigateToLoginAsync().WaitAndUnwrapException();
+                await viewModelNavigationService.NavigateToLoginAsync();
             }
         }
 
@@ -66,13 +64,13 @@ namespace WB.UI.Interviewer
 
         private void UpdateAssignmentsWithInterviewsCount()
         {
-            var assignmentStorage = Mvx.Resolve<IAssignmentDocumentsStorage>();
+            var assignmentStorage = Mvx.IoCProvider.Resolve<IAssignmentDocumentsStorage>();
 
             var hasEmptyInterviewsCounts = assignmentStorage.Count(x => x.CreatedInterviewsCount == null) > 0;
             
             if (!hasEmptyInterviewsCounts) return;
 
-            var interviewStorage = Mvx.Resolve<IPlainStorage<InterviewView>>();
+            var interviewStorage = Mvx.IoCProvider.Resolve<IPlainStorage<InterviewView>>();
             
             var assignments = assignmentStorage.LoadAll();
 
@@ -85,7 +83,7 @@ namespace WB.UI.Interviewer
 
         private void AddTitleToOptionViewForSearching()
         {
-            var optionsStorage = Mvx.Resolve<IPlainStorage<OptionView>>();
+            var optionsStorage = Mvx.IoCProvider.Resolve<IPlainStorage<OptionView>>();
 
             var hasEmptySearchTitles = optionsStorage.Count(x => x.SearchTitle == null) > 0;
             if (!hasEmptySearchTitles) return;
