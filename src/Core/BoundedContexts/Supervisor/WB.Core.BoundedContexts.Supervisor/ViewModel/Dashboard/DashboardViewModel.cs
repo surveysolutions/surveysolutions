@@ -55,7 +55,7 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard
             messengerSubscribtion = messenger.Subscribe<RequestSynchronizationMsg>(msg => SynchronizationCommand.Execute());
         }
 
-        private void OnAfterNavigate(object sender, NavigateEventArgs args)
+        private void OnAfterNavigate(object sender, IMvxNavigateEventArgs args)
         {
             if (args.ViewModel is InterviewTabPanel interviewTabPanel)
             {

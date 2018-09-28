@@ -26,7 +26,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
 
         public void BecauseOf() => result = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
         {
-            Setup.MockedServiceLocator();
+            SetUp.MockedServiceLocator();
 
             Guid fixed1 = Guid.Parse("11111111111111111111111111111111");
             Guid fixed2 = Guid.Parse("22222222222222222222222222222222");

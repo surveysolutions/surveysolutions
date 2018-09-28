@@ -17,7 +17,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
         public void BecauseOf() =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
-                Setup.MockedServiceLocator();
+                SetUp.MockedServiceLocator();
                 
                 var questionnaireId = Guid.Parse("77778888000000000000000000000000");
                 var groupId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDDDDDDDDDDDD");
