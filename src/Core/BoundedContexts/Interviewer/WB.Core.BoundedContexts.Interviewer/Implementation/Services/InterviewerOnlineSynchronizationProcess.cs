@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly IInterviewerPrincipal principal;
         private readonly IPlainStorage<InterviewerIdentity> interviewersPlainStorage;
         private readonly IPasswordHasher passwordHasher;
-        private readonly IInterviewerSynchronizationService interviewerSynchronizationService;
+        private readonly IInterviewerSynchronizationService synchronizationService;
 
         public InterviewerOnlineSynchronizationProcess(
             IOnlineSynchronizationService synchronizationService,
@@ -41,18 +41,18 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.principal = principal;
             this.interviewersPlainStorage = interviewersPlainStorage;
             this.passwordHasher = passwordHasher;
-            this.interviewerSynchronizationService = interviewerSynchronizationService;
+            this.synchronizationService = synchronizationService;
         }
 
         protected override async Task CheckAfterStartSynchronization(CancellationToken cancellationToken)
         {
-            var currentSupervisorId = await this.interviewerSynchronizationService.GetCurrentSupervisor(token: cancellationToken, credentials: this.RestCredentials);
+            var currentSupervisorId = await this.synchronizationService.GetCurrentSupervisor(token: cancellationToken, credentials: this.RestCredentials);
             if (currentSupervisorId != this.principal.CurrentUserIdentity.SupervisorId)
             {
                 this.UpdateSupervisorOfInterviewer(currentSupervisorId);
             }
 
-            var interviewer = await this.interviewerSynchronizationService.GetInterviewerAsync(this.RestCredentials, token: cancellationToken).ConfigureAwait(false);
+            var interviewer = await this.synchronizationService.GetInterviewerAsync(this.RestCredentials, token: cancellationToken).ConfigureAwait(false);
             this.UpdateSecurityStampOfInterviewer(interviewer.SecurityStamp);
         }
 
