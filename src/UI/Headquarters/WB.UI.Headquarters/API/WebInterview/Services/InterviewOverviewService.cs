@@ -37,7 +37,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
             var staticText = interview.GetStaticText(identity);
             if (staticText != null)
             {
-                return new OverviewItemAdditionalInfo(staticText, interview, currentUserId);
+                return new OverviewItemAdditionalInfo(staticText, interview);
             }
 
             return null;
