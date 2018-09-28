@@ -942,7 +942,6 @@
     </Content>
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <EmbeddedResource Include="Migrations\ReadSide\M001-100\interview_update.sql" />
-    <Content Include="readme.txt" />
     <Content Include="Scripts\bloodhound.js" />
     <Content Include="Scripts\bootbox.js" />
     <Content Include="Scripts\bootbox.min.js" />
