@@ -162,6 +162,10 @@ namespace WB.Core.BoundedContexts.Designer.Translations
                         this.translations.Flush();
                     }
                 }
+                catch (NullReferenceException e)
+                {
+                    throw new InvalidExcelFileException(ExceptionMessages.TranslationsCantBeExtracted, e);
+                }
                 catch (InvalidDataException e)
                 {
                     throw new InvalidExcelFileException(ExceptionMessages.TranslationsCantBeExtracted, e);
