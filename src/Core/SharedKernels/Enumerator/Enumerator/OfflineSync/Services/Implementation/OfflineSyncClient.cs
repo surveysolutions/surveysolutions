@@ -73,9 +73,9 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
 
                 content = content ?? new byte[response.Total];
                 
-                Array.Copy(response.Content, 0, content, response.Skip, response.Length);
+                Array.Copy(response.Content, 0, content, response.Skipped, response.Length);
 
-                request.Skip = response.Skip + response.Length;
+                request.Skip = response.Skipped + response.Length;
 
             } while (request.Skip < response.Total);
 

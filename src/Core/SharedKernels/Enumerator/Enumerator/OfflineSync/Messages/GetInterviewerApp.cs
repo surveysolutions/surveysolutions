@@ -19,7 +19,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Messages
     public class GetInterviewerAppResponse : IChunkedByteArrayResponse
     {
         public byte[] Content { get; set; }
-        public long Skip { get; set; }
+        public long Skipped { get; set; }
         public int Length { get; set; }
         public long Total { get; set; }
     }

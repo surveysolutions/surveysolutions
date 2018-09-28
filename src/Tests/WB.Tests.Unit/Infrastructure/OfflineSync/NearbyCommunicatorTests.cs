@@ -2,11 +2,9 @@
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
-using Moq;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
-using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation;
 using WB.Tests.Abc;
@@ -48,14 +46,14 @@ namespace WB.Tests.Unit.Infrastructure.OfflineSync
                 var id = Guid.NewGuid();
 
                 var response = await client.SendAsync<PingMessage, PongMessage>(clientCommunicator, "server",
-                    new PingMessage {Id = id}, null, CancellationToken.None);
+                    new PingMessage { Id = id }, null, CancellationToken.None);
 
                 Assert.That(response.Id, Is.EqualTo(id), "Ensure that we indeed handle proper request");
                 Assert.That(CommunicationSession.Current.RequestsTotal, Is.EqualTo(expectedRequestsCount));
             }
         }
 
-        
+
         //[TestCase(5, 0, 0, Description = "Should timeout before SV even recieve package")]
         //[TestCase(0, 5, 0, Description = "Should timeout after SV recieve package")]
         //[TestCase(0, 0, 5, Description = "Should timeout before success packages received by SV")]
