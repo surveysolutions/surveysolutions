@@ -14,14 +14,14 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
         public static readonly string UnitOfWorkScope = "unitOfWork";
 
 
-        protected AsyncLocal<List<ILifetimeScope>> containers = new AsyncLocal<List<ILifetimeScope>>(); 
+        protected AsyncLocal<Stack<ILifetimeScope>> containers = new AsyncLocal<Stack<ILifetimeScope>>(); 
 
         protected readonly ILifetimeScope rootScope;
 
         public AutofacServiceLocatorAdapterWithChildrenScopes(ILifetimeScope rootScope)
         {
             this.rootScope = rootScope;
-            this.containers.Value = new List<ILifetimeScope>();
+            this.containers.Value = new Stack<ILifetimeScope>();
         }
 
         protected override object DoGetInstance(Type serviceType, string key)
@@ -57,20 +57,23 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
 
             var childLifetimeScope = container.BeginLifetimeScope(UnitOfWorkScope);
             if (containers.Value == null)
-                containers.Value = new List<ILifetimeScope>();
-            containers.Value.Add(childLifetimeScope);
+                containers.Value = new Stack<ILifetimeScope>();
+            containers.Value.Push(childLifetimeScope);
             return childLifetimeScope;
         }
 
         public void CloseScopeAndChildrenScopes(ILifetimeScope scope)
         {
-            var index = containers.Value.FindIndex(s => s == scope);
+            var scopeFromStack = containers.Value.FirstOrDefault(s => s == scope);
 
-            if (index >= 0)
+            if (scopeFromStack != null)
             {
-                var count = containers.Value.Count;
-                containers.Value.Skip(index).ForEach(l => l.Dispose());
-                containers.Value.RemoveRange(index, count - index);
+                do
+                {
+                    scopeFromStack = containers.Value.Pop();
+                    scopeFromStack.Dispose();
+                } while (scopeFromStack != scope);
+
                 return;
             }
 
@@ -79,8 +82,11 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
 
         public void CloseAllChildrenScopes()
         {
-            containers.Value?.ForEach(l => l.Dispose());
-            containers.Value?.Clear();
+            while (containers.Value.Count > 0)
+            {
+                var scope = containers.Value.Pop();
+                scope.Dispose();
+            }
         }
 
         public ILifetimeScope GetCurrentScope()
