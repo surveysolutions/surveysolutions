@@ -19,7 +19,7 @@ namespace WB.Tests.Integration
         [OneTimeSetUp]
         public void OnAssemblyStart()
         {
-            Setup.MockedServiceLocator();
+            SetUp.MockedServiceLocator();
         }
 
         public void OnAssemblyComplete() { }
@@ -35,12 +35,12 @@ namespace WB.Tests.Integration
 
             ServiceLocator.SetLocatorProvider(() => serviceLocator);
 
-            Setup.InstanceToMockedServiceLocator<ISubstitutionService>(new SubstitutionService());
-            Setup.InstanceToMockedServiceLocator<IKeywordsProvider>(new KeywordsProvider(new SubstitutionService()));
-            Setup.InstanceToMockedServiceLocator<IFileSystemAccessor>(new FileSystemIOAccessor());
+            SetUp.InstanceToMockedServiceLocator<ISubstitutionService>(new SubstitutionService());
+            SetUp.InstanceToMockedServiceLocator<IKeywordsProvider>(new KeywordsProvider(new SubstitutionService()));
+            SetUp.InstanceToMockedServiceLocator<IFileSystemAccessor>(new FileSystemIOAccessor());
 
-            Setup.InstanceToMockedServiceLocator<ILogger>(Mock.Of<ILogger>());
-            Setup.InstanceToMockedServiceLocator<IClock>(Mock.Of<IClock>());
+            SetUp.InstanceToMockedServiceLocator<ILogger>(Mock.Of<ILogger>());
+            SetUp.InstanceToMockedServiceLocator<IClock>(Mock.Of<IClock>());
         }
 
         internal static class Stub<T> where T : class

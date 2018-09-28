@@ -16,7 +16,7 @@ namespace WB.Tests.Integration.InterviewTests.AudioQuestion
         [Test]
         public void should_mark_static_text_as_valid_after_answering_audio_question()
         {
-            Setup.MockedServiceLocator();
+            SetUp.MockedServiceLocator();
 
             var audioId = Guid.Parse("11111111111111111111111111111111");
             var staticId = Guid.Parse("22222222222222222222222222222222");
@@ -46,7 +46,7 @@ namespace WB.Tests.Integration.InterviewTests.AudioQuestion
         [Test]
         public void should_mark_static_text_as_invalid_for_created_interview()
         {
-            Setup.MockedServiceLocator();
+            SetUp.MockedServiceLocator();
 
             var audioId = Guid.Parse("11111111111111111111111111111111");
             var staticId = Guid.Parse("22222222222222222222222222222222");
