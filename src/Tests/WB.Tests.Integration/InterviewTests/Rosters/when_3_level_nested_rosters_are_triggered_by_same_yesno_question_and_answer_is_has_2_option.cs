@@ -21,7 +21,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
         private void BecauseOf() =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
-                Setup.MockedServiceLocator();
+                SetUp.MockedServiceLocator();
 
                 var questionnaireId = Guid.Parse("77778888000000000000000000000000");
                 var rosterSizeQuestionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");

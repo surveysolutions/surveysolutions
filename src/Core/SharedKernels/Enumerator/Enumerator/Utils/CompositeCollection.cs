@@ -107,11 +107,15 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
                 return;
 
             var offset = 0;
-            foreach (var coll in this.collections)
-                if (sender == coll)
-                    break;
-                else
-                    offset += coll.Count();
+            lock (SyncRoot)
+            {
+                foreach (var coll in this.collections)
+                    if (sender == coll)
+                        break;
+                    else
+                        offset += coll.Count();
+            }
+
             var newIndex = e.NewStartingIndex == -1 ? -1 : e.NewStartingIndex + offset;
             var oldIndex = e.OldStartingIndex == -1 ? -1 : e.OldStartingIndex + offset;
 

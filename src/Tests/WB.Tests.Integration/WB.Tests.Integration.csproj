@@ -47,7 +47,8 @@
     <PackageReference Include="Microsoft.NETCore.Platforms" Version="2.0.1" />
     <PackageReference Include="Microsoft.Win32.Primitives" Version="4.3.0" />
     <PackageReference Include="Moq" Version="4.9.0" />
-    <PackageReference Include="MvvmCross.Plugin.Messenger" Version="6.1.2" />
+    <PackageReference Include="MvvmCross.Plugin.Messenger" Version="6.2.0" />
+    <PackageReference Include="MvvmCross.Tests" Version="6.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="NHibernate" Version="5.1.2" />
     <PackageReference Include="Ninject" Version="3.3.4" />
@@ -76,6 +77,9 @@
   <ItemGroup>
     <Reference Include="AutoFixture">
       <HintPath>..\..\..\..\..\Users\Victo\.nuget\packages\autofixture\4.0.1\lib\net452\AutoFixture.dll</HintPath>
+    </Reference>
+    <Reference Include="MvvmCross.Tests">
+      <HintPath>C:\Users\slava\.nuget\packages\mvvmcross.tests\6.2.0\lib\netstandard2.0\MvvmCross.Tests.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Windows" />

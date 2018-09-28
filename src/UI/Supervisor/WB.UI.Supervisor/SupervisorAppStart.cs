@@ -1,9 +1,9 @@
-﻿using MvvmCross;
+﻿using System.Threading.Tasks;
+using MvvmCross;
 using MvvmCross.Navigation;
 using MvvmCross.ViewModels;
 using WB.Core.BoundedContexts.Supervisor.Views;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.Enumerator.Denormalizer;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -25,26 +25,26 @@ namespace WB.UI.Supervisor
             this.users = users;
         }
 
-        protected override void Startup(object hint = null)
+        protected override async Task<object> ApplicationStartup(object hint = null)
         {
-            Mvx.Resolve<InterviewDashboardEventHandler>();
+            Mvx.IoCProvider.Resolve<InterviewDashboardEventHandler>();
 
-            var logger = Mvx.Resolve<ILoggerProvider>().GetFor<SupervisorAppStart>();
+            var logger = Mvx.IoCProvider.Resolve<ILoggerProvider>().GetFor<SupervisorAppStart>();
             logger.Info($"Application started. Version: {typeof(SplashActivity).Assembly.GetName().Version}");
 
-            base.Startup(hint);
+            return await base.ApplicationStartup(hint);
         }
 
-        protected override void NavigateToFirstViewModel(object hint = null)
+        protected override async Task NavigateToFirstViewModel(object hint = null)
         {
             var currentUser = users.FirstOrDefault();
             if (currentUser == null)
             {
-                viewModelNavigation.NavigateToFinishInstallationAsync().WaitAndUnwrapException();
+                await viewModelNavigation.NavigateToFinishInstallationAsync();
             }
             else
             {
-                viewModelNavigation.NavigateToLoginAsync().WaitAndUnwrapException();
+                await viewModelNavigation.NavigateToLoginAsync();
             }
         }
     }

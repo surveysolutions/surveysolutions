@@ -77,7 +77,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 interviewerSettings: interviewerSettings ?? Mock.Of<IInterviewerSettings>(),
                 fileSystemAccessor: fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
                 permissions: permissions ?? Mock.Of<IPermissionsService>(),
-                navigationService: navigationService ?? Mock.Of<IViewModelNavigationService>());
+                navigationService: navigationService ?? Mock.Of<IViewModelNavigationService>(),
+                pathUtils: Mock.Of<IPathUtils>());
             step.Context = new EnumeratorSynchonizationContext {Progress = new Progress<SyncProgressInfo>()};
 
             return step;

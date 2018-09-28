@@ -1,7 +1,7 @@
+using System.Threading.Tasks;
 using Android.App;
 using Android.Content.PM;
 using MvvmCross.Droid.Support.V7.AppCompat;
-using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -15,12 +15,11 @@ namespace WB.UI.Interviewer.Activities
         {
         }
 
-        public override void InitializationComplete()
+        public override async Task InitializationComplete()
         {
-            base.InitializationComplete();
+            await base.InitializationComplete();
             var auditLogService = ServiceLocator.Current.GetInstance<IAuditLogService>();
             auditLogService.Write(new OpenApplicationAuditLogEntity());
-
         }
     }
 }

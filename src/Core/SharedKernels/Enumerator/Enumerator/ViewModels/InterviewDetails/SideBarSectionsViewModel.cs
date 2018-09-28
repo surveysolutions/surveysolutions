@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using MvvmCross.Base;
 using MvvmCross.ViewModels;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.EventBus.Lite;
@@ -21,6 +22,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         IDisposable
     {
         private readonly ILiteEventRegistry eventRegistry;
+        private readonly IMvxMainThreadAsyncDispatcher mainThreadDispatcher;
         private NavigationState navigationState;
 
         private readonly IQuestionnaireStorage questionnaireRepository;
@@ -42,12 +44,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             IStatefulInterviewRepository statefulInterviewRepository,
             IQuestionnaireStorage questionnaireRepository,
             ISideBarSectionViewModelsFactory modelsFactory,
-            ILiteEventRegistry eventRegistry)
+            ILiteEventRegistry eventRegistry,
+            IMvxMainThreadAsyncDispatcher mainThreadDispatcher)
         {
             this.questionnaireRepository = questionnaireRepository;
             this.modelsFactory = modelsFactory;
             this.statefulInterviewRepository = statefulInterviewRepository;
             this.eventRegistry = eventRegistry;
+            this.mainThreadDispatcher = mainThreadDispatcher;
         }
 
         public void Init(string interviewId, NavigationState navigationState)
