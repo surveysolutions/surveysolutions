@@ -663,10 +663,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
                 isYesNo: true);
 
             //act
-            question.SetAnswer(YesNoAnswer.FromCheckedYesNoAnswerOptions(new List<CheckedYesNoAnswerOption>()), DateTime.UtcNow);
+            question.SetAnswer(YesNoAnswer.FromCheckedYesNoAnswerOptions(new List<CheckedYesNoAnswerOption>()), new DateTime(2018, 9, 30));
 
             //assert
             Assert.That(question.IsAnswered, Is.False);
+            Assert.That(question.AnswerTimeUtc, Is.EqualTo(new DateTime(2018, 9, 30)));
         }
 
         [Test]
@@ -682,10 +683,11 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection
                 answer: new[] { new Tuple<decimal, string>(1, "1") });
 
             //act
-            question.SetAnswer(TextListAnswer.FromTupleArray(new Tuple<decimal, string>[] {}), DateTime.UtcNow);
+            question.SetAnswer(TextListAnswer.FromTupleArray(new Tuple<decimal, string>[] {}), new DateTime(2018, 10, 31));
 
             //assert
             Assert.That(question.IsAnswered, Is.False);
+            Assert.That(question.AnswerTimeUtc, Is.EqualTo(new DateTime(2018, 10, 31)));
         }
 
         private static InterviewTree CreateSimpleTree(Guid interviewId, Identity sectionIdentity, Identity questionIdentity)

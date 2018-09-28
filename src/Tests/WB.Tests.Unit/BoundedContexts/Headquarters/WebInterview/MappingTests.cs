@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
             {
                 new TextListAnswerRow(0, "test"),
                 new TextListAnswerRow(1, "test")
-            }), DateTime.UtcNow);
+            }), new DateTime(2018, 10, 31));
 
             var dto = this.mapper.Map<InterviewTextListQuestion>(question);
 
