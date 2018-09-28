@@ -322,7 +322,7 @@ namespace WB.Tests.Abc.TestFactories
                 if (payload.Type != PayloadType.Bytes)
                 {
                     // google services notify on outgoing progress
-                    fromClient.RecievePayloadTransferUpdate(this, to, new NearbyPayloadTransferUpdate
+                    fromClient.ReceivePayloadTransferUpdate(this, to, new NearbyPayloadTransferUpdate
                     {
                         Status = TransferStatus.InProgress,
                         BytesTransferred = 0,
@@ -330,7 +330,7 @@ namespace WB.Tests.Abc.TestFactories
                     });
                 }
 
-                fromClient.RecievePayloadTransferUpdate(this, to, new NearbyPayloadTransferUpdate
+                fromClient.ReceivePayloadTransferUpdate(this, to, new NearbyPayloadTransferUpdate
                 {
                     Status = TransferStatus.Success,
                     BytesTransferred = 100,
@@ -340,13 +340,13 @@ namespace WB.Tests.Abc.TestFactories
                 await NextDelay();
 
                 // google service notify that payload is received
-                await toClient.RecievePayloadAsync(this, from, payload);
+                await toClient.ReceivePayloadAsync(this, from, payload);
 
                 await NextDelay();
 
                 if (payload.Type != PayloadType.Bytes)
                 {
-                    toClient.RecievePayloadTransferUpdate(this, from, new NearbyPayloadTransferUpdate
+                    toClient.ReceivePayloadTransferUpdate(this, from, new NearbyPayloadTransferUpdate
                     {
                         Status = TransferStatus.InProgress,
                         BytesTransferred = 0,
@@ -356,7 +356,7 @@ namespace WB.Tests.Abc.TestFactories
 
                 await NextDelay();
 
-                toClient.RecievePayloadTransferUpdate(this, from, new NearbyPayloadTransferUpdate
+                toClient.ReceivePayloadTransferUpdate(this, from, new NearbyPayloadTransferUpdate
                 {
                     Status = TransferStatus.Success,
                     BytesTransferred = 100,
