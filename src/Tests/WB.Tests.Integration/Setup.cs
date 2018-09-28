@@ -18,7 +18,7 @@ using WB.Tests.Abc;
 
 namespace WB.Tests.Integration
 {
-    internal static class Setup
+    internal static class SetUp
     {
         public static void MockedServiceLocator()
         {
@@ -75,8 +75,8 @@ namespace WB.Tests.Integration
                     NavigationState = navigationState,
                 };
            
-            Setup.InstanceToMockedServiceLocator<CoverStateViewModel>(Mock.Of<CoverStateViewModel>());
-            Setup.InstanceToMockedServiceLocator<GroupStateViewModel>(Mock.Of<GroupStateViewModel>());
+            SetUp.InstanceToMockedServiceLocator<CoverStateViewModel>(Mock.Of<CoverStateViewModel>());
+            SetUp.InstanceToMockedServiceLocator<GroupStateViewModel>(Mock.Of<GroupStateViewModel>());
             Mock.Get(ServiceLocator.Current)
                 .Setup(locator => locator.GetInstance<SideBarSectionViewModel>())
                 .Returns(sideBarSectionViewModel);
@@ -103,13 +103,14 @@ namespace WB.Tests.Integration
             Mock.Get(ServiceLocator.Current)
                 .Setup(locator => locator.GetInstance<SideBarSectionViewModel>())
                 .Returns(sideBarSectionViewModel);
-            Setup.InstanceToMockedServiceLocator<InterviewStateViewModel>(Mock.Of<InterviewStateViewModel>());
+            SetUp.InstanceToMockedServiceLocator<InterviewStateViewModel>(Mock.Of<InterviewStateViewModel>());
 
             var sidebarViewModel = new SideBarSectionsViewModel(
                 statefulInterviewRepository: interviewsRepository,
                 questionnaireRepository: questionnaireRepository,
                 modelsFactory: sideBarSectionViewModelsFactory,
-                eventRegistry: liteEventRegistry);
+                eventRegistry: liteEventRegistry,
+                mainThreadDispatcher: Stub.MvxMainThreadAsyncDispatcher());
 
             sidebarViewModel.Init("", navigationState);
 

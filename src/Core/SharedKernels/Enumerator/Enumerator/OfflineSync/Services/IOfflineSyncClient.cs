@@ -17,5 +17,11 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services
             where TResponse : ICommunicationMessage;
         Task SendAsync<TRequest>(TRequest request, CancellationToken cancellationToken, IProgress<TransferProgress> progress = null) 
             where TRequest : ICommunicationMessage;
+
+        Task<TResponse> SendChunkedAsync<TRequest, TResponse>(IChunkedByteArrayRequest request,
+            CancellationToken cancellationToken,
+            IProgress<TransferProgress> progress = null)
+            where TRequest : IChunkedByteArrayRequest
+            where TResponse : class, IChunkedByteArrayResponse;
     }
 }

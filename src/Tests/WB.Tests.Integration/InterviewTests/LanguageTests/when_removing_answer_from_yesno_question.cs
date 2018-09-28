@@ -24,7 +24,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
         {
             var variableValue = Execute.InStandaloneAppDomain(this.appDomainContext.Domain, () =>
             {
-                Setup.MockedServiceLocator();
+                SetUp.MockedServiceLocator();
                 var questionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
                 var variableId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
                 var questionnaireDocument = Create.Entity.QuestionnaireDocumentWithOneChapter(new IComposite[]

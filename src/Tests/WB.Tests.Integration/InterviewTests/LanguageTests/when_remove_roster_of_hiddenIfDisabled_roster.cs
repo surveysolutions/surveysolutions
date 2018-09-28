@@ -22,7 +22,7 @@ namespace WB.Tests.Integration.InterviewTests.LanguageTests
             appDomainContext = AppDomainContext.Create();
             events = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
-                Setup.MockedServiceLocator();
+                SetUp.MockedServiceLocator();
                 
                 userId = Id.gF;
 
