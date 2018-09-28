@@ -1,15 +1,15 @@
 using System.Threading.Tasks;
 using Ncqrs.Eventing.Storage;
+using Plugin.Permissions.Abstractions;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
-using WB.Core.BoundedContexts.Interviewer.Implementation.Services.OfflineSync;
 using WB.Core.BoundedContexts.Interviewer.Services;
-using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Implementation.Storage;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.CommandBus.Implementation;
+using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Services;
@@ -21,6 +21,7 @@ using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.MapService;
 using WB.Core.SharedKernels.Enumerator.Services.MapSynchronization;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
+using WB.Core.SharedKernels.Enumerator.ViewModels;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 using WB.UI.Interviewer.Implementations.Services;
@@ -93,6 +94,24 @@ namespace WB.UI.Interviewer.ServiceLocation
             registry.Bind<ICheckVersionUriProvider, CheckForExtendedVersionUriProvider>();
             registry.Bind<IAreaEditService, WB.UI.Shared.Extensions.CustomServices.AreaEditor.AreaEditService>();
 #endif
+
+            RegisterViewModels(registry);
+        }
+
+        private static void RegisterViewModels(IIocRegistry registry)
+        {
+            registry.BindToMethod(context => new CheckNewVersionViewModel(
+                context.Get<IOnlineSynchronizationService>(),
+                context.Get<IDeviceSettings>(),
+                new TabletDiagnosticService(
+                    context.Get<IFileSystemAccessor>(), 
+                    context.Get<IPermissions>(),
+                    context.Get<IOnlineSynchronizationService>(), 
+                    context.Get<IDeviceSettings>(),
+                    context.Get<IArchivePatcherService>(), 
+                    context.Get<ILogger>(),
+                    context.Get<IViewModelNavigationService>()), 
+                context.Get<ILogger>()));
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
