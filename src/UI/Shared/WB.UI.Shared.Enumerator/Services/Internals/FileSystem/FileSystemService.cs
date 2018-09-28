@@ -144,9 +144,23 @@ namespace WB.UI.Shared.Enumerator.Services.Internals.FileSystem
             File.WriteAllBytes(pathToFile, content);
         }
 
-        public byte[] ReadAllBytes(string pathToFile)
+        public byte[] ReadAllBytes(string pathToFile, long? start = null, long? length = null)
         {
-            return File.ReadAllBytes(pathToFile);
+            if (start != null)
+            {
+                using (var reader = File.OpenRead(pathToFile))
+                {
+                    reader.Seek(start.Value, SeekOrigin.Begin);
+                    var leftToRead = reader.Length - reader.Position; // get amount that left to read after seek
+                    var wantToRead = length ?? leftToRead;           
+                    var amountToRead = Math.Min(leftToRead, wantToRead);  // make sure that requested length is less then left to red
+                    int toRead = (int) Math.Min(amountToRead, int.MaxValue);// make sure that amount to read is less then int max value
+
+                    var response = reader.ReadExactly(toRead);
+                    return response;
+                }
+            }
+            else  return File.ReadAllBytes(pathToFile);
         }
 
         public string ReadAllText(string fileName)
