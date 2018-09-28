@@ -67,14 +67,7 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
             {
                 using (var reader = File.OpenRead(pathToFile))
                 {
-                    reader.Seek(start.Value, SeekOrigin.Begin);
-                    var leftToRead = reader.Length - reader.Position; // get amount that left to read after seek
-                    var wantToRead = length ?? leftToRead;
-                    var amountToRead = Math.Min(leftToRead, wantToRead);  // make sure that requested length is less then left to red
-                    int toRead = (int)Math.Min(amountToRead, int.MaxValue);// make sure that amount to read is less then int max value
-
-                    var response = reader.ReadExactly(toRead);
-                    return response;
+                    return reader.ReadExactly(start.Value, length);
                 }
             }
             else return File.ReadAllBytes(pathToFile);
