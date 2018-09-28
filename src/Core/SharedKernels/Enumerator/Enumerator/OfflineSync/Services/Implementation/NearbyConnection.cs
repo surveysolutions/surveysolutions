@@ -244,13 +244,13 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
         private void OnPayloadTransferUpdate(object sender, NearbyPayloadTransferUpdate update)
         {
             this.logger.Verbose($"({update.Endpoint}, payloadId: {update.Id}, status: {update.Status.ToString()}, {update.BytesTransferred} of {update.TotalBytes}");
-            communicator.RecievePayloadTransferUpdate(this, update.Endpoint, update);
+            communicator.ReceivePayloadTransferUpdate(this, update.Endpoint, update);
         }
 
         private async void OnPayloadReceived(object sender, IPayload payload)
         {
             this.logger.Verbose($"({payload.Endpoint}, {payload.ToString()})");
-            await communicator.RecievePayloadAsync(this, payload.Endpoint, payload);
+            await communicator.ReceivePayloadAsync(this, payload.Endpoint, payload);
         }
 
         public void Dispose()

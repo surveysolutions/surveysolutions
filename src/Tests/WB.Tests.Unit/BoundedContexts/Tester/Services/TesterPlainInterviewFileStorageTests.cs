@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.BoundedContexts.Tester.Services
             byte[] imageFileBytes = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 };
 
             var fileSystemAccessor = Mock.Of<IFileSystemAccessor>(a 
-                => a.ReadAllBytes(filePathToImage) == imageFileBytes
+                => a.ReadAllBytes(filePathToImage, null, null) == imageFileBytes
                 && a.IsFileExists(filePathToImage) == true
                 && a.CombinePath(It.IsAny<string>(), imageName) == filePathToImage);
             var interviewerPlainInterviewFileStorage = Create.Service.TesterPlainInterviewFileStorage(
