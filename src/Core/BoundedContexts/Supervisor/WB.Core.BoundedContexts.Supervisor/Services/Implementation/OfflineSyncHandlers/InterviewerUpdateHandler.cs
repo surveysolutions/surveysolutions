@@ -23,17 +23,30 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             requestHandler.RegisterHandler<GetInterviewerAppRequest, GetInterviewerAppResponse>(GetInterviewerApp);
         }
 
-        private Task<GetInterviewerAppResponse> GetInterviewerApp(GetInterviewerAppRequest request)
+        public Task<GetInterviewerAppResponse> GetInterviewerApp(GetInterviewerAppRequest request)
         {
-            var patchFileName = $@"interviewer{(request.AppType == EnumeratorApplicationType.WithMaps ? ".maps" : "")}.apk";
+            var patchFileName = $@"interviewer{
+                (request.AppType == EnumeratorApplicationType.WithMaps ? ".maps" : "")
+            }.apk";
 
             var patchFilePath = this.fileSystemAccessor.CombinePath(this.settings.InterviewerApplicationsDirectory,
                 this.settings.GetApplicationVersionCode().ToString(), patchFileName);
-
-            return Task.FromResult(new GetInterviewerAppResponse
+            
+            var result = new GetInterviewerAppResponse();
+            
+            if (!this.fileSystemAccessor.IsFileExists(patchFilePath))
             {
-                Content = this.fileSystemAccessor.IsFileExists(patchFilePath) ? this.fileSystemAccessor.ReadAllBytes(patchFilePath) : null
-            });
+                result.Skipped = 0;
+                result.Total = 0;
+                return Task.FromResult(result);
+            }
+
+            result.Content = this.fileSystemAccessor.ReadAllBytes(patchFilePath, request.Skip, request.Maximum);
+            result.Total = this.fileSystemAccessor.GetFileSize(patchFilePath);
+            result.Skipped = request.Skip;
+            result.Length = result.Content.Length;
+            
+            return Task.FromResult(result);
         }
     }
 }
