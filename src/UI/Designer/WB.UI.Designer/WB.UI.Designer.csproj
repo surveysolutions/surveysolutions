@@ -248,7 +248,7 @@
     <Compile Include="Api\WebTester\QuestionnairePackageComposer.cs" />
     <Compile Include="Api\WebTester\WebTesterController.cs" />
     <Compile Include="Api\WebTester\ReloadController.cs" />
-    <Compile Include="App_Start\NinjectWebCommonModule.cs" />
+    <Compile Include="App_Start\AutofacWebCommonModule.cs" />
     <Compile Include="App_Start\SwaggerConfig.cs" />
     <Compile Include="Code\CamelCaseAttribute.cs" />
     <Compile Include="Code\ConfigurationManager\DeskConfigSection.cs" />
