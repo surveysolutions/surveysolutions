@@ -39,7 +39,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
             var pathToInterviewerApks = this.fileSystemAccessor.CombinePath(
                 this.settings.InterviewerApplicationsDirectory, sAppVersion);
 
-            var hasApks = this.fileSystemAccessor.GetFilesInDirectory(pathToInterviewerApks).Length == 2;
+            var hasApks = this.fileSystemAccessor.IsDirectoryExists(pathToInterviewerApks) &&
+                          this.fileSystemAccessor.GetFilesInDirectory(pathToInterviewerApks).Length == 2;
 
             return Task.FromResult(new GetLatestApplicationVersionResponse
             {
