@@ -48,17 +48,28 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             where TResponse : class, IChunkedByteArrayResponse
         {
             request.Skip = 0;
-            request.Maximum = 2 * 1024 * 1024;
+            request.Maximum = 1 * 1024 * 1024 / 4;
 
             byte[] content = null;
             TResponse response = null;
 
+            var eta = new EtaTransferRate();
+
             // reporting back full data, not chunks info
             IProgress<TransferProgress> overallProgress = new Progress<TransferProgress>(t =>
             {
-                t.TotalBytesToReceive = response?.Length;
+                t.TotalBytesToReceive = response?.Total;
+                eta.AddProgress(t.BytesReceived, t.TotalBytesToReceive);
+                t.Speed = eta.AverageSpeed;
+                t.Eta = eta.ETA;
+                
                 t.BytesReceived = request.Skip + t.BytesReceived;
-                t.ProgressPercentage = t.Percent ?? 0;
+                
+                if (t.TotalBytesToReceive != null)
+                {
+                    t.ProgressPercentage = request.Skip.PercentOf(t.TotalBytesToReceive.Value);
+                }
+
                 progress?.Report(t);
             });
 
@@ -78,7 +89,6 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                 Array.Copy(response.Content, 0, content, response.Skipped, response.Length);
 
                 request.Skip = response.Skipped + response.Length;
-
                 overallProgress.Report(new TransferProgress
                 {
                     BytesReceived = request.Skip,
