@@ -14,6 +14,7 @@ namespace WB.Core.GenericSubdomains.Portable
 
         public static decimal ToPercentOf(this long source, long totalCount)
         {
+            if (totalCount == 0) return 0;
             if (source > totalCount) return 100;
             return (decimal)source / totalCount * 100;
         }
