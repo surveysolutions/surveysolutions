@@ -25,7 +25,7 @@ namespace WB.Tests.Integration.TeamInterviewsFactoryTests
                 typeof(InterviewSummaryMap), typeof(TimeSpanBetweenStatusesMap), typeof(QuestionAnswerMap), typeof(InterviewCommentedStatusMap)
             }, true, schemaName: "readside");
 
-            UnitOfWork = new UnitOfWork(sessionFactory);
+            UnitOfWork = IntegrationCreate.UnitOfWork(sessionFactory);
                 
             reader = new PostgreReadSideStorage<InterviewSummary>(UnitOfWork, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
             featuredQuestionAnswersReader = new PostgreReadSideStorage<QuestionAnswer>(UnitOfWork, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
