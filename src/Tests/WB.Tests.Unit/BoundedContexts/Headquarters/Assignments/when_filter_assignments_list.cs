@@ -80,6 +80,33 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             Assert.That(result.Items.First(), Has.Property(nameof(AssignmentRow.Id)).EqualTo(2));
         }
 
+        [Test]
+        public void should_be_able_to_search_by_received_by_tablet_flag()
+        {
+            var fixture = NewFixture();
+
+            var assignment = Create.Entity.Assignment(1);
+            assignment.MarkAsReceivedByTablet();
+
+            fixture.Register<IPlainStorageAccessor<Assignment>>(() => 
+                new TestPlainStorage<Assignment>(
+                    new Dictionary<object, Assignment>
+                    {
+                        {1, assignment},
+                        {2, Create.Entity.Assignment(2)}
+                    }
+            ));
+
+            var sut = fixture.Create<AssignmentViewFactory>();
+
+            var result = sut.Load(new AssignmentsInputModel
+            {
+                ReceivedByTablet = AssignmentReceivedState.Received
+            });
+
+            Assert.That(result.Items.First(), Has.Property(nameof(AssignmentRow.Id)).EqualTo(1));
+        }
+
         IFixture NewFixture() => Create.Other.AutoFixture();
     }
 }

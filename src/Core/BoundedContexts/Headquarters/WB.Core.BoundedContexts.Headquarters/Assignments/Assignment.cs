@@ -43,6 +43,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 
         public virtual DateTime UpdatedAtUtc { get; protected set; }
 
+        public virtual DateTime? ReceivedByTabletAtUtc { get; protected set; }
+
         public virtual QuestionnaireIdentity QuestionnaireId { get; set; }
         
         public virtual IList<IdentifyingAnswer> IdentifyingData { get; protected set; }
@@ -83,6 +85,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         {
             this.ResponsibleId = responsibleId;
             this.UpdatedAtUtc = DateTime.UtcNow;
+            this.ReceivedByTabletAtUtc = null;
         }
 
         public virtual void SetIdentifyingData(IList<IdentifyingAnswer> identifyingAnswers)
@@ -107,6 +110,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         {
             this.ProtectedVariables = protectedVariables;
             this.UpdatedAtUtc = DateTime.UtcNow;
+        }
+
+        public virtual void MarkAsReceivedByTablet()
+        {
+            this.ReceivedByTabletAtUtc = DateTime.UtcNow;
         }
     }
 

@@ -121,12 +121,8 @@
             flex-direction: column; }
 
 .signed-name {
-  width: 35%;
   font-size: 13px;
-  line-height: 15px;
-  margin: 30px 15px 0 0;
-  float: right;
-  text-align: right; }
+  line-height: 15px; }
   .signed-name span {
     color: #2a81cb; }
   .signed-name a {
@@ -184,44 +180,6 @@
   .import-interview tbody .parameters {
     font-style: normal; }
 
-.import-wrapper .dataTables_wrapper .dataTables_paginate > .paginate_button {
-  color: #3ca21a; }
-  .import-wrapper .dataTables_wrapper .dataTables_paginate > .paginate_button.disabled, .import-wrapper .dataTables_wrapper .dataTables_paginate > .paginate_button.disabled:hover, .import-wrapper .dataTables_wrapper .dataTables_paginate > .paginate_button.disabled:active {
-    color: #a6a8a9;
-    text-decoration: none;
-    cursor: not-allowed; }
-
-.import-wrapper .dataTables_wrapper .dataTables_paginate {
-  padding-left: 10px; }
-  .import-wrapper .dataTables_wrapper .dataTables_paginate > span {
-    left: 8px; }
-
-.import-wrapper .dataTables_wrapper {
-  position: relative; }
-  .import-wrapper .dataTables_wrapper .dataTables_filter {
-    position: absolute;
-    top: -10px;
-    right: auto;
-    left: 0; }
-    .import-wrapper .dataTables_wrapper .dataTables_filter label:after {
-      position: absolute;
-      top: 15px;
-      right: auto;
-      left: 10px; }
-    .import-wrapper .dataTables_wrapper .dataTables_filter label input {
-      margin-right: 0;
-      margin-left: 40px; }
-
-@media only screen and (max-width: 1450px) {
-  .import-wrapper .dataTables_wrapper .dataTables_filter {
-    top: -15px; }
-  .import-wrapper .search {
-    top: -10px; }
-  .import-wrapper .active-search .search {
-    top: -12px; }
-    .import-wrapper .active-search .search .btn-search {
-      top: -3px; } }
-
 @media (max-width: 1210px) {
   .import-interview tr {
     -webkit-transition: all 0.1s linear 0s;
@@ -239,12 +197,8 @@
     .import-wrapper .dataTables_wrapper .dataTables_filter label.active input {
       margin-right: 0; }
   .signed-name {
-    width: 100%;
-    float: none;
-    margin: 0;
+    margin-bottom: 10px;
     padding: 0 3%; }
-  .signed-name {
-    margin-bottom: 20px; }
   .import-interview tbody tr td:first-child {
     font-size: 12px;
     line-height: 14px;
@@ -857,9 +811,11 @@ td.errors {
 .statuses table tr:last-child td {
   font-weight: bold !important; }
 
-.enumerators .table-wrapper {
-  margin-left: -15px;
-  max-width: 1210px; }
+.enumerators {
+  position: relative; }
+  .enumerators .table-wrapper {
+    margin-left: -15px;
+    max-width: 1210px; }
 
 .interviews-information {
   margin-bottom: 40px; }
@@ -914,22 +870,6 @@ td.errors {
     width: 50%; }
   .detailed-statistics-block .table {
     margin-left: -15px; }
-
-@media (max-width: 1210px) {
-  .enumerators .table-wrapper {
-    margin-left: 0; }
-  .enumerators .detailed-statistics-block .table {
-    margin: 0; } }
-
-@media (max-width: 880px) {
-  .enumerators .table-interviews {
-    display: none; }
-  .enumerators .screen-small-resolution {
-    padding: 0; } }
-
-@media only screen and (max-width: 840px) {
-  .interviews-information .number-information {
-    width: 50%; } }
 
 .graphic-wrapper {
   display: -webkit-box;
@@ -1245,7 +1185,37 @@ td.errors {
     background-repeat: repeat-x;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#E62A81CB', endColorstr='#E62A81CB', GradientType=1); }
 
+.qrcode-wrapper {
+  position: absolute;
+  display: block;
+  top: 35px;
+  right: 40px;
+  width: 200px; }
+  .qrcode-wrapper img {
+    width: 100%;
+    height: auto; }
+
+@media (max-width: 1210px) {
+  .enumerators .table-wrapper {
+    margin-left: 0; }
+  .enumerators .detailed-statistics-block .table {
+    margin: 0; } }
+
+@media only screen and (max-width: 1050px) {
+  .qrcode-wrapper {
+    position: relative;
+    top: 0;
+    right: 0; } }
+
+@media only screen and (max-width: 840px) {
+  .interviews-information .number-information {
+    width: 50%; } }
+
 @media (max-width: 880px) {
+  .enumerators .table-interviews {
+    display: none; }
+  .enumerators .screen-small-resolution {
+    padding: 0; }
   .graphic-wrapper {
     display: block;
     height: auto;
@@ -1535,7 +1505,8 @@ header > .red-line {
   margin-bottom: 5px; }
 
 .panel-details .about-questionnaire {
-  width: 100%; }
+  width: 100%;
+  min-height: 40px; }
 
 .panel-details h3 {
   margin-bottom: 5px;
@@ -1594,16 +1565,12 @@ header > .red-line {
 .panel-details .data {
   font-family: "RobotoRegular"; }
 
-.panel-details .questionnaire-details-actions,
-.panel-details .about-questionnaire {
-  min-height: 40px; }
-
 .panel-details .questionnaire-details-actions {
-  float: right;
-  padding-top: 17px; }
+  float: right; }
   .panel-details .questionnaire-details-actions .reject {
     margin-right: 15px; }
   .panel-details .questionnaire-details-actions .buttons-container {
+    padding-top: 17px;
     display: inline-block; }
     .panel-details .questionnaire-details-actions .buttons-container .btn {
       max-width: 145px;
@@ -1613,6 +1580,8 @@ header > .red-line {
 
 .panel-details .bootstrap-select.btn-group {
   width: 180px !important; }
+  .panel-details .bootstrap-select.btn-group:only-child {
+    padding-top: 17px; }
   .panel-details .bootstrap-select.btn-group .dropdown-toggle {
     height: 36px;
     line-height: 16px; }
@@ -1798,8 +1767,7 @@ header > .red-line {
     padding-right: 0; }
   .panel-details.contains-tranlation.contains-action-buttons .questionnaire-details-actions {
     width: 100%;
-    float: none;
-    padding-top: 10px; } }
+    float: none; } }
 
 @media only screen and (max-width: 1300px) {
   .web-interview-for-supervisor .details-interview.questionnaire {
@@ -1989,8 +1957,7 @@ header > .red-line {
     padding-right: 0;
     float: none; }
   .panel-details.contains-tranlation .questionnaire-details-actions, .panel-details.contains-action-buttons .questionnaire-details-actions {
-    float: none;
-    padding-top: 10px; } }
+    float: none; } }
 
 @media (max-width: 880px) {
   .web-interview.filters-results-are-shown .filters-results.active {
@@ -2040,12 +2007,6 @@ header > .red-line {
   .panel-details .aside-menu .dropdown-menu {
     left: 35px;
     right: auto; } }
-
-@media only screen and (max-width: 600px) {
-  .questionnaire-details-actions .buttons-container {
-    margin-top: 10px; }
-    .questionnaire-details-actions .buttons-container:only-child {
-      margin-top: 0; } }
 
 @media (max-width: 481px) {
   .web-interview.web-interview-for-supervisor .aside-menu {

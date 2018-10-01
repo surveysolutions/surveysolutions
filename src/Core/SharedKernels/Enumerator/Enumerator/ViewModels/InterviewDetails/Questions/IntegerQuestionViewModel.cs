@@ -72,13 +72,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         private async Task RemoveAnswer()
         {
-            if (!questionState.IsAnswered)
-            {
-                this.Answer = null;
-                this.QuestionState.Validity.ExecutedWithoutExceptions();
-                return;
-            }
-
             try
             {
                 if (isRosterSizeQuestion)

@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Supervisor.Views;
@@ -6,7 +8,6 @@ using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -25,7 +26,6 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
         protected string InterviewerTabletInfosController => string.Concat(ApplicationUrl, "/interviewerTabletInfos");
         protected string InterviewerStatisticsController => string.Concat(ApplicationUrl, "/interviewerStatistics");
         protected string GetListOfDeletedQuestionnairesController => string.Concat(ApplicationUrl, "/deletedQuestionnairesList");
-
 
         public SynchronizationService(IPrincipal principal, IRestService restService,
             ISupervisorSettings settings, ISupervisorSyncProtocolVersionProvider syncProtocolVersionProvider,
@@ -97,6 +97,30 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation
                 credentials: this.restCredentials,
                 token: cancellationToken));
         }
+
+        public Task<byte[]> GetInterviewerApplicationAsync(CancellationToken token, IProgress<TransferProgress> transferProgress = null) =>
+            this.TryGetRestResponseOrThrowAsync(async () =>
+            {
+                var restFile = await this.restService.DownloadFileAsync(
+                    url: string.Concat(ApplicationUrl, "/apk/interviewer"), 
+                    token: token,
+                    credentials: this.restCredentials,
+                    transferProgress: transferProgress);
+
+                return restFile.Content;
+            });
+
+        public Task<byte[]> GetInterviewerApplicationWithMapsAsync(CancellationToken token, IProgress<TransferProgress> transferProgress = null) =>
+            this.TryGetRestResponseOrThrowAsync(async () =>
+            {
+                var restFile = await this.restService.DownloadFileAsync(
+                    url: string.Concat(ApplicationUrl, "/apk/interviewer-with-maps"), 
+                    token: token,
+                    credentials: this.restCredentials,
+                    transferProgress: transferProgress);
+
+                return restFile.Content;
+            });
 
         protected override string CanSynchronizeValidResponse => "158329303";
     }

@@ -2,6 +2,7 @@
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using NUnit.Framework;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Enumerator.Native.WebInterview.Models;
 using WB.Tests.Abc;
 
@@ -38,6 +39,6 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview.Review.Api.GetGro
 
         [Test]
         public void should_have_section_status_Started() => 
-            Assert.That(GetGroupDetails(SectionA, asReviewer: false).Status, Is.EqualTo(GroupStatus.Completed));
+            Assert.That(GetGroupDetails(SectionA, asReviewer: false).Status, Is.EqualTo(GroupStatus.Started));
     }
 }

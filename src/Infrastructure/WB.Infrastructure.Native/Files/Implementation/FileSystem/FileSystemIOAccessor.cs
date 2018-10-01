@@ -12,6 +12,7 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
     internal class FileSystemIOAccessor : IFileSystemAccessor
     {
         public string CombinePath(string path1, string path2) => Path.Combine(path1, path2);
+        public string CombinePath(params string[] pathes) => Path.Combine(pathes);
 
         public string ChangeExtension(string path1, string newExtension) => Path.ChangeExtension(path1, newExtension);
         public void MoveFile(string pathToFile, string newPathToFile)
@@ -60,7 +61,17 @@ namespace WB.Infrastructure.Native.Files.Implementation.FileSystem
 
         public void WriteAllBytes(string pathToFile, byte[] content) => File.WriteAllBytes(pathToFile, content);
 
-        public byte[] ReadAllBytes(string pathToFile) => File.ReadAllBytes(pathToFile);
+        public byte[] ReadAllBytes(string pathToFile, long? start = null, long? length = null)
+        {
+            if (start != null)
+            {
+                using (var reader = File.OpenRead(pathToFile))
+                {
+                    return reader.ReadExactly(start.Value, length);
+                }
+            }
+            else return File.ReadAllBytes(pathToFile);
+        }
 
         public string ReadAllText(string pathToFile) => File.ReadAllText(pathToFile);
 

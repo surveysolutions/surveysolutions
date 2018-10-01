@@ -25,7 +25,7 @@ namespace WB.UI.Headquarters.API.DataCollection
     {
         protected readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IQuestionnaireAssemblyAccessor questionnareAssemblyFileAccessor;
-        private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
+        protected readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireRepository;
         private readonly ISerializer serializer;
 
@@ -45,40 +45,15 @@ namespace WB.UI.Headquarters.API.DataCollection
 
         public virtual HttpResponseMessage List()
         {
-            var questionnaireBrowseView = this.questionnaireBrowseViewFactory.Load(new QuestionnaireBrowseInputModel { Page = 1, PageSize = int.MaxValue });
-            var resultValue = questionnaireBrowseView.Items
-                .Select(x => new QuestionnaireIdentity(x.QuestionnaireId, x.Version))
-                .ToList();
+            var allQuestionnaireIdentities = this.questionnaireBrowseViewFactory.GetAllQuestionnaireIdentities();
 
-            var response = this.Request.CreateResponse(resultValue);
+            var response = this.Request.CreateResponse(allQuestionnaireIdentities);
             response.Headers.CacheControl = new CacheControlHeaderValue
             {
                 Public = false,
                 NoCache = true
             };
 
-            return response;
-        }
-
-        [WriteToSyncLog(SynchronizationLogType.GetCensusQuestionnaires)]
-        public virtual HttpResponseMessage Census()
-        {
-            var query = new QuestionnaireBrowseInputModel()
-            {
-                Page = 1,
-                PageSize = int.MaxValue,
-                OnlyCensus = true
-            };
-
-            var censusQuestionnaires = this.questionnaireBrowseViewFactory.Load(query).Items
-                                           .Select(questionnaire => new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version))
-                                           .ToList();
-
-            var response = this.Request.CreateResponse(censusQuestionnaires);
-            response.Headers.CacheControl = new CacheControlHeaderValue
-            {
-                NoCache = true
-            };
             return response;
         }
 

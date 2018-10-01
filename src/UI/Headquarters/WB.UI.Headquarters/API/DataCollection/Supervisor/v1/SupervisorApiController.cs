@@ -24,10 +24,6 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
 {
     public class SupervisorApiController : ApiController
     {
-        private const string RESPONSEAPPLICATIONFILENAME = "supervisor.apk";
-        private const string PHYSICALAPPLICATIONFILENAME = "supervisor.apk";
-        private const string PHYSICALPATHTOAPPLICATION = "~/Client/";
-
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IAndroidPackageReader androidPackageReader;
         private readonly ITabletInformationService tabletInformationService;
@@ -56,19 +52,27 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
 
         [HttpGet]
         [WriteToSyncLog(SynchronizationLogType.GetSupervisorApk)]
-        public virtual HttpResponseMessage GetSupervisor()
-        {
-            return this.HttpResponseMessage(PHYSICALAPPLICATIONFILENAME, RESPONSEAPPLICATIONFILENAME);
-        }
+        public virtual HttpResponseMessage GetSupervisor() =>
+            this.HttpResponseMessage(ClientApkInfo.SupervisorFileName, ClientApkInfo.SupervisorFileName);
+
+        [HttpGet]
+        [WriteToSyncLog(SynchronizationLogType.GetApk)]
+        public virtual HttpResponseMessage GetInterviewer() =>
+            this.HttpResponseMessage(ClientApkInfo.InterviewerFileName, ClientApkInfo.InterviewerFileName);
+
+        [HttpGet]
+        [WriteToSyncLog(SynchronizationLogType.GetExtendedApk)]
+        public virtual HttpResponseMessage GetInterviewerWithMaps() =>
+            this.HttpResponseMessage(ClientApkInfo.InterviewerExtendedFileName, ClientApkInfo.InterviewerFileName);
 
         private HttpResponseMessage HttpResponseMessage(string appName, string responseFileName)
         {
-            string pathToInterviewerApp = this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(PHYSICALPATHTOAPPLICATION), appName);
+            string pathToSupervisorApp = this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(ClientApkInfo.Directory), appName);
 
-            if (!this.fileSystemAccessor.IsFileExists(pathToInterviewerApp))
+            if (!this.fileSystemAccessor.IsFileExists(pathToSupervisorApp))
                 return this.Request.CreateErrorResponse(HttpStatusCode.NotFound, TabletSyncMessages.FileWasNotFound);
 
-            Stream fileStream = new FileStream(pathToInterviewerApp, FileMode.Open, FileAccess.Read);
+            Stream fileStream = new FileStream(pathToSupervisorApp, FileMode.Open, FileAccess.Read);
             var response = new ProgressiveDownload(this.Request).ResultMessage(fileStream,
                 @"application/vnd.android.package-archive");
 
@@ -84,8 +88,8 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
         public virtual int? GetLatestVersion()
         {
             string pathToInterviewerApp =
-                this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(PHYSICALPATHTOAPPLICATION),
-                    PHYSICALAPPLICATIONFILENAME);
+                this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(ClientApkInfo.Directory),
+                    ClientApkInfo.InterviewerFileName);
 
             return !this.fileSystemAccessor.IsFileExists(pathToInterviewerApp)
                 ? null
@@ -172,7 +176,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
         private HttpResponseMessage GetPatchFile(string fileName)
         {
             string pathToInterviewerPatch = this.fileSystemAccessor.CombinePath(
-                HostingEnvironment.MapPath(PHYSICALPATHTOAPPLICATION), fileName);
+                HostingEnvironment.MapPath(ClientApkInfo.Directory), fileName);
 
             if (!this.fileSystemAccessor.IsFileExists(pathToInterviewerPatch))
                 return this.Request.CreateErrorResponse(HttpStatusCode.NotFound, TabletSyncMessages.FileWasNotFound);

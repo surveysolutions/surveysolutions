@@ -1458,6 +1458,24 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Download updates for Interviewer application.
+        /// </summary>
+        public static string Prefs_DownloadUpdatesForInterviewerApp {
+            get {
+                return ResourceManager.GetString("Prefs_DownloadUpdatesForInterviewerApp", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to If interviewers don&apos;t have an access to the internet, this functionality should be enabled, because it make possibility to update their applications during offline synchronization with Supervisor application.
+        /// </summary>
+        public static string Prefs_DownloadUpdatesForInterviewerAppSummary {
+            get {
+                return ResourceManager.GetString("Prefs_DownloadUpdatesForInterviewerAppSummary", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Number of meters to set accuracy.
         /// </summary>
         public static string Prefs_GpsDesiredAccuracySubTitle {

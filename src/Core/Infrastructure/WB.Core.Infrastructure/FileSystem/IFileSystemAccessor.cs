@@ -6,6 +6,7 @@ namespace WB.Core.Infrastructure.FileSystem
     public interface IFileSystemAccessor
     {
         string CombinePath(string path1, string path2);
+        string CombinePath(params string[] pathes);
         string GetFileName(string filePath);
         string GetFileNameWithoutExtension(string filePath);
         string GetFileExtension(string filePath);
@@ -32,7 +33,7 @@ namespace WB.Core.Infrastructure.FileSystem
 
         void WriteAllText(string pathToFile, string content);
         void WriteAllBytes(string pathToFile, byte[] content);
-        byte[] ReadAllBytes(string pathToFile);
+        byte[] ReadAllBytes(string pathToFile, long? start = null, long? length = null);
         string ReadAllText(string pathToFile);
 
         void CopyFileOrDirectory(string sourceDir, string targetDir, bool overrideAll = false, string[] fileExtentionsFilter = null);

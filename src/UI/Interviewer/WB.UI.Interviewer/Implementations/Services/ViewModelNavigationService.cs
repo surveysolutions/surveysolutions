@@ -13,6 +13,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.UI.Interviewer.Activities;
 using WB.UI.Interviewer.ViewModel;
+using WB.UI.Shared.Enumerator.CustomServices;
 using WB.UI.Shared.Enumerator.Services;
 
 namespace WB.UI.Interviewer.Implementations.Services
@@ -72,6 +73,7 @@ namespace WB.UI.Interviewer.Implementations.Services
             });
 
         public override Task NavigateToLoginAsync() => this.NavigateToAsync<LoginViewModel>();
+
         protected override void FinishActivity() => this.androidCurrentTopActivity.Activity.Finish();
         protected override void NavigateToSettingsImpl() =>
             this.androidCurrentTopActivity.Activity.StartActivity(new Intent(this.androidCurrentTopActivity.Activity, typeof(PrefsActivity)));

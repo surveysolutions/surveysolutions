@@ -32,11 +32,13 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             if (!string.IsNullOrWhiteSpace(schemaName))
                 tableName = schemaName + "." + tableName;
 
-            this.EnshureTableExists();
+            //this.EnshureTableExists();
         }
 
         public virtual TEntity GetById(string id)
         {
+            EnshureTableExists();
+
             string queryResult;
             using (var command = new NpgsqlCommand())
             {
@@ -62,6 +64,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         
         public virtual void Remove(string id)
         {
+            EnshureTableExists();
+
             int queryResult;
             using (var command = new NpgsqlCommand())
             {
@@ -80,6 +84,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         public virtual void Store(TEntity view, string id)
         {
+            EnshureTableExists();
+
             bool entityExists;
             using (var existsCommand = new NpgsqlCommand())
             {
@@ -119,6 +125,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         public virtual void BulkStore(List<Tuple<TEntity, string>> bulk)
         {
+            EnshureTableExists();
+
             try
             {
                 this.FastBulkStore(bulk);
@@ -170,6 +178,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         private void SlowBulkStore(List<Tuple<TEntity, string>> bulk)
         {
+            EnshureTableExists();
+
             foreach (var tuple in bulk)
             {
                 var entity = tuple.Item1;
@@ -179,8 +189,12 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             }
         }
 
+        private bool doesExistTable = false;
+
         protected void EnshureTableExists()
         {
+            if (doesExistTable) return;
+
             using (var connection = new NpgsqlConnection(this.connectionString))
             {
                 connection.Open();
@@ -194,6 +208,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                     sqlCommand.ExecuteNonQuery();
                 }
             }
+
+            doesExistTable = true;
         }
     }
 }

@@ -50,7 +50,8 @@ namespace WB.UI.Supervisor.Services.Implementation
             HttpResponseTimeoutInSec = Application.Context.Resources.GetInteger(Resource.Integer.HttpResponseTimeout),
             EventChunkSize = Application.Context.Resources.GetInteger(Resource.Integer.EventChunkSize),
             CommunicationBufferSize = Application.Context.Resources.GetInteger(Resource.Integer.BufferSize),
-            ShowLocationOnMap = Application.Context.Resources.GetBoolean(Resource.Boolean.ShowLocationOnMap)
+            ShowLocationOnMap = Application.Context.Resources.GetBoolean(Resource.Boolean.ShowLocationOnMap),
+            DownloadUpdatesForInterviewerApp = Application.Context.Resources.GetBoolean(Resource.Boolean.DownloadUpdatesForInterviewerApp)
         };
 
         protected override EnumeratorSettingsView CurrentSettings => this.currentSettings;
@@ -62,6 +63,14 @@ namespace WB.UI.Supervisor.Services.Implementation
         public void SetGpsResponseTimeout(int timeout) => throw new NotImplementedException();
         public void SetGpsDesiredAccuracy(double value) => throw new NotImplementedException();
         public void SetShowLocationOnMap(bool showLocationOnMap) => this.SaveCurrentSettings(settings => settings.ShowLocationOnMap = showLocationOnMap);
+
+        public string InterviewerApplicationsDirectory =>
+            this.fileSystemAccessor.CombinePath(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "patches");
+
+        public bool DownloadUpdatesForInterviewerApp => this.currentSettings.DownloadUpdatesForInterviewerApp ?? true;
+
+        public void SetDownloadUpdatesForInterviewerApp(bool downloadUpdatesForInterviewerApp) 
+            => this.SaveCurrentSettings(settings => settings.DownloadUpdatesForInterviewerApp = downloadUpdatesForInterviewerApp);
 
         private void SaveCurrentSettings(Action<ApplicationSettingsView> onChanging)
         {

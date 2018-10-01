@@ -14,7 +14,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Autofac" Version="4.8.1" />
-    <PackageReference Include="Humanizer.Core" Version="2.2.0" />
+    <PackageReference Include="Humanizer.Core" Version="2.4.2" />
     <PackageReference Include="MvvmCross.Plugin.Messenger" Version="6.1.2" />
     <PackageReference Include="MvvmCross.Plugin.PictureChooser" Version="6.1.2" />
     <PackageReference Include="MvvmCross.Plugin.WebBrowser" Version="6.1.2" />

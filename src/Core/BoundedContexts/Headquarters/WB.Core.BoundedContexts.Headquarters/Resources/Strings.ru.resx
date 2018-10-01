@@ -237,4 +237,11 @@
     <value>С ошибками</value>
     <comment>С ошибками</comment>
   </data>
+  <data name="Teams" xml:space="preserve">
+    <value>Команды</value>
+    <comment>Команды</comment>
+  </data>
+  <data name="NoPermissionsToExecute" xml:space="preserve">
+    <value>Пользователь не авторизован выполнять данное действие</value>
+  </data>
 </root>

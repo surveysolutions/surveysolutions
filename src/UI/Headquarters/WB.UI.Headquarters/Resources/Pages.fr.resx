@@ -756,9 +756,6 @@
   <data name="InterviewerProfile_DeviceSerial" xml:space="preserve">
     <value>Numéro de série de l'appareil</value>
   </data>
-  <data name="InterviewerProfile_DownloadedInterviewsCount" xml:space="preserve">
-    <value>entretiens reçus par l'enquêteur</value>
-  </data>
   <data name="InterviewerProfile_DownloadedQuestionnairesCount" xml:space="preserve">
     <value>Questionnaires reçus par l'enquêteur</value>
   </data>

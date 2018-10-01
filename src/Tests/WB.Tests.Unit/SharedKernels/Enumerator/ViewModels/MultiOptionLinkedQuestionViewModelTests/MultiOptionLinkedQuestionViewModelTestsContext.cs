@@ -34,7 +34,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
                 userIdentity ?? Mock.Of<IPrincipal>(x => x.CurrentUserIdentity == Mock.Of<IUserIdentity>(y => y.UserId == Guid.NewGuid())),
                 eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
-                mainThreadDispatcher ?? Stub.MvxMainThreadDispatcher());
+                mainThreadDispatcher ?? Stub.MvxMainThreadAsyncDispatcher())
+            {
+                ThrottlePeriod = 0
+            };
         }
 
         protected static MultiOptionLinkedToRosterQuestionViewModel CreateMultiOptionRosterLinkedQuestionViewModel(
@@ -59,7 +62,10 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.MultiOptionLinkedQue
                     Mock.Of<IPrincipal>(
                         x => x.CurrentUserIdentity == Mock.Of<IUserIdentity>(y => y.UserId == Guid.NewGuid())),
                     eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
-                    mainThreadDispatcher ?? Stub.MvxMainThreadDispatcher());
+                    mainThreadDispatcher ?? Stub.MvxMainThreadAsyncDispatcher())
+                {
+                    ThrottlePeriod = 0
+                };
         }
         protected static MultiOptionLinkedToRosterQuestionViewModel CreateMultiOptionRosterLinkedQuestionViewModel(
             IQuestionnaire questionnaire,

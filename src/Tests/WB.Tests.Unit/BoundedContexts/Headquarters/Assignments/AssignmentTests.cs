@@ -1,4 +1,5 @@
-﻿using NUnit.Framework;
+﻿using System;
+using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Tests.Abc;
 
@@ -27,6 +28,19 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             Assert.That(assignment.IsCompleted, Is.False);
             Assert.That(assignment.InterviewsNeeded, Is.Null);
+        }
+
+        [Test]
+        public void when_reassigned_should_recet_received_by_tablet()
+        {
+            var assignment = Create.Entity.Assignment(quantity: null);
+            assignment.MarkAsReceivedByTablet();
+
+            Assert.That(assignment.ReceivedByTabletAtUtc, Is.Not.Null);
+
+            assignment.Reassign(Guid.NewGuid());
+
+            Assert.That(assignment.ReceivedByTabletAtUtc, Is.Null);
         }
     }
 }

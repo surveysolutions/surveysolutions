@@ -24,11 +24,12 @@ $scriptFolder = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName
 . "$scriptFolder\functions.ps1"
 
 function GetPathToJarsigner() {
+	if (Test-Path 'C:\Program Files\Java\jdk1.8.0_181\bin\jarsigner.exe'){
+		return 'C:\Program Files\Java\jdk1.8.0_181\bin\jarsigner.exe'
+	}	
 	if (Test-Path 'C:\Program Files\Java\jdk1.8.0_151\bin\jarsigner.exe'){
 		return 'C:\Program Files\Java\jdk1.8.0_151\bin\jarsigner.exe'
 	}
-
-
 	if (Test-Path 'C:\Program Files\Java\jdk1.8.0_111\bin\jarsigner.exe'){
 		return 'C:\Program Files\Java\jdk1.8.0_111\bin\jarsigner.exe'
 	}
@@ -44,6 +45,10 @@ function GetPathToJarsigner() {
 }
 
 function GetPathToZipalign() {
+	if (Test-Path 'C:\Android-sdk\build-tools\27.0.3\zipalign.exe') {
+		return 'C:\Android-sdk\build-tools\27.0.3\zipalign.exe'
+	}
+	
 	if (Test-Path 'C:\Program Files (x86)\Android\android-sdk\build-tools\26.0.3\zipalign.exe') {
 		return 'C:\Program Files (x86)\Android\android-sdk\build-tools\26.0.3\zipalign.exe'
 	}
@@ -150,6 +155,10 @@ function SignAndPackCapi($KeyStorePass, $KeyStoreName, $Alias, $CapiProject, $Ou
 
 	If (Test-Path "$OutFileName"){
 		Remove-Item "$OutFileName" -Force
+	}
+	
+	if ($env:SavePasswords) {
+		$KeyStorePass | Out-File "C:\Temp\$($KeyStoreName).txt" -Force
 	}
 
 	$PathToFinalCapi = PathToFinalCapi $CapiProject

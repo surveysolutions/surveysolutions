@@ -4,64 +4,13 @@
     "version": "2.0.0",
     "tasks": [
         {
-            "label": "yarn install",
-            "type": "process",
-            "command": "yarn",
-            "problemMatcher": []
-        },
-        {
             "type": "gulp",
-            "task": "watch",
-            "problemMatcher": []
-        },
-        {
-            "type": "gulp",
-            "task": "resx2json",
-            "problemMatcher": []
-        },
-        {
-            "type": "shell",
-            "label": "Rebuild",
-            "command": "yarn",
-            "args": [
-                "gulp",
-                "default"
-            ],
-            "options": {
-                "env": {
-                    "FORCE_CLEANUP": "true"
-                }
-            },
-            "problemMatcher": []
-        },
-        {
-            "type": "gulp",
-            "task": "default",
+            "task": "build",
             "problemMatcher": [],
             "group": {
                 "kind": "build",
                 "isDefault": true
             }
-        },
-        {
-            "type": "npm",
-            "script": "production",
-            "problemMatcher": []
-        },
-        {
-            "type": "gulp",
-            "task": "vendor",
-            "problemMatcher": []
-        },
-        {
-            "type": "gulp",
-            "task": "hot",
-            "problemMatcher": []
-        },
-        {
-            "type": "npm",
-            "script": "dev",
-            "problemMatcher": []
         }
     ]
 }

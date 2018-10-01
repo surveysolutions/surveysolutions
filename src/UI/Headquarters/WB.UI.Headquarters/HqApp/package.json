@@ -1,85 +1,34 @@
 {
-  "name": "wb-hq",
-  "version": "1.0.0",
-  "description": "",
+  "name": "hello-world",
+  "version": "0.1.0",
+  "private": true,
   "scripts": {
-    "watch": "gulp watch",
-    "dev": "gulp",
-    "production": "gulp --production",
-    "test": "jest",
-    "postinstall": "rimraf dist && rimraf locale && rimraf node_modules/.cache",
-    "hot": "gulp hot"
-  },
-  "author": "World Bank Group",
-  "license": "ISC",
-  "devDependencies": {
-    "babel-core": "^6.26.0",
-    "babel-jest": "^22.0.4",
-    "babel-loader": "^7.1.2",
-    "babel-plugin-dynamic-import-webpack": "^1.0.2",
-    "babel-plugin-syntax-dynamic-import": "^6.18.0",
-    "babel-plugin-transform-async-to-generator": "^6.24.1",
-    "babel-plugin-transform-export-extensions": "^6.22.0",
-    "babel-plugin-transform-runtime": "^6.23.0",
-    "babel-polyfill": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
-    "babel-preset-stage-2": "^6.24.1",
-    "clean-css-loader": "^0.1.4",
-    "clean-webpack-plugin": "^0.1.17",
-    "cross-env": "^5.1.3",
-    "css-loader": "^0.28.7",    
-    "eslint": "^4.14.0",
-    "eslint-friendly-formatter": "^3.0.0",
-    "eslint-loader": "^1.9.0",
-    "eslint-plugin-vue": "beta",
-    "extract-text-webpack-plugin": "^3.0.2",
-    "friendly-errors-webpack-plugin": "^1.6.1",
-    "gulp": "^3.9.1",
-    "gulp-clean": "^0.3.2",
-    "gulp-clean-css": "^3.9.0",
-    "gulp-debug": "^3.1.0",
-    "gulp-filter": "^5.0.1",
-    "gulp-flatten": "^0.3.1",
-    "gulp-load-plugins": "^1.5.0",
-    "gulp-rename": "^1.2.2",
-    "gulp-resx2json": "^1.0.1",
-    "gulp-util": "^3.0.8",
-    "handlebars": "^4.0.11",
-    "html-webpack-plugin": "^2.30.1",
-    "jest": "^22.0.4",
-    "jest-teamcity": "^1.3.0",
-    "pug": "^2.0.3",
-    "pug-loader": "^2.4.0",
-    "rimraf": "^2.6.2",
-    "uglifyjs-webpack-plugin": "^1.2.4",
-    "vue-loader": "^14.2.2",
-    "vue-template-compiler": "^2.5.16",
-    "webpack": "^3.11.0",
-    "webpack-bundle-analyzer": "^2.9.1",
-    "webpack-dev-server": "^2.9.7",
-    "webpack-merge": "^4.1.1",
-    "webpack-notifier": "^1.5.0",
-    "write-file-webpack-plugin": "^4.2.0"
+    "serve": "cross-env HOT_MODE=1 vue-cli-service serve",
+    "build": "vue-cli-service build",
+    "dev": "vue-cli-service build --mode development",
+    "lint": "vue-cli-service lint",
+    "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
+    "@google/markerclustererplus": "^2.1.11",
     "append-query": "^2.0.1",
     "autonumeric": "^4.2.12",
-    "axios": "^0.17.1",
+    "axios": "^0.18.0",
     "bootbox": "^4.4.0",
     "bootstrap": "^3.3.7",
-    "bootstrap-select": "^1.12.4",
+    "bootstrap-select": "1.12.4",
+    "datatables.net": "1.10.16",
+    "datatables.net-select": "1.2.5",
     "es6-promise": "^4.2.2",
-    "datatables.net": "^1.10.16",
-    "datatables.net-select": "^1.2.5",
+    "filemanager-webpack-plugin": "^2.0.2",
     "flatpickr": "^3.0.7",
     "fuse.js": "^3.2.0",
-    "i18next": "^10.2.1",
+    "i18next": "^11.9.0",
     "jquery": "^3.2.1",
     "jquery-contextmenu": "^2.6.3",
     "jquery-highlight": "^3.4.0",
     "jquery-mask-plugin": "^1.14.13",
     "js-info-bubble": "^0.8.0",
-    "js-marker-clusterer": "^1.0.0",
     "lodash": "^4.17.4",
     "moment": "^2.20.1",
     "pnotify": "^3.2.1",
@@ -89,25 +38,82 @@
     "sticky-kit": "^1.1.3",
     "toastr": "^2.1.4",
     "vee-validate": "^2.0.0-rc.27",
-    "vue": "^2.5.16",
+    "vue": "^2.5.17",
     "vue-infinite-loading": "^2.2.3",
     "vue-router": "^3.0.1",
     "vue-textarea-autosize": "^1.0.4",
-    "vue2-editor": "^2.4.2",
+    "vue2-editor": "^2.6.6",
     "vuex": "^3.0.1",
     "vuex-router-sync": "^5.0.0"
   },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "^3.0.3",
+    "@vue/cli-plugin-eslint": "^3.0.3",
+    "@vue/cli-plugin-unit-jest": "^3.0.0",
+    "@vue/cli-service": "^3.0.3",
+    "@vue/eslint-config-prettier": "^3.0.3",
+    "@vue/test-utils": "^1.0.0-beta.20",
+    "babel-core": "7.0.0-bridge.0",
+    "babel-jest": "^23.0.1",
+    "cross-env": "^5.1.3",
+    "gulp": "^3.9.1",
+    "gulp-filter": "^5.1.0",
+    "gulp-load-plugins": "^1.5.0",
+    "gulp-util": "^3.0.8",
+    "node-sass": "^4.9.0",
+    "rimraf": "^2.6.2",
+    "sass-loader": "^7.0.1",
+    "vue-template-compiler": "^2.5.17",
+    "write-file-webpack-plugin": "^4.3.2",
+    "xmldoc": "^1.1.2"
+  },
+  "eslintConfig": {
+    "root": true,
+    "env": {
+      "node": true
+    },
+    "extends": [
+      "plugin:vue/recommended",
+      "@vue/prettier"
+    ],
+    "rules": {},
+    "parserOptions": {
+      "parser": "babel-eslint"
+    }
+  },
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {}
+    }
+  },
+  "browserslist": [
+    "last 2 versions",
+    "not ie <= 9"
+  ],
   "jest": {
-    "testResultsProcessor": "jest-teamcity",
-    "rootDir": "src",
-    "coverageDirectory": "../.coverage",
-    "collectCoverage": true,
-    "modulePaths": [
-      "<rootDir>"
+    "moduleFileExtensions": [
+      "js",
+      "jsx",
+      "json",
+      "vue"
     ],
     "transform": {
+      "^.+\\.vue$": "vue-jest",
+      ".+\\.(css|styl|less|sass|scss|png|jpg|ttf|woff|woff2)$": "jest-transform-stub",
       "^.+\\.jsx?$": "babel-jest"
     },
-    "setupTestFrameworkScriptFile": "<rootDir>/tests/setup.js"
+    "moduleNameMapper": {
+      "^@/(.*)$": "<rootDir>/src/$1"
+    },
+    "snapshotSerializers": [
+      "jest-serializer-vue"
+    ],
+    "testMatch": [
+      "**/tests/unit/**/*.spec.(js|jsx|ts|tsx)|**/__tests__/*.(js|jsx|ts|tsx)"
+    ],
+    "testURL": "http://localhost/",
+    "testPathIgnorePatterns": [
+      "/locale//.resources/"
+    ]
   }
 }

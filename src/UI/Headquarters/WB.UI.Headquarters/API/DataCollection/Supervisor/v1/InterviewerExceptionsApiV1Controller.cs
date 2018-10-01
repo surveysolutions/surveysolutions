@@ -29,7 +29,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
                     InterviewerId = exception.InterviewerId,
                     LogDate = DateTime.UtcNow,
                     Type = SynchronizationLogType.DeviceUnexpectedException,
-                    Log = $@"<font color=""red"">{exception.StackTrace}</font>"
+                    Log = $@"<pre><font color=""red"">{exception.StackTrace.Replace("\r\n", "<br />")}</font></pre>"
                 }, Guid.NewGuid());
             }
 

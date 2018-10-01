@@ -26,7 +26,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             protected set => this.RaiseAndSetIfChanged( ref this.itemsCount, value);
         }
 
-        protected Task UpdateUiItems() => Task.Run(() =>
+        public Task UpdateUiItemsAsync() => Task.Run(() =>
         {
             this.IsItemsLoaded = false;
 

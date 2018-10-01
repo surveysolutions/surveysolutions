@@ -8,7 +8,6 @@ using MvvmCross.Plugin.Messenger;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Supervisor.Properties;
 using WB.Core.BoundedContexts.Supervisor.ViewModel;
-using WB.Core.BoundedContexts.Supervisor.ViewModel.InterviewerSelector;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
@@ -210,7 +209,6 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
                 dynamicTextViewModel ?? Create.ViewModel.DynamicTextViewModel(),
                 navigationService ?? Mock.Of<IViewModelNavigationService>(),
                 logger ?? Mock.Of<ILogger>(),
-                Mock.Of<IInterviewerSelectorDialog>(),
                 auditLogService ?? Mock.Of<IAuditLogService>()
             );
         }

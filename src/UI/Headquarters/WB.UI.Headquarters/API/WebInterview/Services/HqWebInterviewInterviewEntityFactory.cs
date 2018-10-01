@@ -3,6 +3,7 @@ using AutoMapper;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
+using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Enumerator.Native.WebInterview.Models;
 using WB.Enumerator.Native.WebInterview.Services;
@@ -13,7 +14,10 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
     {
         private readonly IAuthorizedUser authorizedUser;
 
-        public HqWebInterviewInterviewEntityFactory(IMapper autoMapper, IAuthorizedUser authorizedUser) : base(autoMapper)
+        public HqWebInterviewInterviewEntityFactory(IMapper autoMapper, 
+            IAuthorizedUser authorizedUser,
+            IEnumeratorGroupStateCalculationStrategy enumeratorGroupStateCalculationStrategy,
+            ISupervisorGroupStateCalculationStrategy supervisorGroupStateCalculationStrategy) : base(autoMapper, enumeratorGroupStateCalculationStrategy, supervisorGroupStateCalculationStrategy)
         {
             this.authorizedUser = authorizedUser;
         }

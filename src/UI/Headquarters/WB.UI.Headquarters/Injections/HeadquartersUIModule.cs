@@ -52,35 +52,24 @@ namespace WB.UI.Headquarters.Injections
             registry.Bind<IMetaInfoBuilder, MetaInfoBuilder>();
             registry.Bind<IUserImportService, UserImportService>();
             registry.Bind<IMoveUserToAnotherTeamService, MoveUserToAnotherTeamService>();
-            registry.Bind<IAttachmentContentService, AttachmentContentService>();
             registry.Bind<ISupportedVersionProvider, SupportedVersionProvider>();
             registry.Bind<IDataExportProcessDetails, DataExportProcessDetails>();
 
             registry.Bind<IExceptionFilter, HandleUIExceptionAttribute>();
 
-            registry.Bind<IAssemblyService, AssemblyService>();
             registry.Bind<IImageProcessingService, ImageProcessingService>();
 
             registry.BindAsSingleton<IVersionCheckService, VersionCheckService>();
             registry.BindAsSingleton<IHttpStatistician, HttpStatistician>();
             registry.BindAsSingleton<IAudioProcessingService, AudioProcessingService>();
 
-            registry.BindToMethod<ISerializer>(() => new NewtonJsonSerializer());
-            registry.BindToMethod<IInterviewAnswerSerializer>(() => new NewtonInterviewAnswerJsonSerializer());
-
-            registry.BindToMethod<IJsonAllTypesSerializer>(() => new JsonAllTypesSerializer());
-
-            registry.Bind<IStringCompressor, JsonCompressor>();
             registry.BindAsSingleton<IRestServiceSettings, DesignerQuestionnaireApiRestServiceSettings>();
 
+            registry.Bind<IHttpClientFactory, DefaultHttpClientFactory>();
             registry.Bind<IRestService, RestService>(
                 new ConstructorArgument("networkService", _ => null),
                 new ConstructorArgument("restServicePointManager", _ => null),
                 new ConstructorArgument("httpStatistican", _ => _.Resolve<IHttpStatistician>()));
-
-            registry.Bind<IExportSettings, ExportSettings>();
-
-            registry.Bind<IArchiveUtils, IProtectedArchiveUtils, ZipArchiveUtils>();
 
             registry.BindHttpFilter<UnderConstructionHttpFilter>(System.Web.Http.Filters.FilterScope.Global, 0);
             registry.BindMvcFilter<UnderConstructionMvcFilter>(FilterScope.First, 0);

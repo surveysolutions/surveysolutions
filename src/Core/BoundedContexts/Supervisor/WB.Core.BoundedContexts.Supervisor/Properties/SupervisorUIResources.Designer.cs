@@ -98,6 +98,42 @@ namespace WB.Core.BoundedContexts.Supervisor.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Downloading updates for interviewer application.
+        /// </summary>
+        public static string Synchronization_Download_Interviewer_Apps {
+            get {
+                return ResourceManager.GetString("Synchronization_Download_Interviewer_Apps", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Downloading updates. {0} of {1} downloaded.
+        /// </summary>
+        public static string Synchronization_Download_Interviewer_Apps_Format {
+            get {
+                return ResourceManager.GetString("Synchronization_Download_Interviewer_Apps_Format", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Synchronize with Headquarters.
+        /// </summary>
+        public static string Synchronization_Synchronize_HQ {
+            get {
+                return ResourceManager.GetString("Synchronization_Synchronize_HQ", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Synchronize with Interviewers.
+        /// </summary>
+        public static string Synchronization_Synchronize_Offline {
+            get {
+                return ResourceManager.GetString("Synchronization_Synchronize_Offline", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Uploading broken interview packages.
         /// </summary>
         public static string Synchronization_UploadBrokenInterviewPackages {
