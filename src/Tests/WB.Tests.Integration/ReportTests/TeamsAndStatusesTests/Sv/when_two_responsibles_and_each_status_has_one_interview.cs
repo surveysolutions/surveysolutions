@@ -39,7 +39,7 @@ namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests.Sv
             BecauseOf();
         }
 
-        public void BecauseOf() => report = postgresTransactionManager.ExecuteInQueryTransaction(() => reportFactory.GetBySupervisorAndDependentInterviewers(new TeamsAndStatusesInputModel
+        public void BecauseOf() => report = UnitOfWork.ExecuteInQueryTransaction(() => reportFactory.GetBySupervisorAndDependentInterviewers(new TeamsAndStatusesInputModel
         {
             Order = "CompletedCount ASC"
         }));

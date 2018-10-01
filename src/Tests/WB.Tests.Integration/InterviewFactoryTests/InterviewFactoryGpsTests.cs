@@ -81,9 +81,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
             PrepareAnswers(answers);
 
             //act
-            var gpsAnswers = this.plainTransactionManager.ExecuteInPlainTransaction(
-                () => factory.GetGpsAnswers(questionnaireId, gpsQuestionId.Id, 10,
-                    90, -90, 180, -180, null));
+            var gpsAnswers = factory.GetGpsAnswers(questionnaireId, gpsQuestionId.Id, 10, 90, -90, 180, -180, null);
 
             //assert
             Assert.That(gpsAnswers.Length, Is.EqualTo(2));
@@ -130,9 +128,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
             PrepareAnswers(allGpsAnswers);
 
             //act
-            var gpsAnswers = this.plainTransactionManager.ExecuteInQueryTransaction(
-                () => factory.GetGpsAnswers(
-                    questionnaireId, gpsQuestionId.Id, 10, 90, 2, 180, -180, null));
+            var gpsAnswers = factory.GetGpsAnswers(questionnaireId, gpsQuestionId.Id, 10, 90, 2, 180, -180, null);
 
             //assert
             Assert.That(gpsAnswers.Length, Is.EqualTo(1));
@@ -172,9 +168,8 @@ namespace WB.Tests.Integration.InterviewFactoryTests
             PrepareAnswers(allGpsAnswers);
 
             //act
-            var gpsAnswers = this.plainTransactionManager.ExecuteInQueryTransaction(
-                () => factory.GetGpsAnswers(
-                    questionnaireId, gpsQuestionId.Id, 10, 90, 0, 180, -180, null));
+            var gpsAnswers = factory.GetGpsAnswers(
+                    questionnaireId, gpsQuestionId.Id, 10, 90, 0, 180, -180, null);
 
             //assert
             Assert.That(gpsAnswers.Length, Is.EqualTo(1));
@@ -235,9 +230,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
             PrepareAnswers(allGpsAnswers);
 
             //act
-            var gpsAnswers = this.plainTransactionManager.ExecuteInQueryTransaction(
-                () => factory.GetGpsAnswers(
-                    questionnaireId, gpsQuestionId.Id, 10, 90, 0, 180, -180, null));
+            var gpsAnswers = factory.GetGpsAnswers(questionnaireId, gpsQuestionId.Id, 10, 90, 0, 180, -180, null);
 
             //assert
             Assert.That(gpsAnswers.Length, Is.EqualTo(allGpsAnswers.Length));
@@ -275,9 +268,8 @@ namespace WB.Tests.Integration.InterviewFactoryTests
             PrepareAnswers(allGpsAnswers);
 
             //act
-            var gpsAnswers = this.plainTransactionManager.ExecuteInQueryTransaction(
-                () => factory.GetGpsAnswers(
-                    questionnaireId, gpsQuestionId.Id, 1, 90, -90, 180, -180, null));
+            var gpsAnswers = factory.GetGpsAnswers(
+                    questionnaireId, gpsQuestionId.Id, 1, 90, -90, 180, -180, null);
 
             //assert
             Assert.That(gpsAnswers.Length, Is.EqualTo(1));
@@ -337,9 +329,8 @@ namespace WB.Tests.Integration.InterviewFactoryTests
             PrepareAnswers(allGpsAnswers);
 
             //act
-            var gpsAnswers = this.plainTransactionManager.ExecuteInQueryTransaction(
-                () => factory.GetGpsAnswers(
-                    questionnaireId, gpsQuestionId.Id, 2, 90, -90, 180, -180, supervisorId));
+            var gpsAnswers = factory.GetGpsAnswers(
+                    questionnaireId, gpsQuestionId.Id, 2, 90, -90, 180, -180, supervisorId);
 
             //assert
             Assert.That(gpsAnswers.Length, Is.EqualTo(2));
@@ -396,9 +387,8 @@ namespace WB.Tests.Integration.InterviewFactoryTests
             PrepareAnswers(allGpsAnswers);
 
             //act
-            var gpsAnswers = this.plainTransactionManager.ExecuteInQueryTransaction(
-                () => factory.GetGpsAnswers(
-                    questionnaireId, gpsQuestionId.Id, 2, 90, -90, 180, -180, supervisorId));
+            var gpsAnswers = factory.GetGpsAnswers(
+                    questionnaireId, gpsQuestionId.Id, 2, 90, -90, 180, -180, supervisorId);
 
             //assert
             Assert.IsEmpty(gpsAnswers);
@@ -417,8 +407,6 @@ namespace WB.Tests.Integration.InterviewFactoryTests
 
         protected void PrepareAnswers(ICollection<GpsAnswer> answers)
         {
-            this.plainTransactionManager.ExecuteInPlainTransaction(() =>
-            {
                 foreach (var gpsAnswer in answers)
                 {
                     interviewSummaryRepository.Store(new InterviewSummary
@@ -430,10 +418,9 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                         QuestionnaireIdentity = gpsAnswer.QuestionnaireId.ToString()
                     }, gpsAnswer.InterviewId.FormatGuid());
                 }
-            });
+            
 
-            this.plainTransactionManager.ExecuteInPlainTransaction(() =>
-            {
+            
                 foreach (var groupedInterviews in answers.GroupBy(x => x.InterviewId))
                 {
                     var interviewState = Create.Entity.InterviewState(groupedInterviews.Key);
@@ -446,7 +433,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                     interviewState.Enablement = groupedInterviews.ToDictionary(x => x.QuestionId, x => x.IsEnabled);
                     factory.Save(interviewState);
                 }
-            });
+           
         }
     }
 }

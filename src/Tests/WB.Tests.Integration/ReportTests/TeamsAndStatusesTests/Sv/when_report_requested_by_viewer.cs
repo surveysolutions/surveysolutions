@@ -31,7 +31,7 @@ namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests.Sv
             BecauseOf();
         }
 
-        public void BecauseOf() => report = postgresTransactionManager.ExecuteInQueryTransaction(() => reportFactory.GetBySupervisorAndDependentInterviewers(new TeamsAndStatusesInputModel { ViewerId = viewerId }));
+        public void BecauseOf() => report = UnitOfWork.ExecuteInQueryTransaction(() => reportFactory.GetBySupervisorAndDependentInterviewers(new TeamsAndStatusesInputModel { ViewerId = viewerId }));
 
         [NUnit.Framework.Test] public void should_count_number_of_interviews_for_teamlead () => report.Items.First().CompletedCount.Should().Be(2);
 

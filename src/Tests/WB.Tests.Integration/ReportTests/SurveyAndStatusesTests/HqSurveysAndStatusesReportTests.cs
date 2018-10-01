@@ -17,7 +17,7 @@ namespace WB.Tests.Integration.ReportTests.SurveyAndStatusesTests
         {
             var report = Hq.SurveyAndStatuses();
 
-            var view = transactionManager.ExecuteInQueryTransaction(() => report.Load(new SurveysAndStatusesReportInputModel()));
+            var view = report.Load(new SurveysAndStatusesReportInputModel());
 
             Assert.That(view.TotalCount, Is.EqualTo(0));
         }
@@ -48,7 +48,7 @@ namespace WB.Tests.Integration.ReportTests.SurveyAndStatusesTests
 
             var report = Hq.SurveyAndStatuses(interviews);
 
-            var view = transactionManager.ExecuteInQueryTransaction(() => report.Load(new SurveysAndStatusesReportInputModel { Order = "CompletedCount ASC" }));
+            var view = report.Load(new SurveysAndStatusesReportInputModel { Order = "CompletedCount ASC" });
             
             Assert.That(view.TotalCount, Is.EqualTo(2));
             

@@ -3,6 +3,7 @@ using System.Configuration;
 using Npgsql;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Tests.Integration
 {
@@ -12,6 +13,8 @@ namespace WB.Tests.Integration
         protected static NpgsqlConnectionStringBuilder connectionStringBuilder;
         protected static string TestConnectionString;
         private static string databaseName;
+
+        protected IUnitOfWork UnitOfWork;
 
         [SetUp]
         public void Context()
@@ -39,7 +42,13 @@ namespace WB.Tests.Integration
         [TearDown]
         public void Cleanup()
         {
-            pgSqlConnection.Close();
+            if (UnitOfWork != null)
+            {
+                UnitOfWork.AcceptChanges();
+                UnitOfWork.Dispose();
+            }
+
+            //pgSqlConnection.Close();
 
             using (var connection = new NpgsqlConnection(TestConnectionString))
             {
@@ -54,11 +63,6 @@ namespace WB.Tests.Integration
                 }
                 connection.Close();
             }
-        }
-
-        protected void ExecuteInCommandTransaction(Action action)
-        {
-            action();
         }
     }
 }
