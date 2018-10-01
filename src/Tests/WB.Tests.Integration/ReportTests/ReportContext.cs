@@ -33,7 +33,7 @@ namespace WB.Tests.Integration.ReportTests
                         typeof(InterviewCommentedStatusMap)
                 }, true);
 
-            UnitOfWork = new UnitOfWork(sessionFactory);
+            UnitOfWork = IntegrationCreate.UnitOfWork(sessionFactory);
 
             return new PostgreReadSideStorage<InterviewSummary>(UnitOfWork, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
         }

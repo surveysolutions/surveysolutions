@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using FluentAssertions;
 using Moq;
 using NHibernate;
@@ -21,12 +22,17 @@ namespace WB.Tests.Integration.PostgreSQLTests
         [NUnit.Framework.OneTimeSetUp]
         public void context()
         {
-            pgSqlConnection = new NpgsqlConnection(ConnectionStringBuilder.ConnectionString);
-            pgSqlConnection.Open();
+            var sessionFactory = IntegrationCreate.SessionFactory(ConnectionStringBuilder.ConnectionString,
+                new List<Type>()
+                {
+                    typeof(TestPersistedClass)
+                },
+                true, null);
 
-            var sessionProvider = Mock.Of<IUnitOfWork>(x => x.Session == Mock.Of<ISession>(y => y.Transaction == Mock.Of<ITransaction>() && y.Connection == pgSqlConnection));
+            UnitOfWork = IntegrationCreate.UnitOfWork(sessionFactory);
+            
             storage = IntegrationCreate.PostgresReadSideKeyValueStorage<TestPersistedClass>(
-                sessionProvider: sessionProvider, 
+                sessionProvider: UnitOfWork, 
                 postgreConnectionSettings: new UnitOfWorkConnectionSettings { ConnectionString = ConnectionStringBuilder.ConnectionString });
             storedDate = new DateTime(2010, 1, 1);
             usedId = "id";
@@ -40,13 +46,13 @@ namespace WB.Tests.Integration.PostgreSQLTests
         [OneTimeTearDown]
         public void TearDown()
         {
-            pgSqlConnection.Close();
+            UnitOfWork.Dispose();
         }
 
         static PostgresReadSideKeyValueStorage<TestPersistedClass> storage;
         static DateTime storedDate;
         static string usedId;
-        static NpgsqlConnection pgSqlConnection;
+        protected IUnitOfWork UnitOfWork;
     }
 }
 
