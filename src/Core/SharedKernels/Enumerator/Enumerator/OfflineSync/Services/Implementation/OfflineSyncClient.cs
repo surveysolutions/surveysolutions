@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
 
@@ -51,12 +52,13 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
 
             byte[] content = null;
             TResponse response = null;
-            
+
             // reporting back full data, not chunks info
-            var overallProgress = new Progress<TransferProgress>(t =>
+            IProgress<TransferProgress> overallProgress = new Progress<TransferProgress>(t =>
             {
-                t.TotalBytesToReceive = content?.Length;
+                t.TotalBytesToReceive = response?.Length;
                 t.BytesReceived = request.Skip + t.BytesReceived;
+                t.ProgressPercentage = t.Percent ?? 0;
                 progress?.Report(t);
             });
 
@@ -77,6 +79,12 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
 
                 request.Skip = response.Skipped + response.Length;
 
+                overallProgress.Report(new TransferProgress
+                {
+                    BytesReceived = request.Skip,
+                    TotalBytesToReceive = response.Total,
+                    ProgressPercentage = request.Skip.PercentOf(response.Total)
+                });
             } while (request.Skip < response.Total);
 
             response.Content = content;
