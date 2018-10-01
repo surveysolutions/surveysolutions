@@ -63,17 +63,15 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
             {
                 await this.permissions.AssureHasPermission(Permission.Storage);
 
-                Stopwatch sw = null;
                 try
                 {
                     var apkBytes = await this.synchronizationService.GetApplicationAsync(
                         Context.CancellationToken, new Progress<TransferProgress>(downloadProgress =>
                         {
-                            if (sw == null) sw = Stopwatch.StartNew();
-                            if (downloadProgress.ProgressPercentage % 1 != 0) return;
 
                             var receivedKilobytes = downloadProgress.BytesReceived.Bytes();
                             var totalKilobytes = (downloadProgress.TotalBytesToReceive ?? 0).Bytes();
+                            var speed = (downloadProgress.Speed ?? 0).Bytes().Per(TimeSpan.FromSeconds(1)).Humanize("0.00");
 
                             Context.Progress.Report(new SyncProgressInfo
                             {
@@ -82,7 +80,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
                                     InterviewerUIResources.Synchronization_DownloadApplication_Description,
                                     receivedKilobytes.Humanize("0.00"),
                                     totalKilobytes.Humanize("0.00"),
-                                    receivedKilobytes.Per(sw.Elapsed).Humanize("0.00"),
+                                    speed,
                                     (int)downloadProgress.ProgressPercentage),
                                 Status = SynchronizationStatus.Download,
                                 Stage = SyncStage.DownloadApplication,
@@ -90,7 +88,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
                                 {
                                     { "receivedKilobytes", receivedKilobytes.Humanize("0.00") },
                                     { "totalKilobytes", totalKilobytes.Humanize("0.00")},
-                                    { "receivingRate", receivedKilobytes.Per(sw.Elapsed).Humanize("0.00")},
+                                    { "receivingRate", speed},
                                     {"progressPercentage",((int) downloadProgress.ProgressPercentage).ToString()}
                                 }
                             });
