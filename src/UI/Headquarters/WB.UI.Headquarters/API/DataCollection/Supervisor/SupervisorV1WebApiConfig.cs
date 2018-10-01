@@ -27,6 +27,8 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor
             //            config.TypedRoute("api/supervisor/v1", c => c.Action<InterviewerApiV2Controller>(x => x.Get()));
 
             config.TypedRoute(@"api/supervisor/v1/extended", c => c.Action<SupervisorApiController>(x => x.GetSupervisor()));
+            config.TypedRoute(@"api/supervisor/v1/apk/interviewer", c => c.Action<SupervisorApiController>(x => x.GetInterviewer()));
+            config.TypedRoute(@"api/supervisor/v1/apk/interviewer-with-maps", c => c.Action<SupervisorApiController>(x => x.GetInterviewerWithMaps()));
             config.TypedRoute(@"api/supervisor/v1/extended/patch/{deviceVersion}", c => c.Action<SupervisorApiController>(x => x.Patch(Param.Any<int>())));
             config.TypedRoute("api/supervisor/v1/extended/latestversion", c => c.Action<SupervisorApiController>(x => x.GetLatestVersion()));
 
@@ -75,6 +77,8 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor
                 c => c.Action<AssignmentsApiV1Controller>(x => x.GetAssignmentsAsync(Param.Any<CancellationToken>())));
             config.TypedRoute("api/supervisor/v1/assignments/{id}",
                 c => c.Action<AssignmentsApiV1Controller>(x => x.GetAssignmentAsync(Param.Any<int>(), Param.Any<CancellationToken>())));
+            config.TypedRoute("api/supervisor/v1/assignments/{id}/Received",
+                c => c.Action<AssignmentsApiV1Controller>(x => x.Received(Param.Any<int>())));
             config.TypedRoute("api/supervisor/v1/maps", c => c.Action<MapsApiV1Controller>(x => x.GetMaps()));
             config.TypedRoute("api/supervisor/v1/maps/{id}",
                 c => c.Action<MapsApiV1Controller>(x => x.GetMapContent((Param.Any<string>()))));
@@ -108,10 +112,11 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor
                 c => c.Action<InterviewsApiV1Controller>(x => x.PostImage(Param.Any<PostFileRequest>())));
             config.TypedRoute("api/supervisor/v1/interviews/{id:guid}/audio",
                 c => c.Action<InterviewsApiV1Controller>(x => x.PostAudio(Param.Any<PostFileRequest>())));
+            config.TypedRoute("api/supervisor/v1/interviews/{id:guid}/getInterviewUploadState",
+                c => c.Action<InterviewsApiV1Controller>(x => x.GetInterviewUploadState(Param.Any<Guid>(), Param.Any<EventStreamSignatureTag>())));
 
             // INTERVIEWERS
             config.TypedRoute("api/supervisor/v1/interviewers", c => c.Action<InterviewersApiController>(x => x.Get()));
-
         }
 
 #pragma warning restore 4014

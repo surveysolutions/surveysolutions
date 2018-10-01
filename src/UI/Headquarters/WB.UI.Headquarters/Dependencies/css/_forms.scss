@@ -35,11 +35,11 @@
 	.field-to-fill{
 		@extend %field-to-fill;
 	}
-	&.answered, &.has-error{
-		.btn-clear{
-			@extend %visibility-visible;
-		}
-	}
+	// &.answered, &.has-error{
+	// 	.btn-clear{
+	// 		@extend %visibility-visible;
+	// 	}
+	// }
 }
 @include placeholder {
     font-weight: normal !important;

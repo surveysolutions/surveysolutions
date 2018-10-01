@@ -21,6 +21,13 @@ namespace WB.UI.Interviewer
         {
         }
 
+        public override void ResetStart()
+        {
+            //temp fix ofKP-11583
+            //
+            //base.ResetStart();
+        }
+
         protected override void Startup(object hint = null)
         {
             Mvx.Resolve<InterviewDashboardEventHandler>();

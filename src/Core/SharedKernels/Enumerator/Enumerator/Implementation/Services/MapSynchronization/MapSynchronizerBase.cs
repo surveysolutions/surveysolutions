@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.WebApi;
@@ -25,13 +24,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
         private readonly IMapService mapService;
 
         protected MapSyncProviderBase(IMapService mapService, 
-            ISynchronizationService synchronizationService, ILogger logger,
+            ISynchronizationService synchronizationService, 
+            ILogger logger,
             IHttpStatistician httpStatistician, 
             IUserInteractionService userInteractionService, 
             IPrincipal principal,
             IPlainStorage<InterviewView> interviewViewRepository, 
             IAuditLogService auditLogService,
-            IEnumeratorSettings enumeratorSettings) 
+            IEnumeratorSettings enumeratorSettings)
             : base(synchronizationService, logger,
             httpStatistician, userInteractionService, principal,  
             interviewViewRepository, auditLogService, enumeratorSettings)
@@ -42,9 +42,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
         }
 
         protected override bool SendStatistics => false;
-        protected override string SucsessDescription => InterviewerUIResources.Maps_Synchronization_Success_Description;
+        protected override string SuccessDescription => InterviewerUIResources.Maps_Synchronization_Success_Description;
 
-        public override async Task Synchronize(IProgress<SyncProgressInfo> progress, CancellationToken cancellationToken, SynchronizationStatistics statistics)
+        public override async Task Synchronize(IProgress<SyncProgressInfo> progress, 
+            CancellationToken cancellationToken, SynchronizationStatistics statistics)
         {
             progress.Report(new SyncProgressInfo
             {
@@ -53,6 +54,21 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
             });
 
             var items = await this.synchronizationService.GetMapList(cancellationToken).ConfigureAwait(false);
+
+            foreach (var map in this.mapService.GetAvailableMaps())
+            {
+                if (items.Exists(x => string.Compare(x.MapName, map.MapName, StringComparison.InvariantCultureIgnoreCase) == 0))
+                    continue;
+
+                try
+                {
+                    this.mapService.RemoveMap(map.MapName);
+                }
+                catch (Exception ex)
+                {
+                    logger.Info("Unable delete map", ex);
+                }
+            }
 
             cancellationToken.ThrowIfCancellationRequested();
             var processedMapsCount = 0;

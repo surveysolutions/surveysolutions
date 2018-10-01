@@ -555,7 +555,7 @@
     <value>Questionnaires received by Interviewer</value>
   </data>
   <data name="InterviewerProfile_DownloadedInterviewsCount" xml:space="preserve">
-    <value>Interviews received by Interviewer</value>
+    <value>Assignments received by Interviewer</value>
   </data>
   <data name="InterviewerProfile_UploadedInterviewsCount" xml:space="preserve">
     <value>Completed interviews received from Interviewer</value>
@@ -1013,8 +1013,17 @@
   <data name="AreaQestion_Area" xml:space="preserve">
     <value>Area</value>
   </data>
+  <data name="AreaQestion_Length" xml:space="preserve">
+    <value>Length</value>
+  </data>
+  <data name="AreaQestion_Points" xml:space="preserve">
+    <value>Points</value>
+  </data>
   <data name="AreaQestion_AreaUnitMeter" xml:space="preserve">
     <value>square meters</value>
+  </data>
+    <data name="AreaQestion_AreaMeter" xml:space="preserve">
+    <value>meters</value>
   </data>
   <data name="Unarchive" xml:space="preserve">
     <value>Unarchive</value>

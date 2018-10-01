@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 using Ncqrs.Eventing;
+using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
@@ -15,8 +16,6 @@ using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
-using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
-using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Questionnaire.Api;
 using WB.Core.SharedKernels.Questionnaire.Translations;
@@ -24,26 +23,40 @@ using WB.Core.SharedKernels.Questionnaire.Translations;
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
     [ExcludeFromCodeCoverage]
-    public class OfflineSynchronizationService : ISynchronizationService
+    public class OfflineSynchronizationService : IInterviewerSynchronizationService
     {
         private readonly IOfflineSyncClient syncClient;
         private readonly IInterviewerPrincipal principal;
         private readonly IInterviewerQuestionnaireAccessor questionnaireAccessor;
         private readonly IPlainStorage<InterviewView> interviews;
         private readonly IEnumeratorSettings settings;
+        private readonly IDeviceSettings deviceSettings;
 
         public OfflineSynchronizationService(
             IOfflineSyncClient syncClient,
             IInterviewerPrincipal principal,
             IInterviewerQuestionnaireAccessor questionnaireAccessor,
             IPlainStorage<InterviewView> interviews, 
-            IEnumeratorSettings settings)
+            IEnumeratorSettings settings,
+            IDeviceSettings deviceSettings)
         {
             this.syncClient = syncClient;
             this.principal = principal;
             this.questionnaireAccessor = questionnaireAccessor;
             this.interviews = interviews;
             this.settings = settings;
+            this.deviceSettings = deviceSettings;
+        }
+
+        public async Task<InterviewUploadState> GetInterviewUploadState(Guid interviewId, EventStreamSignatureTag eventStreamSignatureTag, CancellationToken cancellationToken)
+        {
+            var result = await this.syncClient.SendAsync<GetInterviewUploadStateRequest, GetInterviewUploadStateResponse>(new GetInterviewUploadStateRequest
+            {
+                InterviewId = interviewId,
+                Check = eventStreamSignatureTag
+            }, cancellationToken);
+
+            return result.UploadState;
         }
 
         public Task UploadInterviewAsync(Guid interviewId, InterviewPackageApiView completedInterview,
@@ -167,6 +180,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return Task.FromResult<RestStreamResult>(null);
         }
 
+        public Task<InterviewerApiView> GetInterviewerAsync(RestCredentials credentials = null, CancellationToken? token = null)
+        {
+            throw new NotSupportedException("Offline mode is not support this method");
+        }
+
         public async Task<Guid> GetCurrentSupervisor(CancellationToken cancellationToken, RestCredentials credentials)
         {
             var response = await this.syncClient.SendAsync<SupervisorIdRequest, SupervisorIdResponse>(
@@ -175,10 +193,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return response.SupervisorId;
         }
 
-        public Task<bool> IsAutoUpdateEnabledAsync(CancellationToken token)
-        {
-            return Task.FromResult(false);
-        }
+        public Task<bool> IsAutoUpdateEnabledAsync(CancellationToken token) => Task.FromResult(true);
 
         public Task UploadAuditLogEntityAsync(AuditLogEntitiesApiView auditLogEntity, CancellationToken cancellationToken)
         {
@@ -217,8 +232,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return response.Assignments;
         }
 
-        private static Version interviewerBoundedContextVersion;
-
         public Task<string> LoginAsync(LogonInfo logonInfo, RestCredentials credentials, CancellationToken? token = null)
         {
             return Task.FromResult("offline sync token");
@@ -231,13 +244,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         public async Task CanSynchronizeAsync(RestCredentials credentials = null, CancellationToken? token = null)
         {
-            if (interviewerBoundedContextVersion == null)
-            {
-                interviewerBoundedContextVersion = 
-                    ReflectionUtils.GetAssemblyVersion(typeof(InterviewerBoundedContextAssemblyIndicator));
-            }
-
-            var request = new CanSynchronizeRequest(interviewerBoundedContextVersion.Revision, 
+            var request = new CanSynchronizeRequest(this.deviceSettings.GetApplicationVersionCode(), 
                 this.principal.CurrentUserIdentity.UserId,
                 this.principal.CurrentUserIdentity.SecurityStamp,
                 settings.LastHqSyncTimestamp);
@@ -313,24 +320,23 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return Task.CompletedTask;
         }
 
-        public Task<byte[]> GetApplicationAsync(CancellationToken token, IProgress<TransferProgress> transferProgress = null)
+        public async Task<byte[]> GetApplicationAsync(CancellationToken token, IProgress<TransferProgress> transferProgress = null)
         {
-            return Task.FromResult<byte[]>(null);
+            var response = await this.syncClient.SendChunkedAsync<GetInterviewerAppRequest, GetInterviewerAppResponse>(
+                new GetInterviewerAppRequest(this.deviceSettings.GetApplicationVersionCode(), this.settings.ApplicationType), 
+                token, transferProgress).ConfigureAwait(false);
+
+            return response.Content;
         }
 
-        public Task<byte[]> GetApplicationPatchAsync(CancellationToken token, IProgress<TransferProgress> transferProgress = null)
-        {
-            return Task.FromResult<byte[]>(null);
-        }
+        public Task<byte[]> GetApplicationPatchAsync(CancellationToken token, IProgress<TransferProgress> transferProgress = null) 
+            => Task.FromResult<byte[]>(null);
 
-        public Task<int?> GetLatestApplicationVersionAsync(CancellationToken token)
+        public async Task<int?> GetLatestApplicationVersionAsync(CancellationToken token)
         {
-            return Task.FromResult<int?>(null);
-        }
-
-        public Task SendBackupAsync(string filePath, CancellationToken token)
-        {
-            return Task.CompletedTask;
+            var response = await this.syncClient.SendAsync<GetLatestApplicationVersionRequest, GetLatestApplicationVersionResponse>(
+                new GetLatestApplicationVersionRequest(), token);
+            return response.InterviewerApplicationVersion;
         }
 
         public async Task<List<InterviewApiView>> GetInterviewsAsync(CancellationToken token)

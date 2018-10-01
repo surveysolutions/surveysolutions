@@ -22,21 +22,19 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Synchronization
 
         Task<byte[]> GetQuestionnaireAssemblyAsync(QuestionnaireIdentity questionnaire, IProgress<TransferProgress> transferProgress, CancellationToken token);
         Task<QuestionnaireApiView> GetQuestionnaireAsync(QuestionnaireIdentity questionnaire, IProgress<TransferProgress> transferProgress, CancellationToken token);
-        Task<List<QuestionnaireIdentity>> GetCensusQuestionnairesAsync(CancellationToken token);
         Task LogQuestionnaireAsSuccessfullyHandledAsync(QuestionnaireIdentity questionnaire);
         Task LogQuestionnaireAssemblyAsSuccessfullyHandledAsync(QuestionnaireIdentity questionnaire);
 
         Task<byte[]> GetApplicationAsync(CancellationToken token, IProgress<TransferProgress> transferProgress = null);
         Task<byte[]> GetApplicationPatchAsync(CancellationToken token, IProgress<TransferProgress> transferProgress = null);
         Task<int?> GetLatestApplicationVersionAsync(CancellationToken token);
-        Task SendBackupAsync(string filePath, CancellationToken token);
 
         Task<List<InterviewApiView>> GetInterviewsAsync(CancellationToken token);
 
         Task LogInterviewAsSuccessfullyHandledAsync(Guid interviewId);
 
         Task<List<CommittedEvent>> GetInterviewDetailsAsync(Guid interviewId, IProgress<TransferProgress> transferProgress, CancellationToken token);
-
+        Task<InterviewUploadState> GetInterviewUploadState(Guid interviewId, EventStreamSignatureTag eventStreamSignatureTag, CancellationToken cancellationToken);
         Task UploadInterviewAsync(Guid interviewId, InterviewPackageApiView completedInterview, IProgress<TransferProgress> transferProgress, CancellationToken token);
         Task UploadInterviewImageAsync(Guid interviewId, string fileName, byte[] fileData, IProgress<TransferProgress> transferProgress, CancellationToken token);
         Task UploadInterviewAudioAsync(Guid interviewId, string fileName, string contentType, byte[] fileData, IProgress<TransferProgress> transferProgressd, CancellationToken token);
@@ -51,7 +49,6 @@ namespace WB.Core.SharedKernels.Enumerator.Services.Synchronization
         
         Task<List<MapView>> GetMapList(CancellationToken cancellationToken);
         Task<RestStreamResult> GetMapContentStream(string mapName, CancellationToken cancellationToken);
-        Task<Guid> GetCurrentSupervisor(CancellationToken token, RestCredentials credentials);
 
         Task<bool> IsAutoUpdateEnabledAsync(CancellationToken token);
         Task UploadAuditLogEntityAsync(AuditLogEntitiesApiView auditLogEntity, CancellationToken cancellationToken);

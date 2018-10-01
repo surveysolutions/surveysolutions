@@ -1,6 +1,6 @@
 ﻿angular.module('designerApp')
     .controller('CommentsEditorCtrl', 
-        function ($rootScope, $scope, $state, commentsService, $i18next, commandService, utilityService, moment) {
+        function ($rootScope, $scope, $state, commentsService, $i18next, commandService, utilityService, moment, confirmService) {
             'use strict';
 
             $scope.maxCommentLength = 1000;
@@ -37,7 +37,24 @@
                         comment.isResolved = true;
                         $rootScope.$broadcast("commentResolved", comment);
                     });
-            }
+            };
+
+            $scope.deleteComment = function(itemId) {
+                var modalInstance = confirmService.open({
+                    title: $i18next.t('DeleteCommentConfirm'),
+                    okButtonTitle: $i18next.t('Delete'),
+                    cancelButtonTitle: $i18next.t('Cancel'),
+                    isReadOnly: $scope.questionnaire.isReadOnlyForUser
+                });
+                modalInstance.result.then(function(confirmResult) {
+                    if (confirmResult === 'ok') {
+                        commentsService.deleteComment($state.params.questionnaireId, itemId).then(function() {
+                                $rootScope.$broadcast("commentDeleted", { id: itemId });
+                            }
+                        );
+                    }
+                });
+            };
 
             $scope.postComment = function() {
                 $scope.activeComment.serverValidation = null;
@@ -65,6 +82,12 @@
 
             $rootScope.$on('commentsOpened', function (event, data) {
                 utilityService.setFocusIn("edit-entity-comment");
+            });
+
+            $rootScope.$on('commentDeleted', function (event, data) {
+                $scope.comments = _.filter($scope.comments, function(comment) {
+                    return comment.id !== data.id;
+                });
             });
 
             $scope.currentChapterId = $state.params.chapterId;

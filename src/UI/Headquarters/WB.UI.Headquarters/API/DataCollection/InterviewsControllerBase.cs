@@ -12,6 +12,7 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernel.Structures.Synchronization.SurveyManagement;
@@ -67,7 +68,8 @@ namespace WB.UI.Headquarters.API.DataCollection
                     QuestionnaireIdentity = interview.QuestionnaireIdentity,
                     IsRejected = interview.IsRejected,
                     ResponsibleId = interview.ResponsibleId,
-                    Sequence = interview.LastEventSequence
+                    Sequence = interview.LastEventSequence,
+                    IsMarkedAsReceivedByInterviewer = interview.IsReceivedByInterviewer
                 }).ToList();
 
             var response = this.Request.CreateResponse(resultValue);
@@ -98,6 +100,21 @@ namespace WB.UI.Headquarters.API.DataCollection
         {
             this.audioFileStorage.StoreInterviewBinaryData(request.InterviewId, request.FileName,
                 Convert.FromBase64String(request.Data), request.ContentType);
+        }
+
+        protected InterviewUploadState GetInterviewUploadStateImpl(Guid id, [FromBody] EventStreamSignatureTag eventStreamSignatureTag)
+        {
+            var doesEventsExists = this.packagesService.IsPackageDuplicated(eventStreamSignatureTag);
+
+            var imageNames = this.imageFileStorage.GetBinaryFilesForInterview(id).Select(bf => bf.FileName).ToHashSet();
+            var audioNames = this.audioFileStorage.GetBinaryFilesForInterview(id).Select(bf => bf.FileName).ToHashSet();
+
+            return new InterviewUploadState
+            {
+                IsEventsUploaded = doesEventsExists,
+                ImagesFilesNames = imageNames,
+                AudioFilesNames = audioNames
+            };
         }
 
         protected JsonResult<List<CommittedEvent>> DetailsV3(Guid id)

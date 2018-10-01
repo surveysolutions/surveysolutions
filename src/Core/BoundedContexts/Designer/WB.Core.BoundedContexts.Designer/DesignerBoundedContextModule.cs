@@ -33,12 +33,14 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService
 using WB.Core.BoundedContexts.Designer.Implementation.Services.QuestionnairePostProcessors;
 using WB.Core.BoundedContexts.Designer.QuestionnaireCompilationForOldVersions;
 using WB.Core.BoundedContexts.Designer.Translations;
+using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.TopologicalSorter;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Infrastructure.Native.Questionnaire;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Infrastructure.Native.Storage;
 
 namespace WB.Core.BoundedContexts.Designer
 {
@@ -60,6 +62,8 @@ namespace WB.Core.BoundedContexts.Designer
             registry.Bind<ISubstitutionService, SubstitutionService>();
 
             registry.Bind<IPlainAggregateRootRepository<User>, UserRepository>();
+            registry.Bind<IPatchGenerator, JsonPatchService>();
+            registry.Bind<IPatchApplier, JsonPatchService>();
             registry.Bind<IPlainAggregateRootRepository<Questionnaire>, QuestionnaireRepository>();
             registry.BindToMethod<IFindReplaceService>(c => new FindReplaceService(c.Get<IPlainAggregateRootRepository<Questionnaire>>()));
 
@@ -77,6 +81,10 @@ namespace WB.Core.BoundedContexts.Designer
             registry.Bind<ITranslationsService, TranslationsService>();
             registry.Bind<ITranslationsExportService, TranslationsExportService>();
             registry.Bind<IQuestionnaireTranslator, QuestionnaireTranslator>();
+
+            registry.BindAsSingleton<IStringCompressor, JsonCompressor>();
+            registry.Bind<ISerializer, NewtonJsonSerializer>();
+            registry.BindInIsolatedThreadScopeOrRequestScopeOrThreadScope<OriginalQuestionnaireStorage>();
 
             registry.Unbind<IExpressionProcessor>();
             registry.BindAsSingleton<IExpressionProcessor, RoslynExpressionProcessor>();

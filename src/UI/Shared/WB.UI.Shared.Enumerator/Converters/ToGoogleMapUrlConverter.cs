@@ -15,7 +15,7 @@ namespace WB.UI.Shared.Enumerator.Converters
 
             return string.Format(
                 CultureInfo.InvariantCulture,
-                "http://maps.googleapis.com/maps/api/staticmap?center={0},{1}&zoom=11&scale=2&size=590x380&markers=color:blue%7Clabel:O%7C{0},{1}",
+                "http://maps.googleapis.com/maps/api/staticmap?center={0},{1}&zoom=11&scale=2&size=590x380&markers=color:blue%7Clabel:O%7C{0},{1}&key=AIzaSyApLR-feMXRPfdDGjuC9NhlzH5udpuTgE4",
                 value.Latitude, value.Longitude);
         }
     }

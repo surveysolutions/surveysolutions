@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Utils;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 
 namespace WB.Enumerator.Native.WebInterview.Models
 {
@@ -52,6 +55,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
     {
         public string Mask { get; set; }
         public string Answer { get; set; }
+        public int MaxLength => AnswerUtils.TextAnswerMaxLength;
     }
 
     public class InterviewIntegerQuestion : GenericQuestion
@@ -98,8 +102,15 @@ namespace WB.Enumerator.Native.WebInterview.Models
     public class InterviewAreaQuestion : GenericQuestion
     {
         public string DisplayUrl { get; set; }
-        public double Answer { get; set; }
-        public string Coordinates { get; set; }
+        public GeometryType? Type { get; set; }
+        public InterviewGeometryAnswer Answer { get; set; }
+    }
+
+    public class InterviewGeometryAnswer
+    {
+        public GeoLocation[] SelectedPoints { get; set; }
+        public double? Area { get; set; }
+        public double? Length { get; set; }
     }
 
     public class InterviewDateQuestion : GenericQuestion
@@ -262,14 +273,6 @@ namespace WB.Enumerator.Native.WebInterview.Models
         public Validity Validity { get; set; } = new Validity();
         public bool Current { get; set; }
         public bool IsRoster { get; set; }
-    }
-
-    public enum GroupStatus
-    {
-        NotStarted = 1,
-        Started,
-        Completed,
-        Invalid
     }
 
     public class DropdownItem

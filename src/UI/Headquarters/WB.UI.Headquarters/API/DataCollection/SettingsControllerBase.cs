@@ -10,11 +10,11 @@ using WB.UI.Headquarters.Models.CompanyLogo;
 
 namespace WB.UI.Headquarters.API.DataCollection
 {
-    public class SettingsControllerBase : ApiController
+    public abstract class SettingsControllerBase : ApiController
     {
         private readonly IPlainKeyValueStorage<CompanyLogo> appSettingsStorage;
 
-        public SettingsControllerBase(IPlainKeyValueStorage<CompanyLogo> appSettingsStorage)
+        protected SettingsControllerBase(IPlainKeyValueStorage<CompanyLogo> appSettingsStorage)
         {
             this.appSettingsStorage = appSettingsStorage;
         }

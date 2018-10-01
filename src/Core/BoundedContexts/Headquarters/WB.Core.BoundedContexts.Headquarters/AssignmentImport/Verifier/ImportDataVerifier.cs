@@ -635,7 +635,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
             var textMask = questionnaire.GetTextQuestionMask(questionId.Value);
             if (string.IsNullOrWhiteSpace(textMask)) return false;
 
-            return !new MaskedFormatter(textMask).IsTextMaskMatched(answer.Value);
+            return !MaskedFormatter.IsTextMaskMatched(answer.Value, textMask);
         }
 
         private bool DateTime_NotParsed(AssignmentDateTimeAnswer answer)

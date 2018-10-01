@@ -39,6 +39,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.Title.Dispose();
         }
 
+        public string Tag => "SideBar_Overview";
+
         public bool IsSelected
         {
             get => isSelected;

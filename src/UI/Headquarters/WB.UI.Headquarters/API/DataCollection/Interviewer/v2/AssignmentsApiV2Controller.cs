@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Net;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http;
@@ -40,5 +41,8 @@ namespace WB.UI.Headquarters.API.DataCollection.Interviewer.v2
         [HttpGet]
         public override Task<List<AssignmentApiView>> GetAssignmentsAsync(CancellationToken cancellationToken)
             => base.GetAssignmentsAsync(cancellationToken);
+
+        [HttpPost]
+        public override HttpResponseMessage Received(int id) => base.Received(id);
     }
 }

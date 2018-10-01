@@ -6,6 +6,7 @@
                 instruction: $i18next.t('HelpInstruction'),
                 mask: $i18next.t('HelpMask'),
                 variableName: $i18next.t('HelpVariableName', {minLength: 1, maxLength: 32}),
+                questionnaireVariableName: $i18next.t('HelpQuestionnaireVarible', {minLength: 1, maxLength: 32}),
                 titleQuestion: $i18next.t('HelpTitles'),
                 variableLabel: $i18next.t('HelpVariableLabel', {maxLength: 80}),
                 conditionExpression: $i18next.t('HelpConditionExpression'),

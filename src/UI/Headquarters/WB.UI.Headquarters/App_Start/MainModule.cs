@@ -23,6 +23,7 @@ using WB.Enumerator.Native.JsonConversion;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Models;
 using WB.Infrastructure.Native;
+using WB.Infrastructure.Native.Monitoring;
 using WB.Infrastructure.Native.Storage;
 using WB.UI.Headquarters.API.Attributes;
 using WB.UI.Headquarters.API.PublicApi;
@@ -30,6 +31,7 @@ using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Implementation.Maps;
 using WB.UI.Headquarters.Implementation.Services;
 using WB.UI.Headquarters.Models.Api;
+using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.MembershipProvider.Accounts;
@@ -119,7 +121,17 @@ namespace WB.UI.Headquarters
             serviceLocator.GetInstance<UpgradeAssignmentJobScheduler>().Configure();
 
             serviceLocator.GetInstance<IScheduler>().Start();
+
+            InitMetrics();
+            MetricsService.Start(serviceLocator);
+
             return Task.CompletedTask;
         }
+
+        private static void InitMetrics()
+        {
+            CommonMetrics.StateFullInterviewsCount.Set(0);
+        }
+
     }
 }

@@ -20,5 +20,6 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         int Count(Expression<Func<AssignmentDocument, bool>> predicate);
 
         int Count();
+        void DecreaseInterviewsCount(int assignmentId);
     }
 }

@@ -63,7 +63,7 @@
                     },
                     status: this.interviewState,
                     validity: {
-                        isValid: !(this.interviewState == GroupStatus.Invalid)
+                        isValid: !(this.interviewState == GroupStatus.StartedInvalid || this.interviewState == GroupStatus.CompletedInvalid)
                     }
                 }
             }

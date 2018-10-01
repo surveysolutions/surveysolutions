@@ -9,16 +9,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 {
     public class InterviewerAssignmentDashboardItemViewModel : AssignmentDashboardItemViewModel, IDashboardViewItem
     {
-        private readonly IServiceLocator serviceLocator;
-
         private IInterviewFromAssignmentCreatorService InterviewFromAssignmentCreator
             => serviceLocator.GetInstance<IInterviewFromAssignmentCreatorService>();
 
-        public int AssignmentId => this.Assignment.Id;
-
         public InterviewerAssignmentDashboardItemViewModel(IServiceLocator serviceLocator) : base(serviceLocator)
         {
-            this.serviceLocator = serviceLocator;
         }
 
         protected override void BindActions()

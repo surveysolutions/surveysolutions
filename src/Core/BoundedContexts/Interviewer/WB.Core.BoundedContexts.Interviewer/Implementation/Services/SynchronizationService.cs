@@ -1,3 +1,5 @@
+using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross;
@@ -7,6 +9,7 @@ using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -19,7 +22,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
     {
         protected override string ApiVersion => "v2";
         protected override string ApiUrl => "api/interviewer/";
-        public string ApiDownloadAppPrefixUrl => "/api/interviewersync";
 
         protected override string InterviewsController => string.Concat(ApiUrl, "v3", "/interviews");
 
@@ -35,6 +37,20 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         {
             return this.TryGetRestResponseOrThrowAsync(() =>
                 this.restService.GetAsync<InterviewerApiView>(url: string.Concat(this.UsersController, "/current"),
+                    credentials: credentials ?? this.restCredentials, token: token));
+        }
+
+        public Task<List<QuestionnaireIdentity>> GetCensusQuestionnairesAsync(CancellationToken token)
+        {
+            return this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<List<QuestionnaireIdentity>>(
+                url: string.Concat(this.QuestionnairesController, "/census"),
+                credentials: this.restCredentials, token: token));
+        }
+
+        public Task<Guid> GetCurrentSupervisor(CancellationToken token, RestCredentials credentials)
+        {
+            return this.TryGetRestResponseOrThrowAsync(() =>
+                this.restService.GetAsync<Guid>(url: string.Concat(this.UsersController, "/supervisor"),
                     credentials: credentials ?? this.restCredentials, token: token));
         }
 
