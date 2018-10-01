@@ -13,7 +13,7 @@ namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests.Sv
         }
 
         private void BecauseOf() => 
-            report = postgresTransactionManager.ExecuteInQueryTransaction(() => reportFactory.GetBySupervisorAndDependentInterviewers(new TeamsAndStatusesInputModel()));
+            report = UnitOfWork.ExecuteInQueryTransaction(() => reportFactory.GetBySupervisorAndDependentInterviewers(new TeamsAndStatusesInputModel()));
 
         [NUnit.Framework.Test] public void should_return_0_records () => report.TotalCount.Should().Be(0);
 

@@ -35,7 +35,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
         protected HqQuestionnaireStorage questionnaireStorage;
         protected InMemoryKeyValueStorage<QuestionnaireDocument> questionnaireDocumentRepository;
         private PostgresPlainStorageRepository<QuestionnaireCompositeItem> compositeItemsRepository;
-        protected IUnitOfWork plainTransactionManager;
+        protected IUnitOfWork UnitOfWork;
 
 
         [OneTimeSetUp]
@@ -53,7 +53,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                     typeof(InterviewCommentedStatusMap)
                 }, true, new UnitOfWorkConnectionSettings().ReadSideSchemaName);
 
-            this.plainTransactionManager = Mock.Of<IUnitOfWork>(x => x.Session == sessionFactory.OpenSession());
+            this.UnitOfWork = new UnitOfWork(sessionFactory);
 
             Abc.Setup.InstanceToMockedServiceLocator<IEntitySerializer<int[][]>>(new EntitySerializer<int[][]>());
             Abc.Setup.InstanceToMockedServiceLocator<IEntitySerializer<GeoPosition>>(new EntitySerializer<GeoPosition>());
@@ -62,9 +62,9 @@ namespace WB.Tests.Integration.InterviewFactoryTests
             Abc.Setup.InstanceToMockedServiceLocator<IEntitySerializer<AudioAnswer>>(new EntitySerializer<AudioAnswer>());
             Abc.Setup.InstanceToMockedServiceLocator<IEntitySerializer<Area>>(new EntitySerializer<Area>());
 
-            this.interviewSummaryRepository = new PostgreReadSideStorage<InterviewSummary>(this.plainTransactionManager, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
-            this.questionnaireItemsRepository = new PostgreReadSideStorage<QuestionnaireCompositeItem, int>(this.plainTransactionManager, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
-            this.compositeItemsRepository = new PostgresPlainStorageRepository<QuestionnaireCompositeItem>(this.plainTransactionManager);
+            this.interviewSummaryRepository = new PostgreReadSideStorage<InterviewSummary>(this.UnitOfWork, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
+            this.questionnaireItemsRepository = new PostgreReadSideStorage<QuestionnaireCompositeItem, int>(this.UnitOfWork, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
+            this.compositeItemsRepository = new PostgresPlainStorageRepository<QuestionnaireCompositeItem>(this.UnitOfWork);
             this.questionnaireDocumentRepository = new InMemoryKeyValueStorage<QuestionnaireDocument>();
             this.questionnaireStorage = new HqQuestionnaireStorage(new InMemoryKeyValueStorage<QuestionnaireDocument>(),
                 Mock.Of<ITranslationStorage>(), Mock.Of<IQuestionnaireTranslator>(),
@@ -75,7 +75,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
         [OneTimeTearDown]
         public void OneTimeTearDown()
         {
-            this.plainTransactionManager.Dispose();
+            this.UnitOfWork.Dispose();
             DatabaseTestInitializer.DropDb(this.connectionString);
         }
 
@@ -102,7 +102,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
         {
             return new InterviewFactory(
                 summaryRepository: interviewSummaryRepository,
-                sessionProvider: this.plainTransactionManager);
+                sessionProvider: this.UnitOfWork);
         }
     }
 }

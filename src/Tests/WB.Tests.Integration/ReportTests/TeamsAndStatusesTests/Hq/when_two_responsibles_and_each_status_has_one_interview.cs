@@ -41,7 +41,7 @@ namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests.Hq
             BecauseOf();
         }
 
-        public void BecauseOf() => report = postgresTransactionManager.ExecuteInQueryTransaction(() => reportFactory.GetBySupervisors(new TeamsAndStatusesByHqInputModel {Order = "CompletedCount ASC" }));
+        public void BecauseOf() => report = UnitOfWork.ExecuteInQueryTransaction(() => reportFactory.GetBySupervisors(new TeamsAndStatusesByHqInputModel {Order = "CompletedCount ASC" }));
 
         [NUnit.Framework.Test] public void should_return_row_per_responsible () => report.TotalCount.Should().Be(2);
 
