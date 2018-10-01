@@ -40,5 +40,15 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             [Query]string archivePassword,
             [Query]string apiKey,
             [Header("Origin")]string tenantBaseUrl);
+        
+        [Get("/api/v1/job/download")]
+        Task<HttpResponseMessage> DownloadArchive([Query] string questionnaireId,
+            [Query] string archiveName,
+            [Query] DataExportFormat format,
+            [Query] InterviewStatus? status,
+            [Query] DateTime? fromDate,
+            [Query] DateTime? toDate,
+            string apiKey,
+            [Header("Origin")] string baseUrl);
     }
 }
