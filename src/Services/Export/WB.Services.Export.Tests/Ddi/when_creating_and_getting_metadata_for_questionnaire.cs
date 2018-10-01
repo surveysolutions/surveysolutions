@@ -1,35 +1,32 @@
 using System;
+using System.IO;
+using System.Threading.Tasks;
 using ddidotnet;
 using FluentAssertions;
-using Main.Core.Entities.Composite;
 using Moq;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
-using WB.Core.Infrastructure.FileSystem;
-using System.IO;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Ddi;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Ddi.Impl;
-using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Tests.Abc;
+using WB.Services.Export.CsvExport.Implementation.DoFiles;
+using WB.Services.Export.Ddi;
+using WB.Services.Export.Ddi.Implementation;
+using WB.Services.Export.Infrastructure;
+using WB.Services.Export.Questionnaire;
 
-
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.MetadataExportServiceTests
+namespace WB.Services.Export.Tests.Ddi
 {
     internal class when_creating_and_getting_metadata_for_questionnaire : MetadataExportServiceTestContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [NUnit.Framework.OneTimeSetUp] public async Task context () {
             var questionnaireLabelFactoryMock = new Mock<IQuestionnaireLabelFactory>();
             var textQuestionId = Guid.NewGuid();
             var numericQuestionId = Guid.NewGuid();
             var singleOptionQuestionId = Guid.NewGuid();
             var gpsQuestionId = Guid.NewGuid();
 
-            var questionnaire = Create.Entity.QuestionnaireDocument(children: new IComposite[]
+            var questionnaire = Create.QuestionnaireDocument(children: new IQuestionnaireEntity[]
             {
-                Create.Entity.TextQuestion(questionId: textQuestionId, text: "text question", label: "a", instruction: "ttt"),
-                Create.Entity.NumericQuestion(questionId: numericQuestionId, title: "numeric question"),
-                Create.Entity.SingleOptionQuestion(questionId: singleOptionQuestionId, title: "single option question"),
-                Create.Entity.GpsCoordinateQuestion(questionId: gpsQuestionId, title: "gps question")
+                Create.TextQuestion(id: textQuestionId, questionText: "text question", variableLabel: "a", instructions: "ttt"),
+                Create.NumericRealQuestion(id: numericQuestionId, questionText: "numeric question"),
+                Create.SingleOptionQuestion(id: singleOptionQuestionId, questionText: "single option question"),
+                Create.GpsCoordinateQuestion(questionId: gpsQuestionId, title: "gps question")
             });
 
             questionnaire.Title = "main level";
@@ -38,19 +35,19 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.M
                 x => x.CreateLabelsForQuestionnaire(Moq.It.IsAny<QuestionnaireExportStructure>()))
                 .Returns(new[]
                 {
-                    Create.Entity.QuestionnaireLevelLabels("main level",
-                        Create.Entity.LabeledVariable(variableName: "txt", label: "lbl_txt", questionId: textQuestionId),
-                        Create.Entity.LabeledVariable(variableName: "num", questionId: numericQuestionId),
-                        Create.Entity.LabeledVariable(variableName: "sng", questionId: singleOptionQuestionId,
+                    Create.QuestionnaireLevelLabels("main level",
+                        Create.LabeledVariable(variableName: "txt", label: "lbl_txt", questionId: textQuestionId),
+                        Create.LabeledVariable(variableName: "num", questionId: numericQuestionId),
+                        Create.LabeledVariable(variableName: "sng", questionId: singleOptionQuestionId,
                             variableValueLabels:
                                 new[]
                                 {
-                                    Create.Entity.VariableValueLabel(value: "1", label: "t1"),
-                                    Create.Entity.VariableValueLabel(value: "2", label: "t2")
+                                    Create.VariableValueLabel(value: "1", label: "t1"),
+                                    Create.VariableValueLabel(value: "2", label: "t2")
                                 }),
-                        Create.Entity.LabeledVariable(variableName: "gps", questionId: gpsQuestionId)),
-                    Create.Entity.QuestionnaireLevelLabels("nested roster level",
-                        Create.Entity.LabeledVariable(variableName: "r1"), Create.Entity.LabeledVariable(variableName: "r2"))
+                        Create.LabeledVariable(variableName: "gps", questionId: gpsQuestionId)),
+                    Create.QuestionnaireLevelLabels("nested roster level",
+                        Create.LabeledVariable(variableName: "r1"), Create.LabeledVariable(variableName: "r2"))
                 });
 
             var fileSystemAccessor = new Mock<IFileSystemAccessor>();
@@ -66,13 +63,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.M
                 questionnaireDocument: questionnaire,
                 metaDescriptionFactory: metaDescriptionFactory.Object,
                 questionnaireLabelFactory: questionnaireLabelFactoryMock.Object);
-            BecauseOf();
+            await BecauseOf();
         }
 
-        public void BecauseOf()
+        private async Task BecauseOf()
         {
-            filePath =
-                ddiMetadataFactory.CreateDDIMetadataFileForQuestionnaireInFolder(new QuestionnaireIdentity(questionnaireId, questionnaireVersion), "");
+            filePath = await 
+                ddiMetadataFactory.CreateDDIMetadataFileForQuestionnaireInFolder(Create.Tenant(), new QuestionnaireId(questionnaireId), "");
         }
 
         [NUnit.Framework.Test] public void should_call_write_xml () =>
@@ -109,7 +106,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.M
             metadataWriter.Verify(x =>x.AddDdiVariableToFile(Moq.It.IsAny<DdiDataFile>(), "r1", DdiDataType.DynString, "lbl", null, null,null));
 
         private static DdiMetadataFactory ddiMetadataFactory;
-        private static Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
+        private static string questionnaireId = "11111111111111111111111111111111";
         private static long questionnaireVersion = 3;
         private static string filePath;
         private static Mock<IMetadataWriter> metadataWriter;

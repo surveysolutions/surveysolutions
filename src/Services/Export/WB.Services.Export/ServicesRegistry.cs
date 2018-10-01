@@ -3,6 +3,8 @@ using Microsoft.Extensions.DependencyInjection;
 using WB.Services.Export.CsvExport;
 using WB.Services.Export.CsvExport.Exporters;
 using WB.Services.Export.CsvExport.Implementation.DoFiles;
+using WB.Services.Export.Ddi;
+using WB.Services.Export.Ddi.Implementation;
 using WB.Services.Export.DescriptionGenerator;
 using WB.Services.Export.ExportProcessHandlers;
 using WB.Services.Export.ExportProcessHandlers.Externals;
@@ -58,6 +60,12 @@ namespace WB.Services.Export
             services.AddTransient<IExportServiceDataProvider, ExportServiceDataProvider>();
             services.AddTransient<IBinaryDataSource, BinaryDataSource>();
             services.AddTransient<IJobsStatusReporting, JobsStatusReporting>();
+            services.AddTransient<IDdiMetadataAccessor, DdiMetadataAccessor>();
+            services.AddTransient<IDdiMetadataFactory, DdiMetadataFactory>();
+            services.AddTransient<IMetadataWriter, MetadataWriter>();
+            services.AddTransient<IMetaDescriptionFactory, MetaDescriptionFactory>();
+
+            
             // Singletons
             services.AddSingleton<ICache, Cache>();
 

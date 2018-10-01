@@ -29,6 +29,7 @@ namespace WB.Services.Export.Questionnaire
         public VariableType Type { get; set; }
         public string Name { get; set; }
         public string Label { get; set; }
+        public string Expression { get; set; }
     }
 
     public enum VariableType

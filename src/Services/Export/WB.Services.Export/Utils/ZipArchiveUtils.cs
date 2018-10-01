@@ -115,5 +115,21 @@ namespace WB.Services.Export.Utils
             //    zipFile.Save(archiveFile);
             //}
         }
+
+        public void ZipFiles(string exportTempDirectoryPath, IEnumerable<string> files, string archiveFilePath, string password = null)
+        {
+            using (var archiveFile = File.Create(archiveFilePath))
+            {
+                using (var archive = CreateArchive(archiveFile, password, CompressionLevel.Fastest))
+                {
+
+                    foreach (var file in files)
+                    {
+                        archive.CreateEntry(file.Substring(exportTempDirectoryPath.Length + 1),
+                            File.ReadAllBytes(file));
+                    }
+                }
+            }
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using WB.Services.Export.Services.Processing.Good;
@@ -27,6 +28,11 @@ namespace WB.Services.Export.Services.Processing
         {
             //   throw new NotImplementedException();
             this.archiveUtils.ZipDirectory(exportTempDirectoryPath, archiveName, archivePassword, exportProgress);
+        }
+
+        public void RecreateExportArchive(string exportTempDirectoryPath, IEnumerable<string> filesToArchive, string archiveFilePath, string archivePassword)
+        {
+            this.archiveUtils.ZipFiles(exportTempDirectoryPath, filesToArchive, archiveFilePath, archivePassword);
         }
 
         public void PubishArchiveToExternalStorage(string archiveFile, IProgress<int> exportProgress)
