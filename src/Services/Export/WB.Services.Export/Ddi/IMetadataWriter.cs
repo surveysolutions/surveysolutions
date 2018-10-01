@@ -1,8 +1,8 @@
 using ddidotnet;
 
-namespace WB.Core.BoundedContexts.Headquarters.DataExport.Ddi
+namespace WB.Services.Export.Ddi
 {
-    internal interface IMetadataWriter
+    public interface IMetadataWriter
     {
         void SetMetadataTitle(string questionnaireTitle);
 

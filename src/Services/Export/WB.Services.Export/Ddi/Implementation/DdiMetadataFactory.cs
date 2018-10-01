@@ -1,30 +1,26 @@
 using System;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using ddidotnet;
-using Main.Core.Documents;
-using Main.Core.Entities.SubEntities;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels;
-using WB.Core.BoundedContexts.Headquarters.Repositories;
-using WB.Core.BoundedContexts.Headquarters.ValueObjects.Export;
-using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
-using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.QuestionnaireEntities;
+using Microsoft.Extensions.Logging;
+using WB.Services.Export.CsvExport.Exporters;
+using WB.Services.Export.CsvExport.Implementation.DoFiles;
+using WB.Services.Export.Infrastructure;
+using WB.Services.Export.Interview;
+using WB.Services.Export.Questionnaire;
+using WB.Services.Export.Questionnaire.Services;
+using WB.Services.Export.Tenant;
 
-namespace WB.Core.BoundedContexts.Headquarters.DataExport.Ddi.Impl
+namespace WB.Services.Export.Ddi.Implementation
 {
-    internal class DdiMetadataFactory : IDdiMetadataFactory
+    public class DdiMetadataFactory : IDdiMetadataFactory
     {
         private readonly IFileSystemAccessor fileSystemAccessor;
 
-        private readonly ILogger logger;
+        private readonly ILogger<DdiMetadataFactory> logger;
 
-        private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
+        private readonly IQuestionnaireExportStructureFactory questionnaireExportStructureStorage;
         private readonly IQuestionnaireStorage questionnaireStorage;
 
         private readonly IMetaDescriptionFactory metaDescriptionFactory;
@@ -32,11 +28,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Ddi.Impl
         private readonly IQuestionnaireLabelFactory questionnaireLabelFactory;
         public DdiMetadataFactory(
             IFileSystemAccessor fileSystemAccessor,
-            ILogger logger,
+            ILogger<DdiMetadataFactory> logger,
             IMetaDescriptionFactory metaDescriptionFactory, 
             IQuestionnaireLabelFactory questionnaireLabelFactory,
             IQuestionnaireStorage questionnaireStorage, 
-            IQuestionnaireExportStructureStorage questionnaireExportStructureStorage)
+            IQuestionnaireExportStructureFactory questionnaireExportStructureStorage)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.logger = logger;
@@ -46,10 +42,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Ddi.Impl
             this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
         }
 
-        public string CreateDDIMetadataFileForQuestionnaireInFolder(QuestionnaireIdentity questionnaireId, string basePath)
+        public async Task<string> CreateDDIMetadataFileForQuestionnaireInFolder(TenantInfo tenant,
+            QuestionnaireId questionnaireId, string basePath)
         {
-            QuestionnaireDocument bigTemplateObject = this.GetQuestionnaireDocument(questionnaireId);
-            QuestionnaireExportStructure questionnaireExportStructure = this.GetQuestionnaireExportStructure(questionnaireId);
+            var bigTemplateObject = await questionnaireStorage.GetQuestionnaireAsync(tenant, questionnaireId);
+            QuestionnaireExportStructure questionnaireExportStructure = 
+                this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(tenant, questionnaireId);
 
             if (questionnaireExportStructure == null || bigTemplateObject == null)
             {
@@ -73,13 +71,17 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Ddi.Impl
                     {
                         if (variableLabel.EntityId.HasValue)
                         {
-                            var questionItem = bigTemplateObject.Find<IQuestion>(variableLabel.EntityId.Value);
+                            var questionItem = bigTemplateObject.Find<Question>(variableLabel.EntityId.Value);
 
                             if (questionItem != null)
                             {
-                                var variable = metadataWriter.AddDdiVariableToFile(hhDataFile, variableLabel.VariableName,
-                                    this.GetDdiDataType(questionItem.QuestionType), variableLabel.Label, questionItem.Instructions,
-                                    questionItem.QuestionText, this.GetDdiVariableScale(questionItem.QuestionType));
+                                var variable = metadataWriter.AddDdiVariableToFile(hhDataFile, 
+                                    variableLabel.VariableName,
+                                    this.GetDdiDataType(questionItem.QuestionType), 
+                                    variableLabel.Label,
+                                    questionItem.Instructions,
+                                    questionItem.QuestionText, 
+                                    this.GetDdiVariableScale(questionItem.QuestionType));
 
                                 foreach (VariableValueLabel variableValueLabel in variableLabel.VariableValueLabels)
                                 {
@@ -90,7 +92,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Ddi.Impl
                                 continue;
                             }
 
-                            var variableItem = bigTemplateObject.Find<IVariable>(variableLabel.EntityId.Value);
+                            var variableItem = bigTemplateObject.Find<Variable>(variableLabel.EntityId.Value);
                             if (variableItem != null)
                             {
                                 var variable = metadataWriter.AddDdiVariableToFile(hhDataFile, variableLabel.VariableName,
@@ -115,7 +117,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Ddi.Impl
                 }
 
                 var pathToWrite = this.fileSystemAccessor.CombinePath(basePath, ExportFileSettings.GetDDIFileName(
-                    $"{questionnaireId.QuestionnaireId}_{questionnaireId.Version}_ddi"));
+                    $"{questionnaireId}_ddi"));
 
                 metadataWriter.SaveMetadataInFile(pathToWrite);
 
@@ -123,22 +125,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Ddi.Impl
             }
             catch (Exception exc)
             {
-                this.logger.Error(
-                    $"Error on DDI metadata creation (questionnaireId:{questionnaireId.QuestionnaireId}, questionnaireVersion:{questionnaireId.Version}): ", exc);
+                this.logger.LogError(
+                    $"Error on DDI metadata creation (questionnaireId:{questionnaireId}): ", exc);
             }
 
             return string.Empty;
-        }
-
-        private QuestionnaireExportStructure GetQuestionnaireExportStructure(QuestionnaireIdentity questionnaireId)
-        {
-            return
-                this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(questionnaireId);
-        }
-
-        private QuestionnaireDocument GetQuestionnaireDocument(QuestionnaireIdentity questionnaireId)
-        {
-            return this.questionnaireStorage.GetQuestionnaireDocument(questionnaireId);
         }
 
         private DdiDataType GetDdiDataType(QuestionType questionType)

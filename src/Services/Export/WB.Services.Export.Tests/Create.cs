@@ -7,6 +7,7 @@ using Moq;
 using WB.Services.Export.CsvExport;
 using WB.Services.Export.CsvExport.Exporters;
 using WB.Services.Export.CsvExport.Implementation;
+using WB.Services.Export.CsvExport.Implementation.DoFiles;
 using WB.Services.Export.DescriptionGenerator;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
@@ -101,13 +102,19 @@ namespace WB.Services.Export.Tests
             };
         }
 
-        public static TextQuestion TextQuestion(Guid? id = null, string questionText = null, string variable = null)
+        public static TextQuestion TextQuestion(Guid? id = null, 
+            string questionText = null, 
+            string variable = null,
+            string variableLabel = null,
+            string instructions = null)
         {
             return new TextQuestion
             {
                 QuestionText = questionText,
                 VariableName = variable ?? Guid.NewGuid().FormatGuid(),
-                PublicKey = id ?? Guid.NewGuid()
+                PublicKey = id ?? Guid.NewGuid(),
+                VariableLabel = variableLabel,
+                Instructions = instructions
             };
         }
 
@@ -450,6 +457,7 @@ namespace WB.Services.Export.Tests
 
         public static NumericQuestion NumericRealQuestion(Guid? id = null,
             string variable = null,
+            string questionText = null,
             IEnumerable<ValidationCondition> validationConditions = null
             )
             => new NumericQuestion
@@ -457,6 +465,7 @@ namespace WB.Services.Export.Tests
                 QuestionType = QuestionType.Numeric,
                 PublicKey = id ?? Guid.NewGuid(),
                 VariableName = variable,
+                QuestionText = questionText,
                 IsInteger = false,
                 ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>()
             };
@@ -465,5 +474,24 @@ namespace WB.Services.Export.Tests
         {
             return new AnsweredYesNoOption(value, isYes);
         }
+
+        public static SingleQuestion SingleOptionQuestion(Guid? id = null, string questionText = null)
+        {
+            return new SingleQuestion
+            {
+                QuestionType = QuestionType.SingleOption,
+                PublicKey = id ?? Guid.NewGuid(),
+                QuestionText = questionText,
+            };
+        }
+
+        public static QuestionnaireLevelLabels QuestionnaireLevelLabels(string levelName = "level", params DataExportVariable[] variableLabels)
+            => new QuestionnaireLevelLabels(levelName, variableLabels);
+
+        public static DataExportVariable LabeledVariable(string variableName = "var", string label = "lbl", Guid? questionId = null, params VariableValueLabel[] variableValueLabels)
+            => new DataExportVariable(variableName, label, questionId, variableValueLabels, ExportValueType.Unknown);
+
+        public static VariableValueLabel VariableValueLabel(string value = "1", string label = "l1")
+            => new VariableValueLabel(value, label);
     }
 }

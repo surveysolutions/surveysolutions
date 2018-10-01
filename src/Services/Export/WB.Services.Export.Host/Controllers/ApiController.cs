@@ -1,7 +1,10 @@
 ﻿using System;
+using System.Net.Http;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using WB.Services.Export.Ddi;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Jobs;
 using WB.Services.Export.Questionnaire;
@@ -11,26 +14,28 @@ using WB.Services.Export.Tenant;
 
 namespace WB.Services.Export.Host.Controllers
 {
-    [Route("api/v1/job")]
     [ApiController]
     public class JobController : ControllerBase
     {
         private readonly IDataExportProcessesService exportProcessesService;
         private readonly IJobsStatusReporting jobsStatusReporting;
+        private readonly IDdiMetadataAccessor ddiDdiMetadataAccessor;
         private readonly ILogger<JobController> logger;
 
         public JobController(IDataExportProcessesService exportProcessesService,
         //    IDataExportStatusReader dataExportStatusReader,
             IJobsStatusReporting jobsStatusReporting,
+            IDdiMetadataAccessor ddiDdiMetadataAccessor,
             ILogger<JobController> logger)
         {
             this.exportProcessesService = exportProcessesService;
             this.jobsStatusReporting = jobsStatusReporting;
+            this.ddiDdiMetadataAccessor = ddiDdiMetadataAccessor;
             this.logger = logger;
         }
 
         [HttpPut]
-        [Route("generate")]
+        [Route("api/v1/job/generate")]
         public ActionResult RequestUpdate(string questionnaireId,
             DataExportFormat format,
             InterviewStatus? status,
@@ -67,7 +72,7 @@ namespace WB.Services.Export.Host.Controllers
 
         [HttpGet]
         [ResponseCache(NoStore = true)]
-        [Route("status")]
+        [Route("api/v1/job/status")]
         public DataExportStatusView GetDataExportStatusForQuestionnaire(
             string questionnaireId,
             string archiveName,
@@ -84,6 +89,22 @@ namespace WB.Services.Export.Host.Controllers
                 archiveName, status, fromDate, toDate);
 
             return dataExportStatusForQuestionnaire;
+        }
+
+        [HttpGet]
+        [ResponseCache(NoStore = true)]
+        [Route("api/v1/ddi")]
+        public async Task<FileStreamResult> GetDdiFile(
+            string questionnaireId,
+            string archivePassword,
+            string apiKey,
+            [FromHeader(Name = "Origin")]string tenantBaseUrl)
+        {
+            var tenant = new TenantInfo(tenantBaseUrl, apiKey);
+            var pathToFile = await this.ddiDdiMetadataAccessor.GetFilePathToDDIMetadata(tenant, new QuestionnaireId(questionnaireId),
+                archivePassword);
+            var responseStream = System.IO.File.OpenRead(pathToFile);
+            return File(responseStream, "application/zip");
         }
     }
 }

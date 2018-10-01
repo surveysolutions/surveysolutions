@@ -48,5 +48,6 @@ namespace WB.Services.Export.Questionnaire
         }
 
         public IList<ValidationCondition> ValidationConditions { get; set; }
+        public string Instructions { get; set; }
     }
 }
