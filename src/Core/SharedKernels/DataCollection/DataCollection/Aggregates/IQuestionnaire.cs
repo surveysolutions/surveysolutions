@@ -141,6 +141,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         ReadOnlyCollection<Guid> GetAllGroups();
 
+        ReadOnlyCollection<Guid> GetAllRosters();
+
         IEnumerable<Guid> GetAllUnderlyingQuestions(Guid groupId);
 
         IEnumerable<Guid> GetAllUnderlyingQuestionsOutsideRosters(Guid? groupId);
@@ -276,5 +278,6 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
         string GetRosterVariableName(Guid id);
         IReadOnlyCollection<int> GetValidationWarningsIndexes(Guid entityId);
         bool IsSignature(Guid entityIdentityId);
+        bool IsRosterTriggeredByOrderedMultiQuestion(Guid rosterId);
     }
 }

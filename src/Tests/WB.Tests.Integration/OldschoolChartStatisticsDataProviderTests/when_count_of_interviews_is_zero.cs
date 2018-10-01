@@ -18,10 +18,10 @@ namespace WB.Tests.Integration.OldschoolChartStatisticsDataProviderTests
     internal class when_count_of_interviews_is_zero: with_postgres_db
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
-            var sessionFactory = IntegrationCreate.SessionFactory(connectionStringBuilder.ConnectionString, new[] { typeof(CumulativeReportStatusChangeMap) }, true);
+            var sessionFactory = IntegrationCreate.SessionFactory(ConnectionStringBuilder.ConnectionString, new[] { typeof(CumulativeReportStatusChangeMap) }, true);
             postgresTransactionManager = new CqrsPostgresTransactionManager(sessionFactory ?? Mock.Of<ISessionFactory>());
 
-            pgSqlConnection = new NpgsqlConnection(connectionStringBuilder.ConnectionString);
+            pgSqlConnection = new NpgsqlConnection(ConnectionStringBuilder.ConnectionString);
             pgSqlConnection.Open();
 
             cumulativeReportStatusChangeStorage = new PostgreReadSideStorage<CumulativeReportStatusChange>(postgresTransactionManager, Mock.Of<ILogger>());

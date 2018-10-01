@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -255,7 +255,7 @@
   <data name="Download" xml:space="preserve">
     <value>Скачать</value>
   </data>
-    <data name="DownloadSupervisor" xml:space="preserve">
+  <data name="DownloadSupervisor" xml:space="preserve">
     <value>Скачать приложения Супервизор</value>
   </data>
   <data name="Open" xml:space="preserve">
@@ -292,7 +292,7 @@
     <value>Архивирован</value>
   </data>
   <data name="AuditLog" xml:space="preserve">
-    <value> Аудит</value>
+    <value>Аудит</value>
   </data>
   <data name="Processing" xml:space="preserve">
     <value>Обработка...</value>
@@ -306,7 +306,7 @@
     <value>Доступна новая версия:</value>
     <comment>Доступна новая версия:</comment>
   </data>
-    <data name="NothingSelected" xml:space="preserve">
+  <data name="NothingSelected" xml:space="preserve">
     <value>Ничего не выбрано</value>
     <comment>Ничего не выбрано</comment>
   </data>

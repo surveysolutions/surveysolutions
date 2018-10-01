@@ -76,7 +76,9 @@ namespace WB.UI.Headquarters.API
                 ShowArchive = !isInterviewer && request.ShowArchive,
                 DateStart = request.DateStart?.ToUniversalTime(),
                 DateEnd = request.DateEnd?.ToUniversalTime(),
-                UserRole = request.UserRole
+                UserRole = request.UserRole,
+                ReceivedByTablet = request.ReceivedByTablet,
+                SupervisorId = request.TeamId,
             };
 
             if (this.authorizedUser.IsSupervisor)
@@ -260,12 +262,14 @@ namespace WB.UI.Headquarters.API
         {
             public string QuestionnaireId { get; set; }
             public Guid? ResponsibleId { get; set; }
+            public Guid? TeamId { get; set; }
 
             public bool ShowArchive { get; set; }
 
             public DateTime? DateStart { get; set; }
             public DateTime? DateEnd { get; set; }
             public UserRoles? UserRole { get; set; }
+            public AssignmentReceivedState ReceivedByTablet { get; set; }
         }
     }
 }

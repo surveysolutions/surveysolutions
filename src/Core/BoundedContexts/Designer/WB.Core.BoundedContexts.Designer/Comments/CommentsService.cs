@@ -81,6 +81,11 @@ namespace WB.Core.BoundedContexts.Designer.Comments
             this.comments.Remove(commentsForEntity);
         }
 
+        public void DeleteComment(Guid id)
+        {
+            this.comments.Remove(id);
+        }
+
         public void ResolveComment(Guid commentdId)
         {
             var comment = this.comments.GetById(commentdId);

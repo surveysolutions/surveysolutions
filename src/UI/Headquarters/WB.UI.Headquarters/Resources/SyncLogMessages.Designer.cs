@@ -88,6 +88,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Check for duplicated interview. Interview: &lt;pre&gt;{0}&lt;/pre&gt;.
+        /// </summary>
+        public static string CheckIsPackageDuplicatedFormat {
+            get {
+                return ResourceManager.GetString("CheckIsPackageDuplicatedFormat", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Check for obsolete interviews. Request: &lt;pre&gt;{0}&lt;/pre&gt;.
         /// </summary>
         public static string CheckObsoleteInterviews {
@@ -417,6 +426,24 @@ namespace WB.UI.Headquarters.Resources {
         public static string QuestionnaireProcessed {
             get {
                 return ResourceManager.GetString("QuestionnaireProcessed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to New Supervisor application file requested.
+        /// </summary>
+        public static string SupervisorApkRequested {
+            get {
+                return ResourceManager.GetString("SupervisorApkRequested", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Supervisor patch file requested for version {0}.
+        /// </summary>
+        public static string SupervisorPatchRequestedFormat {
+            get {
+                return ResourceManager.GetString("SupervisorPatchRequestedFormat", resourceCulture);
             }
         }
         

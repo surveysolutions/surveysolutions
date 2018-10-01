@@ -267,4 +267,19 @@
   <data name="UpgradeProgressDoneTitle" xml:space="preserve">
     <value>Upgrade from {{from}} to {{to}} is finished</value>
   </data>
+  <data name="ReceivedByTablet_All" xml:space="preserve">
+    <value>Show all</value>
+  </data>
+  <data name="ReceivedByTablet_Received" xml:space="preserve">
+    <value>Received by tablet</value>
+  </data>
+  <data name="ReceivedByTablet_NotReceived" xml:space="preserve">
+    <value>Not received by tablet</value>
+  </data>
+  <data name="Tooltip_Filter_Received" xml:space="preserve">
+    <value>Show only assignments that were or were not received by tablets.</value>
+  </data>
+  <data name="ReceivedByTablet" xml:space="preserve">
+    <value>Received by tablet</value>
+  </data>
 </root>

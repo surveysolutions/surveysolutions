@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Ncqrs.Eventing;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services.OfflineSync;
+using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Views;
@@ -18,7 +19,7 @@ using WB.Core.SharedKernels.Questionnaire.Translations;
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
     [ExcludeFromCodeCoverage]
-    public class SyncronizationServiceWrapper : ISynchronizationService
+    public class SyncronizationServiceWrapper : IInterviewerSynchronizationService
     {
         private readonly OfflineSynchronizationService offlineService;
         private readonly SynchronizationService onlineService;
@@ -34,7 +35,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.mode = mode;
         }
 
-        private ISynchronizationService Service
+        private IInterviewerSynchronizationService Service
         {
             get
             {
@@ -85,6 +86,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return Service.GetCensusQuestionnairesAsync(token);
         }
 
+        public Task<InterviewerApiView> GetInterviewerAsync(RestCredentials credentials = null, CancellationToken? token = null)
+        {
+            return Service.GetInterviewerAsync(credentials, token);
+        }
+
         public Task LogQuestionnaireAsSuccessfullyHandledAsync(QuestionnaireIdentity questionnaire)
         {
             return Service.LogQuestionnaireAsSuccessfullyHandledAsync(questionnaire);
@@ -110,11 +116,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return Service.GetLatestApplicationVersionAsync(token);
         }
 
-        public Task SendBackupAsync(string filePath, CancellationToken token)
-        {
-            return onlineService.SendBackupAsync(filePath, token);
-        }
-
         public Task<List<InterviewApiView>> GetInterviewsAsync(CancellationToken token)
         {
             return Service.GetInterviewsAsync(token);
@@ -128,6 +129,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         public Task<List<CommittedEvent>> GetInterviewDetailsAsync(Guid interviewId, IProgress<TransferProgress> transferProgress, CancellationToken token)
         {
             return Service.GetInterviewDetailsAsync(interviewId, transferProgress, token);
+        }
+
+        public Task<InterviewUploadState> GetInterviewUploadState(Guid interviewId, EventStreamSignatureTag eventStreamSignatureTag, CancellationToken cancellationToken)
+        {
+            return Service.GetInterviewUploadState(interviewId, eventStreamSignatureTag, cancellationToken);
         }
 
         public Task UploadInterviewAsync(Guid interviewId, InterviewPackageApiView completedInterview,

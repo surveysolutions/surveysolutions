@@ -743,6 +743,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         public ReadOnlyCollection<Guid> GetAllGroups()
             => this.AllGroups.Select(question => question.PublicKey).ToReadOnlyCollection();
 
+        public ReadOnlyCollection<Guid> GetAllRosters()
+            => this.AllGroups.Where(x => x.IsRoster).Select(question => question.PublicKey).ToReadOnlyCollection();
+
         public IEnumerable<Guid> GetAllUnderlyingQuestions(Guid groupId)
             => this.cacheOfUnderlyingQuestions.GetOrAdd(groupId, this.GetAllUnderlyingQuestionsImpl);
 
@@ -895,6 +898,19 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             var question = this.GetQuestion(entityIdentityId) as IMultimediaQuestion;
             return question?.IsSignature ?? false;
+        }
+
+        public bool IsRosterTriggeredByOrderedMultiQuestion(Guid rosterId)
+        {
+            if (!IsRosterGroup(rosterId))
+                return false;
+
+            if (IsFixedRoster(rosterId))
+                return false;
+
+            var rosterSizeQuestionId = GetRosterSizeQuestion(rosterId);
+
+            return ShouldQuestionRecordAnswersOrder(rosterSizeQuestionId);
         }
 
         public bool HasVariable(Guid variableId) => this.GetVariable(variableId) != null;

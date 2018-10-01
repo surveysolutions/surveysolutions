@@ -22,6 +22,21 @@ namespace WB.Core.GenericSubdomains.Portable
             return null;
         }
 
+        public static Exception GetSelfOrInner(this Exception source, Func<Exception, bool> predicate)
+        {
+            if (predicate.Invoke(source))
+            {
+                return source;
+            }
+
+            while (source.InnerException != null)
+            {
+                return source.InnerException.GetSelfOrInner(predicate);
+            }
+
+            return null;
+        }
+
         public static IEnumerable<Exception> UnwrapAllInnerExceptions(this Exception exception)
         {
             if (exception == null) throw new ArgumentNullException("exception");

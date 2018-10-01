@@ -4,6 +4,7 @@ using System.Collections.ObjectModel;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
@@ -44,8 +45,10 @@ using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
+using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite.Implementation;
@@ -69,8 +72,11 @@ using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.WebApi;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization.Steps;
+using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
+using WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.NonConficltingNamespace;
@@ -330,8 +336,8 @@ namespace WB.Tests.Abc.TestFactories
         public InterviewTreeIntegerQuestion InterviewTreeIntegerQuestion(int answer = 42)
             => new InterviewTreeIntegerQuestion(answer);
 
-        public InterviewBinaryDataDescriptor InterviewBinaryDataDescriptor()
-            => new InterviewBinaryDataDescriptor(Guid.NewGuid(), "test.jpeg", null, () => new byte[0]);
+        public InterviewBinaryDataDescriptor InterviewBinaryDataDescriptor(Guid? interviewId = null, string fileName = null)
+            => new InterviewBinaryDataDescriptor(interviewId ?? Guid.NewGuid(), fileName ?? "test.jpeg", null, () => new byte[0]);
 
         public InterviewComment InterviewComment(string comment = null)
             => new InterviewComment { Comment = comment };
@@ -590,8 +596,8 @@ namespace WB.Tests.Abc.TestFactories
             int? assignmentId = null,
             bool? canBeDeleted = null,
             Guid? responsibleId = null,
-            DateTime? receivedByInterviewerAt = null
-            )
+            DateTime? receivedByInterviewerAt = null,
+            DateTime? fromHqSyncDateTime = null)
         {
             interviewId = interviewId ?? Guid.NewGuid();
             return new InterviewView
@@ -605,7 +611,8 @@ namespace WB.Tests.Abc.TestFactories
                 Assignment = assignmentId,
                 CanBeDeleted = canBeDeleted ?? true,
                 ResponsibleId = responsibleId.GetValueOrDefault(),
-                ReceivedByInterviewerAtUtc = receivedByInterviewerAt
+                ReceivedByInterviewerAtUtc = receivedByInterviewerAt,
+                FromHqSyncDateTime = fromHqSyncDateTime
             };
         }
 
@@ -761,7 +768,8 @@ namespace WB.Tests.Abc.TestFactories
             string validationExpression = null,
             bool useFomatting = false,
             IEnumerable<ValidationCondition> validationConditions = null,
-            int? countOfDecimalPlaces = null)
+            int? countOfDecimalPlaces = null,
+            IEnumerable<Answer> specialValues = null)
             => new NumericQuestion
             {
                 QuestionType = QuestionType.Numeric,
@@ -772,7 +780,8 @@ namespace WB.Tests.Abc.TestFactories
                 ConditionExpression = enablementCondition,
                 ValidationConditions = validationConditions?.ToList() ?? new List<ValidationCondition>(),
                 ValidationExpression = validationExpression,
-                CountOfDecimalPlaces = countOfDecimalPlaces
+                CountOfDecimalPlaces = countOfDecimalPlaces,
+                Answers = new List<Answer>(specialValues ?? new Answer[] { })
             };
 
         public Answer Option(string value = null, string text = null, string parentValue = null, Guid? id = null)
@@ -2001,7 +2010,7 @@ namespace WB.Tests.Abc.TestFactories
         }
 
         public InterviewEntity InterviewEntity(Guid? interviewId = null, EntityType entityType = EntityType.Question, Identity identity = null, 
-            int[] invalidValidations = null, bool isEnabled = true)
+            int[] invalidValidations = null, bool isEnabled = true, int? asInt = null)
         {
             return new InterviewEntity
             {
@@ -2009,7 +2018,8 @@ namespace WB.Tests.Abc.TestFactories
                 EntityType = entityType,
                 Identity = identity ?? Create.Identity(),
                 InvalidValidations = invalidValidations ?? Array.Empty<int>(),
-                IsEnabled = isEnabled
+                IsEnabled = isEnabled,
+                AsInt = asInt
             };
         }
 
@@ -2207,6 +2217,9 @@ namespace WB.Tests.Abc.TestFactories
 
         public AuditLogEntityFactory AuditLogEntity => new AuditLogEntityFactory();
 
+        public InterviewerDocument InterviewerDocument(Guid interviewerId, string login = null) =>
+            new InterviewerDocument {Id = interviewerId.ToString(), InterviewerId = interviewerId, UserName = login};
+
         public class AuditLogEntityFactory
         {
             private readonly Random rnd;
@@ -2242,6 +2255,25 @@ namespace WB.Tests.Abc.TestFactories
                     Time = dateTime ?? DateTime.Now,
                     TimeUtc = dateTimeUtc ?? DateTime.UtcNow
                 };
+        }
+
+        public EnumeratorSynchonizationContext EnumeratorSynchonizationContext(
+            IProgress<SyncProgressInfo> progress = null)
+            => new EnumeratorSynchonizationContext
+            {
+                Statistics = new SynchronizationStatistics(),
+                CancellationToken = CancellationToken.None,
+                Progress = progress ?? Mock.Of<IProgress<SyncProgressInfo>>()
+            };
+
+        public InterviewerAssignmentDashboardItemViewModel InterviewerAssignmentDashboardItemViewModel(IServiceLocator serviceLocator)
+        {
+            return new InterviewerAssignmentDashboardItemViewModel(serviceLocator);
+        }
+
+        public DashboardSubTitleViewModel DashboardSubTitleViewModel()
+        {
+            return new DashboardSubTitleViewModel();
         }
     }
 }

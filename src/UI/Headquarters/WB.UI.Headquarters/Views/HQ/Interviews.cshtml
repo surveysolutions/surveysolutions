@@ -67,7 +67,7 @@
                 notifier,
                 $profileUrl);
             model.BuildMenuItem = function(selectedRow) {
-                var items = {}
+                var items = {};
 
                 items["open"] = {
                     name: "@HttpUtility.JavaScriptStringEncode(Common.Open)",
@@ -94,48 +94,56 @@
                         }
                     };
                 }
-                items["sep1"] = "---------";
 
-                items["assign"] = {
-                    name: "@HttpUtility.JavaScriptStringEncode(Common.Assign)",
-                    className: "primary-text",
-                    callback: function(t, e) {
-                        model.AssignInterview([selectedRow]);
-                    }
-                };
+                @if (!authorizedUser.IsObserving)
+                {
+                    <text>
+                        items["sep1"] = "---------";
 
-                items["approve"] = {
-                    name: "@HttpUtility.JavaScriptStringEncode(Common.Approve)",
-                    className: "success-text",
-                    callback: function(t, e) {
-                        model.ApproveInterview([selectedRow]);
-                    }
-                };
+                        items["assign"] = {
+                            name: "@HttpUtility.JavaScriptStringEncode(Common.Assign)",
+                            className: "primary-text",
+                            callback: function(t, e) {
+                                model.AssignInterview([selectedRow]);
+                            }
+                        };
 
-                items["reject"] = {
-                    name: "@HttpUtility.JavaScriptStringEncode(Common.Reject)",
-                    className: "error-text",
-                    callback: function(t, e) {
-                        model.RejectInterview([selectedRow]);
-                    }
-                };
+                        items["approve"] = {
+                            name: "@HttpUtility.JavaScriptStringEncode(Common.Approve)",
+                            className: "success-text",
+                            callback: function(t, e) {
+                                model.ApproveInterview([selectedRow]);
+                            }
+                        };
 
-                items["unapprove"] = {
-                    name: "@HttpUtility.JavaScriptStringEncode(Common.Unapprove)",
-                    callback: function(t, e) {
-                        model.UnapproveInterview([selectedRow]);
-                    }
-                };
+                        items["reject"] = {
+                            name: "@HttpUtility.JavaScriptStringEncode(Common.Reject)",
+                            className: "error-text",
+                            callback: function(t, e) {
+                                model.RejectInterview([selectedRow]);
+                            }
+                        };
 
-                items["sep2"] = "---------";
+                        items["unapprove"] =
+                        {
+                            name: "@HttpUtility.JavaScriptStringEncode(Common.Unapprove)",
+                            callback:
+                                function(t, e) {
+                                    model.UnapproveInterview([selectedRow]);
+                                }
+                        };
 
-                items["delete"] = {
-                    name: "@HttpUtility.JavaScriptStringEncode(Common.Delete)",
-                    className: "error-text",
-                    callback: function(t, e) {
-                        model.DeleteInterview([selectedRow]);
-                    }
-                };
+                        items["sep2"] = "---------";
+
+                        items["delete"] = {
+                            name: "@HttpUtility.JavaScriptStringEncode(Common.Delete)",
+                            className: "error-text",
+                            callback: function(t, e) {
+                                model.DeleteInterview([selectedRow]);
+                            }
+                        };
+                    </text>
+                }
 
                 return items;
             };
@@ -224,6 +232,7 @@
                                 <label>
                                     @Common.Search:
                                     <input class="" placeholder="@Common.Search" type="search" data-bind="value: SearchBy, valueUpdate:'afterkeydown', enterKey: filter">
+                                    <button type="button" class="btn btn-link btn-clear" data-bind="click: clearSearch"><span></span></button>
                                 </label>
                             </div>
                             <div class="table-with-scroll">
@@ -240,9 +249,9 @@
                                                     </label>
                                                 </th>
                                             }
-                                            <th  title="@Interviews.Tooltip_Table_InterviewKey" class="sorting_disabled  interview-id  title-row">
+                                            <th title="@Interviews.Tooltip_Table_InterviewKey" class="sorting_disabled  interview-id  title-row">
                                                 @Common.InterviewKey
-                                                <a href="javascript:void(0);" class="show-prefield-btn"  title="@Interviews.Tooltip_Table_HideShowIdentifying"
+                                                <a href="javascript:void(0);" class="show-prefield-btn" title="@Interviews.Tooltip_Table_HideShowIdentifying"
                                                    data-bind="text : $root.IsVisiblePrefilledColumns() ? '@HttpUtility.JavaScriptStringEncode(Common.HideIdentifying)' : '@HttpUtility.JavaScriptStringEncode(Common.ShowIdentifying)', click: $root.ToggleVisiblePrefilledColumns()"></a>
                                             </th>
                                             <!-- ko if:SelectedTemplate() == '' -->
@@ -272,7 +281,7 @@
                                         <tr data-bind="css: { 'selected' : IsSelected }">
                                             @if (!authorizedUser.IsObserver && !authorizedUser.IsObserving)
                                             {
-                                                <td class="checkbox-cell"  data-bind="click: function() { IsSelected(!IsSelected()) }">
+                                                <td class="checkbox-cell" data-bind="click: function() { IsSelected(!IsSelected()) }">
                                                     <input type="checkbox" data-bind="value: InterviewId(), attr: { id: 'cbx_' + InterviewId() }, checked: IsSelected" class="checkbox-filter" />
                                                     <label data-bind="attr: { for: 'cbx_' + InterviewId() }"><span class="tick"></span></label>
                                                 </td>
@@ -301,8 +310,7 @@
                                                 <span data-bind="text: ResponsibleName"></span>
                                                 <!-- /ko -->
                                             </td>
-                                            <td class="date last-update" data-bind="text: moment.utc(LastEntryDateUtc()).local().format(input.settings.clientDateTimeFormat)">
-                                            </td>
+                                            <td class="date last-update" data-bind="text: moment.utc(LastEntryDateUtc()).local().format(input.settings.clientDateTimeFormat)"></td>
                                             <td class="type-numeric" data-bind="css: {'errors': ErrorsCount()}">
                                                 <!-- ko if:ErrorsCount() === 0 -->
                                                 <span>0</span>
@@ -377,14 +385,14 @@
     <script type="text/html" id="assign-interview-template">
         <div class="assign-interviewer">
             <div>
-                @Interviews.ChooseResponsible <br/><br />
+                @Interviews.ChooseResponsible <br /><br />
                 <div class="input-group">
                     <input class="form-control with-clear-btn" placeholder="@Common.Any" data-bind="typeahead: Users.AssignTo, typeaheadOptions: {source: Users.LoadUsers, displayText: function(item){return item.UserName}, afterSelect: StoreInteviewer }, valueupdate:'afterkeydown'" type="text" />
                     <span data-bind="spinner: Users.IsResponsiblesLoading, spinnerOptions: { 'left': 1, 'right': '50px' }"></span>
                     <div class="input-group-btn" data-bind="click: ClearAssignTo">
                         <div class="btn btn-default"><span class="glyphicon glyphicon-remove" aria-hidden="true"></span></div>
                     </div>
-                </div> <br/>
+                </div> <br />
             </div>
             <div>
                 @Html.Raw(string.Format(Interviews.AssignToOtherTeamConfirmMessage,
@@ -420,7 +428,7 @@
     <script type="text/html" id="confirm-reject-template">
         @Html.Raw(Interviews.RejectConfirmMessageHQ.FormatString(
             "<span data-bind='text: length'></span>",
-	        InterviewStatus.Completed.ToLocalizeString(),
+            InterviewStatus.Completed.ToLocalizeString(),
             InterviewStatus.ApprovedBySupervisor.ToLocalizeString()))
     </script>
     <script type="text/html" id="confirm-unapprove-template">

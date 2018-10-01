@@ -5,6 +5,7 @@ using AutoMapper;
 using Main.Core.Entities.SubEntities;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
+using WB.Core.SharedKernels.Questionnaire.Documents;
 
 namespace WB.Enumerator.Native.WebInterview.Models
 {
@@ -36,11 +37,11 @@ namespace WB.Enumerator.Native.WebInterview.Models
 
             this.CreateMap<InterviewTreeQuestion, InterviewAreaQuestion>()
                 .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
-                .ForMember(_ => _.Answer, opts => opts.MapFrom(x =>
-                    Math.Round(x.GetAsInterviewTreeAreaQuestion().GetAnswer() != null ? x.GetAsInterviewTreeAreaQuestion().GetAnswer().Value.AreaSize ?? 0 : 0, 2) ))
-                .ForMember(_ => _.Coordinates, opts => opts.MapFrom(x =>
-                        x.GetAsInterviewTreeAreaQuestion().GetAnswer() != null ? x.GetAsInterviewTreeAreaQuestion().GetAnswer().Value.Coordinates : null))
-                    ;
+                .ForMember(_ => _.Answer, opts =>
+                {
+                    opts.PreCondition(x => x.IsAnswered());
+                    opts.MapFrom(x => ToGeometryAnswer(x.GetAsInterviewTreeAreaQuestion().GetAnswer().Value));
+                });
 
             this.CreateMap<InterviewTreeQuestion, InterviewAudioQuestion>()
                 .IncludeBase<InterviewTreeQuestion, GenericQuestion>()
@@ -168,6 +169,14 @@ namespace WB.Enumerator.Native.WebInterview.Models
                 .ForMember(x => x.AnswerTimeUtc, opts => opts.MapFrom(x => x.GetAsInterviewTreeMultimediaQuestion().GetAnswer().AnswerTimeUtc))
                 .ForMember(x => x.Answer, opts => opts.MapFrom(x => $@"?interviewId={x.Tree.InterviewId}&questionId={x.Identity}&filename={x.GetAsInterviewTreeMultimediaQuestion().GetAnswer().FileName}"));
         }
+
+        private static InterviewGeometryAnswer ToGeometryAnswer(Area area) => new InterviewGeometryAnswer
+        {
+            SelectedPoints = area.Coordinates.Split(';').Select(x =>
+                new GeoLocation(double.Parse(x.Split(',')[0]), double.Parse(x.Split(',')[1]), 0, 0)).ToArray(),
+            Length = area.Length,
+            Area = area.AreaSize
+        };
 
         private static DropdownItem GetSingleFixedOptionAnswerAsDropdownItem(InterviewTreeQuestion question)
         {

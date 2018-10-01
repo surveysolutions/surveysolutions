@@ -54,7 +54,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.TextListQuestionView
                 userInteractionService ?? Mock.Of<IUserInteractionService>(),
                 answering ?? Mock.Of<AnsweringViewModel>(),
                 instructionViewModel: Mock.Of<QuestionInstructionViewModel>(),
-                mainThreadDispatcher: mainThreadDispatcher ?? Stub.MvxMainThreadDispatcher());
+                mainThreadDispatcher: mainThreadDispatcher ?? Stub.MvxMainThreadAsyncDispatcher());
         }
     }
 }

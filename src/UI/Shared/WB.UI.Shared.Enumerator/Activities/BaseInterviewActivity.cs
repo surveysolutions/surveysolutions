@@ -73,8 +73,8 @@ namespace WB.UI.Shared.Enumerator.Activities
             }
         }
 
-        private void OnSectionChange(SectionChangeMessage msg) =>
-            Mvx.Resolve<IMvxMainThreadAsyncDispatcher>().ExecuteOnMainThreadAsync(() =>
+        private async void OnSectionChange(SectionChangeMessage msg) =>
+            await Mvx.Resolve<IMvxMainThreadAsyncDispatcher>().ExecuteOnMainThreadAsync(() =>
             {
                 try
                 {

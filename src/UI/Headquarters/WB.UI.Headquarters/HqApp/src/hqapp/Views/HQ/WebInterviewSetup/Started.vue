@@ -84,7 +84,7 @@
     </HqLayout>
 </template>
 <script>
-import Vue from "vue";
+
 import { VueEditor } from "vue2-editor";
 
 export default {
@@ -136,7 +136,7 @@ export default {
       this.submitting = true;
       var formData = new FormData(this.$refs.messagesForm);
       this.$http.post(this.$config.model.updateTextsUrl, formData).then(
-        response => {
+        () => {
           this.submitting = false;
           this.updatedMessage = this.$t("WebInterviewSetup.TextsUpdated");
           this.updateFailed = false;

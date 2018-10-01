@@ -3,7 +3,7 @@
     <div class="header-line">
         <div class="header-menu">
             <div class="buttons">
-                <a class="btn" href="http://docs.mysurvey.solutions/designer.pdf" target="_blank" ng-i18next>Help</a>
+                <a class="btn" href="http://docs.mysurvey.solutions/designer" target="_blank" ng-i18next>Help</a>
                 <a class="btn" href="../../questionnaire/questionnairehistory/{{questionnaire.questionnaireId}}" target="_blank" ng-i18next>History</a>
                 <a class="btn" type="button" ng-show="questionnaire.hasViewerAdminRights" href="../../admin/backupquestionnaire/{{questionnaire.questionnaireId}}" ng-i18next>Backup</a>
                 <button class="btn" type="button" ng-disabled="questionnaire.isReadOnlyForUser && !questionnaire.hasViewerAdminRights" ng-click="showShareInfo()" ng-i18next>Settings</button>

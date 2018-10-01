@@ -115,7 +115,7 @@ namespace WB.UI.Headquarters.API.PublicApi
                 Offset = filter.Offset,
                 SearchBy = filter.SearchBy,
                 ShowArchive = filter.ShowArchive,
-                SupervisorId = filter.SupervisorId
+                SupervisorId = filter.SupervisorId,
             });
 
             var listView = new AssignmentsListView(result.Page, result.PageSize, result.TotalCount, filter.Order);

@@ -65,7 +65,7 @@
 //                Id = "mult1"
 //            });
 
-//            var syncronizer = CreateSynchronizer(interviewsDashboard, interviewAccessor.Object, syncClient.Object, 
+//            var syncronizer = CreateSynchronizer(interviewsDashboard, interviewAccessor.Object, syncClient.Object,
 //                audioFileStorage: audioFilesStorage.Object,
 //                interviewMultimediaViewStorage: multimediaStorage,
 //                imagesStorage: multimediaFiles);
@@ -78,16 +78,16 @@
 
 //            // Assert
 //            interviewAccessor.Verify(x => x.RemoveInterview(interviewId));
-//            syncClient.Verify(x => x.PostInterviewAsync(endpoint, 
+//            syncClient.Verify(x => x.PostInterviewAsync(endpoint,
 //                It.Is<PostInterviewRequest>(r => r.Events.Equals(interviewEvents)), null));
 //            Assert.That(reportedProgress, Has.Property(nameof(reportedProgress.TotalToUpload)).EqualTo(1));
 //            Assert.That(reportedProgress, Has.Property(nameof(reportedProgress.UploadedCount)).EqualTo(1));
 
-//            syncClient.Verify(x => x.PostInterviewImageAsync(endpoint, It.Is<PostInterviewImageRequest>(r => 
+//            syncClient.Verify(x => x.PostInterviewImageAsync(endpoint, It.Is<PostInterviewImageRequest>(r =>
 //                r.InterviewId == interviewId && r.Content.Equals(imageBytes) && r.FileName == "multimedia1"), null));
 
-//            syncClient.Verify(x => x.PostInterviewAudioAsync(endpoint, It.Is<PostInterviewAudioRequest>(r => 
-//                r.InterviewId == interviewId 
+//            syncClient.Verify(x => x.PostInterviewAudioAsync(endpoint, It.Is<PostInterviewAudioRequest>(r =>
+//                r.InterviewId == interviewId
 //                && r.FileName == audioRecordingFile.FileName), null));
 //        }
 

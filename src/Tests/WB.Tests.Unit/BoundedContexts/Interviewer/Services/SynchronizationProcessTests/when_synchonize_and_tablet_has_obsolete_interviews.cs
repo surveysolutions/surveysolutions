@@ -7,26 +7,22 @@ using Moq;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services;
-using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
-using WB.Core.BoundedContexts.Interviewer.Views;
-using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
+using WB.Core.BoundedContexts.Interviewer.Synchronization;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
-using WB.Core.SharedKernels.Enumerator.Implementation.Services;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Services;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProcessTests
 {
-    [TestOf(typeof(InterviewerSynchronizationProcess))]
+    [TestOf(typeof(InterviewerDownloadInterviews))]
     public class when_synchonize_and_tablet_has_obsolete_interviews 
     {
         [Test]
@@ -34,7 +30,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         {
             var obsoleteInterviewId = Id.g1;
 
-            var syncService = new Mock<ISynchronizationService>();
+            var syncService = new Mock<IInterviewerSynchronizationService>();
             syncService.Setup(x => x.CheckObsoleteInterviewsAsync(It.Is<List<ObsoletePackageCheck>>(y => y.Any(o => o.InterviewId == obsoleteInterviewId)), CancellationToken.None))
                 .ReturnsAsync(new List<Guid> {obsoleteInterviewId});
             syncService.Setup(x => x.GetCensusQuestionnairesAsync(CancellationToken.None))
@@ -61,7 +57,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 Id = obsoleteInterviewId.FormatGuid()
             });
 
-            var interviewAccessorMock = new Mock<IInterviewerInterviewAccessor>();
+            var interviewAccessorMock = new Mock<IInterviewsRemover>();
 
             var eventStore = new Mock<IEnumeratorEventStorage>();
             eventStore.Setup(x => x.GetLastEventKnownToHq(obsoleteInterviewId))
@@ -69,17 +65,18 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
 
             var eventBus = new Mock<IEventBus>();
 
-            var syncProcess = Create.Service.SynchronizationProcess(synchronizationService: syncService.Object,
+            var syncProcess = Create.Service.InterviewerDownloadInterviews(synchronizationService: syncService.Object,
                 interviewViewRepository: localInterviewsStorage,
-                interviewFactory: interviewAccessorMock.Object,
-                interviewerEventStorage: eventStore.Object,
+                interviewsRemover: interviewAccessorMock.Object,
+                eventStore: eventStore.Object,
                 eventBus: eventBus.Object);
 
             // Act
-            await syncProcess.Synchronize(Mock.Of<IProgress<SyncProgressInfo>>(), CancellationToken.None, new SynchronizationStatistics());
+            await syncProcess.ExecuteAsync();
 
             // Assert
-            interviewAccessorMock.Verify(x => x.RemoveInterview(obsoleteInterviewId), Times.Once, "Interview that was changed on a server should be removed from tablet");
+            interviewAccessorMock.Verify(x => x.RemoveInterviews(It.IsAny<SynchronizationStatistics>(), It.IsAny<IProgress<SyncProgressInfo>>(), obsoleteInterviewId), Times.Once,
+                "Interview that was changed on a server should be removed from tablet");
             eventBus.Verify(x => x.PublishCommittedEvents(serverEvents), Times.Once);
         }
     }

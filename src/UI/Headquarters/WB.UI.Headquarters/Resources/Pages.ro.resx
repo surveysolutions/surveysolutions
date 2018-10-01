@@ -546,9 +546,6 @@
   <data name="InterviewerProfile_DeviceSerial" xml:space="preserve">
     <value>Numărul de serie al dispozitivului</value>
   </data>
-  <data name="InterviewerProfile_DownloadedInterviewsCount" xml:space="preserve">
-    <value>Interviuri primite de anchetator</value>
-  </data>
   <data name="InterviewerProfile_DownloadedQuestionnairesCount" xml:space="preserve">
     <value>Chestionare primite de anchetator</value>
   </data>

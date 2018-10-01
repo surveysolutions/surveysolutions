@@ -4,8 +4,7 @@ using Android.Text;
 using Android.Text.Style;
 using Android.Widget;
 using MvvmCross.Binding;
-using MvvmCross.Platforms.Android;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
@@ -13,18 +12,11 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
 {
     public class TextViewGroupInfoBinding : BaseBinding<TextView, GroupStateViewModel>
     {
-        private IMvxAndroidCurrentTopActivity CurrentTopActivity
-        {
-            get { return ServiceLocator.Current.GetInstance<IMvxAndroidCurrentTopActivity>(); }
-        }
         public TextViewGroupInfoBinding(TextView androidControl) : base(androidControl)
         {
         }
 
-        public override MvxBindingMode DefaultMode
-        {
-            get { return MvxBindingMode.OneWay; }
-        }
+        public override MvxBindingMode DefaultMode => MvxBindingMode.OneWay;
 
         protected override void SetValueToView(TextView control, GroupStateViewModel value)
         {
