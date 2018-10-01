@@ -10,7 +10,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Ddi;
+
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
@@ -36,7 +36,7 @@ namespace WB.UI.Headquarters.API.PublicApi
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IDataExportProcessesService dataExportProcessesService;
         private readonly IFileSystemAccessor fileSystemAccessor;
-        private readonly IDdiMetadataAccessor ddiMetadataAccessor;
+        
         private readonly IFilebasedExportedDataAccessor filebasedExportedDataAccessor;
         private readonly IPlainKeyValueStorage<ExportServiceSettings> exportServiceSettings;
         private readonly IConfigurationManager configurationManager;
@@ -45,7 +45,6 @@ namespace WB.UI.Headquarters.API.PublicApi
         public ExportController(IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IDataExportProcessesService dataExportProcessesService,
             IFileSystemAccessor fileSystemAccessor,
-            IDdiMetadataAccessor ddiMetadataAccessor,
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor,
             IPlainKeyValueStorage<ExportServiceSettings> exportServiceSettings,
             IConfigurationManager configurationManager,
@@ -54,51 +53,50 @@ namespace WB.UI.Headquarters.API.PublicApi
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.dataExportProcessesService = dataExportProcessesService;
             this.fileSystemAccessor = fileSystemAccessor;
-            this.ddiMetadataAccessor = ddiMetadataAccessor;
             this.filebasedExportedDataAccessor = filebasedExportedDataAccessor;
             this.exportServiceSettings = exportServiceSettings;
             this.configurationManager = configurationManager;
             this.dataExportStatusReader = dataExportStatusReader;
         }
 
-        /// <summary>
-        /// Downloads export file
-        /// </summary>
-        /// <param name="id">Questionnaire id in format [QuestionnaireGuid$Version]</param>
-        /// <param name="exportType">Format of export data to download</param>
-        /// <param name="status">Status of exported interviews</param>
-        /// <param name="from">Started date for timeframe of exported interviews (when change was done to an interview). Should be in UTC date</param>
-        /// <param name="to">Finished date for timeframe of exported interviews (when change was done to an interview). Should be in UTC date</param>
-        /// 
-        /// <response code="200">Returns content of the export file as zip archrive</response>
-        /// <response code="404">Export file was not generated yet</response>
-        /// <response code="400">Questionnaire id is malformed</response>
-        [HttpGet]
-        [Route(@"{exportType}/{id}")]
-        public IHttpActionResult Get(string id, DataExportFormat exportType, InterviewStatus? status = null, DateTime? from = null, DateTime? to = null)
-        {
-            if (!QuestionnaireIdentity.TryParse(id, out var questionnaireIdentity))
-                return this.Content(HttpStatusCode.BadRequest, @"Invalid questionnaire identity");
+        ///// <summary>
+        ///// Downloads export file
+        ///// </summary>
+        ///// <param name="id">Questionnaire id in format [QuestionnaireGuid$Version]</param>
+        ///// <param name="exportType">Format of export data to download</param>
+        ///// <param name="status">Status of exported interviews</param>
+        ///// <param name="from">Started date for timeframe of exported interviews (when change was done to an interview). Should be in UTC date</param>
+        ///// <param name="to">Finished date for timeframe of exported interviews (when change was done to an interview). Should be in UTC date</param>
+        ///// 
+        ///// <response code="200">Returns content of the export file as zip archrive</response>
+        ///// <response code="404">Export file was not generated yet</response>
+        ///// <response code="400">Questionnaire id is malformed</response>
+        //[HttpGet]
+        //[Route(@"{exportType}/{id}")]
+        //public IHttpActionResult Get(string id, DataExportFormat exportType, InterviewStatus? status = null, DateTime? from = null, DateTime? to = null)
+        //{
+        //    if (!QuestionnaireIdentity.TryParse(id, out var questionnaireIdentity))
+        //        return this.Content(HttpStatusCode.BadRequest, @"Invalid questionnaire identity");
 
-            string exportedFilePath;
-            switch (exportType)
-            {
-                case DataExportFormat.DDI:
-                    exportedFilePath = this.ddiMetadataAccessor.GetFilePathToDDIMetadata(questionnaireIdentity);
-                    break;
-                default:
-                    exportedFilePath = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(
-                        questionnaireIdentity, exportType, status, from, to);
-                    break;
-            }
+        //    string exportedFilePath;
+        //    switch (exportType)
+        //    {
+        //        case DataExportFormat.DDI:
+        //            exportedFilePath = this.ddiMetadataAccessor.GetFilePathToDDIMetadata(questionnaireIdentity);
+        //            break;
+        //        default:
+        //            exportedFilePath = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(
+        //                questionnaireIdentity, exportType, status, from, to);
+        //            break;
+        //    }
 
-            if(!this.fileSystemAccessor.IsFileExists(exportedFilePath))
-                return this.NotFound();
+        //    if(!this.fileSystemAccessor.IsFileExists(exportedFilePath))
+        //        return this.NotFound();
 
-            var exportedFileName = this.fileSystemAccessor.GetFileName(exportedFilePath);
+        //    var exportedFileName = this.fileSystemAccessor.GetFileName(exportedFilePath);
 
-            return new ProgressiveDownloadResult(this.Request, exportedFilePath, exportedFileName, @"application/zip");
-        }
+        //    return new ProgressiveDownloadResult(this.Request, exportedFilePath, exportedFileName, @"application/zip");
+        //}
 
         /// <summary>
         /// Starts export file creation

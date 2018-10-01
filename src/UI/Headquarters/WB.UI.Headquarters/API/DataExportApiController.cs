@@ -91,28 +91,33 @@ namespace WB.UI.Headquarters.API
         [HttpGet]
         [ObserverNotAllowedApi]
         [ApiNoCache]
-        public HttpResponseMessage AllData(Guid id, long version, DataExportFormat format, InterviewStatus? status = null, DateTime? from = null, DateTime? to = null)
+        public async Task<HttpResponseMessage> AllData(Guid id, long version, DataExportFormat format, 
+            InterviewStatus? status = null, 
+            DateTime? from = null, 
+            DateTime? to = null)
         {
-            var filenameFullPath = this.exportedFilesAccessor.GetArchiveFilePathForExportedData(
-                new QuestionnaireIdentity(id, version), format, status, @from?.ToUniversalTime(),
-                to?.ToUniversalTime());
+            var result = await this.dataExportStatusReader.GetDataArchive(
+                configurationManager.AppSettings["BaseUrl"],
+                this.exportServiceSettings.GetById(AppSetting.ExportServiceStorageKey).Key,
+                new QuestionnaireIdentity(id, version), format, status, from , to);
 
-            if (format == DataExportFormat.Binary && externalFileStorage.IsEnabled())
+            if (result.Redirect != null)
             {
-                var filename = this.fileSystemAccessor.GetFileName(filenameFullPath);
-                var externalStoragePath = this.exportFileAccessor.GetExternalStoragePath(filename);
-
-                if (this.externalFileStorage.IsExist(externalStoragePath))
-                {
-                    var directLink = this.externalFileStorage.GetDirectLink(externalStoragePath, TimeSpan.FromMinutes(30));
-
-                    var response = Request.CreateResponse(HttpStatusCode.Moved);
-                    response.Headers.Location = new Uri(directLink);
-                    return response;
-                }
+                var response = Request.CreateResponse(HttpStatusCode.Redirect);
+                response.Headers.Location = result.Redirect;
+                return response;
             }
-
-            return CreateFile(filenameFullPath);
+            else
+            {
+                var response = Request.CreateResponse(HttpStatusCode.OK);
+                response.Content = new StreamContent(result.Data);
+                response.Content.Headers.ContentType = new MediaTypeHeaderValue(@"application/octet-stream");
+                response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+                {
+                    FileName = result.FileName
+                };
+                return response;
+            }
         }
 
         [HttpGet]

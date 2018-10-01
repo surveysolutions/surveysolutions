@@ -1,5 +1,8 @@
 ﻿using System;
+using System.IO;
+using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -21,17 +24,23 @@ namespace WB.Services.Export.Host.Controllers
         private readonly IJobsStatusReporting jobsStatusReporting;
         private readonly IDdiMetadataAccessor ddiDdiMetadataAccessor;
         private readonly ILogger<JobController> logger;
+        private readonly IExternalFileStorage externalFileStorage;
+        private readonly IDataExportFileAccessor exportFileAccessor;
 
         public JobController(IDataExportProcessesService exportProcessesService,
         //    IDataExportStatusReader dataExportStatusReader,
             IJobsStatusReporting jobsStatusReporting,
             IDdiMetadataAccessor ddiDdiMetadataAccessor,
-            ILogger<JobController> logger)
+            ILogger<JobController> logger,
+            IExternalFileStorage externalFileStorage,
+            IDataExportFileAccessor exportFileAccessor)
         {
             this.exportProcessesService = exportProcessesService;
             this.jobsStatusReporting = jobsStatusReporting;
             this.ddiDdiMetadataAccessor = ddiDdiMetadataAccessor;
             this.logger = logger;
+            this.externalFileStorage = externalFileStorage;
+            this.exportFileAccessor = exportFileAccessor;
         }
 
         [HttpPut]
@@ -40,9 +49,9 @@ namespace WB.Services.Export.Host.Controllers
             DataExportFormat format,
             InterviewStatus? status,
             DateTime? from,
-            DateTime? to, 
-            string archiveName, 
-            string archivePassword, 
+            DateTime? to,
+            string archiveName,
+            string archivePassword,
             string accessToken,
             ExternalStorageType? storageType,
             string apiKey,
@@ -105,6 +114,36 @@ namespace WB.Services.Export.Host.Controllers
                 archivePassword);
             var responseStream = System.IO.File.OpenRead(pathToFile);
             return File(responseStream, "application/zip");
+        }
+
+        [HttpGet]
+        [ResponseCache(NoStore = true)]
+        [Route("api/v1/job/download")]
+        public ActionResult DownloadArchive(string questionnaireId,
+            string archiveName,
+            InterviewStatus? status,
+            DataExportFormat format,
+            DateTime? fromDate,
+            DateTime? toDate,
+            string apiKey,
+            [FromHeader(Name = "Origin")] string baseUrl)
+        {
+            var tenant = new TenantInfo(baseUrl, apiKey);
+
+            var result = this.jobsStatusReporting.DownloadArchive(tenant, archiveName, format, status, fromDate,
+                toDate);
+
+            if (result == null)
+            {
+                return NotFound();
+            }
+
+            if (result.Redirect != null)
+            {
+                return Redirect(result.Redirect.ToString());
+            }
+
+            return this.File(result.Data, "application/octet-stream", result.FileName);
         }
     }
 }
