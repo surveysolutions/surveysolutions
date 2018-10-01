@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Refit;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
@@ -31,6 +32,12 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             [Query]InterviewStatus? status,
             [Query]DateTime? fromDate,
             [Query]DateTime? toDate,
+            [Query]string apiKey,
+            [Header("Origin")]string tenantBaseUrl);
+
+        [Get("/api/v1/ddi")]
+        Task<HttpContent> GetDdiArchive([Query]string questionnaireId,
+            [Query]string archivePassword,
             [Query]string apiKey,
             [Header("Origin")]string tenantBaseUrl);
     }

@@ -1,7 +1,7 @@
 ﻿using ddidotnet;
-using WB.Infrastructure.Native.Sanitizer;
+using WB.Services.Export.Utils;
 
-namespace WB.Core.BoundedContexts.Headquarters.DataExport.Ddi.Impl
+namespace WB.Services.Export.Ddi.Implementation
 {
     internal class MetadataWriter : IMetadataWriter
     {

@@ -1,11 +1,13 @@
 using System.Collections.Generic;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
-using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
-using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
+using WB.Services.Export.Infrastructure;
+using WB.Services.Export.Interview;
+using WB.Services.Export.Questionnaire;
+using WB.Services.Export.Services.Processing;
+using WB.Services.Export.Tenant;
 
-namespace WB.Core.BoundedContexts.Headquarters.DataExport.Ddi.Impl
+namespace WB.Services.Export.Ddi.Implementation
 {
     internal class DdiMetadataAccessor : IDdiMetadataAccessor
     {
@@ -19,7 +21,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Ddi.Impl
         public DdiMetadataAccessor(
             IDdiMetadataFactory ddiMetadataFactory, 
             IFileSystemAccessor fileSystemAccessor,
-            InterviewDataExportSettings interviewDataExportSettings, 
+            IOptions<InterviewDataExportSettings> interviewDataExportSettings, 
             IExportFileNameService exportFileNameService,
             IDataExportFileAccessor dataExportFileAccessor)
         {
@@ -28,13 +30,15 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Ddi.Impl
             this.exportFileNameService = exportFileNameService;
             this.dataExportFileAccessor = dataExportFileAccessor;
 
-            this.pathToDdiMetadata = fileSystemAccessor.CombinePath(interviewDataExportSettings.DirectoryPath, ExportedDataFolderName);
+            var options = interviewDataExportSettings.Value;
+            this.pathToDdiMetadata = fileSystemAccessor.CombinePath(options.DirectoryPath, ExportedDataFolderName);
 
             if (!fileSystemAccessor.IsDirectoryExists(this.pathToDdiMetadata))
                 fileSystemAccessor.CreateDirectory(this.pathToDdiMetadata);
         }
 
-        public string GetFilePathToDDIMetadata(QuestionnaireIdentity questionnaireId)
+        public async Task<string> GetFilePathToDDIMetadata(TenantInfo tenant, QuestionnaireId questionnaireId,
+            string password)
         {
             var archiveFilePath = this.exportFileNameService.GetFileNameForDdiByQuestionnaire(questionnaireId, this.pathToDdiMetadata);
 
@@ -43,10 +47,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Ddi.Impl
 
             var filesToArchive = new List<string>
             {
-                this.ddiMetadataFactory.CreateDDIMetadataFileForQuestionnaireInFolder(questionnaireId, this.pathToDdiMetadata)
+                await this.ddiMetadataFactory.CreateDDIMetadataFileForQuestionnaireInFolder(tenant, questionnaireId, this.pathToDdiMetadata)
             };
 
-            dataExportFileAccessor.RecreateExportArchive(filesToArchive, archiveFilePath);
+            dataExportFileAccessor.RecreateExportArchive(this.pathToDdiMetadata, filesToArchive, archiveFilePath, password);
 
             return archiveFilePath;
         }

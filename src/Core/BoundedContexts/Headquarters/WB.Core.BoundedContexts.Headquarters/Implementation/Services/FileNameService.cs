@@ -35,10 +35,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             return $"template_{questionnaireTitle}_v{identity.Version}.zip";
         }
 
-        public string GetFileNameForDdiByQuestionnaire(QuestionnaireIdentity identity, string pathToDdiMetadata)
+        public string GetFileNameForDdiByQuestionnaire(QuestionnaireIdentity identity)
         {
             var questionnaireTitle = GetQuestionnaireTitle(identity);
-            return this.fileSystemAccessor.CombinePath(pathToDdiMetadata, $"{questionnaireTitle}_{identity.Version}_ddi.zip");
+            return $"{questionnaireTitle}_{identity.Version}_ddi.zip";
         }
 
         public string GetFileNameForTabByQuestionnaire(QuestionnaireIdentity identity, string pathToExportedData,

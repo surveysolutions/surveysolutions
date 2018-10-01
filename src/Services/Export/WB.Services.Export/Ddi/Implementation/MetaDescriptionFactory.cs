@@ -1,6 +1,6 @@
 using ddidotnet;
 
-namespace WB.Core.BoundedContexts.Headquarters.DataExport.Ddi.Impl
+namespace WB.Services.Export.Ddi.Implementation
 {
     internal class MetaDescriptionFactory : IMetaDescriptionFactory
     {

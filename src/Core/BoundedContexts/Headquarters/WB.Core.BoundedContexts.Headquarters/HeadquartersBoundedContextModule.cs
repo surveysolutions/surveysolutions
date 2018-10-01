@@ -44,8 +44,6 @@ using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Ddi;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Ddi.Impl;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
@@ -171,8 +169,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.BindToMethod<Func<IInterviewsToDeleteFactory>>(context => () => context.Get<IInterviewsToDeleteFactory>());
             registry.Bind<IInterviewHistoryFactory, InterviewHistoryFactory>();
             registry.Bind<IInterviewInformationFactory, InterviewerInterviewsFactory>();
-            registry.Bind<IDdiMetadataFactory, DdiMetadataFactory>();
-            registry.Bind<IMetaDescriptionFactory, MetaDescriptionFactory>();
             registry.Bind<IDatasetWriterFactory, DatasetWriterFactory>();
             registry.Bind<IDataQueryFactory, DataQueryFactory>();
             registry.Bind<IQuestionnaireLabelFactory, QuestionnaireLabelFactory>();
@@ -269,7 +265,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.BindToConstant<ExportSettings>(() => this.exportSettings);
             registry.Bind<IFilebasedExportedDataAccessor, FilebasedExportedDataAccessor>();
 
-            registry.Bind<IDdiMetadataAccessor, DdiMetadataAccessor>();
             registry.Bind<IDataExportFileAccessor, DataExportFileAccessor>();
          
             registry.BindAsSingleton<IDataExportProcessesService, DataExportProcessesService>();

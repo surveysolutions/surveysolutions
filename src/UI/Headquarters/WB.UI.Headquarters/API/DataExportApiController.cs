@@ -8,12 +8,13 @@ using System.Web;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Ddi;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
@@ -37,10 +38,13 @@ namespace WB.UI.Headquarters.API
         private readonly IDataExportProcessesService dataExportProcessesService;
         private readonly IDataExportFileAccessor exportFileAccessor;
 
-        private readonly IDdiMetadataAccessor ddiMetadataAccessor;
+        private readonly IExportFileNameService exportFileNameService;
         private readonly IExternalFileStorage externalFileStorage;
+        private readonly IExportSettings exportSettings;
+        private readonly InterviewDataExportSettings interviewExportSettings;
         private readonly IPlainKeyValueStorage<ExportServiceSettings> exportServiceSettings;
         private readonly IConfigurationManager configurationManager;
+
 
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly ISerializer serializer;
@@ -50,24 +54,28 @@ namespace WB.UI.Headquarters.API
             IDataExportStatusReader dataExportStatusReader,
             IDataExportProcessesService dataExportProcessesService,
             IDataExportFileAccessor exportFileAccessor,
-            IFilebasedExportedDataAccessor filebasedExportedDataAccessor, 
-            IDdiMetadataAccessor ddiMetadataAccessor,
+            IFilebasedExportedDataAccessor filebasedExportedDataAccessor,
             ISerializer serializer,
             IExternalFileStorage externalFileStorage,
+            IExportSettings exportSettings,
+            InterviewDataExportSettings interviewExportSettings,
             IPlainKeyValueStorage<ExportServiceSettings> exportServiceSettings,
             IConfigurationManager configurationManager,
-            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory)
+            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory, 
+            IExportFileNameService exportFileNameService)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.dataExportStatusReader = dataExportStatusReader;
             this.dataExportProcessesService = dataExportProcessesService;
             this.exportFileAccessor = exportFileAccessor;
             this.exportedFilesAccessor = filebasedExportedDataAccessor;
-            this.ddiMetadataAccessor = ddiMetadataAccessor;
             this.externalFileStorage = externalFileStorage;
+            this.exportSettings = exportSettings;
+            this.interviewExportSettings = interviewExportSettings;
             this.exportServiceSettings = exportServiceSettings;
             this.configurationManager = configurationManager;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
+            this.exportFileNameService = exportFileNameService;
             this.serializer = serializer;
         }
 
@@ -109,8 +117,27 @@ namespace WB.UI.Headquarters.API
 
         [HttpGet]
         [ObserverNotAllowedApi]
-        public HttpResponseMessage DDIMetadata(Guid id, long version)
-            => CreateFile(this.ddiMetadataAccessor.GetFilePathToDDIMetadata(new QuestionnaireIdentity(id, version)));
+        [ApiNoCache]
+        public async Task<HttpResponseMessage> DDIMetadata(Guid id, long version)
+        {
+            var questionnaireIdentity = new QuestionnaireIdentity(id, version);
+            var serviceApi = Refit.RestService.For<IExportServiceApi>(interviewExportSettings.ExportServiceUrl);
+            var result = await serviceApi.GetDdiArchive(questionnaireIdentity.ToString(),
+                this.exportSettings.GetPassword(),
+                this.exportServiceSettings.GetById(AppSetting.ExportServiceStorageKey).Key,
+                this.configurationManager.AppSettings["BaseUrl"]);
+
+            var fileName = this.exportFileNameService.GetFileNameForDdiByQuestionnaire(questionnaireIdentity);
+
+            var response = Request.CreateResponse(HttpStatusCode.OK);
+            response.Content = new ByteArrayContent(await result.ReadAsByteArrayAsync());
+            response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue(@"attachment")
+            {
+                FileNameStar = fileSystemAccessor.GetFileName(fileName)
+            };
+
+            return response;
+        }
 
         [HttpPost]
         [ObserverNotAllowedApi]

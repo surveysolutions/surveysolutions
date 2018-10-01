@@ -2,21 +2,18 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Main.Core.Documents;
-using Main.Core.Entities.SubEntities;
+using Microsoft.Extensions.Logging;
 using Moq;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Ddi;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Ddi.Impl;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
-using WB.Core.BoundedContexts.Headquarters.Repositories;
-using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
-using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.FileSystem;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Core.SharedKernels.DataCollection.ValueObjects;
+using WB.Services.Export.CsvExport.Implementation.DoFiles;
+using WB.Services.Export.Ddi;
+using WB.Services.Export.Ddi.Implementation;
+using WB.Services.Export.Infrastructure;
+using WB.Services.Export.Interview;
+using WB.Services.Export.Questionnaire;
+using WB.Services.Export.Questionnaire.Services;
+using WB.Services.Export.Tenant;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.MetadataExportServiceTests
+namespace WB.Services.Export.Tests.Ddi
 {
     [NUnit.Framework.TestOf(typeof (DdiMetadataFactory))]
     internal class MetadataExportServiceTestContext
@@ -29,18 +26,22 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.M
             var fileSystemAccessor = new Mock<IFileSystemAccessor>();
             fileSystemAccessor.Setup(x => x.CombinePath(Moq.It.IsAny<string>(), Moq.It.IsAny<string>())).Returns<string, string>(Path.Combine);
 
+            var questionnaireStorage = new Mock<IQuestionnaireStorage>();
+            questionnaireStorage.SetupIgnoreArgs(x => x.GetQuestionnaireAsync(null, null))
+                .ReturnsAsync(questionnaireDocument);
+
+            var questionnaireExportStructureFactory = new Mock<IQuestionnaireExportStructureFactory>();
+            questionnaireExportStructureFactory.SetupIgnoreArgs(x =>
+                    x.GetQuestionnaireExportStructure(null, It.IsAny<QuestionnaireDocument>()))
+                .Returns(new QuestionnaireExportStructure());
+
             return new DdiMetadataFactory(
                 fileSystemAccessor.Object,
-                Mock.Of<ILogger>(),
+                Mock.Of<ILogger<DdiMetadataFactory>>(),
                 metaDescriptionFactory ?? Mock.Of<IMetaDescriptionFactory>(),
                 questionnaireLabelFactory ?? new QuestionnaireLabelFactory(),
-                Mock.Of<IQuestionnaireStorage>(
-                    _ =>
-                        _.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaireDocument),
-                Mock.Of<IQuestionnaireExportStructureStorage>(
-                    _ =>
-                        _.GetQuestionnaireExportStructure(Moq.It.IsAny<QuestionnaireIdentity>()) ==
-                        new QuestionnaireExportStructure()));
+                questionnaireStorage.Object,
+                questionnaireExportStructureFactory.Object);
         }
 
         protected static HeaderStructureForLevel CreateHeaderStructureForLevel(string levelName = "table name", string[] referenceNames = null, ValueVector<Guid> levelScopeVector = null)

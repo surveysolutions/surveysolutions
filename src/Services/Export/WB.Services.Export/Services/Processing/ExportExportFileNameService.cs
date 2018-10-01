@@ -1,5 +1,6 @@
 ﻿using System;
 using WB.Services.Export.Infrastructure;
+using WB.Services.Export.Questionnaire;
 
 namespace WB.Services.Export.Services.Processing
 {
@@ -17,9 +18,9 @@ namespace WB.Services.Export.Services.Processing
             return $"template_{questionnaireFilename}.zip";
         }
 
-        public string GetFileNameForDdiByQuestionnaire(string questionnaireFilename, string pathToDdiMetadata)
+        public string GetFileNameForDdiByQuestionnaire(QuestionnaireId questionnaire, string pathToDdiMetadata)
         {
-            return this.fileSystemAccessor.Combine(pathToDdiMetadata, $"{questionnaireFilename}_ddi.zip");
+            return this.fileSystemAccessor.Combine(pathToDdiMetadata, $"{questionnaire}_ddi.zip");
         }
 
         public string GetFileNameForTabByQuestionnaire(string questionnaireFilename, string pathToExportedData,

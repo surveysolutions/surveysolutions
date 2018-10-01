@@ -25,4 +25,10 @@
     <ProjectReference Include="..\WB.Services.Export.Host\WB.Services.Export.Host.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="ddidotnet">
+      <HintPath>..\..\..\..\libs\ddidotnet.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>
