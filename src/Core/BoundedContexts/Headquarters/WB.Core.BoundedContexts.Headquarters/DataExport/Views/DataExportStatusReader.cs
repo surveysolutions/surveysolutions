@@ -1,6 +1,9 @@
 ﻿using System;
+using System.IO;
+using System.Net;
 using System.Threading.Tasks;
 using Refit;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
@@ -19,6 +22,30 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
         {
             this.settings = settings;
             this.ExportFileNameService = exportFileNameService;
+        }
+
+        public async Task<DataExportArchive> GetDataArchive(
+            string baseUrl, string apiKey,
+            QuestionnaireIdentity questionnaireIdentity, DataExportFormat format,
+            InterviewStatus? status = null, DateTime? from = null, DateTime? to = null)
+        {
+            var api = RestService.For<IExportServiceApi>(settings.ExportServiceUrl);
+            var archiveFileName = ExportFileNameService.GetQuestionnaireTitleWithVersion(questionnaireIdentity);
+            var result = await api.DownloadArchive(questionnaireIdentity.ToString(), archiveFileName, format, status, from, to, apiKey, baseUrl);
+
+            if (result.StatusCode == HttpStatusCode.Redirect)
+            {
+                return new DataExportArchive
+                {
+                    Redirect = result.Headers.Location
+                };
+            }
+
+            return new DataExportArchive
+            {
+                FileName = result.Content.Headers.ContentDisposition.FileName,
+                Data = await result.Content.ReadAsStreamAsync()
+            };
         }
 
         public async Task<DataExportStatusView> GetDataExportStatusForQuestionnaireAsync(string baseUrl,

@@ -18,6 +18,17 @@ namespace WB.Services.Export.Jobs
             QuestionnaireId questionnaireIdentity,
             string archiveFileName,
             InterviewStatus? status = null, DateTime? fromDate = null, DateTime? toDate = null);
+
+        DataExportArchive DownloadArchive(TenantInfo tenant, string archiveName,
+            DataExportFormat dataExportFormat, InterviewStatus? status,
+            DateTime? from, DateTime? to);
+    }
+
+    public class DataExportArchive
+    {
+        public Stream Data { get; set; }
+        public Uri Redirect { get; set; }
+        public string FileName { get; set; }
     }
 
     public class JobsStatusReporting : IJobsStatusReporting
@@ -55,6 +66,40 @@ namespace WB.Services.Export.Jobs
             this.exportFileAccessor = exportFileAccessor;
         }
 
+        public DataExportArchive DownloadArchive(TenantInfo tenant, string archiveName,
+            DataExportFormat dataExportFormat, InterviewStatus? status,
+            DateTime? from, DateTime? to)
+        {
+            string filePath = this.fileBasedExportedDataAccessor.GetArchiveFilePathForExportedData(
+                tenant,
+                archiveName,
+                dataExportFormat, status, from, to);
+
+            if (this.externalFileStorage.IsEnabled())
+            {
+                var externalStoragePath = this.exportFileAccessor.GetExternalStoragePath(Path.GetFileName(filePath));
+                var metadata = this.externalFileStorage.GetObjectMetadata(externalStoragePath);
+
+                if (metadata != null)
+                {
+                    return new DataExportArchive
+                    {
+                         Redirect = new Uri(this.externalFileStorage.GetDirectLink(filePath, TimeSpan.FromSeconds(10)))
+                    };
+                }
+            }
+            else if (this.fileSystemAccessor.IsFileExists(filePath))
+            {
+                return new DataExportArchive
+                {
+                    FileName = Path.GetFileName(filePath),
+                    Data = new FileStream(filePath, FileMode.Open, FileAccess.Read)
+                };
+            }
+
+            return null;
+        }
+
         public DataExportStatusView GetDataExportStatusForQuestionnaire(
             TenantInfo tenant,
             QuestionnaireId questionnaireIdentity,
@@ -69,7 +114,7 @@ namespace WB.Services.Export.Jobs
 
             var runningProcesses = this.dataExportProcessesService.GetRunningExportProcesses(tenant).Select(CreateRunningDataExportProcessView).ToArray();
             var allProcesses = this.dataExportProcessesService.GetAllProcesses(tenant).Select(CreateRunningDataExportProcessView).ToArray();
-            
+
             var dataExports = this.supportedDataExports.Select(supportedDataExport =>
                     this.CreateDataExportView(tenant, archiveFileName, supportedDataExport.Item1, supportedDataExport.Item2, status,
                         fromDate, toDate, questionnaireIdentity, questionnaire, runningProcesses, allProcesses))
@@ -149,7 +194,7 @@ namespace WB.Services.Export.Jobs
                 archiveFileName,
                 dataFormat, interviewStatus, fromDate, toDate);
 
-            if (dataFormat == DataExportFormat.Binary && this.externalFileStorage.IsEnabled())
+            if (this.externalFileStorage.IsEnabled())
             {
                 var externalStoragePath = this.exportFileAccessor.GetExternalStoragePath(Path.GetFileName(filePath));
                 var metadata = this.externalFileStorage.GetObjectMetadata(externalStoragePath);
@@ -171,7 +216,7 @@ namespace WB.Services.Export.Jobs
             return dataExportView;
         }
 
-        
+
         private static DataExportStatus GetStatusOfExportProcess(DataExportType dataType, DataExportFormat dataFormat,
             QuestionnaireId questionnaireIdentity, RunningDataExportProcessView[] allProcesses)
             => allProcesses.FirstOrDefault(x =>
