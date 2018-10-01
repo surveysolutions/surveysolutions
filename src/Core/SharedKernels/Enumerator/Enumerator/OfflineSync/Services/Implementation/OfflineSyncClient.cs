@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Humanizer;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
@@ -34,11 +36,11 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                 cancellationToken);
         }
 
-        public async Task SendAsync<TRequest>(TRequest request, CancellationToken cancellationToken,
+        public Task SendAsync<TRequest>(TRequest request, CancellationToken cancellationToken,
             IProgress<TransferProgress> progress = null)
             where TRequest : ICommunicationMessage
         {
-            await this.communicator.SendAsync<TRequest, OkResponse>(this.nearbyConnection, Endpoint, request, progress,
+            return this.communicator.SendAsync<TRequest, OkResponse>(this.nearbyConnection, Endpoint, request, progress,
                 cancellationToken);
         }
 
@@ -48,17 +50,18 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             where TResponse : class, IChunkedByteArrayResponse
         {
             request.Skip = 0;
-            request.Maximum = 1 * 1024 * 1024 / 4;
+            request.Maximum = 1024 * 512;
 
             byte[] content = null;
             TResponse response = null;
 
-            var eta = new EtaTransferRate();
+            var eta = new EtaTransferRate(averageWindow: 20);
 
             // reporting back full data, not chunks info
             IProgress<TransferProgress> overallProgress = new Progress<TransferProgress>(t =>
             {
                 t.TotalBytesToReceive = response?.Total;
+
                 eta.AddProgress(t.BytesReceived, t.TotalBytesToReceive);
                 t.Speed = eta.AverageSpeed;
                 t.Eta = eta.ETA;
@@ -67,7 +70,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                 
                 if (t.TotalBytesToReceive != null)
                 {
-                    t.ProgressPercentage = request.Skip.PercentOf(t.TotalBytesToReceive.Value);
+                    t.ProgressPercentage = t.BytesReceived.PercentOf(t.TotalBytesToReceive.Value);
                 }
 
                 progress?.Report(t);
@@ -76,8 +79,7 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
             do
             {
                 response = await this.communicator.SendAsync<TRequest, TResponse>(this.nearbyConnection, 
-                        Endpoint, (TRequest)request, overallProgress, cancellationToken)
-                    .ConfigureAwait(false);
+                        Endpoint, (TRequest)request, overallProgress, cancellationToken);
 
                 if (response.Content == null)
                 {
@@ -89,14 +91,16 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Services.Implementation
                 Array.Copy(response.Content, 0, content, response.Skipped, response.Length);
 
                 request.Skip = response.Skipped + response.Length;
+
                 overallProgress.Report(new TransferProgress
                 {
-                    BytesReceived = request.Skip,
+                    BytesReceived = response.Length,
                     TotalBytesToReceive = response.Total,
                     ProgressPercentage = request.Skip.PercentOf(response.Total)
                 });
-            } while (request.Skip < response.Total);
 
+            } while (request.Skip < response.Total);
+            
             response.Content = content;
            
             return response;
