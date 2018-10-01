@@ -44,12 +44,12 @@ namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests
                 typeof(QuestionAnswerMap),
                 typeof(InterviewCommentedStatusMap)
             }, true);
-            postgresTransactionManager = Mock.Of<IUnitOfWork>(x => x.Session == sessionFactory.OpenSession());
+            UnitOfWork = Mock.Of<IUnitOfWork>(x => x.Session == sessionFactory.OpenSession());
 
             pgSqlConnection = new NpgsqlConnection(ConnectionStringBuilder.ConnectionString);
             pgSqlConnection.Open();
 
-            return new PostgreReadSideStorage<InterviewSummary>(postgresTransactionManager, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
+            return new PostgreReadSideStorage<InterviewSummary>(UnitOfWork, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
         }
 
         protected static void ExecuteInCommandTransaction(Action action)
@@ -64,6 +64,6 @@ namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests
         }
 
         protected static NpgsqlConnection pgSqlConnection;
-        protected static IUnitOfWork postgresTransactionManager;
+        protected static IUnitOfWork UnitOfWork;
     }
 }

@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
 using Moq;
-using NHibernate;
-using Npgsql;
 using WB.Core.BoundedContexts.Headquarters.Mappings;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
@@ -25,8 +23,7 @@ namespace WB.Tests.Integration.ReportTests
         public readonly SvReport Sv;
         public readonly HqReport Hq;
 
-        protected IUnitOfWork transactionManager;
-
+        
         protected PostgreReadSideStorage<InterviewSummary> CreateInterviewSummaryRepository()
         {
             var sessionFactory = IntegrationCreate.SessionFactory(connectionStringBuilder.ConnectionString, 
@@ -36,12 +33,9 @@ namespace WB.Tests.Integration.ReportTests
                         typeof(InterviewCommentedStatusMap)
                 }, true);
 
-            transactionManager = Mock.Of<IUnitOfWork>(x => x.Session == sessionFactory.OpenSession());
+            UnitOfWork = new UnitOfWork(sessionFactory);
 
-            pgSqlConnection = new NpgsqlConnection(connectionStringBuilder.ConnectionString);
-            pgSqlConnection.Open();
-
-           return new PostgreReadSideStorage<InterviewSummary>(transactionManager, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
+            return new PostgreReadSideStorage<InterviewSummary>(UnitOfWork, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
         }
 
         internal class SvReport
@@ -75,7 +69,7 @@ namespace WB.Tests.Integration.ReportTests
             internal SurveysAndStatusesReport SurveyAndStatuses(List<InterviewSummary> interviews)
             {
                 var reader = reportContext.CreateInterviewSummaryRepository();
-                reportContext.ExecuteInCommandTransaction(() => interviews.ForEach(x => reader.Store(x, x.InterviewId.FormatGuid())));
+                interviews.ForEach(x => reader.Store(x, x.InterviewId.FormatGuid()));
                 return SurveyAndStatuses(reader);
             }
         }
@@ -110,7 +104,7 @@ namespace WB.Tests.Integration.ReportTests
             public SurveysAndStatusesReport SurveyAndStatuses(List<InterviewSummary> interviews)
             {
                 var reader = reportContext.CreateInterviewSummaryRepository();
-                reportContext.ExecuteInCommandTransaction(() => interviews.ForEach(x => reader.Store(x, x.InterviewId.FormatGuid())));
+                interviews.ForEach(x => reader.Store(x, x.InterviewId.FormatGuid()));
                 return SurveyAndStatuses(reader);
             }
         }
