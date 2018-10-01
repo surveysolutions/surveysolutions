@@ -53,7 +53,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                     typeof(InterviewCommentedStatusMap)
                 }, true, new UnitOfWorkConnectionSettings().ReadSideSchemaName);
 
-            this.UnitOfWork = new UnitOfWork(sessionFactory);
+            this.UnitOfWork = IntegrationCreate.UnitOfWork(sessionFactory);
 
             Abc.Setup.InstanceToMockedServiceLocator<IEntitySerializer<int[][]>>(new EntitySerializer<int[][]>());
             Abc.Setup.InstanceToMockedServiceLocator<IEntitySerializer<GeoPosition>>(new EntitySerializer<GeoPosition>());

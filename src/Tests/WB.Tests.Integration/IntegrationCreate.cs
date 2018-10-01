@@ -327,6 +327,11 @@ namespace WB.Tests.Integration
             return cfg.BuildSessionFactory();
         }
 
+        public static IUnitOfWork UnitOfWork(ISessionFactory factory)
+        {
+            return new UnitOfWork(factory);
+        }
+
         private static HbmMapping GetMappingsFor(IEnumerable<Type> painStorageEntityMapTypes)
         {
             var mapper = new ModelMapper();
