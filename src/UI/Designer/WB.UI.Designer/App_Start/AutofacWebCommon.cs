@@ -106,7 +106,10 @@ namespace WB.UI.Designer.App_Start
             kernel.ContainerBuilder.RegisterApiControllers(Assembly.GetExecutingAssembly());
 
             kernel.ContainerBuilder.RegisterWebApiFilterProvider(config);
-            //kernel.ContainerBuilder.RegisterWebApiModelBinderProvider();
+            kernel.ContainerBuilder.RegisterWebApiModelBinderProvider();
+
+            kernel.ContainerBuilder.RegisterFilterProvider();
+            kernel.ContainerBuilder.RegisterModelBinderProvider();
 
             //temp logging
             kernel.ContainerBuilder.RegisterModule<LogRequestModule>();

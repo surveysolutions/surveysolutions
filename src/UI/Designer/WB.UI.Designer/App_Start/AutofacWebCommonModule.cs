@@ -20,8 +20,8 @@ namespace WB.UI.Designer.App_Start
         {
             registry.Bind<IAggregateRootCacheCleaner, DummyAggregateRootCacheCleaner>();
 
-            registry.BindWebApiFilterWhenControllerHasAttribute<TokenValidationAuthorizationFilter, ApiValidationAntiForgeryTokenAttribute>(
-                FilterScope.Controller,
+            registry.BindWebApiAuthorizationFilterWhenControllerHasAttribute<TokenValidationAuthorizationFilter, ApiValidationAntiForgeryTokenAttribute>(
+                /*FilterScope.Controller,*/
                 new ConstructorArgument("tokenVerifier", _ => new ApiValidationAntiForgeryTokenVerifier()));
 
             registry.BindAsSingleton<ISettingsProvider, DesignerSettingsProvider>();

@@ -6,11 +6,11 @@ using Autofac.Integration.WebApi;
 
 namespace WB.UI.Shared.Web.Modules.Filters
 {
-    public class AutofacActionFilter<TFilter> : IAutofacActionFilter where TFilter : ActionFilterAttribute
+    public class WebApiActionFilter<TFilter> : IAutofacActionFilter where TFilter : ActionFilterAttribute
     {
         private readonly TFilter filter;
 
-        public AutofacActionFilter(TFilter filter)
+        public WebApiActionFilter(TFilter filter)
         {
             this.filter = filter;
         }
