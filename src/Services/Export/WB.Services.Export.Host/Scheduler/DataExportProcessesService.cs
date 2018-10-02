@@ -42,23 +42,23 @@ namespace WB.Services.Export.Host.Scheduler
             return args.NaturalId;
         }
         
+        
         public IEnumerable<DataExportProcessDetails> GetRunningExportProcesses(TenantInfo tenant)
         {
-            if (currentProcessingJob != null)
-            {
-                return new[] {currentProcessingJob};
-            }
-
-            return Array.Empty<DataExportProcessDetails>();
+            return GetAllProcesses(tenant).Where(p => p.IsQueuedOrRunning());
         }
 
         public DataExportProcessDetails[] GetAllProcesses(TenantInfo tenant)
         {
-            return tempQueue.Where(a => a.Tenant.Id == tenant.Id).Concat(GetRunningExportProcesses(tenant)).ToArray();
+            return tempQueue.Where(a => a.Tenant.Equals(tenant))
+                .Concat(new [] { currentProcessingJob })
+                .Where(p => p != null)
+                .ToArray();
         }
 
         public void FinishExportSuccessfully(string processId)
         {
+
            // throw new NotImplementedException();
         }
 
@@ -98,6 +98,7 @@ namespace WB.Services.Export.Host.Scheduler
                 logger.LogInformation("Started in-memory job queue");
                 foreach (var job in tempQueue.GetConsumingEnumerable())
                 {
+                    job.Status = DataExportStatus.Running;
                     logger.LogInformation("Got new job: " + job.NaturalId);
                     currentProcessingJob = job;
 
@@ -130,6 +131,16 @@ namespace WB.Services.Export.Host.Scheduler
             logger.LogInformation("Stopping in-memory job queue");
             this.tempQueue.CompleteAdding();
             return Task.CompletedTask;
+        }
+    }
+
+    public static class DataExportProcessDetailsExtensions
+    {
+        public static bool IsQueuedOrRunning(this IDataExportProcessDetails process)
+        {
+            if (process == null) return false;
+            return process.Status == DataExportStatus.Queued || process.Status == DataExportStatus.Running ||
+                   process.Status == DataExportStatus.Compressing;
         }
     }
 }
