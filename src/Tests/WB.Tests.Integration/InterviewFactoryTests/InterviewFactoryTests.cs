@@ -40,15 +40,14 @@ namespace WB.Tests.Integration.InterviewFactoryTests
             var roster = Id.g2;
             var rosterItem = Id.g3;
 
-            this.UnitOfWork.ExecuteInPlainTransaction(() =>
-                interviewSummaryRepository.Store(new InterviewSummary
+            interviewSummaryRepository.Store(new InterviewSummary
                 {
                     SummaryId = interviewId.FormatGuid(),
                     InterviewId = interviewId,
                     Status = InterviewStatus.Completed,
                     QuestionnaireIdentity = questionnaireId.ToString(),
                     ReceivedByInterviewer = false
-                }, interviewId.FormatGuid()));
+                }, interviewId.FormatGuid());
 
             var factory = CreateInterviewFactory();
 
@@ -76,7 +75,6 @@ namespace WB.Tests.Integration.InterviewFactoryTests
             var entityNegativeConsecutive = Create.Identity(rosterItem, Create.RosterVector(1, -99, 3, -99, -44));
 
 
-            this.UnitOfWork.ExecuteInPlainTransaction(() =>
             factory.Save(new InterviewState
             {
                 Id = interviewId,
@@ -87,11 +85,10 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                     {InterviewStateIdentity.Create(entityNegativeMixed), true},
                     {InterviewStateIdentity.Create(entityNegativeConsecutive), true}
                 }
-            }));
+            });
 
             //act
-            var entities = this.UnitOfWork.ExecuteInPlainTransaction(() =>
-                factory.GetInterviewEntities(interviewId));
+            var entities = factory.GetInterviewEntities(interviewId));
 
             //assert
             Assert.That(entities, Has.Count.EqualTo(4));
@@ -115,15 +112,14 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                 Identity.Create(Guid.NewGuid(), Create.RosterVector(1))
             };
 
-            this.UnitOfWork.ExecuteInPlainTransaction(() =>
-                interviewSummaryRepository.Store(new InterviewSummary
+           interviewSummaryRepository.Store(new InterviewSummary
                 {
                     SummaryId = interviewId.FormatGuid(),
                     InterviewId = interviewId,
                     Status = InterviewStatus.Completed,
                     QuestionnaireIdentity = questionnaireId.ToString(),
                     ReceivedByInterviewer = false
-                }, interviewId.FormatGuid()));
+                }, interviewId.FormatGuid());
 
             var factory = CreateInterviewFactory();
 
@@ -139,11 +135,10 @@ namespace WB.Tests.Integration.InterviewFactoryTests
             PrepareQuestionnaire(questionnaire, questionnaireId.Version);
 
             foreach (var questionIdentity in questionIdentities)
-                this.UnitOfWork.ExecuteInPlainTransaction(()
-                    => factory.SetFlagToQuestion(interviewId, questionIdentity, true));
+                 factory.SetFlagToQuestion(interviewId, questionIdentity, true);
 
             //act
-            var flaggedIdentites = this.UnitOfWork.ExecuteInPlainTransaction(() => factory.GetFlaggedQuestionIds(interviewId));
+            var flaggedIdentites = factory.GetFlaggedQuestionIds(interviewId);
 
             //assert
             Assert.AreEqual(2, flaggedIdentites.Length);
@@ -163,15 +158,14 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                 Identity.Create(Guid.NewGuid(), Create.RosterVector(1))
             };
 
-            this.UnitOfWork.ExecuteInPlainTransaction(() =>
-                interviewSummaryRepository.Store(new InterviewSummary
+            interviewSummaryRepository.Store(new InterviewSummary
                 {
                     SummaryId = interviewId.FormatGuid(),
                     InterviewId = interviewId,
                     Status = InterviewStatus.Completed,
                     QuestionnaireIdentity = questionnaireId.ToString(),
                     ReceivedByInterviewer = false
-                }, interviewId.FormatGuid()));
+                }, interviewId.FormatGuid());
 
             var factory = CreateInterviewFactory();
 
@@ -186,21 +180,14 @@ namespace WB.Tests.Integration.InterviewFactoryTests
 
             PrepareQuestionnaire(questionnaire, questionnaireId.Version);
 
-            this.UnitOfWork.ExecuteInPlainTransaction(() =>
-            {
-                foreach (var questionIdentity in questionIdentities)
+            foreach (var questionIdentity in questionIdentities)
                 {
                     factory.SetFlagToQuestion(interviewId, questionIdentity, true);
                 }
-            });
-
-            this.UnitOfWork.ExecuteInPlainTransaction(() =>
-            {
-                factory.SetFlagToQuestion(interviewId, questionIdentities[0], false);
-            });
+            factory.SetFlagToQuestion(interviewId, questionIdentities[0], false);
 
             //act
-            var flaggedIdentites = this.UnitOfWork.ExecuteInPlainTransaction(() => factory.GetFlaggedQuestionIds(interviewId));
+            var flaggedIdentites = factory.GetFlaggedQuestionIds(interviewId);
 
             //assert
             Assert.AreEqual(1, flaggedIdentites.Length);
@@ -244,13 +231,10 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                  {variableId, false}
              };
 
-            this.UnitOfWork.ExecuteInPlainTransaction(() =>
-            {
-                factory.Save(interviewState);
-            });
-
+            factory.Save(interviewState);
+            
             //act
-            this.UnitOfWork.ExecuteInPlainTransaction(() => factory.RemoveInterview(interviewId));
+            factory.RemoveInterview(interviewId);
 
             //assert
             var interviewEntities = this.GetInterviewEntities(factory, interviewId, questionnaire.PublicKey);
@@ -286,11 +270,8 @@ namespace WB.Tests.Integration.InterviewFactoryTests
             interviewState.ReadOnly = readOnlyQuestions.Select(InterviewStateIdentity.Create).ToList();
 
             //act
-            this.UnitOfWork.ExecuteInPlainTransaction(() =>
-            {
-                factory.Save(interviewState);
-            });
-
+            factory.Save(interviewState);
+            
             //assert
             var interviewEntities = this.GetInterviewEntities(factory, interviewId, questionnaire.PublicKey);
 
@@ -336,10 +317,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
              };
 
             //act
-            this.UnitOfWork.ExecuteInPlainTransaction(() =>
-            {
-                factory.Save(interviewState);
-            });
+            factory.Save(interviewState);
 
             //assert
             var interviewEntities = this.GetInterviewEntities(factory, interviewId, questionnaire.PublicKey);
@@ -392,10 +370,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
              };
 
             //act
-            this.UnitOfWork.ExecuteInPlainTransaction(() =>
-            {
-                factory.Save(interviewState);
-            });
+            factory.Save(interviewState);
 
             //assert
             var interviewEntities = this.GetInterviewEntities(factory, interviewId, questionnaire.PublicKey);
@@ -453,10 +428,8 @@ namespace WB.Tests.Integration.InterviewFactoryTests
              };
 
             //act
-            this.UnitOfWork.ExecuteInPlainTransaction(() =>
-            {
-                factory.Save(interviewState);
-            });
+            factory.Save(interviewState);
+            
 
             //assert
             var interviewEntities = this.GetInterviewEntities(factory, interviewId, questionnaire.PublicKey);
@@ -492,13 +465,12 @@ namespace WB.Tests.Integration.InterviewFactoryTests
             }, new QuestionnaireIdentity(questionnaire.PublicKey, 1));
 
             //act
-            this.UnitOfWork.ExecuteInPlainTransaction(() =>
-            {
-                var interviewState = Create.Entity.InterviewState(interviewId);
-                interviewState.Enablement = addedRosterIdentities.ToDictionary(InterviewStateIdentity.Create, x => true);
+            
+            var interviewState = Create.Entity.InterviewState(interviewId);
+            interviewState.Enablement = addedRosterIdentities.ToDictionary(InterviewStateIdentity.Create, x => true);
 
-                factory.Save(interviewState);
-            });
+            factory.Save(interviewState);
+            
 
             //assert
             var interviewEntities = this.GetInterviewEntities(factory, interviewId, questionnaire.PublicKey);
@@ -572,10 +544,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                 });
 
             //act
-            this.UnitOfWork.ExecuteInPlainTransaction(() =>
-            {
-                factory.Save(interviewState);
-            });
+            factory.Save(interviewState);
 
             //assert
             var interviewEntities = this.GetInterviewEntities(factory, interviewId, questionnaire.PublicKey);
@@ -668,19 +637,15 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                     AsYesNo = x.AsYesNo
                 });
 
-            this.UnitOfWork.ExecuteInPlainTransaction(() =>
-            {
-                factory.Save(interviewState);
-            });
+            factory.Save(interviewState);
+            
 
             interviewState = Create.Entity.InterviewState(interviewId);
             interviewState.Answers = questions.ToDictionary(x => InterviewStateIdentity.Create(x.Identity),
                 x => new InterviewStateAnswer { Id = x.Identity.Id, RosterVector = x.Identity.RosterVector });
             //act
-            this.UnitOfWork.ExecuteInPlainTransaction(() =>
-            {
-                factory.Save(interviewState);
-            });
+            
+            factory.Save(interviewState);
 
             //assert
             var interviewEntities = this.GetInterviewEntities(factory, interviewId, questionnaire.PublicKey);
@@ -754,9 +719,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
             PrepareQuestionnaire(questionnaire, questionnaireId.Version);
             PrepareQuestionnaire(questionnaire, otherQuestionnaireId.Version);
 
-            this.UnitOfWork.ExecuteInPlainTransaction(() =>
-            {
-                foreach (var expectedMultimediaAnswer in expectedMultimediaAnswers.GroupBy(x => x.Answer.InterviewId))
+            foreach (var expectedMultimediaAnswer in expectedMultimediaAnswers.GroupBy(x => x.Answer.InterviewId))
                 {
                     var id = expectedMultimediaAnswer.Key;
 
@@ -768,11 +731,9 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                         QuestionnaireIdentity = expectedMultimediaAnswer.FirstOrDefault().QuestionnaireId.ToString()
                     }, id.FormatGuid());
                 }
-            });
+            
 
-            this.UnitOfWork.ExecuteInPlainTransaction(() =>
-            {
-                foreach (var groupedInterviews in expectedMultimediaAnswers.GroupBy(x => x.Answer.InterviewId))
+            foreach (var groupedInterviews in expectedMultimediaAnswers.GroupBy(x => x.Answer.InterviewId))
                 {
                     var interviewState = Create.Entity.InterviewState(groupedInterviews.Key);
                     interviewState.Answers = groupedInterviews.ToDictionary(x => x.QuestionId,
@@ -787,11 +748,10 @@ namespace WB.Tests.Integration.InterviewFactoryTests
 
                     factory.Save(interviewState);
                 }
-            });
+            
 
             //act
-            var allMultimediaAnswers = this.UnitOfWork.ExecuteInQueryTransaction(
-                () => factory.GetMultimediaAnswersByQuestionnaire(questionnaireId));
+            var allMultimediaAnswers = factory.GetMultimediaAnswersByQuestionnaire(questionnaireId);
 
             //assert
             Assert.That(allMultimediaAnswers.Length, Is.EqualTo(2));
@@ -848,9 +808,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
             PrepareQuestionnaire(questionnaire, questionnaireId.Version);
             PrepareQuestionnaire(questionnaire, otherQuestionnaireId.Version);
 
-            this.UnitOfWork.ExecuteInPlainTransaction(() =>
-            {
-                foreach (var expectedAudioAnswer in expectedAudioAnswers.GroupBy(x => x.Answer.InterviewId))
+           foreach (var expectedAudioAnswer in expectedAudioAnswers.GroupBy(x => x.Answer.InterviewId))
                 {
                     interviewSummaryRepository.Store(new InterviewSummary
                     {
@@ -861,11 +819,9 @@ namespace WB.Tests.Integration.InterviewFactoryTests
 
                     }, expectedAudioAnswer.Key);
                 }
-            });
+            
 
-            this.UnitOfWork.ExecuteInPlainTransaction(() =>
-            {
-                foreach (var groupedInterviews in expectedAudioAnswers.GroupBy(x => x.Answer.InterviewId))
+            foreach (var groupedInterviews in expectedAudioAnswers.GroupBy(x => x.Answer.InterviewId))
                 {
                     var interviewState = Create.Entity.InterviewState(groupedInterviews.Key);
                     interviewState.Answers = groupedInterviews.ToDictionary(x => x.QuestionId,
@@ -879,10 +835,9 @@ namespace WB.Tests.Integration.InterviewFactoryTests
 
                     factory.Save(interviewState);
                 }
-            });
 
             //act
-            var allAudioAnswers = this.UnitOfWork.ExecuteInPlainTransaction(() => factory.GetAudioAnswersByQuestionnaire(questionnaireId));
+            var allAudioAnswers = factory.GetAudioAnswersByQuestionnaire(questionnaireId);
 
             //assert
             Assert.That(allAudioAnswers.Length, Is.EqualTo(3));
@@ -909,14 +864,12 @@ namespace WB.Tests.Integration.InterviewFactoryTests
             var factory = CreateInterviewFactory();
             PrepareQuestionnaire(questionnaire, questionnaireId.Version);
 
-            this.UnitOfWork.ExecuteInPlainTransaction(() =>
-            {
-                StoreInterviewSummary(new InterviewSummary(questionnaire)
+            StoreInterviewSummary(new InterviewSummary(questionnaire)
                 {
                     InterviewId = interviewId,
                     QuestionnaireIdentity = questionnaireId.ToString()
                 }, questionnaireId);
-            });
+            
 
             var interviewState = Create.Entity.InterviewState(interviewId);
             interviewState.Warnings = new Dictionary<InterviewStateIdentity, InterviewStateValidation>
@@ -942,10 +895,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
             };
 
             //act
-            this.UnitOfWork.ExecuteInPlainTransaction(() =>
-            {
-                factory.Save(interviewState);
-            });
+            factory.Save(interviewState);
 
             //assert
             var interviewEntities = this.GetInterviewEntities(factory, interviewId, questionnaire.PublicKey);
@@ -986,9 +936,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                 InterviewId = interviewId
             }, new QuestionnaireIdentity(questionnaire.PublicKey, 1));
 
-            this.UnitOfWork.ExecuteInPlainTransaction(() =>
-            {
-                var entities = questionnaire.Children[0].Children.SelectMany(x => x.Children).Select(x =>
+            var entities = questionnaire.Children[0].Children.SelectMany(x => x.Children).Select(x =>
                     new
                     {
                         InterviewId = interviewId,
@@ -1000,11 +948,11 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                                 : (x is Variable ? EntityType.Variable : EntityType.Question))
                     });
 
-                var interviewState = Create.Entity.InterviewState(interviewId);
-                interviewState.Enablement = entities.ToDictionary(x => x.Identity, x => true);
+            var interviewState = Create.Entity.InterviewState(interviewId);
+            interviewState.Enablement = entities.ToDictionary(x => x.Identity, x => true);
 
-                factory.Save(interviewState);
-            });
+            factory.Save(interviewState);
+            
 
             var removedEntities = questionnaire.Children[0].Children.Select(x => new InterviewStateIdentity
             {
@@ -1013,13 +961,11 @@ namespace WB.Tests.Integration.InterviewFactoryTests
             }).ToArray();
 
             //act
-            this.UnitOfWork.ExecuteInPlainTransaction(() =>
-            {
-                var interviewState = Create.Entity.InterviewState(interviewId);
+            var interviewNewState = Create.Entity.InterviewState(interviewId);
                 interviewState.Removed = removedEntities.ToList();
 
-                factory.Save(interviewState);
-            });
+            factory.Save(interviewNewState);
+            
 
             //assert
             var interviewEntities = this.GetInterviewEntities(factory, interviewId, questionnaire.PublicKey);
