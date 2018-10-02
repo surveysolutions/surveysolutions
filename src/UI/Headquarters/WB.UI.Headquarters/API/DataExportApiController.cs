@@ -143,18 +143,17 @@ namespace WB.UI.Headquarters.API
 
         [HttpPost]
         [ObserverNotAllowedApi]
-        public HttpResponseMessage DeleteDataExportProcess(string id)
+        public async Task<HttpResponseMessage> DeleteDataExportProcess(string id)
         {
             try
             {
-                
+                await this.exportServiceApi.DeleteProcess(id);
+                return Request.CreateResponse(HttpStatusCode.OK);
             }
             catch (Exception)
             {
                 return Request.CreateResponse(false);
             }
-
-            return Request.CreateResponse(true);
         }
 
         [HttpPost]
