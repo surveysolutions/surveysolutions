@@ -12,7 +12,7 @@ using WB.Services.Export.Interview;
 using WB.Services.Export.Jobs;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Services.Processing;
-using WB.Services.Export.Services.Processing.Good;
+using WB.Services.Export.Storage;
 using WB.Services.Export.Tenant;
 
 namespace WB.Services.Export.Host.Controllers

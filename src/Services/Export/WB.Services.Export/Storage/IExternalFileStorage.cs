@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
+using WB.Services.Export.Services.Processing;
 
-namespace WB.Services.Export.Services.Processing.Good
+namespace WB.Services.Export.Storage
 {
     public interface IExternalFileStorage
     {

@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using WB.Services.Export.Services.Processing.Good;
 using WB.Services.Export.Utils;
 
-namespace WB.Services.Export.Services.Storage
+namespace WB.Services.Export.Storage
 {
     public class S3ImageFileStorage : IImageFileStorage
     {

@@ -3,7 +3,7 @@ using Amazon;
 using Amazon.S3;
 using Amazon.S3.Model;
 using Microsoft.Extensions.Options;
-using WB.Services.Export.Services.Processing.Good;
+using WB.Services.Export.Services.Processing;
 
 namespace WB.Services.Export.Checks
 {

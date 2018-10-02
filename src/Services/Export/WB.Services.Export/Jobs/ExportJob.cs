@@ -7,7 +7,6 @@ using WB.Services.Export.ExportProcessHandlers;
 using WB.Services.Export.ExportProcessHandlers.Externals;
 using WB.Services.Export.ExportProcessHandlers.Implementation;
 using WB.Services.Export.Services.Processing;
-using WB.Services.Export.Services.Processing.Good;
 
 namespace WB.Services.Export.Jobs
 {

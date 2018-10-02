@@ -9,7 +9,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using WB.Services.Export.Jobs;
 using WB.Services.Export.Services.Processing;
-using WB.Services.Export.Services.Processing.Good;
 using WB.Services.Export.Tenant;
 
 namespace WB.Services.Export.Host.Scheduler
