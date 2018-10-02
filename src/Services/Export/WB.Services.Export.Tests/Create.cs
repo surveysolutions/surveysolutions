@@ -114,7 +114,8 @@ namespace WB.Services.Export.Tests
                 VariableName = variable ?? Guid.NewGuid().FormatGuid(),
                 PublicKey = id ?? Guid.NewGuid(),
                 VariableLabel = variableLabel,
-                Instructions = instructions
+                Instructions = instructions,
+                QuestionType = QuestionType.Text
             };
         }
 

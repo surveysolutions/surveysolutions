@@ -51,8 +51,8 @@ namespace WB.Services.Export.Tests.Ddi
                 });
 
             var fileSystemAccessor = new Mock<IFileSystemAccessor>();
-            fileSystemAccessor.Setup(x => x.CombinePath(Moq.It.IsAny<string>(), Moq.It.IsAny<string>()))
-                .Returns<string, string>(Path.Combine);
+            fileSystemAccessor.Setup(x => x.CombinePath(Moq.It.IsAny<string[]>()))
+                .Returns<string[]>(Path.Combine);
 
             metadataWriter = new Mock<IMetadataWriter>();
             var metaDescriptionFactory = new Mock<IMetaDescriptionFactory>();
@@ -63,6 +63,7 @@ namespace WB.Services.Export.Tests.Ddi
                 questionnaireDocument: questionnaire,
                 metaDescriptionFactory: metaDescriptionFactory.Object,
                 questionnaireLabelFactory: questionnaireLabelFactoryMock.Object);
+
             await BecauseOf();
         }
 
@@ -79,7 +80,7 @@ namespace WB.Services.Export.Tests.Ddi
             metadataWriter.Verify(x => x.CreateDdiDataFile("main level"), Times.Once());
 
         [NUnit.Framework.Test] public void should_return_correct_path () =>
-            filePath.Should().Be("11111111-1111-1111-1111-111111111111_3_ddi.xml");
+            filePath.Should().Be("11111111-1111-1111-1111-111111111111_ddi.xml");
 
         [NUnit.Framework.Test] public void should_add_variable_for_txt_question () =>
             metadataWriter.Verify(x =>x.AddDdiVariableToFile(Moq.It.IsAny<DdiDataFile>(), "txt", DdiDataType.DynString, "lbl_txt", "ttt","text question", null));
