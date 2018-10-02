@@ -168,7 +168,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IInterviewHistoryFactory, InterviewHistoryFactory>();
             registry.Bind<IInterviewInformationFactory, InterviewerInterviewsFactory>();
             registry.Bind<IDatasetWriterFactory, DatasetWriterFactory>();
-            registry.Bind<IDataQueryFactory, DataQueryFactory>();
             registry.Bind<IQuestionnaireLabelFactory, QuestionnaireLabelFactory>();
             registry.Bind<IExportViewFactory, ExportViewFactory>();
             registry.Bind<IQuestionnaireVersionProvider, QuestionnaireVersionProvider>();
@@ -261,13 +260,10 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             registry.BindToConstant<InterviewDataExportSettings>(() => this.interviewDataExportSettings);
             registry.BindToConstant<ExportSettings>(() => this.exportSettings);
-            registry.Bind<IFilebasedExportedDataAccessor, FilebasedExportedDataAccessor>();
 
             registry.Bind<IDataExportFileAccessor, DataExportFileAccessor>();
          
             registry.BindAsSingleton<IDataExportProcessesService, DataExportProcessesService>();
-
-            registry.Bind<ITabFileReader, TabFileReader>();
 
             registry.Bind<ITabularFormatExportService, ReadSideToTabularFormatExportService>();
             registry.Bind<ICsvWriterService, CsvWriterService>();

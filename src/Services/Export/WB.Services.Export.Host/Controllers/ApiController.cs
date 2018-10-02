@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using WB.Services.Export.Ddi;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Jobs;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Services.Processing;
-using WB.Services.Export.Storage;
 using WB.Services.Export.Tenant;
 
 namespace WB.Services.Export.Host.Controllers
@@ -18,17 +16,14 @@ namespace WB.Services.Export.Host.Controllers
         private readonly IDataExportProcessesService exportProcessesService;
         private readonly IJobsStatusReporting jobsStatusReporting;
         private readonly IDdiMetadataAccessor ddiDdiMetadataAccessor;
-        private readonly ILogger<JobController> logger;
 
         public JobController(IDataExportProcessesService exportProcessesService,
             IJobsStatusReporting jobsStatusReporting,
-            IDdiMetadataAccessor ddiDdiMetadataAccessor,
-            ILogger<JobController> logger)
+            IDdiMetadataAccessor ddiDdiMetadataAccessor)
         {
             this.exportProcessesService = exportProcessesService;
             this.jobsStatusReporting = jobsStatusReporting;
             this.ddiDdiMetadataAccessor = ddiDdiMetadataAccessor;
-            this.logger = logger;
         }
 
         [HttpPut]
@@ -138,6 +133,14 @@ namespace WB.Services.Export.Host.Controllers
             };
 
             ///return this.File(result.Data, "application/octet-stream", result.FileName);
+        }
+
+        [HttpDelete]
+        [Route("api/v1/job/delete")]
+        public ActionResult Delete(string apiKey,
+            [FromHeader(Name = "Origin")] string baseUrl)
+        {
+            return Ok();
         }
     }
 }

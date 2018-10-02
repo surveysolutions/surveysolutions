@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.UI.Headquarters.API.Filters;
 using WB.UI.Shared.Web.Settings;
 
