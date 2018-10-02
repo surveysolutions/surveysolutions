@@ -12,5 +12,6 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         public int CommunicationBufferSize { get; set; }
         public int? EventChunkSize { get; set; }
         public long? LastHqSyncTimestamp { get; set; }
+        public bool? Encrypted { get; set; }
     }
 }
