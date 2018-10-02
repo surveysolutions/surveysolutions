@@ -9,6 +9,7 @@ using WB.UI.Designer.Implementation.Services;
 using WB.UI.Designer.Services;
 using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.Modules;
+using WB.UI.Shared.Web.Modules.Filters;
 using WB.UI.Shared.Web.Settings;
 
 
@@ -20,9 +21,11 @@ namespace WB.UI.Designer.App_Start
         {
             registry.Bind<IAggregateRootCacheCleaner, DummyAggregateRootCacheCleaner>();
 
-            registry.BindWebApiAuthorizationFilterWhenControllerHasAttribute<TokenValidationAuthorizationFilter, ApiValidationAntiForgeryTokenAttribute>(
-                /*FilterScope.Controller,*/
-                new ConstructorArgument("tokenVerifier", _ => new ApiValidationAntiForgeryTokenVerifier()));
+            registry.BindWithConstructorArgument<TokenValidationAuthorizationFilter, TokenValidationAuthorizationFilter>("tokenVerifier", new ApiValidationAntiForgeryTokenVerifier());
+
+//            registry.BindWebApiAuthorizationFilterWhenControllerHasAttribute<TokenValidationAuthorizationFilter, ApiValidationAntiForgeryTokenAttribute>(
+//                /*FilterScope.Controller,*/
+//                new ConstructorArgument("tokenVerifier", _ => new ApiValidationAntiForgeryTokenVerifier()));
 
             registry.BindAsSingleton<ISettingsProvider, DesignerSettingsProvider>();
 
@@ -34,6 +37,8 @@ namespace WB.UI.Designer.App_Start
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
+            System.Web.Http.GlobalConfiguration.Configuration.Filters.Add(new WebApiAuthorizationFilterWhenActionMethodHasAttribute<TokenValidationAuthorizationFilter, ApiValidationAntiForgeryTokenAttribute>(serviceLocator.GetInstance<TokenValidationAuthorizationFilter>()));
+
             return Task.CompletedTask;
         }
     }

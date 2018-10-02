@@ -2,11 +2,12 @@
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http.Controllers;
+using System.Web.Http.Filters;
 using Autofac.Integration.WebApi;
 
 namespace WB.UI.Shared.Web.Modules.Filters
 {
-    public class WebApiAuthorizationFilterWhenActionMethodHasNoAttribute<TFilter, TAttribute> : IAutofacAuthorizationFilter
+    public class WebApiAuthorizationFilterWhenActionMethodHasNoAttribute<TFilter, TAttribute> : IAutofacAuthorizationFilter, IFilter
         where TFilter : System.Web.Http.Filters.AuthorizationFilterAttribute
         where TAttribute : Attribute
     {
@@ -31,5 +32,7 @@ namespace WB.UI.Shared.Web.Modules.Filters
 
             return Task.CompletedTask;
         }
+
+        public bool AllowMultiple => true;
     }
 }
