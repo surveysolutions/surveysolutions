@@ -68,8 +68,9 @@ namespace WB.UI.Headquarters
 
             registry.BindWebApiFilterWhenControllerHasAttribute<TokenValidationAuthorizationFilter, TokenValidationAuthorizationAttribute>(FilterScope.Controller);
 
-            registry.BindWebApiFilterWhenControllerHasAttribute<TokenValidationAuthorizationFilter, ApiValidationAntiForgeryTokenAttribute>(
-                FilterScope.Controller, new ConstructorArgument("tokenVerifier", _ => new ApiValidationAntiForgeryTokenVerifier()));
+            registry.BindWebApiAuthorizationFilterWhenControllerHasAttribute<TokenValidationAuthorizationFilter, ApiValidationAntiForgeryTokenAttribute>(
+                /*FilterScope.Controller, */
+                new ConstructorArgument("tokenVerifier", _ => new ApiValidationAntiForgeryTokenVerifier()));
             
             registry.BindToConstant<IMapper>(_ => new MapperConfiguration(cfg =>
             {

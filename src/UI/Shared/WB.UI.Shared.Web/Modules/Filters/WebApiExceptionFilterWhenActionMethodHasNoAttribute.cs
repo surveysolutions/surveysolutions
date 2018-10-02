@@ -19,8 +19,10 @@ namespace WB.UI.Shared.Web.Modules.Filters
 
         public Task OnExceptionAsync(HttpActionExecutedContext actionExecutedContext, CancellationToken cancellationToken)
         {
-            var attributes = actionExecutedContext.ActionContext.ActionDescriptor.GetCustomAttributes<TAttribute>();
-            bool shouldExecute = attributes == null || attributes.Count == 0;
+            var actionAttributes = actionExecutedContext.ActionContext.ActionDescriptor.GetCustomAttributes<TAttribute>();
+            var controllerAttributes = actionExecutedContext.ActionContext.ControllerContext.ControllerDescriptor.GetCustomAttributes<TAttribute>();
+            bool shouldExecute = (actionAttributes == null || actionAttributes.Count == 0)
+                            && (controllerAttributes == null || controllerAttributes.Count == 0);
 
             if (shouldExecute)
             {

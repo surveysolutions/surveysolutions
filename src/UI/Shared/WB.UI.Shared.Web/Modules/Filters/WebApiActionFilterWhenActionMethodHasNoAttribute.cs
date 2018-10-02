@@ -9,11 +9,11 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 
 namespace WB.UI.Shared.Web.Modules.Filters
 {
-    public class AutofacActionFilterWhenActionMethodHasNoAttribute<TFilter, TAttribute> : IAutofacActionFilter
+    public class WebApiActionFilterWhenActionMethodHasNoAttribute<TFilter, TAttribute> : IAutofacActionFilter
         where TFilter : System.Web.Http.Filters.ActionFilterAttribute
         where TAttribute : Attribute
     {
-        public AutofacActionFilterWhenActionMethodHasNoAttribute(TFilter filter)
+        public WebApiActionFilterWhenActionMethodHasNoAttribute(TFilter filter)
         {
             this.filter = filter;
         }
@@ -23,8 +23,10 @@ namespace WB.UI.Shared.Web.Modules.Filters
 
         public Task OnActionExecutingAsync(HttpActionContext actionContext, CancellationToken cancellationToken)
         {
-            var attributes = actionContext.ActionDescriptor.GetCustomAttributes<TAttribute>();
-            shouldExecute = attributes == null || attributes.Count == 0;
+            var actionAttributes = actionContext.ActionDescriptor.GetCustomAttributes<TAttribute>();
+            var controllerAttributes = actionContext.ControllerContext.ControllerDescriptor.GetCustomAttributes<TAttribute>();
+            shouldExecute = (actionAttributes == null || actionAttributes.Count == 0)
+                            && (controllerAttributes == null || controllerAttributes.Count == 0);
 
             if (shouldExecute)
             {

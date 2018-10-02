@@ -3,6 +3,7 @@ using System.Web.Http;
 using System.Web.Http.Filters;
 using System.Web.Mvc;
 using Autofac;
+using Autofac.Core;
 using Autofac.Integration.Mvc;
 using Autofac.Integration.WebApi;
 using WB.Core.Infrastructure.Modularity;
@@ -183,7 +184,7 @@ namespace WB.UI.Shared.Web.Modules
         public void BindWebApiFilter<T>() where T: System.Web.Http.Filters.ActionFilterAttribute
         {
             containerBuilder.RegisterType<T>().AsSelf().InstancePerLifetimeScope();
-            containerBuilder.Register(c => new AutofacActionFilter<T>(c.Resolve<T>()))
+            containerBuilder.Register(c => new WebApiActionFilter<T>(c.Resolve<T>()))
                 .AsWebApiActionFilterFor<ApiController>()
                 .InstancePerLifetimeScope();
         }
@@ -191,7 +192,7 @@ namespace WB.UI.Shared.Web.Modules
         public void BindMvcFilter<T>() where T: System.Web.Mvc.ActionFilterAttribute
         {
             containerBuilder.RegisterType<T>().AsSelf().InstancePerLifetimeScope();
-            containerBuilder.Register(c => new AutofacActionFilter<T>(c.Resolve<T>()))
+            containerBuilder.Register(c => new MvcActionFilter(typeof(T)))
                 .AsActionFilterFor<Controller>()
                 .InstancePerLifetimeScope();
         }
@@ -199,7 +200,7 @@ namespace WB.UI.Shared.Web.Modules
         public void BindWebApiExceptionFilter<T>() where T : System.Web.Http.Filters.ExceptionFilterAttribute
         {
             containerBuilder.RegisterType<T>().AsSelf().InstancePerLifetimeScope();
-            containerBuilder.Register(c => new AutofacExceptionFilter<T>(c.Resolve<T>()))
+            containerBuilder.Register(c => new WebApiExceptionFilter<T>(c.Resolve<T>()))
                 .AsWebApiExceptionFilterFor<ApiController>()
                 .InstancePerLifetimeScope();
         }
@@ -207,7 +208,7 @@ namespace WB.UI.Shared.Web.Modules
         public void BindMvcExceptionFilter<T>() where T : IExceptionFilter
         {
             containerBuilder.RegisterType<T>().AsSelf().InstancePerLifetimeScope();
-            containerBuilder.Register(c => new AutofacExceptionFilter<T>(c.Resolve<T>()))
+            containerBuilder.Register(c => new MvcExceptionFilter<T>(c.Resolve<T>()))
                 .AsExceptionFilterFor<Controller>()
                 .InstancePerLifetimeScope();
         }
@@ -222,7 +223,10 @@ namespace WB.UI.Shared.Web.Modules
 
         public void BindMvcAuthorizationFilter<T>() where T : IAuthorizationFilter
         {
-            throw new NotImplementedException();
+            containerBuilder.RegisterType<T>().AsSelf().InstancePerLifetimeScope();
+            containerBuilder.Register(c => new MvcAuthorizationFilter<T>(c.Resolve<T>()))
+                .AsAuthorizationFilterFor<Controller>()
+                .InstancePerLifetimeScope();
         }
 
         public void BindMvcFilter<T>(FilterScope filterScope, int? order) where T : ActionFilterAttribute
@@ -230,9 +234,14 @@ namespace WB.UI.Shared.Web.Modules
             throw new NotImplementedException();
         }
 
-        void IWebIocRegistry.BindMvcFilterWhenActionMethodHasNoAttribute<T, TAttribute>(FilterScope filterScope, int? order)
+        public void BindMvcFilterWhenActionMethodHasNoAttribute<T, TAttribute>(int order = -1)
+            where T : System.Web.Mvc.ActionFilterAttribute
+            where TAttribute : Attribute
         {
-            throw new NotImplementedException();
+            containerBuilder.RegisterType<T>().AsSelf().InstancePerLifetimeScope();
+            containerBuilder.Register(c => new MvcActionFilterWhenActionMethodHasNoTransactionAttribute(typeof(T), typeof(TAttribute)))
+                .AsActionFilterFor<Controller>(order)
+                .InstancePerLifetimeScope();
         }
 
         public void BindMvcFilterWhenActionMethodHasNoAttribute<T, TAttribute>(System.Web.Mvc.FilterScope filterScope, int? order)
@@ -245,9 +254,14 @@ namespace WB.UI.Shared.Web.Modules
             throw new NotImplementedException();
         }
 
-        public void BindWebApiFilterWhenActionMethodHasNoAttribute<T, TAttribute>(System.Web.Http.Filters.FilterScope filterScope, int? order = null) where T : IFilter
+        public void BindWebApiFilterWhenActionMethodHasNoAttribute<T, TAttribute>() 
+            where T : System.Web.Http.Filters.ActionFilterAttribute
+            where TAttribute : Attribute
         {
-            throw new NotImplementedException();
+            containerBuilder.RegisterType<T>().AsSelf().InstancePerLifetimeScope();
+            containerBuilder.Register(c => new WebApiActionFilterWhenActionMethodHasNoAttribute<T, TAttribute>(c.Resolve<T>()))
+                .AsWebApiActionFilterFor<ApiController>()
+                .InstancePerLifetimeScope();
         }
 
         public void BindWebApiFilterWhenControllerHasAttribute<T, TAttribute>(System.Web.Http.Filters.FilterScope filterScope, int? order = null) where T : IFilter
@@ -255,10 +269,14 @@ namespace WB.UI.Shared.Web.Modules
             throw new NotImplementedException();
         }
 
-        public void BindWebApiFilterWhenControllerHasAttribute<T, TAttribute>(System.Web.Http.Filters.FilterScope filterScope,
-            ConstructorArgument constructorArgument) where T : IFilter
+        public void BindWebApiAuthorizationFilterWhenControllerHasAttribute<T, TAttribute>(ConstructorArgument constructorArgument) 
+            where T : System.Web.Http.Filters.IAuthorizationFilter
+            where TAttribute : Attribute
         {
-            throw new NotImplementedException();
+            containerBuilder.RegisterType<T>().AsSelf().WithParameter(constructorArgument.Name, constructorArgument.Value).InstancePerLifetimeScope();
+            containerBuilder.Register(c => new WebApiAuthorizationFilterWhenActionMethodHasAttribute<T, TAttribute>(c.Resolve<T>()))
+                .AsWebApiAuthorizationFilterFor<ApiController>()
+                .InstancePerLifetimeScope();
         }
     }
 }

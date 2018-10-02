@@ -69,8 +69,8 @@ namespace WB.UI.Shared.Web.Kernel
 
     public class AutofacWebApiDependencyResolverWithChildrenScopes : System.Web.Http.Dependencies.IDependencyResolver
     {
-        private readonly AutofacServiceLocatorAdapterWithChildrenScopes adapter;
-        private readonly AutofacWebApiDependencyResolver autofacWebApiDependencyResolver;
+        private AutofacServiceLocatorAdapterWithChildrenScopes adapter;
+        private AutofacWebApiDependencyResolver autofacWebApiDependencyResolver;
 
         public AutofacWebApiDependencyResolverWithChildrenScopes(AutofacServiceLocatorAdapterWithChildrenScopes adapter)
         {
@@ -94,15 +94,18 @@ namespace WB.UI.Shared.Web.Kernel
 
         public IDependencyScope BeginScope()
         {
+            //return new AutofacWebApiDependencyScope(adapter.GetCurrentScope());
+
             //return autofacWebApiDependencyResolver.BeginScope();
-            //var lifetimeScope = adapter.BeginLifetimeScope();
-            //return new AutofacWebApiDependencyScope(lifetimeScope);
-            return new AutofacWebApiDependencyScope(adapter.GetCurrentScope());
+            var lifetimeScope = adapter.BeginAutofacLifetimeScope();
+            return new AutofacWebApiDependencyScope(lifetimeScope);
         }
 
         public void Dispose()
         {
             autofacWebApiDependencyResolver.Dispose();
+            autofacWebApiDependencyResolver = null;
+            adapter = null;
         }
     }
 }
