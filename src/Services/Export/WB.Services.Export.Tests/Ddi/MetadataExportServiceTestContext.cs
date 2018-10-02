@@ -24,15 +24,19 @@ namespace WB.Services.Export.Tests.Ddi
             IQuestionnaireLabelFactory questionnaireLabelFactory=null)
         {
             var fileSystemAccessor = new Mock<IFileSystemAccessor>();
-            fileSystemAccessor.Setup(x => x.CombinePath(Moq.It.IsAny<string>(), Moq.It.IsAny<string>())).Returns<string, string>(Path.Combine);
+            fileSystemAccessor.Setup(x => x.CombinePath(Moq.It.IsAny<string[]>())).Returns<string[]>(Path.Combine);
 
             var questionnaireStorage = new Mock<IQuestionnaireStorage>();
             questionnaireStorage.SetupIgnoreArgs(x => x.GetQuestionnaireAsync(null, null))
                 .ReturnsAsync(questionnaireDocument);
 
             var questionnaireExportStructureFactory = new Mock<IQuestionnaireExportStructureFactory>();
-            questionnaireExportStructureFactory.SetupIgnoreArgs(x =>
-                    x.GetQuestionnaireExportStructure(null, It.IsAny<QuestionnaireDocument>()))
+            questionnaireExportStructureFactory.Setup(x =>
+                    x.GetQuestionnaireExportStructure(It.IsAny<TenantInfo>(), It.IsAny<QuestionnaireDocument>()))
+                .Returns(new QuestionnaireExportStructure());
+
+            questionnaireExportStructureFactory.Setup(x =>
+                    x.GetQuestionnaireExportStructure(It.IsAny<TenantInfo>(), It.IsAny<QuestionnaireId>()))
                 .Returns(new QuestionnaireExportStructure());
 
             return new DdiMetadataFactory(
