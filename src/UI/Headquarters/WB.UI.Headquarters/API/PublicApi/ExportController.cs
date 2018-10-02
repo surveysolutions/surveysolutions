@@ -16,6 +16,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -35,9 +36,7 @@ namespace WB.UI.Headquarters.API.PublicApi
     {
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IDataExportProcessesService dataExportProcessesService;
-        private readonly IFileSystemAccessor fileSystemAccessor;
         
-        private readonly IFilebasedExportedDataAccessor filebasedExportedDataAccessor;
         private readonly IPlainKeyValueStorage<ExportServiceSettings> exportServiceSettings;
         private readonly IConfigurationManager configurationManager;
         private readonly IDataExportStatusReader dataExportStatusReader;
@@ -45,15 +44,12 @@ namespace WB.UI.Headquarters.API.PublicApi
         public ExportController(IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IDataExportProcessesService dataExportProcessesService,
             IFileSystemAccessor fileSystemAccessor,
-            IFilebasedExportedDataAccessor filebasedExportedDataAccessor,
             IPlainKeyValueStorage<ExportServiceSettings> exportServiceSettings,
             IConfigurationManager configurationManager,
             IDataExportStatusReader dataExportStatusReader)
         {
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.dataExportProcessesService = dataExportProcessesService;
-            this.fileSystemAccessor = fileSystemAccessor;
-            this.filebasedExportedDataAccessor = filebasedExportedDataAccessor;
             this.exportServiceSettings = exportServiceSettings;
             this.configurationManager = configurationManager;
             this.dataExportStatusReader = dataExportStatusReader;
