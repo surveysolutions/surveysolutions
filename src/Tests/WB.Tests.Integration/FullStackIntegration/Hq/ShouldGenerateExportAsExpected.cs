@@ -49,7 +49,6 @@ using WB.Enumerator.Native.Questionnaire;
 using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Files;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
-using WB.Infrastructure.Native.Ioc;
 using WB.Infrastructure.Native.Logging;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation.Migrations;
@@ -128,7 +127,7 @@ namespace WB.Tests.Integration.FullStackIntegration.Hq
 
             var authorizedUser = Mock.Of<IAuthorizedUser>();
 
-            using (new NinjectAmbientScope())
+            using (ScopeManager.BeginScope())
             {
                 var importService = new QuestionnaireImportService(
                     ServiceLocator.Current.GetInstance<ISupportedVersionProvider>(),
@@ -184,7 +183,7 @@ namespace WB.Tests.Integration.FullStackIntegration.Hq
 
             var interviewPackage = ServiceLocator.Current.GetInstance<ISerializer>().Deserialize<InterviewPackage>(interview);
 
-            using (new NinjectAmbientScope())
+            using (ScopeManager.BeginScope())
             {
                 var packagesService = ServiceLocator.Current.GetInstance<IInterviewPackagesService>();
                 packagesService.ProcessPackage(interviewPackage);
@@ -196,7 +195,7 @@ namespace WB.Tests.Integration.FullStackIntegration.Hq
         {
             var questionnaireIdentity = new QuestionnaireIdentity(questionanireId, 1);
 
-            using (new NinjectAmbientScope())
+            using (ScopeManager.BeginScope())
             {
                 var tabularFormatDataExportHandler =ServiceLocator.Current.GetInstance<TabularFormatDataExportHandler>();
                 tabularFormatDataExportHandler.ExportData(new DataExportProcessDetails(DataExportFormat.Tabular, questionnaireIdentity, "Enumerator Questions Automation"));
