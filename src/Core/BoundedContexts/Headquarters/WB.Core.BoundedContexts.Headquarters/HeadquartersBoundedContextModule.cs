@@ -47,7 +47,6 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
@@ -268,20 +267,11 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IDataExportFileAccessor, DataExportFileAccessor>();
          
             registry.BindAsSingleton<IDataExportProcessesService, DataExportProcessesService>();
-            registry.Bind<IInterviewErrorsExporter, InterviewErrorsExporter>();
-            registry.Bind<CommentsExporter>();
-            registry.Bind<InterviewActionsExporter>();
-            registry.Bind<DiagnosticsExporter>();
-            registry.Bind<IExportServiceDataProvider, ExportServiceDataProvider>();
 
             registry.Bind<ITabularDataToExternalStatPackageExportService, TabularDataToExternalStatPackageExportService>();
             registry.Bind<ITabFileReader, TabFileReader>();
-            registry.Bind<IEnvironmentContentService, StataEnvironmentContentService>();
 
-            registry.Bind<TabularFormatDataExportHandler>();
             registry.Bind<TabularFormatParaDataExportProcessHandler>();
-            registry.Bind<StataFormatExportHandler>();
-            registry.Bind<SpssFormatExportHandler>();
             registry.Bind<BinaryFormatDataExportHandler>();
 
             registry.Bind<ITabularFormatExportService, ReadSideToTabularFormatExportService>();
@@ -289,7 +279,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<ICsvWriter, CsvWriter>();
             registry.Bind<ICsvReader, CsvReader>();
             registry.Bind<IDataExportStatusReader, DataExportStatusReader>();
-            registry.Bind<IInterviewsExporter, InterviewsExporter>();
 
             registry.Bind<IExportQuestionService, ExportQuestionService>();
 

@@ -6,7 +6,6 @@ using Main.Core.Entities.SubEntities;
 namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
 {
     [DebuggerDisplay("{VariableName}")]
-    [Obsolete("KP-11815")]
     public class ExportedQuestionHeaderItem : IExportedHeaderItem
     {
         public Guid PublicKey { get; set; }
@@ -22,7 +21,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
         public bool IsIdentifyingQuestion { get; internal set; }
     }
 
-    [Obsolete("KP-11815")]
     public class LabelItem
     {
         public LabelItem() {}
