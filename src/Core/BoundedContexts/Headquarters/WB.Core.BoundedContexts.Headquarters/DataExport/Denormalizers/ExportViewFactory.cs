@@ -29,7 +29,6 @@ using WB.Infrastructure.Native.Sanitizer;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
 {
-    [Obsolete("KP-11815")]
     internal class ExportViewFactory : IExportViewFactory
     {
         private const string GeneratedTitleExportFormat = "{0}__{1}";
@@ -52,11 +51,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             this.questionnaireStorage = questionnaireStorage;
             this.rosterStructureService = rosterStructureService;
             this.questionnaireBrowseItemStorage = questionnaireBrowseItemStorage;
-        }
-
-        public QuestionnaireExportStructure CreateQuestionnaireExportStructure(Guid id, long version)
-        {
-            return CreateQuestionnaireExportStructure(new QuestionnaireIdentity(id, version));
         }
 
         public QuestionnaireExportStructure CreateQuestionnaireExportStructure(QuestionnaireIdentity id)
@@ -92,26 +86,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers
             }
 
             return result;
-        }
-
-        public InterviewDataExportView CreateInterviewDataExportView(QuestionnaireExportStructure exportStructure,
-            InterviewData interview, IQuestionnaire questionnaire)
-        {
-            var interviewDataExportLevelViews = new List<InterviewDataExportLevelView>();
-
-            foreach (var exportStructureForLevel in exportStructure.HeaderToLevelMap.Values)
-            {
-                var interviewDataExportRecords = this.BuildRecordsForHeader(interview, exportStructureForLevel, questionnaire);
-
-                var interviewDataExportLevelView = new InterviewDataExportLevelView(
-                    exportStructureForLevel.LevelScopeVector, 
-                    exportStructureForLevel.LevelName,
-                    interviewDataExportRecords);
-
-                interviewDataExportLevelViews.Add(interviewDataExportLevelView);
-            }
-
-            return new InterviewDataExportView(interview.InterviewId, interviewDataExportLevelViews.ToArray());
         }
 
         private InterviewDataExportRecord[] BuildRecordsForHeader(InterviewData interview,

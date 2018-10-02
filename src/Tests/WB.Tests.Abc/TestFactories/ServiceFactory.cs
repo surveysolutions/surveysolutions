@@ -73,7 +73,6 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.TopologicalSorter;
 using WB.Core.Infrastructure.Transactions;
-using WB.Core.Infrastructure.Versions;
 using WB.Core.Infrastructure.WriteSide;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -390,8 +389,7 @@ namespace WB.Tests.Abc.TestFactories
                 Mock.Of<ILogger>(),
                 Mock.Of<IQuestionnaireExportStructureStorage>(_
                     => _.GetQuestionnaireExportStructure(It.IsAny<QuestionnaireIdentity>()) ==
-                       questionnaireExportStructure),
-                Mock.Of<IProductVersion>());
+                       questionnaireExportStructure));
 
         public InterviewerPrincipal InterviewerPrincipal(IPlainStorage<InterviewerIdentity> interviewersPlainStorage,
             IPasswordHasher passwordHasher)
