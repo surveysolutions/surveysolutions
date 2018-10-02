@@ -2,7 +2,7 @@
 
 namespace WB.Services.Export.Services
 {
-    internal interface ITabFileReader
+    public interface ITabFileReader
     {
         IDatasetMeta GetMetaFromTabFile(string path);
         string[,] GetDataFromTabFile(string path);

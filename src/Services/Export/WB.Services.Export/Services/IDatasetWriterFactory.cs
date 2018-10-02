@@ -3,7 +3,7 @@ using WB.Services.Export.Services.Processing;
 
 namespace WB.Services.Export.Services
 {
-    internal interface IDatasetWriterFactory
+    public interface IDatasetWriterFactory
     {
         IDatasetWriter CreateDatasetWriter(DataExportFormat format);
     }
