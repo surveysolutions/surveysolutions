@@ -27,18 +27,18 @@ namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests.Hq
             };
 
             var repository = CreateInterviewSummaryRepository();
-            ExecuteInCommandTransaction(() => interviews.ForEach(x => repository.Store(x, x.InterviewId.FormatGuid())));
+            interviews.ForEach(x => repository.Store(x, x.InterviewId.FormatGuid()));
 
             reportFactory = CreateHqTeamsAndStatusesReport(repository);
 
             BecauseOf();
         }
 
-        public void BecauseOf() => report = UnitOfWork.ExecuteInQueryTransaction(()=>reportFactory.GetBySupervisors(new TeamsAndStatusesByHqInputModel
+        public void BecauseOf() => report = reportFactory.GetBySupervisors(new TeamsAndStatusesByHqInputModel
         {
             TemplateId = questionnaireId, 
             TemplateVersion = version,
-        }));
+        });
 
         [NUnit.Framework.Test] public void should_count_statuses_by_questionnaire () => report.Items.First().CompletedCount.Should().Be(2);
 

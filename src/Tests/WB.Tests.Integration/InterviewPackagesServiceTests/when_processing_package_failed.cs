@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using FluentAssertions;
 using Moq;
+using NHibernate;
 using Npgsql;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters;
@@ -31,10 +32,10 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
         [OneTimeSetUp]
         public void context()
         {
-            var sessionFactory = IntegrationCreate.SessionFactory(ConnectionStringBuilder.ConnectionString,
+            sessionFactory = IntegrationCreate.SessionFactory(ConnectionStringBuilder.ConnectionString,
                 new[] { typeof(InterviewPackageMap), typeof(BrokenInterviewPackageMap) }, true);
-            plainPostgresTransactionManager =
-                Mock.Of<IUnitOfWork>(x => x.Session == sessionFactory.OpenSession());
+
+            UnitOfWork = IntegrationCreate.UnitOfWork(sessionFactory);
 
             origin = "hq";
             expectedException = new InterviewException("Some interview exception",
@@ -43,8 +44,8 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
             pgSqlConnection = new NpgsqlConnection(ConnectionStringBuilder.ConnectionString);
             pgSqlConnection.Open();
 
-            packagesStorage = new PostgresPlainStorageRepository<InterviewPackage>(plainPostgresTransactionManager);
-            brokenPackagesStorage = new PostgresPlainStorageRepository<BrokenInterviewPackage>(plainPostgresTransactionManager);
+            packagesStorage = new PostgresPlainStorageRepository<InterviewPackage>(UnitOfWork);
+            brokenPackagesStorage = new PostgresPlainStorageRepository<BrokenInterviewPackage>(UnitOfWork);
 
             mockOfCommandService = new Mock<ICommandService>();
             mockOfCommandService.Setup(
@@ -94,11 +95,9 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
                 Events = expectedEventsString
             });
 
-            BecauseOf();
-        }
-
-        private void BecauseOf() =>
             interviewPackagesService.ProcessPackage("1");
+        }
+            
 
         [NUnit.Framework.Test]
         public void should_broken_packages_storage_contains_specified_interview()
@@ -118,14 +117,16 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
         }
 
         [OneTimeTearDown]
-        public void TearDown() => pgSqlConnection.Close();
+        public void TearDown() => UnitOfWork.Dispose();
 
+
+        private static ISessionFactory sessionFactory;
         private static SynchronizeInterviewEventsCommand expectedCommand;
         private static Mock<ICommandService> mockOfCommandService;
         private static InterviewPackagesService interviewPackagesService;
         private static PostgresPlainStorageRepository<InterviewPackage> packagesStorage;
         private static PostgresPlainStorageRepository<BrokenInterviewPackage> brokenPackagesStorage;
-        private static IUnitOfWork plainPostgresTransactionManager;
+        private static IUnitOfWork UnitOfWork;
         static NpgsqlConnection pgSqlConnection;
         private static string origin;
         private static InterviewException expectedException;

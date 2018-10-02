@@ -39,10 +39,10 @@ namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests.Sv
             BecauseOf();
         }
 
-        public void BecauseOf() => report = UnitOfWork.ExecuteInQueryTransaction(() => reportFactory.GetBySupervisorAndDependentInterviewers(new TeamsAndStatusesInputModel
+        public void BecauseOf() => report = reportFactory.GetBySupervisorAndDependentInterviewers(new TeamsAndStatusesInputModel
         {
             Order = "CompletedCount ASC"
-        }));
+        });
 
         [NUnit.Framework.Test] public void should_return_row_per_responsible () => report.TotalCount.Should().Be(2);
 
@@ -58,7 +58,8 @@ namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests.Sv
             firstLine.RejectedByHeadquartersCount.Should().Be(1);
         }
 
-        [NUnit.Framework.Test] public void should_count_3_interviews_for_second_responsible () => report.Items.ToArray()[1].CompletedCount.Should().Be(3);
+        [NUnit.Framework.Test] public void should_count_3_interviews_for_second_responsible () => 
+            report.Items.ToArray()[1].CompletedCount.Should().Be(3);
 
         static TeamsAndStatusesReport reportFactory;
         static TeamsAndStatusesReportView report;

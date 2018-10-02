@@ -44,11 +44,8 @@ namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests
                 typeof(QuestionAnswerMap),
                 typeof(InterviewCommentedStatusMap)
             }, true);
-            UnitOfWork = Mock.Of<IUnitOfWork>(x => x.Session == sessionFactory.OpenSession());
 
-            pgSqlConnection = new NpgsqlConnection(ConnectionStringBuilder.ConnectionString);
-            pgSqlConnection.Open();
-
+            UnitOfWork = IntegrationCreate.UnitOfWork(sessionFactory);
             return new PostgreReadSideStorage<InterviewSummary>(UnitOfWork, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
         }
 
@@ -60,10 +57,9 @@ namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests
         [OneTimeTearDown]
         public void TearDown()
         {
-            pgSqlConnection.Close();
+            UnitOfWork.Dispose();
         }
 
-        protected static NpgsqlConnection pgSqlConnection;
         protected static IUnitOfWork UnitOfWork;
     }
 }

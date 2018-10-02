@@ -34,11 +34,11 @@ namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests.Sv
             BecauseOf();
         }
 
-        public void BecauseOf() => report = UnitOfWork.ExecuteInQueryTransaction(() => reportFactory.GetBySupervisorAndDependentInterviewers(new TeamsAndStatusesInputModel
+        public void BecauseOf() => report = reportFactory.GetBySupervisorAndDependentInterviewers(new TeamsAndStatusesInputModel
         {
             TemplateId = questionnaireId, 
             TemplateVersion = version,
-        }));
+        });
 
         [NUnit.Framework.Test] public void should_count_statuses_by_questionnaire () => report.Items.First().CompletedCount.Should().Be(2);
 

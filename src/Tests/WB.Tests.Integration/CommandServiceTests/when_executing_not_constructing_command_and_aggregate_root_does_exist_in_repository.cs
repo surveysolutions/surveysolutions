@@ -7,6 +7,7 @@ using Ncqrs.Domain;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using Ncqrs.Eventing.Storage;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.CommandBus.Implementation;
@@ -60,8 +61,38 @@ namespace WB.Tests.Integration.CommandServiceTests
 
             snapshooterMock = new Mock<IAggregateSnapshotter>();
 
+            var eventStore = new Mock<IEventStore>();
+            eventStore.Setup(x => x.Store(Moq.It.IsAny<UncommittedEventStream>())).Returns(
+                (UncommittedEventStream eventStream) =>
+                {
+                    if (eventStream.IsNotEmpty)
+                    {
+                        List<CommittedEvent> result = new List<CommittedEvent>();
+
+                        var events = new Queue<CommittedEvent>();
+
+                        foreach (var evnt in eventStream)
+                        {
+                            var committedEvent = new CommittedEvent(eventStream.CommitId,
+                                evnt.Origin,
+                                evnt.EventIdentifier,
+                                eventStream.SourceId,
+                                evnt.EventSequence,
+                                evnt.EventTimeStamp,
+                                events.Count,
+                                evnt.Payload);
+                            events.Enqueue(committedEvent);
+                            result.Add(committedEvent);
+                        }
+
+                        return new CommittedEventStream(eventStream.SourceId, result);
+                    }
+
+                    return new CommittedEventStream(eventStream.SourceId);
+                });
+
             commandService = Abc.Create.Service.CommandService(repository: repository, eventBus: eventBus, 
-                snapshooter: snapshooterMock.Object);
+                snapshooter: snapshooterMock.Object, eventStore:eventStore.Object);
             BecauseOf();
         }
 
