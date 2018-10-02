@@ -9,7 +9,7 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 
 namespace WB.UI.Shared.Web.Modules.Filters
 {
-    public class WebApiAuthorizationFilterWhenActionMethodHasAttribute<TFilter, TAttribute> : IAutofacAuthorizationFilter
+    public class WebApiAuthorizationFilterWhenActionMethodHasAttribute<TFilter, TAttribute> : IAutofacAuthorizationFilter, IFilter
         where TFilter : System.Web.Http.Filters.IAuthorizationFilter
         where TAttribute : Attribute
     {
@@ -56,5 +56,7 @@ namespace WB.UI.Shared.Web.Modules.Filters
 
             return Task.CompletedTask;
         }
+
+        public bool AllowMultiple => true;
     }
 }
