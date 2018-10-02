@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using WB.Services.Export.Services.Processing.Good;
 using WB.Services.Export.Utils;
 
@@ -15,18 +16,18 @@ namespace WB.Services.Export.Services.Storage
             this.externalFileStorage = externalFileStorage;
         }
 
-        public byte[] GetInterviewBinaryData(Guid interviewId, string filename)
+        public Task<byte[]> GetInterviewBinaryData(Guid interviewId, string filename)
         {
-            return this.externalFileStorage.GetBinary(GetPath(interviewId, filename));
+            return this.externalFileStorage.GetBinaryAsync(GetPath(interviewId, filename));
         }
 
         private string GetPath(Guid interviewId, string filename = null) =>
             $"images/{interviewId.FormatGuid()}/{filename ?? String.Empty}";
 
-        public List<InterviewBinaryDataDescriptor> GetBinaryFilesForInterview(Guid interviewId)
+        public async Task<List<InterviewBinaryDataDescriptor>> GetBinaryFilesForInterview(Guid interviewId)
         {
             var prefix = GetPath(interviewId);
-            var files = this.externalFileStorage.List(prefix);
+            var files = await this.externalFileStorage.ListAsync(prefix);
 
             return files.Select(file =>
             {
@@ -36,14 +37,14 @@ namespace WB.Services.Export.Services.Storage
             }).ToList();
         }
 
-        public void StoreInterviewBinaryData(Guid interviewId, string fileName, byte[] data, string contentType)
+        public Task StoreInterviewBinaryData(Guid interviewId, string fileName, byte[] data, string contentType)
         {
-            externalFileStorage.Store(GetPath(interviewId, fileName), data, contentType);
+            return externalFileStorage.StoreAsync(GetPath(interviewId, fileName), data, contentType);
         }
 
-        public void RemoveInterviewBinaryData(Guid interviewId, string fileName)
+        public Task RemoveInterviewBinaryData(Guid interviewId, string fileName)
         {
-            externalFileStorage.Remove(GetPath(interviewId, fileName));
+            return externalFileStorage.RemoveAsync(GetPath(interviewId, fileName));
         }
     }
 }

@@ -51,19 +51,19 @@ namespace WB.Services.Export.Jobs
             this.logger = logger;
         }
 
-        public Task ExecuteAsync(DataExportProcessDetails pendingExportProcess, CancellationToken cancellationToken)
+        public async Task ExecuteAsync(DataExportProcessDetails pendingExportProcess, CancellationToken cancellationToken)
         {
             try
             {
                 if (pendingExportProcess.StorageType.HasValue)
                 {
                     var handler = this.GetExternalStorageExportHandler(pendingExportProcess.StorageType.Value);
-                    handler.ExportData(pendingExportProcess);
+                    await handler.ExportDataAsync(pendingExportProcess);
                 }
                 else
                 {
                     var handler = this.GetExportHandler(pendingExportProcess.Format);
-                    handler.ExportData(pendingExportProcess);
+                    await handler.ExportDataAsync(pendingExportProcess);
                 }
 
                 this.exportService.FinishExportSuccessfully(pendingExportProcess.NaturalId);
@@ -75,8 +75,6 @@ namespace WB.Services.Export.Jobs
 
                 this.logger.LogError(e, "Export job failed");
             }
-
-            return Task.CompletedTask;
         }
 
         private AbstractExternalStorageDataExportHandler GetExternalStorageExportHandler(ExternalStorageType storageType)

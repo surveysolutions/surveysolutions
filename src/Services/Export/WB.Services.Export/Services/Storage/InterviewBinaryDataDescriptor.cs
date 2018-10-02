@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Threading.Tasks;
 
 namespace WB.Services.Export.Services.Storage
 {
     public class InterviewBinaryDataDescriptor
     {
         public InterviewBinaryDataDescriptor(Guid interviewId, string fileName, string contentType,
-            Func<byte[]> getData)
+            Func<Task<byte[]>> getData)
         {
             this.InterviewId = interviewId;
             this.FileName = fileName;
@@ -17,11 +18,11 @@ namespace WB.Services.Export.Services.Storage
         public string FileName { get; private set; }
         public string ContentType { get; private set; }
 
-        public byte[] GetData()
+        public Task<byte[]> GetData()
         {
             return this.getData();
         }
 
-        private readonly Func<byte[]> getData;
+        private readonly Func<Task<byte[]>> getData;
     }
 }
