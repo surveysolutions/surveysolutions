@@ -172,7 +172,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
                 datesAndStatuses = await connection.QueryAsync<AssignmentsCounterObject>(query, new
                 {
                     questionnaireid = input.TemplateId,
-                    questionnaireversion = input.TemplateVersion
+                    questionnaireversion = input.TemplateVersion,
+                    supervisorid = input.SupervisorId
                 });
             }
             return datesAndStatuses;
@@ -188,7 +189,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reports.Factories
                 datesAndStatuses = await connection.QueryAsync<InterviewsCounterObject>(query, new
                 {
                     questionnaireid = input.TemplateId,
-                    questionnaireversion = input.TemplateVersion
+                    questionnaireversion = input.TemplateVersion,
+                    supervisorid = input.SupervisorId
                 });
             }
             return datesAndStatuses;

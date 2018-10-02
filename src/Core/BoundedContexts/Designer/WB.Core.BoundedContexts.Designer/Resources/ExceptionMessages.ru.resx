@@ -300,4 +300,8 @@
   <data name="VariableWithIdWasNotFound" xml:space="preserve">
     <value>Переменная с ключом {0} не найдена в опроснике {1}</value>
   </data>
+    <data name="RequiredHeaderWasNotFound" xml:space="preserve">
+    <value>Заголовок {0} не был найден в excel файле</value>
+    <comment>Заголовок {0} не был найден в excel файле</comment>
+  </data>
 </root>

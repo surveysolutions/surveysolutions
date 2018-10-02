@@ -28,13 +28,15 @@ namespace WB.UI.Shared.Enumerator.Services
         private readonly IDeviceSettings deviceSettings;
         private readonly IArchivePatcherService archivePatcherService;
         private readonly ILogger logger;
+        private readonly IViewModelNavigationService navigationService;
 
         protected EnumeratorTabletDiagnosticService(IFileSystemAccessor fileSystemAccessor,
             IPermissions permissions,
             ISynchronizationService synchronizationService,
             IDeviceSettings deviceSettings,
             IArchivePatcherService archivePatcherService,
-            ILogger logger)
+            ILogger logger,
+            IViewModelNavigationService navigationService)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.permissions = permissions;
@@ -42,6 +44,7 @@ namespace WB.UI.Shared.Enumerator.Services
             this.deviceSettings = deviceSettings;
             this.archivePatcherService = archivePatcherService;
             this.logger = logger;
+            this.navigationService = navigationService;
         }
 
         private Activity CurrentActivity => Mvx.Resolve<IMvxAndroidCurrentTopActivity>().Activity;
@@ -141,29 +144,7 @@ namespace WB.UI.Shared.Enumerator.Services
 
             cancellationToken.ThrowIfCancellationRequested();
 
-            Intent promptInstall;
-            if (Build.VERSION.SdkInt < BuildVersionCodes.N)
-            {
-                promptInstall =
-                    new Intent(Intent.ActionView)
-                        .SetDataAndType(global::Android.Net.Uri.FromFile(new Java.IO.File(pathToNewApk)), "application/vnd.android.package-archive")
-                        .AddFlags(ActivityFlags.NewTask)
-                        .AddFlags(ActivityFlags.GrantReadUriPermission);
-            }
-            else
-            {
-                var topActivity = this.CurrentActivity;
-                var uriForFile = FileProvider.GetUriForFile(topActivity.BaseContext, topActivity.ApplicationContext.PackageName + ".fileprovider", new Java.IO.File(pathToNewApk));
-
-                promptInstall = ShareCompat.IntentBuilder.From(topActivity)
-                    .SetStream(uriForFile)
-                    .Intent
-                    .SetAction(Intent.ActionView)
-                    .SetDataAndType(uriForFile, "application/vnd.android.package-archive")
-                    .AddFlags(ActivityFlags.GrantReadUriPermission);
-            }
-
-            Application.Context.StartActivity(promptInstall);
+            this.navigationService.InstallNewApp(pathToNewApk);
         }
 
         public void RestartTheApp()

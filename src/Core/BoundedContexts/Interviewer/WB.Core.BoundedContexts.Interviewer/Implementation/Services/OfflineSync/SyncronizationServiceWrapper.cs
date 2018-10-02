@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Ncqrs.Eventing;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services.OfflineSync;
+using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Views;
@@ -18,7 +19,7 @@ using WB.Core.SharedKernels.Questionnaire.Translations;
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
     [ExcludeFromCodeCoverage]
-    public class SyncronizationServiceWrapper : ISynchronizationService
+    public class SyncronizationServiceWrapper : IInterviewerSynchronizationService
     {
         private readonly OfflineSynchronizationService offlineService;
         private readonly SynchronizationService onlineService;
@@ -34,7 +35,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             this.mode = mode;
         }
 
-        private ISynchronizationService Service
+        private IInterviewerSynchronizationService Service
         {
             get
             {
@@ -83,6 +84,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         public Task<List<QuestionnaireIdentity>> GetCensusQuestionnairesAsync(CancellationToken token)
         {
             return Service.GetCensusQuestionnairesAsync(token);
+        }
+
+        public Task<InterviewerApiView> GetInterviewerAsync(RestCredentials credentials = null, CancellationToken? token = null)
+        {
+            return Service.GetInterviewerAsync(credentials, token);
         }
 
         public Task LogQuestionnaireAsSuccessfullyHandledAsync(QuestionnaireIdentity questionnaire)
@@ -229,8 +235,5 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         {
             return Service.LogAssignmentAsHandledAsync(id, cancellationToken);
         }
-
-        public Task<byte[]> GetFileAsync(string url, IProgress<TransferProgress> transferProgress, CancellationToken token) 
-            => Service.GetFileAsync(url, transferProgress, token);
     }
 }

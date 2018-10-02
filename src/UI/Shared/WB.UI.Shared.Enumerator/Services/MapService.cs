@@ -84,6 +84,7 @@ namespace WB.UI.Shared.Enumerator.Services
                     MapFullPath = x,
                     Size = this.fileSystemAccessor.GetFileSize(x),
                     MapName = this.fileSystemAccessor.GetFileNameWithoutExtension(x),
+                    MapFileName = this.fileSystemAccessor.GetFileName(x),
                     CreationDate = this.fileSystemAccessor.GetCreationTime(x)
 
                 }).ToList();
@@ -133,6 +134,14 @@ namespace WB.UI.Shared.Enumerator.Services
             var newName = this.fileSystemAccessor.ChangeExtension(tempFileName, null);
 
             this.fileSystemAccessor.MoveFile(tempFileName, newName);
+        }
+
+        public void RemoveMap(string mapName)
+        {
+            var filename = this.fileSystemAccessor.CombinePath(this.mapsLocation, mapName);
+
+            if (this.fileSystemAccessor.IsFileExists(filename))
+                this.fileSystemAccessor.DeleteFile(filename);
         }
 
         public List<ShapefileDescription> GetAvailableShapefiles()

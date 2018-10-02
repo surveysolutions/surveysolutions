@@ -78,7 +78,8 @@ namespace WB.UI.Headquarters.API
                 DateStart = request.DateStart?.ToUniversalTime(),
                 DateEnd = request.DateEnd?.ToUniversalTime(),
                 UserRole = request.UserRole,
-                ReceivedByTablet = request.ReceivedByTablet
+                ReceivedByTablet = request.ReceivedByTablet,
+                SupervisorId = request.TeamId,
             };
 
             if (this.authorizedUser.IsSupervisor)
@@ -262,6 +263,7 @@ namespace WB.UI.Headquarters.API
         {
             public string QuestionnaireId { get; set; }
             public Guid? ResponsibleId { get; set; }
+            public Guid? TeamId { get; set; }
 
             public bool ShowArchive { get; set; }
 

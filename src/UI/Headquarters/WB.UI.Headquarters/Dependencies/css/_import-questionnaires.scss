@@ -37,12 +37,9 @@
     }
 }
 .signed-name{
-    width: 35%;
+
     font-size: 13px;
     line-height: 15px;
-    margin: 30px 15px 0 0; 
-    float: right;
-    text-align: right;
     span{
         @extend %uppercase-font;
         color: $blue;
@@ -129,56 +126,6 @@
         }  
     }
 }
-.import-wrapper{
-    .dataTables_wrapper .dataTables_paginate  > .paginate_button{
-        color: $green;
-         &.disabled, &.disabled:hover, &.disabled:active{
-            color: $gray_light;
-            text-decoration: none;
-            cursor: not-allowed;
-        }
-    }
-    .dataTables_wrapper{
-        .dataTables_paginate{
-            padding-left: 10px;
-             &>span{
-                left: 8px;
-             }
-        }
-    }
-    .dataTables_wrapper{
-    position: relative;
-        .dataTables_filter{
-            @include absolute(-10px, auto, null, 0);
-
-            label{
-                &:after{
-                    @include absolute(15px, auto, null, 10px);
-                }
-                input{
-                    margin-right: 0;
-                    margin-left: 40px;
-                }
-            }
-        }
-    }
-}
-@media only screen and (max-width: 1450px){
-    .import-wrapper {
-      .dataTables_wrapper .dataTables_filter{
-            top: -15px;
-        }  
-        .search{
-            top: -10px;
-        }
-        .active-search .search{
-            top: -12px;
-           .btn-search{          
-                top: -3px;
-            } 
-        } 
-    }
-}
 @media (max-width: $screen-md-min){
     .import-interview{
         tr{
@@ -209,13 +156,8 @@
         }
     }
     .signed-name{
-        width: 100%;
-        float: none;
-        margin: 0;
+        margin-bottom: 10px;
         padding: 0 3%;
-    }
-    .signed-name{
-        margin-bottom: 20px;
     }
     .import-interview tbody tr td:first-child{
         font-size: 12px;

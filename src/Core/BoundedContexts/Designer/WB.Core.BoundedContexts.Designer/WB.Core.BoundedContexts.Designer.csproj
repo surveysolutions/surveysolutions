@@ -13,6 +13,9 @@
     <NoWarn>1701;1702;1705;618;1030</NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Implementation\Services\GoogleDiff.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <None Remove="ReferencedAssemblies\System.Collections.dll" />
     <None Remove="ReferencedAssemblies\System.Linq.dll" />
     <None Remove="ReferencedAssemblies\System.Linq.Expressions.dll" />
@@ -36,6 +39,7 @@
     <PackageReference Include="CsvHelper" Version="6.1.0" />
     <PackageReference Include="EPPlus" Version="4.5.2.1" />
     <PackageReference Include="HtmlSanitizer" Version="4.0.187" />
+    <PackageReference Include="JsonDiffPatch.Net" Version="2.1.0" />
     <PackageReference Include="Microsoft.AspNet.WebPages.Data" Version="3.2.3" />
     <PackageReference Include="Microsoft.AspNet.WebPages.WebData" Version="3.2.3" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="2.9.0" />

@@ -24,7 +24,7 @@ namespace WB.Tests.Integration.InterviewTests
 
             var results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
-                Setup.MockedServiceLocator();
+                SetUp.MockedServiceLocator();
 
                 var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
                     Create.Entity.NumericIntegerQuestion(intQuestionId, variable: "i", validationConditions: new[]
@@ -75,7 +75,7 @@ namespace WB.Tests.Integration.InterviewTests
 
             var results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
-                Setup.MockedServiceLocator();
+                SetUp.MockedServiceLocator();
 
                 var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
                     Create.Entity.NumericIntegerQuestion(intQuestionId, variable: "i"),
@@ -126,7 +126,7 @@ namespace WB.Tests.Integration.InterviewTests
 
             var results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
-                Setup.MockedServiceLocator();
+                SetUp.MockedServiceLocator();
 
                 var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
                     Create.Entity.NumericIntegerQuestion(intQuestionId, variable: "i", validationConditions: new[]
@@ -177,7 +177,7 @@ namespace WB.Tests.Integration.InterviewTests
 
             var results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
-                Setup.MockedServiceLocator();
+                SetUp.MockedServiceLocator();
 
                 var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
                     Create.Entity.NumericIntegerQuestion(intQuestionId, variable: "i"),

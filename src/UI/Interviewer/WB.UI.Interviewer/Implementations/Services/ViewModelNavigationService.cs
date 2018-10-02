@@ -72,7 +72,8 @@ namespace WB.UI.Interviewer.Implementations.Services
                 NavigationIdentity = navigationIdentity
             });
 
-        public override Task NavigateToLoginAsync() => this.navigationService.ChangePresentation(new OpenLoginScreenHint());
+        public override Task NavigateToLoginAsync() => this.NavigateToAsync<LoginViewModel>();
+
         protected override void FinishActivity() => this.androidCurrentTopActivity.Activity.Finish();
         protected override void NavigateToSettingsImpl() =>
             this.androidCurrentTopActivity.Activity.StartActivity(new Intent(this.androidCurrentTopActivity.Activity, typeof(PrefsActivity)));
