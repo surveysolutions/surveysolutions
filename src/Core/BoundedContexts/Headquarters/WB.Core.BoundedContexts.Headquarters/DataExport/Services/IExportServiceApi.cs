@@ -20,10 +20,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             string archiveName,
             string archivePassword,
             string accessToken,
-            ExternalStorageType? storageType,
-            string apiKey,
-            [Header("Origin")] string tenantBaseUrl
-        );
+            ExternalStorageType? storageType);
 
         [Get("/api/v1/job/status")]
         Task<DataExportStatusView> GetDataExportStatusForQuestionnaireAsync(
@@ -31,9 +28,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             [Query]string archiveName,
             [Query]InterviewStatus? status,
             [Query]DateTime? fromDate,
-            [Query]DateTime? toDate,
-            [Query]string apiKey,
-            [Header("Origin")]string tenantBaseUrl);
+            [Query]DateTime? toDate);
 
         [Get("/api/v1/job/download")]
         Task<HttpResponseMessage> DownloadArchive([Query] string questionnaireId,
@@ -41,18 +36,16 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             [Query] DataExportFormat format,
             [Query] InterviewStatus? status,
             [Query] DateTime? fromDate,
-            [Query] DateTime? toDate,
-            string apiKey,
-            [Header("Origin")] string baseUrl);
+            [Query] DateTime? toDate);
 
-        [Delete("/api/v1/job/delete")]
-        Task DeleteAll(string apiKey,
-            [Header("Origin")] string baseUrl);
+        [Delete("/api/v1/job")]
+
+        Task DeleteProcess([Query] string processId);
+
+        [Delete("/api/v1/delete")]
+        Task DeleteAll();
 
         [Get("/api/v1/ddi")]
-        Task<HttpContent> GetDdiArchive([Query]string questionnaireId,
-            [Query]string archivePassword,
-            [Query]string apiKey,
-            [Header("Origin")]string tenantBaseUrl);
+        Task<HttpContent> GetDdiArchive([Query]string questionnaireId, [Query]string archivePassword);
     }
 }

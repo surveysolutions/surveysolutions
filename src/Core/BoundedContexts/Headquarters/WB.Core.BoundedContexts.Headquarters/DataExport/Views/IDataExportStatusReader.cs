@@ -16,13 +16,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
 
     public interface IDataExportStatusReader
     {
-        Task<DataExportStatusView> GetDataExportStatusForQuestionnaireAsync(string baseUrl,
-            string apiKey,
+        Task<DataExportStatusView> GetDataExportStatusForQuestionnaireAsync(
             QuestionnaireIdentity questionnaireIdentity,
             InterviewStatus? status = null, DateTime? fromDate = null, DateTime? toDate = null);
 
         Task<DataExportArchive> GetDataArchive(
-            string baseUrl, string apiKey,
             QuestionnaireIdentity questionnaireIdentity, DataExportFormat format,
             InterviewStatus? status = null, DateTime? from = null, DateTime? to = null);
     }
