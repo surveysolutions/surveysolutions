@@ -15,6 +15,7 @@ using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Export.Services;
 using WB.Services.Export.Tenant;
+using WB.Services.Export.Utils;
 
 namespace WB.Services.Export.CsvExport.Implementation
 {
@@ -82,19 +83,17 @@ namespace WB.Services.Export.CsvExport.Implementation
             var exportCommentsProgress = new Progress<int>();
             var exportInterviewActionsProgress = new Progress<int>();
 
-            //ProgressAggregator proggressAggregator = new ProgressAggregator();
-            //proggressAggregator.Add(exportInterviewsProgress, 0.8);
-            //proggressAggregator.Add(exportCommentsProgress, 0.1);
-            //proggressAggregator.Add(exportInterviewActionsProgress, 0.1);
-
-            //proggressAggregator.ProgressChanged += (sender, overallProgress) => progress.Report(overallProgress);
+            ProgressAggregator proggressAggregator = new ProgressAggregator();
+            proggressAggregator.Add(exportInterviewsProgress, 0.8);
+            proggressAggregator.Add(exportCommentsProgress, 0.1);
+            proggressAggregator.Add(exportInterviewActionsProgress, 0.1);
+            proggressAggregator.ProgressChanged += (sender, overallProgress) => progress.Report(overallProgress);
 
             var api = this.tenantApi.For(tenant);
             var interviewsToExport = await api.GetInterviewsToExportAsync(questionnaireIdentity, status, fromDate, toDate);
             var interviewIdsToExport = interviewsToExport.Select(x => x.Id).ToList();
 
             Stopwatch exportWatch = Stopwatch.StartNew();
-            // Directory.CreateDirectory(basePath);
 
             await Task.WhenAll(
                 this.commentsExporter.ExportAsync(questionnaireExportStructure, interviewIdsToExport, basePath, tenant, exportCommentsProgress, cancellationToken),
@@ -104,8 +103,7 @@ namespace WB.Services.Export.CsvExport.Implementation
             );
 
             exportWatch.Stop();
-
-
+            
             this.logger.Log(LogLevel.Information, $"Export with all steps finished for questionnaire {questionnaireIdentity}. " +
                              $"Took {exportWatch.Elapsed:c} to export {interviewIdsToExport.Count} interviews");
 

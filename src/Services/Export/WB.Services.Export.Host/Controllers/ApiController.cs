@@ -1,12 +1,7 @@
 ﻿using System;
-using System.IO;
-using System.Net;
-using System.Net.Http;
-using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
 using WB.Services.Export.Ddi;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Jobs;
@@ -24,23 +19,16 @@ namespace WB.Services.Export.Host.Controllers
         private readonly IJobsStatusReporting jobsStatusReporting;
         private readonly IDdiMetadataAccessor ddiDdiMetadataAccessor;
         private readonly ILogger<JobController> logger;
-        private readonly IExternalFileStorage externalFileStorage;
-        private readonly IDataExportFileAccessor exportFileAccessor;
 
         public JobController(IDataExportProcessesService exportProcessesService,
-        //    IDataExportStatusReader dataExportStatusReader,
             IJobsStatusReporting jobsStatusReporting,
             IDdiMetadataAccessor ddiDdiMetadataAccessor,
-            ILogger<JobController> logger,
-            IExternalFileStorage externalFileStorage,
-            IDataExportFileAccessor exportFileAccessor)
+            ILogger<JobController> logger)
         {
             this.exportProcessesService = exportProcessesService;
             this.jobsStatusReporting = jobsStatusReporting;
             this.ddiDdiMetadataAccessor = ddiDdiMetadataAccessor;
             this.logger = logger;
-            this.externalFileStorage = externalFileStorage;
-            this.exportFileAccessor = exportFileAccessor;
         }
 
         [HttpPut]
