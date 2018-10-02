@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Utils;
 
-namespace WB.Services.Export.Services.Storage
+namespace WB.Services.Export.Storage
 {
     public class ImageFileStorage : IImageFileStorage
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace WB.Services.Export.Services.Storage
+namespace WB.Services.Export.Storage
 {
     public interface IInterviewFileStorage
     {
