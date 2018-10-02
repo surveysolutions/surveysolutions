@@ -12,7 +12,7 @@ namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests.Hq
             BecauseOf();
         }
 
-        public void BecauseOf() => report = UnitOfWork.ExecuteInQueryTransaction(() => reportFactory.GetBySupervisors(new TeamsAndStatusesByHqInputModel()));
+        public void BecauseOf() => report = reportFactory.GetBySupervisors(new TeamsAndStatusesByHqInputModel());
 
         [NUnit.Framework.Test] public void should_return_0_records () => report.TotalCount.Should().Be(0);
 

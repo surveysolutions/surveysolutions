@@ -300,6 +300,8 @@ namespace WB.Tests.Integration.FullStackIntegration.Hq
             oldServiceLocator = ServiceLocator.Current;
 
             kernel.Init().Wait();
+
+            ScopeManager.SetScopeAdapter(new AutofacServiceLocatorAdapterWithChildrenScopes(kernel.Container));
         }
 
         private async Task<Mock<IRestService>> SetupMockOfDesigner()

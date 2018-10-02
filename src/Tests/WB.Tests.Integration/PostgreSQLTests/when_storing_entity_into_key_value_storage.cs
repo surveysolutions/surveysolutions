@@ -1,9 +1,6 @@
 using System;
 using System.Collections.Generic;
 using FluentAssertions;
-using Moq;
-using NHibernate;
-using Npgsql;
 using NUnit.Framework;
 using WB.Core.SharedKernels.SurveySolutions;
 using WB.Infrastructure.Native.Storage.Postgre;
@@ -36,10 +33,11 @@ namespace WB.Tests.Integration.PostgreSQLTests
                 postgreConnectionSettings: new UnitOfWorkConnectionSettings { ConnectionString = ConnectionStringBuilder.ConnectionString });
             storedDate = new DateTime(2010, 1, 1);
             usedId = "id";
+
             BecauseOf();
         }
 
-        public void BecauseOf() { storage.Store(new TestPersistedClass { Date = storedDate }, usedId); }
+        public void BecauseOf() => storage.Store(new TestPersistedClass { Date = storedDate }, usedId); 
 
         [NUnit.Framework.Test] public void should_read_item_that_was_stored() => storage.GetById(usedId).Date.Should().Be(storedDate);
 
