@@ -34,9 +34,10 @@ namespace WB.Services.Export.Host
                 .AddJsonFormatters();            
 
             services.AddSingleton<IDataExportProcessesService, DataExportProcessesService>();
-            services.AddSingleton<IHostedService, DataExportProcessesService>(c => c.GetService<IDataExportProcessesService>() 
-                as DataExportProcessesService);
-            
+            services.AddSingleton<IHostedService, DataExportProcessesService>(
+                c => c.GetService<IDataExportProcessesService>() as DataExportProcessesService);
+            services.AddSingleton<IHostedService, HealthCheckService>();
+
             ServicesRegistry.Configure(services, Configuration);
 
             var builder = new ContainerBuilder();
@@ -57,6 +58,7 @@ namespace WB.Services.Export.Host
             }
             
             app.UseApplicationVersion("/.version");
+            app.UseHealthChecks("/.hc");
             app.UseMetricServer();
             app.UseMvc();
         }

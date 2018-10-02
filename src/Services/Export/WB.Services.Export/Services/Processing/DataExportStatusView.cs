@@ -1,4 +1,5 @@
-﻿using WB.Services.Export.Questionnaire;
+﻿using System.Collections.Generic;
+using WB.Services.Export.Questionnaire;
 
 namespace WB.Services.Export.Services.Processing
 {
@@ -10,7 +11,7 @@ namespace WB.Services.Export.Services.Processing
 
         public DataExportStatusView(
             string questionnaireId,
-            DataExportView[] dataExports,
+            List<DataExportView> dataExports,
             RunningDataExportProcessView[] runningDataExportProcesses)
         {
             QuestionnaireId = questionnaireId;
@@ -19,7 +20,7 @@ namespace WB.Services.Export.Services.Processing
         }
 
         public string QuestionnaireId { get; set;  }
-        public DataExportView[] DataExports { get; set; }
+        public List<DataExportView> DataExports { get; set; }
         public RunningDataExportProcessView[] RunningDataExportProcesses { get; set; }
     }
 }

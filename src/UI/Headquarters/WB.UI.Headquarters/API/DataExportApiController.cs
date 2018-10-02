@@ -104,7 +104,7 @@ namespace WB.UI.Headquarters.API
             if (result.Redirect != null)
             {
                 var response = Request.CreateResponse(HttpStatusCode.Redirect);
-                response.Headers.Location = result.Redirect;
+                response.Headers.Location = new Uri(result.Redirect);
                 return response;
             }
             else

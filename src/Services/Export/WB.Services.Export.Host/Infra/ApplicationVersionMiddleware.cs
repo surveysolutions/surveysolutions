@@ -1,10 +1,19 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 
 namespace WB.Services.Export.Host.Infra
 {
+    public static class ApplicationVersionMiddlewareExtensions
+    {
+        public static IApplicationBuilder UseApplicationVersion(this IApplicationBuilder builder, string path)
+        {
+            return builder.UseMiddleware<ApplicationVersionMiddleware>(path);
+        }
+    }
+
     public class ApplicationVersionMiddleware
     {
         private readonly RequestDelegate _next;
