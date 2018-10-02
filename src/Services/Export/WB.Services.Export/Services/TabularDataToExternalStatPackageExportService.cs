@@ -15,7 +15,7 @@ using WB.Services.Export.Utils;
 
 namespace WB.Services.Export.Services
 {
-    internal class TabularDataToExternalStatPackageExportService : ITabularDataToExternalStatPackageExportService
+    public class TabularDataToExternalStatPackageExportService : ITabularDataToExternalStatPackageExportService
     {
         private readonly ILogger<TabularDataToExternalStatPackageExportService> logger;
 

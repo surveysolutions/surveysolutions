@@ -2,7 +2,7 @@
 
 namespace WB.Services.Export.Services
 {
-    internal interface IDataQueryFactory
+    public interface IDataQueryFactory
     {
         IDataQuery CreateDataQuery(string filePath);
     }

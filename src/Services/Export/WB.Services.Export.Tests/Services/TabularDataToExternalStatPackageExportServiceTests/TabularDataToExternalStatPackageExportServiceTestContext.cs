@@ -1,43 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Main.Core.Entities.SubEntities;
+using Microsoft.Extensions.Logging;
 using Moq;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
-using WB.Core.BoundedContexts.Headquarters.Repositories;
-using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
-using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.FileSystem;
-using WB.Core.Infrastructure.Transactions;
-using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.ValueObjects;
+using WB.Services.Export.CsvExport.Implementation.DoFiles;
+using WB.Services.Export.Interview;
+using WB.Services.Export.Questionnaire;
+using WB.Services.Export.Services;
+using WB.Services.Export.Tenant;
 
-namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.TabularDataToExternalStatPackageExportServiceTests
+namespace WB.Services.Export.Tests.Services.TabularDataToExternalStatPackageExportServiceTests
 {
     [NUnit.Framework.TestOf(typeof (TabularDataToExternalStatPackageExportService))]
     internal class TabularDataToExternalStatPackageExportServiceTestContext
     {
         protected static TabularDataToExternalStatPackageExportService CreateSqlToTabDataExportService(
             QuestionnaireExportStructure questionnaireExportStructure = null,
-            IFileSystemAccessor fileSystemAccessor = null,
             ITabFileReader tabFileReader = null,
             IDataQueryFactory dataQueryFactory = null,
             IDatasetWriterFactory datasetWriterFactory = null,
             IExportServiceDataProvider exportServiceDataProvider = null)
         {
-            fileSystemAccessor = fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>();
             return new TabularDataToExternalStatPackageExportService(
-                fileSystemAccessor,
-                Mock.Of<ITransactionManagerProvider>(_ => _.GetTransactionManager() == Mock.Of<ITransactionManager>()),
-                Mock.Of<ILogger>(),
+                Mock.Of<ILogger<TabularDataToExternalStatPackageExportService>>(),
                 tabFileReader ?? Mock.Of<ITabFileReader>(),
-                dataQueryFactory ?? Mock.Of< IDataQueryFactory> (),
-                datasetWriterFactory ?? Mock.Of<IDatasetWriterFactory>(), new QuestionnaireLabelFactory(),
-                Mock.Of<IQuestionnaireExportStructureStorage>(
-                    _ =>
-                        _.GetQuestionnaireExportStructure(Moq.It.IsAny<QuestionnaireIdentity>()) == questionnaireExportStructure),
+                dataQueryFactory ?? Mock.Of<IDataQueryFactory> (),
+                datasetWriterFactory ?? Mock.Of<IDatasetWriterFactory>(), 
+                new QuestionnaireLabelFactory(),
+                Mock.Of<IQuestionnaireExportStructureFactory>(x => x.GetQuestionnaireExportStructure(It.IsAny<TenantInfo>(), It.IsAny<QuestionnaireId>()) == questionnaireExportStructure),
                 exportServiceDataProvider ?? Mock.Of <IExportServiceDataProvider>());
         }
 
