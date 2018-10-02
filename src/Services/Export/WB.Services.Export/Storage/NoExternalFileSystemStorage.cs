@@ -22,27 +22,27 @@ namespace WB.Services.Export.Storage
             throw new NotImplementedException();
         }
 
-        public byte[] GetBinary(string key)
+        public Task<byte[]> GetBinaryAsync(string key)
         {
             throw new NotImplementedException();
         }
 
-        public List<FileObject> List(string prefix)
+        public Task<List<FileObject>> ListAsync(string prefix)
         {
             throw new NotImplementedException();
         }
 
-        public void Remove(string path)
+        public Task RemoveAsync(string path)
         {
             throw new NotImplementedException();
         }
 
-        public FileObject Store(string path, byte[] data, string contentType, IProgress<int> progress = null)
+        public Task<FileObject> StoreAsync(string path, byte[] data, string contentType, IProgress<int> progress = null)
         {
             throw new NotImplementedException();
         }
 
-        public FileObject Store(string path, Stream inputStream, string contentType, IProgress<int> progress = null)
+        public Task<FileObject> StoreAsync(string path, Stream inputStream, string contentType, IProgress<int> progress = null)
         {
             throw new NotImplementedException();
         }
@@ -52,7 +52,7 @@ namespace WB.Services.Export.Storage
             throw new NotImplementedException();
         }
 
-        public bool IsExist(string path)
+        public Task<bool> IsExistAsync(string path)
         {
             throw new NotImplementedException();
         }

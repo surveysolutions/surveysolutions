@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Utils;
 
@@ -22,32 +23,34 @@ namespace WB.Services.Export.Services.Storage
                 this.fileSystemAccessor.CreateDirectory(this.basePath);
         }
 
-        public byte[] GetInterviewBinaryData(Guid interviewId, string fileName)
+        public Task<byte[]> GetInterviewBinaryData(Guid interviewId, string fileName)
         {
             var filePath = this.GetPathToFile(interviewId, fileName);
             if (!fileSystemAccessor.IsFileExists(filePath))
                 return null;
-            return fileSystemAccessor.ReadAllBytes(filePath);
+            return Task.FromResult(fileSystemAccessor.ReadAllBytes(filePath));
         }
 
-        public List<InterviewBinaryDataDescriptor> GetBinaryFilesForInterview(Guid interviewId)
+        public Task<List<InterviewBinaryDataDescriptor>> GetBinaryFilesForInterview(Guid interviewId)
         {
             var directoryPath = this.GetPathToInterviewDirectory(interviewId);
 
             if (!fileSystemAccessor.IsDirectoryExists(directoryPath))
-                return new List<InterviewBinaryDataDescriptor>();
+                return Task.FromResult(new List<InterviewBinaryDataDescriptor>());
 
-            return fileSystemAccessor.GetFilesInDirectory(directoryPath)
+            var result = fileSystemAccessor.GetFilesInDirectory(directoryPath)
                 .Select(
                     fileName =>
                         new InterviewBinaryDataDescriptor(
                             interviewId,
                             fileSystemAccessor.GetFileName(fileName),
                             null,
-                            () => fileSystemAccessor.ReadAllBytes(fileName))).ToList();
+                            () => Task.FromResult(fileSystemAccessor.ReadAllBytes(fileName)))).ToList();
+
+            return Task.FromResult(result);
         }
 
-        public void StoreInterviewBinaryData(Guid interviewId, string fileName, byte[] data, string contentType)
+        public Task StoreInterviewBinaryData(Guid interviewId, string fileName, byte[] data, string contentType)
         {
             var directoryPath = this.GetPathToInterviewDirectory(interviewId);
 
@@ -60,24 +63,28 @@ namespace WB.Services.Export.Services.Storage
                 fileSystemAccessor.DeleteFile(filePath);
 
             fileSystemAccessor.WriteAllBytes(filePath, data);
+
+            return Task.CompletedTask;
         }
 
-        public void RemoveInterviewBinaryData(Guid interviewId, string fileName)
+        public Task RemoveInterviewBinaryData(Guid interviewId, string fileName)
         {
             var filePath = this.GetPathToFile(interviewId, fileName);
             if (!fileSystemAccessor.IsFileExists(filePath))
-                return;
+                return Task.CompletedTask;
 
             fileSystemAccessor.DeleteFile(filePath);
+            return Task.CompletedTask;
         }
 
-        public void RemoveAllBinaryDataForInterview(Guid interviewId)
+        public Task RemoveAllBinaryDataForInterview(Guid interviewId)
         {
             var directoryPath = this.GetPathToInterviewDirectory(interviewId);
             if (!fileSystemAccessor.IsDirectoryExists(directoryPath))
-                return;
+                return Task.CompletedTask;
 
             fileSystemAccessor.DeleteDirectory(directoryPath);
+            return Task.CompletedTask;
         }
 
         private string GetPathToFile(Guid interviewId, string fileName)

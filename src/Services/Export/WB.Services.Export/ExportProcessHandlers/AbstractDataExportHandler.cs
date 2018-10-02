@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
@@ -24,7 +25,7 @@ namespace WB.Services.Export.ExportProcessHandlers
             this.dataExportFileAccessor = dataExportFileAccessor;
         }
 
-        protected override void DoExport(DataExportProcessDetails processArgs,
+        protected override async Task DoExportAsync(DataExportProcessDetails processArgs,
             ExportSettings exportSettings, string archiveName, IProgress<int> exportProgress)
         {
             this.ExportDataIntoDirectory(exportSettings, exportProgress, processArgs.CancellationToken);
@@ -42,7 +43,7 @@ namespace WB.Services.Export.ExportProcessHandlers
             this.dataExportFileAccessor.RecreateExportArchive(this.exportTempDirectoryPath, archiveName,
                 processArgs.ArchivePassword, exportProgress);
 
-            this.dataExportFileAccessor.PublishArchiveToExternalStorage(processArgs.Tenant, archiveName, exportProgress);
+            await this.dataExportFileAccessor.PublishArchiveToExternalStorageAsync(processArgs.Tenant, archiveName, exportProgress);
         }
 
         protected virtual bool CompressExportedData => true;
