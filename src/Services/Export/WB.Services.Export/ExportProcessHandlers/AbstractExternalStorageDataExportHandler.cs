@@ -35,9 +35,7 @@ namespace WB.Services.Export.ExportProcessHandlers
             CancellationToken cancellationToken)
         {
             //cancellationToken.ThrowIfCancellationRequested();
-
-            long totalInterviewsProcessed = 0;
-
+            
             using (this.GetClient(this.accessToken))
             {
                 var applicationFolder = this.CreateApplicationFolderAsync().Result;
@@ -53,10 +51,10 @@ namespace WB.Services.Export.ExportProcessHandlers
             }
         }
 
-        public void ExportData(DataExportProcessDetails process)
+        public override Task ExportDataAsync(DataExportProcessDetails process)
         {
             this.accessToken = process.AccessToken;
-            base.ExportData(process);
+            return base.ExportDataAsync(process);
         }
 
         protected abstract IDisposable GetClient(string accessToken);

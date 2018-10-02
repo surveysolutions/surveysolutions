@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
@@ -24,7 +25,7 @@ namespace WB.Services.Export.ExportProcessHandlers
             this.dataExportFileAccessor = dataExportFileAccessor;
         }
 
-        protected override void DoExport(
+        protected override async Task DoExportAsync(
             DataExportProcessDetails processArgs, 
             ExportSettings exportSettings, string archiveName,
             IProgress<int> exportProgress)
@@ -47,7 +48,8 @@ namespace WB.Services.Export.ExportProcessHandlers
                 
                 this.dataExportProcessesService.ChangeStatusType(processArgs.Tenant, processArgs.NaturalId, DataExportStatus.Compressing);
                 exportProgress.Report(0);
-                this.dataExportFileAccessor.PublishArchiveToExternalStorage(processArgs.Tenant, archiveName, exportProgress);
+
+                await this.dataExportFileAccessor.PublishArchiveToExternalStorageAsync(processArgs.Tenant, archiveName, exportProgress);
 
                 processArgs.CancellationToken.ThrowIfCancellationRequested();
             }

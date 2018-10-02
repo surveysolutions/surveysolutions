@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
+using System.Threading.Tasks;
 using WB.Services.Export.Services.Processing.Good;
 using WB.Services.Export.Tenant;
 using WB.Services.Infrastructure.FileSystem;
@@ -36,14 +37,14 @@ namespace WB.Services.Export.Services.Processing
             this.archiveUtils.ZipFiles(exportTempDirectoryPath, filesToArchive, archiveFilePath, archivePassword);
         }
 
-        public void PublishArchiveToExternalStorage(TenantInfo tenant, string archiveFile, IProgress<int> exportProgress)
+        public async Task PublishArchiveToExternalStorageAsync(TenantInfo tenant, string archiveFile, IProgress<int> exportProgress)
         {
             if (externalFileStorage.IsEnabled())
             {
                 using (var file = File.OpenRead(archiveFile))
                 {
                     var name = Path.GetFileName(archiveFile);
-                    this.externalFileStorage.Store(GetExternalStoragePath(tenant, name), file, "application/zip", exportProgress);
+                    await this.externalFileStorage.StoreAsync(GetExternalStoragePath(tenant, name), file, "application/zip", exportProgress);
                 }
 
                 File.Delete(archiveFile);

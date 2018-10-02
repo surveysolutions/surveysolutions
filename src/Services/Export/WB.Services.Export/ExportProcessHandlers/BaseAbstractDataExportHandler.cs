@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
@@ -56,7 +57,7 @@ namespace WB.Services.Export.ExportProcessHandlers
             this.interviewDataExportSettings = interviewDataExportSettings;
         }
 
-        public void ExportData(DataExportProcessDetails dataExportProcessDetails)
+        public virtual async Task ExportDataAsync(DataExportProcessDetails dataExportProcessDetails)
         {
             exportTempDirectoryPath = this.fileSystemAccessor.GetTempPath(interviewDataExportSettings.Value.DirectoryPath);
 
@@ -90,12 +91,12 @@ namespace WB.Services.Export.ExportProcessHandlers
                 dataExportProcessDetails.InterviewStatus,
                 fromDate: dataExportProcessDetails.FromDate, toDate: dataExportProcessDetails.ToDate);
 
-            DoExport(dataExportProcessDetails, exportSettings, archiveName, exportProgress);
+            await DoExportAsync(dataExportProcessDetails, exportSettings, archiveName, exportProgress);
 
             this.DeleteExportTempDirectory();
         }
         
-        protected abstract void DoExport(DataExportProcessDetails processArgs,
+        protected abstract Task DoExportAsync(DataExportProcessDetails processArgs,
             ExportSettings exportSettings, string archiveName, IProgress<int> exportProgress);
 
         protected abstract DataExportFormat Format { get; }

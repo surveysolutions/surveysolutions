@@ -9,15 +9,15 @@ namespace WB.Services.Export.Services.Processing.Good
     {
         bool IsEnabled();
         string GetDirectLink(string path, TimeSpan expiration);
-        byte[] GetBinary(string key);
-        List<FileObject> List(string prefix);
+        Task<byte[]> GetBinaryAsync(string key);
+        Task<List<FileObject>> ListAsync(string prefix);
 
-        void Remove(string path);
+        Task RemoveAsync(string path);
 
-        FileObject Store(string path, byte[] data, string contentType, IProgress<int> progress = null);
-        FileObject Store(string path, Stream inputStream, string contentType, IProgress<int> progress = null);
+        Task<FileObject> StoreAsync(string path, byte[] data, string contentType, IProgress<int> progress = null);
+        Task<FileObject> StoreAsync(string path, Stream inputStream, string contentType, IProgress<int> progress = null);
 
         Task<FileObject> GetObjectMetadataAsync(string key);
-        bool IsExist(string path);
+        Task<bool> IsExistAsync(string path);
     }
 }

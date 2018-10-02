@@ -20,7 +20,7 @@ namespace WB.Services.Export.CsvExport.Implementation
 {
     public class TabularFormatExportService : ITabularFormatExportService
     {
-        private readonly string dataFileExtension = "tab";
+        //private readonly string dataFileExtension = "tab";
 
         private readonly ILogger<TabularFormatExportService> logger;
         private readonly ITenantApi<IHeadquartersApi> tenantApi;
@@ -64,12 +64,6 @@ namespace WB.Services.Export.CsvExport.Implementation
 
         public async Task ExportInterviewsInTabularFormat(
             ExportSettings settings,
-            //TenantInfo tenant,
-            //QuestionnaireId questionnaireIdentity,
-            //InterviewStatus? status,
-            //string basePath,
-            //DateTime? fromDate,
-            //DateTime? toDate,
             IProgress<int> progress,
             CancellationToken cancellationToken)
         {
@@ -103,11 +97,11 @@ namespace WB.Services.Export.CsvExport.Implementation
             // Directory.CreateDirectory(basePath);
 
             await Task.WhenAll(
-            this.commentsExporter.ExportAsync(questionnaireExportStructure, interviewIdsToExport, basePath, tenant, exportCommentsProgress, cancellationToken),
-            this.interviewActionsExporter.ExportAsync(tenant, questionnaireIdentity, interviewIdsToExport, basePath, exportInterviewActionsProgress),
-            this.interviewsExporter.ExportAsync(tenant, questionnaireExportStructure, questionnaire, interviewsToExport, basePath, exportInterviewsProgress, cancellationToken),
-            this.diagnosticsExporter.ExportAsync(interviewIdsToExport, basePath, tenant, exportInterviewsProgress, cancellationToken)
-         );
+                this.commentsExporter.ExportAsync(questionnaireExportStructure, interviewIdsToExport, basePath, tenant, exportCommentsProgress, cancellationToken),
+                this.interviewActionsExporter.ExportAsync(tenant, questionnaireIdentity, interviewIdsToExport, basePath, exportInterviewActionsProgress),
+                this.interviewsExporter.ExportAsync(tenant, questionnaireExportStructure, questionnaire, interviewsToExport, basePath, exportInterviewsProgress, cancellationToken),
+                this.diagnosticsExporter.ExportAsync(interviewIdsToExport, basePath, tenant, exportInterviewsProgress, cancellationToken)
+            );
 
             exportWatch.Stop();
 

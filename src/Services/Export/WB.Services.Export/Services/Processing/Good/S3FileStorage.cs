@@ -34,7 +34,7 @@ namespace WB.Services.Export.Services.Processing.Good
         private string StorageBasePath => $"{S3Settings.BasePath}/";
         private string GetKey(string key) => (StorageBasePath + key).Replace('\\', '/');
 
-        public byte[] GetBinary(string key)
+        public async Task<byte[]> GetBinaryAsync(string key)
         {
             try
             {
@@ -45,7 +45,7 @@ namespace WB.Services.Export.Services.Processing.Good
                 };
 
                 log.LogDebug($"GetBinary: {S3Settings.BucketName}/{getObject.Key}");
-                using (var response = client.GetObjectAsync(getObject).Result)
+                using (var response = await client.GetObjectAsync(getObject))
                 {
                     using (var ms = new MemoryStream())
                     {
@@ -66,7 +66,7 @@ namespace WB.Services.Export.Services.Processing.Good
             }
         }
 
-        public List<FileObject> List(string prefix)
+        public async Task<List<FileObject>> ListAsync(string prefix)
         {
             try
             {
@@ -76,7 +76,8 @@ namespace WB.Services.Export.Services.Processing.Good
                     Prefix = GetKey(prefix)
                 };
 
-                ListObjectsV2Response response = client.ListObjectsV2Async(listObjects).Result;
+                ListObjectsV2Response response = await client.ListObjectsV2Async(listObjects);
+
                 return response.S3Objects.Select(s3 => new FileObject
                 {
                     Path = s3.Key.Substring(StorageBasePath.Length),
@@ -125,7 +126,7 @@ namespace WB.Services.Export.Services.Processing.Good
             });
         }
 
-        public FileObject Store(string key, Stream inputStream, string contentType, IProgress<int> progress = null)
+        public async Task<FileObject> StoreAsync(string key, Stream inputStream, string contentType, IProgress<int> progress = null)
         {
             try
             {
@@ -146,7 +147,7 @@ namespace WB.Services.Export.Services.Processing.Good
                     uploadRequest.UploadProgressEvent += (sender, args) => { progress.Report(args.PercentDone); };
                 }
 
-                transferUtility.Upload(uploadRequest);
+                await transferUtility.UploadAsync(uploadRequest);
 
                 return new FileObject
                 {
@@ -191,24 +192,24 @@ namespace WB.Services.Export.Services.Processing.Good
         }
 
 
-        public bool IsExist(string key)
+        public async Task<bool> IsExistAsync(string key)
         {
-            return GetObjectMetadataAsync(key) != null;
+            return (await GetObjectMetadataAsync(key)) != null;
         }
 
-        public FileObject Store(string path, byte[] data, string contentType, IProgress<int> progress = null)
+        public async Task<FileObject> StoreAsync(string path, byte[] data, string contentType, IProgress<int> progress = null)
         {
             using (var ms = new MemoryStream(data))
             {
-                return Store(path, ms, contentType, progress);
+                return await StoreAsync(path, ms, contentType, progress);
             }
         }
 
-        public void Remove(string path)
+        public async Task RemoveAsync(string path)
         {
             try
             {
-                client.DeleteObjectAsync(S3Settings.BucketName, GetKey(path)).Wait();
+                await client.DeleteObjectAsync(S3Settings.BucketName, GetKey(path));
             }
             catch (AmazonS3Exception e) when (e.StatusCode == HttpStatusCode.NotFound)
             {
