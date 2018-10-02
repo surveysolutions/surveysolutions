@@ -93,19 +93,13 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                 Expression<Func<InterviewCommentaries, bool>> whereClauseForComments = 
                     x => interviewIdsStrings.Contains(x.InterviewId);
 
-                var interviewKeysMap = this.transactionManager
-                    .GetTransactionManager()
-                    .ExecuteInQueryTransaction(() =>
-                        this.interviewSummaryStorage.Query(_ => _
+                var interviewKeysMap = this.interviewSummaryStorage.Query(_ => _
                             .Where(x => interviewIdsChunk.Contains(x.InterviewId))
                             .Select(x => new {x.InterviewId, x.Key})
-                            .ToList()))
+                            .ToList())
                     .ToDictionary(x => x.InterviewId.FormatGuid(), x => x.Key);
 
-                var exportComments = this.transactionManager
-                                           .GetTransactionManager()
-                                           .ExecuteInQueryTransaction(
-                                                () => this.QueryCommentsChunkFromReadSide(whereClauseForComments, maxRosterDepthInQuestionnaire, hasAtLeastOneRoster, interviewKeysMap));
+                var exportComments = this.QueryCommentsChunkFromReadSide(whereClauseForComments, maxRosterDepthInQuestionnaire, hasAtLeastOneRoster, interviewKeysMap);
 
                 this.csvWriter.WriteData(commentsFilePath, exportComments, ExportFileSettings.DataFileSeparator.ToString());
                 totalProcessed += interviewIdsStrings.Length;
