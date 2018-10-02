@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using WB.Services.Export.Services.Processing.Good;
+using WB.Services.Export.Tenant;
 using WB.Services.Infrastructure.FileSystem;
 
 namespace WB.Services.Export.Services.Processing
@@ -18,7 +19,7 @@ namespace WB.Services.Export.Services.Processing
             this.externalFileStorage = externalFileStorage;
         }
 
-        public string GetExternalStoragePath(string name) => $"export/" + name;
+        public string GetExternalStoragePath(TenantInfo tenant, string name) => $"{tenant.Id}/{name}";
         public IZipArchive CreateExportArchive(Stream outputStream, string password = null, CompressionLevel compressionLevel = CompressionLevel.Fastest)
         {
             return archiveUtils.CreateArchive(outputStream, password, compressionLevel);
@@ -35,17 +36,18 @@ namespace WB.Services.Export.Services.Processing
             this.archiveUtils.ZipFiles(exportTempDirectoryPath, filesToArchive, archiveFilePath, archivePassword);
         }
 
-        public void PubishArchiveToExternalStorage(string archiveFile, IProgress<int> exportProgress)
+        public void PublishArchiveToExternalStorage(TenantInfo tenant, string archiveFile, IProgress<int> exportProgress)
         {
             if (externalFileStorage.IsEnabled())
             {
                 using (var file = File.OpenRead(archiveFile))
                 {
                     var name = Path.GetFileName(archiveFile);
-                    this.externalFileStorage.Store(GetExternalStoragePath(name), file, "application/zip", exportProgress);
+                    this.externalFileStorage.Store(GetExternalStoragePath(tenant, name), file, "application/zip", exportProgress);
                 }
+
+                File.Delete(archiveFile);
             }
         }
-
     }
 }

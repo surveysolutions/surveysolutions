@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Threading.Tasks;
 using Amazon.S3;
 using Amazon.S3.Model;
 using Amazon.S3.Transfer;
@@ -13,24 +14,25 @@ namespace WB.Services.Export.Services.Processing.Good
 {
     public class S3FileStorage : IExternalFileStorage
     {
-        private readonly IOptions<AmazonS3Settings> s3Settings;
+        private readonly IOptions<S3StorageSettings> s3Settings;
         private readonly IAmazonS3 client;
         private readonly ITransferUtility transferUtility;
-        
+
         private readonly ILogger<S3FileStorage> log;
 
-        public S3FileStorage(IOptions<AmazonS3Settings> s3Settings, 
-            IAmazonS3 amazonS3Client, 
-            ITransferUtility transferUtility, 
+        public S3FileStorage(IOptions<S3StorageSettings> s3Settings,
+            IAmazonS3 amazonS3Client,
+            ITransferUtility transferUtility,
             ILogger<S3FileStorage> log)
         {
             this.s3Settings = s3Settings;
             client = amazonS3Client;
             this.transferUtility = transferUtility;
+            this.log = log;
         }
 
         private string StorageBasePath => $"{S3Settings.BasePath}/";
-        private string GetKey(string key) => StorageBasePath + key;
+        private string GetKey(string key) => (StorageBasePath + key).Replace('\\', '/');
 
         public byte[] GetBinary(string key)
         {
@@ -42,6 +44,7 @@ namespace WB.Services.Export.Services.Processing.Good
                     Key = GetKey(key)
                 };
 
+                log.LogDebug($"GetBinary: {S3Settings.BucketName}/{getObject.Key}");
                 using (var response = client.GetObjectAsync(getObject).Result)
                 {
                     using (var ms = new MemoryStream())
@@ -98,19 +101,21 @@ namespace WB.Services.Export.Services.Processing.Good
             log.LogError($"{message}. " +
                          $"Bucket: {S3Settings.BucketName}. " +
                          $"BasePath: {S3Settings.BasePath} " +
-                         $"EndPoint: {S3Settings.Endpoint} ", exception);
+                         $"EndPoint: {client.Config.ServiceURL} ", exception);
         }
 
         public bool IsEnabled() => true;
 
-        private AmazonS3Settings S3Settings => s3Settings.Value;
+        private S3StorageSettings S3Settings => s3Settings.Value;
 
         public string GetDirectLink(string key, TimeSpan expiration)
         {
-            var protocol = string.IsNullOrWhiteSpace(S3Settings.Endpoint) || S3Settings.Endpoint.StartsWith("https://", StringComparison.OrdinalIgnoreCase)
+            var protocol = client.Config.ServiceURL.StartsWith("https://", StringComparison.OrdinalIgnoreCase)
                 ? Protocol.HTTPS
                 : Protocol.HTTP;
 
+            log.LogDebug($"GetDirectLink: {S3Settings.BucketName}/{key}");
+            
             return client.GetPreSignedURL(new GetPreSignedUrlRequest
             {
                 Protocol = protocol,
@@ -124,6 +129,8 @@ namespace WB.Services.Export.Services.Processing.Good
         {
             try
             {
+                log.LogDebug($"Store: {S3Settings.BucketName}/{key} [{contentType}]");
+
                 var uploadRequest = new TransferUtilityUploadRequest
                 {
                     BucketName = S3Settings.BucketName,
@@ -155,18 +162,19 @@ namespace WB.Services.Export.Services.Processing.Good
             }
         }
 
-        public FileObject GetObjectMetadata(string key)
+        public async Task<FileObject> GetObjectMetadataAsync(string key)
         {
             try
             {
-                var response = client.GetObjectMetadataAsync(S3Settings.BucketName, GetKey(key)).Result;
+                var response = await client.GetObjectMetadataAsync(S3Settings.BucketName, GetKey(key));
 
-                if (response.HttpStatusCode == HttpStatusCode.OK) return new FileObject
-                {
-                    Path = key,
-                    Size = response.ContentLength,
-                    LastModified = response.LastModified
-                };
+                if (response.HttpStatusCode == HttpStatusCode.OK)
+                    return new FileObject
+                    {
+                        Path = key,
+                        Size = response.ContentLength,
+                        LastModified = response.LastModified
+                    };
             }
             catch (AmazonS3Exception e) when (e.StatusCode == HttpStatusCode.NotFound)
             {
@@ -185,7 +193,7 @@ namespace WB.Services.Export.Services.Processing.Good
 
         public bool IsExist(string key)
         {
-            return GetObjectMetadata(key) != null;
+            return GetObjectMetadataAsync(key) != null;
         }
 
         public FileObject Store(string path, byte[] data, string contentType, IProgress<int> progress = null)

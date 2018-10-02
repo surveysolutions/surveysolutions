@@ -1,6 +1,8 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
 using Refit;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
@@ -33,11 +35,13 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
             var archiveFileName = ExportFileNameService.GetQuestionnaireTitleWithVersion(questionnaireIdentity);
             var result = await api.DownloadArchive(questionnaireIdentity.ToString(), archiveFileName, format, status, from, to, apiKey, baseUrl);
 
-            if (result.StatusCode == HttpStatusCode.Redirect)
+            result.EnsureSuccessStatusCode();
+
+            if(result.Headers.TryGetValues("NewLocation", out var values))
             {
                 return new DataExportArchive
                 {
-                    Redirect = result.Headers.Location
+                    Redirect = values.First()
                 };
             }
 

@@ -47,7 +47,7 @@ namespace WB.Services.Export.Storage
             throw new NotImplementedException();
         }
 
-        public FileObject GetObjectMetadata(string key)
+        public Task<FileObject> GetObjectMetadataAsync(string key)
         {
             throw new NotImplementedException();
         }

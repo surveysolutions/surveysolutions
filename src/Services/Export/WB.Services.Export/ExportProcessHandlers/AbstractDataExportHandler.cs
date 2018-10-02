@@ -9,16 +9,16 @@ using WB.Services.Export.Tenant;
 
 namespace WB.Services.Export.ExportProcessHandlers
 {
-    abstract class AbstractDataExportHandler :BaseAbstractDataExportHandler
+    abstract class AbstractDataExportHandler : BaseAbstractDataExportHandler
     {
         private readonly IDataExportFileAccessor dataExportFileAccessor;
-        
+
         protected AbstractDataExportHandler(
             IFileSystemAccessor fileSystemAccessor,
             IFilebasedExportedDataAccessor filebasedExportedDataAccessor,
             IOptions<InterviewDataExportSettings> interviewDataExportSettings,
             IDataExportProcessesService dataExportProcessesService,
-            IDataExportFileAccessor dataExportFileAccessor) 
+            IDataExportFileAccessor dataExportFileAccessor)
             : base(fileSystemAccessor, filebasedExportedDataAccessor, interviewDataExportSettings, dataExportProcessesService)
         {
             this.dataExportFileAccessor = dataExportFileAccessor;
@@ -35,12 +35,14 @@ namespace WB.Services.Export.ExportProcessHandlers
 
             this.dataExportProcessesService.UpdateDataExportProgress(processArgs.Tenant, processArgs.NaturalId, 0);
             this.dataExportProcessesService.ChangeStatusType(
-                processArgs.Tenant, 
+                processArgs.Tenant,
                 processArgs.NaturalId,
                 DataExportStatus.Compressing);
 
-            this.dataExportFileAccessor.RecreateExportArchive(this.exportTempDirectoryPath, archiveName, 
+            this.dataExportFileAccessor.RecreateExportArchive(this.exportTempDirectoryPath, archiveName,
                 processArgs.ArchivePassword, exportProgress);
+
+            this.dataExportFileAccessor.PublishArchiveToExternalStorage(processArgs.Tenant, archiveName, exportProgress);
         }
 
         protected virtual bool CompressExportedData => true;
