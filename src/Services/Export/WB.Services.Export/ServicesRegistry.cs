@@ -78,7 +78,7 @@ namespace WB.Services.Export
             FileStorageModule.Register(services, configuration);
 
             // options
-            services.Configure<InterviewDataExportSettings>(configuration.GetSection("export"));
+            services.Configure<InterviewDataExportSettings>(configuration.GetSection("ExportSettings"));
         }
 
         private static void RegisterHandlers(IServiceCollection services)
