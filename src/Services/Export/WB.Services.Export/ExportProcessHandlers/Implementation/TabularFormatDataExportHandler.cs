@@ -1,5 +1,6 @@
 using System;
 using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using WB.Services.Export.CsvExport;
@@ -36,7 +37,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
 
         protected override DataExportFormat Format => DataExportFormat.Tabular;
 
-        protected override void ExportDataIntoDirectory(ExportSettings settings,
+        protected override Task ExportDataIntoDirectoryAsync(ExportSettings settings,
             IProgress<int> progress, CancellationToken cancellationToken)
         {
             this.GenerateDescriptionTxt(settings.Tenant, settings.QuestionnaireId, settings.ExportTempDirectory);
@@ -44,6 +45,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             this.tabularFormatExportService.ExportInterviewsInTabularFormat(settings, progress, cancellationToken).Wait(cancellationToken);
 
             this.CreateDoFilesForQuestionnaire(settings.Tenant, settings.QuestionnaireId, settings.ExportTempDirectory, cancellationToken);
+            return Task.CompletedTask;
         }
 
         private void GenerateDescriptionTxt(TenantInfo tenant, QuestionnaireId questionnaireIdentity, string directoryPath)

@@ -29,24 +29,22 @@ namespace WB.Services.Export.ExportProcessHandlers
         protected override DataExportFormat Format => DataExportFormat.Binary;
         protected override bool CompressExportedData => false;
         
-        protected override void ExportDataIntoDirectory(ExportSettings settings,
+        protected override async Task ExportDataIntoDirectoryAsync(ExportSettings settings,
             IProgress<int> progress,
             CancellationToken cancellationToken)
         {
-            //cancellationToken.ThrowIfCancellationRequested();
-            
             using (this.GetClient(this.accessToken))
             {
                 var applicationFolder = this.CreateApplicationFolderAsync().Result;
 
                 string GetInterviewFolder(Guid interviewId) => $"{settings.ArchiveName})/{interviewId.FormatGuid()}";
 
-                binaryDataSource.ForEachMultimediaAnswerAsync(settings, async data =>
+                await binaryDataSource.ForEachMultimediaAnswerAsync(settings, async data =>
                 {
                     var interviewFolderPath = await this.CreateFolderAsync(applicationFolder, GetInterviewFolder(data.InterviewId));
                     await this.UploadFileAsync(interviewFolderPath, data.Content, data.Answer);
 
-                }, cancellationToken).Wait();
+                }, cancellationToken);
             }
         }
 

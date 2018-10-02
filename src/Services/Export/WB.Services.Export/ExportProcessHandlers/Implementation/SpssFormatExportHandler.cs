@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using WB.Services.Export.CsvExport;
@@ -24,26 +25,32 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             IDataExportProcessesService dataExportProcessesService,
             ILogger<SpssFormatExportHandler> logger,
             IDataExportFileAccessor dataExportFileAccessor)
-            : base(fileSystemAccessor, filebasedExportedDataAccessor, interviewDataExportSettings, dataExportProcessesService, tabularFormatExportService, logger, dataExportFileAccessor)
+            : base(fileSystemAccessor, filebasedExportedDataAccessor, interviewDataExportSettings,
+                dataExportProcessesService, tabularFormatExportService, logger, dataExportFileAccessor)
         {
             this.tabularDataToExternalStatPackageExportService = tabularDataToExternalStatPackageExportService;
         }
 
         protected override DataExportFormat Format => DataExportFormat.SPSS;
 
-        protected override void ExportDataIntoDirectory(ExportSettings settings, IProgress<int> progress,
+        protected override Task ExportDataIntoDirectoryAsync(ExportSettings settings, IProgress<int> progress,
             CancellationToken cancellationToken)
         {
             var tabFiles = this.CreateTabularDataFiles(settings, progress, cancellationToken);
 
-            this.CreateSpssDataFilesFromTabularDataFiles(settings.Tenant, settings.QuestionnaireId, tabFiles, progress, cancellationToken);
+            this.CreateSpssDataFilesFromTabularDataFiles(settings.Tenant, settings.QuestionnaireId, tabFiles, progress,
+                cancellationToken);
 
             this.DeleteTabularDataFiles(tabFiles, cancellationToken);
 
-            this.GenerateDescriptionTxt(settings.Tenant, settings.QuestionnaireId, settings.ExportTempDirectory, ExportFileSettings.SpssDataFileExtension);
+            this.GenerateDescriptionTxt(settings.Tenant, settings.QuestionnaireId, settings.ExportTempDirectory,
+                ExportFileSettings.SpssDataFileExtension);
+
+            return Task.CompletedTask;
         }
 
-        private void CreateSpssDataFilesFromTabularDataFiles(TenantInfo tenant, QuestionnaireId questionnaireIdentity, string[] tabDataFiles,
+        private void CreateSpssDataFilesFromTabularDataFiles(TenantInfo tenant, QuestionnaireId questionnaireIdentity,
+            string[] tabDataFiles,
             IProgress<int> progress, CancellationToken cancellationToken)
         {
             var exportProgress = new Progress<int>();

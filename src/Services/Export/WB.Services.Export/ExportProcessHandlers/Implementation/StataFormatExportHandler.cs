@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using WB.Services.Export.CsvExport;
@@ -31,7 +32,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
 
         protected override DataExportFormat Format => DataExportFormat.STATA;
 
-        protected override void ExportDataIntoDirectory(ExportSettings settings, IProgress<int> progress,
+        protected override Task ExportDataIntoDirectoryAsync(ExportSettings settings, IProgress<int> progress,
             CancellationToken cancellationToken)
         {
             var tabFiles = this.CreateTabularDataFiles(settings, progress, cancellationToken);
@@ -41,6 +42,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             this.DeleteTabularDataFiles(tabFiles, cancellationToken);
 
             this.GenerateDescriptionTxt(settings.Tenant, settings.QuestionnaireId, settings.ExportTempDirectory, ExportFileSettings.StataDataFileExtension);
+            return Task.CompletedTask;
         }
 
         private void CreateStataDataFilesFromTabularDataFiles(TenantInfo tenant, QuestionnaireId questionnaireIdentity, string[] tabDataFiles,
