@@ -1,0 +1,15 @@
+﻿@model List<String>
+@{
+    this.Layout = "~/Views/Shared/_ControlPanelLayout.cshtml";
+    this.ViewBag.Title = "Control Panel: Versions";
+
+}
+
+<h1 class="page-header">Available Client files</h1>
+
+<ul>
+    @foreach (var item in Model)
+    {
+        <li>@Html.Raw(item)</li>
+    }
+</ul>

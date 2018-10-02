@@ -33,16 +33,13 @@
         var $ExportToExternalStorageUrl =
             '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "DataExportApi", action = "ExportToExternalStorage"}, Request.Url.Scheme)';
         $(function() {
-            var templates = [
-                @foreach (var item in Model.Questionnaires)
-                {
-                    <text>{
-                    id: '@item.TemplateId',
-                    version: '@item.TemplateVersion',
-                    title: '(ver. @item.TemplateVersion) @Html.Raw(item.TemplateName)'
-                },</text>
-                }
-            ];
+            var templates = @Html.Raw(Json.Encode(Model.Questionnaires.Select(q => new
+            {
+                id = q.TemplateId.ToString(),
+                version = q.TemplateVersion,
+                title = $"(ver. {q.TemplateVersion}) {q.TemplateName}"
+            })));
+
             var exportFromats = [];
             @foreach (DataExportFormat formatValue in Enum.GetValues(typeof(DataExportFormat)))
             {

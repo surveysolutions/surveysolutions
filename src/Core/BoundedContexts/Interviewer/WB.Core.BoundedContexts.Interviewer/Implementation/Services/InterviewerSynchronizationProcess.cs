@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using WB.Core.BoundedContexts.Interviewer.Implementation.Services.OfflineSync;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
@@ -10,14 +9,10 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.EventBus.Lite;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog;
-using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization.Steps;
 using WB.Core.SharedKernels.Enumerator.Services;
-using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Views;
@@ -33,33 +28,22 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly IPasswordHasher passwordHasher;
         private readonly IInterviewerSynchronizationService interviewerSynchronizationService;
 
-        public InterviewerSynchronizationProcess(ISynchronizationService synchronizationService,
+        public InterviewerSynchronizationProcess(
             IPlainStorage<InterviewerIdentity> interviewersPlainStorage,
             IPlainStorage<InterviewView> interviewViewRepository,
             IInterviewerPrincipal principal,
             ILogger logger,
             IUserInteractionService userInteractionService,
-            IInterviewerQuestionnaireAccessor questionnairesAccessor,
-            IInterviewerInterviewAccessor interviewFactory,
-            IPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage,
-            IPlainStorage<InterviewFileView> imagesStorage,
-            CompanyLogoSynchronizer logoSynchronizer,
-            AttachmentsCleanupService cleanupService,
             IPasswordHasher passwordHasher,
             IAssignmentsSynchronizer assignmentsSynchronizer,
-            IQuestionnaireDownloader questionnaireDownloader,
             IHttpStatistician httpStatistician,
             IAssignmentDocumentsStorage assignmentsStorage,
-            IAudioFileStorage audioFileStorage,
-            ITabletDiagnosticService diagnosticService,
             IInterviewerSettings interviewerSettings,
             IAuditLogSynchronizer auditLogSynchronizer,
             IAuditLogService auditLogService,
-            ILiteEventBus eventBus,
-            IEnumeratorEventStorage eventStore,
             ISynchronizationMode synchronizationMode,
-            IPlainStorage<InterviewSequenceView, Guid> interviewSequenceViewRepository,
-            IInterviewerSynchronizationService interviewerSynchronizationService) : base(synchronizationService, interviewViewRepository, principal, logger,
+            IInterviewerSynchronizationService interviewerSynchronizationService) 
+            : base(interviewerSynchronizationService, interviewViewRepository, principal, logger,
             userInteractionService, assignmentsSynchronizer, httpStatistician,
             assignmentsStorage, auditLogSynchronizer, auditLogService, interviewerSettings)
         {
@@ -111,7 +95,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 
         protected override async Task CheckAfterStartSynchronization(CancellationToken cancellationToken){
 
-            var currentSupervisorId = await this.synchronizationService.GetCurrentSupervisor(token: cancellationToken, credentials: this.RestCredentials);
+            var currentSupervisorId = await this.interviewerSynchronizationService.GetCurrentSupervisor(token: cancellationToken, credentials: this.RestCredentials);
             if (currentSupervisorId != this.principal.CurrentUserIdentity.SupervisorId)
             {
                 this.UpdateSupervisorOfInterviewer(currentSupervisorId);

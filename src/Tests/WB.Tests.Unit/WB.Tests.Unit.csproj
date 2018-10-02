@@ -4,6 +4,7 @@
       <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
       <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
       <Configurations>Debug;Release;Debug-ESRI</Configurations>
+      <LangVersion>7.3</LangVersion>
   </PropertyGroup>
   <ItemGroup>
     <Compile Remove="SharedKernels\SurveyManagement\PreloadedDataVerifierTests\**" />
@@ -49,6 +50,7 @@
     <PackageReference Include="FluentAssertions" Version="5.4.1" />
     <PackageReference Include="Humanizer.Core" Version="2.4.2" />
     <PackageReference Include="Iesi.Collections" Version="4.0.4" />
+    <PackageReference Include="JsonDiffPatch.Net" Version="2.1.0" />
     <PackageReference Include="Microsoft.AspNet.Identity.Core" Version="2.2.1" />
     <PackageReference Include="Microsoft.AspNet.Identity.Owin" Version="2.2.1" />
     <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.3" />
@@ -70,8 +72,8 @@
     <PackageReference Include="Microsoft.Win32.Primitives" Version="4.3.0" />
     <PackageReference Include="Moq" Version="4.9.0" />
     <PackageReference Include="MvcMailer" Version="4.5" />
-    <PackageReference Include="MvvmCross.Plugin.Messenger" Version="6.1.2" />
-    <PackageReference Include="MvvmCross.Tests" Version="6.1.2" />
+    <PackageReference Include="MvvmCross.Plugin.Messenger" Version="6.2.0" />
+    <PackageReference Include="MvvmCross.Tests" Version="6.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="NHibernate" Version="5.1.2" />
     <PackageReference Include="NSubstitute" Version="3.1.0" />

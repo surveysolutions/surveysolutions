@@ -17,7 +17,6 @@ using WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
-using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 using WB.Core.SharedKernels.Enumerator.ViewModels.Messages;
 using WB.Core.SharedKernels.Enumerator.Views;
 using InterviewerUIResources = WB.Core.BoundedContexts.Interviewer.Properties.InterviewerUIResources;
@@ -72,9 +71,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.synchronizationMode = synchronizationMode;
             this.syncClient = syncClient;
             this.Synchronization = synchronization;
-            this.syncSubscription = synchronizationCompleteSource.SynchronizationEvents.Subscribe(r =>
+            this.syncSubscription = synchronizationCompleteSource.SynchronizationEvents.Subscribe(async r =>
             {
-                this.RefreshDashboard();
+                await this.RefreshDashboard();
             });
 
             this.CreateNew = createNewViewModel;
@@ -103,7 +102,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public override async Task Initialize()
         {
             await base.Initialize().ConfigureAwait(false);
-            this.RefreshDashboard(this.LastVisitedInterviewId);
+            await this.RefreshDashboard(this.LastVisitedInterviewId);
             this.SelectTypeOfInterviewsByInterviewId(this.LastVisitedInterviewId);
         }
 
@@ -194,25 +193,25 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             => InterviewerUIResources.Dashboard_Title.FormatString(this.NumberOfAssignedInterviews.ToString(),
                 Principal.CurrentUserIdentity.Name);
 
-        private void OnInterviewRemoved(object sender, InterviewRemovedArgs e)
+        private async void OnInterviewRemoved(object sender, InterviewRemovedArgs e)
         {
             this.RaisePropertyChanged(() => this.DashboardTitle);
             this.CreateNew.UpdateAssignment(e.AssignmentId);
-            this.CreateNew.Load(this.Synchronization);
+            await this.CreateNew.LoadAsync(this.Synchronization);
         }
 
         private void OnItemsLoaded(object sender, EventArgs e) =>
             this.IsInProgress = !(this.StartedInterviews.IsItemsLoaded && this.RejectedInterviews.IsItemsLoaded &&
                                   this.CompletedInterviews.IsItemsLoaded && this.CreateNew.IsItemsLoaded);
 
-        private void RefreshDashboard(Guid? lastVisitedInterviewId = null)
+        private async Task RefreshDashboard(Guid? lastVisitedInterviewId = null)
         {
             this.IsInProgress = true;
 
-            this.CreateNew.Load(this.Synchronization);
-            this.StartedInterviews.Load(lastVisitedInterviewId);
-            this.RejectedInterviews.Load(lastVisitedInterviewId);
-            this.CompletedInterviews.Load(lastVisitedInterviewId);
+            await Task.WhenAll(this.CreateNew.LoadAsync(this.Synchronization),
+                this.StartedInterviews.LoadAsync(lastVisitedInterviewId),
+                this.RejectedInterviews.LoadAsync(lastVisitedInterviewId),
+                this.CompletedInterviews.LoadAsync(lastVisitedInterviewId));
 
             this.RaisePropertyChanged(() => this.DashboardTitle);
         }

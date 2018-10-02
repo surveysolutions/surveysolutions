@@ -35,8 +35,6 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
         }
 
         [HttpGet]
-        public override HttpResponseMessage Census() => base.Census();
-        [HttpGet]
         public override HttpResponseMessage List() => base.List();
         [HttpGet]
         public override HttpResponseMessage Get(Guid id, int version, long contentVersion) => base.Get(id, version, contentVersion);

@@ -37,7 +37,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             var attachmentContentIds1 = new List<string>() { "1", "2", "3" };
             var attachmentContentIds2 = new List<string>() { "2", "3", "5" };
 
-            synchronizationService = Mock.Of<ISynchronizationService>(
+            synchronizationService = Mock.Of<IInterviewerSynchronizationService>(
                 x => x.GetCensusQuestionnairesAsync(Moq.It.IsAny<CancellationToken>()) == Task.FromResult(newCensusInterviewIdentities)
                 && x.GetQuestionnaireAsync(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<IProgress<TransferProgress>>(), Moq.It.IsAny<CancellationToken>()) == Task.FromResult(new QuestionnaireApiView())
                 && x.GetAttachmentContentsAsync(newCensusInterviewIdentities[0], Moq.It.IsAny<IProgress<TransferProgress>>(), Moq.It.IsAny<CancellationToken>()) == Task.FromResult(attachmentContentIds1)

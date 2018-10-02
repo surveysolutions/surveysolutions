@@ -71,7 +71,7 @@
         self.Facet.subscribe(self.reloadDataTable);
         
         self.initDataTable(this.onDataTableDataReceived, this.onTableInitComplete);
-    }
+    };
 
     var showMoveInterviewersProgress = function (interviewers, supervisor, whatToDoWithAssignments) {
         var messageTemplateId = "#move-interviewer-progress-template";

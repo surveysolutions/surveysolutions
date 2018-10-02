@@ -117,7 +117,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             int[] answerOnMultiOptionQuestion =
                 interview.GetMultiOptionQuestion(this.questionIdentity).GetAnswer()?.CheckedValues?.ToArray();
 
-            UpateMaxAnswersCountMessage(answerOnMultiOptionQuestion?.Length ?? 0);
             var optionViewModels = this.filteredOptionsViewModel.GetOptions()
                 .Select((x, index) => this.ToViewModel(x, answerOnMultiOptionQuestion, interview))
                 .ToList();
@@ -127,14 +126,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             optionViewModels.ForEach(x => this.Options.Add(x));
 
+            UpdateMaxAnswersCountMessage(optionViewModels.Count(o => o.Checked));
         }
 
-        private void UpateMaxAnswersCountMessage(int answersCount)
+        private void UpdateMaxAnswersCountMessage(int answersCount)
         {
             if (this.maxAllowedAnswers.HasValue && this.HasOptions)
             {
                 this.MaxAnswersCountMessage = string.Format(UIResources.Interview_MaxAnswersCount,
-                    answersCount, this.maxAllowedAnswers);
+                    answersCount, Math.Min(this.maxAllowedAnswers.Value, this.Options.Count));
             }
         }
 
@@ -313,7 +313,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 }
 
                 PreviousOptionsToReset = null;
-                UpateMaxAnswersCountMessage(0);
+                UpdateMaxAnswersCountMessage(0);
             }
         }
 
@@ -325,7 +325,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 {
                     this.PutOrderOnOptions(@event);
                 }
-                UpateMaxAnswersCountMessage(@event.SelectedValues.Length);
+                UpdateMaxAnswersCountMessage(@event.SelectedValues.Length);
             }
         }
 

@@ -1,16 +1,14 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using MvvmCross.Plugin.Messenger;
-using NSubstitute;
+using MvvmCross.Tests;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.GenericSubdomains.Portable.Tasks;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
@@ -21,10 +19,17 @@ using WB.Tests.Abc;
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
 {
     [TestOf(typeof(CreateNewViewModel))]
-    public class CreateNewModelTests
+    public class CreateNewModelTests : MvxIoCSupportingTest
     {
+        [OneTimeSetUp]
+        public void SetUp()
+        {
+            base.Setup();
+            Ioc.RegisterSingleton(Stub.MvxMainThreadAsyncDispatcher());
+        }
+
         [Test]
-        public void When_decreasing_count_of_created_interviews()
+        public async Task When_decreasing_count_of_created_interviews()
         {
             //arrange
             var localAssignmentsRepo = Create.Storage.AssignmentDocumentsInmemoryStorage();
@@ -48,8 +53,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
             var viewFactory = CreateViewFactory();
 
             var model = CreateViewModel(assignmentsRepository: localAssignmentsRepo, viewModelFactory: viewFactory);
-            model.Load(mockOfSynchronizationViewModel.Object);
-            model.UpdateUiItems().WaitAndUnwrapException();
+            await model.LoadAsync(mockOfSynchronizationViewModel.Object);
+            await model.UpdateUiItemsAsync();
 
             //act
             model.UpdateAssignment(5);
@@ -83,10 +88,10 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels
             var viewFactory = CreateViewFactory();
 
             var model = CreateViewModel(assignmentsRepository: localAssignmentsRepo, viewModelFactory: viewFactory);
-            model.Load(mockOfSynchronizationViewModel.Object);
+            await model.LoadAsync(mockOfSynchronizationViewModel.Object);
 
             //act
-            await model.UpdateUiItems();
+            await model.UpdateUiItemsAsync();
 
             //assert
             model.UiItems.OfType<InterviewerAssignmentDashboardItemViewModel>().FirstOrDefault(x=>x.AssignmentId == assignmentId).Should().NotBeNull();

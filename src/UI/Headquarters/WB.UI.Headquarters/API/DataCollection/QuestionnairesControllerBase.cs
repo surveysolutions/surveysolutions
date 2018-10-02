@@ -23,7 +23,7 @@ namespace WB.UI.Headquarters.API.DataCollection
     {
         protected readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IQuestionnaireAssemblyAccessor questionnareAssemblyFileAccessor;
-        private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
+        protected readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireRepository;
         private readonly ISerializer serializer;
 
@@ -52,28 +52,6 @@ namespace WB.UI.Headquarters.API.DataCollection
                 NoCache = true
             };
 
-            return response;
-        }
-
-        [WriteToSyncLog(SynchronizationLogType.GetCensusQuestionnaires)]
-        public virtual HttpResponseMessage Census()
-        {
-            var query = new QuestionnaireBrowseInputModel()
-            {
-                Page = 1,
-                PageSize = int.MaxValue,
-                OnlyCensus = true
-            };
-
-            var censusQuestionnaires = this.questionnaireBrowseViewFactory.Load(query).Items
-                                           .Select(questionnaire => new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version))
-                                           .ToList();
-
-            var response = this.Request.CreateResponse(censusQuestionnaires);
-            response.Headers.CacheControl = new CacheControlHeaderValue
-            {
-                NoCache = true
-            };
             return response;
         }
 

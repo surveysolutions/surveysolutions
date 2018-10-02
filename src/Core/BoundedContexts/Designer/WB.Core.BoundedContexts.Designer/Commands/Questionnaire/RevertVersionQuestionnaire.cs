@@ -6,12 +6,12 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire
     [Serializable]
     public class RevertVersionQuestionnaire : QuestionnaireCommand
     {
-        public Guid HistoryReferanceId { get;  }
+        public Guid HistoryReferenceId { get;  }
 
-        public RevertVersionQuestionnaire(Guid questionnaireId, Guid historyReferanceId, Guid responsibleId)
+        public RevertVersionQuestionnaire(Guid questionnaireId, Guid historyReferenceId, Guid responsibleId)
             : base(questionnaireId, responsibleId)
         {
-            this.HistoryReferanceId = historyReferanceId;
+            this.HistoryReferenceId = historyReferenceId;
         }
     }
 }
