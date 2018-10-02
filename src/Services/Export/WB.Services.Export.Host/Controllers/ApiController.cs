@@ -37,8 +37,7 @@ namespace WB.Services.Export.Host.Controllers
             string archivePassword,
             string accessToken,
             ExternalStorageType? storageType,
-            string apiKey,
-            [FromHeader(Name = "Origin")]string tenantBaseUrl)
+            [FromHeader(Name = "Referer")]string tenantBaseUrl)
         {
             if (string.IsNullOrWhiteSpace(archiveName))
             {
@@ -71,8 +70,7 @@ namespace WB.Services.Export.Host.Controllers
             InterviewStatus? status,
             DateTime? fromDate,
             DateTime? toDate,
-            string apiKey,
-            [FromHeader(Name = "Origin")]string tenantBaseUrl)
+            [FromHeader(Name = "Referer")] string tenantBaseUrl)
         {
             var tenant = new TenantInfo(tenantBaseUrl, apiKey);
 
@@ -89,8 +87,7 @@ namespace WB.Services.Export.Host.Controllers
         public async Task<FileStreamResult> GetDdiFile(
             string questionnaireId,
             string archivePassword,
-            string apiKey,
-            [FromHeader(Name = "Origin")]string tenantBaseUrl)
+            [FromHeader(Name = "Referer")]string tenantBaseUrl)
         {
             var tenant = new TenantInfo(tenantBaseUrl, apiKey);
             var pathToFile = await this.ddiDdiMetadataAccessor.GetFilePathToDDIMetadata(tenant, new QuestionnaireId(questionnaireId),
@@ -108,8 +105,7 @@ namespace WB.Services.Export.Host.Controllers
             DataExportFormat format,
             DateTime? fromDate,
             DateTime? toDate,
-            string apiKey,
-            [FromHeader(Name = "Origin")] string baseUrl)
+            [FromHeader(Name = "Referer")] string baseUrl)
         {
             var tenant = new TenantInfo(baseUrl, apiKey);
 
@@ -128,19 +124,25 @@ namespace WB.Services.Export.Host.Controllers
 
             return new FileStreamResult(result.Data, "application/octet-stream")
             {
-
                 FileDownloadName = result.FileName
             };
-
-            ///return this.File(result.Data, "application/octet-stream", result.FileName);
         }
 
         [HttpDelete]
-        [Route("api/v1/job/delete")]
-        public ActionResult Delete(string apiKey,
-            [FromHeader(Name = "Origin")] string baseUrl)
+        [Route("api/v1/delete")]
+        public ActionResult Delete([FromHeader(Name = "Origin")] string baseUrl)
         {
             return Ok();
         }
+
+        [HttpDelete]
+        [Route("api/v1/job")]
+        public ActionResult DeleteDataExportProcess(string processId, [FromHeader(Name = "Referer")] string baseUrl)
+        {
+            this.exportProcessesService.DeleteDataExport(new TenantInfo(baseUrl, apiKey), processId);
+            return Ok();
+        }
+
+        private string apiKey => this.Request.Headers["Authorization"].ToString()?.Replace("Bearer ", "");
     }
 }
