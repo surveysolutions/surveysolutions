@@ -6,10 +6,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails
 {
     public class ExportBinaryToExternalStorage : DataExportProcessDetails
     {
-        public override string Name => $"{base.Name} {Enum.GetName(typeof(ExternalStorageType), this.StorageType)}";
+        public override string Name => $"{base.Name} {Enum.GetName(typeof(ExternalStorageType), StorageType)}";
 
-        public ExternalStorageType StorageType { get; set; }
-        public string AccessToken { get; set; }
         public ExportBinaryToExternalStorage(DataExportFormat format, QuestionnaireIdentity questionnaire, string questionnaireTitle) 
             : base(format, questionnaire, questionnaireTitle)
         {
