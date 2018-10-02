@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -23,17 +24,20 @@ namespace WB.UI.Headquarters.API.Export
         private readonly IInterviewsToExportViewFactory viewFactory;
         private readonly IInterviewFactory interviewFactory;
         private readonly IInterviewDiagnosticsFactory interviewDiagnosticsFactory;
+        private readonly IInterviewHistoryFactory interviewHistoryFactory;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatuses;
 
         public InterviewsExportApiController(
             IInterviewsToExportViewFactory viewFactory,
             IInterviewFactory interviewFactory,
             IInterviewDiagnosticsFactory interviewDiagnosticsFactory,
+            IInterviewHistoryFactory interviewHistoryFactory,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatuses)
         {
             this.viewFactory = viewFactory ?? throw new ArgumentNullException(nameof(viewFactory));
             this.interviewFactory = interviewFactory ?? throw new ArgumentNullException(nameof(interviewFactory));
             this.interviewDiagnosticsFactory = interviewDiagnosticsFactory ?? throw new ArgumentNullException(nameof(interviewDiagnosticsFactory));
+            this.interviewHistoryFactory = interviewHistoryFactory ?? throw new ArgumentNullException(nameof(interviewHistoryFactory));
             this.interviewStatuses = interviewStatuses ?? throw new ArgumentNullException(nameof(interviewStatuses));
         }
 
@@ -133,5 +137,18 @@ namespace WB.UI.Headquarters.API.Export
             return Request.CreateResponse(HttpStatusCode.OK, interviews);
         }
 
+        [Route("api/export/v1/interview/batch/history")]
+        [ServiceApiKeyAuthorization]
+        [HttpGet]
+        [ApiNoCache]
+        public HttpResponseMessage GetInterviewHistory([FromUri] Guid[] id)
+        {
+            var items = this.interviewHistoryFactory.Load(id);
+
+            return Request.CreateResponse(HttpStatusCode.OK, items.Select(i => new
+            {
+                i.InterviewId, i.Records
+            }));
+        }
     }
 }

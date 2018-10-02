@@ -16,7 +16,7 @@ namespace WB.Services.Export.Jobs
         private readonly IDataExportProcessesService exportService;
 
         private readonly Lazy<BinaryFormatDataExportHandler> binaryFormatDataExportHandler;
-        //private readonly Lazy<TabularFormatParaDataExportProcessHandler> tabularFormatParaDataExportProcessHandler;
+        private readonly Lazy<TabularFormatParaDataExportProcessHandler> tabularFormatParaDataExportProcessHandler;
         private readonly Lazy<TabularFormatDataExportHandler> tabularFormatDataExportHandler;
         private readonly Lazy<SpssFormatExportHandler> spssFormatExportHandler;
         private readonly Lazy<StataFormatExportHandler> stataFormatExportHandler;
@@ -28,7 +28,7 @@ namespace WB.Services.Export.Jobs
         
         public ExportJob(IDataExportProcessesService exportService,
             Lazy<BinaryFormatDataExportHandler> binaryFormatDataExportHandler,
-            //Lazy<TabularFormatParaDataExportProcessHandler> tabularFormatParaDataExportProcessHandler,
+            Lazy<TabularFormatParaDataExportProcessHandler> tabularFormatParaDataExportProcessHandler,
             Lazy<TabularFormatDataExportHandler> tabularFormatDataExportHandler,
             Lazy<SpssFormatExportHandler> spssFormatExportHandler,
             Lazy<StataFormatExportHandler> stataFormatExportHandler,
@@ -40,7 +40,7 @@ namespace WB.Services.Export.Jobs
             logger.LogTrace("Constructed instance");
             this.exportService = exportService;
             this.binaryFormatDataExportHandler = binaryFormatDataExportHandler;
-            //this.tabularFormatParaDataExportProcessHandler = tabularFormatParaDataExportProcessHandler;
+            this.tabularFormatParaDataExportProcessHandler = tabularFormatParaDataExportProcessHandler;
             this.tabularFormatDataExportHandler = tabularFormatDataExportHandler;
             this.spssFormatExportHandler = spssFormatExportHandler;
             this.stataFormatExportHandler = stataFormatExportHandler;
@@ -96,8 +96,8 @@ namespace WB.Services.Export.Jobs
             {
                 case DataExportFormat.Binary:
                     return binaryFormatDataExportHandler.Value;
-                //case DataExportFormat.Paradata:
-                //    return tabularFormatParaDataExportProcessHandler.Value;
+                case DataExportFormat.Paradata:
+                    return tabularFormatParaDataExportProcessHandler.Value;
                 case DataExportFormat.Tabular:
                     return tabularFormatDataExportHandler.Value;
                 case DataExportFormat.SPSS:
