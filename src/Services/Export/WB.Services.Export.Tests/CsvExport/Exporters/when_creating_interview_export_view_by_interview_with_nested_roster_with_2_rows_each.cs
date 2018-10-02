@@ -20,7 +20,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
                         Create.Roster(rosterId: nestedRosterId, fixedTitles: new FixedRosterTitle[] {new FixedRosterTitle(1, "t1"), new FixedRosterTitle(2, "t2")},
                             children: new IQuestionnaireEntity[]
                             {
-                                Create.NumericIntegerQuestion(id: questionInsideRosterGroupId, variable: "q1")
+                                Create.NumericRealQuestion(id: questionInsideRosterGroupId, variable: "q1")
                             })
                     }));
             exporter = Create.InterviewsExporter();
