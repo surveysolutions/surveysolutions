@@ -19,8 +19,10 @@ namespace WB.UI.Shared.Web.Modules.Filters
 
         public Task OnAuthorizationAsync(HttpActionContext actionContext, CancellationToken cancellationToken)
         {
-            var attributes = actionContext.ActionDescriptor.GetCustomAttributes<TAttribute>();
-            bool shouldExecute = attributes == null || attributes.Count == 0;
+            var actionAttributes = actionContext.ActionDescriptor.GetCustomAttributes<TAttribute>();
+            var controllerAttributes = actionContext.ControllerContext.ControllerDescriptor.GetCustomAttributes<TAttribute>();
+            bool shouldExecute = (actionAttributes == null || actionAttributes.Count == 0)
+                                 && (controllerAttributes == null || controllerAttributes.Count == 0);
 
             if (shouldExecute)
             {

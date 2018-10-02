@@ -62,6 +62,16 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
             return childLifetimeScope;
         }
 
+        public ILifetimeScope BeginAutofacLifetimeScope()
+        {
+            var container = GetCurrentScope();
+            var childLifetimeScope = container.BeginLifetimeScope();
+            if (containers.Value == null)
+                containers.Value = new Stack<ILifetimeScope>();
+            containers.Value.Push(childLifetimeScope);
+            return childLifetimeScope;
+        }
+
         public void CloseScopeAndChildrenScopes(ILifetimeScope scope)
         {
             var scopeFromStack = containers.Value.FirstOrDefault(s => s == scope);
@@ -82,7 +92,7 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
 
         public void CloseAllChildrenScopes()
         {
-            while (containers.Value.Count > 0)
+            while (containers.Value?.Count > 0)
             {
                 var scope = containers.Value.Pop();
                 scope.Dispose();
