@@ -45,10 +45,6 @@ namespace WB.Services.Export.CsvExport.Exporters
             new DoExportFileHeader("Id4", "Roster ID of the 4th level of nesting", true),
         };
 
-        protected CommentsExporter()
-        {
-        }
-
         public CommentsExporter(
             IOptions<InterviewDataExportSettings> interviewDataExportSettings,
             IFileSystemAccessor fileSystemAccessor,

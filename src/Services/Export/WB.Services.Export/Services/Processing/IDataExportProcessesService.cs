@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using WB.Services.Export.Services.Processing.Good;
 using WB.Services.Export.Tenant;
 
 namespace WB.Services.Export.Services.Processing

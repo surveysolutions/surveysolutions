@@ -1,8 +1,7 @@
 ﻿using Amazon;
-using Amazon.Runtime;
 using Amazon.S3;
 
-namespace WB.Services.Export.Services.Processing.Good
+namespace WB.Services.Export.Services.Processing
 {
     public class S3StorageSettings
     {

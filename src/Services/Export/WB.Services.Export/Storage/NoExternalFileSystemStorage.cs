@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Autofac;
 using Autofac.Core;
 using WB.Services.Export.Services.Processing;
-using WB.Services.Export.Services.Processing.Good;
 
 namespace WB.Services.Export.Storage
 {

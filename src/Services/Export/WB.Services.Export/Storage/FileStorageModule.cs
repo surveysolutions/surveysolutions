@@ -8,8 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using WB.Services.Export.Checks;
-using WB.Services.Export.Services.Processing.Good;
-using WB.Services.Export.Services.Storage;
+using WB.Services.Export.Services.Processing;
 
 namespace WB.Services.Export.Storage
 {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Threading.Tasks;
-using WB.Services.Export.Services.Processing.Good;
+using WB.Services.Export.Storage;
 using WB.Services.Export.Tenant;
 using WB.Services.Infrastructure.FileSystem;
 
