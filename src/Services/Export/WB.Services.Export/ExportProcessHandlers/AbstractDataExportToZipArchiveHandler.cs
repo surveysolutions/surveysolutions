@@ -47,7 +47,7 @@ namespace WB.Services.Export.ExportProcessHandlers
                 
                 this.dataExportProcessesService.ChangeStatusType(processArgs.Tenant, processArgs.NaturalId, DataExportStatus.Compressing);
                 exportProgress.Report(0);
-                this.dataExportFileAccessor.PubishArchiveToExternalStorage(archiveName, exportProgress);
+                this.dataExportFileAccessor.PublishArchiveToExternalStorage(processArgs.Tenant, archiveName, exportProgress);
 
                 processArgs.CancellationToken.ThrowIfCancellationRequested();
             }

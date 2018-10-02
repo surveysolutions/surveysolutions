@@ -1,33 +1,35 @@
 ﻿using Amazon;
+using Amazon.Runtime;
 using Amazon.S3;
 
 namespace WB.Services.Export.Services.Processing.Good
 {
-    public class AmazonS3Settings
+    public class S3StorageSettings
     {
-        public AmazonS3Settings()
-        {
-            
-        }
-
-        public bool IsEnabled { get; set; } = false;
         public string BucketName { get; set; }
-        public string Region { get; set; } = "us-east-1";
-        public string Prefix { get; set; }
-        public string Endpoint { get; set; }
-        public string Folder { get; set; } = "hq";
+        public string Folder { get; set; } = "export";
 
         public string BasePath => $"{Folder}/{Prefix}";
+        public string Prefix { get; set; }
+    }
+
+    public class AmazonS3Settings
+    {
+        public string MinioUrl { get; set; }
+        public string AccessKey { get; set; }
+        public string SecretKey { get; set; }
+        public string Region { get; set; } = RegionEndpoint.USEast1.SystemName;
 
         public AmazonS3Config Config()
         {
             var config = new AmazonS3Config();
+            
             config.RegionEndpoint = RegionEndpoint.GetBySystemName(Region);
 
             // support for local dev env endpoints
-            if (!string.IsNullOrWhiteSpace(Endpoint))
+            if (!string.IsNullOrWhiteSpace(MinioUrl))
             {
-                config.ServiceURL = Endpoint;
+                config.ServiceURL = MinioUrl;
                 config.ForcePathStyle = true;
             }
 

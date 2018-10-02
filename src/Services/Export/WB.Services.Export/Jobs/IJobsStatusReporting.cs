@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Questionnaire;
@@ -13,13 +15,13 @@ namespace WB.Services.Export.Jobs
 {
     public interface IJobsStatusReporting
     {
-        DataExportStatusView GetDataExportStatusForQuestionnaire(
+        Task<DataExportStatusView> GetDataExportStatusForQuestionnaire(
             TenantInfo tenant,
             QuestionnaireId questionnaireIdentity,
             string archiveFileName,
             InterviewStatus? status = null, DateTime? fromDate = null, DateTime? toDate = null);
 
-        DataExportArchive DownloadArchive(TenantInfo tenant, string archiveName,
+        Task<DataExportArchive> DownloadArchive(TenantInfo tenant, string archiveName,
             DataExportFormat dataExportFormat, InterviewStatus? status,
             DateTime? from, DateTime? to);
     }
@@ -66,7 +68,7 @@ namespace WB.Services.Export.Jobs
             this.exportFileAccessor = exportFileAccessor;
         }
 
-        public DataExportArchive DownloadArchive(TenantInfo tenant, string archiveName,
+        public async Task<DataExportArchive> DownloadArchive(TenantInfo tenant, string archiveName,
             DataExportFormat dataExportFormat, InterviewStatus? status,
             DateTime? from, DateTime? to)
         {
@@ -77,14 +79,14 @@ namespace WB.Services.Export.Jobs
 
             if (this.externalFileStorage.IsEnabled())
             {
-                var externalStoragePath = this.exportFileAccessor.GetExternalStoragePath(Path.GetFileName(filePath));
-                var metadata = this.externalFileStorage.GetObjectMetadata(externalStoragePath);
+                var externalStoragePath = this.exportFileAccessor.GetExternalStoragePath(tenant, Path.GetFileName(filePath));
+                var metadata = await this.externalFileStorage.GetObjectMetadataAsync(externalStoragePath);
 
                 if (metadata != null)
                 {
                     return new DataExportArchive
                     {
-                         Redirect = new Uri(this.externalFileStorage.GetDirectLink(filePath, TimeSpan.FromSeconds(10)))
+                        Redirect = new Uri(this.externalFileStorage.GetDirectLink(externalStoragePath, TimeSpan.FromSeconds(10)))
                     };
                 }
             }
@@ -100,7 +102,7 @@ namespace WB.Services.Export.Jobs
             return null;
         }
 
-        public DataExportStatusView GetDataExportStatusForQuestionnaire(
+        public async Task<DataExportStatusView> GetDataExportStatusForQuestionnaire(
             TenantInfo tenant,
             QuestionnaireId questionnaireIdentity,
             string archiveFileName,
@@ -112,23 +114,32 @@ namespace WB.Services.Export.Jobs
             if (questionnaire == null)
                 return null;
 
-            var runningProcesses = this.dataExportProcessesService.GetRunningExportProcesses(tenant).Select(CreateRunningDataExportProcessView).ToArray();
-            var allProcesses = this.dataExportProcessesService.GetAllProcesses(tenant).Select(CreateRunningDataExportProcessView).ToArray();
+            var runningProcesses = this.dataExportProcessesService.GetRunningExportProcesses(tenant)
+                .Select(CreateRunningDataExportProcessView).ToArray();
+            var allProcesses = this.dataExportProcessesService.GetAllProcesses(tenant)
+                .Select(CreateRunningDataExportProcessView).ToArray();
 
-            var dataExports = this.supportedDataExports.Select(supportedDataExport =>
-                    this.CreateDataExportView(tenant, archiveFileName, supportedDataExport.Item1, supportedDataExport.Item2, status,
-                        fromDate, toDate, questionnaireIdentity, questionnaire, runningProcesses, allProcesses))
-                .ToArray();
+            var exports = new List<DataExportView>();
+
+            foreach (var supportedDataExport in this.supportedDataExports)
+            {
+                var dataExportView = await this.CreateDataExportView(tenant, archiveFileName, supportedDataExport.Item1,
+                    supportedDataExport.Item2, status,
+                    fromDate, toDate, questionnaireIdentity, questionnaire, runningProcesses, allProcesses);
+
+                exports.Add(dataExportView);
+            }
 
             return new DataExportStatusView(
                 questionnaireId: questionnaireIdentity.Id,
-                dataExports: dataExports,
+                dataExports: exports,
                 runningDataExportProcesses: runningProcesses);
         }
 
-        private static RunningDataExportProcessView CreateRunningDataExportProcessView(IDataExportProcessDetails dataExportProcessDetails)
+        private static RunningDataExportProcessView CreateRunningDataExportProcessView(
+            IDataExportProcessDetails dataExportProcessDetails)
         {
-            var exportProcessDetails = (DataExportProcessDetails)dataExportProcessDetails;
+            var exportProcessDetails = (DataExportProcessDetails) dataExportProcessDetails;
 
             return new RunningDataExportProcessView
             {
@@ -139,7 +150,9 @@ namespace WB.Services.Export.Jobs
                 Progress = dataExportProcessDetails.ProgressInPercents,
                 Format = dataExportProcessDetails.Format,
                 ProcessStatus = dataExportProcessDetails.Status,
-                Type = exportProcessDetails.Format == DataExportFormat.Paradata ? DataExportType.ParaData : DataExportType.Data,
+                Type = exportProcessDetails.Format == DataExportFormat.Paradata
+                    ? DataExportType.ParaData
+                    : DataExportType.Data,
                 QuestionnaireId = exportProcessDetails.Questionnaire.Id,
                 InterviewStatus = exportProcessDetails.InterviewStatus,
                 FromDate = exportProcessDetails.FromDate,
@@ -147,7 +160,7 @@ namespace WB.Services.Export.Jobs
             };
         }
 
-        private DataExportView CreateDataExportView(TenantInfo tenant,
+        private async Task<DataExportView> CreateDataExportView(TenantInfo tenant,
             string archiveFileName,
             DataExportType dataType,
             DataExportFormat dataFormat,
@@ -164,11 +177,14 @@ namespace WB.Services.Export.Jobs
             {
                 DataExportFormat = dataFormat,
                 DataExportType = dataType,
-                StatusOfLatestExportProcess = GetStatusOfExportProcess(dataType, dataFormat, questionnaireIdentity, allProcesses)
+                StatusOfLatestExportProcess =
+                    GetStatusOfExportProcess(dataType, dataFormat, questionnaireIdentity, allProcesses)
             };
 
             if (dataFormat == DataExportFormat.Binary &&
-                !questionnaire.HeaderToLevelMap.Values.SelectMany(l => l.HeaderItems.Values.OfType<ExportedQuestionHeaderItem>().Where(q => q.QuestionType == QuestionType.Multimedia || q.QuestionType == QuestionType.Audio)).Any())
+                !questionnaire.HeaderToLevelMap.Values.SelectMany(l =>
+                    l.HeaderItems.Values.OfType<ExportedQuestionHeaderItem>().Where(q =>
+                        q.QuestionType == QuestionType.Multimedia || q.QuestionType == QuestionType.Audio)).Any())
             {
                 dataExportView.CanRefreshBeRequested = false;
                 dataExportView.HasAnyDataToBePrepared = false;
@@ -196,8 +212,8 @@ namespace WB.Services.Export.Jobs
 
             if (this.externalFileStorage.IsEnabled())
             {
-                var externalStoragePath = this.exportFileAccessor.GetExternalStoragePath(Path.GetFileName(filePath));
-                var metadata = this.externalFileStorage.GetObjectMetadata(externalStoragePath);
+                var externalStoragePath = this.exportFileAccessor.GetExternalStoragePath(tenant, Path.GetFileName(filePath));
+                var metadata = await this.externalFileStorage.GetObjectMetadataAsync(externalStoragePath);
 
                 if (metadata != null)
                 {

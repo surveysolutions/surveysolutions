@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Threading.Tasks;
 
 namespace WB.Services.Export.Services.Processing.Good
 {
@@ -16,7 +17,7 @@ namespace WB.Services.Export.Services.Processing.Good
         FileObject Store(string path, byte[] data, string contentType, IProgress<int> progress = null);
         FileObject Store(string path, Stream inputStream, string contentType, IProgress<int> progress = null);
 
-        FileObject GetObjectMetadata(string key);
+        Task<FileObject> GetObjectMetadataAsync(string key);
         bool IsExist(string path);
     }
 }

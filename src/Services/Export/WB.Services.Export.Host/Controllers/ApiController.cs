@@ -82,7 +82,7 @@ namespace WB.Services.Export.Host.Controllers
         [HttpGet]
         [ResponseCache(NoStore = true)]
         [Route("api/v1/job/status")]
-        public DataExportStatusView GetDataExportStatusForQuestionnaire(
+        public async Task<DataExportStatusView> GetDataExportStatusForQuestionnaire(
             string questionnaireId,
             string archiveName,
             InterviewStatus? status,
@@ -93,7 +93,7 @@ namespace WB.Services.Export.Host.Controllers
         {
             var tenant = new TenantInfo(tenantBaseUrl, apiKey);
 
-            var dataExportStatusForQuestionnaire = this.jobsStatusReporting.GetDataExportStatusForQuestionnaire(tenant,
+            var dataExportStatusForQuestionnaire = await this.jobsStatusReporting.GetDataExportStatusForQuestionnaire(tenant,
                 new QuestionnaireId(questionnaireId),
                 archiveName, status, fromDate, toDate);
 
@@ -119,7 +119,7 @@ namespace WB.Services.Export.Host.Controllers
         [HttpGet]
         [ResponseCache(NoStore = true)]
         [Route("api/v1/job/download")]
-        public ActionResult DownloadArchive(string questionnaireId,
+        public async Task<ActionResult> DownloadArchive(string questionnaireId,
             string archiveName,
             InterviewStatus? status,
             DataExportFormat format,
@@ -130,8 +130,7 @@ namespace WB.Services.Export.Host.Controllers
         {
             var tenant = new TenantInfo(baseUrl, apiKey);
 
-            var result = this.jobsStatusReporting.DownloadArchive(tenant, archiveName, format, status, fromDate,
-                toDate);
+            var result = await this.jobsStatusReporting.DownloadArchive(tenant, archiveName, format, status, fromDate, toDate);
 
             if (result == null)
             {
@@ -140,10 +139,17 @@ namespace WB.Services.Export.Host.Controllers
 
             if (result.Redirect != null)
             {
-                return Redirect(result.Redirect.ToString());
+                Response.Headers.Add("NewLocation", result.Redirect.ToString());
+                return Ok();
             }
 
-            return this.File(result.Data, "application/octet-stream", result.FileName);
+            return new FileStreamResult(result.Data, "application/octet-stream")
+            {
+
+                FileDownloadName = result.FileName
+            };
+
+            ///return this.File(result.Data, "application/octet-stream", result.FileName);
         }
     }
 }

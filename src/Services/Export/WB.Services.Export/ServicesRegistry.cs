@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using WB.Services.Export.Checks;
 using WB.Services.Export.CsvExport;
 using WB.Services.Export.CsvExport.Exporters;
 using WB.Services.Export.CsvExport.Implementation.DoFiles;
@@ -53,7 +54,9 @@ namespace WB.Services.Export
             services.AddTransient<IArchiveUtils, ZipArchiveUtils>();
             services.AddTransient<IExternalFileStorage, S3FileStorage>();
             services.AddTransient<ITempPathProvider, ManagedThreadAwareTempPathProvider>();
-            services.AddTransient<ITabularDataToExternalStatPackageExportService, TabularDataToExternalStatPackageExportService>();
+            services
+                .AddTransient<ITabularDataToExternalStatPackageExportService,
+                    TabularDataToExternalStatPackageExportService>();
             services.AddTransient<ITabFileReader, TabFileReader>();
             services.AddTransient<IDatasetWriterFactory, DatasetWriterFactory>();
             services.AddTransient<IDataQueryFactory, DataQueryFactory>();
@@ -65,14 +68,14 @@ namespace WB.Services.Export
             services.AddTransient<IMetadataWriter, MetadataWriter>();
             services.AddTransient<IMetaDescriptionFactory, MetaDescriptionFactory>();
 
-            
+
             // Singletons
             services.AddSingleton<ICache, Cache>();
 
             RegisterHandlers(services);
 
             services.AddTransient<IExportJob, ExportJob>();
-            
+
             FileStorageModule.Register(services, configuration);
 
             // options
@@ -87,7 +90,8 @@ namespace WB.Services.Export
             services.AddTransient<SpssFormatExportHandler>();
             services.AddTransient<StataFormatExportHandler>();
             services.AddTransient<OnedriveBinaryDataExportHandler>();
-            services.AddTransient<DropboxBinaryDataExportHandler>(); ;
+            services.AddTransient<DropboxBinaryDataExportHandler>();
+            ;
             services.AddTransient<GoogleDriveBinaryDataExportHandler>();
         }
     }
