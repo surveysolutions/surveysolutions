@@ -71,8 +71,6 @@ namespace WB.Services.Export.Tests.Services.TabularDataToExternalStatPackageExpo
             string extraFile = "extra.tab";
             string extraFileExported = "extra.sav";
 
-            Mock<IDatasetWriter> datasetWriter;
-
             var questionnaireExportStructure = CreateQuestionnaireExportStructure(
                 CreateHeaderStructureForLevel("main level"),
                 CreateHeaderStructureForLevel("nested roster level", referenceNames: new[] {"r1", "r2"},
@@ -84,7 +82,7 @@ namespace WB.Services.Export.Tests.Services.TabularDataToExternalStatPackageExpo
                 new DatasetMeta(new IDatasetVariable[] {new DatasetVariable("test")}));
             tabFileReader.Setup(x => x.GetDataFromTabFile(Moq.It.IsAny<string>())).Returns(new string[,] {{"1", "1"}});
 
-            datasetWriter = new Mock<IDatasetWriter>();
+            var datasetWriter = new Mock<IDatasetWriter>();
 
             var datasetWriterFactory = new Mock<IDatasetWriterFactory>();
             datasetWriterFactory.Setup(x => x.CreateDatasetWriter(DataExportFormat.SPSS)).Returns(datasetWriter.Object);

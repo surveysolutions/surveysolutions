@@ -33,22 +33,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             this.exportSettings = exportSettings;
         }
 
-        public DataExportProcessDetails GetAndStartOldestUnprocessedDataExport()
-        {
-            var exportProcess = this.processes.Values
-                .Where(p => p.Status == DataExportStatus.Queued)
-                .OrderBy(p => p.LastUpdateDate)
-                .FirstOrDefault();
-
-            if (exportProcess == null)
-                return null;
-
-            exportProcess.Status = DataExportStatus.Running;
-            exportProcess.LastUpdateDate = DateTime.UtcNow;
-            
-            return exportProcess;
-        }
-
         public Task AddDataExportAsync(string baseUrl, string apiKey, DataExportProcessDetails details)
         {
             var api = RestService.For<IExportServiceApi>(settings.ExportServiceUrl);
@@ -86,38 +70,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         public DataExportProcessDetails[] GetAllProcesses() => this.processes.Values.ToArray();
 
-        public void FinishExportSuccessfully(string processId)
-        {
-            var dataExportProcess = this.processes.GetOrNull(processId);
-            if (dataExportProcess == null) return;
-
-            dataExportProcess.Status = DataExportStatus.Finished;
-            dataExportProcess.LastUpdateDate = DateTime.UtcNow;
-            dataExportProcess.ProgressInPercents = 100;
-        }
-
-        public void FinishExportWithError(string processId, Exception e)
-        {
-            var dataExportProcess = this.processes.GetOrNull(processId);
-            if (dataExportProcess == null) return;
-
-            dataExportProcess.Status = DataExportStatus.FinishedWithError;
-            dataExportProcess.LastUpdateDate = DateTime.UtcNow;
-        }
-
-        public void UpdateDataExportProgress(string processId, int progressInPercents)
-        {
-            if (progressInPercents < 0 || progressInPercents > 100)
-                throw new ArgumentException(
-                    $"Progress of data export process '{processId}' equals to '{progressInPercents}', but it can't be greater then 100 or less then 0");
-
-            var dataExportProcess = this.processes.GetOrNull(processId);
-            if (dataExportProcess == null) return;
-
-            dataExportProcess.LastUpdateDate = DateTime.UtcNow;
-            dataExportProcess.ProgressInPercents = progressInPercents;
-        }
-
         public void DeleteDataExport(string processId)
         {
             this.processes.GetOrNull(processId)?.Cancel();
@@ -135,15 +87,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             };
 
             this.DeleteDataExport(process.NaturalId);
-        }
-
-        public void ChangeStatusType(string processId, DataExportStatus status)
-        {
-            var dataExportProcess = this.processes.GetOrNull(processId);
-            if (dataExportProcess == null) return;
-
-            dataExportProcess.LastUpdateDate = DateTime.UtcNow;
-            dataExportProcess.Status = status;
         }
     }
 }

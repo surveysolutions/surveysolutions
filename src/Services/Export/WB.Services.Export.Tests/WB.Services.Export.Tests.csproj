@@ -34,4 +34,8 @@
     </Reference>
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ExportProcessHandlers\" />
+  </ItemGroup>
+
 </Project>
