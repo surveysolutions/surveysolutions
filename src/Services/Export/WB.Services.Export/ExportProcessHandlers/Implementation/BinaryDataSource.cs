@@ -42,12 +42,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             cancellationToken.ThrowIfCancellationRequested();
             var api = this.tenantApi.For(settings.Tenant);
 
-            var interviewsToExport = await api.GetInterviewsToExportAsync(
-                settings.QuestionnaireId,
-                settings.InterviewStatus,
-                settings.FromDate,
-                settings.ToDate
-            );
+            var interviewsToExport = await api.GetInterviewsToExportAsync(settings);
 
             var questionnaire = await this.questionnaireStorage
                 .GetQuestionnaireAsync(settings.Tenant, settings.QuestionnaireId);

@@ -84,7 +84,7 @@ namespace WB.Services.Export
         private static void RegisterHandlers(IServiceCollection services)
         {
             services.AddTransient<BinaryFormatDataExportHandler>();
-            //services.AddTransient<TabularFormatParaDataExportProcessHandler>();
+            services.AddTransient<TabularFormatParaDataExportProcessHandler>();
             services.AddTransient<TabularFormatDataExportHandler>();
             services.AddTransient<SpssFormatExportHandler>();
             services.AddTransient<StataFormatExportHandler>();
