@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 using Resources;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
@@ -8,9 +9,9 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Models;
+using WB.UI.Shared.Web.Configuration;
 
 namespace WB.UI.Headquarters.API
 {
@@ -19,24 +20,21 @@ namespace WB.UI.Headquarters.API
     {
         private readonly ILogger logger;
         private readonly IExportSettings exportSettings;
-        private readonly IFilebasedExportedDataAccessor filebasedExportedDataAccessor;
-        private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IDataExportProcessesService dataExportProcessesService;
         private readonly IAuditLog auditLog;
+        private readonly IConfigurationManager configurationManager;
 
         public ExportSettingsApiController(ILogger logger, 
             IExportSettings exportSettings,
-            IFilebasedExportedDataAccessor filebasedExportedDataAccessor,
-            IFileSystemAccessor fileSystemAccessor,
             IDataExportProcessesService dataExportProcessesService,
-            IAuditLog auditLog)
+            IAuditLog auditLog,
+            IConfigurationManager configurationManager)
 
         {
             this.exportSettings = exportSettings;
-            this.filebasedExportedDataAccessor = filebasedExportedDataAccessor;
-            this.fileSystemAccessor = fileSystemAccessor;
             this.dataExportProcessesService = dataExportProcessesService;
             this.auditLog = auditLog;
+            this.configurationManager = configurationManager;
             this.logger = logger;
         }
 
@@ -49,7 +47,7 @@ namespace WB.UI.Headquarters.API
         }
 
         [HttpPost]
-        public HttpResponseMessage ChangeState(ChangeSettingsModel changeSettingsState)
+        public async Task<HttpResponseMessage> ChangeState(ChangeSettingsModel changeSettingsState)
         {
             if (this.IsExistsDataExportInProgress())
                 return Request.CreateErrorResponse(HttpStatusCode.Forbidden, message: DataExport.ErrorThereAreRunningProcesses);
@@ -59,7 +57,7 @@ namespace WB.UI.Headquarters.API
             if (oldState.IsEnabled != changeSettingsState.EnableState)
             {
                 this.exportSettings.SetEncryptionEnforcement(changeSettingsState.EnableState);
-                this.ClearExportData();
+                await this.ClearExportData();
             }
 
             this.auditLog.ExportEncriptionChanged(changeSettingsState.EnableState);
@@ -68,7 +66,7 @@ namespace WB.UI.Headquarters.API
         }
 
         [HttpPost]
-        public HttpResponseMessage RegeneratePassword()
+        public async Task<HttpResponseMessage> RegeneratePassword()
         {
             if (this.IsExistsDataExportInProgress())
                 return Request.CreateErrorResponse(HttpStatusCode.Forbidden, message: DataExport.ErrorThereAreRunningProcesses); 
@@ -78,7 +76,7 @@ namespace WB.UI.Headquarters.API
             if (model.IsEnabled)
             {
                 this.exportSettings.RegeneratePassword();
-                this.ClearExportData();
+                await this.ClearExportData();
             }
 
 
@@ -88,12 +86,11 @@ namespace WB.UI.Headquarters.API
             return Request.CreateResponse(newExportSettingsModel);
         }
 
-        private void ClearExportData()
+        private async Task ClearExportData()
         {
-            var exportedDataDirectoryPath = this.filebasedExportedDataAccessor.GetExportDirectory();
-
-            this.fileSystemAccessor.DeleteDirectory(exportedDataDirectoryPath);
-            this.fileSystemAccessor.CreateDirectory(exportedDataDirectoryPath);
+            IExportServiceApi api =
+                Refit.RestService.For<IExportServiceApi>(this.exportSettings.ExportServiceBaseUrl);
+            await api.DeleteAll(this.exportSettings.ApiKey, configurationManager.AppSettings["BaseUrl"]);
         }
 
         private bool IsExistsDataExportInProgress()

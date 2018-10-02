@@ -13,13 +13,13 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.Headquarters.API.Filters;
 using WB.UI.Headquarters.Filters;
@@ -31,15 +31,12 @@ namespace WB.UI.Headquarters.API
     [Authorize(Roles = "Administrator, Headquarter")]
     public class DataExportApiController : ApiController
     {
-        private readonly IFilebasedExportedDataAccessor exportedFilesAccessor;
         private readonly IFileSystemAccessor fileSystemAccessor;
 
         private readonly IDataExportStatusReader dataExportStatusReader;
         private readonly IDataExportProcessesService dataExportProcessesService;
-        private readonly IDataExportFileAccessor exportFileAccessor;
 
         private readonly IExportFileNameService exportFileNameService;
-        private readonly IExternalFileStorage externalFileStorage;
         private readonly IExportSettings exportSettings;
         private readonly InterviewDataExportSettings interviewExportSettings;
         private readonly IPlainKeyValueStorage<ExportServiceSettings> exportServiceSettings;
@@ -53,10 +50,7 @@ namespace WB.UI.Headquarters.API
             IFileSystemAccessor fileSystemAccessor,
             IDataExportStatusReader dataExportStatusReader,
             IDataExportProcessesService dataExportProcessesService,
-            IDataExportFileAccessor exportFileAccessor,
-            IFilebasedExportedDataAccessor filebasedExportedDataAccessor,
             ISerializer serializer,
-            IExternalFileStorage externalFileStorage,
             IExportSettings exportSettings,
             InterviewDataExportSettings interviewExportSettings,
             IPlainKeyValueStorage<ExportServiceSettings> exportServiceSettings,
@@ -67,9 +61,6 @@ namespace WB.UI.Headquarters.API
             this.fileSystemAccessor = fileSystemAccessor;
             this.dataExportStatusReader = dataExportStatusReader;
             this.dataExportProcessesService = dataExportProcessesService;
-            this.exportFileAccessor = exportFileAccessor;
-            this.exportedFilesAccessor = filebasedExportedDataAccessor;
-            this.externalFileStorage = externalFileStorage;
             this.exportSettings = exportSettings;
             this.interviewExportSettings = interviewExportSettings;
             this.exportServiceSettings = exportServiceSettings;
@@ -77,15 +68,6 @@ namespace WB.UI.Headquarters.API
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.exportFileNameService = exportFileNameService;
             this.serializer = serializer;
-        }
-
-        [HttpGet]
-        [ObserverNotAllowedApi]
-        public HttpResponseMessage Paradata(Guid id, long version, DateTime? from = null, DateTime? to = null)
-        {
-            return CreateFile(this.exportedFilesAccessor.GetArchiveFilePathForExportedData(
-                new QuestionnaireIdentity(id, version), DataExportFormat.Paradata, null, @from?.ToUniversalTime(),
-                to?.ToUniversalTime()));
         }
 
         [HttpGet]
