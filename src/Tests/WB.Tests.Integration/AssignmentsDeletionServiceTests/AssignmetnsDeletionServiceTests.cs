@@ -20,7 +20,7 @@ namespace WB.Tests.Integration.AssignmentsDeletionServiceTests
     public class AssignmetnsDeletionServiceTests 
     {
         private ISessionFactory sessionFactory;
-        private IUnitOfWork plainPostgresTransactionManager;
+        private IUnitOfWork UnitOfWork;
         private string connectionString;
 
         [OneTimeSetUp]
@@ -35,9 +35,14 @@ namespace WB.Tests.Integration.AssignmentsDeletionServiceTests
                     typeof(ReadonlyUserMap),
                     typeof(AssignmentMap),
                     typeof(QuestionnaireLiteViewItemMap),
-                    typeof(InterviewSummaryMap)
+                    typeof(InterviewSummaryMap),
+                    typeof(QuestionAnswerMap),
+                    typeof(InterviewCommentedStatusMap),
+                    typeof(TimeSpanBetweenStatusesMap)
+
                 }, true, "plainstore");
-            plainPostgresTransactionManager = Mock.Of<IUnitOfWork>(x => x.Session == sessionFactory.OpenSession());
+
+            UnitOfWork = IntegrationCreate.UnitOfWork(sessionFactory);
         }
 
         [Test]
@@ -53,11 +58,11 @@ namespace WB.Tests.Integration.AssignmentsDeletionServiceTests
             assignment.SetAnswers(null);
             assignment.SetProtectedVariables(null);
 
-            IPlainStorageAccessor<Assignment> assignments = new PostgresPlainStorageRepository<Assignment>(plainPostgresTransactionManager);
+            IPlainStorageAccessor<Assignment> assignments = new PostgresPlainStorageRepository<Assignment>(UnitOfWork);
 
             assignments.Store(assignment, null);
 
-            var service = new AssignmetnsDeletionService(plainPostgresTransactionManager);
+            var service = new AssignmetnsDeletionService(UnitOfWork);
 
             // act 
             service.Delete(questionnaireIdentity);
@@ -81,7 +86,7 @@ namespace WB.Tests.Integration.AssignmentsDeletionServiceTests
         [OneTimeTearDown]
         public void OneTimeTearDown()
         {
-            this.plainPostgresTransactionManager.Dispose();
+            this.UnitOfWork.Dispose();
             this.sessionFactory.Dispose();
             DatabaseTestInitializer.DropDb(this.connectionString);
         }

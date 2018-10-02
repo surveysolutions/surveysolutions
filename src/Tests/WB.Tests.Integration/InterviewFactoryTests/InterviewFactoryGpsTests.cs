@@ -387,8 +387,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
             PrepareAnswers(allGpsAnswers);
 
             //act
-            var gpsAnswers = factory.GetGpsAnswers(
-                    questionnaireId, gpsQuestionId.Id, 2, 90, -90, 180, -180, supervisorId);
+            var gpsAnswers = factory.GetGpsAnswers(questionnaireId, gpsQuestionId.Id, 2, 90, -90, 180, -180, supervisorId);
 
             //assert
             Assert.IsEmpty(gpsAnswers);
@@ -407,33 +406,30 @@ namespace WB.Tests.Integration.InterviewFactoryTests
 
         protected void PrepareAnswers(ICollection<GpsAnswer> answers)
         {
-                foreach (var gpsAnswer in answers)
+            foreach (var gpsAnswer in answers)
+            {
+                interviewSummaryRepository.Store(new InterviewSummary
                 {
-                    interviewSummaryRepository.Store(new InterviewSummary
-                    {
-                        Status = gpsAnswer.InterviewStatus ?? InterviewStatus.Completed,
-                        TeamLeadId = gpsAnswer.TeamLeadId ?? Guid.Empty,
-                        InterviewId = gpsAnswer.InterviewId,
-                        ReceivedByInterviewer = false,
-                        QuestionnaireIdentity = gpsAnswer.QuestionnaireId.ToString()
-                    }, gpsAnswer.InterviewId.FormatGuid());
-                }
-            
+                    Status = gpsAnswer.InterviewStatus ?? InterviewStatus.Completed,
+                    TeamLeadId = gpsAnswer.TeamLeadId ?? Guid.Empty,
+                    InterviewId = gpsAnswer.InterviewId,
+                    ReceivedByInterviewer = false,
+                    QuestionnaireIdentity = gpsAnswer.QuestionnaireId.ToString()
+                }, gpsAnswer.InterviewId.FormatGuid());
+            }
 
-            
-                foreach (var groupedInterviews in answers.GroupBy(x => x.InterviewId))
+            foreach (var groupedInterviews in answers.GroupBy(x => x.InterviewId))
+            {
+                var interviewState = Create.Entity.InterviewState(groupedInterviews.Key);
+                interviewState.Answers = groupedInterviews.ToDictionary(x => x.QuestionId, x => new InterviewStateAnswer
                 {
-                    var interviewState = Create.Entity.InterviewState(groupedInterviews.Key);
-                    interviewState.Answers = groupedInterviews.ToDictionary(x => x.QuestionId, x => new InterviewStateAnswer
-                    {
-                        Id = x.QuestionId.Id,
-                        RosterVector = x.QuestionId.RosterVector,
-                        AsGps = x.Answer
-                    });
-                    interviewState.Enablement = groupedInterviews.ToDictionary(x => x.QuestionId, x => x.IsEnabled);
-                    factory.Save(interviewState);
-                }
-           
+                    Id = x.QuestionId.Id,
+                    RosterVector = x.QuestionId.RosterVector,
+                    AsGps = x.Answer
+                });
+                interviewState.Enablement = groupedInterviews.ToDictionary(x => x.QuestionId, x => x.IsEnabled);
+                factory.Save(interviewState);
+            }
         }
     }
 }
