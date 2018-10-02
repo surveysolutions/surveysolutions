@@ -28,8 +28,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.MapSynchronizerTest
             var mapService = new Mock<IMapService>();
             mapService.Setup(x => x.GetAvailableMaps()).Returns(new List<MapDescription>()
             {
-                new MapDescription(){MapName = "test"},
-                new MapDescription(){MapName = "test1"}
+                new MapDescription(){MapFileName = "test"},
+                new MapDescription(){MapFileName = "test1"}
             });
 
             mapService.Setup(x => x.DoesMapExist(It.IsAny<string>())).Returns(true);
