@@ -131,5 +131,10 @@ namespace WB.UI.Tester.Infrastructure.Internals.Settings
         }
 
         public EnumeratorApplicationType ApplicationType => EnumeratorApplicationType.WithMaps;
+        public bool Encrypted => false;
+        public void SetEncrypted(bool encrypted)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

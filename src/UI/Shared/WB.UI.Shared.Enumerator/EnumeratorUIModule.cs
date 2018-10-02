@@ -93,6 +93,9 @@ namespace WB.UI.Shared.Enumerator
             registry.BindAsSingleton<IGoogleApiClientFactory, GoogleApiClientFactory>();
             registry.BindAsSingleton<INearbyConnectionClient, NearbyConnectionClient>();
 
+            registry.BindWithConstructorArgument<ISecureStorage, SecureStorage>("password", "Qwerty12345");
+            registry.Bind<IEncryptionService, RsaEncryptionService>();
+
             SetupLoggingFacility(registry);
         }
 
