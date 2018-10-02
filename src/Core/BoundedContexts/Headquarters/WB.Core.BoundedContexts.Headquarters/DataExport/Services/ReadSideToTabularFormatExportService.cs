@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
@@ -20,7 +18,6 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables;
-using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
@@ -34,42 +31,16 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         private readonly ILogger logger;
 
         private readonly IQuestionnaireExportStructureStorage questionnaireExportStructureStorage;
-        private readonly IProductVersion productVersion;
 
         public ReadSideToTabularFormatExportService(IFileSystemAccessor fileSystemAccessor,
             ICsvWriter csvWriter, 
             ILogger logger,
-            IQuestionnaireExportStructureStorage questionnaireExportStructureStorage,
-            IProductVersion productVersion)
+            IQuestionnaireExportStructureStorage questionnaireExportStructureStorage)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.csvWriter = csvWriter;
             this.logger = logger;
             this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
-            this.productVersion = productVersion;
-        }
-
-        public void GenerateDescriptionFile(QuestionnaireIdentity questionnaireIdentity, string basePath, string dataFilesExtension)
-        {
-            QuestionnaireExportStructure questionnaireExportStructure = this.GetQuestionnaireExportStructure(questionnaireIdentity.QuestionnaireId, questionnaireIdentity.Version);
-
-            var descriptionBuilder = new StringBuilder();
-            descriptionBuilder.AppendLine(
-                $"Exported from Survey Solutions Headquarters {this.productVersion} on {DateTime.Today:D}");
-
-            foreach (var level in questionnaireExportStructure.HeaderToLevelMap.Values)
-            {
-                string fileName = $"{level.LevelName}{dataFilesExtension}";
-                var variables = level.HeaderItems.Values.Select(question => question.VariableName);
-
-                descriptionBuilder.AppendLine();
-                descriptionBuilder.AppendLine(fileName);
-                descriptionBuilder.AppendLine(string.Join(", ", variables));
-            }
-
-            this.fileSystemAccessor.WriteAllText(
-                Path.Combine(basePath, "export__readme.txt"),
-                descriptionBuilder.ToString());
         }
 
         public void CreateHeaderStructureForPreloadingForQuestionnaire(QuestionnaireIdentity questionnaireIdentity, string basePath)
@@ -81,12 +52,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                 return;
 
             this.CreateDataSchemaForInterviewsInTabular(questionnaireExportStructure, basePath);
-        }
-
-        public string[] GetTabularDataFilesFromFolder(string basePath)
-        {
-            var filesInDirectory = this.fileSystemAccessor.GetFilesInDirectory(basePath).Where(fileName => fileName.EndsWith("." + this.dataFileExtension)).ToArray();
-            return filesInDirectory;
         }
 
         private void CreateDataSchemaForInterviewsInTabular(QuestionnaireExportStructure questionnaireExportStructure, string basePath)
@@ -119,9 +84,5 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
                 this.csvWriter.WriteData(dataByTheLevelFilePath, new[] { interviewLevelHeader.ToArray() }, ExportFileSettings.DataFileSeparator.ToString());
             }
         }
-
-        private QuestionnaireExportStructure GetQuestionnaireExportStructure(Guid questionnaireId, long questionnaireVersion)
-            => this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(
-                new QuestionnaireIdentity(questionnaireId, questionnaireVersion));
     }
 }

@@ -54,7 +54,6 @@ using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Templates;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
-using WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers.Implementation;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.InterviewerAuditLog;
@@ -268,11 +267,7 @@ namespace WB.Core.BoundedContexts.Headquarters
          
             registry.BindAsSingleton<IDataExportProcessesService, DataExportProcessesService>();
 
-            registry.Bind<ITabularDataToExternalStatPackageExportService, TabularDataToExternalStatPackageExportService>();
             registry.Bind<ITabFileReader, TabFileReader>();
-
-            registry.Bind<TabularFormatParaDataExportProcessHandler>();
-            registry.Bind<BinaryFormatDataExportHandler>();
 
             registry.Bind<ITabularFormatExportService, ReadSideToTabularFormatExportService>();
             registry.Bind<ICsvWriterService, CsvWriterService>();
