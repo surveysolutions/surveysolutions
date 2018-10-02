@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Refit;
 using WB.Services.Export.CsvExport.Exporters;
+using WB.Services.Export.ExportProcessHandlers.Implementation;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Interview.Entities;
 using WB.Services.Export.Questionnaire;
@@ -50,5 +51,8 @@ namespace WB.Services.Export.Services
         
         [Get("/api/export/v1/interview/{interviewId}/audio/{image}")]
         Task<HttpContent> GetInterviewAudioAsync(Guid interviewId, string image);
+
+        [Get("/api/export/v1/interview/batch/history")]
+        Task<List<InterviewHistoryView>> GetInterviewsHistory([Query(CollectionFormat.Multi)] Guid[] id);
     }
 }
