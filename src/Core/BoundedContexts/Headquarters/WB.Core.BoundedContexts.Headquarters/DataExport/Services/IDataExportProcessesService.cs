@@ -5,7 +5,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 {
     public interface IDataExportProcessesService
     {
-        Task AddDataExportAsync(string baseUrl, string apiKey, DataExportProcessDetails details);
+        Task AddDataExportAsync(DataExportProcessDetails details);
 
         DataExportProcessDetails[] GetRunningExportProcesses();
 

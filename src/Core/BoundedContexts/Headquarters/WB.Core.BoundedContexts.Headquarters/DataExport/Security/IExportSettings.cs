@@ -1,7 +1,4 @@
-﻿using System;
-using System.Net.Http;
-
-namespace WB.Core.BoundedContexts.Headquarters.DataExport.Security
+﻿namespace WB.Core.BoundedContexts.Headquarters.DataExport.Security
 {
     public interface IExportSettings
     {

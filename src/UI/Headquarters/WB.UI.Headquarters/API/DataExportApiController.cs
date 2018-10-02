@@ -6,7 +6,6 @@ using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
@@ -15,13 +14,11 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.UI.Headquarters.API.Filters;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.Filters;
@@ -37,11 +34,8 @@ namespace WB.UI.Headquarters.API
         private readonly IDataExportProcessesService dataExportProcessesService;
 
         private readonly IExportFileNameService exportFileNameService;
+        private readonly IExportServiceApi exportServiceApi;
         private readonly IExportSettings exportSettings;
-        private readonly InterviewDataExportSettings interviewExportSettings;
-        private readonly IPlainKeyValueStorage<ExportServiceSettings> exportServiceSettings;
-        private readonly IConfigurationManager configurationManager;
-
 
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly ISerializer serializer;
@@ -52,24 +46,20 @@ namespace WB.UI.Headquarters.API
             IDataExportProcessesService dataExportProcessesService,
             ISerializer serializer,
             IExportSettings exportSettings,
-            InterviewDataExportSettings interviewExportSettings,
-            IPlainKeyValueStorage<ExportServiceSettings> exportServiceSettings,
-            IConfigurationManager configurationManager,
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory, 
-            IExportFileNameService exportFileNameService)
+            IExportFileNameService exportFileNameService,
+            IExportServiceApi exportServiceApi)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.dataExportStatusReader = dataExportStatusReader;
             this.dataExportProcessesService = dataExportProcessesService;
             this.exportSettings = exportSettings;
-            this.interviewExportSettings = interviewExportSettings;
-            this.exportServiceSettings = exportServiceSettings;
-            this.configurationManager = configurationManager;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.exportFileNameService = exportFileNameService;
+            this.exportServiceApi = exportServiceApi;
             this.serializer = serializer;
         }
-
+        
         [HttpGet]
         [ObserverNotAllowedApi]
         [ApiNoCache]
@@ -79,8 +69,6 @@ namespace WB.UI.Headquarters.API
             DateTime? to = null)
         {
             var result = await this.dataExportStatusReader.GetDataArchive(
-                configurationManager.AppSettings["BaseUrl"],
-                this.exportServiceSettings.GetById(AppSetting.ExportServiceStorageKey).Key,
                 new QuestionnaireIdentity(id, version), format, status, from , to);
 
             if (result.Redirect != null)
@@ -108,11 +96,9 @@ namespace WB.UI.Headquarters.API
         public async Task<HttpResponseMessage> DDIMetadata(Guid id, long version)
         {
             var questionnaireIdentity = new QuestionnaireIdentity(id, version);
-            var serviceApi = Refit.RestService.For<IExportServiceApi>(interviewExportSettings.ExportServiceUrl);
-            var result = await serviceApi.GetDdiArchive(questionnaireIdentity.ToString(),
-                this.exportSettings.GetPassword(),
-                this.exportServiceSettings.GetById(AppSetting.ExportServiceStorageKey).Key,
-                this.configurationManager.AppSettings["BaseUrl"]);
+            
+            var result = await exportServiceApi.GetDdiArchive(questionnaireIdentity.ToString(),
+                this.exportSettings.GetPassword());
 
             var fileName = this.exportFileNameService.GetFileNameForDdiByQuestionnaire(questionnaireIdentity);
 
@@ -139,8 +125,7 @@ namespace WB.UI.Headquarters.API
 
             try
             {
-                this.dataExportProcessesService.AddDataExportAsync(configurationManager.AppSettings["BaseUrl"],
-                    this.exportServiceSettings.GetById(AppSetting.ExportServiceStorageKey).Key,
+                this.dataExportProcessesService.AddDataExportAsync(
                     new DataExportProcessDetails(format, questionnaireIdentity, questionnaireBrowseItem.Title)
                 {
                     FromDate = @from?.ToUniversalTime(),
@@ -162,7 +147,7 @@ namespace WB.UI.Headquarters.API
         {
             try
             {
-                this.dataExportProcessesService.DeleteDataExport(id);
+                
             }
             catch (Exception)
             {
@@ -175,29 +160,10 @@ namespace WB.UI.Headquarters.API
         [HttpPost]
         [ObserverNotAllowedApi]
         public Task<DataExportStatusView> GetExportStatus(Guid id, long version, InterviewStatus? status, DateTime? from = null, DateTime? to = null)
-            => this.dataExportStatusReader.GetDataExportStatusForQuestionnaireAsync(
-                configurationManager.AppSettings["BaseUrl"],
-                this.exportServiceSettings.GetById(AppSetting.ExportServiceStorageKey).Key, 
-                new QuestionnaireIdentity(id, version), 
+            => this.dataExportStatusReader.GetDataExportStatusForQuestionnaireAsync(new QuestionnaireIdentity(id, version), 
                 status, 
                 fromDate: @from?.ToUniversalTime(), 
                 toDate: to?.ToUniversalTime());
-
-        private HttpResponseMessage CreateFile(string filePath)
-        {
-            if (!fileSystemAccessor.IsFileExists(filePath))
-                throw new HttpException(404, @"file is absent");
-
-            Stream exportZipStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
-            var result = new ProgressiveDownload(this.Request).ResultMessage(exportZipStream, @"application/zip");
-            
-            result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue(@"attachment")
-            {
-                FileNameStar = fileSystemAccessor.GetFileName(filePath)
-            };
-
-            return result;
-        }
 
         [HttpPost]
         [AllowAnonymous]
@@ -211,8 +177,7 @@ namespace WB.UI.Headquarters.API
             if (questionnaireBrowseItem == null)
                 throw new HttpException(404, @"Questionnaire not found");
 
-            await this.dataExportProcessesService.AddDataExportAsync(configurationManager.AppSettings["BaseUrl"],
-                this.exportServiceSettings.GetById(AppSetting.ExportServiceStorageKey).Key, 
+            await this.dataExportProcessesService.AddDataExportAsync(
                 new DataExportProcessDetails(DataExportFormat.Binary, state.QuestionnaireIdentity, questionnaireBrowseItem.Title)
             {
                 AccessToken = model.Access_token,

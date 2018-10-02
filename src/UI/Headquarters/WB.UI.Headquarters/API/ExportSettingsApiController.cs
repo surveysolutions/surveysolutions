@@ -4,14 +4,12 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http;
 using Resources;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Models;
-using WB.UI.Shared.Web.Configuration;
 
 namespace WB.UI.Headquarters.API
 {
@@ -22,19 +20,18 @@ namespace WB.UI.Headquarters.API
         private readonly IExportSettings exportSettings;
         private readonly IDataExportProcessesService dataExportProcessesService;
         private readonly IAuditLog auditLog;
-        private readonly IConfigurationManager configurationManager;
+        private readonly IExportServiceApi exportServiceApi;
 
         public ExportSettingsApiController(ILogger logger, 
             IExportSettings exportSettings,
             IDataExportProcessesService dataExportProcessesService,
             IAuditLog auditLog,
-            IConfigurationManager configurationManager)
-
+            IExportServiceApi exportServiceApi)
         {
             this.exportSettings = exportSettings;
             this.dataExportProcessesService = dataExportProcessesService;
             this.auditLog = auditLog;
-            this.configurationManager = configurationManager;
+            this.exportServiceApi = exportServiceApi;
             this.logger = logger;
         }
 
@@ -42,7 +39,6 @@ namespace WB.UI.Headquarters.API
         public ExportSettingsModel ExportSettings()
         {
             ExportSettingsModel model = new ExportSettingsModel(this.exportSettings.EncryptionEnforced(), this.exportSettings.GetPassword());
-
             return model;
         }
 
@@ -86,11 +82,9 @@ namespace WB.UI.Headquarters.API
             return Request.CreateResponse(newExportSettingsModel);
         }
 
-        private async Task ClearExportData()
+        private Task ClearExportData()
         {
-            IExportServiceApi api =
-                Refit.RestService.For<IExportServiceApi>(this.exportSettings.ExportServiceBaseUrl);
-            await api.DeleteAll(this.exportSettings.ApiKey, configurationManager.AppSettings["BaseUrl"]);
+            return exportServiceApi.DeleteAll();
         }
 
         private bool IsExistsDataExportInProgress()
