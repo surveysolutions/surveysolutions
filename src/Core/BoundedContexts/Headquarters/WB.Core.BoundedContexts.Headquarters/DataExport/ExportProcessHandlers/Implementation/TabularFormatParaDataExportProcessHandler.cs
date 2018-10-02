@@ -43,6 +43,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers.
 
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly ICsvWriter csvWriter;
+        private readonly IInterviewsToExportViewFactory interviewsToExportViewFactory;
         private readonly ITabularFormatExportService tabularFormatExportService;
         private readonly ILogger logger;
 
@@ -59,6 +60,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers.
             IFilebasedExportedDataAccessor dataAccessor,
             IDataExportFileAccessor exportFileAccessor,
             ICsvWriter csvWriter,
+            IInterviewsToExportViewFactory interviewsToExportViewFactory,
             ITabularFormatExportService tabularFormatExportService,
             ILogger logger) : base(fs, dataAccessor, interviewDataExportSettings, dataExportProcessesService, exportFileAccessor)
         {
@@ -70,6 +72,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers.
             this.plainTransactionManagerProvider = plainTransactionManagerProvider;
             this.questionnaireStorage = questionnaireStorage;
             this.csvWriter = csvWriter;
+            this.interviewsToExportViewFactory = interviewsToExportViewFactory;
             this.tabularFormatExportService = tabularFormatExportService;
             this.logger = logger;
         }
@@ -79,8 +82,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers.
         protected override void ExportDataIntoDirectory(ExportSettings settings, IProgress<int> progress,
             CancellationToken cancellationToken)
         {
-            var interviewsToExport = this.tabularFormatExportService.GetInterviewsToExport(
-                settings.QuestionnaireId, settings.InterviewStatus, cancellationToken, settings.FromDate,
+            var interviewsToExport = this.interviewsToExportViewFactory.GetInterviewsToExport(
+                settings.QuestionnaireId, settings.InterviewStatus, settings.FromDate,
                 settings.ToDate).ToList();
 
             var paradataReader = new InMemoryReadSideRepositoryAccessor<InterviewHistoryView>();

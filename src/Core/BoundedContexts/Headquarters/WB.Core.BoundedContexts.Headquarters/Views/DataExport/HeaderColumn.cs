@@ -2,7 +2,6 @@
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
 {
-    [Obsolete("KP-11815")]
     public class HeaderColumn
     {
         public string Name { set; get; }
@@ -10,7 +9,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
         public ExportValueType ExportType { set;  get;  }
     }
 
-    [Obsolete("KP-11815")]
     public enum ExportValueType
     {
         Unknown = 0,
