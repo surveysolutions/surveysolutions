@@ -87,7 +87,7 @@ namespace WB.Services.Export.Host.Controllers
         public async Task<FileStreamResult> GetDdiFile(
             string questionnaireId,
             string archivePassword,
-            [FromHeader(Name = "Referer")]string tenantBaseUrl)
+            [FromHeader(Name = "Referer")] string tenantBaseUrl)
         {
             var tenant = new TenantInfo(tenantBaseUrl, apiKey);
             var pathToFile = await this.ddiDdiMetadataAccessor.GetFilePathToDDIMetadata(tenant, new QuestionnaireId(questionnaireId),
