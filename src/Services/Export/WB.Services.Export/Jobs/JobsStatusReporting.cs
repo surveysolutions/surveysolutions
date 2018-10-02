@@ -152,13 +152,11 @@ namespace WB.Services.Export.Jobs
             RunningDataExportProcessView[] runningProcess,
             RunningDataExportProcessView[] allProcesses)
         {
-            DataExportView dataExportView = null;
-            dataExportView = new DataExportView
+            DataExportView dataExportView = new DataExportView
             {
                 DataExportFormat = dataFormat,
                 DataExportType = dataType,
-                StatusOfLatestExportProcess =
-                    GetStatusOfExportProcess(dataType, dataFormat, questionnaireIdentity, allProcesses)
+                StatusOfLatestExportProcess = GetStatusOfExportProcess(dataType, dataFormat, questionnaireIdentity, allProcesses)
             };
 
             if (dataFormat == DataExportFormat.Binary &&
@@ -178,7 +176,7 @@ namespace WB.Services.Export.Jobs
                     p.InterviewStatus == interviewStatus &&
                     p.FromDate == fromDate &&
                     p.ToDate == toDate &&
-                    (p.QuestionnaireId == null || p.QuestionnaireId.Equals(questionnaireIdentity)));
+                    (p.QuestionnaireId == null || p.QuestionnaireId == questionnaireIdentity.Id));
 
                 dataExportView.CanRefreshBeRequested = process == null;
                 dataExportView.DataExportProcessId = process?.DataExportProcessId;
@@ -215,9 +213,13 @@ namespace WB.Services.Export.Jobs
 
         private static DataExportStatus GetStatusOfExportProcess(DataExportType dataType, DataExportFormat dataFormat,
             QuestionnaireId questionnaireIdentity, RunningDataExportProcessView[] allProcesses)
-            => allProcesses.FirstOrDefault(x =>
-                   x.QuestionnaireId == null ||
-                   x.QuestionnaireId.Equals(questionnaireIdentity) && x.Format == dataFormat &&
-                   x.Type == dataType)?.ProcessStatus ?? DataExportStatus.NotStarted;
+        {
+            var matchingProcess = allProcesses.FirstOrDefault(x =>
+                (x.QuestionnaireId == null || x.QuestionnaireId == questionnaireIdentity.ToString())
+                && x.Format == dataFormat
+                && x.Type == dataType);
+
+            return matchingProcess?.ProcessStatus ?? DataExportStatus.NotStarted;
+        }
     }
 }
