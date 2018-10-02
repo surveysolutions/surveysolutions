@@ -20,6 +20,12 @@ namespace WB.Services.Export.ExportProcessHandlers
         public string ExportTempDirectory { get; set; }
         public TenantInfo Tenant { get; set; }
         public string ArchiveName { get; set; }
+
+        public override string ToString()
+        {
+            return
+                $"{Tenant.Id} - {ArchiveName} {QuestionnaireId} {InterviewStatus?.ToString() ?? "AllStatus"} {FromDate}-{ToDate}";
+        }
     }
 
     internal interface ITempPathProvider
