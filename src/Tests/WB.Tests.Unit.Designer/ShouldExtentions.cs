@@ -5,7 +5,6 @@ using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration.Model;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
-using WB.Core.Infrastructure.EventBus;
 
 namespace WB.Tests.Unit.Designer
 {
@@ -34,38 +33,6 @@ namespace WB.Tests.Unit.Designer
             question.StateName.Should().Be(generatedStateName);
             question.RosterScopeName.Should().Be(rosterScopeName);
             question.ConditionMethodName.Should().Be(generatedConditionsMethodName);
-        }
-
-        public static void ShouldContainEvent<TEvent>(this EventContext eventContext, Func<TEvent, bool> condition = null)
-            where TEvent : IEvent
-        {
-            if (condition == null)
-            {
-                eventContext.Events.Should().Contain(@event
-                    => @event.Payload is TEvent);
-            }
-            else
-            {
-                eventContext.Events.Should().Contain(@event
-                    => @event.Payload is TEvent
-                        && condition.Invoke((TEvent)@event.Payload));
-            }
-        }
-
-        public static void ShouldNotContainEvent<TEvent>(this EventContext eventContext, Func<TEvent, bool> condition = null)
-            where TEvent : IEvent
-        {
-            if (condition == null)
-            {
-                eventContext.Events.Should().NotContain(@event
-                    => @event.Payload is TEvent);
-            }
-            else
-            {
-                eventContext.Events.Should().NotContain(@event
-                    => @event.Payload is TEvent
-                        && condition.Invoke((TEvent)@event.Payload));
-            }
         }
 
         public static void ShouldContainWarning(this IEnumerable<QuestionnaireVerificationMessage> messages, string code, string message = null)

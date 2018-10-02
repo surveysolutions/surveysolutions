@@ -13,7 +13,7 @@ namespace Main.Core.Documents
 {
     public class QuestionnaireDocument : IQuestionnaireDocument, IView
     {
-        //is used for deserrialization
+        //is used for deserialization
         public QuestionnaireDocument(List<IComposite> children = null)
         {
             this.CreationDate = DateTime.Now;

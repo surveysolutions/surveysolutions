@@ -1870,7 +1870,7 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to User is no longer belongs to Supervisor {0} team. Please contact Your Headquarters for details..
+        ///   Looks up a localized string similar to User is no longer belongs to Supervisor team. Please contact Your Headquarters for details..
         /// </summary>
         public static string Synchronization_UserDoNotBelongToTeam {
             get {

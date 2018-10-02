@@ -141,5 +141,126 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.TranslationServiceTest
                                                                       x.Type == TranslationType.Instruction)).Value, Is.EqualTo("<b>Instruction</b>"));
 
         }
+
+        [Test]
+        public void when_storing_translations_from_excel_file_without_variable_column()
+        {
+            //assert
+            Guid questionnaireId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            Guid translationId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+
+            Guid sectionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+
+            byte[] fileStream = GetEmbendedFileContent("testTranslationsWithoutVariableColumn.xlsx");
+
+            var plainStorageAccessor = new TestPlainStorage<TranslationInstance>();
+
+            var questionnaire = Create.QuestionnaireDocument(questionnaireId, children: new IComposite[]
+            {
+                Create.Group(groupId: sectionId, title:"Section Text")
+            });
+
+            var questionnaires = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
+            questionnaires.SetReturnsDefault(questionnaire);
+
+            var service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object);
+
+            //act
+            service.Store(questionnaireId, translationId, fileStream);
+
+            //assert
+            Assert.That(plainStorageAccessor.Query(_ => _.Count()).Equals(1));
+
+            var translationInstance = plainStorageAccessor.Query(_ => _.Single());
+            Assert.That(translationInstance.Value, Is.EqualTo("title"));
+            Assert.That(translationInstance.QuestionnaireEntityId, Is.EqualTo(sectionId));
+            Assert.That(translationInstance.Type, Is.EqualTo(TranslationType.Title));
+            Assert.That(translationInstance.QuestionnaireId, Is.EqualTo(questionnaireId));
+        }
+
+        [Test]
+        public void when_storing_translations_from_excel_file_with_columns_in_random_order()
+        {
+            //assert
+            Guid questionnaireId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            Guid translationId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+
+            Guid sectionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+
+            byte[] fileStream = GetEmbendedFileContent("testTranslationsWithRandomOrderColumns.xlsx");
+
+            var plainStorageAccessor = new TestPlainStorage<TranslationInstance>();
+
+            var questionnaire = Create.QuestionnaireDocument(questionnaireId, children: new IComposite[]
+            {
+                Create.Group(groupId: sectionId, title:"Section Text")
+            });
+
+            var questionnaires = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
+            questionnaires.SetReturnsDefault(questionnaire);
+
+            var service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object);
+
+            //act
+            service.Store(questionnaireId, translationId, fileStream);
+
+            //assert
+            Assert.That(plainStorageAccessor.Query(_ => _.Count()).Equals(1));
+
+            var translationInstance = plainStorageAccessor.Query(_ => _.Single());
+            Assert.That(translationInstance.Value, Is.EqualTo("title"));
+            Assert.That(translationInstance.QuestionnaireEntityId, Is.EqualTo(sectionId));
+            Assert.That(translationInstance.Type, Is.EqualTo(TranslationType.Title));
+            Assert.That(translationInstance.QuestionnaireId, Is.EqualTo(questionnaireId));
+        }
+
+
+        [Test]
+        public void when_verifying_translations_from_excel_file_without_entity_id_column()
+        {
+            //assert
+            Guid questionnaireId = Guid.Parse("BBBBBBBBBBBBBBBBBBBBBBBBBBBBBBBB");
+            Guid translationId = Guid.Parse("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+
+            Guid sectionId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
+
+            byte[] fileStream = GetEmbendedFileContent("testTranslationsWithoutEntityIdColumn.xlsx");
+
+            var plainStorageAccessor = new TestPlainStorage<TranslationInstance>();
+
+            var questionnaire = Create.QuestionnaireDocument(questionnaireId, children: new IComposite[]
+            {
+                Create.Group(groupId: sectionId, title:"Section Text")
+            });
+
+            var questionnaires = new Mock<IPlainKeyValueStorage<QuestionnaireDocument>>();
+            questionnaires.SetReturnsDefault(questionnaire);
+
+            var service = Create.TranslationsService(plainStorageAccessor, questionnaires.Object);
+
+            //act
+            var exception = Assert.Throws<InvalidExcelFileException>(() => service.Store(questionnaireId, translationId, fileStream));
+
+            //assert
+            Assert.That(exception, Is.Not.Null);
+
+            Assert.That(exception.FoundErrors.Count, Is.EqualTo(1));
+
+            var validationError = exception.FoundErrors.Single();
+            Assert.That(validationError.Message.Contains(TranslationExcelOptions.EntityIdColumnName), Is.True);
+        }
+
+        private byte[] GetEmbendedFileContent(string fileName)
+        {
+            var testType = typeof(TranslationsServiceTests);
+            var readResourceFile = testType.Namespace + "." + fileName;
+            var manifestResourceStream = testType.Assembly.GetManifestResourceStream(readResourceFile);
+
+            using (MemoryStream memoryStream = new MemoryStream())
+            {
+                manifestResourceStream.CopyTo(memoryStream);
+                return memoryStream.ToArray();
+            }
+        }
     }
 }

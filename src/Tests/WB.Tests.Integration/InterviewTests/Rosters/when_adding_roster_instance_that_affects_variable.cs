@@ -29,7 +29,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
 
         public void BecauseOf() => result = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
         {
-            Setup.MockedServiceLocator();
+            SetUp.MockedServiceLocator();
 
             var answeredQuestionId = Guid.Parse("11111111111111111111111111111111");
             var listRosterId = Guid.Parse("22222222222222222222222222222222");

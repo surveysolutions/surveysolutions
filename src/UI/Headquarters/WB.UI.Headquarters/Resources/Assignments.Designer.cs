@@ -349,7 +349,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Show only assignments that were or were not received by tablets.
+        ///   Looks up a localized string similar to Show only assignments that were or were not received by tablets..
         /// </summary>
         public static string Tooltip_Filter_Received {
             get {

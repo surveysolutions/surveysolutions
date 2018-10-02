@@ -191,7 +191,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
             if (!string.IsNullOrWhiteSpace(input.SearchBy))
             {
-                items = items.Where(x => x.Key.StartsWith(input.SearchBy) || x.ClientKey.StartsWith(input.SearchBy) || x.AnswersToFeaturedQuestions.Any(a => a.Answer.StartsWith(input.SearchBy)));
+                var searchLowerCase = input.SearchBy.ToLower();
+                items = items.Where(x => x.Key.StartsWith(searchLowerCase) || 
+                                         x.ClientKey.StartsWith(searchLowerCase) || 
+                                         x.AnswersToFeaturedQuestions.Any(a => a.Answer.ToLower().StartsWith(searchLowerCase)));
             }
             
             if (input.Statuses != null)
@@ -207,6 +210,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             if (input.ResponsibleId.HasValue)
             {
                 items = items.Where(x => x.ResponsibleId == input.ResponsibleId.Value);
+            }
+
+            if (input.TeamId.HasValue)
+            {
+                items = items.Where(x => x.ResponsibleId == input.TeamId || x.TeamLeadId == input.TeamId);
             }
 
             if (input.QuestionnaireId.HasValue)

@@ -27,7 +27,7 @@ namespace WB.Tests.Integration.InterviewTests.Substitution
         {
             var results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
-                Setup.MockedServiceLocator();
+                SetUp.MockedServiceLocator();
 
                 var questionId = Id.g1;
 

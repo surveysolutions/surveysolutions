@@ -30,6 +30,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         public readonly DoExportFileHeader[] ActionFileColumns =
         {
             new DoExportFileHeader("interview__id", "Unique 32-character long identifier of the interview"), 
+            new DoExportFileHeader("interview__key", "Identifier of the interview"), 
             new DoExportFileHeader("Action", "Type of action taken"), 
             new DoExportFileHeader("Originator", "Login name of the person performing the action"), 
             new DoExportFileHeader("Role", "System role of the person performing the action"), 
@@ -117,10 +118,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
               this.interviewStatuses.Query(_ => _
                     .Where(queryActions)
                     .SelectMany(interviewWithStatusHistory => interviewWithStatusHistory.InterviewCommentedStatuses,
-                               (interview, status) => new { interview.InterviewId, StatusHistory = status })
+                               (interview, status) => new { interview.InterviewId, interview.Key, StatusHistory = status })
                     .Select(i => new 
                     {
                         i.InterviewId,
+                        i.Key,
                         i.StatusHistory.Status,
                         i.StatusHistory.StatusChangeOriginatorName,
                         i.StatusHistory.StatusChangeOriginatorRole,
@@ -139,6 +141,7 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
                 var resultRow = new List<string>
                 {
                     interview.InterviewId.FormatGuid(),
+                    interview.Key,
                     interview.Status.ToString(),
                     interview.StatusChangeOriginatorName,
                     this.GetUserRole(interview.StatusChangeOriginatorRole),

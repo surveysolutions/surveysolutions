@@ -572,7 +572,7 @@ namespace WB.Tests.Unit.Designer
             };
         }
 
-        public static Questionnaire Questionnaire(IExpressionProcessor expressionProcessor = null, IQuestionnireHistoryVersionsService historyVersionsService = null)
+        public static Questionnaire Questionnaire(IExpressionProcessor expressionProcessor = null, IQuestionnaireHistoryVersionsService historyVersionsService = null)
         {
             return new Questionnaire(
                 Mock.Of<ILogger>(),
@@ -580,7 +580,7 @@ namespace WB.Tests.Unit.Designer
                 Mock.Of<ILookupTableService>(),
                 Mock.Of<IAttachmentService>(),
                 Mock.Of<ITranslationsService>(),
-                historyVersionsService ?? Mock.Of<IQuestionnireHistoryVersionsService>());
+                historyVersionsService ?? Mock.Of<IQuestionnaireHistoryVersionsService>());
         }
 
 
@@ -600,6 +600,7 @@ namespace WB.Tests.Unit.Designer
             QuestionnaireItemType? targetType = null,
             string resultingQuestionnaireDocument = null,
             int? sequence = null,
+            string diffWithPreviousVersion = null,
             params QuestionnaireChangeReference[] reference)
         {
             return new QuestionnaireChangeRecord()
@@ -611,7 +612,8 @@ namespace WB.Tests.Unit.Designer
                 TargetItemType = targetType ?? QuestionnaireItemType.Section,
                 References = reference.ToHashSet(),
                 Sequence = sequence ?? 1,
-                ResultingQuestionnaireDocument = resultingQuestionnaireDocument
+                ResultingQuestionnaireDocument = resultingQuestionnaireDocument,
+                Patch = diffWithPreviousVersion
             };
         }
 
@@ -1216,13 +1218,23 @@ namespace WB.Tests.Unit.Designer
                 attachmentMetaStorage: attachmentMetaStorage);
         }
 
-        public static QuestionnireHistoryVersionsService QuestionnireHistoryVersionsService(
+        public static QuestionnaireHistoryVersionsService QuestionnireHistoryVersionsService(
             IPlainStorageAccessor<QuestionnaireChangeRecord> questionnaireChangeItemStorage = null,
-            IEntitySerializer<QuestionnaireDocument> entitySerializer = null)
+            IEntitySerializer<QuestionnaireDocument> entitySerializer = null,
+            IPatchApplier patchApplier = null,
+            QuestionnaireHistorySettings questionnaireHistorySettings = null)
         {
-            return new QuestionnireHistoryVersionsService(
+            return new QuestionnaireHistoryVersionsService(
                 questionnaireChangeItemStorage ?? Mock.Of<IPlainStorageAccessor<QuestionnaireChangeRecord>>(),
-                entitySerializer ?? new EntitySerializer<QuestionnaireDocument>());
+                entitySerializer ?? new EntitySerializer<QuestionnaireDocument>(),
+                questionnaireHistorySettings ?? new QuestionnaireHistorySettings(15), 
+                patchApplier ?? Create.PatchApplier(),
+                Create.PatchGenerator());
+        }
+
+        private static IPatchApplier PatchApplier()
+        {
+            return new JsonPatchService(new ZipArchiveUtils());
         }
 
         public static ITopologicalSorter<T> TopologicalSorter<T>()
@@ -1331,7 +1343,8 @@ namespace WB.Tests.Unit.Designer
         public static QuestionnaireListView QuestionnaireListView(params QuestionnaireListViewItem[] items)
             => new QuestionnaireListView(1, 10, items.Length, items, string.Empty);
 
-        public static HistoryPostProcessor HistoryPostProcessor() => new HistoryPostProcessor();
+        public static HistoryPostProcessor HistoryPostProcessor() => 
+            new HistoryPostProcessor();
 
         public static CustomWebApiAuthorizeFilter CustomWebApiAuthorizeFilter()
         {
@@ -1417,6 +1430,11 @@ namespace WB.Tests.Unit.Designer
         public static IAccountRepository AccountRepository()
         {
             return Mock.Of<IAccountRepository>();
+        }
+
+        public static IPatchGenerator PatchGenerator()
+        {
+            return new JsonPatchService(new ZipArchiveUtils());
         }
     }
 }

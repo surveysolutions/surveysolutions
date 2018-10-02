@@ -1,4 +1,9 @@
 ![Link Text](http://build.mysurvey.solutions/app/rest/builds/buildType:`(id:CI)`/statusIcon)
+
+# 18.10
+- Manual step is required for Designer release. In order to shrink questionnaire history tool should be used
+> ShrinkQuestionnaireHistory "%Connection string to database"
+
 # 18.08
 - For all HQs should be cleared PreLoadingTemplates folder
 # 5.27
