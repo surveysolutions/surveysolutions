@@ -9,7 +9,7 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 
 namespace WB.UI.Shared.Web.Modules.Filters
 {
-    public class WebApiAuthorizationFilterWhenActionMethodHasAttribute<TFilter, TAttribute> : IAutofacAuthorizationFilter, IFilter
+    public class WebApiAuthorizationFilterWhenActionMethodHasAttribute<TFilter, TAttribute> : IAutofacAuthorizationFilter
         where TFilter : System.Web.Http.Filters.IAuthorizationFilter
         where TAttribute : Attribute
     {
@@ -18,35 +18,13 @@ namespace WB.UI.Shared.Web.Modules.Filters
             this.filter = filter;
         }
 
-        private bool shouldExecute = false;
         private readonly TFilter filter;
-
-
-        public Task OnActionExecutingAsync(HttpActionContext actionContext, CancellationToken cancellationToken)
-        {
-            var actionAttributes = actionContext.ActionDescriptor.GetCustomAttributes<TAttribute>();
-            var controllerAttributes = actionContext.ControllerContext.ControllerDescriptor.GetCustomAttributes<TAttribute>();
-            shouldExecute = (actionAttributes != null && actionAttributes.Count > 0)
-                            || (controllerAttributes != null && controllerAttributes.Count > 0);
-
-            if (shouldExecute)
-            {
-                return filter.ExecuteAuthorizationFilterAsync(actionContext, cancellationToken, () => null);
-            }
-
-            return Task.CompletedTask;
-        }
-
-        public Task OnActionExecutedAsync(HttpActionExecutedContext actionExecutedContext, CancellationToken cancellationToken)
-        {
-            return Task.CompletedTask;
-        }
 
         public Task OnAuthorizationAsync(HttpActionContext actionContext, CancellationToken cancellationToken)
         {
             var actionAttributes = actionContext.ActionDescriptor.GetCustomAttributes<TAttribute>();
             var controllerAttributes = actionContext.ControllerContext.ControllerDescriptor.GetCustomAttributes<TAttribute>();
-            shouldExecute = (actionAttributes != null && actionAttributes.Count > 0)
+            bool shouldExecute = (actionAttributes != null && actionAttributes.Count > 0)
                             || (controllerAttributes != null && controllerAttributes.Count > 0);
 
             if (shouldExecute)
@@ -55,6 +33,32 @@ namespace WB.UI.Shared.Web.Modules.Filters
             }
 
             return Task.CompletedTask;
+        }
+    }
+
+
+    public class WebApiAuthorizationFilterWhenActionMethodHasAttribute: IAuthorizationFilter
+    {
+        public WebApiAuthorizationFilterWhenActionMethodHasAttribute(IAuthorizationFilter filter, Type attributeType)
+        {
+            this.filter = filter;
+            this.attributeType = attributeType;
+        }
+
+        private readonly IAuthorizationFilter filter;
+        private readonly Type attributeType;
+
+        public Task<HttpResponseMessage> ExecuteAuthorizationFilterAsync(HttpActionContext actionContext, CancellationToken cancellationToken,
+            Func<Task<HttpResponseMessage>> continuation)
+        {
+            var shouldExecute = FilterExtensions.HasActionOrControllerMarkerAttribute(actionContext.ActionDescriptor, attributeType);
+
+            if (shouldExecute)
+            {
+                return filter.ExecuteAuthorizationFilterAsync(actionContext, cancellationToken, continuation);
+            }
+
+            return continuation();
         }
 
         public bool AllowMultiple => true;

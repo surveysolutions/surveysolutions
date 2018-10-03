@@ -37,7 +37,7 @@ namespace WB.UI.Designer.App_Start
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
-            System.Web.Http.GlobalConfiguration.Configuration.Filters.Add(new WebApiAuthorizationFilterWhenActionMethodHasAttribute<TokenValidationAuthorizationFilter, ApiValidationAntiForgeryTokenAttribute>(serviceLocator.GetInstance<TokenValidationAuthorizationFilter>()));
+            System.Web.Http.GlobalConfiguration.Configuration.Filters.Add(new WebApiAuthorizationFilterWhenActionMethodHasAttribute(serviceLocator.GetInstance<TokenValidationAuthorizationFilter>(), typeof(ApiValidationAntiForgeryTokenAttribute)));
 
             return Task.CompletedTask;
         }
