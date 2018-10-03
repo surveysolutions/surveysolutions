@@ -22,13 +22,10 @@ namespace WB.Tests.Integration.OldschoolChartStatisticsDataProviderTests
         {
             var sessionFactory = IntegrationCreate.SessionFactory(ConnectionStringBuilder.ConnectionString,
                 new[] { typeof(CumulativeReportStatusChangeMap) }, true);
-            postgresTransactionManager = Mock.Of<IUnitOfWork>(x => x.Session == sessionFactory.OpenSession());
-
-            pgSqlConnection = new NpgsqlConnection(ConnectionStringBuilder.ConnectionString);
-            pgSqlConnection.Open();
-
+            UnitOfWork = Mock.Of<IUnitOfWork>(x => x.Session == sessionFactory.OpenSession());
+            
             cumulativeReportStatusChangeStorage =
-                new PostgreReadSideStorage<CumulativeReportStatusChange>(postgresTransactionManager,
+                new PostgreReadSideStorage<CumulativeReportStatusChange>(UnitOfWork,
                     Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
 
             var cumulativeReportStatusChangeBegin =
@@ -43,42 +40,41 @@ namespace WB.Tests.Integration.OldschoolChartStatisticsDataProviderTests
                 cumulativeReportStatusChangeInBetween.EntryId);
             cumulativeReportStatusChangeStorage.Store(cumulativeReportStatusChangeEnd,
                 cumulativeReportStatusChangeEnd.EntryId);
-            ;
 
-            oldschoolChartStatisticsDataProvider =
-                new OldschoolChartStatisticsDataProvider(cumulativeReportStatusChangeStorage);
+            oldschoolChartStatisticsDataProvider = new OldschoolChartStatisticsDataProvider(cumulativeReportStatusChangeStorage);
             BecauseOf();
         }
 
         [OneTimeTearDown]
         public void TearDown()
         {
-            pgSqlConnection.Close();
+            UnitOfWork.Dispose();
         }
 
         private void BecauseOf() =>
-                result =
-                    oldschoolChartStatisticsDataProvider.GetStatisticsInOldFormat(questionnaireId, questionnaireVersion);
+                result = oldschoolChartStatisticsDataProvider.GetStatisticsInOldFormat(questionnaireId, questionnaireVersion);
 
         [NUnit.Framework.Test] public void should_return_32_days_timespan() => result.StatisticsByDate.Count.Should().Be(32);
 
 
-        [NUnit.Framework.Test] public void should_return_1_completed_interview_on_first_day() => result.StatisticsByDate[beginDate].CompletedCount.Should().Be(1);
+        [NUnit.Framework.Test] public void should_return_1_completed_interview_on_first_day() => 
+            result.StatisticsByDate[beginDate].CompletedCount.Should().Be(1);
 
-        [NUnit.Framework.Test] public void should_return_2_completed_interview_on_april_first() => result.StatisticsByDate[dateInBetween].CompletedCount.Should().Be(2);
+        [NUnit.Framework.Test] public void should_return_2_completed_interview_on_april_first() => 
+            result.StatisticsByDate[dateInBetween].CompletedCount.Should().Be(2);
 
-        [NUnit.Framework.Test] public void should_return_3_completed_interview_on_last_day() => result.StatisticsByDate[endDate].CompletedCount.Should().Be(3);
+        [NUnit.Framework.Test] public void should_return_3_completed_interview_on_last_day() => 
+            result.StatisticsByDate[endDate].CompletedCount.Should().Be(3);
 
 
         private static OldschoolChartStatisticsDataProvider oldschoolChartStatisticsDataProvider;
         private static StatisticsGroupedByDateAndTemplate result;
-        private static IUnitOfWork postgresTransactionManager;
+        private static IUnitOfWork UnitOfWork;
         private static Guid questionnaireId = Guid.NewGuid();
         private static long questionnaireVersion = 1;
         private static DateTime beginDate = new DateTime(2016, 3, 18);
         private static DateTime dateInBetween = new DateTime(2016, 4, 1);
         private static DateTime endDate = new DateTime(2016, 4, 18);
-        private static NpgsqlConnection pgSqlConnection;
         private static PostgreReadSideStorage<CumulativeReportStatusChange> cumulativeReportStatusChangeStorage;
     }
 }

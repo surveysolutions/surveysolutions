@@ -104,8 +104,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
                 if (!isAssignmentImportIsGoing)
                 {
                     this.DeleteAssignments(new QuestionnaireIdentity(questionnaireId, questionnaireVersion));
-
-                        this.commandService.Execute(new DeleteQuestionnaire(questionnaireId, questionnaireVersion, userId));
+                    this.commandService.Execute(new DeleteQuestionnaire(questionnaireId, questionnaireVersion, userId));
                 }
             }
             catch (Exception e)

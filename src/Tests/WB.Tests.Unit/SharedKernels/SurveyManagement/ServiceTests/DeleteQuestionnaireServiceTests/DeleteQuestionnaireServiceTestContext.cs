@@ -23,7 +23,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
            ICommandService commandService = null, 
            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemStorage = null, 
            IQuestionnaireStorage questionnaireStorage = null,
-           IAssignmentsImportService interviewImportService = null)
+           IAssignmentsImportService interviewImportService = null,
+            IPlainKeyValueStorage<QuestionnaireLookupTable> lookupStorage = null)
         {
             IInterviewsToDeleteFactory Factory() => interviewsToDeleteFactory ?? Mock.Of<IInterviewsToDeleteFactory>();
 
@@ -35,10 +36,10 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
                     Mock.Of<ITranslationManagementService>(),
                     interviewImportService ?? Mock.Of<IAssignmentsImportService>(_ => _.GetImportStatus() == new AssignmentsImportStatus()),
                     Mock.Of<IAuditLog>(),
-                    Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>(),
+                    questionnaireBrowseItemStorage ?? Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>(),
                     Mock.Of<IAssignmetnsDeletionService>(),
-                    Mock.Of<IPlainKeyValueStorage<QuestionnaireLookupTable>>(),
-                    Mock.Of<IQuestionnaireStorage>());
+                    lookupStorage ?? Mock.Of<IPlainKeyValueStorage<QuestionnaireLookupTable>>(),
+                    questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>());
         }
     }
 }
