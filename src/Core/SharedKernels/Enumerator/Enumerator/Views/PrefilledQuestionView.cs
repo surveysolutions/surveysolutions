@@ -14,5 +14,8 @@ namespace WB.Core.SharedKernels.Enumerator.Views
         public string Answer { get; set; }
         public Guid InterviewId { get; set; }
         public int? SortIndex { get; set; }
+
+        public string EncryptedQuestionText { get; set; }
+        public string EncryptedAnswer { get; set; }
     }
 }

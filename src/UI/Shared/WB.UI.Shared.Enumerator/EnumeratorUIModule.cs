@@ -94,7 +94,7 @@ namespace WB.UI.Shared.Enumerator
             registry.BindAsSingleton<INearbyConnectionClient, NearbyConnectionClient>();
 
             registry.BindWithConstructorArgument<ISecureStorage, SecureStorage>("password", "P@$$w0rd5");
-            registry.Bind<IEncryptionService, RsaEncryptionService>();
+            registry.Bind<IEncryptionService, AesEncryptionService>();
 
             SetupLoggingFacility(registry);
         }
