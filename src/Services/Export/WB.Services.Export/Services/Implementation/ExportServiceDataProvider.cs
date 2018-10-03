@@ -6,10 +6,10 @@ namespace WB.Services.Export.Services.Implementation
 {
     internal class ExportServiceDataProvider : IExportServiceDataProvider
     {
-        public ExportServiceDataProvider(DiagnosticsExporter diagnosticsExporter,
+        public ExportServiceDataProvider(IDiagnosticsExporter diagnosticsExporter,
             IInterviewErrorsExporter interviewErrorsExporter,
-            InterviewActionsExporter interviewActionsExporter,
-            CommentsExporter commentsExporter)
+            IInterviewActionsExporter interviewActionsExporter,
+            ICommentsExporter commentsExporter)
         {
             serviceLabels.Add(diagnosticsExporter.DiagnosticsFileName, diagnosticsExporter.DiagnosticsFileColumns.ToDictionary(x => x.Title, x => x.Description));
             serviceLabels.Add(interviewErrorsExporter.GetFileName(), interviewErrorsExporter.GetHeader().ToDictionary(x => x.Title, x => x.Description));

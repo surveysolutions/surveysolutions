@@ -155,8 +155,7 @@ namespace WB.Services.Export.Tests
         {
             return new InterviewActionsExporter(InterviewDataExportSettings(),
                 csvWriter ?? Mock.Of<ICsvWriter>(),
-                tenantApi ?? HeadquartersApi(),
-                Mock.Of<ILogger<InterviewActionsExporter>>());
+                tenantApi ?? HeadquartersApi());
         }
 
         public static IOptions<InterviewDataExportSettings> InterviewDataExportSettings()

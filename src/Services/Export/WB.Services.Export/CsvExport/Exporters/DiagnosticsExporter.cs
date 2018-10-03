@@ -21,14 +21,12 @@ namespace WB.Services.Export.CsvExport.Exporters
         private readonly IOptions<InterviewDataExportSettings> interviewDataExportSettings;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ICsvWriter csvWriter;
-        //private readonly ILogger logger;
         private readonly ITenantApi<IHeadquartersApi> tenantApi;
-        //private readonly ITransactionManagerProvider transactionManager;
 
         private readonly string dataFileExtension = "tab";
-        public readonly string DiagnosticsFileName = "interview__diagnostics";
+        public string DiagnosticsFileName => "interview__diagnostics";
 
-        public readonly DoExportFileHeader[] DiagnosticsFileColumns =
+        public DoExportFileHeader[] DiagnosticsFileColumns => new []
         {
             new DoExportFileHeader("interview__id", "Unique 32-character long identifier of the interview"),
             new DoExportFileHeader("interview__key", "Short identifier of the interview"),
