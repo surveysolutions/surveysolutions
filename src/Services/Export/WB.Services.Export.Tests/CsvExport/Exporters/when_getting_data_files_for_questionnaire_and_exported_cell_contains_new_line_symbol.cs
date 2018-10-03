@@ -55,7 +55,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
                 Mock.Of<IOptions<InterviewDataExportSettings>>(x => x.Value == new InterviewDataExportSettings()),
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
                 csvWriter ?? Mock.Of<ICsvWriter>(),
-                tenantApi,
+                tenantApi ?? Create.HeadquartersApi(),
                 Mock.Of<ILogger<CommentsExporter>>());
         }
     }

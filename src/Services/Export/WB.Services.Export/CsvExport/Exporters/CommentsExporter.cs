@@ -56,7 +56,6 @@ namespace WB.Services.Export.CsvExport.Exporters
             this.fileSystemAccessor = fileSystemAccessor;
             this.csvWriter = csvWriter;
             this.tenantApi = tenantApi;
-            this.tenantApi = tenantApi;
             this.logger = logger;
         }
 
