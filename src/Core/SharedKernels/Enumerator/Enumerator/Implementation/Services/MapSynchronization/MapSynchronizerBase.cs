@@ -57,12 +57,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
 
             foreach (var map in this.mapService.GetAvailableMaps())
             {
-                if (items.Exists(x => string.Compare(x.MapName, map.MapName, StringComparison.InvariantCultureIgnoreCase) == 0))
+                if (items.Exists(x => string.Compare(x.MapName, map.MapFileName, StringComparison.InvariantCultureIgnoreCase) == 0))
                     continue;
 
                 try
                 {
-                    this.mapService.RemoveMap(map.MapName);
+                    this.mapService.RemoveMap(map.MapFileName);
                 }
                 catch (Exception ex)
                 {
