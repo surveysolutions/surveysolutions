@@ -6,6 +6,6 @@ namespace WB.Services.Export.Jobs
 {
     public interface IExportJob
     {
-        Task ExecuteAsync(DataExportProcessDetails args, CancellationToken cancellationToken);
+        Task ExecuteAsync(DataExportProcessArgs args, CancellationToken cancellationToken);
     }
 }

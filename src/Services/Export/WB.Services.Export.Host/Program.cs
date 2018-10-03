@@ -5,9 +5,12 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using NLog.Web;
+using Microsoft.Extensions.DependencyInjection;
+using WB.Services.Export.Host.Scheduler.PostgresWorkQueue;
 
 namespace WB.Services.Export.Host
 {
@@ -40,6 +43,13 @@ namespace WB.Services.Export.Host
                 }
 
                 var host = builder.Build();
+
+            using (var scope = host.Services.CreateScope())
+            {
+                var context = scope.ServiceProvider.GetService<JobContext>();
+                
+                await context.Database.MigrateAsync();
+            }
 
                 if (isService)
                 {

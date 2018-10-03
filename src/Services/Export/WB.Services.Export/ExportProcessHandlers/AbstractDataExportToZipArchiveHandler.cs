@@ -25,9 +25,9 @@ namespace WB.Services.Export.ExportProcessHandlers
         }
 
         protected override async Task DoExportAsync(
-            DataExportProcessDetails processArgs, 
+            DataExportProcessArgs processArgs, 
             ExportSettings exportSettings, string archiveName,
-            IProgress<int> exportProgress)
+            IProgress<int> exportProgress, CancellationToken cancellationToken)
         {
             var tempArchivePath = this.fileSystemAccessor.CombinePath(this.exportTempDirectoryPath, this.fileSystemAccessor.GetFileName(archiveName));
 
@@ -37,20 +37,19 @@ namespace WB.Services.Export.ExportProcessHandlers
                 {
                     using (var archive = dataExportFileAccessor.CreateExportArchive(archiveFile, processArgs.ArchivePassword))
                     {
-                        this.ExportDataIntoArchive(archive, exportSettings, exportProgress,
-                            processArgs.CancellationToken);
+                        this.ExportDataIntoArchive(archive, exportSettings, exportProgress, cancellationToken);
                     }
                 }
 
                 fileSystemAccessor.DeleteFile(archiveName);
                 fileSystemAccessor.MoveFile(tempArchivePath, archiveName);
                 
-                this.dataExportProcessesService.ChangeStatusType(processArgs.Tenant, processArgs.NaturalId, DataExportStatus.Compressing);
+                await this.dataExportProcessesService.ChangeStatusTypeAsync(processArgs.Tenant, processArgs.NaturalId, DataExportStatus.Compressing);
                 exportProgress.Report(0);
 
                 await this.dataExportFileAccessor.PublishArchiveToExternalStorageAsync(processArgs.Tenant, archiveName, exportProgress);
 
-                processArgs.CancellationToken.ThrowIfCancellationRequested();
+                cancellationToken.ThrowIfCancellationRequested();
             }
             finally
             {

@@ -4,12 +4,17 @@ using Autofac.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Console;
 using Prometheus;
 using WB.Services.Export.Host.Infra;
 using WB.Services.Export.Host.Scheduler;
+using WB.Services.Export.Host.Scheduler.PostgresWorkQueue;
+using WB.Services.Export.Host.Scheduler.PostgresWorkQueue.Services.Implementation;
 using WB.Services.Export.Services.Processing;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
@@ -25,7 +30,7 @@ namespace WB.Services.Export.Host
         public IConfiguration Configuration { get; }
 
         public IContainer ApplicationContainer { get; private set; }
-        
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
@@ -33,11 +38,10 @@ namespace WB.Services.Export.Host
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
                 .AddJsonFormatters();            
 
-            services.AddSingleton<IDataExportProcessesService, DataExportProcessesService>();
-            services.AddSingleton<IHostedService, DataExportProcessesService>(
-                c => c.GetService<IDataExportProcessesService>() as DataExportProcessesService);
-            services.AddSingleton<IHostedService, HealthCheckService>();
+            services.AddTransient<IDataExportProcessesService, PostgresDataExportProcessesService>();
+            services.AddSingleton<IHostedService, BackgroundExportService>();
 
+            services.UseJobService(Configuration);
             ServicesRegistry.Configure(services, Configuration);
 
             var builder = new ContainerBuilder();
