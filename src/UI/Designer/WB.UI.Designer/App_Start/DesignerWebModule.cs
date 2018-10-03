@@ -36,6 +36,7 @@ namespace WB.UI.Designer
             registry.Bind<IJsonAllTypesSerializer, JsonAllTypesSerializer>();
 
             registry.Bind<IQuestionnairePackageComposer, QuestionnairePackageComposer>();
+            registry.BindAsSingleton<QuestionnaireChacheStorage, QuestionnaireChacheStorage>();
             registry.Bind<IArchiveUtils, ZipArchiveUtils>();
             registry.Bind<IMembershipHelper, MembershipHelper>();
 
