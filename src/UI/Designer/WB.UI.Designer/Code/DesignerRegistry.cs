@@ -85,7 +85,7 @@ namespace WB.UI.Designer.Code
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
-            System.Web.Http.GlobalConfiguration.Configuration.Filters.Add(new WebApiActionFilterWhenActionMethodHasNoAttribute<ApiTransactionFilter, NoTransactionAttribute>(serviceLocator.GetInstance<ApiTransactionFilter>()));
+            System.Web.Http.GlobalConfiguration.Configuration.Filters.Add(new WebApiActionFilterWhenActionMethodHasNoAttribute(serviceLocator.GetInstance<ApiTransactionFilter>(), typeof(NoTransactionAttribute)));
             System.Web.Http.GlobalConfiguration.Configuration.Filters.Add(serviceLocator.GetInstance<UnderConstructionHttpFilter>());
 //            System.Web.Mvc.GlobalFilters.Filters.Add(serviceLocator.GetInstance<UnderConstructionMvcFilter>());
 //            System.Web.Mvc.GlobalFilters.Filters.Add(serviceLocator.GetInstance<TransactionFilter>());

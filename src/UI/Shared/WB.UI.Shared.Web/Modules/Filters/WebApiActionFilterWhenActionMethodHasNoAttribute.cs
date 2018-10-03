@@ -9,7 +9,7 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 
 namespace WB.UI.Shared.Web.Modules.Filters
 {
-    public class WebApiActionFilterWhenActionMethodHasNoAttribute<TFilter, TAttribute> : IAutofacActionFilter, IFilter
+    public class WebApiActionFilterWhenActionMethodHasNoAttribute<TFilter, TAttribute> : IAutofacActionFilter
         where TFilter : System.Web.Http.Filters.ActionFilterAttribute
         where TAttribute : Attribute
     {
@@ -47,5 +47,40 @@ namespace WB.UI.Shared.Web.Modules.Filters
         }
 
         public bool AllowMultiple => true;
+    }
+
+    public class WebApiActionFilterWhenActionMethodHasNoAttribute : ActionFilterAttribute, IAutofacActionFilter
+    {
+        public WebApiActionFilterWhenActionMethodHasNoAttribute(ActionFilterAttribute filter, Type attributeType)
+        {
+            this.attributeType = attributeType;
+            this.filter = filter;
+        }
+
+        private readonly Type attributeType;
+        private readonly ActionFilterAttribute filter;
+
+        public override Task OnActionExecutingAsync(HttpActionContext actionContext, CancellationToken cancellationToken)
+        {
+            var shouldExecute = FilterExtensions.HasActionOrControllerMarkerAttribute(actionContext.ActionDescriptor, attributeType);
+
+            if (shouldExecute)
+            {
+                return filter.OnActionExecutingAsync(actionContext, cancellationToken);
+            }
+
+            return Task.CompletedTask;
+        }
+
+        public override Task OnActionExecutedAsync(HttpActionExecutedContext actionExecutedContext, CancellationToken cancellationToken)
+        {
+            var shouldExecute = FilterExtensions.HasActionOrControllerMarkerAttribute(actionExecutedContext.ActionContext.ActionDescriptor, attributeType);
+            if (shouldExecute)
+            {
+                return filter.OnActionExecutedAsync(actionExecutedContext, cancellationToken);
+            }
+
+            return Task.CompletedTask;
+        }
     }
 }
