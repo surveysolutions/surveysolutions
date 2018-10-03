@@ -1,11 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
@@ -20,9 +18,9 @@ namespace WB.Services.Export.CsvExport.Exporters
     public class InterviewActionsExporter: IInterviewActionsExporter
     {
         private readonly IOptions<InterviewDataExportSettings> interviewDataExportSettings;
-        public readonly string InterviewActionsFileName = "interview__actions";
+        public string InterviewActionsFileName => "interview__actions";
 
-        public readonly DoExportFileHeader[] ActionFileColumns =
+        public DoExportFileHeader[] ActionFileColumns => new []
         {
             new DoExportFileHeader("interview__id", "Unique 32-character long identifier of the interview"),
             new DoExportFileHeader("interview__key", "Identifier of the interview"),
@@ -39,17 +37,13 @@ namespace WB.Services.Export.CsvExport.Exporters
         private readonly ICsvWriter csvWriter;
         private readonly ITenantApi<IHeadquartersApi> tenantApi;
 
-        private readonly ILogger<InterviewActionsExporter> logger;
-
         public InterviewActionsExporter(IOptions<InterviewDataExportSettings> interviewDataExportSettings,
             ICsvWriter csvWriter,
-            ITenantApi<IHeadquartersApi> tenantApi,
-            ILogger<InterviewActionsExporter> logger)
+            ITenantApi<IHeadquartersApi> tenantApi)
         {
             this.interviewDataExportSettings = interviewDataExportSettings;
             this.csvWriter = csvWriter;
             this.tenantApi = tenantApi;
-            this.logger = logger;
         }
 
         public async Task ExportAsync(TenantInfo tenant, QuestionnaireId questionnaireIdentity, List<Guid> interviewIdsToExport,
@@ -62,30 +56,19 @@ namespace WB.Services.Export.CsvExport.Exporters
             this.csvWriter.WriteData(actionFilePath, new[] { fileColumns }, ExportFileSettings.DataFileSeparator.ToString());
 
             long totalProcessedCount = 0;
-            var stopwatch = Stopwatch.StartNew();
-            //  var etaHelper = new EtaHelper(interviewIdsToExport.Count, batchSize, trackingStopwatch: stopwatch);
             var api = this.tenantApi.For(tenant);
 
             foreach (var interviewsBatch in interviewIdsToExport.Batch(batchSize))
             {
                 var interviewIdsStrings = interviewsBatch.ToArray();
-                // Expression<Func<InterviewSummary, bool>> whereClauseForAction = x => interviewIdsStrings.Contains(x.InterviewId);
-
-                //     var actionsChunk = this.transactionManager.GetTransactionManager().ExecuteInQueryTransaction(
-                //() =>
                 var actionsChunk = await this.QueryActionsChunkFromReadSide(api, interviewIdsStrings);
 
                 this.csvWriter.WriteData(actionFilePath, actionsChunk, ExportFileSettings.DataFileSeparator.ToString());
 
                 totalProcessedCount += interviewIdsStrings.Length;
                 progress.Report(totalProcessedCount.PercentOf(interviewIdsToExport.Count));
-                //  etaHelper.AddProgress(interviewIdsStrings.Length);
-
-                //this.logger.Debug($"Exported batch of interview actions. Processed: {totalProcessedCount:N0} out of {interviewIdsToExport.Count:N0}. {etaHelper}");
             }
 
-            stopwatch.Stop();
-//            this.logger.Info($"Exported interview actions. Processed: {interviewIdsToExport.Count:N0}. Took {stopwatch.Elapsed:g} to complete");
             progress.Report(100);
         }
 
