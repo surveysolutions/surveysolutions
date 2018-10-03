@@ -24,11 +24,11 @@ namespace WB.Services.Export.CsvExport.Exporters
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ICsvWriter csvWriter;
         private readonly string dataFileExtension = "tab";
-        public readonly string CommentsFileName = "interview__comments";
+        public string CommentsFileName => "interview__comments";
         private readonly ITenantApi<IHeadquartersApi> tenantApi;
         private readonly ILogger<CommentsExporter> logger;
 
-        public readonly DoExportFileHeader[] CommentsFileColumns =
+        public DoExportFileHeader[] CommentsFileColumns => new []
         {
             new DoExportFileHeader("Order", "Sequential order of the comment"),
             new DoExportFileHeader("Originator", "Login name of the person leaving the comment"),

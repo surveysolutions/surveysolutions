@@ -28,7 +28,6 @@ namespace WB.Services.Export.Services.Processing
 
         public void RecreateExportArchive(string exportTempDirectoryPath, string archiveName, string archivePassword, IProgress<int> exportProgress)
         {
-            //   throw new NotImplementedException();
             this.archiveUtils.ZipDirectory(exportTempDirectoryPath, archiveName, archivePassword, exportProgress);
         }
 
