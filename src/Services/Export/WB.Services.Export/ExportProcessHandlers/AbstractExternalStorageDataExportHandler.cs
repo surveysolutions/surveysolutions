@@ -10,7 +10,7 @@ using WB.Services.Export.Utils;
 namespace WB.Services.Export.ExportProcessHandlers
 {
     internal abstract class AbstractExternalStorageDataExportHandler : AbstractDataExportHandler,
-        IExportProcessHandler<DataExportProcessDetails>
+        IExportProcessHandler<DataExportProcessArgs>
     {
         private readonly IBinaryDataSource binaryDataSource;
 
@@ -48,10 +48,10 @@ namespace WB.Services.Export.ExportProcessHandlers
             }
         }
 
-        public override Task ExportDataAsync(DataExportProcessDetails process)
+        public override Task ExportDataAsync(DataExportProcessArgs process, CancellationToken cancellationToken)
         {
             this.accessToken = process.AccessToken;
-            return base.ExportDataAsync(process);
+            return base.ExportDataAsync(process, cancellationToken);
         }
 
         protected abstract IDisposable GetClient(string accessToken);

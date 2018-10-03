@@ -24,17 +24,19 @@ namespace WB.Services.Export.ExportProcessHandlers
             this.dataExportFileAccessor = dataExportFileAccessor;
         }
 
-        protected override async Task DoExportAsync(DataExportProcessDetails processArgs,
-            ExportSettings exportSettings, string archiveName, IProgress<int> exportProgress)
+        protected override async Task DoExportAsync(DataExportProcessArgs processArgs,
+            ExportSettings exportSettings, string archiveName, IProgress<int> exportProgress, CancellationToken cancellationToken)
         {
-            await this.ExportDataIntoDirectoryAsync(exportSettings, exportProgress, processArgs.CancellationToken);
+            await this.ExportDataIntoDirectoryAsync(exportSettings, exportProgress, cancellationToken);
 
             if (!this.CompressExportedData) return;
 
-            processArgs.CancellationToken.ThrowIfCancellationRequested();
+            cancellationToken.ThrowIfCancellationRequested();
 
-            this.dataExportProcessesService.UpdateDataExportProgress(processArgs.Tenant, processArgs.NaturalId, 0);
-            this.dataExportProcessesService.ChangeStatusType(
+            await this.dataExportProcessesService.UpdateDataExportProgressAsync(
+                processArgs.Tenant, processArgs.NaturalId, 0);
+
+            await this.dataExportProcessesService.ChangeStatusTypeAsync(
                 processArgs.Tenant,
                 processArgs.NaturalId,
                 DataExportStatus.Compressing);

@@ -1,27 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Threading.Tasks;
 using WB.Services.Export.Tenant;
 
 namespace WB.Services.Export.Services.Processing
 {
     public interface IDataExportProcessesService
     {
-        DataExportProcessDetails GetAndStartOldestUnprocessedDataExport();
+        Task<long> AddDataExport(DataExportProcessArgs args);
 
-        string AddDataExport(DataExportProcessDetails args);
+        Task<DataExportProcessArgs[]> GetAllProcesses(TenantInfo tenant);
 
-        IEnumerable<DataExportProcessDetails> GetRunningExportProcesses(TenantInfo tenant);
+        void FinishExportSuccessfully(long processId);
 
-        DataExportProcessDetails[] GetAllProcesses(TenantInfo tenant);
+        void FinishExportWithError(TenantInfo tenant, string tag, Exception e);
 
-        void FinishExportSuccessfully(string processId);
+        Task UpdateDataExportProgressAsync(TenantInfo tenant, string tag, int progressInPercents);
 
-        void FinishExportWithError(string processId, Exception e);
+        void DeleteDataExport(TenantInfo tenant, string tag);
 
-        void UpdateDataExportProgress(TenantInfo tenant, string processId, int progressInPercents);
-
-        void DeleteDataExport(TenantInfo tenant, string processId);
-
-        void ChangeStatusType(TenantInfo tenant, string processId, DataExportStatus status);
+        Task ChangeStatusTypeAsync(TenantInfo tenant, string tag, DataExportStatus status);
     }
 }

@@ -5,49 +5,27 @@ using WB.Services.Export.Tenant;
 
 namespace WB.Services.Export.Services.Processing
 {
-    //public class DataExportProcessArgs
-    //{
-    //    public TenantInfo Tenant { get; set; }
-    //    public QuestionnaireId Questionnaire { get; set; }
-    //    public ExternalStorageType? StorageType { get; set; }
-    //    public DataExportFormat Format { get; set; }
-    //    public DateTime? FromDate { get; set; }
-    //    public DateTime? ToDate { get; set; }
-    //    public InterviewStatus? InterviewStatus { get; set; }
-
-    //    public string NaturalId => $"{InterviewStatusString()}${this.Format}${this.Questionnaire}" +
-    //                                        $"${this.FromDate?.ToString(@"YYYYMMDD") ?? "EMPTY FROM DATE"}" +
-    //                                        $"${this.ToDate?.ToString(@"YYYYMMDD") ?? "EMPTY TO DATE"}";
-
-
-    //    private string InterviewStatusString() => InterviewStatus?.ToString() ?? "All";
-    //}
-
-    //public class DataExportProcessState
-    //{
-    //    public DataExportProcessArgs Args { get; set; }
-
-    //}
-
-    public class DataExportProcessDetails : AbstractDataExportProcessDetails
+    public class DataExportProcessStatus
     {
-        public DataExportProcessDetails(DataExportFormat format, QuestionnaireId questionnaire, string questionnaireTitle)
-            : base(format)
-        {
-            this.Questionnaire = questionnaire;
-            this.QuestionnaireTitle = questionnaireTitle;
-        }
+        public DateTime? BeginDate { get; set; }
+        public DateTime LastUpdateDate { get; set; }
+        public DataExportStatus Status { get; set; } = DataExportStatus.Queued;
+        public int ProgressInPercents { get; set; }
+        public bool IsRunning { get; set; }
+    }
 
+    public class DataExportProcessArgs
+    {
+        public DataExportProcessStatus Status { get; set; } = new DataExportProcessStatus();
         public TenantInfo Tenant { get; set; }
-        public QuestionnaireId Questionnaire { get; }
+        public QuestionnaireId Questionnaire { get; set; }
         public string ArchivePassword { get; set; }
-        public string QuestionnaireTitle { get; }
 
-        public override string NaturalId => $"{Tenant.Id}${InterviewStatusString()}${this.Format}${this.Questionnaire}" +
+        public string NaturalId => $"{Tenant.Id}${InterviewStatusString()}${this.Format}${this.Questionnaire}" +
                                             $"${this.FromDate?.ToString(@"YYYYMMDD") ?? "EMPTY FROM DATE"}" +
                                             $"${this.ToDate?.ToString(@"YYYYMMDD") ?? "EMPTY TO DATE"}";
 
-        public override string Name => $"{ArchiveName}" + (StorageType.HasValue ? $" {Enum.GetName(typeof(ExternalStorageType), this.StorageType)}" : "");
+        public string Name => $"{ArchiveName}" + (StorageType.HasValue ? $" {Enum.GetName(typeof(ExternalStorageType), this.StorageType)}" : "");
 
         public InterviewStatus? InterviewStatus { get; set; }
 
@@ -56,7 +34,7 @@ namespace WB.Services.Export.Services.Processing
         public string ArchiveName { get; set; }
         public string AccessToken { get; set; }
         public ExternalStorageType? StorageType { get; set; }
-
+        public DataExportFormat Format { get; set; }
         private string InterviewStatusString() => InterviewStatus?.ToString() ?? "All";
     }
 }

@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Amazon.S3;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using WB.Services.Export.ExportProcessHandlers;
 using WB.Services.Export.ExportProcessHandlers.Externals;
@@ -14,63 +15,47 @@ namespace WB.Services.Export.Jobs
     internal class ExportJob : IExportJob
     {
         private readonly IDataExportProcessesService exportService;
+        private readonly IServiceProvider serviceProvider;
 
-        private readonly Lazy<BinaryFormatDataExportHandler> binaryFormatDataExportHandler;
-        private readonly Lazy<TabularFormatParaDataExportProcessHandler> tabularFormatParaDataExportProcessHandler;
-        private readonly Lazy<TabularFormatDataExportHandler> tabularFormatDataExportHandler;
-        private readonly Lazy<SpssFormatExportHandler> spssFormatExportHandler;
-        private readonly Lazy<StataFormatExportHandler> stataFormatExportHandler;
-        private readonly Lazy<OnedriveBinaryDataExportHandler> onedriveBinaryDataExportHandler;
-        private readonly Lazy<DropboxBinaryDataExportHandler> dropboxBinaryDataExportHandler;
-        private readonly Lazy<GoogleDriveBinaryDataExportHandler> googleDriveBinaryDataExportHandler;
+        //private readonly Lazy<BinaryFormatDataExportHandler> binaryFormatDataExportHandler;
+        //private readonly Lazy<TabularFormatParaDataExportProcessHandler> tabularFormatParaDataExportProcessHandler;
+        //private readonly Lazy<TabularFormatDataExportHandler> tabularFormatDataExportHandler;
+        //private readonly Lazy<SpssFormatExportHandler> spssFormatExportHandler;
+        //private readonly Lazy<StataFormatExportHandler> stataFormatExportHandler;
+        //private readonly Lazy<OnedriveBinaryDataExportHandler> onedriveBinaryDataExportHandler;
+        //private readonly Lazy<DropboxBinaryDataExportHandler> dropboxBinaryDataExportHandler;
+        //private readonly Lazy<GoogleDriveBinaryDataExportHandler> googleDriveBinaryDataExportHandler;
 
         private readonly ILogger<ExportJob> logger;
         
         public ExportJob(IDataExportProcessesService exportService,
-            Lazy<BinaryFormatDataExportHandler> binaryFormatDataExportHandler,
-            Lazy<TabularFormatParaDataExportProcessHandler> tabularFormatParaDataExportProcessHandler,
-            Lazy<TabularFormatDataExportHandler> tabularFormatDataExportHandler,
-            Lazy<SpssFormatExportHandler> spssFormatExportHandler,
-            Lazy<StataFormatExportHandler> stataFormatExportHandler,
-            Lazy<OnedriveBinaryDataExportHandler> onedriveBinaryDataExportHandler,
-            Lazy<DropboxBinaryDataExportHandler> dropboxBinaryDataExportHandler,
-            Lazy<GoogleDriveBinaryDataExportHandler> googleDriveBinaryDataExportHandler,
+            IServiceProvider serviceProvider,
             ILogger<ExportJob> logger)
         {
             logger.LogTrace("Constructed instance");
             this.exportService = exportService;
-            this.binaryFormatDataExportHandler = binaryFormatDataExportHandler;
-            this.tabularFormatParaDataExportProcessHandler = tabularFormatParaDataExportProcessHandler;
-            this.tabularFormatDataExportHandler = tabularFormatDataExportHandler;
-            this.spssFormatExportHandler = spssFormatExportHandler;
-            this.stataFormatExportHandler = stataFormatExportHandler;
-            this.onedriveBinaryDataExportHandler = onedriveBinaryDataExportHandler;
-            this.dropboxBinaryDataExportHandler = dropboxBinaryDataExportHandler;
-            this.googleDriveBinaryDataExportHandler = googleDriveBinaryDataExportHandler;
+            this.serviceProvider = serviceProvider;
             this.logger = logger;
         }
 
-        public async Task ExecuteAsync(DataExportProcessDetails pendingExportProcess, CancellationToken cancellationToken)
+        public async Task ExecuteAsync(DataExportProcessArgs pendingExportProcess, CancellationToken cancellationToken)
         {
             try
             {
                 if (pendingExportProcess.StorageType.HasValue)
                 {
                     var handler = this.GetExternalStorageExportHandler(pendingExportProcess.StorageType.Value);
-                    await handler.ExportDataAsync(pendingExportProcess);
+                    await handler.ExportDataAsync(pendingExportProcess, cancellationToken);
                 }
                 else
                 {
                     var handler = this.GetExportHandler(pendingExportProcess.Format);
-                    await handler.ExportDataAsync(pendingExportProcess);
+                    await handler.ExportDataAsync(pendingExportProcess, cancellationToken);
                 }
-
-                this.exportService.FinishExportSuccessfully(pendingExportProcess.NaturalId);
-
             }
             catch (Exception e)
             {
-                this.exportService.FinishExportWithError(pendingExportProcess.NaturalId, e);
+                this.exportService.FinishExportWithError(pendingExportProcess.Tenant, pendingExportProcess.NaturalId, e);
 
                 this.logger.LogError(e, "Export job failed");
             }
@@ -81,11 +66,11 @@ namespace WB.Services.Export.Jobs
             switch (storageType)
             {
                 case ExternalStorageType.OneDrive:
-                    return onedriveBinaryDataExportHandler.Value;
+                    return serviceProvider.GetService<OnedriveBinaryDataExportHandler>();
                 case ExternalStorageType.Dropbox:
-                    return dropboxBinaryDataExportHandler.Value;
+                    return serviceProvider.GetService<DropboxBinaryDataExportHandler>();
                 case ExternalStorageType.GoogleDrive:
-                    return googleDriveBinaryDataExportHandler.Value;
+                    return serviceProvider.GetService<GoogleDriveBinaryDataExportHandler>();
                 default:
                     throw new NotSupportedException($"Export handler for '{Enum.GetName(typeof(ExternalStorageType), storageType)}' not found");
             }
@@ -95,15 +80,15 @@ namespace WB.Services.Export.Jobs
             switch (format)
             {
                 case DataExportFormat.Binary:
-                    return binaryFormatDataExportHandler.Value;
+                    return serviceProvider.GetService<BinaryFormatDataExportHandler>();
                 case DataExportFormat.Paradata:
-                    return tabularFormatParaDataExportProcessHandler.Value;
+                    return serviceProvider.GetService<TabularFormatParaDataExportProcessHandler>();
                 case DataExportFormat.Tabular:
-                    return tabularFormatDataExportHandler.Value;
+                    return serviceProvider.GetService<TabularFormatDataExportHandler>();
                 case DataExportFormat.SPSS:
-                    return spssFormatExportHandler.Value;
+                    return serviceProvider.GetService<SpssFormatExportHandler>();
                 case DataExportFormat.STATA:
-                    return stataFormatExportHandler.Value;
+                    return serviceProvider.GetService<StataFormatExportHandler>();
                 default:
                     throw new NotSupportedException($"Export handler for '{format}' not found");
             }
