@@ -88,7 +88,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
             });
 
             //act
-            var entities = factory.GetInterviewEntities(interviewId));
+            var entities = factory.GetInterviewEntities(interviewId);
 
             //assert
             Assert.That(entities, Has.Count.EqualTo(4));
