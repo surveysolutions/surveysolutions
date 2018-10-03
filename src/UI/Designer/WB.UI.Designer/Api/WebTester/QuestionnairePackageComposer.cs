@@ -25,6 +25,7 @@ namespace WB.UI.Designer.Api.WebTester
         private readonly IDesignerEngineVersionService engineVersionService;
         private readonly IQuestionnaireCompilationVersionService questionnaireCompilationVersionService;
         private readonly IQuestionnaireVerifier questionnaireVerifier;
+        private readonly QuestionnaireChacheStorage questionnaireChacheStorage;
 
         public QuestionnairePackageComposer(IExpressionProcessorGenerator expressionProcessorGenerator,
             IPlainStorageAccessor<QuestionnaireChangeRecord> questionnaireChangeItemStorage,
@@ -32,7 +33,8 @@ namespace WB.UI.Designer.Api.WebTester
             IExpressionsPlayOrderProvider expressionsPlayOrderProvider,
             IDesignerEngineVersionService engineVersionService,
             IQuestionnaireCompilationVersionService questionnaireCompilationVersionService,
-            IQuestionnaireVerifier questionnaireVerifier)
+            IQuestionnaireVerifier questionnaireVerifier,
+            QuestionnaireChacheStorage questionnaireChacheStorage)
         {
             this.expressionProcessorGenerator = expressionProcessorGenerator;
             this.questionnaireChangeItemStorage = questionnaireChangeItemStorage;
@@ -41,9 +43,9 @@ namespace WB.UI.Designer.Api.WebTester
             this.engineVersionService = engineVersionService;
             this.questionnaireCompilationVersionService = questionnaireCompilationVersionService;
             this.questionnaireVerifier = questionnaireVerifier;
+            this.questionnaireChacheStorage = questionnaireChacheStorage;
         }
 
-        static readonly MemoryCache Cache = new MemoryCache("CompilationPackages");
 
         public Questionnaire ComposeQuestionnaire(Guid questionnaireId)
         {
@@ -52,15 +54,12 @@ namespace WB.UI.Designer.Api.WebTester
             
             var cacheKey = $"{questionnaireId}.{maxSequenceByQuestionnaire}";
 
-            var cacheEntry = Cache.Get(cacheKey) as Lazy<Questionnaire>;
+            var cacheEntry = questionnaireChacheStorage.Get(cacheKey);
 
             if (cacheEntry == null)
             {
                 cacheEntry = new Lazy<Questionnaire>(() => ComposeQuestionnaireImpl(questionnaireId));
-                Cache.Add(cacheKey, cacheEntry, new CacheItemPolicy
-                {
-                    SlidingExpiration = TimeSpan.FromMinutes(10)
-                });
+                questionnaireChacheStorage.Add(cacheKey, cacheEntry);
             }
 
             try
@@ -69,7 +68,7 @@ namespace WB.UI.Designer.Api.WebTester
             }
             catch
             {
-                Cache.Remove(cacheKey);
+                questionnaireChacheStorage.Remove(cacheKey);
                 throw;
             }
         }

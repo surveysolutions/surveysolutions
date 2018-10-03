@@ -245,6 +245,7 @@
     <Compile Include="Api\Headquarters\HQLookupController.cs" />
     <Compile Include="Api\Portal\PortalController.cs" />
     <Compile Include="Api\WebTester\IQuestionnairePackageComposer.cs" />
+    <Compile Include="Api\WebTester\QuestionnaireChacheStorage.cs" />
     <Compile Include="Api\WebTester\QuestionnairePackageComposer.cs" />
     <Compile Include="Api\WebTester\WebTesterController.cs" />
     <Compile Include="Api\WebTester\ReloadController.cs" />
