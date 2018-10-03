@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http.Controllers;
@@ -7,7 +8,7 @@ using Autofac.Integration.WebApi;
 
 namespace WB.UI.Shared.Web.Modules.Filters
 {
-    public class WebApiAuthorizationFilterWhenActionMethodHasNoAttribute<TFilter, TAttribute> : IAutofacAuthorizationFilter, IFilter
+    public class WebApiAuthorizationFilterWhenActionMethodHasNoAttribute<TFilter, TAttribute> : IAutofacAuthorizationFilter
         where TFilter : System.Web.Http.Filters.AuthorizationFilterAttribute
         where TAttribute : Attribute
     {
@@ -31,6 +32,32 @@ namespace WB.UI.Shared.Web.Modules.Filters
             }
 
             return Task.CompletedTask;
+        }
+    }
+
+
+    public class WebApiAuthorizationFilterWhenActionMethodHasNoAttribute : IAuthorizationFilter
+    {
+        public WebApiAuthorizationFilterWhenActionMethodHasNoAttribute(IAuthorizationFilter filter, Type attributeType)
+        {
+            this.filter = filter;
+            this.attributeType = attributeType;
+        }
+
+        private readonly IAuthorizationFilter filter;
+        private readonly Type attributeType;
+
+        public Task<HttpResponseMessage> ExecuteAuthorizationFilterAsync(HttpActionContext actionContext, CancellationToken cancellationToken,
+            Func<Task<HttpResponseMessage>> continuation)
+        {
+            var shouldExecute = FilterExtensions.HasActionOrControllerMarkerAttribute(actionContext.ActionDescriptor, attributeType);
+
+            if (shouldExecute)
+            {
+                return filter.ExecuteAuthorizationFilterAsync(actionContext, cancellationToken, continuation);
+            }
+
+            return continuation();
         }
 
         public bool AllowMultiple => true;

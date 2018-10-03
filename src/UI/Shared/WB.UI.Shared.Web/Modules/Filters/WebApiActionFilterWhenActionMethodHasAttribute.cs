@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
+using System.Web.Http.Services;
 using Autofac.Integration.WebApi;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 
@@ -38,6 +40,42 @@ namespace WB.UI.Shared.Web.Modules.Filters
 
         public Task OnActionExecutedAsync(HttpActionExecutedContext actionExecutedContext, CancellationToken cancellationToken)
         {
+            if (shouldExecute)
+            {
+                return filter.OnActionExecutedAsync(actionExecutedContext, cancellationToken);
+            }
+
+            return Task.CompletedTask;
+        }
+    }
+
+    public class WebApiActionFilterWhenActionMethodHasAttribute : ActionFilterAttribute, IAutofacActionFilter
+    {
+        public WebApiActionFilterWhenActionMethodHasAttribute(ActionFilterAttribute filter, Type attributeType)
+        {
+            this.filter = filter;
+            this.attributeType = attributeType;
+        }
+
+        private readonly ActionFilterAttribute filter;
+        private readonly Type attributeType;
+
+        public override Task OnActionExecutingAsync(HttpActionContext actionContext, CancellationToken cancellationToken)
+        {
+            var shouldExecute = FilterExtensions.HasActionOrControllerMarkerAttribute(actionContext.ActionDescriptor, attributeType);
+
+            if (shouldExecute)
+            {
+                return filter.OnActionExecutingAsync(actionContext, cancellationToken);
+            }
+
+            return Task.CompletedTask;
+        }
+
+        public override Task OnActionExecutedAsync(HttpActionExecutedContext actionExecutedContext, CancellationToken cancellationToken)
+        {
+            var shouldExecute = FilterExtensions.HasActionOrControllerMarkerAttribute(actionExecutedContext.ActionContext.ActionDescriptor, attributeType);
+
             if (shouldExecute)
             {
                 return filter.OnActionExecutedAsync(actionExecutedContext, cancellationToken);

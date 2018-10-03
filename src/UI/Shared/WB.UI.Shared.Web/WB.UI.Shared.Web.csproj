@@ -179,6 +179,7 @@
     <Compile Include="Captcha\CaptchaModule.cs" />
     <Compile Include="Modules\ApiControllerExtensions.cs" />
     <Compile Include="Modules\AutofacWebModuleAdapter.cs" />
+    <Compile Include="Modules\Filters\FilterExtensions.cs" />
     <Compile Include="Modules\Filters\MvcActionFilter.cs" />
     <Compile Include="Modules\Filters\MvcAuthorizationFilter.cs" />
     <Compile Include="Modules\Filters\WebApiActionFilter.cs" />
