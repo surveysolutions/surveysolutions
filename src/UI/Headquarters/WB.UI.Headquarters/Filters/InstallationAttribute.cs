@@ -25,7 +25,6 @@ namespace WB.UI.Headquarters.Filters
             if (filterContext.Controller is UnderConstructionController) return;
 
             var isInstallController = filterContext.Controller is InstallController;
-            
             var adminRole = UserRoles.Administrator.ToUserId();
             Installed = this.userRepository.Users.Any(user => user.Roles.Any(role => role.RoleId == adminRole));
 
