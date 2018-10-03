@@ -31,7 +31,6 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
             Guid lookup2 = Id.g2;
 
             var commandServiceMock = Substitute.For<ICommandService>();
-            var plainQuestionnaireRepository = new Mock<IQuestionnaireStorage>();
 
             var questionnaire = Create.Entity.QuestionnaireDocument(Id.gA);
             questionnaire.LookupTables = new Dictionary<Guid, LookupTable>
@@ -40,8 +39,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
                 { lookup2, new LookupTable() },
             };
 
-            var questionnaireStorage = Mock.Of<IQuestionnaireStorage>(s =>
-                s.GetQuestionnaireDocument(questionnaireIdentity) == questionnaire);
+            var questionnaireStorage = Mock.Of<IQuestionnaireStorage>(s => s.GetQuestionnaireDocument(questionnaireIdentity) == questionnaire);
 
             var lookupStorage = new Mock<IPlainKeyValueStorage<QuestionnaireLookupTable>>();
 
@@ -62,7 +60,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
 
             var deleteQuestionnaireService = CreateDeleteQuestionnaireService(commandService: commandServiceMock,
                 interviewsToDeleteFactory: interviewsToDeleteFactoryMock.Object,
-                questionnaireStorage: plainQuestionnaireRepository.Object,
+                questionnaireStorage: questionnaireStorage,
+                lookupStorage : lookupStorage.Object,
                 questionnaireBrowseItemStorage:
                     Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>(
                         _ =>
@@ -93,13 +92,14 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
             Guid interviewId = Guid.Parse("33333333333333333333333333333333");
 
             var commandServiceMock = Substitute.For<ICommandService>();
-            var plainQuestionnaireRepository = new Mock<IQuestionnaireStorage>();
+            
 
             var questionnaire = Create.Entity.QuestionnaireDocument();
             questionnaire.LookupTables = new Dictionary<Guid, LookupTable>();
 
-            Setup.InstanceToMockedServiceLocator(Mock.Of<IQuestionnaireStorage>(s => s.GetQuestionnaireDocument(It.IsAny<QuestionnaireIdentity>()) == questionnaire));
-            
+            var plainQuestionnaireRepository = Mock.Of<IQuestionnaireStorage>(s => s.GetQuestionnaireDocument(It.IsAny<QuestionnaireIdentity>()) == questionnaire);
+            Setup.InstanceToMockedServiceLocator(plainQuestionnaireRepository);
+
             var interviewsToDeleteFactoryMock = new Mock<IInterviewsToDeleteFactory>();
 
             var interviewQueue = new Queue<List<InterviewSummary>>();
@@ -110,7 +110,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
 
             var deleteQuestionnaireService = CreateDeleteQuestionnaireService(commandService: commandServiceMock,
                 interviewsToDeleteFactory: interviewsToDeleteFactoryMock.Object,
-                questionnaireStorage: plainQuestionnaireRepository.Object,
+                questionnaireStorage: plainQuestionnaireRepository,
                 questionnaireBrowseItemStorage:
                     Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>(
                         _ =>
