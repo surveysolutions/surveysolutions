@@ -276,7 +276,7 @@
     <Compile Include="Activities\Dashboard\ExpandableViewHolder.cs" />
     <Compile Include="Activities\EnumeratorSplashScreenAppCompatActivity.cs" />
     <Compile Include="Activities\ISecureStorage.cs" />
-    <Compile Include="Activities\RsaEncryptionService.cs" />
+    <Compile Include="Activities\AesEncryptionService.cs" />
     <Compile Include="Activities\SecureStorage.cs" />
     <Compile Include="Activities\SearchActivity.cs" />
     <Compile Include="Activities\SelectResponsibleForInterviewFragment.cs" />
