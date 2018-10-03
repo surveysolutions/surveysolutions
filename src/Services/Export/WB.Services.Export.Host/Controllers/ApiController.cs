@@ -28,7 +28,7 @@ namespace WB.Services.Export.Host.Controllers
 
         [HttpPut]
         [Route("api/v1/job/generate")]
-        public ActionResult RequestUpdate(string questionnaireId,
+        public async Task<ActionResult> RequestUpdate(string questionnaireId,
             DataExportFormat format,
             InterviewStatus? status,
             DateTime? from,
@@ -44,8 +44,10 @@ namespace WB.Services.Export.Host.Controllers
                 return BadRequest("ArchiveName is required");
             }
 
-            var args = new DataExportProcessDetails(format, new QuestionnaireId(questionnaireId), null)
+            var args = new DataExportProcessArgs
             {
+                Format = format,
+                Questionnaire = new QuestionnaireId(questionnaireId),
                 Tenant = new TenantInfo(tenantBaseUrl, apiKey),
                 InterviewStatus = status,
                 FromDate = from,
@@ -56,7 +58,7 @@ namespace WB.Services.Export.Host.Controllers
                 StorageType = storageType
             };
 
-            exportProcessesService.AddDataExport(args);
+            await exportProcessesService.AddDataExport(args);
 
             return Ok();
         }

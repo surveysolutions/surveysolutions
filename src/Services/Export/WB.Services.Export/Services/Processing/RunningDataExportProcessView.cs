@@ -18,5 +18,6 @@ namespace WB.Services.Export.Services.Processing
         public DataExportStatus ProcessStatus { get; set; }
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }
+        public bool IsRunning { get; set; }
     }
 }

@@ -5,29 +5,10 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
-using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Services.Processing;
-using WB.Services.Export.Tenant;
 
 namespace WB.Services.Export.ExportProcessHandlers
 {
-    public class ExportSettings
-    {
-        public QuestionnaireId QuestionnaireId { get; set; }
-        public InterviewStatus? InterviewStatus { get; set; }
-        public DateTime? FromDate { get; set; }
-        public DateTime? ToDate { get; set; }
-        public string ExportTempDirectory { get; set; }
-        public TenantInfo Tenant { get; set; }
-        public string ArchiveName { get; set; }
-
-        public override string ToString()
-        {
-            return
-                $"{Tenant.Id} - {ArchiveName} {QuestionnaireId} {InterviewStatus?.ToString() ?? "AllStatus"} {FromDate}-{ToDate}";
-        }
-    }
-
     internal interface ITempPathProvider
     {
         string GetTempPath(string basePath);
@@ -41,7 +22,7 @@ namespace WB.Services.Export.ExportProcessHandlers
         }
     }
 
-    abstract class BaseAbstractDataExportHandler : IExportProcessHandler<DataExportProcessDetails>
+    abstract class BaseAbstractDataExportHandler : IExportProcessHandler<DataExportProcessArgs>
     {
         protected readonly IFileSystemAccessor fileSystemAccessor;
         protected readonly IFilebasedExportedDataAccessor filebasedExportedDataAccessor;
@@ -62,47 +43,50 @@ namespace WB.Services.Export.ExportProcessHandlers
             this.interviewDataExportSettings = interviewDataExportSettings;
         }
 
-        public virtual async Task ExportDataAsync(DataExportProcessDetails dataExportProcessDetails)
+        public virtual async Task ExportDataAsync(DataExportProcessArgs dataExportProcessArgs, CancellationToken cancellationToken)
         {
             exportTempDirectoryPath = this.fileSystemAccessor.GetTempPath(interviewDataExportSettings.Value.DirectoryPath);
 
-            dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
+            cancellationToken.ThrowIfCancellationRequested();
 
             this.RecreateExportTempDirectory();
 
-            dataExportProcessDetails.CancellationToken.ThrowIfCancellationRequested();
+            cancellationToken.ThrowIfCancellationRequested();
 
             var exportProgress = new Progress<int>();
 
             exportProgress.ProgressChanged += (sender, donePercent) =>
-                this.dataExportProcessesService.UpdateDataExportProgress(dataExportProcessDetails.Tenant, dataExportProcessDetails.NaturalId,
-                    donePercent);
+               this.dataExportProcessesService.UpdateDataExportProgressAsync(
+                   dataExportProcessArgs.Tenant, dataExportProcessArgs.NaturalId, donePercent);
 
             var exportSettings = new ExportSettings
             {
-                QuestionnaireId = dataExportProcessDetails.Questionnaire,
-                InterviewStatus = dataExportProcessDetails.InterviewStatus,
-                FromDate = dataExportProcessDetails.FromDate,
-                ToDate = dataExportProcessDetails.ToDate,
+                QuestionnaireId = dataExportProcessArgs.Questionnaire,
+                InterviewStatus = dataExportProcessArgs.InterviewStatus,
+                FromDate = dataExportProcessArgs.FromDate,
+                ToDate = dataExportProcessArgs.ToDate,
                 ExportTempDirectory = this.exportTempDirectoryPath,
-                Tenant = dataExportProcessDetails.Tenant,
-                ArchiveName = dataExportProcessDetails.ArchiveName
+                Tenant = dataExportProcessArgs.Tenant,
+                ArchiveName = dataExportProcessArgs.ArchiveName
             };
 
             var archiveName = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(
-                dataExportProcessDetails.Tenant, 
-                dataExportProcessDetails.ArchiveName, 
+                dataExportProcessArgs.Tenant, 
+                dataExportProcessArgs.ArchiveName, 
                 Format, 
-                dataExportProcessDetails.InterviewStatus,
-                fromDate: dataExportProcessDetails.FromDate, toDate: dataExportProcessDetails.ToDate);
+                dataExportProcessArgs.InterviewStatus,
+                fromDate: dataExportProcessArgs.FromDate, toDate: dataExportProcessArgs.ToDate);
 
-            await DoExportAsync(dataExportProcessDetails, exportSettings, archiveName, exportProgress);
+            await this.dataExportProcessesService.ChangeStatusTypeAsync(
+                dataExportProcessArgs.Tenant, dataExportProcessArgs.NaturalId, DataExportStatus.Running);
+
+            await DoExportAsync(dataExportProcessArgs, exportSettings, archiveName, exportProgress, cancellationToken);
 
             this.DeleteExportTempDirectory();
         }
         
-        protected abstract Task DoExportAsync(DataExportProcessDetails processArgs,
-            ExportSettings exportSettings, string archiveName, IProgress<int> exportProgress);
+        protected abstract Task DoExportAsync(DataExportProcessArgs processArgs,
+            ExportSettings exportSettings, string archiveName, IProgress<int> exportProgress, CancellationToken cancellationToken);
 
         protected abstract DataExportFormat Format { get; }
         

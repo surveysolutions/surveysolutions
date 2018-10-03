@@ -94,9 +94,7 @@ namespace WB.Services.Export.Jobs
             if (questionnaire == null)
                 return null;
 
-            var runningProcesses = this.dataExportProcessesService.GetRunningExportProcesses(tenant)
-                .Select(CreateRunningDataExportProcessView).ToArray();
-            var allProcesses = this.dataExportProcessesService.GetAllProcesses(tenant)
+            var allProcesses = (await this.dataExportProcessesService.GetAllProcesses(tenant))
                 .Select(CreateRunningDataExportProcessView).ToArray();
 
             var exports = new List<DataExportView>();
@@ -105,7 +103,7 @@ namespace WB.Services.Export.Jobs
             {
                 var dataExportView = await this.CreateDataExportView(tenant, archiveFileName, supportedDataExport.Item1,
                     supportedDataExport.Item2, status,
-                    fromDate, toDate, questionnaireIdentity, questionnaire, runningProcesses, allProcesses);
+                    fromDate, toDate, questionnaireIdentity, questionnaire, allProcesses);
 
                 exports.Add(dataExportView);
             }
@@ -113,30 +111,29 @@ namespace WB.Services.Export.Jobs
             return new DataExportStatusView(
                 questionnaireId: questionnaireIdentity.Id,
                 dataExports: exports,
-                runningDataExportProcesses: runningProcesses);
+                runningDataExportProcesses: allProcesses.Where(p => p.IsRunning).ToArray());
         }
 
         private static RunningDataExportProcessView CreateRunningDataExportProcessView(
-            IDataExportProcessDetails dataExportProcessDetails)
+            DataExportProcessArgs dataExportProcessDetails)
         {
-            var exportProcessDetails = (DataExportProcessDetails) dataExportProcessDetails;
-
             return new RunningDataExportProcessView
             {
+                IsRunning = dataExportProcessDetails.Status.IsRunning,
                 DataExportProcessId = dataExportProcessDetails.NaturalId,
-                BeginDate = dataExportProcessDetails.BeginDate,
-                LastUpdateDate = dataExportProcessDetails.LastUpdateDate,
+                BeginDate = dataExportProcessDetails.Status.BeginDate ?? DateTime.MinValue,
+                LastUpdateDate = dataExportProcessDetails.Status.LastUpdateDate,
                 DataExportProcessName = dataExportProcessDetails.Name,
-                Progress = dataExportProcessDetails.ProgressInPercents,
+                Progress = dataExportProcessDetails.Status.ProgressInPercents,
                 Format = dataExportProcessDetails.Format,
-                ProcessStatus = dataExportProcessDetails.Status,
-                Type = exportProcessDetails.Format == DataExportFormat.Paradata
+                ProcessStatus = dataExportProcessDetails.Status.Status,
+                Type = dataExportProcessDetails.Format == DataExportFormat.Paradata
                     ? DataExportType.ParaData
                     : DataExportType.Data,
-                QuestionnaireId = exportProcessDetails.Questionnaire.Id,
-                InterviewStatus = exportProcessDetails.InterviewStatus,
-                FromDate = exportProcessDetails.FromDate,
-                ToDate = exportProcessDetails.ToDate
+                QuestionnaireId = dataExportProcessDetails.Questionnaire.Id,
+                InterviewStatus = dataExportProcessDetails.InterviewStatus,
+                FromDate = dataExportProcessDetails.FromDate,
+                ToDate = dataExportProcessDetails.ToDate
             };
         }
 
@@ -149,7 +146,6 @@ namespace WB.Services.Export.Jobs
             DateTime? toDate,
             QuestionnaireId questionnaireIdentity,
             QuestionnaireExportStructure questionnaire,
-            RunningDataExportProcessView[] runningProcess,
             RunningDataExportProcessView[] allProcesses)
         {
             DataExportView dataExportView = new DataExportView
@@ -170,7 +166,8 @@ namespace WB.Services.Export.Jobs
             else
             {
                 dataExportView.HasAnyDataToBePrepared = true;
-                var process = runningProcess.FirstOrDefault(p =>
+                var process = allProcesses.FirstOrDefault(p =>
+                    p.IsRunning &&
                     p.Format == dataFormat &&
                     p.Type == dataType &&
                     p.InterviewStatus == interviewStatus &&

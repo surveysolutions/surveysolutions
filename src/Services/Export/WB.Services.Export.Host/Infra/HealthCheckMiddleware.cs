@@ -51,7 +51,6 @@ namespace WB.Services.Export.Host.Infra
     {
         public static IApplicationBuilder UseHealthChecks(this IApplicationBuilder builder, string path)
         {
-            
             return builder.UseMiddleware<HealthCheckMiddleware>(path);
         }
 
