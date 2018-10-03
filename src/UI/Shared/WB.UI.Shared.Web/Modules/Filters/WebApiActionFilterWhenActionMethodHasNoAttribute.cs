@@ -49,7 +49,7 @@ namespace WB.UI.Shared.Web.Modules.Filters
         public bool AllowMultiple => true;
     }
 
-    public class WebApiActionFilterWhenActionMethodHasNoAttribute : ActionFilterAttribute, IAutofacActionFilter
+    public class WebApiActionFilterWhenActionMethodHasNoAttribute : ActionFilterAttribute
     {
         public WebApiActionFilterWhenActionMethodHasNoAttribute(ActionFilterAttribute filter, Type attributeType)
         {
@@ -62,7 +62,7 @@ namespace WB.UI.Shared.Web.Modules.Filters
 
         public override Task OnActionExecutingAsync(HttpActionContext actionContext, CancellationToken cancellationToken)
         {
-            var shouldExecute = FilterExtensions.HasActionOrControllerMarkerAttribute(actionContext.ActionDescriptor, attributeType);
+            var shouldExecute = !FilterExtensions.HasActionOrControllerMarkerAttribute(actionContext.ActionDescriptor, attributeType);
 
             if (shouldExecute)
             {
@@ -74,13 +74,35 @@ namespace WB.UI.Shared.Web.Modules.Filters
 
         public override Task OnActionExecutedAsync(HttpActionExecutedContext actionExecutedContext, CancellationToken cancellationToken)
         {
-            var shouldExecute = FilterExtensions.HasActionOrControllerMarkerAttribute(actionExecutedContext.ActionContext.ActionDescriptor, attributeType);
+            var shouldExecute = !FilterExtensions.HasActionOrControllerMarkerAttribute(actionExecutedContext.ActionContext.ActionDescriptor, attributeType);
             if (shouldExecute)
             {
                 return filter.OnActionExecutedAsync(actionExecutedContext, cancellationToken);
             }
 
             return Task.CompletedTask;
+        }
+
+        public override void OnActionExecuting(HttpActionContext actionContext)
+        {
+            var shouldExecute = !FilterExtensions.HasActionOrControllerMarkerAttribute(actionContext.ActionDescriptor, attributeType);
+            if (shouldExecute)
+            {
+                filter.OnActionExecuting(actionContext);
+            }
+
+            base.OnActionExecuting(actionContext);
+        }
+
+        public override void OnActionExecuted(HttpActionExecutedContext actionExecutedContext)
+        {
+            var shouldExecute = !FilterExtensions.HasActionOrControllerMarkerAttribute(actionExecutedContext.ActionContext.ActionDescriptor, attributeType);
+            if (shouldExecute)
+            {
+                filter.OnActionExecuted(actionExecutedContext);
+            }
+
+            base.OnActionExecuted(actionExecutedContext);
         }
     }
 }
