@@ -8,7 +8,6 @@ using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Interview.Entities;
 using WB.Services.Export.Questionnaire;
-using WB.Services.Export.Resources;
 using WB.Services.Export.Services;
 using WB.Services.Export.Tenant;
 
@@ -170,7 +169,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
         {
             await actionsExporter.ExportAsync(tenant, questionnaireIdentity, new List<Guid> { interviewId }, "", new Progress<int>());
 
-            Assert.That(fileData[10], Is.EqualTo(new[] { "22222222222222222222222222222222", InterviewKey, "ApprovedBySupervisor", "supervisor", "Supervisor", Strings.AnyHeadquarters, "Headquarter", "2017-12-31", "14:45:30" }));
+            Assert.That(fileData[10], Is.EqualTo(new[] { "22222222222222222222222222222222", InterviewKey, "ApprovedBySupervisor", "supervisor", "Supervisor", "any headquarters", "Headquarter", "2017-12-31", "14:45:30" }));
         }
 
         [Test]
@@ -186,7 +185,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
         {
             await actionsExporter.ExportAsync(tenant, questionnaireIdentity, new List<Guid> { interviewId }, "", new Progress<int>());
 
-            Assert.That(fileData[12], Is.EqualTo(new[] { "22222222222222222222222222222222", InterviewKey, "ApprovedBySupervisor", "supervisor", "Supervisor", Strings.AnyHeadquarters, "Headquarter", "2017-12-31", "14:45:30" }));
+            Assert.That(fileData[12], Is.EqualTo(new[] { "22222222222222222222222222222222", InterviewKey, "ApprovedBySupervisor", "supervisor", "Supervisor", "any headquarters", "Headquarter", "2017-12-31", "14:45:30" }));
         }
 
         [Test]
