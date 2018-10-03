@@ -77,11 +77,13 @@ namespace WB.Services.Export.CsvExport.Exporters
             long totalProcessed = 0;
             var stopwatch = Stopwatch.StartNew();
 
+            var headquartersApi = tenantApi.For(tenant);
+
             foreach (var interviewIds in interviewIdsToExport.Batch(batchSize))
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                var comments = await tenantApi.For(tenant).GetInterviewCommentsBatchAsync(interviewIds.ToArray());
+                var comments = await headquartersApi.GetInterviewCommentsBatchAsync(interviewIds.ToArray());
 
                 var rows = ConvertToCsvStrings(comments, maxRosterDepthInQuestionnaire, hasAtLeastOneRoster);
                 this.csvWriter.WriteData(commentsFilePath, rows, ExportFileSettings.DataFileSeparator.ToString());
