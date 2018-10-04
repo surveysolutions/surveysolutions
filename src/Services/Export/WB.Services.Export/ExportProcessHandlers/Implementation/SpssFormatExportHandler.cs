@@ -33,10 +33,10 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
 
         protected override DataExportFormat Format => DataExportFormat.SPSS;
 
-        protected override Task ExportDataIntoDirectoryAsync(ExportSettings settings, IProgress<int> progress,
+        protected override async Task ExportDataIntoDirectoryAsync(ExportSettings settings, IProgress<int> progress,
             CancellationToken cancellationToken)
         {
-            var tabFiles = this.CreateTabularDataFiles(settings, progress, cancellationToken);
+            var tabFiles = await this.CreateTabularDataFiles(settings, progress, cancellationToken);
 
             this.CreateSpssDataFilesFromTabularDataFiles(settings.Tenant, settings.QuestionnaireId, tabFiles, progress,
                 cancellationToken);
@@ -45,8 +45,6 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
 
             this.GenerateDescriptionTxt(settings.Tenant, settings.QuestionnaireId, settings.ExportTempDirectory,
                 ExportFileSettings.SpssDataFileExtension);
-
-            return Task.CompletedTask;
         }
 
         private void CreateSpssDataFilesFromTabularDataFiles(TenantInfo tenant, QuestionnaireId questionnaireIdentity,
