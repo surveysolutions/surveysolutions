@@ -14,9 +14,9 @@ namespace WB.Services.Export.Ddi.Implementation
         private readonly IDdiMetadataFactory ddiMetadataFactory;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private const string ExportedDataFolderName = "DdiMetaData";
-        private readonly string pathToDdiMetadata;
         private readonly IExportFileNameService exportFileNameService;
         private readonly IDataExportFileAccessor dataExportFileAccessor;
+        private readonly InterviewDataExportSettings options;
 
         public DdiMetadataAccessor(
             IDdiMetadataFactory ddiMetadataFactory, 
@@ -30,35 +30,39 @@ namespace WB.Services.Export.Ddi.Implementation
             this.exportFileNameService = exportFileNameService;
             this.dataExportFileAccessor = dataExportFileAccessor;
 
-            var options = interviewDataExportSettings.Value;
-            this.pathToDdiMetadata = fileSystemAccessor.CombinePath(options.DirectoryPath, ExportedDataFolderName);
-
-            if (!fileSystemAccessor.IsDirectoryExists(this.pathToDdiMetadata))
-                fileSystemAccessor.CreateDirectory(this.pathToDdiMetadata);
+            this.options = interviewDataExportSettings.Value;
+            
         }
 
         public async Task<string> GetFilePathToDDIMetadata(TenantInfo tenant, QuestionnaireId questionnaireId,
             string password)
         {
-            var archiveFilePath = this.exportFileNameService.GetFileNameForDdiByQuestionnaire(questionnaireId, this.pathToDdiMetadata);
+            var pathToDdiMetadata = fileSystemAccessor.CombinePath(options.DirectoryPath, tenant.Id.Id, ExportedDataFolderName);
+
+            if (!fileSystemAccessor.IsDirectoryExists(pathToDdiMetadata))
+                fileSystemAccessor.CreateDirectory(pathToDdiMetadata);
+
+            var archiveFilePath = this.exportFileNameService.GetFileNameForDdiByQuestionnaire(questionnaireId, pathToDdiMetadata);
 
             if (this.fileSystemAccessor.IsFileExists(archiveFilePath))
                 return archiveFilePath;
 
             var filesToArchive = new List<string>
             {
-                await this.ddiMetadataFactory.CreateDDIMetadataFileForQuestionnaireInFolder(tenant, questionnaireId, this.pathToDdiMetadata)
+                await this.ddiMetadataFactory.CreateDDIMetadataFileForQuestionnaireInFolder(tenant, questionnaireId, pathToDdiMetadata)
             };
 
-            dataExportFileAccessor.RecreateExportArchive(this.pathToDdiMetadata, filesToArchive, archiveFilePath, password);
+            dataExportFileAccessor.RecreateExportArchive(pathToDdiMetadata, filesToArchive, archiveFilePath, password);
 
             return archiveFilePath;
         }
 
-        public void ClearFiles()
+        public void ClearFiles(TenantInfo tenant)
         {
-            this.fileSystemAccessor.DeleteDirectory(this.pathToDdiMetadata);
-            this.fileSystemAccessor.CreateDirectory(this.pathToDdiMetadata);
+            var pathToDdiMetadata = fileSystemAccessor.CombinePath(options.DirectoryPath, tenant.Id.Id, ExportedDataFolderName);
+
+            this.fileSystemAccessor.DeleteDirectory(pathToDdiMetadata);
+            this.fileSystemAccessor.CreateDirectory(pathToDdiMetadata);
         }
     }
 }
