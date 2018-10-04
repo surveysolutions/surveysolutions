@@ -25,7 +25,7 @@ namespace WB.UI.Designer.App_Start
             registry.Bind<ITokenVerifier, ApiValidationAntiForgeryTokenVerifier>();
 
             registry.BindWebApiAuthorizationFilter<CustomWebApiAuthorizeFilter>();
-            registry.BindWebApiAuthorizationFilterWhenControllerHasAttribute<TokenValidationAuthorizationFilter, ApiValidationAntiForgeryTokenAttribute>();
+            registry.BindWebApiAuthorizationFilterWhenControllerOrActionHasAttribute<TokenValidationAuthorizationFilter, ApiValidationAntiForgeryTokenAttribute>();
 
             registry.BindAsSingleton<ISettingsProvider, DesignerSettingsProvider>();
 

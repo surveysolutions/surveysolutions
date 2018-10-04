@@ -66,9 +66,9 @@ namespace WB.UI.Headquarters
 
             registry.BindToConstant<ITokenVerifier>(() => new SimpleTokenVerifier(settingsProvider.AppSettings["Synchronization.Key"]));
 
-            registry.BindWebApiFilterWhenControllerHasAttribute<TokenValidationAuthorizationFilter, TokenValidationAuthorizationAttribute>(FilterScope.Controller);
+            registry.BindWebApiAuthorizationFilterWhenControllerOrActionHasAttribute<TokenValidationAuthorizationFilter, TokenValidationAuthorizationAttribute>(/*FilterScope.Controller*/);
 
-            registry.BindWebApiAuthorizationFilterWhenControllerHasAttribute<TokenValidationAuthorizationFilter, ApiValidationAntiForgeryTokenAttribute>(
+            registry.BindWebApiAuthorizationFilterWhenControllerOrActionHasAttribute<TokenValidationAuthorizationFilter, ApiValidationAntiForgeryTokenAttribute>(
                 /*FilterScope.Controller, */
                 new ConstructorArgument("tokenVerifier", _ => new ApiValidationAntiForgeryTokenVerifier()));
             
