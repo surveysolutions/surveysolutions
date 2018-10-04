@@ -5,6 +5,7 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.Modularity;
+using WB.UI.Designer.Code;
 using WB.UI.Designer.Implementation.Services;
 using WB.UI.Designer.Services;
 using WB.UI.Shared.Web.Filters;
@@ -21,11 +22,13 @@ namespace WB.UI.Designer.App_Start
         {
             registry.Bind<IAggregateRootCacheCleaner, DummyAggregateRootCacheCleaner>();
 
-            registry.BindWithConstructorArgument<TokenValidationAuthorizationFilter, TokenValidationAuthorizationFilter>("tokenVerifier", new ApiValidationAntiForgeryTokenVerifier());
+            registry.Bind<ITokenVerifier, ApiValidationAntiForgeryTokenVerifier>();
 
-//            registry.BindWebApiAuthorizationFilterWhenControllerHasAttribute<TokenValidationAuthorizationFilter, ApiValidationAntiForgeryTokenAttribute>(
-//                /*FilterScope.Controller,*/
-//                new ConstructorArgument("tokenVerifier", _ => new ApiValidationAntiForgeryTokenVerifier()));
+            registry.BindWebApiAuthorizationFilter<CustomWebApiAuthorizeFilter>();
+
+            //registry.BindWithConstructorArgument<TokenValidationAuthorizationFilter, TokenValidationAuthorizationFilter>("tokenVerifier", new ApiValidationAntiForgeryTokenVerifier());
+
+            registry.BindWebApiAuthorizationFilterWhenControllerHasAttribute<TokenValidationAuthorizationFilter, ApiValidationAntiForgeryTokenAttribute>();
 
             registry.BindAsSingleton<ISettingsProvider, DesignerSettingsProvider>();
 
@@ -37,7 +40,7 @@ namespace WB.UI.Designer.App_Start
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
-            System.Web.Http.GlobalConfiguration.Configuration.Filters.Add(new WebApiAuthorizationFilterWhenActionMethodHasAttribute(serviceLocator.GetInstance<TokenValidationAuthorizationFilter>(), typeof(ApiValidationAntiForgeryTokenAttribute)));
+            //System.Web.Http.GlobalConfiguration.Configuration.Filters.Add(new WebApiAuthorizationFilterWhenActionMethodHasAttribute(serviceLocator.GetInstance<TokenValidationAuthorizationFilter>(), typeof(ApiValidationAntiForgeryTokenAttribute)));
 
             return Task.CompletedTask;
         }

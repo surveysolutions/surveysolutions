@@ -40,6 +40,10 @@ namespace WB.UI.Shared.Web.Modules
         void BindWebApiFilterWhenControllerHasAttribute<T, TAttribute>(System.Web.Http.Filters.FilterScope filterScope, int? order = null) 
             where T : System.Web.Http.Filters.IFilter;
 
+        void BindWebApiAuthorizationFilterWhenControllerHasAttribute<T, TAttribute>()
+            where T : System.Web.Http.Filters.IAuthorizationFilter
+            where TAttribute : Attribute;
+
         void BindWebApiAuthorizationFilterWhenControllerHasAttribute<T, TAttribute>(ConstructorArgument constructorArgument)
             where T : System.Web.Http.Filters.IAuthorizationFilter
             where TAttribute : Attribute;

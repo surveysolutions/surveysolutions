@@ -301,7 +301,7 @@ namespace WB.Tests.Integration.FullStackIntegration.Hq
 
             kernel.Init().Wait();
 
-            ScopeManager.SetScopeAdapter(new AutofacServiceLocatorAdapterWithChildrenScopes(kernel.Container));
+            ScopeManager.SetScopeAdapter(kernel.Container);
         }
 
         private async Task<Mock<IRestService>> SetupMockOfDesigner()

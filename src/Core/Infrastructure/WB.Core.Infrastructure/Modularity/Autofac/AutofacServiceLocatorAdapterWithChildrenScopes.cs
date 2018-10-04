@@ -115,7 +115,7 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
         }
     }
 
-    public class ScopeManager
+/*    public class ScopeManager
     {
         private static AutofacServiceLocatorAdapterWithChildrenScopes scopeAdapter;
 
@@ -155,5 +155,5 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
         {
             scopeAdapter.CloseScopeAndChildrenScopes(lifetimeScope);
         }
-    }
+    }*/
 }

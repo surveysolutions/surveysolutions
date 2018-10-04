@@ -14,14 +14,13 @@ namespace WB.UI.Shared.Web.Modules.Filters
 {
     public class MvcActionFilterWhenActionMethodHasNoTransactionAttribute : ActionFilterAttribute
     {
-        private readonly Type filter;
+        private readonly ActionFilterAttribute filterInstance;
         private readonly Type attribute;
         private bool shouldExecute;
-        private ActionFilterAttribute filterInstance;
 
-        public MvcActionFilterWhenActionMethodHasNoTransactionAttribute(Type TFilter, Type attribute)
+        public MvcActionFilterWhenActionMethodHasNoTransactionAttribute(ActionFilterAttribute filterInstance, Type attribute)
         {
-            this.filter = TFilter;
+            this.filterInstance = filterInstance;
             this.attribute = attribute;
         }
 
@@ -31,7 +30,6 @@ namespace WB.UI.Shared.Web.Modules.Filters
 
             if (shouldExecute)
             {
-                filterInstance = (ActionFilterAttribute)ServiceLocator.Current.GetInstance(filter);
                 filterInstance.OnActionExecuting(filterContext);
             }
 
