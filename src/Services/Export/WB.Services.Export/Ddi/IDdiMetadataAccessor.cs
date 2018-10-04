@@ -8,6 +8,6 @@ namespace WB.Services.Export.Ddi
     {
         Task<string> GetFilePathToDDIMetadata(TenantInfo tenant, QuestionnaireId questionnaireId, string password);
 
-        void ClearFiles();
+        void ClearFiles(TenantInfo tenant);
     }
 }
