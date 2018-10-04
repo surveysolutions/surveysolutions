@@ -25,9 +25,6 @@ namespace WB.UI.Designer.App_Start
             registry.Bind<ITokenVerifier, ApiValidationAntiForgeryTokenVerifier>();
 
             registry.BindWebApiAuthorizationFilter<CustomWebApiAuthorizeFilter>();
-
-            //registry.BindWithConstructorArgument<TokenValidationAuthorizationFilter, TokenValidationAuthorizationFilter>("tokenVerifier", new ApiValidationAntiForgeryTokenVerifier());
-
             registry.BindWebApiAuthorizationFilterWhenControllerHasAttribute<TokenValidationAuthorizationFilter, ApiValidationAntiForgeryTokenAttribute>();
 
             registry.BindAsSingleton<ISettingsProvider, DesignerSettingsProvider>();
@@ -40,8 +37,6 @@ namespace WB.UI.Designer.App_Start
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
-            //System.Web.Http.GlobalConfiguration.Configuration.Filters.Add(new WebApiAuthorizationFilterWhenActionMethodHasAttribute(serviceLocator.GetInstance<TokenValidationAuthorizationFilter>(), typeof(ApiValidationAntiForgeryTokenAttribute)));
-
             return Task.CompletedTask;
         }
     }
