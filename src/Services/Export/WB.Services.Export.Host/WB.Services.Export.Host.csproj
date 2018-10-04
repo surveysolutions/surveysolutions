@@ -13,6 +13,13 @@
     <VersionPrefix Condition="'$(VersionPrefix)' == ''">18.10.0-development-$(COMPUTERNAME)</VersionPrefix>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="logs\**" />
+    <Content Remove="logs\**" />
+    <EmbeddedResource Remove="logs\**" />
+    <None Remove="logs\**" />
+  </ItemGroup>
+
   <ItemGroup>  
     <PackageReference Include="Autofac" Version="4.8.1" />  
     <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.3.0" />

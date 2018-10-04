@@ -1,5 +1,6 @@
 using System;
 using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using WB.Services.Export.CsvExport;
@@ -31,7 +32,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             string directoryPath, string dataFilesExtension)
             => this.tabularFormatExportService.GenerateDescriptionFile(tenant, questionnaireIdentity, directoryPath, dataFilesExtension);
 
-        protected string[] CreateTabularDataFiles(ExportSettings exportSettings, IProgress<int> progress, CancellationToken cancellationToken)
+        protected async Task<string[]> CreateTabularDataFiles(ExportSettings exportSettings, IProgress<int> progress, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
@@ -40,7 +41,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             exportProgress.ProgressChanged +=
                 (sender, donePercent) => progress.Report(donePercent / 2);
 
-            this.tabularFormatExportService.ExportInterviewsInTabularFormat(
+            await this.tabularFormatExportService.ExportInterviewsInTabularFormat(
                 exportSettings, exportProgress, cancellationToken);
 
             return this.fileSystemAccessor.GetFilesInDirectory(exportSettings.ExportTempDirectory);
