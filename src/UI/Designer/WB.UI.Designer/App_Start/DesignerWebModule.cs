@@ -59,7 +59,7 @@ namespace WB.UI.Designer
             registry.BindAsSingleton<IWebTesterService, WebTesterService>();
 
             // temp override registration
-            registry.BindInPerUnitOfWorkScope<IUnitOfWork, UnitOfWork>();
+            registry.BindInPerUnitOfWorkOrPerRequestScope<IUnitOfWork, UnitOfWork>();
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)

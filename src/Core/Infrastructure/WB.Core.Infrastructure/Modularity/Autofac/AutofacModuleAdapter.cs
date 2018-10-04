@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Autofac;
 using Autofac.Core;
+using Autofac.Core.Lifetime;
 
 namespace WB.Core.Infrastructure.Modularity.Autofac
 {
@@ -74,9 +75,12 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
                 .WithParameter(argumentName, argumentValue);
         }
 
-        public void BindInPerUnitOfWorkScope<TInterface, TImplementation>() where TImplementation : TInterface
+        public void BindInPerUnitOfWorkOrPerRequestScope<TInterface, TImplementation>() where TImplementation : TInterface
         {
-            containerBuilder.RegisterType<TImplementation>().As<TInterface>().InstancePerMatchingLifetimeScope(AutofacServiceLocatorAdapterWithChildrenScopes.UnitOfWorkScope);
+            containerBuilder.RegisterType<TImplementation>().As<TInterface>()
+                .InstancePerMatchingLifetimeScope(
+                    AutofacServiceLocatorAdapterWithChildrenScopes.UnitOfWorkScope,
+                    MatchingScopeLifetimeTags.RequestLifetimeScopeTag);
         }
 
         public void BindWithConstructorArgumentInPerLifetimeScope<TInterface, TImplementation>(string argumentName, object argumentValue) where TImplementation : TInterface
