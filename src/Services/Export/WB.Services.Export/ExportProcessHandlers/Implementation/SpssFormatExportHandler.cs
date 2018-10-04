@@ -26,7 +26,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             ILogger<SpssFormatExportHandler> logger,
             IDataExportFileAccessor dataExportFileAccessor)
             : base(fileSystemAccessor, filebasedExportedDataAccessor, interviewDataExportSettings,
-                dataExportProcessesService, tabularFormatExportService, logger, dataExportFileAccessor)
+                dataExportProcessesService, tabularFormatExportService, dataExportFileAccessor)
         {
             this.tabularDataToExternalStatPackageExportService = tabularDataToExternalStatPackageExportService;
         }
