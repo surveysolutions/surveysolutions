@@ -1,7 +1,6 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using WB.Services.Export.CsvExport;
 using WB.Services.Export.Infrastructure;
@@ -21,7 +20,6 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             IOptions<InterviewDataExportSettings> interviewDataExportSettings, 
             IDataExportProcessesService dataExportProcessesService, 
             ITabularFormatExportService tabularFormatExportService,
-            ILogger<TabBasedFormatExportHandler> logger,
             IDataExportFileAccessor dataExportFileAccessor)
             : base(fileSystemAccessor, filebasedExportedDataAccessor, interviewDataExportSettings, dataExportProcessesService, dataExportFileAccessor)
         {
