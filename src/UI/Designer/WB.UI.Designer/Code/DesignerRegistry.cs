@@ -49,7 +49,7 @@ namespace WB.UI.Designer.Code
 
         public void Load(IWebIocRegistry registry)
         {
-            registry.BindMvcFilter<UnderConstructionMvcFilter>();
+            registry.BindMvcActionFilter<UnderConstructionMvcFilter>();
             registry.BindWebApiFilter<UnderConstructionHttpFilter>(/*System.Web.Http.Filters.FilterScope.Controller, 0*/);
             registry.BindMvcFilterWhenActionMethodHasNoAttribute<TransactionFilter, NoTransactionAttribute>(/*FilterScope.First,*/ 1);
             registry.BindWebApiFilterWhenActionMethodHasNoAttribute<ApiTransactionFilter, NoTransactionAttribute>(/*System.Web.Http.Filters.FilterScope.Global, 1*/);
