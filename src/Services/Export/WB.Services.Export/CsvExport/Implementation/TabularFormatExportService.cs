@@ -106,10 +106,6 @@ namespace WB.Services.Export.CsvExport.Implementation
             
             this.logger.Log(LogLevel.Information, $"Export with all steps finished for questionnaire {questionnaireIdentity}. " +
                              $"Took {exportWatch.Elapsed:c} to export {interviewIdsToExport.Count} interviews");
-
-            this.descriptionGenerator.GenerateDescriptionFile(questionnaireExportStructure, basePath, ExportFileSettings.TabDataFileExtension);
-
-            this.environmentContentService.CreateEnvironmentFiles(questionnaireExportStructure, basePath, cancellationToken);
         }
         
         public void GenerateDescriptionFile(TenantInfo tenant, QuestionnaireId questionnaireId, string basePath, string dataFilesExtension)

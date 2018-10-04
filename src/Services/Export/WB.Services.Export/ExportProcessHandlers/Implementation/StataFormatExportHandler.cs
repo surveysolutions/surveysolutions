@@ -25,7 +25,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             ITabularDataToExternalStatPackageExportService tabularDataToExternalStatPackageExportService,
             ILogger<StataFormatExportHandler> logger,
             IDataExportFileAccessor dataExportFileAccessor)
-            : base(fileSystemAccessor, filebasedExportedDataAccessor, interviewDataExportSettings, dataExportProcessesService, tabularFormatExportService, logger, dataExportFileAccessor)
+            : base(fileSystemAccessor, filebasedExportedDataAccessor, interviewDataExportSettings, dataExportProcessesService, tabularFormatExportService, dataExportFileAccessor)
         {
             this.tabularDataToExternalStatPackageExportService = tabularDataToExternalStatPackageExportService;
         }
