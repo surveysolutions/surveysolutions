@@ -97,7 +97,6 @@ namespace WB.UI.Designer.App_Start
 
             var config = GlobalConfiguration.Configuration;
 
-
             kernel.ContainerBuilder.RegisterControllers(Assembly.GetExecutingAssembly());
             kernel.ContainerBuilder.RegisterApiControllers(Assembly.GetExecutingAssembly());
 
@@ -113,25 +112,15 @@ namespace WB.UI.Designer.App_Start
             // init
             kernel.Init().Wait();
 
-            //var serviceLocator = ServiceLocator.Current.GetInstance<IServiceLocator>();
-            //ServiceLocator.SetLocatorProvider(() => serviceLocator);
             ScopeManager.SetScopeAdapter(kernel.Container);
             var scopeResolver = new AutofacServiceLocatorAdapterWithLifeScopeResolver(kernel.Container);
             ServiceLocator.SetLocatorProvider(() => scopeResolver);
-            //ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(kernel.Container));
-            //var adapterWithChildrenScopes = new AutofacServiceLocatorAdapterWithChildrenScopes(kernel.Container);
-            //ScopeManager.SetScopeAdapter(adapterWithChildrenScopes);
-            //ServiceLocator.SetLocatorProvider(() => adapterWithChildrenScopes);
 
             // DependencyResolver
             var resolver = new AutofacWebApiDependencyResolver(kernel.Container);
-            //var resolver = new AutofacDependencyResolverWithChildrenScopes(adapterWithChildrenScopes);
-            //var resolver = new AutofacWebApiDependencyResolverWithChildrenScopes(adapterWithChildrenScopes);
             config.DependencyResolver = resolver;
             GlobalConfiguration.Configuration.DependencyResolver = resolver;
 
-            //DependencyResolver.SetResolver(new AutofacDependencyResolver(kernel.Container, new CustomLifetimeScopeProvider(adapterWithChildrenScopes)));
-            //DependencyResolver.SetResolver(t => ServiceLocator.Current.GetInstance(t), t => ServiceLocator.Current.GetAllInstances(t));
             DependencyResolver.SetResolver(new AutofacDependencyResolver(kernel.Container));
         }
     }

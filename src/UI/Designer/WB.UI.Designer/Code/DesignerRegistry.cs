@@ -49,16 +49,6 @@ namespace WB.UI.Designer.Code
 
         public void Load(IWebIocRegistry registry)
         {
-//            System.Web.Http.GlobalConfiguration.Configuration.Filters.Add(new ApiTransactionFilter());
-//            System.Web.Http.GlobalConfiguration.Configuration.Filters.Add(new UnderConstructionHttpFilter());
-//            System.Web.Mvc.GlobalFilters.Filters.Add(new UnderConstructionMvcFilter());
-//            System.Web.Mvc.GlobalFilters.Filters.Add(new TransactionFilter());
-//            registry.Bind<ApiTransactionFilter>();
-//            registry.Bind<UnderConstructionHttpFilter>();
-//            registry.Bind<UnderConstructionMvcFilter>();
-//            registry.Bind<TransactionFilter>();
-
-            //registry.BindWebApiFilter<ApiTransactionFilter>();
             registry.BindMvcFilter<UnderConstructionMvcFilter>();
             registry.BindWebApiFilter<UnderConstructionHttpFilter>(/*System.Web.Http.Filters.FilterScope.Controller, 0*/);
             registry.BindMvcFilterWhenActionMethodHasNoAttribute<TransactionFilter, NoTransactionAttribute>(/*FilterScope.First,*/ 1);
@@ -85,11 +75,6 @@ namespace WB.UI.Designer.Code
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
-//            System.Web.Http.GlobalConfiguration.Configuration.Filters.Add(new WebApiActionFilterWhenActionMethodHasNoAttribute(serviceLocator.GetInstance<ApiTransactionFilter>(), typeof(NoTransactionAttribute)));
-//            System.Web.Http.GlobalConfiguration.Configuration.Filters.Add(serviceLocator.GetInstance<UnderConstructionHttpFilter>());
-//            System.Web.Mvc.GlobalFilters.Filters.Add(serviceLocator.GetInstance<UnderConstructionMvcFilter>());
-//            System.Web.Mvc.GlobalFilters.Filters.Add(serviceLocator.GetInstance<TransactionFilter>());
-
             return Task.CompletedTask;
         }
     }
