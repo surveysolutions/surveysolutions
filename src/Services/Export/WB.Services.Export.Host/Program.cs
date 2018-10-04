@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
+using NLog.Web;
 
 namespace WB.Services.Export.Host
 {
@@ -13,33 +15,49 @@ namespace WB.Services.Export.Host
     {
         static async Task Main(string[] args)
         {
-            AppDomain.CurrentDomain.UnhandledException += (sender, eventArgs) =>
+            // NLog: setup the logger first to catch all errors
+            var logger = NLog.Web.NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
+
+            try
             {
-                Console.WriteLine(eventArgs.ExceptionObject.GetType().FullName);
-                Console.WriteLine(eventArgs.ExceptionObject.ToString());
-            };
+                AppDomain.CurrentDomain.UnhandledException += (sender, eventArgs) =>
+                {
+                    Console.WriteLine(eventArgs.ExceptionObject.GetType().FullName);
+                    Console.WriteLine(eventArgs.ExceptionObject.ToString());
+                    logger.Error(eventArgs.ExceptionObject.ToString);
+                };
 
-            var isService = !(Debugger.IsAttached || args.Contains("--console"));
-            args = args.Where(arg => arg != "--console" && arg != "--worker").ToArray();
+                var isService = !(Debugger.IsAttached || args.Contains("--console"));
+                args = args.Where(arg => arg != "--console" && arg != "--worker").ToArray();
 
-            var builder = CreateWebHostBuilder(args);
+                var builder = CreateWebHostBuilder(args);
 
-            if (isService)
-            {
-                var pathToExe = Process.GetCurrentProcess().MainModule.FileName;
-                var pathToContentRoot = Path.GetDirectoryName(pathToExe);
-                builder.UseContentRoot(pathToContentRoot);
+                if (isService)
+                {
+                    var pathToExe = Process.GetCurrentProcess().MainModule.FileName;
+                    var pathToContentRoot = Path.GetDirectoryName(pathToExe);
+                    builder.UseContentRoot(pathToContentRoot);
+                }
+
+                var host = builder.Build();
+
+                if (isService)
+                {
+                    host.RunAsCustomService();
+                }
+                else
+                {
+                    await host.RunAsync();
+                }
             }
-
-            var host = builder.Build();
-            
-            if (isService)
+            catch (Exception ex)
             {
-                host.RunAsCustomService();
+                logger.Error(ex, "Stopped program because of exception");
+                throw;
             }
-            else
+            finally
             {
-                await host.RunAsync();
+                NLog.LogManager.Shutdown();
             }
         }
 
@@ -51,6 +69,14 @@ namespace WB.Services.Export.Host
                     c.AddJsonFile($"appsettings.{Environment.MachineName}.json", true);
                     c.AddCommandLine(args);
                 })
+                .ConfigureLogging((hosting, logging) =>
+                {
+                    if (!hosting.HostingEnvironment.IsDevelopment())
+                    {
+                        logging.ClearProviders();
+                    }
+                })
+                .UseNLog()
                 .UseUrls(GetCommandLineUrls(args))
                 .UseHttpSys()
                 .UseStartup<Startup>();
