@@ -100,10 +100,7 @@ namespace WB.Services.Export.Storage
 
         private void LogError(string message, Exception exception)
         {
-            log.LogError($"{message}. " +
-                         $"Bucket: {S3Settings.BucketName}. " +
-                         $"BasePath: {S3Settings.BasePath} " +
-                         $"EndPoint: {client.Config.ServiceURL} ", exception);
+            log.LogError(exception, $"{message}. Bucket: {S3Settings.BucketName}. BasePath: {S3Settings.BasePath} EndPoint: {client.Config.ServiceURL} ");
         }
 
         public bool IsEnabled() => true;
