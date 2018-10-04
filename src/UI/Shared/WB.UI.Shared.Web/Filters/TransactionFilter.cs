@@ -10,12 +10,19 @@ namespace WB.UI.Shared.Web.Filters
 {
     public class TransactionFilter : ActionFilterAttribute
     {
+        private readonly IUnitOfWork unitOfWork;
+
+        public TransactionFilter(IUnitOfWork unitOfWork)
+        {
+            this.unitOfWork = unitOfWork;
+        }
+
         public override void OnResultExecuted(ResultExecutedContext filterContext)
         {
             base.OnResultExecuted(filterContext);
             
             //should respect current scope
-            var unitOfWork = ServiceLocator.Current.GetInstance<IUnitOfWork>();
+            //var unitOfWork = ServiceLocator.Current.GetInstance<IUnitOfWork>();
             
             if (filterContext.Exception == null)
             {
