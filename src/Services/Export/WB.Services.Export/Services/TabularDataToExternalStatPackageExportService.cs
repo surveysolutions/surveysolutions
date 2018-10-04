@@ -132,7 +132,7 @@ namespace WB.Services.Export.Services
             }
             catch (Exception exc)
             {
-                this.logger.LogError($"Error on data export (questionnaireId:{questionnaireId}): ", exc);
+                this.logger.Log(LogLevel.Error, exc, $"Error on data export (questionnaireId:{questionnaireId}): ");
                 this.logger.LogError(currentDataInfo);
             }
 

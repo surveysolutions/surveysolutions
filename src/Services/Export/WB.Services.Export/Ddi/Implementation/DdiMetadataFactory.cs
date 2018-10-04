@@ -126,7 +126,7 @@ namespace WB.Services.Export.Ddi.Implementation
             catch (Exception exc)
             {
                 this.logger.LogError(
-                    $"Error on DDI metadata creation (questionnaireId:{questionnaireId}): ", exc);
+                    exc, $"Error on DDI metadata creation (questionnaireId:{questionnaireId}): ");
             }
 
             return string.Empty;
