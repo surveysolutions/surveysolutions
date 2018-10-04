@@ -241,7 +241,7 @@ namespace WB.UI.Shared.Web.Modules
                 .InstancePerRequest();
         }
 
-        public void BindMvcFilterWhenActionMethodHasNoAttribute<T, TAttribute>(int order = -1)
+        public void BindMvcActionFilterWhenControllerOrActionHasNoAttribute<T, TAttribute>(int order = -1)
             where T : System.Web.Mvc.ActionFilterAttribute
             where TAttribute : Attribute
         {
@@ -251,7 +251,7 @@ namespace WB.UI.Shared.Web.Modules
                 .InstancePerRequest();
         }
 
-        public void BindWebApiFilterWhenActionMethodHasNoAttribute<T, TAttribute>() 
+        public void BindWebApiActionFilterWhenControllerOrActionHasNoAttribute<T, TAttribute>() 
             where T : System.Web.Http.Filters.ActionFilterAttribute
             where TAttribute : Attribute
         {
@@ -261,12 +261,7 @@ namespace WB.UI.Shared.Web.Modules
                 .InstancePerRequest();
         }
 
-        public void BindWebApiFilterWhenControllerHasAttribute<T, TAttribute>(System.Web.Http.Filters.FilterScope filterScope, int? order = null) where T : IFilter
-        {
-            throw new NotImplementedException();
-        }
-
-        public void BindWebApiAuthorizationFilterWhenControllerHasAttribute<T, TAttribute>() where T : System.Web.Http.Filters.IAuthorizationFilter where TAttribute : Attribute
+        public void BindWebApiAuthorizationFilterWhenControllerOrActionHasAttribute<T, TAttribute>() where T : System.Web.Http.Filters.IAuthorizationFilter where TAttribute : Attribute
         {
             containerBuilder.RegisterType<T>().AsSelf().InstancePerRequest();
             containerBuilder.Register(c => new WebApiAuthorizationFilterWhenActionMethodHasAttribute<T, TAttribute>(c.Resolve<T>()))
@@ -274,15 +269,14 @@ namespace WB.UI.Shared.Web.Modules
                 .InstancePerRequest();
         }
 
-        public void BindWebApiAuthorizationFilterWhenControllerHasAttribute<T, TAttribute>(ConstructorArgument constructorArgument) 
+        public void BindWebApiAuthorizationFilterWhenControllerOrActionHasAttribute<T, TAttribute>(ConstructorArgument constructorArgument) 
             where T : System.Web.Http.Filters.IAuthorizationFilter
             where TAttribute : Attribute
         {
-            throw new NotImplementedException();
-//            containerBuilder.RegisterType<T>().AsSelf().WithParameter(constructorArgument.Name, constructorArgument.Value).InstancePerLifetimeScope();
-//            containerBuilder.Register(c => new WebApiAuthorizationFilterWhenActionMethodHasAttribute<T, TAttribute>(c.Resolve<T>()))
-//                .AsWebApiAuthorizationFilterFor<ApiController>()
-//                .InstancePerRequest();
+            containerBuilder.RegisterType<T>().AsSelf().WithParameter(constructorArgument.Name, constructorArgument.Value).InstancePerRequest();
+            containerBuilder.Register(c => new WebApiAuthorizationFilterWhenActionMethodHasAttribute<T, TAttribute>(c.Resolve<T>()))
+                .AsWebApiAuthorizationFilterFor<ApiController>()
+                .InstancePerRequest();
         }
     }
 }
