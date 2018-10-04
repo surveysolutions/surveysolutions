@@ -193,7 +193,7 @@ namespace WB.UI.Shared.Web.Modules
                 .InstancePerRequest();
         }
 
-        public void BindMvcFilter<T>() where T: System.Web.Mvc.ActionFilterAttribute
+        public void BindMvcActionFilter<T>() where T: System.Web.Mvc.ActionFilterAttribute
         {
             containerBuilder.RegisterType<T>().AsSelf().InstancePerRequest();
             containerBuilder.Register(c => new MvcActionFilter(typeof(T)))
@@ -233,7 +233,7 @@ namespace WB.UI.Shared.Web.Modules
                 .InstancePerRequest();
         }
 
-        public void BindMvcFilter<T>(FilterScope filterScope, int? order) where T : ActionFilterAttribute
+        public void BindMvcActionFilter<T>(FilterScope filterScope, int? order) where T : ActionFilterAttribute
         {
             containerBuilder.RegisterType<T>().AsSelf().InstancePerRequest();
             containerBuilder.Register(c => new MvcActionFilter(typeof(T)))
@@ -249,16 +249,6 @@ namespace WB.UI.Shared.Web.Modules
             containerBuilder.Register(c => new MvcActionFilterWhenActionMethodHasNoTransactionAttribute(c.Resolve<T>(), typeof(TAttribute)))
                 .AsActionFilterFor<Controller>(order)
                 .InstancePerRequest();
-        }
-
-        public void BindMvcFilterWhenActionMethodHasNoAttribute<T, TAttribute>(System.Web.Mvc.FilterScope filterScope, int? order)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void BindMvcFilter<T>(System.Web.Http.Filters.FilterScope filterScope, int? order) where T : IFilter
-        {
-            throw new NotImplementedException();
         }
 
         public void BindWebApiFilterWhenActionMethodHasNoAttribute<T, TAttribute>() 
