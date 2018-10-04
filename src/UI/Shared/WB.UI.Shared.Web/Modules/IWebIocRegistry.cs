@@ -26,22 +26,19 @@ namespace WB.UI.Shared.Web.Modules
         void BindMvcActionFilter<T>(System.Web.Mvc.FilterScope filterScope, int? order) 
             where T : System.Web.Mvc.ActionFilterAttribute;
 
-        void BindMvcFilterWhenActionMethodHasNoAttribute<T, TAttribute>(int order = -1) 
+        void BindMvcActionFilterWhenControllerOrActionHasNoAttribute<T, TAttribute>(int order = -1) 
             where T : System.Web.Mvc.ActionFilterAttribute
             where TAttribute : Attribute;
 
-        void BindWebApiFilterWhenActionMethodHasNoAttribute<T, TAttribute>() 
+        void BindWebApiActionFilterWhenControllerOrActionHasNoAttribute<T, TAttribute>() 
             where T : System.Web.Http.Filters.ActionFilterAttribute
             where TAttribute : Attribute;
 
-        void BindWebApiFilterWhenControllerHasAttribute<T, TAttribute>(System.Web.Http.Filters.FilterScope filterScope, int? order = null) 
-            where T : System.Web.Http.Filters.IFilter;
-
-        void BindWebApiAuthorizationFilterWhenControllerHasAttribute<T, TAttribute>()
+        void BindWebApiAuthorizationFilterWhenControllerOrActionHasAttribute<T, TAttribute>()
             where T : System.Web.Http.Filters.IAuthorizationFilter
             where TAttribute : Attribute;
 
-        void BindWebApiAuthorizationFilterWhenControllerHasAttribute<T, TAttribute>(ConstructorArgument constructorArgument)
+        void BindWebApiAuthorizationFilterWhenControllerOrActionHasAttribute<T, TAttribute>(ConstructorArgument constructorArgument)
             where T : System.Web.Http.Filters.IAuthorizationFilter
             where TAttribute : Attribute;
     }
