@@ -8,23 +8,20 @@ namespace WB.UI.Shared.Web.Modules
         void BindWebApiFilter<T>() 
             where T : System.Web.Http.Filters.ActionFilterAttribute;
 
-        void BindMvcActionFilter<T>() 
+        void BindMvcActionFilter<T>(int order = -1) 
             where T : System.Web.Mvc.ActionFilterAttribute;
 
         void BindWebApiExceptionFilter<T>()
             where T : System.Web.Http.Filters.ExceptionFilterAttribute;
 
-        void BindMvcExceptionFilter<T>() 
+        void BindMvcExceptionFilter<T>(int order = -1) 
             where T : System.Web.Mvc.IExceptionFilter;
 
         void BindWebApiAuthorizationFilter<T>() 
             where T : System.Web.Http.Filters.AuthorizationFilterAttribute;
 
-        void BindMvcAuthorizationFilter<T>() 
+        void BindMvcAuthorizationFilter<T>(int order = -1) 
             where T : System.Web.Mvc.IAuthorizationFilter;
-
-        void BindMvcActionFilter<T>(System.Web.Mvc.FilterScope filterScope, int? order) 
-            where T : System.Web.Mvc.ActionFilterAttribute;
 
         void BindMvcActionFilterWhenControllerOrActionHasNoAttribute<T, TAttribute>(int order = -1) 
             where T : System.Web.Mvc.ActionFilterAttribute

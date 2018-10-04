@@ -193,11 +193,11 @@ namespace WB.UI.Shared.Web.Modules
                 .InstancePerRequest();
         }
 
-        public void BindMvcActionFilter<T>() where T: System.Web.Mvc.ActionFilterAttribute
+        public void BindMvcActionFilter<T>(int order = -1) where T: System.Web.Mvc.ActionFilterAttribute
         {
             containerBuilder.RegisterType<T>().AsSelf().InstancePerRequest();
             containerBuilder.Register(c => new MvcActionFilter(typeof(T)))
-                .AsActionFilterFor<Controller>()
+                .AsActionFilterFor<Controller>(order)
                 .InstancePerRequest();
         }
 
@@ -209,11 +209,11 @@ namespace WB.UI.Shared.Web.Modules
                 .InstancePerRequest();
         }
 
-        public void BindMvcExceptionFilter<T>() where T : IExceptionFilter
+        public void BindMvcExceptionFilter<T>(int order = -1) where T : IExceptionFilter
         {
             containerBuilder.RegisterType<T>().AsSelf().InstancePerRequest();
             containerBuilder.Register(c => new MvcExceptionFilter<T>(c.Resolve<T>()))
-                .AsExceptionFilterFor<Controller>()
+                .AsExceptionFilterFor<Controller>(order)
                 .InstancePerRequest();
         }
 
@@ -225,19 +225,11 @@ namespace WB.UI.Shared.Web.Modules
                 .InstancePerRequest();
         }
 
-        public void BindMvcAuthorizationFilter<T>() where T : IAuthorizationFilter
+        public void BindMvcAuthorizationFilter<T>(int order = -1) where T : IAuthorizationFilter
         {
             containerBuilder.RegisterType<T>().AsSelf().InstancePerRequest();
             containerBuilder.Register(c => new MvcAuthorizationFilter<T>(c.Resolve<T>()))
-                .AsAuthorizationFilterFor<Controller>()
-                .InstancePerRequest();
-        }
-
-        public void BindMvcActionFilter<T>(FilterScope filterScope, int? order) where T : ActionFilterAttribute
-        {
-            containerBuilder.RegisterType<T>().AsSelf().InstancePerRequest();
-            containerBuilder.Register(c => new MvcActionFilter(typeof(T)))
-                .AsActionFilterFor<Controller>()
+                .AsAuthorizationFilterFor<Controller>(order)
                 .InstancePerRequest();
         }
 
