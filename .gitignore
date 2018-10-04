@@ -93,3 +93,4 @@ Elmah/
 /src/UI/Supervisor/WB.UI.Supervisor/Resources/Resource.Designer.cs
 /src/UI/Designer/WB.UI.Designer/questionnaire/build/rev-manifest.json
 .export/
+/src/Services/Export/WB.Services.Export.Host/logs
