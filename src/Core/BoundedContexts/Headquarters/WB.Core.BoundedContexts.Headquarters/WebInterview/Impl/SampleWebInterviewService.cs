@@ -63,13 +63,15 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview.Impl
             header.Add(AssignmentLink);
             header.Add(AssignmentId);
 
-            if (sampleAssignment != null)
+            foreach (var identifyingAnswer in sampleAssignment.SelectMany(x => x.IdentifyingData))
             {
-                foreach (var questionItem in sampleAssignment.SelectMany(x => x.IdentifyingData)
-                    .Select(x => x.Identity.Id).Distinct()
-                    .Select(questionnaire.GetQuestionVariableName))
+                if (identifyingAnswer != null)
                 {
-                    header.Add(questionItem);
+                    var variableName = questionnaire.GetQuestionVariableName(identifyingAnswer.Identity.Id);
+                    if (!header.Contains(variableName))
+                    {
+                        header.Add(variableName);
+                    }
                 }
             }
 
