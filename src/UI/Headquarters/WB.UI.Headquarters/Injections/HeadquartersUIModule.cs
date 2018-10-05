@@ -1,5 +1,4 @@
 using System;
-using System.Configuration;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -45,8 +44,10 @@ using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web.Attributes;
 using WB.UI.Shared.Web.CommandDeserialization;
+using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.Modules;
 using WB.UI.Shared.Web.Services;
+using ConfigurationManager = System.Configuration.ConfigurationManager;
 using RestService = WB.Core.GenericSubdomains.Portable.Implementation.Services.RestService;
 
 namespace WB.UI.Headquarters.Injections
@@ -107,7 +108,7 @@ namespace WB.UI.Headquarters.Injections
             {
                 var manager = ctx.Get<IPlainTransactionManager>();
                 var settings = ctx.Get<InterviewDataExportSettings>();
-
+                var cfg = ctx.Get<IConfigurationManager>();
                 string key = null;
 
                 manager.ExecuteInPlainTransaction(() =>
@@ -121,10 +122,12 @@ namespace WB.UI.Headquarters.Injections
                     BaseAddress = new Uri(settings.ExportServiceUrl),
                     DefaultRequestHeaders =
                     {
-                        Authorization = new AuthenticationHeaderValue("Bearer", key),
-                        Referrer = new Uri(ConfigurationManager.AppSettings["BaseUrl"])
+                        Authorization = new AuthenticationHeaderValue(@"Bearer", key),
+                        Referrer = new Uri(ConfigurationManager.AppSettings[@"BaseUrl"])
                     }
                 };
+
+                http.DefaultRequestHeaders.Add(@"x-tenant-name", cfg.AppSettings[@"Storage.S3.Prefix"]);
 
                 var api = Refit.RestService.For<IExportServiceApi>(http);
 
