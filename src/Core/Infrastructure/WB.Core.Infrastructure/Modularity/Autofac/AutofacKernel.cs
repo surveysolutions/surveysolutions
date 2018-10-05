@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -23,14 +24,23 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
 
         public IContainer Container { get; set; }
 
-        public void Load(params IModule[] modules)
+        public virtual void Load<T>(params IModule<T>[] modules) where T: IIocRegistry
         {
-            var autofacModules = modules.Select(module => module.AsAutofac()).ToArray();
+            var autofacModules = modules.Select(module =>
+            {
+                switch (module)
+                {
+                    case IModule iModule: return iModule.AsAutofac();
+                    default:
+                        throw new ArgumentException("Cant resolve module type: " + module.GetType());
+                }
+            }).ToArray();
+
             foreach (var autofacModule in autofacModules)
             {
                 this.containerBuilder.RegisterModule(autofacModule);
             }
-            initModules.AddRange(modules.Select(m => m as IInitModule).Where(m => m != null));
+            initModules.AddRange(modules);
         }
 
         
@@ -60,10 +70,10 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
             try
             {
                 foreach (var module in initModules)
-                    {
-                        status.ClearMessage();
-                        await module.Init(ServiceLocator.Current, status);
-                    }
+                {
+                    status.ClearMessage();
+                    await module.Init(ServiceLocator.Current, status);
+                }
             }
             finally
             {

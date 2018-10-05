@@ -7,12 +7,19 @@ using Autofac.Core.Lifetime;
 
 namespace WB.Core.Infrastructure.Modularity.Autofac
 {
-    public class AutofacModuleAdapter : Module, IIocRegistry
+    public class AutofacModuleAdapter : AutofacModuleAdapter<IIocRegistry>
     {
-        private readonly IModule module;
-        private ContainerBuilder containerBuilder;
+        public AutofacModuleAdapter(IModule<IIocRegistry> module) : base(module)
+        {
+        }
+    }
 
-        public AutofacModuleAdapter(IModule module)
+    public abstract class AutofacModuleAdapter<TIoc> : Module, IIocRegistry where TIoc : class, IIocRegistry 
+    {
+        protected readonly IModule<TIoc> module;
+        protected ContainerBuilder containerBuilder;
+
+        protected AutofacModuleAdapter(IModule<TIoc> module)
         {
             this.module = module;
         }
@@ -20,7 +27,7 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
         protected override void Load(ContainerBuilder builder)
         {
             containerBuilder = builder;
-            this.module.Load(this);
+            this.module.Load(this as TIoc);
         }
 
         void IIocRegistry.Bind<TInterface, TImplementation>()
@@ -166,16 +173,6 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
         {
             containerBuilder.Register((ctx, p) => func(new AutofacModuleContext(ctx, p))).SingleInstance();
         }
-
-        /*public void BindToConstructorInSingletonScope<T>(Func<IConstructorContext, T> func)
-        {
-            containerBuilder.Register((ctx, p) => func(new AutofacConstructorContext(ctx, p))).SingleInstance();
-        }*/
-
-        /*public void BindToConstructorInSingletonScope<T>(Func<IModuleContext, T> func)
-        {
-            throw new NotImplementedException();
-        }*/
 
         public void BindAsSingleton(Type @interface, Type implementation)
         {
