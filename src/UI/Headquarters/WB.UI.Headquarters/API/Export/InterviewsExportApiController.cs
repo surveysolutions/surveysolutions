@@ -87,12 +87,12 @@ namespace WB.UI.Headquarters.API.Export
         [ApiNoCache]
         public HttpResponseMessage GetInterviewCommentariesBatch([FromUri] Guid[] id)
         {
-            var response = new List<(Guid id, List<InterviewApiComment> comments)>();
+            var response = new List<InterviewApiComment>();
 
             foreach (var interviewId in id)
             {
                 var entities = this.viewFactory.GetInterviewComments(interviewId);
-                response.Add((interviewId, entities));
+                response.AddRange(entities);
             }
 
             return Request.CreateResponse(HttpStatusCode.OK, response);
