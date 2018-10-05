@@ -11,7 +11,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainInterviewFileStorageTe
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
             FileSystemAccessorMock.Setup(x => x.IsFileExists(Moq.It.IsAny<string>())).Returns(true);
-            FileSystemAccessorMock.Setup(x => x.ReadAllBytes(Moq.It.IsAny<string>())).Returns(data1);
+            FileSystemAccessorMock.Setup(x => x.ReadAllBytes(Moq.It.IsAny<string>(), null, null)).Returns(data1);
             imageFileRepository = CreatePlainFileRepository(fileSystemAccessor: FileSystemAccessorMock.Object);
             BecauseOf();
         }

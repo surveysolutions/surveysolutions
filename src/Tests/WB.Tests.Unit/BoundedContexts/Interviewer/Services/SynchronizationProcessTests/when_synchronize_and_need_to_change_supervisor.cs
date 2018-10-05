@@ -33,7 +33,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
             InterviewerStorageMock.Setup(x => x.FirstOrDefault()).Returns(interviewerIdentity);
 
             viewModel = Create.Service.SynchronizationProcess(principal: PrincipalMock.Object,
-                synchronizationService: SynchronizationServiceMock.Object,
+                interviewerSynchronizationService: SynchronizationServiceMock.Object,
                 interviewersPlainStorage: InterviewerStorageMock.Object);
 
             viewModel
@@ -53,6 +53,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         static InterviewerSynchronizationProcess viewModel;
         static readonly Mock<IPlainStorage<InterviewerIdentity>> InterviewerStorageMock = new Mock<IPlainStorage<InterviewerIdentity>>();
         static Mock<IInterviewerPrincipal> PrincipalMock = new Mock<IInterviewerPrincipal>();
-        static readonly Mock<ISynchronizationService>  SynchronizationServiceMock =new Mock<ISynchronizationService>();
+        static readonly Mock<IInterviewerSynchronizationService>  SynchronizationServiceMock =new Mock<IInterviewerSynchronizationService>();
     }
 }

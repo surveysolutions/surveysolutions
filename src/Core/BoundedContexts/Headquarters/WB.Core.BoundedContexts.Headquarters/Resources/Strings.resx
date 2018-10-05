@@ -219,6 +219,9 @@
   <data name="AllTeams" xml:space="preserve">
     <value>All teams</value>
   </data>
+  <data name="Teams" xml:space="preserve">
+    <value>Teams</value>
+  </data>
   <data name="AllPeriods" xml:space="preserve">
     <value>All periods</value>
   </data>
@@ -227,5 +230,8 @@
   </data>
   <data name="AllInterviewers" xml:space="preserve">
     <value>All interviewers</value>
+  </data>
+  <data name="NoPermissionsToExecute" xml:space="preserve">
+    <value>User is not authorized to execute provided action</value>
   </data>
 </root>

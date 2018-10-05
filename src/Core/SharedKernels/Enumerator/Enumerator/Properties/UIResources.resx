@@ -455,8 +455,14 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="Prefs_ShowLocationOnMap" xml:space="preserve">
     <value>Show location on map</value>
   </data>
+  <data name="Prefs_DownloadUpdatesForInterviewerApp" xml:space="preserve">
+    <value>Download updates for Interviewer application</value>
+  </data>
   <data name="Prefs_ShowLocationOnMapSummary" xml:space="preserve">
     <value>Load map to show location for GPS questions</value>
+  </data>
+  <data name="Prefs_DownloadUpdatesForInterviewerAppSummary" xml:space="preserve">
+    <value>If interviewers don't have an access to the internet, this functionality should be enabled, because it make possibility to update their applications during offline synchronization with Supervisor application</value>
   </data>
   <data name="VariableEmptyValue" xml:space="preserve">
     <value>&lt;empty&gt;</value>

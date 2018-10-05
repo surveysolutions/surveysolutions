@@ -34,6 +34,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
         public class StatusDurationRequest : DataTableRequest
         {
             public string QuestionnaireId { get; set; }
+            public Guid? SupervisorId { get; set; }
             public int Timezone { get; set; }
         }
 

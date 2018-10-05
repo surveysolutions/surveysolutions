@@ -22,5 +22,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Models
 
         public DateTime? UnactiveDateStart { get; set; }
         public DateTime? UnactiveDateEnd { get; set; }
+
+        public Guid? TeamId { get; set; }
     }
 }

@@ -29,7 +29,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
 
             Mock<IPlainStorage<InterviewerIdentity>> interviewerStorageMock = new Mock<IPlainStorage<InterviewerIdentity>>();
             Mock<IUserInteractionService> userInteractionServiceMock = new Mock<IUserInteractionService>();
-            Mock<ISynchronizationService> synchronizationServiceMock = new Mock<ISynchronizationService>();
+            Mock<IInterviewerSynchronizationService> synchronizationServiceMock = new Mock<IInterviewerSynchronizationService>();
             Mock<IPasswordHasher> passwordHasherMock = new Mock<IPasswordHasher>();
 
             var principalMock = Mock.Get(Setup.InterviewerPrincipal(interviewerIdentity));
@@ -65,7 +65,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 .Returns(interviewerIdentity);
 
             var viewModel = Create.Service.SynchronizationProcess(principal: principalMock.Object,
-                synchronizationService: synchronizationServiceMock.Object,
+                interviewerSynchronizationService: synchronizationServiceMock.Object,
                 interviewersPlainStorage: interviewerStorageMock.Object,
                 userInteractionService: userInteractionServiceMock.Object,
                 passwordHasher: passwordHasherMock.Object);
