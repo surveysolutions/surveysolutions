@@ -6,7 +6,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Account
     {
         public RegisterUser(string applicationName, string userName, string email,
             Guid userId, string password,
-            string passwordSalt, bool isConfirmed, string confirmationToken)
+            string passwordSalt, bool isConfirmed, string confirmationToken, string fullName)
             : base(userId)
         {
             this.ApplicationName = applicationName;
@@ -16,7 +16,10 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Account
             this.PasswordSalt = passwordSalt;
             this.IsConfirmed = isConfirmed;
             this.ConfirmationToken = confirmationToken;
+            this.FullName = fullName;
         }
+
+        public string FullName { get; }
 
         public string ApplicationName { private set; get; }
         public string UserName { private set; get; }
