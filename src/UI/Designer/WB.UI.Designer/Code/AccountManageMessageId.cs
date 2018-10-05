@@ -5,6 +5,7 @@
         ChangePasswordSuccess,
         SetPasswordSuccess,
         RemoveLoginSuccess,
+        UpdateUserProfileSuccess
     }
 
 }

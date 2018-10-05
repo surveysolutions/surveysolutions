@@ -246,4 +246,12 @@
   <data name="NoQuestionnaireIdToValidatePremissions" xml:space="preserve">
     <value>Ключ опросника не был предоставлен для проверки прав доступа</value>
   </data>
+    <data name="UnhandledExceptionDuringUpdateUserInfo" xml:space="preserve">
+    <value>Не удалось обновить информацию о пользователе. Пожалуйста, повторите попытку позже.</value>
+    <comment>Информация не обновлена. Пожалуйста, попробуйте повторить попытку позже</comment>
+  </data>
+    <data name="FullNameMaxLengthError" xml:space="preserve">
+    <value>ФИО не должно содержать больше {1} символов</value>
+    <comment>ФИО не должно содержать больше {1} символов</comment>
+  </data>
 </root>
