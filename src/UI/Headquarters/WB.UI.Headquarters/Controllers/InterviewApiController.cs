@@ -57,6 +57,7 @@ namespace WB.UI.Headquarters.Controllers
                 AssignmentId = data.AssignmentId,
                 UnactiveDateStart = data.UnactiveDateStart?.ToUniversalTime(),
                 UnactiveDateEnd = data.UnactiveDateEnd?.ToUniversalTime(),
+                TeamId = data.TeamId
             };
 
             var allInterviews = this.allInterviewsViewFactory.Load(input);

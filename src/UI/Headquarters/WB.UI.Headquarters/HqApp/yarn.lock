@@ -694,23 +694,23 @@
     babel-plugin-dynamic-import-node "^2.0.0"
     babel-plugin-transform-vue-jsx "^4.0.1"
 
-"@vue/cli-overlay@^3.0.0":
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/@vue/cli-overlay/-/cli-overlay-3.0.1.tgz#474067e18fc7c1b303c97901175d6441bfdcde6f"
+"@vue/cli-overlay@^3.0.2":
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/@vue/cli-overlay/-/cli-overlay-3.0.2.tgz#18411420798135295fe80523579b22e4c6bb3d3b"
 
-"@vue/cli-plugin-babel@^3.0.0":
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/@vue/cli-plugin-babel/-/cli-plugin-babel-3.0.1.tgz#a1691caf610d42800314ceb9e727a7668bfa3e7f"
+"@vue/cli-plugin-babel@^3.0.3":
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/@vue/cli-plugin-babel/-/cli-plugin-babel-3.0.3.tgz#967ef902553c1c6152ef6330cb05816a730dfdb5"
   dependencies:
     "@babel/core" "7.0.0-beta.47"
     "@vue/babel-preset-app" "^3.0.1"
     babel-loader "^8.0.0-0"
 
-"@vue/cli-plugin-eslint@^3.0.0":
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/@vue/cli-plugin-eslint/-/cli-plugin-eslint-3.0.1.tgz#9330cfe4843058f28b0ab2871a8862fa31f3a5c0"
+"@vue/cli-plugin-eslint@^3.0.3":
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/@vue/cli-plugin-eslint/-/cli-plugin-eslint-3.0.3.tgz#728daadd5d3b8af69679c7dcbc63b7f8d00e6c0c"
   dependencies:
-    "@vue/cli-shared-utils" "^3.0.1"
+    "@vue/cli-shared-utils" "^3.0.2"
     babel-eslint "^8.2.5"
     eslint "^4.19.1"
     eslint-loader "^2.0.0"
@@ -728,13 +728,13 @@
     jest-transform-stub "^1.0.0"
     vue-jest "^2.6.0"
 
-"@vue/cli-service@^3.0.0":
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/@vue/cli-service/-/cli-service-3.0.1.tgz#086c4b3b78bda7b0f4e1e7324237c62c89c5e6b3"
+"@vue/cli-service@^3.0.3":
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/@vue/cli-service/-/cli-service-3.0.3.tgz#dd91f2ee40922001559601d458209e4398887337"
   dependencies:
     "@intervolga/optimize-cssnano-plugin" "^1.0.5"
-    "@vue/cli-overlay" "^3.0.0"
-    "@vue/cli-shared-utils" "^3.0.1"
+    "@vue/cli-overlay" "^3.0.2"
+    "@vue/cli-shared-utils" "^3.0.2"
     "@vue/preload-webpack-plugin" "^1.1.0"
     "@vue/web-component-wrapper" "^1.2.0"
     acorn "^5.7.1"
@@ -774,7 +774,7 @@
     thread-loader "^1.1.5"
     uglifyjs-webpack-plugin "^1.2.7"
     url-loader "^1.1.0"
-    vue-loader "^15.3.0"
+    vue-loader "^15.4.2"
     webpack "^4.15.1"
     webpack-bundle-analyzer "^2.13.1"
     webpack-chain "^4.8.0"
@@ -798,6 +798,23 @@
     semver "^5.5.0"
     string.prototype.padstart "^3.0.0"
 
+"@vue/cli-shared-utils@^3.0.2":
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/@vue/cli-shared-utils/-/cli-shared-utils-3.0.2.tgz#d4c734060ac994fadf0fc0c48883c7931a72c4ff"
+  dependencies:
+    chalk "^2.4.1"
+    execa "^0.10.0"
+    joi "^13.0.0"
+    launch-editor "^2.2.1"
+    lru-cache "^4.1.3"
+    node-ipc "^9.1.1"
+    opn "^5.3.0"
+    ora "^2.1.0"
+    request "^2.87.0"
+    request-promise-native "^1.0.5"
+    semver "^5.5.0"
+    string.prototype.padstart "^3.0.0"
+
 "@vue/component-compiler-utils@^2.0.0":
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/@vue/component-compiler-utils/-/component-compiler-utils-2.2.0.tgz#bbbb7ed38a9a8a7c93abe7ef2e54a90a04b631b4"
@@ -812,9 +829,9 @@
     source-map "^0.5.6"
     vue-template-es2015-compiler "^1.6.0"
 
-"@vue/eslint-config-prettier@^3.0.1":
-  version "3.0.1"
-  resolved "https://registry.yarnpkg.com/@vue/eslint-config-prettier/-/eslint-config-prettier-3.0.1.tgz#28c1543b29646814c148d8dea0cd5102a7874fce"
+"@vue/eslint-config-prettier@^3.0.3":
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/@vue/eslint-config-prettier/-/eslint-config-prettier-3.0.3.tgz#b1e43da08b4d2137db9cb974f56990015c0ac2b2"
   dependencies:
     eslint-config-prettier "^2.9.0"
     eslint-plugin-prettier "^2.6.2"
@@ -2740,14 +2757,20 @@ data-urls@^1.0.0:
     whatwg-mimetype "^2.0.0"
     whatwg-url "^6.4.0"
 
-datatables.net-select@^1.2.5:
-  version "1.2.7"
-  resolved "https://registry.yarnpkg.com/datatables.net-select/-/datatables.net-select-1.2.7.tgz#7d5badfca49c438f8b51df04483d8d77857e917c"
+datatables.net-select@1.2.5:
+  version "1.2.5"
+  resolved "https://registry.yarnpkg.com/datatables.net-select/-/datatables.net-select-1.2.5.tgz#4f764669b464d5576a59c576c1250a5d069aa2e9"
   dependencies:
     datatables.net "^1.10.15"
     jquery ">=1.7"
 
-datatables.net@^1.10.15, datatables.net@^1.10.16:
+datatables.net@1.10.16:
+  version "1.10.16"
+  resolved "https://registry.yarnpkg.com/datatables.net/-/datatables.net-1.10.16.tgz#4b052d1082824261b68eed9d22741b711d3d2469"
+  dependencies:
+    jquery ">=1.7"
+
+datatables.net@^1.10.15:
   version "1.10.19"
   resolved "https://registry.yarnpkg.com/datatables.net/-/datatables.net-1.10.19.tgz#97a1ed41c85e62d61040603481b59790a172dd1f"
   dependencies:
@@ -4536,9 +4559,9 @@ https-browserify@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/https-browserify/-/https-browserify-1.0.0.tgz#ec06c10e0a34c0f2faf199f7fd7fc78fffd03c73"
 
-i18next@^11.6.0:
-  version "11.6.0"
-  resolved "https://registry.yarnpkg.com/i18next/-/i18next-11.6.0.tgz#e0047aa3e3a0080f6f318426f90597cbb0d6ddd5"
+i18next@^11.9.0:
+  version "11.9.0"
+  resolved "https://registry.yarnpkg.com/i18next/-/i18next-11.9.0.tgz#c30c0a5e0a857124923a8dd1ce8f1df603e30c70"
 
 iconv-lite@0.4.19:
   version "0.4.19"
@@ -5883,7 +5906,7 @@ lru-cache@^3.2.0:
   dependencies:
     pseudomap "^1.0.1"
 
-lru-cache@^4.0.1, lru-cache@^4.1.1, lru-cache@^4.1.2:
+lru-cache@^4.0.1, lru-cache@^4.1.1, lru-cache@^4.1.2, lru-cache@^4.1.3:
   version "4.1.3"
   resolved "https://registry.yarnpkg.com/lru-cache/-/lru-cache-4.1.3.tgz#a1175cf3496dfc8436c156c334b4955992bce69c"
   dependencies:
@@ -9100,9 +9123,9 @@ vue-jest@^2.6.0:
     tsconfig "^7.0.0"
     vue-template-es2015-compiler "^1.6.0"
 
-vue-loader@^15.3.0:
-  version "15.3.0"
-  resolved "https://registry.yarnpkg.com/vue-loader/-/vue-loader-15.3.0.tgz#b474d10a4e93d934a78c147fc3e314b370e9fc54"
+vue-loader@^15.4.2:
+  version "15.4.2"
+  resolved "https://registry.yarnpkg.com/vue-loader/-/vue-loader-15.4.2.tgz#812bb26e447dd3b84c485eb634190d914ce125e2"
   dependencies:
     "@vue/component-compiler-utils" "^2.0.0"
     hash-sum "^1.0.2"
@@ -9136,7 +9159,7 @@ vue-textarea-autosize@^1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/vue-textarea-autosize/-/vue-textarea-autosize-1.0.4.tgz#671e4f9b69d278be9b94ea304a3032bcabb54135"
 
-vue2-editor@^2.4.2:
+vue2-editor@^2.6.6:
   version "2.6.6"
   resolved "https://registry.yarnpkg.com/vue2-editor/-/vue2-editor-2.6.6.tgz#567f7c2aabdd10d465756da7aebf568ee34ebbc5"
   dependencies:

@@ -20,20 +20,33 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
 
         public void Register(IRequestHandler requestHandler)
         {
-            requestHandler.RegisterHandler<GetInterviewerAppPatchRequest, GetInterviewerAppPatchResponse>(GetInterviewerAppPatch);
+            requestHandler.RegisterHandler<GetInterviewerAppRequest, GetInterviewerAppResponse>(GetInterviewerApp);
         }
 
-        private Task<GetInterviewerAppPatchResponse> GetInterviewerAppPatch(GetInterviewerAppPatchRequest request)
+        public Task<GetInterviewerAppResponse> GetInterviewerApp(GetInterviewerAppRequest request)
         {
-            var patchFileName = $@"WBCapi.{request.AppVersion}{(request.AppType == EnumeratorApplicationType.WithMaps ? ".Ext" : "")}.delta";
+            var patchFileName = $@"interviewer{
+                (request.AppType == EnumeratorApplicationType.WithMaps ? ".maps" : "")
+            }.apk";
 
-            var patchFilePath = this.fileSystemAccessor.CombinePath(this.settings.InterviewerAppPatchesDirectory,
+            var patchFilePath = this.fileSystemAccessor.CombinePath(this.settings.InterviewerApplicationsDirectory,
                 this.settings.GetApplicationVersionCode().ToString(), patchFileName);
-
-            return Task.FromResult(new GetInterviewerAppPatchResponse
+            
+            var result = new GetInterviewerAppResponse();
+            
+            if (!this.fileSystemAccessor.IsFileExists(patchFilePath))
             {
-                Content = this.fileSystemAccessor.IsFileExists(patchFilePath) ? this.fileSystemAccessor.ReadAllBytes(patchFilePath) : null
-            });
+                result.Skipped = 0;
+                result.Total = 0;
+                return Task.FromResult(result);
+            }
+
+            result.Content = this.fileSystemAccessor.ReadAllBytes(patchFilePath, request.Skip, request.Maximum);
+            result.Total = this.fileSystemAccessor.GetFileSize(patchFilePath);
+            result.Skipped = request.Skip;
+            result.Length = result.Content.Length;
+            
+            return Task.FromResult(result);
         }
     }
 }

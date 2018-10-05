@@ -60,7 +60,7 @@ namespace WB.Tests.Abc
         }
 
         public static IQuestionnaireStorage QuestionnaireRepositoryWithOneQuestionnaire(QuestionnaireDocument questionnaireDocument)
-            => Setup.QuestionnaireRepositoryWithOneQuestionnaire(Create.Entity.PlainQuestionnaire(questionnaireDocument));
+            => Setup.QuestionnaireRepositoryWithOneQuestionnaire(Create.Entity.PlainQuestionnaire(questionnaireDocument), questionnaireDocument);
 
         public static IQuestionnaireStorage QuestionnaireRepositoryWithOneQuestionnaire(
             QuestionnaireIdentity questionnaireIdentity, QuestionnaireDocument questionnaireDocument)
@@ -70,9 +70,15 @@ namespace WB.Tests.Abc
             QuestionnaireIdentity questionnaireIdentity, Expression<Func<IQuestionnaire, bool>> questionnaireMoqPredicate)
             => Setup.QuestionnaireRepositoryWithOneQuestionnaire(Mock.Of<IQuestionnaire>(questionnaireMoqPredicate));
 
+        public static IQuestionnaireStorage QuestionnaireRepositoryWithOneQuestionnaire(IQuestionnaire questionnaire, QuestionnaireDocument questionnaireDocument = null)
+        {
+            var questionnaireMockStorage = new Mock<IQuestionnaireStorage>();
+            questionnaireMockStorage.Setup(x => x.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>())).Returns(questionnaire);
+            questionnaireMockStorage.Setup(x => x.GetQuestionnaireDocument(Moq.It.IsAny<QuestionnaireIdentity>())).Returns(questionnaireDocument);
+            questionnaireMockStorage.Setup(x => x.GetQuestionnaireDocument(Moq.It.IsAny<Guid>(), Moq.It.IsAny<long>())).Returns(questionnaireDocument);
 
-        public static IQuestionnaireStorage QuestionnaireRepositoryWithOneQuestionnaire(IQuestionnaire questionnaire)
-            => Stub<IQuestionnaireStorage>.Returning(questionnaire);
+            return questionnaireMockStorage.Object;// Stub<IQuestionnaireStorage>.Returning(questionnaire);
+        }
 
         public static IEventHandler FailingFunctionalEventHandlerHavingUniqueType<TUniqueType>()
         {

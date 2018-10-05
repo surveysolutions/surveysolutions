@@ -4,7 +4,6 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
-using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSyncHandlers
@@ -34,66 +33,82 @@ namespace WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSync
         private Task<GetLatestApplicationVersionResponse> GetLatestApplicationVersion(
             GetLatestApplicationVersionRequest request)
         {
+            
             var sAppVersion = this.settings.GetApplicationVersionCode().ToString();
 
-            var pathToInterviewerAppPatches = this.fileSystemAccessor.CombinePath(
-                this.settings.InterviewerAppPatchesDirectory, sAppVersion);
+            var pathToInterviewerApks = this.fileSystemAccessor.CombinePath(
+                this.settings.InterviewerApplicationsDirectory, sAppVersion);
 
-            var hasPatches = this.fileSystemAccessor.IsDirectoryExists(pathToInterviewerAppPatches);
+            var hasApks = this.fileSystemAccessor.IsDirectoryExists(pathToInterviewerApks) &&
+                          this.fileSystemAccessor.GetFilesInDirectory(pathToInterviewerApks).Length == 2;
 
             return Task.FromResult(new GetLatestApplicationVersionResponse
             {
-                InterviewerApplicationVersion = hasPatches
+                InterviewerApplicationVersion = hasApks
                     ? this.settings.GetApplicationVersionCode()
                     : (int?) null
             });
         }
 
-        public Task<CanSynchronizeResponse> CanSynchronize(CanSynchronizeRequest arg)
+        public async Task<CanSynchronizeResponse> CanSynchronize(CanSynchronizeRequest arg)
         {
             if (settings.LastHqSyncTimestamp == null ||
                 arg.LastHqSyncTimestamp != null && arg.LastHqSyncTimestamp > settings.LastHqSyncTimestamp)
             {
-                return Task.FromResult(new CanSynchronizeResponse
+                return new CanSynchronizeResponse
                 {
                     CanSyncronize = false,
                     Reason = SyncDeclineReason.SupervisorRequireOnlineSync
-                });
+                };
             }
 
             var supervisorBuildNumber = this.settings.GetApplicationVersionCode();
-            if (supervisorBuildNumber < arg.InterviewerBuildNumber)
+            if (arg.InterviewerBuildNumber > supervisorBuildNumber)
             {
-                return Task.FromResult(new CanSynchronizeResponse
+                return new CanSynchronizeResponse
                 {
                     CanSyncronize = false,
                     Reason = SyncDeclineReason.UnexpectedClientVersion
-                });
+                };
+            }
+
+            if (arg.InterviewerBuildNumber < supervisorBuildNumber)
+            {
+                // check that supervisor has apks for interviewers
+                var latestInterviewerVersion = await GetLatestApplicationVersion(new GetLatestApplicationVersionRequest());
+                if (!latestInterviewerVersion.InterviewerApplicationVersion.HasValue)
+                {
+                    return new CanSynchronizeResponse
+                    {
+                        CanSyncronize = false,
+                        Reason = SyncDeclineReason.UnexpectedClientVersion
+                    };
+                }
             }
 
             var user = interviewerViewRepository.GetById(arg.InterviewerId.FormatGuid());
             if (user == null)
             {
-                return Task.FromResult(new CanSynchronizeResponse
+                return new CanSynchronizeResponse
                 {
                     CanSyncronize = false,
                     Reason = SyncDeclineReason.NotATeamMember
-                });
+                };
             }
 
             if (user.IsLockedByHeadquarters || user.IsLockedBySupervisor)
             {
-                return Task.FromResult(new CanSynchronizeResponse
+                return new CanSynchronizeResponse
                 {
                     CanSyncronize = false,
                     Reason = SyncDeclineReason.UserIsLocked
-                });
+                };
             }
 
-            return Task.FromResult(new CanSynchronizeResponse
+            return new CanSynchronizeResponse
             {
                 CanSyncronize = true
-            });
+            };
         }
     }
 }
