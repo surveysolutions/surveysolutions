@@ -1,10 +1,10 @@
 ﻿@using WB.UI.Designer.BootstrapSupport
 @using WB.UI.Designer.Resources
 @using WB.UI.Shared.Web.Extensions
-@model WB.UI.Designer.Models.LocalPasswordModel
+@model WB.UI.Designer.Models.ManageAccountModel
 
 @{
-    ViewBag.Title = AccountResources.ChangePassword;
+    ViewBag.Title = AccountResources.ManageAccount;
     Layout = "~/Views/Shared/Layout.cshtml";
 }
 <div id="edit-form">
@@ -12,31 +12,15 @@
     {
         <div class="alert alert-success header">@Html.Raw(@TempData[Alerts.SUCCESS])</div>
     }
-    @using (Html.BeginForm("Manage", "Account", null, FormMethod.Post, new { @class = "form-signin", autocomplete = "off" }))
+    @if (TempData.ContainsKey(Alerts.ERROR))
     {
-        @Html.AntiForgeryToken()
-        <h1>@AccountResources.ChangePassword</h1>
-        if (TempData.ContainsKey(Alerts.ERROR))
-        {
-            <p class="note has-error">@Html.Raw(@TempData[Alerts.ERROR])</p>
-        }
-        <div class="form-group">
-            @Html.PasswordFor(x => x.OldPassword, new { @class = "form-control", placeholder = AccountResources.CurrentPassword })
-            @Html.ValidationMessageFor(x => x.OldPassword, null, new { @class = "help-inline" })
-        </div>
-        <div class="form-group">
-            @Html.PasswordFor(x => x.Password, new { @class = "form-control", placeholder = AccountResources.PasswordWatermark })
-            @Html.ValidationMessageFor(x => x.Password, null, new { @class = "help-inline" })
-        </div>
-        <div class="form-group">
-            @Html.PasswordFor(x => x.ConfirmPassword, new { @class = "form-control", placeholder = AccountResources.RepeatPassword })
-            @Html.ValidationMessageFor(x => x.ConfirmPassword, null, new { @class = "help-inline" })
-        </div>
-        <div class="form-actions">
-            <input type="submit" class="btn btn-success btn-lg" value="@AccountResources.Change"/>
-            @Html.ActionLink(QuestionnaireController.Cancel, "Index", "Questionnaire", null, new { @class = "btn " })
-        </div>
+        <p class="note has-error">@Html.Raw(@TempData[Alerts.ERROR])</p>
     }
+
+
+    @Html.Partial("_UpdateUserProfile", Model.UserProfile)
+    @Html.Partial("_ChangePassword", Model.ChangePassword)
+
 </div>
 
 @section Scripts {

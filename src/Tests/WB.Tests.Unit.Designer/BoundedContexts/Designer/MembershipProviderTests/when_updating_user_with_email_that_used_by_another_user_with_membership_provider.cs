@@ -19,7 +19,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.MembershipProviderTest
             accountRepository =
                 Mock.Of<IAccountRepository>(
                     x =>
-                        x.Create(it.IsAny<object>(), it.IsAny<string>(), it.IsAny<string>(), it.IsAny<string>()) == Mock.Of<IMembershipAccount>() &&
+                        x.Create(it.IsAny<object>(), it.IsAny<string>(), it.IsAny<string>(), it.IsAny<string>(), it.IsAny<string>()) == Mock.Of<IMembershipAccount>() &&
                         x.GetUserNameByEmail(validatedUserEmail) == "userWithExistingEmail" &&
                         x.GetByProviderKey(userIdWithExistingEmail) == Mock.Of<IMembershipAccount>() &&
                         x.IsUniqueEmailRequired == true);
