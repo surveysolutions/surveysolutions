@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using WB.Services.Export.Tenant;
+using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.Services.Processing
 {
@@ -16,7 +16,7 @@ namespace WB.Services.Export.Services.Processing
 
         Task UpdateDataExportProgressAsync(TenantInfo tenant, string tag, int progressInPercents);
 
-        void DeleteDataExport(TenantInfo tenant, string tag);
+        Task DeleteDataExport(TenantInfo tenant, string tag);
 
         Task ChangeStatusTypeAsync(TenantInfo tenant, string tag, DataExportStatus status);
     }

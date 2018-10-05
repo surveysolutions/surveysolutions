@@ -15,9 +15,9 @@ using WB.Services.Export.Interview.Entities;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Export.Services;
-using WB.Services.Export.Tenant;
 using WB.Services.Export.Tests.CsvExport.Exporters;
 using WB.Services.Export.Utils;
+using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.Tests
 {
@@ -74,9 +74,9 @@ namespace WB.Services.Export.Tests
             return Mock.Of<ITenantApi<IHeadquartersApi>>();
         }
 
-        public static TenantInfo Tenant()
+        public static TenantInfo Tenant(string baseUrl = null, string id = null, string name = null)
         {
-            return new TenantInfo();
+            return new TenantInfo(baseUrl, id, name);
         }
 
         public static QuestionnaireExportStructure QuestionnaireExportStructure(string questionnaireId = null)

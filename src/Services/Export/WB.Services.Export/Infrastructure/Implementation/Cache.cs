@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Runtime.Caching;
 using WB.Services.Export.Questionnaire;
-using WB.Services.Export.Tenant;
+using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.Infrastructure.Implementation
 {

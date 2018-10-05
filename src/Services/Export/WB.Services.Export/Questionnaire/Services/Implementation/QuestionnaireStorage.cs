@@ -2,7 +2,7 @@
 using Newtonsoft.Json;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Services;
-using WB.Services.Export.Tenant;
+using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.Questionnaire.Services.Implementation
 {
