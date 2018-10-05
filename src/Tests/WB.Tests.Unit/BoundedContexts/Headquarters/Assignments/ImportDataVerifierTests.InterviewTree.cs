@@ -40,6 +40,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var answer = 9999m;
             var expectedParentValue = 0m;
 
+            var optionsRepository = Create.Storage.QuestionnaireQuestionOptionsRepository();
+
             var questionnaire = Create.Entity.PlainQuestionnaire(
                 Create.Entity.QuestionnaireDocumentWithOneChapter(
                     Create.Entity.SingleOptionQuestion(parentCascadingQuestionId, answerCodes: new[] { answerOnParentQuestion, answer }),
@@ -47,7 +49,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                         cascadeFromQuestionId: parentCascadingQuestionId, answerCodes: new[] { answerOnParentQuestion, answer },
                         parentCodes: new[] { 1m, expectedParentValue })),
                 version: 1,
-                questionOptionsRepository: new QuestionnaireQuestionOptionsRepository());
+                questionOptionsRepository: optionsRepository);
 
             var questionnaireRepository = Mock.Of<IQuestionnaireStorage>(repository
                 => repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire);
@@ -56,7 +58,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
 
             var verifier = Create.Service.ImportDataVerifier(
                 interviewTreeBuilder: Create.Service.InterviewTreeBuilder(),
-                optionsRepository: Create.Storage.QuestionnaireQuestionOptionsRepository(questionnaire));
+                optionsRepository: optionsRepository);
 
             var answers = new List<InterviewAnswer>
             {

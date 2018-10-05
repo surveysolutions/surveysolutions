@@ -27,7 +27,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
                         })
                 });
 
-            plainQuestionnaire = Create.Entity.PlainQuestionnaire(document: questionnaire);
+            var substitutionService = Create.Service.SubstitutionService();
+            plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaire, 1, substitutionService: substitutionService);
             BecauseOf();
         }  
 
