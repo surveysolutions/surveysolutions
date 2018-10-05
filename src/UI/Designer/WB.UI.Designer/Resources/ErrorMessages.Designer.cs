@@ -124,6 +124,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Full name cannot contain more than {1} characters.
+        /// </summary>
+        internal static string FullNameMaxLengthError {
+            get {
+                return ResourceManager.GetString("FullNameMaxLengthError", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Login or password is incorrect. Please try again..
         /// </summary>
         internal static string IncorrectUserNameOrPassword {
@@ -319,6 +328,15 @@ namespace WB.UI.Designer.Resources {
         internal static string Unexpected_error_occurred_Please_try_again_later {
             get {
                 return ResourceManager.GetString("Unexpected_error_occurred_Please_try_again_later", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Could not update user information. Please, try again later..
+        /// </summary>
+        internal static string UnhandledExceptionDuringUpdateUserInfo {
+            get {
+                return ResourceManager.GetString("UnhandledExceptionDuringUpdateUserInfo", resourceCulture);
             }
         }
         

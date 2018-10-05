@@ -125,5 +125,7 @@ namespace WB.Core.BoundedContexts.Designer.Services.Accounts
         string ConfirmationToken { get; set; }
 
         bool CanImportOnHq { get; set; }
+
+        string FullName { get; set; }
     }
 }
