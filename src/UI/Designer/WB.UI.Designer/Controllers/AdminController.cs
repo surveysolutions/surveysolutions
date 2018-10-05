@@ -475,7 +475,7 @@ namespace WB.UI.Designer.Controllers
             {
                 try
                 {
-                    WebSecurity.CreateUserAndAccount(model.UserName, model.Password, new { model.Email }, false);
+                    WebSecurity.CreateUserAndAccount(model.UserName, model.Password, new { Email = model.Email, FullName = model.FullName }, false);
                     Roles.Provider.AddUsersToRoles(new[] { model.UserName }, new[] { this.UserHelper.USERROLENAME });
 
                     return this.RedirectToAction("Index");
@@ -544,7 +544,8 @@ namespace WB.UI.Designer.Controllers
                 LastPasswordChangedDate = account.LastPasswordChangedDate.ToUIString(),
                 Comment = account.Comment ?? GlobalHelper.EmptyString,
                 OwnedQuestionnaires = ownedQuestionnaires,
-                SharedQuestionnaires = sharedQuestionnaires
+                SharedQuestionnaires = sharedQuestionnaires,
+                FullName = account.FullName
             });
         }
 
@@ -560,7 +561,8 @@ namespace WB.UI.Designer.Controllers
                             IsLockedOut = intUser.IsLockedOut, 
                             UserName = intUser.UserName, 
                             Id = id,
-                            CanImportOnHq = intUser.CanImportOnHq
+                            CanImportOnHq = intUser.CanImportOnHq,
+                            FullName = intUser.FullName
                         });
         }
 
@@ -590,7 +592,8 @@ namespace WB.UI.Designer.Controllers
                                 lastActivityDate: intUser.LastActivityDate,
                                 lastPasswordChangedDate: intUser.LastPasswordChangedDate,
                                 lastLockoutDate: intUser.LastLockoutDate,
-                                canImportOnHq: user.CanImportOnHq));
+                                canImportOnHq: user.CanImportOnHq,
+                                fullName: user.FullName));
 
                         return this.RedirectToAction("Index");
                     }
@@ -645,7 +648,8 @@ namespace WB.UI.Designer.Controllers
                                  CanOpen = false,
                                  CanDelete = false, 
                                  CanPreview = editAction(x),
-                                 CanImportOnHq = x.CanImportOnHq
+                                 CanImportOnHq = x.CanImportOnHq,
+                                 FullName = x.FullName
                              });
 
             return View(retVal.ToPagedList(page, GlobalHelper.GridPageItemsCount, users.TotalCount));
