@@ -87,9 +87,7 @@ namespace WB.UI.Designer.App_Start
                 new QuestionnaireVerificationModule(),
                 new MembershipModule(),
                 new FileInfrastructureModule(),
-                new ProductVersionModule(typeof(MvcApplication).Assembly)
-                );
-            kernel.Load(
+                new ProductVersionModule(typeof(MvcApplication).Assembly),
                 new DesignerRegistry(pdfSettings, deskSettings, settingsProvider.AppSettings.GetInt("QuestionnaireChangeHistoryLimit", 500)),
                 new DesignerWebModule(),
                 new AutofacWebCommonModule()
