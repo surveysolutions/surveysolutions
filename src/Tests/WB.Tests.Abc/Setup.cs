@@ -261,7 +261,7 @@ namespace WB.Tests.Abc
                 questionnaireDocuments.Add(new KeyValuePair<string, QuestionnaireDocument>(questionnaire.Key, questionnaireDocumentWithOneChapterAndLanguages));
             }
 
-            var questionnaireRepository = Create.Fake.QuestionnaireRepository(questionnaireDocuments.ToArray());
+            var questionnaireRepository = Create.Fake.QuestionnaireRepository(questionnaireDocuments.ToArray(), questionOptionsRepository);
 
             return Create.AggregateRoot.StatefulInterview(questionnaireRepository: questionnaireRepository, questionOptionsRepository: questionOptionsRepository);
         }
