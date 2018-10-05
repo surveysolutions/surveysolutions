@@ -20,7 +20,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.MembershipProviderTest
             accountRepositoryMock = new Mock<IAccountRepository>();
             accountRepositoryMock.Setup(
                 x =>
-                    x.Create(it.IsAny<object>(), it.IsAny<string>(), it.IsAny<string>(), it.IsAny<string>()))
+                    x.Create(it.IsAny<object>(), it.IsAny<string>(), it.IsAny<string>(), it.IsAny<string>(), it.IsAny<string>()))
                     .Returns(Mock.Of<IMembershipAccount>());
 
             var passwordPolicy = Mock.Of<IPasswordPolicy>();
@@ -42,6 +42,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.MembershipProviderTest
             accountRepositoryMock.Verify(
                 x => x.Create(
                     it.Is<Guid>(userId => userId == validatedUserId),
+                    it.IsAny<string>(),
                     it.IsAny<string>(),
                     it.IsAny<string>(),
                     it.IsAny<string>()));

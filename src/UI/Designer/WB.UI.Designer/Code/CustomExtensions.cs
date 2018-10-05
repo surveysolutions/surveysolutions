@@ -83,15 +83,15 @@ namespace WB.UI.Designer.Extensions
         }
 
         public static string ToUIMessage(this AccountManageMessageId message)
-        {
-            return message == AccountManageMessageId.ChangePasswordSuccess
-                       ? AccountResources.PasswordChanged
-                       : message == AccountManageMessageId.SetPasswordSuccess
-                             ? AccountResources.PasswordSet
-                             : message == AccountManageMessageId.RemoveLoginSuccess
-                                   ? AccountResources.ExternalLoginRemoved
-                                   : string.Empty;
-        }
+            => message == AccountManageMessageId.ChangePasswordSuccess
+                ? AccountResources.PasswordChanged
+                : message == AccountManageMessageId.SetPasswordSuccess
+                    ? AccountResources.PasswordSet
+                    : message == AccountManageMessageId.RemoveLoginSuccess
+                        ? AccountResources.ExternalLoginRemoved
+                        : message == AccountManageMessageId.UpdateUserProfileSuccess
+                            ? AccountResources.AccountInfoUpdated
+                            : string.Empty;
 
         public static string ToUIString(this DateTime source)
         {
