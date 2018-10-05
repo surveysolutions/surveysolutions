@@ -37,15 +37,14 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
 
         protected override DataExportFormat Format => DataExportFormat.Tabular;
 
-        protected override Task ExportDataIntoDirectoryAsync(ExportSettings settings,
+        protected override async Task ExportDataIntoDirectoryAsync(ExportSettings settings,
             IProgress<int> progress, CancellationToken cancellationToken)
         {
             this.GenerateDescriptionTxt(settings.Tenant, settings.QuestionnaireId, settings.ExportTempDirectory);
 
-            this.tabularFormatExportService.ExportInterviewsInTabularFormat(settings, progress, cancellationToken).Wait(cancellationToken);
+            await this.tabularFormatExportService.ExportInterviewsInTabularFormat(settings, progress, cancellationToken);
 
             this.CreateDoFilesForQuestionnaire(settings.Tenant, settings.QuestionnaireId, settings.ExportTempDirectory, cancellationToken);
-            return Task.CompletedTask;
         }
 
         private void GenerateDescriptionTxt(TenantInfo tenant, QuestionnaireId questionnaireIdentity, string directoryPath)
