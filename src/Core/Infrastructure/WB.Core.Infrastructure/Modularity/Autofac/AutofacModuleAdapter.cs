@@ -58,13 +58,14 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
             
             foreach (var constructorArgument in constructorArguments)
             {
-                var value = constructorArgument.Value.Invoke(null);
+                //var value = constructorArgument.Value.Invoke(null);
 
                 //object Callback(IContext context) => constructorArgument.Value.Invoke(new NinjectModuleContext(context));
                 registrationBuilder.WithParameter(
                     new ResolvedParameter(
                         (pi, ctx) => pi.Name == constructorArgument.Name, //pi.ParameterType == typeof(string) &&
-                        (pi, ctx) => value) //constructorArgument.Value.Invoke(new AutofacModuleContext(ctx, new List<Parameter>())) 
+                        (pi, ctx) => constructorArgument.Value.Invoke(new AutofacModuleContext(ctx, new List<Parameter>() )))
+                        //constructorArgument.Value.Invoke(new AutofacModuleContext(ctx, new List<Parameter>())) 
 
                     //constructorArgument.Name, constructorArgument.Value.Invoke()
                     );

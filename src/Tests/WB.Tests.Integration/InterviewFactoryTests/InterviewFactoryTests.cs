@@ -5,10 +5,13 @@ using Castle.Core.Internal;
 using Main.Core.Documents;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Moq;
 using Newtonsoft.Json;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
@@ -18,6 +21,7 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 using WB.Core.SharedKernels.QuestionnaireEntities;
+using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewFactoryTests
@@ -808,9 +812,13 @@ namespace WB.Tests.Integration.InterviewFactoryTests
             PrepareQuestionnaire(questionnaire, questionnaireId.Version);
             PrepareQuestionnaire(questionnaire, otherQuestionnaireId.Version);
 
-           foreach (var expectedAudioAnswer in expectedAudioAnswers.GroupBy(x => x.Answer.InterviewId))
+            using (var unitOfWork = IntegrationCreate.UnitOfWork(sessionFactory))
+            {
+                var interviewSummaryRepositoryLocal = new PostgreReadSideStorage<InterviewSummary>(unitOfWork, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
+
+                foreach (var expectedAudioAnswer in expectedAudioAnswers.GroupBy(x => x.Answer.InterviewId))
                 {
-                    interviewSummaryRepository.Store(new InterviewSummary
+                    interviewSummaryRepositoryLocal.Store(new InterviewSummary
                     {
                         InterviewId = expectedAudioAnswer.Key,
                         Status = InterviewStatus.Completed,
@@ -819,7 +827,9 @@ namespace WB.Tests.Integration.InterviewFactoryTests
 
                     }, expectedAudioAnswer.Key);
                 }
-            
+
+                unitOfWork.AcceptChanges();
+            }
 
             foreach (var groupedInterviews in expectedAudioAnswers.GroupBy(x => x.Answer.InterviewId))
                 {
