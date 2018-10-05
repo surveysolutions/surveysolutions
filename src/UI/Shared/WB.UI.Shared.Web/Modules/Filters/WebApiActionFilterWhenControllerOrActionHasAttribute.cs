@@ -11,11 +11,11 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 
 namespace WB.UI.Shared.Web.Modules.Filters
 {
-    public class WebApiActionFilterWhenActionMethodHasAttribute<TFilter, TAttribute> : IAutofacActionFilter
+    public class WebApiActionFilterWhenControllerOrActionHasAttribute<TFilter, TAttribute> : IAutofacActionFilter
         where TFilter : System.Web.Http.Filters.ActionFilterAttribute
         where TAttribute : Attribute
     {
-        public WebApiActionFilterWhenActionMethodHasAttribute(TFilter filter)
+        public WebApiActionFilterWhenControllerOrActionHasAttribute(TFilter filter)
         {
             this.filter = filter;
         }
@@ -49,9 +49,9 @@ namespace WB.UI.Shared.Web.Modules.Filters
         }
     }
 
-    public class WebApiActionFilterWhenActionMethodHasAttribute : ActionFilterAttribute, IAutofacActionFilter
+    public class WebApiActionFilterWhenControllerOrActionHasAttribute : ActionFilterAttribute, IAutofacActionFilter
     {
-        public WebApiActionFilterWhenActionMethodHasAttribute(ActionFilterAttribute filter, Type attributeType)
+        public WebApiActionFilterWhenControllerOrActionHasAttribute(ActionFilterAttribute filter, Type attributeType)
         {
             this.filter = filter;
             this.attributeType = attributeType;

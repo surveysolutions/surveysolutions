@@ -1,28 +1,18 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using System.Web.Http.Controllers;
-using System.Web.Http.Filters;
-using System.Web.Mvc;
-using Autofac.Integration.WebApi;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using ActionFilterAttribute = System.Web.Mvc.ActionFilterAttribute;
+﻿using System.Web.Mvc;
 
 namespace WB.UI.Shared.Web.Modules.Filters
 {
     public class MvcActionFilter : ActionFilterAttribute
     {
-        private readonly Type filter;
-        private ActionFilterAttribute filterInstance;
+        private readonly ActionFilterAttribute filterInstance;
 
-        public MvcActionFilter(Type filter)
+        public MvcActionFilter(ActionFilterAttribute filter)
         {
-            this.filter = filter;
+            this.filterInstance = filter;
         }
 
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            filterInstance = (ActionFilterAttribute)ServiceLocator.Current.GetInstance(filter);
             filterInstance.OnActionExecuting(filterContext);
 
             base.OnActionExecuting(filterContext);

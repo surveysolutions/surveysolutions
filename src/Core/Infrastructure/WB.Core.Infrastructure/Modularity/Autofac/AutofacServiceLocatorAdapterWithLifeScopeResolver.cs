@@ -68,7 +68,6 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
 
         public ILifetimeScope GetCurrentScope()
         {
-            //return rootScope.Resolve<ILifetimeScope>();
             return containers.Value?.LastOrDefault() ?? rootScope;
         }
 
