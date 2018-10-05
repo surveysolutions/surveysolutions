@@ -41,15 +41,11 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
             expectedException = new InterviewException("Some interview exception",
                 InterviewDomainExceptionType.StatusIsNotOneOfExpected);
 
-            pgSqlConnection = new NpgsqlConnection(ConnectionStringBuilder.ConnectionString);
-            pgSqlConnection.Open();
-
             packagesStorage = new PostgresPlainStorageRepository<InterviewPackage>(UnitOfWork);
             brokenPackagesStorage = new PostgresPlainStorageRepository<BrokenInterviewPackage>(UnitOfWork);
 
             mockOfCommandService = new Mock<ICommandService>();
-            mockOfCommandService.Setup(
-                    x => x.Execute(Moq.It.IsAny<SynchronizeInterviewEventsCommand>(), Moq.It.IsAny<string>()))
+            mockOfCommandService.Setup(x => x.Execute(Moq.It.IsAny<SynchronizeInterviewEventsCommand>(), Moq.It.IsAny<string>()))
                 .Throws(expectedException);
 
             var newtonJsonSerializer = new JsonAllTypesSerializer();
@@ -102,7 +98,16 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
         [NUnit.Framework.Test]
         public void should_broken_packages_storage_contains_specified_interview()
         {
-            var expectedPackage = brokenPackagesStorage.GetById(1);
+            //code should be changed
+            //if code suppresses exception and continues execution
+            //UnitOfWork could contain data that should not be persisted
+            //all objects created with UnitOfWork could not be used
+
+
+            var UoW = IntegrationCreate.UnitOfWork(sessionFactory);
+            var brokenPackagesStorageVerifier = new PostgresPlainStorageRepository<BrokenInterviewPackage>(UoW);
+
+            var expectedPackage = brokenPackagesStorageVerifier.GetById(1);
 
             expectedPackage.IsCensusInterview.Should().Be(expectedCommand.CreatedOnClient);
             expectedPackage.InterviewStatus.Should().Be(expectedCommand.InterviewStatus);
@@ -114,6 +119,8 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
             expectedPackage.ExceptionMessage.Should().Be(expectedException.Message);
             expectedPackage.Events.Should().Be(expectedEventsString);
             expectedPackage.PackageSize.Should().Be(expectedEventsString.Length);
+
+            UoW.Dispose();
         }
 
         [OneTimeTearDown]
@@ -127,7 +134,6 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
         private static PostgresPlainStorageRepository<InterviewPackage> packagesStorage;
         private static PostgresPlainStorageRepository<BrokenInterviewPackage> brokenPackagesStorage;
         private static IUnitOfWork UnitOfWork;
-        static NpgsqlConnection pgSqlConnection;
         private static string origin;
         private static InterviewException expectedException;
         private static string expectedEventsString;

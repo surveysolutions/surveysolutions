@@ -124,7 +124,8 @@ namespace WB.Tests.Abc.TestFactories
             Guid? userId = null,
             IQuestionnaireStorage questionnaireRepository = null,
             bool shouldBeInitialized = true,
-            Action<Mock<IInterviewLevel>> setupLevel = null)
+            Action<Mock<IInterviewLevel>> setupLevel = null,
+            IQuestionOptionsRepository questionOptionsRepository = null)
         {
             questionnaireId = questionnaireId ?? Guid.NewGuid();
 
@@ -133,7 +134,7 @@ namespace WB.Tests.Abc.TestFactories
                 CreateDefaultInterviewExpressionStateProvider(setupLevel),
                 Create.Service.SubstitutionTextFactory(),
                 Create.Service.InterviewTreeBuilder(),
-                Mock.Of<IQuestionOptionsRepository>());
+                questionOptionsRepository ?? Mock.Of<IQuestionOptionsRepository>());
 
             if (shouldBeInitialized)
             {

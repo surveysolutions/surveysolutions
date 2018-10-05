@@ -4,8 +4,10 @@ using FluentAssertions;
 using Moq;
 using Ncqrs.Domain;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using NSubstitute;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventHandlers;
@@ -38,6 +40,10 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
             publishableEvent = Create.Fake.PublishableEvent(payload: new FunctionalEventHandlerEvent());
 
             var secondFunctionalEventHandler = new FunctionalEventHandler(Mock.Of<IReadSideStorage<IReadSideRepositoryEntity>>());
+
+
+            var sl = new Mock<IServiceLocator>();
+            //sl.Setup(x => x.GetInstance<>()).Returns();
 
             eventDispatcher = Create.Service.NcqrCompatibleEventDispatcher(logger: loggerMock.Object,
                 eventBusSettings: new EventBusSettings()

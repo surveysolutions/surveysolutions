@@ -22,7 +22,8 @@ namespace WB.Tests.Integration.OldschoolChartStatisticsDataProviderTests
         {
             var sessionFactory = IntegrationCreate.SessionFactory(ConnectionStringBuilder.ConnectionString,
                 new[] { typeof(CumulativeReportStatusChangeMap) }, true);
-            UnitOfWork = Mock.Of<IUnitOfWork>(x => x.Session == sessionFactory.OpenSession());
+
+            UnitOfWork = IntegrationCreate.UnitOfWork(sessionFactory);
             
             cumulativeReportStatusChangeStorage =
                 new PostgreReadSideStorage<CumulativeReportStatusChange>(UnitOfWork,
@@ -41,8 +42,10 @@ namespace WB.Tests.Integration.OldschoolChartStatisticsDataProviderTests
             cumulativeReportStatusChangeStorage.Store(cumulativeReportStatusChangeEnd,
                 cumulativeReportStatusChangeEnd.EntryId);
 
+            
             oldschoolChartStatisticsDataProvider = new OldschoolChartStatisticsDataProvider(cumulativeReportStatusChangeStorage);
-            BecauseOf();
+
+            result = oldschoolChartStatisticsDataProvider.GetStatisticsInOldFormat(questionnaireId, questionnaireVersion);
         }
 
         [OneTimeTearDown]
@@ -50,10 +53,7 @@ namespace WB.Tests.Integration.OldschoolChartStatisticsDataProviderTests
         {
             UnitOfWork.Dispose();
         }
-
-        private void BecauseOf() =>
-                result = oldschoolChartStatisticsDataProvider.GetStatisticsInOldFormat(questionnaireId, questionnaireVersion);
-
+        
         [NUnit.Framework.Test] public void should_return_32_days_timespan() => result.StatisticsByDate.Count.Should().Be(32);
 
 
