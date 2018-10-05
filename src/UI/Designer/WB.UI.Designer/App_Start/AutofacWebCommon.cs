@@ -112,7 +112,7 @@ namespace WB.UI.Designer.App_Start
             // init
             kernel.Init().Wait();
 
-            ScopeManager.SetScopeAdapter(kernel.Container);
+            UnitOfWorkScopeManager.SetScopeAdapter(kernel.Container);
             var scopeResolver = new AutofacServiceLocatorAdapterWithLifeScopeResolver(kernel.Container);
             ServiceLocator.SetLocatorProvider(() => scopeResolver);
 

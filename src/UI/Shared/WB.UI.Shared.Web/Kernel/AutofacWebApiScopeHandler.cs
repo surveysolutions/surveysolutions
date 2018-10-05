@@ -10,7 +10,7 @@ namespace WB.UI.Shared.Web.Kernel
     {
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
         {
-            var scope = ScopeManager.BeginScope();
+            var scope = UnitOfWorkScopeManager.BeginScope();
             try
             {
                 return base.SendAsync(request, cancellationToken);

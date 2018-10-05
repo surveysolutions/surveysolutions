@@ -192,12 +192,10 @@ namespace WB.UI.Designer
 
         protected void Application_BeginRequest(object sender, EventArgs e)
         {
-            //ScopeManager.BeginScope();
         }
 
         protected void Application_EndRequest(object sender, EventArgs e)
         {
-            //ScopeManager.EndAllScope();
         }
 
         private void EnsureJsonStorageForErrorsExists()

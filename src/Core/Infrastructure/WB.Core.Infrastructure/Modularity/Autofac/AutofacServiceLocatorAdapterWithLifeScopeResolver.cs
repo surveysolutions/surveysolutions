@@ -83,7 +83,7 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
         }
     }
 
-    public class ScopeManager
+    public class UnitOfWorkScopeManager
     {
         private static ILifetimeScope rootScope;
 

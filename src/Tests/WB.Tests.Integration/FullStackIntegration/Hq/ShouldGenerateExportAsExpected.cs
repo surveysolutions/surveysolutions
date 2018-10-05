@@ -127,7 +127,7 @@ namespace WB.Tests.Integration.FullStackIntegration.Hq
 
             var authorizedUser = Mock.Of<IAuthorizedUser>();
 
-            using (ScopeManager.BeginScope())
+            using (UnitOfWorkScopeManager.BeginScope())
             {
                 var importService = new QuestionnaireImportService(
                     ServiceLocator.Current.GetInstance<ISupportedVersionProvider>(),
@@ -183,7 +183,7 @@ namespace WB.Tests.Integration.FullStackIntegration.Hq
 
             var interviewPackage = ServiceLocator.Current.GetInstance<ISerializer>().Deserialize<InterviewPackage>(interview);
 
-            using (ScopeManager.BeginScope())
+            using (UnitOfWorkScopeManager.BeginScope())
             {
                 var packagesService = ServiceLocator.Current.GetInstance<IInterviewPackagesService>();
                 packagesService.ProcessPackage(interviewPackage);
@@ -195,7 +195,7 @@ namespace WB.Tests.Integration.FullStackIntegration.Hq
         {
             var questionnaireIdentity = new QuestionnaireIdentity(questionanireId, 1);
 
-            using (ScopeManager.BeginScope())
+            using (UnitOfWorkScopeManager.BeginScope())
             {
                 var tabularFormatDataExportHandler =ServiceLocator.Current.GetInstance<TabularFormatDataExportHandler>();
                 tabularFormatDataExportHandler.ExportData(new DataExportProcessDetails(DataExportFormat.Tabular, questionnaireIdentity, "Enumerator Questions Automation"));
@@ -301,7 +301,7 @@ namespace WB.Tests.Integration.FullStackIntegration.Hq
 
             kernel.Init().Wait();
 
-            ScopeManager.SetScopeAdapter(kernel.Container);
+            UnitOfWorkScopeManager.SetScopeAdapter(kernel.Container);
         }
 
         private async Task<Mock<IRestService>> SetupMockOfDesigner()
