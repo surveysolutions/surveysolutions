@@ -24,6 +24,10 @@ namespace WB.Tests.Unit.Infrastructure
         [SetUp]
         public void Setup()
         {
+            var mockOfEncryptionService = new Mock<IEncryptionService>();
+            mockOfEncryptionService.Setup(x => x.Encrypt(It.IsAny<string>())).Returns<string>(x => x);
+            mockOfEncryptionService.Setup(x => x.Decrypt(It.IsAny<string>())).Returns<string>(x => x);
+
             sqliteEventStorage = new SqliteMultiFilesEventStorage(Mock.Of<ILogger>(),
               new SqliteSettings
               {
@@ -33,7 +37,8 @@ namespace WB.Tests.Unit.Infrastructure
               },
               Mock.Of<IEnumeratorSettings>(x => x.EventChunkSize == 100),
               Mock.Of<IFileSystemAccessor>(x=>x.IsFileExists(Moq.It.IsAny<string>()) == true),
-              Mock.Of<IEventTypeResolver>(x => x.ResolveType("TextQuestionAnswered") == typeof(TextQuestionAnswered)));
+              Mock.Of<IEventTypeResolver>(x => x.ResolveType("TextQuestionAnswered") == typeof(TextQuestionAnswered)), 
+              mockOfEncryptionService.Object);
         }
 
         [Test]

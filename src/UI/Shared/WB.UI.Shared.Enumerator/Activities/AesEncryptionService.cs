@@ -33,6 +33,8 @@ namespace WB.UI.Shared.Enumerator.Activities
 
         public string Encrypt(string textToEncrypt)
         {
+            if (string.IsNullOrEmpty(textToEncrypt)) return textToEncrypt;
+
             var bytesToEncrypt = Encoding.UTF8.GetBytes(textToEncrypt);
 
             using (var aes = new AesCryptoServiceProvider())
@@ -45,6 +47,8 @@ namespace WB.UI.Shared.Enumerator.Activities
 
         public string Decrypt(string textToDecrypt)
         {
+            if (string.IsNullOrEmpty(textToDecrypt)) return textToDecrypt;
+
             using (var aes = new AesCryptoServiceProvider())
             using (var decryptor = aes.CreateDecryptor(this.secureStorage.Retrieve(Key), this.secureStorage.Retrieve(IV)))
             {
