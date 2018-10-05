@@ -3,9 +3,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using WB.Services.Export.Checks;
 
-namespace WB.Services.Export.Host.Infra
+namespace WB.Services.Infrastructure.Health
 {
     public class HealthCheckMiddleware
     {

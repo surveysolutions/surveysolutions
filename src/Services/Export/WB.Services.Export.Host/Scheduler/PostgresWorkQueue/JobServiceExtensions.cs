@@ -3,9 +3,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Console;
-using WB.Services.Export.Checks;
+using WB.Services.Export.Host.Infra;
 using WB.Services.Export.Host.Scheduler.PostgresWorkQueue.Services;
 using WB.Services.Export.Host.Scheduler.PostgresWorkQueue.Services.Implementation;
+using WB.Services.Infrastructure.Health;
 
 namespace WB.Services.Export.Host.Scheduler.PostgresWorkQueue
 {
@@ -13,7 +14,7 @@ namespace WB.Services.Export.Host.Scheduler.PostgresWorkQueue
     {
         public static void UseJobService(this IServiceCollection services, IConfiguration configuration, string section = "job")
         {
-            services.AddTransient<IHealthCheck, DbHealthCheck>();
+            services.ConfigureHealthCheck<DbHealthCheck>();
             services.AddTransient<IJobService, JobService>();
             services.AddSingleton<IJobProgressReporter, JobProgressReporter>();
             services.AddTransient<IJobWorker, JobWorker>();
