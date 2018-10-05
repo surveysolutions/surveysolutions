@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Diagnostics;
+using System.Linq;
 using System.Threading.Tasks;
 using MvvmCross.Droid.Support.V7.AppCompat;
 using MvvmCross.ViewModels;
@@ -29,48 +30,23 @@ namespace WB.UI.Shared.Enumerator.Activities
         protected virtual void EncryptApplication() 
         {
             var settings = ServiceLocator.Current.GetInstance<IEnumeratorSettings>();
+
             if (!settings.Encrypted)
             {
                 var encryptionService = ServiceLocator.Current.GetInstance<IEncryptionService>();
 
                 encryptionService.GenerateKeys();
 
-                this.EncryptDatabase(encryptionService);
+                EncryptIdentifyingQuestions();
+                EncryptAssignments();
+                EncryptEvents(encryptionService);
 
-                //settings.SetEncrypted(true);
+                settings.SetEncrypted(true);
             }
         }
 
-        private void EncryptDatabase(IEncryptionService encryptionService)
+        private static void EncryptEvents(IEncryptionService encryptionService)
         {
-            var identifyingQuestionsRepository = ServiceLocator.Current.GetInstance<IPlainStorage<PrefilledQuestionView>>();
-            var identifyingQuestions = identifyingQuestionsRepository.LoadAll();
-
-            foreach (var identifyingQuestion in identifyingQuestions)
-            {
-                identifyingQuestion.EncryptedQuestionText = encryptionService.Encrypt(identifyingQuestion.QuestionText);
-                identifyingQuestion.EncryptedAnswer = encryptionService.Encrypt(identifyingQuestion.Answer);
-
-                identifyingQuestionsRepository.Store(identifyingQuestion);
-            }
-
-            var assignmentAnswerRepository = ServiceLocator.Current.GetInstance<IAssignmentDocumentsStorage>();
-            var assignments = assignmentAnswerRepository.LoadAll();
-
-            foreach (var assignment in assignments)
-            {
-                var assignmentAnswers = assignmentAnswerRepository.FetchPreloadedData(assignment).Answers;
-
-                foreach (var assignmentAnswer in assignmentAnswers)
-                {
-                    assignmentAnswer.EncryptedQuestion = encryptionService.Encrypt(assignmentAnswer.Question);
-                    assignmentAnswer.EncryptedAnswerAsString = encryptionService.Encrypt(assignmentAnswer.AnswerAsString);
-                    assignmentAnswer.EncryptedSerializedAnswer = encryptionService.Encrypt(assignmentAnswer.SerializedAnswer);
-                }
-
-                assignmentAnswerRepository.Store(assignment);
-            }
-
             var eventsSettings = ServiceLocator.Current.GetInstance<SqliteSettings>();
             var fileAccessor = ServiceLocator.Current.GetInstance<IFileSystemAccessor>();
 
@@ -82,15 +58,39 @@ namespace WB.UI.Shared.Enumerator.Activities
 
                 using (connection.Lock())
                 {
-                    var events = connection.Table<EventView>().ToList();
+                    var events = connection.Table<EventView>().Where(x => x.EncryptedJsonEvent == null).ToList();
                     foreach (var eventView in events)
                     {
                         eventView.EncryptedJsonEvent = encryptionService.Encrypt(eventView.JsonEvent);
+                        eventView.JsonEvent = null;
                     }
 
-                    connection.UpdateAll(events);
+                    if (events.Any()) connection.UpdateAll(events);
                 }
             }
+        }
+
+        private static void EncryptAssignments()
+        {
+            var assignmentAnswerRepository = ServiceLocator.Current.GetInstance<IAssignmentDocumentsStorage>();
+            var assignments = assignmentAnswerRepository.LoadAll();
+
+            foreach (var assignment in assignments)
+            {
+                var assignmentAnswers = assignmentAnswerRepository.FetchPreloadedData(assignment).Answers;
+                assignment.Answers = assignmentAnswers;
+                assignmentAnswerRepository.Store(assignment);
+            }
+        }
+
+        private static void EncryptIdentifyingQuestions()
+        {
+            var identifyingQuestionsRepository = ServiceLocator.Current.GetInstance<IPlainStorage<PrefilledQuestionView>>();
+            var identifyingQuestions = identifyingQuestionsRepository.Where(x =>
+                (x.Answer != null && x.EncryptedAnswer == null) ||
+                (x.QuestionText != null && x.EncryptedQuestionText == null));
+
+            identifyingQuestionsRepository.Store(identifyingQuestions);
         }
     }
 }
