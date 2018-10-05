@@ -21,7 +21,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
             return this.externalFileStorage.GetBinary(GetPath(interviewId, filename));
         }
 
-        private string GetPath(Guid interviewId, string filename = null) => $"images/{interviewId.FormatGuid()}/{filename ?? String.Empty}";
+        public string GetPath(Guid interviewId, string filename = null) => $"images/{interviewId.FormatGuid()}/{filename ?? String.Empty}";
 
         public List<InterviewBinaryDataDescriptor> GetBinaryFilesForInterview(Guid interviewId)
         {

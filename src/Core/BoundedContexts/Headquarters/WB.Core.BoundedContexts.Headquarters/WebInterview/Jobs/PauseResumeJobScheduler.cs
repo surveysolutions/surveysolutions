@@ -1,6 +1,5 @@
 ﻿using System;
 using Quartz;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Jobs;
 
 namespace WB.Core.BoundedContexts.Headquarters.WebInterview.Jobs
 {
