@@ -109,7 +109,8 @@ namespace WB.Services.Export.Storage
 
         public string GetDirectLink(string key, TimeSpan expiration)
         {
-            var protocol = client.Config.ServiceURL.StartsWith("https://", StringComparison.OrdinalIgnoreCase)
+            var protocol = (client.Config.ServiceURL ?? "https://")
+                .StartsWith("https://", StringComparison.OrdinalIgnoreCase)
                 ? Protocol.HTTPS
                 : Protocol.HTTP;
 
