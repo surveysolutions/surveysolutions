@@ -3,6 +3,7 @@ using Dapper;
 using Microsoft.Extensions.Configuration;
 using Npgsql;
 using WB.Services.Export.Checks;
+using WB.Services.Infrastructure.Health;
 
 namespace WB.Services.Export.Host.Scheduler
 {

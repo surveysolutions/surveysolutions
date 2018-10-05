@@ -1,14 +1,11 @@
-﻿using System;
-using Amazon.Extensions.NETCore.Setup;
-using Amazon.Runtime;
-using Amazon.Runtime.CredentialManagement;
-using Amazon.S3;
+﻿using Amazon.S3;
 using Amazon.S3.Transfer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using WB.Services.Export.Checks;
 using WB.Services.Export.Services.Processing;
+using WB.Services.Infrastructure.Health;
 
 namespace WB.Services.Export.Storage
 {
