@@ -16,6 +16,7 @@ using WB.Services.Export.Host.Scheduler;
 using WB.Services.Export.Host.Scheduler.PostgresWorkQueue;
 using WB.Services.Export.Host.Scheduler.PostgresWorkQueue.Services.Implementation;
 using WB.Services.Export.Services.Processing;
+using WB.Services.Infrastructure.Health;
 using IHostingEnvironment = Microsoft.AspNetCore.Hosting.IHostingEnvironment;
 
 namespace WB.Services.Export.Host

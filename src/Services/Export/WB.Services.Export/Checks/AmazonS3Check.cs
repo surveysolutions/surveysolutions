@@ -4,6 +4,7 @@ using Amazon.S3;
 using Amazon.S3.Model;
 using Microsoft.Extensions.Options;
 using WB.Services.Export.Services.Processing;
+using WB.Services.Infrastructure.Health;
 
 namespace WB.Services.Export.Checks
 {

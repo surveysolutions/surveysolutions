@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace WB.Services.Export.Checks
+namespace WB.Services.Infrastructure.Health
 {
     public interface IHealthCheck
     {
