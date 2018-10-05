@@ -45,7 +45,9 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                     Create.Entity.SingleOptionQuestion(parentCascadingQuestionId, answerCodes: new[] { answerOnParentQuestion, answer }),
                     Create.Entity.SingleOptionQuestion(cascadingQuestionId,
                         cascadeFromQuestionId: parentCascadingQuestionId, answerCodes: new[] { answerOnParentQuestion, answer },
-                        parentCodes: new[] { 1m, expectedParentValue })));
+                        parentCodes: new[] { 1m, expectedParentValue })),
+                version: 1,
+                questionOptionsRepository: new QuestionnaireQuestionOptionsRepository());
 
             var questionnaireRepository = Mock.Of<IQuestionnaireStorage>(repository
                 => repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire);
