@@ -57,7 +57,7 @@ namespace WB.UI.Designer.Code
                 }
 
                 if (!isInvalidUser && filterContext.Controller is AccountController &&
-                    filterContext.ActionDescriptor.ActionName.NotIn(new[] {"logoff", "manage", "findbyemail"}))
+                    filterContext.ActionDescriptor.ActionName.NotIn(new[] {"logoff", "manage", "changepassword", "findbyemail"}))
                 {
                     filterContext.Result =
                         new RedirectToRouteResult(

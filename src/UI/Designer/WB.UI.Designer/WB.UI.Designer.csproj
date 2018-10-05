@@ -17,7 +17,7 @@
     <AssemblyName>WB.UI.Designer</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>false</UseIISExpress>
+    <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -287,6 +287,7 @@
     <Compile Include="Implementation\Services\WebTesterSettings.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M001_Init.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M002_AddStatsTable.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M201809071827_FullNameToUsersTable.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M022_AddCommentsTable.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M003_AddTranslationsTable.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M007_UpdateQuestionnairechangereferencesTable.cs" />
@@ -404,7 +405,7 @@
     <Compile Include="Models\DeleteAccountModel.cs" />
     <Compile Include="Models\QuestionnaireViewModel.cs" />
     <Compile Include="Models\UpdateAccountModel.cs" />
-    <Compile Include="Models\LocalPasswordModel.cs" />
+    <Compile Include="Models\ManageAccountModel.cs" />
     <Compile Include="Models\RegisterModel.cs" />
     <Compile Include="Pdf\OSUtil.cs" />
     <Compile Include="Pdf\PdfConvert.cs" />
@@ -926,6 +927,8 @@
     <Content Include="Views\Questionnaire\Shared.cshtml" />
     <Content Include="Views\Shared\ExportHtmlModalDialog.cshtml" />
     <Content Include="Views\UnderConstruction\Index.cshtml" />
+    <Content Include="Views\Account\_UpdateUserProfile.cshtml" />
+    <Content Include="Views\Account\_ChangePassword.cshtml" />
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>

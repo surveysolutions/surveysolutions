@@ -107,7 +107,7 @@ namespace WB.Core.BoundedContexts.Designer
             CommandRegistry
                 .Setup<User>()
                 .ResolvesIdFrom<UserCommand>(command => command.UserId)
-                .InitializesWith<RegisterUser>((command, aggregate) => aggregate.Register(command.ApplicationName, command.UserName, command.Email, command.UserId, command.Password, command.PasswordSalt, command.IsConfirmed, command.ConfirmationToken))
+                .InitializesWith<RegisterUser>((command, aggregate) => aggregate.Register(command.ApplicationName, command.UserName, command.Email, command.UserId, command.Password, command.PasswordSalt, command.IsConfirmed, command.ConfirmationToken, command.FullName))
                 .Handles<AssignUserRole>((command, aggregate) => aggregate.AddRole(command.Role))
                 .Handles<ChangeUserPassword>((command, aggregate) => aggregate.ChangePassword(command.Password))
                 .Handles<ChangeSecurityQuestion>((command, aggregate) => aggregate.ChangePasswordQuestionAndAnswer(command.PasswordQuestion, command.PasswordAnswer))
@@ -119,7 +119,7 @@ namespace WB.Core.BoundedContexts.Designer
                 .Handles<RemoveUserRole>((command, aggregate) => aggregate.RemoveRole(command.Role))
                 .Handles<ResetUserPassword>((command, aggregate) => aggregate.ResetPassword(command.Password, command.PasswordSalt))
                 .Handles<UnlockUserAccount>((command, aggregate) => aggregate.Unlock())
-                .Handles<UpdateUserAccount>((command, aggregate) => aggregate.Update(command.UserName, command.IsLockedOut, command.PasswordQuestion, command.Email, command.IsConfirmed, command.Comment, command.CanImportOnHq));
+                .Handles<UpdateUserAccount>((command, aggregate) => aggregate.Update(command.UserName, command.IsLockedOut, command.PasswordQuestion, command.Email, command.IsConfirmed, command.Comment, command.CanImportOnHq, command.FullName));
 
             CommandRegistry
                 .Setup<Questionnaire>()

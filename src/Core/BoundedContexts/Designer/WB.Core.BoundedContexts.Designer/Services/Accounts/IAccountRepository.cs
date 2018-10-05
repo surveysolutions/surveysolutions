@@ -120,7 +120,7 @@ namespace WB.Core.BoundedContexts.Designer.Services.Accounts
         /// <param name="username">User name</param>
         /// <param name="email">Email address</param>
         /// <returns>Created account</returns>
-        IMembershipAccount Create(object providerUserKey, string applicationName, string username, string email);
+        IMembershipAccount Create(object providerUserKey, string applicationName, string username, string email, string fullName);
 
         /// <summary>
         /// The get user by reset password token.
