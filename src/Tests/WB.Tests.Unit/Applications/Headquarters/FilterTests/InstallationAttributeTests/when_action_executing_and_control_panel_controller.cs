@@ -1,6 +1,6 @@
+using AutoFixture;
+using WB.Tests.Abc;
 using WB.UI.Headquarters.Controllers;
-using WB.UI.Headquarters.Filters;
-
 
 namespace WB.Tests.Unit.Applications.Headquarters.FilterTests.InstallationAttributeTests
 {
@@ -8,7 +8,9 @@ namespace WB.Tests.Unit.Applications.Headquarters.FilterTests.InstallationAttrib
     {
         [NUnit.Framework.Test] public void context () {
             var attribute = CreateInstallationAttribute();
-            attribute.OnActionExecuting(CreateFilterContext(new ControlPanelController(null, null, null, null, null, null, null)));
+
+            attribute.OnActionExecuting(CreateFilterContext(
+                Create.Other.AutoFixture().Create<ControlPanelController>()));
         }
     }
 }
