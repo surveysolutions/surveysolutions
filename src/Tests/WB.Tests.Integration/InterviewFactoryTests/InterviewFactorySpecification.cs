@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Main.Core.Documents;
 using Main.Core.Entities.SubEntities;
 using Moq;
+using NHibernate;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Mappings;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
@@ -34,8 +35,9 @@ namespace WB.Tests.Integration.InterviewFactoryTests
         protected PostgreReadSideStorage<QuestionnaireCompositeItem, int> questionnaireItemsRepository;
         protected HqQuestionnaireStorage questionnaireStorage;
         protected InMemoryKeyValueStorage<QuestionnaireDocument> questionnaireDocumentRepository;
-        private PostgresPlainStorageRepository<QuestionnaireCompositeItem> compositeItemsRepository;
+
         protected IUnitOfWork UnitOfWork;
+        protected ISessionFactory sessionFactory;
 
 
         [OneTimeSetUp]
@@ -43,7 +45,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
         {
             this.connectionString = DatabaseTestInitializer.InitializeDb(DbType.PlainStore, DbType.ReadSide);
 
-            var sessionFactory = IntegrationCreate.SessionFactory(this.connectionString,
+            sessionFactory = IntegrationCreate.SessionFactory(this.connectionString,
                 new List<Type>
                 {
                     typeof(InterviewSummaryMap),
@@ -64,7 +66,6 @@ namespace WB.Tests.Integration.InterviewFactoryTests
 
             this.interviewSummaryRepository = new PostgreReadSideStorage<InterviewSummary>(this.UnitOfWork, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
             this.questionnaireItemsRepository = new PostgreReadSideStorage<QuestionnaireCompositeItem, int>(this.UnitOfWork, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
-            this.compositeItemsRepository = new PostgresPlainStorageRepository<QuestionnaireCompositeItem>(this.UnitOfWork);
             this.questionnaireDocumentRepository = new InMemoryKeyValueStorage<QuestionnaireDocument>();
             this.questionnaireStorage = new HqQuestionnaireStorage(new InMemoryKeyValueStorage<QuestionnaireDocument>(),
                 Mock.Of<ITranslationStorage>(), Mock.Of<IQuestionnaireTranslator>(),
@@ -88,8 +89,20 @@ namespace WB.Tests.Integration.InterviewFactoryTests
 
         protected void PrepareQuestionnaire(QuestionnaireDocument document, long questionnaireVersion = 1)
         {
-            document.Id = document.PublicKey.FormatGuid();
-            this.questionnaireStorage.StoreQuestionnaire(document.PublicKey, questionnaireVersion, document);
+            using (var unitOfWork = IntegrationCreate.UnitOfWork(sessionFactory))
+            {
+                var questionnaireItemsRepositoryLocal = new PostgreReadSideStorage<QuestionnaireCompositeItem, int>(this.UnitOfWork, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
+                
+                var questionnaireStorageLocal = new HqQuestionnaireStorage(new InMemoryKeyValueStorage<QuestionnaireDocument>(),
+                    Mock.Of<ITranslationStorage>(), Mock.Of<IQuestionnaireTranslator>(),
+                    questionnaireItemsRepositoryLocal, Mock.Of<IQuestionOptionsRepository>(),
+                    Mock.Of<ISubstitutionService>());
+
+                document.Id = document.PublicKey.FormatGuid();
+                questionnaireStorageLocal.StoreQuestionnaire(document.PublicKey, questionnaireVersion, document);
+
+                unitOfWork.AcceptChanges();
+            }
         }
 
         protected InterviewEntity[] GetInterviewEntities(InterviewFactory factory, Guid interviewId, Guid questionnaireId, long version = 1) =>

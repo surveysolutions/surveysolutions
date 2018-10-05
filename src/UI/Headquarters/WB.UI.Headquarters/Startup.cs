@@ -38,6 +38,7 @@ using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.SurveyManagement.Web.Utils.Binding;
 using WB.Enumerator.Native.WebInterview;
@@ -108,6 +109,8 @@ namespace WB.UI.Headquarters
 
             //no scope involved activity should be used
             autofacKernel.Init().Wait();
+
+            UnitOfWorkScopeManager.SetScopeAdapter(autofacKernel.Container);
 
             var container = autofacKernel.Container;
 

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using FluentAssertions;
 using Moq;
@@ -36,14 +37,36 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
                 throw new NotImplementedException();
             }
         }
+
+        private class FailingFunctionalEventHandler :
+            AbstractFunctionalEventHandler<IReadSideRepositoryEntity, IReadSideStorage<IReadSideRepositoryEntity>>,
+            IUpdateHandler<IReadSideRepositoryEntity, FunctionalEventHandlerEvent>
+        {
+            public FailingFunctionalEventHandler(IReadSideStorage<IReadSideRepositoryEntity> readSideStorage) : base(readSideStorage)
+            {
+            }
+
+            public IReadSideRepositoryEntity Update(IReadSideRepositoryEntity state, IPublishedEvent<FunctionalEventHandlerEvent> @event)
+            {
+                throw new NotImplementedException();
+            }
+
+            public new void Handle(IEnumerable<IPublishableEvent> publishableEvents, Guid eventSourceId)
+            {
+                throw new Exception();
+            }
+
+        }
+
         [NUnit.Framework.OneTimeSetUp] public void context () {
             publishableEvent = Create.Fake.PublishableEvent(payload: new FunctionalEventHandlerEvent());
 
+            var failingFunctionalEventHandler = new FailingFunctionalEventHandler(Mock.Of<IReadSideStorage<IReadSideRepositoryEntity>>());
             var secondFunctionalEventHandler = new FunctionalEventHandler(Mock.Of<IReadSideStorage<IReadSideRepositoryEntity>>());
 
-
-            var sl = new Mock<IServiceLocator>();
-            //sl.Setup(x => x.GetInstance<>()).Returns();
+            var serviceLocator = new Mock<IServiceLocator>();
+            serviceLocator.Setup(x => x.GetInstance(secondFunctionalEventHandler.GetType())).Returns(secondFunctionalEventHandler);
+            serviceLocator.Setup(x => x.GetInstance(failingFunctionalEventHandler.GetType())).Returns(failingFunctionalEventHandler);
 
             eventDispatcher = Create.Service.NcqrCompatibleEventDispatcher(logger: loggerMock.Object,
                 eventBusSettings: new EventBusSettings()
@@ -53,11 +76,12 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
                         secondFunctionalEventHandler.GetType()
                     },
                     DisabledEventHandlerTypes = new Type[0]
-                });
+                },
+                serviceLocator: serviceLocator.Object);
             eventDispatcher.OnCatchingNonCriticalEventHandlerException +=
                 (e) => { handledNonCriticalEventHandlerException = e; };
 
-            eventDispatcher.Register(Setup.FailingFunctionalEventHandlerHavingUniqueType<int>());
+            eventDispatcher.Register(failingFunctionalEventHandler);
             eventDispatcher.Register(secondFunctionalEventHandler);
             BecauseOf();
         }
