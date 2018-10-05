@@ -9,11 +9,11 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 
 namespace WB.UI.Shared.Web.Modules.Filters
 {
-    public class WebApiActionFilterWhenActionMethodHasNoAttribute<TFilter, TAttribute> : IAutofacActionFilter
+    public class WebApiActionFilterWhenControllerOrActionHasNoAttribute<TFilter, TAttribute> : IAutofacActionFilter
         where TFilter : System.Web.Http.Filters.ActionFilterAttribute
         where TAttribute : Attribute
     {
-        public WebApiActionFilterWhenActionMethodHasNoAttribute(TFilter filter)
+        public WebApiActionFilterWhenControllerOrActionHasNoAttribute(TFilter filter)
         {
             this.filter = filter;
         }
@@ -49,9 +49,9 @@ namespace WB.UI.Shared.Web.Modules.Filters
         public bool AllowMultiple => true;
     }
 
-    public class WebApiActionFilterWhenActionMethodHasNoAttribute : ActionFilterAttribute
+    public class WebApiActionFilterWhenControllerOrActionHasNoAttribute : ActionFilterAttribute
     {
-        public WebApiActionFilterWhenActionMethodHasNoAttribute(ActionFilterAttribute filter, Type attributeType)
+        public WebApiActionFilterWhenControllerOrActionHasNoAttribute(ActionFilterAttribute filter, Type attributeType)
         {
             this.attributeType = attributeType;
             this.filter = filter;

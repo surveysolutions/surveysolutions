@@ -9,11 +9,11 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 
 namespace WB.UI.Shared.Web.Modules.Filters
 {
-    public class WebApiAuthorizationFilterWhenActionMethodHasAttribute<TFilter, TAttribute> : IAutofacAuthorizationFilter
+    public class WebApiAuthorizationFilterWhenControllerOrActionHasAttribute<TFilter, TAttribute> : IAutofacAuthorizationFilter
         where TFilter : System.Web.Http.Filters.IAuthorizationFilter
         where TAttribute : Attribute
     {
-        public WebApiAuthorizationFilterWhenActionMethodHasAttribute(TFilter filter)
+        public WebApiAuthorizationFilterWhenControllerOrActionHasAttribute(TFilter filter)
         {
             this.filter = filter;
         }
