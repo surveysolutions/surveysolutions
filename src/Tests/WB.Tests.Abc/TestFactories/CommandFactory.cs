@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using ASP;
 using Main.Core.Documents;
 using WB.Core.BoundedContexts.Headquarters.Commands;
@@ -54,6 +55,7 @@ namespace WB.Tests.Abc.TestFactories
                 rosterVector: new decimal[0],
                 selectedValues: answer);
 
+        [DebuggerStepThrough]
         public AnswerNumericIntegerQuestionCommand AnswerNumericIntegerQuestionCommand(Guid? interviewId = null, 
             Guid? userId = null, Guid? questionId = null, int answer = 0)
             => new AnswerNumericIntegerQuestionCommand(
