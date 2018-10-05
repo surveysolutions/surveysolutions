@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using Autofac;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.Modularity.Autofac;
@@ -8,14 +9,25 @@ namespace WB.UI.Shared.Web.Kernel
 {
     public class AutofacWebKernel : AutofacKernel
     {
-        public void Load(params IWebModule[] modules)
+        public override void Load<T>(params IModule<T>[] modules)
         {
-            var autofacModules = modules.Select(module => module.AsWebAutofac()).ToArray();
+            var autofacModules = modules.Select(module =>
+            {
+                switch (module)
+                {
+                    case IWebModule webModule: return webModule.AsWebAutofac();
+                    case IModule iModule: return iModule.AsAutofac();
+                    default:
+                        throw new ArgumentException("Cant resolve module type: " + module.GetType());
+                }
+            }).ToArray();
+
             foreach (var autofacModule in autofacModules)
             {
                 this.containerBuilder.RegisterModule(autofacModule);
             }
-            initModules.AddRange(modules.Select(m => m as IInitModule).Where(m => m != null));
+
+            initModules.AddRange(modules);
         }
     }
 }
