@@ -135,6 +135,12 @@
   <data name="ChangePassword" xml:space="preserve">
     <value>Change password</value>
   </data>
+  <data name="ManageAccount" xml:space="preserve">
+    <value>Manage account</value>
+  </data>
+  <data name="EditProfile" xml:space="preserve">
+    <value>Edit profile</value>
+  </data>
   <data name="CompanyName" xml:space="preserve">
     <value>The World Bank Group</value>
   </data>
@@ -170,6 +176,9 @@
   </data>
   <data name="LoginName" xml:space="preserve">
     <value>Login</value>
+  </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Full name</value>
   </data>
   <data name="LoginOrEmail" xml:space="preserve">
     <value>Login or email</value>
@@ -263,6 +272,9 @@
   </data>
   <data name="PasswordSet" xml:space="preserve">
     <value>Your password has been set.</value>
+  </data>
+  <data name="AccountInfoUpdated" xml:space="preserve">
+    <value>Account information successfully updated</value>
   </data>
   <data name="ExternalLoginRemoved" xml:space="preserve">
     <value>The external login was removed.</value>
