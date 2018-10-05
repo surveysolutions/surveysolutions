@@ -85,7 +85,7 @@
 </template>
 <script>
 
-const VueEditor = () => import(/* webpackChunkName: "editor" */"vue2-editor")
+import { VueEditor } from "vue2-editor";
 
 export default {
   data() {

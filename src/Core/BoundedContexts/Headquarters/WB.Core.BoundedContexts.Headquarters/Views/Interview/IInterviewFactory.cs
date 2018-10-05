@@ -23,7 +23,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         IEnumerable<InterviewEntity> GetInterviewEntities(IEnumerable<Guid> interviews);
         List<InterviewEntity> GetInterviewEntities(Guid interviewId);
-        Dictionary<string, InterviewLevel> GetInterviewDataLevels(IQuestionnaire questionnaire, List<InterviewEntity> interviewEntities);
+        Dictionary<string, InterviewLevel> GetInterviewDataLevels(IQuestionnaire questionnaire,
+            List<InterviewEntity> interviewEntities);
         void Save(InterviewState interviewState);
         InterviewGpsAnswerWithTimeStamp[] GetGpsAnswersForInterviewer(Guid interviewerId);
         bool HasAnyGpsAnswerForInterviewer(Guid interviewerId);

@@ -49,9 +49,8 @@ namespace WB.UI.Interviewer.ServiceLocation
             registry.Bind<IGroupStateCalculationStrategy, EnumeratorGroupGroupStateCalculationStrategy>();
             registry.Bind<IInterviewStateCalculationStrategy, EnumeratorInterviewStateCalculationStrategy>();
 
-            registry.Bind<ISynchronizationService, SyncronizationServiceWrapper>();
+            registry.Bind<ISynchronizationService, IInterviewerSynchronizationService, SyncronizationServiceWrapper>();
 
-            registry.Bind<IInterviewerSynchronizationService, SynchronizationService>();
             registry.Bind<IBattery, AndroidBattery>();
             registry.Bind<IDeviceOrientation, AndroidDeviceOrientation>();
             registry.Bind<IDeviceInformationService, DeviceInformationService>();

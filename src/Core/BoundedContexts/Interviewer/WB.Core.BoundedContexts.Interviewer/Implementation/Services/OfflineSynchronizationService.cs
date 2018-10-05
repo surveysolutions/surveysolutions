@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 using Ncqrs.Eventing;
+using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
@@ -15,8 +16,6 @@ using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
-using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
-using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Questionnaire.Api;
 using WB.Core.SharedKernels.Questionnaire.Translations;
@@ -24,7 +23,7 @@ using WB.Core.SharedKernels.Questionnaire.Translations;
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
     [ExcludeFromCodeCoverage]
-    public class OfflineSynchronizationService : ISynchronizationService
+    public class OfflineSynchronizationService : IInterviewerSynchronizationService
     {
         private readonly IOfflineSyncClient syncClient;
         private readonly IInterviewerPrincipal principal;
@@ -181,6 +180,11 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return Task.FromResult<RestStreamResult>(null);
         }
 
+        public Task<InterviewerApiView> GetInterviewerAsync(RestCredentials credentials = null, CancellationToken? token = null)
+        {
+            throw new NotSupportedException("Offline mode is not support this method");
+        }
+
         public async Task<Guid> GetCurrentSupervisor(CancellationToken cancellationToken, RestCredentials credentials)
         {
             var response = await this.syncClient.SendAsync<SupervisorIdRequest, SupervisorIdResponse>(
@@ -217,11 +221,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         public Task LogAssignmentAsHandledAsync(int id, CancellationToken cancellationToken)
         {
             return syncClient.SendAsync(new LogAssignmentAsHandledRequest { Id = id }, cancellationToken);
-        }
-
-        public Task<byte[]> GetFileAsync(string url, IProgress<TransferProgress> transferProgress, CancellationToken token)
-        {
-            throw new NotImplementedException();
         }
 
         public async Task<List<AssignmentApiView>> GetAssignmentsAsync(CancellationToken cancellationToken)
@@ -321,17 +320,17 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return Task.CompletedTask;
         }
 
-        public Task<byte[]> GetApplicationAsync(CancellationToken token, IProgress<TransferProgress> transferProgress = null)
+        public async Task<byte[]> GetApplicationAsync(CancellationToken token, IProgress<TransferProgress> transferProgress = null)
         {
-            return Task.FromResult<byte[]>(null);
-        }
+            var response = await this.syncClient.SendChunkedAsync<GetInterviewerAppRequest, GetInterviewerAppResponse>(
+                new GetInterviewerAppRequest(this.deviceSettings.GetApplicationVersionCode(), this.settings.ApplicationType), 
+                token, transferProgress).ConfigureAwait(false);
 
-        public async Task<byte[]> GetApplicationPatchAsync(CancellationToken token, IProgress<TransferProgress> transferProgress = null)
-        {
-            var response = await this.syncClient.SendAsync<GetInterviewerAppPatchRequest, GetInterviewerAppPatchResponse>(
-                new GetInterviewerAppPatchRequest(this.deviceSettings.GetApplicationVersionCode(), this.settings.ApplicationType), token, transferProgress);
             return response.Content;
         }
+
+        public Task<byte[]> GetApplicationPatchAsync(CancellationToken token, IProgress<TransferProgress> transferProgress = null) 
+            => Task.FromResult<byte[]>(null);
 
         public async Task<int?> GetLatestApplicationVersionAsync(CancellationToken token)
         {

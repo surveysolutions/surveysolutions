@@ -4,6 +4,7 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Enumerator.Views.Dashboard;
@@ -15,14 +16,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         private readonly IInterviewViewModelFactory viewModelFactory;
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
         private readonly IPlainStorage<PrefilledQuestionView> identifyingQuestionsRepo;
+        protected readonly IPrincipal Principal;
 
-        protected BaseInterviewsViewModel(IInterviewViewModelFactory viewModelFactory, 
+        protected BaseInterviewsViewModel(IInterviewViewModelFactory viewModelFactory,
             IPlainStorage<InterviewView> interviewViewRepository,
-            IPlainStorage<PrefilledQuestionView> identifyingQuestionsRepo)
+            IPlainStorage<PrefilledQuestionView> identifyingQuestionsRepo, 
+            IPrincipal principal)
         {
             this.viewModelFactory = viewModelFactory;
             this.interviewViewRepository = interviewViewRepository;
             this.identifyingQuestionsRepo = identifyingQuestionsRepo;
+            this.Principal = principal;
         }
         
         private int? highLightedItemIndex;
@@ -42,10 +46,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
         }
 
         private IReadOnlyCollection<InterviewView> GetDbItems()
-            => this.interviewViewRepository.Where(this.GetDbQuery());
+            => this.Principal.IsAuthenticated ? interviewViewRepository.Where(this.GetDbQuery()) : Array.Empty<InterviewView>();
 
         private int GetDbItemsCount()
-            => this.interviewViewRepository.Count(this.GetDbQuery());
+            => this.Principal.IsAuthenticated ? this.interviewViewRepository.Count(this.GetDbQuery()) : 0;
 
         public async Task LoadAsync(Guid? lastVisitedInterviewId)
         {
