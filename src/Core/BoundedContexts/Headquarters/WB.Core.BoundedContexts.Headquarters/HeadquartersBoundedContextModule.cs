@@ -44,12 +44,9 @@ using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Ddi;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Ddi.Impl;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Denormalizers;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
@@ -57,7 +54,6 @@ using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Templates;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
-using WB.Core.BoundedContexts.Headquarters.DataExport.ExportProcessHandlers.Implementation;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.InterviewerAuditLog;
@@ -171,10 +167,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.BindToMethod<Func<IInterviewsToDeleteFactory>>(context => () => context.Get<IInterviewsToDeleteFactory>());
             registry.Bind<IInterviewHistoryFactory, InterviewHistoryFactory>();
             registry.Bind<IInterviewInformationFactory, InterviewerInterviewsFactory>();
-            registry.Bind<IDdiMetadataFactory, DdiMetadataFactory>();
-            registry.Bind<IMetaDescriptionFactory, MetaDescriptionFactory>();
             registry.Bind<IDatasetWriterFactory, DatasetWriterFactory>();
-            registry.Bind<IDataQueryFactory, DataQueryFactory>();
             registry.Bind<IQuestionnaireLabelFactory, QuestionnaireLabelFactory>();
             registry.Bind<IExportViewFactory, ExportViewFactory>();
             registry.Bind<IQuestionnaireVersionProvider, QuestionnaireVersionProvider>();
@@ -204,6 +197,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IMapBrowseViewFactory, MapBrowseViewFactory>();
             registry.Bind<IOldschoolChartStatisticsDataProvider, OldschoolChartStatisticsDataProvider>();
             registry.Bind<IInterviewDiagnosticsFactory, InterviewDiagnosticsFactory>();
+            registry.Bind<IInterviewsToExportViewFactory, InterviewsToExportViewFactory>();
 
             registry.Bind<ITeamsAndStatusesReport, TeamsAndStatusesReport>();
             registry.Bind<ISurveysAndStatusesReport, SurveysAndStatusesReport>();
@@ -266,34 +260,16 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             registry.BindToConstant<InterviewDataExportSettings>(() => this.interviewDataExportSettings);
             registry.BindToConstant<ExportSettings>(() => this.exportSettings);
-            registry.Bind<IFilebasedExportedDataAccessor, FilebasedExportedDataAccessor>();
 
-            registry.Bind<IDdiMetadataAccessor, DdiMetadataAccessor>();
             registry.Bind<IDataExportFileAccessor, DataExportFileAccessor>();
          
             registry.BindAsSingleton<IDataExportProcessesService, DataExportProcessesService>();
-            registry.Bind<IInterviewErrorsExporter, InterviewErrorsExporter>();
-            registry.Bind<CommentsExporter>();
-            registry.Bind<InterviewActionsExporter>();
-            registry.Bind<DiagnosticsExporter>();
-            registry.Bind<IExportServiceDataProvider, ExportServiceDataProvider>();
-
-            registry.Bind<ITabularDataToExternalStatPackageExportService, TabularDataToExternalStatPackageExportService>();
-            registry.Bind<ITabFileReader, TabFileReader>();
-            registry.Bind<IEnvironmentContentService, StataEnvironmentContentService>();
-
-            registry.Bind<TabularFormatDataExportHandler>();
-            registry.Bind<TabularFormatParaDataExportProcessHandler>();
-            registry.Bind<StataFormatExportHandler>();
-            registry.Bind<SpssFormatExportHandler>();
-            registry.Bind<BinaryFormatDataExportHandler>();
 
             registry.Bind<ITabularFormatExportService, ReadSideToTabularFormatExportService>();
             registry.Bind<ICsvWriterService, CsvWriterService>();
             registry.Bind<ICsvWriter, CsvWriter>();
             registry.Bind<ICsvReader, CsvReader>();
             registry.Bind<IDataExportStatusReader, DataExportStatusReader>();
-            registry.Bind<IInterviewsExporter, InterviewsExporter>();
 
             registry.Bind<IExportQuestionService, ExportQuestionService>();
 

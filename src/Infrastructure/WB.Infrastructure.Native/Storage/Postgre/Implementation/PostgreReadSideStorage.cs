@@ -120,6 +120,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         public IQuery GenerateCountRowsQuery(ICriteria criteria)
         {
             ISession session = this.sessionProvider.GetSession();
+            
             var criteriaImpl = (CriteriaImpl)criteria;
             var sessionImpl = (SessionImpl)criteriaImpl.Session;
             var factory = (SessionFactoryImpl)sessionImpl.SessionFactory;

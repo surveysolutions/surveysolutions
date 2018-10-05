@@ -20,7 +20,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
         public virtual decimal[] RosterVector { get; set; }
         public virtual string Comment { get; set; }
 
-
         public virtual InterviewCommentaries InterviewCommentaries { get; set; }
     }
 }
