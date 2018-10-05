@@ -1,0 +1,99 @@
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Newtonsoft.Json;
+using WB.Services.Export.Services.Processing;
+using WB.Services.Infrastructure.Tenant;
+using WB.Services.Scheduler.Model;
+using WB.Services.Scheduler.Services;
+
+namespace WB.Services.Export.Host.Jobs
+{
+    class PostgresDataExportProcessesService : IDataExportProcessesService
+    {
+        private readonly IJobService jobService;
+        private readonly IJobProgressReporter jobProgressReporter;
+        private readonly ILogger<PostgresDataExportProcessesService> logger;
+
+        public PostgresDataExportProcessesService(
+            IJobService jobService,
+            IJobProgressReporter jobProgressReporter,
+            ILogger<PostgresDataExportProcessesService> logger)
+        {
+            this.jobService = jobService;
+            this.jobProgressReporter = jobProgressReporter;
+            this.logger = logger;
+        }
+
+        public async Task<long> AddDataExport(DataExportProcessArgs args)
+        {
+            var job = await this.jobService.AddNewJobAsync(new JobItem
+            {
+                Tenant = args.Tenant.ToString(),
+                Args = JsonConvert.SerializeObject(args),
+                Tag = args.NaturalId,
+                Type = ExportJobRunner.Name,
+                Data =
+                {
+                    [StatusField] = DataExportStatus.Queued.ToString()
+                }
+            });
+
+            return job.Id;
+        }
+
+        private DataExportProcessArgs AsDataExportProcessArgs(JobItem job)
+        {
+            var args = JsonConvert.DeserializeObject<DataExportProcessArgs>(job.Args);
+
+            args.Status = new DataExportProcessStatus
+            {
+                ProgressInPercents = Int32.Parse(job.GetData<string>(ProgressField) ?? "0"),
+                BeginDate = job.StartAt,
+                IsRunning = job.Status == JobStatus.Running || job.Status == JobStatus.Created,
+                Status = Enum.Parse<DataExportStatus>(job.GetData<string>(StatusField))
+            };
+
+            return args;
+        }
+
+        public async Task<DataExportProcessArgs[]> GetAllProcesses(TenantInfo tenant)
+        {
+            var jobs = (await this.jobService.GetAllJobs(tenant, JobStatus.Created, JobStatus.Running))
+                .Select(AsDataExportProcessArgs).ToArray();
+
+            return jobs;
+        }
+
+        public void FinishExportSuccessfully(long processId)
+        {
+        }
+
+        public void FinishExportWithError(TenantInfo tenant, string tag, Exception e)
+        {
+            
+        }
+
+        public async Task UpdateDataExportProgressAsync(TenantInfo tenant, string tag, int progressInPercents)
+        {
+            var job = await jobService.GetJob(tenant, tag);
+            jobProgressReporter.UpdateJobData(job.Id, ProgressField, progressInPercents.ToString());
+        }
+
+        public async Task DeleteDataExport(TenantInfo tenant, string tag)
+        {
+            var job = await jobService.GetJob(tenant, tag);
+            jobProgressReporter.CancelJob(job.Id, tag);
+        }
+
+        public async Task ChangeStatusTypeAsync(TenantInfo tenant, string tag, DataExportStatus status)
+        {
+            var job = await jobService.GetJob(tenant, tag);
+            jobProgressReporter.UpdateJobData(job.Id, StatusField, status.ToString());
+        }
+
+        public const string StatusField = "exportStatus";
+        public const string ProgressField = "progress";
+    }
+}

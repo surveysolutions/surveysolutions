@@ -7,7 +7,7 @@ using WB.Services.Export.CsvExport.Implementation.DoFiles;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Services;
-using WB.Services.Export.Tenant;
+using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.Tests.Services.TabularDataToExternalStatPackageExportServiceTests
 {
