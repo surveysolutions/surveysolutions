@@ -124,7 +124,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts
             out MembershipCreateStatus status)
         {
             IMembershipAccount account = this.InternalCreateAccount(
-                username, password, email, providerUserKey, isApproved, out status);
+                username, password, email, null, providerUserKey, isApproved, out status);
             if (status == MembershipCreateStatus.Success)
             {
                 return this.CloneUser(account);
@@ -136,33 +136,29 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts
         public override string CreateUserAndAccount(
             string userName, string password, bool requireConfirmation, IDictionary<string, object> values)
         {
-            string token = string.Empty;
-
             const string emailParameterName = "Email";
             const string providerUserKeyParameterName = "ProviderUserKey";
+            const string fullNameParameterName = "FullName";
 
             string email = string.Empty;
             Guid? providerUserKey = null;
+            string fullName = null;
 
             if (values.ContainsKey(emailParameterName))
-                email = values["Email"] as string;
+                email = values[emailParameterName] as string;
+
+            if (values.ContainsKey(fullNameParameterName))
+                fullName = values[fullNameParameterName] as string;
 
             if (values.ContainsKey(providerUserKeyParameterName))
-                providerUserKey = values["ProviderUserKey"] as Guid?;
+                providerUserKey = values[providerUserKeyParameterName] as Guid?;
 
-            MembershipCreateStatus status;
             IMembershipAccount account = this.InternalCreateAccount(
-                userName, password, email, providerUserKey, !requireConfirmation, out status);
-            if (status == MembershipCreateStatus.Success)
-            {
-                token = account.ConfirmationToken;
-            }
-            else
-            {
-                throw new MembershipCreateUserException(status);
-            }
+                userName, password, email, fullName, providerUserKey, !requireConfirmation, out var status);
 
-            return token;
+            return status == MembershipCreateStatus.Success
+                ? account.ConfirmationToken
+                : throw new MembershipCreateUserException(status);
         }
 
         public override bool DeleteAccount(string userName)
@@ -431,7 +427,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts
                 account.LastActivityAt, 
                 account.LastPasswordChangeAt, 
                 account.LastLockedOutAt,
-                account.CanImportOnHq);
+                account.CanImportOnHq,
+                account.FullName);
         }
 
         private static string GenerateToken()
@@ -453,12 +450,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts
             return members;
         }
 
-        private IMembershipAccount InternalCreateAccount(
-            string username, 
-            string password, 
-            string email, 
-            object providerUserKey, 
-            bool isApproved, 
+        private IMembershipAccount InternalCreateAccount(string username,
+            string password,
+            string email,
+            string fullName,
+            object providerUserKey,
+            bool isApproved,
             out MembershipCreateStatus status)
         {
             if (this.AccountRepository.IsUniqueEmailRequired && !string.IsNullOrEmpty(this.AccountRepository.GetUserNameByEmail(email)))
@@ -486,7 +483,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts
             }
 
             IMembershipAccount account = this.AccountRepository.Create(
-                providerUserKey, this.ApplicationName, username, email);
+                providerUserKey, this.ApplicationName, username, email, fullName);
             var passwordInfo = new AccountPasswordInfo(username, password);
             account.Password = this.PasswordStrategy.Encrypt(passwordInfo);
             account.PasswordSalt = passwordInfo.PasswordSalt;
@@ -523,6 +520,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts
             account.ProviderUserKey = Guid.Parse(user.ProviderUserKey.ToString());
             account.UserName = user.UserName;
             account.CanImportOnHq = user.CanImportOnHq;
+            account.FullName = user.FullName;
         }
 
         private void UpdateOnlineState(bool userIsOnline, IMembershipAccount user)

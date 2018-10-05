@@ -9,7 +9,7 @@
     Layout = "~/Views/Account/Layout.Account.cshtml";
 }
 
-@using (Html.BeginForm("register", "account", null, FormMethod.Post, new { @id = "start-register", autocomplete = "off" }))
+@using (Html.BeginForm("register", "account", null, FormMethod.Post, new {@id = "start-register", autocomplete = "off"}))
 {
     @Html.AntiForgeryToken()
     <h1>@AccountResources.Register</h1>
@@ -18,20 +18,24 @@
         <p class="note has-error">@Html.Raw(@TempData[Alerts.ERROR])</p>
     }
     <div class="form-group">
-        @Html.TextBoxFor(x => x.UserName, new { @class = "form-control", placeholder = AccountResources.LoginName })
-        @Html.ValidationMessageFor(x => x.UserName, null, new { @class = "help-inline" })
+        @Html.TextBoxFor(x => x.UserName, new {@class = "form-control", placeholder = AccountResources.LoginName})
+        @Html.ValidationMessageFor(x => x.UserName, null, new {@class = "help-inline"})
     </div>
     <div class="form-group">
-        @Html.TextBoxFor(x => x.Email, new { @class = "form-control", @type = "email", placeholder = AccountResources.Email })
-        @Html.ValidationMessageFor(x => x.Email, null, new { @class = "help-inline" })
+        @Html.TextBoxFor(x => x.FullName, new {@class = "form-control", placeholder = AccountResources.FullName})
+        @Html.ValidationMessageFor(x => x.FullName, null, new {@class = "help-inline"})
     </div>
     <div class="form-group">
-        @Html.PasswordFor(x => x.Password, new { @class = "form-control", placeholder = AccountResources.PasswordWatermark })
-        @Html.ValidationMessageFor(x => x.Password, null, new { @class = "help-inline" })
+        @Html.TextBoxFor(x => x.Email, new {@class = "form-control", @type = "email", placeholder = AccountResources.Email})
+        @Html.ValidationMessageFor(x => x.Email, null, new {@class = "help-inline"})
     </div>
     <div class="form-group">
-        @Html.PasswordFor(x => x.ConfirmPassword, new { @class = "form-control", placeholder = AccountResources.RepeatPassword })
-        @Html.ValidationMessageFor(x => x.ConfirmPassword, null, new { @class = "help-inline" })
+        @Html.PasswordFor(x => x.Password, new {@class = "form-control", placeholder = AccountResources.PasswordWatermark})
+        @Html.ValidationMessageFor(x => x.Password, null, new {@class = "help-inline"})
+    </div>
+    <div class="form-group">
+        @Html.PasswordFor(x => x.ConfirmPassword, new {@class = "form-control", placeholder = AccountResources.RepeatPassword})
+        @Html.ValidationMessageFor(x => x.ConfirmPassword, null, new {@class = "help-inline"})
     </div>
 
     if (AppSettings.Instance.IsReCaptchaEnabled)
@@ -42,7 +46,7 @@
     }
 
     <div class="form-actions">
-        <input type="submit" class="btn btn-success btn-lg" value="@AccountResources.Register" />
+        <input type="submit" class="btn btn-success btn-lg" value="@AccountResources.Register"/>
         <a class="btn btn-link" href="@Url.Action("Login")">@AccountResources.Login</a>
         <a class="btn btn-link" href="@Url.Action("PasswordReset")">@AccountResources.ForgotPassword</a>
     </div>

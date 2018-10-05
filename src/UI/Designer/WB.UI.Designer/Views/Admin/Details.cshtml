@@ -14,6 +14,9 @@
         <b>Email:</b> @Model.Email
     </div>
     <div class="form-group">
+        <b>Full name:</b> @Model.FullName
+    </div>
+    <div class="form-group">
         @Html.CheckBoxFor(x => x.IsApproved, new { @id = "is-approved", @class = "wb-checkbox", @disabled = "disabled" })
         <label for="is-approved">
             <span></span>Is Approved
@@ -117,19 +120,3 @@
     }
 }
 
-@functions
-{
-    private string ActionWithOrderField(string sortField)
-    {
-        var sortOrder = (int?)ViewBag.SortOrder;
-        return Url.Action(
-            WB.UI.Designer.GlobalHelper.CurrentAction,
-            new
-            {
-                p = ViewBag.PageIndex,
-                sb = sortField,
-                so = CustomExtensions.InvertBooleableInt(sortOrder, ViewBag.SortBy == sortField),
-                f = ViewBag.Filter
-            });
-    }
-}
