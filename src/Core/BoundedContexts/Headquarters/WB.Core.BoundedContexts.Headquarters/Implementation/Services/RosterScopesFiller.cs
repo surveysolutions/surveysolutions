@@ -33,7 +33,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
             this.rosterGroups = this.groupsByRosterSizeSourceLookup[RosterSizeSourceType.Question].ToLookup(@group => @group.RosterSizeQuestionId);
             this.rosterSizeQuestions = this.document.Find<IQuestion>(question => this.rosterGroups[question.PublicKey].Any()).ToList();
             
-            foreach (var rosterSizeQuestion in this.rosterSizeQuestions)
+            foreach (var rosterSizeQuestion in this.rosterSizeQuestions.OrderBy(x => x.PublicKey))
             {
                 var scopeVectorsOfTriggers = this.rosterGroups[rosterSizeQuestion.PublicKey].Select(this.GetScopeOfQuestionnaireItem).GroupBy(k => k);
 
