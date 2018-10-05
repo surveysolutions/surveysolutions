@@ -13,10 +13,14 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.SurveySolutions;
+using WB.Enumerator.Native.Questionnaire.Impl;
 using WB.Tests.Abc.Storage;
 using WB.UI.WebTester.Services;
 using WB.UI.WebTester.Services.Implementation;
@@ -92,6 +96,13 @@ namespace WB.Tests.Abc.TestFactories
                 storage.Store(entity);
 
             return storage;
+        }
+
+        public QuestionnaireQuestionOptionsRepository QuestionnaireQuestionOptionsRepository(IQuestionnaire questionnaire)
+        {
+            var optionsRepository = new QuestionnaireQuestionOptionsRepository();
+            optionsRepository.SetCurentQuestionnaire(questionnaire);
+            return optionsRepository;
         }
     }
 }

@@ -51,9 +51,10 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                 => repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire);
 
             Setup.InstanceToMockedServiceLocator(questionnaireRepository);
-            Setup.InstanceToMockedServiceLocator<IQuestionOptionsRepository>(new QuestionnaireQuestionOptionsRepository());
 
-            var verifier = Create.Service.ImportDataVerifier(interviewTreeBuilder: Create.Service.InterviewTreeBuilder());
+            var verifier = Create.Service.ImportDataVerifier(
+                interviewTreeBuilder: Create.Service.InterviewTreeBuilder(),
+                optionsRepository: Create.Storage.QuestionnaireQuestionOptionsRepository(questionnaire));
 
             var answers = new List<InterviewAnswer>
             {
