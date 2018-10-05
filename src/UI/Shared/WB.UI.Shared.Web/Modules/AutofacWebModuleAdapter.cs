@@ -196,7 +196,7 @@ namespace WB.UI.Shared.Web.Modules
         public void BindMvcActionFilter<T>(int order = -1) where T: System.Web.Mvc.ActionFilterAttribute
         {
             containerBuilder.RegisterType<T>().AsSelf().InstancePerRequest();
-            containerBuilder.Register(c => new MvcActionFilter(typeof(T)))
+            containerBuilder.Register(c => new MvcActionFilter(c.Resolve<T>()))
                 .AsActionFilterFor<Controller>(order)
                 .InstancePerRequest();
         }
@@ -238,7 +238,7 @@ namespace WB.UI.Shared.Web.Modules
             where TAttribute : Attribute
         {
             containerBuilder.RegisterType<T>().AsSelf().InstancePerRequest();
-            containerBuilder.Register(c => new MvcActionFilterWhenActionMethodHasNoTransactionAttribute(c.Resolve<T>(), typeof(TAttribute)))
+            containerBuilder.Register(c => new MvcActionFilterWhenControllerOrActionHasNoAttribute(c.Resolve<T>(), typeof(TAttribute)))
                 .AsActionFilterFor<Controller>(order)
                 .InstancePerRequest();
         }
@@ -248,7 +248,7 @@ namespace WB.UI.Shared.Web.Modules
             where TAttribute : Attribute
         {
             containerBuilder.RegisterType<T>().AsSelf().InstancePerRequest();
-            containerBuilder.Register(c => new WebApiActionFilterWhenActionMethodHasNoAttribute<T, TAttribute>(c.Resolve<T>()))
+            containerBuilder.Register(c => new WebApiActionFilterWhenControllerOrActionHasNoAttribute<T, TAttribute>(c.Resolve<T>()))
                 .AsWebApiActionFilterFor<ApiController>()
                 .InstancePerRequest();
         }
@@ -256,7 +256,7 @@ namespace WB.UI.Shared.Web.Modules
         public void BindWebApiAuthorizationFilterWhenControllerOrActionHasAttribute<T, TAttribute>() where T : System.Web.Http.Filters.IAuthorizationFilter where TAttribute : Attribute
         {
             containerBuilder.RegisterType<T>().AsSelf().InstancePerRequest();
-            containerBuilder.Register(c => new WebApiAuthorizationFilterWhenActionMethodHasAttribute<T, TAttribute>(c.Resolve<T>()))
+            containerBuilder.Register(c => new WebApiAuthorizationFilterWhenControllerOrActionHasAttribute<T, TAttribute>(c.Resolve<T>()))
                 .AsWebApiAuthorizationFilterFor<ApiController>()
                 .InstancePerRequest();
         }
@@ -266,7 +266,7 @@ namespace WB.UI.Shared.Web.Modules
             where TAttribute : Attribute
         {
             containerBuilder.RegisterType<T>().AsSelf().WithParameter(constructorArgument.Name, constructorArgument.Value).InstancePerRequest();
-            containerBuilder.Register(c => new WebApiAuthorizationFilterWhenActionMethodHasAttribute<T, TAttribute>(c.Resolve<T>()))
+            containerBuilder.Register(c => new WebApiAuthorizationFilterWhenControllerOrActionHasAttribute<T, TAttribute>(c.Resolve<T>()))
                 .AsWebApiAuthorizationFilterFor<ApiController>()
                 .InstancePerRequest();
         }

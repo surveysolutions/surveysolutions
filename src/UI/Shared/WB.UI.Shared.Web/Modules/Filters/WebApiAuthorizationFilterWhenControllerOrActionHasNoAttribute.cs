@@ -8,11 +8,11 @@ using Autofac.Integration.WebApi;
 
 namespace WB.UI.Shared.Web.Modules.Filters
 {
-    public class WebApiAuthorizationFilterWhenActionMethodHasNoAttribute<TFilter, TAttribute> : IAutofacAuthorizationFilter
+    public class WebApiAuthorizationFilterWhenControllerOrActionHasNoAttribute<TFilter, TAttribute> : IAutofacAuthorizationFilter
         where TFilter : System.Web.Http.Filters.AuthorizationFilterAttribute
         where TAttribute : Attribute
     {
-        public WebApiAuthorizationFilterWhenActionMethodHasNoAttribute(TFilter filter)
+        public WebApiAuthorizationFilterWhenControllerOrActionHasNoAttribute(TFilter filter)
         {
             this.filter = filter;
         }
@@ -36,9 +36,9 @@ namespace WB.UI.Shared.Web.Modules.Filters
     }
 
 
-    public class WebApiAuthorizationFilterWhenActionMethodHasNoAttribute : IAuthorizationFilter
+    public class WebApiAuthorizationFilterWhenControllerOrActionHasNoAttribute : IAuthorizationFilter
     {
-        public WebApiAuthorizationFilterWhenActionMethodHasNoAttribute(IAuthorizationFilter filter, Type attributeType)
+        public WebApiAuthorizationFilterWhenControllerOrActionHasNoAttribute(IAuthorizationFilter filter, Type attributeType)
         {
             this.filter = filter;
             this.attributeType = attributeType;

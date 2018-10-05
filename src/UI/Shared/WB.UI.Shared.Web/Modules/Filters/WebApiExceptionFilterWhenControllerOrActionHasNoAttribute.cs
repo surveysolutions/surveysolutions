@@ -6,13 +6,13 @@ using Autofac.Integration.WebApi;
 
 namespace WB.UI.Shared.Web.Modules.Filters
 {
-    public class WebApiExceptionFilterWhenActionMethodHasNoAttribute<TFilter, TAttribute> : IAutofacExceptionFilter
+    public class WebApiExceptionFilterWhenControllerOrActionHasNoAttribute<TFilter, TAttribute> : IAutofacExceptionFilter
         where TFilter : System.Web.Http.Filters.ExceptionFilterAttribute
         where TAttribute : Attribute
     {
         private readonly TFilter filter;
 
-        public WebApiExceptionFilterWhenActionMethodHasNoAttribute(TFilter filter)
+        public WebApiExceptionFilterWhenControllerOrActionHasNoAttribute(TFilter filter)
         {
             this.filter = filter;
         }
