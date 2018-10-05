@@ -30,7 +30,7 @@ namespace WB.UI.Shared.Web.Versions
         {
             if (shouldStoreVersionToDb)
             {
-                using (ScopeManager.BeginScope())
+                using (UnitOfWorkScopeManager.BeginScope())
                 using (var unitOfWork = new UnitOfWork(serviceLocator.GetInstance<ISessionFactory>()))
                 {
                     serviceLocator.GetInstance<IProductVersionHistory>().RegisterCurrentVersion();
