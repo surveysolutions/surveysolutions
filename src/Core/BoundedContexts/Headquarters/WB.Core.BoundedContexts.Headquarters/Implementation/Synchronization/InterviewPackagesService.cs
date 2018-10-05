@@ -223,57 +223,64 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             string existingInterviewKey = null;
             try
             {
-                existingInterviewKey = this.interviews.GetById(interview.InterviewId)?.Key;
-                var aggregateRootEvents = this.serializer
-                    .Deserialize<AggregateRootEvent[]>(interview.Events.Replace(@"\u0000", ""));
-
-                var firstEvent = aggregateRootEvents.FirstOrDefault();
-                if (firstEvent != null && 
-                    firstEvent.Payload.GetType() != typeof(SynchronizationMetadataApplied) &&
-                    eventStore.HasEventsAfterSpecifiedSequenceWithAnyOfSpecifiedTypes(firstEvent.EventSequence - 1, 
-                        interview.InterviewId,
-                        EventsThatChangeAnswersStateProvider.GetTypeNames()))
+                using (var handlingUow = new UnitOfWork(ServiceLocator.Current.GetInstance<ISessionFactory>()))
                 {
-                    throw new InterviewException("Provided interview package is outdated. New answers were given to the interview while interviewer had interview on a tablet", InterviewDomainExceptionType.PackageIsOudated);
+
+                    existingInterviewKey = this.interviews.GetById(interview.InterviewId)?.Key;
+                    var aggregateRootEvents = this.serializer
+                        .Deserialize<AggregateRootEvent[]>(interview.Events.Replace(@"\u0000", ""));
+
+                    var firstEvent = aggregateRootEvents.FirstOrDefault();
+                    if (firstEvent != null &&
+                        firstEvent.Payload.GetType() != typeof(SynchronizationMetadataApplied) &&
+                        eventStore.HasEventsAfterSpecifiedSequenceWithAnyOfSpecifiedTypes(firstEvent.EventSequence - 1,
+                            interview.InterviewId,
+                            EventsThatChangeAnswersStateProvider.GetTypeNames()))
+                    {
+                        throw new InterviewException(
+                            "Provided interview package is outdated. New answers were given to the interview while interviewer had interview on a tablet",
+                            InterviewDomainExceptionType.PackageIsOudated);
+                    }
+
+                    AssertPackageNotDuplicated(aggregateRootEvents);
+
+                    var serializedEvents = aggregateRootEvents
+                        .Select(e => e.Payload)
+                        .ToArray();
+
+                    this.logger.Debug(
+                        $"Interview events by {interview.InterviewId} deserialized. Took {innerwatch.Elapsed:g}.");
+                    innerwatch.Restart();
+
+                    bool shouldChangeInterviewKey =
+                        CheckIfInterviewKeyNeedsToBeChanged(interview.InterviewId, serializedEvents);
+                    bool shouldChangeSupervisorId = CheckIfInterviewerWasMovedToAnotherTeam(interview.ResponsibleId,
+                        serializedEvents, out Guid? newSupervisorId);
+
+                    if (shouldChangeSupervisorId && !newSupervisorId.HasValue)
+                        throw new InterviewException(
+                            "Can't move interview to a new team, because supervisor id is empty",
+                            exceptionType: InterviewDomainExceptionType.CantMoveToUndefinedTeam);
+
+                    this.commandService.Execute(new SynchronizeInterviewEventsCommand(
+                        interviewId: interview.InterviewId,
+                        userId: interview.ResponsibleId,
+                        questionnaireId: interview.QuestionnaireId,
+                        questionnaireVersion: interview.QuestionnaireVersion,
+                        interviewStatus: interview.InterviewStatus,
+                        createdOnClient: interview.IsCensusInterview,
+                        interviewKey: shouldChangeInterviewKey ? this.uniqueKeyGenerator.Get() : null,
+                        synchronizedEvents: serializedEvents,
+                        newSupervisorId: shouldChangeSupervisorId ? newSupervisorId : null
+                    ), this.syncSettings.Origin);
+
+                    RecordProcessedPackageInfo(aggregateRootEvents);
+
+                    handlingUow.AcceptChanges();
                 }
-
-                AssertPackageNotDuplicated(aggregateRootEvents);
-
-                var serializedEvents = aggregateRootEvents
-                    .Select(e => e.Payload)
-                    .ToArray();
-
-                this.logger.Debug($"Interview events by {interview.InterviewId} deserialized. Took {innerwatch.Elapsed:g}.");
-                innerwatch.Restart();
-
-                bool shouldChangeInterviewKey = CheckIfInterviewKeyNeedsToBeChanged(interview.InterviewId, serializedEvents);
-                bool shouldChangeSupervisorId = CheckIfInterviewerWasMovedToAnotherTeam(interview.ResponsibleId,
-                    serializedEvents, out Guid? newSupervisorId);
-
-                if (shouldChangeSupervisorId && !newSupervisorId.HasValue)
-                    throw new InterviewException("Can't move interview to a new team, because supervisor id is empty",
-                        exceptionType: InterviewDomainExceptionType.CantMoveToUndefinedTeam);
-
-                this.commandService.Execute(new SynchronizeInterviewEventsCommand(
-                    interviewId: interview.InterviewId,
-                    userId: interview.ResponsibleId,
-                    questionnaireId: interview.QuestionnaireId,
-                    questionnaireVersion: interview.QuestionnaireVersion,
-                    interviewStatus: interview.InterviewStatus,
-                    createdOnClient: interview.IsCensusInterview,
-                    interviewKey: shouldChangeInterviewKey ? this.uniqueKeyGenerator.Get() : null,
-                    synchronizedEvents: serializedEvents,
-                    newSupervisorId: shouldChangeSupervisorId ? newSupervisorId : null
-                ), this.syncSettings.Origin);
-
-                RecordProcessedPackageInfo(aggregateRootEvents);
-
             }
             catch (Exception exception)
             {
-                this.unitOfWork.Dispose();
-
-
                 this.logger.Error($"Interview events by {interview.InterviewId} processing failed. Reason: '{exception.Message}'", exception);
 
                 var interviewException = exception as InterviewException;

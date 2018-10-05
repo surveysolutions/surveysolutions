@@ -244,7 +244,8 @@ namespace WB.Tests.Abc
         }
 
         internal static StatefulInterview StatefulInterviewWithMultilanguageQuestionnaires(
-            params KeyValuePair<string, IComposite[]>[] questionnaires)
+             KeyValuePair<string, IComposite[]>[] questionnaires, 
+             IQuestionOptionsRepository questionOptionsRepository = null)
         {
             var chapterId = Guid.Parse("33333333333333333333333333333333");
 
@@ -262,7 +263,7 @@ namespace WB.Tests.Abc
 
             var questionnaireRepository = Create.Fake.QuestionnaireRepository(questionnaireDocuments.ToArray());
 
-            return Create.AggregateRoot.StatefulInterview(questionnaireRepository: questionnaireRepository);
+            return Create.AggregateRoot.StatefulInterview(questionnaireRepository: questionnaireRepository, questionOptionsRepository: questionOptionsRepository);
         }
 
         public static Mock<T> GetMock<T>(this IFixture fixture) where T : class

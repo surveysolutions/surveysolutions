@@ -812,7 +812,8 @@ namespace WB.Tests.Abc.TestFactories
         public PlainQuestionnaire PlainQuestionnaire(QuestionnaireDocument document = null, long version = 1)
             => Create.Entity.PlainQuestionnaire(document, version, null);
 
-        public PlainQuestionnaire PlainQuestionnaire(QuestionnaireDocument document, long version, Translation translation = null, ISubstitutionService substitutionService = null)
+        public PlainQuestionnaire PlainQuestionnaire(QuestionnaireDocument document, long version, Translation translation = null, 
+            ISubstitutionService substitutionService = null, IQuestionOptionsRepository questionOptionsRepository = null)
         {
             if (document != null)
             {
@@ -820,7 +821,8 @@ namespace WB.Tests.Abc.TestFactories
                 document.ExpressionsPlayOrder = document.ExpressionsPlayOrder ?? Create.Service.ExpressionsPlayOrderProvider().GetExpressionsPlayOrder(
                     document.AsReadOnly().AssignMissingVariables());
             }
-            return new PlainQuestionnaire(document, version, Mock.Of<IQuestionOptionsRepository>(), substitutionService ?? Mock.Of<ISubstitutionService>(), translation);
+            return new PlainQuestionnaire(document, version, questionOptionsRepository ?? Mock.Of<IQuestionOptionsRepository>(), 
+                substitutionService ?? Mock.Of<ISubstitutionService>(), translation);
         }
 
         public QRBarcodeQuestion QRBarcodeQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,

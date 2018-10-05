@@ -135,13 +135,14 @@ namespace WB.Tests.Integration
         public static Interview Interview(
             Guid? questionnaireId = null,
             IQuestionnaireStorage questionnaireRepository = null, 
-            IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null)
+            IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null,
+            IQuestionOptionsRepository questionOptionsRepository = null)
         {
             var interview = new Interview(questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>(),
                 Create.Service.SubstitutionTextFactory(),
                 Create.Service.InterviewTreeBuilder(),
-                Mock.Of<IQuestionOptionsRepository>());
+                questionOptionsRepository ?? Mock.Of<IQuestionOptionsRepository>());
 
             interview.CreateInterview(Create.Command.CreateInterview(
                 interviewId: interview.EventSourceId, 
