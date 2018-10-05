@@ -52,6 +52,8 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
 
         public virtual string UserId { get; set; }
 
+        public virtual string FullName { get; set; }
+
         public virtual Guid ProviderUserKey
         {
             get { return providerUserKey; }
@@ -71,15 +73,19 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
         #endregion
 
         public virtual Guid Id => this.ProviderUserKey;
+
         public virtual void SetId(Guid id) => this.ProviderUserKey = id;
 
-        public virtual void Register(string applicationName, string userName, string email, Guid accountId, string password, string passwordSalt, bool isConfirmed, string confirmationToken)
+        public virtual void Register(string applicationName, string userName, string email, Guid accountId,
+            string password, string passwordSalt, bool isConfirmed, 
+            string confirmationToken, string fullName)
         {
             this.UserName = GetNormalizedUserName(userName);
             this.Email = email;
             this.ConfirmationToken = confirmationToken;
             this.ApplicationName = applicationName;
             this.CreatedAt = DateTime.UtcNow;
+            this.FullName = fullName;
 
             this.ResetPassword(password: password, passwordSalt: passwordSalt);
             if (isConfirmed)
@@ -146,13 +152,14 @@ namespace WB.Core.BoundedContexts.Designer.Aggregates
             this.Password = password;
         }
 
-        public virtual void Update(string userName, bool isLockedOut, string passwordQuestion, string email, bool isConfirmed, string comment, bool canImportOnHq)
+        public virtual void Update(string userName, bool isLockedOut, string passwordQuestion, string email, bool isConfirmed, string comment, bool canImportOnHq, string fullName)
         {
             this.Comment = comment;
             this.Email = email;
             this.PasswordQuestion = passwordQuestion;
             this.UserName = GetNormalizedUserName(userName);
             this.CanImportOnHq = canImportOnHq;
+            this.FullName = fullName;
 
             if (!this.IsConfirmed && isConfirmed)
             {

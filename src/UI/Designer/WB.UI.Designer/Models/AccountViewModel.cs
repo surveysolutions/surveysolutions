@@ -46,5 +46,8 @@ namespace WB.UI.Designer.Models
 
         [Display(Name = "Name", Order = 1)]
         public string UserName { get; set; }
+
+        [Display(Name = "Full name", Order = 2)]
+        public string FullName { get; set; }
     }
 }
