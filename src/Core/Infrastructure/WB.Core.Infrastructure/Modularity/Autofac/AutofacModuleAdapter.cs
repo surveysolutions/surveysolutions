@@ -113,7 +113,12 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
 
         public void BindAsSingleton<TInterface1, TInterface2, TImplementation>() where TImplementation : TInterface2, TInterface1
         {
-            containerBuilder.RegisterType<TImplementation>().As<TInterface1, TInterface1>().SingleInstance();
+            containerBuilder.RegisterType<TImplementation>().As<TInterface1, TInterface2>().SingleInstance();
+        }
+
+        public void BindAsSingleton<TInterface1, TInterface2, TInterface3, TImplementation>() where TImplementation : TInterface3, TInterface2, TInterface1
+        {
+            containerBuilder.RegisterType<TImplementation>().As<TInterface1, TInterface2, TInterface3>().SingleInstance();
         }
 
         void IIocRegistry.BindAsSingletonWithConstructorArgument<TInterface, TImplementation>(string argumentName, object argumentValue)
