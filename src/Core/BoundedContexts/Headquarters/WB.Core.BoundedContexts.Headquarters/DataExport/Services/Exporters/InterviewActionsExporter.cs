@@ -45,6 +45,10 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services.Exporters
         private readonly IUnitOfWork sessionProvider;
         private readonly ILogger logger;
 
+        protected InterviewActionsExporter()
+        {
+        }
+
         public InterviewActionsExporter(InterviewDataExportSettings interviewDataExportSettings,
             IFileSystemAccessor fileSystemAccessor, 
             ICsvWriter csvWriter, 
