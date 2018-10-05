@@ -98,10 +98,11 @@ namespace WB.Tests.Abc.TestFactories
             return storage;
         }
 
-        public QuestionnaireQuestionOptionsRepository QuestionnaireQuestionOptionsRepository(IQuestionnaire questionnaire)
+        public QuestionnaireQuestionOptionsRepository QuestionnaireQuestionOptionsRepository(IQuestionnaire questionnaire = null)
         {
             var optionsRepository = new QuestionnaireQuestionOptionsRepository();
-            optionsRepository.SetCurentQuestionnaire(questionnaire);
+            if (questionnaire != null)
+                optionsRepository.SetCurentQuestionnaire(questionnaire);
             return optionsRepository;
         }
     }
