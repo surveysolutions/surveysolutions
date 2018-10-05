@@ -66,9 +66,10 @@ namespace WB.UI.Interviewer.Infrastructure
                 PathToInterviewsDirectory = AndroidPathUtils.GetPathToSubfolderInLocalDirectory($"data{Path.DirectorySeparatorChar}interviews")
             });
 
-
             registry.BindAsSingleton(typeof(IPlainStorage<,>), typeof(SqlitePlainStorage<,>));
             registry.BindAsSingleton(typeof(IPlainStorage<>), typeof(SqlitePlainStorage<>));
+
+            registry.BindAsSingleton<IPlainStorage<PrefilledQuestionView>, PrefilledQuestionsRepository>();
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)

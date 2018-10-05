@@ -27,6 +27,7 @@ namespace WB.Core.SharedKernels.Enumerator.Views
 
         private readonly ILogger logger;
         private readonly IFileSystemAccessor fileSystemAccessor;
+        private readonly IEncryptionService encryptionService;
 
         private string connectionStringToEventStoreInSingleFile;
         private static readonly object lockObject = new object();
@@ -37,9 +38,11 @@ namespace WB.Core.SharedKernels.Enumerator.Views
             SqliteSettings settings,
             IEnumeratorSettings enumeratorSettings,
             IFileSystemAccessor fileSystemAccessor,
-            IEventTypeResolver eventTypesResolver)
+            IEventTypeResolver eventTypesResolver,
+            IEncryptionService encryptionService)
         {
             this.fileSystemAccessor = fileSystemAccessor;
+            this.encryptionService = encryptionService;
             this.settings = settings;
             this.enumeratorSettings = enumeratorSettings;
             this.logger = logger;
@@ -167,7 +170,7 @@ namespace WB.Core.SharedKernels.Enumerator.Views
                 {
                     connection.RunInTransaction(() =>
                     {
-                        var storedEvents = events.Select(x => ToStoredEvent(x, eventSerializer));
+                        var storedEvents = events.Select(x => ToStoredEvent(x, eventSerializer, this.encryptionService));
                         foreach (var @event in storedEvents)
                         {
                             connection.Insert(@event);
@@ -202,7 +205,7 @@ namespace WB.Core.SharedKernels.Enumerator.Views
                         .ToList();
 
                     var committedEvents = eventViews
-                        .Select(x => ToCommitedEvent(x, eventSerializer))
+                        .Select(x => ToCommitedEvent(x, eventSerializer, this.encryptionService))
                         .ToList();
                     return committedEvents;
                 }
@@ -420,7 +423,7 @@ namespace WB.Core.SharedKernels.Enumerator.Views
                 .Skip(skip)
                 .Take(take)
                 .ToList()
-                .Select(x => ToCommitedEvent(x, serializer))
+                .Select(x => ToCommitedEvent(x, serializer, this.encryptionService))
                 .ToList();
         }
 
@@ -444,7 +447,7 @@ namespace WB.Core.SharedKernels.Enumerator.Views
                     {
                         this.ValidateStreamVersion(connection, eventStream);
 
-                        List<EventView> storedEvents = eventStream.Select(x => ToStoredEvent(x, serializer)).ToList();
+                        List<EventView> storedEvents = eventStream.Select(x => ToStoredEvent(x, serializer, this.encryptionService)).ToList();
                         foreach (var @event in storedEvents)
                         {
                             connection.Insert(@event);
@@ -516,7 +519,7 @@ namespace WB.Core.SharedKernels.Enumerator.Views
             }
         }
 
-        private static CommittedEvent ToCommitedEvent(EventView storedEvent, IEventSerializer serializer)
+        private static CommittedEvent ToCommitedEvent(EventView storedEvent, IEventSerializer serializer, IEncryptionService encryptionService)
             => new CommittedEvent(
                 commitId: storedEvent.CommitId ?? storedEvent.EventSourceId,
                 origin: string.Empty,
@@ -525,7 +528,7 @@ namespace WB.Core.SharedKernels.Enumerator.Views
                 eventSequence: storedEvent.EventSequence,
                 eventTimeStamp: storedEvent.DateTimeUtc,
                 globalSequence: -1,
-                payload: serializer.Deserialize(storedEvent.JsonEvent, storedEvent.EventType));
+                payload: serializer.Deserialize(encryptionService.Decrypt(storedEvent.EncryptedJsonEvent), storedEvent.EventType));
 
         private static CommittedEvent ToCommitedEvent(UncommittedEvent storedEvent)
             => new CommittedEvent(
@@ -538,7 +541,7 @@ namespace WB.Core.SharedKernels.Enumerator.Views
                 globalSequence: -1,
                 payload: storedEvent.Payload);
 
-        private static EventView ToStoredEvent(UncommittedEvent evt, IEventSerializer serializer)
+        private static EventView ToStoredEvent(UncommittedEvent evt, IEventSerializer serializer, IEncryptionService encryptionService)
             => new EventView
             {
                 EventId = evt.EventIdentifier,
@@ -546,24 +549,22 @@ namespace WB.Core.SharedKernels.Enumerator.Views
                 CommitId = evt.CommitId,
                 EventSequence = evt.EventSequence,
                 DateTimeUtc = evt.EventTimeStamp,
-                JsonEvent = serializer.Serialize(evt.Payload),
+                EncryptedJsonEvent = encryptionService.Encrypt(serializer.Serialize(evt.Payload)),
                 EventType = evt.Payload.GetType().Name
             };
 
-        private static EventView ToStoredEvent(CommittedEvent evt, IEventSerializer serializer)
-        {
-            return new EventView
+        private static EventView ToStoredEvent(CommittedEvent evt, IEventSerializer serializer, IEncryptionService encryptionService)
+            => new EventView
             {
                 EventId = evt.EventIdentifier,
                 EventSourceId = evt.EventSourceId,
                 CommitId = evt.CommitId,
                 EventSequence = evt.EventSequence,
                 DateTimeUtc = evt.EventTimeStamp,
-                JsonEvent = serializer.Serialize(evt.Payload),
+                EncryptedJsonEvent = encryptionService.Encrypt(serializer.Serialize(evt.Payload)),
                 EventType = evt.Payload.GetType().Name,
                 ExistsOnHq = 1
             };
-        }
 
 
         private interface IEventSerializer

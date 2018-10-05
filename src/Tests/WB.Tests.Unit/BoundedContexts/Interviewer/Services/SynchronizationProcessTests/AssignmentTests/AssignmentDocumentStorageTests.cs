@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         {
             this.connection = Create.Storage.InMemorySqLiteConnection;
 
-            this.storage = new AssignmentDocumentsStorage(connection, Mock.Of<ILogger>());
+            this.storage = new AssignmentDocumentsStorage(connection, Mock.Of<ILogger>(), Mock.Of<IEncryptionService>());
         }
 
         [Test]
