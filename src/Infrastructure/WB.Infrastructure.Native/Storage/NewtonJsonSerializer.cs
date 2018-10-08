@@ -14,7 +14,7 @@ namespace WB.Infrastructure.Native.Storage
                 TypeNameHandling = TypeNameHandling.Objects,
                 NullValueHandling = NullValueHandling.Ignore,
                 FloatParseHandling = FloatParseHandling.Decimal,
-                Formatting = Formatting.None,
+                Formatting = Formatting.Indented,
                 Binder = new OldToNewAssemblyRedirectSerializationBinder()
             };
         }
