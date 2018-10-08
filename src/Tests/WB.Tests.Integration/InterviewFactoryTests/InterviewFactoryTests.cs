@@ -44,20 +44,8 @@ namespace WB.Tests.Integration.InterviewFactoryTests
             var roster = Id.g2;
             var rosterItem = Id.g3;
 
-            interviewSummaryRepository.Store(new InterviewSummary
-                {
-                    SummaryId = interviewId.FormatGuid(),
-                    InterviewId = interviewId,
-                    Status = InterviewStatus.Completed,
-                    QuestionnaireIdentity = questionnaireId.ToString(),
-                    ReceivedByInterviewer = false
-                }, interviewId.FormatGuid());
-
-            var factory = CreateInterviewFactory();
-
             var questionnaire = Create.Entity.QuestionnaireDocumentWithOneChapter(
                 id: questionnaireId.QuestionnaireId,
-
                 children: new IComposite[]
                 {
                     Create.Entity.MultyOptionsQuestion(rosterSource, new List<Answer> {
@@ -71,6 +59,15 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                         })
                 });
 
+            StoreInterviewSummary(new InterviewSummary
+            {
+                SummaryId = interviewId.FormatGuid(),
+                InterviewId = interviewId,
+                Status = InterviewStatus.Completed,
+                QuestionnaireIdentity = questionnaireId.ToString(),
+                ReceivedByInterviewer = false
+            }, new QuestionnaireIdentity(questionnaire.PublicKey, 1));
+
             PrepareQuestionnaire(questionnaire, questionnaireId.Version);
 
             var entityNegative = Create.Identity(rosterItem, Create.RosterVector(-99));
@@ -78,7 +75,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
             var entityNegativeMixed = Create.Identity(rosterItem, Create.RosterVector(1, -99, 3));
             var entityNegativeConsecutive = Create.Identity(rosterItem, Create.RosterVector(1, -99, 3, -99, -44));
 
-
+            var factory = CreateInterviewFactory();
             factory.Save(new InterviewState
             {
                 Id = interviewId,
@@ -724,34 +721,33 @@ namespace WB.Tests.Integration.InterviewFactoryTests
             PrepareQuestionnaire(questionnaire, otherQuestionnaireId.Version);
 
             foreach (var expectedMultimediaAnswer in expectedMultimediaAnswers.GroupBy(x => x.Answer.InterviewId))
-                {
-                    var id = expectedMultimediaAnswer.Key;
+            {
+                var id = expectedMultimediaAnswer.Key;
 
-                    interviewSummaryRepository.Store(new InterviewSummary
-                    {
-                        InterviewId = id,
-                        Status = InterviewStatus.Completed,
-                        ReceivedByInterviewer = false,
-                        QuestionnaireIdentity = expectedMultimediaAnswer.FirstOrDefault().QuestionnaireId.ToString()
-                    }, id.FormatGuid());
-                }
+                StoreInterviewSummary(new InterviewSummary
+                {
+                    InterviewId = id,
+                    Status = InterviewStatus.Completed,
+                    ReceivedByInterviewer = false,
+                }, expectedMultimediaAnswer.First().QuestionnaireId);
+            }
             
 
             foreach (var groupedInterviews in expectedMultimediaAnswers.GroupBy(x => x.Answer.InterviewId))
-                {
-                    var interviewState = Create.Entity.InterviewState(groupedInterviews.Key);
-                    interviewState.Answers = groupedInterviews.ToDictionary(x => x.QuestionId,
-                        x => new InterviewStateAnswer
-                        {
-                            Id = x.QuestionId.Id,
-                            RosterVector = x.QuestionId.RosterVector,
-                            AsString = x.Answer.Answer
-                        });
+            {
+                var interviewState = Create.Entity.InterviewState(groupedInterviews.Key);
+                interviewState.Answers = groupedInterviews.ToDictionary(x => x.QuestionId,
+                    x => new InterviewStateAnswer
+                    {
+                        Id = x.QuestionId.Id,
+                        RosterVector = x.QuestionId.RosterVector,
+                        AsString = x.Answer.Answer
+                    });
 
-                    interviewState.Enablement = groupedInterviews.ToDictionary(x => x.QuestionId, x => x.Enabled);
+                interviewState.Enablement = groupedInterviews.ToDictionary(x => x.QuestionId, x => x.Enabled);
 
-                    factory.Save(interviewState);
-                }
+                factory.Save(interviewState);
+            }
             
 
             //act
