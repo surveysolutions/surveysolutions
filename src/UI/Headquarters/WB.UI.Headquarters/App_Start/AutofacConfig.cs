@@ -113,25 +113,6 @@ namespace WB.UI.Headquarters
 
             var autofacKernel = new AutofacWebKernel();
 
-            //ContainerBuilder builder = new ContainerBuilder();
-
-
-
-            /*
-
-                        builder.RegisterModule(new NLogLoggingModule().AsAutofac());
-                        builder.RegisterModule(new EventSourcedInfrastructureModule().AsAutofac());
-                        builder.RegisterModule(new InfrastructureModule().AsAutofac());
-                        builder.RegisterModule(new NcqrsModule().AsAutofac());
-                        builder.RegisterModule(new WebConfigurationModule().AsAutofac());
-                        builder.RegisterModule(new CaptchaModule(settingsProvider.AppSettings.Get("CaptchaService")).AsAutofac());
-                        builder.RegisterModule(new QuestionnaireUpgraderModule().AsAutofac());
-                        builder.RegisterModule(new FileInfrastructureModule().AsAutofac());
-                        builder.RegisterModule(new ProductVersionModule(typeof(HeadquartersUIModule).Assembly).AsAutofac());
-                        builder.RegisterModule(new OrmModule(connectionSettings).AsAutofac());
-            */
-
-
             autofacKernel.ContainerBuilder.RegisterFilterProvider();
             var config = GlobalConfiguration.Configuration;
             autofacKernel.ContainerBuilder.RegisterWebApiFilterProvider(config);
@@ -218,6 +199,9 @@ namespace WB.UI.Headquarters
             var owinSecurityModule = new OwinSecurityModule();
 
             autofacKernel.Load(new NLogLoggingModule(),
+                
+                new OrmModule(connectionSettings),
+
                 new EventSourcedInfrastructureModule(),
                 new InfrastructureModule(),
                 new NcqrsModule(),
@@ -225,22 +209,8 @@ namespace WB.UI.Headquarters
                 new CaptchaModule(settingsProvider.AppSettings.Get("CaptchaService")),
                 new QuestionnaireUpgraderModule(),
                 new FileInfrastructureModule(),
-
-//
-//resolve after merge
-
-				//new PostgresKeyValueModule(cacheSettings),
-                //new PostgresReadSideModule(
-                //    settingsProvider.ConnectionStrings[dbConnectionStringName].ConnectionString,
-                //    PostgresReadSideModule.ReadSideSchemaName, DbUpgradeSettings.FromFirstMigration<M001_InitDb>(),
-                //    cacheSettings,
-                //    mappingAssemblies),
-                //new PostgresPlainStorageModule(postgresPlainStorageSettings),
-//                
-
                 
                 new ProductVersionModule(typeof(HeadquartersUIModule).Assembly),
-                new OrmModule(connectionSettings),
 
                 eventStoreModule,
                 new DataCollectionSharedKernelModule(),
