@@ -316,6 +316,7 @@
         return dataReference.StatusOfLatestExportProcess() === 4;
     }
 
-    self.updateDataExportInfo(true);
+    self.updateProcess = setInterval(function() { self.updateDataExportInfo(false); }, 2000);
+    
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.ExportData, Supervisor.VM.BasePage);

@@ -5,7 +5,7 @@ using NUnit.Framework;
 using WB.Services.Infrastructure.Tenant;
 using WB.Services.Scheduler.Services.Implementation;
 
-namespace WB.Services.Scheduler.Tests
+namespace WB.Services.Scheduler.Tests.JobServiceTests
 {
     [TestFixture]
     public class JobServiceTests : with_scheduler

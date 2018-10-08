@@ -7,6 +7,8 @@ using WB.Services.Export.Jobs;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Services.Processing;
 using WB.Services.Infrastructure.Tenant;
+using WB.Services.Scheduler.Model;
+using WB.Services.Scheduler.Services;
 
 namespace WB.Services.Export.Host.Controllers
 {
@@ -16,14 +18,16 @@ namespace WB.Services.Export.Host.Controllers
         private readonly IDataExportProcessesService exportProcessesService;
         private readonly IJobsStatusReporting jobsStatusReporting;
         private readonly IDdiMetadataAccessor ddiDdiMetadataAccessor;
+        private readonly IJobService jobService;
 
         public JobController(IDataExportProcessesService exportProcessesService,
             IJobsStatusReporting jobsStatusReporting,
-            IDdiMetadataAccessor ddiDdiMetadataAccessor)
+            IDdiMetadataAccessor ddiDdiMetadataAccessor, IJobService jobService)
         {
             this.exportProcessesService = exportProcessesService;
             this.jobsStatusReporting = jobsStatusReporting;
             this.ddiDdiMetadataAccessor = ddiDdiMetadataAccessor;
+            this.jobService = jobService;
         }
 
         [HttpPut]
@@ -74,7 +78,7 @@ namespace WB.Services.Export.Host.Controllers
             DateTime? toDate,
             TenantInfo tenant)
         {
-            var dataExportStatusForQuestionnaire = await this.jobsStatusReporting.GetDataExportStatusForQuestionnaire(tenant,
+            var dataExportStatusForQuestionnaire = await this.jobsStatusReporting.GetDataExportStatusForQuestionnaireAsync(tenant,
                 new QuestionnaireId(questionnaireId),
                 archiveName, status, fromDate, toDate);
 
@@ -89,7 +93,7 @@ namespace WB.Services.Export.Host.Controllers
             string archivePassword,
             TenantInfo tenant)
         {
-            var pathToFile = await this.ddiDdiMetadataAccessor.GetFilePathToDDIMetadata(tenant, new QuestionnaireId(questionnaireId),
+            var pathToFile = await this.ddiDdiMetadataAccessor.GetFilePathToDDIMetadataAsync(tenant, new QuestionnaireId(questionnaireId),
                 archivePassword);
             var responseStream = System.IO.File.OpenRead(pathToFile);
             return File(responseStream, "application/zip");
@@ -106,7 +110,7 @@ namespace WB.Services.Export.Host.Controllers
             DateTime? toDate,
             TenantInfo tenant)
         {
-            var result = await this.jobsStatusReporting.DownloadArchive(tenant, archiveName, format, status, fromDate, toDate);
+            var result = await this.jobsStatusReporting.DownloadArchiveAsync(tenant, archiveName, format, status, fromDate, toDate);
 
             if (result == null)
             {
@@ -134,12 +138,11 @@ namespace WB.Services.Export.Host.Controllers
 
         [HttpDelete]
         [Route("api/v1/job")]
-        public ActionResult DeleteDataExportProcess(string processId, TenantInfo tenant)
+        public async Task<ActionResult> DeleteDataExportProcess(string processId, TenantInfo tenant)
         {
-            this.exportProcessesService.DeleteDataExport(tenant, processId);
+            var job = await jobService.GetJobAsync(tenant, processId, JobStatus.Running, JobStatus.Created);
+            this.exportProcessesService.DeleteDataExport(job.Id, "User canceled");
             return Ok();
         }
-
-        private string apiKey => this.Request.Headers["Authorization"].ToString()?.Replace("Bearer ", "");
     }
 }

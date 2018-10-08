@@ -19,9 +19,10 @@ namespace WB.Services.Export.Host.Jobs
 
         public const string Name = "export";
 
-        public Task ExecuteAsync(string arg, CancellationToken token)
+        public Task ExecuteAsync(string arg, JobExecutingContext ctx, CancellationToken token)
         {
             var jobArg = JsonConvert.DeserializeObject<DataExportProcessArgs>(arg);
+            jobArg.ProcessId = ctx.Job.Id;
             return this.exportJob.ExecuteAsync(jobArg, token);
         }
     }

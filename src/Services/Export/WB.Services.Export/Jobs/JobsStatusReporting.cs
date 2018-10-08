@@ -48,7 +48,7 @@ namespace WB.Services.Export.Jobs
             this.exportFileAccessor = exportFileAccessor;
         }
 
-        public async Task<DataExportArchive> DownloadArchive(TenantInfo tenant, string archiveName,
+        public async Task<DataExportArchive> DownloadArchiveAsync(TenantInfo tenant, string archiveName,
             DataExportFormat dataExportFormat, InterviewStatus? status,
             DateTime? from, DateTime? to)
         {
@@ -82,7 +82,7 @@ namespace WB.Services.Export.Jobs
             return null;
         }
 
-        public async Task<DataExportStatusView> GetDataExportStatusForQuestionnaire(
+        public async Task<DataExportStatusView> GetDataExportStatusForQuestionnaireAsync(
             TenantInfo tenant,
             QuestionnaireId questionnaireIdentity,
             string archiveFileName,

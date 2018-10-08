@@ -6,7 +6,7 @@ namespace WB.Services.Export.Ddi
 {
     public interface IDdiMetadataAccessor
     {
-        Task<string> GetFilePathToDDIMetadata(TenantInfo tenant, QuestionnaireId questionnaireId, string password);
+        Task<string> GetFilePathToDDIMetadataAsync(TenantInfo tenant, QuestionnaireId questionnaireId, string password);
 
         void ClearFiles(TenantInfo tenant);
     }
