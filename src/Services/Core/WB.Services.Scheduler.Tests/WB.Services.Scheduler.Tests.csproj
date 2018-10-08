@@ -4,13 +4,10 @@
     <TargetFramework>netcoreapp2.1</TargetFramework>
       <OutputType>Library</OutputType>
       <RuntimeFrameworkVersion>2.1.4</RuntimeFrameworkVersion>
+      <RuntimeIdentifier>win-x64</RuntimeIdentifier>
   </PropertyGroup>
 
-  <ItemGroup>
-    <None Remove="appsettings.json" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <ItemGroup>
     <Content Include="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
