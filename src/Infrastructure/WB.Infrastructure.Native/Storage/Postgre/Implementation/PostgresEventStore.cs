@@ -258,7 +258,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         {
             List<CommittedEvent> events = new List<CommittedEvent>();
 
-            var npgConnection = this.sessionProvider.GetSession().Connection as NpgsqlConnection;
+            var npgConnection = this.sessionProvider.Session.Connection as NpgsqlConnection;
 
             var command = npgConnection.CreateCommand();
             command.CommandText =

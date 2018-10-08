@@ -7,7 +7,9 @@ using System.Web.Mvc;
 using Refit;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
+using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.UI.Headquarters.Views;
@@ -19,10 +21,10 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.Questionnaire.Translations;
@@ -109,16 +111,10 @@ namespace WB.UI.Headquarters.Injections
 
             registry.BindToMethod<IExportServiceApi>(ctx =>
             {
-                var manager = ctx.Get<IPlainTransactionManager>();
                 var settings = ctx.Get<InterviewDataExportSettings>();
 
-                string key = null;
-
-                manager.ExecuteInPlainTransaction(() =>
-                {
-                    var exportServiceSettings = ctx.Get<IPlainKeyValueStorage<ExportServiceSettings>>();
-                    key = exportServiceSettings.GetById(AppSetting.ExportServiceStorageKey).Key;
-                });
+                var exportServiceSettings = ctx.Get<IPlainKeyValueStorage<ExportServiceSettings>>();
+                string key = exportServiceSettings.GetById(AppSetting.ExportServiceStorageKey).Key;
 
                 var http = new HttpClient
                 {
