@@ -30,7 +30,11 @@ namespace WB.Tests.Integration.PostgreSQLTests
             
             storage = IntegrationCreate.PostgresReadSideKeyValueStorage<TestPersistedClass>(
                 sessionProvider: UnitOfWork, 
-                postgreConnectionSettings: new UnitOfWorkConnectionSettings { ConnectionString = ConnectionStringBuilder.ConnectionString });
+                postgreConnectionSettings: new UnitOfWorkConnectionSettings
+                {
+                    ConnectionString = ConnectionStringBuilder.ConnectionString,
+                    ReadSideSchemaName = null
+                });
             storedDate = new DateTime(2010, 1, 1);
             usedId = "id";
 

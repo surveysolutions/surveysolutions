@@ -10,6 +10,7 @@ using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.Mappings;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus;
@@ -35,22 +36,23 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
             sessionFactory = IntegrationCreate.SessionFactory(ConnectionStringBuilder.ConnectionString,
                 new[] { typeof(InterviewPackageMap), typeof(BrokenInterviewPackageMap) }, true);
 
-            UnitOfWork = IntegrationCreate.UnitOfWork(sessionFactory);
+            Setup.InstanceToMockedServiceLocator(sessionFactory);
+            var UnitOfWork = IntegrationCreate.UnitOfWork(sessionFactory);
 
-            origin = "hq";
+            var origin = "hq";
             expectedException = new InterviewException("Some interview exception",
                 InterviewDomainExceptionType.StatusIsNotOneOfExpected);
 
-            packagesStorage = new PostgresPlainStorageRepository<InterviewPackage>(UnitOfWork);
-            brokenPackagesStorage = new PostgresPlainStorageRepository<BrokenInterviewPackage>(UnitOfWork);
+            var packagesStorage = new PostgresPlainStorageRepository<InterviewPackage>(UnitOfWork);
+            var brokenPackagesStorage = new PostgresPlainStorageRepository<BrokenInterviewPackage>(UnitOfWork);
 
-            mockOfCommandService = new Mock<ICommandService>();
+            var mockOfCommandService = new Mock<ICommandService>();
             mockOfCommandService.Setup(x => x.Execute(Moq.It.IsAny<SynchronizeInterviewEventsCommand>(), Moq.It.IsAny<string>()))
                 .Throws(expectedException);
 
             var newtonJsonSerializer = new JsonAllTypesSerializer();
 
-            interviewPackagesService = Create.Service.InterviewPackagesService(
+            var interviewPackagesService = Create.Service.InterviewPackagesService(
                 syncSettings: new SyncSettings(origin) { UseBackgroundJobForProcessingPackages = true },
                 logger: Mock.Of<ILogger>(),
                 serializer: newtonJsonSerializer,
@@ -92,6 +94,8 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
             });
 
             interviewPackagesService.ProcessPackage("1");
+
+            UnitOfWork.AcceptChanges();
         }
             
 
@@ -103,7 +107,7 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
             //UnitOfWork could contain data that should not be persisted
             //all objects created with UnitOfWork could not be used
 
-
+             
             var UoW = IntegrationCreate.UnitOfWork(sessionFactory);
             var brokenPackagesStorageVerifier = new PostgresPlainStorageRepository<BrokenInterviewPackage>(UoW);
 
@@ -123,19 +127,10 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
             UoW.Dispose();
         }
 
-        [OneTimeTearDown]
-        public void TearDown() => UnitOfWork.Dispose();
 
-
-        private static ISessionFactory sessionFactory;
-        private static SynchronizeInterviewEventsCommand expectedCommand;
-        private static Mock<ICommandService> mockOfCommandService;
-        private static InterviewPackagesService interviewPackagesService;
-        private static PostgresPlainStorageRepository<InterviewPackage> packagesStorage;
-        private static PostgresPlainStorageRepository<BrokenInterviewPackage> brokenPackagesStorage;
-        private static IUnitOfWork UnitOfWork;
-        private static string origin;
-        private static InterviewException expectedException;
-        private static string expectedEventsString;
+        private ISessionFactory sessionFactory;
+        private SynchronizeInterviewEventsCommand expectedCommand;
+        private InterviewException expectedException;
+        private string expectedEventsString;
     }
 }
