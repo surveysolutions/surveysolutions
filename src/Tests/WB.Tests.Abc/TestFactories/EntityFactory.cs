@@ -28,7 +28,6 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
-using WB.Core.BoundedContexts.Headquarters.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
@@ -371,37 +370,6 @@ namespace WB.Tests.Abc.TestFactories
                 InterviewerName = "inter",
                 SupervisorName = "supervisor",
                 TimeSpanWithPreviousStatus = timeSpanWithPreviousStatus
-            };
-
-        public InterviewDiagnosticsInfo InterviewDiagnosticsInfo(
-            Guid? interviewId = null,
-            string interviewKey = null,
-            InterviewStatus status = InterviewStatus.InterviewerAssigned,
-            Guid? responsibleId = null, 
-            string responsibleName = null, 
-            int numberOfInterviewers = 0, 
-            int numberRejectionsBySupervisor = 0, 
-            int numberRejectionsByHq = 0, 
-            int numberValidQuestions = 0, 
-            int numberInvalidEntities = 0, 
-            int numberUnansweredQuestions = 0, 
-            int numberCommentedQuestions = 0, 
-            long? interviewDuration = null)
-            => new InterviewDiagnosticsInfo
-            {
-                InterviewId = interviewId ?? Guid.NewGuid(),
-                InterviewKey = interviewKey,
-                Status = status,
-                ResponsibleId = responsibleId ?? Guid.NewGuid(),
-                ResponsibleName = responsibleName,
-                NumberOfInterviewers = numberOfInterviewers,
-                NumberRejectionsBySupervisor = numberRejectionsBySupervisor,
-                NumberRejectionsByHq = numberRejectionsByHq,
-                NumberValidQuestions = numberValidQuestions,
-                NumberInvalidEntities = numberInvalidEntities,
-                NumberUnansweredQuestions = numberUnansweredQuestions,
-                NumberCommentedQuestions = numberCommentedQuestions,
-                InterviewDuration = interviewDuration
             };
 
         public InterviewData InterviewData(
@@ -1901,7 +1869,6 @@ namespace WB.Tests.Abc.TestFactories
 
             var exportViewFactory = new ExportViewFactory(
                 fileSystemAccessor.Object,
-                Mock.Of<IExportQuestionService>(),
                 Mock.Of<IQuestionnaireStorage>(),
                 new RosterStructureService(),
                 Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>());

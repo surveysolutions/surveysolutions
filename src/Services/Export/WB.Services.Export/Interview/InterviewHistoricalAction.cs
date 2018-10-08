@@ -1,0 +1,37 @@
+﻿namespace WB.Services.Export.Interview
+{
+    public enum InterviewHistoricalAction
+    {
+        SupervisorAssigned,
+        InterviewerAssigned,
+        AnswerSet,
+        AnswerRemoved,
+        CommentSet,
+        Completed,
+        Restarted,
+        ApproveBySupervisor,
+        ApproveByHeadquarter,
+        RejectedBySupervisor,
+        RejectedByHeadquarter,
+        Deleted,
+        Restored,
+        QuestionEnabled,
+        QuestionDisabled,
+        GroupEnabled,
+        GroupDisabled,
+        QuestionDeclaredValid,
+        QuestionDeclaredInvalid,
+        UnapproveByHeadquarters,
+        ReceivedByInterviewer,
+        ReceivedBySupervisor,
+        VariableSet,
+        VariableEnabled,
+        VariableDisabled,
+        Paused,
+        Resumed,
+        KeyAssigned,
+        TranslationSwitched,
+        OpenedBySupervisor,
+        ClosedBySupervisor
+    }
+}
