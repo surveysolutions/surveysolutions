@@ -44,7 +44,7 @@ namespace WB.Services.Export.ExportProcessHandlers
                 fileSystemAccessor.DeleteFile(archiveName);
                 fileSystemAccessor.MoveFile(tempArchivePath, archiveName);
                 
-                await this.dataExportProcessesService.ChangeStatusTypeAsync(processArgs.Tenant, processArgs.NaturalId, DataExportStatus.Compressing);
+                this.dataExportProcessesService.ChangeStatusType(processArgs.ProcessId, DataExportStatus.Compressing);
                 exportProgress.Report(0);
 
                 await this.dataExportFileAccessor.PublishArchiveToExternalStorageAsync(processArgs.Tenant, archiveName, exportProgress);

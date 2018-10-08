@@ -22,6 +22,7 @@
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="Refit" Version="4.6.48" />
     <PackageReference Include="Refit.HttpClientFactory" Version="4.6.48" />
+    <PackageReference Include="System.Reactive" Version="4.1.1" />
     <PackageReference Include="System.Runtime.Caching" Version="4.5.0" />
   </ItemGroup>
 

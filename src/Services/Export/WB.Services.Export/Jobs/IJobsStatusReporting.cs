@@ -9,13 +9,13 @@ namespace WB.Services.Export.Jobs
 {
     public interface IJobsStatusReporting
     {
-        Task<DataExportStatusView> GetDataExportStatusForQuestionnaire(
+        Task<DataExportStatusView> GetDataExportStatusForQuestionnaireAsync(
             TenantInfo tenant,
             QuestionnaireId questionnaireIdentity,
             string archiveFileName,
             InterviewStatus? status = null, DateTime? fromDate = null, DateTime? toDate = null);
 
-        Task<DataExportArchive> DownloadArchive(TenantInfo tenant, string archiveName,
+        Task<DataExportArchive> DownloadArchiveAsync(TenantInfo tenant, string archiveName,
             DataExportFormat dataExportFormat, InterviewStatus? status,
             DateTime? from, DateTime? to);
     }

@@ -9,9 +9,9 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Console;
 using WB.Services.Infrastructure.Health;
-using WB.Services.Scheduler.Jobs;
 using WB.Services.Scheduler.Services;
 using WB.Services.Scheduler.Services.Implementation;
+using WB.Services.Scheduler.Services.Implementation.HostedServices;
 using WB.Services.Scheduler.Storage;
 
 namespace WB.Services.Scheduler
@@ -36,13 +36,15 @@ namespace WB.Services.Scheduler
             if (string.IsNullOrWhiteSpace(connectionName))
                 connectionName = new JobSettings().ConnectionName;
             
-            //Console.WriteLine("----");
-            //Console.WriteLine(connectionName);
-            //Console.WriteLine(configuration.GetConnectionString(connectionName));
-            //Console.WriteLine("----");
-
             services.AddSingleton<IHostedService, BackgroundExportService>();
-            services.AddSingleton<IHostedService, CleanupService>();
+            
+            services.AddTransient<IHostedSchedulerService, CleanupService>();
+            services.AddTransient<IHostedSchedulerService, WorkCancellationTrackService>();
+            services.AddTransient<IHostedSchedulerService, JobProgressReportService>();
+            services.AddTransient<IHostedSchedulerService, JobWorkersManageService>();
+
+            services.AddSingleton<IJobCancellationNotifier, JobCancellationNotifier>();
+
             services.ConfigureHealthCheck<DbHealthCheck>();
             services.AddTransient<IJobService, JobService>();
             services.AddSingleton<IJobProgressReporter, JobProgressReporter>();

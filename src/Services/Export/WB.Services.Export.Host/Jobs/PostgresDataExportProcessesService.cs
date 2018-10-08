@@ -60,37 +60,26 @@ namespace WB.Services.Export.Host.Jobs
 
         public async Task<DataExportProcessArgs[]> GetAllProcesses(TenantInfo tenant)
         {
-            var jobs = (await this.jobService.GetAllJobs(tenant, JobStatus.Created, JobStatus.Running))
+            var jobs = (await this.jobService.GetAllJobsAsync(tenant, JobStatus.Created, JobStatus.Running))
                 .Select(AsDataExportProcessArgs).ToArray();
 
             return jobs;
         }
-
-        public void FinishExportSuccessfully(long processId)
+        
+        public void UpdateDataExportProgress(long processId, int progressInPercents)
         {
+            logger.LogTrace($"Update progress: {processId} - {progressInPercents}%");
+            jobProgressReporter.UpdateJobData(processId, ProgressField, progressInPercents.ToString());
         }
 
-        public void FinishExportWithError(TenantInfo tenant, string tag, Exception e)
+        public void DeleteDataExport(long processId, string reason)
         {
-            
+            jobProgressReporter.CancelJob(processId, reason);
         }
 
-        public async Task UpdateDataExportProgressAsync(TenantInfo tenant, string tag, int progressInPercents)
+        public void ChangeStatusType(long processId, DataExportStatus status)
         {
-            var job = await jobService.GetJob(tenant, tag);
-            jobProgressReporter.UpdateJobData(job.Id, ProgressField, progressInPercents.ToString());
-        }
-
-        public async Task DeleteDataExport(TenantInfo tenant, string tag)
-        {
-            var job = await jobService.GetJob(tenant, tag);
-            jobProgressReporter.CancelJob(job.Id, tag);
-        }
-
-        public async Task ChangeStatusTypeAsync(TenantInfo tenant, string tag, DataExportStatus status)
-        {
-            var job = await jobService.GetJob(tenant, tag);
-            jobProgressReporter.UpdateJobData(job.Id, StatusField, status.ToString());
+            jobProgressReporter.UpdateJobData(processId, StatusField, status.ToString());
         }
 
         public const string StatusField = "exportStatus";
