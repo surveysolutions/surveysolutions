@@ -1,12 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 using Humanizer;
 using Main.Core.Entities.SubEntities;
 using StackExchange.Exceptional;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
+using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -15,9 +20,12 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.API;
+using WB.UI.Headquarters.API.Filters;
+using WB.UI.Headquarters.Models.Admin;
 using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.Settings;
 
@@ -29,6 +37,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly HqUserManager userManager;
         private readonly IServiceLocator serviceLocator;
         private readonly ISettingsProvider settingsProvider;
+        private readonly IPlainKeyValueStorage<ExportServiceSettings> exportServiceSettings;
         private readonly IAndroidPackageReader androidPackageReader;
 
         public ControlPanelController(
@@ -36,14 +45,16 @@ namespace WB.UI.Headquarters.Controllers
             ICommandService commandService,
             HqUserManager userManager,
             ILogger logger,
+            ISettingsProvider settingsProvider,
             IAndroidPackageReader androidPackageReader,
-            ISettingsProvider settingsProvider)
+            IPlainKeyValueStorage<ExportServiceSettings> exportServiceSettings, IExportServiceApi exportServiceApi)
              : base(commandService: commandService, logger: logger)
         {
             this.userManager = userManager;
             this.androidPackageReader = androidPackageReader;
             this.serviceLocator = serviceLocator;
             this.settingsProvider = settingsProvider;
+            this.exportServiceSettings = exportServiceSettings;
         }
 
         public ActionResult CreateHeadquarters()
@@ -91,14 +102,14 @@ namespace WB.UI.Headquarters.Controllers
             if (ModelState.IsValid)
             {
                 var creationResult = await this.userManager.CreateUserAsync(
-                            new HqUser
-                            {
-                                Id = Guid.NewGuid(),
-                                UserName = model.UserName,
-                                Email = model.Email,
-                                FullName = model.PersonName,
-                                PhoneNumber = model.PhoneNumber
-                            }, model.Password, UserRoles.Administrator);
+                    new HqUser
+                    {
+                        Id = Guid.NewGuid(),
+                        UserName = model.UserName,
+                        Email = model.Email,
+                        FullName = model.PersonName,
+                        PhoneNumber = model.PhoneNumber
+                    }, model.Password, UserRoles.Administrator);
 
                 if (creationResult.Succeeded)
                 {
@@ -115,6 +126,31 @@ namespace WB.UI.Headquarters.Controllers
         public ActionResult ResetPrivilegedUserPassword()
         {
             return this.View(new UserEditModel());
+        }
+
+        public async Task<ActionResult> ExportService()
+        {
+            var uri = ConfigurationManager.AppSettings[@"Export.ServiceUrl"];
+            
+            try
+            {
+                var http = new HttpClient
+                {
+                    BaseAddress = new Uri(uri),
+                    Timeout = TimeSpan.FromSeconds(5)
+                };
+
+                ViewData["uri"] = uri + @"/.hc";
+                var health = await http.GetStringAsync(@"/.hc");
+
+                this.ViewData["health"] = health;
+            }
+            catch(Exception e)
+            {
+                this.ViewData["health"] = e.ToString();
+            }
+
+            return View();
         }
 
         [HttpPost]
@@ -171,8 +207,11 @@ namespace WB.UI.Headquarters.Controllers
 
         public ActionResult Settings()
         {
-            IEnumerable<ApplicationSetting> settings = this.settingsProvider.GetSettings().OrderBy(setting => setting.Name);
-            return this.View(settings);
+            var model = new SettingsModel();
+            model.Settings = this.settingsProvider.GetSettings().OrderBy(setting => setting.Name);
+            model.ExportSettings = this.exportServiceSettings.GetById(AppSetting.ExportServiceStorageKey);
+
+            return this.View(model);
         }
 
         public ActionResult RepeatLastInterviewStatus(Guid? interviewId)

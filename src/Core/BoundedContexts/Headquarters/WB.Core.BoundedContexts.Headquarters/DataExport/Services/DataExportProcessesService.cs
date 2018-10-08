@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Linq;
+using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
@@ -15,40 +14,39 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
     internal class DataExportProcessesService : IDataExportProcessesService
     {
         private readonly IAuditLog auditLog;
-        private static readonly ConcurrentDictionary<string, DataExportProcessDetails> processes = 
-            new ConcurrentDictionary<string, DataExportProcessDetails>();
+        private readonly IExportFileNameService exportFileNameService;
+        private readonly IExportServiceApi exportServiceApi;
+        private readonly IExportSettings exportSettings;
 
-        private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires;
+        private readonly ConcurrentDictionary<string, DataExportProcessDetails> processes = new ConcurrentDictionary<string, DataExportProcessDetails>();
 
-        public DataExportProcessesService(IAuditLog auditLog, IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaires)
+        public DataExportProcessesService(IAuditLog auditLog,
+            IExportFileNameService exportFileNameService,
+            IExportServiceApi exportServiceApi,
+            IExportSettings exportSettings)
         {
             this.auditLog = auditLog;
-            this.questionnaires = questionnaires;
+            this.exportFileNameService = exportFileNameService;
+            this.exportServiceApi = exportServiceApi;
+            this.exportSettings = exportSettings;
         }
 
-        public DataExportProcessDetails GetAndStartOldestUnprocessedDataExport()
+        public Task AddDataExportAsync(DataExportProcessDetails details)
         {
-            var exportProcess = processes.Values
-                .Where(p => p.Status == DataExportStatus.Queued)
-                .OrderBy(p => p.LastUpdateDate)
-                .FirstOrDefault();
+            var archiveFileName = exportFileNameService.GetQuestionnaireTitleWithVersion(details.Questionnaire);
 
-            if (exportProcess == null)
-                return null;
-
-            exportProcess.Status = DataExportStatus.Running;
-            exportProcess.LastUpdateDate = DateTime.UtcNow;
-            
-            return exportProcess;
+            return exportServiceApi.RequestUpdate(details.Questionnaire.ToString(), details.Format, details.InterviewStatus,
+                details.FromDate, details.ToDate,
+                archiveFileName, GetPasswordFromSettings(),
+                details.AccessToken,
+                details.StorageType);
         }
 
-        public void AddDataExport(DataExportProcessDetails details)
+        private string GetPasswordFromSettings()
         {
-            var questionnaireBrowseItem = this.questionnaires.GetById(details.Questionnaire.ToString());
-            if (questionnaireBrowseItem == null)
-                throw new ArgumentException($"Questionnaire {details.Questionnaire} wasn't found");
-            
-            this.EnqueueProcessIfNotYetInQueue(details);
+            return this.exportSettings.EncryptionEnforced()
+                    ? this.exportSettings.GetPassword()
+                    : null;
         }
 
         private void EnqueueProcessIfNotYetInQueue(DataExportProcessDetails newProcess)
@@ -68,38 +66,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         public DataExportProcessDetails[] GetAllProcesses() => processes.Values.ToArray();
 
-        public void FinishExportSuccessfully(string processId)
-        {
-            var dataExportProcess = processes.GetOrNull(processId);
-            if (dataExportProcess == null) return;
-
-            dataExportProcess.Status = DataExportStatus.Finished;
-            dataExportProcess.LastUpdateDate = DateTime.UtcNow;
-            dataExportProcess.ProgressInPercents = 100;
-        }
-
-        public void FinishExportWithError(string processId, Exception e)
-        {
-            var dataExportProcess = processes.GetOrNull(processId);
-            if (dataExportProcess == null) return;
-
-            dataExportProcess.Status = DataExportStatus.FinishedWithError;
-            dataExportProcess.LastUpdateDate = DateTime.UtcNow;
-        }
-
-        public void UpdateDataExportProgress(string processId, int progressInPercents)
-        {
-            if (progressInPercents < 0 || progressInPercents > 100)
-                throw new ArgumentException(
-                    $"Progress of data export process '{processId}' equals to '{progressInPercents}', but it can't be greater then 100 or less then 0");
-
-            var dataExportProcess = processes.GetOrNull(processId);
-            if (dataExportProcess == null) return;
-
-            dataExportProcess.LastUpdateDate = DateTime.UtcNow;
-            dataExportProcess.ProgressInPercents = progressInPercents;
-        }
-
         public void DeleteDataExport(string processId)
         {
             processes.GetOrNull(processId)?.Cancel();
@@ -117,15 +83,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             };
 
             this.DeleteDataExport(process.NaturalId);
-        }
-
-        public void ChangeStatusType(string processId, DataExportStatus status)
-        {
-            var dataExportProcess = processes.GetOrNull(processId);
-            if (dataExportProcess == null) return;
-
-            dataExportProcess.LastUpdateDate = DateTime.UtcNow;
-            dataExportProcess.Status = status;
         }
     }
 }
