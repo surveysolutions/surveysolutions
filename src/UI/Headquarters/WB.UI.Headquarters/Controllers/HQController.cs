@@ -12,7 +12,10 @@ using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.EventBus;
+using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Web.Controllers;
@@ -35,6 +38,7 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IQuestionnaireVersionProvider questionnaireVersionProvider;
         private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IQuestionnaireExporter questionnaireExporter;
+        private readonly EventBusSettings eventBusSettings;
 
         public HQController(ICommandService commandService,
             IAuthorizedUser authorizedUser,
@@ -43,7 +47,8 @@ namespace WB.UI.Headquarters.Controllers
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IQuestionnaireVersionProvider questionnaireVersionProvider,
             IQuestionnaireStorage questionnaireStorage, 
-            IQuestionnaireExporter questionnaireExporter)
+            IQuestionnaireExporter questionnaireExporter,
+            EventBusSettings eventBusSettings)
             : base(commandService, logger)
         {
             this.authorizedUser = authorizedUser;
@@ -52,6 +57,7 @@ namespace WB.UI.Headquarters.Controllers
             this.questionnaireVersionProvider = questionnaireVersionProvider;
             this.questionnaireStorage = questionnaireStorage;
             this.questionnaireExporter = questionnaireExporter;
+            this.eventBusSettings = eventBusSettings;
         }
 
         public ActionResult Index()
@@ -143,11 +149,22 @@ namespace WB.UI.Headquarters.Controllers
 
         public ActionResult TakeNew(string questionnaireId)
         {
+            var newInterviewId = Guid.NewGuid();
+            this.eventBusSettings.IgnoredAggregateRoots.Add(newInterviewId.FormatGuid());
+
             var identity = QuestionnaireIdentity.Parse(questionnaireId);
-            var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(identity);
-            return this.View(new TakeNewAssignmentView(questionnaire));
+            var command = new CreateTemporaryInterviewCommand(newInterviewId, this.authorizedUser.Id, identity);
+
+            this.CommandService.Execute(command);
+
+            return this.RedirectToAction("TakeNewAssignment", new {id = newInterviewId});
         }
 
+        public ActionResult TakeNewAssignment(string id)
+        {
+            return this.View(new {id = id});
+        }
+        
         private DocumentFilter Filters()
         {
             IEnumerable<SurveyStatusViewItem> statuses = StatusHelper.GetOnlyActualSurveyStatusViewItems(this.authorizedUser.IsSupervisor);
