@@ -141,10 +141,11 @@ namespace WB.UI.Headquarters.Controllers
             return File(file.FileStream, "application/zip", file.Filename);
         }
 
-        public ActionResult TakeNew(Guid id, long version)
+        public ActionResult TakeNew(string questionnaireId)
         {
-            var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(id, version);
-            return this.View(new TakeNewAssignmentView(questionnaire, version));
+            var identity = QuestionnaireIdentity.Parse(questionnaireId);
+            var questionnaire = this.questionnaireStorage.GetQuestionnaireDocument(identity);
+            return this.View(new TakeNewAssignmentView(questionnaire));
         }
 
         private DocumentFilter Filters()
