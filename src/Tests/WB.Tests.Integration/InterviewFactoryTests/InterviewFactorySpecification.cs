@@ -55,14 +55,18 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                     typeof(InterviewCommentedStatusMap)
                 }, true, new UnitOfWorkConnectionSettings().ReadSideSchemaName);
 
-            this.UnitOfWork = IntegrationCreate.UnitOfWork(sessionFactory);
-
             Abc.Setup.InstanceToMockedServiceLocator<IEntitySerializer<int[][]>>(new EntitySerializer<int[][]>());
             Abc.Setup.InstanceToMockedServiceLocator<IEntitySerializer<GeoPosition>>(new EntitySerializer<GeoPosition>());
             Abc.Setup.InstanceToMockedServiceLocator<IEntitySerializer<InterviewTextListAnswer[]>>(new EntitySerializer<InterviewTextListAnswer[]>());
             Abc.Setup.InstanceToMockedServiceLocator<IEntitySerializer<AnsweredYesNoOption[]>>(new EntitySerializer<AnsweredYesNoOption[]>());
             Abc.Setup.InstanceToMockedServiceLocator<IEntitySerializer<AudioAnswer>>(new EntitySerializer<AudioAnswer>());
             Abc.Setup.InstanceToMockedServiceLocator<IEntitySerializer<Area>>(new EntitySerializer<Area>());
+        }
+
+        [SetUp]
+        public void EachTestSetup()
+        {
+            this.UnitOfWork = IntegrationCreate.UnitOfWork(sessionFactory);
 
             this.interviewSummaryRepository = new PostgreReadSideStorage<InterviewSummary>(this.UnitOfWork, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
             this.questionnaireItemsRepository = new PostgreReadSideStorage<QuestionnaireCompositeItem, int>(this.UnitOfWork, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
@@ -73,25 +77,35 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                 Mock.Of<ISubstitutionService>());
         }
 
+        [TearDown]
+        public void TearDown()
+        {
+            this.UnitOfWork.Dispose();
+        }
+
         [OneTimeTearDown]
         public void OneTimeTearDown()
         {
-            this.UnitOfWork.Dispose();
             DatabaseTestInitializer.DropDb(this.connectionString);
         }
 
         protected void StoreInterviewSummary(InterviewSummary interviewSummary, QuestionnaireIdentity questionnaireIdentity)
         {
-            interviewSummary.QuestionnaireIdentity = questionnaireIdentity.ToString();
-            interviewSummary.SummaryId = interviewSummary.InterviewId.FormatGuid();
-            this.interviewSummaryRepository.Store(interviewSummary, interviewSummary.SummaryId);
+            using (var unitOfWork = IntegrationCreate.UnitOfWork(sessionFactory))
+            {
+                var interviewSummaryRepository = new PostgreReadSideStorage<InterviewSummary>(unitOfWork, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
+                interviewSummary.QuestionnaireIdentity = questionnaireIdentity.ToString();
+                interviewSummary.SummaryId = interviewSummary.InterviewId.FormatGuid();
+                interviewSummaryRepository.Store(interviewSummary, interviewSummary.SummaryId);
+                unitOfWork.AcceptChanges();
+            }
         }
 
         protected void PrepareQuestionnaire(QuestionnaireDocument document, long questionnaireVersion = 1)
         {
             using (var unitOfWork = IntegrationCreate.UnitOfWork(sessionFactory))
             {
-                var questionnaireItemsRepositoryLocal = new PostgreReadSideStorage<QuestionnaireCompositeItem, int>(this.UnitOfWork, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
+                var questionnaireItemsRepositoryLocal = new PostgreReadSideStorage<QuestionnaireCompositeItem, int>(unitOfWork, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
                 
                 var questionnaireStorageLocal = new HqQuestionnaireStorage(new InMemoryKeyValueStorage<QuestionnaireDocument>(),
                     Mock.Of<ITranslationStorage>(), Mock.Of<IQuestionnaireTranslator>(),
@@ -100,7 +114,6 @@ namespace WB.Tests.Integration.InterviewFactoryTests
 
                 document.Id = document.PublicKey.FormatGuid();
                 questionnaireStorageLocal.StoreQuestionnaire(document.PublicKey, questionnaireVersion, document);
-
                 unitOfWork.AcceptChanges();
             }
         }
