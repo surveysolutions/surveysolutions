@@ -199,14 +199,15 @@ namespace WB.Tests.Integration
         public static StatefulInterview StatefulInterview(QuestionnaireIdentity questionnaireIdentity,
             IQuestionnaireStorage questionnaireRepository = null, 
             IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null,
-            List<InterviewAnswer> answersOnPrefilledQuestions = null)
+            List<InterviewAnswer> answersOnPrefilledQuestions = null,
+            IQuestionOptionsRepository questionOptionsRepository = null)
         {
             var interview = new StatefulInterview(
                 questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 expressionProcessorStatePrototypeProvider ?? Stub<IInterviewExpressionStatePrototypeProvider>.WithNotEmptyValues,
                 Create.Service.SubstitutionTextFactory(),
                 Create.Service.InterviewTreeBuilder(),
-                Mock.Of<IQuestionOptionsRepository>());
+                questionOptionsRepository ?? Mock.Of<IQuestionOptionsRepository>());
 
             interview.CreateInterview(Create.Command.CreateInterview(
                 interviewId: interview.EventSourceId,
