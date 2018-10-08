@@ -1,30 +1,24 @@
 ﻿using System;
-using System.Linq;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 
 namespace WB.Services.Scheduler.Services.Implementation
 {
     internal class BackgroundExportService : IHostedService
     {
         private readonly IServiceProvider serviceProvider;
-        private IJobProgressReporter jobProgressReporter;
-        private IServiceScope scope;
-        private readonly IOptions<JobSettings> options;
+        private IEnumerable<IHostedSchedulerService> backgroundServices;
         private readonly ILogger<BackgroundExportService> logger;
-        private IJobWorker[] workers;
-        private readonly CancellationTokenSource cts = new CancellationTokenSource();
+        private IServiceScope scope;
 
         public BackgroundExportService(IServiceProvider serviceProvider,
-            IOptions<JobSettings> options,
             ILogger<BackgroundExportService> logger)
         {
             this.serviceProvider = serviceProvider;
-            this.options = options;
             this.logger = logger;
         }
 
@@ -32,36 +26,25 @@ namespace WB.Services.Scheduler.Services.Implementation
         {
             await serviceProvider.RunJobServiceMigrations();
 
-            logger.LogInformation("Background export service workers start");
+            this.scope = this.serviceProvider.CreateScope();
+            this.backgroundServices = scope.ServiceProvider.GetServices<IHostedSchedulerService>();
 
-            scope = serviceProvider.CreateScope();
-
-            this.jobProgressReporter = scope.ServiceProvider.GetService<IJobProgressReporter>();
-            this.jobProgressReporter.Start();
-
-            var workersCount = this.options.Value.WorkerCount;
-
-            if (workersCount == 0)
+            foreach (var backgroundService in backgroundServices)
             {
-                workersCount = Environment.ProcessorCount;
-            }
-
-            workers = new IJobWorker[workersCount];
-
-            for (int i = 0; i < workers.Length; i++)
-            {
-                var worker = serviceProvider.GetService<IJobWorker>();
-                workers[i] = worker;
-                worker.Task = worker.StartAsync(cts.Token);
+                await backgroundService.StartAsync(cancellationToken);
+                logger.LogInformation("Started background service: " + backgroundService.GetType().Name);
             }
         }
 
-        public Task StopAsync(CancellationToken cancellationToken)
+        public async Task StopAsync(CancellationToken cancellationToken)
         {
-            scope.Dispose();
-            logger.LogInformation("Background export service workers stopped");
-            cts.Cancel();
-            return Task.WhenAll(workers.Select(w => w.Task));
+            foreach (var backgroundService in backgroundServices)
+            {
+                await backgroundService.StopAsync(cancellationToken);
+                logger.LogInformation("Stopped background service: " + backgroundService.GetType().Name);
+            }
+
+            this.scope.Dispose();
         }
     }
 }

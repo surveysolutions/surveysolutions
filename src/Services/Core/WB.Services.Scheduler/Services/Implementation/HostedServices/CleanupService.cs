@@ -2,14 +2,12 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using WB.Services.Scheduler.Jobs;
 
-namespace WB.Services.Scheduler.Services.Implementation
+namespace WB.Services.Scheduler.Services.Implementation.HostedServices
 {
-    internal class CleanupService : IHostedService
+    internal class CleanupService : IHostedSchedulerService
     {
         private readonly IServiceProvider serviceProvider;
         private readonly IOptions<JobSettings> options;
@@ -28,9 +26,9 @@ namespace WB.Services.Scheduler.Services.Implementation
         {
             this.task = Task.Run(async () =>
             {
-                logger.LogInformation("Cleanup service started");
                 while (true)
                 { 
+                    logger.LogTrace("Start cleaning of stale running jobs");
                     if (cancellationToken.IsCancellationRequested) break;
 
                     using (var scope = this.serviceProvider.CreateScope())
@@ -48,10 +46,8 @@ namespace WB.Services.Scheduler.Services.Implementation
 
         public async Task StopAsync(CancellationToken cancellationToken)
         {
-            logger.LogInformation("Cleanup service stopping");
             this.cts.Cancel();
             try { await task;} catch { /* om om om: we just need to wait for task to complete */}
-            logger.LogInformation("Cleanup service stopped");
         }
     }
 }

@@ -8,7 +8,7 @@ using Microsoft.Extensions.Options;
 using WB.Services.Scheduler.Model;
 using WB.Services.Scheduler.Storage;
 
-namespace WB.Services.Scheduler.Jobs
+namespace WB.Services.Scheduler.Services.Implementation
 {
     class StaleJobCleanupService
     {

@@ -7,39 +7,51 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using WB.Services.Scheduler.Model;
 using WB.Services.Scheduler.Model.Events;
-using WB.Services.Scheduler.Storage;
 
 namespace WB.Services.Scheduler.Services.Implementation
 {
-    internal class JobProgressReporter : IDisposable, IJobProgressReporter
+    internal class JobProgressReporter : IJobProgressReporter
     {
         private readonly JobContext db;
+        private readonly IJobCancellationNotifier jobCancellationNotifier;
         private readonly ILogger<JobProgressReporter> logger;
+        private readonly TaskCompletionSource<bool> queueCompletion = new TaskCompletionSource<bool>();
 
-        public JobProgressReporter(JobContext db, ILogger<JobProgressReporter> logger)
+        public JobProgressReporter(JobContext db, IJobCancellationNotifier jobCancellationNotifier, ILogger<JobProgressReporter> logger)
         {
             this.db = db;
+            this.jobCancellationNotifier = jobCancellationNotifier;
             this.logger = logger;
-            this.cts = new CancellationTokenSource();
         }
 
         public void Start()
         {
             Task.Run(async () =>
             {
-                foreach (var task in queue.GetConsumingEnumerable(cts.Token))
+                db.ChangeTracker.AutoDetectChangesEnabled = false;
+                db.Database.AutoTransactionsEnabled = false;
+
+                foreach (var task in queue.GetConsumingEnumerable())
                 {
-                    using (var tr = await db.Database.BeginTransactionAsync(cts.Token))
+                    using (var tr = await db.Database.BeginTransactionAsync())
                     {
                         var job = await db.Jobs.Where(j => j.Id == task.Id).SingleOrDefaultAsync();
                         job.Handle(task);
                         db.Jobs.Update(job);
-                        await db.SaveChangesAsync(cts.Token);
+
+                        if (task is CancelJobEvent)
+                        {
+                            await jobCancellationNotifier.NotifyOnJobCancellationAsync(job.Id);
+                        }
+
+                        await db.SaveChangesAsync();
                         logger.LogTrace(task.ToString());
                         tr.Commit();
                     }
                 }
-            }, cts.Token);
+
+                queueCompletion.SetResult(true);
+            });
         }
 
         public void StartJob(long jobId)
@@ -67,16 +79,17 @@ namespace WB.Services.Scheduler.Services.Implementation
             queue.Add(new CancelJobEvent(jobId, reason));
         }
 
+        public Task AbortAsync(CancellationToken cancellationToken)
+        {
+            queue.CompleteAdding();
+            return queueCompletion.Task;
+        }
+
         readonly BlockingCollection<IJobEvent> queue = new BlockingCollection<IJobEvent>();
 
-        private readonly CancellationTokenSource cts;
-        
         public void Dispose()
         {
             queue.CompleteAdding();
-
-            cts.Cancel();
-            cts.Dispose();
         }
     }
 }

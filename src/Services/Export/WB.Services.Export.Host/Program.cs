@@ -75,7 +75,7 @@ namespace WB.Services.Export.Host
                 {
                     if (!hosting.HostingEnvironment.IsDevelopment())
                     {
-                        logging.ClearProviders();
+                       // logging.ClearProviders();
                     }
                 })
                 .UseNLog()

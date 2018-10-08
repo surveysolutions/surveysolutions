@@ -10,6 +10,7 @@ namespace WB.Services.Scheduler.Services.Implementation
     internal class JobWorker : IJobWorker
     {
         private readonly IServiceProvider serviceProvider;
+
         private readonly ILogger<JobWorker> logger;
         private static long _instanceCounter = 0;
         public long Id { get; set; }
@@ -23,13 +24,12 @@ namespace WB.Services.Scheduler.Services.Implementation
             Id = Interlocked.Increment(ref _instanceCounter);
         }
 
-        //private void Trace(string message) => logger.LogTrace($"[{Id}] {message}");
         private void Info(string message) => logger.LogInformation($"[{Id}] {message}");
 
         public async Task StartAsync(CancellationToken token)
         {
             Info("Start new worker");
-            
+
             while (true)
             {
                 if (token.IsCancellationRequested) return;
@@ -43,7 +43,6 @@ namespace WB.Services.Scheduler.Services.Implementation
                     if (job != null)
                     {
                         var executor = scope.ServiceProvider.GetService<IJobExecutor>();
-
                         await executor.ExecuteAsync(job, token);
                     }
                 }

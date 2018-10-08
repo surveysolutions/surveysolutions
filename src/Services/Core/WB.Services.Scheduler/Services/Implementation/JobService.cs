@@ -26,7 +26,7 @@ namespace WB.Services.Scheduler.Services.Implementation
             this.logger = logger;
         }
 
-        private static long lock_add_value = long.MaxValue;
+        private static long lock_add_value = -95599;
 
         public async Task<JobItem> AddNewJobAsync(JobItem job)
         {
@@ -61,6 +61,8 @@ namespace WB.Services.Scheduler.Services.Implementation
         {
             using (var tr = db.Database.BeginTransaction())
             {
+                await db.AcquireLockAsync(lock_add_value);
+
                 var running = JobStatus.Running.ToString().ToLowerInvariant();
                 var created = JobStatus.Created.ToString().ToLowerInvariant();
                 var maxPerTenant = jobSettings.Value.WorkerCountPerTenant;
@@ -104,14 +106,16 @@ namespace WB.Services.Scheduler.Services.Implementation
             }
         }
 
-        public async Task<JobItem> GetJob(TenantInfo tenant, string tag)
+        public async Task<JobItem> GetJobAsync(TenantInfo tenant, string tag, params JobStatus[] statuses)
         {
             return await db.Jobs
-                .Where(j => j.Tenant == tenant.Id.Id && j.Tag == tag && (j.Status == JobStatus.Running || j.Status == JobStatus.Created))
+                .Where(j => j.Tenant == tenant.Id.Id && j.Tag == tag
+                    && (statuses.Length == 0 || statuses.Contains(j.Status))
+                            )
                 .FirstOrDefaultAsync();
         }
 
-        public Task<List<JobItem>> GetAllJobs(TenantInfo tenant, params JobStatus[] statuses)
+        public Task<List<JobItem>> GetAllJobsAsync(TenantInfo tenant, params JobStatus[] statuses)
         {
             return db.Jobs.Where(j => j.Tenant == tenant.Id.Id
                                       && (statuses.Length == 0 || statuses.Contains(j.Status)))

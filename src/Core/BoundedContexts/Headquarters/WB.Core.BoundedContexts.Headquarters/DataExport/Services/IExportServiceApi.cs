@@ -39,7 +39,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             [Query] DateTime? toDate);
 
         [Delete("/api/v1/job")]
-
         Task DeleteProcess([Query] string processId);
 
         [Delete("/api/v1/delete")]
