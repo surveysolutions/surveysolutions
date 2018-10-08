@@ -7,6 +7,7 @@
     <!--<TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>-->
     <RuntimeFrameworkVersion>2.1.4</RuntimeFrameworkVersion>
     <Company>World Bank</Company>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <PackageId>WB.Services.Export.Host</PackageId>
     <Product>Survey Solutions Export Service</Product>
     <VersionPrefix Condition="'$(VersionPrefix)' == ''">18.10.0-development-$(COMPUTERNAME)</VersionPrefix>
