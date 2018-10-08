@@ -27,7 +27,9 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
                     Create.Entity.SingleQuestion(id:questionId,isFilteredCombobox:true, options:answers)
                 });
 
-            plainQuestionnaire = Create.Entity.PlainQuestionnaire(document: questionnaire);
+            var questionOptionsRepository = new QuestionnaireQuestionOptionsRepository();
+            plainQuestionnaire = Create.Entity.PlainQuestionnaire(document: questionnaire, 1,questionOptionsRepository: questionOptionsRepository);
+            questionOptionsRepository.SetCurentQuestionnaire(plainQuestionnaire);
 
             var questionnaireRepository = Mock.Of<IQuestionnaireStorage>(repository
                 => repository.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>()) == Create.Entity.PlainQuestionnaire(questionnaire, 1));

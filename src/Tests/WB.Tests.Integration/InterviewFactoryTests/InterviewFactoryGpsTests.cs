@@ -3,11 +3,15 @@ using System.Collections.Generic;
 using System.Linq;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
+using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.InterviewFactoryTests
@@ -38,6 +42,7 @@ namespace WB.Tests.Integration.InterviewFactoryTests
                 });
 
             this.factory = CreateInterviewFactory();
+
             PrepareQuestionnaire(questionnaire, questionnaireId.Version);
             PrepareQuestionnaire(questionnaire, otherQuestionnaireId.Version);
         }
@@ -406,17 +411,26 @@ namespace WB.Tests.Integration.InterviewFactoryTests
 
         protected void PrepareAnswers(ICollection<GpsAnswer> answers)
         {
-            foreach (var gpsAnswer in answers)
+
+            using (var unitOfWork = IntegrationCreate.UnitOfWork(sessionFactory))
             {
-                interviewSummaryRepository.Store(new InterviewSummary
+                var interviewSummaryRepositoryLocal = new PostgreReadSideStorage<InterviewSummary>(unitOfWork, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
+
+                foreach (var gpsAnswer in answers)
                 {
-                    Status = gpsAnswer.InterviewStatus ?? InterviewStatus.Completed,
-                    TeamLeadId = gpsAnswer.TeamLeadId ?? Guid.Empty,
-                    InterviewId = gpsAnswer.InterviewId,
-                    ReceivedByInterviewer = false,
-                    QuestionnaireIdentity = gpsAnswer.QuestionnaireId.ToString()
-                }, gpsAnswer.InterviewId.FormatGuid());
+                    interviewSummaryRepositoryLocal.Store(new InterviewSummary
+                    {
+                        Status = gpsAnswer.InterviewStatus ?? InterviewStatus.Completed,
+                        TeamLeadId = gpsAnswer.TeamLeadId ?? Guid.Empty,
+                        InterviewId = gpsAnswer.InterviewId,
+                        ReceivedByInterviewer = false,
+                        QuestionnaireIdentity = gpsAnswer.QuestionnaireId.ToString()
+                    }, gpsAnswer.InterviewId.FormatGuid());
+                }
+
+                unitOfWork.AcceptChanges();
             }
+            
 
             foreach (var groupedInterviews in answers.GroupBy(x => x.InterviewId))
             {

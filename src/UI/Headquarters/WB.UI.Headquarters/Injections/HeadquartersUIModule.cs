@@ -39,6 +39,7 @@ using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Code.CommandTransformation;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Services;
+using WB.UI.Shared.Web.Attributes;
 using WB.UI.Shared.Web.CommandDeserialization;
 using WB.UI.Shared.Web.Modules;
 using WB.UI.Shared.Web.Services;
@@ -79,21 +80,14 @@ namespace WB.UI.Headquarters.Injections
                 new ConstructorArgument("restServicePointManager", _ => null),
                 new ConstructorArgument("httpStatistican", _ => _.Resolve<IHttpStatistician>()));
 
-
-
-
-
+            
             //registry.BindHttpFilter<UnderConstructionHttpFilter>(System.Web.Http.Filters.FilterScope.Global, 0);
             //registry.BindMvcFilter<UnderConstructionMvcFilter>(FilterScope.First, 0);
-
-            
             //registry.BindMvcFilterWhenActionMethodHasNoAttribute<GlobalNotificationAttribute, NoTransactionAttribute>(FilterScope.Global, 5);
 
-            
             //no need any more
             //registry.BindMvcFilterWhenActionMethodHasNoAttribute<TransactionFilter, NoTransactionAttribute>(FilterScope.First, 1);
-
-
+            
             //no need
             //registry.BindHttpFilterWhenActionMethodHasNoAttribute<ApiTransactionFilter, NoTransactionAttribute>(System.Web.Http.Filters.FilterScope.Global, 1);
 
@@ -139,9 +133,10 @@ namespace WB.UI.Headquarters.Injections
 
             //todo:af
             //filters should have order
-            GlobalFilters.Filters.Add(serviceLocator.GetInstance<TransactionFilter>());
-            GlobalFilters.Filters.Add(new GlobalNotificationAttribute());
-            System.Web.Http.GlobalConfiguration.Configuration.Filters.Add(new ApiTransactionFilter());
+
+            //GlobalFilters.Filters.Add(serviceLocator.GetInstance<TransactionFilter>());
+            //GlobalFilters.Filters.Add(new GlobalNotificationAttribute());
+            //System.Web.Http.GlobalConfiguration.Configuration.Filters.Add(new ApiTransactionFilter());
 
             return Task.CompletedTask;
         }
