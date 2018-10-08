@@ -260,7 +260,7 @@ namespace WB.UI.Headquarters
                     trackingSettings,
                     interviewCountLimit,
                     externalStoragesSettings: externalStoragesSettings
-                    ),
+                    )
 
                 );
 
