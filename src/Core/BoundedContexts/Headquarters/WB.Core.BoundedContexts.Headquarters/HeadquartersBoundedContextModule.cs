@@ -173,7 +173,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IQuestionnaireVersionProvider, QuestionnaireVersionProvider>();
             registry.Bind<ITranslationManagementService, TranslationManagementService>();
             registry.Bind<IAssemblyService, AssemblyService>();
-            registry.Bind<IExportSettings, Implementation.ExportSettings>();
+            registry.BindAsSingleton<IExportSettings, Implementation.ExportSettings>();
             registry.Bind<IArchiveUtils, IProtectedArchiveUtils, ZipArchiveUtils>();
             
             registry.Bind<IAllInterviewsFactory, AllInterviewsFactory>();
