@@ -156,11 +156,13 @@ namespace WB.UI.Headquarters
             var interviewDataExportSettings =
                 new InterviewDataExportSettings(basePath,
                     bool.Parse(settingsProvider.AppSettings["Export.EnableInterviewHistory"]),
+                    settingsProvider.AppSettings["Export.ServiceUrl"],
                     settingsProvider.AppSettings["Export.MaxRecordsCountPerOneExportQuery"].ToIntOrDefault(10000),
                     settingsProvider.AppSettings["Export.LimitOfCachedItemsByDenormalizer"].ToIntOrDefault(100),
                     settingsProvider.AppSettings["Export.InterviewsExportParallelTasksLimit"].ToIntOrDefault(10),
                     settingsProvider.AppSettings["Export.InterviewIdsQueryBatchSize"].ToIntOrDefault(40000),
-                    settingsProvider.AppSettings["Export.ErrorsExporterBatchSize"].ToIntOrDefault(20));
+                    settingsProvider.AppSettings["Export.ErrorsExporterBatchSize"].ToIntOrDefault(20)
+                    );
 
             var sampleImportSettings = new SampleImportSettings(
                 settingsProvider.AppSettings["PreLoading.InterviewsImportParallelTasksLimit"].ToIntOrDefault(2));
@@ -222,7 +224,8 @@ namespace WB.UI.Headquarters
                     synchronizationSettings,
                     trackingSettings,
                     interviewCountLimit,
-                    externalStoragesSettings: externalStoragesSettings),
+                    externalStoragesSettings: externalStoragesSettings
+                    ),
                 new FileStorageModule(basePath),
                 new QuartzModule(),
                 new WebInterviewModule(),

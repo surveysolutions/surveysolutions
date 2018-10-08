@@ -15,13 +15,16 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails
         }
 
         public QuestionnaireIdentity Questionnaire { get; }
+        public ExternalStorageType? StorageType { get; set; }
+        public string AccessToken { get; set; }
         public string QuestionnaireTitle { get; }
 
         public override string NaturalId => $"{InterviewStatusString()}${this.Format}${this.Questionnaire}" +
                                             $"${this.FromDate?.ToString("YYYYMMDD") ?? "EMPTY FROM DATE"}" +
                                             $"${this.ToDate?.ToString("YYYYMMDD") ?? "EMPTY TO DATE"}";
 
-        public override string Name => $"(ver. {this.Questionnaire.Version}) {this.QuestionnaireTitle}";
+        public override string Name => $"(ver. {this.Questionnaire.Version}) {this.QuestionnaireTitle}" 
+        + (StorageType.HasValue ? $" {Enum.GetName(typeof(ExternalStorageType), this.StorageType)}" : "");
 
         public InterviewStatus? InterviewStatus { get; set; }
 

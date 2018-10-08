@@ -21,7 +21,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             Guid gpsQuestionId, int maxAnswersCount, double northEastCornerLatitude,
             double southWestCornerLatitude, double northEastCornerLongtitude, double southWestCornerLongtitude, Guid? supervisorId);
 
-        IEnumerable<InterviewEntity> GetInterviewEntities(IEnumerable<Guid> interviews);
+        IEnumerable<InterviewEntity> GetInterviewEntities(IEnumerable<Guid> interviews, Guid[] entityIds = null);
         List<InterviewEntity> GetInterviewEntities(Guid interviewId);
         Dictionary<string, InterviewLevel> GetInterviewDataLevels(IQuestionnaire questionnaire,
             List<InterviewEntity> interviewEntities);
