@@ -13,8 +13,6 @@ namespace WB.UI.Shared.Enumerator.Activities
     {
         protected override int ViewResourceId => Resource.Layout.prefilled_questions;
 
-        public override void OnBackPressed() => this.ViewModel.NavigateToPreviousViewModelAsync().WaitAndUnwrapException();
-
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
