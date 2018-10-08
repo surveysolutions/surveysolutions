@@ -10,18 +10,6 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="FullStackIntegration\Hq\assembly.dll" />
-    <None Remove="FullStackIntegration\Hq\Enumerator Questions Automation.zip" />
-    <None Remove="FullStackIntegration\Hq\expectedExport.zip" />
-    <None Remove="FullStackIntegration\Hq\syncPackage.json" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="FullStackIntegration\Hq\assembly.dll" />
-    <EmbeddedResource Include="FullStackIntegration\Hq\Enumerator Questions Automation.zip" />
-    <EmbeddedResource Include="FullStackIntegration\Hq\expectedExport.zip" />
-    <EmbeddedResource Include="FullStackIntegration\Hq\syncPackage.json" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\WB.Core.BoundedContexts.Interviewer.csproj" />
     <ProjectReference Include="..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\WB.Core.BoundedContexts.Designer.csproj" />
     <ProjectReference Include="..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\WB.Core.BoundedContexts.Headquarters.csproj" />

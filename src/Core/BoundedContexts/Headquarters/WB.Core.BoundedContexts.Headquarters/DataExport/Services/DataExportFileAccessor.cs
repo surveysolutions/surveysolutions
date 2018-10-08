@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
 using Ionic.Zlib;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
@@ -33,18 +31,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         {
             var password = this.GetPasswordFromSettings();
             this.archiveUtils.ZipDirectory(folderForDataExport, archiveFilePath, password, progress);
-        }
-
-        public void RecreateExportArchive(IEnumerable<string> filesToArchive, string archiveFilePath)
-        {
-            this.logger.Debug($"Starting creation of {Path.GetFileName(archiveFilePath)} archive");
-            Stopwatch watch = Stopwatch.StartNew();
-
-            var password = this.GetPasswordFromSettings();
-            this.archiveUtils.ZipFiles(filesToArchive, archiveFilePath, password);
-
-            watch.Stop();
-            this.logger.Info($"Done creation {Path.GetFileName(archiveFilePath)} archive. Spent: {watch.Elapsed:g}");
         }
 
         public IZipArchive CreateExportArchive(Stream outputStream, CompressionLevel compressionLevel = CompressionLevel.BestSpeed)

@@ -1,0 +1,42 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+      <TargetFramework>netstandard2.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Autofac" Version="4.8.1" />
+    <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.3.6" />
+    <PackageReference Include="AWSSDK.S3" Version="3.3.24.1" />
+    <PackageReference Include="CsvHelper" Version="7.1.1" />
+    <PackageReference Include="Dropbox.Api" Version="4.9.0" />
+    <PackageReference Include="Google.Apis.Drive.v3" Version="1.35.2.1358" />
+    <PackageReference Include="HtmlSanitizer" Version="4.0.187" />
+    <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.1.1" />
+    <PackageReference Include="Microsoft.Extensions.FileProviders.Abstractions" Version="2.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="2.1.1" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.1.1" />
+    <PackageReference Include="Microsoft.Graph" Version="1.11.0" />
+    <PackageReference Include="Microsoft.Graph.Core" Version="1.11.0" />
+    <!--<PackageReference Include="Microsoft.OneDriveSDK" Version="2.0.7" />-->
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="Refit" Version="4.6.30" />
+    <PackageReference Include="Refit.HttpClientFactory" Version="4.6.30" />
+    <PackageReference Include="System.Runtime.Caching" Version="4.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Core\WB.Services.Infrastructure\WB.Services.Infrastructure.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="ddidotnet">
+      <HintPath>..\..\..\..\libs\ddidotnet.dll</HintPath>
+    </Reference>
+    <Reference Include="StatData">
+      <HintPath>..\..\..\..\libs\StatData.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

@@ -1,0 +1,19 @@
+{
+  "profiles": {
+    "Export.Host": {
+      "commandName": "Project",
+      "commandLineArgs": "--console",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "http://localhost:5000/export"
+    },
+    "Export.Worker": {
+      "commandName": "Project",
+      "commandLineArgs": "--console --worker",
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

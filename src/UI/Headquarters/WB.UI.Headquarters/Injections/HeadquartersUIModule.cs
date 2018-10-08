@@ -1,7 +1,13 @@
+using System;
+using System.Configuration;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web.Mvc;
+using Refit;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.UI.Headquarters.Views;
@@ -11,9 +17,12 @@ using WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles;
 using WB.Core.BoundedContexts.Headquarters.MoveUserToAnotherTeam;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
-using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Modularity;
+using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.Questionnaire.Translations;
@@ -21,6 +30,7 @@ using WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandDeserialization;
 using WB.Core.Synchronization.MetaInfo;
 using WB.Enumerator.Native.WebInterview.Services;
 using WB.Infrastructure.Native.Questionnaire;
+using WB.UI.Headquarters.API.Filters;
 using WB.UI.Headquarters.API.WebInterview;
 using WB.UI.Headquarters.API.WebInterview.Services;
 using WB.UI.Headquarters.Code;
@@ -30,6 +40,7 @@ using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web.CommandDeserialization;
 using WB.UI.Shared.Web.Modules;
 using WB.UI.Shared.Web.Services;
+using RestService = WB.Core.GenericSubdomains.Portable.Implementation.Services.RestService;
 
 namespace WB.UI.Headquarters.Injections
 {
@@ -95,6 +106,34 @@ namespace WB.UI.Headquarters.Injections
             registry.Bind<IQuestionnaireExporter, QuestionnaireExporter>();
 
             registry.Bind<IQRCodeHelper, QRCodeHelper>();
+
+            registry.BindToMethod<IExportServiceApi>(ctx =>
+            {
+                var manager = ctx.Get<IPlainTransactionManager>();
+                var settings = ctx.Get<InterviewDataExportSettings>();
+
+                string key = null;
+
+                manager.ExecuteInPlainTransaction(() =>
+                {
+                    var exportServiceSettings = ctx.Get<IPlainKeyValueStorage<ExportServiceSettings>>();
+                    key = exportServiceSettings.GetById(AppSetting.ExportServiceStorageKey).Key;
+                });
+
+                var http = new HttpClient
+                {
+                    BaseAddress = new Uri(settings.ExportServiceUrl),
+                    DefaultRequestHeaders =
+                    {
+                        Authorization = new AuthenticationHeaderValue("Bearer", key),
+                        Referrer = new Uri(ConfigurationManager.AppSettings["BaseUrl"])
+                    }
+                };
+
+                var api = Refit.RestService.For<IExportServiceApi>(http);
+
+                return api;
+            });
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)

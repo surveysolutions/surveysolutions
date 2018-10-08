@@ -73,6 +73,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
             fileSystemAccessor.DeleteFile(filePath);
         }
 
+        public string GetPath(Guid interviewId, string filename = null) => this.GetPathToFile(interviewId, filename);
+
         public void RemoveAllBinaryDataForInterview(Guid interviewId)
         {
             var directoryPath = this.GetPathToInterviewDirectory(interviewId);

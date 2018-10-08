@@ -1,4 +1,7 @@
-﻿using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
+﻿using System;
+using System.Configuration;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
+using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation
@@ -8,10 +11,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation
         private ExportEncryptionSettings settingCache = null;
 
         private readonly IPlainKeyValueStorage<ExportEncryptionSettings> appSettingsStorage;
+        private readonly IPlainKeyValueStorage<ExportServiceSettings> exportServiceSettings;
+        private readonly InterviewDataExportSettings exportSettings;
 
-        public ExportSettings(IPlainKeyValueStorage<ExportEncryptionSettings> appSettingsStorage)
+        public ExportSettings(IPlainKeyValueStorage<ExportEncryptionSettings> appSettingsStorage,
+            IPlainKeyValueStorage<ExportServiceSettings> exportServiceSettings,
+            InterviewDataExportSettings exportSettings)
         {
             this.appSettingsStorage = appSettingsStorage;
+            this.exportServiceSettings = exportServiceSettings;
+            this.exportSettings = exportSettings;
         }
 
         public bool EncryptionEnforced()
@@ -52,6 +61,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation
                 this.settingCache = newSetting;
             }
         }
+
+        public string ExportServiceBaseUrl
+        {
+            get { return exportSettings.ExportServiceUrl; }
+        }
+
+        public string ApiKey =>
+            this.exportServiceSettings.GetById(ExportEncryptionSettings.ExportServiceStorageKey).Key;
 
         private string GeneratePassword()
         {

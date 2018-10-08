@@ -38,5 +38,10 @@ namespace WB.UI.WebTester.Services.Implementation
         {
             mediaStorage.Remove(fileName, interviewId);
         }
+
+        public string GetPath(Guid interviewId, string filename = null)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

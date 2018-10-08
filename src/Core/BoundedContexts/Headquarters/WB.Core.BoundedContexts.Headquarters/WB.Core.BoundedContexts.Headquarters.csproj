@@ -46,8 +46,8 @@
     <PackageReference Include="Microsoft.AspNet.Identity.EntityFramework" Version="2.2.1" />
     <PackageReference Include="Microsoft.AspNet.Identity.Owin" Version="2.2.1" />
     <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
-    <PackageReference Include="Microsoft.Graph.Core" Version="1.10.0" />
-    <PackageReference Include="Microsoft.OneDriveSDK" Version="2.0.7" />
+    <PackageReference Include="Microsoft.Graph" Version="1.11.0" />
+    <PackageReference Include="Microsoft.Graph.Core" Version="1.11.0" />
     <PackageReference Include="Microsoft.Owin" Version="3.1.0" />
     <PackageReference Include="Microsoft.Owin.Host.SystemWeb" Version="3.1.0" />
     <PackageReference Include="Microsoft.Owin.Security" Version="3.1.0" />
@@ -57,6 +57,7 @@
     <PackageReference Include="NHibernate" Version="5.1.2" />
     <PackageReference Include="Owin" Version="1.0" />
     <PackageReference Include="Quartz" Version="2.6.1" />
+    <PackageReference Include="refit" Version="4.6.30" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="ddidotnet">
@@ -70,63 +71,6 @@
     </Reference>
     <Reference Include="System.Runtime.Caching" />
     <Reference Include="System.Web" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Update="Resources\CommandValidatorsMessages.Designer.cs">
-      <DependentUpon>CommandValidatorsMessages.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Resources\ErrorMessages.Designer.cs">
-      <DependentUpon>ErrorMessages.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Resources\FileBasedDataExportRepositoryWriterMessages.Designer.cs">
-      <DependentUpon>FileBasedDataExportRepositoryWriterMessages.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Resources\HeadquarterUserCommandValidatorMessages.Designer.cs">
-      <DependentUpon>HeadquarterUserCommandValidatorMessages.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Resources\Interviews.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Interviews.resx</DependentUpon>
-    </Compile>
-    <Compile Update="Resources\PreloadingVerificationMessages.Designer.cs">
-      <DependentUpon>PreloadingVerificationMessages.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Resources\Report.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Report.resx</DependentUpon>
-    </Compile>
-    <Compile Update="Resources\Strings.Designer.cs">
-      <DependentUpon>Strings.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Resources\SurveyManagementInterviewCommandValidatorMessages.Designer.cs">
-      <DependentUpon>SurveyManagementInterviewCommandValidatorMessages.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Resources\TroubleshootingMessages.Designer.cs">
-      <DependentUpon>TroubleshootingMessages.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
-    <Compile Update="Resources\UserPreloadingServiceMessages.Designer.cs">
-      <DependentUpon>UserPreloadingServiceMessages.resx</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="Resources\CommandValidatorsMessages.es.resx">
@@ -291,8 +235,8 @@
       <DependentUpon>Strings.resx</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\Strings.resx">
-      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
       <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Strings.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\Strings.ru.resx">
       <DependentUpon>Strings.resx</DependentUpon>
@@ -366,5 +310,62 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Services\WebInterview\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Resources\CommandValidatorsMessages.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>CommandValidatorsMessages.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\ErrorMessages.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ErrorMessages.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\FileBasedDataExportRepositoryWriterMessages.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>FileBasedDataExportRepositoryWriterMessages.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\HeadquarterUserCommandValidatorMessages.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>HeadquarterUserCommandValidatorMessages.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Interviews.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Interviews.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\PreloadingVerificationMessages.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>PreloadingVerificationMessages.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Report.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Report.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Strings.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Strings.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\SurveyManagementInterviewCommandValidatorMessages.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>SurveyManagementInterviewCommandValidatorMessages.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\TroubleshootingMessages.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>TroubleshootingMessages.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\UserPreloadingServiceMessages.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>UserPreloadingServiceMessages.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
 </Project>
