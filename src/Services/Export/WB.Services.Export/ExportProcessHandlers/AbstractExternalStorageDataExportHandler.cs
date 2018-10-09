@@ -37,7 +37,7 @@ namespace WB.Services.Export.ExportProcessHandlers
             {
                 var applicationFolder = this.CreateApplicationFolderAsync().Result;
 
-                string GetInterviewFolder(Guid interviewId) => $"{settings.ArchiveName})/{interviewId.FormatGuid()}";
+                string GetInterviewFolder(Guid interviewId) => $"{settings.ArchiveName}/{interviewId.FormatGuid()}";
 
                 await binaryDataSource.ForEachMultimediaAnswerAsync(settings, async data =>
                 {

@@ -16,8 +16,8 @@ namespace WB.Services.Export.Interview.Entities
             this.Length = length;
         }
 
-        public string FileName { get; }
-        public TimeSpan Length { get; }
+        public string FileName { get; set; }
+        public TimeSpan Length { get; set; }
 
         public static AudioAnswer FromString(string fileName, TimeSpan? length)
         {

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
@@ -15,9 +17,9 @@ using WB.Services.Export.Interview.Entities;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Export.Services;
-using WB.Services.Export.Tenant;
 using WB.Services.Export.Tests.CsvExport.Exporters;
 using WB.Services.Export.Utils;
+using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.Tests
 {
@@ -74,9 +76,9 @@ namespace WB.Services.Export.Tests
             return Mock.Of<ITenantApi<IHeadquartersApi>>();
         }
 
-        public static TenantInfo Tenant()
+        public static TenantInfo Tenant(string baseUrl = null, string id = null, string name = null)
         {
-            return new TenantInfo();
+            return new TenantInfo(baseUrl, id, name);
         }
 
         public static QuestionnaireExportStructure QuestionnaireExportStructure(string questionnaireId = null)
@@ -127,7 +129,7 @@ namespace WB.Services.Export.Tests
                 .Returns((string f) => f);
 
             var QuestionnaireExportStructureFactory = new QuestionnaireExportStructureFactory(
-                Mock.Of<ICache>(),
+                new MemoryCache(new MemoryCacheOptions()), 
                 Mock.Of<IQuestionnaireStorage>());
             return QuestionnaireExportStructureFactory.GetQuestionnaireExportStructure(Create.Tenant(), questionnaire);
         }
@@ -174,7 +176,7 @@ namespace WB.Services.Export.Tests
                 Mock.Of<ICommentsExporter>(),
                 Mock.Of<IDiagnosticsExporter>(),
                 Mock.Of<IInterviewActionsExporter>(),
-                Mock.Of<IQuestionnaireExportStructureFactory>(x => x.GetQuestionnaireExportStructure(It.IsAny<TenantInfo>(), It.IsAny<QuestionnaireId>()) == questionnaireExportStructure),
+                Mock.Of<IQuestionnaireExportStructureFactory>(x => x.GetQuestionnaireExportStructureAsync(It.IsAny<TenantInfo>(), It.IsAny<QuestionnaireId>()) == Task.FromResult(questionnaireExportStructure)),
                 Mock.Of<IQuestionnaireStorage>(),
                 Mock.Of<IDescriptionGenerator>(),
                 Mock.Of<IEnvironmentContentService>(),

@@ -11,29 +11,16 @@ using WB.Services.Export.Services.Processing;
 
 namespace WB.Services.Export.Jobs
 {
-
     internal class ExportJob : IExportJob
     {
-        private readonly IDataExportProcessesService exportService;
         private readonly IServiceProvider serviceProvider;
-
-        //private readonly Lazy<BinaryFormatDataExportHandler> binaryFormatDataExportHandler;
-        //private readonly Lazy<TabularFormatParaDataExportProcessHandler> tabularFormatParaDataExportProcessHandler;
-        //private readonly Lazy<TabularFormatDataExportHandler> tabularFormatDataExportHandler;
-        //private readonly Lazy<SpssFormatExportHandler> spssFormatExportHandler;
-        //private readonly Lazy<StataFormatExportHandler> stataFormatExportHandler;
-        //private readonly Lazy<OnedriveBinaryDataExportHandler> onedriveBinaryDataExportHandler;
-        //private readonly Lazy<DropboxBinaryDataExportHandler> dropboxBinaryDataExportHandler;
-        //private readonly Lazy<GoogleDriveBinaryDataExportHandler> googleDriveBinaryDataExportHandler;
 
         private readonly ILogger<ExportJob> logger;
         
-        public ExportJob(IDataExportProcessesService exportService,
-            IServiceProvider serviceProvider,
+        public ExportJob(IServiceProvider serviceProvider,
             ILogger<ExportJob> logger)
         {
             logger.LogTrace("Constructed instance");
-            this.exportService = exportService;
             this.serviceProvider = serviceProvider;
             this.logger = logger;
         }
@@ -53,11 +40,14 @@ namespace WB.Services.Export.Jobs
                     await handler.ExportDataAsync(pendingExportProcess, cancellationToken);
                 }
             }
+            catch (OperationCanceledException)
+            {
+                throw;
+            }
             catch (Exception e)
             {
-                this.exportService.FinishExportWithError(pendingExportProcess.Tenant, pendingExportProcess.NaturalId, e);
-
                 this.logger.LogError(e, "Export job failed");
+                throw;
             }
         }
 
