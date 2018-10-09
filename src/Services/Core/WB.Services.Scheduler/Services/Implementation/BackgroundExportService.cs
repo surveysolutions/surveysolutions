@@ -14,6 +14,7 @@ namespace WB.Services.Scheduler.Services.Implementation
         private IEnumerable<IHostedSchedulerService> backgroundServices;
         private readonly ILogger<BackgroundExportService> logger;
         private IServiceScope scope;
+        private CancellationTokenSource cts;
 
         public BackgroundExportService(IServiceProvider serviceProvider,
             ILogger<BackgroundExportService> logger)
@@ -24,6 +25,8 @@ namespace WB.Services.Scheduler.Services.Implementation
 
         public async Task StartAsync(CancellationToken cancellationToken)
         {
+            cts = new CancellationTokenSource();
+
             await serviceProvider.RunJobServiceMigrations();
 
             this.scope = this.serviceProvider.CreateScope();
@@ -31,13 +34,15 @@ namespace WB.Services.Scheduler.Services.Implementation
 
             foreach (var backgroundService in backgroundServices)
             {
-                await backgroundService.StartAsync(cancellationToken);
+                await backgroundService.StartAsync(cts.Token);
                 logger.LogInformation("Started background service: " + backgroundService.GetType().Name);
             }
         }
 
         public async Task StopAsync(CancellationToken cancellationToken)
         {
+            cts.Cancel();
+
             foreach (var backgroundService in backgroundServices)
             {
                 await backgroundService.StopAsync(cancellationToken);

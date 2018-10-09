@@ -56,40 +56,47 @@ namespace WB.Services.Scheduler.Services.Implementation
 
         public void StartJob(long jobId)
         {
-            queue.Add(new StartJobEvent(jobId));
+            if (!queue.IsAddingCompleted)
+                queue.Add(new StartJobEvent(jobId));
         }
 
         public void CompleteJob(long jobId)
         {
-            queue.Add(new CompleteJobEvent(jobId));
+            if (!queue.IsAddingCompleted)
+                queue.Add(new CompleteJobEvent(jobId));
         }
 
         public void FailJob(long jobId, Exception exception)
         {
-            queue.Add(new FailJobEvent(jobId, exception));
+            if (!queue.IsAddingCompleted)
+                queue.Add(new FailJobEvent(jobId, exception));
         }
 
         public void UpdateJobData(long jobId, string key, object value)
         {
+            if(!queue.IsAddingCompleted)
             queue.Add(new UpdateDataEvent(jobId, key, value));
         }
 
         public void CancelJob(long jobId, string reason)
         {
-            queue.Add(new CancelJobEvent(jobId, reason));
+            if (!queue.IsAddingCompleted)
+                queue.Add(new CancelJobEvent(jobId, reason));
         }
 
         public Task AbortAsync(CancellationToken cancellationToken)
         {
             queue.CompleteAdding();
-            return queueCompletion.Task;
+            queueCompletion.Task.Wait(TimeSpan.FromSeconds(5)); // waiting at least 5 seconds to complete queue
+            return Task.CompletedTask;
         }
 
         readonly BlockingCollection<IJobEvent> queue = new BlockingCollection<IJobEvent>();
 
         public void Dispose()
         {
-            queue.CompleteAdding();
+            if(!queue.IsCompleted)
+                queue.CompleteAdding();
         }
     }
 }
