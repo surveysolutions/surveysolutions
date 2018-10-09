@@ -1,4 +1,4 @@
-﻿Supervisor.VM.ExportData = function (templates, statuses, $dataUrl, $exportFromats, $deleteDataExportProcessUrl, $updateDataUrl, $exportToExternalStorageUrl, storages) {
+﻿Supervisor.VM.ExportData = function (templates, statuses, $dataUrl, $exportFormats, $deleteDataExportProcessUrl, $updateDataUrl, $exportToExternalStorageUrl, storages) {
     Supervisor.VM.ExportData.superclass.constructor.apply(this, arguments);
 
     var self = this;
@@ -10,7 +10,7 @@
 
     self.DataExports = ko.observableArray([]);
     self.RunningDataExportProcesses = ko.observableArray([]);
-    self.exportFromats = $exportFromats;
+    self.exportFormats = $exportFormats;
 
     self.selectedTemplate = ko.observable();
     self.selectedStatus = ko.observable({ status: 'null' });
@@ -278,7 +278,7 @@
     }
 
     self.exportFormatName = function (runningExport) {
-        return self.exportFromats[runningExport.Format()];
+        return self.exportFormats[runningExport.Format()];
     }
     self.formatDate=function(date) {
         return moment(date).format("MMM DD, YYYY HH:mm");
