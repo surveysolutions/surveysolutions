@@ -27,7 +27,7 @@ namespace WB.UI.WebTester.Infrastructure
 
         public void Store(List<TranslationInstance> translations)
         {
-            this.translationsList = translations;
+            this.storage.Store(translations);
         }
 
         public PlainQuestionnaire Translate(QuestionnaireDocument questionnaire, long version, string language)
