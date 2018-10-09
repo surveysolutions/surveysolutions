@@ -112,19 +112,28 @@ namespace WB.Enumerator.Native.WebInterview
 
             return result;
         }
-        
-        [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
-        public PrefilledPageData GetPrefilledEntities()
+
+        public InterviewEntityWithType[] GetPrefilledQuestions()
         {
             var questionnaire = this.GetCallerQuestionnaire();
-
-            var interviewEntityWithTypes = questionnaire
+            InterviewEntityWithType[] interviewEntityWithTypes = questionnaire
                 .GetPrefilledQuestions()
                 .Select(x => new InterviewEntityWithType
                 {
                     Identity = Identity.Create(x, RosterVector.Empty).ToString(),
                     EntityType = this.GetEntityType(x, questionnaire).ToString()
                 })
+                .ToArray();
+
+            return interviewEntityWithTypes;
+        }
+
+        [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @store.actions.js")]
+        public PrefilledPageData GetPrefilledEntities()
+        {
+            var questionnaire = this.GetCallerQuestionnaire();
+
+            InterviewEntityWithType[] interviewEntityWithTypes = GetPrefilledQuestions()
                 .Union(ActionButtonsDefinition)
                 .ToArray();
 
