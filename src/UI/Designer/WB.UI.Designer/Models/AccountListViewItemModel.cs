@@ -11,6 +11,9 @@ namespace WB.UI.Designer.Models
         [Display(Name = "Email", Order = 2)]
         public string Email { get; set; }
 
+        [Display(Name = "FullName", Order = 2)]
+        public string FullName { get; set; }
+
         [Key]
         public Guid Id { get; set; }
 
@@ -30,20 +33,8 @@ namespace WB.UI.Designer.Models
         [Default]
         public string UserName { get; set; }
 
-        public override bool CanCopy
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public override bool CanCopy => false;
 
-        public override bool CanExport
-        {
-            get
-            {
-                return false;
-            }
-        }
+        public override bool CanExport => false;
     }
 }

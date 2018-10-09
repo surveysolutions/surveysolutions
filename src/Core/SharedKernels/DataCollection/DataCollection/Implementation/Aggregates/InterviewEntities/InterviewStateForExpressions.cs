@@ -59,9 +59,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                     if (categoricalFixedMultiOptionAnswer == null) return default(T);
                     return categoricalFixedMultiOptionAnswer.ToInts().ToArray().To<T>();//int[]
                 case InterviewQuestionType.YesNo:
+                    if (!question.IsAnswered() || question.IsDisabled())
+                    {
+                        return new YesNoAndAnswersMissings(
+                            this.tree.GetOptionsForQuestion(questionId, null, "").Select(x => x.Value),
+                            Array.Empty<CheckedYesNoAnswerOption>()).To<T>(); 
+                    }
+
                     return new YesNoAndAnswersMissings(
                         this.tree.GetOptionsForQuestion(questionId, null, "").Select(x => x.Value),
-                        question.GetAsInterviewTreeYesNoQuestion().GetAnswer()?.CheckedOptions).To<T>(); //YesNoAndAnswersMissings
+                        question.GetAsInterviewTreeYesNoQuestion().GetAnswer()?.CheckedOptions).To<T>(); 
                 case InterviewQuestionType.SingleLinkedOption:
                     var categoricalLinkedSingleOptionAnswer = question.GetAsInterviewTreeSingleLinkedToRosterQuestion().GetAnswer();
                     if (categoricalLinkedSingleOptionAnswer == null) return default(T);

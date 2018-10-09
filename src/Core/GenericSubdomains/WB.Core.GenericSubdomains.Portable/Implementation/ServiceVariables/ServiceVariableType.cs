@@ -1,5 +1,8 @@
-﻿namespace WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables
+﻿using System;
+
+namespace WB.Core.GenericSubdomains.Portable.Implementation.ServiceVariables
 {
+    [Obsolete("KP-11815")]
     public enum ServiceVariableType
     {
         InterviewRandom = 0,
