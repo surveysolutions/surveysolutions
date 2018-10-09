@@ -1484,6 +1484,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
                 command.OriginDate,
                 true));
 
+            this.ApplyEvent(new SupervisorAssigned(command.UserId, command.UserId, command.OriginDate));
+            this.ApplyEvent(new InterviewKeyAssigned(new InterviewKey(0), command.OriginDate));
+
             this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, comment: null,
                 previousStatus: InterviewStatus.SupervisorAssigned, originDate: command.OriginDate));
         }

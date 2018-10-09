@@ -157,7 +157,7 @@ namespace WB.UI.Headquarters.Controllers
 
             this.CommandService.Execute(command);
 
-            return this.RedirectToAction("TakeNewAssignment", new {id = newInterviewId});
+            return this.RedirectToAction("TakeNewAssignment", new {id = newInterviewId.FormatGuid()});
         }
 
         public ActionResult TakeNewAssignment(string id)
