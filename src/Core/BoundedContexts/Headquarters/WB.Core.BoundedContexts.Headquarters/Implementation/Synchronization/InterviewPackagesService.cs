@@ -24,6 +24,7 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Enumerator.Native.WebInterview;
+using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
@@ -42,7 +43,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
         private readonly SyncSettings syncSettings;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviews;
         private readonly IUserRepository userRepository;
-        private readonly IUnitOfWork unitOfWork;
 
         public InterviewPackagesService(
             IPlainStorageAccessor<InterviewPackage> interviewPackageStorage,
@@ -55,8 +55,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             IInterviewUniqueKeyGenerator uniqueKeyGenerator,
             SyncSettings syncSettings,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviews,
-            IUserRepository userRepository,
-            IUnitOfWork unitOfWork)
+            IUserRepository userRepository)
         {
             this.interviewPackageStorage = interviewPackageStorage;
             this.brokenInterviewPackageStorage = brokenInterviewPackageStorage;
@@ -69,7 +68,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             this.syncSettings = syncSettings;
             this.interviews = interviews;
             this.userRepository = userRepository;
-            this.unitOfWork = unitOfWork;
         }
 
         public void StoreOrProcessPackage(InterviewPackage interviewPackage)
@@ -209,12 +207,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             this.logger.Debug($"Package {package.InterviewId} loaded from db. Took {innerwatch.Elapsed:g}.");
             innerwatch.Restart();
 
-            this.ProcessPackage(package);
+            this.ProcessPackage(package); 
+
             this.interviewPackageStorage.Remove(packageId);
 
             this.logger.Debug($"Package {package.InterviewId} removed. Took {innerwatch.Elapsed:g}.");
             innerwatch.Stop();
         }
+
+
 
         public void ProcessPackage(InterviewPackage interview)
         {
@@ -223,26 +224,34 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             string existingInterviewKey = null;
             try
             {
-                using (var handlingUow = new UnitOfWork(ServiceLocator.Current.GetInstance<ISessionFactory>()))
-                {
+                //could fail
+                //Uow would contain partial data
+                //so a new scope created
 
-                    existingInterviewKey = this.interviews.GetById(interview.InterviewId)?.Key;
-                    var aggregateRootEvents = this.serializer
+                ServiceLocator.Current.ExecuteActionInScope((serviceLocator) =>
+                {
+                    var interviewsLocal =
+                        serviceLocator.GetInstance<IQueryableReadSideRepositoryReader<InterviewSummary>>();
+                    existingInterviewKey = interviewsLocal.GetById(interview.InterviewId)?.Key;
+                    var aggregateRootEvents = serviceLocator.GetInstance<IJsonAllTypesSerializer>()
                         .Deserialize<AggregateRootEvent[]>(interview.Events.Replace(@"\u0000", ""));
 
                     var firstEvent = aggregateRootEvents.FirstOrDefault();
                     if (firstEvent != null &&
                         firstEvent.Payload.GetType() != typeof(SynchronizationMetadataApplied) &&
-                        eventStore.HasEventsAfterSpecifiedSequenceWithAnyOfSpecifiedTypes(firstEvent.EventSequence - 1,
-                            interview.InterviewId,
-                            EventsThatChangeAnswersStateProvider.GetTypeNames()))
+                        serviceLocator.GetInstance<IHeadquartersEventStore>()
+                            .HasEventsAfterSpecifiedSequenceWithAnyOfSpecifiedTypes(firstEvent.EventSequence - 1,
+                                interview.InterviewId,
+                                EventsThatChangeAnswersStateProvider.GetTypeNames()))
                     {
                         throw new InterviewException(
                             "Provided interview package is outdated. New answers were given to the interview while interviewer had interview on a tablet",
                             InterviewDomainExceptionType.PackageIsOudated);
                     }
 
-                    AssertPackageNotDuplicated(aggregateRootEvents);
+                    var packageTrackr = serviceLocator.GetInstance<IPlainStorageAccessor<ReceivedPackageLogEntry>>();
+
+                    AssertPackageNotDuplicated(packageTrackr, aggregateRootEvents);
 
                     var serializedEvents = aggregateRootEvents
                         .Select(e => e.Payload)
@@ -252,32 +261,32 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                         $"Interview events by {interview.InterviewId} deserialized. Took {innerwatch.Elapsed:g}.");
                     innerwatch.Restart();
 
-                    bool shouldChangeInterviewKey =
-                        CheckIfInterviewKeyNeedsToBeChanged(interview.InterviewId, serializedEvents);
-                    bool shouldChangeSupervisorId = CheckIfInterviewerWasMovedToAnotherTeam(interview.ResponsibleId,
-                        serializedEvents, out Guid? newSupervisorId);
+                    bool shouldChangeInterviewKey = CheckIfInterviewKeyNeedsToBeChanged(interviewsLocal, interview.InterviewId, serializedEvents);
+                    
+                    bool shouldChangeSupervisorId = CheckIfInterviewerWasMovedToAnotherTeam(serviceLocator.GetInstance<IUserRepository>(), 
+                        interview.ResponsibleId, serializedEvents, out Guid? newSupervisorId);
 
                     if (shouldChangeSupervisorId && !newSupervisorId.HasValue)
                         throw new InterviewException(
                             "Can't move interview to a new team, because supervisor id is empty",
                             exceptionType: InterviewDomainExceptionType.CantMoveToUndefinedTeam);
 
-                    this.commandService.Execute(new SynchronizeInterviewEventsCommand(
-                        interviewId: interview.InterviewId,
-                        userId: interview.ResponsibleId,
-                        questionnaireId: interview.QuestionnaireId,
-                        questionnaireVersion: interview.QuestionnaireVersion,
-                        interviewStatus: interview.InterviewStatus,
-                        createdOnClient: interview.IsCensusInterview,
-                        interviewKey: shouldChangeInterviewKey ? this.uniqueKeyGenerator.Get() : null,
-                        synchronizedEvents: serializedEvents,
-                        newSupervisorId: shouldChangeSupervisorId ? newSupervisorId : null
-                    ), this.syncSettings.Origin);
+                    serviceLocator.GetInstance<ICommandService>().Execute(
+                        new SynchronizeInterviewEventsCommand(
+                            interviewId: interview.InterviewId,
+                            userId: interview.ResponsibleId,
+                            questionnaireId: interview.QuestionnaireId,
+                            questionnaireVersion: interview.QuestionnaireVersion,
+                            interviewStatus: interview.InterviewStatus,
+                            createdOnClient: interview.IsCensusInterview,
+                            interviewKey: shouldChangeInterviewKey ? serviceLocator.GetInstance<IInterviewUniqueKeyGenerator>().Get() : null,
+                            synchronizedEvents: serializedEvents,
+                            newSupervisorId: shouldChangeSupervisorId ? newSupervisorId : null), 
+                        serviceLocator.GetInstance<SyncSettings>().Origin);
 
-                    RecordProcessedPackageInfo(aggregateRootEvents);
-
-                    handlingUow.AcceptChanges();
-                }
+                    RecordProcessedPackageInfo(packageTrackr, aggregateRootEvents);
+                });
+                
             }
             catch (Exception exception)
             {
@@ -323,11 +332,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             innerwatch.Stop();
         }
 
-        private void RecordProcessedPackageInfo(AggregateRootEvent[] aggregateRootEvents)
+        private void RecordProcessedPackageInfo(IPlainStorageAccessor<ReceivedPackageLogEntry> packageTrackr, AggregateRootEvent[] aggregateRootEvents)
         {
             if (aggregateRootEvents.Length > 0)
             {
-                this.packagesTracker.Store(new ReceivedPackageLogEntry
+                packageTrackr.Store(new ReceivedPackageLogEntry
                 {
                     FirstEventId = aggregateRootEvents[0].EventIdentifier,
                     FirstEventTimestamp = aggregateRootEvents[0].EventTimeStamp,
@@ -337,14 +346,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             }
         }
 
-        private void AssertPackageNotDuplicated(AggregateRootEvent[] aggregateRootEvents)
+        private void AssertPackageNotDuplicated(IPlainStorageAccessor<ReceivedPackageLogEntry> packagesTrackr, AggregateRootEvent[] aggregateRootEvents)
         {
             if (aggregateRootEvents.Length <= 0) return;
 
             var firstEvent = aggregateRootEvents[0];
             var lastEvent = aggregateRootEvents[aggregateRootEvents.Length - 1];
 
-            var isPackageDuplicated = IsPackageDuplicated(new EventStreamSignatureTag
+            var isPackageDuplicated = IsPackageDuplicated(packagesTrackr, new EventStreamSignatureTag
             {
                 FirstEventId = firstEvent.EventIdentifier,
                 FirstEventTimeStamp = firstEvent.EventTimeStamp,
@@ -361,7 +370,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
 
         public bool IsPackageDuplicated(EventStreamSignatureTag eventStreamSignatureTag)
         {
-            var existingReceivedPackageLog = this.packagesTracker.Query(_ =>
+            return this.IsPackageDuplicated(this.packagesTracker, eventStreamSignatureTag);
+        }
+
+        private bool IsPackageDuplicated(IPlainStorageAccessor<ReceivedPackageLogEntry> packagesTrackr, EventStreamSignatureTag eventStreamSignatureTag)
+        {
+            var existingReceivedPackageLog = packagesTrackr.Query(_ =>
                 _.FirstOrDefault(x => x.FirstEventId == eventStreamSignatureTag.FirstEventId &&
                                       x.FirstEventTimestamp == eventStreamSignatureTag.FirstEventTimeStamp &&
                                       x.LastEventId == eventStreamSignatureTag.LastEventId &&
@@ -371,25 +385,27 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
 
         }
 
-        private bool CheckIfInterviewerWasMovedToAnotherTeam(Guid responsibleId,
+        private bool CheckIfInterviewerWasMovedToAnotherTeam(IUserRepository userRepositoryLocal,
+            Guid responsibleId,
             IEvent[] interviewEvents, out Guid? newSupervisorId)
         {
             newSupervisorId = null;
             SupervisorAssigned supervisorAssigned = interviewEvents.OfType<SupervisorAssigned>().LastOrDefault();
             if (supervisorAssigned == null)
                 return false;
-            HqUser interviewer = userRepository.FindByIdAsync(responsibleId).Result;
+            HqUser interviewer = userRepositoryLocal.FindByIdAsync(responsibleId).Result;
             newSupervisorId = interviewer.Profile.SupervisorId;
             return newSupervisorId != supervisorAssigned.SupervisorId;
         }
 
-        private bool CheckIfInterviewKeyNeedsToBeChanged(Guid interviewId, IEvent[] interviewEvents)
+        private bool CheckIfInterviewKeyNeedsToBeChanged(IQueryableReadSideRepositoryReader<InterviewSummary> interviewsLocal, 
+            Guid interviewId, IEvent[] interviewEvents)
         {
             InterviewKeyAssigned interviewKeyEvent = interviewEvents.OfType<InterviewKeyAssigned>().LastOrDefault();
             if (interviewKeyEvent != null)
             {
                 var stringKey = interviewKeyEvent.Key.ToString();
-                var existingInterview = this.interviews.Query(
+                var existingInterview = interviewsLocal.Query(
                         _ => _.FirstOrDefault(x => x.Key == stringKey && x.InterviewId != interviewId));
 
                 if (existingInterview != null)
@@ -400,7 +416,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                 return false;
             }
 
-            var interview = this.interviews.Query(_ => _.Where(x => x.SummaryId == interviewId.FormatGuid())
+            var interview = interviewsLocal.Query(_ => _.Where(x => x.SummaryId == interviewId.FormatGuid())
                 .Select(x => x.Key).FirstOrDefault());
             return interview == null;
         }
