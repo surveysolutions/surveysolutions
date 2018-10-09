@@ -40,15 +40,17 @@
             </div>
             <div class="questionnaire-details-actions clearfix" >
                 <SwitchLanguage v-if="canChangeLanguage" :disabled="changeLanguageDisabled"/>
-                <button type="button" class="btn btn-success" v-if="showApproveButton" @click="approve" :disabled="changeStatusDisabled">
-                    {{$t("Pages.ApproveRejectPartialView_ApproveAction")}}
-                </button>
-                <button type="button" class="btn btn-default btn-lg reject" v-if="showRejectButton" @click="reject" :disabled="changeStatusDisabled">
-                    {{$t("Pages.ApproveRejectPartialView_RejectAction")}}
-                </button>
-                <button type="button" class="btn btn-default btn-lg reject" v-if="showUnapproveButton" @click="reject">
-                    {{$t("Pages.ApproveRejectPartialView_UnapproveAction")}}
-                </button>
+                <div class="buttons-container">
+                  <button type="button" class="btn btn-success" v-if="showApproveButton" @click="approve" :disabled="changeStatusDisabled">
+                      {{$t("Pages.ApproveRejectPartialView_ApproveAction")}}
+                  </button>
+                  <button type="button" class="btn btn-default btn-lg reject" v-if="showRejectButton" @click="reject" :disabled="changeStatusDisabled">
+                      {{$t("Pages.ApproveRejectPartialView_RejectAction")}}
+                  </button>
+                  <button type="button" class="btn btn-default btn-lg reject" v-if="showUnapproveButton" @click="reject">
+                      {{$t("Pages.ApproveRejectPartialView_UnapproveAction")}}
+                  </button>
+                </div>
             </div>
         </div>
         <OverviewModal ref="overview" id="overview" slot="modals" class="overviewModal" />
