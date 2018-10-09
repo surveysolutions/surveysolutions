@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
@@ -127,7 +128,7 @@ namespace WB.Services.Export.Tests
                 .Returns((string f) => f);
 
             var QuestionnaireExportStructureFactory = new QuestionnaireExportStructureFactory(
-                Mock.Of<ICache>(),
+                new MemoryCache(new MemoryCacheOptions()), 
                 Mock.Of<IQuestionnaireStorage>());
             return QuestionnaireExportStructureFactory.GetQuestionnaireExportStructure(Create.Tenant(), questionnaire);
         }
