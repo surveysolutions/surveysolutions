@@ -88,8 +88,8 @@ namespace WB.Services.Export.Jobs
             string archiveFileName,
             InterviewStatus? status = null, DateTime? fromDate = null, DateTime? toDate = null)
         {
-            var questionnaire =
-                this.exportStructureFactory.GetQuestionnaireExportStructure(tenant, questionnaireIdentity);
+            var questionnaire = await
+                this.exportStructureFactory.GetQuestionnaireExportStructureAsync(tenant, questionnaireIdentity);
 
             if (questionnaire == null)
                 return null;
