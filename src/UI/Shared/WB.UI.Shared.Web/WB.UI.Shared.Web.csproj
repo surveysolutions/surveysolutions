@@ -167,10 +167,7 @@
     <Compile Include="Filters\ApiValidationAntiForgeryTokenAttribute.cs" />
     <Compile Include="Filters\NoCacheAttribute.cs" />
     <Compile Include="Filters\TokenValidationAuthorizationFilter.cs" />
-    <Compile Include="Kernel\AutofacWebApiDependencyResolverWithChildrenScopes.cs" />
-    <Compile Include="Kernel\AutofacWebApiScopeHandler.cs" />
     <Compile Include="Kernel\AutofacWebKernel.cs" />
-    <Compile Include="Kernel\CustomLifetimeScopeProvider.cs" />
     <Compile Include="Kernel\CustomMVCDependencyResolver.cs" />
     <Compile Include="Kernel\CustomWebApiDependencyResolver.cs" />
     <Compile Include="Mappings\ProductVersionChangeMap.cs" />
