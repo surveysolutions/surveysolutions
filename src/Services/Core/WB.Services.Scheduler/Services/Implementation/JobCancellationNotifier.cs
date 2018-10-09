@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Reactive.Subjects;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
@@ -16,6 +17,7 @@ namespace WB.Services.Scheduler.Services.Implementation
             this.subject = new Subject<long>();
         }
 
+        [SuppressMessage("Possible SQL injection vulnerability", "EF1000")]
         public Task NotifyOnJobCancellationAsync(long jobId)
         {
             string sql = "notify job_cancellation, '" + jobId + "'";

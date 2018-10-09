@@ -4,6 +4,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using StatData.Core;
 using WB.Services.Export.CsvExport.Implementation.DoFiles;
@@ -50,23 +51,23 @@ namespace WB.Services.Export.Services
         private const string StataFileNameExtension = ExportFileSettings.StataDataFileExtension;
         private const string SpssFileNameExtension = ExportFileSettings.SpssDataFileExtension;
 
-        public string[] CreateAndGetStataDataFilesForQuestionnaire(TenantInfo tenant, QuestionnaireId questionnaireId,
+        public async Task<string[]> CreateAndGetStataDataFilesForQuestionnaireAsync(TenantInfo tenant, QuestionnaireId questionnaireId,
             string[] tabularDataFiles,
             IProgress<int> progress,
             CancellationToken cancellationToken)
         {
-            return this.CreateAndGetExportDataFiles(tenant, questionnaireId, DataExportFormat.STATA, tabularDataFiles, progress, cancellationToken);
+            return await this.CreateAndGetExportDataFiles(tenant, questionnaireId, DataExportFormat.STATA, tabularDataFiles, progress, cancellationToken);
         }
 
-        public string[] CreateAndGetSpssDataFilesForQuestionnaire(TenantInfo tenant,QuestionnaireId questionnaireId,
+        public async Task<string[]> CreateAndGetSpssDataFilesForQuestionnaireAsync(TenantInfo tenant,QuestionnaireId questionnaireId,
             string[] tabularDataFiles,
             IProgress<int> progress,
             CancellationToken cancellationToken)
         {
-            return this.CreateAndGetExportDataFiles(tenant, questionnaireId, DataExportFormat.SPSS, tabularDataFiles, progress, cancellationToken);
+            return await this.CreateAndGetExportDataFiles(tenant, questionnaireId, DataExportFormat.SPSS, tabularDataFiles, progress, cancellationToken);
         }
 
-        private string[] CreateAndGetExportDataFiles(TenantInfo tenant,QuestionnaireId questionnaireId, DataExportFormat format,
+        private async Task<string[]> CreateAndGetExportDataFiles(TenantInfo tenant,QuestionnaireId questionnaireId, DataExportFormat format,
             string[] dataFiles, IProgress<int> progress, CancellationToken cancellationToken)
         {
             string currentDataInfo = string.Empty;
@@ -74,13 +75,14 @@ namespace WB.Services.Export.Services
             {
                 cancellationToken.ThrowIfCancellationRequested();
 
-                var questionnaireExportStructure =
-                        this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(tenant, questionnaireId);
+                var questionnaireExportStructure = await
+                        this.questionnaireExportStructureStorage
+                            .GetQuestionnaireExportStructureAsync(tenant, questionnaireId);
 
                 if (questionnaireExportStructure == null)
                     return new string[0];
 
-                var labelsForQuestionnaire = this.questionnaireLabelFactory.CreateLabelsForQuestionnaire(questionnaireExportStructure);
+                var labelsForQuestionnaire =  this.questionnaireLabelFactory.CreateLabelsForQuestionnaire(questionnaireExportStructure);
 
                 var serviceDataLabels = this.exportSeviceDataProvider.GetServiceDataLabels();
 
@@ -88,6 +90,7 @@ namespace WB.Services.Export.Services
                 string fileExtension = format == DataExportFormat.STATA
                     ? StataFileNameExtension
                     : SpssFileNameExtension;
+
                 var writer = this.datasetWriterFactory.CreateDatasetWriter(format);
                 long processedFiles = 0;
 

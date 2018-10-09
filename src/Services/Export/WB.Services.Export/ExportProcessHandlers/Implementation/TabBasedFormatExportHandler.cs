@@ -28,7 +28,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
 
         protected void GenerateDescriptionTxt(TenantInfo tenant, QuestionnaireId questionnaireIdentity,
             string directoryPath, string dataFilesExtension)
-            => this.tabularFormatExportService.GenerateDescriptionFile(tenant, questionnaireIdentity, directoryPath, dataFilesExtension);
+            => this.tabularFormatExportService.GenerateDescriptionFileAsync(tenant, questionnaireIdentity, directoryPath, dataFilesExtension);
 
         protected async Task<string[]> CreateTabularDataFiles(ExportSettings exportSettings, IProgress<int> progress, CancellationToken cancellationToken)
         {

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -175,7 +176,7 @@ namespace WB.Services.Export.Tests
                 Mock.Of<ICommentsExporter>(),
                 Mock.Of<IDiagnosticsExporter>(),
                 Mock.Of<IInterviewActionsExporter>(),
-                Mock.Of<IQuestionnaireExportStructureFactory>(x => x.GetQuestionnaireExportStructure(It.IsAny<TenantInfo>(), It.IsAny<QuestionnaireId>()) == questionnaireExportStructure),
+                Mock.Of<IQuestionnaireExportStructureFactory>(x => x.GetQuestionnaireExportStructureAsync(It.IsAny<TenantInfo>(), It.IsAny<QuestionnaireId>()) == Task.FromResult(questionnaireExportStructure)),
                 Mock.Of<IQuestionnaireStorage>(),
                 Mock.Of<IDescriptionGenerator>(),
                 Mock.Of<IEnvironmentContentService>(),

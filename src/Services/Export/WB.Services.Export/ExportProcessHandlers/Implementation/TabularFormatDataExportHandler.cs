@@ -44,17 +44,16 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
 
             await this.tabularFormatExportService.ExportInterviewsInTabularFormat(settings, progress, cancellationToken);
 
-            this.CreateDoFilesForQuestionnaire(settings.Tenant, settings.QuestionnaireId, settings.ExportTempDirectory, cancellationToken);
+            await this.CreateDoFilesForQuestionnaire(settings.Tenant, settings.QuestionnaireId, settings.ExportTempDirectory, cancellationToken);
         }
 
         private void GenerateDescriptionTxt(TenantInfo tenant, QuestionnaireId questionnaireIdentity, string directoryPath)
-            => this.tabularFormatExportService.GenerateDescriptionFile(tenant, questionnaireIdentity, directoryPath, ExportFileSettings.TabDataFileExtension);
+            => this.tabularFormatExportService.GenerateDescriptionFileAsync(tenant, questionnaireIdentity, directoryPath, ExportFileSettings.TabDataFileExtension);
 
-        private void CreateDoFilesForQuestionnaire(TenantInfo tenant, QuestionnaireId questionnaireIdentity, string directoryPath, CancellationToken cancellationToken)
+        private async Task CreateDoFilesForQuestionnaire(TenantInfo tenant, QuestionnaireId questionnaireIdentity, string directoryPath, CancellationToken cancellationToken)
         {
-
-            var questionnaireExportStructure = this.questionnaireExportStructureStorage
-                .GetQuestionnaireExportStructure(tenant, questionnaireIdentity);
+            var questionnaireExportStructure = await this.questionnaireExportStructureStorage
+                .GetQuestionnaireExportStructureAsync(tenant, questionnaireIdentity);
 
             this.environmentContentService.CreateEnvironmentFiles(questionnaireExportStructure, directoryPath, cancellationToken);
 

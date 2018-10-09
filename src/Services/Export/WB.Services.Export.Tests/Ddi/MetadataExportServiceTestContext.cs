@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Moq;
 using WB.Services.Export.CsvExport.Implementation.DoFiles;
@@ -36,8 +37,8 @@ namespace WB.Services.Export.Tests.Ddi
                 .Returns(new QuestionnaireExportStructure());
 
             questionnaireExportStructureFactory.Setup(x =>
-                    x.GetQuestionnaireExportStructure(It.IsAny<TenantInfo>(), It.IsAny<QuestionnaireId>()))
-                .Returns(new QuestionnaireExportStructure());
+                    x.GetQuestionnaireExportStructureAsync(It.IsAny<TenantInfo>(), It.IsAny<QuestionnaireId>()))
+                .Returns(Task.FromResult(new QuestionnaireExportStructure()));
 
             return new DdiMetadataFactory(
                 fileSystemAccessor.Object,
