@@ -32,11 +32,11 @@ namespace WB.UI.Shared.Web.Modules
             where TAttribute : Attribute;
 
         void BindWebApiAuthorizationFilterWhenControllerOrActionHasAttribute<T, TAttribute>()
-            where T : System.Web.Http.Filters.IAuthorizationFilter
+            where T : System.Web.Http.Filters.AuthorizationFilterAttribute
             where TAttribute : Attribute;
 
         void BindWebApiAuthorizationFilterWhenControllerOrActionHasAttribute<T, TAttribute>(ConstructorArgument constructorArgument)
-            where T : System.Web.Http.Filters.IAuthorizationFilter
+            where T : System.Web.Http.Filters.AuthorizationFilterAttribute
             where TAttribute : Attribute;
     }
 }
