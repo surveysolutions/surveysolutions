@@ -6,6 +6,7 @@ using Java.IO;
 using Java.Security;
 using Javax.Crypto;
 using MvvmCross.Platforms.Android;
+using WB.Core.SharedKernels.DataCollection.Services;
 
 namespace WB.UI.Shared.Enumerator.Activities
 {
@@ -24,7 +25,7 @@ namespace WB.UI.Shared.Enumerator.Activities
         private readonly Dictionary<string, byte[]> inMemoryKeyStorage = new Dictionary<string, byte[]>();
 
         static readonly object keyStoreFileLock = new object();
-        static string keyStoreFileName = "keychain.keystore";
+        static string keyStoreFileName = "keystore.dat";
 
         public SecureStorage(IMvxAndroidCurrentTopActivity mvxAndroidCurrentTopActivity)
         {

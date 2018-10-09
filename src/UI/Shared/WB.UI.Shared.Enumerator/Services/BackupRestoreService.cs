@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Plugin.Permissions.Abstractions;
@@ -9,6 +10,7 @@ using SQLitePCL;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
@@ -24,6 +26,10 @@ namespace WB.UI.Shared.Enumerator.Services
         private readonly IDeviceSettings deviceSettings;
         private readonly IRestService restService;
         private readonly IPrincipal principal;
+        private readonly ISecureStorage secureStorage;
+        private readonly IEncryptionService aesEcryptionService;
+        private readonly IEncryptionService rsaEncryptionService;
+        private readonly ISerializer serializer;
         private readonly string privateStorage;
 
         public BackupRestoreService(
@@ -34,7 +40,11 @@ namespace WB.UI.Shared.Enumerator.Services
             IPermissions permissions,
             IDeviceSettings deviceSettings,
             IRestService restService,
-            IPrincipal principal)
+            IPrincipal principal,
+            ISecureStorage secureStorage,
+            IEncryptionService aesEncryptionService,
+            IEncryptionService rsaEncryptionService,
+            ISerializer serializer)
         {
             this.archiver = archiver;
             this.fileSystemAccessor = fileSystemAccessor;
@@ -44,6 +54,10 @@ namespace WB.UI.Shared.Enumerator.Services
             this.deviceSettings = deviceSettings;
             this.restService = restService;
             this.principal = principal;
+            this.secureStorage = secureStorage;
+            this.aesEcryptionService = aesEncryptionService;
+            this.rsaEncryptionService = rsaEncryptionService;
+            this.serializer = serializer;
         }
 
         public async Task<string> BackupAsync()
@@ -74,7 +88,9 @@ namespace WB.UI.Shared.Enumerator.Services
                 await Task.Run(() => this.BackupSqliteDbs()).ConfigureAwait(false);
 
                 this.fileSystemAccessor.CopyFileOrDirectory(this.privateStorage, backupTempFolder, false,
-                    new[] {".log", ".dll", ".back", ".info"});
+                    new[] {".log", ".dll", ".back", ".info", ".dat"});
+
+                this.EncryptKeyStore();
 
                 var backupFolderFilesPath = this.fileSystemAccessor.CombinePath(backupTempFolder, "files");
 
@@ -260,6 +276,8 @@ namespace WB.UI.Shared.Enumerator.Services
                     var destFileName = Path.ChangeExtension(tempBackupFile, null);
                     File.Move(tempBackupFile, destFileName);
                 }
+
+                this.DecryptKeyStore();
             }
         }
 
@@ -268,6 +286,52 @@ namespace WB.UI.Shared.Enumerator.Services
             var tabletInfoFilePath = this.fileSystemAccessor.CombinePath(this.privateStorage, "device.info");
             var deviceTechnicalInformation = this.deviceSettings.GetDeviceTechnicalInformation();
             this.fileSystemAccessor.WriteAllText(tabletInfoFilePath, deviceTechnicalInformation);
+        }
+
+        private void DecryptKeyStore()
+        {
+            var keyStorePasswordFile = this.fileSystemAccessor.CombinePath(this.privateStorage, "keystore.info");
+            var keyStorePasswordFileText = this.fileSystemAccessor.ReadAllText(keyStorePasswordFile);
+
+            var serializedKeyChain = this.serializer.Deserialize<KeyChain>(keyStorePasswordFileText);
+
+            this.secureStorage.Store("key", serializedKeyChain.Key);
+            this.secureStorage.Store("iv", serializedKeyChain.Iv);
+
+            var keyStoreFile = this.fileSystemAccessor.CombinePath(this.privateStorage, "keystore.dat");
+            var keyStoreFileBytes = this.fileSystemAccessor.ReadAllBytes(keyStoreFile);
+
+            var encryptedKeyStoreFile = this.aesEcryptionService.Decrypt(keyStoreFileBytes);
+            this.fileSystemAccessor.WriteAllBytes(keyStoreFile, encryptedKeyStoreFile);
+        }
+
+        private void EncryptKeyStore()
+        {
+            var keyStoreFile = this.fileSystemAccessor.CombinePath(this.privateStorage, "keystore.dat");
+            var keyStoreFileBytes = this.fileSystemAccessor.ReadAllBytes(keyStoreFile);
+
+            var encryptedKeyStoreFile = this.aesEcryptionService.Encrypt(keyStoreFileBytes);
+            this.fileSystemAccessor.WriteAllBytes(keyStoreFile, encryptedKeyStoreFile);
+
+            var securedKeyChain = new KeyChain
+            {
+                Key = this.secureStorage.Retrieve("key"),
+                Iv = this.secureStorage.Retrieve("iv")
+            };
+
+            var serializedKeyChain = this.serializer.Serialize(securedKeyChain);
+            var serializedKeyChainBytes = Encoding.UTF8.GetBytes(serializedKeyChain);
+
+            var keyStorePasswordFile = this.fileSystemAccessor.CombinePath(this.privateStorage, "keystore.info");
+
+            this.fileSystemAccessor.WriteAllBytes(keyStorePasswordFile,
+                this.rsaEncryptionService.Encrypt(serializedKeyChainBytes));
+        }
+
+        private class KeyChain
+        {
+            public byte[] Key { get; set; }
+            public byte[] Iv { get; set; }
         }
     }
 }

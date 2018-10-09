@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Security.Cryptography;
 using System.Text;
-using WB.Core.SharedKernels.Enumerator.Services;
+using WB.Core.SharedKernels.DataCollection.Services;
 
-namespace WB.UI.Shared.Enumerator.Activities
+namespace WB.Core.SharedKernels.DataCollection.Implementation
 {
     public class AesEncryptionService : IEncryptionService
     {
@@ -32,31 +32,36 @@ namespace WB.UI.Shared.Enumerator.Activities
         }
 
         public string Encrypt(string textToEncrypt)
-        {
-            if (string.IsNullOrEmpty(textToEncrypt)) return textToEncrypt;
+            => string.IsNullOrEmpty(textToEncrypt)
+                ? textToEncrypt
+                : Convert.ToBase64String(this.Encrypt(Encoding.UTF8.GetBytes(textToEncrypt)));
 
-            var bytesToEncrypt = Encoding.UTF8.GetBytes(textToEncrypt);
+        public string Decrypt(string textToDecrypt)
+            => string.IsNullOrEmpty(textToDecrypt)
+                ? textToDecrypt
+                : Encoding.UTF8.GetString(this.Decrypt(Convert.FromBase64String(textToDecrypt)));
+
+        public byte[] Encrypt(byte[] value)
+        {
+            if (!this.secureStorage.Contains(Key) || !this.secureStorage.Contains(IV))
+                throw new Exception("Key or Initialization vector is missing.");
 
             using (var aes = new AesCryptoServiceProvider())
             using (var cryptor = aes.CreateEncryptor(this.secureStorage.Retrieve(Key), this.secureStorage.Retrieve(IV)))
             {
-                byte[] encryptedBytes = cryptor.TransformFinalBlock(bytesToEncrypt, 0, bytesToEncrypt.Length);
-                return Convert.ToBase64String(encryptedBytes);
+                return cryptor.TransformFinalBlock(value, 0, value.Length);
             }
         }
 
-        public string Decrypt(string textToDecrypt)
+        public byte[] Decrypt(byte[] value)
         {
-            if (string.IsNullOrEmpty(textToDecrypt)) return textToDecrypt;
+            if (!this.secureStorage.Contains(Key) || !this.secureStorage.Contains(IV))
+                throw new Exception("Key or Initialization vector is missing.");
 
             using (var aes = new AesCryptoServiceProvider())
             using (var decryptor = aes.CreateDecryptor(this.secureStorage.Retrieve(Key), this.secureStorage.Retrieve(IV)))
             {
-                var bytesToDecrypt = Convert.FromBase64String(textToDecrypt);
-
-                byte[] decryptedBytes = decryptor.TransformFinalBlock(bytesToDecrypt, 0, bytesToDecrypt.Length);
-
-                return Encoding.UTF8.GetString(decryptedBytes);
+                return decryptor.TransformFinalBlock(value, 0, value.Length);
             }
         }
     }
