@@ -44,7 +44,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 
             var history = this.questionnaireChangeItemStorage.Query(_ => (from h in _
                 where h.Sequence >= questionnaireChangeRecord.Sequence
-                      && h.QuestionnaireId == questionnaireChangeRecord.QuestionnaireId
+                      && h.QuestionnaireId == questionnaireChangeRecord.QuestionnaireId &&
+                      (h.Patch != null || h.ResultingQuestionnaireDocument != null)
                 orderby h.Sequence descending 
                 select new
                 {

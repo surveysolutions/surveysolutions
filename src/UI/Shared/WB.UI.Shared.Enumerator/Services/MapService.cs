@@ -84,6 +84,7 @@ namespace WB.UI.Shared.Enumerator.Services
                     MapFullPath = x,
                     Size = this.fileSystemAccessor.GetFileSize(x),
                     MapName = this.fileSystemAccessor.GetFileNameWithoutExtension(x),
+                    MapFileName = this.fileSystemAccessor.GetFileName(x),
                     CreationDate = this.fileSystemAccessor.GetCreationTime(x)
 
                 }).ToList();
