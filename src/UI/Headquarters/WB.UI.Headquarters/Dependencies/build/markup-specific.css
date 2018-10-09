@@ -1569,14 +1569,19 @@ header > .red-line {
   float: right; }
   .panel-details .questionnaire-details-actions .reject {
     margin-right: 15px; }
+  .panel-details .questionnaire-details-actions .btn-group {
+    margin-right: 5px; }
   .panel-details .questionnaire-details-actions .buttons-container {
     padding-top: 17px;
     display: inline-block; }
+    .panel-details .questionnaire-details-actions .buttons-container:empty {
+      padding: 0; }
     .panel-details .questionnaire-details-actions .buttons-container .btn {
       max-width: 145px;
       text-overflow: ellipsis;
       overflow: hidden;
-      white-space: nowrap; }
+      white-space: nowrap;
+      margin-right: 5px; }
 
 .panel-details .bootstrap-select.btn-group {
   width: 180px !important; }

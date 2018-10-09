@@ -1,7 +1,7 @@
 <template>
     <div :class="{'enumerators-comment': isInterviewersComment}">
         <h6>{{ commentTitle }}</h6>
-        <p>{{ text }}</p>
+        <p :class="{'overloaded': isCollapsed}">{{ text }}<button v-if="isCollapsed" type="button" v-on:click="toggle()" class="btn btn-link btn-horizontal-hamburger"><span></span></button></p>
     </div>
 </template>
 
@@ -20,6 +20,11 @@
                 required: true,
                 type: Boolean
             },
+        },
+        data() {
+            return {
+                isCollapsed: this.text.length > 200
+            };
         },
         computed: {
             isInterviewersComment(){
@@ -44,6 +49,11 @@
 
                 return this.$t("WebInterviewUI.Comment") //'Comment';
             }           
+        },
+        methods: {
+            toggle(){
+                this.isCollapsed = !this.isCollapsed;
+            }
         }
     }
 

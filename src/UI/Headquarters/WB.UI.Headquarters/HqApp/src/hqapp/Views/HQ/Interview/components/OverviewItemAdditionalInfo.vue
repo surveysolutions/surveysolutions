@@ -2,7 +2,7 @@
     <div ref="additionalInfo" :class="{visible : isAdditionalInfoVisible}" v-if="isAdditionalInfoVisible" class="custom-popover overview-additional-information">
         <div class="popover-header">
             <button @click="close" type="button" class="close close-popover" ><span></span></button>
-            <h5>Additional question information</h5>
+            <h5>{{$t("WebInterviewUI.Interview_Overview_AdditionalInformation")}}</h5>
         </div>
         <div class="popover-content">
             <div v-if="errors.length > 0">
@@ -52,8 +52,8 @@
             </div>
         </div>
         <div class="popover-footer clearftix">
-            <button type="button" v-if="item.SupportsComments" @click="showAddCommentForm" class="btn btn-link gray-action-unit pull-left add-comment">Add comment</button>
-            <button type="button" @click="close" class="btn btn-link gray-action-unit pull-right close-popover">Close</button>
+            <button type="button" v-if="item.SupportsComments" @click="showAddCommentForm" class="btn btn-link gray-action-unit pull-left add-comment">{{$t("WebInterviewUI.CommentAdd")}}</button>
+            <button type="button" @click="close" class="btn btn-link gray-action-unit pull-right close-popover">{{$t("Pages.CloseLabel")}}</button>
         </div>
     </div>
 </template>
@@ -66,7 +66,7 @@ export default {
             type: Object
         }
     },
-     data() {
+    data() {
         return {
             isAdditionalInfoVisible: false,
             isCommentFormIsVisible: false,

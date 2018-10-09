@@ -44,26 +44,6 @@
             isShowingAddCommentDialog: { type: Boolean, default: false }
         },
         methods: {
-            getCommentTitle(comment) {
-                if (comment.isOwnComment == true) {
-                    return this.$t("WebInterviewUI.CommentYours")
-                }
-                if (comment.userRole == 1 /*'Administrator'*/) {
-                    return this.$t("WebInterviewUI.CommentAdmin") // "Admin comment"
-                }
-                if (comment.userRole == 2/*'Supervisor'*/) {
-                    return this.$t("WebInterviewUI.CommentSupervisor") // "Supervisor comment"
-                }
-                if (comment.userRole == 4/*'Interviewer'*/) {
-                    return this.$t("WebInterviewUI.CommentInterviewer") // "Interviewer comment"
-                }
-                if (comment.userRole == 6/*'Headquarter'*/) {
-                    return this.$t("WebInterviewUI.CommentHeadquarters") // "Headquarters comment"
-                }
-
-                return this.$t("WebInterviewUI.Comment") //'Comment';
-            },
-
             async postComment(evnt) {
                 const com = this.comment
 
