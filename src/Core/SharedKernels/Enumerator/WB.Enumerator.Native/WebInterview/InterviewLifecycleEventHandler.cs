@@ -2,12 +2,14 @@ using System.Linq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Implementation.Aggregates;
+using WB.Core.Infrastructure.Ncqrs.Eventing;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Utils;
 
 namespace WB.Enumerator.Native.WebInterview
 {
+    [ReceivesIgnoredEvents]
     public class InterviewLifecycleEventHandler :
         BaseDenormalizer,
         IEventHandler<AnswersDeclaredInvalid>,

@@ -86,49 +86,49 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
 
             Guid firstEventSourceId = events.First().EventSourceId;
 
-            if (this.eventBusSettings.IgnoredAggregateRoots.Contains(firstEventSourceId.FormatGuid()))
-                return;
-
             var errorsDuringHandling = new List<Exception>();
 
-            foreach (var functionalEventHandler in functionalHandlers)
+            if (!this.eventBusSettings.IgnoredAggregateRoots.Contains(firstEventSourceId.FormatGuid()))
             {
-                var handler = (IFunctionalEventHandler)functionalEventHandler.Handler;
+                foreach (var functionalEventHandler in functionalHandlers)
+                {
+                    var handler = (IFunctionalEventHandler) functionalEventHandler.Handler;
 
-                functionalEventHandler.Bus.OnCatchingNonCriticalEventHandlerException +=
+                    functionalEventHandler.Bus.OnCatchingNonCriticalEventHandlerException +=
                         this.OnCatchingNonCriticalEventHandlerException;
-                try
-                {
-                    handler.Handle(events, firstEventSourceId);
-                }
-                catch (Exception exception)
-                {
-                    var eventHandlerType = handler.GetType();
-                    var shouldIgnoreException =
-                        this.eventBusSettings.EventHandlerTypesWithIgnoredExceptions.Contains(eventHandlerType);
-
-                    var eventHandlerException = new EventHandlerException(eventHandlerType: eventHandlerType,
-                        eventType: events.First().GetType(), isCritical: !shouldIgnoreException,
-                        innerException: exception);
-
-                    if (shouldIgnoreException)
+                    try
                     {
-                        this.logger.Error(
-                            $"Failed to handle {eventHandlerException.EventType.Name} in {eventHandlerException.EventHandlerType} by event source '{firstEventSourceId}'.",
-                            eventHandlerException);
-
-                        this.OnCatchingNonCriticalEventHandlerException?.Invoke(
-                            eventHandlerException);
+                        handler.Handle(events, firstEventSourceId);
                     }
-                    else
+                    catch (Exception exception)
                     {
-                        errorsDuringHandling.Add(eventHandlerException);
+                        var eventHandlerType = handler.GetType();
+                        var shouldIgnoreException =
+                            this.eventBusSettings.EventHandlerTypesWithIgnoredExceptions.Contains(eventHandlerType);
+
+                        var eventHandlerException = new EventHandlerException(eventHandlerType: eventHandlerType,
+                            eventType: events.First().GetType(), isCritical: !shouldIgnoreException,
+                            innerException: exception);
+
+                        if (shouldIgnoreException)
+                        {
+                            this.logger.Error(
+                                $"Failed to handle {eventHandlerException.EventType.Name} in {eventHandlerException.EventHandlerType} by event source '{firstEventSourceId}'.",
+                                eventHandlerException);
+
+                            this.OnCatchingNonCriticalEventHandlerException?.Invoke(
+                                eventHandlerException);
+                        }
+                        else
+                        {
+                            errorsDuringHandling.Add(eventHandlerException);
+                        }
                     }
-                }
-                finally
-                {
-                    functionalEventHandler.Bus.OnCatchingNonCriticalEventHandlerException -=
-                        this.OnCatchingNonCriticalEventHandlerException;
+                    finally
+                    {
+                        functionalEventHandler.Bus.OnCatchingNonCriticalEventHandlerException -=
+                            this.OnCatchingNonCriticalEventHandlerException;
+                    }
                 }
             }
 
