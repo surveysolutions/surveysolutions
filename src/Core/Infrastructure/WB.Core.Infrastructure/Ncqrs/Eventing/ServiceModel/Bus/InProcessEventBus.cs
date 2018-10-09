@@ -8,7 +8,7 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.EventBus.Lite;
+using WB.Core.Infrastructure.Ncqrs.Eventing;
 
 namespace Ncqrs.Eventing.ServiceModel.Bus
 {
@@ -18,6 +18,9 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
         {
             public Type EventType { get; set; }
             public Type EventHandlerType { get; set; }
+
+            public bool ReceivesIgnoredEvents { get; set; }
+
             public Action<IPublishableEvent> Handle { get; set; }
         }
 
@@ -39,11 +42,14 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
         {
             if (eventMessage?.Payload == null) return;
 
-            if(this.eventBusSettings.IgnoredAggregateRoots.Contains(eventMessage.EventSourceId.FormatGuid()))
-                return;
+            bool isIgnoredAggregate =
+                this.eventBusSettings.IgnoredAggregateRoots.Contains(eventMessage.EventSourceId.FormatGuid());
 
             var eventHandlerMethodsByEventType = this.eventHandlerMethods.Where(
-                    eventHandlerMethod => eventHandlerMethod.EventType.GetTypeInfo().IsAssignableFrom(eventMessage.Payload.GetType().GetTypeInfo())).ToList();
+                    eventHandlerMethod => eventHandlerMethod.EventType.GetTypeInfo().IsAssignableFrom(eventMessage.Payload.GetType().GetTypeInfo()) && 
+                                          (!isIgnoredAggregate || eventHandlerMethod.ReceivesIgnoredEvents))
+                    
+                            .ToList();
 
             if (eventHandlerMethodsByEventType.Any())
             {
@@ -56,7 +62,9 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
             if (eventMessage?.Payload == null) return false;
 
             if (this.eventBusSettings.IgnoredAggregateRoots.Contains(eventMessage.EventSourceId.FormatGuid()))
-                return false;
+            {
+                return this.eventHandlerMethods.Any(x => x.ReceivesIgnoredEvents);
+            }
 
             return this.eventHandlerMethods.Any(eventHandlerMethod => eventHandlerMethod.EventType.GetTypeInfo().IsAssignableFrom(eventMessage.Payload.GetType().GetTypeInfo()));
         }
@@ -84,16 +92,18 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
             var eventDataType = typeof(TEvent);
             var eventHandlerType = handler.GetType();
 
-            RegisterHandler(eventDataType, eventHandlerType,  evnt => handler.Handle((IPublishedEvent<TEvent>)evnt));
+            RegisterHandler(eventDataType, eventHandlerType, @event => handler.Handle((IPublishedEvent<TEvent>)@event));
         }
 
         public void RegisterHandler(Type eventType, Type eventHandlerType, Action<IPublishableEvent> handle)
         {
+            var receivesIgnoredEventsAttribute = eventHandlerType.GetCustomAttribute(typeof(ReceivesIgnoredEventsAttribute));
             this.eventHandlerMethods.Add(new EventHandlerMethod
             {
                 EventType = eventType,
                 EventHandlerType = eventHandlerType,
-                Handle = handle
+                Handle = handle,
+                ReceivesIgnoredEvents = receivesIgnoredEventsAttribute != null
             });
         }
 
