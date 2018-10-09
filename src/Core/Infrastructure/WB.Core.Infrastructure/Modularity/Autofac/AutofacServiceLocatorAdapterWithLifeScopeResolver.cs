@@ -5,9 +5,6 @@ using System.Linq;
 using System.Threading;
 using Autofac;
 using Autofac.Core.Lifetime;
-using Autofac.Core.Resolving;
-using Autofac.Util;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 
 namespace WB.Core.Infrastructure.Modularity.Autofac
@@ -79,42 +76,6 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
         public bool IsRegistered(Type serviceType)
         {
             return GetCurrentScope().IsRegistered(serviceType);
-        }
-    }
-
-    public class UnitOfWorkScopeManager
-    {
-        private static ILifetimeScope rootScope;
-
-        public static void SetScopeAdapter(ILifetimeScope scope)
-        {
-            rootScope = scope;
-        }
-
-        public static Scope BeginScope()
-        {
-            var lifetimeScope = rootScope.BeginLifetimeScope(AutofacServiceLocatorAdapterWithChildrenScopes.UnitOfWorkScope);
-            return new Scope(lifetimeScope);
-        }
-
-        public static void EndScope(Scope scope)
-        {
-            scope.Dispose();
-        }
-    }
-
-    public class Scope : IDisposable
-    {
-        private readonly ILifetimeScope lifetimeScope;
-
-        public Scope(ILifetimeScope lifetimeScope)
-        {
-            this.lifetimeScope = lifetimeScope;
-        }
-
-        public void Dispose()
-        {
-            lifetimeScope.Dispose();
         }
     }
 }
