@@ -29,11 +29,13 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
                 dataExportProcessesService, dataExportFileAccessor, binaryDataSource)
         {
             this.logger = logger;
+            logger.LogTrace("New Instance");
         }
 
         protected override IDisposable GetClient(string accessToken)
         {
             this.client = new DropboxClient(accessToken);
+            logger.LogTrace("Got Dropbox client");
             return client;
         }
 
@@ -44,11 +46,9 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
 
         protected override async Task UploadFileAsync(string folder, byte[] fileContent, string fileName)
         {
-            using (var logScope = logger.BeginScope("Upload dropbox file"))
-            {
-                await this.client.Files.UploadAsync(new CommitInfo($"{folder}/{fileName}"),
-                    new MemoryStream(fileContent));
-            }
+            logger.LogTrace("Uploading file: " + folder + "/" + fileContent + " - " + fileContent.Length + "bytes");
+            await this.client.Files.UploadAsync(new CommitInfo($"{folder}/{fileName}"), new MemoryStream(fileContent));
+            logger.LogTrace("Done Uploading file: " + folder + "/" + fileContent + " - " + fileContent.Length + "bytes");
         }
     }
 }
