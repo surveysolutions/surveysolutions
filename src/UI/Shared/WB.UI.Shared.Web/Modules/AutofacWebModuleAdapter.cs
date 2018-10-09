@@ -96,7 +96,7 @@ namespace WB.UI.Shared.Web.Modules
                 .InstancePerRequest();
         }
 
-        public void BindWebApiAuthorizationFilterWhenControllerOrActionHasAttribute<T, TAttribute>() where T : System.Web.Http.Filters.IAuthorizationFilter where TAttribute : Attribute
+        public void BindWebApiAuthorizationFilterWhenControllerOrActionHasAttribute<T, TAttribute>() where T : System.Web.Http.Filters.AuthorizationFilterAttribute where TAttribute : Attribute
         {
             containerBuilder.RegisterType<T>().AsSelf().InstancePerRequest();
             containerBuilder.Register(c => new WebApiAuthorizationFilterWhenControllerOrActionHasAttribute<T, TAttribute>(c.Resolve<T>()))
@@ -105,7 +105,7 @@ namespace WB.UI.Shared.Web.Modules
         }
 
         public void BindWebApiAuthorizationFilterWhenControllerOrActionHasAttribute<T, TAttribute>(ConstructorArgument constructorArgument) 
-            where T : System.Web.Http.Filters.IAuthorizationFilter
+            where T : System.Web.Http.Filters.AuthorizationFilterAttribute
             where TAttribute : Attribute
         {
             string nameService = typeof(T).Name + " - " + typeof(TAttribute).Name;
