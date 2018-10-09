@@ -87,7 +87,7 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
         {
             containerBuilder.RegisterType<TImplementation>().As<TInterface>()
                 .InstancePerMatchingLifetimeScope(
-                    AutofacServiceLocatorAdapterWithChildrenScopes.UnitOfWorkScope,
+                    AutofacServiceLocatorConstants.UnitOfWorkScope,
                     MatchingScopeLifetimeTags.RequestLifetimeScopeTag);
         }
 
