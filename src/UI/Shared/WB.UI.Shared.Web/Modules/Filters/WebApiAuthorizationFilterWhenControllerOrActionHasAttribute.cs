@@ -10,7 +10,7 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 namespace WB.UI.Shared.Web.Modules.Filters
 {
     public class WebApiAuthorizationFilterWhenControllerOrActionHasAttribute<TFilter, TAttribute> : IAutofacAuthorizationFilter
-        where TFilter : System.Web.Http.Filters.IAuthorizationFilter
+        where TFilter : System.Web.Http.Filters.AuthorizationFilterAttribute
         where TAttribute : Attribute
     {
         public WebApiAuthorizationFilterWhenControllerOrActionHasAttribute(TFilter filter)
@@ -29,7 +29,7 @@ namespace WB.UI.Shared.Web.Modules.Filters
 
             if (shouldExecute)
             {
-                return filter.ExecuteAuthorizationFilterAsync(actionContext, cancellationToken, () => null);
+                return filter.OnAuthorizationAsync(actionContext, cancellationToken);
             }
 
             return Task.CompletedTask;
