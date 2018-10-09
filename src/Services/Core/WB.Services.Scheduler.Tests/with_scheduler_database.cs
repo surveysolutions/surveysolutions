@@ -87,7 +87,7 @@ namespace WB.Services.Scheduler.Tests
             using (var scope = PrepareOneTime().CreateScope())
             {
                 var db = scope.ServiceProvider.GetService<JobContext>();
-              //  await db.Database.EnsureDeletedAsync();
+                await db.Database.EnsureDeletedAsync();
             }
         }
 

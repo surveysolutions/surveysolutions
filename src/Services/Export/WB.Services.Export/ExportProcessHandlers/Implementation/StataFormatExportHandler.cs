@@ -51,7 +51,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             exportProgress.ProgressChanged +=
                 (sender, donePercent) => progress.Report(50 + (donePercent / 2));
 
-            tabularDataToExternalStatPackageExportService.CreateAndGetStataDataFilesForQuestionnaire(
+            tabularDataToExternalStatPackageExportService.CreateAndGetStataDataFilesForQuestionnaireAsync(
                  tenant,
                  questionnaireIdentity,
                  tabDataFiles,

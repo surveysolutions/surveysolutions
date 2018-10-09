@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Interview.Entities;
@@ -23,10 +24,10 @@ namespace WB.Services.Export.Questionnaire
             this.questionnaireStorage = questionnaireStorage;
         }
 
-        public QuestionnaireExportStructure GetQuestionnaireExportStructure(TenantInfo tenant,
+        public async Task<QuestionnaireExportStructure> GetQuestionnaireExportStructureAsync(TenantInfo tenant,
             QuestionnaireId questionnaireId)
         {
-            var questionnaire = this.questionnaireStorage.GetQuestionnaireAsync(tenant, questionnaireId).Result; // todo make it async
+            var questionnaire = await this.questionnaireStorage.GetQuestionnaireAsync(tenant, questionnaireId);
             return GetQuestionnaireExportStructure(tenant, questionnaire);
         }
 

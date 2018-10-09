@@ -108,9 +108,9 @@ namespace WB.Services.Export.CsvExport.Implementation
                              $"Took {exportWatch.Elapsed:c} to export {interviewIdsToExport.Count} interviews");
         }
         
-        public void GenerateDescriptionFile(TenantInfo tenant, QuestionnaireId questionnaireId, string basePath, string dataFilesExtension)
+        public async Task GenerateDescriptionFileAsync(TenantInfo tenant, QuestionnaireId questionnaireId, string basePath, string dataFilesExtension)
         {
-            QuestionnaireExportStructure questionnaireExportStructure = this.exportStructureFactory.GetQuestionnaireExportStructure(tenant, questionnaireId);
+            QuestionnaireExportStructure questionnaireExportStructure = await this.exportStructureFactory.GetQuestionnaireExportStructureAsync(tenant, questionnaireId);
 
             var descriptionBuilder = new StringBuilder();
             descriptionBuilder.AppendLine(
