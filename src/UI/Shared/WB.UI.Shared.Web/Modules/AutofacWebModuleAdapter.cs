@@ -107,8 +107,8 @@ namespace WB.UI.Shared.Web.Modules
             where T : System.Web.Http.Filters.IAuthorizationFilter
             where TAttribute : Attribute
         {
-            containerBuilder.RegisterType<T>().AsSelf().WithParameter(constructorArgument.Name, constructorArgument.Value).InstancePerRequest();
-            containerBuilder.Register(c => new WebApiAuthorizationFilterWhenControllerOrActionHasAttribute<T, TAttribute>(c.Resolve<T>()))
+            containerBuilder.RegisterType<T>().AsSelf().InstancePerRequest();
+            containerBuilder.Register(c => new WebApiAuthorizationFilterWhenControllerOrActionHasAttribute<T, TAttribute>(c.Resolve<T>(new NamedParameter(constructorArgument.Name, constructorArgument.Value))))
                 .AsWebApiAuthorizationFilterFor<ApiController>()
                 .InstancePerRequest();
         }
