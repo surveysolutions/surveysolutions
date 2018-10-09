@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using StatData.Core;
@@ -18,7 +19,7 @@ namespace WB.Services.Export.Tests.Services.TabularDataToExternalStatPackageExpo
     internal class TabularDataToExternalStatPackageExportServiceTests : TabularDataToExternalStatPackageExportServiceTestContext
     {
         [Test]
-        public void when_creating_and_getting_spss_data_files_for_questionnaire()
+        public async Task when_creating_and_getting_spss_data_files_for_questionnaire()
         {
             TabularDataToExternalStatPackageExportService _tabularDataToExternalStatPackagesTabDataExportService;
             Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
@@ -49,7 +50,7 @@ namespace WB.Services.Export.Tests.Services.TabularDataToExternalStatPackageExpo
                 datasetWriterFactory: datasetWriterFactory.Object);
             
             //act
-            _tabularDataToExternalStatPackagesTabDataExportService.CreateAndGetSpssDataFilesForQuestionnaire(
+            await _tabularDataToExternalStatPackagesTabDataExportService.CreateAndGetSpssDataFilesForQuestionnaireAsync(
                     Create.Tenant(), new QuestionnaireId(questionnaireId.ToString()), new[] {mailLevelFileName, nestedRosterFileName},
                     new Progress<int>(), CancellationToken.None);
 
@@ -60,7 +61,7 @@ namespace WB.Services.Export.Tests.Services.TabularDataToExternalStatPackageExpo
         }
 
         [Test]
-        public void when_creating_and_getting_spss_data_files_for_questionnaire_with_labels_for_extra_files()
+        public async Task when_creating_and_getting_spss_data_files_for_questionnaire_with_labels_for_extra_files()
         {
             TabularDataToExternalStatPackageExportService _tabularDataToExternalStatPackagesTabDataExportService;
             Guid questionnaireId = Guid.Parse("11111111111111111111111111111111");
@@ -103,7 +104,7 @@ namespace WB.Services.Export.Tests.Services.TabularDataToExternalStatPackageExpo
                 exportServiceDataProvider: exportSeviceDataProvider.Object);
 
             // Act
-            _tabularDataToExternalStatPackagesTabDataExportService.CreateAndGetSpssDataFilesForQuestionnaire(
+            await _tabularDataToExternalStatPackagesTabDataExportService.CreateAndGetSpssDataFilesForQuestionnaireAsync(
                     Create.Tenant(), new QuestionnaireId(questionnaireId.ToString()), new[] { mailLevelFileName, nestedRosterFileName , extraFile },
                     new Progress<int>(), CancellationToken.None);
 

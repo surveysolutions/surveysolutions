@@ -3,6 +3,7 @@ using System.IO;
 using System.Threading.Tasks;
 using Dropbox.Api;
 using Dropbox.Api.Files;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
@@ -12,6 +13,8 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
 {
     internal class DropboxBinaryDataExportHandler : AbstractExternalStorageDataExportHandler
     {
+        private readonly ILogger<DropboxBinaryDataExportHandler> logger;
+        
         private DropboxClient client;
 
         public DropboxBinaryDataExportHandler(
@@ -20,15 +23,19 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
             IOptions<InterviewDataExportSettings> interviewDataExportSettings,
             IDataExportProcessesService dataExportProcessesService,
             IBinaryDataSource binaryDataSource,
-            IDataExportFileAccessor dataExportFileAccessor)
+            IDataExportFileAccessor dataExportFileAccessor,
+            ILogger<DropboxBinaryDataExportHandler> logger)
             : base(fileSystemAccessor, filebasedExportedDataAccessor, interviewDataExportSettings,
                 dataExportProcessesService, dataExportFileAccessor, binaryDataSource)
         {
+            this.logger = logger;
+            logger.LogTrace("New Instance");
         }
 
         protected override IDisposable GetClient(string accessToken)
         {
             this.client = new DropboxClient(accessToken);
+            logger.LogTrace("Got Dropbox client");
             return client;
         }
 
@@ -38,6 +45,10 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
             => Task.FromResult($"/{folderName}");
 
         protected override async Task UploadFileAsync(string folder, byte[] fileContent, string fileName)
-            => await this.client.Files.UploadAsync(new CommitInfo($"{folder}/{fileName}"), new MemoryStream(fileContent));
+        {
+            logger.LogTrace($"Uploading file: {folder}/{fileName} - {fileContent.Length}bytes");
+            await this.client.Files.UploadAsync(new CommitInfo($"{folder}/{fileName}"), new MemoryStream(fileContent));
+            logger.LogTrace($"Done Uploading file: {folder}/{fileName} - {fileContent.Length}bytes");
+        }
     }
 }
