@@ -6,6 +6,7 @@ using Moq;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventHandlers;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
@@ -22,10 +23,24 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
             var secondEventHandlerMock = new Mock<IEventHandler>();
             secondFunctionalEventHandlerMock = secondEventHandlerMock.As<IFunctionalEventHandler>();
 
-            eventDispatcher = Create.Service.NcqrCompatibleEventDispatcher();
-            eventDispatcher.Register(Setup.FailingFunctionalEventHandlerHavingUniqueType<int>());
+            var handler1 = Setup.FailingFunctionalEventHandlerHavingUniqueType<int>();
+            var handler2 = Setup.FailingFunctionalEventHandlerHavingUniqueType<bool>();
+
+            var serviceLocator = new Mock<IServiceLocator>();
+
+            var queue = new Queue<IEventHandler>();
+
+            queue.Enqueue(handler1);
+            queue.Enqueue(secondEventHandlerMock.Object);
+            queue.Enqueue(handler2);
+
+            serviceLocator.Setup(x => x.GetInstance(Moq.It.IsAny<Type>())).Returns(queue.Dequeue);
+  
+            eventDispatcher = Create.Service.NcqrCompatibleEventDispatcher(serviceLocator: serviceLocator.Object);
+
+            eventDispatcher.Register(handler1);
             eventDispatcher.Register(secondEventHandlerMock.Object);
-            eventDispatcher.Register(Setup.FailingFunctionalEventHandlerHavingUniqueType<bool>());
+            eventDispatcher.Register(handler2);
             BecauseOf();
         }
 
