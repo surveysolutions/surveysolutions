@@ -38,7 +38,8 @@ namespace WB.UI.WebTester.Infrastructure.AppDomainSpecific
             registry.Bind<IInterviewExpressionStateUpgrader, InterviewExpressionStateUpgrader>();
             registry.Bind<IQuestionOptionsRepository, QuestionnaireQuestionOptionsRepository>();
             registry.Bind<StatefulInterview, StatefulInterview>();
-            registry.Bind<IWebTesterTranslationService, WebTesterTranslationStorage>();
+            registry.Bind<IWebTesterTranslationService, WebTesterTranslationService>();
+            registry.BindAsSingleton<IWebTesterTranslationStorage, WebTesterTranslationStorage>();
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)

@@ -268,10 +268,12 @@
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\MultimediaController.cs" />
     <Compile Include="Infrastructure\AppDomainSpecific\CurrentInterview.cs" />
+    <Compile Include="Infrastructure\AppDomainSpecific\IWebTesterTranslationStorage.cs" />
     <Compile Include="Infrastructure\AppDomainSpecific\PrivateSettersResolver.cs" />
     <Compile Include="Infrastructure\AppDomainSpecific\IWebTesterTranslationService.cs" />
     <Compile Include="Infrastructure\AppDomainSpecific\WebTesterAppDomainModule.cs" />
     <Compile Include="Infrastructure\AppDomainSpecific\WebTesterQuestionnaireStorage.cs" />
+    <Compile Include="Infrastructure\AppDomainSpecific\WebTesterTranslationService.cs" />
     <Compile Include="Infrastructure\AppDomainSpecific\WebTesterTranslationStorage.cs" />
     <Compile Include="Infrastructure\WebTesterCommandService.cs" />
     <Compile Include="Infrastructure\WebTesterStatefulInterview.cs" />
