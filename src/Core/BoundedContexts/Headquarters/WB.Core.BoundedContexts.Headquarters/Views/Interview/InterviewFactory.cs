@@ -515,18 +515,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 .ToDictionary(x => x.Key, x => x.Select(e => e.RosterId).ToList());
 
             var entitiesByRosterScope = interviewEntities
-                .Select(x => new
-                {
-                    // store this in DB for each entity. Static info
-                    RosterScope = new ValueVector<Guid>(questionnaire.GetRosterSizeSourcesForEntity(x.Identity.Id)),
-                    Entity = x
-                })
-                .GroupBy(x => x.RosterScope)
-                .ToDictionary(x => x.Key, x => x.Select(e => e.Entity).ToList());
+                // store this in DB for each entity. Static info
+                .ToLookup(x => new ValueVector<Guid>(questionnaire.GetRosterSizeSourcesForEntity(x.Identity.Id)));
 
             foreach (var scopedEntities in entitiesByRosterScope)
             {
-                var entities = scopedEntities.Value;
+                var entities = scopedEntities;
                 var rosterScope = scopedEntities.Key;
 
                 var rosterVectors = entities.Select(x => x.Identity?.RosterVector ?? RosterVector.Empty).Distinct()
