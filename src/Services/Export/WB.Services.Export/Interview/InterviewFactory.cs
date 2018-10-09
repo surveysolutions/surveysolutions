@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview.Entities;
 using WB.Services.Export.Questionnaire;
-using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Export.Services;
 using WB.Services.Export.Utils;
 using WB.Services.Infrastructure.Tenant;
@@ -16,12 +15,10 @@ namespace WB.Services.Export.Interview
     public class InterviewFactory : IInterviewFactory
     {
         private readonly ITenantApi<IHeadquartersApi> tenantApi;
-        private readonly IQuestionnaireStorage questionnaireStorage;
 
-        public InterviewFactory(ITenantApi<IHeadquartersApi> tenantApi, IQuestionnaireStorage questionnaireStorage)
+        public InterviewFactory(ITenantApi<IHeadquartersApi> tenantApi)
         {
             this.tenantApi = tenantApi;
-            this.questionnaireStorage = questionnaireStorage;
         }
 
         public async Task<IEnumerable<InterviewEntity>> GetInterviewEntities(TenantInfo tenant, Guid interviewId)
