@@ -9,7 +9,7 @@ using WB.Services.Export.Interview;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Services;
 using WB.Services.Export.Services.Processing;
-using WB.Services.Export.Tenant;
+using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.ExportProcessHandlers.Implementation
 {
@@ -51,7 +51,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             exportProgress.ProgressChanged +=
                 (sender, donePercent) => progress.Report(50 + (donePercent / 2));
 
-            tabularDataToExternalStatPackageExportService.CreateAndGetStataDataFilesForQuestionnaire(
+            tabularDataToExternalStatPackageExportService.CreateAndGetStataDataFilesForQuestionnaireAsync(
                  tenant,
                  questionnaireIdentity,
                  tabDataFiles,

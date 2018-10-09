@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
+using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
@@ -43,6 +45,25 @@ namespace WB.Services.Export.ExportProcessHandlers
             this.interviewDataExportSettings = interviewDataExportSettings;
         }
 
+        private void HandleProgress(long processId, Progress<int> exportProgress)
+        {
+            int lastPercent = 0;
+            var sw = Stopwatch.StartNew();
+
+            exportProgress.ProgressChanged += (sender, donePercent) =>
+            {
+                // throttle progress changed events 
+                if (donePercent != lastPercent || sw.Elapsed > TimeSpan.FromSeconds(1))
+                {
+                    this.dataExportProcessesService.UpdateDataExportProgress(processId, donePercent);
+
+                    lastPercent = donePercent;
+                    sw.Restart();
+                }
+            };
+
+        }
+
         public virtual async Task ExportDataAsync(DataExportProcessArgs dataExportProcessArgs, CancellationToken cancellationToken)
         {
             exportTempDirectoryPath = this.fileSystemAccessor.GetTempPath(interviewDataExportSettings.Value.DirectoryPath);
@@ -55,10 +76,8 @@ namespace WB.Services.Export.ExportProcessHandlers
 
             var exportProgress = new Progress<int>();
 
-            exportProgress.ProgressChanged += (sender, donePercent) =>
-               this.dataExportProcessesService.UpdateDataExportProgressAsync(
-                   dataExportProcessArgs.Tenant, dataExportProcessArgs.NaturalId, donePercent);
-
+            HandleProgress(dataExportProcessArgs.ProcessId, exportProgress);
+            
             var exportSettings = new ExportSettings
             {
                 QuestionnaireId = dataExportProcessArgs.Questionnaire,
@@ -77,8 +96,8 @@ namespace WB.Services.Export.ExportProcessHandlers
                 dataExportProcessArgs.InterviewStatus,
                 fromDate: dataExportProcessArgs.FromDate, toDate: dataExportProcessArgs.ToDate);
 
-            await this.dataExportProcessesService.ChangeStatusTypeAsync(
-                dataExportProcessArgs.Tenant, dataExportProcessArgs.NaturalId, DataExportStatus.Running);
+            this.dataExportProcessesService.ChangeStatusType(
+                dataExportProcessArgs.ProcessId, DataExportStatus.Running);
 
             await DoExportAsync(dataExportProcessArgs, exportSettings, archiveName, exportProgress, cancellationToken);
 
