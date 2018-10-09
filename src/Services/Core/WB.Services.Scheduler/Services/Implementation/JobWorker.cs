@@ -49,7 +49,14 @@ namespace WB.Services.Scheduler.Services.Implementation
 
                 if (token.IsCancellationRequested) return;
 
-                await Task.Delay(TimeSpan.FromSeconds(5), token);
+                try
+                {
+                    await Task.Delay(TimeSpan.FromSeconds(5), token);
+                }
+                catch (TaskCanceledException)
+                {
+                    logger.LogInformation("Cancellation requested");
+                }
             }
         }
     }

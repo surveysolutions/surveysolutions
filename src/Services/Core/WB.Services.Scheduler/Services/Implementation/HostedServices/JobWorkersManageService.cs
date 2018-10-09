@@ -53,6 +53,7 @@ namespace WB.Services.Scheduler.Services.Implementation.HostedServices
 
         public Task StopAsync(CancellationToken cancellationToken)
         {
+            
             scope.Dispose();
             return Task.CompletedTask;
         }
