@@ -24,14 +24,15 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
 
         public bool IsUniqueEmailRequired { get; set; }
 
-        public IMembershipAccount Create(object providerUserKey, string applicationName, string username, string email)
+        public IMembershipAccount Create(object providerUserKey, string applicationName, string username, string email, string fullName)
         {
             var account = new Aggregates.User
                               {
                                   ProviderUserKey = Guid.Parse(providerUserKey.ToString()), 
                                   ApplicationName = applicationName, 
                                   UserName = username, 
-                                  Email = email
+                                  Email = email,
+                                  FullName = fullName
                               };
             return account;
         }
@@ -145,7 +146,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
             }
 
             IAccountView account = this.GetUser(accountEmail: email);
-            return account == null ? string.Empty : account.UserName;
+            return account == null ? string.Empty : account.FullName ?? account.UserName;
         }
 
         public MembershipCreateStatus Register(IMembershipAccount account)
@@ -159,7 +160,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
                     password: account.Password, 
                     passwordSalt: account.PasswordSalt, 
                     isConfirmed: account.IsConfirmed, 
-                    confirmationToken: account.ConfirmationToken));
+                    confirmationToken: account.ConfirmationToken,
+                    fullName: account.FullName));
             return MembershipCreateStatus.Success;
         }
 
@@ -202,7 +204,8 @@ namespace WB.Core.BoundedContexts.Designer.Views.Account
                         email: account.Email, 
                         isConfirmed: account.IsConfirmed, 
                         comment: account.Comment,
-                        canImportOnHq: account.CanImportOnHq);
+                        canImportOnHq: account.CanImportOnHq,
+                        fullName: account.FullName);
                     break;
                 case MembershipEventType.FailedLogin:
                     command = new RegisterFailedLogin(accountPublicKey);

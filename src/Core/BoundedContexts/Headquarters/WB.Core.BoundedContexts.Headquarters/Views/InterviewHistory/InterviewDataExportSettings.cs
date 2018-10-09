@@ -16,6 +16,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory
 
         public InterviewDataExportSettings(string directoryPath, 
             bool enableInterviewHistory, 
+            string exportServiceUrl,
             int maxRecordsCountPerOneExportQuery = 1000, 
             int limitOfCachedItemsByDenormalizer = 100,
             int interviewsExportParallelTasksLimit = 1,
@@ -23,6 +24,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory
             int errorsExporterBatchSize = 0)
         {
             this.EnableInterviewHistory = enableInterviewHistory;
+            this.ExportServiceUrl = exportServiceUrl;
             this.MaxRecordsCountPerOneExportQuery = maxRecordsCountPerOneExportQuery;
             this.LimitOfCachedItemsByDenormalizer = limitOfCachedItemsByDenormalizer;
             this.InterviewsExportParallelTasksLimit = interviewsExportParallelTasksLimit;
@@ -36,6 +38,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory
         public string DirectoryPath { get; private set; }
 
         public bool EnableInterviewHistory { get; private set; }
+        public string ExportServiceUrl { get; }
 
         public int MaxRecordsCountPerOneExportQuery { get; private set; }
 

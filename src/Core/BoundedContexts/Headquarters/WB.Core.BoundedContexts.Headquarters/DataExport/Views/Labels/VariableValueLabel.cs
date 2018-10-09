@@ -1,5 +1,8 @@
+using System;
+
 namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels
 {
+    [Obsolete("KP-11815")]
     internal class VariableValueLabel
     {
         public VariableValueLabel(string value, string label)

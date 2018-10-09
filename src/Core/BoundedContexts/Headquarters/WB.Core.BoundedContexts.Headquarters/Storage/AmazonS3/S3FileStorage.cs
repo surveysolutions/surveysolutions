@@ -103,7 +103,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3
 
         public string GetDirectLink(string key, TimeSpan expiration)
         {
-            var protocol = string.IsNullOrWhiteSpace(s3Settings.Endpoint) || s3Settings.Endpoint.StartsWith("https://", StringComparison.OrdinalIgnoreCase)
+            var protocol = string.IsNullOrWhiteSpace(s3Settings.Endpoint) 
+                           || s3Settings.Endpoint.StartsWith("https://", StringComparison.OrdinalIgnoreCase)
                 ? Protocol.HTTPS
                 : Protocol.HTTP;
 

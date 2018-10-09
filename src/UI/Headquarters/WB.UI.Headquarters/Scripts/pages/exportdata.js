@@ -1,7 +1,9 @@
-﻿Supervisor.VM.ExportData = function (templates, statuses, $dataUrl, $exportFromats, $deleteDataExportProcessUrl, $updateDataUrl, $exportToExternalStorageUrl, storages) {
+﻿Supervisor.VM.ExportData = function (templates, statuses, $dataUrl, $exportFormats, $deleteDataExportProcessUrl, $updateDataUrl, $exportToExternalStorageUrl, storages) {
     Supervisor.VM.ExportData.superclass.constructor.apply(this, arguments);
 
     var self = this;
+    self.initiated = false;
+
     self.Url = $dataUrl;
     self.DeleteDataExportProcessUrl = $deleteDataExportProcessUrl;
     self.UpdateDataUrl = $updateDataUrl;
@@ -10,13 +12,50 @@
 
     self.DataExports = ko.observableArray([]);
     self.RunningDataExportProcesses = ko.observableArray([]);
-    self.exportFromats = $exportFromats;
+    self.exportFormats = $exportFormats;
 
     self.selectedTemplate = ko.observable();
+    
     self.selectedStatus = ko.observable({ status: 'null' });
     
     self.fromDateSelected = ko.observable();
     self.toDateSelected = ko.observable();
+
+    function getQueryStringValue(key) {
+        return decodeURIComponent(window.location.search.replace(new RegExp("^(?:.*[&\\?]" + encodeURIComponent(key).replace(/[\.\+\*]/g, "\\$&") + "(?:\\=([^&]*))?)?.*$", "i"), "$1"));
+    }
+
+    self.fromQueryString = function() {
+        var selectedTemplate = getQueryStringValue("template")
+        var selectedTemplateVersion = getQueryStringValue("version")
+        var selectedStatus = getQueryStringValue('status')
+
+        if (selectedStatus !== '') {
+            var statusCode = parseInt(selectedStatus);
+
+            for (var i = 0; i < statuses.length; i++) {
+                var status = statuses[i];
+
+                if (status.status === statusCode) {
+                    self.selectedStatus(status);
+                    break;
+                }
+            }
+        }
+
+        if (selectedTemplate != '' && selectedTemplateVersion != '') {
+            var version = parseInt(selectedTemplateVersion);
+
+            for (var i = 0; i < templates.length; i++) {
+                var template = templates[i];
+
+                if (template.id == selectedTemplate && template.version === version) {
+                    self.selectedTemplate(template);
+                    break;
+                }
+            }
+        }
+    };
 
     self.fromDateSelected.subscribe(function(newValue) {
         if (newValue == null) return;
@@ -24,7 +63,7 @@
         var picker = $("#to-date").data('datetimepickr_inst');
         picker.config.minDate = newValue;
 
-        self.updateDataExportInfo(false);
+        self.updateDataExportInfo(true);
     });
 
     self.toDateSelected.subscribe(function(newValue) {
@@ -33,7 +72,7 @@
         var picker = $("#from-date").data('datetimepickr_inst');
         picker.config.maxDate = newValue;
 
-        self.updateDataExportInfo(false);
+        self.updateDataExportInfo(true);
     });
 
     self.selectedTemplateId = ko.computed(function () {
@@ -49,9 +88,13 @@
     });
 
     self.selectedStatus.subscribe(function() {
-        self.updateDataExportInfo(false);
+        self.updateDataExportInfo(true);
     });
-    
+
+    self.selectedTemplate.subscribe(function() {
+        self.updateDataExportInfo(true);
+    })
+
     self.getRequestQuery = function (format) {
         var request = {
             id: self.selectedTemplateId(),
@@ -70,21 +113,37 @@
         return $.param(request);
     };
 
-    self.updateDataExportInfo = function (runRecursively) {
+    window.onpopstate = function(event) {
+        self.fromQueryString()
+    }
+
+    self.updateDataExportInfo = function (updateQueryString) {
+
+        if (updateQueryString && self.initiated) {
+            if (window.history != null) {
+                var template = self.selectedTemplate();
+                var queryArgs = {
+                    template: template.id,
+                    version: template.version,
+                    status: self.selectedStatus().status
+                }
+
+                var search = $.param(queryArgs);
+                var newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?' + search;
+                window.history.pushState(queryArgs, window.title, newUrl);
+            }
+        }
+
         if (self.selectedTemplate() == null) {
             _.delay(function () {
-                self.updateDataExportInfo(true);
+                self.updateDataExportInfo(false);
             }, 3000);
             return;
         }
 
         self.sendWebRequest(self.Url + "?" + self.getRequestQuery(), {}, function (data) {
             ko.mapping.fromJS(data, self.mappingOptions, self);
-            if (runRecursively===true) {
-                _.delay(function () {
-                    self.updateDataExportInfo(true);
-                }, 3000);
-            }
+
         });
     };
 
@@ -162,7 +221,7 @@
             self.sendWebRequest(self.UpdateDataUrl + "?" + self.getRequestQuery(format),
                 [],
                 function(data) {
-                    self.updateDataExportInfo();
+                    self.updateDataExportInfo(false);
                 });
         }
     };
@@ -278,7 +337,7 @@
     }
 
     self.exportFormatName = function (runningExport) {
-        return self.exportFromats[runningExport.Format()];
+        return self.exportFormats[runningExport.Format()];
     }
     self.formatDate=function(date) {
         return moment(date).format("MMM DD, YYYY HH:mm");
@@ -316,6 +375,10 @@
         return dataReference.StatusOfLatestExportProcess() === 4;
     }
 
-    self.updateDataExportInfo(true);
+    self.fromQueryString();
+
+    self.updateProcess = setInterval(function() { self.updateDataExportInfo(false); }, 2000);
+    self.initiated = true;
+
 };
 Supervisor.Framework.Classes.inherit(Supervisor.VM.ExportData, Supervisor.VM.BasePage);
