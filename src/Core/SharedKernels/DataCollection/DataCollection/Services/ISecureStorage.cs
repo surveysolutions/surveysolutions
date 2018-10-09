@@ -1,4 +1,4 @@
-﻿namespace WB.UI.Shared.Enumerator.Activities
+﻿namespace WB.Core.SharedKernels.DataCollection.Services
 {
     public interface ISecureStorage
     {
