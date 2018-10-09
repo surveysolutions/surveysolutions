@@ -162,7 +162,11 @@ namespace WB.UI.Headquarters.Controllers
 
         public ActionResult TakeNewAssignment(string id)
         {
-            return this.View(new {id = id});
+            return this.View(new
+            {
+                id = id,
+                responsiblesUrl = Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "ResponsiblesCombobox"})
+            });
         }
         
         private DocumentFilter Filters()
