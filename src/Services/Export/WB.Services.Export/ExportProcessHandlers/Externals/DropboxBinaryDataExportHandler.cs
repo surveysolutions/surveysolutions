@@ -46,9 +46,9 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
 
         protected override async Task UploadFileAsync(string folder, byte[] fileContent, string fileName)
         {
-            logger.LogTrace("Uploading file: " + folder + "/" + fileContent + " - " + fileContent.Length + "bytes");
+            logger.LogTrace($"Uploading file: {folder}/{fileName} - {fileContent.Length}bytes");
             await this.client.Files.UploadAsync(new CommitInfo($"{folder}/{fileName}"), new MemoryStream(fileContent));
-            logger.LogTrace("Done Uploading file: " + folder + "/" + fileContent + " - " + fileContent.Length + "bytes");
+            logger.LogTrace($"Done Uploading file: {folder}/{fileName} - {fileContent.Length}bytes");
         }
     }
 }
