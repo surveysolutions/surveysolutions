@@ -18,5 +18,7 @@ namespace WB.Services.Export.Jobs
         Task<DataExportArchive> DownloadArchiveAsync(TenantInfo tenant, string archiveName,
             DataExportFormat dataExportFormat, InterviewStatus? status,
             DateTime? from, DateTime? to);
+
+        Task ClearAllExportArchives(TenantInfo tenant);
     }
 }

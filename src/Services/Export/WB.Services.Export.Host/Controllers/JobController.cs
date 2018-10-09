@@ -131,8 +131,9 @@ namespace WB.Services.Export.Host.Controllers
 
         [HttpDelete]
         [Route("api/v1/delete")]
-        public ActionResult Delete(TenantInfo tenant)
+        public async Task<ActionResult> Delete(TenantInfo tenant)
         {
+            await this.jobsStatusReporting.ClearAllExportArchives(tenant);
             return Ok();
         }
 
