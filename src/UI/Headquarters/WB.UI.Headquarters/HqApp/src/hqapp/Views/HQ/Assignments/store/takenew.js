@@ -16,7 +16,7 @@ export default {
             const interviewDetails = await Vue.$api.call(api => api.getInterviewDetails())
             commit("SET_INTERVIEW_DETAILS", interviewDetails);
 
-            const data = await Vue.$api.call(api => api.getPrefilledEntities())
+            const data = await Vue.$api.call(api => api.getPrefilledQuestions())
             commit("SET_TAKENEW_RESPONSE", data)
 
 
@@ -25,7 +25,7 @@ export default {
 
     mutations: {
         SET_TAKENEW_RESPONSE(state, data) {
-            state.entities = data.entities
+            state.entities = data
             state.isLoaded = true
         },
         SET_INTERVIEW_DETAILS(state, data) {
