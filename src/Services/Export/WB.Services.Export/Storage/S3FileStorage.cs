@@ -208,6 +208,7 @@ namespace WB.Services.Export.Storage
         {
             try
             {
+                this.log.LogTrace($"Removing file {S3Settings.BucketName}/{GetKey(path)}");
                 await client.DeleteObjectAsync(S3Settings.BucketName, GetKey(path));
             }
             catch (AmazonS3Exception e) when (e.StatusCode == HttpStatusCode.NotFound)
