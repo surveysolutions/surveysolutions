@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web.Http;
 using System.Web.Http.Filters;
 using System.Web.Mvc;
@@ -107,8 +108,15 @@ namespace WB.UI.Shared.Web.Modules
             where T : System.Web.Http.Filters.IAuthorizationFilter
             where TAttribute : Attribute
         {
-            containerBuilder.RegisterType<T>().AsSelf().InstancePerRequest();
-            containerBuilder.Register(c => new WebApiAuthorizationFilterWhenControllerOrActionHasAttribute<T, TAttribute>(c.Resolve<T>(new NamedParameter(constructorArgument.Name, constructorArgument.Value))))
+            string nameService = typeof(T).Name + " - " + typeof(TAttribute).Name;
+            containerBuilder.RegisterType<T>().Named<T>(nameService)
+                .WithParameter(
+                    new ResolvedParameter(
+                        (pi, ctx) => pi.Name == constructorArgument.Name, 
+                        (pi, ctx) => constructorArgument.Value.Invoke(new AutofacModuleContext(ctx, new List<Parameter>())))
+                ).InstancePerRequest();
+
+            containerBuilder.Register(c => new WebApiAuthorizationFilterWhenControllerOrActionHasAttribute<T, TAttribute>(c.ResolveNamed<T>(nameService)))
                 .AsWebApiAuthorizationFilterFor<ApiController>()
                 .InstancePerRequest();
         }
