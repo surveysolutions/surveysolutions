@@ -57,6 +57,7 @@ namespace WB.Services.Export.ExportProcessHandlers
             }
         }
 
-        protected abstract void ExportDataIntoArchive(IZipArchive archive, ExportSettings exportSettings, IProgress<int> exportProgress, CancellationToken cancellationToken);
+        protected abstract Task ExportDataIntoArchive(IZipArchive archive, ExportSettings exportSettings,
+            IProgress<int> exportProgress, CancellationToken cancellationToken);
     }
 }
