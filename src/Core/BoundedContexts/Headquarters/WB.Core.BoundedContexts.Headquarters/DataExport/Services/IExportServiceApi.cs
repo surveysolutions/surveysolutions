@@ -46,5 +46,11 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         [Get("/api/v1/ddi")]
         Task<HttpContent> GetDdiArchive([Query]string questionnaireId, [Query]string archivePassword);
+
+        [Get("/.hc")]
+        Task<HttpResponseMessage> Health();
+
+        [Get("/.version")]
+        Task<string> Version();
     }
 }
