@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using WB.Services.Export.Infrastructure;
+using Microsoft.Extensions.Caching.Memory;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Interview.Entities;
 using WB.Services.Export.Questionnaire.Services;
@@ -11,13 +11,13 @@ using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.Questionnaire
 {
-    public class QuestionnaireExportStructureFactory: IQuestionnaireExportStructureFactory
+    public class QuestionnaireExportStructureFactory : IQuestionnaireExportStructureFactory
     {
-        private readonly ICache cache;
         private const string GeneratedTitleExportFormat = "{0}__{1}";
+        private readonly IMemoryCache cache;
         private readonly IQuestionnaireStorage questionnaireStorage;
 
-        public QuestionnaireExportStructureFactory(ICache cache, IQuestionnaireStorage questionnaireStorage)
+        public QuestionnaireExportStructureFactory(IMemoryCache cache, IQuestionnaireStorage questionnaireStorage)
         {
             this.cache = cache;
             this.questionnaireStorage = questionnaireStorage;
@@ -33,18 +33,19 @@ namespace WB.Services.Export.Questionnaire
         public QuestionnaireExportStructure GetQuestionnaireExportStructure(TenantInfo tenant,
             QuestionnaireDocument questionnaire)
         {
-            var cachedQuestionnaireExportStructure = this.cache.Get(new QuestionnaireId(questionnaire.Id), tenant.Id);
-            if (cachedQuestionnaireExportStructure == null)
+            return this.cache.GetOrCreate(tenant + "/" + questionnaire.Id, entry =>
             {
-                cachedQuestionnaireExportStructure = CreateQuestionnaireExportStructure(questionnaire);
+                var cachedQuestionnaireExportStructure = CreateQuestionnaireExportStructure(questionnaire);
 
                 if (cachedQuestionnaireExportStructure == null)
+                {
                     return null;
+                }
 
-                this.cache.Set(questionnaire.Id, cachedQuestionnaireExportStructure, tenant.Id);
-            }
+                entry.SlidingExpiration = TimeSpan.FromMinutes(1);
 
-            return (QuestionnaireExportStructure) cachedQuestionnaireExportStructure;
+                return cachedQuestionnaireExportStructure;
+            });
         }
 
         public QuestionnaireExportStructure CreateQuestionnaireExportStructure(QuestionnaireDocument questionnaire)
@@ -112,7 +113,7 @@ namespace WB.Services.Export.Questionnaire
                 {
                     Name = variable.Name,
                     Title = variable.Label,
-                    ExportType = GetStorageType(variable) 
+                    ExportType = GetStorageType(variable)
                 }};
 
             return exportedHeaderItem;
@@ -147,7 +148,7 @@ namespace WB.Services.Export.Questionnaire
 
             if (question.QuestionType == QuestionType.MultyOption)
             {
-                var multioptionQuestion = (MultyOptionsQuestion) question;
+                var multioptionQuestion = (MultyOptionsQuestion)question;
                 if (multioptionQuestion.LinkedToQuestionId.HasValue || multioptionQuestion.LinkedToRosterId.HasValue)
                 {
                     exportedHeaderItem.QuestionSubType = QuestionSubtype.MultyOption_Linked;
@@ -158,7 +159,7 @@ namespace WB.Services.Export.Questionnaire
                         ? QuestionSubtype.MultyOption_YesNoOrdered
                         : QuestionSubtype.MultyOption_YesNo;
                 }
-                else if(multioptionQuestion.AreAnswersOrdered)
+                else if (multioptionQuestion.AreAnswersOrdered)
                 {
                     exportedHeaderItem.QuestionSubType = QuestionSubtype.MultyOption_Ordered;
                 }
@@ -177,7 +178,7 @@ namespace WB.Services.Export.Questionnaire
             }
 
             exportedHeaderItem.VariableName = question.VariableName;
-            
+
             exportedHeaderItem.ColumnHeaders = new List<HeaderColumn>()
             {
                 new HeaderColumn
@@ -219,19 +220,19 @@ namespace WB.Services.Export.Questionnaire
                 case QuestionType.Numeric:
                     return ExportValueType.Numeric;
                 case QuestionType.DateTime:
-                {
-                    return (questionSubType != null && questionSubType == QuestionSubtype.DateTime_Timestamp) ? ExportValueType.DateTime :  ExportValueType.Date;
-                }
-                    
+                    {
+                        return (questionSubType != null && questionSubType == QuestionSubtype.DateTime_Timestamp) ? ExportValueType.DateTime : ExportValueType.Date;
+                    }
+
                 case QuestionType.MultyOption:
                 case QuestionType.SingleOption:
-                {
-                    bool isLinked = questionSubType == QuestionSubtype.MultyOption_Linked ||
-                                    questionSubType == QuestionSubtype.SingleOption_Linked;
-                    return isLinked ? ExportValueType.String : ExportValueType.NumericInt;
-                }
+                    {
+                        bool isLinked = questionSubType == QuestionSubtype.MultyOption_Linked ||
+                                        questionSubType == QuestionSubtype.SingleOption_Linked;
+                        return isLinked ? ExportValueType.String : ExportValueType.NumericInt;
+                    }
                 default:
-                        return ExportValueType.Unknown;
+                    return ExportValueType.Unknown;
             }
         }
 
@@ -251,7 +252,7 @@ namespace WB.Services.Export.Questionnaire
                 if (!IsQuestionLinked(question) && question is MultyOptionsQuestion)
                 {
                     var columnValue = int.Parse(question.Answers[i].AnswerValue);
-              
+
                     headerColumn.Name = string.Format(GeneratedTitleExportFormat,
                         question.VariableName, DecimalToHeaderConverter.ToHeader(columnValue));
 
@@ -351,7 +352,7 @@ namespace WB.Services.Export.Questionnaire
                 rosterScopes[levelVector].Type == RosterScopeType.TextList)
             {
                 structures.IsTextListScope = true;
-                structures.ReferencedNames = new [] { rosterScopes[levelVector].SizeQuestionTitle };
+                structures.ReferencedNames = new[] { rosterScopes[levelVector].SizeQuestionTitle };
             }
 
             return structures;
@@ -383,7 +384,7 @@ namespace WB.Services.Export.Questionnaire
             return new HashSet<Guid>(rosterScopes[levelVector].RosterIdToRosterTitleQuestionIdMap.Keys);
         }
 
-        private void FillHeaderWithQuestionsInsideGroup(HeaderStructureForLevel headerStructureForLevel, 
+        private void FillHeaderWithQuestionsInsideGroup(HeaderStructureForLevel headerStructureForLevel,
             Group @group,
             QuestionnaireDocument questionnaire,
             bool supportVariables,
@@ -505,7 +506,7 @@ namespace WB.Services.Export.Questionnaire
                     this.GetLengthOfRosterVectorWhichNeedToBeExported(question, questionnaire)));
         }
 
-        private void AddHeadersForLinkedToListMultiOptions(IDictionary<Guid, IExportedHeaderItem> headerItems, 
+        private void AddHeadersForLinkedToListMultiOptions(IDictionary<Guid, IExportedHeaderItem> headerItems,
             Question question,
             Question linkToTextListQuestion,
             QuestionnaireDocument questionnaire)
@@ -526,7 +527,7 @@ namespace WB.Services.Export.Questionnaire
                 this.GetLengthOfRosterVectorWhichNeedToBeExported(question, questionnaire));
 
             gpsQuestionExportHeader.ColumnHeaders = new List<HeaderColumn>();
-            
+
             var questionLabel = string.IsNullOrEmpty(question.VariableLabel)
                 ? question.QuestionText
                 : question.VariableLabel;
