@@ -35,7 +35,7 @@ namespace WB.Services.Export.ExportProcessHandlers
         {
             using (this.GetClient(this.accessToken))
             {
-                var applicationFolder = this.CreateApplicationFolderAsync().Result;
+                var applicationFolder = await this.CreateApplicationFolderAsync();
 
                 string GetInterviewFolder(Guid interviewId) => $"{settings.ArchiveName}/{interviewId.FormatGuid()}";
 
@@ -44,7 +44,7 @@ namespace WB.Services.Export.ExportProcessHandlers
                     var interviewFolderPath = await this.CreateFolderAsync(applicationFolder, GetInterviewFolder(data.InterviewId));
                     await this.UploadFileAsync(interviewFolderPath, data.Content, data.Answer);
 
-                }, cancellationToken);
+                }, progress, cancellationToken);
             }
         }
 
