@@ -230,8 +230,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
 
                 ServiceLocator.Current.ExecuteActionInScope((serviceLocator) =>
                 {
-                    var interviewsLocal =
-                        serviceLocator.GetInstance<IQueryableReadSideRepositoryReader<InterviewSummary>>();
+                    var interviewsLocal = serviceLocator.GetInstance<IQueryableReadSideRepositoryReader<InterviewSummary>>();
                     existingInterviewKey = interviewsLocal.GetById(interview.InterviewId)?.Key;
                     var aggregateRootEvents = serviceLocator.GetInstance<IJsonAllTypesSerializer>()
                         .Deserialize<AggregateRootEvent[]>(interview.Events.Replace(@"\u0000", ""));
@@ -281,8 +280,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                             createdOnClient: interview.IsCensusInterview,
                             interviewKey: shouldChangeInterviewKey ? serviceLocator.GetInstance<IInterviewUniqueKeyGenerator>().Get() : null,
                             synchronizedEvents: serializedEvents,
-                            newSupervisorId: shouldChangeSupervisorId ? newSupervisorId : null), 
-                        serviceLocator.GetInstance<SyncSettings>().Origin);
+                            newSupervisorId: shouldChangeSupervisorId ? newSupervisorId : null),
+                            this.syncSettings.Origin);
 
                     RecordProcessedPackageInfo(packageTrackr, aggregateRootEvents);
                 });
