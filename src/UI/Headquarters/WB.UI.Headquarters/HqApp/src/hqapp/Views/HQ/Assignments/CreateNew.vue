@@ -10,13 +10,22 @@
                         </div>
                         <component v-for="entity in entities" 
                                 :key="entity.identity"
-                                 :is="entity.entityType"
-                                  :id="entity.identity"
-                                   fetchOnMount></component>
+                                :is="entity.entityType"
+                                :id="entity.identity"
+                                fetchOnMount
+                                noComments="true"
+                                ></component>
 
 
-                        <wb-question :question="assignToQuestion" noValidation="true" noComments="true" showSideMenu="false"
+                        <wb-question :question="assignToQuestion" 
+                                    noValidation="true" 
+                                    :noComments="true"
+                                    :no-title="false"
                                     questionCssClassName="single-select-question">
+
+                            <h5>
+                                {{$t("Assignments.CreateAssignment_ResponsibleInstruction")}}
+                            </h5>
                             <div class="question-unit">
                                 <div class="options-group">
                                     <div class="form-group">
@@ -37,12 +46,17 @@
                         <wb-question :question="sizeQuestion" 
                                      noValidation="true"
                                      noComments="true"
-                                     showSideMenu="false" questionCssClassName="numeric-question">
+                                     
+                                     questionCssClassName="numeric-question">
+                            <h5>
+                                {{ this.$t("Assignments.Size") }}
+                            </h5>
                             <div class="question-unit">
                                 <div class="options-group">
                                     <div class="form-group">
                                         <div class="field answered">
                                             <input v-model="sizeQuestion.answer" 
+                                                :title="this.$t('Assignments.SizeExplanation')"
                                                 v-validate="'regex:^-?([0-9]+)$|min_value:-1'"
                                                 type="text" autocomplete="off" inputmode="numeric" class="field-to-fill"/>
                                         </div>
@@ -80,7 +94,6 @@ export default {
         return {
             assignToQuestion: {
                 id: "assignTo",
-                title: this.$t("Assignments.AssignTo"),
                 acceptAnswer: true,
                 isAnswered: false,
                 validity: {
@@ -89,7 +102,6 @@ export default {
             },
             sizeQuestion: {
                 id: "size",
-                title: this.$t("Assignments.Size"),
                 acceptAnswer: true,
                 isAnswered: true,
                 answer: "1",

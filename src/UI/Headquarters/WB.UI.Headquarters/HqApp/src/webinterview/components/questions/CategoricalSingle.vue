@@ -1,5 +1,5 @@
 <template>
-    <wb-question :question="$me" questionCssClassName="single-select-question" :noAnswer="noOptions">
+    <wb-question :question="$me" questionCssClassName="single-select-question" :noAnswer="noOptions" :no-comments="noComments">
         <div class="question-unit">
             <div class="options-group" v-bind:class="{ 'dotted': noOptions }">
                 <div class="radio" v-for="option in answeredOrAllOptions" :key="$me.id + '_' + option.value">
@@ -26,6 +26,7 @@
 
     export default {
         name: 'CategoricalSingle',
+        props: ['noComments'],
         data(){
             return {
                 showAllOptions: false
