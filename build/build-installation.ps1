@@ -31,7 +31,7 @@ $supportPath = Join-path $workdir "SupportPackage"
 $targetSupportPath = Join-path $HQsitePath "Support"
 
 Copy-Item $sitePatha\* $HQsitePath -Force -Recurse
-Copy-Item $workdir\ExportService\* $HQsitePath\.bin\Export -Force -Recurse
+Copy-Item $HQSourcePath\ExportService\* $HQsitePath\.bin\Export -Force -Recurse
 
 Copy-Item -Path $supportPath -Destination $targetSupportPath -Force -Recurse
 
