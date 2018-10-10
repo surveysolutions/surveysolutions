@@ -1,5 +1,5 @@
 <template>
-    <wb-question :question="$me" questionCssClassName="numeric-question">
+    <wb-question :question="$me" questionCssClassName="numeric-question" :no-comments="noComments">
         <div class="question-unit">
             <div class="options-group">
                 <div class="form-group">
@@ -50,6 +50,7 @@
                 autoNumericElement: null}
             },
         name: 'Double',
+        props: ['noComments'],
         mixins: [entityDetails],
         computed: {
             isSpecialValueSelected(){
