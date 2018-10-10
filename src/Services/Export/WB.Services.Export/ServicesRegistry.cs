@@ -30,6 +30,8 @@ namespace WB.Services.Export
     {
         public static void Configure(IServiceCollection services, IConfiguration configuration)
         {
+            services.AddMemoryCache();
+
             // Transients
             services.AddTransient<IFileSystemAccessor, FileSystemAccessor>();
             services.AddTransient<ICsvWriter, CsvWriter>();
@@ -66,15 +68,12 @@ namespace WB.Services.Export
             services.AddTransient<IDdiMetadataFactory, DdiMetadataFactory>();
             services.AddTransient<IMetadataWriter, MetadataWriter>();
             services.AddTransient<IMetaDescriptionFactory, MetaDescriptionFactory>();
-
-
-            // Singletons
-            services.AddSingleton<ICache, Cache>();
-
-            RegisterHandlers(services);
-
             services.AddTransient<IExportJob, ExportJob>();
 
+            // Singletons
+            RegisterHandlers(services);
+
+            
             FileStorageModule.Register(services, configuration);
 
             // options

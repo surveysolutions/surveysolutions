@@ -4,8 +4,8 @@ using System.IO;
 using System.IO.Compression;
 using System.Threading.Tasks;
 using WB.Services.Export.Storage;
-using WB.Services.Export.Tenant;
 using WB.Services.Infrastructure.FileSystem;
+using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.Services.Processing
 {

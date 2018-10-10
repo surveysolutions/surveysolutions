@@ -12,7 +12,6 @@ using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Export.Services;
 using WB.Services.Export.Utils;
 
-
 namespace WB.Services.Export.ExportProcessHandlers.Implementation
 {
     internal class BinaryDataSource : IBinaryDataSource
@@ -37,7 +36,10 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             this.interviewDataExportSettings = interviewDataExportSettings;
         }
 
-        public async Task ForEachMultimediaAnswerAsync(ExportSettings settings, Func<BinaryData, Task> action, CancellationToken cancellationToken)
+        public async Task ForEachMultimediaAnswerAsync(ExportSettings settings, 
+            Func<BinaryData, Task> action, 
+            IProgress<int> progress,
+            CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
             var api = this.tenantApi.For(settings.Tenant);
@@ -49,12 +51,14 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
 
             var batchSize = interviewDataExportSettings.Value.MaxRecordsCountPerOneExportQuery;
 
+            progress.Report(0);
+            long interviewsProcessed = 0;
             foreach (var interviewBatch in interviewsToExport.Batch(batchSize))
             {
                 var interviewIds = interviewBatch.Select(i => i.Id).ToArray();
 
-                var allMultimediaAnswers = this.interviewFactory.GetMultimediaAnswersByQuestionnaire(
-                    settings.Tenant, questionnaire, interviewIds, cancellationToken).Result;
+                var allMultimediaAnswers = await this.interviewFactory.GetMultimediaAnswersByQuestionnaire(
+                    settings.Tenant, questionnaire, interviewIds, cancellationToken);
 
                 cancellationToken.ThrowIfCancellationRequested();
 
@@ -90,6 +94,9 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
                         logger.LogWarning($"[{e.StatusCode}] Cannot download file for {answer.InterviewId} - {answer.Answer}");
                     }
                 }
+
+                interviewsProcessed += interviewIds.Length;
+                progress.Report(interviewsProcessed.PercentOf(interviewsToExport.Count));
             }
         }
     }
