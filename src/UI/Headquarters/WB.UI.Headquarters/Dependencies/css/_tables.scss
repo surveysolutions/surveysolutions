@@ -211,6 +211,14 @@
         }
     }
 }
+.table-striped-odd{
+    tbody tr{
+        background-color: #f8f9f9;
+    }
+    &> tbody > tr.odd{
+        background-color: #edeff0;
+    }
+}
 .table-bordered{
     border: none;
     & > thead, 

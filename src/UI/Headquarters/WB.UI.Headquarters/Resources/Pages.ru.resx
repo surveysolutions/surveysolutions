@@ -988,10 +988,10 @@
   </data>
   <data name="DownloadSupervisorPage_Welcome" xml:space="preserve">
     <value>Добро пожаловать на страницу скачивания приложения Супервизора</value>
-  </data>  
+  </data>
   <data name="DownloadSupervisorPage_PageTitle" xml:space="preserve">
     <value>Скачивание приложения Супервизора</value>
-  </data>  
+  </data>
   <data name="DownloadPage_PageTitle" xml:space="preserve">
     <value>Скачивание приложения Интервьюер</value>
   </data>
@@ -1231,21 +1231,25 @@
     <value>Перепривязан</value>
   </data>
   <data name="UpgradeAssignmentsTitle" xml:space="preserve">
-    <value>Обновление заданий</value></data>
+    <value>Обновление заданий</value>
+  </data>
   <data name="InterviewerProfile_ShowAuditLog" xml:space="preserve">
     <value>Показать действия пользователя</value>
     <comment>Показать действия пользователя</comment>
   </data>
-    <data name="AreaQestion_Length" xml:space="preserve">
+  <data name="AreaQestion_Length" xml:space="preserve">
     <value>Длинна</value>
     <comment>Длинна</comment>
   </data>
-    <data name="AreaQestion_AreaMeter" xml:space="preserve">
+  <data name="AreaQestion_AreaMeter" xml:space="preserve">
     <value>метра(ов)</value>
     <comment>метров</comment>
   </data>
-    <data name="AreaQestion_Points" xml:space="preserve">
+  <data name="AreaQestion_Points" xml:space="preserve">
     <value>Кол-во точек</value>
     <comment>Кол-во точек</comment>
+  </data>
+  <data name="InterviewOverview" xml:space="preserve">
+    <value>Обзор интервью</value>
   </data>
 </root>
