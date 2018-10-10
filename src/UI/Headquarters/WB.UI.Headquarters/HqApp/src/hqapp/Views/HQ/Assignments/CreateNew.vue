@@ -42,7 +42,9 @@
                                 <div class="options-group">
                                     <div class="form-group">
                                         <div class="field answered">
-                                            <input v-model="sizeQuestion.answer" type="text" autocomplete="off" inputmode="numeric" class="field-to-fill"/>
+                                            <input v-model="sizeQuestion.answer" 
+                                                v-validate="'regex:^-?([0-9]+)$|min_value:-1'"
+                                                type="text" autocomplete="off" inputmode="numeric" class="field-to-fill"/>
                                         </div>
                                     </div>
                                   
@@ -50,6 +52,19 @@
                                 
                             </div>
                         </wb-question>
+
+                        <div class="action-container">
+                            <form ref="createForm" :action="config.createNewAssignmentUrl" method="post">
+                                <input type="hidden" name="interviewId" :vaue="config.id" />
+                                <input type="hidden" name="responsibleId" :value="responsibleId"/>
+                                <input type="hidden" name="size" :value="sizeQuestion.answer"/>
+
+                                <button type="submit" @click="create" class="btn btn-success btn-lg">
+                                    {{ $t('Common.Create') }}
+                                </button>
+                            </form>
+                            
+                        </div>
                     </div>
                 </div>
             </div>
@@ -87,24 +102,44 @@ export default {
     },
     computed: {
         entities() {
-            return this.$store.state.takeNew.takeNew.entities
+            return this.$store.state.takeNew.takeNew.entities;
         },
         questionnaireTitle() {
-            return this.$store.state.takeNew.takeNew.interview.questionnaireTitle
+            return this.$store.state.takeNew.takeNew.interview
+                .questionnaireTitle;
         },
         config() {
-            return this.$config.model
+            return this.$config.model;
+        },
+        responsibleId() {
+            return this.newResponsibleId != null
+                ? this.newResponsibleId.key
+                : null;
         }
     },
 
     methods: {
         onResize() {
-            var screenWidth = document.documentElement.clientWidth
-            this.$store.dispatch("screenWidthChanged", screenWidth)
+            var screenWidth = document.documentElement.clientWidth;
+            this.$store.dispatch("screenWidthChanged", screenWidth);
         },
         newResponsibleSelected(newValue) {
             this.newResponsibleId = newValue
-            this.assignToQuestion.isAnswered = newValue != null
+            this.assignToQuestion.isAnswered = this.newResponsibleId != null
+        },
+        async create(ev) {
+            const validationResult = await this.$validator.validateAll()
+           
+            this.sizeQuestion.validity.isValid = validationResult
+            
+            if(this.newResponsibleId == null) {
+                this.assignToQuestion.validity.isValid = false
+            }
+
+            const submitAllowed = validationResult && this.newResponsibleId != null
+            if(!submitAllowed){
+                ev.preventDefault()
+            }
         }
     },
 
@@ -114,28 +149,28 @@ export default {
                 interviewId: window.CONFIG.model.id,
                 review: false
             })
-            .then(() => this.$store.dispatch("loadTakeNew"))
+            .then(() => this.$store.dispatch("loadTakeNew"));
     },
 
     mounted() {
         const self = this;
 
         this.$nextTick(function() {
-            window.addEventListener("resize", self.onResize)
-            self.onResize()
-        })
+            window.addEventListener("resize", self.onResize);
+            self.onResize();
+        });
     },
 
     updated() {
         Vue.nextTick(() => {
-            window.ajustNoticeHeight()
-            window.ajustDetailsPanelHeight()
+            window.ajustNoticeHeight();
+            window.ajustDetailsPanelHeight();
         });
     },
     components: {},
 
     beforeDestroy() {
-        window.removeEventListener("resize", this.onResize)
+        window.removeEventListener("resize", this.onResize);
     }
 };
 </script>
