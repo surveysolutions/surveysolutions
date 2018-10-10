@@ -35,16 +35,16 @@ namespace WB.Services.Export.ExportProcessHandlers
         {
             using (this.GetClient(this.accessToken))
             {
-                var applicationFolder = this.CreateApplicationFolderAsync().Result;
+                var applicationFolder = await this.CreateApplicationFolderAsync();
 
-                string GetInterviewFolder(Guid interviewId) => $"{settings.ArchiveName})/{interviewId.FormatGuid()}";
+                string GetInterviewFolder(Guid interviewId) => $"{settings.ArchiveName}/{interviewId.FormatGuid()}";
 
                 await binaryDataSource.ForEachMultimediaAnswerAsync(settings, async data =>
                 {
                     var interviewFolderPath = await this.CreateFolderAsync(applicationFolder, GetInterviewFolder(data.InterviewId));
                     await this.UploadFileAsync(interviewFolderPath, data.Content, data.Answer);
 
-                }, cancellationToken);
+                }, progress, cancellationToken);
             }
         }
 

@@ -40,10 +40,10 @@
                 title = $"(ver. {q.TemplateVersion}) {q.TemplateName}"
             })));
 
-            var exportFromats = [];
+            var exportFormats = [];
             @foreach (DataExportFormat formatValue in Enum.GetValues(typeof(DataExportFormat)))
             {
-                <text>exportFromats[@((int) formatValue)] = '@Html.ToSafeJavascriptMessage(formatValue.ToString())'</text>
+                <text>exportFormats[@((int) formatValue)] = '@Html.ToSafeJavascriptMessage(formatValue.ToString())'</text>
             }
 
             var statuses = [
@@ -94,7 +94,7 @@
             var model = new Supervisor.VM.ExportData(templates,
                 statuses,
                 $ExportedDataReferencesForQuestionnaireUrl,
-                exportFromats,
+                exportFormats,
                 $DeleteDataExportProcessUrl,
                 $UpdateTabularDataUrl,
                 $ExportToExternalStorageUrl,

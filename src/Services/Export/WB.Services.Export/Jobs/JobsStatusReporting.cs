@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Services.Processing;
 using WB.Services.Export.Storage;
-using WB.Services.Export.Tenant;
 using WB.Services.Export.Utils;
+using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.Jobs
 {
@@ -32,13 +33,15 @@ namespace WB.Services.Export.Jobs
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IExternalFileStorage externalFileStorage;
         private readonly IDataExportFileAccessor exportFileAccessor;
+        private readonly ILogger<JobsStatusReporting> logger;
 
         public JobsStatusReporting(IDataExportProcessesService dataExportProcessesService,
             IQuestionnaireExportStructureFactory exportStructureFactory,
             IFilebasedExportedDataAccessor fileBasedExportedDataAccessor,
             IFileSystemAccessor fileSystemAccessor,
             IExternalFileStorage externalFileStorage,
-            IDataExportFileAccessor exportFileAccessor)
+            IDataExportFileAccessor exportFileAccessor,
+            ILogger<JobsStatusReporting> logger)
         {
             this.dataExportProcessesService = dataExportProcessesService;
             this.exportStructureFactory = exportStructureFactory;
@@ -46,9 +49,30 @@ namespace WB.Services.Export.Jobs
             this.fileSystemAccessor = fileSystemAccessor;
             this.externalFileStorage = externalFileStorage;
             this.exportFileAccessor = exportFileAccessor;
+            this.logger = logger;
         }
 
-        public async Task<DataExportArchive> DownloadArchive(TenantInfo tenant, string archiveName,
+        public async Task ClearAllExportArchives(TenantInfo tenant)
+        {
+            if (this.externalFileStorage.IsEnabled())
+            {
+                var externalStoragePath = this.exportFileAccessor.GetExternalStoragePath(tenant, string.Empty);
+                var items = await this.externalFileStorage.ListAsync(externalStoragePath);
+                logger.LogInformation("Deleting export archives for tenant: " + tenant + $" - there is {items.Count} files");
+
+                foreach (var file in items)
+                {
+                    await this.externalFileStorage.RemoveAsync(file.Path);
+                }
+
+                return;
+            }
+
+            var directory = this.fileBasedExportedDataAccessor.GetExportDirectory(tenant);
+            Directory.Delete(directory);
+        }
+
+        public async Task<DataExportArchive> DownloadArchiveAsync(TenantInfo tenant, string archiveName,
             DataExportFormat dataExportFormat, InterviewStatus? status,
             DateTime? from, DateTime? to)
         {
@@ -82,14 +106,14 @@ namespace WB.Services.Export.Jobs
             return null;
         }
 
-        public async Task<DataExportStatusView> GetDataExportStatusForQuestionnaire(
+        public async Task<DataExportStatusView> GetDataExportStatusForQuestionnaireAsync(
             TenantInfo tenant,
             QuestionnaireId questionnaireIdentity,
             string archiveFileName,
             InterviewStatus? status = null, DateTime? fromDate = null, DateTime? toDate = null)
         {
-            var questionnaire =
-                this.exportStructureFactory.GetQuestionnaireExportStructure(tenant, questionnaireIdentity);
+            var questionnaire = await
+                this.exportStructureFactory.GetQuestionnaireExportStructureAsync(tenant, questionnaireIdentity);
 
             if (questionnaire == null)
                 return null;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using WB.Services.Export.CsvExport.Implementation;
@@ -16,7 +17,7 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation
     internal class TabularFormatExportServiceTests
     {
         [Test]
-        public void When_generating_description_file_Then_should_generate_it_with_data_about_questionnaire_and_files()
+        public async Task When_generating_description_file_Then_should_generate_it_with_data_about_questionnaire_and_files()
         {
             // arrange
             string description = null;
@@ -51,7 +52,7 @@ namespace WB.Services.Export.Tests.CsvExport.Implementation
                 fileSystemAccessor: fileSystemAccessor.Object);
 
             // act
-            exportService.GenerateDescriptionFile(Create.Tenant(), new QuestionnaireId(questionnaireExportStructure.QuestionnaireId), @"x:\", ".xlsx");
+            await exportService.GenerateDescriptionFileAsync(Create.Tenant(), new QuestionnaireId(questionnaireExportStructure.QuestionnaireId), @"x:\", ".xlsx");
 
             // assert
             Assert.That(description, Is.Not.Empty);
