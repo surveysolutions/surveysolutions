@@ -1,40 +1,38 @@
 <template>
-    <div>
-        <OverviewItem v-for="item in items" :key="item.id" :item="item" @mount="registerItemToStick" />
+    <ModalFrame ref="modal" id="overview">
+        <div slot="title">
+            <h3>{{$t("Pages.InterviewOverview")}}</h3>
+        </div>
+
+        <OverviewItem v-for="item in items" :key="item.id" :item="item" @showAdditionalInfo="onShowAdditionalInfo" />
 
         <infinite-loading ref="loader" v-if="overview.total > 0 && items.length > 0" @infinite="infiniteHandler" :distance="1000">
             <span slot="no-more"></span>
             <span slot="no-results"></span>
         </infinite-loading>
-    </div>
+
+        <div slot="actions">
+            <button type="button" class="btn btn-link" @click="hide">{{ $t("Pages.CloseLabel") }}</button>
+        </div>
+    </ModalFrame>
 </template>
 
 <script>
-
 import InfiniteLoading from "vue-infinite-loading";
 import OverviewItem from "./components/OverviewItem";
+import vue from "vue";
 
 export default {
     components: { InfiniteLoading, OverviewItem },
-
-    data() {
+    data: function() {
         return {
             loaded: 100,
             sticked: [],
             scroll: 0,
-            scrollable: null
+            scrollable: null,
+            itemWithAdditionalInfo: null
         };
     },
-
-    mounted() {
-        this.$store.dispatch("loadOverviewData");
-        document.addEventListener("scroll", this.handleScroll);
-    },
-
-    destroyed() {
-        document.removeEventListener("scroll", this.handleScroll);
-    },
-
     computed: {
         overview() {
             return this.$store.state.review.overview;
@@ -42,22 +40,8 @@ export default {
 
         items() {
             return _.slice(this.overview.entities, 0, this.loaded);
-        },
-
-        currentSection() {
-            if (this.sticked.length == 0) return null;
-
-            const index = _.sortedIndexBy(
-                this.sticked,
-                { top: this.scroll + this.breadcrumbsOffset() },
-                it => it.top
-            );
-
-            const item = this.sticked[index > 0 ? index - 1 : index];
-            return item.item;
-        }      
+        }       
     },
-
     watch: {
         "overview.isLoaded"(to, from) {
             if (from == true && to == false) {
@@ -65,13 +49,20 @@ export default {
             }
         }
     },
-
     methods: {
-        breadcrumbsOffset() {
-            const el = this.$refs.breadcrumb;
-            if (el == null) return 0;
+        hide() {
+            document.removeEventListener("scroll", this.handleScroll);
+            $(this.$refs.modal).modal("hide");
+        },
 
-            return el.offsetTop + el.clientHeight;
+        async show() {
+            this.$store.dispatch("loadOverviewData");
+            document.addEventListener("scroll", this.handleScroll);
+
+            this.$refs.modal.modal({
+                backdrop: 'static',
+                keyboard: false
+            });
         },
 
         infiniteHandler($state) {
@@ -89,15 +80,14 @@ export default {
             this.scroll = window.scrollY;
         },
 
-        registerItemToStick(arg) {
-            const item = arg.item;
-            const top = arg.el.offsetTop;
-
-            const index = _.sortedIndexBy(this.sticked, { top }, it => it.top);
-            this.sticked.splice(index, 0, { top, item });
+        onShowAdditionalInfo(itemToShow)
+        {
+            if (this.itemWithAdditionalInfo)
+            {
+                this.itemWithAdditionalInfo.hideAdditionalDetails();
+            }
+            this.itemWithAdditionalInfo = itemToShow;
         }
     }
 };
-</script>
-
-
+</script> 
