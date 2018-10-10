@@ -94,3 +94,4 @@ Elmah/
 /src/UI/Designer/WB.UI.Designer/questionnaire/build/rev-manifest.json
 .export/
 /src/Services/Export/WB.Services.Export.Host/logs
+.bin
