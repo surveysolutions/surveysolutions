@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.Caching.Memory;
 using Moq;
 using WB.Services.Export.CsvExport.Exporters;
-using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Interview.Entities;
 using WB.Services.Export.Questionnaire;
@@ -18,7 +18,7 @@ namespace WB.Services.Export.Tests.Questionnaire.ExportStructureFactoryTests
             IQuestionnaireStorage questionnaireStorage = null)
         {
             return new QuestionnaireExportStructureFactory(
-                Mock.Of<ICache>(),
+                new MemoryCache(new MemoryCacheOptions()), 
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>());
         }
 
@@ -28,7 +28,7 @@ namespace WB.Services.Export.Tests.Questionnaire.ExportStructureFactoryTests
             {
                 Children = new List<IQuestionnaireEntity>
                 {
-                    new Group()
+                    new Group
                     {
                         Title = "Chapter",
                         PublicKey = Guid.Parse("FFF000AAA111EE2DD2EE111AAA000FFF"),

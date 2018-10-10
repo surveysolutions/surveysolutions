@@ -148,7 +148,7 @@ namespace WB.UI.Headquarters.API
             try
             {
                 await this.exportServiceApi.DeleteProcess(id);
-                return Request.CreateResponse(HttpStatusCode.OK);
+                return Request.CreateResponse(true);
             }
             catch (Exception)
             {

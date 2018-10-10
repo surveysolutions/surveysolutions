@@ -500,7 +500,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts
 
         private void Merge(DesignerMembershipUser user, IMembershipAccount account)
         {
-            string userNameByEmail = this.AccountRepository.GetUserNameByEmail(user.Email);
+            string userNameByEmail = this.AccountRepository.GetByNameOrEmail(user.Email)?.UserName;
 
             if (this.AccountRepository.IsUniqueEmailRequired && !string.IsNullOrEmpty(userNameByEmail) && userNameByEmail != account.UserName)
             {

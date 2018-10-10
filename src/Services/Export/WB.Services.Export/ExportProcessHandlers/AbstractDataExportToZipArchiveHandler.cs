@@ -44,7 +44,7 @@ namespace WB.Services.Export.ExportProcessHandlers
                 fileSystemAccessor.DeleteFile(archiveName);
                 fileSystemAccessor.MoveFile(tempArchivePath, archiveName);
                 
-                await this.dataExportProcessesService.ChangeStatusTypeAsync(processArgs.Tenant, processArgs.NaturalId, DataExportStatus.Compressing);
+                this.dataExportProcessesService.ChangeStatusType(processArgs.ProcessId, DataExportStatus.Compressing);
                 exportProgress.Report(0);
 
                 await this.dataExportFileAccessor.PublishArchiveToExternalStorageAsync(processArgs.Tenant, archiveName, exportProgress);
@@ -57,6 +57,7 @@ namespace WB.Services.Export.ExportProcessHandlers
             }
         }
 
-        protected abstract void ExportDataIntoArchive(IZipArchive archive, ExportSettings exportSettings, IProgress<int> exportProgress, CancellationToken cancellationToken);
+        protected abstract Task ExportDataIntoArchive(IZipArchive archive, ExportSettings exportSettings,
+            IProgress<int> exportProgress, CancellationToken cancellationToken);
     }
 }
