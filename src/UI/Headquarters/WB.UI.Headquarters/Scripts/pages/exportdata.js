@@ -122,15 +122,22 @@
         if (updateQueryString && self.initiated) {
             if (window.history != null) {
                 var template = self.selectedTemplate();
-                var queryArgs = {
-                    template: template.id,
-                    version: template.version,
-                    status: self.selectedStatus().status
-                }
+                if (template != null) {
+                    var queryArgs = {
+                        template: template.id,
+                        version: template.version,
+                        status: self.selectedStatus().status
+                    };
 
-                var search = $.param(queryArgs);
-                var newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?' + search;
-                window.history.pushState(queryArgs, window.title, newUrl);
+                    var search = $.param(queryArgs);
+                    var newUrl = window.location.protocol +
+                        "//" +
+                        window.location.host +
+                        window.location.pathname +
+                        '?' +
+                        search;
+                    window.history.pushState(queryArgs, window.title, newUrl);
+                }
             }
         }
 
@@ -143,7 +150,6 @@
 
         self.sendWebRequest(self.Url + "?" + self.getRequestQuery(), {}, function (data) {
             ko.mapping.fromJS(data, self.mappingOptions, self);
-
         });
     };
 
