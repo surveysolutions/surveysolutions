@@ -1,11 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2041
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "SurveySolutionsBootstrap", "SurveySolutionsBootstrap.wixproj", "{AB07CF13-D4CB-471A-81FD-AB9FA0B2A05C}"
+Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "SurveySolutionsBootstrap", "SurveySolutionsBootstrap\SurveySolutionsBootstrap.wixproj", "{AB07CF13-D4CB-471A-81FD-AB9FA0B2A05C}"
 EndProject
-Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "SurveySolutions", "..\SurveySolutionsProduct\SurveySolutions.wixproj", "{C575970B-D09A-4C43-95B8-0867A617DDB8}"
+Project("{930C7802-8A8C-48F9-8165-68863BCCD9DD}") = "SurveySolutions", "SurveySolutionsProduct\SurveySolutions.wixproj", "{C575970B-D09A-4C43-95B8-0867A617DDB8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -34,5 +34,8 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {92318F29-00C4-42C1-AFAF-80CE8ED4E9DA}
 	EndGlobalSection
 EndGlobal
