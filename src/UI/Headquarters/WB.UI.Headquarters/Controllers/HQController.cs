@@ -165,7 +165,8 @@ namespace WB.UI.Headquarters.Controllers
             return this.View(new
             {
                 id = id,
-                responsiblesUrl = Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "ResponsiblesCombobox"})
+                responsiblesUrl = Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "ResponsiblesCombobox"}),
+                createNewAssignmentUrl = Url.RouteUrl(new {controller = "Assignments", action = "Create", id = id})
             });
         }
         
