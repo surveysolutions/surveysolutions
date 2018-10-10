@@ -21,7 +21,7 @@
             Variable="OldProductInstalled" 
             Result="state"/>
 
-        <bal:Condition Message="Please uninstsall previous version of Survey Solutions.">
+        <bal:Condition Message="Please uninstall previous version of Survey Solutions.">
             (OldProductInstalled = 2)
         </bal:Condition>
 
