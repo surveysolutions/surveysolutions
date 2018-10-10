@@ -392,7 +392,30 @@
                       ElementPath="//configuration/appSettings/add[\[]@key='WebInterviewEnabled'[\]]"
                       Name="value"
                       Value="true"
-                      Sequence='17'/>
+                      Sequence='17'/>       
+          
+        <!--<add key="Export.ServiceUrl" value="http://localhost:5000" />-->
+        <util:XmlFile Id="CreateElementExportServiceUrl"
+                      File="[CONFIGFOLDER]\Headquarters.Web.config"
+                      Action="createElement"
+                      ElementPath="//configuration/appSettings"
+                      Name="add" Sequence='18'/>
+
+        <util:XmlFile Id="AddKeyElementExportServiceUrl"
+                      File="[CONFIGFOLDER]\Headquarters.Web.config"
+                      Action="setValue"
+                      ElementPath="//configuration/appSettings/add[\[]not(@key)[\]]"
+                      Name="key"
+                      Value="Export.ServiceUrl"
+                      Sequence="19"/>
+
+        <util:XmlFile Id="UpdateValueElementExportServiceUrl"
+                      File="[CONFIGFOLDER]\Headquarters.Web.config"
+                      Action="setValue"
+                      ElementPath="//configuration/appSettings/add[\[]@key='Export.ServiceUrl'[\]]"
+                      Name="value"
+                      Value="http://localhost:5000"
+                      Sequence='20'/>
       </Component>
     </ComponentGroup>
 
