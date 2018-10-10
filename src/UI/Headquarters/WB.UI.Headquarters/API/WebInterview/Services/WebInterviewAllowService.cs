@@ -50,13 +50,15 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
 
         public void CheckWebInterviewAccessPermissions(string interviewId)
         {
-            if(this.eventBusSettings.IgnoredAggregateRoots.Contains(interviewId)) 
-                return;
+            if(this.eventBusSettings.IgnoredAggregateRoots.Contains(interviewId))
+                if (!this.authorizedUser.IsHeadquarter && !this.authorizedUser.IsAdministrator)
+                {
+                    throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewNotFound, Enumerator.Native.Resources.WebInterview.Error_NotFound);
+                }
 
             Guid interviewGuid = Guid.Parse(interviewId);
             var interview = transactionManagerProvider.GetTransactionManager()
-                .ExecuteInQueryTransaction(
-                    () => interviewSummaryStorage.GetById(interviewGuid));
+                .ExecuteInQueryTransaction(() => interviewSummaryStorage.GetById(interviewGuid));
 
             if (interview == null)
                 throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewNotFound, Enumerator.Native.Resources.WebInterview.Error_NotFound);
