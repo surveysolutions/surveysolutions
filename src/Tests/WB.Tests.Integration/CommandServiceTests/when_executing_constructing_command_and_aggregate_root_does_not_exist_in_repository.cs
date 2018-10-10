@@ -42,13 +42,6 @@ namespace WB.Tests.Integration.CommandServiceTests
             var eventBus = Mock.Of<IEventBus>();
             var eventBusMock = Mock.Get(eventBus);
 
-            eventBusMock.Setup(bus => bus.CommitUncommittedEvents(Moq.It.IsAny<IEventSourcedAggregateRoot>(), Moq.It.IsAny<string>()))
-                        .Returns((IEventSourcedAggregateRoot aggregate, string origin) =>
-                        {
-                            constructedAggregateId = aggregate.EventSourceId;
-                            return IntegrationCreate.CommittedEventStream(aggregate.EventSourceId, aggregate.GetUnCommittedChanges());
-                        });
-
             eventBusMock
                 .Setup(bus => bus.PublishCommittedEvents(Moq.It.IsAny<IEnumerable<CommittedEvent>>()))
                 .Callback<IEnumerable<CommittedEvent>>(events =>
@@ -84,6 +77,8 @@ namespace WB.Tests.Integration.CommandServiceTests
                             events.Enqueue(committedEvent);
                             result.Add(committedEvent);
                         }
+
+                        constructedAggregateId = eventStream.SourceId;
 
                         return new CommittedEventStream(eventStream.SourceId, result);
                     }
