@@ -3,6 +3,7 @@
      xmlns:netfx="http://schemas.microsoft.com/wix/NetFxExtension"
      xmlns:iis="http://schemas.microsoft.com/wix/IIsExtension"
      xmlns:util="http://schemas.microsoft.com/wix/UtilExtension"
+     xmlns:PanelSW="http://schemas.panel-sw.co.il/wix/WixExtension"
      xmlns:localization="http://schemas.microsoft.com/wix/2006/localization">
 
   <Product Id="*"
@@ -131,12 +132,25 @@
 
     <Property Id="IISInstallCommandProperty" Value="/Online /Enable-Feature /All /FeatureName:IIS-WebServerRole /FeatureName:IIS-ASPNET45 /FeatureName:IIS-ManagementConsole /FeatureName:IIS-ISAPIFilter /FeatureName:IIS-NetFxExtensibility45 /FeatureName:NetFx4Extended-ASPNET45 /FeatureName:IIS-WebSockets /FeatureName:IIS-WindowsAuthentication /FeatureName:IIS-ManagementService /FeatureName:IIS-HttpCompressionDynamic"/>
 
+    <!-- MODIFY CONFIGURATIONS -->
+
+    <PanelSW:FileRegex  Id="updateSettingsRegex" FilePath="[INSTALLFOLDER]Site\.bin\Export\appsettings.json"
+        Regex="(\{FROM_INSTALLER\})" 
+        Replacement="Server=[CONNSERVER];Port=[CONNPORT];User Id=[CONNUSERNAME];Password=[CONNPASSWORD];Database=SurveySolutions;" 
+        IgnoreCase="yes" Encoding="AutoDetect">
+        <![CDATA[Not Installed]]>
+    </PanelSW:FileRegex>
+
+    <Property Id="ModifyExportSettings" Value="INSTALLFOLDER=[INSTALLFOLDER];Server=[CONNSERVER];Port=[CONNPORT];User Id=[CONNUSERNAME];Password=[CONNPASSWORD];Database=SurveySolutions;" ></Property>
+      
+
     <!-- Use DISM to setup IIS (see also http://support.microsoft.com/kb/2736284) -->
     <!-- Build path to dism.exe (full path is important, just calling dism.exe without path will fail) -->
     <CustomAction Id="InstallIISSetProperty"
                   Property="InstallIIS"
                   Execute="immediate"
                   Value="&quot;[System64Folder]dism.exe&quot; [IISInstallCommandProperty]" />
+
     <!-- Call dism.exe quietly (without showing command prompt).
                  (see also http://wixtoolset.org/documentation/manual/v3/customactions/qtexec.html) -->
     <CustomAction Id="InstallIIS"
