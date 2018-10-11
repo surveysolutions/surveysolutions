@@ -60,6 +60,9 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 title.Init(interviewId, invalidEntity);
 
                 entityWithErrorsViewModel.Init(navigationIdentity, title.PlainText, navigationState);
+
+                title.Dispose();//remove registration from bus
+
                 entitiesWithErrors.Add(entityWithErrorsViewModel);
             }
             return entitiesWithErrors;
