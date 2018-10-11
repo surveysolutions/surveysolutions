@@ -412,4 +412,7 @@ Oбратитесь в тех. поддержку за помощью</value>
   <data name="Interview_Overview_NotAnswered" xml:space="preserve">
     <value>Не отвечен</value>
   </data>
+  <data name="Interview_Overview_AdditionalInformation" xml:space="preserve">
+    <value>Дополнительная информация о вопросе</value>
+  </data>
 </root>

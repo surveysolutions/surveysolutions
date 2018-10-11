@@ -41,8 +41,8 @@ export default {
             $(this.$refs.modal).modal("hide");
         },
 
-        modal(){
-            $(this.$refs.modal).appendTo("body").modal();
+        modal(params){
+            $(this.$refs.modal).appendTo("body").modal(params || {});
         }
     }
     

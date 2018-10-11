@@ -7,5 +7,7 @@
 
         void SetEncryptionEnforcement(bool value);
         void RegeneratePassword();
+        string ExportServiceBaseUrl { get; }
+        string ApiKey { get; }
     }
 }
