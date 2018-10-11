@@ -121,6 +121,14 @@ namespace WB.UI.Headquarters.API.WebInterview
             };
         }
 
+        public OverviewItemAdditionalInfo OverviewItemAdditionalInfo(string id)
+        {
+            var statefulInterview = this.GetCallerInterview();
+            var currentUserId = this.authorizedUser.Id;
+            var additionalInfo = this.overviewService.GetOverviewItemAdditionalInfo(statefulInterview, id, currentUserId);
+            return additionalInfo;
+        }
+
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @filters.js")]
         public List<CommentedStatusHistoryView> GetStatusesHistory()
         {

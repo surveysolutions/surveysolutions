@@ -9,14 +9,12 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Properties;
 using WB.Core.SharedKernels.Enumerator.Services;
-using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
     public class SendTabletInformationViewModel : MvxNotifyPropertyChanged
     {
         private readonly IBackupRestoreService backupRestoreService;
-        private readonly ISynchronizationService synchronizationService;
         private readonly IUserInteractionService userInteractionService;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly ILogger logger;
@@ -31,13 +29,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         public SendTabletInformationViewModel(
             IBackupRestoreService backupRestoreService,
-            ISynchronizationService synchronizationService,
             ILogger logger, 
             IUserInteractionService userInteractionService,
             IFileSystemAccessor fileSystemAccessor)
         {
             this.backupRestoreService = backupRestoreService;
-            this.synchronizationService = synchronizationService;
             this.logger = logger;
             this.userInteractionService = userInteractionService;
             this.fileSystemAccessor = fileSystemAccessor;

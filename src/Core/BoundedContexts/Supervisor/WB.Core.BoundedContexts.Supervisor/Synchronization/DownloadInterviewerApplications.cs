@@ -21,7 +21,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
 {
     public class DownloadInterviewerApplications : SynchronizationStep
     {
-        private readonly ISupervisorSynchronizationService synchronizationService;
+        private readonly ISupervisorSynchronizationService supervisorSynchronizationService;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IPermissionsService permissions;
         private readonly ISupervisorSettings supervisorSettings;
@@ -34,7 +34,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
             ISupervisorSettings supervisorSettings) :
             base(sortOrder, synchronizationService, logger)
         {
-            this.synchronizationService = synchronizationService;
+            this.supervisorSynchronizationService = synchronizationService;
             this.fileSystemAccessor = fileSystemAccessor;
             this.permissions = permissions;
             this.supervisorSettings = supervisorSettings;
@@ -44,7 +44,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
         {
             if (!this.supervisorSettings.DownloadUpdatesForInterviewerApp) return;
 
-            var latestVersionOfSupervisorApp = await this.synchronizationService.GetLatestApplicationVersionAsync(Context.CancellationToken);
+            var latestVersionOfSupervisorApp = await this.supervisorSynchronizationService.GetLatestApplicationVersionAsync(Context.CancellationToken);
             if (latestVersionOfSupervisorApp != this.supervisorSettings.GetApplicationVersionCode()) return;
 
             Context.Progress.Report(new SyncProgressInfo
@@ -100,7 +100,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
 
                 if (!this.fileSystemAccessor.IsFileExists(interviewerAppFilePath))
                 {
-                    var interviewerApk = await this.synchronizationService.GetInterviewerApplicationAsync(Context.CancellationToken,
+                    var interviewerApk = await this.supervisorSynchronizationService.GetInterviewerApplicationAsync(Context.CancellationToken,
                         new Progress<TransferProgress>(downloadProgress => { UpdateProgress(downloadProgress, ref sw); }));
 
                     if (interviewerApk != null)
@@ -111,7 +111,7 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
 
                 if (!this.fileSystemAccessor.IsFileExists(interviewerWithMapsAppFilePath))
                 {
-                    var interviewerWithMapsApk = await this.synchronizationService.GetInterviewerApplicationWithMapsAsync(Context.CancellationToken,
+                    var interviewerWithMapsApk = await this.supervisorSynchronizationService.GetInterviewerApplicationWithMapsAsync(Context.CancellationToken,
                             new Progress<TransferProgress>(downloadProgress => { UpdateProgress(downloadProgress, ref sw); }));
 
                     if (interviewerWithMapsApk != null)

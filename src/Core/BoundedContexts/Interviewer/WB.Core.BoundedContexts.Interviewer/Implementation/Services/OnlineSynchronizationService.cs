@@ -2,8 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using MvvmCross;
-using WB.Core.BoundedContexts.Interviewer.Properties;
 using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -14,18 +12,17 @@ using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
-using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
-    public class SynchronizationService : EnumeratorSynchronizationService, IInterviewerSynchronizationService
+    public class OnlineSynchronizationService : EnumeratorSynchronizationService, IOnlineSynchronizationService
     {
         protected override string ApiVersion => "v2";
         protected override string ApiUrl => "api/interviewer/";
 
         protected override string InterviewsController => string.Concat(ApiUrl, "v3", "/interviews");
 
-        public SynchronizationService(IPrincipal principal, IRestService restService,
+        public OnlineSynchronizationService(IPrincipal principal, IRestService restService,
             IInterviewerSettings interviewerSettings, IInterviewerSyncProtocolVersionProvider syncProtocolVersionProvider,
             IFileSystemAccessor fileSystemAccessor, ICheckVersionUriProvider checkVersionUriProvider, ILogger logger) :
             base(principal, restService, interviewerSettings, syncProtocolVersionProvider, fileSystemAccessor,
