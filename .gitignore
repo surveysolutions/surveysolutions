@@ -95,3 +95,4 @@ Elmah/
 .export/
 /src/Services/Export/WB.Services.Export.Host/logs
 .bin
+/src/Services/Export/WB.Services.Export.Host/pid
