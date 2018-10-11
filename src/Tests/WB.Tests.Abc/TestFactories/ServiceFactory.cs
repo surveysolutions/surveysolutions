@@ -275,7 +275,7 @@ namespace WB.Tests.Abc.TestFactories
 
         public TeamViewFactory TeamViewFactory(
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader = null)
-            => new TeamViewFactory(interviewSummaryReader, Mock.Of<IUserRepository>(), Mock.Of<ISessionProvider>());
+            => new TeamViewFactory(interviewSummaryReader, Mock.Of<IUserRepository>(), Mock.Of<IUnitOfWork>());
 
         public ITopologicalSorter<T> TopologicalSorter<T>()
             => new TopologicalSorter<T>();
