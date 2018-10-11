@@ -28,16 +28,16 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
 
         protected override DataExportFormat Format => DataExportFormat.Binary;
 
-        protected override void ExportDataIntoArchive(IZipArchive archive, ExportSettings settings,
+        protected override async Task ExportDataIntoArchive(IZipArchive archive, ExportSettings settings,
             IProgress<int> progress,
             CancellationToken cancellationToken)
         {
-            binaryDataSource.ForEachMultimediaAnswerAsync(settings,  data =>
+            await binaryDataSource.ForEachMultimediaAnswerAsync(settings,  data =>
             {
                 var path = this.fileSystemAccessor.CombinePath(data.InterviewId.FormatGuid(), data.Answer);
                 archive.CreateEntry(path, data.Content);
                 return Task.CompletedTask;
-            }, cancellationToken).Wait();
+            }, progress, cancellationToken);
         }
     }
 }

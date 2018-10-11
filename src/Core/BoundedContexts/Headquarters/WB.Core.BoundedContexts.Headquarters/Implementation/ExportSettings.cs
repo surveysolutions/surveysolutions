@@ -1,6 +1,4 @@
-﻿using System;
-using System.Configuration;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
+﻿using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.Infrastructure.PlainStorage;
 

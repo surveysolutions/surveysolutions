@@ -5,7 +5,6 @@ using Microsoft.Extensions.Options;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Services.Processing;
-using WB.Services.Export.Tenant;
 
 namespace WB.Services.Export.ExportProcessHandlers
 {
@@ -33,13 +32,10 @@ namespace WB.Services.Export.ExportProcessHandlers
 
             cancellationToken.ThrowIfCancellationRequested();
 
-            await this.dataExportProcessesService.UpdateDataExportProgressAsync(
-                processArgs.Tenant, processArgs.NaturalId, 0);
+            this.dataExportProcessesService.UpdateDataExportProgress(processArgs.ProcessId, 0);
 
-            await this.dataExportProcessesService.ChangeStatusTypeAsync(
-                processArgs.Tenant,
-                processArgs.NaturalId,
-                DataExportStatus.Compressing);
+            this.dataExportProcessesService.ChangeStatusType(
+                processArgs.ProcessId, DataExportStatus.Compressing);
 
             this.dataExportFileAccessor.RecreateExportArchive(this.exportTempDirectoryPath, archiveName,
                 processArgs.ArchivePassword, exportProgress);

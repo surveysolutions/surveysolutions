@@ -40,17 +40,20 @@
             </div>
             <div class="questionnaire-details-actions clearfix" >
                 <SwitchLanguage v-if="canChangeLanguage" :disabled="changeLanguageDisabled"/>
-                <button type="button" class="btn btn-success" v-if="showApproveButton" @click="approve" :disabled="changeStatusDisabled">
-                    {{$t("Pages.ApproveRejectPartialView_ApproveAction")}}
-                </button>
-                <button type="button" class="btn btn-default btn-lg reject" v-if="showRejectButton" @click="reject" :disabled="changeStatusDisabled">
-                    {{$t("Pages.ApproveRejectPartialView_RejectAction")}}
-                </button>
-                <button type="button" class="btn btn-default btn-lg reject" v-if="showUnapproveButton" @click="reject">
-                    {{$t("Pages.ApproveRejectPartialView_UnapproveAction")}}
-                </button>
+                <div class="buttons-container">
+                  <button type="button" class="btn btn-success" v-if="showApproveButton" @click="approve" :disabled="changeStatusDisabled">
+                      {{$t("Pages.ApproveRejectPartialView_ApproveAction")}}
+                  </button>
+                  <button type="button" class="btn btn-default btn-lg reject" v-if="showRejectButton" @click="reject" :disabled="changeStatusDisabled">
+                      {{$t("Pages.ApproveRejectPartialView_RejectAction")}}
+                  </button>
+                  <button type="button" class="btn btn-default btn-lg reject" v-if="showUnapproveButton" @click="reject">
+                      {{$t("Pages.ApproveRejectPartialView_UnapproveAction")}}
+                  </button>
+                </div>
             </div>
         </div>
+        <OverviewModal ref="overview" id="overview" slot="modals" class="overviewModal" />
         <StatusesHistory ref="statusesHistory" id="statusesHistory" slot="modals" class="statusHistoryModal" />
         <Confirm ref="confirmApprove" id="confirmApprove" slot="modals" :title="$t('Pages.ApproveRejectPartialView_ApproveLabel')">
             <label for="txtApproveComment">
@@ -83,6 +86,7 @@
 <script>
 import SwitchLanguage from "./SwitchLanguage";
 import StatusesHistory from "./StatusesHistory";
+import OverviewModal from "./OverviewModal";
 import Vue from "vue";
 
 export default {
@@ -125,7 +129,8 @@ export default {
       this.$refs.statusesHistory.show();
     },
     showOverview() {
-        this.$router.push({name: "Overview"})
+        //this.$router.push({name: "Overview"})
+        this.$refs.overview.show();
     }
   },
   
@@ -179,7 +184,8 @@ export default {
 
   components: {
     SwitchLanguage,
-    StatusesHistory
+    StatusesHistory,
+    OverviewModal
   }
 };
 </script>

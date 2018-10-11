@@ -1,0 +1,1448 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:html="http://www.w3.org/1999/xhtml"
+            xmlns:wix="http://schemas.microsoft.com/wix/2006/wi"
+             xmlns:xs="http://www.w3.org/2001/XMLSchema"
+            xmlns:xse="http://schemas.microsoft.com/wix/2005/XmlSchemaExtension"
+      targetNamespace="http://schemas.panel-sw.co.il/wix/WixExtension"
+                xmlns="http://schemas.panel-sw.co.il/wix/WixExtension">
+  <xs:annotation>
+    <xs:documentation>
+      Windows Installer XML PanelSw Extension
+
+      This extension significantly simplifies various system tasks that aren't natively supported by Windows installer.
+    </xs:documentation>
+  </xs:annotation>
+  <xs:import namespace="http://schemas.microsoft.com/wix/2006/wi" />
+
+  <xs:element name="DiskSpace">
+    <xs:annotation>
+      <xs:appinfo>
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="Directory" />
+      </xs:appinfo>
+      <xs:documentation>
+        <![CDATA[Calculate disk free space for a directory. The free space is set to property '*DirectoryId*_DISK_FREE_SPACE'.
+        By default, the action executes after CostFinalize. You can author an Error custom action to execute after custom action 'DiskSpace' to condition install on available space.
+        Note that, the action does not reserve space for costing. Directories in the same drive are expected to return the same value.
+        The directory must exist at the time of the check, so it is recommended to use pre-existing folders such as ProgramFiles64Folder.
+        ]]>
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>  
+  
+  <xs:element name="CertificateHashSearch">
+    <xs:annotation>
+      <xs:appinfo>
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="Property" />
+      </xs:appinfo>
+      <xs:documentation>
+        <![CDATA[Find a certificate hash in local machine MY store. Either CertName or both Issuer and SerialNumber should be specified]]>
+      </xs:documentation>
+    </xs:annotation>
+
+    <xs:complexType>
+      <xs:attribute name="CertName" type="xs:string">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Certificate subject name. The field is formatted.]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="Issuer" type="xs:string">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Certificate issuer name in binary format as returned by RegistrySearch. The field is formatted.]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="SerialNumber" type="xs:string">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Certificate serial number in binary format as returned by RegistrySearch. The field is formatted.]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="Evaluate">
+    <xs:annotation>
+      <xs:appinfo>
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="Property" />
+      </xs:appinfo>
+      <xs:documentation>
+        <![CDATA[Evaluates mathematical expressions using ExprTk library.]]>
+      </xs:documentation>
+    </xs:annotation>
+
+    <xs:complexType>
+      <xs:attribute name="Expression" use="required" type="xs:string">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Expression to evaluate. The field is formatted.]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="Order" use="optional" type="xs:int" default="0">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Order of execution, defaults to 0.]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="SetPropertyFromPipe">
+    <xs:annotation>
+      <xs:appinfo>
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="Product" />
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="Module" />
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="Fragment" />
+      </xs:appinfo>
+      <xs:documentation>
+        <![CDATA[Reads property values from a pipe. Property values are send to a pipe in a Protobuf message. Proto file is .\ProtoCaLib\setPropertyFromPipeDetails.proto, included in the Nuget package.]]>
+      </xs:documentation>
+    </xs:annotation>
+
+    <xs:complexType>
+      <xs:attribute name="PipeName" use="required" type="xs:string">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Formatted pipe name. If empty, pipe will not be read from.]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="Timeout" use="optional" type="xs:int" default="0">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Timeout in seconds. Value of zero, the default, means wait indefinitely.]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="AlwaysOverwriteFile">
+    <xs:annotation>
+      <xs:appinfo>
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="File" />
+      </xs:appinfo>
+      <xs:documentation>
+        <![CDATA[Sets the highest possible version on a file row (65535.65535.65535.65535) to ensure it overwrites existing file]]>
+      </xs:documentation>
+    </xs:annotation>
+  </xs:element>
+
+  <xs:element name="CreateSelfSignCertificate">
+    <xs:annotation>
+      <xs:appinfo>
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="Component" />
+      </xs:appinfo>
+      <xs:documentation>
+        <![CDATA[Create a self-signed certificate when parent component is installed]]>
+      </xs:documentation>
+    </xs:annotation>
+
+    <xs:complexType>
+      <xs:attribute name="Id" use="required" type="xs:string">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Property name in which the path of the newly created PFX file will be saved.]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="Password" use="optional" type="xs:string">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Formatted PFX password.]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="X500" use="required" type="xs:string">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Formatted X500 string of the certificate.]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="SubjectAltName" use="optional" type="xs:string">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Formatted 'Subject Alternative Name' for the certificate. Single SAN is supported.]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="Expiry" use="required" type="xs:int">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Certificate expiry in days from install.]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="DeleteOnCommit" use="optional" type="YesNoType" default="yes">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Whether or not the certificate file will be deleted on commit. Defaults to 'yes']]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="TopShelf">
+    <xs:annotation>
+      <xs:appinfo>
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="File" />
+      </xs:appinfo>
+      <xs:documentation>
+        <![CDATA[Install a TopShelf service when the parent component is installed and uninstalls it when the parent component is removed]]>
+      </xs:documentation>
+    </xs:annotation>
+
+    <xs:complexType>
+      <xs:attribute name="ServiceName" use="optional" type="xs:string">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Formatted service name.]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="DisplayName" use="optional" type="xs:string">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Formatted service display name.]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="Description" use="optional" type="xs:string">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Formatted service description.]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="Instance" use="optional" type="xs:string">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Formatted service instance.]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="UserName" use="optional" type="xs:string">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Formatted service account user name when Account is custom.]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="Password" use="optional" type="xs:string">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Formatted service account password when Account is custom.]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="Account" use="optional" type="TopShelf_Account" default="none">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Service account. Defaults to 'none']]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="Start" use="optional" type="TopShelf_Start" default="none">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Service start type. Defaults to 'none']]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="ErrorHandling" use="optional" type="ErrorHandlingType" default="fail">
+        <xs:annotation>
+          <xs:documentation><![CDATA[On error fail, ignore, or prompt user to abort, retry or ignore. Defaults to 'fail']]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="BackupAndRestore">
+    <xs:annotation>
+      <xs:appinfo>
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="Product" />
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="Module" />
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="Fragment" />
+      </xs:appinfo>
+      <xs:documentation>
+        <![CDATA[Backup file or folder as an immediate custom action and then restore it on specified schedule]]>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute name="Id" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation>Identifier for the value (primary key).</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Path" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation>Full file or folder path to backup and restore. This field is formatted.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="IgnoreMissing" type="YesNoType" use="optional">
+            <xs:annotation>
+              <xs:documentation>Skip is source is missing. Default is no.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="IgnoreErrors" type="YesNoType" use="optional">
+            <xs:annotation>
+              <xs:documentation>Do not fail the installation if the operation fails. Default is no.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="RestoreScheduling" type="BackupAndRestore_RestoreScheduling" default="beforeInstallFiles">
+            <xs:annotation>
+              <xs:documentation>Denote when to recover files from backup. Default is beforeInstallFiles.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="SqlSearch">
+    <xs:annotation>
+      <xs:appinfo>
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="Property" />
+      </xs:appinfo>
+      <xs:documentation><![CDATA[Execute scalar SQL query]]></xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute name="Server" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation>SQL server name</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Instance" type="xs:string">
+            <xs:annotation>
+              <xs:documentation>SQL instance name</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Database" use="required">
+            <xs:annotation>
+              <xs:documentation>Database name.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Username" type="xs:string" use="optional">
+            <xs:annotation>
+              <xs:documentation>SQL user name. Can be empty to denote SSPI Integrated Security</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Password" use="optional">
+            <xs:annotation>
+              <xs:documentation>SQL user password. Ignored if user name is empty</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Query" use="required">
+            <xs:annotation>
+              <xs:documentation>SQL query. Must return a single result at most.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="InstallUtil">
+    <xs:annotation>
+      <xs:appinfo>
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="File" />
+      </xs:appinfo>
+      <xs:documentation>
+        <![CDATA[Install a .NET installer class when the parent component is installed and uninstalls it when the parent component is removed]]>
+      </xs:documentation>
+    </xs:annotation>
+
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="Argument"/>
+      </xs:choice>
+      <xs:attribute name="Bitness" use="optional" default="asComponent" type="InstallUtil_Bitness">
+        <xs:annotation>
+          <xs:documentation><![CDATA[The assembly bitness. Defaults to the Component's bitness.]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="Argument">
+    <xs:annotation>
+      <xs:appinfo>
+        <xse:parent ref="InstallUtil" />
+      </xs:appinfo>
+      <xs:documentation>
+        <![CDATA[Argument to pass to the .NET installer class]]>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:attribute name="Id" use="required">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Primary key for the argument.]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="Value" use="required">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Argument to pass to the .NET installer class]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="ServiceConfig">
+    <xs:annotation>
+      <xs:appinfo>
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="Component" />
+      </xs:appinfo>
+      <xs:documentation><![CDATA[Configures a service start account.]]></xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute name="Id" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation>Identifier for the value (primary key).</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="ServiceName" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation><![CDATA[Service name. Formatted]]></xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Account" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation><![CDATA[Service start account. Formatted]]></xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Password" type="xs:string">
+            <xs:annotation>
+              <xs:documentation><![CDATA[Optional account password. Formatted]]></xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="ZipFile">
+    <xs:annotation>
+      <xs:appinfo>
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="Product" />
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="Module" />
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="Fragment" />
+      </xs:appinfo>
+      <xs:documentation><![CDATA[Creates a ZIP archive from selected files.]]></xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute name="Id" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation>Identifier for the value (primary key).</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="TargetZipFile" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation><![CDATA[Target ZIP archive full path.]]></xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="SourceFolder" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation><![CDATA[Folder to add to the archive.]]></xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="FilePattern" type="xs:string">
+            <xs:annotation>
+              <xs:documentation><![CDATA[Optional file patterns to add to the archive. Defaults to '*.*']]></xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Recursive" type="YesNoType">
+            <xs:annotation>
+              <xs:documentation><![CDATA[Whether or not file pattern will be applied recusrsively on the source folder. Defaults to 'yes']]></xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="Unzip">
+    <xs:annotation>
+      <xs:appinfo>
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="Product" />
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="Module" />
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="Fragment" />
+      </xs:appinfo>
+      <xs:documentation><![CDATA[Extract a ZIP archive to selected folder.]]></xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute name="Id" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation>Identifier for the value (primary key).</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="ZipFile" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation><![CDATA[ZIP archive full path.]]></xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="TargetFolder" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation><![CDATA[Folder to extract the archive into.]]></xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Overwrite" type="YesNoType" use="optional" default="no">
+            <xs:annotation>
+              <xs:documentation><![CDATA[Whether or not to overwrite existing files. Defaults to 'no'.]]></xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="Dism">
+    <xs:annotation>
+      <xs:appinfo>
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="Component" />
+      </xs:appinfo>
+      <xs:documentation><![CDATA[Enable Windows Feature using DISM API. Features will be installed when the parent component is being installed or repaired.]]></xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute name="Id" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation>Identifier for the value (primary key).</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="EnableFeature" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation><![CDATA[Feature Regex pattern. Any Windows Feature matching the regular expression will be enabled. For example, IIS will match all feature that contain 'IIS' in their name, while '^IIS$' will only match a feature whose full name is IIS.]]></xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="ExcludeFeatures" type="xs:string" use="optional">
+            <xs:annotation>
+              <xs:documentation><![CDATA[Feature Regex pattern. Any Windows Feature matching the regular expression will not be enabled. For example, IIS will match all feature that contain 'IIS' in their name, while '^IIS$' will only match a feature whose full name is IIS.]]></xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="ExecOn">
+    <xs:annotation>
+      <xs:appinfo>
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="Component" />
+      </xs:appinfo>
+      <xs:documentation><![CDATA[Execute a custom command on component action.]]></xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:choice minOccurs="0" maxOccurs="unbounded">
+        <xs:element ref="ExitCode" />
+      </xs:choice>
+      <xs:attribute name="Id" type="xs:string" use="required">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Primary key.]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="Command" type="xs:string" use="required">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Command line to execute. The executable to run should be enclosed with double-quotes. This field is formatted.]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <!-- On Component Action -->
+      <xs:attribute name="OnInstall" type="YesNoType">
+        <xs:annotation>
+          <xs:documentation><![CDATA['yes' to execute on component installation.]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="OnInstallRollback" type="YesNoType">
+        <xs:annotation>
+          <xs:documentation><![CDATA['yes' to execute on component installation rollback.]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="OnReinstall" type="YesNoType">
+        <xs:annotation>
+          <xs:documentation><![CDATA['yes' to execute on component reinstallation.]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="OnReinstallRollback" type="YesNoType">
+        <xs:annotation>
+          <xs:documentation><![CDATA['yes' to execute on component reinstallation rollback.]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="OnUninstall" type="YesNoType">
+        <xs:annotation>
+          <xs:documentation><![CDATA['yes' to execute on component removal.]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="OnUninstallRollback" type="YesNoType">
+        <xs:annotation>
+          <xs:documentation><![CDATA['yes' to execute on component removal rollback.]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <!-- Timing -->
+      <xs:attribute name="BeforeStopServices" type="YesNoType">
+        <xs:annotation>
+          <xs:documentation><![CDATA['yes' to execute before StopServices action.]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="AfterStopServices" type="YesNoType">
+        <xs:annotation>
+          <xs:documentation><![CDATA['yes' to execute after StopServices action.]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="BeforeStartServices" type="YesNoType">
+        <xs:annotation>
+          <xs:documentation><![CDATA['yes' to execute before StartServices action.]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="AfterStartServices" type="YesNoType">
+        <xs:annotation>
+          <xs:documentation><![CDATA['yes' to execute after StartServices action.]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="IgnoreExitCode" type="YesNoType">
+        <xs:annotation>
+          <xs:documentation><![CDATA['yes' to ignore exit code.]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="Wait" type="YesNoType" default="yes">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Whether or not to wait for the command to terminate. Defaults to 'yes'.]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="Impersonate" type="YesNoType" default="no">
+        <xs:annotation>
+          <xs:documentation><![CDATA['yes' to execute in user context; 'no' to execute as LocalSystem. Default is 'no'.]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+
+      <xs:attribute name="Order" type="xs:integer">
+        <xs:annotation>
+          <xs:documentation><![CDATA[Order of command execution. When absent, execution order is indeterminate. Note, that ordering applies to commands executed on the same event and context.]]></xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="ExitCode">
+    <xs:annotation>
+      <xs:documentation>Describes map of exit code returned from command</xs:documentation>
+      <xs:appinfo>
+        <xse:parent ref="ExecOn" />
+      </xs:appinfo>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:attribute name="Value" type="xs:integer" use="required">
+        <xs:annotation>
+          <xs:documentation>Exit code returned from executable package. If no value is provided it means all values not explicitly set default to this behavior.</xs:documentation>
+        </xs:annotation>
+      </xs:attribute>
+      <xs:attribute name="Behavior" use="required">
+        <xs:annotation>
+          <xs:documentation>Choose one of the supported behaviors error codes: success, error, scheduleReboot.</xs:documentation>
+        </xs:annotation>
+        <xs:simpleType>
+          <xs:restriction base="xs:string">
+            <xs:enumeration value="success" />
+            <xs:enumeration value="error" />
+            <xs:enumeration value="scheduleReboot" />
+          </xs:restriction>
+        </xs:simpleType>
+      </xs:attribute>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="TaskScheduler">
+    <xs:annotation>
+      <xs:appinfo>
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="Component" />
+      </xs:appinfo>
+      <xs:documentation><![CDATA[Add a task to Windows Task Scheduler. Task definition XML should be in inner text]]></xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute name="TaskName" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation><![CDATA[Task name in Windows Task Scheduler (primary key).]]></xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="DeletePath">
+    <xs:annotation>
+      <xs:appinfo>
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="Product" />
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="Module" />
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="Fragment" />
+      </xs:appinfo>
+      <xs:documentation>
+        <![CDATA[
+Delete folder or file specified by a path.
+
+\par Example:
+\code
+<Wix ... xmlns:PanelSw="http://schemas.panel-sw.co.il/wix/WixExtension">
+<Product ...>
+ <PanelSw:DeletePath Id="Q1" Path="[#someFile]" IgnoreMissing="yes" IgnoreErros="no">MY_CONDITION</PanelSw:DeletePath>
+</Product>
+</Wix>
+\endcode
+        ]]>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute name="Id" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation>Identifier for the value (primary key).</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Path" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation>Full file or folder path to delete. This field is formatted.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="IgnoreMissing" type="YesNoType" use="optional">
+            <xs:annotation>
+              <xs:documentation>Skip is source is missing. Default is no.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="IgnoreErrors" type="YesNoType" use="optional">
+            <xs:annotation>
+              <xs:documentation>Do not fail the installation if the file operation fails. Default is no.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="FileRegex">
+    <xs:annotation>
+      <xs:appinfo>
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="Product" />
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="Module" />
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="Fragment" />
+      </xs:appinfo>
+      <xs:documentation>
+        <![CDATA[
+Execute a Regular Expression to perform find & replace operations within files.
+
+\par Example:
+\code
+<Wix ... xmlns:PanelSw="http://schemas.panel-sw.co.il/wix/WixExtension">
+<Product ...>
+ <PanelSw:FileRegex Id="Q1" FilePath="[#someFile]" Regex="([\[]a-z[\]]+)" Replacement="Text was $1" IgnoreCase="yes">MY_CONDITION</PanelSw:FileRegex>
+</Product>
+</Wix>
+\endcode
+        ]]>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute name="Id" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation>Identifier for the value (primary key).</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="FilePath" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation>Full file path to perform find &amp; replace in. This field is formatted.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Regex" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation>Regular Expression. This field is formatted. Note the you must escape square brackets that you want to include in the regex expression.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Replacement" type="xs:string" use="optional">
+            <xs:annotation>
+              <xs:documentation>Replacement text. Set to empty string to delete all regex matches. This field is formatted.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Encoding" type="EncodingType" use="optional">
+            <xs:annotation>
+              <xs:documentation>File encoding. Default is 'AutoDetect'.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="IgnoreCase" type="YesNoType" use="optional">
+            <xs:annotation>
+              <xs:documentation>Set to yes to ignore case in matches. Default is no.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Order" type="xs:integer" default="255">
+            <xs:annotation>
+              <xs:documentation><![CDATA[Order of regex execution, in range 0-255. Default is 255. Execution order is indeterminate accross expressions with the same order number.]]></xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="RegularExpression">
+    <xs:annotation>
+      <xs:appinfo>
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="Product" />
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="Module" />
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="Fragment" />
+      </xs:appinfo>
+      <xs:documentation>
+        <![CDATA[
+Execute a Regular Expression to replace or find matches in property values.
+
+\par Example:
+\code
+<Wix ... xmlns:PanelSw="http://schemas.panel-sw.co.il/wix/WixExtension">
+<Product ...>
+ <PanelSw:RegularExpression Id="Q1" Input="My Input Text is [MY_TEXT]" Expression="M.\s" Replacement="Your " DstProperty="YOUR_PROP" IgnoreCase="yes">MY_CONDITION</PanelSw:RegularExpression>
+</Product>
+</Wix>
+\endcode
+        ]]>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute name="Id" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation>Identifier for the value (primary key).</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Input" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation>Input text. This field is formatted.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Expression" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation>Regular Expression. This field is formatted.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Replacement" type="xs:string" use="optional">
+            <xs:annotation>
+              <xs:documentation>Replacement text. To replace a pattern with an empty string, set this property to "". To match a pattern do not set this field. This field is formatted.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="DstProperty" type="xs:string" use="optional">
+            <xs:annotation>
+              <xs:documentation>Target property. For matches, this will be used as a base property name and results will be placed in property names like DSTPROP_0, DSTPROP_1. For replace operations this will be the name of the target property.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="IgnoreCase" type="YesNoType" use="optional">
+            <xs:annotation>
+              <xs:documentation>Set to yes to ignore case in matches. Default is no.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Extended" type="YesNoType" use="optional">
+            <xs:annotation>
+              <xs:documentation>Set to yes for extended regex syntax. Default is no.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Order" type="xs:integer" default="255">
+            <xs:annotation>
+              <xs:documentation><![CDATA[Order of regex execution, in range 0-255. Default is 255. Execution order is indeterminate accross expressions with the same order number.]]></xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="MsiSqlQuery">
+    <xs:annotation>
+      <xs:appinfo>
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="Product" />
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="Module" />
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="Fragment" />
+      </xs:appinfo>
+      <xs:documentation>
+        <![CDATA[
+Execute a MSI-SQL query on the MSI database.
+
+\par Example:
+\code
+<Wix ... xmlns:PanelSw="http://schemas.panel-sw.co.il/wix/WixExtension">
+<Product ...>
+ <PanelSw:MsiSqlQuery Id="Q1" Query="INSERT INTO {MyTable} (`Col1`, `Col2`) VALUES (`1`, `2`) TEMPORARY">MY_CONDITION</PanelSw:MsiSqlQuery>
+</Product>
+</Wix>
+\endcode
+        ]]>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute name="Id" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation>Identifier for the value (primary key).</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Query" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation>Query to execute against the MSI database.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="ShellExecute">
+    <xs:annotation>
+      <xs:appinfo>
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="Product" />
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="Fragment" />
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="Module" />
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="Patch" />
+      </xs:appinfo>
+      <xs:documentation>
+        <![CDATA[
+Call ShellExecuteEx with parameters
+        ]]>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute name="Id" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation>Identifier for the value (primary key).</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Target" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation>ShellExecuteEx szFile parameter. This field is Formatted.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Args" type="xs:string" use="optional">
+            <xs:annotation>
+              <xs:documentation>ShellExecuteEx lpParameters parameter. This field is Formatted.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="WorkingDir" type="xs:string" use="optional">
+            <xs:annotation>
+              <xs:documentation>ShellExecuteEx lpDirectory parameter. This field is Formatted. Default is empty ("").</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Verb" type="xs:string" use="optional">
+            <xs:annotation>
+              <xs:documentation>ShellExecuteEx lpVerb parameter. This field is Formatted. Default is empty ("").</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Wait" use="optional" default="no" type="YesNoType">
+            <xs:annotation>
+              <xs:documentation>Whether or not to wait for the ShellExecute target to terminate. Defaults to 'no'</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Show" use="optional" type="xs:decimal">
+            <xs:annotation>
+              <xs:documentation>ShellExecuteEx nShow parameter. Default is 0 (SW_HIDE).</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="OnRollback" use="optional" default="no" type="YesNoType">
+            <xs:annotation>
+              <xs:documentation>Whether or not to post this data during rollback.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="OnCommit" use="optional" default="no" type="YesNoType">
+            <xs:annotation>
+              <xs:documentation>Whether or not to post this data during commit.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="OnExecute" use="optional" default="no" type="YesNoType">
+            <xs:annotation>
+              <xs:documentation>Whether or not to post this data during execute sequence (deferred, right after InstallInitialize). If neither OnXXX attribute is pecified as 'yes' then OnExecute='yes' will be the default.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="Telemetry">
+    <xs:annotation>
+      <xs:appinfo>
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="Product" />
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="Fragment" />
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="Module" />
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="Patch" />
+      </xs:appinfo>
+      <xs:documentation>
+        <![CDATA[
+Send telemetry data to a given URL
+
+\par Example:
+\code
+<Wix ... xmlns:PanelSw="http://schemas.panel-sw.co.il/wix/WixExtension">
+ <PanelSw:Telemetry Id="My_Telemetry" Method="POST" Secure="yes" OnRollback="yes" OnSucess="yes" OnStart="yes" Url="www.example.com" Page="/telemetry?REMOVE=[REMOVE]&UPGRADINGPRODUCTCODE=[UPGRADINGPRODUCTCODE]&ACTION=[ACTION]" >
+  MY_CONDITION
+ </PanelSw:XmlSearch>
+</Wix>
+\endcode
+        ]]>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute name="Id" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation>Identifier for the value (primary key).</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Url" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation>URL of the web site to post telemetry data to. This field should be the host name rather than a full URL; Use example.com rather than http://www.example.com. This field is Formatted</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Method" use="required">
+            <xs:annotation>
+              <xs:documentation>SelectionLanguage of the expression.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:enumeration value="POST">
+                  <xs:annotation>
+                    <xs:documentation>Post data.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+                <xs:enumeration value="GET">
+                  <xs:annotation>
+                    <xs:documentation>Get data.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+                <xs:enumeration value="PUT">
+                  <xs:annotation>
+                    <xs:documentation>PUT data.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute name="Secure" use="optional" default="no" type="YesNoType">
+            <xs:annotation>
+              <xs:documentation>Use HTTP or HTTPS protocol.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Page" type="xs:string" use="optional" default="">
+            <xs:annotation>
+              <xs:documentation>Telemetry page and any parameters. This field is Formatted</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Data" type="xs:string" use="optional" default="">
+            <xs:annotation>
+              <xs:documentation>Telemetry data. This field is Formatted</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="OnFailure" use="optional" default="no" type="YesNoType">
+            <xs:annotation>
+              <xs:documentation>Whether or not to post this data during rollback.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="OnSuccess" use="optional" default="no" type="YesNoType">
+            <xs:annotation>
+              <xs:documentation>Whether or not to post this data during commit.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="OnStart" use="optional" default="no" type="YesNoType">
+            <xs:annotation>
+              <xs:documentation>Whether or not to post this data during execute sequence (right after InstallInitialize).</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="CustomUninstallKey">
+    <xs:annotation>
+      <xs:appinfo>
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="Product" />
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="Module" />
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="Fragment" />
+      </xs:appinfo>
+      <xs:documentation>
+        <![CDATA[
+Overwrite or create registry values in Software\Microsoft\Windows\CurrentVersion\Uninstall\[ProductCode].
+
+\par Example:
+\code
+<Wix ... xmlns:PanelSw="http://schemas.panel-sw.co.il/wix/WixExtension">
+<Product ...>
+ <PanelSw:CustomUninstallKey Id="UninstallString" Name="UninstallString" Data="[#test2]" DataType="REG_SZ" />
+</Product>
+</Wix>
+\endcode
+        ]]>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute name="Id" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation>Identifier for the value (primary key).</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="ProductCode" type="xs:string" use="optional">
+            <xs:annotation>
+              <xs:documentation>ProductCode of the product. This field is formatted. If not specified, Current ProductCode is used</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Name" type="xs:string" use="optional">
+            <xs:annotation>
+              <xs:documentation>Name of the registry value. Deafult is same as Id attribute.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Data" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation>Data of the registry value.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="DataType" default="REG_SZ" use="optional" type="RegistryValueType">
+            <xs:annotation>
+              <xs:documentation>Data type of the registry value. One of REG_SZ, REG_DWORD. Default is REG_SZ</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="ReadIniValues">
+    <xs:annotation>
+      <xs:appinfo>
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="Product" />
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="Module" />
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="Fragment" />
+      </xs:appinfo>
+      <xs:documentation>
+        <![CDATA[
+Read values from a .INI file
+
+\par Example:
+\code
+<Wix ... xmlns:PanelSw="http://schemas.panel-sw.co.il/wix/WixExtension">
+<Product ...>
+ <PanelSw:ReadIniValues Id="MyValue" FilePath="[MyIniFile]" Section="[SectionProp]" Key="[KeyProp]" IgnoreErrors="yes" DestProperty="DestProperty">MY_CONDITION</PanelSw:ReadIniValues>
+</Product>
+</Wix>
+\endcode
+        ]]>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute name="Id" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation>Identifier for the value (primary key).</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="FilePath" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation>.INI file full path</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Section" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation>INI Section.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Key" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation>.INI key</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="DestProperty" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation>Property name in which the value will be placed.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="IgnoreErrors" type="YesNoType" use="optional" default="no">
+            <xs:annotation>
+              <xs:documentation>Property name in which the value will be placed.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="XmlSearch">
+    <xs:annotation>
+      <xs:appinfo>
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="Property" />
+      </xs:appinfo>
+      <xs:documentation>
+        <![CDATA[
+Read values from a XML file
+
+\par Example:
+\code
+<Wix ... xmlns:PanelSw="http://schemas.panel-sw.co.il/wix/WixExtension">
+<Property Id="My_Prop">
+ <PanelSw:XmlSearch Id="My_Prop" XmlFilePath="[MyXmlFile]" XPath="/Root/Element[\[]@HasThisAttribute[\]]/@OtherAttribute" Match="first">MY_CONDITION</PanelSw:XmlSearch>
+</Property>
+</Wix>
+\endcode
+        ]]>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute name="Id" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation>Identifier for the value (primary key).</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="FilePath" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation>XML file full path. This value can be formatted</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="XPath" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation>XPath expression to the required value. This value can be formatted</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Language" use="optional" default="XSLPattern">
+            <xs:annotation>
+              <xs:documentation>SelectionLanguage of the expression.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:enumeration value="XSLPattern">
+                  <xs:annotation>
+                    <xs:documentation>Expression is XSLPattern.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+                <xs:enumeration value="XPath">
+                  <xs:annotation>
+                    <xs:documentation>Expression is XPath.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+          <xs:attribute name="Namespaces" type="xs:string" use="optional">
+            <xs:annotation>
+              <xs:documentation>Namespaces to set for the node selection.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Match" use="optional" default="first">
+            <xs:annotation>
+              <xs:documentation>Configures how to handle multiple XPath matches. Defaults to 'first'.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:enumeration value="first">
+                  <xs:annotation>
+                    <xs:documentation>Return the first match.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+                <xs:enumeration value="all">
+                  <xs:annotation>
+                    <xs:documentation>Return all matching results, delimited with the null property [~].</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+                <xs:enumeration value="enforceSingle">
+                  <xs:annotation>
+                    <xs:documentation>Fail if the xpath expression matches more than one result.</xs:documentation>
+                  </xs:annotation>
+                </xs:enumeration>
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:element name="RemoveRegistryValue">
+    <xs:annotation>
+      <xs:appinfo>
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="Product" />
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="Module" />
+        <xse:parent namespace="http://schemas.microsoft.com/wix/2006/wi" ref="Fragment" />
+      </xs:appinfo>
+      <xs:documentation>
+        <![CDATA[
+Remove registry values.
+
+\par Example:
+\code
+<Wix ... xmlns:PanelSw="http://schemas.panel-sw.co.il/wix/WixExtension">
+<Product ...>
+ <PanelSw:RemoveRegistryValue Id="Val1" Root="HKLM" Key="Software\MyCompany\[ProductName]" Name="MyValue" Win64="yes">MY_CONDITION</PanelSw:RemoveRegistryValue>
+</Product>
+</Wix>
+\endcode
+        ]]>
+      </xs:documentation>
+    </xs:annotation>
+    <xs:complexType>
+      <xs:simpleContent>
+        <xs:extension base="xs:string">
+          <xs:attribute name="Id" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation>Identifier for the value (primary key).</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Root" use="required" type="RegistryRootType">
+            <xs:annotation>
+              <xs:documentation>Root of the registry hive.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Key" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation>Registry key name.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Name" type="xs:string" use="required">
+            <xs:annotation>
+              <xs:documentation>Name of the registry value. Deafult is same as Id attribute.</xs:documentation>
+            </xs:annotation>
+          </xs:attribute>
+          <xs:attribute name="Area" use="optional">
+            <xs:annotation>
+              <xs:documentation>Remove the value from the x86 / x64 area. Default to the package's platform.</xs:documentation>
+            </xs:annotation>
+            <xs:simpleType>
+              <xs:restriction base="xs:string">
+                <xs:enumeration value="x86" />
+                <xs:enumeration value="x64" />
+                <xs:enumeration value="default" />
+              </xs:restriction>
+            </xs:simpleType>
+          </xs:attribute>
+        </xs:extension>
+      </xs:simpleContent>
+    </xs:complexType>
+  </xs:element>
+
+  <xs:simpleType name="YesNoType">
+    <xs:annotation>
+      <xs:documentation>Values of this type will either be "yes" or "no".</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:NMTOKEN">
+      <xs:enumeration value="yes" />
+      <xs:enumeration value="no" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="YesNoDefaultType">
+    <xs:annotation>
+      <xs:documentation>Values of this type will either be "yes" or "no".</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:NMTOKEN">
+      <xs:enumeration value="yes" />
+      <xs:enumeration value="no" />
+      <xs:enumeration value="default" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="RegistryRootType">
+    <xs:annotation>
+      <xs:documentation>Windows registry roots.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:NMTOKEN">
+      <xs:enumeration value="HKLM" />
+      <xs:enumeration value="HKCU" />
+      <xs:enumeration value="HKCR" />
+      <xs:enumeration value="HKCC" />
+      <xs:enumeration value="HKPD" />
+      <xs:enumeration value="HKU" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="RegistryValueType">
+    <xs:annotation>
+      <xs:documentation>Windows registry data types.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:NMTOKEN">
+      <xs:enumeration value="REG_SZ" />
+      <xs:enumeration value="REG_DWORD" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="EncodingType">
+    <xs:annotation>
+      <xs:documentation>File encoding.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:NMTOKEN">
+      <xs:enumeration value="AutoDetect" />
+      <xs:enumeration value="Unicode" />
+      <xs:enumeration value="ReverseUnicode" />
+      <xs:enumeration value="MultiByte" />
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="BackupAndRestore_RestoreScheduling">
+    <xs:annotation>
+      <xs:documentation>Scheduling for restoring files from backup.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:NMTOKEN">
+      <xs:enumeration value="beforeInstallFiles">
+        <xs:annotation>
+          <xs:documentation>Restore files before installing new files</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="afterDuplicateFiles">
+        <xs:annotation>
+          <xs:documentation>Restore files after having installed new files</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="afterRemoveExistingProducts">
+        <xs:annotation>
+          <xs:documentation>Restore files after RemoveExistingProducts action. Note that, RemoveExistingProducts must be sequenced between InstallInitialize and InstallFinalize for this to work.</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="InstallUtil_Bitness">
+    <xs:annotation>
+      <xs:documentation>Assembly bitness for InstallUtil.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:NMTOKEN">
+      <xs:enumeration value="asComponent">
+        <xs:annotation>
+          <xs:documentation>Use component's bitness</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="x86"></xs:enumeration>
+      <xs:enumeration value="x64"></xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="TopShelf_Account">
+    <xs:annotation>
+      <xs:documentation>TopShelf service account.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:NMTOKEN">
+      <xs:enumeration value="none"></xs:enumeration>
+      <xs:enumeration value="custom">
+        <xs:annotation>
+          <xs:documentation>Custom account specified in 'UserName' attribute</xs:documentation>
+        </xs:annotation>
+      </xs:enumeration>
+      <xs:enumeration value="localSystem"></xs:enumeration>
+      <xs:enumeration value="localService"></xs:enumeration>
+      <xs:enumeration value="networkService"></xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="TopShelf_Start">
+    <xs:annotation>
+      <xs:documentation>TopShelf start type.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:NMTOKEN">
+      <xs:enumeration value="none"></xs:enumeration>
+      <xs:enumeration value="disabled"></xs:enumeration>
+      <xs:enumeration value="auto"></xs:enumeration>
+      <xs:enumeration value="manual"></xs:enumeration>
+      <xs:enumeration value="delayedAuto"></xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+
+  <xs:simpleType name="ErrorHandlingType">
+    <xs:annotation>
+      <xs:documentation>Error handling behavior.</xs:documentation>
+    </xs:annotation>
+    <xs:restriction base="xs:NMTOKEN">
+      <xs:enumeration value="fail"></xs:enumeration>
+      <xs:enumeration value="ignore"></xs:enumeration>
+      <xs:enumeration value="prompt"></xs:enumeration>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>

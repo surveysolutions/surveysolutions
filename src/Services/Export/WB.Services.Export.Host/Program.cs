@@ -5,19 +5,20 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using NLog.Web;
-using Microsoft.Extensions.DependencyInjection;
-using WB.Services.Export.Host.Scheduler.PostgresWorkQueue;
 
 namespace WB.Services.Export.Host
 {
     class Program
     {
+        private static FileStream pid;
+
         static async Task Main(string[] args)
         {
+            OpenPIDFile();
+
             // NLog: setup the logger first to catch all errors
             var logger = NLog.Web.NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
 
@@ -43,13 +44,6 @@ namespace WB.Services.Export.Host
                 }
 
                 var host = builder.Build();
-
-            using (var scope = host.Services.CreateScope())
-            {
-                var context = scope.ServiceProvider.GetService<JobContext>();
-                
-                await context.Database.MigrateAsync();
-            }
 
                 if (isService)
                 {
@@ -83,7 +77,7 @@ namespace WB.Services.Export.Host
                 {
                     if (!hosting.HostingEnvironment.IsDevelopment())
                     {
-                        logging.ClearProviders();
+                       logging.ClearProviders();
                     }
                 })
                 .UseNLog()
@@ -94,5 +88,16 @@ namespace WB.Services.Export.Host
 
         private static string GetCommandLineUrls(string[] args) =>
             new ConfigurationBuilder().AddCommandLine(args).Build()["urls"];
+
+        // pid file - is a file that is exists only while process is alive and contains own process id
+        private static void OpenPIDFile()
+        {
+            pid = new FileStream("pid", FileMode.CreateNew, FileAccess.ReadWrite, FileShare.Read, 4096,
+                FileOptions.DeleteOnClose);
+            var writer = new StreamWriter(pid);
+
+            writer.WriteLine(Process.GetCurrentProcess().Id);
+            writer.Flush();
+        }
     }
 }

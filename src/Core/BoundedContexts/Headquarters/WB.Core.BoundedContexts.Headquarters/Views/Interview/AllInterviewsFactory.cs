@@ -194,7 +194,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 var searchLowerCase = input.SearchBy.ToLower();
                 items = items.Where(x => x.Key.StartsWith(searchLowerCase) || 
                                          x.ClientKey.StartsWith(searchLowerCase) || 
-                                         x.AnswersToFeaturedQuestions.Any(a => a.Answer.ToLower().StartsWith(searchLowerCase)));
+                                         x.AnswersToFeaturedQuestions.Any(a => a.Answer.ToLower().StartsWith(searchLowerCase)) ||
+                                         x.ResponsibleName.ToLower().StartsWith(searchLowerCase)
+                                         );
             }
             
             if (input.Statuses != null)

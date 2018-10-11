@@ -51,7 +51,7 @@ namespace WB.UI.Headquarters.Controllers
             ILogger logger,
             ISettingsProvider settingsProvider,
             IAndroidPackageReader androidPackageReader,
-            IPlainKeyValueStorage<ExportServiceSettings> exportServiceSettings, IExportServiceApi exportServiceApi)
+            IPlainKeyValueStorage<ExportServiceSettings> exportServiceSettings)
              : base(commandService: commandService, logger: logger)
         {
             this.userManager = userManager;
@@ -134,22 +134,16 @@ namespace WB.UI.Headquarters.Controllers
 
         public async Task<ActionResult> ExportService()
         {
-            var uri = ConfigurationManager.AppSettings[@"Export.ServiceUrl"];
-            
             try
             {
-                var http = new HttpClient
-                {
-                    BaseAddress = new Uri(uri),
-                    Timeout = TimeSpan.FromSeconds(5)
-                };
+                var exportServiceApi = serviceLocator.GetInstance<IExportServiceApi>();
+                var health = await exportServiceApi.Health();
 
-                ViewData["uri"] = uri + @"/.hc";
-                var health = await http.GetStringAsync(@"/.hc");
-
-                this.ViewData["health"] = health;
+                this.ViewData["version"] = await exportServiceApi.Version();
+                this.ViewData["health"] = await health.Content.ReadAsStringAsync();
+                this.ViewData["uri"] = health.RequestMessage.RequestUri.ToString();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 this.ViewData["health"] = e.ToString();
             }

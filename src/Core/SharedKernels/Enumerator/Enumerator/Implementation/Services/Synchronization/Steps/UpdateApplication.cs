@@ -14,15 +14,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 {
     public abstract class UpdateApplication : SynchronizationStep
     {
-        private readonly ISynchronizationService synchronizationService;
         private readonly ITabletDiagnosticService diagnosticService;
 
-        public UpdateApplication(int sortOrder,
+        protected UpdateApplication(int sortOrder,
             ISynchronizationService synchronizationService,
             ITabletDiagnosticService diagnosticService,
             ILogger logger) : base(sortOrder, synchronizationService, logger)
         {
-            this.synchronizationService = synchronizationService;
             this.diagnosticService = diagnosticService;
         }
 
