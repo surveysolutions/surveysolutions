@@ -20,15 +20,11 @@
     
     self.fromDateSelected = ko.observable();
     self.toDateSelected = ko.observable();
-
-    function getQueryStringValue(key) {
-        return decodeURIComponent(window.location.search.replace(new RegExp("^(?:.*[&\\?]" + encodeURIComponent(key).replace(/[\.\+\*]/g, "\\$&") + "(?:\\=([^&]*))?)?.*$", "i"), "$1"));
-    }
-
-    self.fromQueryString = function() {
-        var selectedTemplate = getQueryStringValue("template")
-        var selectedTemplateVersion = getQueryStringValue("version")
-        var selectedStatus = getQueryStringValue('status')
+    
+    self.setStateFromQueryString = function() {
+        var selectedTemplate = self.QueryString["template"]
+        var selectedTemplateVersion = self.QueryString["version"]
+        var selectedStatus = self.QueryString['status']
 
         if (selectedStatus !== '') {
             var statusCode = parseInt(selectedStatus);
@@ -114,7 +110,7 @@
     };
 
     window.onpopstate = function(event) {
-        self.fromQueryString()
+        self.setStateFromQueryString()
     }
 
     self.updateDataExportInfo = function (updateQueryString) {
@@ -122,15 +118,22 @@
         if (updateQueryString && self.initiated) {
             if (window.history != null) {
                 var template = self.selectedTemplate();
-                var queryArgs = {
-                    template: template.id,
-                    version: template.version,
-                    status: self.selectedStatus().status
-                }
+                if (template != null) {
+                    var queryArgs = {
+                        template: template.id,
+                        version: template.version,
+                        status: self.selectedStatus().status
+                    };
 
-                var search = $.param(queryArgs);
-                var newUrl = window.location.protocol + "//" + window.location.host + window.location.pathname + '?' + search;
-                window.history.pushState(queryArgs, window.title, newUrl);
+                    var search = $.param(queryArgs);
+                    var newUrl = window.location.protocol +
+                        "//" +
+                        window.location.host +
+                        window.location.pathname +
+                        '?' +
+                        search;
+                    window.history.pushState(queryArgs, window.title, newUrl);
+                }
             }
         }
 
@@ -143,7 +146,6 @@
 
         self.sendWebRequest(self.Url + "?" + self.getRequestQuery(), {}, function (data) {
             ko.mapping.fromJS(data, self.mappingOptions, self);
-
         });
     };
 
@@ -375,7 +377,7 @@
         return dataReference.StatusOfLatestExportProcess() === 4;
     }
 
-    self.fromQueryString();
+    self.setStateFromQueryString();
 
     self.updateProcess = setInterval(function() { self.updateDataExportInfo(false); }, 2000);
     self.initiated = true;

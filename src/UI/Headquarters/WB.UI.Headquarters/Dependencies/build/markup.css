@@ -8358,6 +8358,7 @@ body > .ui-pnotify {
     .overview-item .date div:first-of-type {
       color: #dbdfe2; }
   .overview-item .item-content {
+    word-wrap: break-word;
     cursor: pointer;
     -webkit-box-flex: 1;
         -ms-flex-positive: 1;
@@ -8454,6 +8455,7 @@ body > .ui-pnotify {
   top: 50%;
   -webkit-box-shadow: 0 0 10px;
           box-shadow: 0 0 10px;
+  word-wrap: break-word;
   -webkit-transform: translate(0, -50%);
           transform: translate(0, -50%);
   right: -345px;
@@ -8500,6 +8502,25 @@ body > .ui-pnotify {
     border-width: 25px;
     border-style: solid;
     border-color: transparent #fff transparent transparent; }
+
+.overloaded {
+  position: relative;
+  max-height: 56px;
+  overflow: hidden; }
+  .overloaded:after {
+    content: "";
+    display: block;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    -webkit-box-shadow: 0px 0px 20px 15px #fff;
+            box-shadow: 0px 0px 20px 15px #fff; }
+  .overloaded .btn-horizontal-hamburger {
+    position: absolute;
+    bottom: 0;
+    left: -8px;
+    z-index: 2; }
 
 @media only screen and (max-width: 1210px) {
   .custom-popover {
@@ -8669,6 +8690,12 @@ body > .ui-pnotify {
     background-image: linear-gradient(to right, transparent 0%, #edeff0 70%);
     background-repeat: repeat-x;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#00000000', endColorstr='#FFEDEFF0', GradientType=1); }
+
+.table-striped-odd tbody tr {
+  background-color: #f8f9f9; }
+
+.table-striped-odd > tbody > tr.odd {
+  background-color: #edeff0; }
 
 .table-bordered {
   border: none; }
@@ -9551,8 +9578,10 @@ main.hidden.display-block {
     margin-right: auto; }
   .view-mode {
     top: 60px; }
-  .interviews-large-screen {
+  .interviews-large-screen .table-with-scroll, .interviews-large-screen .wrapper-modal-dropdown, .interviews-large-screen .dataTables_info {
     display: none; }
+  .interviews-large-screen .dataTables_paginate {
+    display: none !important; }
   .page-header .neighbor-block-to-search {
     padding-right: 0; }
   .screen-small-resolution {

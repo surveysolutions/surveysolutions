@@ -2,10 +2,7 @@
     <div class="information-block comments-block">
 
         <template v-for="comment in $me.comments">
-            <div :class="{'enumerators-comment': comment.userRole == 4 /*'Interviewer'*/}" :key="comment.commentTimeUtc">
-                <h6>{{ getCommentTitle(comment) }}</h6>
-                <p>{{ comment.text }}</p>
-            </div>
+            <wb-comment-item :userRole="comment.userRole" :text="comment.text" :isOwnComment="comment.isOwnComment" :key="comment.commentTimeUtc" />
         </template>
 
         <div class="comment active" v-if="isShowingAddCommentDialog">
@@ -19,7 +16,9 @@
                             :title="inputTitle"/>
                         <div class="input-group-btn">
                             <button type="button" class="btn btn-default btn-post-comment"
-                                :class="buttonClass" @click="postComment($event)" :disabled="!allowPostComment">
+                                :class="buttonClass" 
+                                @click="postComment($event)" 
+                                :disabled="!allowPostComment">
                                 {{ postBtnText }}
                             </button>
                         </div>
@@ -45,26 +44,6 @@
             isShowingAddCommentDialog: { type: Boolean, default: false }
         },
         methods: {
-            getCommentTitle(comment) {
-                if (comment.isOwnComment == true) {
-                    return this.$t("WebInterviewUI.CommentYours")
-                }
-                if (comment.userRole == 1 /*'Administrator'*/) {
-                    return this.$t("WebInterviewUI.CommentAdmin") // "Admin comment"
-                }
-                if (comment.userRole == 2/*'Supervisor'*/) {
-                    return this.$t("WebInterviewUI.CommentSupervisor") // "Supervisor comment"
-                }
-                if (comment.userRole == 4/*'Interviewer'*/) {
-                    return this.$t("WebInterviewUI.CommentInterviewer") // "Interviewer comment"
-                }
-                if (comment.userRole == 6/*'Headquarter'*/) {
-                    return this.$t("WebInterviewUI.CommentHeadquarters") // "Headquarters comment"
-                }
-
-                return this.$t("WebInterviewUI.Comment") //'Comment';
-            },
-
             async postComment(evnt) {
                 const com = this.comment
 

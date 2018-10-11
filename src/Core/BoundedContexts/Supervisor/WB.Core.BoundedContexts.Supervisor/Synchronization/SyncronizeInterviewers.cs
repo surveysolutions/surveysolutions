@@ -16,7 +16,10 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
         private readonly ISupervisorSynchronizationService supervisorSynchronization;
         private readonly IPlainStorage<InterviewerDocument> interviewerViewRepository;
 
-        public SyncronizeInterviewers(int sortOrder, ISynchronizationService synchronizationService, ILogger logger, ISupervisorSynchronizationService supervisorSynchronization, IPlainStorage<InterviewerDocument> interviewerViewRepository) : base(sortOrder, synchronizationService, logger)
+        public SyncronizeInterviewers(int sortOrder, ILogger logger,
+            ISupervisorSynchronizationService supervisorSynchronization,
+            IPlainStorage<InterviewerDocument> interviewerViewRepository) : base(sortOrder, supervisorSynchronization,
+            logger)
         {
             this.supervisorSynchronization = supervisorSynchronization;
             this.interviewerViewRepository = interviewerViewRepository;

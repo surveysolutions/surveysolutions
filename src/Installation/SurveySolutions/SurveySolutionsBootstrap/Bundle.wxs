@@ -9,9 +9,9 @@
             Manufacturer="The World Bank"
             UpgradeCode="D101A3BD-9921-4BBC-8F13-2B496A721317" >
 
-        <bal:Condition Message="This application requires Windows Server 2012 R2 x64.">
+        <!--<bal:Condition Message="This application requires Windows Server 2012 R2 x64.">
             (VersionNT64 &gt;= v6.3) 
-        </bal:Condition>
+        </bal:Condition>-->
         
         <!--OR WixBundleAction = 3-->
 
@@ -21,7 +21,7 @@
             Variable="OldProductInstalled" 
             Result="state"/>
 
-        <bal:Condition Message="Please uninstsall previous version of Survey Solutions.">
+        <bal:Condition Message="Please uninstall previous version of Survey Solutions.">
             (OldProductInstalled = 2)
         </bal:Condition>
 

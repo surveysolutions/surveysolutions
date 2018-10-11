@@ -1,7 +1,9 @@
 using System;
+using System.Diagnostics;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 using Refit;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
@@ -108,6 +110,28 @@ namespace WB.UI.Headquarters.Injections
             {
                 var settings = ctx.Get<InterviewDataExportSettings>();
                 var cfg = ctx.Get<IConfigurationManager>();
+
+                if (HttpContext.Current != null)
+                {
+                    var httpCtx = HttpContext.Current;
+
+                    var servicePath = httpCtx.Server.MapPath(@"~/.bin/Export");
+                    var serviceExe = System.IO.Path.Combine(servicePath, "WB.Services.Export.Host.exe");
+
+                    if (System.IO.File.Exists(serviceExe))
+                    {
+                        var pid = System.IO.Path.Combine(servicePath, "pid");
+
+                        if (!System.IO.File.Exists(pid))
+                        {
+                            var procesInfo = new ProcessStartInfo(serviceExe, "--console")
+                            {
+                                WorkingDirectory = servicePath
+                            };
+                            System.Diagnostics.Process.Start(procesInfo);
+                        }
+                    }
+                }
                 var exportServiceSettings = ctx.Get<IPlainKeyValueStorage<ExportServiceSettings>>();
                 string key = exportServiceSettings.GetById(AppSetting.ExportServiceStorageKey).Key;
 

@@ -1,0 +1,12 @@
+syntax = "proto3";
+package com.panelsw.ca;
+option optimize_for = LITE_RUNTIME;
+
+message property {
+	bytes Name = 1;
+	bytes Value = 2;
+}
+
+message SetPropertyFromPipeDetails{
+    repeated property properties = 1;
+}
