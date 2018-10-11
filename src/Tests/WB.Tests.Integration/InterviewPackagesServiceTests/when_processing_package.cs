@@ -43,10 +43,7 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
 
             var sessionFactory = IntegrationCreate.SessionFactory(ConnectionStringBuilder.ConnectionString, new[] { typeof(InterviewPackageMap), typeof(BrokenInterviewPackageMap) }, true);
             plainPostgresTransactionManager = Mock.Of<IUnitOfWork>(x => x.Session == sessionFactory.OpenSession());
-
-            pgSqlConnection = new NpgsqlConnection(ConnectionStringBuilder.ConnectionString);
-            pgSqlConnection.Open();
-
+            
             packagesStorage = new PostgresPlainStorageRepository<InterviewPackage>(plainPostgresTransactionManager);
 
             mockOfCommandService = new Mock<ICommandService>();
@@ -92,8 +89,9 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
 
             var autofacServiceLocatorAdapterForTests = new AutofacServiceLocatorAdapter(container.Object);
 
-            ServiceLocator.SetLocatorProvider(() => autofacServiceLocatorAdapterForTests);
+            var serviceLocatorOriginal = ServiceLocator.IsLocationProviderSet ? ServiceLocator.Current : null;
 
+            ServiceLocator.SetLocatorProvider(() => autofacServiceLocatorAdapterForTests);
             
             interviewPackagesService = Create.Service.InterviewPackagesService(
                 syncSettings: new SyncSettings(origin) { UseBackgroundJobForProcessingPackages = true},
@@ -134,6 +132,8 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
                     });
 
             BecauseOf();
+
+            ServiceLocator.SetLocatorProvider(() => serviceLocatorOriginal);
         }
 
         private void BecauseOf() => interviewPackagesService.ProcessPackage("1");
@@ -155,7 +155,6 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
         public void TearDown()
         {
             plainPostgresTransactionManager.Dispose();
-            pgSqlConnection.Close();
         }
 
         private static SynchronizeInterviewEventsCommand expectedCommand;
@@ -164,7 +163,6 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
         private static InterviewPackagesService interviewPackagesService;
         private static PostgresPlainStorageRepository<InterviewPackage> packagesStorage;
         private static IUnitOfWork plainPostgresTransactionManager;
-        static NpgsqlConnection pgSqlConnection;
         private static string origin;
     }
 }

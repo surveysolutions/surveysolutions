@@ -79,10 +79,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewPackagesServiceTes
 
             var autofacServiceLocatorAdapterForTests = new AutofacServiceLocatorAdapter(container.Object);
 
+            var serviceLocatorOriginal = ServiceLocator.IsLocationProviderSet ? ServiceLocator.Current : null;
             ServiceLocator.SetLocatorProvider(() => autofacServiceLocatorAdapterForTests);
-
-
-
 
             var service = Create.Service.InterviewPackagesService(commandService: commandService.Object);
 
@@ -91,6 +89,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewPackagesServiceTes
             var interviewPackage = Create.Entity.InterviewPackage(Id.g1, keyAssignedEvent);
             // Act
             service.ProcessPackage(interviewPackage);
+
+            ServiceLocator.SetLocatorProvider(() => serviceLocatorOriginal);
 
             // Assert
             Assert.That(syncCommand, Is.Not.Null);
