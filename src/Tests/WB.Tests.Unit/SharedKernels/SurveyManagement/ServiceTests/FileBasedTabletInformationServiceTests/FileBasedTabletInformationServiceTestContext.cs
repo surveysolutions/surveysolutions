@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.TabletInformation;
@@ -26,8 +27,11 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.FileBasedTab
             if (fileNamesInDirectory != null)
                 fileSystemAccessorMock.Setup(x => x.GetFilesInDirectory(It.IsAny<string>(), It.IsAny<string>())).Returns(() => fileNamesInDirectory);
 
+            var archiveUtils = Mock.Of<IArchiveUtils>(x =>
+                x.GetArchivedFileNamesAndSize(It.IsAny<byte[]>()) == new Dictionary<string, long>());
+
             return new FileBasedTabletInformationService(string.Empty, fileSystemAccessorMock.Object,
-                Mock.Of<IArchiveUtils>(), Mock.Of<IEncryptionService>());
+                archiveUtils, Mock.Of<IEncryptionService>());
         }
     }
 }
