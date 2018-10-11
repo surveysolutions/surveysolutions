@@ -41,7 +41,6 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IServiceLocator serviceLocator;
         private readonly ISettingsProvider settingsProvider;
         private readonly IPlainKeyValueStorage<ExportServiceSettings> exportServiceSettings;
-        private readonly IExportServiceApi exportServiceApi;
         private readonly IAndroidPackageReader androidPackageReader;
 
         public ControlPanelController(
@@ -51,7 +50,7 @@ namespace WB.UI.Headquarters.Controllers
             ILogger logger,
             ISettingsProvider settingsProvider,
             IAndroidPackageReader androidPackageReader,
-            IPlainKeyValueStorage<ExportServiceSettings> exportServiceSettings, IExportServiceApi exportServiceApi)
+            IPlainKeyValueStorage<ExportServiceSettings> exportServiceSettings)
              : base(commandService: commandService, logger: logger)
         {
             this.userManager = userManager;
@@ -59,7 +58,6 @@ namespace WB.UI.Headquarters.Controllers
             this.serviceLocator = serviceLocator;
             this.settingsProvider = settingsProvider;
             this.exportServiceSettings = exportServiceSettings;
-            this.exportServiceApi = exportServiceApi;
         }
 
         public ActionResult CreateHeadquarters()
@@ -137,9 +135,10 @@ namespace WB.UI.Headquarters.Controllers
         {
             try
             {
+                var exportServiceApi = serviceLocator.GetInstance<IExportServiceApi>();
                 var health = await exportServiceApi.Health();
 
-                this.ViewData["version"] = await this.exportServiceApi.Version();
+                this.ViewData["version"] = await exportServiceApi.Version();
                 this.ViewData["health"] = await health.Content.ReadAsStringAsync();
                 this.ViewData["uri"] = health.RequestMessage.RequestUri.ToString();
             }

@@ -9,7 +9,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.FilterTests.InstallationAttrib
         [NUnit.Framework.Test] public void context () {
             var attribute = CreateInstallationAttribute();
             attribute.OnActionExecuting(CreateFilterContext(
-                new ControlPanelController(null, null, 
+                new ControlPanelController(null, 
                 null, null, null, null, null, null)));
         }
     }
