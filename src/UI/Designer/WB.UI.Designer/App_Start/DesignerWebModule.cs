@@ -28,8 +28,6 @@ namespace WB.UI.Designer
         public void Load(IWebIocRegistry registry)
         {
             //registry.Bind<ILog>().ToConstant(new Log()).InSingletonScope();
-//            registry.Bind<CustomHandleErrorFilter>();
-//            registry.Bind<CustomAuthorizeFilter>();
             registry.BindMvcExceptionFilter<CustomHandleErrorFilter>();
             registry.BindMvcAuthorizationFilter<CustomAuthorizeFilter>();
 
@@ -58,15 +56,12 @@ namespace WB.UI.Designer
 
             registry.BindAsSingleton<IWebTesterService, WebTesterService>();
 
-            // temp override registration
+            // override registration
             registry.BindInPerUnitOfWorkOrPerRequestScope<IUnitOfWork, UnitOfWork>();
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
-//            System.Web.Mvc.GlobalFilters.Filters.Add(serviceLocator.GetInstance<CustomHandleErrorFilter> ());
-//            System.Web.Mvc.GlobalFilters.Filters.Add(serviceLocator.GetInstance<CustomAuthorizeFilter>());
-
             return Task.CompletedTask;
         }
     }
