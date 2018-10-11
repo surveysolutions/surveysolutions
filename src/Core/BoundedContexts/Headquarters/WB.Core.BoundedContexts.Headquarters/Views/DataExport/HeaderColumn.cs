@@ -1,4 +1,6 @@
-﻿namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
+﻿using System;
+
+namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
 {
     public class HeaderColumn
     {

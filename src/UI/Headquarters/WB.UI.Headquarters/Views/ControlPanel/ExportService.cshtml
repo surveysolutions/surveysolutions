@@ -1,0 +1,11 @@
+﻿@model List<String>
+@{
+    this.Layout = "~/Views/Shared/_ControlPanelLayout.cshtml";
+    this.ViewBag.Title = "Control Panel: Export Service State";
+
+}
+
+<h1 class="page-header">Export Service Health (@ViewData["version"])</h1>
+
+<h4>@ViewData["uri"]</h4>
+<pre>@ViewData["health"]</pre>

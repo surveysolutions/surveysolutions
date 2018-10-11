@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Headquarters.EventHandler;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
@@ -38,10 +39,15 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory
 
         public InterviewHistoryView Load(Guid interviewId)
         {
-            return this.RestoreInterviewHistory(interviewId);
+            return this.RestoreInterviewHistory(interviewId).First();
         }
 
-        private InterviewHistoryView RestoreInterviewHistory(Guid interviewId)
+        public InterviewHistoryView[] Load(Guid[] interviewIds)
+        {
+            return this.RestoreInterviewHistory(interviewIds);
+        }
+
+        private InterviewHistoryView[] RestoreInterviewHistory(params Guid[] interviewIds)
         {
             var interviewHistoryReader = new InMemoryReadSideRepositoryAccessor<InterviewHistoryView>();
             var interviewHistoryDenormalizer = new InterviewParaDataEventHandler(interviewHistoryReader, 
@@ -51,12 +57,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory
                 this.questionnaireExportStructureStorage, 
                 this.questionnaireStorage);
 
-            var events = this.eventStore.Read(interviewId, 0);
-            foreach (var @event in events)
+            foreach (var interviewId in interviewIds)
             {
-                interviewHistoryDenormalizer.Handle(@event);
+                var events = this.eventStore.Read(interviewId, 0);
+
+                foreach (var @event in events)
+                {
+                    interviewHistoryDenormalizer.Handle(@event);
+                }
             }
-            return interviewHistoryReader.GetById(interviewId);
+
+            return interviewHistoryReader.Query(_ => _.ToArray());
         }
     }
 }

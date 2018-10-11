@@ -8,7 +8,7 @@ $ErrorActionPreference = "Stop"
 $scriptFolder = (Get-Item $MyInvocation.MyCommand.Path).Directory.FullName
 . "$scriptFolder\functions.ps1"
 
-$InstallationProject = 'src\Installation\SurveySolutions\\SurveySolutionsBootstrap\SurveySolutionsBootstrap.wixproj'
+$InstallationProject = 'src\Installation\SurveySolutions\SurveySolutionsBootstrap\SurveySolutionsBootstrap.wixproj'
 
 $sourceCleanup = $False
 
@@ -31,6 +31,8 @@ $supportPath = Join-path $workdir "SupportPackage"
 $targetSupportPath = Join-path $HQsitePath "Support"
 
 Copy-Item $sitePatha\* $HQsitePath -Force -Recurse
+Copy-Item $HQSourcePath\ExportService\* $HQsitePath\.bin\Export -Force -Recurse
+
 Copy-Item -Path $supportPath -Destination $targetSupportPath -Force -Recurse
 
 $file = (Get-ChildItem -Path $HQsitePath -recurse | Where-Object {$_.Name -match "WB.UI.Headquarters.dll"})

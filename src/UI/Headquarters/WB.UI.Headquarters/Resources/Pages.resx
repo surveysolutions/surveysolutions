@@ -1022,7 +1022,7 @@
   <data name="AreaQestion_AreaUnitMeter" xml:space="preserve">
     <value>square meters</value>
   </data>
-    <data name="AreaQestion_AreaMeter" xml:space="preserve">
+  <data name="AreaQestion_AreaMeter" xml:space="preserve">
     <value>meters</value>
   </data>
   <data name="Unarchive" xml:space="preserve">
@@ -1225,5 +1225,8 @@
   </data>
   <data name="UpgradeAssignmentsTitle" xml:space="preserve">
     <value>Upgrade assignments</value>
+  </data>
+  <data name="InterviewOverview" xml:space="preserve">
+    <value>Interview overview</value>
   </data>
 </root>
