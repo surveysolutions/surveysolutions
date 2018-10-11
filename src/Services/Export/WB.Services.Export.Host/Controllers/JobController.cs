@@ -17,15 +17,18 @@ namespace WB.Services.Export.Host.Controllers
     {
         private readonly IDataExportProcessesService exportProcessesService;
         private readonly IJobsStatusReporting jobsStatusReporting;
+        private readonly IExportArchiveHandleService archiveHandleService;
         private readonly IDdiMetadataAccessor ddiDdiMetadataAccessor;
         private readonly IJobService jobService;
 
         public JobController(IDataExportProcessesService exportProcessesService,
             IJobsStatusReporting jobsStatusReporting,
+            IExportArchiveHandleService archiveHandleService,
             IDdiMetadataAccessor ddiDdiMetadataAccessor, IJobService jobService)
         {
             this.exportProcessesService = exportProcessesService;
             this.jobsStatusReporting = jobsStatusReporting;
+            this.archiveHandleService = archiveHandleService;
             this.ddiDdiMetadataAccessor = ddiDdiMetadataAccessor;
             this.jobService = jobService;
         }
@@ -110,7 +113,7 @@ namespace WB.Services.Export.Host.Controllers
             DateTime? toDate,
             TenantInfo tenant)
         {
-            var result = await this.jobsStatusReporting.DownloadArchiveAsync(tenant, archiveName, format, status, fromDate, toDate);
+            var result = await this.archiveHandleService.DownloadArchiveAsync(tenant, archiveName, format, status, fromDate, toDate);
 
             if (result == null)
             {
@@ -133,7 +136,7 @@ namespace WB.Services.Export.Host.Controllers
         [Route("api/v1/delete")]
         public async Task<ActionResult> Delete(TenantInfo tenant)
         {
-            await this.jobsStatusReporting.ClearAllExportArchives(tenant);
+            await this.archiveHandleService.ClearAllExportArchives(tenant);
             return Ok();
         }
 

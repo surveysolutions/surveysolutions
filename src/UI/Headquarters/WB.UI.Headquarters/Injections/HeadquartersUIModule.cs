@@ -118,17 +118,18 @@ namespace WB.UI.Headquarters.Injections
                     var servicePath = httpCtx.Server.MapPath(@"~/.bin/Export");
                     var serviceExe = System.IO.Path.Combine(servicePath, "WB.Services.Export.Host.exe");
 
+
                     if (System.IO.File.Exists(serviceExe))
                     {
                         var pid = System.IO.Path.Combine(servicePath, "pid");
 
                         if (!System.IO.File.Exists(pid))
                         {
-                            var procesInfo = new ProcessStartInfo(serviceExe, "--console")
+                            var processStartInfo = new ProcessStartInfo(serviceExe, "--console")
                             {
                                 WorkingDirectory = servicePath
                             };
-                            System.Diagnostics.Process.Start(procesInfo);
+                            System.Diagnostics.Process.Start(processStartInfo);
                         }
                     }
                 }
@@ -141,7 +142,7 @@ namespace WB.UI.Headquarters.Injections
                     DefaultRequestHeaders =
                     {
                         Authorization = new AuthenticationHeaderValue(@"Bearer", key),
-                        Referrer = new Uri(ConfigurationManager.AppSettings[@"BaseUrl"])
+                        Referrer = GetBaseUrl(cfg)
                     }
                 };
 
@@ -166,6 +167,30 @@ namespace WB.UI.Headquarters.Injections
             //System.Web.Http.GlobalConfiguration.Configuration.Filters.Add(new ApiTransactionFilter());
 
             return Task.CompletedTask;
+        }
+
+        public Uri GetBaseUrl(IConfigurationManager cfg)
+        {
+            var uri = cfg.AppSettings[@"BaseUrl"];
+            if (!string.IsNullOrWhiteSpace(uri))
+            {
+                return new Uri(uri);
+            }
+
+            if (HttpContext.Current != null)
+            {
+                var request = HttpContext.Current.Request;
+                var appUrl = HttpRuntime.AppDomainAppVirtualPath;
+
+                if (appUrl != "/")
+                    appUrl = "/" + appUrl;
+
+                var baseUrl = string.Format("{0}://{1}{2}", request.Url.Scheme, request.Url.Authority, appUrl);
+
+                return new Uri(baseUrl);
+            }
+
+            return null;
         }
     }
 }
