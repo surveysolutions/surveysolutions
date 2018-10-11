@@ -31,19 +31,14 @@ $supportPath = Join-path $workdir "SupportPackage"
 $targetSupportPath = Join-path $HQsitePath "Support"
 
 Copy-Item $sitePatha\* $HQsitePath -Force -Recurse
-Copy-Item $HQSourcePath\ExportService\* $HQsitePath\.bin\Export -Force -Recurse
-
-$exportSettingsPath = "$HQsitePath\.bin\Export\appsettings.json"
-
-$exportSettings = Get-Content $exportSettingsPath -raw | ConvertFrom-Json
-$exportSettings.ConnectionStrings.DefaultConnection = "{FROM_INSTALLER}"
-
-$exportSettings | ConvertTo-Json | set-content $exportSettingsPath
+Remove-Item "$HQsitePath\HostMap.config"
 
 Copy-Item -Path $supportPath -Destination $targetSupportPath -Force -Recurse
 
 $file = (Get-ChildItem -Path $HQsitePath -recurse | Where-Object {$_.Name -match "WB.UI.Headquarters.dll"})
 $version = [Reflection.AssemblyName]::GetAssemblyName($file.FullName).Version
+
+setupExportService
 
 & (GetPathToMSBuild) $InstallationProject '/t:Build' "/p:HarvestDir=$HQsitePath" "/p:HarvestDirectory=$HQsitePath" "/p:Configuration=Release" "/p:Platform=x64" "/p:SurveySolutionsVersion=$version" | Write-Host
 
@@ -66,3 +61,14 @@ if ($sourceCleanup) {
 }
 
 Write-Host "##teamcity[publishArtifacts 'SurveySolutions.msi']"
+
+function setupExportService() {
+    Copy-Item $HQSourcePath\ExportService\* $HQsitePath\.bin\Export -Force -Recurse
+
+    $exportSettingsPath = "$HQsitePath\.bin\Export\appsettings.json"
+    
+    $exportSettings = Get-Content $exportSettingsPath -raw | ConvertFrom-Json
+    $exportSettings.ConnectionStrings.DefaultConnection = "{FROM_INSTALLER}"
+    $exportSettings.Storage.S3.Enabled = $false
+    $exportSettings | ConvertTo-Json | set-content $exportSettingsPath    
+}
