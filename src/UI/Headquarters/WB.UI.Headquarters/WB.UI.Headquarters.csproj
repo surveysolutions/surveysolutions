@@ -1748,7 +1748,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\AdminMenu.cshtml" />
     <Content Include="Views\Template\LoginToDesigner.cshtml" />
-    <Content Include="Views\HQ\Assign.cshtml" />
     <Content Include="Views\SurveySetup\BatchUpload.cshtml" />
     <Content Include="Views\HQ\Interviews.cshtml" />
     <Content Include="Views\Reports\MapReport.cshtml" />
@@ -2773,9 +2772,11 @@
     <Error Condition="!Exists('..\..\..\..\packages\Esri.ArcGISRuntime.WPF.100.2.1\build\net452\Esri.ArcGISRuntime.WPF.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\Esri.ArcGISRuntime.WPF.100.2.1\build\net452\Esri.ArcGISRuntime.WPF.targets'))" />
     <Error Condition="!Exists('..\..\..\..\packages\Microsoft.Net.Compilers.2.9.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\Microsoft.Net.Compilers.2.9.0\build\Microsoft.Net.Compilers.props'))" />
     <Error Condition="!Exists('..\..\..\..\packages\Refit.4.6.30\build\net461\refit.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\Refit.4.6.30\build\net461\refit.targets'))" />
+    <Error Condition="!Exists('..\..\..\..\packages\RazorGenerator.MsBuild.2.5.0\build\RazorGenerator.MsBuild.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\RazorGenerator.MsBuild.2.5.0\build\RazorGenerator.MsBuild.targets'))" />
   </Target>
   <Import Project="..\..\..\..\packages\Esri.ArcGISRuntime.WPF.100.2.1\build\net452\Esri.ArcGISRuntime.WPF.targets" Condition="Exists('..\..\..\..\packages\Esri.ArcGISRuntime.WPF.100.2.1\build\net452\Esri.ArcGISRuntime.WPF.targets')" />
   <Import Project="..\..\..\..\packages\Refit.4.6.30\build\net461\refit.targets" Condition="Exists('..\..\..\..\packages\Refit.4.6.30\build\net461\refit.targets')" />
+  <Import Project="..\..\..\..\packages\RazorGenerator.MsBuild.2.5.0\build\RazorGenerator.MsBuild.targets" Condition="Exists('..\..\..\..\packages\RazorGenerator.MsBuild.2.5.0\build\RazorGenerator.MsBuild.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
