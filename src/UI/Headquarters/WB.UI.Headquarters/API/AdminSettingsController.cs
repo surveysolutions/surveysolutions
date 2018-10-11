@@ -4,6 +4,7 @@ using System.Net.Http;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.ValueObjects;
+using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.Infrastructure.PlainStorage;
 
 namespace WB.UI.Headquarters.API

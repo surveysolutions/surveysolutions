@@ -235,5 +235,10 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         {
             return Service.LogAssignmentAsHandledAsync(id, cancellationToken);
         }
+
+        public Task<string> GetPublicKeyForEncryptionAsync(CancellationToken cancellationToken)
+        {
+            return Service.GetPublicKeyForEncryptionAsync(cancellationToken);
+        }
     }
 }
