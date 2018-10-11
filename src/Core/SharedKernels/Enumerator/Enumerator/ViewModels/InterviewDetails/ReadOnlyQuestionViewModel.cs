@@ -10,7 +10,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
     public class ReadOnlyQuestionViewModel :
         MvxNotifyPropertyChanged,
-        IInterviewEntityViewModel
+        IInterviewEntityViewModel,
+        IDisposable
     {
         public Identity Identity { get; private set; }
 
@@ -58,5 +59,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         public virtual WarningsViewModel Warnings { get; }
 
         public string Answer { get; private set; }
+
+        public void Dispose()
+        {
+            Title?.Dispose();
+            Validity?.Dispose();
+            Warnings?.Dispose();
+        }
     }
 }
