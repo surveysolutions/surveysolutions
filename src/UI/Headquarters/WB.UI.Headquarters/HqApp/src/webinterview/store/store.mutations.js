@@ -67,8 +67,10 @@ export default {
         state.hasCoverPage = hasCoverPage
     },
     POSTING_COMMENT(state, {questionId}){
-        const question = state.entityDetails[questionId]
-        Vue.set(question, "postingComment", true)
+        const question = state.entityDetails[questionId];
+        if (question){ // can be posted from overview and question is not loaded
+            Vue.set(question, "postingComment", true)
+        }
     },
 
     LOG_LAST_ACTIVITY(state){

@@ -33,6 +33,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Utils
 
         public void Unzip(string archivedFile, string extractToFolder, bool ignoreRootDirectory = false)
         {
+            if (archivedFile == null) throw new ArgumentNullException(nameof(archivedFile));
+
             if (!ignoreRootDirectory)
             {
                 extractToFolder = Path.Combine(extractToFolder, Path.GetFileNameWithoutExtension(archivedFile));
