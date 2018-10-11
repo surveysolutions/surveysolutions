@@ -33,6 +33,13 @@ $targetSupportPath = Join-path $HQsitePath "Support"
 Copy-Item $sitePatha\* $HQsitePath -Force -Recurse
 Copy-Item $HQSourcePath\ExportService\* $HQsitePath\.bin\Export -Force -Recurse
 
+$exportSettingsPath = "$HQsitePath\.bin\Export\appsettings.json"
+
+$exportSettings = Get-Content $exportSettingsPath -raw | ConvertFrom-Json
+$exportSettings.ConnectionStrings.DefaultConnection = "{FROM_INSTALLER}"
+
+$exportSettings | ConvertTo-Json | set-content $exportSettingsPath
+
 Copy-Item -Path $supportPath -Destination $targetSupportPath -Force -Recurse
 
 $file = (Get-ChildItem -Path $HQsitePath -recurse | Where-Object {$_.Name -match "WB.UI.Headquarters.dll"})

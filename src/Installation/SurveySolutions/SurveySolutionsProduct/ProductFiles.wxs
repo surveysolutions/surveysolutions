@@ -1,13 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
     <Fragment>
-        <DirectoryRef Id="INSTALLSITEFOLDER" />
+        <DirectoryRef Id="INSTALLSITEFOLDER">
+            <Directory Id="dir85E4FA3518F14256FC747AA98E47C39D" Name=".bin" />
+        </DirectoryRef>
     </Fragment>
     <Fragment>
         <ComponentGroup Id="ProductFilesComponentGroup">
             <Component Id="cmpC45FD8B60F055547CDAE8F1B77CAD5B5" Directory="INSTALLSITEFOLDER" Guid="*">
                 <File Id="fil0ECFD1288AFE6DE65F0209209F58C59B" KeyPath="yes" Source="$(var.HarvestDir)\New Text Document.txt" />
             </Component>
+            <Component Id="cmpF93194CCCAC30A181D5CA616562C3EF6" Directory="dirE79D123614CAF68440CA21A74C92F709" Guid="*">
+                <File Id="filC4B6A38902B7F5860FBCBFD9ADE22A61" KeyPath="yes" Source="$(var.HarvestDir)\.bin\Export\appsettings.json" />
+            </Component>
         </ComponentGroup>
+    </Fragment>
+    <Fragment>
+        <DirectoryRef Id="dir85E4FA3518F14256FC747AA98E47C39D">
+            <Directory Id="dirE79D123614CAF68440CA21A74C92F709" Name="Export" />
+        </DirectoryRef>
     </Fragment>
 </Wix>
