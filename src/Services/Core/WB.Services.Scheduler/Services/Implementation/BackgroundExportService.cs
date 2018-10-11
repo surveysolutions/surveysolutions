@@ -49,6 +49,7 @@ namespace WB.Services.Scheduler.Services.Implementation
                 logger.LogInformation("Stopped background service: " + backgroundService.GetType().Name);
             }
 
+            cts.Dispose();
             this.scope.Dispose();
         }
     }

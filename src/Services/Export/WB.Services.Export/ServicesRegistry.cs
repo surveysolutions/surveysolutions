@@ -64,6 +64,7 @@ namespace WB.Services.Export
             services.AddTransient<IExportServiceDataProvider, ExportServiceDataProvider>();
             services.AddTransient<IBinaryDataSource, BinaryDataSource>();
             services.AddTransient<IJobsStatusReporting, JobsStatusReporting>();
+            services.AddTransient<IExportArchiveHandleService, ExportArchiveHandleService>();
             services.AddTransient<IDdiMetadataAccessor, DdiMetadataAccessor>();
             services.AddTransient<IDdiMetadataFactory, DdiMetadataFactory>();
             services.AddTransient<IMetadataWriter, MetadataWriter>();
