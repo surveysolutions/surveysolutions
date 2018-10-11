@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Globalization;
 using System.Linq;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -30,11 +30,15 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Interview.Overview
 
             this.HasWarnings = interview.GetFailedWarningMessages(treeQuestion.Identity, string.Empty).Any();
             HasComment = treeQuestion.AnswerComments.Count > 0;
+            this.AnswerTimeUtc = treeQuestion.AnswerTimeUtc;
+            this.SupportsComments = true;
         }
 
         public bool HasErrors { get; set; }
 
         public string Answer { get; set; }
+
+        public DateTime? AnswerTimeUtc { get; set; }
 
         public bool HasComment { get; set; }
 

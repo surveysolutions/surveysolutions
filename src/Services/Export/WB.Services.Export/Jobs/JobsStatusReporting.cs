@@ -69,7 +69,10 @@ namespace WB.Services.Export.Jobs
             }
 
             var directory = this.fileBasedExportedDataAccessor.GetExportDirectory(tenant);
-            Directory.Delete(directory);
+            if (Directory.Exists(directory))
+            {
+                Directory.Delete(directory, true);
+            }
         }
 
         public async Task<DataExportArchive> DownloadArchiveAsync(TenantInfo tenant, string archiveName,

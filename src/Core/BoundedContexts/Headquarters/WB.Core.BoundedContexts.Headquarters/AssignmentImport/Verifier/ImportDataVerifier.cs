@@ -126,7 +126,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                             new InterviewQuestionInvariants(answer.Identity, questionnaire, tree, questionOptionsRepository).RequireQuestionExists();
                         }
 
-                        interviewTreeQuestion.SetAnswer(answer.Answer);
+                        interviewTreeQuestion.SetAnswer(answer.Answer, DateTime.UtcNow);
 
                         interviewTreeQuestion.RunImportInvariantsOrThrow(new InterviewQuestionInvariants(answer.Identity, questionnaire, tree, questionOptionsRepository));
                     }

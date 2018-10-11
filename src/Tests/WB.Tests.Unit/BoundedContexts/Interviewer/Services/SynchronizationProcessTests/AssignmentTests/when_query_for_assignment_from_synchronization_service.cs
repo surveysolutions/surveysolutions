@@ -17,7 +17,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         private AssignmentApiDocument assignment;
         private AssignmentApiDocument assignmentResponse;
 
-        private SynchronizationService synchronizationService;
+        private OnlineSynchronizationService synchronizationService;
 
         [OneTimeSetUp]
         public async Task Context()
