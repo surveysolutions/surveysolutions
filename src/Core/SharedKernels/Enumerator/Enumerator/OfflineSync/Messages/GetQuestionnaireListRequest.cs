@@ -105,6 +105,13 @@ namespace WB.Core.SharedKernels.Enumerator.OfflineSync.Messages
         public int Id { get; set; }
     }
 
+    public class GetPublicKeyForEncryptionRequest: ICommunicationMessage { }
+
+    public class GetPublicKeyForEncryptionResponse : ICommunicationMessage
+    {
+        public string PublicKey { get; set; }
+    }
+
     public class UploadInterviewImageRequest : ICommunicationMessage
     {
         public PostFileApiView InterviewImage { get; set; }
