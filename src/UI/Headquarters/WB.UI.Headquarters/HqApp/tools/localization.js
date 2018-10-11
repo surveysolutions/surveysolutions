@@ -94,11 +94,37 @@ module.exports = class LocalizationBuilder {
                 json
             );
         }
+		
+		this.addDefaultLocaleValues(locale, "en");
 
         this.localeInfo = locale;
         console.timeEnd("parseResxFiles");
         return this.localeInfo;
     }
+	
+	addDefaultLocaleValues(locales, def) {
+		const defaultMessages = locales[def];
+
+		// translations: en, ru, es
+		Object.keys(locales).forEach((locale) => {
+			if (locale == def) return;
+
+			// namespaces: Main, DataTables 
+			Object.keys(defaultMessages).forEach((namespace) => {
+				if (!locales[locale][namespace]){
+					locales[locale][namespace] = {};
+				}
+				// key: Version, ModalTitle
+				Object.keys(defaultMessages[namespace]).forEach((key) => {
+					if (!locales[locale][namespace][key]) {
+						locales[locale][namespace][key] = defaultMessages[namespace][key];
+					}
+				});
+			});
+		});
+
+		return locales;
+	}
 
     getDictionaryDefinition(locales) {
         var result = Object.keys(locales).map(
@@ -147,7 +173,8 @@ module.exports = class LocalizationBuilder {
             }
         });
 
-        return Object.assign(initial, newone);
+		var result = Object.assign(initial, newone);
+        return result;
     }
 
     getHash(content) {
