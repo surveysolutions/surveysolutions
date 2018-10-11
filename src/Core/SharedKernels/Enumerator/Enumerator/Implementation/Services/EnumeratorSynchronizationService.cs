@@ -40,7 +40,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         
         protected string LogoUrl => string.Concat(ApplicationUrl, "/companyLogo");
         protected string AutoUpdateUrl => string.Concat(ApplicationUrl, "/autoupdate");
-        
+        protected string PublicKeyForEncryptionUrl => string.Concat(ApplicationUrl, "/encryption-key");
+
         protected string MapsController => string.Concat(ApplicationUrl, "/maps"); 
 
         private readonly IPrincipal principal;
@@ -139,6 +140,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
             return response;
         }
+
+        public Task<string> GetPublicKeyForEncryptionAsync(CancellationToken cancellationToken)
+            => this.TryGetRestResponseOrThrowAsync(() => this.restService.GetAsync<string>(
+                url: this.PublicKeyForEncryptionUrl, credentials: this.restCredentials, token: cancellationToken));
 
         public Task<AssignmentApiDocument> GetAssignmentAsync(int id, CancellationToken cancellationToken)
         {

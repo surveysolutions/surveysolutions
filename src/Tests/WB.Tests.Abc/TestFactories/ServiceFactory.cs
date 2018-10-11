@@ -753,7 +753,8 @@ namespace WB.Tests.Abc.TestFactories
             return new SupervisorSynchronizeHandler(
                 interviewerViewRepository ?? Mock.Of<IPlainStorage<InterviewerDocument>>(),
                 settings ?? Mock.Of<ISupervisorSettings>(),
-                fileSystemAccessor: fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>());
+                fileSystemAccessor: fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
+                secureStorage: Mock.Of<ISecureStorage>());
         }
 
         public SupervisorInterviewsHandler SupervisorInterviewsHandler(ILiteEventBus eventBus = null,

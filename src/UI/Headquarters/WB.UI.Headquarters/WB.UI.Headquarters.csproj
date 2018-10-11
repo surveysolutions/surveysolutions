@@ -2285,6 +2285,7 @@
     <Compile Include="Controllers\WebInterviewController.Actions.cs" />
     <Compile Include="Implementation\Maps\JsonMapResponse.cs" />
     <Compile Include="Implementation\Maps\MapService.cs" />
+    <Compile Include="Implementation\Services\SecureStorage.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M201805031628_AllowNullForResponsibleName.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M201804231416_AddAuditLogTable.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M024_AddAllowExportVariablesColumnToQuestionnaireBrowseItem.cs" />
@@ -2307,6 +2308,7 @@
     <Compile Include="Migrations\PlainStore\M001-100\M201805311125_AddResponsibleIdIndexForAssignments.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M201806151438_AddQuestionnaireVariableToQuestionnaireBrowseItems.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M201809031621_AddReceivedAtToAssignment.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M201810101543_AddRsaEncryptionKeys.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M201809101449_AddExportServiceKey.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201709081506_RemoveInterviewStatusTimespans.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201709071054_Remove_Readsideversions.cs" />
