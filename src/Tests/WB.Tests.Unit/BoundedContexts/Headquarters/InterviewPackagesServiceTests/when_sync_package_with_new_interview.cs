@@ -89,11 +89,14 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewPackagesServiceTes
 
             var autofacServiceLocatorAdapterForTests = new AutofacServiceLocatorAdapter(container.Object);
 
+            var serviceLocatorOriginal = ServiceLocator.IsLocationProviderSet ? ServiceLocator.Current : null;
             ServiceLocator.SetLocatorProvider(() => autofacServiceLocatorAdapterForTests);
 
 
             // Act
             service.ProcessPackage(Create.Entity.InterviewPackage(Id.g1, Create.Event.SupervisorAssigned(Id.gC, oldSupervisorId)));
+
+            ServiceLocator.SetLocatorProvider(() => serviceLocatorOriginal);
 
             // Assert
             Assert.That(syncCommand, Is.Not.Null);
@@ -106,9 +109,6 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewPackagesServiceTes
             var service = Create.Service.InterviewPackagesService(commandService: commandService.Object);
 
             var oldSupervisorId = Id.gB;
-
-
-
 
             var newtonJsonSerializer = new JsonAllTypesSerializer();
 
@@ -150,13 +150,14 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewPackagesServiceTes
 
             var autofacServiceLocatorAdapterForTests = new AutofacServiceLocatorAdapter(container.Object);
 
+            var serviceLocatorOriginal = ServiceLocator.IsLocationProviderSet ? ServiceLocator.Current : null;
+
             ServiceLocator.SetLocatorProvider(() => autofacServiceLocatorAdapterForTests);
-
-
-
 
             // Act
             service.ProcessPackage(Create.Entity.InterviewPackage(Id.g1, Create.Event.SupervisorAssigned(Id.gC, oldSupervisorId)));
+
+            ServiceLocator.SetLocatorProvider(() => serviceLocatorOriginal);
 
             // Assert
             Assert.That(syncCommand, Is.Not.Null);

@@ -82,9 +82,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewPackagesServiceT
 
             var autofacServiceLocatorAdapterForTests = new AutofacServiceLocatorAdapter(container.Object);
 
+            var serviceLocatorOriginal = ServiceLocator.IsLocationProviderSet ? ServiceLocator.Current : null;
             ServiceLocator.SetLocatorProvider(() => autofacServiceLocatorAdapterForTests);
-
-
 
             interviewPackagesService = Create.Service.InterviewPackagesService(
                 serializer: serializer, brokenInterviewPackageStorage: brokenPackagesStorage,
@@ -104,6 +103,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewPackagesServiceT
             });
 
             interviewPackagesService.ProcessPackage("1");
+
+            ServiceLocator.SetLocatorProvider(() => serviceLocatorOriginal);
         }
         
         [Test]
