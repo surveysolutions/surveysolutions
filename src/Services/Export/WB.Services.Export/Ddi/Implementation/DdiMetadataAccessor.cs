@@ -5,7 +5,7 @@ using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Services.Processing;
-using WB.Services.Export.Tenant;
+using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.Ddi.Implementation
 {
@@ -34,7 +34,7 @@ namespace WB.Services.Export.Ddi.Implementation
             
         }
 
-        public async Task<string> GetFilePathToDDIMetadata(TenantInfo tenant, QuestionnaireId questionnaireId,
+        public async Task<string> GetFilePathToDDIMetadataAsync(TenantInfo tenant, QuestionnaireId questionnaireId,
             string password)
         {
             var pathToDdiMetadata = fileSystemAccessor.CombinePath(options.DirectoryPath, tenant.Id.Id, ExportedDataFolderName);

@@ -3,11 +3,11 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <LangVersion>7.1</LangVersion>
     <!--<TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>-->
     <RuntimeFrameworkVersion>2.1.4</RuntimeFrameworkVersion>
     <Company>World Bank</Company>
+    <RuntimeIdentifier>win-x64</RuntimeIdentifier>
     <PackageId>WB.Services.Export.Host</PackageId>
     <Product>Survey Solutions Export Service</Product>
     <VersionPrefix Condition="'$(VersionPrefix)' == ''">18.10.0-development-$(COMPUTERNAME)</VersionPrefix>
@@ -21,8 +21,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Autofac" Version="4.8.1" />
-    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="4.3.0" />
     <PackageReference Include="Dapper" Version="1.50.5" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting.WindowsServices" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.1.1" />
@@ -46,6 +44,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Core\WB.Services.Scheduler\WB.Services.Scheduler.csproj" />
     <ProjectReference Include="..\WB.Services.Export\WB.Services.Export.csproj" />
   </ItemGroup>
 

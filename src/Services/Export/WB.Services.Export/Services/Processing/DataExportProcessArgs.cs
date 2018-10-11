@@ -1,7 +1,7 @@
 ﻿using System;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Questionnaire;
-using WB.Services.Export.Tenant;
+using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.Services.Processing
 {
@@ -21,7 +21,7 @@ namespace WB.Services.Export.Services.Processing
         public QuestionnaireId Questionnaire { get; set; }
         public string ArchivePassword { get; set; }
 
-        public string NaturalId => $"{Tenant.Id}${InterviewStatusString()}${this.Format}${this.Questionnaire}" +
+        public string NaturalId => $"{Tenant.Id}${InterviewStatusString()}${this.Format}${this.Questionnaire}${this.StorageTypeString}" +
                                             $"${this.FromDate?.ToString(@"YYYYMMDD") ?? "EMPTY FROM DATE"}" +
                                             $"${this.ToDate?.ToString(@"YYYYMMDD") ?? "EMPTY TO DATE"}";
 
@@ -35,6 +35,9 @@ namespace WB.Services.Export.Services.Processing
         public string AccessToken { get; set; }
         public ExternalStorageType? StorageType { get; set; }
         public DataExportFormat Format { get; set; }
+        public long ProcessId { get; set; }
+
+        private string StorageTypeString => this.StorageType == null ? "NoExternal" : this.StorageType.ToString();
         private string InterviewStatusString() => InterviewStatus?.ToString() ?? "All";
     }
 }

@@ -576,6 +576,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Additional question information.
+        /// </summary>
+        internal static string Interview_Overview_AdditionalInformation {
+            get {
+                return ResourceManager.GetString("Interview_Overview_AdditionalInformation", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Not answered.
         /// </summary>
         internal static string Interview_Overview_NotAnswered {

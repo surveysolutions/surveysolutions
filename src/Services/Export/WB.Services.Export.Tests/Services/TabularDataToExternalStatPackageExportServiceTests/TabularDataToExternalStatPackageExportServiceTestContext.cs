@@ -1,13 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Moq;
 using WB.Services.Export.CsvExport.Implementation.DoFiles;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Services;
-using WB.Services.Export.Tenant;
+using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.Tests.Services.TabularDataToExternalStatPackageExportServiceTests
 {
@@ -27,7 +28,9 @@ namespace WB.Services.Export.Tests.Services.TabularDataToExternalStatPackageExpo
                 dataQueryFactory ?? Mock.Of<IDataQueryFactory> (),
                 datasetWriterFactory ?? Mock.Of<IDatasetWriterFactory>(), 
                 new QuestionnaireLabelFactory(),
-                Mock.Of<IQuestionnaireExportStructureFactory>(x => x.GetQuestionnaireExportStructure(It.IsAny<TenantInfo>(), It.IsAny<QuestionnaireId>()) == questionnaireExportStructure),
+                Mock.Of<IQuestionnaireExportStructureFactory>(x => 
+                    x.GetQuestionnaireExportStructureAsync(It.IsAny<TenantInfo>(), It.IsAny<QuestionnaireId>()) 
+                    == Task.FromResult(questionnaireExportStructure)),
                 exportServiceDataProvider ?? Mock.Of <IExportServiceDataProvider>());
         }
 
