@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using Dapper;
-using NHibernate;
-using NHibernate.Transform;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
+
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.User
 {
@@ -123,27 +121,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
             return responsiblesFromInterviews;
         }
 
-
-        private static IQueryable<UsersViewItem> ApplyFilterByResponsible(string searchBy, IQueryable<InterviewSummary> interviews)
-        {
-            if (!string.IsNullOrWhiteSpace(searchBy))
-            {
-                string searchLowerText = searchBy.ToLower();
-                interviews = interviews.Where(x => x.ResponsibleName.ToLower().Contains(searchLowerText));
-            }
-
-            var responsiblesFromInterviews = interviews.Select(x => new {x.ResponsibleId, x.ResponsibleName})
-                .Distinct()
-                .Select(x => new UsersViewItem
-                {
-                    UserId = x.ResponsibleId,
-                    UserName = x.ResponsibleName
-                })
-                .OrderBy(x => x.UserName);
-
-            return responsiblesFromInterviews;
-        }
-
         private List<UsersViewItem> GetUsersFilteredByTeamLeadAndResponsible(string searchBy, int pageSize)
         {
             string searchLowerText = searchBy?.ToLower();
@@ -170,92 +147,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                     UserName = x.userName
                 })
                 .ToList();
-
-
-            /*
-                         if (!string.IsNullOrWhiteSpace(searchBy))
-            {
-                interviews = interviews.Where(x => 
-                    x.TeamLeadName.ToLower().Contains(searchLowerText) ||
-                    x.ResponsibleName.ToLower().Contains(searchLowerText)
-                );
-            }
-
-             var responsiblesFromInterviews = interviews.
-                            .Join(interviews, interview1 => 1, interview2 => 2, (interview1, interview2) => new {
-            //                    UserId = interview1.TeamLeadId == null ? interview2.ResponsibleId : interview1.TeamLeadId,
-            //                    UserName = interview1.TeamLeadName == null ? interview2.ResponsibleName : interview1.TeamLeadName
-                                UserId = interview1.TeamLeadId,
-                                UserName = interview1.TeamLeadName
-                            })
-                            .Select(x => new UsersViewItem
-                            {
-                                UserId = x.UserId,
-                                UserName = x.UserName
-                            })
-                            .OrderBy(x => x.UserName);*/
-
-            /*            var responsiblesFromInterviews = (from interview1 in interviews
-                            join interview2 in interviews on 1 equals 2
-                            let name = (interview1.TeamLeadName == null) ? interview2.ResponsibleName : interview1.TeamLeadName
-                            let id = (interview1.TeamLeadId == null) ? interview2.ResponsibleId : interview1.TeamLeadId
-                            select new UsersViewItem
-                            {
-                                UserId = id,
-                                UserName = name
-                            });*/
-
-            /*            var responsiblesFromInterviews = interviews.Select(x => new { id = x.TeamLeadId, name = x.TeamLeadName })
-                            .Distinct()
-                            .Join(interviews.Select(x => new { id = x.ResponsibleId, name = x.ResponsibleName }).Distinct())
-                            .Select(x => new UsersViewItem
-                            {
-                                UserId = x.TeamLeadId,
-                                UserName = x.TeamLeadName
-                            })
-                            .Join(interviews.Select(x => new { x.ResponsibleId, x.ResponsibleName })
-                                .Distinct()
-                                .Select(x => new UsersViewItem
-                                {
-                                    UserId = x.ResponsibleId,
-                                    UserName = x.ResponsibleName
-                                }))
-                            .OrderBy(x => x.UserName);*/
-
-            /*
-                        var responsiblesFromInterviews = interviews.Select(x => new {x.TeamLeadId, x.TeamLeadName, x.ResponsibleId, x.ResponsibleName })
-                            .Select(x => new UsersViewItem
-                            {
-                                UserId = x.TeamLeadId,
-                                UserName = x.TeamLeadName
-                            })
-                            .Union(interviews.Select(x => new { x.ResponsibleId, x.ResponsibleName })
-                                .Select(x => new UsersViewItem
-                                {
-                                    UserId = x.ResponsibleId,
-                                    UserName = x.ResponsibleName
-                                }))
-                            .OrderBy(x => x.UserName);*/
-
-
-            /*var responsiblesFromInterviews = interviews.GroupBy(x => new {x.TeamLeadId, x.TeamLeadName})
-                .Where(x => x.Count() > 0)
-                .Select(x => new UsersViewItem
-                {
-                    UserId = x.Key.TeamLeadId,
-                    UserName = x.Key.TeamLeadName
-                })
-                .Union(
-                    interviews.GroupBy(x => new { x.ResponsibleId, x.ResponsibleName })
-                    .Where(x => x.Count() > 0)
-                    .Select(x => new UsersViewItem
-                    {
-                        UserId = x.Key.ResponsibleId,
-                        UserName = x.Key.ResponsibleName
-                    }))
-                .OrderBy(x => x.UserName);*/
-
-            //return responsiblesFromInterviews;
         }
 
         private int GetCountUsersFilteredByTeamLeadAndResponsible(string searchBy)
