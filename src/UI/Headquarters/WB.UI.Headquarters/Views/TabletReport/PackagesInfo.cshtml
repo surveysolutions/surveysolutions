@@ -14,7 +14,7 @@
         var $packegeUrl = '@Url.Action("DownloadPackages", "TabletReport")';
 
         var $tabletInfoUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "TabletReportApi", action = "Packages" })';
-        var responsiblesUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "Teams", action = "AssigneeSupervisorsAndDependentInterviewers" })';
+        var responsiblesUrl = '@Url.RouteUrl("DefaultApiWithAction", new { httproute = "", controller = "Teams", action = "AssigneeSupervisors" })';
         var model = new Supervisor.VM.TabletInfo($tabletInfoUrl, responsiblesUrl);
         ko.applyBindings(model);
         model.load();
