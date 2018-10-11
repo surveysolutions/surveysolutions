@@ -69,6 +69,6 @@ function setupExportService() {
     
     $exportSettings = Get-Content $exportSettingsPath -raw | ConvertFrom-Json
     $exportSettings.ConnectionStrings.DefaultConnection = "{FROM_INSTALLER}"
-    
+    $exportSettings.Storage.S3.Enabled = $false
     $exportSettings | ConvertTo-Json | set-content $exportSettingsPath    
 }
