@@ -1,0 +1,21 @@
+@baseUri = http://localhost:5000
+@questionnaireId = d69217ff1b27405194476d261d331684$5
+@tenantId = ad7a6cf7-e81f-452f-8be1-67999ed322b0
+@referer = http://localhost/headquarters
+
+### @name Health check
+GET {{baseUri}}/.hc
+
+
+### @name Get Status
+GET {{baseUri}}/api/v1/job/status?questionnaireId={{questionnaireId}}&archiveName=CIFF18_Mother_With_Children(0-3)_5
+Authorization: Bearer {{tenantId}}
+Referer: {{referer}}
+x-tenant-name: local
+
+
+### @name Request update
+PUT {{baseUri}}/api/v1/job/generate?questionnaireId={{questionnaireId}}&format=STATA&archiveName=CIFF18_Mother_With_Children%280-3%29_5
+Authorization: Bearer {{tenantId}}
+Referer: {{referer}}
+x-tenant-name: local

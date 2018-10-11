@@ -1,6 +1,7 @@
 import Vue from "vue"
 
 Vue.component("wb-comments",        () => import(/* webpackChunkName: "questions" */ "./Comments"))
+Vue.component("wb-comment-item",    () => import(/* webpackChunkName: "questions" */ "./CommentItem"))
 Vue.component("wb-instructions",    () => import(/* webpackChunkName: "questions" */ "./Instructions"))
 Vue.component("wb-title",           () => import(/* webpackChunkName: "questions" */ "./Title"))
 Vue.component("wb-validation",      () => import(/* webpackChunkName: "questions" */ "./Validation"))

@@ -82,7 +82,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
 
         protected override async Task UploadFileAsync(string folder, byte[] fileContent, string fileName)
         {
-            var file = this.GetFileIdAsync(fileName, folder);
+            var file = await this.GetFileIdAsync(fileName, folder);
             if (file != null) return;
 
             var fileMetadata = new File

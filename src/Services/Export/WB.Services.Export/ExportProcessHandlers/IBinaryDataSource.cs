@@ -7,6 +7,9 @@ namespace WB.Services.Export.ExportProcessHandlers
 {
     internal interface IBinaryDataSource
     {
-        Task ForEachMultimediaAnswerAsync(ExportSettings settings, Func<BinaryData, Task> action, CancellationToken cancellationToken);
+        Task ForEachMultimediaAnswerAsync(ExportSettings settings, 
+            Func<BinaryData, Task> action, 
+            IProgress<int> progress, 
+            CancellationToken cancellationToken);
     }
 }

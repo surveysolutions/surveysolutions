@@ -67,6 +67,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
         private string GetQuestionnaireTitle(QuestionnaireIdentity identity)
         {
             var questionnaire = this.transactionManager.ExecuteInQueryTransaction(() => this.questionnaires.GetById(identity.ToString()));
+            if (questionnaire == null) return identity.QuestionnaireId.FormatGuid();
+
             var questionnaireTitle = questionnaire.Variable ?? questionnaire.Title;
 
             questionnaireTitle = this.fileSystemAccessor.MakeValidFileName(questionnaireTitle);

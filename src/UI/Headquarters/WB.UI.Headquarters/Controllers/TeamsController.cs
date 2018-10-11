@@ -42,6 +42,11 @@ namespace WB.UI.Headquarters.Controllers
 
         [HttpGet]
         [AuthorizeOr403(Roles = "Administrator, Headquarter, Observer")]
+        public UsersView AssigneeSupervisors(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
+            => this.teamViewFactory.GetAssigneeSupervisors(pageSize: pageSize, searchBy: query);
+
+        [HttpGet]
+        [AuthorizeOr403(Roles = "Administrator, Headquarter, Observer")]
         public UsersView AssigneeSupervisorsAndDependentInterviewers(string query = DEFAULTEMPTYQUERY, int pageSize = DEFAULTPAGESIZE)
             => this.teamViewFactory.GetAssigneeSupervisorsAndDependentInterviewers(pageSize: pageSize, searchBy: query);
 

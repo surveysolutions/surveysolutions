@@ -1,8 +1,9 @@
 using System;
-using System.Configuration;
+using System.Diagnostics;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 using Refit;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
@@ -46,8 +47,10 @@ using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Services;
 using WB.UI.Shared.Web.Attributes;
 using WB.UI.Shared.Web.CommandDeserialization;
+using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.Modules;
 using WB.UI.Shared.Web.Services;
+using ConfigurationManager = System.Configuration.ConfigurationManager;
 using RestService = WB.Core.GenericSubdomains.Portable.Implementation.Services.RestService;
 
 namespace WB.UI.Headquarters.Injections
@@ -108,8 +111,31 @@ namespace WB.UI.Headquarters.Injections
             {
                 var manager = ctx.Get<IPlainTransactionManager>();
                 var settings = ctx.Get<InterviewDataExportSettings>();
-
+                var cfg = ctx.Get<IConfigurationManager>();
                 string key = null;
+
+                if (HttpContext.Current != null)
+                {
+                    var httpCtx = HttpContext.Current;
+
+                    var servicePath = httpCtx.Server.MapPath(@"~/.bin/Export");
+                    var serviceExe = System.IO.Path.Combine(servicePath, "WB.Services.Export.Host.exe");
+
+
+                    if (System.IO.File.Exists(serviceExe))
+                    {
+                        var pid = System.IO.Path.Combine(servicePath, "pid");
+
+                        if (!System.IO.File.Exists(pid))
+                        {
+                            var processStartInfo = new ProcessStartInfo(serviceExe, "--console")
+                            {
+                                WorkingDirectory = servicePath
+                            };
+                            System.Diagnostics.Process.Start(processStartInfo);
+                        }
+                    }
+                }
 
                 manager.ExecuteInPlainTransaction(() =>
                 {
@@ -122,10 +148,12 @@ namespace WB.UI.Headquarters.Injections
                     BaseAddress = new Uri(settings.ExportServiceUrl),
                     DefaultRequestHeaders =
                     {
-                        Authorization = new AuthenticationHeaderValue("Bearer", key),
-                        Referrer = new Uri(ConfigurationManager.AppSettings["BaseUrl"])
+                        Authorization = new AuthenticationHeaderValue(@"Bearer", key),
+                        Referrer = GetBaseUrl(cfg)
                     }
                 };
+
+                http.DefaultRequestHeaders.Add(@"x-tenant-name", cfg.AppSettings[@"Storage.S3.Prefix"]);
 
                 var api = Refit.RestService.For<IExportServiceApi>(http);
 
@@ -136,6 +164,30 @@ namespace WB.UI.Headquarters.Injections
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
             return Task.CompletedTask;
+        }
+
+        public Uri GetBaseUrl(IConfigurationManager cfg)
+        {
+            var uri = cfg.AppSettings[@"BaseUrl"];
+            if (!string.IsNullOrWhiteSpace(uri))
+            {
+                return new Uri(uri);
+            }
+
+            if (HttpContext.Current != null)
+            {
+                var request = HttpContext.Current.Request;
+                var appUrl = HttpRuntime.AppDomainAppVirtualPath;
+
+                if (appUrl != "/")
+                    appUrl = "/" + appUrl;
+
+                var baseUrl = string.Format("{0}://{1}{2}", request.Url.Scheme, request.Url.Authority, appUrl);
+
+                return new Uri(baseUrl);
+            }
+
+            return null;
         }
     }
 }

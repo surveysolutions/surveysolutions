@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using WB.Services.Export.ExportProcessHandlers;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Questionnaire;
-using WB.Services.Export.Tenant;
+using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.CsvExport
 {
@@ -12,6 +12,6 @@ namespace WB.Services.Export.CsvExport
     {
         Task ExportInterviewsInTabularFormat(ExportSettings exportSettings, IProgress<int> progress, CancellationToken cancellationToken);
 
-        void GenerateDescriptionFile(TenantInfo tenant, QuestionnaireId questionnaireId, string directoryPath, string tabDataFileExtension);
+        Task GenerateDescriptionFileAsync(TenantInfo tenant, QuestionnaireId questionnaireId, string directoryPath, string tabDataFileExtension);
     }
 }
