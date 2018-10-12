@@ -67,11 +67,10 @@ namespace WB.Services.Export.Infrastructure.Implementation
                 CancellationToken cancellationToken)
             {
                 var uri = QueryHelpers.AddQueryString(request.RequestUri.ToString(), "apiKey", this.tenantId.Id);
-                logger.LogTrace("Appending apiKey: " + this.tenantId.Id);
                 request.RequestUri = new Uri(uri);
                 
                 var sw = Stopwatch.StartNew();
-                logger.LogTrace($"Calling {request.Method}: {request.RequestUri}");
+                logger.LogDebug($"Calling {request.Method}: {request.RequestUri}");
 
                 var result = await base.SendAsync(request, cancellationToken);
 
