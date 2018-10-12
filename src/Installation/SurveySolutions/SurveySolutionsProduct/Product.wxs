@@ -14,7 +14,7 @@
            UpgradeCode="2EBD5061-5E46-4313-A73E-CDAF570512D9">
     <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" Platform="x64"/>
 
-    <util:CloseApplication Id="CloseExportService" CloseMessage="yes" Target="WB.Services.Export.Host.exe" />
+    <util:CloseApplication Id="CloseExportService" CloseMessage="yes" Timeout="10" RebootPrompt="no" TerminateProcess="3" Target="WB.Services.Export.Host.exe" />
 
     <!--Will override all files-->
     <Property Id="REINSTALLMODE" Value="amus" />
