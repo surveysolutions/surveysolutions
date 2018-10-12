@@ -8,7 +8,7 @@ using WB.Services.Export.Utils;
 
 namespace WB.Services.Export.CsvExport.Implementation.DoFiles
 {
-    public class QuestionnaireLabelFactory : IQuestionnaireLabelFactory
+    internal class QuestionnaireLabelFactory : IQuestionnaireLabelFactory
     {
         private QuestionnaireLevelLabels CreateLabelsForQuestionnaireLevel(
             QuestionnaireExportStructure structure,
@@ -27,13 +27,15 @@ namespace WB.Services.Export.CsvExport.Implementation.DoFiles
             if (levelRosterVector.Count == 0 && level.LevelIdColumnName == ServiceColumns.InterviewId) // main file
             {
                 variableLabels.Add(new DataExportVariable(ServiceColumns.InterviewId, "Unique 32-character long identifier of the interview", null, levelVariableValueLabel, ExportValueType.Unknown));
-                variableLabels.Add(new DataExportVariable(ServiceColumns.Key, "Uinque 8-digit long identifier of the interview", null, levelVariableValueLabel, ExportValueType.Unknown));
+                variableLabels.Add(new DataExportVariable(ServiceColumns.Key, "Unique 8-digit long identifier of the interview", null, levelVariableValueLabel, ExportValueType.Unknown));
                 variableLabels.Add(new DataExportVariable(ServiceColumns.InterviewRandom, "Random number in the range 0..1 associated with interview", null, levelVariableValueLabel, ExportValueType.Unknown));
                 variableLabels.Add(new DataExportVariable(ServiceColumns.HasAnyError, "Errors count in the interview", null, levelVariableValueLabel, ExportValueType.Unknown));
+                variableLabels.Add(new DataExportVariable(ServiceColumns.InterviewStatus, "Status of the interview", null, levelVariableValueLabel, ExportValueType.Unknown));
             }
             else
             {
                 variableLabels.Add(new DataExportVariable(level.LevelIdColumnName, string.Empty, null, levelVariableValueLabel, ExportValueType.Unknown));
+                variableLabels.Add(new DataExportVariable(ServiceColumns.Key, "Unique 8-digit long identifier of the interview", null, levelVariableValueLabel, ExportValueType.Unknown));
             }
 
             foreach (IExportedHeaderItem headerItem in level.HeaderItems.Values)
@@ -84,7 +86,7 @@ namespace WB.Services.Export.CsvExport.Implementation.DoFiles
         public QuestionnaireLevelLabels[] CreateLabelsForQuestionnaire(QuestionnaireExportStructure structure)
         {
             return structure.HeaderToLevelMap.Values.Select(
-                x => this.CreateLabelsForQuestionnaireLevel(structure, x.LevelScopeVector)).ToArray();
+                        x => this.CreateLabelsForQuestionnaireLevel(structure, x.LevelScopeVector)).ToArray();
         }
     }
 }
