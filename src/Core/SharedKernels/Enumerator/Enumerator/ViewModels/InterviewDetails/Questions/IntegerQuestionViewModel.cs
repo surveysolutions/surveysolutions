@@ -162,6 +162,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.ProtectedAnswer = answerModel.ProtectedAnswer?.Value;
 
             InitSpecialValues(interviewId, entityIdentity);
+
+            if (!this.specialValues.HasSpecialValues)
+                this.ThrottlePeriod = 0;
         }
 
         public int? ProtectedAnswer
