@@ -55,13 +55,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     ? NavigationIdentity.CreateForPrefieldScreen()
                     : NavigationIdentity.CreateForGroup(interview.GetParentGroup(invalidEntity), invalidEntity);
 
-                var title = this.dynamicTextViewModelFactory.CreateDynamicTextViewModel();
-
-                title.Init(interviewId, invalidEntity);
-
-                entityWithErrorsViewModel.Init(navigationIdentity, title.PlainText, navigationState);
-
-                title.Dispose();//remove registration from bus
+                //remove registration from bus
+                using (var title = this.dynamicTextViewModelFactory.CreateDynamicTextViewModel())
+                {
+                    title.Init(interviewId, invalidEntity);
+                    entityWithErrorsViewModel.Init(navigationIdentity, title.PlainText, navigationState);
+                }
 
                 entitiesWithErrors.Add(entityWithErrorsViewModel);
             }

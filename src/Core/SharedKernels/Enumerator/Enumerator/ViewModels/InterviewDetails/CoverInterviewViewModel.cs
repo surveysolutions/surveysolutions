@@ -129,10 +129,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public void Dispose()
         {
-            var questions = PrefilledQuestions;
-            foreach (var entityWithCommentsViewModel in questions)
+            var prefilledQuestionsLocal = PrefilledQuestions;
+            foreach (var prefilledQuestion in prefilledQuestionsLocal)
             {
-                entityWithCommentsViewModel.Question?.Dispose();
+                prefilledQuestion.Dispose();
             }
 
             Name?.Dispose();

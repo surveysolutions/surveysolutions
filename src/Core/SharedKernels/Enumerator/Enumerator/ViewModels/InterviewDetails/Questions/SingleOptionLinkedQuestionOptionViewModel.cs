@@ -12,7 +12,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     {
         public event EventHandler BeforeSelected;
         public event EventHandler AnswerRemoved;
-        public EnablementViewModel Enablement => QuestionState.Enablement;
+        public EnablementViewModel Enablement => QuestionState?.Enablement;
 
         public decimal[] RosterVector { get; set; }
 
