@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
@@ -62,11 +63,11 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
                 writer.WriteField("offset");
                 writer.WriteField("parameters");
                 writer.NextRecord();
-               
-                Parallel.ForEach(interviewsToExport.Batch(interviewDataExportSettings.Value.ParadataQueryLimit), interviews =>
+
+                async Task QueryParadata(IEnumerable<InterviewToExport> interviews)
                 {
                     logger.LogTrace($"Query headquarters for interviews history");
-                    var historyItems = api.GetInterviewsHistory(interviews.Select(i => i.Id).ToArray()).Result;
+                    var historyItems = await api.GetInterviewsHistory(interviews.Select(i => i.Id).ToArray());
                     logger.LogTrace($"Query headquarters for interviews history. Got {historyItems.Count} items");
 
                     foreach (InterviewHistoryView paradata in historyItems)
@@ -76,7 +77,13 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
 
                     totalInterviewsProcessed += historyItems.Count;
                     progress.Report(totalInterviewsProcessed.PercentOf(interviewsToExport.Count));
-                });
+                }
+
+                foreach (var interviews in interviewsToExport.Batch(
+                    interviewDataExportSettings.Value.ParadataQueryLimit))
+                {
+                    await QueryParadata(interviews);
+                }
             }
 
             logger.LogInformation("Completed paradata export for " + settings);
