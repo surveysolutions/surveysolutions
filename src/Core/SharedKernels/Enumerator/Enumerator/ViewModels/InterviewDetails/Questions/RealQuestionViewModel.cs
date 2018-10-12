@@ -130,6 +130,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
 
             InitSpecialValues(interviewId, entityIdentity);
+
+            if (!this.specialValues.HasSpecialValues)
+                this.ThrottlePeriod = 0;
         }
 
         private void InitSpecialValues(string interviewId, Identity entityIdentity)

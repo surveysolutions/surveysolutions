@@ -238,8 +238,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
             catch (InterviewException ex)
             {
-                ResetUiOptions();
-                // reset to previous state
+                if (ex.ExceptionType != InterviewDomainExceptionType.QuestionIsMissing)
+                {
+                    // reset to previous state
+                    ResetUiOptions();
+                }
+                
                 this.QuestionState.Validity.ProcessException(ex);
             }
         }
