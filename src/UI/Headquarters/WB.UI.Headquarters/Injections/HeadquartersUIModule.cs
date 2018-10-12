@@ -1,11 +1,9 @@
 using System;
-using System.Diagnostics;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
-using Refit;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
@@ -24,9 +22,7 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
@@ -36,10 +32,7 @@ using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandDeserialization;
 using WB.Core.Synchronization.MetaInfo;
 using WB.Enumerator.Native.WebInterview.Services;
-using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Questionnaire;
-using WB.Infrastructure.Native.Storage;
-using WB.UI.Headquarters.API.Filters;
 using WB.UI.Headquarters.API.WebInterview;
 using WB.UI.Headquarters.API.WebInterview.Services;
 using WB.UI.Headquarters.Code;
@@ -50,7 +43,6 @@ using WB.UI.Shared.Web.CommandDeserialization;
 using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.Modules;
 using WB.UI.Shared.Web.Services;
-using ConfigurationManager = System.Configuration.ConfigurationManager;
 using RestService = WB.Core.GenericSubdomains.Portable.Implementation.Services.RestService;
 
 namespace WB.UI.Headquarters.Injections
@@ -107,35 +99,18 @@ namespace WB.UI.Headquarters.Injections
 
             registry.Bind<IQRCodeHelper, QRCodeHelper>();
 
+            registry.BindAsSingleton<ILocalExportServiceRunner, LocalExportServiceRunner>();
+
             registry.BindToMethod<IExportServiceApi>(ctx =>
             {
                 var manager = ctx.Get<IPlainTransactionManager>();
                 var settings = ctx.Get<InterviewDataExportSettings>();
                 var cfg = ctx.Get<IConfigurationManager>();
+
                 string key = null;
 
-                if (HttpContext.Current != null)
-                {
-                    var httpCtx = HttpContext.Current;
-
-                    var servicePath = httpCtx.Server.MapPath(@"~/.bin/Export");
-                    var serviceExe = System.IO.Path.Combine(servicePath, "WB.Services.Export.Host.exe");
-
-
-                    if (System.IO.File.Exists(serviceExe))
-                    {
-                        var pid = System.IO.Path.Combine(servicePath, "pid");
-
-                        if (!System.IO.File.Exists(pid))
-                        {
-                            var processStartInfo = new ProcessStartInfo(serviceExe, "--console")
-                            {
-                                WorkingDirectory = servicePath
-                            };
-                            System.Diagnostics.Process.Start(processStartInfo);
-                        }
-                    }
-                }
+                var localRunner = ctx.Get<ILocalExportServiceRunner>();
+                localRunner.Run();
 
                 manager.ExecuteInPlainTransaction(() =>
                 {
