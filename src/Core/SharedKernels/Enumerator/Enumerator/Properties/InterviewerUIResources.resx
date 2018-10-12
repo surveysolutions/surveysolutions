@@ -682,6 +682,9 @@ for further instructions</value>
   <data name="FailedToLoadInterview" xml:space="preserve">
     <value>Failed to open interview</value>
   </data>
+  <data name="FailedToLoadInterviewDescription" xml:space="preserve">
+    <value>Interview is in invalid state and will be removed. Please synchronize to get correct state.</value>
+  </data>
   <data name="UnacceptableSSLCertificate" xml:space="preserve">
     <value>Failed to verify certificate for target URL. Please, check if Headquarters website address is valid and your device has corrent current date and time</value>
   </data>
