@@ -1113,6 +1113,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
+            new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree).RequireQuestionExists();
+
             var treeQuestion = this.Tree.GetQuestion(questionIdentity);
 
             if (treeQuestion.IsLinkedToListQuestion)
@@ -1183,6 +1185,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var questionIdentity = new Identity(questionId, rosterVector);
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
+
+            new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree).RequireQuestionExists();
 
             var answeredQuestion = this.Tree.GetQuestion(questionIdentity);
             var isLinkedToList = answeredQuestion.IsLinkedToListQuestion;
@@ -1405,7 +1409,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public bool IsAnswerProtected(Identity questionIdentity, decimal value)
         {
             var question = this.Tree.GetQuestion(questionIdentity);
-            return question.IsAnswerProtected(value);
+            return question?.IsAnswerProtected(value) ?? false;
         }
 
         public void RemoveAnswer(Guid questionId, RosterVector rosterVector, Guid userId, DateTimeOffset originDate)
