@@ -35,6 +35,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly ILiteEventRegistry eventRegistry;
         private readonly IMvxMainThreadAsyncDispatcher mainThreadDispatcher;
+        private readonly ThrottlingViewModel throttlingModel;
 
         public SingleOptionRosterLinkedQuestionViewModel(
             IPrincipal principal,
@@ -44,7 +45,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IMvxMainThreadAsyncDispatcher mainThreadDispatcher,
             QuestionStateViewModel<SingleOptionLinkedQuestionAnswered> questionStateViewModel,
             QuestionInstructionViewModel instructionViewModel,
-            AnsweringViewModel answering)
+            AnsweringViewModel answering, 
+            ThrottlingViewModel throttlingModel)
         {
             if (principal == null) throw new ArgumentNullException("principal");
             if (interviewRepository == null) throw new ArgumentNullException("interviewRepository");
@@ -60,7 +62,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionState = questionStateViewModel;
             this.InstructionViewModel = instructionViewModel;
             this.Answering = answering;
-            this.timer = new Timer(async _ => { await SaveAnswer(); }, null, Timeout.Infinite, Timeout.Infinite);
+            this.throttlingModel = throttlingModel;
+            this.throttlingModel.Init(SaveAnswer);
         }
 
         private Identity questionIdentity;
@@ -161,6 +164,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 option.BeforeSelected -= this.OptionSelected;
                 option.AnswerRemoved -= this.RemoveAnswer;
             }
+            this.throttlingModel.Dispose();
         }
 
         private IEnumerable<SingleOptionLinkedQuestionOptionViewModel> CreateOptions()

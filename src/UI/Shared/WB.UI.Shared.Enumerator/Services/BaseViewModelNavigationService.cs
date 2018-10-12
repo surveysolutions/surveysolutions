@@ -43,7 +43,8 @@ namespace WB.UI.Shared.Enumerator.Services
 
         public virtual bool HasPendingOperations => this.commandService.HasPendingCommands ||
                                                     this.userInteractionService.HasPendingUserInterations ||
-                                                    this.userInterfaceStateService.IsUserInferfaceLocked;
+                                                    this.userInterfaceStateService.IsUserInterfaceLocked ||
+                                                    this.userInterfaceStateService.HasPendingThrottledActions;
 
         public Task Close(IMvxViewModel viewModel)
         {
