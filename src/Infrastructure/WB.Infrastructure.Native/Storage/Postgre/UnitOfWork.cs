@@ -33,7 +33,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             transaction = session.BeginTransaction();
             sessionId = (session as SessionImpl)?.SessionId;
 
-            logger.Info($"creating UOW:{Id} sessionId:{(session as SessionImpl)?.SessionId} Thread:{Thread.CurrentThread.ManagedThreadId}");
+            //logger.Info($"creating UOW:{Id} sessionId:{(session as SessionImpl)?.SessionId} Thread:{Thread.CurrentThread.ManagedThreadId}");
         }
 
         public void AcceptChanges()
@@ -44,7 +44,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             session.Close();
             transaction.Dispose();
             session.Dispose();
-            logger.Info($"session closing UOW:{Id} sessionId:{(session as SessionImpl)?.SessionId} Thread:{Thread.CurrentThread.ManagedThreadId}");
+            //logger.Info($"session closing UOW:{Id} sessionId:{(session as SessionImpl)?.SessionId} Thread:{Thread.CurrentThread.ManagedThreadId}");
             transaction = null;
             session = null;
         }
@@ -71,7 +71,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             transaction?.Dispose();
             session?.Dispose();
 
-            logger.Info($"session closing in dispose UOW:{Id} sessionId:{(session as SessionImpl)?.SessionId} Thread:{Thread.CurrentThread.ManagedThreadId}");
+            //logger.Info($"session closing in dispose UOW:{Id} sessionId:{(session as SessionImpl)?.SessionId} Thread:{Thread.CurrentThread.ManagedThreadId}");
 
             transaction = null;
             session = null;

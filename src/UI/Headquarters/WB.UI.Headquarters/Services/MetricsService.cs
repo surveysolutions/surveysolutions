@@ -29,7 +29,7 @@ namespace WB.UI.Headquarters.Services
             }
             try
             {
-                var sessionFactory = serviceLocator.GetInstance<ISessionFactory>(SessionFactoryName);
+                var sessionFactory = serviceLocator.GetInstance<ISessionFactory>();
                 MetricsRegistry.Instance.RegisterOnDemandCollectors(new BrokenPackagesStatsCollector(sessionFactory));
 
                 // getting instance name from connection string information
