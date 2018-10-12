@@ -40,6 +40,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly FilteredOptionsViewModel filteredOptionsViewModel;
         private readonly QuestionInstructionViewModel instructionViewModel;
         private readonly QuestionStateViewModel<MultipleOptionsQuestionAnswered> questionState;
+        private readonly ThrottlingViewModel throttlingModel;
 
         private Guid interviewId;
         private Identity questionIdentity;
@@ -65,7 +66,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             AnsweringViewModel answering,
             FilteredOptionsViewModel filteredOptionsViewModel,
             QuestionInstructionViewModel instructionViewModel,
-            IMvxMainThreadAsyncDispatcher mainThreadDispatcher)
+            IMvxMainThreadAsyncDispatcher mainThreadDispatcher, ThrottlingViewModel throttlingModel)
         {
             this.Options = new CovariantObservableCollection<MultiOptionQuestionOptionViewModel>();
             this.questionState = questionStateViewModel;
@@ -78,7 +79,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.interviewRepository = interviewRepository;
             this.Answering = answering;
             this.mainThreadDispatcher = mainThreadDispatcher;
-            this.timer = new Timer(async _ => { await SaveAnswer(); }, null, Timeout.Infinite, Timeout.Infinite);
+            this.throttlingModel = throttlingModel;
+            this.throttlingModel.Init(SaveAnswer);
         }
 
         public Identity Identity => this.questionIdentity;
@@ -161,6 +163,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.filteredOptionsViewModel.Dispose();
             this.eventRegistry.Unsubscribe(this);
             this.questionState.Dispose();
+            this.throttlingModel.Dispose();
         }
 
         public CovariantObservableCollection<MultiOptionQuestionOptionViewModel> Options { get; }
@@ -190,8 +193,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             return result;
         }
 
-        private readonly Timer timer;
-        protected internal int ThrottlePeriod { get; set; } = Constants.ThrottlePeriod;
         private List<int> previousOptionsToReset = null;
         private List<int> PreviousOptionsToReset
         {
@@ -295,14 +296,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             selectedOptionsToSave = allSelectedOptions;
 
-            if (this.ThrottlePeriod == 0)
-            {
-                await SaveAnswer();
-            }
-            else
-            {
-                timer.Change(ThrottlePeriod, Timeout.Infinite);
-            }
+            await this.throttlingModel.ExecuteActionIfNeeded();
         }
 
         public void Handle(AnswersRemoved @event)
