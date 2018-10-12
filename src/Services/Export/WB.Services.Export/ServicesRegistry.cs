@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System.Runtime.CompilerServices;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using WB.Services.Export.Checks;
 using WB.Services.Export.CsvExport;
@@ -23,6 +24,8 @@ using WB.Services.Export.Services.Processing;
 using WB.Services.Export.Storage;
 using WB.Services.Export.Utils;
 using WB.Services.Infrastructure.FileSystem;
+
+[assembly:InternalsVisibleTo("WB.Services.Export.Tests")]
 
 namespace WB.Services.Export
 {
