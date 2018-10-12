@@ -33,5 +33,15 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.FileBasedTab
             return new FileBasedTabletInformationService(string.Empty, fileSystemAccessorMock.Object,
                 archiveUtils, Mock.Of<IEncryptionService>());
         }
+
+        protected static FileBasedTabletInformationService CreateFileBasedTabletInformationService(
+            IFileSystemAccessor fileSystemAccessor = null,
+            IArchiveUtils archiveUtils = null,
+            IEncryptionService encryptionService = null) 
+            => new FileBasedTabletInformationService(
+                "path to internal folder",
+                fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
+                archiveUtils ?? Mock.Of<IArchiveUtils>(),
+                encryptionService ?? Mock.Of<IEncryptionService>());
     }
 }
