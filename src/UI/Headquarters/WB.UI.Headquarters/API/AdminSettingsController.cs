@@ -24,9 +24,8 @@ namespace WB.UI.Headquarters.API
         public AdminSettingsController(IPlainKeyValueStorage<GlobalNotice> appSettingsStorage,
             IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage)
         {
-            if (appSettingsStorage == null) throw new ArgumentNullException(nameof(appSettingsStorage));
-            this.appSettingsStorage = appSettingsStorage;
-            this.interviewerSettingsStorage = interviewerSettingsStorage;
+            this.appSettingsStorage = appSettingsStorage ?? throw new ArgumentNullException(nameof(appSettingsStorage));
+            this.interviewerSettingsStorage = interviewerSettingsStorage ?? throw new ArgumentNullException(nameof(interviewerSettingsStorage));
         }
 
         public HttpResponseMessage Get() => Request.CreateResponse(new SettingsModel
