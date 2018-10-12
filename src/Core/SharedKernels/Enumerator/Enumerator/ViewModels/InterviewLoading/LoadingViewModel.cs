@@ -90,6 +90,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
                 //remove from storage and return to dashboard
                 if (interview == null)
                 {
+                    await this.interactionService.AlertAsync(InterviewerUIResources.FailedToLoadInterviewDescription, InterviewerUIResources.FailedToLoadInterview);
+
                     this.logger.Error($"Failed to load interview {this.interviewId}. Stream is empty. Removing interview." );
                     this.interviewFactory.RemoveInterview(this.interviewId);
 
