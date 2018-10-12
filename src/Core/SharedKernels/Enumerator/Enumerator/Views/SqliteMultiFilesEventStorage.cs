@@ -171,7 +171,7 @@ namespace WB.Core.SharedKernels.Enumerator.Views
                 {
                     connection.RunInTransaction(() =>
                     {
-                        var storedEvents = events.Select(x => ToStoredEvent(x, eventSerializer, this.encryptionService));
+                        var storedEvents = events.Select(x => ToStoredEvent(x, eventSerializer));
                         foreach (var @event in storedEvents)
                         {
                             connection.Insert(@event);
@@ -448,7 +448,7 @@ namespace WB.Core.SharedKernels.Enumerator.Views
                     {
                         this.ValidateStreamVersion(connection, eventStream);
 
-                        List<EventView> storedEvents = eventStream.Select(x => ToStoredEvent(x, serializer, this.encryptionService)).ToList();
+                        List<EventView> storedEvents = eventStream.Select(x => ToStoredEvent(x, serializer)).ToList();
                         foreach (var @event in storedEvents)
                         {
                             connection.Insert(@event);
@@ -542,7 +542,7 @@ namespace WB.Core.SharedKernels.Enumerator.Views
                 globalSequence: -1,
                 payload: storedEvent.Payload);
 
-        private static EventView ToStoredEvent(UncommittedEvent evt, IEventSerializer serializer, IEncryptionService encryptionService)
+        private EventView ToStoredEvent(UncommittedEvent evt, IEventSerializer serializer)
             => new EventView
             {
                 EventId = evt.EventIdentifier,
@@ -550,11 +550,11 @@ namespace WB.Core.SharedKernels.Enumerator.Views
                 CommitId = evt.CommitId,
                 EventSequence = evt.EventSequence,
                 DateTimeUtc = evt.EventTimeStamp,
-                EncryptedJsonEvent = encryptionService.Encrypt(serializer.Serialize(evt.Payload)),
+                EncryptedJsonEvent = this.encryptionService.Encrypt(serializer.Serialize(evt.Payload)),
                 EventType = evt.Payload.GetType().Name
             };
 
-        private static EventView ToStoredEvent(CommittedEvent evt, IEventSerializer serializer, IEncryptionService encryptionService)
+        private EventView ToStoredEvent(CommittedEvent evt, IEventSerializer serializer)
             => new EventView
             {
                 EventId = evt.EventIdentifier,
@@ -562,7 +562,7 @@ namespace WB.Core.SharedKernels.Enumerator.Views
                 CommitId = evt.CommitId,
                 EventSequence = evt.EventSequence,
                 DateTimeUtc = evt.EventTimeStamp,
-                EncryptedJsonEvent = encryptionService.Encrypt(serializer.Serialize(evt.Payload)),
+                EncryptedJsonEvent = this.encryptionService.Encrypt(serializer.Serialize(evt.Payload)),
                 EventType = evt.Payload.GetType().Name,
                 ExistsOnHq = 1
             };
