@@ -53,12 +53,12 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                         .OrderBy(x => x.Type)
                         .ForEach(x => allVisibleGroupItems.AddCollection(x.CompositeCollection));
 
-                    this.OnEnablementChanged(compositeQuestionParts, compositeQuestion, allVisibleGroupItems);
+                    this.OnEnablementChanged(compositeQuestionParts, compositeQuestion, allVisibleGroupItems).WaitAndUnwrapException();
 
                     compositeQuestion.QuestionState.Enablement.PropertyChanged += (sender, e) =>
                     {
                         if (e.PropertyName != nameof(EnablementViewModel.Enabled)) return;
-                        OnEnablementChanged(compositeQuestionParts, compositeQuestion, allVisibleGroupItems);
+                        OnEnablementChanged(compositeQuestionParts, compositeQuestion, allVisibleGroupItems).WaitAndUnwrapException();
                     };
 
                 }

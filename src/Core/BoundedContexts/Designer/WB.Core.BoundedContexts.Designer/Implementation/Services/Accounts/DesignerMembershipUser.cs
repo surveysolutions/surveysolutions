@@ -21,7 +21,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts
             DateTime lastActivityDate,
             DateTime lastPasswordChangedDate,
             DateTime lastLockoutDate,
-            bool canImportOnHq)
+            bool canImportOnHq,
+            string fullName)
             : base(providerName,
                 name,
                 providerUserKey,
@@ -37,7 +38,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts
                 lastLockoutDate)
         {
             this.CanImportOnHq = canImportOnHq;
+            this.FullName = fullName;
         }
+
+        public virtual string FullName { get; set; }
 
         public virtual bool CanImportOnHq { get; set; }
     }
