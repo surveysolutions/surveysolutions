@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="AWSSDK.Extensions.NETCore.Setup" Version="3.3.6" />
-    <PackageReference Include="AWSSDK.S3" Version="3.3.25.1" />
+    <PackageReference Include="AWSSDK.S3" Version="3.3.25" />
     <PackageReference Include="CsvHelper" Version="7.1.1" />
     <PackageReference Include="Dropbox.Api" Version="4.9.0" />
     <PackageReference Include="Google.Apis.Drive.v3" Version="1.36.1.1372" />
