@@ -63,7 +63,7 @@ namespace WB.Services.Export.CsvExport.Implementation
             this.fileSystemAccessor = fileSystemAccessor;
         }
 
-        public async Task ExportInterviewsInTabularFormat(
+        public async Task ExportInterviewsInTabularFormatAsync(
             ExportSettings settings,
             IProgress<int> progress,
             CancellationToken cancellationToken)
