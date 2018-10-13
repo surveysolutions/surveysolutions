@@ -42,21 +42,20 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
         {
             this.GenerateDescriptionTxt(settings.Tenant, settings.QuestionnaireId, settings.ExportTempDirectory);
 
-            await this.tabularFormatExportService.ExportInterviewsInTabularFormat(settings, progress, cancellationToken);
+            await this.tabularFormatExportService.ExportInterviewsInTabularFormatAsync(settings, progress, cancellationToken);
 
-            await this.CreateDoFilesForQuestionnaire(settings.Tenant, settings.QuestionnaireId, settings.ExportTempDirectory, cancellationToken);
+            await this.CreateDoFilesForQuestionnaireAsync(settings.Tenant, settings.QuestionnaireId, settings.ExportTempDirectory, cancellationToken);
         }
 
         private void GenerateDescriptionTxt(TenantInfo tenant, QuestionnaireId questionnaireIdentity, string directoryPath)
             => this.tabularFormatExportService.GenerateDescriptionFileAsync(tenant, questionnaireIdentity, directoryPath, ExportFileSettings.TabDataFileExtension);
 
-        private async Task CreateDoFilesForQuestionnaire(TenantInfo tenant, QuestionnaireId questionnaireIdentity, string directoryPath, CancellationToken cancellationToken)
+        private async Task CreateDoFilesForQuestionnaireAsync(TenantInfo tenant, QuestionnaireId questionnaireIdentity, string directoryPath, CancellationToken cancellationToken)
         {
             var questionnaireExportStructure = await this.questionnaireExportStructureStorage
                 .GetQuestionnaireExportStructureAsync(tenant, questionnaireIdentity);
 
             this.environmentContentService.CreateEnvironmentFiles(questionnaireExportStructure, directoryPath, cancellationToken);
-
         }
     }
 }
