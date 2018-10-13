@@ -39,7 +39,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             exportProgress.ProgressChanged +=
                 (sender, donePercent) => progress.Report(donePercent / 2);
 
-            await this.tabularFormatExportService.ExportInterviewsInTabularFormat(
+            await this.tabularFormatExportService.ExportInterviewsInTabularFormatAsync(
                 exportSettings, exportProgress, cancellationToken);
 
             return this.fileSystemAccessor.GetFilesInDirectory(exportSettings.ExportTempDirectory);

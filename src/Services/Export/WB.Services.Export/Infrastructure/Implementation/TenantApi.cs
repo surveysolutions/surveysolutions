@@ -81,6 +81,4 @@ namespace WB.Services.Export.Infrastructure.Implementation
             }
         }
     }
-
-
 }

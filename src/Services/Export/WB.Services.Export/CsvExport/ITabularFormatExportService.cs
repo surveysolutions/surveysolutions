@@ -10,7 +10,7 @@ namespace WB.Services.Export.CsvExport
 {
     public interface ITabularFormatExportService
     {
-        Task ExportInterviewsInTabularFormat(ExportSettings exportSettings, IProgress<int> progress, CancellationToken cancellationToken);
+        Task ExportInterviewsInTabularFormatAsync(ExportSettings exportSettings, IProgress<int> progress, CancellationToken cancellationToken);
 
         Task GenerateDescriptionFileAsync(TenantInfo tenant, QuestionnaireId questionnaireId, string directoryPath, string tabDataFileExtension);
     }
