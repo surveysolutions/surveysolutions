@@ -633,16 +633,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
 
         private InterviewQuestionInvariants RequireQuestionInstanceExists()
         {
-            if (this.QuestionIdentity.RosterVector == null)
-                throw new InterviewException("Roster information for question is missing. Roster vector cannot be null", InterviewDomainExceptionType.QuestionIsMissing)
-                      {
-                          Data =
-                          {
-                              {ExceptionKeys.InterviewId, this.InterviewTree.InterviewId},
-                              {ExceptionKeys.QuestionId, this.QuestionIdentity.Id}
-                          }
-                      };
-
             var questions = this.InterviewTree.FindQuestions(this.QuestionIdentity.Id);
             var rosterVectors = questions.Select(question => question.Identity.RosterVector).ToList();
 
