@@ -38,7 +38,6 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
                     unitOfWork.Dispose();
                     throw;
                 }
-                
             }
         }
     }
