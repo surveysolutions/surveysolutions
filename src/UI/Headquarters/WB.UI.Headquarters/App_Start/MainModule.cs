@@ -125,7 +125,7 @@ namespace WB.UI.Headquarters
             serviceLocator.GetInstance<PauseResumeJobScheduler>().Configure();
             serviceLocator.GetInstance<UpgradeAssignmentJobScheduler>().Configure();
 
-            //serviceLocator.GetInstance<IScheduler>().Start();
+            serviceLocator.GetInstance<IScheduler>().Start();
 
             InitMetrics();
             MetricsService.Start(serviceLocator);
