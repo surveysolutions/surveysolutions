@@ -26,23 +26,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.callbackAction = action;
         }
 
-        private async Task TimerCallback()
-        {
-            if (this.callbackAction != null)
-            {
-                await callbackAction();
-            }
-
-            if (!hasPendingAction) return;
-            userInterfaceStateService.ThrottledActionFinished();
-            this.hasPendingAction = false;
-        }
-
-        public void ResetTimer()
-        {
-            timer.Change(ThrottlePeriod, Timeout.Infinite);
-        }
-
         public async Task ExecuteActionIfNeeded()
         {
             if (this.ThrottlePeriod == 0)
@@ -68,6 +51,23 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                 this.hasPendingAction = false;
             }
             timer.Change(Timeout.Infinite, Timeout.Infinite);
+        }
+
+        private async Task TimerCallback()
+        {
+            if (this.callbackAction != null)
+            {
+                await callbackAction();
+            }
+
+            if (!hasPendingAction) return;
+            userInterfaceStateService.ThrottledActionFinished();
+            this.hasPendingAction = false;
+        }
+
+        private void ResetTimer()
+        {
+            timer.Change(ThrottlePeriod, Timeout.Infinite);
         }
 
         public void Dispose()
