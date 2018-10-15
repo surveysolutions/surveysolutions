@@ -156,13 +156,6 @@ namespace WB.UI.Headquarters.Injections
             System.Web.Http.GlobalConfiguration.Configuration.Filters.Add(new UnderConstructionHttpFilter());
             GlobalFilters.Filters.Add(new UnderConstructionMvcFilter());
 
-            //todo:af
-            //filters should have order
-
-            //GlobalFilters.Filters.Add(serviceLocator.GetInstance<TransactionFilter>());
-            //GlobalFilters.Filters.Add(new GlobalNotificationAttribute());
-            //System.Web.Http.GlobalConfiguration.Configuration.Filters.Add(new ApiTransactionFilter());
-
             return Task.CompletedTask;
         }
 

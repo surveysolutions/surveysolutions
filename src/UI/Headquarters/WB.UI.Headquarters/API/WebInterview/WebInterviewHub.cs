@@ -207,9 +207,6 @@ namespace WB.UI.Headquarters.API.WebInterview
 
         protected override void Dispose(bool disposing)
         {
-            //todo:af 
-            //move it to more proper place
-            
             unitOfWork.AcceptChanges();
 
             base.Dispose(disposing);
