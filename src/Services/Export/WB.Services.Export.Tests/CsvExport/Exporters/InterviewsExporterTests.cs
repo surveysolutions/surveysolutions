@@ -60,13 +60,18 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             var interviewFactory = new Mock<IInterviewFactory>();
             interviewFactory.SetupIgnoreArgs(x => x.GetInterviewDataLevels(null, null))
                 .Returns(new Dictionary<string, InterviewLevel>());
+            interviewFactory.SetupIgnoreArgs(x => x.GetInterviewEntities(null, null))
+                .Returns(Task.FromResult(new List<InterviewEntity>()));
 
             var exporter = Create.InterviewsExporter(csvWriter, interviewFactory.Object);
 
             //act
-            await exporter.ExportAsync(Create.Tenant(), questionnaireExportStructure, questionnaire, interviewIdsToExport, "", new Progress<int>(), CancellationToken.None);
+            await exporter.ExportAsync(Create.Tenant(), questionnaireExportStructure, questionnaire, interviewIdsToExport, "", 
+                new Progress<int>(), CancellationToken.None);
 
             //assert
+            Assert.That(dataInCsvFile, Has.Count.EqualTo(2));
+
             Assert.That(dataInCsvFile[0].File, Is.EqualTo("MyQuestionnaire.tab"));
 
             Assert.That(dataInCsvFile[0].Data[0], Has.Length.EqualTo(dataInCsvFile[1].Data[0].Length),

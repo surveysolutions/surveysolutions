@@ -55,8 +55,8 @@ namespace WB.Services.Export.CsvExport.Exporters
             this.tenantApi = tenantApi;
         }
 
-        public async Task ExportAsync(List<Guid> interviewIdsToExport, string basePath, TenantInfo tenant, Progress<int> exportInterviewsProgress,
-            CancellationToken cancellationToken)
+        public async Task ExportAsync(List<Guid> interviewIdsToExport, string basePath, 
+            TenantInfo tenant, IProgress<int> progress, CancellationToken cancellationToken)
         {
             var batchSize = this.interviewDataExportSettings.Value.MaxRecordsCountPerOneExportQuery;
 
@@ -64,16 +64,16 @@ namespace WB.Services.Export.CsvExport.Exporters
             this.WriteFileHeader(diagnosticsFilePath);
 
             long totalProcessed = 0;
-            var stopwatch = Stopwatch.StartNew();
-            //            var etaHelper = new EtaHelper(interviewIdsToExport.Count, batchSize, trackingStopwatch: stopwatch);
+
             var api = this.tenantApi.For(tenant);
 
             var data = new List<string[]>(batchSize);
 
-            foreach (var interview in interviewIdsToExport.Batch(batchSize))
+            foreach (var interviewsBatch in interviewIdsToExport.Batch(batchSize))
             {
-                var diagInfos = await api.GetInterviewDiagnosticsInfoBatchAsync(interview.ToArray());
-
+                var interviews = interviewsBatch.ToArray();
+                var diagInfos = await api.GetInterviewDiagnosticsInfoBatchAsync(interviews);
+                
                 foreach (var diagInfo in diagInfos)
                 {
                     data.Add(new string[]
@@ -97,17 +97,11 @@ namespace WB.Services.Export.CsvExport.Exporters
 
                 this.csvWriter.WriteData(diagnosticsFilePath, data, ExportFileSettings.DataFileSeparator.ToString());
 
-                totalProcessed++;
-
-                // etaHelper.AddProgress(interviewIds.Count);
-
-                //progress.Report(totalProcessed.PercentOf(interviewIdsToExport.Count));
-                //this.logger.Debug($"Exported batch of interview diagnostics. {etaHelper} " +
-                //                  $"Total interview diagnostics processed {totalProcessed:N0} out of {interviewIdsToExport.Count:N0}");
+                totalProcessed+= interviews.Length;
+                progress.Report(totalProcessed.PercentOf(interviewIdsToExport.Count));
             }
-            stopwatch.Stop();
-            //this.logger.Info($"Exported all interview diagnostics. Took {stopwatch.Elapsed:g} to export {interviewIdsToExport.Count:N0} interviews");
-            //progress.Report(100);
+
+            progress.Report(100);
         }
 
         public void ExportDoFile(QuestionnaireExportStructure questionnaireExportStructure, string basePath)

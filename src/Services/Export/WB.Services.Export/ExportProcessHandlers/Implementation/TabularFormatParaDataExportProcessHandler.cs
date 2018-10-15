@@ -66,9 +66,8 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
 
                 async Task QueryParadata(IEnumerable<InterviewToExport> interviews)
                 {
-                    logger.LogTrace($"Query headquarters for interviews history");
                     var historyItems = await api.GetInterviewsHistory(interviews.Select(i => i.Id).ToArray());
-                    logger.LogTrace($"Query headquarters for interviews history. Got {historyItems.Count} items");
+                    logger.LogTrace($"Query headquarters for interviews history. Got {historyItems.Count} items with {historyItems.Sum(h => h.Records.Count)} records");
 
                     foreach (InterviewHistoryView paradata in historyItems)
                     {
@@ -79,9 +78,15 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
                     progress.Report(totalInterviewsProcessed.PercentOf(interviewsToExport.Count));
                 }
 
-                foreach (var interviews in interviewsToExport.Batch(
-                    interviewDataExportSettings.Value.ParadataQueryLimit))
+                var options = new BatchOptions
                 {
+                    TargetSeconds = 5,
+                    Max = interviewDataExportSettings.Value.MaxRecordsCountPerOneExportQuery
+                };
+
+                foreach (var interviews in interviewsToExport.BatchInTime(options, logger))
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
                     await QueryParadata(interviews);
                 }
             }
