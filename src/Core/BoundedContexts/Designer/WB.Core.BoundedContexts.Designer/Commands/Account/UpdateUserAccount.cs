@@ -6,7 +6,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Account
     public class UpdateUserAccount : UserCommand
     {
         public UpdateUserAccount(Guid userId, string userName, bool isLockedOut, string passwordQuestion,
-            string email, bool isConfirmed, string comment, bool canImportOnHq)
+            string email, bool isConfirmed, string comment, bool canImportOnHq, string fullName)
             : base(userId)
         {
             this.UserName = userName;
@@ -16,6 +16,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Account
             this.IsConfirmed = isConfirmed;
             this.Comment = comment;
             this.CanImportOnHq = canImportOnHq;
+            this.FullName = fullName;
         }
 
         public bool CanImportOnHq { get; set; }
@@ -26,5 +27,6 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Account
         public string Email { get; private set; }
         public bool IsConfirmed { get; private set; }
         public string Comment { get; private set; }
+        public string FullName { get; private set; }
     }
 }

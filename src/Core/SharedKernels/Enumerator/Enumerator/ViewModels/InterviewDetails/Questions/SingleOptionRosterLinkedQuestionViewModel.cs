@@ -298,7 +298,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             var optionViewModel = new SingleOptionLinkedQuestionOptionViewModel
             {
-                Enablement = this.questionState.Enablement,
                 RosterVector = linkedOption,
                 Title = interview.GetLinkedOptionTitle(this.Identity, linkedOption),
                 Selected = linkedOption.Equals(answeredOption),
