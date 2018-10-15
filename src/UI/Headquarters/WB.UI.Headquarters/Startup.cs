@@ -126,34 +126,11 @@ namespace WB.UI.Headquarters
             GlobalHost.DependencyResolver = container.Resolve<Microsoft.AspNet.SignalR.IDependencyResolver>();
 
             var resolv = container.Resolve<System.Web.Mvc.IDependencyResolver>();
-            //resolver.
 
             DependencyResolver.SetResolver(resolv);
             ModelBinders.Binders.DefaultBinder = new AutofacBinderResolver(container);
 
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(container));
-
-            //TODO:AF resolve
-            /*var perRequestModule = new OnePerRequestHttpModule();
-            // onPerRequest scope implementation. Collecting all perRequest instances after all requests
-            app.Use(async (ctx, next) =>
-            {
-                try
-                {
-                    if (ctx.Request.CallCancelled.IsCancellationRequested) return;
-
-                    await next();
-                }
-                finally
-                {
-                    perRequestModule.DeactivateInstancesForCurrentHttpRequest();
-                }
-            });
-            kernel.Inject(perRequestModule); // will keep reference to perRequestModule in Kernel instance
-            */
-
-            //GlobalFilters.Filters.Add(new TransactionFilter());
-            //config.Filters.Add(new ApiTransactionFilter());
 
             app.UseAutofacMiddleware(container);
             app.UseWebApi(config);
