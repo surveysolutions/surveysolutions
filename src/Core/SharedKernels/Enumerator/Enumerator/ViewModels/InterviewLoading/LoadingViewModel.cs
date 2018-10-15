@@ -19,6 +19,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
     public class LoadingViewModel : BaseViewModel<LoadingViewModelArg>, IDisposable
     {
         protected Guid interviewId;
+        private readonly IInterviewerInterviewAccessor interviewFactory;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IViewModelNavigationService viewModelNavigationService;
@@ -33,7 +34,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
             ICommandService commandService,
             ILogger logger,
             IUserInteractionService interactionService,
-            IQuestionnaireStorage questionnaireRepository)
+            IQuestionnaireStorage questionnaireRepository,
+            IInterviewerInterviewAccessor interviewFactory)
             : base(principal, viewModelNavigationService)
         {
             this.interviewRepository = interviewRepository;
@@ -42,6 +44,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
             this.interactionService = interactionService;
             this.viewModelNavigationService = viewModelNavigationService;
             this.questionnaireRepository = questionnaireRepository;
+            this.interviewFactory = interviewFactory;
         }
 
         public IMvxCommand CancelLoadingCommand => new MvxCommand(this.CancelLoading);
@@ -82,25 +85,39 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewLoading
                 IStatefulInterview interview = await this.interviewRepository.GetAsync(interviewIdString, progress, this.loadingCancellationTokenSource.Token)
                                                                              .ConfigureAwait(false);
 
-                this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
-
-                if (interview.Status == InterviewStatus.Completed && this.shouldReopen)
+                //DB has no events
+                //state is broken
+                //remove from storage and return to dashboard
+                if (interview == null)
                 {
-                    this.loadingCancellationTokenSource.Token.ThrowIfCancellationRequested();
-                    var restartInterviewCommand = new RestartInterviewCommand(this.interviewId,
-                        this.Principal.CurrentUserIdentity.UserId, "", DateTime.UtcNow);
-                    await this.commandService.ExecuteAsync(restartInterviewCommand).ConfigureAwait(false);
-                }
+                    this.logger.Error($"Failed to load interview {this.interviewId}. Stream is empty. Removing interview." );
+                    this.interviewFactory.RemoveInterview(this.interviewId);
 
-                this.loadingCancellationTokenSource.Token.ThrowIfCancellationRequested();
-
-                if (interview.HasEditableIdentifyingQuestions)
-                {
-                    await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(interviewIdString);
+                    await this.viewModelNavigationService.NavigateToDashboardAsync();
                 }
                 else
                 {
-                    await this.viewModelNavigationService.NavigateToInterviewAsync(interviewIdString, navigationIdentity: null);
+                    this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
+
+                    if (interview.Status == InterviewStatus.Completed && this.shouldReopen)
+                    {
+                        this.loadingCancellationTokenSource.Token.ThrowIfCancellationRequested();
+                        var restartInterviewCommand = new RestartInterviewCommand(this.interviewId,
+                            this.Principal.CurrentUserIdentity.UserId, "", DateTime.UtcNow);
+                        await this.commandService.ExecuteAsync(restartInterviewCommand).ConfigureAwait(false);
+                    }
+
+                    this.loadingCancellationTokenSource.Token.ThrowIfCancellationRequested();
+
+                    if (interview.HasEditableIdentifyingQuestions)
+                    {
+                        await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(interviewIdString);
+                    }
+                    else
+                    {
+                        await this.viewModelNavigationService.NavigateToInterviewAsync(interviewIdString,
+                            navigationIdentity: null);
+                    }
                 }
             }
             catch (OperationCanceledException)
