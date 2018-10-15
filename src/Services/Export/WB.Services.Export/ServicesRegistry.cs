@@ -56,7 +56,6 @@ namespace WB.Services.Export
             services.AddTransient<IExportFileNameService, ExportExportFileNameService>();
             services.AddTransient<IArchiveUtils, ZipArchiveUtils>();
             services.AddTransient<IExternalFileStorage, S3FileStorage>();
-            services.AddTransient<ITempPathProvider, ManagedThreadAwareTempPathProvider>();
             services
                 .AddTransient<ITabularDataToExternalStatPackageExportService,
                     TabularDataToExternalStatPackageExportService>();

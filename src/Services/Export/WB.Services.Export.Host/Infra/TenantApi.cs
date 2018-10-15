@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Concurrent;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
@@ -9,20 +10,24 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Refit;
+using WB.Services.Export.Infrastructure;
 using WB.Services.Infrastructure.Tenant;
 
-namespace WB.Services.Export.Infrastructure.Implementation
+namespace WB.Services.Export.Host.Infra
 {
     public class TenantApi<T> : ITenantApi<T>, IDisposable
     {
         private readonly ILogger<TenantApi<T>> logger;
-        private static long counter = 0;
+
+        [SuppressMessage("ReSharper", "StaticMemberInGenericType")]
+        private static long _counter = 0;
+
         private readonly long id;
 
         public TenantApi(ILogger<TenantApi<T>> logger)
         {
             this.logger = logger;
-            id = Interlocked.Increment(ref counter);
+            id = Interlocked.Increment(ref _counter);
             logger.LogTrace($"Creating new TenantApi<{typeof(T).Name}> #{id}");
         }
 
@@ -81,4 +86,5 @@ namespace WB.Services.Export.Infrastructure.Implementation
             }
         }
     }
+
 }

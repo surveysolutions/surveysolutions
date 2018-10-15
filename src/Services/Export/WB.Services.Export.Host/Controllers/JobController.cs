@@ -145,7 +145,11 @@ namespace WB.Services.Export.Host.Controllers
         public async Task<ActionResult> DeleteDataExportProcess(string processId, TenantInfo tenant)
         {
             var job = await jobService.GetJobAsync(tenant, processId, JobStatus.Running, JobStatus.Created);
-            this.exportProcessesService.DeleteDataExport(job.Id, "User canceled");
+            if (job != null)
+            {
+                this.exportProcessesService.DeleteDataExport(job.Id, "User canceled");
+            }
+
             return Ok();
         }
     }

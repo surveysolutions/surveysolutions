@@ -11,7 +11,7 @@ namespace WB.Services.Export.CsvExport.Exporters
     public interface IDiagnosticsExporter
     {
         Task ExportAsync(List<Guid> interviewIdsToExport, string basePath, TenantInfo tenant,
-            Progress<int> exportInterviewsProgress, CancellationToken cancellationToken);
+            IProgress<int> exportInterviewsProgress, CancellationToken cancellationToken);
 
         void ExportDoFile(QuestionnaireExportStructure questionnaireExportStructure, string folderPath);
         string DiagnosticsFileName { get; }
