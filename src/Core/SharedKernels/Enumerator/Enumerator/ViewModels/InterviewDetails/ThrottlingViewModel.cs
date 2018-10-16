@@ -8,8 +8,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
     public class ThrottlingViewModel : IDisposable
     {
-        private Timer timer = null;
+        private readonly Timer timer = null;
         private bool hasPendingAction = false;
+        private bool isDisposed = false;
 
         protected internal int ThrottlePeriod { get; set; } = Constants.ThrottlePeriod;
         private readonly IUserInterfaceStateService userInterfaceStateService;
@@ -28,51 +29,75 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         public async Task ExecuteActionIfNeeded()
         {
+            if (isDisposed) return;
+
             if (this.ThrottlePeriod == 0)
             {
-                await callbackAction();
+                await InvokeCallbackIfSet();
+                return;
             }
-            else
+            
+            if (!hasPendingAction)
             {
-                if (!hasPendingAction)
-                {
-                    this.userInterfaceStateService.ThrottledActionStarted();
-                    this.hasPendingAction = true;
-                }
-                this.ResetTimer();
+                this.userInterfaceStateService.ThrottledActionStarted();
+                this.hasPendingAction = true;
             }
+            this.ResetTimer();
         }
 
         public void CancelPendingAction()
         {
-            if (hasPendingAction)
-            {
-                this.userInterfaceStateService.ThrottledActionFinished();
-                this.hasPendingAction = false;
-            }
-            timer.Change(Timeout.Infinite, Timeout.Infinite);
+            FinishThrottledAction();
+            CancelTimer();
+        }
+
+        public void Dispose()
+        {
+            FinishThrottledAction();
+
+            isDisposed = true;
+            callbackAction = null;
+            timer?.Dispose();
         }
 
         private async Task TimerCallback()
+        {
+            try
+            {
+                await InvokeCallbackIfSet();
+            }
+            finally
+            {
+                FinishThrottledAction();
+            }
+        }
+
+        private async Task InvokeCallbackIfSet()
         {
             if (this.callbackAction != null)
             {
                 await callbackAction();
             }
+        }
 
-            if (!hasPendingAction) return;
-            userInterfaceStateService.ThrottledActionFinished();
-            this.hasPendingAction = false;
+        private void CancelTimer()
+        {
+            if (isDisposed) return;
+            timer.Change(Timeout.Infinite, Timeout.Infinite);
         }
 
         private void ResetTimer()
         {
+            if (isDisposed) return;
             timer.Change(ThrottlePeriod, Timeout.Infinite);
         }
 
-        public void Dispose()
+        private void FinishThrottledAction()
         {
-            timer?.Dispose();
+            if (!hasPendingAction)
+                return;
+            userInterfaceStateService.ThrottledActionFinished();
+            this.hasPendingAction = false;
         }
     }
 }
