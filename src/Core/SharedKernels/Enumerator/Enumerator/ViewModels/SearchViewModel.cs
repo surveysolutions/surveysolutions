@@ -77,19 +77,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         }
 
         public IMvxCommand ClearSearchCommand => new MvxCommand(() => SearchText = string.Empty);
-        public IMvxCommand ExitSearchCommand => new MvxAsyncCommand(async () => await viewModelNavigationService.NavigateToDashboardAsync());
-        public IMvxCommand SearchCommand => new MvxCommand<string>(Search);
+        public IMvxAsyncCommand ExitSearchCommand => new MvxAsyncCommand(async () => await viewModelNavigationService.NavigateToDashboardAsync());
+        public IMvxAsyncCommand<string> SearchCommand => new MvxAsyncCommand<string>(async (text) => await Search(text));
 
-        private void Search(string searctText)
+        private async Task Search(string searctText)
         {
-            UpdateUiItems(searctText);
+            await UpdateUiItemsAsync(searctText);
         }
 
         public override async Task Initialize()
         {
             await base.Initialize().ConfigureAwait(false);
             EmptySearchText = InterviewerUIResources.Dashboard_SearchWatermark;
-            UpdateUiItems(SearchText);
+            await UpdateUiItemsAsync(SearchText);
         }
 
         private List<InterviewView> interviews;
@@ -113,7 +113,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             protected set => this.RaiseAndSetIfChanged(ref this.uiItems, value);
         }
 
-        protected void UpdateUiItems(string searctText) => Task.Run(() =>
+        protected Task UpdateUiItemsAsync(string searctText) => Task.Run(() =>
         {
             this.IsInProgressItemsLoading = true;
 
@@ -176,6 +176,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         {
             foreach (var assignmentItem in GetAssignmentItems())
             {
+                if (assignmentItem.Quantity.HasValue && assignmentItem.CreatedInterviewsCount.HasValue)
+                {
+                    int count = assignmentItem.Quantity.Value - assignmentItem.CreatedInterviewsCount.Value;
+                    if (count == 0)
+                        continue;
+                }
+
                 bool isMatched = Contains(assignmentItem.Title, searctText)
                                  || Contains(assignmentItem.Id.ToString(), searctText)
                                  || (assignmentItem.IdentifyingAnswers?.Any(pi => Contains(pi.AnswerAsString, searctText)) ?? false);

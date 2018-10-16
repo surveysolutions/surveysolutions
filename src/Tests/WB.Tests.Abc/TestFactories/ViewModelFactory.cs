@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Main.Core.Documents;
 using Moq;
 using MvvmCross.Base;
@@ -467,5 +468,22 @@ namespace WB.Tests.Abc.TestFactories
 
         public ConnectedDeviceSynchronizationViewModel ConnectedDeviceSynchronizationViewModel()
             => new ConnectedDeviceSynchronizationViewModel();
+
+        public SearchViewModel SearchViewModel(
+            IPrincipal principal = null,
+            IViewModelNavigationService viewModelNavigationService = null,
+            IInterviewViewModelFactory viewModelFactory = null,
+            IPlainStorage<InterviewView> interviewViewRepository = null,
+            IPlainStorage<PrefilledQuestionView> identifyingQuestionsRepo = null,
+            IAssignmentDocumentsStorage assignmentsRepository = null,
+            IMvxMessenger messenger = null)
+            => new SearchViewModel(
+                principal ?? Mock.Of<IPrincipal>(),
+                viewModelNavigationService ?? Mock.Of<IViewModelNavigationService>(),
+                viewModelFactory ?? Mock.Of<IInterviewViewModelFactory>(),
+                interviewViewRepository ?? Mock.Of<IPlainStorage<InterviewView>>(m => m.LoadAll() == Enumerable.Empty<InterviewView>().ToReadOnlyCollection()),
+                identifyingQuestionsRepo ?? Mock.Of<IPlainStorage<PrefilledQuestionView>>(m => m.LoadAll() == Enumerable.Empty<PrefilledQuestionView>().ToReadOnlyCollection()),
+                assignmentsRepository ?? Mock.Of<IAssignmentDocumentsStorage>(),
+                messenger ?? Mock.Of<IMvxMessenger>());
     }
 }
