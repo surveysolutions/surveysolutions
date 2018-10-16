@@ -55,6 +55,10 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                 {
                     throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewNotFound, Enumerator.Native.Resources.WebInterview.Error_NotFound);
                 }
+                else
+                {
+                    return;
+                }
 
             Guid interviewGuid = Guid.Parse(interviewId);
             var interview = transactionManagerProvider.GetTransactionManager()
