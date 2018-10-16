@@ -35,7 +35,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             var searchViewModel = Create.ViewModel.SearchViewModel(assignmentsRepository: assignmentsStorage, viewModelFactory: viewModelFactory.Object);
 
             //act
-            await searchViewModel.SearchCommand.ExecuteAsync("assign");
+            await searchViewModel.SearchAsync("assign");
 
             //assert
             CollectionAssert.IsEmpty(searchViewModel.UiItems);
@@ -58,7 +58,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             var searchViewModel = Create.ViewModel.SearchViewModel(assignmentsRepository: assignmentsStorage, viewModelFactory: viewModelFactory.Object);
 
             //act
-            await searchViewModel.SearchCommand.ExecuteAsync("assign");
+            await searchViewModel.SearchAsync("assign");
 
             //assert
             CollectionAssert.IsNotEmpty(searchViewModel.UiItems);
