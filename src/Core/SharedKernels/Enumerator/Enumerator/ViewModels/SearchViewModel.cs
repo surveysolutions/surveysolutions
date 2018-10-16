@@ -76,9 +76,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             set => SetProperty(ref this.isInProgressItemsLoading, value);
         }
 
-        public IMvxCommand ClearSearchCommand => new MvxCommand(() => SearchText = string.Empty);
-        public IMvxAsyncCommand ExitSearchCommand => new MvxAsyncCommand(async () => await viewModelNavigationService.NavigateToDashboardAsync());
-        public IMvxAsyncCommand<string> SearchCommand => new MvxAsyncCommand<string>(async (text) => await Search(text));
+        public IMvxCommand ClearSearchCommand => new MvxCommand(() => SearchText = string.Empty, () => !IsInProgressLongOperation && !IsInProgressItemsLoading);
+        public IMvxAsyncCommand ExitSearchCommand => new MvxAsyncCommand(() => viewModelNavigationService.NavigateToDashboardAsync());
+        public IMvxAsyncCommand<string> SearchCommand => new MvxAsyncCommand<string>(Search, _ => !IsInProgressLongOperation);
 
         private async Task Search(string searctText)
         {
@@ -104,8 +104,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private IReadOnlyCollection<AssignmentDocument> GetAssignmentItems()
             => assignments ?? (assignments = this.assignmentsRepository.LoadAll());
 
-        public event EventHandler OnItemsLoaded;
-
         private MvxObservableCollection<IDashboardItem> uiItems = new MvxObservableCollection<IDashboardItem>();
         public MvxObservableCollection<IDashboardItem> UiItems
         {
@@ -119,32 +117,29 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
             try
             {
-                List<IDashboardItem> items = new List<IDashboardItem>();
-
                 if (string.IsNullOrWhiteSpace(searctText))
                 {
                     SerchResultText = InterviewerUIResources.Dashboard_NeedTextForSearch;
+
+                    this.UiItems.OfType<InterviewDashboardItemViewModel>().ForEach(i => i.OnItemRemoved -= InterviewItemRemoved);
+                    this.UiItems.SwitchTo(new List<InterviewDashboardItemViewModel>());
                 }
                 else
                 {
-                    var newItems = this.GetUiItems(searctText);
-                    items.AddRange(newItems);
-                    var countOfItems = items.Count;
-                    SerchResultText = countOfItems > 0
-                        ? string.Format(InterviewerUIResources.Dashboard_SearchResult, countOfItems)
+                    var items = this.GetUiItems(searctText).ToList();
+                    SerchResultText = items.Count > 0
+                        ? string.Format(InterviewerUIResources.Dashboard_SearchResult, items.Count)
                         : InterviewerUIResources.Dashboard_NotFoundSearchResult;
-                }
 
-                this.UiItems.OfType<InterviewDashboardItemViewModel>().ForEach(i => i.OnItemRemoved -= InterviewItemRemoved);
-                this.UiItems.ReplaceWith(items);
-                this.UiItems.OfType<InterviewDashboardItemViewModel>().ForEach(i => i.OnItemRemoved += InterviewItemRemoved);
+                    this.UiItems.OfType<InterviewDashboardItemViewModel>().ForEach(i => i.OnItemRemoved -= InterviewItemRemoved);
+                    this.UiItems.ReplaceWith(items);
+                    this.UiItems.OfType<InterviewDashboardItemViewModel>().ForEach(i => i.OnItemRemoved += InterviewItemRemoved);
+                }
             }
             finally
             {
                 this.IsInProgressItemsLoading = false;
             }
-
-            this.OnItemsLoaded?.Invoke(this, EventArgs.Empty);
         });
 
         private void InterviewItemRemoved(object sender, EventArgs eventArgs)
