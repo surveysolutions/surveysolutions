@@ -32,7 +32,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
         private IPlainTransactionManagerProvider plainTransactionManagerProvider;
         private WebInterviewConfig webInterviewConfig;
         private Mock<IAuthorizedUser> authorizedUserMock;
-        private EventBusSettings eventBusSettings = new EventBusSettings();
+        private EventBusSettings eventBusSettings;
 
 
         [SetUp]
@@ -49,6 +49,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
             webInterviewConfig = new WebInterviewConfig();
             webInterviewConfigProvider = Mock.Of<IWebInterviewConfigProvider>(tmp => tmp.Get(It.IsAny<QuestionnaireIdentity>()) == webInterviewConfig);
             authorizedUserMock = new Mock<IAuthorizedUser>();
+            eventBusSettings = new EventBusSettings();
 
             webInterviewAllowService = new WebInterviewAllowService(transactionManagerProvider, 
                 plainTransactionManagerProvider,
