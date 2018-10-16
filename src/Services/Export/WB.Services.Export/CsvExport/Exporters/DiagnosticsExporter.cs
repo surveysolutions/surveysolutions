@@ -99,6 +99,7 @@ namespace WB.Services.Export.CsvExport.Exporters
 
                 totalProcessed+= interviews.Length;
                 progress.Report(totalProcessed.PercentOf(interviewIdsToExport.Count));
+                cancellationToken.ThrowIfCancellationRequested();
             }
 
             progress.Report(100);

@@ -95,7 +95,7 @@ namespace WB.Services.Export.CsvExport.Implementation
 
             await Task.WhenAll(
                 this.commentsExporter.ExportAsync(questionnaireExportStructure, interviewIdsToExport, basePath, tenant, exportCommentsProgress, cancellationToken),
-                this.interviewActionsExporter.ExportAsync(tenant, questionnaireIdentity, interviewIdsToExport, basePath, exportInterviewActionsProgress),
+                this.interviewActionsExporter.ExportAsync(tenant, questionnaireIdentity, interviewIdsToExport, basePath, exportInterviewActionsProgress, cancellationToken),
                 this.interviewsExporter.ExportAsync(tenant, questionnaireExportStructure, questionnaire, interviewsToExport, basePath, exportInterviewsProgress, cancellationToken),
                 this.diagnosticsExporter.ExportAsync(interviewIdsToExport, basePath, tenant, exportDiagnosticsProgress, cancellationToken)
             );
