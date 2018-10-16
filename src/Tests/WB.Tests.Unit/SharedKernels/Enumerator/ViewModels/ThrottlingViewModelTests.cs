@@ -38,19 +38,19 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
             userInterfaceMock.Verify(x => x.ThrottledActionFinished(), Times.Once);
         }
 
-        [Test]
-        public async Task When_action_is_finished()
-        {
-            var userInterfaceMock = new Mock<IUserInterfaceStateService>();
-            var model = Create.ViewModel.ThrottlingViewModel(userInterfaceStateService: userInterfaceMock.Object);
-            model.ThrottlePeriod = 100;
-            model.Init(async () => { await Task.CompletedTask; });
-            await model.ExecuteActionIfNeeded();
+        //[Test]
+        //public async Task When_action_is_finished()
+        //{
+        //    var userInterfaceMock = new Mock<IUserInterfaceStateService>();
+        //    var model = Create.ViewModel.ThrottlingViewModel(userInterfaceStateService: userInterfaceMock.Object);
+        //    model.ThrottlePeriod = 100;
+        //    model.Init(async () => { await Task.CompletedTask; });
+        //    await model.ExecuteActionIfNeeded();
 
-            // Act
-            await Task.Delay(model.ThrottlePeriod);
+        //    // Act
+        //    await Task.Delay(model.ThrottlePeriod);
 
-            userInterfaceMock.Verify(x => x.ThrottledActionFinished(), Times.Once);
-        }
+        //    userInterfaceMock.Verify(x => x.ThrottledActionFinished(), Times.Once);
+        //}
     }
 }
