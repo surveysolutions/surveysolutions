@@ -80,15 +80,23 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
 
                 var options = new BatchOptions
                 {
-                    TargetSeconds = 5,
+                    TargetSeconds = 2,
                     Max = interviewDataExportSettings.Value.MaxRecordsCountPerOneExportQuery
                 };
 
-                foreach (var interviews in interviewsToExport.BatchInTime(options, logger))
+                var split = interviewsToExport.Batch(interviewsToExport.Count / 2);
+
+                var parallelOptions = new ParallelOptions {MaxDegreeOfParallelism = 2};
+
+                Parallel.ForEach(split, parallelOptions, exports =>
                 {
-                    cancellationToken.ThrowIfCancellationRequested();
-                    await QueryParadata(interviews);
-                }
+                    foreach (var interviews in exports.ToList().BatchInTime(options, logger))
+                    {
+                        cancellationToken.ThrowIfCancellationRequested();
+                        QueryParadata(interviews).Wait(cancellationToken);
+                    }
+                });
+               
             }
 
             logger.LogInformation("Completed paradata export for " + settings);

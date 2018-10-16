@@ -79,41 +79,24 @@ namespace WB.Services.Export.Utils
         {
             using (var archiveFile = File.Create(archiveName))
             {
-                using (var archive = CreateArchive(archiveFile, archivePassword, CompressionLevel.Fastest))
+                using (var archive = CreateArchive(archiveFile, archivePassword, CompressionLevel.Optimal))
                 {
-
                     foreach (var file in Directory.EnumerateFiles(exportTempDirectoryPath))
                     {
-                        archive.CreateEntry(file.Substring(exportTempDirectoryPath.Length + 1),
-                            File.ReadAllBytes(file));
+                        using (var fs = File.OpenRead(file))
+                        {
+                            if (fs.Length == 0)
+                            {
+                                archive.CreateEntry(file.Substring(exportTempDirectoryPath.Length + 1), new byte[0]);
+                            }
+                            else
+                            {
+                                archive.CreateEntry(file.Substring(exportTempDirectoryPath.Length + 1), fs);
+                            }
+                        }
                     }
                 }
             }
-
-            //using (var zipFile = new ZipFile
-            //{
-            //    ParallelDeflateThreshold = -1,
-            //    AlternateEncoding = Encoding.UTF8,
-            //    AlternateEncodingUsage = ZipOption.Always,
-            //    UseZip64WhenSaving = Zip64Option.AsNecessary
-            //})
-            //{
-            //    if (password != null)
-            //        zipFile.Password = password;
-
-            //    zipFile.AddDirectory(directory, "");
-
-            //    if (progress != null)
-            //    {
-            //        zipFile.SaveProgress += (o, e) =>
-            //        {
-            //            if (e.EventType == ZipProgressEventType.Saving_AfterWriteEntry)
-            //                progress.Report(e.EntriesSaved * 100 / e.EntriesTotal);
-            //        };
-            //    }
-
-            //    zipFile.Save(archiveFile);
-            //}
         }
 
         public void ZipFiles(string exportTempDirectoryPath, IEnumerable<string> files, string archiveFilePath, string password = null)
@@ -122,11 +105,19 @@ namespace WB.Services.Export.Utils
             {
                 using (var archive = CreateArchive(archiveFile, password, CompressionLevel.Fastest))
                 {
-
                     foreach (var file in files)
                     {
-                        archive.CreateEntry(file.Substring(exportTempDirectoryPath.Length + 1),
-                            File.ReadAllBytes(file));
+                        using (var fs = File.OpenRead(file))
+                        {
+                            if (fs.Length == 0)
+                            {
+                                archive.CreateEntry(file.Substring(exportTempDirectoryPath.Length + 1), new byte[0]);
+                            }
+                            else
+                            {
+                                archive.CreateEntry(file.Substring(exportTempDirectoryPath.Length + 1), fs);
+                            }
+                        }
                     }
                 }
             }
