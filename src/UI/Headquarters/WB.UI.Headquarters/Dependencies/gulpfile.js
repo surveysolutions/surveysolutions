@@ -75,6 +75,10 @@ const config = {
             folder: '../Views/WebInterview/'
         },
         {
+            file: "TakeNewAssignment.cshtml",
+            folder: '../Views/HQ/'
+        },
+        {
             file: "Index.cshtml",
             folder: '../Views/Download/'
         },
