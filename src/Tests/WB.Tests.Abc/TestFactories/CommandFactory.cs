@@ -339,5 +339,10 @@ namespace WB.Tests.Abc.TestFactories
                 OriginDate = originDate ?? DateTimeOffset.Now
             };
         }
+
+        public CreateTemporaryInterviewCommand CreateTemporaryInterview(Guid? interviewId= null, Guid? userId = null, QuestionnaireIdentity questionnaireId = null)
+        {
+            return new CreateTemporaryInterviewCommand(interviewId ?? Guid.NewGuid(), userId ?? Guid.NewGuid(), questionnaireId ?? Create.Entity.QuestionnaireIdentity());
+        }
     }
 }
