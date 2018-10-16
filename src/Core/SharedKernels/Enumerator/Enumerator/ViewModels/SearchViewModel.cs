@@ -71,12 +71,18 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             set => SetProperty(ref this.isInProgressLongOperation, value);
         }
 
-        private bool isInProgressItemsLoading;
-        public bool IsInProgressItemsLoading
+        private int isInProgressItemsLoadingCount;
+        private int IsInProgressItemsLoadingCount
         {
-            get => this.isInProgressItemsLoading;
-            set => SetProperty(ref this.isInProgressItemsLoading, value);
+            get => this.isInProgressItemsLoadingCount;
+            set
+            {
+                this.isInProgressItemsLoadingCount = value;
+                RaisePropertyChanged(nameof(IsInProgressItemsLoading));
+            }
         }
+
+        public bool IsInProgressItemsLoading => this.IsInProgressItemsLoadingCount > 0;
 
         public IMvxCommand ClearSearchCommand => new MvxCommand(() => SearchText = string.Empty, () => !IsInProgressLongOperation && !IsInProgressItemsLoading);
         public IMvxCommand ExitSearchCommand => new MvxAsyncCommand(() => viewModelNavigationService.NavigateToDashboardAsync());
@@ -118,7 +124,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         protected Task UpdateUiItemsAsync(string searctText, CancellationToken cancellationToken) => Task.Run(() =>
         {
-            this.IsInProgressItemsLoading = true;
+            this.IsInProgressItemsLoadingCount++;
 
             try
             {
@@ -150,7 +156,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             }
             finally
             {
-                this.IsInProgressItemsLoading = false;
+                this.IsInProgressItemsLoadingCount--;
             }
         }, cancellationToken);
 
