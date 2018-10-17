@@ -98,22 +98,23 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             this.questionnaireStorage = questionnaireStorage;
         }
 
-        readonly Dictionary<Type, MethodInfo> methodsCache = new Dictionary<Type, MethodInfo>();
-        private object[] args = new object[2];
-
+        static readonly ConcurrentDictionary<Type, MethodInfo> methodsCache = new ConcurrentDictionary<Type, MethodInfo>();
+        
         public void Handle(IPublishableEvent evt)
         {
-            if (!methodsCache.TryGetValue(evt.Payload.GetType(), out var updateMethod))
+            var payloadType = evt.Payload.GetType();
+
+            var updateMethod = methodsCache.GetOrAdd(payloadType, t =>
             {
                 var eventType = typeof(IPublishedEvent<>).MakeGenericType(evt.Payload.GetType());
 
-                updateMethod = this
+                return this
                     .GetType()
-                    .GetMethod("Update", new[] {typeof(InterviewHistoryView), eventType});
-
-                if (updateMethod == null)
-                    return;
-            }
+                    .GetMethod("Update", new[] { typeof(InterviewHistoryView), eventType });
+            });
+            
+            if (updateMethod == null)
+                return;
 
             InterviewHistoryView currentState = this.readSideStorage.GetById(evt.EventSourceId);
 
