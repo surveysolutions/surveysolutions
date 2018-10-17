@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Globalization;
-using Autofac;
 using Quartz;
 using Quartz.Spi;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 
 namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
 {

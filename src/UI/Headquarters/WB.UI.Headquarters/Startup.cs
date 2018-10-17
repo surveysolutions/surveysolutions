@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Reflection;
@@ -15,7 +13,6 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using System.Web.SessionState;
 using Autofac;
-using Autofac.Core;
 using Autofac.Integration.Mvc;
 using Autofac.Integration.SignalR;
 using Autofac.Integration.WebApi;
@@ -71,7 +68,6 @@ namespace WB.UI.Headquarters
             //HibernatingRhinos.Profiler.Appender.EntityFramework.EntityFrameworkProfiler.Initialize();
             //NpgsqlLogManager.Provider = new NLogNpgsqlLoggingProvider();
             //NpgsqlLogManager.IsParameterLoggingEnabled = true;
-
         }
 
         public void Configuration(IAppBuilder app)
@@ -84,15 +80,9 @@ namespace WB.UI.Headquarters
             autofacKernel.ContainerBuilder.RegisterHubs(Assembly.GetAssembly(typeof(WebInterviewHub)));
             autofacKernel.ContainerBuilder.RegisterControllers(typeof(Startup).Assembly);
             autofacKernel.ContainerBuilder.RegisterApiControllers(typeof(Startup).Assembly);
-
-            //autofacKernel.ContainerBuilder.RegisterSource(new AnyConcreteTypeNotAlreadyRegisteredSource());
-
+            
             autofacKernel.ContainerBuilder.RegisterType<Autofac.Integration.SignalR.AutofacDependencyResolver>()
                 .As<Microsoft.AspNet.SignalR.IDependencyResolver>().SingleInstance();
-            
-            
-            //temp logging
-            autofacKernel.ContainerBuilder.RegisterModule<LogRequestModule>();
             
             autofacKernel.ContainerBuilder
                 .RegisterType<CustomMVCDependencyResolver>()
@@ -141,7 +131,7 @@ namespace WB.UI.Headquarters
             ConfigureAuth(app);
             InitializeAppShutdown(app);
             InitializeMVC();
-            ConfigureWebApi(app);
+            ConfigureWebApi(app, config);
 
             Exceptional.Settings.ExceptionActions.AddHandler<TargetInvocationException>((error, exception) =>
             {
@@ -163,9 +153,8 @@ namespace WB.UI.Headquarters
         }
 
 
-        private void ConfigureWebApi(IAppBuilder app)
+        private void ConfigureWebApi(IAppBuilder app, HttpConfiguration config)
         {
-            var config = new HttpConfiguration();
             config.Formatters.Add(new FormMultipartEncodedMediaTypeFormatter());
 
             GlobalConfiguration.Configure(WebApiConfig.Register);
@@ -341,43 +330,6 @@ namespace WB.UI.Headquarters
                     Directory.CreateDirectory(jsonStorePathAbsolute);
                 }
             }
-        }
-    }
-
-    public class CustomLifetimeHubManager : IDisposable
-    {
-        private readonly ConcurrentDictionary<IHub, ILifetimeScope> _hubLifetimeScopes = new ConcurrentDictionary<IHub, ILifetimeScope>();
-
-        public T ResolveHub<T>(Type type, ILifetimeScope lifetimeScope) where T : ILifetimeHub
-        {
-            ILifetimeScope context = lifetimeScope.BeginLifetimeScope(ScopeLifetimeTag.RequestLifetimeScopeTag);
-            var serviceLocatorLocal = context.Resolve<IServiceLocator>(new NamedParameter("kernel", context));
-
-            T obj = (T)context.Resolve(type);
-            obj.OnDisposing += new EventHandler(this.HubOnDisposing);
-            this._hubLifetimeScopes.TryAdd((IHub)obj, context);
-            return obj;
-        }
-
-        public void Dispose()
-        {
-            this.Dispose(true);
-            GC.SuppressFinalize((object)this);
-        }
-
-        protected virtual void Dispose(bool disposing)
-        {
-            foreach (IDisposable key in (IEnumerable<IHub>)this._hubLifetimeScopes.Keys)
-                key.Dispose();
-        }
-
-        private void HubOnDisposing(object sender, EventArgs eventArgs)
-        {
-            IHub key = sender as IHub;
-            ILifetimeScope lifetimeScope;
-            if (key == null || !this._hubLifetimeScopes.TryRemove(key, out lifetimeScope) || lifetimeScope == null)
-                return;
-            lifetimeScope.Dispose();
         }
     }
 

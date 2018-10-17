@@ -42,18 +42,7 @@ namespace WB.Tests.Integration.CommandServiceTests
 
             var eventBus = Mock.Of<IEventBus>();
             var eventBusMock = Mock.Get(eventBus);
-            eventBusMock.Setup(bus => bus.CommitUncommittedEvents(Moq.It.IsAny<IEventSourcedAggregateRoot>(), Moq.It.IsAny<string>()))
-                     .Returns((IEventSourcedAggregateRoot aggregate, string origin) =>
-                     {
-                         return new CommittedEventStream(aggregate.EventSourceId,
-                             aggregate.GetUnCommittedChanges()
-                                      .Select(x => IntegrationCreate.CommittedEvent(payload: x.Payload,
-                                                     eventSourceId: x.EventSourceId,
-                                                     eventSequence: x.EventSequence)));
-                     });
-
-            eventBusMock
-                .Setup(bus => bus.PublishCommittedEvents(Moq.It.IsAny<IEnumerable<CommittedEvent>>()))
+            eventBusMock.Setup(bus => bus.PublishCommittedEvents(Moq.It.IsAny<IEnumerable<CommittedEvent>>()))
                 .Callback<IEnumerable<CommittedEvent>>(events =>
                 {
                     publishedEvents = events;

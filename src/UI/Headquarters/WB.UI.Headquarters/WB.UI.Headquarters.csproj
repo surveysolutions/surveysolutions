@@ -1945,7 +1945,6 @@
     <Compile Include="API\WebInterview\LinksExportController.cs" />
     <Compile Include="API\PagedApiResponse.cs" />
     <Compile Include="API\WebInterview\Pipeline\WebInterviewAuthorizeAttribute.cs" />
-    <Compile Include="API\WebInterview\Pipeline\PlainSignalRTransactionManager.cs" />
     <Compile Include="API\WebInterview\Pipeline\WebInterviewStateManager.cs" />
     <Compile Include="API\WebInterview\SearchResults.cs" />
     <Compile Include="API\WebInterview\Services\HqWebInterviewInterviewEntityFactory.cs" />
@@ -2268,6 +2267,7 @@
     <Compile Include="Controllers\ResourceController.cs" />
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\WebInterviewController.Actions.cs" />
+    <Compile Include="Code\CustomLifetimeHubManager.cs" />
     <Compile Include="Implementation\Maps\JsonMapResponse.cs" />
     <Compile Include="Implementation\Maps\MapService.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M201805031628_AllowNullForResponsibleName.cs" />
