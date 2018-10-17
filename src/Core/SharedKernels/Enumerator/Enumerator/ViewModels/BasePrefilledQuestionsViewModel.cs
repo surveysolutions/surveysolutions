@@ -84,12 +84,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             
             var questions = this.interviewViewModelFactory.GetPrefilledQuestions(this.InterviewId).ToList();
 
-            this.PrefilledQuestions = this.compositeCollectionInflationService.GetInflatedCompositeCollection(questions);
+            var visibleSectionItems = this.compositeCollectionInflationService.GetInflatedCompositeCollection(questions);
             
             var startButton = this.interviewViewModelFactory.GetNew<StartInterviewViewModel>();
             startButton.InterviewStarted += (sender, args) => this.Dispose();
             startButton.Init(InterviewId);
-            this.PrefilledQuestions.Add(startButton);
+
+            visibleSectionItems.Add(startButton);
+
+            this.PrefilledQuestions = visibleSectionItems;
 
             this.availableLanguages = questionnaire.GetTranslationLanguages();
             this.currentLanguage = interview.Language;
