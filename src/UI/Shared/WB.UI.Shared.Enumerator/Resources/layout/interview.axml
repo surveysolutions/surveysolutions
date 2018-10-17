@@ -35,8 +35,8 @@
     <FrameLayout
       android:animateLayoutChanges="false"
       android:id="@+id/interviewCurrentStepFrame"
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
+      android:layout_width="fill_parent"
+      android:layout_height="fill_parent"
       android:descendantFocusability="beforeDescendants"
       android:focusableInTouchMode="true"
       local:MvxBind="CurrentScreen CurrentStage;"

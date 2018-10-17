@@ -28,7 +28,6 @@
     android:scrollbars="vertical"
     android:descendantFocusability="beforeDescendants"
     android:focusableInTouchMode="true"
-    android:layout_marginBottom="?attr/actionBarSize"
     local:MvxTemplateSelector ="WB.UI.Shared.Enumerator.CustomControls.InterviewTemplateSelector, WB.UI.Shared.Enumerator"
     local:MvxBind="ItemsSource PrefilledQuestions" />
 
