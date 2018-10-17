@@ -84,7 +84,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         public bool IsInProgressItemsLoading => this.IsInProgressItemsLoadingCount > 0;
 
-        public IMvxCommand ClearSearchCommand => new MvxCommand(() => SearchText = string.Empty, () => !IsInProgressLongOperation && !IsInProgressItemsLoading);
+        public IMvxCommand ClearSearchCommand => new MvxCommand(() => SearchText = string.Empty, () => !IsInProgressLongOperation);
         public IMvxCommand ExitSearchCommand => new MvxAsyncCommand(() => viewModelNavigationService.NavigateToDashboardAsync());
         public IMvxCommand<string> SearchCommand => new MvxCommand<string>(async text => await SearchAsync(text));
 
@@ -122,43 +122,55 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             protected set => this.RaiseAndSetIfChanged(ref this.uiItems, value);
         }
 
-        protected Task UpdateUiItemsAsync(string searctText, CancellationToken cancellationToken) => Task.Run(() =>
+        protected async Task UpdateUiItemsAsync(string searctText, CancellationToken cancellationToken)
         {
             this.IsInProgressItemsLoadingCount++;
 
+            this.SerchResultText = string.IsNullOrWhiteSpace(searctText)
+                ? InterviewerUIResources.Dashboard_NeedTextForSearch
+                : InterviewerUIResources.Dashboard_Searching;
+
+            var items = new List<IDashboardItem>();
+
             try
             {
-                if (string.IsNullOrWhiteSpace(searctText))
+                if (!string.IsNullOrWhiteSpace(searctText))
                 {
-                    SerchResultText = InterviewerUIResources.Dashboard_NeedTextForSearch;
+                    items = await this.GetViewModelsAsync(searctText, cancellationToken);
 
-                    this.UiItems.OfType<InterviewDashboardItemViewModel>().ForEach(i => i.OnItemRemoved -= InterviewItemRemoved);
-                    this.UiItems.SwitchTo(new List<InterviewDashboardItemViewModel>());
-                }
-                else
-                {
-                    var items = this.GetUiItems(searctText, cancellationToken).ToList();
-
-                    if (cancellationToken.IsCancellationRequested) return;
-
-                    SerchResultText = items.Count > 0
+                    this.SerchResultText = items.Count > 0
                         ? string.Format(InterviewerUIResources.Dashboard_SearchResult, items.Count)
                         : InterviewerUIResources.Dashboard_NotFoundSearchResult;
-
-                    this.UiItems.OfType<InterviewDashboardItemViewModel>().ForEach(i => i.OnItemRemoved -= InterviewItemRemoved);
-                    this.UiItems.ReplaceWith(items);
-                    this.UiItems.OfType<InterviewDashboardItemViewModel>().ForEach(i => i.OnItemRemoved += InterviewItemRemoved);
                 }
+
+                this.UiItems.OfType<InterviewDashboardItemViewModel>().ForEach(i => i.OnItemRemoved -= InterviewItemRemoved);
+                this.UiItems.ReplaceWith(items);
+                this.UiItems.OfType<InterviewDashboardItemViewModel>().ForEach(i => i.OnItemRemoved += InterviewItemRemoved);
             }
-            catch(TaskCanceledException)
-            { 
-                return;
+            catch (OperationCanceledException)
+            {
             }
             finally
             {
                 this.IsInProgressItemsLoadingCount--;
             }
-        }, cancellationToken);
+        }
+
+        private Task<List<IDashboardItem>> GetViewModelsAsync(string searctText, CancellationToken cancellationToken) =>
+            Task.Run(() =>
+            {
+                var items = new List<IDashboardItem>();
+
+                foreach (var uiItem in this.GetUiItems(searctText))
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    items.Add(uiItem);
+                }
+
+                return items;
+
+            }, cancellationToken);
 
         private void InterviewItemRemoved(object sender, EventArgs eventArgs)
         {
@@ -185,12 +197,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 : InterviewerUIResources.Dashboard_NotFoundSearchResult;
         }
         
-        protected IEnumerable<IDashboardItem> GetUiItems(string searctText, CancellationToken cancellationToken)
+        protected IEnumerable<IDashboardItem> GetUiItems(string searctText)
         {
             foreach (var assignmentItem in GetAssignmentItems())
             {
-                if (cancellationToken.IsCancellationRequested) yield break;
-
                 if (assignmentItem.Quantity.HasValue && assignmentItem.CreatedInterviewsCount.HasValue)
                 {
                     int count = assignmentItem.Quantity.Value - assignmentItem.CreatedInterviewsCount.Value;
@@ -214,8 +224,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
             foreach (var interviewView in this.GetInterviewItems())
             {
-                if (cancellationToken.IsCancellationRequested) yield break;
-
                 var details = preffilledQuestions[interviewView.InterviewId]
                     .OrderBy(x => x.SortIndex)
                     .Select(fi => new PrefilledQuestion { Answer = fi.Answer?.Trim(), Question = fi.QuestionText })
