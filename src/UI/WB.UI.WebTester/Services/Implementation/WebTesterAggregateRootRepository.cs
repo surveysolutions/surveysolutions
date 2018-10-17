@@ -2,6 +2,7 @@
 using System.Web.WebPages;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing.Storage;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Infrastructure.Native.Storage;
 
@@ -12,12 +13,12 @@ namespace WB.UI.WebTester.Services.Implementation
         private readonly IEvictionNotifier notify;
 
         public WebTesterAggregateRootRepository(
-            IEventStore eventStore,
+            IInMemoryEventStore eventStore,
             ISnapshotStore snapshotStore,
             IDomainRepository repository,
             IAggregateLock aggregateLock,
             IEvictionNotifier notify,
-            IEvictionObservable evictionNotification) : base(eventStore, snapshotStore, repository, aggregateLock)
+            IEvictionObservable evictionNotification) : base(eventStore, eventStore, new EventBusSettings(), snapshotStore, repository, aggregateLock)
         {
             this.notify = notify;
             Expiration = TimeSpan.FromMinutes(ConfigurationSource.Configuration["Cache.Expiration"].AsInt(10));
