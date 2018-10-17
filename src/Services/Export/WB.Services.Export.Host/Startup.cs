@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Security.Cryptography;
+using System.Text;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
@@ -28,12 +30,24 @@ namespace WB.Services.Export.Host
         // This method gets called by the runtime. Use this method to add services to the container.
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
+            if (Configuration["connectionString"] != null)
+            {
+                var encryptedConnectionString = Configuration["connectionString"];
+
+                var encryptedBytes = Convert.FromBase64String(encryptedConnectionString);
+                var connectionStringBytes = ProtectedData.Unprotect(encryptedBytes, 
+                    null, DataProtectionScope.CurrentUser);
+                var connectionString = Encoding.UTF8.GetString(connectionStringBytes);
+
+                Configuration.GetSection("ConnectionStrings")["DefaultConnection"] = connectionString;
+            }
+
             services.AddMvcCore(ops =>
-                {
-                    ops.ModelBinderProviders.Insert(0, new TenantEntityBinderProvider());
-                })
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
-                .AddJsonFormatters();            
+            {
+                ops.ModelBinderProviders.Insert(0, new TenantEntityBinderProvider());
+            })
+            .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+            .AddJsonFormatters();            
 
             services.AddTransient<IDataExportProcessesService, PostgresDataExportProcessesService>();
             
