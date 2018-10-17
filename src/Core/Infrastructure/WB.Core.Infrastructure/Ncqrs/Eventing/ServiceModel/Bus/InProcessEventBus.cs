@@ -43,7 +43,7 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
             if (eventMessage?.Payload == null) return;
 
             bool isIgnoredAggregate =
-                this.eventBusSettings.IgnoredAggregateRoots.Contains(eventMessage.EventSourceId.FormatGuid());
+                this.eventBusSettings.IsIgnoredAggregate(eventMessage.EventSourceId);
 
             var eventHandlerMethodsByEventType = this.eventHandlerMethods.Where(
                     eventHandlerMethod => eventHandlerMethod.EventType.GetTypeInfo().IsAssignableFrom(eventMessage.Payload.GetType().GetTypeInfo()) && 
@@ -61,7 +61,7 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
         {
             if (eventMessage?.Payload == null) return false;
 
-            if (this.eventBusSettings.IgnoredAggregateRoots.Contains(eventMessage.EventSourceId.FormatGuid()))
+            if (this.eventBusSettings.IsIgnoredAggregate(eventMessage.EventSourceId))
             {
                 return this.eventHandlerMethods.Any(x => x.ReceivesIgnoredEvents);
             }

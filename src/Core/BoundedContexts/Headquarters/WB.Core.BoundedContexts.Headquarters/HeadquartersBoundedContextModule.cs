@@ -132,6 +132,8 @@ namespace WB.Core.BoundedContexts.Headquarters
                     typeof(DataCollectionSharedKernelAssemblyMarker).Assembly,
                     typeof(HeadquartersBoundedContextModule).Assembly));
 
+            registry.BindAsSingleton<IInMemoryEventStore, InMemoryEventStore>();
+
             registry.BindToConstant(() => this.externalStoragesSettings);
 
             registry.BindToConstant<SyncSettings>(() => this.syncSettings);

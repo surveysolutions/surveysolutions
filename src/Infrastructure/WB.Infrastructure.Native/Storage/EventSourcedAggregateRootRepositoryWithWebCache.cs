@@ -3,9 +3,11 @@ using System.Collections.Concurrent;
 using System.Threading;
 using System.Web.Caching;
 using Ncqrs.Domain.Storage;
+using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Aggregates;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Infrastructure.Native.Monitoring;
 
@@ -14,16 +16,22 @@ namespace WB.Infrastructure.Native.Storage
     public class EventSourcedAggregateRootRepositoryWithWebCache : EventSourcedAggregateRootRepository,
         IAggregateRootCacheCleaner, IAggregateRootCacheFiller
     {
+        private readonly IInMemoryEventStore inMemoryEventStore;
+        private readonly EventBusSettings eventBusSettings;
         private readonly IAggregateLock aggregateLock;
 
         private static readonly ConcurrentDictionary<string, bool> CacheCountTracker = new ConcurrentDictionary<string, bool>();
 
         public EventSourcedAggregateRootRepositoryWithWebCache(IEventStore eventStore, 
+            IInMemoryEventStore inMemoryEventStore,
+            EventBusSettings eventBusSettings,
             ISnapshotStore snapshotStore,
             IDomainRepository repository, 
             IAggregateLock aggregateLock)
             : base(eventStore, snapshotStore, repository)
         {
+            this.inMemoryEventStore = inMemoryEventStore;
+            this.eventBusSettings = eventBusSettings;
             this.aggregateLock = aggregateLock;
         }
 
@@ -39,7 +47,15 @@ namespace WB.Infrastructure.Native.Storage
 
                 if (aggregateRoot == null)
                 {
-                    aggregateRoot = base.GetLatest(aggregateType, aggregateId, progress, cancellationToken);
+                    if (!this.eventBusSettings.IsIgnoredAggregate(aggregateId))
+                    {
+                        aggregateRoot = base.GetLatest(aggregateType, aggregateId, progress, cancellationToken);
+                    }
+                    else
+                    {
+                        var events = this.inMemoryEventStore.Read(aggregateId, 0);
+                        aggregateRoot = base.repository.Load(aggregateType, aggregateId, null, events);
+                    }
 
                     if (aggregateRoot != null)
                         this.PutToCache(aggregateRoot);

@@ -22,7 +22,7 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
             var secondOldSchoolEventHandlerMock = secondEventHandlerMock.As<IEventHandler<IEvent>>();
             var ncqrCompatibleEventDispatcher = CreateNcqrCompatibleEventDispatcher(new EventBusSettings()
             {
-                IgnoredAggregateRoots = new HashSet<string>(new[] { ignoredEventSource.FormatGuid() })
+                IgnoredAggregateRoots = new List<string>(new[] { ignoredEventSource.FormatGuid() })
             });
 
             ncqrCompatibleEventDispatcher.Register(secondEventHandlerMock.Object);
@@ -57,7 +57,7 @@ namespace WB.Tests.Unit.Infrastructure.NcqrCompatibleEventDispatcherTests
 
             var ncqrCompatibleEventDispatcher = CreateNcqrCompatibleEventDispatcher(new EventBusSettings()
             {
-                IgnoredAggregateRoots = new HashSet<string>(new[] { ignoredEventSource.FormatGuid() })
+                IgnoredAggregateRoots = new List<string>(new[] { ignoredEventSource.FormatGuid() })
             });
 
             var customHandler = new CustomHandler();
