@@ -1,6 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" InitialTargets="EnsureWixToolsetInstalled" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="..\..\..\..\packages\PanelSwWixExtension.1.10.1\build\PanelSwWixExtension.props" Condition="Exists('..\..\..\..\packages\PanelSwWixExtension.1.10.1\build\PanelSwWixExtension.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
@@ -51,9 +50,6 @@
     <Content Include="img\WixUIDialogBmp.bmp" />
     <Content Include="img\WixUIExclamationIco.bmp" />
     <Content Include="img\WixUIInfoIco.bmp" />
-    <Content Include="packages.config" />
-    <Content Include="PanelSwWixExtension.xsd" />
-    <Content Include="setPropertyFromPipeDetails.proto" />
   </ItemGroup>
   <ItemGroup>
     <WixExtension Include="WixUtilExtension">
@@ -93,12 +89,6 @@
   </Target>
   <Target Name="BeforeBuild">
     <HeatDirectory OutputFile="$(ProjectDir)\ProductFiles.wxs" Directory="$(HarvestDirectory)" ComponentGroupName="ProductFilesComponentGroup" DirectoryRefId="INSTALLSITEFOLDER" AutogenerateGuids="true" PreprocessorVariable="var.HarvestDir" SuppressRegistry="true" SuppressRootDirectory="true" ToolPath="$(WixToolPath)" NoLogo="true" />
-  </Target>
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\..\..\..\packages\PanelSwWixExtension.1.10.1\build\PanelSwWixExtension.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\PanelSwWixExtension.1.10.1\build\PanelSwWixExtension.props'))" />
   </Target>
   <!--
 	To modify your build process, add your task inside one of the targets below and uncomment it.
