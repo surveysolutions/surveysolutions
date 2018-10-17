@@ -14,6 +14,8 @@ namespace WB.UI.Headquarters.Injections
         private readonly string serviceExe;
         private readonly bool canRun;
         private readonly ILogger logger;
+        private TaskCompletionSource<bool> tsc;
+
         public LocalExportServiceRunner(ILogger logger)
         {
             this.logger = logger;
@@ -25,13 +27,13 @@ namespace WB.UI.Headquarters.Injections
                 serviceExe = Path.Combine(servicePath, "WB.Services.Export.Host.exe");
                 canRun = servicePath != null && serviceExe != null && File.Exists(serviceExe);
             }
+
+            this.tsc = new TaskCompletionSource<bool>();
         }
 
         private async Task StartService()
         {
-            var tsc = new TaskCompletionSource<bool>();
-
-            var processStartInfo = new ProcessStartInfo(serviceExe, "--console")
+            var processStartInfo = new ProcessStartInfo(serviceExe, "--console --kestrel")
             {
                 WorkingDirectory = servicePath,
                 UseShellExecute = false,
@@ -64,8 +66,7 @@ namespace WB.UI.Headquarters.Injections
                 logger.Error(e.Data);
             }
 
-            await tsc.Task;
-            tsc = null;
+            await tsc.Task.ConfigureAwait(false);
         }
 
         public void Run()
@@ -83,8 +84,6 @@ namespace WB.UI.Headquarters.Injections
 
                 StartService().Wait();
             }
-
-            return;
         }
     }
 }

@@ -670,8 +670,11 @@
   <data name="Prefs_DownloadUpdatesForInterviewerApp" xml:space="preserve">
     <value>Загружать обновления для интервьюер приложения</value>
   </data>
-    <data name="Prefs_DownloadUpdatesForInterviewerAppSummary" xml:space="preserve">
+  <data name="Prefs_DownloadUpdatesForInterviewerAppSummary" xml:space="preserve">
     <value>Если у интервьюеров нет доступа к интернету и они работают в оффлайн режиме, то эта настройка должна быть влючена, чтобы при оффлайновой синхронизации с супервизором интервьюер мог обновить свое приложение через приложение супервизора</value>
     <comment>Если у интервьюеров нет доступа к интернету, то эта настройка должна быть включена, чтобы при оффлайн синхронизации интервьюер мог обновить свое приложение через приложение супервизора</comment>
+  </data>
+  <data name="Validity_QuestionDoesntExist" xml:space="preserve">
+    <value>Текущий ростер удален или выключен. Пожалуйста, перейдите в следующую активную секцию или ростер используя панель навигации.</value>
   </data>
 </root>

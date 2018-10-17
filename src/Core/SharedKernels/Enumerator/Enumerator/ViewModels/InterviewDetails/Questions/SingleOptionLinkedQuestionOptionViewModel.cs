@@ -12,7 +12,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
     {
         public event EventHandler BeforeSelected;
         public event EventHandler AnswerRemoved;
-        public EnablementViewModel Enablement { get; set; }
+        public EnablementViewModel Enablement => QuestionState?.Enablement;
 
         public decimal[] RosterVector { get; set; }
 
@@ -63,5 +63,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
 
         public string ItemTag => this.QuestionState.Header.Identity + "_Opt_" + (RosterVector == null ? "<null>" : new RosterVector(RosterVector).ToString());
+        
     }
 }

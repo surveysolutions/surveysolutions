@@ -2,6 +2,7 @@ using System;
 using FluentAssertions;
 using Main.Core.Entities.SubEntities;
 using Moq;
+using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
@@ -12,7 +13,7 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
 {
     internal class when_answering_qr_barcode_question_with_incorrect_roster_vector : InterviewTestsContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [OneTimeSetUp] public void context () {
             
             var questionnaireId = Guid.Parse("DDDDDDDDDDDDDDDDDDDDDD0000000000");
             var questionnaire = Mock.Of<IQuestionnaire>
@@ -24,20 +25,22 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             IQuestionnaireStorage questionnaireRepository = CreateQuestionnaireRepositoryStubWithOneQuestionnaire(questionnaireId, questionnaire);
 
             interview = CreateInterview(questionnaireId: questionnaireId, questionnaireRepository: questionnaireRepository);
-            BecauseOf();
+
+            exception = Assert.Throws<InterviewException>(() =>
+                interview.AnswerQRBarcodeQuestion(userId: userId, questionId: questionId, originDate:DateTimeOffset.Now,  rosterVector: invalidRosterVector, answer: answer));
         }
 
-        public void BecauseOf() =>
-            exception = NUnit.Framework.Assert.Throws<InterviewException>(() =>
-                interview.AnswerQRBarcodeQuestion(userId: userId, questionId: questionId, originDate:DateTimeOffset.Now, 
-                    rosterVector: invalidRosterVector, answer: answer));
-
-        [NUnit.Framework.Test] public void should_raise_InterviewException () =>
+        [Test] 
+        public void should_raise_InterviewException () =>
             exception.Should().BeOfType<InterviewException>();
 
-        [NUnit.Framework.Test] public void should_throw_exception_with_message_containting_words__roster_information_incorrect__ () =>
-             new[] { "roster", "information", "incorrect" }.Should().OnlyContain(
-                    keyword => exception.Message.ToLower().Contains(keyword));
+        [Test] 
+        public void should_throw_exception_with_message () =>
+            exception.Message.Should().Equals("Roster information for question is incorrect. No questions found for roster vector");
+
+        [Test] 
+        public void should_throw_exception_question_is_missing_type () =>
+            ((InterviewException)exception).ExceptionType.Should().Equals(InterviewDomainExceptionType.QuestionIsMissing);
 
         private static Exception exception;
         private static Interview interview;
