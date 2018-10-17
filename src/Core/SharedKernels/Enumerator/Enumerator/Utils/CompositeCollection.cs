@@ -150,13 +150,18 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
                 return;
 
             var offset = 0;
-            lock (SyncRoot)
+            this.itemsLock.EnterReadLock();
+            try
             {
                 foreach (var coll in this.collections)
                     if (sender == coll)
                         break;
                     else
                         offset += coll.Count();
+            }
+            finally
+            {
+                this.itemsLock.ExitReadLock();
             }
 
             var newIndex = e.NewStartingIndex == -1 ? -1 : e.NewStartingIndex + offset;
