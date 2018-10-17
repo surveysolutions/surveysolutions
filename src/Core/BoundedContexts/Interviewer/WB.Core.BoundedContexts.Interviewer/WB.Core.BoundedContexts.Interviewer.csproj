@@ -16,10 +16,10 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Autofac" Version="4.8.1" />
-    <PackageReference Include="MvvmCross.Plugin.File" Version="6.2.0" />
-    <PackageReference Include="MvvmCross.Plugin.Messenger" Version="6.2.0" />
-    <PackageReference Include="MvvmCross.Plugin.Network" Version="6.2.0" />
-    <PackageReference Include="MvvmCross.Plugin.WebBrowser" Version="6.2.0" />
+    <PackageReference Include="MvvmCross.Plugin.File" Version="6.2.1" />
+    <PackageReference Include="MvvmCross.Plugin.Messenger" Version="6.2.1" />
+    <PackageReference Include="MvvmCross.Plugin.Network" Version="6.2.1" />
+    <PackageReference Include="MvvmCross.Plugin.WebBrowser" Version="6.2.1" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="sqlite-net-pcl" Version="1.4.118" />
     <PackageReference Include="SQLitePCLRaw.bundle_green" Version="1.1.11" />
