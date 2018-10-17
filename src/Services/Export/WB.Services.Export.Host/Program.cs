@@ -33,7 +33,7 @@ namespace WB.Services.Export.Host
 
                 var isService = !(Debugger.IsAttached || args.Contains("--console"));
                 args = args.Where(arg => arg != "--console").ToArray();
-
+                
                 var useKestrel = args.Contains("--kestrel");
                 args = args.Where(arg => arg != "--kestrel").ToArray();
 
@@ -84,8 +84,8 @@ namespace WB.Services.Export.Host
                         }
                     })
                     .UseNLog()
-                    .UseUrls(GetCommandLineUrls(args))
-                ;
+                    .UseUrls(GetCommandLineUrls(args));
+
             host = useKestrel ? host.UseKestrel() : host.UseHttpSys();
             return host.UseStartup<Startup>();
         }
