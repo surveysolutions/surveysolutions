@@ -25,9 +25,11 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
         private readonly IEventStore eventStore;
         private readonly EventBusSettings eventBusSettings;
         private readonly ILogger logger;
+        private readonly IInMemoryEventStore inMemoryEventStore;
         
-        public NcqrCompatibleEventDispatcher(IEventStore eventStore, EventBusSettings eventBusSettings, ILogger logger, IEnumerable<IEventHandler> eventHandlers)
+        public NcqrCompatibleEventDispatcher(IEventStore eventStore, IInMemoryEventStore inMemoryEventStore, EventBusSettings eventBusSettings, ILogger logger, IEnumerable<IEventHandler> eventHandlers)
         {
+            this.inMemoryEventStore = inMemoryEventStore;
             this.eventStore = eventStore;
             this.eventBusSettings = eventBusSettings;
             this.logger = logger;
@@ -88,7 +90,7 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
 
             var errorsDuringHandling = new List<Exception>();
 
-            if (!this.eventBusSettings.IgnoredAggregateRoots.Contains(firstEventSourceId.FormatGuid()))
+            if (!this.eventBusSettings.IsIgnoredAggregate(firstEventSourceId))
             {
                 foreach (var functionalEventHandler in functionalHandlers)
                 {
@@ -165,6 +167,10 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
         public IEnumerable<CommittedEvent> CommitUncommittedEvents(IEventSourcedAggregateRoot aggregateRoot, string origin)
         {
             var eventStream = new UncommittedEventStream(origin, aggregateRoot.GetUnCommittedChanges());
+            if (this.eventBusSettings.IsIgnoredAggregate(aggregateRoot.EventSourceId))
+            {
+                return this.inMemoryEventStore.Store(eventStream);
+            }
 
             return this.eventStore.Store(eventStream);
         }

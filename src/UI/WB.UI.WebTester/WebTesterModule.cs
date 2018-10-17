@@ -62,7 +62,7 @@ namespace WB.UI.WebTester
             {
                 DisabledEventHandlerTypes = Array.Empty<Type>(),
                 EventHandlerTypesWithIgnoredExceptions = Array.Empty<Type>(),
-                IgnoredAggregateRoots = new HashSet<string>()
+                IgnoredAggregateRoots = new List<string>()
             });
 
             registry.Bind<WebTesterStatefulInterview>();
