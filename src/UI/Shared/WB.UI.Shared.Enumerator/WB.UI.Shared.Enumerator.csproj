@@ -77,35 +77,35 @@
     </Reference>
     <Reference Include="Mono.Android" />
     <Reference Include="Mono.Android.Export" />
-    <Reference Include="MvvmCross, Version=6.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\MvvmCross.6.2.0\lib\monoandroid81\MvvmCross.dll</HintPath>
+    <Reference Include="MvvmCross, Version=6.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\MvvmCross.6.2.1\lib\monoandroid81\MvvmCross.dll</HintPath>
     </Reference>
-    <Reference Include="MvvmCross.Droid.Support.Core.UI, Version=6.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\MvvmCross.Droid.Support.Core.UI.6.2.0\lib\monoandroid81\MvvmCross.Droid.Support.Core.UI.dll</HintPath>
+    <Reference Include="MvvmCross.Droid.Support.Core.UI, Version=6.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\MvvmCross.Droid.Support.Core.UI.6.2.1\lib\monoandroid81\MvvmCross.Droid.Support.Core.UI.dll</HintPath>
     </Reference>
-    <Reference Include="MvvmCross.Droid.Support.Core.Utils, Version=6.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\MvvmCross.Droid.Support.Core.Utils.6.2.0\lib\monoandroid81\MvvmCross.Droid.Support.Core.Utils.dll</HintPath>
+    <Reference Include="MvvmCross.Droid.Support.Core.Utils, Version=6.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\MvvmCross.Droid.Support.Core.Utils.6.2.1\lib\monoandroid81\MvvmCross.Droid.Support.Core.Utils.dll</HintPath>
     </Reference>
-    <Reference Include="MvvmCross.Droid.Support.Design, Version=6.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\MvvmCross.Droid.Support.Design.6.2.0\lib\monoandroid81\MvvmCross.Droid.Support.Design.dll</HintPath>
+    <Reference Include="MvvmCross.Droid.Support.Design, Version=6.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\MvvmCross.Droid.Support.Design.6.2.1\lib\monoandroid81\MvvmCross.Droid.Support.Design.dll</HintPath>
     </Reference>
-    <Reference Include="MvvmCross.Droid.Support.Fragment, Version=6.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\MvvmCross.Droid.Support.Fragment.6.2.0\lib\monoandroid81\MvvmCross.Droid.Support.Fragment.dll</HintPath>
+    <Reference Include="MvvmCross.Droid.Support.Fragment, Version=6.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\MvvmCross.Droid.Support.Fragment.6.2.1\lib\monoandroid81\MvvmCross.Droid.Support.Fragment.dll</HintPath>
     </Reference>
-    <Reference Include="MvvmCross.Droid.Support.V7.AppCompat, Version=6.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\MvvmCross.Droid.Support.V7.AppCompat.6.2.0\lib\monoandroid81\MvvmCross.Droid.Support.V7.AppCompat.dll</HintPath>
+    <Reference Include="MvvmCross.Droid.Support.V7.AppCompat, Version=6.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\MvvmCross.Droid.Support.V7.AppCompat.6.2.1\lib\monoandroid81\MvvmCross.Droid.Support.V7.AppCompat.dll</HintPath>
     </Reference>
-    <Reference Include="MvvmCross.Droid.Support.V7.RecyclerView, Version=6.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\MvvmCross.Droid.Support.V7.RecyclerView.6.2.0\lib\monoandroid81\MvvmCross.Droid.Support.V7.RecyclerView.dll</HintPath>
+    <Reference Include="MvvmCross.Droid.Support.V7.RecyclerView, Version=6.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\MvvmCross.Droid.Support.V7.RecyclerView.6.2.1\lib\monoandroid81\MvvmCross.Droid.Support.V7.RecyclerView.dll</HintPath>
     </Reference>
-    <Reference Include="MvvmCross.Plugin.File, Version=6.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\MvvmCross.Plugin.File.6.2.0\lib\monoandroid81\MvvmCross.Plugin.File.dll</HintPath>
+    <Reference Include="MvvmCross.Plugin.File, Version=6.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\MvvmCross.Plugin.File.6.2.1\lib\monoandroid81\MvvmCross.Plugin.File.dll</HintPath>
     </Reference>
-    <Reference Include="MvvmCross.Plugin.Messenger, Version=6.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\MvvmCross.Plugin.Messenger.6.2.0\lib\netstandard2.0\MvvmCross.Plugin.Messenger.dll</HintPath>
+    <Reference Include="MvvmCross.Plugin.Messenger, Version=6.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\MvvmCross.Plugin.Messenger.6.2.1\lib\netstandard2.0\MvvmCross.Plugin.Messenger.dll</HintPath>
     </Reference>
-    <Reference Include="MvvmCross.Plugin.Network, Version=6.2.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\MvvmCross.Plugin.Network.6.2.0\lib\monoandroid81\MvvmCross.Plugin.Network.dll</HintPath>
+    <Reference Include="MvvmCross.Plugin.Network, Version=6.2.1.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\MvvmCross.Plugin.Network.6.2.1\lib\monoandroid81\MvvmCross.Plugin.Network.dll</HintPath>
     </Reference>
     <Reference Include="Newtonsoft.Json, Version=11.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Newtonsoft.Json.11.0.2\lib\netstandard2.0\Newtonsoft.Json.dll</HintPath>
