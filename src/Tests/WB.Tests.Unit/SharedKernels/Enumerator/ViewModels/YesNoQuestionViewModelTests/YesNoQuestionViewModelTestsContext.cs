@@ -34,11 +34,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.YesNoQuestionViewMod
                 answeringViewModel ?? Mock.Of<AnsweringViewModel>(),
                 userInteractionService ?? Mock.Of<IUserInteractionService>(),
                 filteredOptionsViewModel ?? Mock.Of<FilteredOptionsViewModel>(),
-                Create.ViewModel.QuestionInstructionViewModel()
-            )
-            {
-                ThrottlePeriod = 0
-            };
+                Create.ViewModel.QuestionInstructionViewModel(),
+                Create.ViewModel.ThrottlingViewModel());
         }
     }
 }

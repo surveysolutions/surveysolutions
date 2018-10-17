@@ -37,7 +37,7 @@ namespace WB.Services.Export.ExportProcessHandlers
                 {
                     using (var archive = dataExportFileAccessor.CreateExportArchive(archiveFile, processArgs.ArchivePassword))
                     {
-                        this.ExportDataIntoArchive(archive, exportSettings, exportProgress, cancellationToken);
+                        await this.ExportDataIntoArchive(archive, exportSettings, exportProgress, cancellationToken);
                     }
                 }
 

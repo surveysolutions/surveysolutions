@@ -27,7 +27,7 @@
                 return [
                     {
                         render: function (data, type, row) {
-                            return model.getLinkToInterviews(data, row);
+                            return model.getLinkToInterviews(data, row, '', model.Url.query['templateId'], model.Url.query['templateVersion']);
                         }
                     },
                     {
