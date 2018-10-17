@@ -43,6 +43,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         protected readonly QuestionStateViewModel<MultipleOptionsLinkedQuestionAnswered> questionState;
         private OptionBorderViewModel optionsTopBorderViewModel;
         private OptionBorderViewModel optionsBottomBorderViewModel;
+        private readonly ThrottlingViewModel throttlingModel;
 
         public IQuestionStateViewModel QuestionState => this.questionState;
 
@@ -57,18 +58,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IQuestionnaireStorage questionnaireStorage,
             IPrincipal userIdentity,
             ILiteEventRegistry eventRegistry,
-            IMvxMainThreadAsyncDispatcher mainThreadDispatcher)
+            IMvxMainThreadAsyncDispatcher mainThreadDispatcher, 
+            ThrottlingViewModel throttlingModel)
         {
             this.interviewRepository = interviewRepository;
             this.questionnaireStorage = questionnaireStorage;
             this.userIdentity = userIdentity;
             this.eventRegistry = eventRegistry;
             this.mainThreadDispatcher = mainThreadDispatcher;
+            this.throttlingModel = throttlingModel;
             this.questionState = questionState;
             this.Answering = answering;
             this.InstructionViewModel = instructionViewModel;
             this.Options = new CovariantObservableCollection<MultiOptionLinkedQuestionOptionViewModel>();
-            this.timer = new Timer(async _ => { await SaveAnswer(); }, null, Timeout.Infinite, Timeout.Infinite);
+            this.throttlingModel.Init(SaveAnswer);
         }
 
         public Identity Identity => this.questionIdentity;
@@ -111,6 +114,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             this.eventRegistry.Unsubscribe(this);
             this.QuestionState.Dispose();
+            this.throttlingModel.Dispose();
         }
 
         public CovariantObservableCollection<MultiOptionLinkedQuestionOptionViewModel> Options { get; }
@@ -118,8 +122,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         IObservableCollection<MultiOptionQuestionOptionViewModelBase> IMultiOptionQuestionViewModelToggleable.Options => this.Options;
         public bool HasOptions => this.Options.Any();
 
-        private readonly Timer timer;
-        protected internal int ThrottlePeriod { get; set; } = Constants.ThrottlePeriod;
         private List<RosterVector> previousOptionsToReset = null;
         private List<RosterVector> PreviousOptionsToReset
         {
@@ -181,14 +183,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 .Select(x => new RosterVector(x.Value))
                 .ToList();
 
-            if (this.ThrottlePeriod == 0)
-            {
-                await SaveAnswer();
-            }
-            else
-            {
-                timer.Change(ThrottlePeriod, Timeout.Infinite);
-            }
+            await this.throttlingModel.ExecuteActionIfNeeded();
         }
 
         private void ResetUiOptions()

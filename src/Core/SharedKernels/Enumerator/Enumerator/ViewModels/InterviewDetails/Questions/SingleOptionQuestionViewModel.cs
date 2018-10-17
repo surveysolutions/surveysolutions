@@ -32,6 +32,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly FilteredOptionsViewModel filteredOptionsViewModel;
         private readonly QuestionInstructionViewModel instructionViewModel;
         private readonly IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher;
+        private readonly ThrottlingViewModel throttlingModel;
 
         public SingleOptionQuestionViewModel(
             IPrincipal principal,
@@ -42,7 +43,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             AnsweringViewModel answering,
             FilteredOptionsViewModel filteredOptionsViewModel,
             QuestionInstructionViewModel instructionViewModel,
-            IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher)
+            IMvxMainThreadAsyncDispatcher mvxMainThreadDispatcher, 
+            ThrottlingViewModel throttlingModel)
         {
             if (principal == null) throw new ArgumentNullException(nameof(principal));
             if (questionnaireRepository == null) throw new ArgumentNullException(nameof(questionnaireRepository));
@@ -56,9 +58,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.filteredOptionsViewModel = filteredOptionsViewModel;
             this.instructionViewModel = instructionViewModel;
             this.mvxMainThreadDispatcher = mvxMainThreadDispatcher;
+            this.throttlingModel = throttlingModel;
             this.Options = new CovariantObservableCollection<SingleOptionQuestionOptionViewModel>();
 
-            this.timer = new Timer(async _ => { await SaveAnswer(); }, null, Timeout.Infinite, Timeout.Infinite);
+            this.throttlingModel.Init(SaveAnswer);
         }
 
         private Identity questionIdentity;
@@ -125,8 +128,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             });
         }
 
-        private readonly Timer timer;
-        protected internal int ThrottlePeriod { get; set; } = Constants.ThrottlePeriod;
         private int? previousOptionToReset = null;
         private int? selectedOptionToSave = null;
 
@@ -188,14 +189,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.Options.Where(x=> x.Selected && x.Value!=selectedOptionToSave).ForEach(x => x.Selected = false);
 
-            if (this.ThrottlePeriod == 0)
-            {
-                await SaveAnswer();
-            }
-            else
-            {
-                timer.Change(ThrottlePeriod, Timeout.Infinite);
-            }
+            await this.throttlingModel.ExecuteActionIfNeeded();
         }
 
         private SingleOptionQuestionOptionViewModel ToViewModel(CategoricalOption model, bool isSelected)
@@ -218,7 +212,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             try
             {
-                timer.Change(Timeout.Infinite, Timeout.Infinite);
+                this.throttlingModel.CancelPendingAction();
                 await this.Answering.SendRemoveAnswerCommandAsync(
                     new RemoveAnswerCommand(this.interviewId,
                         this.userId,
@@ -267,6 +261,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 option.BeforeSelected -= this.OptionSelected;
                 option.AnswerRemoved -= this.RemoveAnswer;
             }
+            this.throttlingModel.Dispose();
         }
 
         public IObservableCollection<ICompositeEntity> Children

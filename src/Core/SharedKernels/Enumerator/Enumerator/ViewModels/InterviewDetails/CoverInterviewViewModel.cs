@@ -16,7 +16,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 {
-    public class CoverInterviewViewModel : MvxViewModel
+    public class CoverInterviewViewModel : MvxViewModel, IDisposable
     {
         private readonly ICommandService commandService;
         private readonly IQuestionnaireStorage questionnaireRepository;
@@ -125,6 +125,17 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         {
             await this.commandService.WaitPendingCommandsAsync();
             await this.navigationState.NavigateTo(NavigationIdentity.CreateForGroup(firstSectionIdentity));
+        }
+
+        public void Dispose()
+        {
+            var prefilledQuestionsLocal = PrefilledQuestions;
+            foreach (var prefilledQuestion in prefilledQuestionsLocal)
+            {
+                prefilledQuestion.Dispose();
+            }
+
+            Name?.Dispose();
         }
     }
 }
