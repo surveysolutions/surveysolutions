@@ -622,6 +622,9 @@
   <data name="FailedToLoadInterview" xml:space="preserve">
     <value>Не удалось открыть интервью</value>
   </data>
+  <data name="FailedToLoadInterviewDescription" xml:space="preserve">
+    <value>Интервью находится в неправильном состоянии и будет удалено. Синхронизируйтесь, чтобы получить правильное.</value>
+  </data>
   <data name="UnacceptableSSLCertificate" xml:space="preserve">
     <value>Невозможно проверить сертификат. Проверьте адрес приложения Headquarters и верность текущей даты на устройстве</value>
   </data>
@@ -859,5 +862,9 @@
     <data name="SelectResponsible_CancelButtonText" xml:space="preserve">
     <value>Отмена</value>
     <comment>Отмена</comment>
+  </data>
+    <data name="Dashboard_Searching" xml:space="preserve">
+    <value>Поиск...</value>
+    <comment>Поиск...</comment>
   </data>
 </root>
