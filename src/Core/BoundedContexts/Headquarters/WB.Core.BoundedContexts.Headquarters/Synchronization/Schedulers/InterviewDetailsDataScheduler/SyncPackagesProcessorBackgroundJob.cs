@@ -36,7 +36,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.Interv
                 serviceLocator.ExecuteActionInScope((serviceLocatorLocal) =>
                 {
                     packageIds = serviceLocatorLocal.GetInstance<IInterviewPackagesService>().GetTopPackageIds(
-                        serviceLocator.GetInstance<SyncPackagesProcessorBackgroundJobSetting>().SynchronizationBatchCount);
+                        serviceLocatorLocal.GetInstance<SyncPackagesProcessorBackgroundJobSetting>().SynchronizationBatchCount);
                 });
 
                 if (packageIds == null || !packageIds.Any()) return;

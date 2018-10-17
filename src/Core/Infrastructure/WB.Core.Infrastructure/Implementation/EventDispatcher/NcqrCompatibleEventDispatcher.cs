@@ -167,13 +167,6 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
                     errorsDuringHandling);
         }
 
-        public IEnumerable<CommittedEvent> CommitUncommittedEvents(IEventSourcedAggregateRoot aggregateRoot, string origin)
-        {
-            throw new NotImplementedException();
-            /*var eventStream = new UncommittedEventStream(origin, aggregateRoot.GetUnCommittedChanges());
-
-            return this.eventStore().Store(eventStream);*/
-        }
 
         public void PublishCommittedEvents(IEnumerable<CommittedEvent> committedEvents) => this.Publish(committedEvents);
 

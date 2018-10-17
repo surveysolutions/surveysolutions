@@ -11,14 +11,12 @@ namespace WB.Enumerator.Native.WebInterview.Pipeline
     public class WebInterviewStateManager : HubPipelineModule
     {
         private readonly IProductVersion productVersion;
-        //private readonly IStatefulInterviewRepository statefulInterviewRepository;
+        
         private IStatefulInterviewRepository statefulInterviewRepository => ServiceLocator.Current.GetInstance<IStatefulInterviewRepository>();
 
-        public WebInterviewStateManager(IProductVersion productVersion/*, 
-            IStatefulInterviewRepository statefulInterviewRepository*/)
+        public WebInterviewStateManager(IProductVersion productVersion)
         {
             this.productVersion = productVersion;
-            //this.statefulInterviewRepository = statefulInterviewRepository;
         }
 
         protected override bool OnBeforeConnect(IHub hub)
