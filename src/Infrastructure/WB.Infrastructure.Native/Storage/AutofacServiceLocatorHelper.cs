@@ -46,14 +46,12 @@ namespace WB.Infrastructure.Native.Storage
             using (var scope = serviceLocator.CreateChildContainer())
             {
                 var serviceLocatorLocal = scope.Resolve<IServiceLocator>(new NamedParameter("kernel", scope));
-                try
-                {
-                    return func(serviceLocatorLocal);
-                }
-                finally
-                {
-                    serviceLocatorLocal.GetInstance<IUnitOfWork>().AcceptChanges();
-                }
+
+                var result = func(serviceLocatorLocal);
+
+                serviceLocatorLocal.GetInstance<IUnitOfWork>().AcceptChanges();
+
+                return result;
             }
         }
     }

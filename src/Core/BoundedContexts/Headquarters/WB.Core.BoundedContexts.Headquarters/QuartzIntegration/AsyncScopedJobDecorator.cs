@@ -1,9 +1,7 @@
 ﻿using System;
-using Autofac;
 using Quartz;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Infrastructure.Native.Storage;
-using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
 {
@@ -19,26 +17,14 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
 
         public void Execute(IJobExecutionContext context)
         {
-            using (var scope = ServiceLocator.Current.CreateChildContainer())
+            ServiceLocator.Current.ExecuteActionInScope((serviceLocatorLocal) =>
             {
-                //preserve scope
-                var serviceLocator = scope.Resolve<IServiceLocator>(new NamedParameter("kernel", scope));
-                var unitOfWork = serviceLocator.GetInstance<IUnitOfWork>();
-                try
-                {
-                    var job = scope.Resolve(jobType) as IJob;
-                    if (job == null)
-                        throw new ArgumentNullException(nameof(job));
-                    job.Execute(context);
+                var job = serviceLocatorLocal.GetInstance(jobType) as IJob;
+                if (job == null)
+                    throw new ArgumentNullException(nameof(job));
 
-                    unitOfWork.AcceptChanges();
-                }
-                catch (Exception)
-                {
-                    unitOfWork.Dispose();
-                    throw;
-                }
-            }
+                job.Execute(context);
+            });
         }
     }
 }

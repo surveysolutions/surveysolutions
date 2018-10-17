@@ -8,8 +8,6 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
 {
     public class AutofacModuleContext : IModuleContext
     {
-        const string TargetTypeParameterName = "Autofac.AutowiringPropertyInjector.InstanceType";
-
         private readonly IComponentContext ctx;
         private readonly IEnumerable<Parameter> parameters;
 
@@ -29,7 +27,7 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
             get
             {
                 var targetType = parameters.OfType<NamedParameter>()
-                    .FirstOrDefault(np => np.Name == TargetTypeParameterName && np.Value is Type);
+                    .FirstOrDefault(np => np.Name == ResolutionExtensions.PropertyInjectedInstanceTypeNamedParameter && np.Value is Type);
 
                 return (Type) targetType?.Value;
             }

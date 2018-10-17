@@ -4,6 +4,7 @@ using Ncqrs.Domain;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using Ncqrs.Eventing.Storage;
 using NUnit.Framework;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.CommandBus;
@@ -35,7 +36,8 @@ namespace WB.Tests.Integration.CommandServiceTests
             var repository = Mock.Of<IEventSourcedAggregateRootRepository>(_
                 => _.GetLatest(typeof(Aggregate), aggregateId) == aggregateFromRepository);
 
-            commandService = Create.Service.CommandService(repository: repository, eventBus: eventBusMock.Object, snapshooter: snapshooterMock.Object);
+            commandService = Create.Service.CommandService(repository: repository, eventBus: eventBusMock.Object, snapshooter: snapshooterMock.Object, 
+                eventStore: eventStoreMock.Object);
 
             // Act
             commandService.Execute(new DoNothing(), null);
@@ -43,8 +45,8 @@ namespace WB.Tests.Integration.CommandServiceTests
 
         [Test]
         public void should_not_commit_events() =>
-            eventBusMock.Verify(
-                bus => bus.CommitUncommittedEvents(Moq.It.IsAny<IEventSourcedAggregateRoot>(), Moq.It.IsAny<string>()),
+            eventStoreMock.Verify(
+                eventStore => eventStore.Store(Moq.It.IsAny<UncommittedEventStream>()),
                 Times.Never());
         [Test]
         public void should_not_publish_events() =>
@@ -57,5 +59,6 @@ namespace WB.Tests.Integration.CommandServiceTests
         private static Mock<IAggregateSnapshotter> snapshooterMock = new Mock<IAggregateSnapshotter>();
         private static Aggregate aggregateFromRepository;
         private static Mock<IEventBus> eventBusMock = new Mock<IEventBus>();
+        private static Mock<IEventStore> eventStoreMock = new Mock<IEventStore>();
     }
 }
