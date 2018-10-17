@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
+using System.Threading;
 using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.SharedKernels.Enumerator.Utils
@@ -15,7 +16,9 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
     /// </remarks>
     public class CompositeCollection<T> : IObservableCollection<T>
     {
-        private object lockObject = new object();
+        private readonly ReaderWriterLockSlim itemsLock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+        private Object syncRoot;
+
         private readonly List<IObservableCollection<T>> collections = new List<IObservableCollection<T>>();
 
         public bool IsReadOnly => true;
@@ -29,7 +32,27 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
 
         public int Count { get ; private set; }
         public bool IsSynchronized => false;
-        public object SyncRoot => this.lockObject;
+        object ICollection.SyncRoot
+        {
+            get
+            {
+                if (this.syncRoot == null)
+                {
+                    this.itemsLock.EnterReadLock();
+
+                    try
+                    {
+                        Interlocked.CompareExchange<Object>(ref this.syncRoot, new Object(), null);
+                    }
+                    finally
+                    {
+                        this.itemsLock.ExitReadLock();
+                    }
+                }
+
+                return this.syncRoot;
+            }
+        }
 
         public void Clear()
         {
@@ -52,11 +75,17 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
 
         public IEnumerator<T> GetEnumerator()
         {
-            lock (SyncRoot)
+            this.itemsLock.EnterReadLock();
+
+            try
             {
                 foreach (var coll in this.collections)
                 foreach (var item in coll ?? Enumerable.Empty<T>())
                     yield return item;
+            }
+            finally
+            {
+                this.itemsLock.ExitReadLock();
             }
         }
 
@@ -67,9 +96,16 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
 
         public void Add(T item)
         {
-            lock (SyncRoot)
+            this.itemsLock.EnterWriteLock();
+
+            try
             {
                 this.AddCollection(new CovariantObservableCollection<T>(item.ToEnumerable()));
+              
+            }
+            finally
+            {
+                this.itemsLock.ExitWriteLock();
             }
         }
 
@@ -79,9 +115,16 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
 
         public void AddCollection(IObservableCollection<T> collection)
         {
-            lock (SyncRoot)
+            this.itemsLock.EnterWriteLock();
+
+            try
             {
                 this.collections.Add(collection);
+              
+            }
+            finally
+            {
+                this.itemsLock.ExitWriteLock();
             }
 
             collection.CollectionChanged += this.HandleChildCollectionChanged;

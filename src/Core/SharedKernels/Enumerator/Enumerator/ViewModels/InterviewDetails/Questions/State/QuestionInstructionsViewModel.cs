@@ -9,7 +9,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State
 {
     public class QuestionInstructionViewModel : MvxNotifyPropertyChanged,
-        ICompositeEntity
+        ICompositeEntity, IDisposable
     {
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IQuestionnaireStorage questionnaireRepository;
@@ -56,5 +56,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public Identity Identity { get; private set; }
 
         public ICommand ShowInstructions => new MvxCommand(() => this.IsInstructionsHidden = false);
+
+        public void Dispose()
+        {
+            Instruction?.Dispose();
+        }
     }
 }

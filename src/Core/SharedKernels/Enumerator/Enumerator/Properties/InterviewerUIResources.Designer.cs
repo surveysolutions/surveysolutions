@@ -921,6 +921,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Interview is in invalid state and will be removed. Please synchronize to get correct state..
+        /// </summary>
+        public static string FailedToLoadInterviewDescription {
+            get {
+                return ResourceManager.GetString("FailedToLoadInterviewDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Synchronization endpoint &apos;{0}&apos; is different from provided in Settings (&apos;{1}&apos;). Load URL from settings?.
         /// </summary>
         public static string FinishInstallation_EndpointDiffers {
