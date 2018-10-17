@@ -147,8 +147,8 @@ namespace WB.Services.Export.CsvExport.Exporters
                         exportBulk.Add(interviewExportedDataRecord);
                     }
 
-                    ++totalInterviewsProcessed;
-                    progress.Report(totalInterviewsProcessed.PercentOf(interviewIdsToExport.Count));
+                    var interviewsProcessed = Interlocked.Increment(ref totalInterviewsProcessed);
+                    progress.Report(interviewsProcessed.PercentOf(interviewIdsToExport.Count));
                 });
 
                 logger.LogTrace($"Took {trace.ElapsedMilliseconds}ms to process {batch.Count} interviews {interviewEntities.Count} rows");

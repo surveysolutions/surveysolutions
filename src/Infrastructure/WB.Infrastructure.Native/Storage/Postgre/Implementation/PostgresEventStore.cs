@@ -302,7 +302,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
             foreach (var raw in rawEventsData)
             {
-                if (obsoleteEvents.Contains(raw.eventType.ToLowerInvariant()))
+                if (obsoleteEvents.Contains(raw.eventType.ToLower()))
                 {
                     continue;
                 }
