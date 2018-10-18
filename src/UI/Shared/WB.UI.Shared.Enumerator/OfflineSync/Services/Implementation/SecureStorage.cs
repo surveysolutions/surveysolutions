@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using Android.App;
 using Android.Content;
 using Android.Runtime;
 using Java.IO;
 using Java.Security;
 using Javax.Crypto;
-using MvvmCross.Platforms.Android;
 using WB.Core.SharedKernels.DataCollection.Services;
 
 namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
@@ -15,24 +15,21 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
     /// </summary>
     public class SecureStorage : ISecureStorage
     {
-        private readonly IMvxAndroidCurrentTopActivity mvxAndroidCurrentTopActivity;
         private readonly KeyStore keyStore;
         private readonly Dictionary<string, byte[]> inMemoryKeyStorage = new Dictionary<string, byte[]>();
 
         static readonly object keyStoreFileLock = new object();
         static string keyStoreFileName = "keystore.dat";
 
-        public SecureStorage(IMvxAndroidCurrentTopActivity mvxAndroidCurrentTopActivity)
+        public SecureStorage()
         {
-            this.mvxAndroidCurrentTopActivity = mvxAndroidCurrentTopActivity;
-
             this.keyStore = KeyStore.GetInstance(KeyStore.DefaultType);
 
             try
             {
                 lock (keyStoreFileLock)
                 {
-                    using (var keyStoreFile = this.mvxAndroidCurrentTopActivity.Activity.OpenFileInput(keyStoreFileName))
+                    using (var keyStoreFile = Application.Context.OpenFileInput(keyStoreFileName))
                     {
                         this.keyStore.Load(keyStoreFile, null);
                     }
@@ -48,7 +45,7 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
         {
             lock (keyStoreFileLock)
             {
-                using (var keyStoreFile = this.mvxAndroidCurrentTopActivity.Activity.OpenFileOutput(keyStoreFileName, FileCreationMode.Private))
+                using (var keyStoreFile = Application.Context.OpenFileOutput(keyStoreFileName, FileCreationMode.Private))
                 {
                     this.keyStore.Store(keyStoreFile, null);
                 }
