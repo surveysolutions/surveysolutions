@@ -66,9 +66,16 @@ namespace WB.UI.Headquarters.Controllers
         }
 
         [HttpPost]
+        [AuthorizeOr403(Roles = "Administrator, Headquarter")]
+        [ObserverNotAllowed]
         public ActionResult Create(string id, Guid responsibleId, int? size)
         {
             var interview = this.interviews.Get(id);
+            if (interview == null)
+            {
+                return HttpNotFound();
+            }
+
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, null);
             var assignment = Assignment.PrefillFromInterview(interview, questionnaire);
             assignment.UpdateQuantity(size);

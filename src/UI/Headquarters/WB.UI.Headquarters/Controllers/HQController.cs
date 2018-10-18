@@ -36,7 +36,6 @@ namespace WB.UI.Headquarters.Controllers
         private readonly IAuthorizedUser authorizedUser;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IQuestionnaireVersionProvider questionnaireVersionProvider;
-        private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IQuestionnaireExporter questionnaireExporter;
         private readonly EventBusSettings eventBusSettings;
 
@@ -55,7 +54,6 @@ namespace WB.UI.Headquarters.Controllers
             this.allUsersAndQuestionnairesFactory = allUsersAndQuestionnairesFactory;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.questionnaireVersionProvider = questionnaireVersionProvider;
-            this.questionnaireStorage = questionnaireStorage;
             this.questionnaireExporter = questionnaireExporter;
             this.eventBusSettings = eventBusSettings;
         }
@@ -162,6 +160,9 @@ namespace WB.UI.Headquarters.Controllers
 
         public ActionResult TakeNewAssignment(string id)
         {
+            if (!this.eventBusSettings.IsIgnoredAggregate(Guid.Parse(id)))
+                return HttpNotFound();
+
             return this.View(new
             {
                 id = id,
