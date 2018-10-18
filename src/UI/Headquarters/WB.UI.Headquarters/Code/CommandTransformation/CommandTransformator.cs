@@ -167,11 +167,4 @@ namespace WB.UI.Headquarters.Code.CommandTransformation
             return ((JArray)jsonArray).ToObject<string[]>();
         }
     }
-
-    public interface ICommandTransformator
-    {
-        ICommand TransformCommnadIfNeeded(ICommand command, Guid? responsibleId = null);
-        KeyValuePair<Guid, AbstractAnswer> ParseQuestionAnswer(UntypedQuestionAnswer answer,
-            IQuestionnaire questionnaire);
-    }
 }
