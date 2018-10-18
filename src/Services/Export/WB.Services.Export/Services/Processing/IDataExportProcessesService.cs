@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using WB.Services.Export.Models;
 using WB.Services.Infrastructure.Tenant;
 
 namespace WB.Services.Export.Services.Processing

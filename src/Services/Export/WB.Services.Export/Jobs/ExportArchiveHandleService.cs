@@ -3,6 +3,8 @@ using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using WB.Services.Export.Interview;
+using WB.Services.Export.Models;
+using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Services.Processing;
 using WB.Services.Export.Storage;
 using WB.Services.Infrastructure.Tenant;
@@ -11,20 +13,23 @@ namespace WB.Services.Export.Jobs
 {
     internal class ExportArchiveHandleService : IExportArchiveHandleService
     {
-        private readonly IFilebasedExportedDataAccessor fileBasedExportedDataAccessor;
+        private readonly IFileBasedExportedDataAccessor fileBasedExportedDataAccessor;
         private readonly IExternalFileStorage externalFileStorage;
         private readonly IDataExportFileAccessor exportFileAccessor;
         private readonly ILogger<JobsStatusReporting> logger;
+        private readonly IExportFileNameService fileNameService;
 
-        public ExportArchiveHandleService(IFilebasedExportedDataAccessor fileBasedExportedDataAccessor, 
-            IExternalFileStorage externalFileStorage, 
-            IDataExportFileAccessor exportFileAccessor, 
-            ILogger<JobsStatusReporting> logger)
+        public ExportArchiveHandleService(IFileBasedExportedDataAccessor fileBasedExportedDataAccessor,
+            IExternalFileStorage externalFileStorage,
+            IDataExportFileAccessor exportFileAccessor,
+            ILogger<JobsStatusReporting> logger,
+            IExportFileNameService fileNameService)
         {
             this.fileBasedExportedDataAccessor = fileBasedExportedDataAccessor;
             this.externalFileStorage = externalFileStorage;
             this.exportFileAccessor = exportFileAccessor;
             this.logger = logger;
+            this.fileNameService = fileNameService;
         }
 
         public async Task ClearAllExportArchives(TenantInfo tenant)
@@ -50,35 +55,41 @@ namespace WB.Services.Export.Jobs
             }
         }
 
-        public async Task<DataExportArchive> DownloadArchiveAsync(TenantInfo tenant, string archiveName,
-            DataExportFormat dataExportFormat, InterviewStatus? status,
-            DateTime? from, DateTime? to)
+        public async Task<DataExportArchive> DownloadArchiveAsync(ExportSettings settings, string archiveName)
         {
-            string filePath = this.fileBasedExportedDataAccessor.GetArchiveFilePathForExportedData(
-                tenant,
-                archiveName,
-                dataExportFormat, status, from, to);
-
             if (this.externalFileStorage.IsEnabled())
             {
-                var externalStoragePath = this.exportFileAccessor.GetExternalStoragePath(tenant, Path.GetFileName(filePath));
+                var internalFilePath = this.fileNameService.GetFileNameForExportArchive(settings);
+
+                var externalStoragePath = this.exportFileAccessor.GetExternalStoragePath(
+                    settings.Tenant, Path.GetFileName(internalFilePath));
+
                 var metadata = await this.externalFileStorage.GetObjectMetadataAsync(externalStoragePath);
 
                 if (metadata != null)
                 {
+                    var downloadFileName = this.fileNameService.GetFileNameForExportArchive(settings, archiveName);
+
+                    var uri = this.externalFileStorage.GetDirectLink(externalStoragePath,
+                        TimeSpan.FromHours(10), downloadFileName);
+
                     return new DataExportArchive
                     {
-                        Redirect = new Uri(this.externalFileStorage.GetDirectLink(externalStoragePath, TimeSpan.FromSeconds(10)))
+                        Redirect = uri
                     };
                 }
             }
-            else if (File.Exists(filePath))
+            else
             {
-                return new DataExportArchive
+                var filePath = this.fileBasedExportedDataAccessor.GetArchiveFilePathForExportedData(settings);
+                if (File.Exists(filePath))
                 {
-                    FileName = Path.GetFileName(filePath),
-                    Data = new FileStream(filePath, FileMode.Open, FileAccess.Read)
-                };
+                    return new DataExportArchive
+                    {
+                        FileName = archiveName,
+                        Data = new FileStream(filePath, FileMode.Open, FileAccess.Read)
+                    };
+                }
             }
 
             return null;
