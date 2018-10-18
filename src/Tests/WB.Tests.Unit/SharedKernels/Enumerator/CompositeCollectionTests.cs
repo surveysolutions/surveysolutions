@@ -38,7 +38,6 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator
         [Test]
         public void should_be_able_to_get_element_from_second_collection_by_index()
         {
-            
             var items = Create.Entity.CompositeCollection<string>();
 
             items.Add("zero");
@@ -47,6 +46,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator
 
             // Act
             var result = items[2];
+            Assert.Throws<IndexOutOfRangeException>(() => { var a = items[5]; });
 
             // Assert
             Assert.That(result, Is.EqualTo("two"));
