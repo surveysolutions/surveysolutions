@@ -2,29 +2,29 @@
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Upgrade;
 using WB.Core.BoundedContexts.Headquarters.DataExport;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 
 namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 {
     [DisallowConcurrentExecution]
     public class UpgradeAssignmentJob : IJob
     {
-        public UpgradeAssignmentJob(IServiceLocator serviceLocator)
+        public UpgradeAssignmentJob(IAssignmentsUpgradeService assignmentsUpgradeService, 
+            IAssignmentsUpgrader assignmentsUpgrader)
         {
-            this.serviceLocator = serviceLocator;
+            this.assignmentsUpgradeService = assignmentsUpgradeService;
+            this.assignmentsUpgrader = assignmentsUpgrader;
         }
         
-        private IServiceLocator serviceLocator;
+        private readonly IAssignmentsUpgradeService assignmentsUpgradeService;
+        private readonly IAssignmentsUpgrader assignmentsUpgrader;
 
         public void Execute(IJobExecutionContext context)
         {
-            IAssignmentsUpgradeService upgradeService = serviceLocator.GetInstance<IAssignmentsUpgradeService>();
-
-            var processToRun = upgradeService.DequeueUpgrade();
+            var processToRun = assignmentsUpgradeService.DequeueUpgrade();
             if (processToRun != null)
             {
-                serviceLocator.GetInstance<IAssignmentsUpgrader>().Upgrade(processToRun.ProcessId, processToRun.From, processToRun.To, 
-                    upgradeService.GetCancellationToken(processToRun.ProcessId));
+                assignmentsUpgrader.Upgrade(processToRun.ProcessId, processToRun.From, processToRun.To,
+                    assignmentsUpgradeService.GetCancellationToken(processToRun.ProcessId));
             }
         }
     }

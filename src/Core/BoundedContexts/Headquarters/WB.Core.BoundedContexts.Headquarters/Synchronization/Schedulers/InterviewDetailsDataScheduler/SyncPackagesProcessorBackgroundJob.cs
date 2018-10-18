@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
-using Autofac;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Infrastructure.Native.Storage;
-using WB.UI.Shared.Enumerator.Services.Internals;
 
 namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewDetailsDataScheduler
 {
@@ -17,28 +15,30 @@ namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.Interv
     internal class SyncPackagesProcessorBackgroundJob : IJob
     {
         private readonly IServiceLocator serviceLocator;
+        private readonly ILogger logger;
+        private readonly SyncPackagesProcessorBackgroundJobSetting syncPackagesProcessorBackgroundJobSetting;
+        private readonly IInterviewPackagesService interviewPackagesService;
 
-        public SyncPackagesProcessorBackgroundJob(IServiceLocator servicelocator)
+        public SyncPackagesProcessorBackgroundJob(IServiceLocator serviceLocator,
+            ILogger logger,
+            SyncPackagesProcessorBackgroundJobSetting syncPackagesProcessorBackgroundJobSetting,
+            IInterviewPackagesService interviewPackagesService)
         {
-            this.serviceLocator = servicelocator;
+            this.serviceLocator = serviceLocator;
+            this.logger = logger;
+            this.syncPackagesProcessorBackgroundJobSetting = syncPackagesProcessorBackgroundJobSetting;
+            this.interviewPackagesService = interviewPackagesService;
         }
 
         public void Execute(IJobExecutionContext context)
         {
-            ILogger logger = this.serviceLocator.GetInstance<ILoggerProvider>().GetFor<SyncPackagesProcessorBackgroundJob>();
-
             try
             {
                 Stopwatch stopwatch = Stopwatch.StartNew();
-
-                IReadOnlyCollection<string> packageIds = null;
-
-                serviceLocator.ExecuteActionInScope((serviceLocatorLocal) =>
-                {
-                    packageIds = serviceLocatorLocal.GetInstance<IInterviewPackagesService>().GetTopPackageIds(
-                        serviceLocatorLocal.GetInstance<SyncPackagesProcessorBackgroundJobSetting>().SynchronizationBatchCount);
-                });
-
+                
+                IReadOnlyCollection<string> packageIds = interviewPackagesService.GetTopPackageIds(
+                    syncPackagesProcessorBackgroundJobSetting.SynchronizationBatchCount);
+                
                 if (packageIds == null || !packageIds.Any()) return;
 
                 logger.Debug($"Interview packages job: Received {packageIds.Count} packages for procession. Took {stopwatch.Elapsed:g}.");
@@ -47,7 +47,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.Interv
                 Parallel.ForEach(packageIds,
                     new ParallelOptions
                     {
-                        MaxDegreeOfParallelism = serviceLocator.GetInstance<SyncPackagesProcessorBackgroundJobSetting>().SynchronizationParallelExecutorsCount
+                        MaxDegreeOfParallelism = syncPackagesProcessorBackgroundJobSetting.SynchronizationParallelExecutorsCount
                     },
                     packageId =>
                     {

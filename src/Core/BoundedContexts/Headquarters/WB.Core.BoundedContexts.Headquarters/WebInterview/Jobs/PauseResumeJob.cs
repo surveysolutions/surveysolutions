@@ -10,14 +10,16 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview.Jobs
     [DisallowConcurrentExecution]
     internal class PauseResumeJob : IJob
     {
-        public PauseResumeJob(IServiceLocator serviceLocator)
+        public PauseResumeJob(IServiceLocator serviceLocator, ILogger logger)
         {
             this.serviceLocator = serviceLocator;
+            this.logger = logger;
         }
-        public ILogger Logger => serviceLocator.GetInstance<ILoggerProvider>().GetFor<PauseResumeJob>();
-        
+
+        private readonly ILogger logger;
+
         private IPauseResumeQueue queue;
-        private IServiceLocator serviceLocator;
+        private readonly IServiceLocator serviceLocator;
 
         public IPauseResumeQueue Queue
         {
@@ -42,7 +44,7 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview.Jobs
                 }
                 catch (Exception e)
                 {
-                    this.Logger.Error($"Failed to log command {interviewCommand.GetType().Name} for interview {interviewCommand.InterviewId}", e);
+                    this.logger.Error($"Failed to log command {interviewCommand.GetType().Name} for interview {interviewCommand.InterviewId}", e);
                 }
             }
         }

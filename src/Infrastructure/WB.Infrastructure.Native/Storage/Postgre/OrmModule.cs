@@ -81,7 +81,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         {
             registry.BindToConstant(() => this.connectionSettings);
             registry.BindToMethodInSingletonScope<ISessionFactory>(context => this.BuildSessionFactory());
-            registry.BindInPerLifetimeScope<IUnitOfWork, UnitOfWork>();
+            registry.BindInPerUnitOfWorkOrPerRequestScope<IUnitOfWork, UnitOfWork>();
 
             registry.Bind(typeof(IQueryableReadSideRepositoryReader<>), typeof(PostgreReadSideStorage<>));
             registry.Bind(typeof(IQueryableReadSideRepositoryReader<,>), typeof(PostgreReadSideStorage<,>));

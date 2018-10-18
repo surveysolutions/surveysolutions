@@ -16,36 +16,29 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
     [DisallowConcurrentExecution]
     internal class AssignmentsImportJob : IJob
     {
-        private IServiceLocator serviceLocator;
+        private readonly IServiceLocator serviceLocator;
+        private readonly ILogger logger;
+        private readonly IAssignmentsImportService assignmentsImportService;
 
-        public AssignmentsImportJob(IServiceLocator serviceLocator)
+        public AssignmentsImportJob(IServiceLocator serviceLocator, ILogger logger, IAssignmentsImportService assignmentsImportService)
         {
             this.serviceLocator = serviceLocator;
+            this.logger = logger;
+            this.assignmentsImportService = assignmentsImportService;
         }
-
-        private ILogger logger => serviceLocator.GetInstance<ILoggerProvider>().GetFor<AssignmentsImportJob>();
         
-
         public void Execute(IJobExecutionContext context)
         {
             try
             {
-                AssignmentsImportStatus importProcessStatus = null;
-                int[] allAssignmentIds = null;
-                SampleImportSettings sampleImportSettings = null;
+                var sampleImportSettings = serviceLocator.GetInstance<SampleImportSettings>();
 
-                serviceLocator.ExecuteActionInScope((serviceLocatorLocal) =>
-                {
-                    IAssignmentsImportService importAssignmentsService = serviceLocatorLocal.GetInstance<IAssignmentsImportService>();
-                    sampleImportSettings = serviceLocatorLocal.GetInstance<SampleImportSettings>();
+                AssignmentsImportStatus importProcessStatus = assignmentsImportService.GetImportStatus();
+                if (importProcessStatus?.ProcessStatus != AssignmentsImportProcessStatus.Import)
+                    return;
 
-                    importProcessStatus = importAssignmentsService.GetImportStatus();
-                    if (importProcessStatus?.ProcessStatus != AssignmentsImportProcessStatus.Import)
-                        return;
-
-                    allAssignmentIds = importAssignmentsService.GetAllAssignmentIdsToImport();
-                });
-
+                var allAssignmentIds = assignmentsImportService.GetAllAssignmentIdsToImport();
+                
                 if (importProcessStatus?.ProcessStatus != AssignmentsImportProcessStatus.Import)
                     return;
 
@@ -73,12 +66,8 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
                         });
                     });
 
-                serviceLocator.ExecuteActionInScope((serviceLocatorLocal) =>
-                {
-                    IAssignmentsImportService importAssignmentsService = serviceLocatorLocal.GetInstance<IAssignmentsImportService>();
-                    importAssignmentsService.SetImportProcessStatus(AssignmentsImportProcessStatus.ImportCompleted);
-                });
-
+                assignmentsImportService.SetImportProcessStatus(AssignmentsImportProcessStatus.ImportCompleted);
+                
                 sw.Stop();
                 this.logger.Debug($"Assignments import job: Finished. Elapsed time: {sw.Elapsed}");
             }

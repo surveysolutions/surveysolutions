@@ -5,14 +5,12 @@ using Quartz;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
-using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Infrastructure.Native.Storage;
-using WB.UI.Shared.Enumerator.Services.Internals;
 
 namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
 {
@@ -20,34 +18,28 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
     internal class AssignmentsVerificationJob : IJob
     {
         private readonly IServiceLocator serviceLocator;
+        private readonly ILogger logger;
+        private readonly IAssignmentsImportService assignmentsImportService;
+        private readonly SampleImportSettings sampleImportSettings;
 
-        public AssignmentsVerificationJob(IServiceLocator locator)
+        public AssignmentsVerificationJob(IServiceLocator locator, ILogger logger, 
+            IAssignmentsImportService assignmentsImportService, SampleImportSettings sampleImportSettings)
         {
             this.serviceLocator = locator;
+            this.logger = logger;
+            this.assignmentsImportService = assignmentsImportService;
+            this.sampleImportSettings = sampleImportSettings;
         }
-
-        private ILogger logger => serviceLocator.GetInstance<ILoggerProvider>()
-            .GetFor<AssignmentsVerificationJob>();
-        
 
         public void Execute(IJobExecutionContext context)
         {
             try
             {
-                AssignmentsImportStatus importProcess = null;
-                int[] allAssignmentIds = null;
-                SampleImportSettings sampleImportSettings = null;
+                var importProcess = assignmentsImportService.GetImportStatus();
 
-                serviceLocator.ExecuteActionInScope((serviceLocatorLocal) =>
-                {
-                    var importAssignmentsService = serviceLocatorLocal.GetInstance<IAssignmentsImportService>();
-                    sampleImportSettings = serviceLocatorLocal.GetInstance<SampleImportSettings>();
-                    importProcess = importAssignmentsService.GetImportStatus();
-                    if (importProcess?.ProcessStatus != AssignmentsImportProcessStatus.Verification) return;
+                if (importProcess?.ProcessStatus != AssignmentsImportProcessStatus.Verification) return;
 
-                    allAssignmentIds = importAssignmentsService.GetAllAssignmentIdsToVerify();
-                });
-
+                var allAssignmentIds = assignmentsImportService.GetAllAssignmentIdsToVerify();
                     
                 if (importProcess?.ProcessStatus != AssignmentsImportProcessStatus.Verification) return;
 
@@ -90,19 +82,15 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
                         });
                     });
 
-                serviceLocator.ExecuteActionInScope((serviceLocatorLocal) =>
-                {
-                    var importAssignmentsService = serviceLocatorLocal.GetInstance<IAssignmentsImportService>();
-                    importAssignmentsService.SetImportProcessStatus(AssignmentsImportProcessStatus.Import);
-                });
-
+                assignmentsImportService.SetImportProcessStatus(AssignmentsImportProcessStatus.Import);
+                
                 serviceLocator.ExecuteActionInScope((serviceLocatorLocal) =>
                 {
                      serviceLocatorLocal.GetInstance<AssignmentsImportTask>().Run();
                 });
 
                 sw.Stop();
-                this.logger.Debug($"Assignments verfication job: Finished. Elapsed time: {sw.Elapsed}");
+                this.logger.Debug($"Assignments verification job: Finished. Elapsed time: {sw.Elapsed}");
             }
             catch (Exception ex)
             {
