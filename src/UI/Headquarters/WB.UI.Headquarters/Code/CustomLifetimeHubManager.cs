@@ -15,8 +15,7 @@ namespace WB.UI.Headquarters
         public T ResolveHub<T>(Type type, ILifetimeScope lifetimeScope) where T : ILifetimeHub
         {
             ILifetimeScope context = lifetimeScope.BeginLifetimeScope(ScopeLifetimeTag.RequestLifetimeScopeTag);
-            var serviceLocatorLocal = context.Resolve<IServiceLocator>(new NamedParameter("kernel", context));
-
+            
             T obj = (T)context.Resolve(type);
             obj.OnDisposing += new EventHandler(this.HubOnDisposing);
             this._hubLifetimeScopes.TryAdd((IHub)obj, context);
