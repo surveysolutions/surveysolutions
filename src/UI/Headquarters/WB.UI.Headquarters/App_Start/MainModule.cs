@@ -27,6 +27,7 @@ using WB.Infrastructure.Native.Monitoring;
 using WB.Infrastructure.Native.Storage;
 using WB.UI.Headquarters.API.Attributes;
 using WB.UI.Headquarters.API.PublicApi;
+using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Implementation.Maps;
 using WB.UI.Headquarters.Implementation.Services;
@@ -62,13 +63,13 @@ namespace WB.UI.Headquarters
 
             registry.BindToConstant<LegacyAssemblySettings>(() => legacyAssemblySettings);
 
+            registry.BindWebApiAuthorizationFilter<CustomWebApiAuthorizeFilter>();
 
             registry.BindToConstant<ITokenVerifier>(() => new SimpleTokenVerifier(settingsProvider.AppSettings["Synchronization.Key"]));
 
-            registry.BindWebApiAuthorizationFilterWhenControllerOrActionHasAttribute<TokenValidationAuthorizationFilter, TokenValidationAuthorizationAttribute>(/*FilterScope.Controller*/);
+            registry.BindWebApiAuthorizationFilterWhenControllerOrActionHasAttribute<TokenValidationAuthorizationFilter, TokenValidationAuthorizationAttribute>();
 
             registry.BindWebApiAuthorizationFilterWhenControllerOrActionHasAttribute<TokenValidationAuthorizationFilter, ApiValidationAntiForgeryTokenAttribute>(
-                /*FilterScope.Controller, */
                 new ConstructorArgument("tokenVerifier", _ => new ApiValidationAntiForgeryTokenVerifier()));
             
             registry.BindToConstant<IMapper>(_ => new MapperConfiguration(cfg =>

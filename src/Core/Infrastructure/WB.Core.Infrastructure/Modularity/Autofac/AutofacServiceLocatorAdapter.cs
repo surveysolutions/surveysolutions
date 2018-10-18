@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Autofac;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.Infrastructure.Modularity.Autofac;
 
 namespace WB.UI.Shared.Enumerator.Services.Internals
 {
@@ -40,12 +41,12 @@ namespace WB.UI.Shared.Enumerator.Services.Internals
 
         public ILifetimeScope CreateChildContainer(Action<ContainerBuilder> @override)
         {
-            return this.container.BeginLifetimeScope(@override);
+            return this.container.BeginLifetimeScope(AutofacServiceLocatorConstants.UnitOfWorkScope, @override);
         }
 
         public ILifetimeScope CreateChildContainer()
         {
-            return this.container.BeginLifetimeScope();
+            return this.container.BeginLifetimeScope(AutofacServiceLocatorConstants.UnitOfWorkScope);
         }
     }
 

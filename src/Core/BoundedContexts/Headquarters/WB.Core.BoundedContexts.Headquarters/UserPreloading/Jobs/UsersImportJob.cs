@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Threading.Tasks;
-using Autofac;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
@@ -10,26 +9,25 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.GenericSubdomains.Portable.Tasks;
-using WB.Infrastructure.Native.Storage;
-using WB.Infrastructure.Native.Storage.Postgre;
-using WB.UI.Shared.Enumerator.Services.Internals;
 
 namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
 {
     [DisallowConcurrentExecution]
     internal class UsersImportJob : IJob
     {
-        private IServiceLocator serviceLocator;
+        private readonly IServiceLocator serviceLocator;
+        private readonly ILogger logger;
+        private readonly IUserImportService userImportService;
 
-        public UsersImportJob(IServiceLocator serviceLocator)
+        public UsersImportJob(IServiceLocator serviceLocator, ILogger logger, IUserImportService userImportService)
         {
             this.serviceLocator = serviceLocator;
+            this.logger = logger;
+            this.userImportService = userImportService;
         }
 
         public void Execute(IJobExecutionContext context)
         {
-            ILogger logger = this.serviceLocator.GetInstance<ILoggerProvider>().GetFor<UsersImportJob>();
-
             logger.Info("User import job: Started");
 
             var sw = new Stopwatch();
@@ -37,23 +35,17 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
 
             try
             {
-                serviceLocator.ExecuteActionInScope((serviceLocatorLocal) =>
+                UserToImport userToImport = null;
+                do
                 {
-                    IUserImportService importUsersService = serviceLocatorLocal.GetInstance<IUserImportService>();
+                    userToImport = userImportService.GetUserToImport();
+                    if (userToImport == null) break;
+                    this.CreateUserOrUnarchiveAndUpdateAsync(userToImport).WaitAndUnwrapException();
 
-                    UserToImport userToImport = null;
-                    do
-                    {
-                        userToImport = importUsersService.GetUserToImport();
+                    userImportService.RemoveImportedUser(userToImport);
 
-                        if (userToImport == null) break;
-
-                        this.CreateUserOrUnarchiveAndUpdateAsync(userToImport, serviceLocatorLocal).WaitAndUnwrapException();
-
-                        importUsersService.RemoveImportedUser(userToImport);
-
-                    } while (userToImport != null);
-                });
+                } while (userToImport != null);
+                
             }
             catch (Exception ex)
             {
@@ -64,7 +56,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
             logger.Info($"User import job: Finished. Elapsed time: {sw.Elapsed}");
         }
 
-        private async Task CreateUserOrUnarchiveAndUpdateAsync(UserToImport userToCreate, IServiceLocator serviceLocator)
+        private async Task CreateUserOrUnarchiveAndUpdateAsync(UserToImport userToCreate)
         {
             using (var userManager = serviceLocator.GetInstance<HqUserManager>())
             {

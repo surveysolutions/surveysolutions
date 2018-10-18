@@ -8,7 +8,6 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
     public class AsyncScopedJobDecorator : IJob
     {
         private readonly Type jobType;
-        //private IContainer container;
 
         public AsyncScopedJobDecorator(Type jobType)
         {
