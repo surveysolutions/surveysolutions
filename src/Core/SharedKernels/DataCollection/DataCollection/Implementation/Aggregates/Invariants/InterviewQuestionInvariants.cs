@@ -701,7 +701,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                     {
                         {ExceptionKeys.InterviewId, this.InterviewTree.InterviewId},
                         {ExceptionKeys.QuestionId, this.QuestionId},
-                        {ExceptionKeys.AvailableAnswersList, string.Join(", ", question.AsLinked.Options)},
+                        {ExceptionKeys.AvailableAnswersList, string.Join(", ", question.AsLinkedToList.Options)},
                         {ExceptionKeys.ProvidedAnswerValue, option}
                     }
                 };
