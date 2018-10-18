@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
 using Autofac.Integration.WebApi;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 
 namespace WB.UI.Shared.Web.Modules.Filters
 {

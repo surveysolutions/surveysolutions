@@ -14,41 +14,41 @@ namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.Interv
     [DisallowConcurrentExecution]
     public class SyncPackagesReprocessorBackgroundJob : IJob
     {
-        private IServiceLocator serviceLocator;
+        private readonly IServiceLocator serviceLocator;
+        private readonly IInterviewBrokenPackagesService interviewBrokenPackagesService;
+        private readonly SyncPackagesProcessorBackgroundJobSetting syncPackagesProcessorBackgroundJobSetting;
+        private readonly ILogger logger;
 
-        public SyncPackagesReprocessorBackgroundJob(IServiceLocator servicelocator)
+        public SyncPackagesReprocessorBackgroundJob(IServiceLocator serviceLocator,
+            IInterviewBrokenPackagesService interviewBrokenPackagesService,
+            SyncPackagesProcessorBackgroundJobSetting syncPackagesProcessorBackgroundJobSetting,
+            ILogger logger)
         {
-            this.serviceLocator = servicelocator;
+            this.serviceLocator = serviceLocator;
+            this.interviewBrokenPackagesService = interviewBrokenPackagesService;
+            this.syncPackagesProcessorBackgroundJobSetting = syncPackagesProcessorBackgroundJobSetting;
+            this.logger = logger;
         }
 
         
         public void Execute(IJobExecutionContext context)
         {
-            ILogger logger = serviceLocator.GetInstance<ILoggerProvider>().GetFor<SyncPackagesReprocessorBackgroundJob>();
-
             try
             {
                 Stopwatch stopwatch = Stopwatch.StartNew();
 
-                IReadOnlyCollection<int> packageIds = null;
-
-                serviceLocator.ExecuteActionInScope((serviceLocatorLocal) =>
-                {
-                    packageIds = serviceLocator.GetInstance<IInterviewBrokenPackagesService>()
-                        .GetTopBrokenPackageIdsAllowedToReprocess(
-                            serviceLocator.GetInstance<SyncPackagesProcessorBackgroundJobSetting>()
-                                .SynchronizationBatchCount);
-                });
+                IReadOnlyCollection<int> packageIds = interviewBrokenPackagesService
+                        .GetTopBrokenPackageIdsAllowedToReprocess(syncPackagesProcessorBackgroundJobSetting.SynchronizationBatchCount);
                 
                 if (packageIds == null || !packageIds.Any()) return;
 
-                logger.Debug($"Interview reproces packages job: Received {packageIds.Count} packages for reprocession. Took {stopwatch.Elapsed:g}.");
+                logger.Debug($"Interview reprocess packages job: Received {packageIds.Count} packages for re-procession. Took {stopwatch.Elapsed:g}.");
                 stopwatch.Restart();
 
                 Parallel.ForEach(packageIds,
                     new ParallelOptions
                     {
-                        MaxDegreeOfParallelism = serviceLocator.GetInstance<SyncPackagesProcessorBackgroundJobSetting>().SynchronizationParallelExecutorsCount
+                        MaxDegreeOfParallelism = syncPackagesProcessorBackgroundJobSetting.SynchronizationParallelExecutorsCount
                     },
                     packageId =>
                     {
@@ -65,11 +65,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.Interv
             {
                 logger.Error($"Interview reprocess packages job: FAILED. Reason: {ex.Message} ", ex);
             }
-        }
-
-        private T ExecuteInQueryTransaction<T>(Func<T> query)
-        {
-            return query();
         }
     }
 }

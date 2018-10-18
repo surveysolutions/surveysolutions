@@ -86,7 +86,7 @@ namespace WB.Core.BoundedContexts.Designer
 
             registry.BindAsSingleton<IStringCompressor, JsonCompressor>();
             registry.Bind<ISerializer, NewtonJsonSerializer>();
-            registry.BindInPerLifetimeScope<OriginalQuestionnaireStorage, OriginalQuestionnaireStorage>();
+            registry.BindInPerUnitOfWorkOrPerRequestScope<OriginalQuestionnaireStorage, OriginalQuestionnaireStorage>();
 
             registry.BindAsSingleton<IExpressionProcessor, RoslynExpressionProcessor>();
             registry.BindToConstant<ICompilerSettings>(() => this.compilerSettings);

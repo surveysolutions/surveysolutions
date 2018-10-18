@@ -48,7 +48,6 @@ using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.DataAnnotations;
 using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.Kernel;
-using WB.UI.Shared.Web.Modules;
 
 namespace WB.UI.Headquarters
 {
@@ -81,14 +80,6 @@ namespace WB.UI.Headquarters
             autofacKernel.ContainerBuilder.RegisterControllers(typeof(Startup).Assembly);
             autofacKernel.ContainerBuilder.RegisterApiControllers(typeof(Startup).Assembly);
             
-            autofacKernel.ContainerBuilder.RegisterType<Autofac.Integration.SignalR.AutofacDependencyResolver>()
-                .As<Microsoft.AspNet.SignalR.IDependencyResolver>().SingleInstance();
-            
-            autofacKernel.ContainerBuilder
-                .RegisterType<CustomMVCDependencyResolver>()
-                .As<System.Web.Mvc.IDependencyResolver>()
-                .SingleInstance();
-
             autofacKernel.ContainerBuilder
                 .RegisterType<AutofacServiceLocatorAdapter>()
                 .As<IServiceLocator>()
@@ -104,25 +95,17 @@ namespace WB.UI.Headquarters
 
             var container = autofacKernel.Container;
 
-            var config = new HttpConfiguration();
-            var resolver = new CustomWebApiDependencyResolver(container);
-
-            config.DependencyResolver = resolver;
-            GlobalConfiguration.Configuration.DependencyResolver = resolver;
-
-            HubConfiguration hubConfig = new HubConfiguration();
-
-            hubConfig.Resolver = container.Resolve<Microsoft.AspNet.SignalR.IDependencyResolver>();
-            GlobalHost.DependencyResolver = container.Resolve<Microsoft.AspNet.SignalR.IDependencyResolver>();
-
-            var resolv = container.Resolve<System.Web.Mvc.IDependencyResolver>();
-
-            DependencyResolver.SetResolver(resolv);
+            GlobalConfiguration.Configuration.DependencyResolver = new AutofacWebApiDependencyResolver(container);
+            GlobalHost.DependencyResolver = new Autofac.Integration.SignalR.AutofacDependencyResolver(container);
+            DependencyResolver.SetResolver(new Autofac.Integration.Mvc.AutofacDependencyResolver(container));
             ModelBinders.Binders.DefaultBinder = new AutofacBinderResolver(container);
 
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(container));
 
             app.UseAutofacMiddleware(container);
+
+            var config = new HttpConfiguration();
+
             app.UseWebApi(config);
 
             var logger = container.Resolve<ILoggerProvider>().GetFor<Startup>();
