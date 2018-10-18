@@ -55,13 +55,11 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 
                     this.OnEnablementChanged(compositeQuestionParts, compositeQuestion, allVisibleGroupItems);
 
-                    compositeQuestion.QuestionState.Enablement.PropertyChanged += async (sender, e) =>
+                    compositeQuestion.QuestionState.Enablement.PropertyChanged += (sender, e) =>
                     {
                         if (e.PropertyName != nameof(EnablementViewModel.Enabled)) return;
-                        await this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
-                        {
-                            OnEnablementChanged(compositeQuestionParts, compositeQuestion, allVisibleGroupItems);
-                        });
+                        OnEnablementChanged(compositeQuestionParts, compositeQuestion, allVisibleGroupItems);
+                        
                     };
 
                 }
