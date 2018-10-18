@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
+using WB.Services.Export.Models;
 using WB.Services.Export.Services;
 using WB.Services.Export.Services.Processing;
 using WB.Services.Export.Utils;
@@ -25,7 +26,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             ITenantApi<IHeadquartersApi> tenantApi,
             IDataExportProcessesService dataExportProcessesService,
             IFileSystemAccessor fs,
-            IFilebasedExportedDataAccessor dataAccessor,
+            IFileBasedExportedDataAccessor dataAccessor,
             IDataExportFileAccessor exportFileAccessor,
             ICsvWriter csvWriter,
             ILogger<TabularFormatParaDataExportProcessHandler> logger) 
@@ -47,7 +48,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             
             cancellationToken.ThrowIfCancellationRequested();
 
-            var exportFilePath = this.fileSystemAccessor.CombinePath(settings.ExportTempDirectory, "paradata.tab");
+            var exportFilePath = this.fileSystemAccessor.CombinePath(ExportTempDirectoryPath, "paradata.tab");
 
             long totalInterviewsProcessed = 0;
 

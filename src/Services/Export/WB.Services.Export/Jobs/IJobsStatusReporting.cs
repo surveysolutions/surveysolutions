@@ -12,7 +12,6 @@ namespace WB.Services.Export.Jobs
         Task<DataExportStatusView> GetDataExportStatusForQuestionnaireAsync(
             TenantInfo tenant,
             QuestionnaireId questionnaireIdentity,
-            string archiveFileName,
             InterviewStatus? status = null, DateTime? fromDate = null, DateTime? toDate = null);
     }
 }

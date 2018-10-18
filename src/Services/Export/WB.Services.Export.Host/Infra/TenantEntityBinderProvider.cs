@@ -10,9 +10,11 @@ namespace WB.Services.Export.Host.Infra
         {
             if (context == null)
                 throw new ArgumentNullException(nameof(context));
+
             if (context.Metadata.ModelType == typeof(TenantInfo))
-                return (IModelBinder)new TenantEntityBinder();
-            return (IModelBinder)null;
+                return new TenantEntityBinder();
+
+            return null;
         }
     }
 }
