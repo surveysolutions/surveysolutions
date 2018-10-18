@@ -53,12 +53,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                         .OrderBy(x => x.Type)
                         .ForEach(x => allVisibleGroupItems.AddCollection(x.CompositeCollection));
 
-                    this.OnEnablementChanged(compositeQuestionParts, compositeQuestion, allVisibleGroupItems).WaitAndUnwrapException();
+                    this.OnEnablementChanged(compositeQuestionParts, compositeQuestion, allVisibleGroupItems);
 
                     compositeQuestion.QuestionState.Enablement.PropertyChanged += (sender, e) =>
                     {
                         if (e.PropertyName != nameof(EnablementViewModel.Enabled)) return;
-                        OnEnablementChanged(compositeQuestionParts, compositeQuestion, allVisibleGroupItems).WaitAndUnwrapException();
+                        OnEnablementChanged(compositeQuestionParts, compositeQuestion, allVisibleGroupItems);
+                        
                     };
 
                 }
@@ -75,11 +76,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             return allVisibleGroupItems;
         }
 
-        private async Task OnEnablementChanged(
+        private void OnEnablementChanged(
             Dictionary<CompositeItemType, CompositeCollection<ICompositeEntity>> itemCompositeCollections,
-            ICompositeQuestion compositeQuestion, 
-            CompositeCollection<ICompositeEntity> allVisibleGroupItems) => 
-            await this.mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
+            ICompositeQuestion compositeQuestion,
+            CompositeCollection<ICompositeEntity> allVisibleGroupItems)
         {
             if (!itemCompositeCollections[CompositeItemType.Title].Contains(compositeQuestion.QuestionState.Header))
             {
@@ -122,7 +122,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                 itemCompositeCollections[CompositeItemType.Comments].Add(compositeQuestion.QuestionState.Comments);
                 itemCompositeCollections[CompositeItemType.AnsweringProgress].Add(compositeQuestion.Answering);
             }
-        });
+        }
 
         private enum CompositeItemType
         {
