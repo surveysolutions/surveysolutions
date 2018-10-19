@@ -117,7 +117,8 @@ namespace WB.Tests.Abc.TestFactories
                 Stub.MvxMainThreadAsyncDispatcher(),
                 questionState ?? Stub<QuestionStateViewModel<SingleOptionQuestionAnswered>>.WithNotEmptyValues,
                 Mock.Of<QuestionInstructionViewModel>(),
-                answering ?? Mock.Of<AnsweringViewModel>());
+                answering ?? Mock.Of<AnsweringViewModel>(),
+                Create.ViewModel.ThrottlingViewModel());
 
         public MultiOptionLinkedToListQuestionQuestionViewModel MultiOptionLinkedToListQuestionQuestionViewModel(
             IQuestionnaire questionnaire = null,
@@ -133,7 +134,8 @@ namespace WB.Tests.Abc.TestFactories
                 Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == (questionnaire ?? Mock.Of<IQuestionnaire>())),
                 Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == Mock.Of<IUserIdentity>(y => y.UserId == Guid.NewGuid())),
                 eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
-                Stub.MvxMainThreadAsyncDispatcher());
+                Stub.MvxMainThreadAsyncDispatcher(),
+                Create.ViewModel.ThrottlingViewModel());
 
         public SingleOptionLinkedQuestionViewModel SingleOptionLinkedQuestionViewModel(
             IQuestionnaire questionnaire = null,
@@ -152,10 +154,8 @@ namespace WB.Tests.Abc.TestFactories
             Stub.MvxMainThreadAsyncDispatcher(),
             questionState ?? Stub<QuestionStateViewModel<SingleOptionLinkedQuestionAnswered>>.WithNotEmptyValues,
             Mock.Of<QuestionInstructionViewModel>(),
-            answering ?? Mock.Of<AnsweringViewModel>())
-        {
-            ThrottlePeriod = 0
-        };
+            answering ?? Mock.Of<AnsweringViewModel>(),
+            Create.ViewModel.ThrottlingViewModel());
 
         public TextQuestionViewModel TextQuestionViewModel(
             ILiteEventRegistry eventRegistry = null,
@@ -379,14 +379,15 @@ namespace WB.Tests.Abc.TestFactories
                 Mock.Of<IQuestionnaireStorage>(_ => _.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == (questionnaire ?? Mock.Of<IQuestionnaire>())),
                 Mock.Of<IPrincipal>(_ => _.CurrentUserIdentity == Mock.Of<IUserIdentity>(y => y.UserId == Guid.NewGuid())),
                 eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
-                Stub.MvxMainThreadAsyncDispatcher());
+                Stub.MvxMainThreadAsyncDispatcher(),
+                Create.ViewModel.ThrottlingViewModel());
 
         public VibrationViewModel VibrationViewModel(ILiteEventRegistry eventRegistry = null,
-            IEnumeratorSettings enumeratorSettings = null, IVirbationService virbationService = null)
+            IEnumeratorSettings enumeratorSettings = null, IVirbationService vibrationService = null)
             => new VibrationViewModel(
                 eventRegistry ?? Mock.Of<ILiteEventRegistry>(),
                 enumeratorSettings ?? Mock.Of<IEnumeratorSettings>(), 
-                virbationService ?? Mock.Of<IVirbationService>());
+                vibrationService ?? Mock.Of<IVirbationService>());
 
         public SingleOptionQuestionOptionViewModel SingleOptionQuestionOptionViewModel(int? value = null)
         {
@@ -465,5 +466,13 @@ namespace WB.Tests.Abc.TestFactories
 
         public ConnectedDeviceSynchronizationViewModel ConnectedDeviceSynchronizationViewModel()
             => new ConnectedDeviceSynchronizationViewModel();
+
+        public ThrottlingViewModel ThrottlingViewModel(IUserInterfaceStateService userInterfaceStateService = null)
+        {
+            return new ThrottlingViewModel(userInterfaceStateService ?? Mock.Of<IUserInterfaceStateService>())
+            {
+                ThrottlePeriod = 0
+            };
+        }
     }
 }
