@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -33,16 +34,16 @@ namespace WB.UI.Headquarters.Injections
 
             this.tsc = new TaskCompletionSource<bool>();
         }
-
+        
         private async Task StartService()
         {
-            var data = ProtectedData.Protect(
-                Encoding.UTF8.GetBytes(ConfigurationManager.ConnectionStrings[@"Postgres"].ConnectionString),
-                null, DataProtectionScope.CurrentUser);
-
-            // for local running export service we passing connection string via command line using ProtectedData api
-            // so that connection string is no visible via taskmgr.exe
-            var processStartInfo = new ProcessStartInfo(serviceExe, $"--console --connectionString={Convert.ToBase64String(data)}")
+            var webConfigs = String.Join(@";", 
+                NConfig.NConfigurator.Default.FileNames
+                    .Union(new [] {@"~/Web.config"})
+                    .Select(HttpContext.Current.Server.MapPath)
+                    .Reverse());
+            
+            var processStartInfo = new ProcessStartInfo(serviceExe, $"--console --webConfigs=\"{webConfigs}\"")
             {
                 WorkingDirectory = servicePath,
                 UseShellExecute = false,
