@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
+using WB.Services.Export.Models;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Services.Processing;
 using WB.Services.Export.Storage;
@@ -16,20 +17,20 @@ namespace WB.Services.Export.Jobs
 {
     public class JobsStatusReporting : IJobsStatusReporting
     {
-        private readonly Tuple<DataExportType, DataExportFormat>[] supportedDataExports = new[]
+        private readonly (DataExportType exportType, DataExportFormat format)[] supportedDataExports =
         {
-            Tuple.Create(DataExportType.ParaData, DataExportFormat.Paradata),
-            Tuple.Create(DataExportType.ParaData, DataExportFormat.Tabular),
+            (DataExportType.ParaData, DataExportFormat.Paradata),
+            (DataExportType.ParaData, DataExportFormat.Tabular),
 
-            Tuple.Create(DataExportType.Data, DataExportFormat.Tabular),
-            Tuple.Create(DataExportType.Data, DataExportFormat.STATA),
-            Tuple.Create(DataExportType.Data, DataExportFormat.SPSS),
-            Tuple.Create(DataExportType.Data, DataExportFormat.Binary),
+            (DataExportType.Data, DataExportFormat.Tabular),
+            (DataExportType.Data, DataExportFormat.STATA),
+            (DataExportType.Data, DataExportFormat.SPSS),
+            (DataExportType.Data, DataExportFormat.Binary),
         };
 
         private readonly IDataExportProcessesService dataExportProcessesService;
         private readonly IQuestionnaireExportStructureFactory exportStructureFactory;
-        private readonly IFilebasedExportedDataAccessor fileBasedExportedDataAccessor;
+        private readonly IFileBasedExportedDataAccessor fileBasedExportedDataAccessor;
         private readonly IFileSystemAccessor fileSystemAccessor;
         private readonly IExternalFileStorage externalFileStorage;
         private readonly IDataExportFileAccessor exportFileAccessor;
@@ -37,7 +38,7 @@ namespace WB.Services.Export.Jobs
 
         public JobsStatusReporting(IDataExportProcessesService dataExportProcessesService,
             IQuestionnaireExportStructureFactory exportStructureFactory,
-            IFilebasedExportedDataAccessor fileBasedExportedDataAccessor,
+            IFileBasedExportedDataAccessor fileBasedExportedDataAccessor,
             IFileSystemAccessor fileSystemAccessor,
             IExternalFileStorage externalFileStorage,
             IDataExportFileAccessor exportFileAccessor,
@@ -55,11 +56,10 @@ namespace WB.Services.Export.Jobs
         public async Task<DataExportStatusView> GetDataExportStatusForQuestionnaireAsync(
             TenantInfo tenant,
             QuestionnaireId questionnaireIdentity,
-            string archiveFileName,
-            InterviewStatus? status = null, DateTime? fromDate = null, DateTime? toDate = null)
+            InterviewStatus? status = null, 
+            DateTime? fromDate = null, DateTime? toDate = null)
         {
-            var questionnaire = await
-                this.exportStructureFactory.GetQuestionnaireExportStructureAsync(tenant, questionnaireIdentity);
+            var questionnaire = await this.exportStructureFactory.GetQuestionnaireExportStructureAsync(tenant, questionnaireIdentity);
 
             if (questionnaire == null)
                 return null;
@@ -71,9 +71,18 @@ namespace WB.Services.Export.Jobs
 
             foreach (var supportedDataExport in this.supportedDataExports)
             {
-                var dataExportView = await this.CreateDataExportView(tenant, archiveFileName, supportedDataExport.Item1,
-                    supportedDataExport.Item2, status,
-                    fromDate, toDate, questionnaireIdentity, questionnaire, allProcesses);
+                var exportSettings = new ExportSettings
+                {
+                    Tenant = tenant,
+                    QuestionnaireId = questionnaireIdentity,
+                    ExportFormat = supportedDataExport.format,
+                    Status = status,
+                    FromDate = fromDate,
+                    ToDate = toDate
+                };
+                var dataExportView = await this.CreateDataExportView(exportSettings, 
+                    supportedDataExport.exportType, 
+                    questionnaire, allProcesses);
 
                 exports.Add(dataExportView);
             }
@@ -93,39 +102,35 @@ namespace WB.Services.Export.Jobs
                 DataExportProcessId = dataExportProcessDetails.NaturalId,
                 BeginDate = dataExportProcessDetails.Status.BeginDate ?? DateTime.MinValue,
                 LastUpdateDate = dataExportProcessDetails.Status.LastUpdateDate,
-                DataExportProcessName = dataExportProcessDetails.Name,
                 Progress = dataExportProcessDetails.Status.ProgressInPercents,
-                Format = dataExportProcessDetails.Format,
+                Format = dataExportProcessDetails.ExportSettings.ExportFormat,
                 ProcessStatus = dataExportProcessDetails.Status.Status,
-                Type = dataExportProcessDetails.Format == DataExportFormat.Paradata
+                Type = dataExportProcessDetails.ExportSettings.ExportFormat == DataExportFormat.Paradata
                     ? DataExportType.ParaData
                     : DataExportType.Data,
-                QuestionnaireId = dataExportProcessDetails.Questionnaire.Id,
-                InterviewStatus = dataExportProcessDetails.InterviewStatus,
-                FromDate = dataExportProcessDetails.FromDate,
-                ToDate = dataExportProcessDetails.ToDate
+                QuestionnaireId = dataExportProcessDetails.ExportSettings.QuestionnaireId.ToString(),
+                InterviewStatus = dataExportProcessDetails.ExportSettings.Status,
+                FromDate = dataExportProcessDetails.ExportSettings.FromDate,
+                ToDate = dataExportProcessDetails.ExportSettings.ToDate
             };
         }
 
-        private async Task<DataExportView> CreateDataExportView(TenantInfo tenant,
-            string archiveFileName,
+        private async Task<DataExportView> CreateDataExportView(
+            ExportSettings exportSettings,
             DataExportType dataType,
-            DataExportFormat dataFormat,
-            InterviewStatus? interviewStatus,
-            DateTime? fromDate,
-            DateTime? toDate,
-            QuestionnaireId questionnaireIdentity,
             QuestionnaireExportStructure questionnaire,
             RunningDataExportProcessView[] allProcesses)
         {
             DataExportView dataExportView = new DataExportView
             {
-                DataExportFormat = dataFormat,
+                DataExportFormat = exportSettings.ExportFormat,
                 DataExportType = dataType,
-                StatusOfLatestExportProcess = GetStatusOfExportProcess(dataType, dataFormat, questionnaireIdentity, allProcesses)
+                StatusOfLatestExportProcess = GetStatusOfExportProcess(dataType, 
+                    exportSettings.ExportFormat, exportSettings.QuestionnaireId, 
+                    allProcesses)
             };
 
-            if (dataFormat == DataExportFormat.Binary &&
+            if (exportSettings.ExportFormat == DataExportFormat.Binary &&
                 !questionnaire.HeaderToLevelMap.Values.SelectMany(l =>
                     l.HeaderItems.Values.OfType<ExportedQuestionHeaderItem>().Where(q =>
                         q.QuestionType == QuestionType.Multimedia || q.QuestionType == QuestionType.Audio)).Any())
@@ -138,26 +143,23 @@ namespace WB.Services.Export.Jobs
                 dataExportView.HasAnyDataToBePrepared = true;
                 var process = allProcesses.FirstOrDefault(p =>
                     p.IsRunning &&
-                    p.Format == dataFormat &&
+                    p.Format == exportSettings.ExportFormat &&
                     p.Type == dataType &&
-                    p.InterviewStatus == interviewStatus &&
-                    p.FromDate == fromDate &&
-                    p.ToDate == toDate &&
-                    (p.QuestionnaireId == null || p.QuestionnaireId == questionnaireIdentity.Id));
+                    p.InterviewStatus == exportSettings.Status &&
+                    p.FromDate == exportSettings.FromDate &&
+                    p.ToDate == exportSettings.ToDate &&
+                    (p.QuestionnaireId == null || p.QuestionnaireId == exportSettings.QuestionnaireId.ToString()));
 
                 dataExportView.CanRefreshBeRequested = process == null;
                 dataExportView.DataExportProcessId = process?.DataExportProcessId;
                 dataExportView.ProgressInPercents = process?.Progress ?? 0;
             }
 
-            string filePath = this.fileBasedExportedDataAccessor.GetArchiveFilePathForExportedData(
-                tenant,
-                archiveFileName,
-                dataFormat, interviewStatus, fromDate, toDate);
+            string filePath = this.fileBasedExportedDataAccessor.GetArchiveFilePathForExportedData(exportSettings);
 
             if (this.externalFileStorage.IsEnabled())
             {
-                var externalStoragePath = this.exportFileAccessor.GetExternalStoragePath(tenant, Path.GetFileName(filePath));
+                var externalStoragePath = this.exportFileAccessor.GetExternalStoragePath(exportSettings.Tenant, Path.GetFileName(filePath));
                 var metadata = await this.externalFileStorage.GetObjectMetadataAsync(externalStoragePath);
 
                 if (metadata != null)

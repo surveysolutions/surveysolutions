@@ -8,9 +8,9 @@
       },
       "applicationUrl": "http://localhost:5000/export"
     },
-    "Export.Worker": {
+    "Export.VglLocalTest": {
       "commandName": "Project",
-      "commandLineArgs": "--console --worker",
+      "commandLineArgs": "--console --webConfigs=\"C:\\src\\wb\\src\\UI\\Headquarters\\WB.UI.Headquarters\\Web.config;C:\\src\\wb\\src\\UI\\Headquarters\\WB.UI.Headquarters\\Configuration\\vgl.Headquarters.Web.config\" Logging:LogLevel:WB.Services.Export.Host=Trace",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

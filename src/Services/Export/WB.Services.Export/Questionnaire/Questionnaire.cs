@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.Extensions.Caching.Memory;
 using WB.Services.Export.Interview;
 
 namespace WB.Services.Export.Questionnaire
 {
     public class QuestionnaireDocument : Group
     {
-      //  private bool childrenWereConnected = false;
-
         public QuestionnaireDocument(List<IQuestionnaireEntity> children = null) : base(children)
         {
+            this.memoryCache = new MemoryCache(new MemoryCacheOptions());
         }
 
         public string Id { get; set;}
@@ -84,30 +84,35 @@ namespace WB.Services.Export.Questionnaire
 
         public Guid[] GetRosterSizeSourcesForEntity(Guid entityId)
         {
-            var entity = this.Find<IQuestionnaireEntity>(entityId);
-
-
-            var rosterSizes = new List<Guid>();
-
-            while (entity != this && entity != null)
+            return this.memoryCache.GetOrCreate("RosterSizeSource:" + entityId, entry =>
             {
-                if (entity is Group group)
+                var entity = this.Find<IQuestionnaireEntity>(entityId);
+
+                var rosterSizes = new List<Guid>();
+
+                while (entity != this && entity != null)
                 {
-                    if (group.IsRoster)
-                        rosterSizes.Insert(0, this.GetRosterSource(group.PublicKey));
+                    if (entity is Group group)
+                    {
+                        if (group.IsRoster)
+                            rosterSizes.Insert(0, this.GetRosterSource(group.PublicKey));
+                    }
+
+                    entity = entity.GetParent();
                 }
 
-                entity = entity.GetParent();
-            }
-
-            return rosterSizes.ToArray();
+                return rosterSizes.ToArray();
+            });
         }
 
         private Guid GetRosterSource(Guid rosterId)
         {
-            Group roster = this.Find<Group>(rosterId);
+            return this.memoryCache.GetOrCreate("GetRosterSource:" + rosterId, entry =>
+            {
+                Group roster = this.Find<Group>(rosterId);
 
-            return roster.RosterSizeQuestionId ?? roster.PublicKey;
+                return roster.RosterSizeQuestionId ?? roster.PublicKey;
+            });
         }
 
         public Guid[] GetAllGroups()
@@ -117,22 +122,27 @@ namespace WB.Services.Export.Questionnaire
 
         public Guid[] GetRostersInLevel(ValueVector<Guid> rosterScope)
         {
-            if (rostersInLevelCache == null)
+            return this.memoryCache.GetOrCreate("getrostersinlevel:" + rosterScope.ToString(), entry =>
             {
-                rostersInLevelCache = GetAllGroups()
-                    .Select(x => new
-                    {
-                        RosterScope = new ValueVector<Guid>(GetRosterSizeSourcesForEntity(x)),
-                        RosterId = x
-                    })
-                    .GroupBy(x => x.RosterScope)
-                    .ToDictionary(x => x.Key, x => x.Select(e => e.RosterId).ToArray());
-            }
+                if (rostersInLevelCache == null)
+                {
+                    rostersInLevelCache = GetAllGroups()
+                        .Select(x => new
+                        {
+                            RosterScope = new ValueVector<Guid>(GetRosterSizeSourcesForEntity(x)),
+                            RosterId = x
+                        })
+                        .GroupBy(x => x.RosterScope)
+                        .ToDictionary(x => x.Key, x => x.Select(e => e.RosterId).ToArray());
+                }
 
-            return rostersInLevelCache[rosterScope];
+                return rostersInLevelCache[rosterScope];
+            });
         }
 
         private Dictionary<Guid, Group> groupsCache;
+        private MemoryCache memoryCache;
+
         private Dictionary<Guid, Group> GroupsCache
         {
             get
@@ -144,5 +154,7 @@ namespace WB.Services.Export.Questionnaire
                                    group => group));
             }
         }
+
+        
     }
 }

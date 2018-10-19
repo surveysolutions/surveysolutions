@@ -96,3 +96,4 @@ Elmah/
 /src/Services/Export/WB.Services.Export.Host/logs
 .bin
 /src/Services/Export/WB.Services.Export.Host/pid
+*.pubxml.user
