@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Questionnaire;
@@ -10,7 +11,7 @@ namespace WB.Services.Export.CsvExport.Exporters
     public interface IInterviewActionsExporter
     {
         Task ExportAsync(TenantInfo tenant, QuestionnaireId questionnaireIdentity, List<Guid> interviewIdsToExport,
-            string basePath, IProgress<int> progress);
+            string basePath, IProgress<int> progress, CancellationToken cancellationToken = default);
 
         void ExportDoFile(QuestionnaireExportStructure questionnaireExportStructure, string folderPath);
         string InterviewActionsFileName { get; }

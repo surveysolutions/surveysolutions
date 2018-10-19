@@ -2,9 +2,11 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Dapper;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
@@ -63,23 +65,25 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             using (NpgsqlConnection connection = new NpgsqlConnection(this.connectionSettings.ConnectionString))
             {
                 connection.Open();
-                using (connection.BeginTransaction())
-                {
-                    var command = connection.CreateCommand();
-                    command.CommandText = $"SELECT * FROM {tableNameWithSchema} WHERE eventsourceid=:sourceId AND eventsequence >= :minVersion ORDER BY eventsequence LIMIT :batchSize OFFSET :processed";
-                    command.Parameters.AddWithValue("sourceId", NpgsqlDbType.Uuid, id);
-                    command.Parameters.AddWithValue("minVersion", minVersion);
-                    command.Parameters.AddWithValue("batchSize", BatchSize);
-                    command.Parameters.AddWithValue("processed", processed);
 
-                    using (var reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
+                using (var tr = connection.BeginTransaction())
+                {
+                    var rawEvents = connection.Query<RawEvent>(
+                        $"SELECT id, eventsourceid, origin, eventsequence, timestamp, globalsequence, eventtype, value::text " +
+                        $"FROM {tableNameWithSchema} " +
+                        $"WHERE eventsourceid= @sourceId AND eventsequence >= @minVersion " +
+                        $"ORDER BY eventsequence LIMIT @batchSize OFFSET @processed",
+                        new
                         {
-                            var singleEvent = this.ReadSingleEvent(reader);
-                            if (singleEvent != null)
-                                yield return singleEvent;
-                        }
+                            sourceId = id,
+                            minVersion = minVersion,
+                            batchSize = BatchSize,
+                            processed = processed
+                        }, buffered: true, transaction: tr);
+
+                    foreach (var committedEvent in ToCommittedEvent(rawEvents))
+                    {
+                        yield return committedEvent;
                     }
                 }
             }
@@ -252,64 +256,71 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             }
         }
 
+        private struct RawEvent
+        {
+            public Guid Id { get; set; }
+            public Guid eventSourceId { get; set; }
+            public string origin { get; set; }
+            public int eventSequence { get; set; }
+            public DateTime timeStamp { get; set; }
+            public long globalSequence { get; set; }
+            public string eventType { get; set; }
+            public string value { get; set; }
+        }
+
         public async Task<EventsFeedPage> GetEventsFeedAsync(long startWithGlobalSequence, int pageSize)
         {
-            List<CommittedEvent> events = new List<CommittedEvent>();
+            var rawEventsData = await this.sessionProvider.GetSession().Connection
+                .QueryAsync<RawEvent>
+                 ($@"SELECT id, eventsourceid, origin, eventsequence, timestamp, globalsequence, eventtype, value::text 
+                   FROM {tableNameWithSchema} 
+                   WHERE globalsequence > @minVersion 
+                   ORDER BY globalsequence 
+                   LIMIT @batchSize", 
+                   new { minVersion = startWithGlobalSequence, batchSize = pageSize });
 
-            var npgConnection = this.sessionProvider.GetSession().Connection as NpgsqlConnection;
-
-            var command = npgConnection.CreateCommand();
-            command.CommandText =
-                $@"SELECT id, eventsourceid, origin, eventsequence, timestamp, globalsequence, eventtype, value FROM {tableNameWithSchema} 
-                                         WHERE globalsequence > @minVersion 
-                                         ORDER BY globalsequence 
-                                         LIMIT @batchSize";
-            command.Parameters.AddWithValue("minVersion", startWithGlobalSequence);
-            command.Parameters.AddWithValue("batchSize", pageSize);
-
-            using (var reader = await command.ExecuteReaderAsync().ConfigureAwait(false))
-            {
-                while (await reader.ReadAsync().ConfigureAwait(false))
-                {
-                    var singleEvent = this.ReadSingleEvent(reader);
-                    if (singleEvent != null)
-                        events.Add(singleEvent);
-                }
-            }
+            var events = ToCommittedEvent(rawEventsData).ToList();
 
             return new EventsFeedPage(GetLastGlobalSequence(), events);
         }
 
-        private CommittedEvent ReadSingleEvent(IDataReader dataReader)
+        private IEnumerable<CommittedEvent> ToCommittedEvent(IEnumerable<RawEvent> rawEventsData)
         {
-            string value = (string) dataReader["value"];
+            // reusing serializer to save few bytes of allocation
+            var serializer = JsonSerializer.CreateDefault(EventSerializerSettings.BackwardCompatibleJsonSerializerSettings);
 
-            string eventType = (string) dataReader["eventtype"];
+            IEvent Deserialize(string value, Type type)
+            {
+                using (var sr = new StringReader(value))
+                {
+                    using (JsonTextReader jsonTextReader = new JsonTextReader(sr))
+                    {
+                        return (IEvent) serializer.Deserialize(jsonTextReader, type);
+                    }
+                }
+            }
 
-            if (obsoleteEvents.Contains(eventType.ToLower()))
-                return null;
+            foreach (var raw in rawEventsData)
+            {
+                if (obsoleteEvents.Contains(raw.eventType.ToLower()))
+                {
+                    continue;
+                }
 
-            var resolvedEventType = this.eventTypeResolver.ResolveType(eventType);
-            IEvent typedEvent = JsonConvert.DeserializeObject(value, resolvedEventType, EventSerializerSettings.BackwardCompatibleJsonSerializerSettings) as IEvent;
+                var resolvedEventType = this.eventTypeResolver.ResolveType(raw.eventType);
+                IEvent typedEvent = Deserialize(raw.value, resolvedEventType);
 
-            var origin = dataReader["origin"];
-
-            var eventIdentifier = (Guid) dataReader["id"];
-            var eventSourceId = (Guid) dataReader["eventsourceid"];
-            var eventSequence = (int) dataReader["eventsequence"];
-            var eventTimeStamp = (DateTime) dataReader["timestamp"];
-            var globalSequence = (int) dataReader["globalsequence"];
-
-            var commitedEvent = new CommittedEvent(Guid.Empty,
-                origin is DBNull ? null : (string) origin,
-                eventIdentifier,
-                eventSourceId,
-                eventSequence,
-                eventTimeStamp,
-                globalSequence,
-                typedEvent
+                yield return new CommittedEvent(
+                    Guid.Empty,
+                    raw.origin,
+                    raw.Id,
+                    raw.eventSourceId,
+                    raw.eventSequence,
+                    raw.timeStamp,
+                    raw.globalSequence,
+                    typedEvent
                 );
-            return commitedEvent;
+            }
         }
 
         private long GetNextSequence()

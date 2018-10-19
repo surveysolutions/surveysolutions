@@ -50,13 +50,12 @@ namespace WB.Services.Export
             services.AddTransient<IExportQuestionService, ExportQuestionService>();
             services.AddTransient<IDescriptionGenerator, DescriptionGenerator.DescriptionGenerator>();
             services.AddTransient<IEnvironmentContentService, StataEnvironmentContentService>();
-            services.AddTransient<IFilebasedExportedDataAccessor, FilebasedExportedDataAccessor>();
+            services.AddTransient<IFileBasedExportedDataAccessor, FileBasedExportedDataAccessor>();
             services.AddTransient<IDataExportFileAccessor, DataExportFileAccessor>();
             services.AddTransient<IQuestionnaireLabelFactory, QuestionnaireLabelFactory>();
             services.AddTransient<IExportFileNameService, ExportExportFileNameService>();
             services.AddTransient<IArchiveUtils, ZipArchiveUtils>();
             services.AddTransient<IExternalFileStorage, S3FileStorage>();
-            services.AddTransient<ITempPathProvider, ManagedThreadAwareTempPathProvider>();
             services
                 .AddTransient<ITabularDataToExternalStatPackageExportService,
                     TabularDataToExternalStatPackageExportService>();

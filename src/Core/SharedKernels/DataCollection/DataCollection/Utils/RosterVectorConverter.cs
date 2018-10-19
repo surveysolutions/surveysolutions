@@ -36,7 +36,7 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            var vector = new List<decimal>();
+            var vector = new List<int>();
 
             if (reader.TokenType == JsonToken.StartObject)
             {
@@ -57,15 +57,23 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
             return new RosterVector(vector);
         }
 
-        private static List<decimal> ParseArray(JsonReader reader)
+        private static List<int> ParseArray(JsonReader reader)
         {
-            List<decimal> vector = new List<decimal>();
+            List<int> vector = new List<int>();
 
             while (reader.Read() && reader.TokenType != JsonToken.EndArray)
             {
                 if (reader.TokenType != JsonToken.Comment)
                 {
-                    vector.Add(Convert.ToDecimal(reader.Value));
+                    switch (reader.Value)
+                    {
+                        case Double val: vector.Add((int)val); break;
+                        case long val: vector.Add((int)val); break;
+                        case int val: vector.Add(val); break;
+                        case decimal val: vector.Add((int)val); break;
+                        default:
+                            vector.Add((int) Convert.ToDecimal(reader.Value)); break;
+                    }
                 }
             }
 
