@@ -42,6 +42,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         protected readonly IMvxMainThreadAsyncDispatcher mainThreadDispatcher;
         private readonly QuestionInstructionViewModel instructionViewModel;
         private readonly QuestionStateViewModel<MultipleOptionsQuestionAnswered> questionState;
+        private readonly ThrottlingViewModel throttlingModel;
 
         protected IStatefulInterview interview;
         private Guid interviewId;
@@ -81,7 +82,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IStatefulInterviewRepository interviewRepository,
             IQuestionnaireStorage questionnaireStorage,
             IPrincipal userIdentity, ILiteEventRegistry eventRegistry,
-            IMvxMainThreadAsyncDispatcher mainThreadDispatcher)
+            IMvxMainThreadAsyncDispatcher mainThreadDispatcher, 
+            ThrottlingViewModel throttlingModel)
         {
             this.Options = new CovariantObservableCollection<MultiOptionQuestionOptionViewModel>();
             this.questionState = questionState;
@@ -92,7 +94,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.interviewRepository = interviewRepository;
             this.Answering = answering;
             this.mainThreadDispatcher = mainThreadDispatcher;
-            this.timer = new Timer(async _ => { await SaveAnswer(); }, null, Timeout.Infinite, Timeout.Infinite);
+            this.throttlingModel = throttlingModel;
+            this.throttlingModel.Init(SaveAnswer);
         }
 
         public Identity Identity => this.questionIdentity;
@@ -132,8 +135,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.linkedToQuestionId = questionnaire.GetQuestionReferencedByLinkedQuestion(questionIdentity.Id);
         }
 
-        private readonly Timer timer;
-        protected internal int ThrottlePeriod { get; set; } = Constants.ThrottlePeriod;
         private List<int> previousOptionsToReset = null;
         private List<int> PreviousOptionsToReset
         {
@@ -163,7 +164,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
             catch (InterviewException ex)
             {
-                ResetUiOptions();
+                if (ex.ExceptionType != InterviewDomainExceptionType.QuestionIsMissing)
+                {
+                    ResetUiOptions();
+                }
                 this.QuestionState.Validity.ProcessException(ex);
             }
         }
@@ -183,15 +187,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             
             selectedOptionsToSave = allSelectedOptions.Select(x => x.Value).ToList();
 
-            if (this.ThrottlePeriod == 0)
-            {
-                await SaveAnswer();
-            }
-            else
-            {
-                timer.Change(ThrottlePeriod, Timeout.Infinite);
-            }
-
+            await this.throttlingModel.ExecuteActionIfNeeded();
         }
 
         private void ResetUiOptions()
@@ -217,6 +213,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             this.questionState.Dispose();
             this.eventRegistry.Unsubscribe(this);
+            this.throttlingModel.Dispose();
         }
 
         public IObservableCollection<ICompositeEntity> Children

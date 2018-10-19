@@ -14,7 +14,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.Sta
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
 {
-    public class OverviewViewModel : MvxViewModel
+    public class OverviewViewModel : MvxViewModel, IDisposable
     {
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IImageFileStorage fileStorage;
@@ -111,6 +111,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
         public List<OverviewNode> Items { get; private set; }
 
         public DynamicTextViewModel Name { get; private set; }
+
+        public void Dispose()
+        {
+            audioService?.Dispose();
+            nameViewModel?.Dispose();
+            Name?.Dispose();
+        }
     }
 }
 

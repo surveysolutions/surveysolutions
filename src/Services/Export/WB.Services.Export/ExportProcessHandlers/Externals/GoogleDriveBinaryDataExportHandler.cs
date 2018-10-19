@@ -19,12 +19,12 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
     {
         public GoogleDriveBinaryDataExportHandler(
             IFileSystemAccessor fileSystemAccessor,
-            IFilebasedExportedDataAccessor filebasedExportedDataAccessor,
+            IFileBasedExportedDataAccessor fileBasedExportedDataAccessor,
             IOptions<InterviewDataExportSettings> interviewDataExportSettings,
             IDataExportProcessesService dataExportProcessesService,
             IBinaryDataSource binaryDataSource,
             IDataExportFileAccessor dataExportFileAccessor)
-            : base(fileSystemAccessor, filebasedExportedDataAccessor, interviewDataExportSettings,
+            : base(fileSystemAccessor, fileBasedExportedDataAccessor, interviewDataExportSettings,
                 dataExportProcessesService, dataExportFileAccessor, binaryDataSource)
         {
         }

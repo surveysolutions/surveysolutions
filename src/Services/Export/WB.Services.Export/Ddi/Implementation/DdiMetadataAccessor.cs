@@ -45,7 +45,7 @@ namespace WB.Services.Export.Ddi.Implementation
             var archiveFilePath = this.exportFileNameService.GetFileNameForDdiByQuestionnaire(questionnaireId, pathToDdiMetadata);
 
             if (this.fileSystemAccessor.IsFileExists(archiveFilePath))
-                return archiveFilePath;
+                this.fileSystemAccessor.DeleteFile(archiveFilePath);
 
             var filesToArchive = new List<string>
             {

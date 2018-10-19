@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging;
 using WB.Services.Export.ExportProcessHandlers;
 using WB.Services.Export.ExportProcessHandlers.Externals;
 using WB.Services.Export.ExportProcessHandlers.Implementation;
+using WB.Services.Export.Models;
 using WB.Services.Export.Services.Processing;
 
 namespace WB.Services.Export.Jobs
@@ -36,7 +37,7 @@ namespace WB.Services.Export.Jobs
                 }
                 else
                 {
-                    var handler = this.GetExportHandler(pendingExportProcess.Format);
+                    var handler = this.GetExportHandler(pendingExportProcess.ExportSettings.ExportFormat);
                     await handler.ExportDataAsync(pendingExportProcess, cancellationToken);
                 }
             }

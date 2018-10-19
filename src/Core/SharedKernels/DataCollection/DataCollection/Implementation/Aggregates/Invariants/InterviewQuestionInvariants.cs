@@ -633,21 +633,11 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
 
         private InterviewQuestionInvariants RequireQuestionInstanceExists()
         {
-            if (this.QuestionIdentity.RosterVector == null)
-                throw new InterviewException("Roster information for question is missing. Roster vector cannot be null")
-                      {
-                          Data =
-                          {
-                              {ExceptionKeys.InterviewId, this.InterviewTree.InterviewId},
-                              {ExceptionKeys.QuestionId, this.QuestionIdentity.Id}
-                          }
-                      };
-
             var questions = this.InterviewTree.FindQuestions(this.QuestionIdentity.Id);
             var rosterVectors = questions.Select(question => question.Identity.RosterVector).ToList();
 
             if (!rosterVectors.Contains(this.QuestionIdentity.RosterVector))
-                throw new InterviewException("Roster information for question is incorrect. No questions found for roster vector")
+                throw new InterviewException("Roster information for question is incorrect. No questions found for roster vector", InterviewDomainExceptionType.QuestionIsMissing)
                 {
                     Data =
                     {
@@ -711,7 +701,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                     {
                         {ExceptionKeys.InterviewId, this.InterviewTree.InterviewId},
                         {ExceptionKeys.QuestionId, this.QuestionId},
-                        {ExceptionKeys.AvailableAnswersList, string.Join(", ", question.AsLinked.Options)},
+                        {ExceptionKeys.AvailableAnswersList, string.Join(", ", question.AsLinkedToList.Options)},
                         {ExceptionKeys.ProvidedAnswerValue, option}
                     }
                 };

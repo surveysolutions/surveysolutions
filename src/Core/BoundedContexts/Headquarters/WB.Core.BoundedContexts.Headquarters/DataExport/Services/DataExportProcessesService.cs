@@ -33,11 +33,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
 
         public Task AddDataExportAsync(DataExportProcessDetails details)
         {
-            var archiveFileName = exportFileNameService.GetQuestionnaireTitleWithVersion(details.Questionnaire);
-
             return exportServiceApi.RequestUpdate(details.Questionnaire.ToString(), details.Format, details.InterviewStatus,
-                details.FromDate, details.ToDate,
-                archiveFileName, GetPasswordFromSettings(),
+                details.FromDate, details.ToDate, GetPasswordFromSettings(),
                 details.AccessToken,
                 details.StorageType);
         }
@@ -47,15 +44,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             return this.exportSettings.EncryptionEnforced()
                     ? this.exportSettings.GetPassword()
                     : null;
-        }
-
-        private void EnqueueProcessIfNotYetInQueue(DataExportProcessDetails newProcess)
-        {
-            if (this.processes.GetOrNull(newProcess.NaturalId)?.IsQueuedOrRunning() ?? false)
-                return;
-
-            this.auditLog.ExportStared(newProcess.Name, newProcess.Format);
-            this.processes[newProcess.NaturalId] = newProcess;
         }
 
         public DataExportProcessDetails[] GetRunningExportProcesses() 

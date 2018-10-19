@@ -35,7 +35,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Mappings
             {
                 clm.Lazy(true);
                 clm.Formula(@"(SELECT COUNT(DISTINCT (c.interviewid, c.variable, c.rostervector)) FROM readside.commentaries c 
-                               WHERE c.interviewid::uuid = interviewid AND c.variable not like '@@%')");
+                               WHERE c.interviewid = interviewid::text AND c.variable not like '@@%')");
             });
             Property(x => x.AssignmentId);
             Property(x => x.ReceivedByInterviewer, pm => pm.Column(cm =>

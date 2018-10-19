@@ -161,7 +161,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             if (newSelectedOptions.Length != selectedOptions.Length)
             {
                 question.SetAnswer(
-                    CategoricalFixedMultiOptionAnswer.Convert(newSelectedOptions));
+                    CategoricalFixedMultiOptionAnswer.Convert(newSelectedOptions), DateTime.UtcNow);
                 // remove rosters, implement cheaper solutions
                 question.Tree.ActualizeTree();
             }
@@ -183,7 +183,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
             if (newCheckedOptions.Length != checkedOptions.Count)
             {
-                question.SetAnswer(YesNoAnswer.FromCheckedYesNoAnswerOptions(newCheckedOptions));
+                question.SetAnswer(YesNoAnswer.FromCheckedYesNoAnswerOptions(newCheckedOptions), DateTime.UtcNow);
                 // remove rosters, implement cheaper solutions
                 question.Tree.ActualizeTree();
             }

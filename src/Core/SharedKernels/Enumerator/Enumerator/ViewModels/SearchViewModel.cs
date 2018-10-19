@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
 using MvvmCross.Plugin.Messenger;
@@ -26,6 +27,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 
         private readonly IDisposable startingLongOperationMessageSubscriptionToken;
         private readonly IDisposable stopLongOperationMessageSubscriptionToken;
+        private CancellationTokenSource cancellationTokenSource;
 
         public SearchViewModel(IPrincipal principal, 
             IViewModelNavigationService viewModelNavigationService,
@@ -69,27 +71,36 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             set => SetProperty(ref this.isInProgressLongOperation, value);
         }
 
-        private bool isInProgressItemsLoading;
-        public bool IsInProgressItemsLoading
+        private int isInProgressItemsLoadingCount;
+        private int IsInProgressItemsLoadingCount
         {
-            get => this.isInProgressItemsLoading;
-            set => SetProperty(ref this.isInProgressItemsLoading, value);
+            get => this.isInProgressItemsLoadingCount;
+            set
+            {
+                this.isInProgressItemsLoadingCount = value;
+                RaisePropertyChanged(nameof(IsInProgressItemsLoading));
+            }
         }
 
-        public IMvxCommand ClearSearchCommand => new MvxCommand(() => SearchText = string.Empty);
-        public IMvxCommand ExitSearchCommand => new MvxAsyncCommand(async () => await viewModelNavigationService.NavigateToDashboardAsync());
-        public IMvxCommand SearchCommand => new MvxCommand<string>(Search);
+        public bool IsInProgressItemsLoading => this.IsInProgressItemsLoadingCount > 0;
 
-        private void Search(string searctText)
+        public IMvxCommand ClearSearchCommand => new MvxCommand(() => SearchText = string.Empty, () => !IsInProgressLongOperation);
+        public IMvxCommand ExitSearchCommand => new MvxAsyncCommand(() => viewModelNavigationService.NavigateToDashboardAsync());
+        public IMvxCommand<string> SearchCommand => new MvxCommand<string>(async text => await SearchAsync(text));
+
+        public async Task SearchAsync(string searctText)
         {
-            UpdateUiItems(searctText);
+            cancellationTokenSource?.Cancel();
+            cancellationTokenSource = new CancellationTokenSource();
+
+            await UpdateUiItemsAsync(searctText, cancellationTokenSource.Token);
         }
 
         public override async Task Initialize()
         {
             await base.Initialize().ConfigureAwait(false);
             EmptySearchText = InterviewerUIResources.Dashboard_SearchWatermark;
-            UpdateUiItems(SearchText);
+            await UpdateUiItemsAsync(SearchText, CancellationToken.None);
         }
 
         private List<InterviewView> interviews;
@@ -104,8 +115,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         private IReadOnlyCollection<AssignmentDocument> GetAssignmentItems()
             => assignments ?? (assignments = this.assignmentsRepository.LoadAll());
 
-        public event EventHandler OnItemsLoaded;
-
         private MvxObservableCollection<IDashboardItem> uiItems = new MvxObservableCollection<IDashboardItem>();
         public MvxObservableCollection<IDashboardItem> UiItems
         {
@@ -113,25 +122,24 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             protected set => this.RaiseAndSetIfChanged(ref this.uiItems, value);
         }
 
-        protected void UpdateUiItems(string searctText) => Task.Run(() =>
+        protected async Task UpdateUiItemsAsync(string searctText, CancellationToken cancellationToken)
         {
-            this.IsInProgressItemsLoading = true;
+            this.IsInProgressItemsLoadingCount++;
+
+            this.SerchResultText = string.IsNullOrWhiteSpace(searctText)
+                ? InterviewerUIResources.Dashboard_NeedTextForSearch
+                : InterviewerUIResources.Dashboard_Searching;
+
+            var items = new List<IDashboardItem>();
 
             try
             {
-                List<IDashboardItem> items = new List<IDashboardItem>();
+                if (!string.IsNullOrWhiteSpace(searctText))
+                {
+                    items = await this.GetViewModelsAsync(searctText, cancellationToken);
 
-                if (string.IsNullOrWhiteSpace(searctText))
-                {
-                    SerchResultText = InterviewerUIResources.Dashboard_NeedTextForSearch;
-                }
-                else
-                {
-                    var newItems = this.GetUiItems(searctText);
-                    items.AddRange(newItems);
-                    var countOfItems = items.Count;
-                    SerchResultText = countOfItems > 0
-                        ? string.Format(InterviewerUIResources.Dashboard_SearchResult, countOfItems)
+                    this.SerchResultText = items.Count > 0
+                        ? string.Format(InterviewerUIResources.Dashboard_SearchResult, items.Count)
                         : InterviewerUIResources.Dashboard_NotFoundSearchResult;
                 }
 
@@ -139,13 +147,30 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                 this.UiItems.ReplaceWith(items);
                 this.UiItems.OfType<InterviewDashboardItemViewModel>().ForEach(i => i.OnItemRemoved += InterviewItemRemoved);
             }
+            catch (OperationCanceledException)
+            {
+            }
             finally
             {
-                this.IsInProgressItemsLoading = false;
+                this.IsInProgressItemsLoadingCount--;
             }
+        }
 
-            this.OnItemsLoaded?.Invoke(this, EventArgs.Empty);
-        });
+        private Task<List<IDashboardItem>> GetViewModelsAsync(string searctText, CancellationToken cancellationToken) =>
+            Task.Run(() =>
+            {
+                var items = new List<IDashboardItem>();
+
+                foreach (var uiItem in this.GetUiItems(searctText))
+                {
+                    cancellationToken.ThrowIfCancellationRequested();
+
+                    items.Add(uiItem);
+                }
+
+                return items;
+
+            }, cancellationToken);
 
         private void InterviewItemRemoved(object sender, EventArgs eventArgs)
         {
@@ -176,6 +201,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         {
             foreach (var assignmentItem in GetAssignmentItems())
             {
+                if (assignmentItem.Quantity.HasValue && assignmentItem.CreatedInterviewsCount.HasValue)
+                {
+                    int count = assignmentItem.Quantity.Value - assignmentItem.CreatedInterviewsCount.Value;
+                    if (count == 0)
+                        continue;
+                }
+
                 bool isMatched = Contains(assignmentItem.Title, searctText)
                                  || Contains(assignmentItem.Id.ToString(), searctText)
                                  || (assignmentItem.IdentifyingAnswers?.Any(pi => Contains(pi.AnswerAsString, searctText)) ?? false);

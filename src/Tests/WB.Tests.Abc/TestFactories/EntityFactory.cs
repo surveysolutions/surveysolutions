@@ -1330,6 +1330,9 @@ namespace WB.Tests.Abc.TestFactories
         public ValidationCondition ValidationCondition(string expression = "self != null", string message = "should be answered", ValidationSeverity severity = ValidationSeverity.Error)
             => new ValidationCondition(expression, message) { Severity =  severity };
 
+        public ValidationCondition WarningCondition(string expression = "self != null", string message = "warning about unanswered question") 
+            => this.ValidationCondition(expression, message, ValidationSeverity.Warning);
+
         public Variable Variable(Guid? id = null, VariableType type = VariableType.LongInteger, string variableName = "v1", string expression = "2*2")
             => new Variable(
                 id ?? Guid.NewGuid(),
