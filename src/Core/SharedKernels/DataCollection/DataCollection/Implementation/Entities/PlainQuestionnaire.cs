@@ -24,13 +24,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 {
     public class PlainQuestionnaire : IQuestionnaire
     {
-        public ISubstitutionService SubstitutionService
-        {
-            get => this.substitutionService;
-        }
+        public ISubstitutionService SubstitutionService { get; }
 
-        private ISubstitutionService substitutionService;
-        
         private readonly IQuestionOptionsRepository questionOptionsRepository;
 
         #region State
@@ -209,13 +204,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             Translation translation = null)
         {
             this.innerDocument = document;
+            
             this.Version = version;
             this.translation = translation;
             this.questionOptionsRepository = questionOptionsRepository;
-            this.substitutionService = substitutionService;
+            this.SubstitutionService = substitutionService;
 
-            this.questionOptionsRepository.SetCurentQuestionnaire(this);
+            this.QuestionnaireIdentity = new QuestionnaireIdentity(this.QuestionnaireId, Version);
         }
+
+        public QuestionnaireIdentity QuestionnaireIdentity { get; set; }
 
         public void WarmUpPriorityCaches()
         {
@@ -374,7 +372,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             //filtered and cascadings
             if (question.CascadeFromQuestionId.HasValue || (question.IsFilteredCombobox ?? false))
             {
-                return questionOptionsRepository.GetOptionsForQuestion(new QuestionnaireIdentity(this.QuestionnaireId, Version),
+                return questionOptionsRepository.GetOptionsForQuestion(this.QuestionnaireIdentity,
                     questionId, parentQuestionValue, searchFor, this.translation);
             }
 
@@ -390,7 +388,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             if (question.CascadeFromQuestionId.HasValue || (question.IsFilteredCombobox ?? false))
             {
                 return questionOptionsRepository.GetOptionForQuestionByOptionText(
-                    new QuestionnaireIdentity(this.QuestionnaireId, Version),
+                    this.QuestionnaireIdentity,
                     questionId,
                     optionText, 
                     parentQuestionValue,
@@ -452,7 +450,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
             if (question.CascadeFromQuestionId.HasValue || (question.IsFilteredCombobox ?? false))
             {
-                return questionOptionsRepository.GetOptionForQuestionByOptionValue(new QuestionnaireIdentity(this.QuestionnaireId, Version),
+                return questionOptionsRepository.GetOptionForQuestionByOptionValue(this.QuestionnaireIdentity,
                     questionId, optionValue, this.translation);
             }
 

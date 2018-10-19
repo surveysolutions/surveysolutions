@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -36,10 +35,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
             Guid questionId, decimal optionValue, Translation translation)
         {
             return this.optionsRepository.GetQuestionOptionByValue(qestionnaireIdentity, questionId, optionValue, translation?.Id);
-        }
-
-        public void SetCurentQuestionnaire(IQuestionnaire questionnaire)
-        {
         }
     }
 }

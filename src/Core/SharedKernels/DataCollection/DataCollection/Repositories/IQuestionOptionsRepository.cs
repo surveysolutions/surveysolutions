@@ -17,6 +17,5 @@ namespace WB.Core.SharedKernels.DataCollection.Repositories
         CategoricalOption GetOptionForQuestionByOptionValue(QuestionnaireIdentity qestionnaireIdentity, 
             Guid questionId, decimal optionValue, Translation translationId);
 
-        void SetCurentQuestionnaire(IQuestionnaire questionnaire);
     }
 }
