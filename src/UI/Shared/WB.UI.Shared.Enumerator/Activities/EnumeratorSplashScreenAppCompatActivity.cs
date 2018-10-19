@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using MvvmCross.Droid.Support.V7.AppCompat;
 using MvvmCross.ViewModels;
@@ -32,17 +33,39 @@ namespace WB.UI.Shared.Enumerator.Activities
         {
             var settings = ServiceLocator.Current.GetInstance<IEnumeratorSettings>();
 
-            if (!settings.Encrypted)
+            if (settings.Encrypted) return;
+
+            var encryptionService = ServiceLocator.Current.GetInstance<IEncryptionService>();
+
+            encryptionService.GenerateKeys();
+
+            EncryptIdentifyingQuestions();
+            EncryptAssignments();
+            EncryptEvents(encryptionService);
+            EncryptMultimedia(encryptionService);
+
+            settings.SetEncrypted(true);
+        }
+
+        private static void EncryptMultimedia(IEncryptionService encryptionService)
+        {
+            EncryptPictures(encryptionService);
+        }
+
+        private static void EncryptPictures(IEncryptionService encryptionService)
+        {
+            IPlainStorage<InterviewMultimediaView> imageViewStorage =
+                ServiceLocator.Current.GetInstance<IPlainStorage<InterviewMultimediaView>>();
+
+            IPlainStorage<InterviewFileView> fileViewStorage =
+                ServiceLocator.Current.GetInstance<IPlainStorage<InterviewFileView>>();
+
+            foreach (var imageInfo in imageViewStorage.LoadAll())
             {
-                var encryptionService = ServiceLocator.Current.GetInstance<IEncryptionService>();
+                var imageFile = fileViewStorage.GetById(imageInfo.FileId);
 
-                encryptionService.GenerateKeys();
-
-                EncryptIdentifyingQuestions();
-                EncryptAssignments();
-                EncryptEvents(encryptionService);
-
-                settings.SetEncrypted(true);
+                imageFile.File = encryptionService.Encrypt(imageFile.File);
+                fileViewStorage.Store(imageFile);
             }
         }
 
