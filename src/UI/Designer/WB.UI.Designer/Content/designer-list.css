@@ -914,3 +914,7 @@ table.table-header.page-with-breadcrumbs {
     width: 100%;
     height: 100%;
 }
+
+#designer-list #edit-form .form-group .field-validation-error {
+    color: #a94442;
+}
