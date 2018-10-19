@@ -115,9 +115,7 @@ namespace WB.UI.Designer.App_Start
             ServiceLocator.SetLocatorProvider(() => scopeResolver);
 
             // DependencyResolver
-            var resolver = new AutofacWebApiDependencyResolver(kernel.Container);
-            config.DependencyResolver = resolver;
-            GlobalConfiguration.Configuration.DependencyResolver = resolver;
+            GlobalConfiguration.Configuration.DependencyResolver = new AutofacWebApiDependencyResolver(kernel.Container);
 
             DependencyResolver.SetResolver(new AutofacDependencyResolver(kernel.Container));
         }
