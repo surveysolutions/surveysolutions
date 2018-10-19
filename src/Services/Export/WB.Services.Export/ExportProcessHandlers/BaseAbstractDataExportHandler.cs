@@ -1,47 +1,33 @@
 ﻿using System;
 using System.Diagnostics;
-using System.IO;
-using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
+using WB.Services.Export.Models;
 using WB.Services.Export.Services.Processing;
 
 namespace WB.Services.Export.ExportProcessHandlers
 {
-    internal interface ITempPathProvider
-    {
-        string GetTempPath(string basePath);
-    }
-
-    class ManagedThreadAwareTempPathProvider : ITempPathProvider
-    {
-        public string GetTempPath(string basePath)
-        {
-            return Path.Combine(basePath, ".temp", "worker_" + Thread.CurrentThread.ManagedThreadId.ToString());
-        }
-    }
-
     abstract class BaseAbstractDataExportHandler : IExportProcessHandler<DataExportProcessArgs>
     {
         protected readonly IFileSystemAccessor fileSystemAccessor;
-        protected readonly IFilebasedExportedDataAccessor filebasedExportedDataAccessor;
+        protected readonly IFileBasedExportedDataAccessor FileBasedExportedDataAccessor;
         protected readonly IOptions<InterviewDataExportSettings> interviewDataExportSettings;
         protected readonly IDataExportProcessesService dataExportProcessesService;
 
-        protected string exportTempDirectoryPath;
+        protected string ExportTempDirectoryPath;
 
         protected BaseAbstractDataExportHandler(
             IFileSystemAccessor fileSystemAccessor,
-            IFilebasedExportedDataAccessor filebasedExportedDataAccessor,
+            IFileBasedExportedDataAccessor fileBasedExportedDataAccessor,
             IOptions<InterviewDataExportSettings> interviewDataExportSettings,
             IDataExportProcessesService dataExportProcessesService)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.dataExportProcessesService = dataExportProcessesService;
-            this.filebasedExportedDataAccessor = filebasedExportedDataAccessor;
+            this.FileBasedExportedDataAccessor = fileBasedExportedDataAccessor;
             this.interviewDataExportSettings = interviewDataExportSettings;
         }
 
@@ -61,64 +47,53 @@ namespace WB.Services.Export.ExportProcessHandlers
                     sw.Restart();
                 }
             };
-
         }
 
-        public virtual async Task ExportDataAsync(DataExportProcessArgs dataExportProcessArgs, CancellationToken cancellationToken)
+        public virtual async Task ExportDataAsync(DataExportProcessArgs dataExportProcessArgs,
+            CancellationToken cancellationToken)
         {
-            exportTempDirectoryPath = this.fileSystemAccessor.GetTempPath(interviewDataExportSettings.Value.DirectoryPath);
+            ExportTempDirectoryPath = this.fileSystemAccessor.GetTempPath(interviewDataExportSettings.Value.DirectoryPath);
 
             cancellationToken.ThrowIfCancellationRequested();
 
             this.RecreateExportTempDirectory();
 
-            cancellationToken.ThrowIfCancellationRequested();
-
-            var exportProgress = new Progress<int>();
-
-            HandleProgress(dataExportProcessArgs.ProcessId, exportProgress);
-            
-            var exportSettings = new ExportSettings
+            try
             {
-                QuestionnaireId = dataExportProcessArgs.Questionnaire,
-                InterviewStatus = dataExportProcessArgs.InterviewStatus,
-                FromDate = dataExportProcessArgs.FromDate,
-                ToDate = dataExportProcessArgs.ToDate,
-                ExportTempDirectory = this.exportTempDirectoryPath,
-                Tenant = dataExportProcessArgs.Tenant,
-                ArchiveName = dataExportProcessArgs.ArchiveName
-            };
+                cancellationToken.ThrowIfCancellationRequested();
 
-            var archiveName = this.filebasedExportedDataAccessor.GetArchiveFilePathForExportedData(
-                dataExportProcessArgs.Tenant, 
-                dataExportProcessArgs.ArchiveName, 
-                Format, 
-                dataExportProcessArgs.InterviewStatus,
-                fromDate: dataExportProcessArgs.FromDate, toDate: dataExportProcessArgs.ToDate);
+                var exportProgress = new Progress<int>();
 
-            this.dataExportProcessesService.ChangeStatusType(
-                dataExportProcessArgs.ProcessId, DataExportStatus.Running);
+                HandleProgress(dataExportProcessArgs.ProcessId, exportProgress);
 
-            await DoExportAsync(dataExportProcessArgs, exportSettings, archiveName, exportProgress, cancellationToken);
+                var archiveName = this.FileBasedExportedDataAccessor.GetArchiveFilePathForExportedData(dataExportProcessArgs.ExportSettings);
 
-            this.DeleteExportTempDirectory();
+                this.dataExportProcessesService.ChangeStatusType(
+                    dataExportProcessArgs.ProcessId, DataExportStatus.Running);
+
+                await DoExportAsync(dataExportProcessArgs, dataExportProcessArgs.ExportSettings, archiveName, exportProgress, cancellationToken);
+            }
+            finally
+            {
+                this.DeleteExportTempDirectory();
+            }
         }
-        
+
         protected abstract Task DoExportAsync(DataExportProcessArgs processArgs,
             ExportSettings exportSettings, string archiveName, IProgress<int> exportProgress, CancellationToken cancellationToken);
 
         protected abstract DataExportFormat Format { get; }
-        
+
         private void DeleteExportTempDirectory()
         {
-            if (this.fileSystemAccessor.IsDirectoryExists(this.exportTempDirectoryPath))
-                this.fileSystemAccessor.DeleteDirectory(this.exportTempDirectoryPath);
+            if (this.fileSystemAccessor.IsDirectoryExists(this.ExportTempDirectoryPath))
+                this.fileSystemAccessor.DeleteDirectory(this.ExportTempDirectoryPath);
         }
 
         private void RecreateExportTempDirectory()
         {
             this.DeleteExportTempDirectory();
-            this.fileSystemAccessor.CreateDirectory(this.exportTempDirectoryPath);
+            this.fileSystemAccessor.CreateDirectory(this.ExportTempDirectoryPath);
         }
     }
 }

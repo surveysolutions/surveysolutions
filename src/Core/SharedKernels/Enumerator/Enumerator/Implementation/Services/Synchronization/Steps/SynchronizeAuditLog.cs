@@ -7,7 +7,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 {
     public class SynchronizeAuditLog : SynchronizationStep
     {
-        protected readonly IAuditLogSynchronizer auditLogSynchronizer;
+        private readonly IAuditLogSynchronizer auditLogSynchronizer;
 
         public SynchronizeAuditLog(int sortOrder, 
             IAuditLogSynchronizer auditLogSynchronizer,

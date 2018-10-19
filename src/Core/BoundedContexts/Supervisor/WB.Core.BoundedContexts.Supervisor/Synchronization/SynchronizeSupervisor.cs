@@ -12,18 +12,18 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
 {
     public class SynchronizeSupervisor : SynchronizationStep
     {
-        private readonly ISynchronizationService synchronizationService;
+        private readonly ISupervisorSynchronizationService supevisorSynchronizationService;
         private readonly ISupervisorPrincipal principal;
         private readonly IPlainStorage<SupervisorIdentity> supervisorsPlainStorage;
 
         public SynchronizeSupervisor(int sortOrder, 
-            ISynchronizationService synchronizationService, 
+            ISupervisorSynchronizationService synchronizationService, 
             ILogger logger, 
             ISupervisorPrincipal principal, 
             IPlainStorage<SupervisorIdentity> supervisorsPlainStorage) : 
                 base(sortOrder, synchronizationService, logger)
         {
-            this.synchronizationService = synchronizationService;
+            this.supevisorSynchronizationService = synchronizationService;
             this.principal = principal;
             this.supervisorsPlainStorage = supervisorsPlainStorage;
         }
@@ -37,10 +37,8 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
                 Status = SynchronizationStatus.Download
             });
 
-            ISupervisorSynchronizationService supervisorSyncService = synchronizationService as ISupervisorSynchronizationService;
-
             var localSupervisor = this.supervisorsPlainStorage.FirstOrDefault();
-            var supervisor = await supervisorSyncService.GetSupervisorAsync(token: Context.CancellationToken);
+            var supervisor = await supevisorSynchronizationService.GetSupervisorAsync(token: Context.CancellationToken);
 
             if (localSupervisor.Email != supervisor.Email)
             {

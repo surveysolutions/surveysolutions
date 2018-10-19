@@ -222,6 +222,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
+        public bool HasSpecialValues => this.allSpecialValues.Any();
+
         public void Dispose()
         {
             this.optionsViewModel.Dispose();

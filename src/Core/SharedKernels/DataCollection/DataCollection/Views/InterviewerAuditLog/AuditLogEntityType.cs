@@ -18,6 +18,6 @@
         ApproveInterview,
         RejectInterview,
         AssignResponsibleToInterview,
-        AssignResponsibleToAssignment,
+        AssignResponsibleToAssignment
     }
 }

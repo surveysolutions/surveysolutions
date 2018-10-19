@@ -3,6 +3,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization;
@@ -23,18 +24,19 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchroniz
         private readonly ILogger logger;
         private readonly IMapService mapService;
 
-        protected MapSyncProviderBase(IMapService mapService, 
-            ISynchronizationService synchronizationService, 
+        protected MapSyncProviderBase(IMapService mapService,
+            ISynchronizationService synchronizationService,
             ILogger logger,
-            IHttpStatistician httpStatistician, 
-            IUserInteractionService userInteractionService, 
+            IHttpStatistician httpStatistician,
             IPrincipal principal,
-            IPlainStorage<InterviewView> interviewViewRepository, 
+            IPlainStorage<InterviewView> interviewViewRepository,
             IAuditLogService auditLogService,
-            IEnumeratorSettings enumeratorSettings)
-            : base(synchronizationService, logger,
-            httpStatistician, userInteractionService, principal,  
-            interviewViewRepository, auditLogService, enumeratorSettings)
+            IEnumeratorSettings enumeratorSettings,
+            IUserInteractionService userInteractionService,
+            IServiceLocator serviceLocator,
+            IAssignmentDocumentsStorage assignmentsStorage)
+            : base(synchronizationService, logger, httpStatistician, principal, interviewViewRepository,
+                auditLogService, enumeratorSettings, serviceLocator, userInteractionService, assignmentsStorage)
         {
             this.synchronizationService = synchronizationService;
             this.logger = logger;

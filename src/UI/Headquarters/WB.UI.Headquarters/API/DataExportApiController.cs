@@ -96,9 +96,10 @@ namespace WB.UI.Headquarters.API
         public async Task<HttpResponseMessage> DDIMetadata(Guid id, long version)
         {
             var questionnaireIdentity = new QuestionnaireIdentity(id, version);
-            
+
+            var archivePassword = this.exportSettings.EncryptionEnforced() ? this.exportSettings.GetPassword() : null;
             var result = await exportServiceApi.GetDdiArchive(questionnaireIdentity.ToString(),
-                this.exportSettings.GetPassword());
+                archivePassword);
 
             var fileName = this.exportFileNameService.GetFileNameForDdiByQuestionnaire(questionnaireIdentity);
 

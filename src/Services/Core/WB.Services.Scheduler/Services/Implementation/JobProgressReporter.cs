@@ -26,7 +26,7 @@ namespace WB.Services.Scheduler.Services.Implementation
 
         public void Start()
         {
-            Task.Run(async () =>
+            Task.Factory.StartNew(async () =>
             {
                 db.ChangeTracker.AutoDetectChangesEnabled = false;
                 db.Database.AutoTransactionsEnabled = false;
@@ -51,7 +51,7 @@ namespace WB.Services.Scheduler.Services.Implementation
                 }
 
                 queueCompletion.SetResult(true);
-            });
+            }, TaskCreationOptions.LongRunning);
         }
 
         public void StartJob(long jobId)

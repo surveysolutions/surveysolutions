@@ -27,6 +27,17 @@ namespace WB.Tests.Abc.TestFactories
                 questions.ToDictionary<Identity, Identity, IReadOnlyList<FailedValidationCondition>>(question => question, question => new List<FailedValidationCondition>()),
                 DateTimeOffset.Now);
 
+
+        internal AnswersDeclaredInvalid AnswerDeclaredInvalid(Identity identity, int[] failedValidations)
+        {
+            var errors = failedValidations.Select(x => Create.Entity.FailedValidationCondition(x)).ToReadOnlyCollection();
+            var failedValidationConditions = new Dictionary<Identity, IReadOnlyList<FailedValidationCondition>>
+            {
+                {identity, errors}
+            };
+            return new AnswersDeclaredInvalid(failedValidationConditions, DateTimeOffset.Now);
+        }
+
         public AggregateRootEvent AggregateRootEvent(Core.Infrastructure.EventBus.IEvent evnt)
         {
             var rnd = new Random();

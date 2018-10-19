@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using Ncqrs.Eventing.ServiceModel.Bus;
@@ -97,16 +98,22 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             this.questionnaireStorage = questionnaireStorage;
         }
 
-
+        static readonly ConcurrentDictionary<Type, MethodInfo> methodsCache = new ConcurrentDictionary<Type, MethodInfo>();
+        
         public void Handle(IPublishableEvent evt)
         {
-            var eventType = typeof(IPublishedEvent<>).MakeGenericType(evt.Payload.GetType());
+            var payloadType = evt.Payload.GetType();
 
-            var updateMethod = this
-                .GetType()
-                .GetMethod("Update", new[] {typeof (InterviewHistoryView), eventType});
+            var updateMethod = methodsCache.GetOrAdd(payloadType, t =>
+            {
+                var eventType = typeof(IPublishedEvent<>).MakeGenericType(evt.Payload.GetType());
 
-            if (updateMethod==null)
+                return this
+                    .GetType()
+                    .GetMethod("Update", new[] { typeof(InterviewHistoryView), eventType });
+            });
+            
+            if (updateMethod == null)
                 return;
 
             InterviewHistoryView currentState = this.readSideStorage.GetById(evt.EventSourceId);
@@ -451,8 +458,12 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             return result;
         }
 
-        private InterviewHistoricalRecordView CreateInterviewHistoricalRecordView(InterviewHistoricalAction action, Guid? userId,
-            DateTime? timestamp, TimeSpan? offset, Dictionary<string, string> parameters, QuestionnaireExportStructure questionnaire)
+        private InterviewHistoricalRecordView CreateInterviewHistoricalRecordView(InterviewHistoricalAction action, 
+            Guid? userId,
+            DateTime? timestamp, 
+            TimeSpan? offset, 
+            Dictionary<string, string> parameters, 
+            QuestionnaireExportStructure questionnaire)
         {
             string userName = string.Empty;
             string userRole = string.Empty;
@@ -462,84 +473,91 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                 userName = this.GetUserName(user);
                 userRole = this.GetUserRole(user);
             }
-            if (action == InterviewHistoricalAction.AnswerSet 
-                || action == InterviewHistoricalAction.CommentSet
-                || action == InterviewHistoricalAction.QuestionDeclaredInvalid
-                || action == InterviewHistoricalAction.QuestionDeclaredValid
-                || action == InterviewHistoricalAction.QuestionEnabled
-                || action == InterviewHistoricalAction.QuestionDisabled)
+            switch (action)
             {
-                var newParameters = new Dictionary<string, string>();
-                if (parameters.ContainsKey("questionId"))
+                case InterviewHistoricalAction.AnswerSet:
+                case InterviewHistoricalAction.CommentSet:
+                case InterviewHistoricalAction.QuestionDeclaredInvalid:
+                case InterviewHistoricalAction.QuestionDeclaredValid:
+                case InterviewHistoricalAction.QuestionEnabled:
+                case InterviewHistoricalAction.QuestionDisabled:
                 {
-                    var questionId = Guid.Parse(parameters["questionId"]);
-                    var question = questionnaire.HeaderToLevelMap.SelectMany(h => h.Value.HeaderItems).FirstOrDefault(q => q.Key == questionId);
-                    if (!question.Equals(new KeyValuePair<Guid, ExportedQuestionHeaderItem>()))
+                    var newParameters = new Dictionary<string, string>();
+                    if (parameters.ContainsKey("questionId"))
                     {
-                        newParameters["question"] = question.Value.VariableName;
-                        if (action == InterviewHistoricalAction.CommentSet)
+                        var questionId = Guid.Parse(parameters["questionId"]);
+                        var question = questionnaire.GetExportedQuestionHeaderItemForQuestion(questionId);
+
+                        if (question != null)
                         {
-                            newParameters["comment"] = parameters["comment"];
-                        }
-                        if (action == InterviewHistoricalAction.AnswerSet)
-                        {
-                            newParameters["answer"] = parameters["answer"];
-                        }
-                        if (parameters.ContainsKey("roster"))
-                        {
-                            newParameters["roster"] = parameters["roster"];
+                            newParameters["question"] = question.VariableName;
+                            switch (action)
+                            {
+                                case InterviewHistoricalAction.CommentSet:
+                                    newParameters["comment"] = parameters["comment"];
+                                    break;
+                                case InterviewHistoricalAction.AnswerSet:
+                                    newParameters["answer"] = parameters["answer"];
+                                    break;
+                            }
+
+                            if (parameters.TryGetValue("roster", out var roster))
+                            {
+                                newParameters["roster"] = roster;
+                            }
                         }
                     }
+                    return new InterviewHistoricalRecordView(0, action, userName, userRole, newParameters, timestamp, offset);
                 }
-                return new InterviewHistoricalRecordView(0, action, userName, userRole, newParameters, timestamp, offset);
-            }
-            if (action == InterviewHistoricalAction.GroupDisabled || action == InterviewHistoricalAction.GroupEnabled)
-            {
-                var newParameters = new Dictionary<string, string>();
-                var groupId = parameters["groupId"];
-                newParameters["group"] = groupId;
-                newParameters["roster"] = parameters["roster"];
-                return new InterviewHistoricalRecordView(0, action, userName, userRole, newParameters, timestamp, offset);
-            }
-            if (action == InterviewHistoricalAction.InterviewerAssigned)
-            {
-                if (parameters.ContainsKey("responsible") && parameters["responsible"] != null)
+                case InterviewHistoricalAction.GroupDisabled:
+                case InterviewHistoricalAction.GroupEnabled:
+                {
+                    var newParameters = new Dictionary<string, string>();
+                    var groupId = parameters["groupId"];
+                    newParameters["group"] = groupId;
+                    newParameters["roster"] = parameters["roster"];
+                    return new InterviewHistoricalRecordView(0, action, userName, userRole, newParameters, timestamp, offset);
+                }
+                case InterviewHistoricalAction.InterviewerAssigned 
+                    when parameters.ContainsKey("responsible") && parameters["responsible"] != null:
                 {
                     Guid responsibleId = Guid.Parse(parameters["responsible"]);
                     return new InterviewHistoricalRecordView(0, action, userName, userRole,
-                        new Dictionary<string, string> { { "responsible", this.GetUserName(this.GetUserDocument(responsibleId)) } },
+                        new Dictionary<string, string> {
+                        {
+                            "responsible", this.GetUserName(this.GetUserDocument(responsibleId))
+                        } },
                         timestamp, offset);
                 }
-            }
-            if (action == InterviewHistoricalAction.VariableSet 
-                || action == InterviewHistoricalAction.VariableEnabled 
-                || action == InterviewHistoricalAction.VariableDisabled)
-            {
-                var newParameters = new Dictionary<string, string>();
-                if (parameters.ContainsKey("variableId"))
+                case InterviewHistoricalAction.VariableSet:
+                case InterviewHistoricalAction.VariableEnabled:
+                case InterviewHistoricalAction.VariableDisabled:
                 {
-                    var variableId = Guid.Parse(parameters["variableId"]);
-                    var variable = questionnaire.HeaderToLevelMap.SelectMany(h => h.Value.HeaderItems).FirstOrDefault(q => q.Key == variableId);
-
-                    if (variable.Value == null)
-                        return null;
-
-                    if (!variable.Equals(new KeyValuePair<Guid, ExportedVariableHeaderItem>()))
+                    var newParameters = new Dictionary<string, string>();
+                    if (parameters.ContainsKey("variableId"))
                     {
-                        newParameters["variable"] = variable.Value.VariableName;
+                        var variableId = Guid.Parse(parameters["variableId"]);
+                        var variable = questionnaire.GetExportedQuestionHeaderItemForQuestion(variableId);
+                     
+                        if (variable == null)
+                            return null;
+
+                        newParameters["variable"] = variable.VariableName;
                         if (action == InterviewHistoricalAction.VariableSet)
                         {
                             newParameters["value"] = parameters["value"];
                         }
-                        if (parameters.ContainsKey("roster"))
+
+                        if (parameters.TryGetValue("roster", out var roster))
                         {
-                            newParameters["roster"] = parameters["roster"];
+                            newParameters["roster"] = roster;
                         }
-                    }
+                        }
+                    return new InterviewHistoricalRecordView(0, action, userName, userRole, newParameters, timestamp, offset);
                 }
-                return new InterviewHistoricalRecordView(0, action, userName, userRole, newParameters, timestamp, offset);
+                default:
+                    return new InterviewHistoricalRecordView(0, action, userName, userRole, parameters, timestamp, offset);
             }
-            return new InterviewHistoricalRecordView(0, action, userName, userRole, parameters, timestamp, offset);
         }
 
         private void ReduceCacheIfNeeded<TKey, TValue>(ConcurrentDictionary<TKey, TValue> cache)

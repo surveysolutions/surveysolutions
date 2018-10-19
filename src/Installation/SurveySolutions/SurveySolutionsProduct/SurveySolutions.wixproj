@@ -7,7 +7,7 @@
     <ProjectGuid>c575970b-d09a-4c43-95b8-0867a617ddb8</ProjectGuid>
     <SchemaVersion>2.0</SchemaVersion>
     <OutputName>SurveySolutions</OutputName>
-    <OutputType>Package</OutputType>    
+    <OutputType>Package</OutputType>
     <SurveySolutionsVersion Condition=" '$(SurveySolutionsVersion)' == '' ">1.1.0.0</SurveySolutionsVersion>
     <HarvestDir Condition=" '$(HarvestDir)' == '' ">harvest</HarvestDir>
     <HarvestDirectory Condition=" '$(HarvestDirectory)' == '' ">harvest</HarvestDirectory>

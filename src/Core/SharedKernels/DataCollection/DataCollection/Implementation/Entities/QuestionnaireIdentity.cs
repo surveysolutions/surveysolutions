@@ -24,7 +24,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public override string ToString()
         {
-            return $"{this.QuestionnaireId.FormatGuid()}${this.Version}";
+            return this.QuestionnaireId.FormatGuid()  + "$" + this.Version;
         }
 
         public override int GetHashCode()

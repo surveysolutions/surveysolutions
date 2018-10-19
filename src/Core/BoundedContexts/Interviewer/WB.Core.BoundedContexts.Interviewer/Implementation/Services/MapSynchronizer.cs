@@ -1,6 +1,8 @@
-﻿using WB.Core.BoundedContexts.Interviewer.Views;
+﻿using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Implementation;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services.MapSynchronization;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -19,18 +21,20 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         private readonly IPrincipal principal;
 
         public MapSyncProvider(IMapService mapService,
-            ISynchronizationService synchronizationService,
+            IOnlineSynchronizationService synchronizationService,
             ILogger logger,
             IHttpStatistician httpStatistician,
-            IUserInteractionService userInteractionService,
             IPrincipal principal,
             IPasswordHasher passwordHasher,
             IPlainStorage<InterviewerIdentity> interviewersPlainStorage,
             IPlainStorage<InterviewView> interviewViewRepository,
             IAuditLogService auditLogService,
-            IEnumeratorSettings enumeratorSettings)
-            : base(mapService, synchronizationService, logger, httpStatistician, userInteractionService,
-                principal, interviewViewRepository, auditLogService, enumeratorSettings)
+            IEnumeratorSettings enumeratorSettings,
+            IUserInteractionService userInteractionService,
+            IServiceLocator serviceLocator,
+            IAssignmentDocumentsStorage assignmentsStorage)
+            : base(mapService, synchronizationService, logger, httpStatistician,
+                principal, interviewViewRepository, auditLogService, enumeratorSettings, userInteractionService, serviceLocator, assignmentsStorage)
         {
             this.interviewersPlainStorage = interviewersPlainStorage;
             this.passwordHasher = passwordHasher;

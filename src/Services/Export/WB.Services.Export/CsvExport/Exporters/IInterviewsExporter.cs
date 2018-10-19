@@ -12,6 +12,6 @@ namespace WB.Services.Export.CsvExport.Exporters
     {
         Task ExportAsync(TenantInfo tenant, QuestionnaireExportStructure questionnaireExportStructure,
             QuestionnaireDocument questionnaire, List<InterviewToExport> interviewsToExport, string basePath,
-            Progress<int> progress, CancellationToken cancellationToken);
+            IProgress<int> progress, CancellationToken cancellationToken);
     }
 }

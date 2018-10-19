@@ -14,6 +14,7 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Interview.Overview
         public string Title { get; set; }
         public string Id { get; set; }
         public bool IsAnswered { get; set; }
+        public bool SupportsComments { get; set; } = false;
 
         public abstract OverviewNodeState State { get; set; }
     }
