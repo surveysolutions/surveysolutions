@@ -30,6 +30,7 @@ namespace WB.UI.Shared.Enumerator.Services
         private readonly ISecureStorage secureStorage;
         private readonly IEncryptionService encryptionService;
         private readonly ISerializer serializer;
+        private readonly IUserInteractionService userInteractionService;
         private readonly string privateStorage;
 
         public BackupRestoreService(
@@ -43,7 +44,8 @@ namespace WB.UI.Shared.Enumerator.Services
             IPrincipal principal,
             ISecureStorage secureStorage,
             IEncryptionService encryptionService,
-            ISerializer serializer)
+            ISerializer serializer,
+            IUserInteractionService userInteractionService)
         {
             this.archiver = archiver;
             this.fileSystemAccessor = fileSystemAccessor;
@@ -56,6 +58,7 @@ namespace WB.UI.Shared.Enumerator.Services
             this.secureStorage = secureStorage;
             this.encryptionService = encryptionService;
             this.serializer = serializer;
+            this.userInteractionService = userInteractionService;
         }
 
         public async Task<string> BackupAsync()
@@ -261,11 +264,7 @@ namespace WB.UI.Shared.Enumerator.Services
 
             if (this.fileSystemAccessor.IsFileExists(backupFilePath))
             {
-                if (this.fileSystemAccessor.IsDirectoryExists(this.privateStorage))
-                {
-                    this.fileSystemAccessor.DeleteDirectory(this.privateStorage);
-                    this.fileSystemAccessor.CreateDirectory(this.privateStorage);
-                }
+                this.ReCreatePrivateDirectory();
 
                 await this.archiver.UnzipAsync(backupFilePath, this.privateStorage, true);
 
@@ -275,8 +274,27 @@ namespace WB.UI.Shared.Enumerator.Services
                     File.Move(tempBackupFile, destFileName);
                 }
 
-                this.DecryptKeyStore();
+                try
+                {
+                    this.DecryptKeyStore();
+                }
+                catch (Exception e)
+                {
+                    this.logger.Error("Restore unhandled exception", e);
+
+                    this.ReCreatePrivateDirectory();
+
+                    await this.userInteractionService.AlertAsync("Could not restore encrypted data", "Warning");
+                }
             }
+        }
+
+        private void ReCreatePrivateDirectory()
+        {
+            if (!this.fileSystemAccessor.IsDirectoryExists(this.privateStorage)) return;
+
+            this.fileSystemAccessor.DeleteDirectory(this.privateStorage);
+            this.fileSystemAccessor.CreateDirectory(this.privateStorage);
         }
 
         private void CreateDeviceInfoFile()
@@ -292,6 +310,7 @@ namespace WB.UI.Shared.Enumerator.Services
             if (!this.fileSystemAccessor.IsFileExists(keyStorePasswordFile)) return;
 
             var keyStorePasswordFileText = this.fileSystemAccessor.ReadAllText(keyStorePasswordFile);
+
 
             var serializedKeyChain = this.serializer.Deserialize<KeyChain>(keyStorePasswordFileText);
 
