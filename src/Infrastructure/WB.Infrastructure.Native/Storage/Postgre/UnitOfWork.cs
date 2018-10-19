@@ -16,7 +16,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         private ITransaction transaction;
         private bool isDisposed = false;
         private static int Counter = 0;
-        public int Id { get; set; }
         public Guid? sessionId;
 
         private readonly ILogger logger = ServiceLocator.Current.GetInstance<ILogger>();
@@ -24,7 +23,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         public UnitOfWork(ISessionFactory sessionFactory)
         {
             this.sessionFactory = sessionFactory;
-            Id = Interlocked.Increment(ref Counter);
 
             if (session != null) throw new InvalidOperationException("Unit of work already started");
             if (isDisposed == true) throw new ObjectDisposedException(nameof(UnitOfWork));
@@ -32,8 +30,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             session = this.sessionFactory.OpenSession();
             transaction = session.BeginTransaction();
             sessionId = (session as SessionImpl)?.SessionId;
-
-            //logger.Info($"creating UOW:{Id} sessionId:{(session as SessionImpl)?.SessionId} Thread:{Thread.CurrentThread.ManagedThreadId}");
         }
 
         public void AcceptChanges()
@@ -41,12 +37,6 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             if (isDisposed) throw new ObjectDisposedException(nameof(UnitOfWork));
 
             transaction.Commit();
-            session.Close();
-            transaction.Dispose();
-            session.Dispose();
-            //logger.Info($"session closing UOW:{Id} sessionId:{(session as SessionImpl)?.SessionId} Thread:{Thread.CurrentThread.ManagedThreadId}");
-            transaction = null;
-            session = null;
         }
 
         public ISession Session
@@ -66,15 +56,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre
         {
             if (isDisposed) return;
 
-            transaction?.Rollback();
-            session?.Close();
-            transaction?.Dispose();
-            session?.Dispose();
-
-            //logger.Info($"session closing in dispose UOW:{Id} sessionId:{(session as SessionImpl)?.SessionId} Thread:{Thread.CurrentThread.ManagedThreadId}");
-
-            transaction = null;
-            session = null;
+            transaction.Dispose();
+            session.Dispose();
 
             isDisposed = true;
         }
