@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using MvvmCross.Plugin.Messenger;
+using MvvmCross.Tests;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Supervisor.Properties;
 using WB.Core.BoundedContexts.Supervisor.ViewModel;
@@ -25,8 +26,10 @@ using WB.Tests.Abc;
 namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
 {
     [TestOf(typeof(SupervisorResolveInterviewViewModel))]
-    public class SupervisorResolveInterviewViewModelTests
+    public class SupervisorResolveInterviewViewModelTests : MvxIoCSupportingTest
     {
+        public SupervisorResolveInterviewViewModelTests() => base.Setup();
+
         private readonly Guid InterviewId = Id.g1;
 
         [Test]
@@ -43,7 +46,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
             var interview = Create.AggregateRoot.StatefulInterview(interviewId: InterviewId);
             interview.Complete(Id.gA, "", DateTime.UtcNow);
 
-            var statefulInterviewRepository = Setup.StatefulInterviewRepository(interview);
+            var statefulInterviewRepository = Abc.Setup.StatefulInterviewRepository(interview);
             var viewModel = CreateViewModel(interviewRepository: statefulInterviewRepository);
 
             // Act
@@ -66,7 +69,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
             interview.Apply(Create.Event.InterviewKeyAssigned(interviewKey));
             interview.Complete(Id.gA, "", DateTime.UtcNow);
 
-            var statefulInterviewRepository = Setup.StatefulInterviewRepository(interview);
+            var statefulInterviewRepository = Abc.Setup.StatefulInterviewRepository(interview);
             var viewModel = CreateViewModel(interviewRepository: statefulInterviewRepository,
                 commandService: commandService.Object,
                 navigationService: navigationService.Object,
@@ -94,7 +97,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
             interview.Apply(Create.Event.InterviewKeyAssigned(interviewKey));
             interview.Complete(Id.gA, "", DateTime.UtcNow);
 
-            var statefulInterviewRepository = Setup.StatefulInterviewRepository(interview);
+            var statefulInterviewRepository = Abc.Setup.StatefulInterviewRepository(interview);
             var viewModel = CreateViewModel(interviewRepository: statefulInterviewRepository,
                 commandService: commandService.Object,
                 navigationService: navigationService.Object,
@@ -173,7 +176,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
             interview.Complete(Id.gA, "", DateTime.UtcNow);
             interview.Reject(Id.gA, "", DateTime.UtcNow);
 
-            var statefulInterviewRepository = Setup.StatefulInterviewRepository(interview);
+            var statefulInterviewRepository = Abc.Setup.StatefulInterviewRepository(interview);
             var viewModel = CreateViewModel(interviewRepository: statefulInterviewRepository,
                 commandService: commandService.Object,
                 navigationService: navigationService.Object,
@@ -202,7 +205,7 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.ViewModels
                 commandService ?? Create.Service.CommandService(),
                 principal ?? Mock.Of<IPrincipal>(x => x.IsAuthenticated == true && x.CurrentUserIdentity == Mock.Of<IUserIdentity>(y => y.UserId == Id.gA)),
                 messenger ?? Mock.Of<IMvxMessenger>(),
-                interviewRepository ?? Setup.StatefulInterviewRepository(Create.AggregateRoot.StatefulInterview(interviewId: InterviewId)),
+                interviewRepository ?? Abc.Setup.StatefulInterviewRepository(Create.AggregateRoot.StatefulInterview(interviewId: InterviewId)),
                 entitiesListViewModelFactory ?? Mock.Of<IEntitiesListViewModelFactory>(),
                 lastCompletionComments ?? Mock.Of<ILastCompletionComments>(),
                 interviewState ?? Mock.Of<InterviewStateViewModel>(),

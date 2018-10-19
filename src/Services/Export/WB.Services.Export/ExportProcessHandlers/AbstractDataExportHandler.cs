@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
+using WB.Services.Export.Models;
 using WB.Services.Export.Services.Processing;
 
 namespace WB.Services.Export.ExportProcessHandlers
@@ -14,17 +15,18 @@ namespace WB.Services.Export.ExportProcessHandlers
 
         protected AbstractDataExportHandler(
             IFileSystemAccessor fileSystemAccessor,
-            IFilebasedExportedDataAccessor filebasedExportedDataAccessor,
+            IFileBasedExportedDataAccessor fileBasedExportedDataAccessor,
             IOptions<InterviewDataExportSettings> interviewDataExportSettings,
             IDataExportProcessesService dataExportProcessesService,
             IDataExportFileAccessor dataExportFileAccessor)
-            : base(fileSystemAccessor, filebasedExportedDataAccessor, interviewDataExportSettings, dataExportProcessesService)
+            : base(fileSystemAccessor, fileBasedExportedDataAccessor, interviewDataExportSettings, dataExportProcessesService)
         {
             this.dataExportFileAccessor = dataExportFileAccessor;
         }
 
         protected override async Task DoExportAsync(DataExportProcessArgs processArgs,
-            ExportSettings exportSettings, string archiveName, IProgress<int> exportProgress, CancellationToken cancellationToken)
+            ExportSettings exportSettings, string archiveName, 
+            IProgress<int> exportProgress, CancellationToken cancellationToken)
         {
             await this.ExportDataIntoDirectoryAsync(exportSettings, exportProgress, cancellationToken);
 
@@ -37,10 +39,10 @@ namespace WB.Services.Export.ExportProcessHandlers
             this.dataExportProcessesService.ChangeStatusType(
                 processArgs.ProcessId, DataExportStatus.Compressing);
 
-            this.dataExportFileAccessor.RecreateExportArchive(this.exportTempDirectoryPath, archiveName,
+            this.dataExportFileAccessor.RecreateExportArchive(this.ExportTempDirectoryPath, archiveName,
                 processArgs.ArchivePassword, exportProgress);
 
-            await this.dataExportFileAccessor.PublishArchiveToExternalStorageAsync(processArgs.Tenant, archiveName, exportProgress);
+            await this.dataExportFileAccessor.PublishArchiveToExternalStorageAsync(exportSettings.Tenant, archiveName, exportProgress);
         }
 
         protected virtual bool CompressExportedData => true;

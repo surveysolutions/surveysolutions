@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Interviewer;
+using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services.Infrastructure;
 using WB.Core.BoundedContexts.Interviewer.Views;
 using WB.Core.GenericSubdomains.Portable;
@@ -13,11 +13,11 @@ using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
-using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.OfflineSync
 {
+    [TestOf(typeof(OfflineSynchronizationService))]
     public class OfflineSynchronizationServiceTests
     {
         [Test]
@@ -69,9 +69,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.OfflineSync
         [Test]
         public async Task CanSynchronize_Should_throw_when_versions_do_not_match()
         {
-            var v = ReflectionUtils.GetAssemblyVersion(typeof(InterviewerBoundedContextAssemblyIndicator));
-
-             var clientMock = new Mock<IOfflineSyncClient>();
+            var clientMock = new Mock<IOfflineSyncClient>();
             clientMock.Setup(x => x.SendAsync<CanSynchronizeRequest, CanSynchronizeResponse>(
                     It.IsAny<CanSynchronizeRequest>(), CancellationToken.None, null))
                 .ReturnsAsync(new CanSynchronizeResponse
@@ -93,6 +91,36 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.OfflineSync
             {
                 Assert.That(e.Type, Is.EqualTo(SynchronizationExceptionType.UpgradeRequired));
             }
+        }
+
+        [TestCase(SyncDeclineReason.NotATeamMember, SynchronizationExceptionType.InterviewerFromDifferentTeam)]
+        [TestCase(SyncDeclineReason.InvalidPassword, SynchronizationExceptionType.Unauthorized)]
+        [TestCase(SyncDeclineReason.UserIsLocked, SynchronizationExceptionType.UserLocked)]
+        [TestCase(SyncDeclineReason.SupervisorRequireOnlineSync, SynchronizationExceptionType.SupervisorRequireOnlineSync)]
+        [TestCase(SyncDeclineReason.Unknown, SynchronizationExceptionType.Unexpected)]
+        public void when_CanSynchronize_and_interviewer_from_different_team_Should_throw_specified_SynchronizationException(
+                SyncDeclineReason responseReason, SynchronizationExceptionType syncExceptionType)
+        {
+            // arrange
+            var clientMock = new Mock<IOfflineSyncClient>();
+            clientMock.Setup(x => x.SendAsync<CanSynchronizeRequest, CanSynchronizeResponse>(
+                    It.IsAny<CanSynchronizeRequest>(), CancellationToken.None, null))
+                .ReturnsAsync(new CanSynchronizeResponse
+                {
+                    CanSyncronize = false,
+                    Reason = responseReason
+                });
+
+            var interviewerPrincipal = new Mock<IInterviewerPrincipal>();
+            interviewerPrincipal.Setup(x => x.CurrentUserIdentity).Returns(new InterviewerIdentity() {Id = Guid.NewGuid().FormatGuid()});
+
+            var service = Create.Service.OfflineSynchronizationService(clientMock.Object, interviewerPrincipal.Object);
+
+            // act
+            var e = Assert.CatchAsync<SynchronizationException>(async () => await service.CanSynchronizeAsync());
+
+            // assert
+            Assert.That(e.Type, Is.EqualTo(syncExceptionType));
         }
     }
 }

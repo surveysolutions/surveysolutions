@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 
 namespace WB.Services.Export.Utils
 {
@@ -86,5 +87,78 @@ namespace WB.Services.Export.Utils
                 yield return resultSelector(bucket.Take(count));
             }
         }
+
+        public static IEnumerable<List<T>> BatchInTime<T>(this ICollection<T> source, BatchOptions options,
+            ILogger logger = null)
+        {
+            long index = 0;
+
+            // take initial batch around min value
+            int batchSize = options.Min;
+
+            using (var queue = source.GetEnumerator())
+            {
+                Stopwatch sw = null;
+
+                while (index < source.Count)
+                {
+                    var interviewsLeft = source.Count - index;
+
+                    var take = Math.Min(batchSize, (int) interviewsLeft);
+
+                    if (sw != null)
+                    {
+                        var elapsed = sw.Elapsed.TotalSeconds;
+                        var oldBatchSize = batchSize;
+                        logger.LogTrace($"Took {sw.Elapsed.TotalSeconds:F} seconds to process {batchSize} items");
+
+                        // delta need just to make batch size to end up in some stable position, and don't change every iteration
+                        if (elapsed - options.TargetSeconds > options.TargetSeconds * options.TargetDelta)
+                        {
+                            batchSize = batchSize - (int) (batchSize * options.TargetStep);
+                            if (batchSize == oldBatchSize) batchSize -= 1;
+                            batchSize = Math.Max(options.Min, batchSize);
+
+                            logger?.LogDebug($"Changed batch size to {batchSize}. Too slow execution ({elapsed - options.TargetSeconds:F}s)");
+                        }
+                        else if (elapsed - options.TargetSeconds < -options.TargetSeconds * options.TargetDelta)
+                        {
+                            batchSize = batchSize + (int) (batchSize * options.TargetStep);
+                            if (batchSize == oldBatchSize) batchSize += 1;
+                            batchSize = Math.Min(batchSize, options.Max);
+
+                            logger?.LogDebug($"Changed batch size to {batchSize}. Can go faster ({elapsed - options.TargetSeconds:F}s)");
+                        }
+                        
+                        sw.Restart();
+                    }
+                    else
+                    {
+                        sw = Stopwatch.StartNew();
+                    }
+
+                    var result = new List<T>();
+
+                    for (int i = 0; i < take; i++)
+                    {
+                        if (!queue.MoveNext()) break;
+                        result.Add(queue.Current);
+                        index++;
+                    }
+
+                    yield return result;
+                }
+                
+            }
+        }
+    }
+
+    public class BatchOptions
+    {
+        public double TargetSeconds { get; set; } = 2;
+        public double TargetDelta { get; set; } = 0.2;
+        public double TargetStep { get; set; } = 0.25;
+        public int Max { get; set; }
+        public int Min { get; set; } = 1;
     }
 }

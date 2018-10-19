@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
+using WB.Services.Export.Models;
 using WB.Services.Export.Services.Processing;
 using WB.Services.Infrastructure.FileSystem;
 
@@ -15,11 +16,11 @@ namespace WB.Services.Export.ExportProcessHandlers
         private readonly IDataExportFileAccessor dataExportFileAccessor;
 
         protected AbstractDataExportToZipArchiveHandler(IFileSystemAccessor fileSystemAccessor,
-            IFilebasedExportedDataAccessor filebasedExportedDataAccessor,
+            IFileBasedExportedDataAccessor fileBasedExportedDataAccessor,
             IOptions<InterviewDataExportSettings> interviewDataExportSettings,
             IDataExportProcessesService dataExportProcessesService,
             IDataExportFileAccessor dataExportFileAccessor)
-            : base(fileSystemAccessor, filebasedExportedDataAccessor, interviewDataExportSettings, dataExportProcessesService)
+            : base(fileSystemAccessor, fileBasedExportedDataAccessor, interviewDataExportSettings, dataExportProcessesService)
         {
             this.dataExportFileAccessor = dataExportFileAccessor;
         }
@@ -29,7 +30,7 @@ namespace WB.Services.Export.ExportProcessHandlers
             ExportSettings exportSettings, string archiveName,
             IProgress<int> exportProgress, CancellationToken cancellationToken)
         {
-            var tempArchivePath = this.fileSystemAccessor.CombinePath(this.exportTempDirectoryPath, this.fileSystemAccessor.GetFileName(archiveName));
+            var tempArchivePath = this.fileSystemAccessor.CombinePath(this.ExportTempDirectoryPath, this.fileSystemAccessor.GetFileName(archiveName));
 
             try
             {
@@ -37,7 +38,7 @@ namespace WB.Services.Export.ExportProcessHandlers
                 {
                     using (var archive = dataExportFileAccessor.CreateExportArchive(archiveFile, processArgs.ArchivePassword))
                     {
-                        this.ExportDataIntoArchive(archive, exportSettings, exportProgress, cancellationToken);
+                        await this.ExportDataIntoArchive(archive, exportSettings, exportProgress, cancellationToken);
                     }
                 }
 
@@ -47,7 +48,7 @@ namespace WB.Services.Export.ExportProcessHandlers
                 this.dataExportProcessesService.ChangeStatusType(processArgs.ProcessId, DataExportStatus.Compressing);
                 exportProgress.Report(0);
 
-                await this.dataExportFileAccessor.PublishArchiveToExternalStorageAsync(processArgs.Tenant, archiveName, exportProgress);
+                await this.dataExportFileAccessor.PublishArchiveToExternalStorageAsync(processArgs.ExportSettings.Tenant, archiveName, exportProgress);
 
                 cancellationToken.ThrowIfCancellationRequested();
             }
@@ -57,6 +58,7 @@ namespace WB.Services.Export.ExportProcessHandlers
             }
         }
 
-        protected abstract void ExportDataIntoArchive(IZipArchive archive, ExportSettings exportSettings, IProgress<int> exportProgress, CancellationToken cancellationToken);
+        protected abstract Task ExportDataIntoArchive(IZipArchive archive, ExportSettings exportSettings,
+            IProgress<int> exportProgress, CancellationToken cancellationToken);
     }
 }

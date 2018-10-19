@@ -86,8 +86,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.Diagnostics
         {
             return
                 new SendTabletInformationViewModel(
-                    backupRestoreService ?? Mock.Of<IBackupRestoreService>(_ => _.BackupAsync() == Task.FromResult("backup-path")),
-                    synchronizationService ?? Mock.Of<ISynchronizationService>(), 
+                    backupRestoreService ?? Mock.Of<IBackupRestoreService>(_ => _.BackupAsync() == Task.FromResult("backup-path")), 
                     Mock.Of<ILogger>(), 
                     Mock.Of<IUserInteractionService>(),
                     Mock.Of<IFileSystemAccessor>());

@@ -6,11 +6,9 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
-using WB.Services.Export.CsvExport;
 using WB.Services.Export.CsvExport.Exporters;
 using WB.Services.Export.CsvExport.Implementation;
 using WB.Services.Export.CsvExport.Implementation.DoFiles;
-using WB.Services.Export.DescriptionGenerator;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
 using WB.Services.Export.Interview.Entities;
@@ -178,8 +176,7 @@ namespace WB.Services.Export.Tests
                 Mock.Of<IInterviewActionsExporter>(),
                 Mock.Of<IQuestionnaireExportStructureFactory>(x => x.GetQuestionnaireExportStructureAsync(It.IsAny<TenantInfo>(), It.IsAny<QuestionnaireId>()) == Task.FromResult(questionnaireExportStructure)),
                 Mock.Of<IQuestionnaireStorage>(),
-                Mock.Of<IDescriptionGenerator>(),
-                Mock.Of<IEnvironmentContentService>(),
+                
                 Mock.Of<IProductVersion>(),
                 fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>());
         }
@@ -274,11 +271,12 @@ namespace WB.Services.Export.Tests
             ICsvWriter csvWriter = null,
             IInterviewFactory interviewFactory = null)
         {
-            return new InterviewsExporter(Mock.Of<ILogger<InterviewsExporter>>(),
-                csvWriter ?? Mock.Of<ICsvWriter>(),
-                Create.InterviewErrorsExporter(),
+            return new InterviewsExporter(new ExportQuestionService(),
                 interviewFactory ?? Mock.Of<IInterviewFactory>(),
-                new ExportQuestionService());
+                Create.InterviewErrorsExporter(),
+                csvWriter ?? Mock.Of<ICsvWriter>(), 
+                Mock.Of<IOptions<Interview.InterviewDataExportSettings>>(s => s.Value == new InterviewDataExportSettings()),
+                Mock.Of<ILogger<InterviewsExporter>>());
         }
 
         public static StaticText StaticText(
@@ -406,7 +404,7 @@ namespace WB.Services.Export.Tests
 
         public static IInterviewFactory InterviewFactory()
         {
-            return new InterviewFactory(Create.HeadquartersApi(), Mock.Of<IQuestionnaireStorage>());
+            return new InterviewFactory(Create.HeadquartersApi());
         }
 
         public static Variable Variable(Guid? id = null, VariableType type = VariableType.LongInteger)

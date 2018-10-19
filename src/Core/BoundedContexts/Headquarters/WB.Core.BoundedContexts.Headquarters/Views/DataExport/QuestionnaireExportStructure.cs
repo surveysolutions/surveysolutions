@@ -12,6 +12,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
     {
         private QuestionnaireIdentity identity;
         private int? maxRosterDepthInQuestionnaire = null;
+        
 
         public QuestionnaireExportStructure()
         {
@@ -39,6 +40,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.DataExport
                 yield return ServiceColumns.InterviewId;
                 yield return ServiceColumns.Key;
             }
+        }
+
+        private ILookup<Guid, IExportedHeaderItem> headerToQuestionMap;
+        public IExportedHeaderItem GetExportedQuestionHeaderItemForQuestion(Guid id)
+        {
+            if (this.headerToQuestionMap == null)
+            {
+                this.headerToQuestionMap = 
+                    HeaderToLevelMap.SelectMany(h => h.Value.HeaderItems).ToLookup(l => l.Key, l => l.Value);
+            }
+            
+            return this.headerToQuestionMap[id].FirstOrDefault();
         }
 
         public int MaxRosterDepth

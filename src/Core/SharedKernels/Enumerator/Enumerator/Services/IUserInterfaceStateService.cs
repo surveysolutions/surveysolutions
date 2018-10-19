@@ -10,6 +10,12 @@ namespace WB.Core.SharedKernels.Enumerator.Services
 
         Task WaitWhileUserInterfaceIsRefreshingAsync();
 
-        bool IsUserInferfaceLocked { get; }
+        bool IsUserInterfaceLocked { get; }
+
+        void ThrottledActionStarted();
+
+        void ThrottledActionFinished();
+
+        bool HasPendingThrottledActions { get; }
     }
 }

@@ -374,6 +374,7 @@ body > .ui-pnotify{
         }
     }
     .item-content{
+        word-wrap: break-word; 
         cursor: pointer;
         flex-grow: 1;
         padding: 10px;
@@ -504,7 +505,7 @@ body > .ui-pnotify{
     position: absolute;
     top: 50%; 
     box-shadow: 0 0 10px;
-
+    word-wrap: break-word;
     transform: translate(0,-50%);
     right: -345px;
     width: 315px;
@@ -532,6 +533,7 @@ body > .ui-pnotify{
     .popover-footer{
         padding: 0 10px;
     }
+
     .comments-block .comment{
         display: block;
         label{
@@ -561,6 +563,26 @@ body > .ui-pnotify{
         border-width: 25px;
         border-style: solid;
         border-color: transparent #fff transparent transparent;
+    }
+}
+.overloaded{
+    position: relative;
+    max-height: 56px;
+    overflow: hidden;
+    &:after{
+        content: "";
+        display: block;
+        width: 100%;
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        box-shadow: 0px 0px 20px 15px #fff;
+    }
+    .btn-horizontal-hamburger{
+        position: absolute;
+        bottom: 0;
+        left: -8px;
+        z-index: 2;
     }
 }
 @media only screen and (max-width:  $screen-md){

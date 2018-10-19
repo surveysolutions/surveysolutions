@@ -8,10 +8,10 @@ using Microsoft.Extensions.Options;
 using Refit;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
+using WB.Services.Export.Models;
 using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Export.Services;
 using WB.Services.Export.Utils;
-
 
 namespace WB.Services.Export.ExportProcessHandlers.Implementation
 {
@@ -37,7 +37,10 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             this.interviewDataExportSettings = interviewDataExportSettings;
         }
 
-        public async Task ForEachMultimediaAnswerAsync(ExportSettings settings, Func<BinaryData, Task> action, CancellationToken cancellationToken)
+        public async Task ForEachMultimediaAnswerAsync(ExportSettings settings, 
+            Func<BinaryData, Task> action, 
+            IProgress<int> progress,
+            CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
             var api = this.tenantApi.For(settings.Tenant);
@@ -49,14 +52,19 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
 
             var batchSize = interviewDataExportSettings.Value.MaxRecordsCountPerOneExportQuery;
 
+            progress.Report(0);
+            long interviewsProcessed = 0;
             foreach (var interviewBatch in interviewsToExport.Batch(batchSize))
             {
                 var interviewIds = interviewBatch.Select(i => i.Id).ToArray();
 
-                var allMultimediaAnswers = this.interviewFactory.GetMultimediaAnswersByQuestionnaire(
-                    settings.Tenant, questionnaire, interviewIds, cancellationToken).Result;
+                var allMultimediaAnswers = await this.interviewFactory.GetMultimediaAnswersByQuestionnaire(
+                    settings.Tenant, questionnaire, interviewIds, cancellationToken);
 
                 cancellationToken.ThrowIfCancellationRequested();
+
+                long filesUploaded = 0;
+                var interviewProgress = interviewsProcessed.PercentOf(interviewsToExport.Count);
 
                 foreach (var answer in allMultimediaAnswers)
                 {
@@ -77,19 +85,30 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
                             default:
                                 continue;
                         }
-
+                        
                         await action(new BinaryData
                         {
                             InterviewId = answer.InterviewId,
                             Answer = answer.Answer,
                             Content = content
                         });
+
+                        filesUploaded++;
+
+                        var filesPercent = filesUploaded / (double) allMultimediaAnswers.Count;
+                        var batchProgress = (long) (interviewIds.Length * filesPercent );
+                        var batchInterviewsProgress = batchProgress.PercentOf(interviewsToExport.Count);
+                        
+                        progress.Report(interviewProgress + batchInterviewsProgress);
                     }
                     catch(ApiException e) when (e.StatusCode == HttpStatusCode.NotFound)
                     {
                         logger.LogWarning($"[{e.StatusCode}] Cannot download file for {answer.InterviewId} - {answer.Answer}");
                     }
                 }
+
+                interviewsProcessed += interviewIds.Length;
+                progress.Report(interviewsProcessed.PercentOf(interviewsToExport.Count));
             }
         }
     }

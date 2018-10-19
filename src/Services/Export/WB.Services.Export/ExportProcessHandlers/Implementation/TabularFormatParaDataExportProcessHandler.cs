@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Threading;
@@ -7,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
+using WB.Services.Export.Models;
 using WB.Services.Export.Services;
 using WB.Services.Export.Services.Processing;
 using WB.Services.Export.Utils;
@@ -24,7 +26,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             ITenantApi<IHeadquartersApi> tenantApi,
             IDataExportProcessesService dataExportProcessesService,
             IFileSystemAccessor fs,
-            IFilebasedExportedDataAccessor dataAccessor,
+            IFileBasedExportedDataAccessor dataAccessor,
             IDataExportFileAccessor exportFileAccessor,
             ICsvWriter csvWriter,
             ILogger<TabularFormatParaDataExportProcessHandler> logger) 
@@ -46,7 +48,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             
             cancellationToken.ThrowIfCancellationRequested();
 
-            var exportFilePath = this.fileSystemAccessor.CombinePath(settings.ExportTempDirectory, "paradata.tab");
+            var exportFilePath = this.fileSystemAccessor.CombinePath(ExportTempDirectoryPath, "paradata.tab");
 
             long totalInterviewsProcessed = 0;
 
@@ -62,12 +64,11 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
                 writer.WriteField("offset");
                 writer.WriteField("parameters");
                 writer.NextRecord();
-               
-                Parallel.ForEach(interviewsToExport.Batch(interviewDataExportSettings.Value.ParadataQueryLimit), interviews =>
+
+                async Task QueryParadata(IEnumerable<InterviewToExport> interviews)
                 {
-                    logger.LogTrace($"Query headquarters for interviews history");
-                    var historyItems = api.GetInterviewsHistory(interviews.Select(i => i.Id).ToArray()).Result;
-                    logger.LogTrace($"Query headquarters for interviews history. Got {historyItems.Count} items");
+                    var historyItems = await api.GetInterviewsHistory(interviews.Select(i => i.Id).ToArray());
+                    logger.LogTrace($"Query headquarters for interviews history. Got {historyItems.Count} items with {historyItems.Sum(h => h.Records.Count)} records");
 
                     foreach (InterviewHistoryView paradata in historyItems)
                     {
@@ -76,7 +77,27 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
 
                     totalInterviewsProcessed += historyItems.Count;
                     progress.Report(totalInterviewsProcessed.PercentOf(interviewsToExport.Count));
+                }
+
+                var options = new BatchOptions
+                {
+                    TargetSeconds = 2,
+                    Max = interviewDataExportSettings.Value.MaxRecordsCountPerOneExportQuery
+                };
+
+                var split = interviewsToExport.Batch(interviewsToExport.Count / 2);
+
+                var parallelOptions = new ParallelOptions {MaxDegreeOfParallelism = 2};
+
+                Parallel.ForEach(split, parallelOptions, exports =>
+                {
+                    foreach (var interviews in exports.ToList().BatchInTime(options, logger))
+                    {
+                        cancellationToken.ThrowIfCancellationRequested();
+                        QueryParadata(interviews).Wait(cancellationToken);
+                    }
                 });
+               
             }
 
             logger.LogInformation("Completed paradata export for " + settings);

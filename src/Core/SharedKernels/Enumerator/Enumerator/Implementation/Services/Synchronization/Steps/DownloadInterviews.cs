@@ -61,7 +61,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 interview => !remoteInterviewWithSequence.ContainsKey(interview.InterviewId) && 
                              interview.FromHqSyncDateTime != null); //were created on tablet and was not synced with hq
                                                                     //after reject from SV -> Int offline sync
-                                                                    //flac CanBeDeleted is false
+                                                                    //flag CanBeDeleted is false
 
             var obsoleteInterviews = await this.FindObsoleteInterviewsAsync(localInterviews, remoteInterviews, this.Context.Progress, this.Context.CancellationToken);
 
@@ -127,8 +127,8 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                         continue;
                     }
 
-                    eventBus.PublishCommittedEvents(interviewDetails);
                     EventStore.StoreEvents(new CommittedEventStream(interview.Id, interviewDetails));
+                    eventBus.PublishCommittedEvents(interviewDetails);
                     MarkInterviewAsReceivedFromHeadquarters(interview);
 
                     if (interview.Sequence.HasValue)

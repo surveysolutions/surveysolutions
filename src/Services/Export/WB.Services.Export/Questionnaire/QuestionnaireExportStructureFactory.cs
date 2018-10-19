@@ -28,6 +28,7 @@ namespace WB.Services.Export.Questionnaire
             QuestionnaireId questionnaireId)
         {
             var questionnaire = await this.questionnaireStorage.GetQuestionnaireAsync(tenant, questionnaireId);
+            if (questionnaire == null) return null;
             return GetQuestionnaireExportStructure(tenant, questionnaire);
         }
 

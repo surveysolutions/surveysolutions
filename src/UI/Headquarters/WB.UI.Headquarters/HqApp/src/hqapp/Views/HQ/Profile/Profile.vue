@@ -240,6 +240,9 @@
                         style: google.maps.ZoomControlStyle.LARGE,
                         position: google.maps.ControlPosition.TOP_RIGHT
                     },
+                    mapTypeControlOptions: {
+                        position: google.maps.ControlPosition.LEFT_TOP
+                    },
                     minZoom: 3,
                     scaleControl: true,
                     streetViewControl: false,

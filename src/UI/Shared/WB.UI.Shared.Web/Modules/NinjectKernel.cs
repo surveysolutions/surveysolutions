@@ -7,9 +7,10 @@ using System.Web;
 using Ninject;
 using Ninject.Web.Common;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Modularity;
 using WB.Infrastructure.Native.Ioc;
-
+using Exception = System.Exception;
 using IKernel = Ninject.IKernel;
 
 namespace WB.UI.Shared.Web.Modules
@@ -51,8 +52,17 @@ namespace WB.UI.Shared.Web.Modules
             ServiceLocator.SetLocatorProvider(() => new NativeNinjectServiceLocatorAdapter(this.Kernel));
             this.Kernel.Bind<IServiceLocator>().ToConstant(ServiceLocator.Current);
 
-            Thread thread = new Thread(() => InitModules(status).Wait()) { IsBackground = false };
-            thread.Start();
+            Task.Run(async () =>
+            {
+                try
+                {
+                    await InitModules(status);
+                }
+                catch (Exception e)
+                {
+                    this.Kernel.Get<ILogger>().Error("Error during init", e);
+                }
+            });
 
             return Task.CompletedTask;
         }
