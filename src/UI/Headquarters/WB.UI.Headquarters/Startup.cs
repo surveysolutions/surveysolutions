@@ -100,7 +100,6 @@ namespace WB.UI.Headquarters
             var container = autofacKernel.Container;
 
             var resolver = new AutofacWebApiDependencyResolver(container);
-
             config.DependencyResolver = resolver;
             GlobalConfiguration.Configuration.DependencyResolver = resolver;
 
