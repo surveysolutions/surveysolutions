@@ -84,9 +84,11 @@ namespace WB.Services.Export.Jobs
                 var filePath = this.fileBasedExportedDataAccessor.GetArchiveFilePathForExportedData(settings);
                 if (File.Exists(filePath))
                 {
+                    var downloadFileName = this.fileNameService.GetFileNameForExportArchive(settings, archiveName);
+
                     return new DataExportArchive
                     {
-                        FileName = archiveName,
+                        FileName = downloadFileName,
                         Data = new FileStream(filePath, FileMode.Open, FileAccess.Read)
                     };
                 }
