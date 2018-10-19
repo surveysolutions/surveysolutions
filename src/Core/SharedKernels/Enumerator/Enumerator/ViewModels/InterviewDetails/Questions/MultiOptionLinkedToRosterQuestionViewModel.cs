@@ -31,10 +31,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IQuestionnaireStorage questionnaireStorage,
             IPrincipal userIdentity,
             ILiteEventRegistry eventRegistry,
-            IMvxMainThreadAsyncDispatcher mainThreadDispatcher)
+            IMvxMainThreadAsyncDispatcher mainThreadDispatcher,
+            ThrottlingViewModel throttlingModel)
             : base(
                 questionState, answering, instructionViewModel, interviewRepository, questionnaireStorage, userIdentity, eventRegistry,
-                mainThreadDispatcher)
+                mainThreadDispatcher, throttlingModel)
         {
         }
 

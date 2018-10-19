@@ -13,6 +13,7 @@
         CantMoveToUndefinedTeam,
         ExpessionCalculationError,
         DuplicateSyncPackage,
-        PackageIsOudated
+        PackageIsOudated,
+        QuestionIsMissing
     }
 }

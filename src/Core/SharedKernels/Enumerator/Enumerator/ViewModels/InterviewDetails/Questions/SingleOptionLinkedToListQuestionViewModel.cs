@@ -40,6 +40,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly ILiteEventRegistry eventRegistry;
         private readonly IMvxMainThreadAsyncDispatcher mainThreadDispatcher;
         protected IStatefulInterview interview;
+        private readonly ThrottlingViewModel throttlingModel;
 
         public SingleOptionLinkedToListQuestionViewModel(
             IPrincipal principal,
@@ -49,7 +50,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IMvxMainThreadAsyncDispatcher mainThreadDispatcher,
             QuestionStateViewModel<SingleOptionQuestionAnswered> questionStateViewModel,
             QuestionInstructionViewModel instructionViewModel,
-            AnsweringViewModel answering)
+            AnsweringViewModel answering, 
+            ThrottlingViewModel throttlingModel)
         {
             if (principal == null) throw new ArgumentNullException(nameof(principal));
 
@@ -61,8 +63,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionState = questionStateViewModel;
             this.InstructionViewModel = instructionViewModel;
             this.Answering = answering;
+            this.throttlingModel = throttlingModel;
             this.questionnaireRepository = questionnaireStorage ?? throw new ArgumentNullException(nameof(questionnaireStorage));
-            this.timer = new Timer(async _ => { await SaveAnswer(); }, null, Timeout.Infinite, Timeout.Infinite);
+            this.throttlingModel.Init(SaveAnswer);
         }
 
         private Guid interviewId;
@@ -142,6 +145,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 option.BeforeSelected -= this.OptionSelected;
                 option.AnswerRemoved -= this.RemoveAnswer;
             }
+            this.throttlingModel.Dispose();
         }
 
         private async void OptionSelected(object sender, EventArgs eventArgs) => await this.OptionSelectedAsync(sender);
@@ -169,8 +173,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        private readonly Timer timer;
-        protected internal int ThrottlePeriod { get; set; } = Constants.ThrottlePeriod;
         private int? previousOptionToReset = null;
         private int? selectedOptionToSave = null;
 		
@@ -222,14 +224,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             
             this.Options.Where(x=> x.Selected && x.Value!=selectedOptionToSave).ForEach(x => x.Selected = false);
 
-            if (this.ThrottlePeriod == 0)
-            {
-                await SaveAnswer();
-            }
-            else
-            {
-                timer.Change(ThrottlePeriod, Timeout.Infinite);
-            }
+            await this.throttlingModel.ExecuteActionIfNeeded();
         }
 
         private SingleOptionQuestionOptionViewModel GetOptionByValue(int? value)
