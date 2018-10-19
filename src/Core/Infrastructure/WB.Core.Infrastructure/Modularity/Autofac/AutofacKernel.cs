@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Autofac;
 using Autofac.Features.ResolveAnything;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Infrastructure.Native.Storage;
 using WB.UI.Shared.Enumerator.Services.Internals;
 
 namespace WB.Core.Infrastructure.Modularity.Autofac
@@ -58,23 +57,26 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
 
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(Container));
 
-            Thread thread = new Thread(() =>
-                ServiceLocator.Current.ExecuteActionInScope((serviceLocatorLocal) => InitModules(status, serviceLocatorLocal).Wait())) { IsBackground = false };
+            Thread thread = new Thread(() => InitModules(status, Container).Wait()) { IsBackground = false };
             thread.Start();
 
             return Task.CompletedTask;
         }
 
-        private async Task InitModules(UnderConstructionInfo status, IServiceLocator serviceLocatorLocal)
+        private async Task InitModules(UnderConstructionInfo status, IContainer container)
         {
             status.Run();
 
             try
             {
-                foreach (var module in initModules)
+                using (var scope = container.BeginLifetimeScope(AutofacServiceLocatorConstants.UnitOfWorkScope))
                 {
-                    status.ClearMessage();
-                    await module.Init(serviceLocatorLocal, status);
+                    var serviceLocatorLocal = scope.Resolve<IServiceLocator>(new NamedParameter("kernel", scope));
+                    foreach (var module in initModules)
+                    {
+                        status.ClearMessage();
+                        await module.Init(serviceLocatorLocal, status);
+                    }
                 }
             }
             finally
