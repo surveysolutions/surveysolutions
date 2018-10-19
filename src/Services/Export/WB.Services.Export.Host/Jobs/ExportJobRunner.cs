@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using WB.Services.Export.Jobs;
-using WB.Services.Export.Services.Processing;
+using WB.Services.Export.Models;
 using WB.Services.Scheduler.Services;
 using WB.Services.Scheduler.Services.Implementation;
 

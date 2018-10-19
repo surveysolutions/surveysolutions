@@ -13,6 +13,7 @@ namespace WB.UI.Designer.Models
 
     public class UpdateUserProfileModel
     {
+        [StringLength(100, ErrorMessageResourceName = nameof(ErrorMessages.FullNameMaxLengthError), ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessage = null)]
         public string FullName { get; set; }
 
         [Required(ErrorMessageResourceType = typeof(ErrorMessages), ErrorMessageResourceName = "Email_required")]

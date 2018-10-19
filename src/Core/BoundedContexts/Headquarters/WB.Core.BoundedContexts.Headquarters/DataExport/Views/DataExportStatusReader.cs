@@ -50,9 +50,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
             DateTime? fromDate = null,
             DateTime? toDate = null)
         {
-            var archiveFileName = ExportFileNameService.GetQuestionnaireTitleWithVersion(questionnaireIdentity);
-            var result = await exportServiceApi.GetDataExportStatusForQuestionnaireAsync(questionnaireIdentity.ToString(),
-                archiveFileName, status, fromDate, toDate);
+            var result = await exportServiceApi.GetDataExportStatusForQuestionnaireAsync(
+                questionnaireIdentity.ToString(), status, fromDate, toDate);
             return result;
         }
     }
