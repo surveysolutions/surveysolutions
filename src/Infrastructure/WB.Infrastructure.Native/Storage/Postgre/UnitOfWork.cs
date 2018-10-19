@@ -45,7 +45,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre
             {
                 if (isDisposed)
                 {
-                    logger.Info($"Error getting session. UOW:{Id} old sessionId:{sessionId} Thread:{Thread.CurrentThread.ManagedThreadId}");
+                    logger.Info($"Error getting session. Old sessionId:{sessionId} Thread:{Thread.CurrentThread.ManagedThreadId}");
                     throw new ObjectDisposedException(nameof(UnitOfWork));
                 }
                 return session;
