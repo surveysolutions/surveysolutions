@@ -101,8 +101,8 @@ namespace WB.Tests.Abc.TestFactories
         public QuestionnaireQuestionOptionsRepository QuestionnaireQuestionOptionsRepository(IQuestionnaire questionnaire = null)
         {
             var optionsRepository = new QuestionnaireQuestionOptionsRepository();
-            if (questionnaire != null)
-                optionsRepository.SetCurentQuestionnaire(questionnaire);
+            
+
             return optionsRepository;
         }
     }

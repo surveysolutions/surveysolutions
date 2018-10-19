@@ -129,10 +129,6 @@ namespace WB.Tests.Integration.InterviewTests
                 questionnaire,
                 questionnaireIdentity.Version);
 
-            
-            questionOptionsRepository.SetCurentQuestionnaire(questionnaire);
-
-            
             SetUp.InstanceToMockedServiceLocator<IQuestionOptionsRepository>(questionOptionsRepository);
 
             var interview = IntegrationCreate.StatefulInterview(
@@ -197,8 +193,7 @@ namespace WB.Tests.Integration.InterviewTests
 
             var optionRepo = new QuestionnaireQuestionOptionsRepository();
             var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument, 1, null, null, optionRepo);
-            optionRepo.SetCurentQuestionnaire(questionnaire);
-
+            
             var questionnaireRepository = Mock.Of<IQuestionnaireStorage>(repository
                 => repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire);
             
