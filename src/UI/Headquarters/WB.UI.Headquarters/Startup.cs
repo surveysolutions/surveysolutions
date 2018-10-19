@@ -47,7 +47,6 @@ using WB.UI.Shared.Enumerator.Services.Internals;
 using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.DataAnnotations;
 using WB.UI.Shared.Web.Filters;
-using WB.UI.Shared.Web.Kernel;
 
 namespace WB.UI.Headquarters
 {
@@ -88,14 +87,23 @@ namespace WB.UI.Headquarters
             autofacKernel.ContainerBuilder.RegisterType<CustomLifetimeHubManager>().SingleInstance();
             autofacKernel.ContainerBuilder.RegisterType<CustomAutofacHubActivator>().As<IHubActivator>().SingleInstance();
 
-            //no scope involved activity should be used
+            autofacKernel.ContainerBuilder.RegisterFilterProvider();
+
+            var config = new HttpConfiguration();
+            autofacKernel.ContainerBuilder.RegisterWebApiFilterProvider(config);
+            autofacKernel.ContainerBuilder.RegisterWebApiModelBinderProvider();
+
             autofacKernel.Init().Wait();
 
             UnitOfWorkScopeManager.SetScopeAdapter(autofacKernel.Container);
 
             var container = autofacKernel.Container;
 
-            GlobalConfiguration.Configuration.DependencyResolver = new AutofacWebApiDependencyResolver(container);
+            var resolver = new AutofacWebApiDependencyResolver(container);
+
+            config.DependencyResolver = resolver;
+            GlobalConfiguration.Configuration.DependencyResolver = resolver;
+
             GlobalHost.DependencyResolver = new Autofac.Integration.SignalR.AutofacDependencyResolver(container);
             DependencyResolver.SetResolver(new Autofac.Integration.Mvc.AutofacDependencyResolver(container));
             ModelBinders.Binders.DefaultBinder = new AutofacBinderResolver(container);
@@ -103,11 +111,7 @@ namespace WB.UI.Headquarters
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(container));
 
             app.UseAutofacMiddleware(container);
-
-            var config = new HttpConfiguration();
-
-            app.UseWebApi(config);
-
+            
             var logger = container.Resolve<ILoggerProvider>().GetFor<Startup>();
             logger.Info($@"Starting Headquarters {container.Resolve<IProductVersion>()}");
 
@@ -115,6 +119,8 @@ namespace WB.UI.Headquarters
             InitializeAppShutdown(app);
             InitializeMVC();
             ConfigureWebApi(app, config);
+
+            app.UseWebApi(config);
 
             Exceptional.Settings.ExceptionActions.AddHandler<TargetInvocationException>((error, exception) =>
             {
