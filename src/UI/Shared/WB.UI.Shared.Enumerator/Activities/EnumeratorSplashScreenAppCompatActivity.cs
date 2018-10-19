@@ -59,6 +59,8 @@ namespace WB.UI.Shared.Enumerator.Activities
 
                 using (connection.Lock())
                 {
+                    connection.CreateTable<EventView>();
+
                     var events = connection.Table<EventView>().Where(x => x.EncryptedJsonEvent == null).ToList();
                     foreach (var eventView in events)
                     {
