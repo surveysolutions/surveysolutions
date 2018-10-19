@@ -132,7 +132,15 @@ html, body {
                 }
 
                 .disabled a {
-                    color: @gray-lighter;
+                    color: @error-text;
+                }
+            }
+        }
+
+        .edit-form {
+            .form-group {
+                .field-validation-error {
+                    color: @error-text;
                 }
             }
         }
