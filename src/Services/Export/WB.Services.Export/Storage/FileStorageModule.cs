@@ -1,4 +1,5 @@
-﻿using Amazon.S3;
+﻿using Amazon;
+using Amazon.S3;
 using Amazon.S3.Transfer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -32,12 +33,10 @@ namespace WB.Services.Export.Storage
                 services.AddTransient<IAmazonS3>(service =>
                 {
                     var s3Settings = service.GetService<IOptions<AmazonS3Settings>>().Value;
-
-                    var config = s3Settings.Config();
-
+                    
                     return s3Settings.AccessKey != null && s3Settings.SecretKey != null
-                        ? new AmazonS3Client(s3Settings.AccessKey, s3Settings.SecretKey, config)
-                        : new AmazonS3Client(config);
+                        ? new AmazonS3Client(s3Settings.AccessKey, s3Settings.SecretKey, RegionEndpoint.USEast1)
+                        : new AmazonS3Client();
                 });
 
                 services.AddTransient<ITransferUtility>(c => new TransferUtility(c.GetService<IAmazonS3>()));
