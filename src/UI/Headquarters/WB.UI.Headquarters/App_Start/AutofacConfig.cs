@@ -113,11 +113,6 @@ namespace WB.UI.Headquarters
 
             var autofacKernel = new AutofacWebKernel();
 
-            autofacKernel.ContainerBuilder.RegisterFilterProvider();
-            var config = GlobalConfiguration.Configuration;
-            autofacKernel.ContainerBuilder.RegisterWebApiFilterProvider(config);
-            autofacKernel.ContainerBuilder.RegisterWebApiModelBinderProvider();
-
             var interviewCountLimitString = settingsProvider.AppSettings["Limits.MaxNumberOfInterviews"];
             int? interviewCountLimit = string.IsNullOrEmpty(interviewCountLimitString)
                 ? (int?) null
