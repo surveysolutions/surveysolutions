@@ -38,7 +38,8 @@
         },
         computed: {
             shouldShowAnsweredOptionsOnly(){
-                return !this.showAllOptions && this.$store.getters.isReviewMode && !this.noOptions && this.$me.answer;
+                var isSupervisorOnsupervisorQuestion = this.$me.isForSupervisor && !this.$me.isDisabled;
+                return !isSupervisorOnsupervisorQuestion && !this.showAllOptions && this.$store.getters.isReviewMode && !this.noOptions && this.$me.answer;
             },
             answeredOrAllOptions(){
                 if(!this.shouldShowAnsweredOptionsOnly)

@@ -34,7 +34,8 @@
         },
         computed: {
             shouldShowAnsweredOptionsOnly(){
-                return !this.showAllOptions && this.$store.getters.isReviewMode && !this.noOptions && this.$me.answer.length > 0 && 
+                var isSupervisorOnsupervisorQuestion = this.$me.isForSupervisor && !this.$me.isDisabled;
+                return !isSupervisorOnsupervisorQuestion && !this.showAllOptions && this.$store.getters.isReviewMode && !this.noOptions && this.$me.answer.length > 0 && 
                         this.$me.answer.length < this.$me.options.length;
             },
             answeredOrAllOptions(){
