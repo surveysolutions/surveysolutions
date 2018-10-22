@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using Polly;
 using Refit;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Infrastructure.Tenant;
@@ -66,6 +67,17 @@ namespace WB.Services.Export.Host.Infra
                 this.tenantId = tenantId;
                 this.logger = logger;
                 this.AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip;
+                this.policy = Policy
+                    .HandleResult<HttpResponseMessage>(
+                        message => message.RequestMessage.Method == HttpMethod.Get
+                                   && !message.IsSuccessStatusCode)
+                    .WaitAndRetryAsync(8,
+                        retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)), 
+                        (response, timeSpan, retryCount, context) =>
+                    {
+                        logger.LogWarning($"Request failed with {response.Result.StatusCode}. " +
+                                          $"Waiting {timeSpan} before next retry. Retry attempt {retryCount}");
+                    });
             }
 
             protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
@@ -77,7 +89,7 @@ namespace WB.Services.Export.Host.Infra
                 var sw = Stopwatch.StartNew();
                 logger.LogDebug($"Calling {request.Method}: {request.RequestUri}");
 
-                var result = await base.SendAsync(request, cancellationToken);
+                var result = await this.policy.ExecuteAsync(() => base.SendAsync(request, cancellationToken));
 
                 sw.Stop();
 
