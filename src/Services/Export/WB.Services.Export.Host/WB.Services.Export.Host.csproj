@@ -3,7 +3,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>netcoreapp2.1</TargetFramework>
-    <LangVersion>7.1</LangVersion>
+    <LangVersion>7.2</LangVersion>
     <!--<TargetLatestRuntimePatch>true</TargetLatestRuntimePatch>-->
     <RuntimeFrameworkVersion>2.1.4</RuntimeFrameworkVersion>
     <Company>World Bank</Company>
@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <PackageReference Include="Dapper" Version="1.50.5" />
+    <PackageReference Include="Humanizer.Core" Version="2.5.1" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting.WindowsServices" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Hosting" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.1.3" />
@@ -35,7 +36,8 @@
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="2.1.1" />
     <PackageReference Include="NLog.Web.AspNetCore" Version="4.7.0" />
     <PackageReference Include="NLog" Version="4.5.10" />
-    
+    <PackageReference Include="Refit" Version="4.6.48" />
+
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.1.2" />
     <PackageReference Include="Npgsql" Version="4.0.3" />
     <PackageReference Include="Polly" Version="6.1.0" />
@@ -50,21 +52,23 @@
     <ProjectReference Include="..\WB.Services.Export\WB.Services.Export.csproj" />
   </ItemGroup>
 
-<ItemGroup>
+  <ItemGroup>
     <Content Update="appsettings.Development.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       <CopyToPublishDirectory>Never</CopyToPublishDirectory>
     </Content>
     <Content Update="appsettings.vgl.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-       <CopyToPublishDirectory>Never</CopyToPublishDirectory>
+      <CopyToPublishDirectory>Never</CopyToPublishDirectory>
     </Content>
-  
+
     <Content Update="appsettings.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      
+
     </Content>
-  
+      <PackageReference Include="Refit" Version="4.6.48" />
+
+
     <Content Update="nlog.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
