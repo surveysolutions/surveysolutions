@@ -64,7 +64,6 @@ namespace WB.Services.Export.Host.Infra
         {
             private readonly TenantInfo tenant;
             private readonly ILogger<TenantApi<T>> logger;
-            private readonly RetryPolicy<HttpResponseMessage> policy;
 
             public ApiKeyHandler(TenantInfo tenant, ILogger<TenantApi<T>> logger)
             {
