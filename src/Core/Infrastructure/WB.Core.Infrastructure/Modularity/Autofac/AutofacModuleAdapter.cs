@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Autofac;
 using Autofac.Core;
 using Autofac.Core.Lifetime;
@@ -88,7 +87,9 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
             containerBuilder.RegisterType<TImplementation>().As<TInterface>()
                 .InstancePerMatchingLifetimeScope(
                     AutofacServiceLocatorConstants.UnitOfWorkScope,
-                    MatchingScopeLifetimeTags.RequestLifetimeScopeTag);
+                    MatchingScopeLifetimeTags.RequestLifetimeScopeTag
+                    //,ScopeLifetimeTag.RequestLifetimeScopeTag
+                    );
         }
 
         public void BindWithConstructorArgumentInPerLifetimeScope<TInterface, TImplementation>(string argumentName, object argumentValue) where TImplementation : TInterface

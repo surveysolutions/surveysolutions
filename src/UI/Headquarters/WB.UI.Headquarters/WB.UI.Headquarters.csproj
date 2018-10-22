@@ -2270,6 +2270,7 @@
     <Compile Include="Controllers\UsersController.cs" />
     <Compile Include="Controllers\WebInterviewController.Actions.cs" />
     <Compile Include="Code\CustomLifetimeHubManager.cs" />
+    <Compile Include="Code\CustomAutofacHubActivator.cs" />
     <Compile Include="Implementation\Maps\JsonMapResponse.cs" />
     <Compile Include="Implementation\Maps\MapService.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M201805031628_AllowNullForResponsibleName.cs" />
