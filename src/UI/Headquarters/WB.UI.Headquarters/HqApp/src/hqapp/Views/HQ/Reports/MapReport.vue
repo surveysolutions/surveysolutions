@@ -21,17 +21,17 @@
         <div style="display:none;">
             <div ref="tooltip">
                 <div class="row-fluid">
-                    <strong>{{$t("Common.InterviewKey")}} :</strong>&nbsp;{{selectedTooltip.InterviewKey}}</div>
+                    <strong>{{$t("Common.InterviewKey")}}:</strong>&nbsp;{{selectedTooltip.InterviewKey}}</div>
                 <div class="row-fluid">
-                    <strong>{{$t("Users.Interviewer")}} :</strong>&nbsp;{{selectedTooltip.InterviewerName}}</div>
+                    <strong>{{$t("Common.Responsible")}}:</strong>&nbsp;{{selectedTooltip.InterviewerName}}</div>
                 <div class="row-fluid">
-                    <strong>{{$t("Users.Supervisor")}} :</strong>&nbsp;{{selectedTooltip.SupervisorName}}</div>
+                    <strong>{{$t("Users.Supervisor")}}:</strong>&nbsp;{{selectedTooltip.SupervisorName}}</div>
                 <div class="row-fluid">
-                    <strong>{{$t("Common.Status")}} :</strong>&nbsp;{{selectedTooltip.LastStatus}}</div>
+                    <strong>{{$t("Common.Status")}}:</strong>&nbsp;{{selectedTooltip.LastStatus}}</div>
                 <div class="row-fluid">
-                    <strong>{{$t("Reports.LastUpdatedDate")}} :</strong>&nbsp;{{selectedTooltip.LastUpdatedDate}}</div>
+                    <strong>{{$t("Reports.LastUpdatedDate")}}:</strong>&nbsp;{{selectedTooltip.LastUpdatedDate}}</div>
                 <div class="row-fluid" style="white-space:nowrap;">
-                    <strong>{{$t("MapReport.ViewInterviewContent")}} :</strong>&nbsp;
+                    <strong>{{$t("MapReport.ViewInterviewContent")}}:</strong>&nbsp;
                     <a v-bind:href="model.api.interviewDetailsUrl + '/' + selectedTooltip.InterviewId" target="_blank">{{$t("MapReport.details")}}</a>
                 </div>
             </div>
