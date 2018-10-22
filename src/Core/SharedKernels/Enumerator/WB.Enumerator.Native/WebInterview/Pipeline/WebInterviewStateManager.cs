@@ -4,7 +4,9 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Infrastructure.Native.Storage;
 
 namespace WB.Enumerator.Native.WebInterview.Pipeline
 {
@@ -12,8 +14,6 @@ namespace WB.Enumerator.Native.WebInterview.Pipeline
     {
         private readonly IProductVersion productVersion;
         
-        private IStatefulInterviewRepository statefulInterviewRepository => ServiceLocator.Current.GetInstance<IStatefulInterviewRepository>();
-
         public WebInterviewStateManager(IProductVersion productVersion)
         {
             this.productVersion = productVersion;
@@ -28,7 +28,14 @@ namespace WB.Enumerator.Native.WebInterview.Pipeline
         protected override void OnAfterConnect(IHub hub)
         {
             var interviewId = hub.Context.QueryString[@"interviewId"];
-            var interview = this.statefulInterviewRepository.Get(interviewId);
+            IStatefulInterview interview = null;
+
+            ServiceLocator.Current.ExecuteActionInScope((locator) =>
+            {
+                    IStatefulInterviewRepository statefulInterviewRepository = locator.GetInstance<IStatefulInterviewRepository>();
+                    interview = statefulInterviewRepository.Get(interviewId);
+            });
+            
             if (interview == null)
             {
                 hub.Clients.Caller.shutDown();
