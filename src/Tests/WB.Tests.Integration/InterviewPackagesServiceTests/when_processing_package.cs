@@ -37,21 +37,24 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
 {
     internal class when_processing_package : with_postgres_db
     {
-        [NUnit.Framework.OneTimeSetUp] public void context ()
+        [NUnit.Framework.OneTimeSetUp]
+        public void context()
         {
             var supervisorId = Guid.NewGuid();
 
-            var sessionFactory = IntegrationCreate.SessionFactory(ConnectionStringBuilder.ConnectionString, new[] { typeof(InterviewPackageMap), typeof(BrokenInterviewPackageMap) }, true);
+            var sessionFactory = IntegrationCreate.SessionFactory(ConnectionStringBuilder.ConnectionString,
+                new[] {typeof(InterviewPackageMap), typeof(BrokenInterviewPackageMap)}, true);
             plainPostgresTransactionManager = Mock.Of<IUnitOfWork>(x => x.Session == sessionFactory.OpenSession());
-            
+
             packagesStorage = new PostgresPlainStorageRepository<InterviewPackage>(plainPostgresTransactionManager);
 
             mockOfCommandService = new Mock<ICommandService>();
-            mockOfCommandService.Setup(x => x.Execute(Moq.It.IsAny<SynchronizeInterviewEventsCommand>(), Moq.It.IsAny<string>()))
-                .Callback<ICommand, string>((command, origin) => actualCommand = command as SynchronizeInterviewEventsCommand);
+            mockOfCommandService.Setup(x =>
+                    x.Execute(Moq.It.IsAny<SynchronizeInterviewEventsCommand>(), Moq.It.IsAny<string>()))
+                .Callback<ICommand, string>((command, origin) =>
+                    actualCommand = command as SynchronizeInterviewEventsCommand);
 
             origin = "hq";
-
 
             var newtonJsonSerializer = new JsonAllTypesSerializer();
 
@@ -62,64 +65,72 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
                 .Returns(true);
 
             var container = new Mock<ILifetimeScope>();
-            container.Setup(x => x.BeginLifetimeScope()).Returns(container.Object);
+            container.Setup(x => x.BeginLifetimeScope(It.IsAny<string>())).Returns(container.Object);
             container.SetupGet(x => x.ComponentRegistry).Returns(componentRegistry.Object);
 
-            var serviceLocatorNestedMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
+            var serviceLocatorNestedMock = new Mock<IServiceLocator> {DefaultValue = DefaultValue.Mock};
             serviceLocatorNestedMock.Setup(x => x.GetInstance<ICommandService>()).Returns(mockOfCommandService.Object);
             serviceLocatorNestedMock.Setup(x => x.GetInstance<IJsonAllTypesSerializer>())
                 .Returns(newtonJsonSerializer);
 
             var packageStore = new Mock<IPlainStorageAccessor<ReceivedPackageLogEntry>>();
-            packageStore.Setup(x => x.Query(It.IsAny<Func<IQueryable<ReceivedPackageLogEntry>, ReceivedPackageLogEntry>>())).Returns((ReceivedPackageLogEntry)null);
+            packageStore
+                .Setup(x => x.Query(It.IsAny<Func<IQueryable<ReceivedPackageLogEntry>, ReceivedPackageLogEntry>>()))
+                .Returns((ReceivedPackageLogEntry) null);
 
-            serviceLocatorNestedMock.Setup(x => x.GetInstance<IPlainStorageAccessor<ReceivedPackageLogEntry>>()).Returns(packageStore.Object);
-            serviceLocatorNestedMock.Setup(x => x.GetInstance<IInterviewUniqueKeyGenerator>()).Returns(Mock.Of<IInterviewUniqueKeyGenerator>);
+            serviceLocatorNestedMock.Setup(x => x.GetInstance<IPlainStorageAccessor<ReceivedPackageLogEntry>>())
+                .Returns(packageStore.Object);
+            serviceLocatorNestedMock.Setup(x => x.GetInstance<IInterviewUniqueKeyGenerator>())
+                .Returns(Mock.Of<IInterviewUniqueKeyGenerator>);
 
             var users = new Mock<IUserRepository>();
-            users.Setup(x => x.FindByIdAsync(It.IsAny<Guid>())).Returns(Task.FromResult(new HqUser(){Profile =new HqUserProfile(){SupervisorId = supervisorId}}));
+            users.Setup(x => x.FindByIdAsync(It.IsAny<Guid>())).Returns(Task.FromResult(new HqUser()
+                {Profile = new HqUserProfile() {SupervisorId = supervisorId}}));
 
             serviceLocatorNestedMock.Setup(x => x.GetInstance<IUserRepository>()).Returns(users.Object);
-            
-            container.Setup(x => x.ResolveComponent(It.IsAny<IComponentRegistration>(), It.IsAny<System.Collections.Generic.IEnumerable<Autofac.Core.Parameter>>()))
+
+            container.Setup(x => x.ResolveComponent(It.IsAny<IComponentRegistration>(),
+                    It.IsAny<System.Collections.Generic.IEnumerable<Autofac.Core.Parameter>>()))
                 .Returns((IComponentRegistration compRegistration, IEnumerable<Autofac.Core.Parameter> pars) =>
-                {
-                    return serviceLocatorNestedMock.Object;
-                });
+                    serviceLocatorNestedMock.Object);
+
+            //container.Setup(x => x.Resolve<IServiceLocator>()).Returns(serviceLocatorNestedMock.Object);
 
             var autofacServiceLocatorAdapterForTests = new AutofacServiceLocatorAdapter(container.Object);
 
             var serviceLocatorOriginal = ServiceLocator.IsLocationProviderSet ? ServiceLocator.Current : null;
 
             ServiceLocator.SetLocatorProvider(() => autofacServiceLocatorAdapterForTests);
-            
-            interviewPackagesService = Create.Service.InterviewPackagesService(
-                syncSettings: new SyncSettings(origin) { UseBackgroundJobForProcessingPackages = true},
-                logger: Mock.Of<ILogger>(),
-                serializer: newtonJsonSerializer, 
-                interviewPackageStorage: packagesStorage,
-                brokenInterviewPackageStorage: Mock.Of<IPlainStorageAccessor<BrokenInterviewPackage>>(),
-                commandService: mockOfCommandService.Object,
-                uniqueKeyGenerator: Mock.Of<IInterviewUniqueKeyGenerator>(),
-                interviews: new TestInMemoryWriter<InterviewSummary>());
+            try
+            {
+                interviewPackagesService = Create.Service.InterviewPackagesService(
+                    syncSettings: new SyncSettings(origin) {UseBackgroundJobForProcessingPackages = true},
+                    logger: Mock.Of<ILogger>(),
+                    serializer: newtonJsonSerializer,
+                    interviewPackageStorage: packagesStorage,
+                    brokenInterviewPackageStorage: Mock.Of<IPlainStorageAccessor<BrokenInterviewPackage>>(),
+                    commandService: mockOfCommandService.Object,
+                    uniqueKeyGenerator: Mock.Of<IInterviewUniqueKeyGenerator>(),
+                    interviews: new TestInMemoryWriter<InterviewSummary>());
 
-            expectedCommand = Create.Command.SynchronizeInterviewEventsCommand(
-                interviewId: Guid.Parse("11111111111111111111111111111111"),
-                questionnaireId: Guid.Parse("22222222222222222222222222222222"),
-                questionnaireVersion: 111,
-                userId: Guid.Parse("33333333333333333333333333333333"),
-                interviewStatus: InterviewStatus.Restarted,
-                createdOnClient: true,
-                synchronizedEvents:
+                expectedCommand = Create.Command.SynchronizeInterviewEventsCommand(
+                    interviewId: Guid.Parse("11111111111111111111111111111111"),
+                    questionnaireId: Guid.Parse("22222222222222222222222222222222"),
+                    questionnaireVersion: 111,
+                    userId: Guid.Parse("33333333333333333333333333333333"),
+                    interviewStatus: InterviewStatus.Restarted,
+                    createdOnClient: true,
+                    synchronizedEvents:
                     new IEvent[]
                     {
                         Create.Event.InterviewOnClientCreated(Guid.NewGuid(), 111),
                         new InterviewerAssigned(Guid.NewGuid(), Guid.NewGuid(), DateTimeOffset.Now),
                         new SupervisorAssigned(Guid.NewGuid(), supervisorId, DateTimeOffset.Now),
-                        new DateTimeQuestionAnswered(Guid.NewGuid(), Guid.NewGuid(), new decimal[] { 2, 5, 8}, DateTime.UtcNow, DateTime.Today),  
+                        new DateTimeQuestionAnswered(Guid.NewGuid(), Guid.NewGuid(), new decimal[] {2, 5, 8},
+                            DateTime.UtcNow, DateTime.Today),
                     });
 
-            interviewPackagesService.StoreOrProcessPackage(
+                interviewPackagesService.StoreOrProcessPackage(
                     new InterviewPackage
                     {
                         InterviewId = expectedCommand.InterviewId,
@@ -128,12 +139,16 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
                         ResponsibleId = expectedCommand.UserId,
                         InterviewStatus = expectedCommand.InterviewStatus,
                         IsCensusInterview = expectedCommand.CreatedOnClient,
-                        Events = newtonJsonSerializer.Serialize(expectedCommand.SynchronizedEvents.Select(IntegrationCreate.AggregateRootEvent).ToArray())
+                        Events = newtonJsonSerializer.Serialize(expectedCommand.SynchronizedEvents
+                            .Select(IntegrationCreate.AggregateRootEvent).ToArray())
                     });
 
-            BecauseOf();
-
-            ServiceLocator.SetLocatorProvider(() => serviceLocatorOriginal);
+                BecauseOf();
+            }
+            finally
+            {
+                ServiceLocator.SetLocatorProvider(() => serviceLocatorOriginal);
+            }
         }
 
         private void BecauseOf() => interviewPackagesService.ProcessPackage("1");

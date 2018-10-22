@@ -43,11 +43,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewPackagesServiceT
             packagesStorage = new TestPlainStorage<InterviewPackage>();
             
             mockOfCommandService = new Mock<ICommandService>();
-
             
-
-            var newtonJsonSerializer = new JsonAllTypesSerializer();
-
             IComponentRegistration componentRegistration = new Mock<IComponentRegistration>().Object;
             var componentRegistry = new Mock<IComponentRegistry>();
             componentRegistry.Setup(x =>
@@ -55,7 +51,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewPackagesServiceT
                 .Returns(true);
 
             var container = new Mock<ILifetimeScope>();
-            container.Setup(x => x.BeginLifetimeScope()).Returns(container.Object);
+            container.Setup(x => x.BeginLifetimeScope(It.IsAny<string>())).Returns(container.Object);
             container.SetupGet(x => x.ComponentRegistry).Returns(componentRegistry.Object);
 
             var serviceLocatorNestedMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
@@ -85,26 +81,30 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewPackagesServiceT
             var serviceLocatorOriginal = ServiceLocator.IsLocationProviderSet ? ServiceLocator.Current : null;
             ServiceLocator.SetLocatorProvider(() => autofacServiceLocatorAdapterForTests);
 
-            interviewPackagesService = Create.Service.InterviewPackagesService(
-                serializer: serializer, brokenInterviewPackageStorage: brokenPackagesStorage,
-                interviewPackageStorage: packagesStorage, commandService: mockOfCommandService.Object,
-                syncSettings: syncSettings);
-            
-
-            interviewPackagesService.StoreOrProcessPackage(new InterviewPackage
+            try
             {
-                InterviewId = Guid.Parse("11111111111111111111111111111111"),
-                QuestionnaireId = Guid.Parse("22222222222222222222222222222222"),
-                QuestionnaireVersion = 111,
-                ResponsibleId = Guid.Parse("33333333333333333333333333333333"),
-                InterviewStatus = InterviewStatus.Restarted,
-                IsCensusInterview = false,
-                Events = "compressed serialized events"
-            });
+                interviewPackagesService = Create.Service.InterviewPackagesService(
+                    serializer: serializer, brokenInterviewPackageStorage: brokenPackagesStorage,
+                    interviewPackageStorage: packagesStorage, commandService: mockOfCommandService.Object,
+                    syncSettings: syncSettings);
 
-            interviewPackagesService.ProcessPackage("1");
+                interviewPackagesService.StoreOrProcessPackage(new InterviewPackage
+                {
+                    InterviewId = Guid.Parse("11111111111111111111111111111111"),
+                    QuestionnaireId = Guid.Parse("22222222222222222222222222222222"),
+                    QuestionnaireVersion = 111,
+                    ResponsibleId = Guid.Parse("33333333333333333333333333333333"),
+                    InterviewStatus = InterviewStatus.Restarted,
+                    IsCensusInterview = false,
+                    Events = "compressed serialized events"
+                });
 
-            ServiceLocator.SetLocatorProvider(() => serviceLocatorOriginal);
+                interviewPackagesService.ProcessPackage("1");
+            }
+            finally
+            {
+                ServiceLocator.SetLocatorProvider(() => serviceLocatorOriginal);
+            }
         }
         
         [Test]

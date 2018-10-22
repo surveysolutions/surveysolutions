@@ -57,7 +57,7 @@ namespace WB.UI.Headquarters.Code
 
             ILogger logger = (context.Request.GetDependencyScope().GetService(typeof(ILoggerProvider)) as ILoggerProvider).GetFor<WriteToSyncLogAttribute>();
 
-        await base.OnActionExecutedAsync(context, cancellationToken);
+            await base.OnActionExecutedAsync(context, cancellationToken);
 
             try
             {
