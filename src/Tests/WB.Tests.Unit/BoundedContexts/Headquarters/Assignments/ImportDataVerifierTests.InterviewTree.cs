@@ -6,7 +6,6 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Enumerator.Native.Questionnaire.Impl;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
@@ -16,7 +15,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         [Test]
         public void when_verify_answers_on_interview_tree_and_questionnaire_has_no_question_Should_report_error()
         {
-            var questionnaireDocument = Create.Entity.PlainQuestionnaire();
+            var questionnaireDocument = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneQuestion());
             var verifier = Create.Service.ImportDataVerifier();
 
             var answers = new List<InterviewAnswer>
