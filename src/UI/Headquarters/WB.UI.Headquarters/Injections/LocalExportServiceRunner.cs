@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -16,7 +13,6 @@ namespace WB.UI.Headquarters.Injections
         private readonly object locker = new object();
         private readonly string servicePath;
         private readonly string serviceExe;
-        private readonly bool canRun;
         private readonly ILogger logger;
         private readonly TaskCompletionSource<bool> tsc;
 
@@ -29,7 +25,7 @@ namespace WB.UI.Headquarters.Injections
                 var httpCtx = HttpContext.Current;
                 servicePath = httpCtx.Server.MapPath(@"~/.bin/Export");
                 serviceExe = Path.Combine(servicePath, "WB.Services.Export.Host.exe");
-                canRun = servicePath != null && serviceExe != null && File.Exists(serviceExe);
+               
             }
 
             this.tsc = new TaskCompletionSource<bool>();
@@ -81,6 +77,7 @@ namespace WB.UI.Headquarters.Injections
 
         public void Run()
         {
+            var canRun = servicePath != null && serviceExe != null && File.Exists(serviceExe);
             if (!canRun) return;
 
             lock (locker)
