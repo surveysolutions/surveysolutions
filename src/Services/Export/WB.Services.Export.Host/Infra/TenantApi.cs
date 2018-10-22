@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Polly;
+using Polly.Retry;
 using Refit;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Infrastructure.Tenant;
@@ -61,6 +62,7 @@ namespace WB.Services.Export.Host.Infra
         {
             private readonly TenantId tenantId;
             private readonly ILogger<TenantApi<T>> logger;
+            private readonly RetryPolicy<HttpResponseMessage> policy;
 
             public ApiKeyHandler(TenantId tenantId, ILogger<TenantApi<T>> logger)
             {
