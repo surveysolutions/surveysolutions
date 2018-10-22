@@ -85,7 +85,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
                     Max = interviewDataExportSettings.Value.MaxRecordsCountPerOneExportQuery
                 };
 
-                var split = interviewsToExport.Batch(interviewsToExport.Count / 2);
+                var split = interviewsToExport.Batch(Math.Max(1, interviewsToExport.Count / 2));
 
                 var parallelOptions = new ParallelOptions {MaxDegreeOfParallelism = 2};
 
