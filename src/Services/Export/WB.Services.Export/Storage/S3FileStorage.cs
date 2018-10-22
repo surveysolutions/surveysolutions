@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Threading.Tasks;
 using Amazon.S3;
 using Amazon.S3.Model;
@@ -127,6 +128,7 @@ namespace WB.Services.Export.Storage
 
             if (!string.IsNullOrWhiteSpace(asFilename))
             {
+                asFilename = WebUtility.UrlEncode(asFilename).Replace('+', ' ');
                 preSignedUrlRequest.ResponseHeaderOverrides.ContentDisposition = $"attachment; filename =\"{asFilename}\"";
             }
 

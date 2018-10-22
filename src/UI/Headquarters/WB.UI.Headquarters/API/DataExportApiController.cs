@@ -84,7 +84,7 @@ namespace WB.UI.Headquarters.API
                 response.Content.Headers.ContentType = new MediaTypeHeaderValue(@"application/octet-stream");
                 response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
                 {
-                    FileName = result.FileName
+                    FileName = WebUtility.UrlDecode(result.FileName)
                 };
                 return response;
             }
