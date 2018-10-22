@@ -53,7 +53,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewPackagesServiceTes
                 .Returns(true);
 
             var container = new Mock<ILifetimeScope>();
-            container.Setup(x => x.BeginLifetimeScope()).Returns(container.Object);
+            container.Setup(x => x.BeginLifetimeScope(It.IsAny<string>())).Returns(container.Object);
             container.SetupGet(x => x.ComponentRegistry).Returns(componentRegistry.Object);
 
             var serviceLocatorNestedMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
