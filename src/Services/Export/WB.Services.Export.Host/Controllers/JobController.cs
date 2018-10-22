@@ -89,11 +89,12 @@ namespace WB.Services.Export.Host.Controllers
         [ResponseCache(NoStore = true)]
         [Route("api/v1/ddi")]
         public async Task<FileStreamResult> GetDdiFile(
-            [FromQuery] QuestionnaireId questionnaireId,
+            string questionnaireId,
             string archivePassword,
             TenantInfo tenant)
         {
-            var pathToFile = await this.ddiDdiMetadataAccessor.GetFilePathToDDIMetadataAsync(tenant, questionnaireId,
+            var pathToFile = await this.ddiDdiMetadataAccessor.GetFilePathToDDIMetadataAsync(tenant, 
+                new QuestionnaireId(questionnaireId),
                 archivePassword);
             var responseStream = System.IO.File.OpenRead(pathToFile);
             return File(responseStream, "application/zip");
