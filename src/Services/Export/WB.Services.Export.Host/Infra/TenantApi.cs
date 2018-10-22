@@ -64,6 +64,7 @@ namespace WB.Services.Export.Host.Infra
         {
             private readonly TenantInfo tenant;
             private readonly ILogger<TenantApi<T>> logger;
+            private readonly IAsyncPolicy<HttpResponseMessage> policy;
 
             public ApiKeyHandler(TenantInfo tenant, ILogger<TenantApi<T>> logger)
             {
@@ -77,10 +78,11 @@ namespace WB.Services.Export.Host.Infra
                     .WaitAndRetryAsync(8,
                         retryAttempt => TimeSpan.FromSeconds(Math.Pow(2, retryAttempt)), 
                         (response, timeSpan, retryCount, context) =>
-                    {
-                        logger.LogWarning($"Request failed with {response.Result.StatusCode}. " +
-                                          $"Waiting {timeSpan} before next retry. Retry attempt {retryCount}");
-                    });
+                            {
+                                logger.LogWarning("Request failed with {statusCode}. " +
+                                                  "Waiting {timeSpan} before next retry. Retry attempt {retryCount}",
+                                response.Result.StatusCode, timeSpan, retryCount);
+                            });
             }
 
             protected override async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
@@ -90,7 +92,7 @@ namespace WB.Services.Export.Host.Infra
                 request.RequestUri = new Uri(uri);
 
                 var sw = Stopwatch.StartNew();
-                logger.LogDebug($"Calling {request.Method}: {request.RequestUri}");
+                logger.LogTrace("Calling {method}: {requestUri}", request.Method, request.RequestUri);
 
                 var result = await this.policy.ExecuteAsync(() => base.SendAsync(request, cancellationToken));
                 sw.Stop();
@@ -109,14 +111,14 @@ namespace WB.Services.Export.Host.Infra
                 Monitoring.Http.Latency
                     .Labels(Monitoring.Http.HTTP_OUT, this.tenant.Name ?? this.tenant.Id.ToString()).Observe(sw.Elapsed.TotalSeconds);
 
-                logger.LogInformation($"Got {size.Bytes().Humanize("#.##")} in {sw.ElapsedMilliseconds}ms: {uri.Substring(0, 80)}...");
+                logger.LogDebug("Got {size} in {elapsed} ms: {uri}...",
+                    size.Bytes().Humanize("#.##"), sw.ElapsedMilliseconds, uri.Substring(0, 80));
+
                 return result;
             }
 
             private static readonly ConcurrentDictionary<Type, FieldInfo> Cache = new ConcurrentDictionary<Type, FieldInfo>();
-            private readonly IAsyncPolicy<HttpResponseMessage> policy;
-
-
+            
             private static long? GetRawSizeUsingReflection(HttpResponseMessage result)
             {
                 var field = Cache.GetOrAdd(result.Content.GetType(), type =>
