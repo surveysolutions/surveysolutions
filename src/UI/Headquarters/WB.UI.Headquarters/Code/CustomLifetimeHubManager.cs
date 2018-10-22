@@ -4,21 +4,21 @@ using System.Collections.Generic;
 using Autofac;
 using Microsoft.AspNet.SignalR.Hubs;
 using SignalR.Extras.Autofac;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.Infrastructure.Modularity.Autofac;
 
-namespace WB.UI.Headquarters
+namespace WB.UI.Headquarters.Code
 {
     public class CustomLifetimeHubManager : IDisposable
     {
-        private readonly ConcurrentDictionary<IHub, ILifetimeScope> _hubLifetimeScopes = new ConcurrentDictionary<IHub, ILifetimeScope>();
+        private readonly ConcurrentDictionary<IHub, ILifetimeScope> hubLifetimeScopes = new ConcurrentDictionary<IHub, ILifetimeScope>();
 
         public T ResolveHub<T>(Type type, ILifetimeScope lifetimeScope) where T : ILifetimeHub
         {
-            ILifetimeScope context = lifetimeScope.BeginLifetimeScope(ScopeLifetimeTag.RequestLifetimeScopeTag);
+            ILifetimeScope context = lifetimeScope.BeginLifetimeScope(AutofacServiceLocatorConstants.UnitOfWorkScope/*ScopeLifetimeTag.RequestLifetimeScopeTag*/);
             
             T obj = (T)context.Resolve(type);
             obj.OnDisposing += new EventHandler(this.HubOnDisposing);
-            this._hubLifetimeScopes.TryAdd((IHub)obj, context);
+            this.hubLifetimeScopes.TryAdd((IHub)obj, context);
             return obj;
         }
 
@@ -30,7 +30,7 @@ namespace WB.UI.Headquarters
 
         protected virtual void Dispose(bool disposing)
         {
-            foreach (IDisposable key in (IEnumerable<IHub>)this._hubLifetimeScopes.Keys)
+            foreach (IDisposable key in (IEnumerable<IHub>)this.hubLifetimeScopes.Keys)
                 key.Dispose();
         }
 
@@ -38,7 +38,7 @@ namespace WB.UI.Headquarters
         {
             IHub key = sender as IHub;
             ILifetimeScope lifetimeScope;
-            if (key == null || !this._hubLifetimeScopes.TryRemove(key, out lifetimeScope) || lifetimeScope == null)
+            if (key == null || !this.hubLifetimeScopes.TryRemove(key, out lifetimeScope) || lifetimeScope == null)
                 return;
             lifetimeScope.Dispose();
         }

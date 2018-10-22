@@ -28,7 +28,6 @@ using NConfig;
 using NLog;
 using Owin;
 using Quartz;
-using SignalR.Extras.Autofac;
 using StackExchange.Exceptional;
 using StackExchange.Exceptional.Stores;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
@@ -83,6 +82,9 @@ namespace WB.UI.Headquarters
                 .RegisterType<AutofacServiceLocatorAdapter>()
                 .As<IServiceLocator>()
                 .InstancePerLifetimeScope();
+
+            autofacKernel.ContainerBuilder.RegisterType<Autofac.Integration.SignalR.AutofacDependencyResolver>()
+                .As<Microsoft.AspNet.SignalR.IDependencyResolver>().SingleInstance();
 
             autofacKernel.ContainerBuilder.RegisterType<CustomLifetimeHubManager>().SingleInstance();
             autofacKernel.ContainerBuilder.RegisterType<CustomAutofacHubActivator>().As<IHubActivator>().SingleInstance();
@@ -318,23 +320,6 @@ namespace WB.UI.Headquarters
                     Directory.CreateDirectory(jsonStorePathAbsolute);
                 }
             }
-        }
-    }
-
-    class CustomAutofacHubActivator : IHubActivator
-    {
-        private readonly ILifetimeScope _lifetimeScope;
-        private readonly CustomLifetimeHubManager _lifetimeHubManager;
-
-        public CustomAutofacHubActivator(CustomLifetimeHubManager lifetimeHubManager, ILifetimeScope lifetimeScope)
-        {
-            this._lifetimeScope = lifetimeScope;
-            this._lifetimeHubManager = lifetimeHubManager;
-        }
-
-        public IHub Create(HubDescriptor descriptor)
-        {
-            return typeof(ILifetimeHub).IsAssignableFrom(descriptor.HubType) ? (IHub)this._lifetimeHubManager.ResolveHub<ILifetimeHub>(descriptor.HubType, this._lifetimeScope) : this._lifetimeScope.Resolve(descriptor.HubType) as IHub;
         }
     }
 }

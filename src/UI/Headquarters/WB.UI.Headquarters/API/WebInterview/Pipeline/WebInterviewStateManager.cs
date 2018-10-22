@@ -4,9 +4,11 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.SignalR.Hubs;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Infrastructure.Native.Storage;
 
 namespace WB.UI.Headquarters.API.WebInterview.Pipeline
 {
@@ -39,7 +41,13 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
             var interviewId = hub.Context.QueryString[@"interviewId"];
 
             //resolve from context to preserve scope
-            var interview = serviceLocator.GetInstance<IStatefulInterviewRepository>().Get(interviewId);
+            IStatefulInterview interview = null;
+            this.serviceLocator.ExecuteActionInScope((locator) =>
+            {
+                IStatefulInterviewRepository statefulInterviewRepository = locator.GetInstance<IStatefulInterviewRepository>();
+                interview = statefulInterviewRepository.Get(interviewId);
+            });
+            
             Guid userId = Guid.Parse(hub.Context.User.Identity.GetUserId());
 
             if (isInterviewer && !interview.IsCompleted)
