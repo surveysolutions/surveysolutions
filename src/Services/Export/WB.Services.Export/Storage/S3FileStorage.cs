@@ -123,12 +123,11 @@ namespace WB.Services.Export.Storage
                 BucketName = S3Settings.BucketName,
                 Key = GetKey(key),
                 Expires = DateTime.UtcNow.Add(expiration)
-                
              };
 
             if (!string.IsNullOrWhiteSpace(asFilename))
             {
-                asFilename = WebUtility.UrlEncode(asFilename).Replace('+', ' ');
+                asFilename = WebUtility.UrlEncode(asFilename)?.Replace('+', ' ');
                 preSignedUrlRequest.ResponseHeaderOverrides.ContentDisposition = $"attachment; filename =\"{asFilename}\"";
             }
 
@@ -219,8 +218,9 @@ namespace WB.Services.Export.Storage
         {
             try
             {
-                this.log.LogTrace($"Removing file {S3Settings.BucketName}/{GetKey(path)}");
-                await client.DeleteObjectAsync(S3Settings.BucketName, GetKey(path));
+                var keyPath = GetKey(path);
+                this.log.LogTrace("Removing file {bucketName}/{key}", S3Settings.BucketName, keyPath);
+                await client.DeleteObjectAsync(S3Settings.BucketName, keyPath);
             }
             catch (AmazonS3Exception e) when (e.StatusCode == HttpStatusCode.NotFound)
             {
