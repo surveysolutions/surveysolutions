@@ -58,7 +58,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewPackagesServiceTes
                 .Returns(true);
 
             var container = new Mock<ILifetimeScope>();
-            container.Setup(x => x.BeginLifetimeScope()).Returns(container.Object);
+            container.Setup(x => x.BeginLifetimeScope(It.IsAny<string>())).Returns(container.Object);
             container.SetupGet(x => x.ComponentRegistry).Returns(componentRegistry.Object);
 
             var serviceLocatorNestedMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
@@ -92,11 +92,15 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewPackagesServiceTes
             var serviceLocatorOriginal = ServiceLocator.IsLocationProviderSet ? ServiceLocator.Current : null;
             ServiceLocator.SetLocatorProvider(() => autofacServiceLocatorAdapterForTests);
 
-
-            // Act
-            service.ProcessPackage(Create.Entity.InterviewPackage(Id.g1, Create.Event.SupervisorAssigned(Id.gC, oldSupervisorId)));
-
-            ServiceLocator.SetLocatorProvider(() => serviceLocatorOriginal);
+            try
+            {
+                // Act
+                service.ProcessPackage(Create.Entity.InterviewPackage(Id.g1, Create.Event.SupervisorAssigned(Id.gC, oldSupervisorId)));
+            }
+            finally
+            {
+                ServiceLocator.SetLocatorProvider(() => serviceLocatorOriginal);
+            }
 
             // Assert
             Assert.That(syncCommand, Is.Not.Null);
@@ -119,7 +123,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewPackagesServiceTes
                 .Returns(true);
 
             var container = new Mock<ILifetimeScope>();
-            container.Setup(x => x.BeginLifetimeScope()).Returns(container.Object);
+            container.Setup(x => x.BeginLifetimeScope(It.IsAny<string>())).Returns(container.Object);
             container.SetupGet(x => x.ComponentRegistry).Returns(componentRegistry.Object);
 
             var serviceLocatorNestedMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
@@ -153,11 +157,17 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewPackagesServiceTes
             var serviceLocatorOriginal = ServiceLocator.IsLocationProviderSet ? ServiceLocator.Current : null;
 
             ServiceLocator.SetLocatorProvider(() => autofacServiceLocatorAdapterForTests);
+            try
+            {
+                // Act
+                service.ProcessPackage(Create.Entity.InterviewPackage(Id.g1,
+                    Create.Event.SupervisorAssigned(Id.gC, oldSupervisorId)));
 
-            // Act
-            service.ProcessPackage(Create.Entity.InterviewPackage(Id.g1, Create.Event.SupervisorAssigned(Id.gC, oldSupervisorId)));
-
-            ServiceLocator.SetLocatorProvider(() => serviceLocatorOriginal);
+            }
+            finally
+            {
+                ServiceLocator.SetLocatorProvider(() => serviceLocatorOriginal);
+            }
 
             // Assert
             Assert.That(syncCommand, Is.Not.Null);

@@ -39,7 +39,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewPackagesServiceTes
                 .Returns(true);
 
             var container = new Mock<ILifetimeScope>();
-            container.Setup(x => x.BeginLifetimeScope()).Returns(container.Object);
+            container.Setup(x => x.BeginLifetimeScope(It.IsAny<string>())).Returns(container.Object);
             container.SetupGet(x => x.ComponentRegistry).Returns(componentRegistry.Object);
 
 
@@ -65,14 +65,18 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewPackagesServiceTes
             var serviceLocatorOriginal = ServiceLocator.IsLocationProviderSet ? ServiceLocator.Current : null;
 
             ServiceLocator.SetLocatorProvider(() => autofacServiceLocatorAdapterForTests);
+            try
+            {
+                var service = Create.Service.InterviewPackagesService(commandService: commandService.Object);
 
-            var service = Create.Service.InterviewPackagesService(commandService: commandService.Object);
-
-            // Act
-            service.ProcessPackage(Create.Entity.InterviewPackage(Guid.NewGuid(), 
-                Create.Event.TextQuestionAnswered(answer: new string(new []{'a', '\0', '1'}))));
-
-            ServiceLocator.SetLocatorProvider(() => serviceLocatorOriginal);
+                // Act
+                service.ProcessPackage(Create.Entity.InterviewPackage(Guid.NewGuid(),
+                    Create.Event.TextQuestionAnswered(answer: new string(new[] { 'a', '\0', '1' }))));
+            }
+            finally
+            {
+                ServiceLocator.SetLocatorProvider(() => serviceLocatorOriginal);
+            }
 
             // Assert
             Assert.That(syncCommand, Is.Not.Null);

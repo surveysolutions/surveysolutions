@@ -95,9 +95,10 @@ namespace WB.Tests.Integration.InterviewTests
             bool useLatestEngine = true,
             List<InterviewAnswer> answers = null,
             QuestionnaireIdentity questionnaireIdentity = null,
-            IQuestionnaireStorage questionnaireStorage = null)
+            IQuestionnaireStorage questionnaireStorage = null,
+            IQuestionOptionsRepository questionOptionsRepository = null)
         {
-            return SetupStatefullInterviewWithExpressionStorage(questionnaireDocument, events, answers, questionnaireIdentity, questionnaireStorage);
+            return SetupStatefullInterviewWithExpressionStorage(questionnaireDocument, events, answers, questionnaireIdentity, questionnaireStorage, questionOptionsRepository);
         }
 
         protected static StatefulInterview SetupStatefullInterviewWithExpressionStorage(
@@ -105,7 +106,8 @@ namespace WB.Tests.Integration.InterviewTests
             IEnumerable<object> events = null,
             List<InterviewAnswer> answers = null,
             QuestionnaireIdentity questionnaireIdentity = null,
-            IQuestionnaireStorage questionnaireStorage = null)
+            IQuestionnaireStorage questionnaireStorage = null,
+            IQuestionOptionsRepository optionsRepository = null)
         {
             questionnaireIdentity = questionnaireIdentity ?? new QuestionnaireIdentity(questionnaireDocument.PublicKey, 1);
             questionnaireDocument.IsUsingExpressionStorage = true;
@@ -113,14 +115,14 @@ namespace WB.Tests.Integration.InterviewTests
             var readOnlyQuestionnaireDocument = questionnaireDocument.AsReadOnly();
             questionnaireDocument.ExpressionsPlayOrder = playOrderProvider.GetExpressionsPlayOrder(readOnlyQuestionnaireDocument);
             var dependencyGraph = playOrderProvider.GetDependencyGraph(readOnlyQuestionnaireDocument);
-            questionnaireDocument.DependencyGraph = dependencyGraph ?? throw new ArgumentException("please check questionnire, you have cycle reference");
+            questionnaireDocument.DependencyGraph = dependencyGraph ?? throw new ArgumentException("please check questionnaire, you have cycle reference");
             questionnaireDocument.ValidationDependencyGraph = playOrderProvider.GetValidationDependencyGraph(readOnlyQuestionnaireDocument);
 
             var state = GetLatestExpressionStorage(questionnaireDocument);
 
             var statePrototypeProvider = Mock.Of<IInterviewExpressionStatePrototypeProvider>(a => a.GetExpressionStorage(It.IsAny<QuestionnaireIdentity>()) == state);
 
-            var questionOptionsRepository = new QuestionnaireQuestionOptionsRepository();
+            var questionOptionsRepository = optionsRepository ??  new QuestionnaireQuestionOptionsRepository();
 
             var questionnaire = Create.Entity.PlainQuestionnaire(questionnaireDocument, 1 , questionOptionsRepository: questionOptionsRepository);
 

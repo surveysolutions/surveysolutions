@@ -54,7 +54,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewPackagesServiceTes
                 .Returns(true);
 
             var container = new Mock<ILifetimeScope>();
-            container.Setup(x => x.BeginLifetimeScope()).Returns(container.Object);
+            container.Setup(x => x.BeginLifetimeScope(It.IsAny<string>())).Returns(container.Object);
             container.SetupGet(x => x.ComponentRegistry).Returns(componentRegistry.Object);
 
             var serviceLocatorNestedMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
@@ -86,13 +86,23 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewPackagesServiceTes
 
             var serviceLocatorOriginal = ServiceLocator.IsLocationProviderSet ? ServiceLocator.Current : null;
             ServiceLocator.SetLocatorProvider(() => autofacServiceLocatorAdapterForTests);
+            try
+            {
 
-            var service = Create.Service.InterviewPackagesService(interviews: interviews, commandService: commandService.Object);
 
-            // Act
-            service.ProcessPackage(Create.Entity.InterviewPackage(interviewId, keyAssignedEventZero, keyAssignedEvent));
+                var service =
+                    Create.Service.InterviewPackagesService(interviews: interviews,
+                        commandService: commandService.Object);
 
-            ServiceLocator.SetLocatorProvider(() => serviceLocatorOriginal);
+                // Act
+                service.ProcessPackage(Create.Entity.InterviewPackage(interviewId, keyAssignedEventZero,
+                    keyAssignedEvent));
+            }
+            finally
+            {
+                ServiceLocator.SetLocatorProvider(() => serviceLocatorOriginal);
+            }
+            
             // Assert
             commandService.Verify(x => x.Execute(It.Is<SynchronizeInterviewEventsCommand>(cmd => cmd.InterviewKey == null), It.IsAny<string>()));
         }
