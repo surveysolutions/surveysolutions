@@ -274,6 +274,7 @@
   <ItemGroup>
     <Compile Include="Activities\ActivityExtensions.cs" />
     <Compile Include="Activities\Dashboard\ExpandableViewHolder.cs" />
+    <Compile Include="Activities\EnumeratorSplashScreenAppCompatActivity.cs" />
     <Compile Include="Activities\SearchActivity.cs" />
     <Compile Include="Activities\SelectResponsibleForInterviewFragment.cs" />
     <Compile Include="Converters\EnumToStringConverter.cs" />
@@ -386,6 +387,7 @@
     <Compile Include="OfflineSync\Services\Implementation\IGoogleApiClientFactory.cs" />
     <Compile Include="OfflineSync\Services\Implementation\NearbyConnectionImplementation.cs" />
     <Compile Include="OfflineSync\Services\Implementation\PayloadProvider.cs" />
+    <Compile Include="OfflineSync\Services\Implementation\SecureStorage.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EnumeratorSetup.cs" />

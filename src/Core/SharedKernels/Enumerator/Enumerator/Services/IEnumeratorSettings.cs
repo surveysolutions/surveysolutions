@@ -23,5 +23,7 @@ namespace WB.Core.SharedKernels.Enumerator.Services
         long? LastHqSyncTimestamp { get; }
         void SetLastHqSyncTimestamp(long? lastHqSyncTimestamp);
         EnumeratorApplicationType ApplicationType { get; }
+        bool Encrypted { get; }
+        void SetEncrypted(bool encrypted);
     }
 }

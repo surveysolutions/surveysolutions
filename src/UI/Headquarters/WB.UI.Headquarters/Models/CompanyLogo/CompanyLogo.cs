@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Security.Cryptography;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
+using WB.Core.BoundedContexts.Headquarters.Views;
 
 namespace WB.UI.Headquarters.Models.CompanyLogo
 {
