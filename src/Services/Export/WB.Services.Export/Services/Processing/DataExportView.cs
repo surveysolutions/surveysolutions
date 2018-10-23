@@ -13,6 +13,6 @@ namespace WB.Services.Export.Services.Processing
         public double FileSize { get; set; }
         public int ProgressInPercents { get; set; }
         public string DataExportProcessId { get; set; }
-        public DataExportStatus StatusOfLatestExportProcess { get; set; }
+        public DataExportStatus ProcessStatus { get; set; }
     }
 }
