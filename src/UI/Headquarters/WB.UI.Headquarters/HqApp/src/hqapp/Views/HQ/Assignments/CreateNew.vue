@@ -139,6 +139,7 @@ export default {
         newResponsibleSelected(newValue) {
             this.newResponsibleId = newValue
             this.assignToQuestion.isAnswered = this.newResponsibleId != null
+            this.assignToQuestion.validity.isValid = this.newResponsibleId != null
         },
         async create(ev) {
             const validationResult = await this.$validator.validateAll()
