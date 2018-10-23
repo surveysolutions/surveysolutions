@@ -28,6 +28,7 @@
 <script lang="js">
     import { entityDetails } from "../mixins"
     import { find, isEqual } from "lodash"
+    import { shouldShowAnsweredOptionsOnlyForSingle } from "./question_helpers"
 
     export default {
         name: "LinkedSingle",
@@ -38,8 +39,7 @@
         },
         computed: {
             shouldShowAnsweredOptionsOnly(){
-                var isSupervisorOnsupervisorQuestion = this.$me.isForSupervisor && !this.$me.isDisabled;
-                return !isSupervisorOnsupervisorQuestion && !this.showAllOptions && this.$store.getters.isReviewMode && !this.noOptions && this.$me.answer;
+                return shouldShowAnsweredOptionsOnlyForSingle(this);
             },
             answeredOrAllOptions(){
                 if(!this.shouldShowAnsweredOptionsOnly)

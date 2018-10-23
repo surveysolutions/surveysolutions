@@ -49,6 +49,7 @@
     import * as $ from "jquery"
     import modal from "../modal"
     import { findIndex, filter } from "lodash"
+    import { shouldShowAnsweredOptionsOnlyForMulti } from "./question_helpers"
     
     export default {
         name: 'CategoricalYesNo',
@@ -65,9 +66,7 @@
                 return isMaxLimitReached;
             },
             shouldShowAnsweredOptionsOnly(){
-                var isSupervisorOnsupervisorQuestion = this.$me.isForSupervisor && !this.$me.isDisabled;
-                return !isSupervisorOnsupervisorQuestion && !this.showAllOptions && this.$store.getters.isReviewMode && !this.noOptions &&                     
-                    this.$me.answer.length > 0 && this.$me.answer.length < this.$me.options.length;
+                 return shouldShowAnsweredOptionsOnlyForMulti(this);
             },
             answeredOrAllOptions(){
                 if(!this.shouldShowAnsweredOptionsOnly)
