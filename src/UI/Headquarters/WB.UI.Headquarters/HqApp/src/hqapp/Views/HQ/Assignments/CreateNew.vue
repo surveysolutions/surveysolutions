@@ -58,6 +58,7 @@
                                             <input v-model="sizeQuestion.answer" 
                                                 :title="this.$t('Assignments.SizeExplanation')"
                                                 v-validate="'regex:^-?([0-9]+)$|min_value:-1'"
+                                                maxlength="9"
                                                 type="text" autocomplete="off" inputmode="numeric" class="field-to-fill"/>
                                         </div>
                                     </div>
