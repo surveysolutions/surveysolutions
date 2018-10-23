@@ -180,7 +180,7 @@ namespace WB.UI.Headquarters.API
                 throw new HttpException(404, @"Questionnaire not found");
 
             await RequestExportUpdateAsync(questionnaireBrowseItem, DataExportFormat.Binary, 
-                state.InterviewStatus, 
+                null,
                 state.FromDate?.ToUniversalTime(),
                 state.ToDate?.ToUniversalTime(),
                 model.Access_token, state.Type);
