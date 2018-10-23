@@ -125,7 +125,7 @@ namespace WB.Services.Export.Jobs
             {
                 DataExportFormat = exportSettings.ExportFormat,
                 DataExportType = dataType,
-                StatusOfLatestExportProcess = GetStatusOfExportProcess(dataType, 
+                ProcessStatus = GetStatusOfExportProcess(dataType, 
                     exportSettings.ExportFormat, exportSettings.QuestionnaireId, 
                     allProcesses)
             };

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Refit;
@@ -27,6 +28,9 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             [Query]InterviewStatus? status,
             [Query]DateTime? fromDate,
             [Query]DateTime? toDate);
+
+        [Get("/api/v1/job/running")]
+        Task<List<string>> GetRunningExportJobs();
 
         [Get("/api/v1/job/download")]
         Task<HttpResponseMessage> DownloadArchive(

@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -160,6 +162,18 @@ namespace WB.Services.Export.Host.Controllers
             }
 
             return Ok();
+        }
+
+        [HttpGet]
+        [Route("api/v1/job/running")]
+        public async Task<List<string>> GetRunningJobsList(TenantInfo tenant)
+        {
+            var jobs = await this.exportProcessesService.GetAllProcesses(tenant);
+
+            return jobs
+                .Where(j => j.Status.IsRunning)
+                .Select(j => j.ExportSettings.QuestionnaireId.ToString())
+                .ToList();
         }
     }
 }

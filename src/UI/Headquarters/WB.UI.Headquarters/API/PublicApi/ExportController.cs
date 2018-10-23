@@ -8,11 +8,12 @@ using System.Web.Http.Description;
 using Main.Core.Entities.SubEntities;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
-using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.Headquarters.Code;
@@ -22,22 +23,29 @@ namespace WB.UI.Headquarters.API.PublicApi
     /// <summary>
     /// Provides a methods for managing export related actions
     /// </summary>
-    [ApiBasicAuth(new[] { UserRoles.ApiUser, UserRoles.Administrator }, TreatPasswordAsPlain = true)]
+    [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Administrator, TreatPasswordAsPlain = true)]
     [RoutePrefix(@"api/v1/export")]
     public class ExportController : ApiController
     {
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
-        private readonly IDataExportProcessesService dataExportProcessesService;
-        
+        private readonly IExportServiceApi exportServiceApi;
         private readonly IDataExportStatusReader dataExportStatusReader;
+        private readonly IExportSettings exportSettings;
+        private readonly IAuditLog auditLog;
+            
 
-        public ExportController(IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
-            IDataExportProcessesService dataExportProcessesService,
-            IDataExportStatusReader dataExportStatusReader)
+        public ExportController(
+            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
+            IDataExportStatusReader dataExportStatusReader, 
+            IExportServiceApi exportServiceApi, 
+            IExportSettings exportSettings, 
+            IAuditLog auditLog)
         {
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
-            this.dataExportProcessesService = dataExportProcessesService;
             this.dataExportStatusReader = dataExportStatusReader;
+            this.exportServiceApi = exportServiceApi;
+            this.exportSettings = exportSettings;
+            this.auditLog = auditLog;
         }
 
         /// <summary>
@@ -54,7 +62,10 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// <response code="404">Questionnaire was not found</response>
         [HttpPost]
         [Route(@"{exportType}/{id?}/start")]
-        public async Task<IHttpActionResult> StartProcess(string id, DataExportFormat exportType, InterviewStatus? status = null, DateTime? from = null, DateTime? to = null)
+        public async Task<IHttpActionResult> StartProcess(string id, 
+            DataExportFormat exportType, 
+            InterviewStatus? status = null, 
+            DateTime? from = null, DateTime? to = null)
         {
             switch (exportType)
             {
@@ -67,18 +78,25 @@ namespace WB.UI.Headquarters.API.PublicApi
                     var questionnaireBrowseItem = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
                     if (questionnaireBrowseItem == null)
                         return this.Content(HttpStatusCode.NotFound, @"Questionnaire not found");
+                    
+                    await this.exportServiceApi.RequestUpdate(questionnaireIdentity.ToString(),
+                        exportType, status, from, to, GetPasswordFromSettings(), null, null);
+                    
+                    this.auditLog.ExportStared(
+                        $@"{questionnaireBrowseItem.Title} v{questionnaireBrowseItem.Version} {status?.ToString() ?? ""}", 
+                        exportType);
 
-                    await this.dataExportProcessesService.AddDataExportAsync(
-                        new DataExportProcessDetails(exportType, questionnaireIdentity, questionnaireBrowseItem.Title)
-                    {
-                        FromDate = @from,
-                        ToDate = to,
-                        InterviewStatus = status
-                    });
                     break;
             }
 
             return this.Ok();
+        }
+
+        private string GetPasswordFromSettings()
+        {
+            return this.exportSettings.EncryptionEnforced()
+                ? this.exportSettings.GetPassword()
+                : null;
         }
 
         /// <summary>
@@ -95,7 +113,7 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// <response code="404">Questionnaire was not found</response>
         [HttpPost]
         [Route(@"{exportType}/{id}/cancel")]
-        public IHttpActionResult CancelProcess(string id, DataExportFormat exportType, InterviewStatus? status = null, DateTime? from = null, DateTime? to = null)
+        public async Task<IHttpActionResult> CancelProcess(string id, DataExportFormat exportType, InterviewStatus? status = null, DateTime? from = null, DateTime? to = null)
         {
             if (!QuestionnaireIdentity.TryParse(id, out var questionnaireIdentity))
                 return this.Content(HttpStatusCode.BadRequest, @"Invalid questionnaire identity");
@@ -104,13 +122,7 @@ namespace WB.UI.Headquarters.API.PublicApi
             if (questionnaireBrowseItem == null)
                 return this.Content(HttpStatusCode.NotFound, @"Questionnaire not found");
 
-            this.dataExportProcessesService.DeleteDataExport(
-                new DataExportProcessDetails(exportType, questionnaireIdentity, questionnaireBrowseItem.Title)
-                {
-                    FromDate = from,
-                    ToDate = to,
-                    InterviewStatus = status
-                }.NaturalId);
+            await this.exportServiceApi.DeleteProcess(id);
 
             return this.Ok();
         }
