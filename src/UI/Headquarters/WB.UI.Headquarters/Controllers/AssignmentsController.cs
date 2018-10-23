@@ -1,8 +1,12 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.Web.Mvc;
+using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Code;
@@ -15,14 +19,23 @@ namespace WB.UI.Headquarters.Controllers
     [ActivePage(MenuItem.Assignments)]
     public class AssignmentsController : BaseController
     {
+        private readonly IStatefulInterviewRepository interviews;
+        private readonly IQuestionnaireStorage questionnaireStorage;
         private readonly IAuthorizedUser currentUser;
+        private readonly IPlainStorageAccessor<Assignment> assignmentsStorage;
 
         public AssignmentsController(ICommandService commandService,
             ILogger logger,
-            IAuthorizedUser currentUser)
+            IStatefulInterviewRepository interviews,
+            IQuestionnaireStorage questionnaireStorage,
+            IAuthorizedUser currentUser, 
+            IPlainStorageAccessor<Assignment> assignmentsStorage)
             : base(commandService, logger)
         {
+            this.interviews = interviews;
+            this.questionnaireStorage = questionnaireStorage;
             this.currentUser = currentUser;
+            this.assignmentsStorage = assignmentsStorage;
         }
         
         [Localizable(false)]
@@ -50,6 +63,27 @@ namespace WB.UI.Headquarters.Controllers
             };
 
             return View(model);
+        }
+
+        [HttpPost]
+        [AuthorizeOr403(Roles = "Administrator, Headquarter")]
+        [ObserverNotAllowed]
+        public ActionResult Create(string id, Guid responsibleId, int? size)
+        {
+            var interview = this.interviews.Get(id);
+            if (interview == null)
+            {
+                return HttpNotFound();
+            }
+
+            var questionnaire = this.questionnaireStorage.GetQuestionnaire(interview.QuestionnaireIdentity, null);
+            var assignment = Assignment.PrefillFromInterview(interview, questionnaire);
+            assignment.UpdateQuantity(size);
+            assignment.Reassign(responsibleId);
+
+            this.assignmentsStorage.Store(assignment, null);
+
+            return RedirectToAction("Index");
         }
     }
 

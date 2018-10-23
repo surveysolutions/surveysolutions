@@ -1,5 +1,5 @@
 <template>
-    <wb-question :question="$me" questionCssClassName="single-select-question">
+    <wb-question :question="$me" questionCssClassName="single-select-question" :no-comments="noComments">
         <div class="question-unit">
             <div class="options-group">
                 <div class="form-group">

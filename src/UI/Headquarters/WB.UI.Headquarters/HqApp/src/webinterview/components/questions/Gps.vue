@@ -1,5 +1,5 @@
 <template>
-    <wb-question :question="$me" questionCssClassName="gps-question">
+    <wb-question :question="$me" questionCssClassName="gps-question" :no-comments="noComments">
         <div class="question-unit">
             <div class="options-group">
                 <div class="field" :class="{answered: $me.isAnswered}" v-if="$me.isAnswered">
@@ -40,6 +40,7 @@
     export default {
         name: "Gps",
         mixins: [entityDetails],
+        props: ['noComments'],
         data() {
             return {
                 isInProgress: false
