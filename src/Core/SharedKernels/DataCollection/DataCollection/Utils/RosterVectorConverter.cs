@@ -6,23 +6,23 @@ using Newtonsoft.Json;
 
 namespace WB.Core.SharedKernels.DataCollection.Utils
 {
-    [Obsolete("Should be removed as soon as we sure that there is no stored json events with decimal arrays")]
     public class RosterVectorConverter : JsonConverter
     {
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             var vector = (RosterVector)value;
 
-            if (serializer.TypeNameHandling == TypeNameHandling.All || serializer.TypeNameHandling == TypeNameHandling.Auto)
+            if (serializer.TypeNameHandling == TypeNameHandling.All)
             {
                 writer.WriteStartObject();
                 writer.WritePropertyName("$type");
                 writer.WriteValue(FullRosterVectorTypeName);
                 writer.WritePropertyName("$values");
                 writer.WriteStartArray();
-                foreach (var coordinate in vector.Coordinates)
+
+                for (int i = 0; i < vector.Array.Length; i++)
                 {
-                    writer.WriteValue(coordinate);
+                    writer.WriteValue(vector.Array[i]);
                 }
 
                 writer.WriteEndArray();
@@ -30,7 +30,7 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
             }
             else
             {
-                serializer.Serialize(writer, vector.Coordinates);
+                serializer.Serialize(writer, vector.Array);
             }
         }
 

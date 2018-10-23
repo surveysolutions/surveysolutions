@@ -5,7 +5,6 @@ using Newtonsoft.Json;
 
 namespace WB.Core.SharedKernels.DataCollection.Utils
 {
-    [Obsolete("Should be removed as soon as we sure that there is no stored json events with decimal arrays")]
     public class IdentityJsonConverter : JsonConverter
     {
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
