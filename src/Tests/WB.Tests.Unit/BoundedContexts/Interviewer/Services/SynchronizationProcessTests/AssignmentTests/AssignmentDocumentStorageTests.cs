@@ -5,6 +5,7 @@ using SQLite;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Tests.Abc;
 using System.Collections.Generic;
+using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Views;
@@ -21,7 +22,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
         {
             this.connection = Create.Storage.InMemorySqLiteConnection;
 
-            this.storage = new AssignmentDocumentsStorage(connection, Mock.Of<ILogger>());
+            this.storage = new AssignmentDocumentsStorage(connection, Mock.Of<ILogger>(), Mock.Of<IEncryptionService>());
         }
 
         [Test]

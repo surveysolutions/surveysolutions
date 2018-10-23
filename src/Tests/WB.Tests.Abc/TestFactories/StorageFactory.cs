@@ -14,6 +14,7 @@ using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
@@ -58,7 +59,10 @@ namespace WB.Tests.Abc.TestFactories
 
         public IAssignmentDocumentsStorage AssignmentDocumentsInmemoryStorage()
         {
-            return new AssignmentDocumentsStorage(InMemorySqLiteConnection, Mock.Of<ILogger>());
+            var mockOfEncryptionService = new Mock<IEncryptionService>();
+            mockOfEncryptionService.Setup(x => x.Encrypt(It.IsAny<string>())).Returns<string>(x=>x);
+            mockOfEncryptionService.Setup(x => x.Decrypt(It.IsAny<string>())).Returns<string>(x => x);
+            return new AssignmentDocumentsStorage(InMemorySqLiteConnection, Mock.Of<ILogger>(), mockOfEncryptionService.Object);
         }
 
         public SQLiteConnectionWithLock InMemorySqLiteConnection =>
