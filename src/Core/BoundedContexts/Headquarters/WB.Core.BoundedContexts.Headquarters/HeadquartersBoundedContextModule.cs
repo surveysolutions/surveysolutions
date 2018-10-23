@@ -132,6 +132,8 @@ namespace WB.Core.BoundedContexts.Headquarters
                     typeof(DataCollectionSharedKernelAssemblyMarker).Assembly,
                     typeof(HeadquartersBoundedContextModule).Assembly));
 
+            registry.BindAsSingleton<IInMemoryEventStore, InMemoryEventStore>();
+
             registry.BindToConstant(() => this.externalStoragesSettings);
 
             registry.BindToConstant<SyncSettings>(() => this.syncSettings);
@@ -310,7 +312,7 @@ namespace WB.Core.BoundedContexts.Headquarters
                 .InitializesWith<CreateInterviewFromSynchronizationMetadata>(command => command.InterviewId, (command, aggregate) => aggregate.CreateInterviewFromSynchronizationMetadata(command.Id, command.UserId, command.QuestionnaireId, command.QuestionnaireVersion, command.InterviewStatus, command.FeaturedQuestionsMeta, command.Comments, command.RejectedDateTime, command.InterviewerAssignedDateTime, command.Valid, command.CreatedOnClient, command.OriginDate))
                 .InitializesWith<SynchronizeInterviewEventsCommand>(command => command.InterviewId, aggregate => aggregate.SynchronizeInterviewEvents)
                 .InitializesWith<CreateInterview>(command => command.InterviewId, (command, aggregate) => aggregate.CreateInterview(command))
-
+                .InitializesWith<CreateTemporaryInterviewCommand>(command => command.InterviewId, (command, aggregate) => aggregate.CreateTemporaryInterview(command))
                 .StatelessHandles<HardDeleteInterview>(command => command.InterviewId, (command, aggregate) => aggregate.HardDelete(command.UserId, command.OriginDate))
 
                 .Handles<AnswerDateTimeQuestionCommand>(command => command.InterviewId, (command, aggregate) => aggregate.AnswerDateTimeQuestion(command.UserId, command.QuestionId, command.RosterVector, command.OriginDate, command.Answer))

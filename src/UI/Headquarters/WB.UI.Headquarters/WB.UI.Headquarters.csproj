@@ -1755,7 +1755,7 @@
     <Content Include="Views\HQ\SampleCreationResult.cshtml" />
     <Content Include="Views\Reports\TeamsAndStatuses.cshtml" />
     <Content Include="Views\Reports\SurveysAndStatuses.cshtml" />
-    <Content Include="Views\HQ\TakeNew.cshtml" />
+    <Content Include="Views\HQ\TakeNewAssignment.cshtml" />
     <Content Include="Views\ControlPanel\CreateHeadquarters.cshtml" />
     <Content Include="Views\ControlPanel\ResetPrivilegedUserPassword.cshtml" />
     <Content Include="Views\Shared\SupervisorMainMenu.cshtml" />

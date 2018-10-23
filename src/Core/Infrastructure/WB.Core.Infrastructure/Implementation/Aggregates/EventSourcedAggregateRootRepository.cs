@@ -13,7 +13,7 @@ namespace WB.Core.Infrastructure.Implementation.Aggregates
     {
         private readonly IEventStore eventStore;
         private readonly ISnapshotStore snapshotStore;
-        private readonly IDomainRepository repository;
+        protected readonly IDomainRepository repository;
 
         public EventSourcedAggregateRootRepository(IEventStore eventStore, ISnapshotStore snapshotStore, IDomainRepository repository)
         {

@@ -243,9 +243,10 @@ namespace WB.Tests.Abc.TestFactories
             => new LiteEventRegistry();
 
         public NcqrCompatibleEventDispatcher NcqrCompatibleEventDispatcher(EventBusSettings eventBusSettings = null,
-            ILogger logger = null, params IEventHandler[] handlers)
+            ILogger logger = null, IInMemoryEventStore inMemoryEventStore = null, params IEventHandler[] handlers)
             => new NcqrCompatibleEventDispatcher(
                 eventStore: Mock.Of<IEventStore>(),
+                inMemoryEventStore: inMemoryEventStore ?? Mock.Of<IInMemoryEventStore>(),
                 eventBusSettings: eventBusSettings ?? Create.Entity.EventBusSettings(),
                 logger: logger ?? Mock.Of<ILogger>(),
                 eventHandlers: handlers);
