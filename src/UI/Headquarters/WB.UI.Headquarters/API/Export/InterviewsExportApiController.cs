@@ -3,17 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.ModelBinding;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
-using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -29,7 +24,6 @@ namespace WB.UI.Headquarters.API.Export
         private readonly IInterviewFactory interviewFactory;
         private readonly IInterviewDiagnosticsFactory interviewDiagnosticsFactory;
         private readonly IInterviewHistoryFactory interviewHistoryFactory;
-        private readonly IEntitySerializer<object> allTypesSerializer;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatuses;
 
         public InterviewsExportApiController(
@@ -37,14 +31,12 @@ namespace WB.UI.Headquarters.API.Export
             IInterviewFactory interviewFactory,
             IInterviewDiagnosticsFactory interviewDiagnosticsFactory,
             IInterviewHistoryFactory interviewHistoryFactory,
-            IEntitySerializer<object> allTypesSerializer,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewStatuses)
         {
             this.viewFactory = viewFactory ?? throw new ArgumentNullException(nameof(viewFactory));
             this.interviewFactory = interviewFactory ?? throw new ArgumentNullException(nameof(interviewFactory));
             this.interviewDiagnosticsFactory = interviewDiagnosticsFactory ?? throw new ArgumentNullException(nameof(interviewDiagnosticsFactory));
             this.interviewHistoryFactory = interviewHistoryFactory ?? throw new ArgumentNullException(nameof(interviewHistoryFactory));
-            this.allTypesSerializer = allTypesSerializer;
             this.interviewStatuses = interviewStatuses ?? throw new ArgumentNullException(nameof(interviewStatuses));
 
             
