@@ -23,7 +23,7 @@ namespace WB.Services.Export.Services.Processing
         public string GetFileNameForExportArchive(ExportSettings exportSettings, string withQuestionnaireName = null)
         {
             var statusSuffix = exportSettings.Status != null && exportSettings.ExportFormat != DataExportFormat.Binary 
-                ? exportSettings.ExportFormat.ToString() 
+                ? exportSettings.Status.ToString() 
                 : "All";
 
             var fromDatePrefix = exportSettings.FromDate == null || exportSettings.ExportFormat == DataExportFormat.Binary 
