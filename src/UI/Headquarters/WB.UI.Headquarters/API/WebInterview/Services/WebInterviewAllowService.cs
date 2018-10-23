@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -17,6 +18,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
         private readonly IAuthorizedUser authorizedUser;
+        private readonly EventBusSettings eventBusSettings;
         private readonly IPlainTransactionManagerProvider plainTransactionManagerProvider;
         private static readonly List<InterviewStatus> AllowedInterviewStatuses = new List<InterviewStatus>
         {
@@ -35,21 +37,32 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
             IPlainTransactionManagerProvider plainTransactionManagerProvider,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage,
             IWebInterviewConfigProvider webInterviewConfigProvider, 
-            IAuthorizedUser authorizedUser)
+            IAuthorizedUser authorizedUser,
+            EventBusSettings EventBusSettings)
         {
             this.transactionManagerProvider = transactionManagerProvider;
             this.interviewSummaryStorage = interviewSummaryStorage;
             this.webInterviewConfigProvider = webInterviewConfigProvider;
             this.authorizedUser = authorizedUser;
+            eventBusSettings = EventBusSettings;
             this.plainTransactionManagerProvider = plainTransactionManagerProvider;
         }
 
         public void CheckWebInterviewAccessPermissions(string interviewId)
         {
+            if(this.eventBusSettings.IgnoredAggregateRoots.Contains(interviewId))
+                if (!this.authorizedUser.IsHeadquarter && !this.authorizedUser.IsAdministrator)
+                {
+                    throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewNotFound, Enumerator.Native.Resources.WebInterview.Error_NotFound);
+                }
+                else
+                {
+                    return;
+                }
+
             Guid interviewGuid = Guid.Parse(interviewId);
             var interview = transactionManagerProvider.GetTransactionManager()
-                .ExecuteInQueryTransaction(
-                    () => interviewSummaryStorage.GetById(interviewGuid));
+                .ExecuteInQueryTransaction(() => interviewSummaryStorage.GetById(interviewGuid));
 
             if (interview == null)
                 throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewNotFound, Enumerator.Native.Resources.WebInterview.Error_NotFound);

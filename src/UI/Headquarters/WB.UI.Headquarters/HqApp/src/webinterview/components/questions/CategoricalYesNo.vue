@@ -1,5 +1,5 @@
 <template>
-    <wb-question :question="$me" :questionCssClassName="$me.ordered ? 'yes-no-question ordered' : 'yes-no-question'">
+    <wb-question :question="$me" :questionCssClassName="$me.ordered ? 'yes-no-question ordered' : 'yes-no-question'"  :no-comments="noComments">
         <div class="question-unit">
             <div class="yes-no-mark">{{ $t("WebInterviewUI.Yes") }} <b>/</b> {{ $t("WebInterviewUI.No")}}</div>
             <div class="options-group">
@@ -57,6 +57,7 @@
                 showAllOptions: false
             }
         },
+        props: ['noComments'],
         computed: {
             allAnswersGiven() {
                 const yesAnswers = $.grep(this.$me.answer, function(e){ return e.yes; });

@@ -1,6 +1,7 @@
 ﻿<template>
     <wb-question :question="$me"
-                 :questionCssClassName="$me.isTimestamp ? 'current-time-question' : 'time-question'">
+                 :questionCssClassName="$me.isTimestamp ? 'current-time-question' : 'time-question'"
+                 :no-comments="noComments">
         <div class="question-unit">
             <div class="options-group">
                 <div v-if="!$me.isTimestamp"
@@ -46,6 +47,7 @@
     export default {
         name: "DateTime",
         mixins: [entityDetails],
+        props: ['noComments'],
         data() {
             return {
                 pickerOpts: {

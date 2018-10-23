@@ -282,4 +282,10 @@
   <data name="ReceivedByTablet" xml:space="preserve">
     <value>Received by tablet</value>
   </data>
+  <data name="CreatingNewAssignment" xml:space="preserve">
+    <value>Create new assignment for questionnaire {{questionnaire}}</value>
+  </data>
+  <data name="AssignTo" xml:space="preserve">
+    <value>Assign to</value>
+  </data>
 </root>
