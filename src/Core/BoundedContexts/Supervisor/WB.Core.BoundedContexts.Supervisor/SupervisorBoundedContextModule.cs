@@ -12,6 +12,7 @@ namespace WB.Core.BoundedContexts.Supervisor
         public void Load(IIocRegistry registry)
         {
             registry.BindWithConstructorArgument<ISynchronizationStep, SupervisorUploadInterviews>("sortOrder", 0);
+            registry.BindWithConstructorArgument<ISynchronizationStep, UpdateEncryptionKey>("sortOrder", 1);
             registry.BindWithConstructorArgument<ISynchronizationStep, SyncronizeInterviewers>("sortOrder", 10);
             registry.BindWithConstructorArgument<ISynchronizationStep, SynchronizeSupervisor>("sortOrder", 20);
             registry.BindWithConstructorArgument<ISynchronizationStep, SynchronizeAssignments>("sortOrder", 30);

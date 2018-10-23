@@ -18,6 +18,8 @@ using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Implementation;
+using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Enumerator.Native.JsonConversion;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Models;
@@ -107,6 +109,9 @@ namespace WB.UI.Headquarters
             registry.BindAsSingletonWithConstructorArgument<ILiteEventBus, NcqrCompatibleEventDispatcher>(
                 "eventBusSettings",
                 settingsProvider.GetSection<EventBusConfigSection>("eventBus").GetSettings());
+
+            registry.Bind<ISecureStorage, SecureStorage>();
+            registry.Bind<IEncryptionService, RsaEncryptionService>();
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
