@@ -1,5 +1,6 @@
 ﻿using System;
-using System.Linq;
+using Dapper;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Prometheus;
 using Prometheus.Advanced;
@@ -29,19 +30,22 @@ namespace WB.Services.Scheduler.Stats
             using (var scope = serviceProvider.CreateScope())
             {
                 var db = scope.ServiceProvider.GetService<JobContext>();
-                /*  select "type", status, count(*)
-                    from scheduler.jobs
-                    group by "type", status  */
+                
+                var query = @"with 
+	                    tenants as (select distinct tenant_name as tenant from scheduler.jobs),
+	                    statuses as (select s as status from unnest(ARRAY['started', 'running', 'completed', 'fail', 'canceled']) s),
+	                    types as (select distinct ""type"" from scheduler.jobs),
+	                    tuples as (select * from tenants t, statuses s, types tp)
+                    select t.tenant, t.""type"", t.status, count(*)
+                    from tuples t
+                    left join scheduler.jobs j on  j.tenant_name = t.tenant and j.""type"" = t.""type"" and j.status = t.status
+                    group by t.tenant, t.""type"", t.status";
 
-                var statusCounts = from job in db.Jobs
-                    group job by new {job.Type, job.Status, job.TenantName}
-                    into g
-                    select ValueTuple.Create(g.Key, g.Count());
+                var counts = db.Database.GetDbConnection().Query<(string tenant, string type, string status, int count)>(query);
 
-                foreach (var status in statusCounts)
+                foreach (var count in counts)
                 {
-                    CurrentJobs.Labels(status.Item1.Type, status.Item1.Status.ToString(), status.Item1.TenantName)
-                        .Set(status.Item2);
+                    CurrentJobs.Labels(count.type, count.status, count.tenant).Set(count.count);
                 }
             }
         }
