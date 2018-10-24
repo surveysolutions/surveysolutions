@@ -85,10 +85,7 @@ namespace WB.UI.Headquarters
 
             autofacKernel.ContainerBuilder.RegisterType<Autofac.Integration.SignalR.AutofacDependencyResolver>()
                 .As<Microsoft.AspNet.SignalR.IDependencyResolver>().SingleInstance();
-
-            autofacKernel.ContainerBuilder.RegisterType<CustomLifetimeHubManager>().SingleInstance();
-            autofacKernel.ContainerBuilder.RegisterType<CustomAutofacHubActivator>().As<IHubActivator>().SingleInstance();
-
+            
             autofacKernel.ContainerBuilder.RegisterFilterProvider();
 
             var config = new HttpConfiguration();
@@ -98,14 +95,17 @@ namespace WB.UI.Headquarters
             autofacKernel.Init().Wait();
 
             UnitOfWorkScopeManager.SetScopeAdapter(autofacKernel.Container);
-
             var container = autofacKernel.Container;
 
             var resolver = new AutofacWebApiDependencyResolver(container);
             config.DependencyResolver = resolver;
             GlobalConfiguration.Configuration.DependencyResolver = resolver;
 
-            GlobalHost.DependencyResolver = new Autofac.Integration.SignalR.AutofacDependencyResolver(container);
+            var hubActivator = new CustomAutofacHubActivator(new CustomLifetimeHubManager(), container);
+            var signalRAutofacDependencyResolver = container.Resolve<Microsoft.AspNet.SignalR.IDependencyResolver>();
+            signalRAutofacDependencyResolver.Register(typeof(IHubActivator), () => hubActivator);
+            
+            GlobalHost.DependencyResolver = signalRAutofacDependencyResolver;
             DependencyResolver.SetResolver(new Autofac.Integration.Mvc.AutofacDependencyResolver(container));
             ModelBinders.Binders.DefaultBinder = new AutofacBinderResolver(container);
 

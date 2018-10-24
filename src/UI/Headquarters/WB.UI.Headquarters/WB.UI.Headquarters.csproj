@@ -2231,6 +2231,7 @@
     <Compile Include="Code\HtmlEncodeStringPropertiesConverter.cs" />
     <Compile Include="Code\HtmlHelper.cs" />
     <Compile Include="Code\HttpForbiddenResult.cs" />
+    <Compile Include="Code\ILifetimeHub.cs" />
     <Compile Include="Code\InterviewerVersionReader.cs" />
     <Compile Include="Code\ApplicationSettings.cs" />
     <Compile Include="Code\MessageHandler\BasicAuthMessageHandler.cs" />

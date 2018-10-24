@@ -53,16 +53,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
         private AssemblyHolder GetAssemblyHolder(Guid questionnaireId, long questionnaireVersion)
         {
             string assemblyFileName = this.GetAssemblyFileName(questionnaireId, questionnaireVersion);
-
-            var assemblyInfo = this.assemblyService.GetAssemblyInfo(assemblyFileName);
-            if (assemblyInfo == null)
-                return null;
-
-            var assembly = assemblyCache.GetOrAdd(assemblyFileName, CreateAssemblyHolder(assemblyFileName, assemblyInfo.Content));
+            var assembly = assemblyCache.GetOrAdd(assemblyFileName, CreateAssemblyHolder(assemblyFileName));
 
             return assembly;
-
-    }
+        }
 
         public Assembly LoadAssembly(Guid questionnaireId, long questionnaireVersion)
         {
@@ -70,10 +64,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Services
             return assembly?.Assembly;
         }
 
-        private AssemblyHolder CreateAssemblyHolder(string assemblyFileName, byte[] assemblyContent)
+        private AssemblyHolder CreateAssemblyHolder(string assemblyFileName)
         {
-            
-            return new AssemblyHolder(assemblyFileName, assemblyContent);
+            var assemblyInfo = this.assemblyService.GetAssemblyInfo(assemblyFileName);
+
+            return assemblyInfo == null ? null : new AssemblyHolder(assemblyFileName, assemblyInfo.Content);
         }
 
         public void StoreAssembly(Guid questionnaireId, long questionnaireVersion, string assemblyAsBase64)

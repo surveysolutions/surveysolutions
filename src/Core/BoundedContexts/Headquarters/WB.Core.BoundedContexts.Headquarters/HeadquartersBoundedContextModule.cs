@@ -165,7 +165,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IBrokenInterviewPackagesViewFactory, BrokenInterviewPackagesViewFactory>();
             registry.Bind<ISynchronizationLogViewFactory, SynchronizationLogViewFactory>();
             registry.Bind<IInterviewsToDeleteFactory, InterviewsToDeleteFactory>();
-            registry.BindToMethod<Func<IInterviewsToDeleteFactory>>(context => () => context.Get<IInterviewsToDeleteFactory>());
+            //registry.BindToMethod<Func<IInterviewsToDeleteFactory>>(context => () => context.Get<IInterviewsToDeleteFactory>());
             registry.Bind<IInterviewHistoryFactory, InterviewHistoryFactory>();
             registry.Bind<IInterviewInformationFactory, InterviewerInterviewsFactory>();
             registry.Bind<IDatasetWriterFactory, DatasetWriterFactory>();
@@ -174,7 +174,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IQuestionnaireVersionProvider, QuestionnaireVersionProvider>();
             registry.Bind<ITranslationManagementService, TranslationManagementService>();
             registry.Bind<IAssemblyService, AssemblyService>();
-            registry.BindAsSingleton<IExportSettings, Implementation.ExportSettings>();
+            registry.Bind<IExportSettings, Implementation.ExportSettings>();
             registry.Bind<IArchiveUtils, IProtectedArchiveUtils, ZipArchiveUtils>();
             
             registry.Bind<IAllInterviewsFactory, AllInterviewsFactory>();
