@@ -508,7 +508,7 @@
     <Content Include="questionnaire\content\i\chekboxes2k.png" />
     <Content Include="questionnaire\content\i\designer-left-icons-2-3.png" />
     <Content Include="questionnaire\content\i\designer-left-icons-3.png" />
-    <Content Include="questionnaire\content\i\icons3.png" />
+    <Content Include="questionnaire\content\i\icons4.png" />
     <Content Include="questionnaire\content\i\logo-designer.png" />
     <Content Include="questionnaire\content\i\logo.png" />
     <Content Include="questionnaire\details\scripts\controllers\alert.js" />

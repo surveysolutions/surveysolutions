@@ -716,6 +716,7 @@
                                         <a class="verification-item" href="javascript:void(0);"
                                            tooltip-class="error-tooltip" tooltip-append-to-body="true" tooltip-placement="right" uib-tooltip-html="referencesWithErrors.compilationErrorMessages != null ? referencesWithErrors.compilationErrorMessages.slice(0, 10).join('<br />') + (referencesWithErrors.compilationErrorMessages.length > 10 ? '<br />...' : '') : ''">
                                             <span ng-if="reference.type == 'Question'" class="icon {{reference.questionType}}  icon-{{verificationStatus.typeOfMessageToBeShown}}"></span>
+                                            <span ng-if="reference.type == 'Questionnaire'" class="icon icon-questionnaire icon-{{verificationStatus.typeOfMessageToBeShown}}"></span>
                                             <span ng-if="reference.type == 'Macro'" class="icon icon-macro icon-{{verificationStatus.typeOfMessageToBeShown}}"></span>
                                             <span ng-if="reference.type == 'LookupTable'" class="icon icon-lookup icon-{{verificationStatus.typeOfMessageToBeShown}}"></span>
                                             <span ng-if="reference.type == 'StaticText'" class="icon icon-statictext icon-{{verificationStatus.typeOfMessageToBeShown}}"></span>
