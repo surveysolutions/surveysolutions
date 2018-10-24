@@ -71,13 +71,17 @@ namespace WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation
         public byte[] Retrieve(string key)
         {
             if (inMemoryKeyStorage.ContainsKey(key)) return inMemoryKeyStorage[key];
-            if (!(this.keyStore.GetEntry(key, null) is KeyStore.SecretKeyEntry entry))
-            {
-                throw new Exception($"No entry found for key {key}.");
-            }
 
-            this.inMemoryKeyStorage[key] = entry.SecretKey.GetEncoded();
-            return inMemoryKeyStorage[key];
+            lock (keyStoreFileLock)
+            {
+                if (!(this.keyStore.GetEntry(key, null) is KeyStore.SecretKeyEntry entry))
+                {
+                    throw new Exception($"No entry found for key {key}.");
+                }
+
+                this.inMemoryKeyStorage[key] = entry.SecretKey.GetEncoded();
+                return inMemoryKeyStorage[key];
+            }
         }
 
         /// <summary>
