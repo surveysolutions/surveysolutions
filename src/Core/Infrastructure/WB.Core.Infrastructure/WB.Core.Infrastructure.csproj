@@ -17,10 +17,7 @@
     <ProjectReference Include="..\..\GenericSubdomains\WB.Core.GenericSubdomains.Portable\WB.Core.GenericSubdomains.Portable.csproj" />
     <ProjectReference Include="..\..\SharedKernels\Questionnaire\WB.Core.SharedKernels.Questionnaire\WB.Core.SharedKernels.Questionnaire.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Reference Include="SignalR.Extras.Autofac">
-      <HintPath>..\..\..\..\packages\SignalR.Extras.Autofac.1.2.0\lib\net45\SignalR.Extras.Autofac.dll</HintPath>
-    </Reference>
+  <ItemGroup>    
     <Reference Include="WB.Infrastructure.Native">
       <HintPath>..\..\..\UI\WB.UI.WebTester\Bin\WB.Infrastructure.Native.dll</HintPath>
     </Reference>
