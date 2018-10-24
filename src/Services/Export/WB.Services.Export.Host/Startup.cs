@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Prometheus;
+using Prometheus.Advanced;
 using WB.Services.Export.Host.Infra;
 using WB.Services.Export.Host.Jobs;
 using WB.Services.Export.Infrastructure;
@@ -51,6 +52,17 @@ namespace WB.Services.Export.Host
             services.RegisterJobHandler<ExportJobRunner>(ExportJobRunner.Name);
             services.AddScoped(typeof(ITenantApi<>), typeof(TenantApi<>));
 
+            services.AddSingleton<ICollectorRegistry>(c =>
+            {
+                var registry = DefaultCollectorRegistry.Instance;
+                var collectors = c.GetServices<IOnDemandCollector>();
+
+                registry.RegisterOnDemandCollectors(collectors);
+                registry.RegisterOnDemandCollector<DotNetStatsCollector>();
+                
+                return registry;
+            });
+            
             ServicesRegistry.Configure(services, Configuration);
 
             // Create the IServiceProvider based on the container.
@@ -67,7 +79,7 @@ namespace WB.Services.Export.Host
 
             app.UseApplicationVersion("/.version");
             app.UseHealthChecks("/.hc");
-            app.UseMetricServer();
+            app.UseMetricServer("/metrics", app.ApplicationServices.GetService<ICollectorRegistry>());
             app.UseMvc();
         }
     }
