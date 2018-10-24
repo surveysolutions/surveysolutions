@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Microsoft.AspNet.SignalR.Hubs;
-using SignalR.Extras.Autofac;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -18,6 +17,7 @@ using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Models;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.UI.Headquarters.API.WebInterview.Pipeline;
+using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.API.WebInterview
 {

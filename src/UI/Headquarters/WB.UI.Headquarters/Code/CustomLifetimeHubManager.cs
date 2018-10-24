@@ -10,11 +10,13 @@ namespace WB.UI.Headquarters.Code
 {
     public class CustomLifetimeHubManager : IDisposable
     {
+        private Guid id = Guid.NewGuid();
+
         private readonly ConcurrentDictionary<IHub, ILifetimeScope> hubLifetimeScopes = new ConcurrentDictionary<IHub, ILifetimeScope>();
 
-        public T ResolveHub<T>(Type type, ILifetimeScope lifetimeScope) where T : ILifetimeHub
+        public T CreateUnitOwWorkScopeAndResolveHub<T>(Type type, ILifetimeScope lifetimeScope) where T : ILifetimeHub
         {
-            ILifetimeScope context = lifetimeScope.BeginLifetimeScope(AutofacServiceLocatorConstants.UnitOfWorkScope/*ScopeLifetimeTag.RequestLifetimeScopeTag*/);
+            ILifetimeScope context = lifetimeScope.BeginLifetimeScope(ScopeLifetimeTag.RequestLifetimeScopeTag);
             
             T obj = (T)context.Resolve(type);
             obj.OnDisposing += new EventHandler(this.HubOnDisposing);
