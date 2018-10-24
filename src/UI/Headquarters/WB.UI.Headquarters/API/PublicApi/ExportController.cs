@@ -32,7 +32,6 @@ namespace WB.UI.Headquarters.API.PublicApi
         private readonly IDataExportStatusReader dataExportStatusReader;
         private readonly IExportSettings exportSettings;
         private readonly IAuditLog auditLog;
-            
 
         public ExportController(
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
@@ -122,7 +121,13 @@ namespace WB.UI.Headquarters.API.PublicApi
             if (questionnaireBrowseItem == null)
                 return this.Content(HttpStatusCode.NotFound, @"Questionnaire not found");
 
-            await this.exportServiceApi.DeleteProcess(id);
+            var running = await this.exportServiceApi.GetDataExportStatusForQuestionnaireAsync(id, status, from, to);
+            var toCancel = running.RunningDataExportProcesses.FirstOrDefault(p => p.Format == exportType);
+
+            if (toCancel != null)
+            {
+                await this.exportServiceApi.DeleteProcess(toCancel.DataExportProcessId);
+            }
 
             return this.Ok();
         }
