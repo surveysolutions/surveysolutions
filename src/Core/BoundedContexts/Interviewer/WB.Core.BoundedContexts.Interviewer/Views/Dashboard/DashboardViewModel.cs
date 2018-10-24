@@ -92,6 +92,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public override void Prepare(DashboardViewModelArgs parameter)
         {
             this.LastVisitedInterviewId = parameter.InterviewId;
+            this.SelectTypeOfInterviewsByInterviewId(this.LastVisitedInterviewId);
         }
 
         public override async Task Initialize()
