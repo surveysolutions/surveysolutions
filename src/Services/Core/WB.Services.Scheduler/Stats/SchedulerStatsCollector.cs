@@ -12,7 +12,7 @@ namespace WB.Services.Scheduler.Stats
 
         private static readonly Gauge CurrentJobs = Metrics.CreateGauge(
             "wb_services_scheduler_jobs_count",
-            "Count of current jobs states per type", "type", "status");
+            "Count of current jobs states per type", "type", "status", "tenant");
 
         public SchedulerStatsCollector(IServiceProvider serviceProvider)
         {
