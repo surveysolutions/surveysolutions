@@ -22,7 +22,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
 {
     internal class DeleteQuestionnaireService : IDeleteQuestionnaireService
     {
-        private readonly Func<IInterviewsToDeleteFactory> interviewsToDeleteFactory;
+        private readonly IInterviewsToDeleteFactory interviewsToDeleteFactory;
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnaireBrowseItemReader;
         private readonly ICommandService commandService;
         private readonly ILogger logger;
@@ -36,7 +36,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
         private readonly IPlainKeyValueStorage<QuestionnaireLookupTable> lookupTablesStorage;
         private readonly IQuestionnaireStorage questionnaireStorage;
 
-        public DeleteQuestionnaireService(Func<IInterviewsToDeleteFactory> interviewsToDeleteFactory, 
+        public DeleteQuestionnaireService(IInterviewsToDeleteFactory interviewsToDeleteFactory, 
             ICommandService commandService,
             ILogger logger, 
             ITranslationManagementService translations,
@@ -143,8 +143,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
         {
             var exceptionsDuringDelete = new List<Exception>();
 
-            IInterviewsToDeleteFactory toDeleteFactory = this.interviewsToDeleteFactory.Invoke();
-            List<InterviewSummary> listOfInterviews = toDeleteFactory.Load(questionnaireId, questionnaireVersion);
+            //IInterviewsToDeleteFactory toDeleteFactory = this.interviewsToDeleteFactory.Invoke();
+            List<InterviewSummary> listOfInterviews = this.interviewsToDeleteFactory.Load(questionnaireId, questionnaireVersion);
             do
             {
                 try
@@ -161,7 +161,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.DeleteQue
                     exceptionsDuringDelete.Add(e);
                 }
 
-                listOfInterviews = toDeleteFactory.Load(questionnaireId, questionnaireVersion);
+                listOfInterviews = this.interviewsToDeleteFactory.Load(questionnaireId, questionnaireVersion);
 
             } while (
                 exceptionsDuringDelete.Count == 0 && 
