@@ -11,6 +11,7 @@ namespace WB.Services.Scheduler.Model
         public string Args { get; set; } = "{}";
         public string Tag { get; set; }
         public string Tenant { get; set; }
+        public string TenantName { get; set; }
         public JobStatus Status { get; set; }
         public DateTime? StartAt { get; set; }
         public DateTime? EndAt { get; set; }
