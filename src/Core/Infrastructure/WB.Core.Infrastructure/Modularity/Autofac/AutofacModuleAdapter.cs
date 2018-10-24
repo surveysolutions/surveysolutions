@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Autofac;
 using Autofac.Core;
 using Autofac.Core.Lifetime;
+using SignalR.Extras.Autofac;
 
 namespace WB.Core.Infrastructure.Modularity.Autofac
 {
@@ -87,9 +88,8 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
             containerBuilder.RegisterType<TImplementation>().As<TInterface>()
                 .InstancePerMatchingLifetimeScope(
                     AutofacServiceLocatorConstants.UnitOfWorkScope,
-                    MatchingScopeLifetimeTags.RequestLifetimeScopeTag
-                    //,ScopeLifetimeTag.RequestLifetimeScopeTag
-                    );
+                    MatchingScopeLifetimeTags.RequestLifetimeScopeTag,
+                    ScopeLifetimeTag.RequestLifetimeScopeTag);
         }
 
         public void BindWithConstructorArgumentInPerLifetimeScope<TInterface, TImplementation>(string argumentName, object argumentValue) where TImplementation : TInterface
