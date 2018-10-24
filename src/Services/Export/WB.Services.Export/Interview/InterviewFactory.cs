@@ -96,17 +96,19 @@ namespace WB.Services.Export.Interview
             return levels;
         }
 
-        private bool CheckIfAllRostersAreDisabled(IEnumerable<Identity> rosterIdentitiesInLevel, 
-            Dictionary<Identity, InterviewEntity> interviewEntities)
+        private bool CheckIfAllRostersAreDisabled(IEnumerable<Identity> rosterIdentitiesInLevel, Dictionary<Identity, InterviewEntity> interviewEntities)
         {
             foreach (var rosterIdentity in rosterIdentitiesInLevel)
             {
                 if (interviewEntities.TryGetValue(rosterIdentity, out var roster))
                 {
-                    return roster.IsEnabled;
+                    if (roster.IsEnabled)
+                        return false;
                 }
-
-                return false;
+                else
+                {
+                    return false;
+                }
             }
 
             return true;
