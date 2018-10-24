@@ -32,6 +32,7 @@ namespace WB.Services.Export.Host.Jobs
             var job = await this.jobService.AddNewJobAsync(new JobItem
             {
                 Tenant = args.ExportSettings.Tenant.ToString(),
+                TenantName = args.ExportSettings.Tenant.Name,
                 Args = JsonConvert.SerializeObject(args),
                 Tag = args.NaturalId,
                 Type = ExportJobRunner.Name,
