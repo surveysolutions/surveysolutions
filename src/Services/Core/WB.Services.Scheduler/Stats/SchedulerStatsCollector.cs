@@ -34,13 +34,14 @@ namespace WB.Services.Scheduler.Stats
                     group by "type", status  */
 
                 var statusCounts = from job in db.Jobs
-                    group job by new {job.Type, job.Status}
+                    group job by new {job.Type, job.Status, job.TenantName}
                     into g
-                    select ValueTuple.Create(g.Key.Type, g.Key.Status, g.Count());
+                    select ValueTuple.Create(g.Key, g.Count());
 
                 foreach (var status in statusCounts)
                 {
-                    CurrentJobs.Labels(status.Item1, status.Item2.ToString()).Set(status.Item3);
+                    CurrentJobs.Labels(status.Item1.Type, status.Item1.Status.ToString(), status.Item1.TenantName)
+                        .Set(status.Item2);
                 }
             }
         }
