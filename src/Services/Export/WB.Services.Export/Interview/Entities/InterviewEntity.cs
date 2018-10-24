@@ -33,6 +33,7 @@ namespace WB.Services.Export.Interview.Entities
         public override string ToString() => $"{InterviewId} => {Answer}";
     }
 
+    [DebuggerDisplay("InterviewId = {InterviewId}; Identity = {Identity}; EntityType = {EntityType}")]
     public class InterviewEntity
     {
         public virtual Guid InterviewId { get; set; }
