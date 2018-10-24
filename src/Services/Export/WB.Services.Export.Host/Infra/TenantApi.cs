@@ -98,18 +98,11 @@ namespace WB.Services.Export.Host.Infra
                 sw.Stop();
 
                 var size = result.Content.Headers.ContentLength ?? GetRawSizeUsingReflection(result) ?? 0;
-                
-                Monitoring.Http.RequestsCounter
-                    .Labels(Monitoring.Http.HTTP_OUT, this.tenant.Name ?? this.tenant.Id.ToString()).Inc();
 
-                if (size != 0)
-                {
-                    Monitoring.Http.DataServed
-                        .Labels(Monitoring.Http.HTTP_OUT, this.tenant.Name ?? this.tenant.Id.ToString()).Inc(size);
-                }
-
-                Monitoring.Http.Latency
-                    .Labels(Monitoring.Http.HTTP_OUT, this.tenant.Name ?? this.tenant.Id.ToString()).Observe(sw.Elapsed.TotalSeconds);
+                Monitoring.Http.RegisterRequest(
+                    this.tenant.Name ?? this.tenant.Id.ToString(),
+                    sw.Elapsed.TotalSeconds,
+                    size);
 
                 logger.LogDebug("Got {size} in {elapsed} ms: {uri}...",
                     size.Bytes().Humanize("#.##"), sw.ElapsedMilliseconds, uri.Substring(0, 80));

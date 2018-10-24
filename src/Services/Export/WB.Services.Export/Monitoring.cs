@@ -1,4 +1,5 @@
-﻿using Prometheus;
+﻿using System;
+using Prometheus;
 
 namespace WB.Services.Export
 {
@@ -6,21 +7,25 @@ namespace WB.Services.Export
     {
         public static class Http
         {
-            public const string HTTP_IN = "in";
-            public const string HTTP_OUT = "out";
+            private static readonly Lazy<Counter> RequestCounter = new Lazy<Counter>(() => Metrics.CreateCounter(
+                "wb_services_export_http_total",
+                "Overall counter for handled requests", "tenant"));
 
-            public static Counter RequestsCounter = Prometheus.Metrics.CreateCounter(
-                "wb_http_total",
-                "Overall counter for handled requests", "direction", "tenant");
+            private static readonly Lazy<Counter> DataServed = new Lazy<Counter>(() => Metrics.CreateCounter(
+                "wb_services_export_http_bytes_count",
+                "Overall counter for handled requests bytes", "tenant"));
 
-            public static Counter DataServed = Prometheus.Metrics.CreateCounter(
-                "wb_http_bytes_count",
-                "Overall counter for handled requests bytes", "direction", "tenant");
-
-            public static Histogram Latency = Metrics.CreateHistogram(
-                "wb_http_latency",
+            public static readonly Lazy<Histogram> Latency = new Lazy<Histogram>(() => Metrics.CreateHistogram(
+                "wb_services_export_http_latency",
                 "Histogram for requests latency", new[] {0, 0.2, 0.4, 0.6, 0.8, 0.9}
-                , "direction", "tenant");
+                , "tenant"));
+
+            public static void RegisterRequest(string tenant, double duration, long bytes)
+            {
+                RequestCounter.Value.Labels(tenant).Inc();
+                DataServed.Value.Labels(tenant).Inc(bytes);
+                Latency.Value.Labels(tenant).Observe(duration);
+            }
         }
     }
 }
