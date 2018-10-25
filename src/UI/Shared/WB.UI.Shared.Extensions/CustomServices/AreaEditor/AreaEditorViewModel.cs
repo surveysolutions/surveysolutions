@@ -307,7 +307,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                 ShapefileFeatureTable myShapefile = await ShapefileFeatureTable.OpenAsync(AvailableShapefiles.First().FullPath);
                 // Create a feature layer to display the shapefile
                 FeatureLayer newFeatureLayer = new FeatureLayer(myShapefile);
-
+                
                 await newFeatureLayer.LoadAsync();
 
                 SimpleLineSymbol lineSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, Color.Aqua, 1.0);
