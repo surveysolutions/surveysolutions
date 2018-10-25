@@ -138,6 +138,21 @@ namespace WB.Tests.Integration
             IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null,
             IQuestionOptionsRepository questionOptionsRepository = null)
         {
+            var qRepository = questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>();
+            Mock.Get(ServiceLocator.Current)
+                .Setup(locator => locator.GetInstance<IQuestionnaireStorage>())
+                .Returns(qRepository);
+
+            var expressionsProvider = expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>();
+            Mock.Get(ServiceLocator.Current)
+                .Setup(locator => locator.GetInstance<IInterviewExpressionStatePrototypeProvider>())
+                .Returns(expressionsProvider);
+
+            var optionsRepository = questionOptionsRepository ?? Mock.Of<IQuestionOptionsRepository>();
+            Mock.Get(ServiceLocator.Current)
+                .Setup(locator => locator.GetInstance<IQuestionOptionsRepository>())
+                .Returns(optionsRepository);
+            
             var interview = new Interview(
                 //questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 //expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>(),
@@ -163,6 +178,21 @@ namespace WB.Tests.Integration
             IQuestionnaireStorage questionnaireRepository = null, 
             IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null)
         {
+            var qRepository = questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>();
+            Mock.Get(ServiceLocator.Current)
+                .Setup(locator => locator.GetInstance<IQuestionnaireStorage>())
+                .Returns(qRepository);
+
+            var expressionsProvider = expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>();
+            Mock.Get(ServiceLocator.Current)
+                .Setup(locator => locator.GetInstance<IInterviewExpressionStatePrototypeProvider>())
+                .Returns(expressionsProvider);
+
+            var optionsRepository = Mock.Of<IQuestionOptionsRepository>();
+            Mock.Get(ServiceLocator.Current)
+                .Setup(locator => locator.GetInstance<IQuestionOptionsRepository>())
+                .Returns(optionsRepository);
+
             var interview = new StatefulInterview(
                 //questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 //expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>(),
@@ -206,6 +236,21 @@ namespace WB.Tests.Integration
             List<InterviewAnswer> answersOnPrefilledQuestions = null,
             IQuestionOptionsRepository questionOptionsRepository = null)
         {
+            var qRepository = questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>();
+            Mock.Get(ServiceLocator.Current)
+                .Setup(locator => locator.GetInstance<IQuestionnaireStorage>())
+                .Returns(qRepository);
+
+            var expressionsProvider = expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>();
+            Mock.Get(ServiceLocator.Current)
+                .Setup(locator => locator.GetInstance<IInterviewExpressionStatePrototypeProvider>())
+                .Returns(expressionsProvider);
+
+            var optionsRepository = questionOptionsRepository ?? Mock.Of<IQuestionOptionsRepository>();
+            Mock.Get(ServiceLocator.Current)
+                .Setup(locator => locator.GetInstance<IQuestionOptionsRepository>())
+                .Returns(optionsRepository);
+
             var interview = new StatefulInterview(
                 //questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 //expressionProcessorStatePrototypeProvider ?? Stub<IInterviewExpressionStatePrototypeProvider>.WithNotEmptyValues,

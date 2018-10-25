@@ -21,7 +21,6 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
-
 using WB.UI.Headquarters.Resources;
 using WB.UI.Headquarters.Utils;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -45,17 +44,19 @@ namespace WB.UI.Headquarters.Code
 
         public override async Task OnActionExecutedAsync(HttpActionExecutedContext context, CancellationToken cancellationToken)
         {
-            var signInManager = context.Request.GetDependencyScope().GetService(typeof(HqSignInManager)) as HqSignInManager;
-            var synchronizationLogItemPlainStorageAccessor = 
-                context.Request.GetDependencyScope().GetService(typeof(IPlainStorageAccessor<SynchronizationLogItem>)) as IPlainStorageAccessor<SynchronizationLogItem>;
-            IAuthorizedUser authorizedUser = context.Request.GetDependencyScope().GetService(typeof(IAuthorizedUser)) as IAuthorizedUser;
-            IQuestionnaireBrowseViewFactory questionnaireBrowseItemFactory = 
-                context.Request.GetDependencyScope().GetService(typeof(IQuestionnaireBrowseViewFactory)) as IQuestionnaireBrowseViewFactory;
+            var currentContextScope = context.Request.GetDependencyScope();
 
-            IQuestionnaireStorage questionnaireStorage = context.Request.GetDependencyScope().GetService(typeof(IQuestionnaireStorage)) as IQuestionnaireStorage;
-            IInterviewAnswerSerializer answerSerializer = context.Request.GetDependencyScope().GetService(typeof(IInterviewAnswerSerializer)) as IInterviewAnswerSerializer;
+            var signInManager = currentContextScope.GetService(typeof(HqSignInManager)) as HqSignInManager;
+            var synchronizationLogItemPlainStorageAccessor =
+                currentContextScope.GetService(typeof(IPlainStorageAccessor<SynchronizationLogItem>)) as IPlainStorageAccessor<SynchronizationLogItem>;
+            IAuthorizedUser authorizedUser = currentContextScope.GetService(typeof(IAuthorizedUser)) as IAuthorizedUser;
+            IQuestionnaireBrowseViewFactory questionnaireBrowseItemFactory =
+                currentContextScope.GetService(typeof(IQuestionnaireBrowseViewFactory)) as IQuestionnaireBrowseViewFactory;
 
-            ILogger logger = (context.Request.GetDependencyScope().GetService(typeof(ILoggerProvider)) as ILoggerProvider).GetFor<WriteToSyncLogAttribute>();
+            IQuestionnaireStorage questionnaireStorage = currentContextScope.GetService(typeof(IQuestionnaireStorage)) as IQuestionnaireStorage;
+            IInterviewAnswerSerializer answerSerializer = currentContextScope.GetService(typeof(IInterviewAnswerSerializer)) as IInterviewAnswerSerializer;
+
+            ILogger logger = (currentContextScope.GetService(typeof(ILoggerProvider)) as ILoggerProvider).GetFor<WriteToSyncLogAttribute>();
 
             await base.OnActionExecutedAsync(context, cancellationToken);
 

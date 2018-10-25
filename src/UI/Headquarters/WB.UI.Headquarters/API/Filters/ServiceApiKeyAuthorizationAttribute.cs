@@ -14,9 +14,6 @@ namespace WB.UI.Headquarters.API.Filters
     [Localizable(false)]
     public class ServiceApiKeyAuthorizationAttribute : ActionFilterAttribute
     {
-//        [Inject]
-//        public IPlainKeyValueStorage<ExportServiceSettings> AppSettingsStorage { get; set; }
-
         public override void OnActionExecuting(HttpActionContext actionContext)
         {
             IPlainKeyValueStorage<ExportServiceSettings> AppSettingsStorage = //ServiceLocator.Current
