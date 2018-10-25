@@ -54,14 +54,5 @@ namespace WB.Services.Scheduler.Services.Implementation
                 tr.Commit();
             }
         }
-
-        //static readonly JobStatus[] StatusesToRemove = new[] { JobStatus.Completed, JobStatus.Canceled, JobStatus.Fail };
-        //private async Task ClearOldJobs(CancellationToken cancellationToken)
-        //{
-        //    var jobs = await db.Jobs.Where(j =>
-        //        StatusesToRemove.Contains(j.Status) && DateTime.UtcNow.AddHours(-8) < j.EndAt).ToListAsync(cancellationToken);
-
-        //    db.Jobs.RemoveRange(jobs);
-        //}
     }
 }
