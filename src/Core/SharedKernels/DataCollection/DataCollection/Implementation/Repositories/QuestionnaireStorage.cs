@@ -20,6 +20,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
 
         private static ConcurrentDictionary<string, QuestionnaireDocument> questionnaireDocumentsCache = new ConcurrentDictionary<string, QuestionnaireDocument>();
         private static ConcurrentDictionary<string, PlainQuestionnaire> plainQuestionnairesCache = new ConcurrentDictionary<string, PlainQuestionnaire>();
+
         private readonly IQuestionOptionsRepository questionOptionsRepository;
         private ISubstitutionService substitutionService;
 

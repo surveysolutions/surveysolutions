@@ -19,7 +19,8 @@ namespace WB.UI.Headquarters.API.Filters
 
         public override void OnActionExecuting(HttpActionContext actionContext)
         {
-            IPlainKeyValueStorage<ExportServiceSettings> AppSettingsStorage = ServiceLocator.Current.GetInstance<IPlainKeyValueStorage<ExportServiceSettings>>();
+            IPlainKeyValueStorage<ExportServiceSettings> AppSettingsStorage = //ServiceLocator.Current
+                actionContext.Request.GetDependencyScope().GetService(typeof(IPlainKeyValueStorage<ExportServiceSettings>)) as IPlainKeyValueStorage<ExportServiceSettings>;
             var authorizationParameter = actionContext.Request.RequestUri.ParseQueryString()["apikey"];
             var appSetting = AppSettingsStorage.GetById(AppSetting.ExportServiceStorageKey);
             if (appSetting == null)

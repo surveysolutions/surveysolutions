@@ -6,24 +6,20 @@ using Microsoft.AspNet.SignalR.Hubs;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.Infrastructure.Modularity;
 using WB.Enumerator.Native.WebInterview;
-using WB.Infrastructure.Native.Storage;
-using WB.UI.Shared.Enumerator.Services.Internals;
 
 namespace WB.UI.Headquarters.API.WebInterview.Pipeline
 {
     public class WebInterviewAuthorizeAttribute : AuthorizeAttribute
     {
-        private readonly IServiceLocator serviceLocator;
-        
         public WebInterviewAuthorizeAttribute()
         {
-            this.serviceLocator = ServiceLocator.Current;
         }
 
         public override bool AuthorizeHubConnection(HubDescriptor hubDescriptor, IRequest request)
         {
-            serviceLocator.ExecuteActionInScope((serviceLocatorLocal) =>
+            InScopeExecutor.Current.ExecuteActionInScope((serviceLocatorLocal) =>
             {
                 CheckPermissions(request, serviceLocatorLocal);
             });
@@ -34,7 +30,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
         public override bool AuthorizeHubMethodInvocation(IHubIncomingInvokerContext hubIncomingInvokerContext, 
             bool appliesToMethod)
         {
-            return serviceLocator.ExecuteFunctionInScope((serviceLocatorLocal) =>
+            return InScopeExecutor.Current.ExecuteFunctionInScope((serviceLocatorLocal) =>
             {
                 try
                 {
@@ -63,8 +59,6 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
 
                 return authorizeHubMethodInvocation;
             });
-
-            
         }
 
         private void CheckPermissions(IRequest hub, IServiceLocator locator)

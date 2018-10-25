@@ -138,11 +138,13 @@ namespace WB.Tests.Integration
             IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null,
             IQuestionOptionsRepository questionOptionsRepository = null)
         {
-            var interview = new Interview(questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
-                expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>(),
+            var interview = new Interview(
+                //questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
+                //expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>(),
                 Create.Service.SubstitutionTextFactory(),
-                Create.Service.InterviewTreeBuilder(),
-                questionOptionsRepository ?? Mock.Of<IQuestionOptionsRepository>());
+                Create.Service.InterviewTreeBuilder()
+                //,questionOptionsRepository ?? Mock.Of<IQuestionOptionsRepository>()
+                );
 
             interview.CreateInterview(Create.Command.CreateInterview(
                 interviewId: interview.EventSourceId, 
@@ -161,11 +163,13 @@ namespace WB.Tests.Integration
             IQuestionnaireStorage questionnaireRepository = null, 
             IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null)
         {
-            var interview = new StatefulInterview(questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
-                expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>(),
+            var interview = new StatefulInterview(
+                //questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
+                //expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>(),
                 Create.Service.SubstitutionTextFactory(),
-                Create.Service.InterviewTreeBuilder(),
-                Mock.Of<IQuestionOptionsRepository>());
+                Create.Service.InterviewTreeBuilder()
+                //,Mock.Of<IQuestionOptionsRepository>()
+                );
           
             interview.CreateInterview(Create.Command.CreateInterview(
                 interviewId: Guid.NewGuid(),
@@ -203,11 +207,12 @@ namespace WB.Tests.Integration
             IQuestionOptionsRepository questionOptionsRepository = null)
         {
             var interview = new StatefulInterview(
-                questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
-                expressionProcessorStatePrototypeProvider ?? Stub<IInterviewExpressionStatePrototypeProvider>.WithNotEmptyValues,
+                //questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
+                //expressionProcessorStatePrototypeProvider ?? Stub<IInterviewExpressionStatePrototypeProvider>.WithNotEmptyValues,
                 Create.Service.SubstitutionTextFactory(),
-                Create.Service.InterviewTreeBuilder(),
-                questionOptionsRepository ?? Mock.Of<IQuestionOptionsRepository>());
+                Create.Service.InterviewTreeBuilder()
+                //,questionOptionsRepository ?? Mock.Of<IQuestionOptionsRepository>()
+                 );
 
             interview.CreateInterview(Create.Command.CreateInterview(
                 interviewId: interview.EventSourceId,

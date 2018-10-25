@@ -15,6 +15,7 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -24,7 +25,6 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.WebApi;
 using WB.Enumerator.Native.WebInterview;
-using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
@@ -35,39 +35,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
         private readonly IPlainStorageAccessor<InterviewPackage> interviewPackageStorage;
         private readonly IPlainStorageAccessor<BrokenInterviewPackage> brokenInterviewPackageStorage;
         private readonly IPlainStorageAccessor<ReceivedPackageLogEntry> packagesTracker;
-        private readonly IHeadquartersEventStore eventStore;
         private readonly ILogger logger;
-        private readonly IJsonAllTypesSerializer serializer;
-        private readonly ICommandService commandService;
-        private readonly IInterviewUniqueKeyGenerator uniqueKeyGenerator;
         private readonly SyncSettings syncSettings;
-        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviews;
-        private readonly IUserRepository userRepository;
-
+        
         public InterviewPackagesService(
             IPlainStorageAccessor<InterviewPackage> interviewPackageStorage,
             IPlainStorageAccessor<BrokenInterviewPackage> brokenInterviewPackageStorage,
             IPlainStorageAccessor<ReceivedPackageLogEntry> packagesTracker,
-            IHeadquartersEventStore eventStore,
             ILogger logger,
-            IJsonAllTypesSerializer serializer,
-            ICommandService commandService,
-            IInterviewUniqueKeyGenerator uniqueKeyGenerator,
-            SyncSettings syncSettings,
-            IQueryableReadSideRepositoryReader<InterviewSummary> interviews,
-            IUserRepository userRepository)
+            SyncSettings syncSettings)
         {
             this.interviewPackageStorage = interviewPackageStorage;
             this.brokenInterviewPackageStorage = brokenInterviewPackageStorage;
             this.packagesTracker = packagesTracker;
-            this.eventStore = eventStore;
             this.logger = logger;
-            this.serializer = serializer;
-            this.commandService = commandService;
-            this.uniqueKeyGenerator = uniqueKeyGenerator;
             this.syncSettings = syncSettings;
-            this.interviews = interviews;
-            this.userRepository = userRepository;
         }
 
         public void StoreOrProcessPackage(InterviewPackage interviewPackage)
@@ -228,7 +210,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                 //Uow would contain partial data
                 //so a new scope created
 
-                ServiceLocator.Current.ExecuteActionInScope((serviceLocator) =>
+                InScopeExecutor.Current.ExecuteActionInScope((serviceLocator) =>
                 {
                     var interviewsLocal = serviceLocator.GetInstance<IQueryableReadSideRepositoryReader<InterviewSummary>>();
                     existingInterviewKey = interviewsLocal.GetById(interview.InterviewId)?.Key;

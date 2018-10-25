@@ -660,16 +660,9 @@ namespace WB.Tests.Abc.TestFactories
             return new InterviewPackagesService(
                 syncSettings: syncSettings ?? Mock.Of<SyncSettings>(),
                 logger: logger ?? Mock.Of<ILogger>(),
-                serializer: serializer ?? new JsonAllTypesSerializer(),
                 interviewPackageStorage: interviewPackageStorage ?? Mock.Of<IPlainStorageAccessor<InterviewPackage>>(),
-                brokenInterviewPackageStorage: brokenInterviewPackageStorage ??
-                                               Mock.Of<IPlainStorageAccessor<BrokenInterviewPackage>>(),
-                commandService: commandService ?? Mock.Of<ICommandService>(),
-                uniqueKeyGenerator: uniqueKeyGenerator ?? Mock.Of<IInterviewUniqueKeyGenerator>(x => x.Get() == generatedInterviewKey),
-                interviews: interviews ?? new TestInMemoryWriter<InterviewSummary>(),
-                userRepository: userRepository ?? userRepositoryMock.Object,
-                packagesTracker: new TestPlainStorage<ReceivedPackageLogEntry>(),
-                eventStore: Mock.Of<IHeadquartersEventStore>());
+                brokenInterviewPackageStorage: brokenInterviewPackageStorage ?? Mock.Of<IPlainStorageAccessor<BrokenInterviewPackage>>(),
+                packagesTracker: new TestPlainStorage<ReceivedPackageLogEntry>());
         }
 
         public ImportDataVerifier ImportDataVerifier(IFileSystemAccessor fileSystem = null,

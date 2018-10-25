@@ -4,6 +4,7 @@ using System.Linq;
 using Main.Core.Entities.SubEntities;
 using Ncqrs.Domain;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -79,25 +80,30 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         /// So this repository may be used only in command handlers.
         /// And should never be used in event handlers!!
         /// </remarks>
-        private readonly IQuestionnaireStorage questionnaireRepository;
-        private readonly IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider;
+        public IQuestionnaireStorage questionnaireRepository => 
+            ServiceLocator.Current.GetInstance<IQuestionnaireStorage>();
+        private IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider => 
+            ServiceLocator.Current.GetInstance<IInterviewExpressionStatePrototypeProvider>();
         private readonly ISubstitutionTextFactory substitutionTextFactory;
         private readonly IInterviewTreeBuilder treeBuilder;
-        private readonly IQuestionOptionsRepository questionOptionsRepository;
+        public IQuestionOptionsRepository questionOptionsRepository => 
+            ServiceLocator.Current.GetInstance<IQuestionOptionsRepository>();
 
         protected InterviewKey interviewKey;
 
-        public Interview(IQuestionnaireStorage questionnaireRepository,
-            IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider,
+        public Interview(
+            //IQuestionnaireStorage questionnaireRepository,
+            //IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider,
             ISubstitutionTextFactory substitutionTextFactory,
-            IInterviewTreeBuilder treeBuilder,
-            IQuestionOptionsRepository questionOptionsRepository)
+            IInterviewTreeBuilder treeBuilder
+            //,IQuestionOptionsRepository questionOptionsRepository
+            )
         {
-            this.questionnaireRepository = questionnaireRepository;
-            this.expressionProcessorStatePrototypeProvider = expressionProcessorStatePrototypeProvider;
+            //this.questionnaireRepository = questionnaireRepository;
+            //this.expressionProcessorStatePrototypeProvider = expressionProcessorStatePrototypeProvider;
             this.substitutionTextFactory = substitutionTextFactory;
             this.treeBuilder = treeBuilder;
-            this.questionOptionsRepository = questionOptionsRepository;
+            //this.questionOptionsRepository = questionOptionsRepository;
         }
 
         #region Apply (state restore) methods

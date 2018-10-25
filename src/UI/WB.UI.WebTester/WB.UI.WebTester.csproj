@@ -275,6 +275,7 @@
     <Compile Include="Infrastructure\AppDomainSpecific\WebTesterQuestionnaireStorage.cs" />
     <Compile Include="Infrastructure\AppDomainSpecific\WebTesterTranslationService.cs" />
     <Compile Include="Infrastructure\AppDomainSpecific\WebTesterTranslationStorage.cs" />
+    <Compile Include="Infrastructure\NoScopeInScopeExecutor.cs" />
     <Compile Include="Infrastructure\WebTesterCommandService.cs" />
     <Compile Include="Infrastructure\WebTesterStatefulInterview.cs" />
     <Compile Include="Services\IInterviewFactory.cs" />

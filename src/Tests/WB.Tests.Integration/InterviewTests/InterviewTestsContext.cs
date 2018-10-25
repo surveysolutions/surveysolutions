@@ -172,11 +172,12 @@ namespace WB.Tests.Integration.InterviewTests
             SetUp.InstanceToMockedServiceLocator<IQuestionOptionsRepository>(questionOptionsRepository);
 
             var interview = new StatefulInterview(
-                questionnaireRepository,
-                statePrototypeProvider,
+                //questionnaireRepository,
+                //statePrototypeProvider,
                 Create.Service.SubstitutionTextFactory(),
-                Create.Service.InterviewTreeBuilder(),
-                questionOptionsRepository);
+                Create.Service.InterviewTreeBuilder()
+                //,questionOptionsRepository
+                );
 
             return interview;
         }
