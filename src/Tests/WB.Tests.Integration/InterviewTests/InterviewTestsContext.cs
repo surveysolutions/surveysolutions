@@ -15,6 +15,7 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Designer.Services.CodeGeneration;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Preloading;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
@@ -170,6 +171,21 @@ namespace WB.Tests.Integration.InterviewTests
 
             var questionOptionsRepository = new QuestionnaireQuestionOptionsRepository();
             SetUp.InstanceToMockedServiceLocator<IQuestionOptionsRepository>(questionOptionsRepository);
+            
+            var qRepository = questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>();
+            Mock.Get(ServiceLocator.Current)
+                .Setup(locator => locator.GetInstance<IQuestionnaireStorage>())
+                .Returns(qRepository);
+
+            var expressionsProvider = statePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>();
+            Mock.Get(ServiceLocator.Current)
+                .Setup(locator => locator.GetInstance<IInterviewExpressionStatePrototypeProvider>())
+                .Returns(expressionsProvider);
+
+            var optionsRepository = questionOptionsRepository ?? Mock.Of<IQuestionOptionsRepository>();
+            Mock.Get(ServiceLocator.Current)
+                .Setup(locator => locator.GetInstance<IQuestionOptionsRepository>())
+                .Returns(optionsRepository);
 
             var interview = new StatefulInterview(
                 //questionnaireRepository,
