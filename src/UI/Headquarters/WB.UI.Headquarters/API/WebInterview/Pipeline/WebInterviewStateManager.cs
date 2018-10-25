@@ -3,24 +3,22 @@ using Main.Core.Entities.SubEntities;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.SignalR.Hubs;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
-using WB.Infrastructure.Native.Storage;
+using WB.Enumerator.Native.WebInterview;
 
 namespace WB.UI.Headquarters.API.WebInterview.Pipeline
 {
     public class HandlePauseEventPipelineModule : HubPipelineModule
     {
         private readonly IPauseResumeQueue pauseResumeQueue;
-        private IServiceLocator serviceLocator;
-
-        public HandlePauseEventPipelineModule(IPauseResumeQueue pauseResumeQueue, IServiceLocator serviceLocator)
+        
+        public HandlePauseEventPipelineModule(IPauseResumeQueue pauseResumeQueue)
         {
             this.pauseResumeQueue = pauseResumeQueue ?? throw new ArgumentNullException(nameof(pauseResumeQueue));
-            this.serviceLocator = serviceLocator;
         }
 
         protected override bool OnBeforeDisconnect(IHub hub, bool stopCalled)
@@ -42,7 +40,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Pipeline
 
             //resolve from context to preserve scope
             IStatefulInterview interview = null;
-            this.serviceLocator.ExecuteActionInScope((locator) =>
+            InScopeExecutor.Current.ExecuteActionInScope((locator) =>
             {
                 IStatefulInterviewRepository statefulInterviewRepository = locator.GetInstance<IStatefulInterviewRepository>();
                 interview = statefulInterviewRepository.Get(interviewId);

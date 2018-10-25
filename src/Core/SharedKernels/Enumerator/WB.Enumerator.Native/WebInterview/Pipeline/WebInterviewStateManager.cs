@@ -1,12 +1,11 @@
 using System;
 using Microsoft.AspNet.SignalR.Hubs;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Infrastructure.Native.Storage;
 
 namespace WB.Enumerator.Native.WebInterview.Pipeline
 {
@@ -30,10 +29,10 @@ namespace WB.Enumerator.Native.WebInterview.Pipeline
             var interviewId = hub.Context.QueryString[@"interviewId"];
             IStatefulInterview interview = null;
 
-            ServiceLocator.Current.ExecuteActionInScope((locator) =>
+            InScopeExecutor.Current.ExecuteActionInScope((locator) =>
             {
-                    IStatefulInterviewRepository statefulInterviewRepository = locator.GetInstance<IStatefulInterviewRepository>();
-                    interview = statefulInterviewRepository.Get(interviewId);
+                IStatefulInterviewRepository statefulInterviewRepository = locator.GetInstance<IStatefulInterviewRepository>();
+                interview = statefulInterviewRepository.Get(interviewId);
             });
             
             if (interview == null)

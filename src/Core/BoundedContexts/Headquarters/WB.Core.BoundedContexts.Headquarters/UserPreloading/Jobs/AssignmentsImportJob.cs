@@ -8,8 +8,9 @@ using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Infrastructure.Native.Storage;
+using WB.Enumerator.Native.WebInterview;
 
 namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
 {
@@ -50,7 +51,7 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
                     new ParallelOptions { MaxDegreeOfParallelism = sampleImportSettings.InterviewsImportParallelTasksLimit },
                     assignmentId =>
                     {
-                        serviceLocator.ExecuteActionInScope((serviceLocatorLocal) =>
+                        InScopeExecutor.Current.ExecuteActionInScope((serviceLocatorLocal) =>
                         {
                             var threadImportAssignmentsService = serviceLocatorLocal.GetInstance<IAssignmentsImportService>();
 

@@ -13,6 +13,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
+using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
@@ -21,7 +22,6 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Infrastructure.Native.Storage;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
-using WB.UI.Shared.Enumerator.Services.Internals;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewPackagesServiceTests
 {

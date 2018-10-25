@@ -2,15 +2,13 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
-using Autofac;
 using Newtonsoft.Json;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Versions;
-using WB.Infrastructure.Native.Storage;
+using WB.Enumerator.Native.WebInterview;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Models.VersionCheck;
-using WB.UI.Shared.Enumerator.Services.Internals;
 
 namespace WB.UI.Headquarters.Services
 {
@@ -26,15 +24,12 @@ namespace WB.UI.Headquarters.Services
         private readonly IPlainKeyValueStorage<VersionCheckingInfo> appSettingsStorage;
 
         private readonly IProductVersion productVersion;
-        private IServiceLocator serviceLocator;
-
+        
         public VersionCheckService(IPlainKeyValueStorage<VersionCheckingInfo> appSettingsStorage,
-            IProductVersion productVersion,
-            IServiceLocator serviceLocator)
+            IProductVersion productVersion)
         {
             this.appSettingsStorage = appSettingsStorage;
             this.productVersion = productVersion;
-            this.serviceLocator = serviceLocator;
         }
 
         public bool DoesNewVersionExist()
@@ -87,18 +82,16 @@ namespace WB.UI.Headquarters.Services
                 AvailableVersion = versionInfo;
                 LastLoadedAt = DateTime.Now;
                 ErrorOccuredAt = null;
-                this.serviceLocator.ExecuteActionInScope((serviceLocatorLocal) =>
+                InScopeExecutor.Current.ExecuteActionInScope((serviceLocatorLocal) =>
                 {
                     serviceLocatorLocal.GetInstance<IPlainKeyValueStorage<VersionCheckingInfo>>()
                         .Store(versionInfo, VersionCheckingInfo.VersionCheckingInfoKey);
                 });
-
             }
             catch (Exception)
             {
                 ErrorOccuredAt = DateTime.Now;
             }
-
         }
 
         private async Task<T> DoRequestJsonAsync<T>(string uri)

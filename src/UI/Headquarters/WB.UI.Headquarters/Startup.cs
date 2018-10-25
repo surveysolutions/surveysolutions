@@ -30,6 +30,7 @@ using Owin;
 using Quartz;
 using StackExchange.Exceptional;
 using StackExchange.Exceptional.Stores;
+using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
@@ -42,7 +43,6 @@ using WB.Infrastructure.Native.Monitoring;
 using WB.UI.Headquarters.API.WebInterview;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
-using WB.UI.Shared.Enumerator.Services.Internals;
 using WB.UI.Shared.Web.Configuration;
 using WB.UI.Shared.Web.DataAnnotations;
 using WB.UI.Shared.Web.Filters;
@@ -78,11 +78,6 @@ namespace WB.UI.Headquarters
             autofacKernel.ContainerBuilder.RegisterControllers(typeof(Startup).Assembly);
             autofacKernel.ContainerBuilder.RegisterApiControllers(typeof(Startup).Assembly);
             
-            autofacKernel.ContainerBuilder
-                .RegisterType<AutofacServiceLocatorAdapter>()
-                .As<IServiceLocator>()
-                .InstancePerLifetimeScope();
-
             autofacKernel.ContainerBuilder.RegisterType<Autofac.Integration.SignalR.AutofacDependencyResolver>()
                 .As<Microsoft.AspNet.SignalR.IDependencyResolver>().SingleInstance();
             
@@ -93,9 +88,11 @@ namespace WB.UI.Headquarters
             autofacKernel.ContainerBuilder.RegisterWebApiModelBinderProvider();
 
             autofacKernel.Init().Wait();
-
-            UnitOfWorkScopeManager.SetScopeAdapter(autofacKernel.Container);
             var container = autofacKernel.Container;
+
+            UnitOfWorkScopeManager.SetScopeAdapter(container);
+
+            InScopeExecutor.Init(new UnitOfWorkInScopeExecutor(container));
 
             var resolver = new AutofacWebApiDependencyResolver(container);
             config.DependencyResolver = resolver;
@@ -109,7 +106,8 @@ namespace WB.UI.Headquarters
             DependencyResolver.SetResolver(new Autofac.Integration.Mvc.AutofacDependencyResolver(container));
             ModelBinders.Binders.DefaultBinder = new AutofacBinderResolver(container);
 
-            ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(container));
+            var scopeResolver = new AutofacServiceLocatorAdapterWithLifeScopeResolver(container);
+            ServiceLocator.SetLocatorProvider(() => scopeResolver);
 
             app.UseAutofacMiddleware(container);
             

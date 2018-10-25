@@ -5,26 +5,23 @@ using System.Linq;
 using System.Threading.Tasks;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Infrastructure.Native.Storage;
+using WB.Core.Infrastructure.Modularity;
+using WB.Enumerator.Native.WebInterview;
 
 namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewDetailsDataScheduler
 {
     [DisallowConcurrentExecution]
     internal class SyncPackagesProcessorBackgroundJob : IJob
     {
-        private readonly IServiceLocator serviceLocator;
         private readonly ILogger logger;
         private readonly SyncPackagesProcessorBackgroundJobSetting syncPackagesProcessorBackgroundJobSetting;
         private readonly IInterviewPackagesService interviewPackagesService;
 
-        public SyncPackagesProcessorBackgroundJob(IServiceLocator serviceLocator,
-            ILogger logger,
+        public SyncPackagesProcessorBackgroundJob(ILogger logger,
             SyncPackagesProcessorBackgroundJobSetting syncPackagesProcessorBackgroundJobSetting,
             IInterviewPackagesService interviewPackagesService)
         {
-            this.serviceLocator = serviceLocator;
             this.logger = logger;
             this.syncPackagesProcessorBackgroundJobSetting = syncPackagesProcessorBackgroundJobSetting;
             this.interviewPackagesService = interviewPackagesService;
@@ -51,7 +48,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.Interv
                     },
                     packageId =>
                     {
-                        serviceLocator.ExecuteActionInScope((serviceLocatorLocal) =>
+                        InScopeExecutor.Current.ExecuteActionInScope((serviceLocatorLocal) =>
                         {
                             serviceLocatorLocal.GetInstance<IInterviewPackagesService>().ProcessPackage(packageId);
                         });

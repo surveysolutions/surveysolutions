@@ -1,7 +1,7 @@
 ﻿using System;
 using Quartz;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Infrastructure.Native.Storage;
+using WB.Core.Infrastructure.Modularity;
+using WB.Enumerator.Native.WebInterview;
 
 namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
 {
@@ -16,7 +16,7 @@ namespace WB.Core.BoundedContexts.Headquarters.QuartzIntegration
 
         public void Execute(IJobExecutionContext context)
         {
-            ServiceLocator.Current.ExecuteActionInScope((serviceLocatorLocal) =>
+            InScopeExecutor.Current.ExecuteActionInScope((serviceLocatorLocal) =>
             {
                 var job = serviceLocatorLocal.GetInstance(jobType) as IJob;
                 if (job == null)
