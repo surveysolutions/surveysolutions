@@ -19,15 +19,24 @@ using WB.Core.SharedKernels.Enumerator.Events;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
+    //stored in global cache
+    //references to repositories should be resolved on demand 
     public class StatefulInterview : Interview, IStatefulInterview
     {
-        public StatefulInterview(IQuestionnaireStorage questionnaireRepository,
-                                 IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider,
-                                 ISubstitutionTextFactory substitutionTextFactory,
-                                 IInterviewTreeBuilder treeBuilder,
-            IQuestionOptionsRepository questionOptionsRepository)
-            : base(questionnaireRepository, expressionProcessorStatePrototypeProvider, 
-                substitutionTextFactory, treeBuilder, questionOptionsRepository)
+        public StatefulInterview(
+            //IQuestionnaireStorage questionnaireRepository,
+            //IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider,
+            ISubstitutionTextFactory substitutionTextFactory,
+            IInterviewTreeBuilder treeBuilder
+            //,IQuestionOptionsRepository questionOptionsRepository
+            )
+            : base(
+                //questionnaireRepository, 
+                //expressionProcessorStatePrototypeProvider, 
+                substitutionTextFactory, 
+                treeBuilder
+                //,questionOptionsRepository
+                )
         {
         }
 

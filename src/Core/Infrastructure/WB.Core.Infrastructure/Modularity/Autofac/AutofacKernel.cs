@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Autofac;
 using Autofac.Features.ResolveAnything;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.UI.Shared.Enumerator.Services.Internals;
 
 namespace WB.Core.Infrastructure.Modularity.Autofac
 {

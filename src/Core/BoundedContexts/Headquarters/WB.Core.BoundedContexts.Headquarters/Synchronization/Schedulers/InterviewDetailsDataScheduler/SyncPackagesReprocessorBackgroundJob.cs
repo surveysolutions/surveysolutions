@@ -4,27 +4,23 @@ using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Quartz;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.Modularity;
 using WB.Enumerator.Native.WebInterview;
-using WB.Infrastructure.Native.Storage;
 
 namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewDetailsDataScheduler
 {
     [DisallowConcurrentExecution]
     public class SyncPackagesReprocessorBackgroundJob : IJob
     {
-        private readonly IServiceLocator serviceLocator;
         private readonly IInterviewBrokenPackagesService interviewBrokenPackagesService;
         private readonly SyncPackagesProcessorBackgroundJobSetting syncPackagesProcessorBackgroundJobSetting;
         private readonly ILogger logger;
 
-        public SyncPackagesReprocessorBackgroundJob(IServiceLocator serviceLocator,
-            IInterviewBrokenPackagesService interviewBrokenPackagesService,
+        public SyncPackagesReprocessorBackgroundJob(IInterviewBrokenPackagesService interviewBrokenPackagesService,
             SyncPackagesProcessorBackgroundJobSetting syncPackagesProcessorBackgroundJobSetting,
             ILogger logger)
         {
-            this.serviceLocator = serviceLocator;
             this.interviewBrokenPackagesService = interviewBrokenPackagesService;
             this.syncPackagesProcessorBackgroundJobSetting = syncPackagesProcessorBackgroundJobSetting;
             this.logger = logger;
@@ -52,7 +48,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.Interv
                     },
                     packageId =>
                     {
-                        serviceLocator.ExecuteActionInScope((serviceLocatorLocal) =>
+                        InScopeExecutor.Current.ExecuteActionInScope((serviceLocatorLocal) =>
                         {
                             serviceLocatorLocal.GetInstance<IInterviewBrokenPackagesService>().ReprocessSelectedBrokenPackages(new[] { packageId });
                         });

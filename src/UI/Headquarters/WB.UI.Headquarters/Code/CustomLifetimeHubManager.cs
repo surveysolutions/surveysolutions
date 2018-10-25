@@ -9,8 +9,6 @@ namespace WB.UI.Headquarters.Code
 {
     public class CustomLifetimeHubManager : IDisposable
     {
-        private Guid id = Guid.NewGuid();
-
         private readonly ConcurrentDictionary<IHub, ILifetimeScope> hubLifetimeScopes = new ConcurrentDictionary<IHub, ILifetimeScope>();
 
         public T CreateUnitOwWorkScopeAndResolveHub<T>(Type type, ILifetimeScope lifetimeScope) where T : ILifetimeHub
