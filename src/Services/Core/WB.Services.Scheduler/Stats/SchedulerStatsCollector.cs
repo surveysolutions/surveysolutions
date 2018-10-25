@@ -31,15 +31,18 @@ namespace WB.Services.Scheduler.Stats
             {
                 var db = scope.ServiceProvider.GetService<JobContext>();
                 
-                var query = @"with 
-	                    tenants as (select distinct tenant_name as tenant from scheduler.jobs),
-	                    statuses as (select s as status from unnest(ARRAY['started', 'running', 'completed', 'fail', 'canceled']) s),
-	                    types as (select distinct ""type"" from scheduler.jobs),
-	                    tuples as (select * from tenants t, statuses s, types tp)
-                    select t.tenant, t.""type"", t.status, count(*)
-                    from tuples t
-                    left join scheduler.jobs j on  j.tenant_name = t.tenant and j.""type"" = t.""type"" and j.status = t.status
-                    group by t.tenant, t.""type"", t.status";
+                var query = @"
+            with
+                tenants as (select distinct tenant_name as tenant from scheduler.jobs),
+                statuses as (select s as status from unnest(ARRAY['started', 'running', 'completed', 'fail', 'canceled']) s),
+                types as (select distinct ""type"" from scheduler.jobs),
+                tuples as (select* from tenants t, statuses s, types tp)
+            select t.tenant, t.status, t.""type"", 
+            (
+                select count(*) from scheduler.jobs j
+                where j.tenant_name = t.tenant and j.""type"" = t.""type"" and j.status = t.status
+                ) as ""count""
+            from tuples t";
 
                 var counts = db.Database.GetDbConnection().Query<(string tenant, string type, string status, int count)>(query);
 
