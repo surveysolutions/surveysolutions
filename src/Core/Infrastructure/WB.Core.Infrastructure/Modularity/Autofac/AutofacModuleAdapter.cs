@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using Autofac;
 using Autofac.Core;
 using Autofac.Core.Lifetime;
-using SignalR.Extras.Autofac;
 
 namespace WB.Core.Infrastructure.Modularity.Autofac
 {
