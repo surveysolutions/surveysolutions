@@ -1627,18 +1627,18 @@ header > .red-line {
 
 .question-editor.for-supervisor .options-group {
   background-color: #bbd5ec; }
-  .question-editor.for-supervisor .options-group input {
+  .question-editor.for-supervisor .options-group input, .question-editor.for-supervisor .options-group textarea {
     color: #2a81cb; }
-    .question-editor.for-supervisor .options-group input::-webkit-input-placeholder {
+    .question-editor.for-supervisor .options-group input::-webkit-input-placeholder, .question-editor.for-supervisor .options-group textarea::-webkit-input-placeholder {
       /* Chrome/Opera/Safari */
       color: #4e9ada !important; }
-    .question-editor.for-supervisor .options-group input::-moz-placeholder {
+    .question-editor.for-supervisor .options-group input::-moz-placeholder, .question-editor.for-supervisor .options-group textarea::-moz-placeholder {
       /* Firefox 19+ */
       color: #4e9ada !important; }
-    .question-editor.for-supervisor .options-group input:-ms-input-placeholder {
+    .question-editor.for-supervisor .options-group input:-ms-input-placeholder, .question-editor.for-supervisor .options-group textarea:-ms-input-placeholder {
       /* IE 10+ */
       color: #4e9ada !important; }
-    .question-editor.for-supervisor .options-group input:-moz-placeholder {
+    .question-editor.for-supervisor .options-group input:-moz-placeholder, .question-editor.for-supervisor .options-group textarea:-moz-placeholder {
       /* Firefox 18- */
       color: #4e9ada !important; }
 
