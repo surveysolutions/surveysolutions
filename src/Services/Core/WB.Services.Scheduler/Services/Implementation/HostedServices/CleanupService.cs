@@ -42,7 +42,7 @@ namespace WB.Services.Scheduler.Services.Implementation.HostedServices
                         await Task.Delay(TimeSpan.FromSeconds(options.Value.ClearStaleJobsInSeconds),
                             cancellationToken);
                     }
-                    catch (TaskCanceledException tce)
+                    catch (TaskCanceledException)
                     {
                         logger.LogInformation("Cancellation received.");
                     }
