@@ -44,7 +44,7 @@ namespace WB.Services.Scheduler.Stats
                 ) as ""count""
             from tuples t";
 
-                var counts = db.Database.GetDbConnection().Query<(string tenant, string type, string status, int count)>(query);
+                var counts = db.Database.GetDbConnection().Query<(string tenant, string status, string type, int count)>(query);
 
                 foreach (var count in counts)
                 {
