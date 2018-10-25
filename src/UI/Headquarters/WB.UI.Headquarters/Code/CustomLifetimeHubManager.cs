@@ -3,7 +3,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using Autofac;
 using Microsoft.AspNet.SignalR.Hubs;
-using SignalR.Extras.Autofac;
 using WB.Core.Infrastructure.Modularity.Autofac;
 
 namespace WB.UI.Headquarters.Code
@@ -16,7 +15,7 @@ namespace WB.UI.Headquarters.Code
 
         public T CreateUnitOwWorkScopeAndResolveHub<T>(Type type, ILifetimeScope lifetimeScope) where T : ILifetimeHub
         {
-            ILifetimeScope context = lifetimeScope.BeginLifetimeScope(ScopeLifetimeTag.RequestLifetimeScopeTag);
+            ILifetimeScope context = lifetimeScope.BeginLifetimeScope(AutofacServiceLocatorConstants.UnitOfWorkScope);
             
             T obj = (T)context.Resolve(type);
             obj.OnDisposing += new EventHandler(this.HubOnDisposing);
