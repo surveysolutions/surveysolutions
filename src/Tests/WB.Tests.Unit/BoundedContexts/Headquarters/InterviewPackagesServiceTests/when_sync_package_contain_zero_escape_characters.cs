@@ -14,6 +14,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Services;
+using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Storage;
 using WB.Tests.Abc;
 
@@ -42,7 +43,6 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewPackagesServiceTes
             container.Setup(x => x.BeginLifetimeScope(It.IsAny<string>())).Returns(container.Object);
             container.SetupGet(x => x.ComponentRegistry).Returns(componentRegistry.Object);
 
-
             var serviceLocatorNestedMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
             serviceLocatorNestedMock.Setup(x => x.GetInstance<ICommandService>()).Returns(commandService.Object);
             serviceLocatorNestedMock.Setup(x => x.GetInstance<IJsonAllTypesSerializer>())
@@ -53,31 +53,18 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewPackagesServiceTes
 
             serviceLocatorNestedMock.Setup(x => x.GetInstance<IPlainStorageAccessor<ReceivedPackageLogEntry>>()).Returns(packageStore.Object);
             serviceLocatorNestedMock.Setup(x => x.GetInstance<IInterviewUniqueKeyGenerator> ()).Returns(Mock.Of<IInterviewUniqueKeyGenerator>);
+            
+            var executor = new Mock<IInScopeExecutor>();
+            executor.Setup(x => x.ExecuteActionInScope(It.IsAny<Action<IServiceLocator>>())).Callback(
+                (Action<IServiceLocator> action) => { action.Invoke(serviceLocatorNestedMock.Object); });
 
-            container.Setup(x => x.ResolveComponent(It.IsAny<IComponentRegistration>(), It.IsAny<System.Collections.Generic.IEnumerable<Autofac.Core.Parameter>>()))
-                .Returns((IComponentRegistration compRegistration, IEnumerable<Autofac.Core.Parameter> pars) =>
-                    {
-                        return serviceLocatorNestedMock.Object;
-                    });
+            InScopeExecutor.Init(executor.Object);
 
-            var autofacServiceLocatorAdapterForTests = new AutofacServiceLocatorAdapter(container.Object);
-
-            var serviceLocatorOriginal = ServiceLocator.IsLocationProviderSet ? ServiceLocator.Current : null;
-
-            ServiceLocator.SetLocatorProvider(() => autofacServiceLocatorAdapterForTests);
-            try
-            {
-                var service = Create.Service.InterviewPackagesService(commandService: commandService.Object);
-
+           var service = Create.Service.InterviewPackagesService(commandService: commandService.Object);
                 // Act
                 service.ProcessPackage(Create.Entity.InterviewPackage(Guid.NewGuid(),
                     Create.Event.TextQuestionAnswered(answer: new string(new[] { 'a', '\0', '1' }))));
-            }
-            finally
-            {
-                ServiceLocator.SetLocatorProvider(() => serviceLocatorOriginal);
-            }
-
+           
             // Assert
             Assert.That(syncCommand, Is.Not.Null);
             Assert.That(syncCommand.SynchronizedEvents[0], Has.Property(nameof(TextQuestionAnswered.Answer)).EqualTo("a1"));

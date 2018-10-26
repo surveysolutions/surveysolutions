@@ -20,6 +20,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Storage;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
@@ -36,8 +37,6 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewPackagesServiceTes
             commandService
                 .Setup(x => x.Execute(It.IsAny<ICommand>(), It.IsAny<string>()))
                 .Callback((ICommand c, string o) => { syncCommand = c as SynchronizeInterviewEventsCommand; });
-
-
 
             var newtonJsonSerializer = new JsonAllTypesSerializer();
 
@@ -71,30 +70,20 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewPackagesServiceTes
 
             serviceLocatorNestedMock.Setup(x => x.GetInstance<IUserRepository>()).Returns(users.Object);
 
-            container.Setup(x => x.ResolveComponent(It.IsAny<IComponentRegistration>(), It.IsAny<System.Collections.Generic.IEnumerable<Autofac.Core.Parameter>>()))
-                .Returns((IComponentRegistration compRegistration, IEnumerable<Autofac.Core.Parameter> pars) =>
-                {
-                    return serviceLocatorNestedMock.Object;
-                });
+            var executor = new Mock<IInScopeExecutor>();
+            executor.Setup(x => x.ExecuteActionInScope(It.IsAny<Action<IServiceLocator>>())).Callback(
+                (Action<IServiceLocator> action) => { action.Invoke(serviceLocatorNestedMock.Object); });
 
-            var autofacServiceLocatorAdapterForTests = new AutofacServiceLocatorAdapter(container.Object);
+            InScopeExecutor.Init(executor.Object);
 
-            var serviceLocatorOriginal = ServiceLocator.IsLocationProviderSet ? ServiceLocator.Current : null;
-            ServiceLocator.SetLocatorProvider(() => autofacServiceLocatorAdapterForTests);
-            try
-            {
-                var service = Create.Service.InterviewPackagesService(commandService: commandService.Object);
+            var service = Create.Service.InterviewPackagesService(commandService: commandService.Object);
 
-                InterviewKeyAssigned keyAssignedEvent = Create.Event.InterviewKeyAssigned();
+            InterviewKeyAssigned keyAssignedEvent = Create.Event.InterviewKeyAssigned();
 
-                var interviewPackage = Create.Entity.InterviewPackage(Id.g1, keyAssignedEvent);
+            var interviewPackage = Create.Entity.InterviewPackage(Id.g1, keyAssignedEvent);
                 // Act
-                service.ProcessPackage(interviewPackage);
-            }
-            finally
-            {
-                ServiceLocator.SetLocatorProvider(() => serviceLocatorOriginal);
-            }
+            service.ProcessPackage(interviewPackage);
+            
 
             // Assert
             Assert.That(syncCommand, Is.Not.Null);

@@ -1,12 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Autofac;
 using Autofac.Core;
 using FluentAssertions;
 using Moq;
-using Npgsql;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
@@ -19,13 +17,12 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus;
-using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
@@ -89,21 +86,13 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
 
             serviceLocatorNestedMock.Setup(x => x.GetInstance<IUserRepository>()).Returns(users.Object);
 
-            container.Setup(x => x.ResolveComponent(It.IsAny<IComponentRegistration>(),
-                    It.IsAny<System.Collections.Generic.IEnumerable<Autofac.Core.Parameter>>()))
-                .Returns((IComponentRegistration compRegistration, IEnumerable<Autofac.Core.Parameter> pars) =>
-                    serviceLocatorNestedMock.Object);
+            var executor = new Mock<IInScopeExecutor>();
+            executor.Setup(x => x.ExecuteActionInScope(It.IsAny<Action<IServiceLocator>>())).Callback(
+                (Action<IServiceLocator> action) => { action.Invoke(serviceLocatorNestedMock.Object); });
 
-            //container.Setup(x => x.Resolve<IServiceLocator>()).Returns(serviceLocatorNestedMock.Object);
+            InScopeExecutor.Init(executor.Object);
 
-            var autofacServiceLocatorAdapterForTests = new AutofacServiceLocatorAdapter(container.Object);
-
-            var serviceLocatorOriginal = ServiceLocator.IsLocationProviderSet ? ServiceLocator.Current : null;
-
-            ServiceLocator.SetLocatorProvider(() => autofacServiceLocatorAdapterForTests);
-            try
-            {
-                interviewPackagesService = Create.Service.InterviewPackagesService(
+            interviewPackagesService = Create.Service.InterviewPackagesService(
                     syncSettings: new SyncSettings(origin) {UseBackgroundJobForProcessingPackages = true},
                     logger: Mock.Of<ILogger>(),
                     serializer: newtonJsonSerializer,
@@ -113,7 +102,7 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
                     uniqueKeyGenerator: Mock.Of<IInterviewUniqueKeyGenerator>(),
                     interviews: new TestInMemoryWriter<InterviewSummary>());
 
-                expectedCommand = Create.Command.SynchronizeInterviewEventsCommand(
+            expectedCommand = Create.Command.SynchronizeInterviewEventsCommand(
                     interviewId: Guid.Parse("11111111111111111111111111111111"),
                     questionnaireId: Guid.Parse("22222222222222222222222222222222"),
                     questionnaireVersion: 111,
@@ -130,7 +119,7 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
                             DateTime.UtcNow, DateTime.Today),
                     });
 
-                interviewPackagesService.StoreOrProcessPackage(
+            interviewPackagesService.StoreOrProcessPackage(
                     new InterviewPackage
                     {
                         InterviewId = expectedCommand.InterviewId,
@@ -143,12 +132,8 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
                             .Select(IntegrationCreate.AggregateRootEvent).ToArray())
                     });
 
-                BecauseOf();
-            }
-            finally
-            {
-                ServiceLocator.SetLocatorProvider(() => serviceLocatorOriginal);
-            }
+            BecauseOf();
+           
         }
 
         private void BecauseOf() => interviewPackagesService.ProcessPackage("1");
