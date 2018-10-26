@@ -15,13 +15,14 @@ namespace support
 
             var ninjectKernel = new StandardKernel();
             ninjectKernel.Bind<INetworkService>().To<NetworkService>();
-            ninjectKernel.Bind<IDatabaseSevice>().To<PostgresDatabaseService>();
+            ninjectKernel.Bind<IDatabaseService>().To<PostgresDatabaseService>();
             ninjectKernel.Bind<IConfigurationManagerSettings>().To<ConfigurationManagerSettings>().InSingletonScope();
             ninjectKernel.Bind<ILogger>().ToConstant(logger);
 
             var processor = new CommandLineProcessor(new ConsoleHost(), new ConsoleDependencyResolver(ninjectKernel));
             ((Dictionary<string, Type>)processor.Commands).Clear();
 
+            processor.RegisterCommand<ResetPasswordCommand>("reset-password");
             processor.RegisterCommand<CheckAccessCommand>("health-check");
             processor.RegisterCommand<ArchiveLogsCommand>("archive-logs");
             processor.RegisterCommand<CustomHelpCommand>("help");
@@ -45,7 +46,6 @@ namespace support
                 logger.Error(e);
                 Console.WriteLine("Unexpected exception. See logs for more details");
             }
-            
         }
     }
 }

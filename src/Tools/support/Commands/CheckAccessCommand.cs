@@ -1,7 +1,4 @@
-using System;
 using System.ComponentModel;
-using System.Configuration;
-using System.IO;
 using System.Threading.Tasks;
 using NConsole;
 using NLog;
@@ -9,25 +6,20 @@ using NLog;
 namespace support
 {
     [Description("Health check of Survey Solutions services.")]
-    public class CheckAccessCommand : IConsoleCommand
+    public class CheckAccessCommand : ConfigurationDependentCommand, IConsoleCommand
     {
         private readonly INetworkService _networkService;
-        private readonly IDatabaseSevice _databaseSevice;
-        private readonly IConfigurationManagerSettings _configurationManagerSettings;
+        private readonly IDatabaseService databaseService;
         private readonly ILogger _logger;
 
-        public CheckAccessCommand(INetworkService networkService, IDatabaseSevice databaseSevice,
-            IConfigurationManagerSettings configurationManagerSettings, ILogger logger)
+        public CheckAccessCommand(INetworkService networkService, 
+            IDatabaseService databaseService,
+            IConfigurationManagerSettings configurationManagerSettings, ILogger logger) : base(configurationManagerSettings)
         {
             _networkService = networkService;
-            _databaseSevice = databaseSevice;
-            _configurationManagerSettings = configurationManagerSettings;
+            this.databaseService = databaseService;
             _logger = logger;
         }
-
-        [Description("Physical path to Headquarters website.")]
-        [Argument(Name = "path")]
-        public string PathToHeadquarters { get; set; }
 
         [Description("Check access to Survey Solutions website, connection and permissions to Headquarters database.")]
         [Switch(LongName = "all", ShortName = "all")]
@@ -47,16 +39,8 @@ namespace support
 
         public async Task<object> RunAsync(CommandLineProcessor processor, IConsoleHost host)
         {
-            var pathToHq = this.PathToHeadquarters.Trim('"').TrimEnd('\\');
-            if (!Directory.Exists(pathToHq))
-            {
-                host.WriteLine("Headquarters website settings not found. " +
-                               "Please, ensure that you enter correct path to Headquarters website");
+            if (!ReadConfigurationFile(host))
                 return null;
-            }
-
-            _configurationManagerSettings.SetPhysicalPathToWebsite(pathToHq);
-
 
             var shouldCheckDesignerWebsite = this.All || this.CheckDesignerWebsite;
             var shouldCheckDbConnection = this.All || this.CheckDbConnection;
@@ -82,27 +66,23 @@ namespace support
 
         private async Task CheckPermissionsToDatabaseAsync(IConsoleHost host)
         {
-            var dbConnectionString = ConfigurationManager.ConnectionStrings["Postgres"]?.ConnectionString;
-            if (!string.IsNullOrWhiteSpace(dbConnectionString))
+            if (!string.IsNullOrWhiteSpace(ConnectionString))
             {
                 host.WriteMessage("Permissions to database: ");
                 await host.TryExecuteActionWithAnimationAsync(_logger,
-                    _databaseSevice.HasPermissionsAsync(dbConnectionString));
+                    databaseService.HasPermissionsAsync(ConnectionString));
             }
             else
                 host.WriteMessage("Connection string not found");
-
         }
 
         private async Task CheckConnectionToDatabaseAsync(IConsoleHost host)
         {
-            var dbConnectionString = ConfigurationManager.ConnectionStrings["Postgres"]?.ConnectionString;
-
-            if (!string.IsNullOrWhiteSpace(dbConnectionString))
+            if (!string.IsNullOrWhiteSpace(ConnectionString))
             {
                 host.WriteMessage("Connection to database: ");
                 await host.TryExecuteActionWithAnimationAsync(_logger,
-                    _databaseSevice.HasConnectionAsync(dbConnectionString));
+                    databaseService.HasConnectionAsync(ConnectionString));
             }
             else
                 host.WriteMessage("Connection string not found");
@@ -110,12 +90,11 @@ namespace support
 
         private async Task CheckConnectionToDesignerAsync(IConsoleHost host)
         {
-            var designerUrl = ConfigurationManager.AppSettings["DesignerAddress"];
-            if (!string.IsNullOrEmpty(designerUrl))
+            if (!string.IsNullOrEmpty(DesignerUrl))
             {
                 host.WriteMessage("Connection to the Survey Solutions website: ");
                 await host.TryExecuteActionWithAnimationAsync(_logger,
-                    _networkService.IsHostReachableAsync(designerUrl));
+                    _networkService.IsHostReachableAsync(DesignerUrl));
             }
             else
                 host.WriteLine("Url to Survey Solutions Website not found.");

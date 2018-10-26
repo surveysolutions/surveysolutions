@@ -14,36 +14,23 @@ using NLog.Config;
 namespace support
 {
     [Description("Archive Headquarters log files.")]
-    public class ArchiveLogsCommand : IConsoleCommand
+    public class ArchiveLogsCommand : ConfigurationDependentCommand, IConsoleCommand
     {
-        private int _consoleCursorPosition;
-        private int _logFilesCount;
-        private int _totalLogFilesCount;
+        private int consoleCursorPosition;
+        private int logFilesCount;
+        private int totalLogFilesCount;
 
-        private readonly IConfigurationManagerSettings _configurationManagerSettings;
-        private readonly ILogger _logger;
+        private readonly ILogger logger;
 
-        public ArchiveLogsCommand(IConfigurationManagerSettings configurationManagerSettings, ILogger logger)
+        public ArchiveLogsCommand(IConfigurationManagerSettings configurationManagerSettings, ILogger logger) : base(configurationManagerSettings)
         {
-            _configurationManagerSettings = configurationManagerSettings;
-            _logger = logger;
+            this.logger = logger;
         }
-
-        [Description("Physical path to Headquarters website.")]
-        [Argument(Name = "path")]
-        public string PathToHeadquarters { get; set; }
 
         public async Task<object> RunAsync(CommandLineProcessor processor, IConsoleHost host)
         {
-            var pathToHq = this.PathToHeadquarters.Trim('"').TrimEnd('\\');
-            if (!Directory.Exists(pathToHq))
-            {
-                host.WriteLine("Headquarters website settings not found. " +
-                               "Please, ensure that you enter correct path to Headquarters website");
+            if (!ReadConfigurationFile(host))
                 return null;
-            }
-
-            _configurationManagerSettings.SetPhysicalPathToWebsite(pathToHq);
 
             var elmahConfigSection = ConfigurationManager.GetSection("elmah/errorLog") as Hashtable;
             var nlogConfigSection = ConfigurationManager.GetSection("nlog") as XmlLoggingConfiguration;
@@ -58,23 +45,23 @@ namespace support
             string pathToElmahLogs = "";
 
             if (hasElmahSettings)
-                pathToElmahLogs = ((string) elmahConfigSection[elmahRelativeLogPath]).Replace("~", pathToHq).Replace("/", "\\");
+                pathToElmahLogs = ((string) elmahConfigSection[elmahRelativeLogPath]).Replace("~", PathToHq).Replace("/", "\\");
 
             string pathToNlogLogs = "";
             if (hasNlogSettings)
                 pathToNlogLogs = nlogConfigSection.Variables[nlogLogPathFormat]
-                                     .Text.Replace("${basedir}", pathToHq)
+                                     .Text.Replace("${basedir}", PathToHq)
                                      .Replace("/", "\\")
                                      .TrimEnd('\\') + "\\logs";
 
-            _totalLogFilesCount = 0;
+            totalLogFilesCount = 0;
             if (Directory.Exists(pathToElmahLogs))
-                _totalLogFilesCount += Directory.EnumerateFiles(pathToElmahLogs).Count();
+                totalLogFilesCount += Directory.EnumerateFiles(pathToElmahLogs).Count();
 
             if (Directory.Exists(pathToNlogLogs))
-                _totalLogFilesCount += Directory.EnumerateFiles(pathToNlogLogs).Count();
+                totalLogFilesCount += Directory.EnumerateFiles(pathToNlogLogs).Count();
 
-            if (_totalLogFilesCount == 0)
+            if (totalLogFilesCount == 0)
             {
                 host.WriteLine("No logs found");
                 return null;
@@ -91,7 +78,7 @@ namespace support
             }
             catch (Exception e)
             {
-                _logger.Error(e, "Unexpected exception");
+                logger.Error(e, "Unexpected exception");
                 host.WriteError("Unexpected exception. See error log for more details");
             }
 
@@ -107,7 +94,7 @@ namespace support
             }
             catch (Exception e)
             {
-                _logger.Error(e, "Unexpected exception");
+                logger.Error(e, "Unexpected exception");
                 host.WriteError("Unexpected exception. See error log for more details");
             }
 
@@ -145,7 +132,7 @@ namespace support
                     {
                         await sourceStream.CopyToAsync(destinationStream);
                         Console.CursorLeft = 0;
-                        Console.Write($"Moving log files to temporary directory: {++_logFilesCount} of {_totalLogFilesCount}");
+                        Console.Write($"Moving log files to temporary directory: {++logFilesCount} of {totalLogFilesCount}");
                     }
                 }
             }
@@ -153,9 +140,9 @@ namespace support
 
         public void ArchiveWithProgress(string backupFolderPath, string backupFileName)
         {
-            _consoleCursorPosition = Console.CursorLeft;
-            _logFilesCount = 0;
-            _totalLogFilesCount = Directory.GetFiles(backupFolderPath, "*.*", SearchOption.AllDirectories).Length;
+            consoleCursorPosition = Console.CursorLeft;
+            logFilesCount = 0;
+            totalLogFilesCount = Directory.GetFiles(backupFolderPath, "*.*", SearchOption.AllDirectories).Length;
 
             FastZipEvents events = new FastZipEvents {ProcessFile = ProcessFileMethod};
             FastZip fastZip = new FastZip(events) {CreateEmptyDirectories = true};
@@ -167,8 +154,8 @@ namespace support
         
         private void ProcessFileMethod(object sender, ScanEventArgs args)
         {
-            Console.CursorLeft = _consoleCursorPosition;
-            Console.Write($"{++_logFilesCount * 100 / _totalLogFilesCount}%");
+            Console.CursorLeft = consoleCursorPosition;
+            Console.Write($"{++logFilesCount * 100 / totalLogFilesCount}%");
         }
     }
 }

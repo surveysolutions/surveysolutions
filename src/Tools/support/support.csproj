@@ -41,6 +41,9 @@
       <HintPath>..\..\..\packages\SharpZipLib.0.86.0\lib\20\ICSharpCode.SharpZipLib.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="Microsoft.AspNet.Identity.Core, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <HintPath>..\..\..\packages\Microsoft.AspNet.Identity.Core.2.2.2\lib\net45\Microsoft.AspNet.Identity.Core.dll</HintPath>
+    </Reference>
     <Reference Include="NConfig, Version=1.1.22.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\packages\NConfig.1.1.22\lib\Net40\NConfig.dll</HintPath>
       <Private>True</Private>
@@ -76,20 +79,22 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CheckAccessCommand.cs" />
+    <Compile Include="Commands\CheckAccessCommand.cs" />
+    <Compile Include="Commands\ConfigurationDependentCommand.cs" />
     <Compile Include="ConfigurationManagerSettings.cs" />
     <Compile Include="ConsoleDependencyResolver.cs" />
     <Compile Include="ConsoleExtensions.cs" />
-    <Compile Include="CustomHelpCommand.cs" />
+    <Compile Include="Commands\CustomHelpCommand.cs" />
     <Compile Include="ElmahSection.cs" />
     <Compile Include="IConfigurationManagerSettings.cs" />
-    <Compile Include="IDatabaseSevice.cs" />
+    <Compile Include="IDatabaseService.cs" />
     <Compile Include="INetworkService.cs" />
-    <Compile Include="ArchiveLogsCommand.cs" />
+    <Compile Include="Commands\ArchiveLogsCommand.cs" />
     <Compile Include="NetworkService.cs" />
     <Compile Include="PostgresDatabaseService.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Commands\ResetPasswordCommand.cs" />
     <Compile Include="SpinAnimation.cs" />
   </ItemGroup>
   <ItemGroup>

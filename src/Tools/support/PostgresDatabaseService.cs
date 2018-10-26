@@ -3,7 +3,7 @@ using Npgsql;
 
 namespace support
 {
-    public class PostgresDatabaseService : IDatabaseSevice
+    public class PostgresDatabaseService : IDatabaseService
     {
         public async Task<bool> HasConnectionAsync(string connectionString)
         {
@@ -30,6 +30,24 @@ namespace support
                 var dbOwnerName = (string)await command.ExecuteScalarAsync();
 
                 return dbOwnerName == connection.UserName;
+            }
+        }
+
+        public async Task<bool> UpdatePasswordAsync(string connectionString, string login, string passwordHash)
+        {
+            using (var connection = new NpgsqlConnection(connectionString))
+            {
+                await connection.OpenAsync();
+
+                var updateCommand = new NpgsqlCommand($@"UPDATE users.users SET ""PasswordHash""='{passwordHash}' WHERE ""UserName"" = '{login}';", connection);
+
+                var affectedRows = updateCommand.ExecuteNonQuery();
+
+                var selectCommand = new NpgsqlCommand($@"SELECT ""PasswordHash"" FROM users.users WHERE  ""UserName"" = '{login}'", connection);
+
+                var updatedPasswordHash = (string)await selectCommand.ExecuteScalarAsync();
+
+                return updatedPasswordHash == passwordHash;
             }
         }
     }

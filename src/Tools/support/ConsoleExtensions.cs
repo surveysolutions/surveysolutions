@@ -10,7 +10,7 @@ namespace support
         public static void WriteLine(this IConsoleHost host, string text = null)
             => host.WriteMessage($"{text}{Environment.NewLine}");
 
-        public static void WriteHighlitedText(this IConsoleHost host, string textToHighlight, ConsoleColor colorOfHighlightedText)
+        public static void WriteHighlightedText(this IConsoleHost host, string textToHighlight, ConsoleColor colorOfHighlightedText)
         {
             Console.ForegroundColor = colorOfHighlightedText;
             host.WriteMessage(textToHighlight);
@@ -19,20 +19,20 @@ namespace support
 
         public static void WriteDone(this IConsoleHost host)
         {
-            host.WriteHighlitedText("DONE", ConsoleColor.Green);
+            host.WriteHighlightedText("DONE", ConsoleColor.Green);
             host.WriteLine();
         }
 
 
         public static void WriteOk(this IConsoleHost host)
         {
-            host.WriteHighlitedText("OK", ConsoleColor.Green);
+            host.WriteHighlightedText("OK", ConsoleColor.Green);
             host.WriteLine();
         }
 
         public static void WriteFailed(this IConsoleHost host)
         {
-            host.WriteHighlitedText("FAILED", ConsoleColor.DarkRed);
+            host.WriteHighlightedText("FAILED", ConsoleColor.DarkRed);
             host.WriteLine();
         }
 
