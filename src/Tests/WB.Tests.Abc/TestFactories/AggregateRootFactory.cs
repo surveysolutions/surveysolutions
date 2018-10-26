@@ -37,6 +37,22 @@ namespace WB.Tests.Abc.TestFactories
                 repository.GetQuestionnaireDocument(It.IsAny<QuestionnaireIdentity>()) == questionnaireDocument);
 
             var textFactoryMock = new Mock<ISubstitutionTextFactory> {DefaultValue = DefaultValue.Mock};
+
+            var qRepository = questionnaireRepository ?? questionnaireDefaultRepository;
+            Mock.Get(ServiceLocator.Current)
+                .Setup(locator => locator.GetInstance<IQuestionnaireStorage>())
+                .Returns(qRepository);
+
+            var expressionsProvider = expressionProcessorStatePrototypeProvider ?? CreateDefaultInterviewExpressionStateProvider(null);
+            Mock.Get(ServiceLocator.Current)
+                .Setup(locator => locator.GetInstance<IInterviewExpressionStatePrototypeProvider>())
+                .Returns(expressionsProvider);
+
+            var optionsRepository = questionOptionsRepository ?? Mock.Of<IQuestionOptionsRepository>();
+            Mock.Get(ServiceLocator.Current)
+                .Setup(locator => locator.GetInstance<IQuestionOptionsRepository>())
+                .Returns(optionsRepository);
+
             var interview = new Interview(
                 //questionnaireRepository ?? questionnaireDefaultRepository,
                 //expressionProcessorStatePrototypeProvider ?? Stub.InterviewExpressionStateProvider(),
