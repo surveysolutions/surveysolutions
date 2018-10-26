@@ -15,7 +15,8 @@ namespace WB.UI.Supervisor.Activities
     [Activity(Theme = "@style/GrayAppTheme",
         WindowSoftInputMode = SoftInput.StateHidden,
         HardwareAccelerated = true,
-        ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
+        ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize,
+        Exported = false)]
     public class MapsActivity : BaseActivity<MapsViewModel>, ISyncBgService<MapSyncProgressStatus>, ISyncServiceHost<MapDownloadBackgroundService>
     {
         public ServiceBinder<MapDownloadBackgroundService> Binder { get; set; }

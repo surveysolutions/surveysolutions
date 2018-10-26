@@ -34,7 +34,8 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         Theme = "@style/GrayAppTheme", 
         WindowSoftInputMode = SoftInput.StateHidden,
         HardwareAccelerated = true,
-        ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
+        ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize,
+        Exported = false)]
     public class DashboardActivity : BaseActivity<DashboardViewModel>, 
         ISyncBgService<SyncProgressDto>, 
         ISyncServiceHost<SyncBgService>, 
