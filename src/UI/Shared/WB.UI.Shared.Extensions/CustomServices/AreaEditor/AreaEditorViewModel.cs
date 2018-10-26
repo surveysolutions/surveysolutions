@@ -382,9 +382,11 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 
             if (e.Position == null) { return; }
 
-            var point = GeometryEngine.Project(e.Position, this.MapView.SpatialReference);
+            var extent = this.MapView.Map.Basemap.BaseLayers[0].FullExtent;
 
-            if (!GeometryEngine.Contains(this.MapView.Map.Basemap.BaseLayers[0].FullExtent, point))
+            var point = GeometryEngine.Project(e.Position, extent.SpatialReference);
+
+            if (!GeometryEngine.Contains(extent, point))
             {
                 this.userInteractionService.ShowToast(UIResources.AreaMap_LocationOutOfBoundaries);
             }
