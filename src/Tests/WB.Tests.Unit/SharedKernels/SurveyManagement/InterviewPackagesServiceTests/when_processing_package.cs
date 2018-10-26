@@ -21,6 +21,7 @@ using WB.Core.SharedKernel.Structures.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Storage;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
@@ -76,19 +77,18 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewPackagesServiceT
                     return serviceLocatorNestedMock.Object;
                 });
 
-            var autofacServiceLocatorAdapterForTests = new AutofacServiceLocatorAdapter(container.Object);
+            var executor = new Mock<IInScopeExecutor>();
+            executor.Setup(x => x.ExecuteActionInScope(It.IsAny<Action<IServiceLocator>>())).Callback(
+                (Action<IServiceLocator> action) => { action.Invoke(serviceLocatorNestedMock.Object); });
 
-            var serviceLocatorOriginal = ServiceLocator.IsLocationProviderSet ? ServiceLocator.Current : null;
-            ServiceLocator.SetLocatorProvider(() => autofacServiceLocatorAdapterForTests);
-
-            try
-            {
-                interviewPackagesService = Create.Service.InterviewPackagesService(
+            InScopeExecutor.Init(executor.Object);
+            
+            interviewPackagesService = Create.Service.InterviewPackagesService(
                     serializer: serializer, brokenInterviewPackageStorage: brokenPackagesStorage,
                     interviewPackageStorage: packagesStorage, commandService: mockOfCommandService.Object,
                     syncSettings: syncSettings);
 
-                interviewPackagesService.StoreOrProcessPackage(new InterviewPackage
+            interviewPackagesService.StoreOrProcessPackage(new InterviewPackage
                 {
                     InterviewId = Guid.Parse("11111111111111111111111111111111"),
                     QuestionnaireId = Guid.Parse("22222222222222222222222222222222"),
@@ -99,12 +99,8 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.InterviewPackagesServiceT
                     Events = "compressed serialized events"
                 });
 
-                interviewPackagesService.ProcessPackage("1");
-            }
-            finally
-            {
-                ServiceLocator.SetLocatorProvider(() => serviceLocatorOriginal);
-            }
+            interviewPackagesService.ProcessPackage("1");
+            
         }
         
         [Test]

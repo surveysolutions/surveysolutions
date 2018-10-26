@@ -20,6 +20,7 @@ using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Storage;
 using WB.Tests.Abc;
 using WB.Tests.Abc.Storage;
@@ -76,32 +77,20 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewPackagesServiceTes
 
             serviceLocatorNestedMock.Setup(x => x.GetInstance<IUserRepository>()).Returns(users.Object);
 
-            container.Setup(x => x.ResolveComponent(It.IsAny<IComponentRegistration>(), It.IsAny<System.Collections.Generic.IEnumerable<Autofac.Core.Parameter>>()))
-                .Returns((IComponentRegistration compRegistration, IEnumerable<Autofac.Core.Parameter> pars) =>
-                {
-                    return serviceLocatorNestedMock.Object;
-                });
+            var executor = new Mock<IInScopeExecutor>();
+            executor.Setup(x => x.ExecuteActionInScope(It.IsAny<Action<IServiceLocator>>())).Callback(
+                (Action<IServiceLocator> action) => { action.Invoke(serviceLocatorNestedMock.Object); });
 
-            var autofacServiceLocatorAdapterForTests = new AutofacServiceLocatorAdapter(container.Object);
+            InScopeExecutor.Init(executor.Object);
 
-            var serviceLocatorOriginal = ServiceLocator.IsLocationProviderSet ? ServiceLocator.Current : null;
-            ServiceLocator.SetLocatorProvider(() => autofacServiceLocatorAdapterForTests);
-            try
-            {
-
-
-                var service =
+            var service =
                     Create.Service.InterviewPackagesService(interviews: interviews,
                         commandService: commandService.Object);
 
-                // Act
-                service.ProcessPackage(Create.Entity.InterviewPackage(interviewId, keyAssignedEventZero,
+            // Act
+            service.ProcessPackage(Create.Entity.InterviewPackage(interviewId, keyAssignedEventZero,
                     keyAssignedEvent));
-            }
-            finally
-            {
-                ServiceLocator.SetLocatorProvider(() => serviceLocatorOriginal);
-            }
+            
             
             // Assert
             commandService.Verify(x => x.Execute(It.Is<SynchronizeInterviewEventsCommand>(cmd => cmd.InterviewKey == null), It.IsAny<string>()));
