@@ -475,13 +475,19 @@ namespace WB.Services.Export.Tests
             return new AnsweredYesNoOption(value, isYes);
         }
 
-        public static SingleQuestion SingleOptionQuestion(Guid? id = null, string questionText = null)
+        public static SingleQuestion SingleOptionQuestion(Guid? id = null, 
+            string questionText = null,
+            string variable = null,
+            IEnumerable<Answer> options = null,
+            Guid? linkedToQuestionId = null)
         {
             return new SingleQuestion
             {
+                Answers = linkedToQuestionId.HasValue ? null : new List<Answer>(options ?? new Answer[] { }),
                 QuestionType = QuestionType.SingleOption,
                 PublicKey = id ?? Guid.NewGuid(),
                 QuestionText = questionText,
+                VariableName = variable?? "single"
             };
         }
 

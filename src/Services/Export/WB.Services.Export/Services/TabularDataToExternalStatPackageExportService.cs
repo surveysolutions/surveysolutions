@@ -153,7 +153,7 @@ namespace WB.Services.Export.Services
 
                 meta.Variables[index] = new DatasetVariable(meta.Variables[index].VarName)
                 {
-                    Storage = GetGtorageType(variableLabels.ValueType)
+                    Storage = GetStorageType(variableLabels.ValueType)
                 };
 
                 meta.Variables[index].VarLabel = variableLabels.Label;
@@ -182,7 +182,7 @@ namespace WB.Services.Export.Services
             }
         }
 
-        private static VariableStorage GetGtorageType(ExportValueType variableLabelsValueType)
+        private static VariableStorage GetStorageType(ExportValueType variableLabelsValueType)
         {
             switch (variableLabelsValueType)
             {
