@@ -40,7 +40,8 @@ namespace WB.Services.Export.CsvExport.Implementation.DoFiles
 
             foreach (IExportedHeaderItem headerItem in level.HeaderItems.Values)
             {
-                bool hasLabels = (headerItem as ExportedQuestionHeaderItem)?.Labels?.Count > 0 && ((ExportedQuestionHeaderItem)headerItem).QuestionType != QuestionType.MultyOption;
+                bool hasLabels = (headerItem as ExportedQuestionHeaderItem)?.Labels?.Count > 0 
+                                 && ((ExportedQuestionHeaderItem)headerItem).QuestionType != QuestionType.MultyOption;
 
                 foreach (var headerColumn in headerItem.ColumnHeaders)
                 {
@@ -48,10 +49,15 @@ namespace WB.Services.Export.CsvExport.Implementation.DoFiles
 
                     if (hasLabels)
                     {
-                        variableValueLabel = ((ExportedQuestionHeaderItem)headerItem).Labels.Select(label => new VariableValueLabel(label.Caption, label.Title?.RemoveHtmlTags() ?? string.Empty)).ToArray();
+                        variableValueLabel = ((ExportedQuestionHeaderItem)headerItem).Labels
+                            .Select(label => new VariableValueLabel(label.Caption, label.Title?.RemoveHtmlTags() ?? string.Empty))
+                            .ToArray();
                     }
 
-                    variableLabels.Add(new DataExportVariable(headerColumn.Name, headerColumn.Title?.RemoveHtmlTags() ?? string.Empty, headerItem.PublicKey, variableValueLabel, headerColumn.ExportType));
+                    variableLabels.Add(
+                        new DataExportVariable(headerColumn.Name, 
+                            headerColumn.Title?.RemoveHtmlTags() ?? string.Empty, 
+                            headerItem.PublicKey, variableValueLabel, headerColumn.ExportType));
                 }
             }
 
