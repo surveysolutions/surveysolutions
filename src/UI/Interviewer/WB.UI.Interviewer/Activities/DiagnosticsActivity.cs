@@ -9,7 +9,9 @@ using WB.UI.Shared.Enumerator.Activities;
 
 namespace WB.UI.Interviewer.Activities
 {
-    [Activity(WindowSoftInputMode = SoftInput.StateHidden, Theme = "@style/GrayAppTheme")]
+    [Activity(WindowSoftInputMode = SoftInput.StateHidden, 
+        Theme = "@style/GrayAppTheme",
+        Exported = false)]
     public class DiagnosticsActivity : BaseActivity<DiagnosticsViewModel>
     {
         protected override void OnCreate(Bundle bundle)
