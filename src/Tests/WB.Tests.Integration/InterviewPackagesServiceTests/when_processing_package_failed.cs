@@ -8,6 +8,7 @@ using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Mappings;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus;
@@ -16,6 +17,7 @@ using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
+using WB.Enumerator.Native.WebInterview;
 using WB.Infrastructure.Native.Storage;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Tests.Abc;
@@ -47,6 +49,25 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
                 .Throws(expectedException);
 
             var newtonJsonSerializer = new JsonAllTypesSerializer();
+
+            var serviceLocatorNestedMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
+            serviceLocatorNestedMock.Setup(x => x.GetInstance<ICommandService>()).Returns(mockOfCommandService.Object);
+            serviceLocatorNestedMock.Setup(x => x.GetInstance<IJsonAllTypesSerializer>())
+                .Returns(newtonJsonSerializer);
+
+            var executor = new Mock<IInScopeExecutor>();
+            executor.Setup(x => x.ExecuteActionInScope(It.IsAny<Action<IServiceLocator>>())).Callback(
+                (Action<IServiceLocator> action) => { action.Invoke(serviceLocatorNestedMock.Object); });
+
+            InScopeExecutor.Init(executor.Object);
+
+            Mock.Get(ServiceLocator.Current)
+                .Setup(locator => locator.GetInstance<ISessionFactory>())
+                .Returns(sessionFactory)
+                .Callback(() =>
+                {
+                    var t = 1;
+                });
 
             var interviewPackagesService = Create.Service.InterviewPackagesService(
                 syncSettings: new SyncSettings(origin) { UseBackgroundJobForProcessingPackages = true },
