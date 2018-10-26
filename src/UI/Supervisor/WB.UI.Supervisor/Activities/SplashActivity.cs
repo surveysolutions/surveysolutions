@@ -5,7 +5,10 @@ using WB.UI.Shared.Enumerator.Activities;
 
 namespace WB.UI.Supervisor.Activities
 {
-    [Activity(NoHistory = true, MainLauncher = true, ScreenOrientation = ScreenOrientation.Portrait, Theme = "@style/AppTheme")]
+    [Activity(NoHistory = true, 
+        MainLauncher = true, 
+        ScreenOrientation = ScreenOrientation.Portrait, 
+        Theme = "@style/AppTheme")]
     [MvxActivityPresentation]
     public class SplashActivity : EnumeratorSplashScreenAppCompatActivity<SupervisorSetup, SupervisorMvxApplication>
     {
