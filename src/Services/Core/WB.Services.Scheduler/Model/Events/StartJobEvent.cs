@@ -2,8 +2,11 @@
 {
     public class StartJobEvent : JobEvent
     {
-        public StartJobEvent(long jobId) : base(jobId)
+        public string WorkerId { get; }
+
+        public StartJobEvent(long jobId, string workerId) : base(jobId)
         {
+            WorkerId = workerId;
         }
     }
 }

@@ -95,7 +95,7 @@ namespace WB.Services.Scheduler.Services.Implementation
                
                 if (job != null)
                 {
-                    job.Start();
+                    job.Start(jobSettings.Value.WorkerId);
                     db.Jobs.Update(job);
                 }
 
