@@ -7,6 +7,7 @@ param([string]$VersionName,
 [string]$CapiProject,
 [string]$OutFileName,
 [bool]$ExcludeExtra,
+[string]$branch,
 [string]$PlatformsOverride)
 
 if(!$VersionCode){
@@ -87,7 +88,7 @@ function GetPackageName([string]$CapiProject) {
 	return ($res.Node.Value)
 }
 
-function UpdateAndroidAppManifest($VersionName, $VersionCode, $CapiProject){
+function UpdateAndroidAppManifest($VersionName, $VersionCode, $CapiProject, $branchName){
 	Write-Host "##teamcity[blockOpened name='Updating Android App Manifest']"
 	Write-Host "##teamcity[progressStart 'Updating Android App Manifest']"
 
@@ -102,6 +103,17 @@ function UpdateAndroidAppManifest($VersionName, $VersionCode, $CapiProject){
 
 	$code = Select-Xml -xml $xam  -Xpath '/manifest/@android:versionCode' -namespace @{android='http://schemas.android.com/apk/res/android'}
 	$code.Node.Value = $VersionCode
+
+    $hockeyApp = Select-Xml -xml $xam `
+        -Xpath '/manifest/application/meta-data[@android:name="net.hockeyapp.android.appIdentifier"]' `
+        -namespace @{android='http://schemas.android.com/apk/res/android'};
+
+    if ($branchName -eq "release") {
+        $hockeyApp.Node.SetAttribute('android:value', 'bd034ac8bec541d783f7e40c1300fd10')
+    }
+    else {
+        $hockeyApp.Node.SetAttribute('android:value', '1d21a663e5fc45359b254f22d6fa2b31')
+    }
 
 	$xam.Save($PahToManifest)
 
@@ -231,7 +243,7 @@ Write-Host "##teamcity[message text='PlatformsOverride = $PlatformsOverride']"
 		
 if([string]::IsNullOrWhiteSpace($PlatformsOverride))
 {
-	UpdateAndroidAppManifest -VersionName $VersionName -VersionCode $VersionCode -CapiProject $CapiProject
+	UpdateAndroidAppManifest -VersionName $VersionName -VersionCode $VersionCode -CapiProject $CapiProject -branchName $branch
 	
 
 	if (Test-Path $OutFileName) {
@@ -251,7 +263,7 @@ else
 	Foreach ($TargetAbi in $TargetAbis)
 	{
 		$IndexToAdd = $IndexToAdd + 1
-		UpdateAndroidAppManifest -VersionName $VersionName -VersionCode "$VersionCode$IndexToAdd" -CapiProject $CapiProject
+		UpdateAndroidAppManifest -VersionName $VersionName -VersionCode "$VersionCode$IndexToAdd" -CapiProject $CapiProject -branchName $branch
 	
 		if (Test-Path "$TargetAbi$OutFileName") {
 			Remove-Item "$TargetAbi$OutFileName" -Force

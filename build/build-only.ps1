@@ -83,6 +83,7 @@ try {
             -KeystoreAlias 'wbcapipublish' `
             -CapiProject 'src\UI\Interviewer\WB.UI.Interviewer\WB.UI.Interviewer.csproj' `
             -OutFileName $ExtPackageName `
+            -branch $branch `
             -ExcludeExtra $false | % { if (-not $_) { Exit } }
 
          CopyCapi -Project $ProjectHeadquarters -source $ExtPackageName -cleanUp $true | % { if (-not $_) { Exit } }
