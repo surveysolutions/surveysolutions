@@ -108,7 +108,8 @@ function UpdateAndroidAppManifest($VersionName, $VersionCode, $CapiProject, $bra
 		-Xpath '/manifest/application/meta-data[@android:name="net.hockeyapp.android.appIdentifier"]' `
 		-namespace @{android='http://schemas.android.com/apk/res/android'};
 
-	switch (org.worldbank.solutions.interviewer ) {
+	$projectname = GetPackageName $CapiProject
+	switch ($projectname) {
 		"org.worldbank.solutions.interviewer" {
 			if ($branchName -eq "release") {
 				$hockeyApp.Node.SetAttribute('android:value', 'bd034ac8bec541d783f7e40c1300fd10')
