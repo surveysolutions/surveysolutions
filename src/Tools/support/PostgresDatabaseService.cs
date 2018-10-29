@@ -1,10 +1,19 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
+using NLog;
 using Npgsql;
 
 namespace support
 {
     public class PostgresDatabaseService : IDatabaseService
     {
+        private readonly ILogger logger;
+
+        public PostgresDatabaseService(ILogger logger)
+        {
+            this.logger = logger;
+        }
+
         public async Task<bool> HasConnectionAsync(string connectionString)
         {
             using (var connection = new NpgsqlConnection(connectionString))
@@ -35,17 +44,43 @@ namespace support
 
         public async Task<bool> UpdatePasswordAsync(string connectionString, string login, string passwordHash)
         {
+            var selectStatement = $@"SELECT ""PasswordHash"" FROM users.users WHERE  ""UserName"" = '{login}'";
+            var updateStatement = $@"UPDATE users.users SET ""PasswordHash""='{passwordHash}' WHERE ""UserName"" = '{login}';";
+
             using (var connection = new NpgsqlConnection(connectionString))
             {
-                await connection.OpenAsync();
+                try
+                {
+                    await connection.OpenAsync();
+                }catch (Exception ex)
+                {
+                    logger.Error(ex, "Unable to open connection to DB");
+                    throw;
+                }
 
-                var updateCommand = new NpgsqlCommand($@"UPDATE users.users SET ""PasswordHash""='{passwordHash}' WHERE ""UserName"" = '{login}';", connection);
+                try
+                {
+                    var updateCommand = new NpgsqlCommand(updateStatement, connection);
+                    var affectedRows = updateCommand.ExecuteNonQuery();
+                    logger.Info($"Affected {affectedRows} rows with update statement: {updateStatement}");
+                }
+                catch (Exception ex)
+                {
+                    logger.Error(ex, $"Error during update statement execution: {updateStatement}");
+                    throw;
+                }
 
-                var affectedRows = updateCommand.ExecuteNonQuery();
-
-                var selectCommand = new NpgsqlCommand($@"SELECT ""PasswordHash"" FROM users.users WHERE  ""UserName"" = '{login}'", connection);
-
-                var updatedPasswordHash = (string)await selectCommand.ExecuteScalarAsync();
+                string updatedPasswordHash;
+                try
+                {
+                    var selectCommand = new NpgsqlCommand(selectStatement, connection);
+                    updatedPasswordHash = (string) await selectCommand.ExecuteScalarAsync();
+                }
+                catch (Exception ex)
+                {
+                    logger.Error(ex, $"Error during update statement execution: {updateStatement}");
+                    throw;
+                }
 
                 return updatedPasswordHash == passwordHash;
             }

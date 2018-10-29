@@ -30,10 +30,16 @@ namespace support
 
         public async Task<object> RunAsync(CommandLineProcessor processor, IConsoleHost host)
         {
+            logger.Info("Reset password");
+            logger.Info($"Login: {Login}");
+
             if (!ReadConfigurationFile(host))
                 return null;
 
             var passwordHash = HashPassword(NewPassword);
+            
+            logger.Info($"Password hash: {passwordHash}");
+            logger.Info($"Connection string: {ConnectionString}");
 
             if (!string.IsNullOrWhiteSpace(ConnectionString))
             {

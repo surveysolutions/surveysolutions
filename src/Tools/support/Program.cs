@@ -12,7 +12,7 @@ namespace support
         static void Main(string[] args)
         {
             var logger = LogManager.GetLogger("support");
-
+            logger.Info($"Support tool started {DateTime.Now}.");
             var ninjectKernel = new StandardKernel();
             ninjectKernel.Bind<INetworkService>().To<NetworkService>();
             ninjectKernel.Bind<IDatabaseService>().To<PostgresDatabaseService>();
@@ -46,6 +46,8 @@ namespace support
                 logger.Error(e);
                 Console.WriteLine("Unexpected exception. See logs for more details");
             }
+
+            logger.Info($"Support tool finished {DateTime.Now}.");
         }
     }
 }
