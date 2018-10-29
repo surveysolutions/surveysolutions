@@ -29,7 +29,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
 
         protected override DataExportFormat Format => DataExportFormat.Binary;
 
-        protected override async Task ExportDataIntoArchive(IZipArchive archive, ExportSettings settings,
+        protected override async Task ExportDataIntoArchiveAsync(IZipArchive archive, ExportSettings settings,
             IProgress<int> progress,
             CancellationToken cancellationToken)
         {
