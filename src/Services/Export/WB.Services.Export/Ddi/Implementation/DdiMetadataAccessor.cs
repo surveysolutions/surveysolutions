@@ -49,7 +49,7 @@ namespace WB.Services.Export.Ddi.Implementation
 
             var filesToArchive = new List<string>
             {
-                await this.ddiMetadataFactory.CreateDDIMetadataFileForQuestionnaireInFolder(tenant, questionnaireId, pathToDdiMetadata)
+                await this.ddiMetadataFactory.CreateDDIMetadataFileForQuestionnaireInFolderAsync(tenant, questionnaireId, pathToDdiMetadata)
             };
 
             dataExportFileAccessor.RecreateExportArchive(pathToDdiMetadata, filesToArchive, archiveFilePath, password);

@@ -39,7 +39,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
         {
             var tabFiles = await this.CreateTabularDataFilesAsync(settings, progress, cancellationToken);
 
-            await this.CreateSpssDataFilesFromTabularDataFiles(settings.Tenant, settings.QuestionnaireId, tabFiles, progress,
+            await this.CreateSpssDataFilesFromTabularDataFilesAsync(settings.Tenant, settings.QuestionnaireId, tabFiles, progress,
                 cancellationToken);
 
             this.DeleteTabularDataFiles(tabFiles, cancellationToken);
@@ -48,7 +48,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
                 ExportFileSettings.SpssDataFileExtension);
         }
 
-        private async Task CreateSpssDataFilesFromTabularDataFiles(TenantInfo tenant, QuestionnaireId questionnaireIdentity,
+        private async Task CreateSpssDataFilesFromTabularDataFilesAsync(TenantInfo tenant, QuestionnaireId questionnaireIdentity,
             string[] tabDataFiles,
             IProgress<int> progress, CancellationToken cancellationToken)
         {
