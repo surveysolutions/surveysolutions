@@ -87,7 +87,7 @@ namespace WB.Services.Export.Utils
                         {
                             if (fs.Length == 0)
                             {
-                                archive.CreateEntry(file.Substring(exportTempDirectoryPath.Length + 1), new byte[0]);
+                                archive.CreateEntry(file.Substring(exportTempDirectoryPath.Length + 1), Array.Empty<byte>());
                             }
                             else
                             {
@@ -111,7 +111,7 @@ namespace WB.Services.Export.Utils
                         {
                             if (fs.Length == 0)
                             {
-                                archive.CreateEntry(file.Substring(exportTempDirectoryPath.Length + 1), new byte[0]);
+                                archive.CreateEntry(file.Substring(exportTempDirectoryPath.Length + 1), Array.Empty<byte>());
                             }
                             else
                             {
