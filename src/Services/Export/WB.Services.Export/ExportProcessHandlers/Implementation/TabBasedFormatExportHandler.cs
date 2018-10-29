@@ -31,7 +31,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             string directoryPath, string dataFilesExtension)
             => this.tabularFormatExportService.GenerateDescriptionFileAsync(tenant, questionnaireIdentity, directoryPath, dataFilesExtension);
 
-        protected async Task<string[]> CreateTabularDataFiles(ExportSettings exportSettings, IProgress<int> progress, CancellationToken cancellationToken)
+        protected async Task<string[]> CreateTabularDataFilesAsync(ExportSettings exportSettings, IProgress<int> progress, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 

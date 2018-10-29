@@ -38,7 +38,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             CancellationToken cancellationToken)
         {
             
-            var tabFiles = await this.CreateTabularDataFiles(settings, progress, cancellationToken);
+            var tabFiles = await this.CreateTabularDataFilesAsync(settings, progress, cancellationToken);
 
             this.CreateSpssDataFilesFromTabularDataFiles(settings.Tenant, settings.QuestionnaireId, tabFiles, progress,
                 cancellationToken);
