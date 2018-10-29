@@ -104,16 +104,26 @@ function UpdateAndroidAppManifest($VersionName, $VersionCode, $CapiProject, $bra
 	$code = Select-Xml -xml $xam  -Xpath '/manifest/@android:versionCode' -namespace @{android='http://schemas.android.com/apk/res/android'}
 	$code.Node.Value = $VersionCode
 
-    $hockeyApp = Select-Xml -xml $xam `
-        -Xpath '/manifest/application/meta-data[@android:name="net.hockeyapp.android.appIdentifier"]' `
-        -namespace @{android='http://schemas.android.com/apk/res/android'};
+	$hockeyApp = Select-Xml -xml $xam `
+		-Xpath '/manifest/application/meta-data[@android:name="net.hockeyapp.android.appIdentifier"]' `
+		-namespace @{android='http://schemas.android.com/apk/res/android'};
 
-    if ($branchName -eq "release") {
-        $hockeyApp.Node.SetAttribute('android:value', 'bd034ac8bec541d783f7e40c1300fd10')
-    }
-    else {
-        $hockeyApp.Node.SetAttribute('android:value', '1d21a663e5fc45359b254f22d6fa2b31')
-    }
+	switch (org.worldbank.solutions.interviewer ) {
+		"org.worldbank.solutions.interviewer" {
+			if ($branchName -eq "release") {
+				$hockeyApp.Node.SetAttribute('android:value', 'bd034ac8bec541d783f7e40c1300fd10')
+			}
+			else {
+				$hockeyApp.Node.SetAttribute('android:value', '1d21a663e5fc45359b254f22d6fa2b31')
+			}
+		}
+		"org.worldbank.solutions.supervisor" {
+			$hockeyApp.Node.SetAttribute('android:value', '80bf6bc07188459192130d4895a5e041')
+		}
+		"org.worldbank.solutions.Vtester" {
+			$hockeyApp.Node.SetAttribute('android:value', 'e77a488dd76b43009a378716f5b2faa7')
+		}
+	}
 
 	$xam.Save($PahToManifest)
 
