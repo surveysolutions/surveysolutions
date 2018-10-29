@@ -44,6 +44,7 @@ namespace WB.Services.Export.Host
                     var pathToExe = Process.GetCurrentProcess().MainModule.FileName;
                     var pathToContentRoot = Path.GetDirectoryName(pathToExe);
                     builder.UseContentRoot(pathToContentRoot);
+                    Directory.SetCurrentDirectory(pathToContentRoot);
                 }
 
                 var host = builder.Build();
