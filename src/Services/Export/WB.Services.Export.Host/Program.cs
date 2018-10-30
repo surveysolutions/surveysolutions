@@ -17,8 +17,6 @@ namespace WB.Services.Export.Host
 
         static async Task Main(string[] args)
         {
-            OpenPIDFile();
-            
             // NLog: setup the logger first to catch all errors
             var logger = NLog.Web.NLogBuilder.ConfigureNLog("nlog.config").GetCurrentClassLogger();
 
@@ -46,6 +44,8 @@ namespace WB.Services.Export.Host
                     builder.UseContentRoot(pathToContentRoot);
                     Directory.SetCurrentDirectory(pathToContentRoot);
                 }
+
+                OpenPIDFile();
 
                 var host = builder.Build();
 
