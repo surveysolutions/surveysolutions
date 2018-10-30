@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Synchronization
             IInterviewerInterviewAccessor interviewFactory, 
             IPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage, 
             ILogger logger, 
-            IPlainStorage<InterviewFileView> imagesStorage, 
+            IImageFileStorage imagesStorage, 
             IAudioFileStorage audioFileStorage, 
             ISynchronizationService synchronizationService, 
             int sortOrder, 
