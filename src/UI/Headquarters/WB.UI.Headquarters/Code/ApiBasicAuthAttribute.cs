@@ -93,7 +93,7 @@ namespace WB.UI.Headquarters.Code
 
         private static void appendBasicAuthHeader(HttpActionContext actionContext)
         {
-            actionContext.Response.Headers.Add(AuthHeader, $@"Basic realm=""{actionContext.Request.RequestUri.DnsSafeHost}""");
+            actionContext.Response?.Headers.Add(AuthHeader, $@"Basic realm=""{actionContext.Request.RequestUri.DnsSafeHost}""");
         }
 
         private void RespondWithMessageThatUserIsNoPermittedRole(HttpActionContext actionContext)
