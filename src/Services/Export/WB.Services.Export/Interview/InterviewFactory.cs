@@ -80,21 +80,15 @@ namespace WB.Services.Export.Interview
                         }
                     }
 
-                    var keyParts = rosterScope.Select(x => x.FormatGuid()).ToList();
-                    if (rosterVector.Length == 0)
-                        keyParts.Add("#");
-                    else
-                    {
-                        keyParts.AddRange(rosterVector.Select(x => x.ToString()));
-                    }
-
-                    var levelKey = string.Join("-", keyParts);
+                    var levelKey = InterviewLevel.GetLevelKeyName(rosterScope, rosterVector);
                     levels.Add(levelKey, interviewLevel);
                 }
             }
 
             return levels;
         }
+
+        
 
         private bool CheckIfAllRostersAreDisabled(IEnumerable<Identity> rosterIdentitiesInLevel, Dictionary<Identity, InterviewEntity> interviewEntities)
         {
