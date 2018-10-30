@@ -74,7 +74,7 @@
                                 <input type="hidden" name="responsibleId" :value="responsibleId"/>
                                 <input type="hidden" name="size" :value="sizeQuestion.answer"/>
 
-                                <button type="submit" @click="create" class="btn btn-success btn-lg">
+                                <button type="button" @click="create" class="btn btn-success btn-lg">
                                     {{ $t('Common.Create') }}
                                 </button>
                             </form>
@@ -151,8 +151,8 @@ export default {
             }
 
             const submitAllowed = validationResult && this.newResponsibleId != null
-            if(!submitAllowed){
-                ev.preventDefault()
+            if (submitAllowed) {
+                this.$refs.createForm.submit()
             }
         }
     },
