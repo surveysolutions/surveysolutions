@@ -4,18 +4,25 @@ using System.Configuration;
 using System.Globalization;
 using System.IO;
 using System.Net;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
+using Shark.PdfConvert;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.Infrastructure.Transactions;
 using WB.UI.Designer.Pdf;
 using WB.UI.Designer.Resources;
 using WB.UI.Shared.Web.Filters;
+using PdfConvert = Shark.PdfConvert.PdfConvert;
 
 namespace WB.UI.Designer.Controllers
 {
@@ -91,9 +98,8 @@ namespace WB.UI.Designer.Controllers
             return this.View("RenderQuestionnaire", questionnaire);
         }
 
-        [LocalOrDevelopmentAccessOnly]
         [System.Web.Mvc.AllowAnonymous]
-        public ActionResult RenderQuestionnaireFooter(Guid id)
+        public ActionResult RenderQuestionnaireFooter()
         {
             return this.View("RenderQuestionnaireFooter");
         }
@@ -182,15 +188,39 @@ namespace WB.UI.Designer.Controllers
         
         private void StartRenderPdf(Guid id, PdfGenerationProgress generationProgress, Guid? translation, string cultureCode)
         {
-            var pdfConvertEnvironment = this.GetPdfConvertEnvironment();
-            var pdfDocument = this.GetSourceUrlsForPdf(id, translation, cultureCode);
-            var pdfOutput = new PdfOutput {OutputFilePath = generationProgress.FilePath};
+            var pathToWkHtmlToPdfExecutable = this.GetPathToWKHtmlToPdfExecutableOrThrow();
+
+            var renderQuestionnaireResult = RenderQuestionnaire(id: id,
+                requestedByUserId: this.UserHelper.WebUser.UserId,
+                requestedByUserName: this.UserHelper.WebUser.UserName,
+                translation: translation,
+                cultureCode: cultureCode);
+            var questionnaireHtml = RenderActionResultToString(renderQuestionnaireResult);
+            var pageFooterUrl = GlobalHelper.GenerateUrl(nameof(RenderQuestionnaireFooter), "Pdf", new { });
 
             Task.Factory.StartNew(() =>
             {
                 try
                 {
-                    PdfConvert.ConvertHtmlToPdf(pdfDocument, pdfConvertEnvironment, pdfOutput);
+                    if (!string.IsNullOrWhiteSpace(cultureCode))
+                    {
+                        CultureInfo culture = CultureInfo.GetCultureInfo(cultureCode);
+                        Thread.CurrentThread.CurrentCulture = culture;
+                        Thread.CurrentThread.CurrentUICulture = culture;
+                    }
+
+                    PdfConvert.Convert(new PdfConversionSettings
+                    {
+                        Content = questionnaireHtml,
+                        PageFooterUrl = pageFooterUrl,
+                        OutputPath = generationProgress.FilePath,
+                        WkHtmlToPdfExeName = pathToWkHtmlToPdfExecutable,
+                        ExecutionTimeout = this.pdfSettings.PdfGenerationTimeoutInMilliseconds,
+                        TempFilesPath = Path.GetTempPath(),
+                        Size = PdfPageSize.A4,
+                        Margins = new PdfPageMargins() { Top = 10, Bottom = 7, Left = 0, Right = 0 },
+                    });
+
                     generationProgress.Finish();
                 }
                 catch (Exception exception)
@@ -201,28 +231,21 @@ namespace WB.UI.Designer.Controllers
             }, TaskCreationOptions.LongRunning);
         }
 
-        private PdfConvertEnvironment GetPdfConvertEnvironment() => new PdfConvertEnvironment
+        private string RenderActionResultToString(ActionResult result)
         {
-            Timeout = this.pdfSettings.PdfGenerationTimeoutInMilliseconds,
-            TempFolderPath = Path.GetTempPath(),
-            WkHtmlToPdfPath = this.GetPathToWKHtmlToPdfExecutableOrThrow()
-        };
+            var sb = new StringBuilder();
+            using (var memWriter = new StringWriter(sb))
+            {
+                var fakeResponse = new HttpResponse(memWriter);
+                var fakeContext = new HttpContext(System.Web.HttpContext.Current.Request, fakeResponse);
+                var fakeControllerContext = new ControllerContext(new HttpContextWrapper(fakeContext), this.ControllerContext.RouteData, this.ControllerContext.Controller);
 
-        private PdfDocument GetSourceUrlsForPdf(Guid id, Guid? translation, string cultureCode) => new PdfDocument
-        {
-            Url = GlobalHelper.GenerateUrl(nameof(RenderQuestionnaire), "Pdf", new
-            {
-                id = id,
-                requestedByUserId = this.UserHelper.WebUser.UserId,
-                requestedByUserName = this.UserHelper.WebUser.UserName,
-                translation = translation,
-                cultureCode = cultureCode
-            }),
-            FooterUrl = GlobalHelper.GenerateUrl(nameof(RenderQuestionnaireFooter), "Pdf", new
-            {
-                id = id
-            }),
-        };
+                result.ExecuteResult(fakeControllerContext);
+
+                memWriter.Flush();
+            }
+            return sb.ToString();
+        }
 
         private string GetPathToWKHtmlToPdfExecutableOrThrow()
         {
