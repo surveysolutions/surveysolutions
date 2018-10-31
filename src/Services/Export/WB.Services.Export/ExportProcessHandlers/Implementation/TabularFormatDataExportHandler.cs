@@ -41,15 +41,12 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
         protected override async Task ExportDataIntoDirectoryAsync(ExportSettings settings,
             IProgress<int> progress, CancellationToken cancellationToken)
         {
-            this.GenerateDescriptionTxt(settings.Tenant, settings.QuestionnaireId, ExportTempDirectoryPath);
+            await this.tabularFormatExportService.GenerateDescriptionFileAsync(settings.Tenant, settings.QuestionnaireId, ExportTempDirectoryPath, ExportFileSettings.TabDataFileExtension);
 
             await this.tabularFormatExportService.ExportInterviewsInTabularFormatAsync(settings, ExportTempDirectoryPath, progress, cancellationToken);
 
             await this.CreateDoFilesForQuestionnaireAsync(settings.Tenant, settings.QuestionnaireId, ExportTempDirectoryPath, cancellationToken);
         }
-
-        private void GenerateDescriptionTxt(TenantInfo tenant, QuestionnaireId questionnaireIdentity, string directoryPath)
-            => this.tabularFormatExportService.GenerateDescriptionFileAsync(tenant, questionnaireIdentity, directoryPath, ExportFileSettings.TabDataFileExtension);
 
         private async Task CreateDoFilesForQuestionnaireAsync(TenantInfo tenant, QuestionnaireId questionnaireIdentity, string directoryPath, CancellationToken cancellationToken)
         {

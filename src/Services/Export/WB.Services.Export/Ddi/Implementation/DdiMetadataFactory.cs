@@ -42,7 +42,7 @@ namespace WB.Services.Export.Ddi.Implementation
             this.questionnaireExportStructureStorage = questionnaireExportStructureStorage;
         }
 
-        public async Task<string> CreateDDIMetadataFileForQuestionnaireInFolder(TenantInfo tenant,
+        public async Task<string> CreateDDIMetadataFileForQuestionnaireInFolderAsync(TenantInfo tenant,
             QuestionnaireId questionnaireId, string basePath)
         {
             var bigTemplateObject = await questionnaireStorage.GetQuestionnaireAsync(tenant, questionnaireId);
