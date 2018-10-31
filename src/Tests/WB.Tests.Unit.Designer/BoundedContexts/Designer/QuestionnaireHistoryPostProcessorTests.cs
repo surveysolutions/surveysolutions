@@ -1166,7 +1166,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer
             Assert.That(newHistoryItems[0].ActionType, Is.EqualTo(QuestionnaireActionType.Update));
             Assert.That(newHistoryItems[0].TargetItemType, Is.EqualTo(QuestionnaireItemType.Questionnaire));
             Assert.That(newHistoryItems[0].TargetItemTitle, Is.EqualTo("new title"));
-            Assert.That(newHistoryItems[0].Patch, Is.Not.Null);
+            Assert.That(newHistoryItems[0].ResultingQuestionnaireDocument, Is.Not.Null);
 
             Assert.That(newHistoryItems[1].ActionType, Is.EqualTo(QuestionnaireActionType.Delete));
             Assert.That(newHistoryItems[1].TargetItemType, Is.EqualTo(QuestionnaireItemType.Questionnaire));
