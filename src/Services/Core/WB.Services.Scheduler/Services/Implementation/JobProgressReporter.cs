@@ -24,7 +24,7 @@ namespace WB.Services.Scheduler.Services.Implementation
             this.logger = logger;
         }
 
-        public void Start()
+        public void StartProgressReporter()
         {
             Task.Factory.StartNew(async () =>
             {
@@ -52,12 +52,6 @@ namespace WB.Services.Scheduler.Services.Implementation
 
                 queueCompletion.SetResult(true);
             }, TaskCreationOptions.LongRunning);
-        }
-
-        public void StartJob(long jobId)
-        {
-            if (!queue.IsAddingCompleted)
-                queue.Add(new StartJobEvent(jobId));
         }
 
         public void CompleteJob(long jobId)

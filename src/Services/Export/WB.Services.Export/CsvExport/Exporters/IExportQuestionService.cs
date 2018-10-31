@@ -92,7 +92,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                 case QuestionType.TextList:
                     return this.BuildAnswerListForQuestionByHeader(question.AsObject(), header);
                 default:
-                    return new string[0];
+                    return Array.Empty<string>();
             }
         }
 

@@ -80,7 +80,7 @@ namespace WB.Services.Export.Services
                             .GetQuestionnaireExportStructureAsync(tenant, questionnaireId);
 
                 if (questionnaireExportStructure == null)
-                    return new string[0];
+                    return Array.Empty<string>();
 
                 var labelsForQuestionnaire =  this.questionnaireLabelFactory.CreateLabelsForQuestionnaire(questionnaireExportStructure);
 
@@ -139,7 +139,7 @@ namespace WB.Services.Export.Services
                 this.logger.LogError(currentDataInfo);
             }
 
-            return new string[0];
+            return Array.Empty<string>();
         }
 
         private static void UpdateMetaWithLabels(IDatasetMeta meta, QuestionnaireLevelLabels questionnaireLevelLabels)
