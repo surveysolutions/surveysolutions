@@ -35,8 +35,6 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
             CriticalForLookupTable(LookupTableNotUniqueRowcodeValues, "WB0047", VerificationMessages.WB0047_LookupTableNotUniqueRowcodeValues),
         };
 
-        
-
         private static bool LookupTableHasEmptyName(Guid tableId, LookupTable table, MultiLanguageQuestionnaireDocument questionnaire)
         {
             return string.IsNullOrWhiteSpace(table.TableName);
@@ -57,7 +55,7 @@ namespace WB.Core.BoundedContexts.Designer.Verifier
         private bool LookupTableHasEmptyContent(Guid tableId, LookupTable table, MultiLanguageQuestionnaireDocument questionnaire)
         {
             var lookupTableContent = this.lookupTableService.GetLookupTableContent(questionnaire.PublicKey, tableId);
-            return lookupTableContent == null;
+            return lookupTableContent == null || lookupTableContent.VariableNames.Length == 0;
         }
 
         private bool LookupTableHasInvalidHeaders(LookupTable table, LookupTableContent tableContent, MultiLanguageQuestionnaireDocument questionnaire)

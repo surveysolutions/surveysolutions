@@ -106,7 +106,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                       && h.QuestionnaireId == sQuestionnaireId
                 select h).FirstOrDefault());
 
-            if (previousChange?.ResultingQuestionnaireDocument != null)
+            if (previousChange?.ResultingQuestionnaireDocument != null && questionnaireDocument != null)
             {
                 var previousVersion = previousChange.ResultingQuestionnaireDocument;
                 var left = this.entitySerializer.Serialize(questionnaireDocument);

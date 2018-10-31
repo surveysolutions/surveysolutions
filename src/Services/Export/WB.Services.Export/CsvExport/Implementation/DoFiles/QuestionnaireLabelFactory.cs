@@ -18,7 +18,7 @@ namespace WB.Services.Export.CsvExport.Implementation.DoFiles
 
             var variableLabels = new List<DataExportVariable>();
 
-            var levelVariableValueLabel = new VariableValueLabel[0];
+            var levelVariableValueLabel = Array.Empty<VariableValueLabel>();
             if (level.LevelLabels != null)
             {
                 levelVariableValueLabel = level.LevelLabels.Select(x => new VariableValueLabel(x.Caption, x.Title?.RemoveHtmlTags())).ToArray();
@@ -45,7 +45,7 @@ namespace WB.Services.Export.CsvExport.Implementation.DoFiles
 
                 foreach (var headerColumn in headerItem.ColumnHeaders)
                 {
-                    var variableValueLabel = new VariableValueLabel[0];
+                    var variableValueLabel = Array.Empty<VariableValueLabel>();
 
                     if (hasLabels)
                     {

@@ -27,11 +27,11 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             this.tabularFormatExportService = tabularFormatExportService;
         }
 
-        protected void GenerateDescriptionTxt(TenantInfo tenant, QuestionnaireId questionnaireIdentity,
+        protected Task GenerateDescriptionTxtAsync(TenantInfo tenant, QuestionnaireId questionnaireIdentity,
             string directoryPath, string dataFilesExtension)
             => this.tabularFormatExportService.GenerateDescriptionFileAsync(tenant, questionnaireIdentity, directoryPath, dataFilesExtension);
 
-        protected async Task<string[]> CreateTabularDataFiles(ExportSettings exportSettings, IProgress<int> progress, CancellationToken cancellationToken)
+        protected async Task<string[]> CreateTabularDataFilesAsync(ExportSettings exportSettings, IProgress<int> progress, CancellationToken cancellationToken)
         {
             cancellationToken.ThrowIfCancellationRequested();
 
