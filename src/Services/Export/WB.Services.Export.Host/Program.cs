@@ -35,14 +35,21 @@ namespace WB.Services.Export.Host
                 var useKestrel = args.Contains("--kestrel");
                 args = args.Where(arg => arg != "--kestrel").ToArray();
 
-                var builder = CreateWebHostBuilder(args, useKestrel);
+                string currentWorkingDir = Directory.GetCurrentDirectory();
 
                 if (isService)
                 {
                     var pathToExe = Process.GetCurrentProcess().MainModule.FileName;
                     var pathToContentRoot = Path.GetDirectoryName(pathToExe);
-                    builder.UseContentRoot(pathToContentRoot);
-                    Directory.SetCurrentDirectory(pathToContentRoot);
+                    currentWorkingDir = pathToContentRoot;
+                    Directory.SetCurrentDirectory(currentWorkingDir);
+                }
+
+                var builder = CreateWebHostBuilder(args, useKestrel);
+                
+                if (isService)
+                {
+                    builder.UseContentRoot(currentWorkingDir);
                 }
 
                 OpenPIDFile();
