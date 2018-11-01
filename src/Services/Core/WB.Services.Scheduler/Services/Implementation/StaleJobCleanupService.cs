@@ -24,7 +24,8 @@ namespace WB.Services.Scheduler.Services.Implementation
         }
 
         public const string Name = "cleanup";
-        public const long CleanupServiceLock = -5555;
+
+        public const long CleanupServiceLock = -888;
 
         public async Task ExecuteAsync(CancellationToken cancellationToken)
         {
@@ -41,13 +42,17 @@ namespace WB.Services.Scheduler.Services.Implementation
                 foreach (var job in list)
                 {
                     // each job while running - hold a lock, is we cannot acquire it - job is still running
-                    if (await db.TryAcquireLockAsync(job.Id))
+                    if (!await db.TryAcquireLockAsync(job.Id)) continue;
+
+                    try
                     {
                         job.Cancel("Canceled due to inactivity");
                         logger.LogInformation($"Job {job.Tag} marked as canceled due to inactivity");
                     }
-
-                    await db.ReleaseLockAsync(job.Id);
+                    finally
+                    {
+                        await db.ReleaseLockAsync(job.Id);
+                    }
                 }
 
                 await db.SaveChangesAsync(cancellationToken);
