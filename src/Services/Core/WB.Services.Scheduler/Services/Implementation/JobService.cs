@@ -34,7 +34,7 @@ namespace WB.Services.Scheduler.Services.Implementation
 
             using (var tr = await db.Database.BeginTransactionAsync())
             {
-                await db.AcquireLockAsync(lock_add_value);
+                await db.AcquireXactLockAsync(lock_add_value);
 
                 var existingJob = await db.Jobs
                     .Where(j =>
@@ -59,9 +59,9 @@ namespace WB.Services.Scheduler.Services.Implementation
 
         public async Task<JobItem> GetFreeJobAsync(CancellationToken token = default)
         {
-            using (var tr = await db.Database.BeginTransactionAsync())
+            using (var tr = await db.Database.BeginTransactionAsync(token))
             {
-                await db.AcquireLockAsync(lock_add_value);
+                await db.AcquireXactLockAsync(lock_add_value);
 
                 var running = JobStatus.Running.ToString().ToLowerInvariant();
                 var created = JobStatus.Created.ToString().ToLowerInvariant();

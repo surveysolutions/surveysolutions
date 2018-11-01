@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
+using Dapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -48,6 +50,7 @@ namespace WB.Services.Scheduler
             services.AddSingleton<IJobCancellationNotifier, JobCancellationNotifier>();
 
             services.ConfigureHealthCheck<DbHealthCheck>();
+            services.ConfigureHealthCheck<EfCoreHealthCheck>();
             services.AddTransient<IJobService, JobService>();
             services.AddSingleton<IJobProgressReporter, JobProgressReporter>();
             services.AddTransient<IJobWorker, JobWorker>();
@@ -71,15 +74,29 @@ namespace WB.Services.Scheduler
             SchedulerGlobalConfiguration.RegisterJob(typeof(THandler).GetTypeInfo(), name);
         }
 
-        public static async Task RunJobServiceMigrations(this IServiceProvider serviceProvider)
+        public static async Task RunJobServiceMigrations(this IServiceProvider serviceProvider,
+            CancellationToken cancellationToken)
         {
             using (var scope = serviceProvider.CreateScope())
             {
-                var context = scope.ServiceProvider.GetService<JobContext>();
-
-                await context.Database.MigrateAsync();
+                var db = scope.ServiceProvider.GetService<JobContext>();
+                try
+                {
+                    await db.AcquireLockAsync(LockValueForMigration);
+                    await db.Database.GetDbConnection().ExecuteAsync("create schema if not exists public");
+                    await db.Database.MigrateAsync(cancellationToken);
+                }
+                finally
+                {
+                    await db.ReleaseLockAsync(LockValueForMigration);
+                }
             }
         }
+
+        /// <summary>
+        /// True random lock value for lock to prevent run of several migrations at once
+        /// </summary>
+        private const long LockValueForMigration = -889238397;
 
         public static readonly LoggerFactory MyLoggerFactory
             = new LoggerFactory(new[] { new ConsoleLoggerProvider((s, level) => (int) level >= 4, true ) });
