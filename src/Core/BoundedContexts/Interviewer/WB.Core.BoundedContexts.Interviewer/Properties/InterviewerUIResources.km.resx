@@ -183,12 +183,6 @@
   <data name="DashboardItem_Title" xml:space="preserve">
     <value>{0} (v{1})</value>
   </data>
-  <data name="Diagnostics_Backup_Description" xml:space="preserve">
-    <value>ការប្រមូលទិន្នន័យទាំងអស់នឹងរក្សាទុកឡើងវិញ</value>
-  </data>
-  <data name="Diagnostics_Backup_Title" xml:space="preserve">
-    <value>រក្សាទុកឡើងវិញ រាល់ពត៌មានដែលបានប្រមូល</value>
-  </data>
   <data name="Diagnostics_BackupDate_Title" xml:space="preserve">
     <value>ពេលដែលរក្សាទុក៖</value>
   </data>
