@@ -84,6 +84,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		WB without Xamarin.sln.startup.json = WB without Xamarin.sln.startup.json
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.Persistence.Headquarters", "Infrastructure\WB.Persistence.Headquarters\WB.Persistence.Headquarters.csproj", "{2F99741B-8182-4814-A726-8CFEB3781E31}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -260,6 +262,14 @@ Global
 		{276D7605-A681-4469-B4C0-E62C5CE87E30}.Deploy-dev|Any CPU.Build.0 = Debug-ESRI|Any CPU
 		{276D7605-A681-4469-B4C0-E62C5CE87E30}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{276D7605-A681-4469-B4C0-E62C5CE87E30}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2F99741B-8182-4814-A726-8CFEB3781E31}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F99741B-8182-4814-A726-8CFEB3781E31}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2F99741B-8182-4814-A726-8CFEB3781E31}.Debug-ESRI|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F99741B-8182-4814-A726-8CFEB3781E31}.Debug-ESRI|Any CPU.Build.0 = Debug|Any CPU
+		{2F99741B-8182-4814-A726-8CFEB3781E31}.Deploy-dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{2F99741B-8182-4814-A726-8CFEB3781E31}.Deploy-dev|Any CPU.Build.0 = Debug|Any CPU
+		{2F99741B-8182-4814-A726-8CFEB3781E31}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2F99741B-8182-4814-A726-8CFEB3781E31}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -294,6 +304,7 @@ Global
 		{048BBBA2-7BBF-44A5-A1B1-E4D32BBA2797} = {27286D23-04D1-475F-A9AE-E799855896E5}
 		{30342261-52F3-48D7-8724-385FC7D83230} = {572464F5-0EC9-4ABE-9B6D-C74B6E11C782}
 		{276D7605-A681-4469-B4C0-E62C5CE87E30} = {E3404571-E3D0-47E8-94FC-001982D11D59}
+		{2F99741B-8182-4814-A726-8CFEB3781E31} = {27286D23-04D1-475F-A9AE-E799855896E5}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {2ABEC548-5E84-4C4E-B783-4A3D2BC44097}

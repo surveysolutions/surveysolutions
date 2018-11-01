@@ -22,6 +22,7 @@ namespace support
             var processor = new CommandLineProcessor(new ConsoleHost(), new ConsoleDependencyResolver(ninjectKernel));
             ((Dictionary<string, Type>)processor.Commands).Clear();
 
+            processor.RegisterCommand<MigrateDbCommand>("migrate");
             processor.RegisterCommand<ResetPasswordCommand>("reset-password");
             processor.RegisterCommand<CheckAccessCommand>("health-check");
             processor.RegisterCommand<ArchiveLogsCommand>("archive-logs");
