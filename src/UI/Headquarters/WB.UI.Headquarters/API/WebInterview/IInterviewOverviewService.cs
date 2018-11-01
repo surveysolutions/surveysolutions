@@ -7,7 +7,7 @@ namespace WB.UI.Headquarters.API.WebInterview
 {
     public interface IInterviewOverviewService
     {
-        IEnumerable<OverviewNode> GetOverview(IStatefulInterview interview);
+        IEnumerable<OverviewNode> GetOverview(IStatefulInterview interview, bool isReviewMode);
         OverviewItemAdditionalInfo GetOverviewItemAdditionalInfo(IStatefulInterview interview, string entityId, Guid currentUserId);
     }
 }
