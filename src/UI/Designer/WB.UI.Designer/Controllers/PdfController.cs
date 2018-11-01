@@ -202,13 +202,6 @@ namespace WB.UI.Designer.Controllers
             {
                 try
                 {
-                    if (!string.IsNullOrWhiteSpace(cultureCode))
-                    {
-                        CultureInfo culture = CultureInfo.GetCultureInfo(cultureCode);
-                        Thread.CurrentThread.CurrentCulture = culture;
-                        Thread.CurrentThread.CurrentUICulture = culture;
-                    }
-
                     PdfConvert.Convert(new PdfConversionSettings
                     {
                         Content = questionnaireHtml,
@@ -218,7 +211,7 @@ namespace WB.UI.Designer.Controllers
                         ExecutionTimeout = this.pdfSettings.PdfGenerationTimeoutInMilliseconds,
                         TempFilesPath = Path.GetTempPath(),
                         Size = PdfPageSize.A4,
-                        Margins = new PdfPageMargins() { Top = 10, Bottom = 7, Left = 0, Right = 0 },
+                        Margins = new PdfPageMargins() {Top = 10, Bottom = 7, Left = 0, Right = 0},
                     });
 
                     generationProgress.Finish();
