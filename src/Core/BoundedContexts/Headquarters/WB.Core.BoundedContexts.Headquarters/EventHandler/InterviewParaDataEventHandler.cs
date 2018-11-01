@@ -51,10 +51,6 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewHistoryView, InterviewHardDeleted>,
         IUpdateHandler<InterviewHistoryView, AnswersDeclaredInvalid>,
         IUpdateHandler<InterviewHistoryView, AnswersDeclaredValid>,
-        IUpdateHandler<InterviewHistoryView, QuestionsDisabled>,
-        IUpdateHandler<InterviewHistoryView, QuestionsEnabled>,
-        IUpdateHandler<InterviewHistoryView, GroupsDisabled>,
-        IUpdateHandler<InterviewHistoryView, GroupsEnabled>,
         IUpdateHandler<InterviewHistoryView, AnswerRemoved>,
         IUpdateHandler<InterviewHistoryView, AnswersRemoved>,
         IUpdateHandler<InterviewHistoryView, UnapprovedByHeadquarters>,
@@ -696,54 +692,6 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                     @event.Payload.OriginDate?.LocalDateTime ?? @event.EventTimeStamp, 
                     @event.Payload.OriginDate?.Offset,
                 this.CreateQuestionParameters(question.Id, question.RosterVector));
-            }
-            return view;
-        }
-
-        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<QuestionsDisabled> @event)
-        {
-            foreach (var question in @event.Payload.Questions)
-            {
-                this.AddHistoricalRecord(view, InterviewHistoricalAction.QuestionDisabled, null,
-                    @event.Payload.OriginDate?.LocalDateTime ?? @event.EventTimeStamp,
-                    @event.Payload.OriginDate?.Offset,
-                this.CreateQuestionParameters(question.Id, question.RosterVector));
-            }
-            return view;
-        }
-
-        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<QuestionsEnabled> @event)
-        {
-            foreach (var question in @event.Payload.Questions)
-            {
-                this.AddHistoricalRecord(view, InterviewHistoricalAction.QuestionEnabled, null,
-                    @event.Payload.OriginDate?.LocalDateTime ?? @event.EventTimeStamp,
-                    @event.Payload.OriginDate?.Offset,
-                this.CreateQuestionParameters(question.Id, question.RosterVector));
-            }
-            return view;
-        }
-
-        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<GroupsDisabled> @event)
-        {
-            foreach (var group in @event.Payload.Groups)
-            {
-                this.AddHistoricalRecord(view, InterviewHistoricalAction.GroupDisabled, null,
-                    @event.Payload.OriginDate?.LocalDateTime ?? @event.EventTimeStamp,
-                    @event.Payload.OriginDate?.Offset,
-                this.CreateGroupParameters(group.Id, group.RosterVector));
-            }
-            return view;
-        }
-
-        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<GroupsEnabled> @event)
-        {
-            foreach (var group in @event.Payload.Groups)
-            {
-                this.AddHistoricalRecord(view, InterviewHistoricalAction.GroupEnabled, null,
-                    @event.Payload.OriginDate?.LocalDateTime ?? @event.EventTimeStamp,
-                    @event.Payload.OriginDate?.Offset,
-                this.CreateGroupParameters(group.Id, group.RosterVector));
             }
             return view;
         }
