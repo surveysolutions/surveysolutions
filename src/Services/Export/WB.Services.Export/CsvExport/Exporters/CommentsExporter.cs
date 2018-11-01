@@ -37,6 +37,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             new DoExportFileHeader("Time", "Time when the comment was left"),
             new DoExportFileHeader("Variable", "Variable name for the commented question"),
             new DoExportFileHeader("interview__id", "Unique 32-character long identifier of the interview"),
+            new DoExportFileHeader("interview__key", "Identifier of the interview"),
             new DoExportFileHeader("Comment", "Text of the comment"),
             new DoExportFileHeader("Roster", "Name of the roster containing the variable"),
             new DoExportFileHeader("Id1", "Roster ID of the 1st level of nesting", true),
@@ -117,6 +118,8 @@ namespace WB.Services.Export.CsvExport.Exporters
 
                 resultRow.Add(comment.InterviewId.ToString("N"));
 
+                resultRow.Add(comment.InterviewKey);
+
                 for (int i = 0; i < maxRosterDepthInQuestionnaire; i++)
                 {
                     resultRow.Add(comment.RosterVector.Length > i ? comment.RosterVector[i].ToString(CultureInfo.InvariantCulture) : "");
@@ -177,6 +180,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                 commentsHeader.Add("Roster");
 
             commentsHeader.Add("interview__id");
+            commentsHeader.Add("interview__key");
 
             for (int i = 1; i <= maxRosterDepthInQuestionnaire; i++)
             {
