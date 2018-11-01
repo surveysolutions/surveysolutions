@@ -254,12 +254,7 @@
   <data name="DashboardItem_Title" xml:space="preserve">
     <value>{0}（版本{1}）</value>
   </data>
-  <data name="Diagnostics_Backup_Description" xml:space="preserve">
-    <value>收集到的所有数据将以备份文件的形式保存在这台设备上。</value>
-  </data>
-  <data name="Diagnostics_Backup_Title" xml:space="preserve">
-    <value>备份收集到的所有信息</value>
-  </data>
+
   <data name="Diagnostics_BackupDate_Title" xml:space="preserve">
     <value>保存时间：</value>
   </data>
