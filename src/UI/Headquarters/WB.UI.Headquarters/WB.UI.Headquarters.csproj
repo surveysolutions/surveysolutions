@@ -954,7 +954,6 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
-    <EmbeddedResource Include="Migrations\ReadSide\M001-100\interview_update.sql" />
     <Content Include="Scripts\bloodhound.js" />
     <Content Include="Scripts\bootbox.js" />
     <Content Include="Scripts\bootbox.min.js" />
@@ -1215,7 +1214,9 @@
     <None Include="job_scheduling_data_2_0.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Scripts\jquery-2.1.3.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.3.js" />
     <Content Include="Scripts\jquery-2.1.3.min.js" />
@@ -2290,76 +2291,6 @@
     <Compile Include="Implementation\Services\SecureStorage.cs" />
     <Compile Include="Injections\ILocalExportServiceRunner.cs" />
     <Compile Include="Injections\LocalExportServiceRunner.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M201805031628_AllowNullForResponsibleName.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M201804231416_AddAuditLogTable.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M024_AddAllowExportVariablesColumnToQuestionnaireBrowseItem.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M020_AddContentType.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M021_AddIndexOnQuestionnaierBrowseItems_QuestionnaireId.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M022_AddQuestionnaireIdColumn_to_Assignmenst.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M201710021139_ChangeJsonToJsonB.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M201709291647_RemoveQuestionnaireQuestionsInfos.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M201709081246_MergeSettingsTables.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M201805211530_Add_Default_Responsible_to_ImportAssignments.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M201805071404_Add_Status_to_ImportAssignments.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M201804061653_ImportAssignments.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M201802191312_AddColumnsToRetryReprocessBrokenPackages.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M201711141615_ImportUsers.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M201710161320_UserMaps.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M201710051530_MapBrowseItems.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M201802201015_AddInterviewKeyToPackage.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M201804031536_MakeUserPreloadingOptionalFields.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M201805101216_AddProtectedVariables.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M201805311125_AddResponsibleIdIndexForAssignments.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M201806151438_AddQuestionnaireVariableToQuestionnaireBrowseItems.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M201809031621_AddReceivedAtToAssignment.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M201810101543_AddRsaEncryptionKeys.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M201809101449_AddExportServiceKey.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M201709081506_RemoveInterviewStatusTimespans.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M201709071054_Remove_Readsideversions.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M024_DeleteInterviewEntitiesTable.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M021_CreateInterviewsTable.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M017_AddQuestionnaireIdentityColumn.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M015_Add_indexes_for_interviewSummary.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M014_AddStatusIndexToStatusHistory.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M012_DeleteDeletedInterviews.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M013_AddIndexesForQuantityReport.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M016_AddQuestionnaireIdAndVersionIndexesToInterviewSummary.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M023AddInterviewEntitiesTable.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M018_RemoveInterviewReferencesTable.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M019_RemoveLastInterviewStatusAndAddColumnsToCumulativeChart.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M020_RemoveInterviewStatuses.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M201709071637_AddIndexToCumulativeReportStatusChangesTable.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M201709081726_RemoveInterviewLinkedQuestionOptions.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M201709281806_RemoveMapReportPointsTable.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M201709251028_AddWasCompletedFlagToSummary.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M201711061216_RemovelastpublishedeventpositionforhandlersTable.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M201709291355_ChangeJsonToJsonB.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M201802011630_SpeedupMapReport.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M201801051838_SpeedupUploadInterview.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M201712051138_RemoveExportTable.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M201802121400_ExtractQuestionnaireDocumentStructure.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M201802201614_AddInterviewingTotalTime.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M201802121510_AddIdToInterviewSummaryId.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M201802121640_AddSlimdownInterviewsTable.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M201802131620_AddIndexesAndViewsToSlimInterviewTable.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M201804161300_Add_categorical_report_function.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M201804161242_Add_materialized_view_report_tabulate_data_view.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M201804171241_ChangeHasErrorsToNumberOfErrors.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M201804151700_AddRepotRelatedMetadataToQuestionnaireEntities.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M201804201634_RemoveHasErrorsPropery.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M201805071800_Add_get_numerical_report_function.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M201805121700_Add_categorical_pivot.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M201805141156_AddIndexForInterviewStatusChangeHistory.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M201805141242_CreateSyncPackageTrackingTable.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M201806191234_AddErrorsCountToInterviewSummary.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M201806191240_FillErrorsCountInInterviewSummary.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M201808131420_AddIndicesForInterviewSummariesAndComments.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M201806271400_AddUniqueConstraintOnInterviewEntities.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M201808210950_AddTabulateReportData.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\QuestionnaireEntityMigration.cs" />
-    <Compile Include="Migrations\Users\M005_AddDeviceAppVersionToProfile.cs" />
-    <Compile Include="Migrations\Users\M201807241755_ReplaceEmptyEmailToNull.cs" />
-    <Compile Include="Migrations\Users\M201709081340_RemovedUserDocumentAndRolesTables.cs" />
     <Compile Include="Models\Admin\SettingsModel.cs" />
     <Compile Include="Models\DownloadModel.cs" />
     <Compile Include="Models\InterviewsDataTableRequest.cs" />
@@ -2384,29 +2315,11 @@
     <Compile Include="Filters\BrowsersRestriction.cs" />
     <Compile Include="Filters\ObserverNotAllowedAttribute.cs" />
     <Compile Include="Implementation\Services\InterviewCreatorFromAssignment.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M009_AddInterviewIdColumnAndEnumeratorIndex.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M010_AddAssignmentsTables.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M011_RenamePrefilledQuestionsToIdentifyingOnAssignments.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M012_AddAllowAssignmentsColumnToQuestionnaireBrowseItem.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M013_AddCascadingForeignKeyToIdentifyingDataOfAssignments.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M014_AddAnswerAsStringColumnForAssignments.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M015_RenameCapacityToQuantityInAssignments.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M016_AddColumnRosterVectorToIdentifyingQuestion.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M017_AlterColumnRosterVectorToIdentifyingQuestionToNullable.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M018_AddColumnAnswersToAssignments.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M019_AddAudioFileStorage.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M009_AddAssignmentIdToInterview.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M010_Add_index_for_interviewSummary_assignmentid.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M011_AddOriginalHumanIdToInterviewSummary.cs" />
-    <Compile Include="Migrations\Users\M004_RemoveOldMigrationSchemas.cs" />
     <Compile Include="Models\Account\FinishIntallationModel.cs" />
     <Compile Include="Models\Account\IPasswordRequired.cs" />
     <Compile Include="Models\Account\UserModelBase.cs" />
     <Compile Include="Models\Api\AssignmentProfile.cs" />
     <Compile Include="Models\Api\TeamsAndStatusesReportResponse.cs" />
-    <Compile Include="Migrations\Users\M001_AddUsersHqIdentityModel.cs" />
-    <Compile Include="Migrations\Users\M002_MigrateUsersFromUserDocumentStore.cs" />
-    <Compile Include="Migrations\Users\M003_AddDeviceAppVersionToProfile.cs" />
     <Compile Include="Models\InterviewerHqModel.cs" />
     <Compile Include="Models\Reports\MapReportModel.cs" />
     <Compile Include="Models\VersionCheck\VersionCheckingInfo.cs" />
@@ -2422,22 +2335,6 @@
     <Compile Include="Filters\TokenValidationAuthorizationAttribute.cs" />
     <Compile Include="Filters\TypedDirectRouteProvider.cs" />
     <Compile Include="App_Start\NinjectConfig.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M001_InitDb.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M005_QuestionnaireRosterStructures.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M004_QuestionnaireImportDate.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M003_AddTranslations.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M008_MoveAssemblyToDB.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M007_AddAssembly.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M006_AddMinInterviewerVersion.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M005_AddTeamLeatIdIndex.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M002_AddUsersIndex.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M001_InitDb.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M002_AddMissingIndexes.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M003_RemoveFeedTables.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M004_RemoveOldSyncTables.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M006_AddSortOrderToFeaturedQuestions.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M007_AddIsAssignedToInterviewerToInterviewSummary.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M008_AddInterviewKey.cs" />
     <Compile Include="Models\AllQuestionnairesListViewModel.cs" />
     <Compile Include="API\PublicApi\Models\AssignChangeApiModel.cs" />
     <Compile Include="Models\Api\BaseApiView.cs" />
@@ -2678,7 +2575,6 @@
     <Folder Include="App_Data\Elmah\" />
     <Folder Include="App_Start\OwinSecurity\" />
     <Folder Include="Dependencies\dist\" />
-    <Folder Include="Migrations\ReadSide\M101-200\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\WB.Core.BoundedContexts.Headquarters.csproj">
@@ -2712,6 +2608,10 @@
     <ProjectReference Include="..\..\..\Infrastructure\WB.Infrastructure.Native\WB.Infrastructure.Native.csproj">
       <Project>{048bbba2-7bbf-44a5-a1b1-e4d32bba2797}</Project>
       <Name>WB.Infrastructure.Native</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Infrastructure\WB.Persistence.Headquarters\WB.Persistence.Headquarters.csproj">
+      <Project>{2f99741b-8182-4814-a726-8cfeb3781e31}</Project>
+      <Name>WB.Persistence.Headquarters</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">
       <Project>{75470164-4087-4E9B-845A-5400C038A499}</Project>
