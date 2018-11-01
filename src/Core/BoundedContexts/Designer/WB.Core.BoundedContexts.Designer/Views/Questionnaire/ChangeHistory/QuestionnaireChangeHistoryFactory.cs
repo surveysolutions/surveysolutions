@@ -44,7 +44,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory
 
             var hasHistory = questionnaireChangeHistoryStorage
                                  .Query(_ => _.Where(x => historyItemIds.Contains(x.QuestionnaireChangeRecordId) 
-                                                          && x.Patch != null)
+                                                          && (x.Patch != null || x.ResultingQuestionnaireDocument != null))
                                               .Select(x => x.QuestionnaireChangeRecordId)
                                               .ToList().ToHashSet());
             
