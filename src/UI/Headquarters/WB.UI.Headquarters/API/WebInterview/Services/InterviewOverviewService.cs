@@ -12,13 +12,19 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
 {
     public class InterviewOverviewService : IInterviewOverviewService
     {
-        public IEnumerable<OverviewNode> GetOverview(IStatefulInterview interview)
+        public IEnumerable<OverviewNode> GetOverview(IStatefulInterview interview, bool isReviewMode)
         {
-            var interviewEntities = interview.GetUnderlyingInterviewerEntities();
-            var sections = interview.GetEnabledSections().Select(x => x.Identity).ToHashSet();
-            return interviewEntities
-                .Where(interview.IsEnabled)
-                .Select(x => BuildOverviewNode(x, interview, sections));
+            var enabledSectionIds = interview.GetEnabledSections().Select(x => x.Identity).ToHashSet();
+
+            foreach (var enabledSectionId in enabledSectionIds)
+            {
+                var interviewEntities = isReviewMode
+                    ? interview.GetUnderlyingEntitiesForReview(enabledSectionId)
+                    : interview.GetUnderlyingInterviewerEntities(enabledSectionId);
+
+                foreach (var interviewEntity in interviewEntities.Where(interview.IsEnabled))
+                    yield return BuildOverviewNode(interviewEntity, interview, enabledSectionIds);
+            }
         }
 
         public OverviewItemAdditionalInfo GetOverviewItemAdditionalInfo(IStatefulInterview interview, string entityId, Guid currentUserId)
