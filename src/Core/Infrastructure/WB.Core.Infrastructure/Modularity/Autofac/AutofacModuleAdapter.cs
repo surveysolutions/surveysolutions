@@ -127,6 +127,23 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
                 .WithParameter(argumentName, argumentValue).SingleInstance();
         }
 
+        public void BindAsSingletonWithConstructorArguments<TInterface, TImplementation>(
+            params ConstructorArgument[] constructorArguments) where TImplementation : TInterface
+        {
+            var registrationBuilder = containerBuilder.RegisterType<TImplementation>().As<TInterface>();
+
+            foreach (var constructorArgument in constructorArguments)
+            {
+                registrationBuilder.WithParameter(
+                    new ResolvedParameter(
+                        (pi, ctx) => pi.Name == constructorArgument.Name, //pi.ParameterType == typeof(string) &&
+                        (pi, ctx) => constructorArgument.Value.Invoke(new AutofacModuleContext(ctx, new List<Parameter>())))
+                );
+            }
+
+            registrationBuilder.SingleInstance();
+        }
+
         void IIocRegistry.BindToRegisteredInterface<TInterface, TRegisteredInterface>()
         {
             containerBuilder.Register<TInterface>(c => c.Resolve<TRegisteredInterface>());

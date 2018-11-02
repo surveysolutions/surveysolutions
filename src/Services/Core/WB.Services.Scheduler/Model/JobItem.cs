@@ -11,12 +11,14 @@ namespace WB.Services.Scheduler.Model
         public string Args { get; set; } = "{}";
         public string Tag { get; set; }
         public string Tenant { get; set; }
+        public string TenantName { get; set; }
         public JobStatus Status { get; set; }
         public DateTime? StartAt { get; set; }
         public DateTime? EndAt { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime LastUpdateAt { get; set; }
         public DateTime? ScheduleAt { get; set; }
+        public string WorkerId { get; set; }
 
         public Dictionary<string, object> Data { get; set; } = new Dictionary<string, object>();
 
@@ -32,6 +34,7 @@ namespace WB.Services.Scheduler.Model
         {
             this.StartAt = DateTime.UtcNow;
             this.Status = JobStatus.Running;
+            this.WorkerId = @event.WorkerId;
         }
 
         private void Apply(CancelJobEvent ev)
@@ -59,9 +62,9 @@ namespace WB.Services.Scheduler.Model
             this.Data[ev.Key] = ev.Value;
         }
 
-        public JobItem Start()
+        public JobItem Start(string workerId)
         {
-            this.Handle(new StartJobEvent(Id));
+            this.Handle(new StartJobEvent(Id, workerId));
             return this;
         }
 

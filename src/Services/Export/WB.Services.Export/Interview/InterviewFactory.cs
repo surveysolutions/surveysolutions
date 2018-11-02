@@ -21,10 +21,10 @@ namespace WB.Services.Export.Interview
             this.tenantApi = tenantApi;
         }
 
-        public async Task<IEnumerable<InterviewEntity>> GetInterviewEntities(TenantInfo tenant, Guid interviewId)
+        public async Task<List<InterviewEntity>> GetInterviewEntities(TenantInfo tenant, Guid[] interviewsId)
         {
             var api = this.tenantApi.For(tenant);
-            var entities = await api.GetInterviewAsync(interviewId);
+            var entities = await api.GetInterviewBatchAsync(interviewsId);
             return entities;
         }
 
@@ -37,10 +37,13 @@ namespace WB.Services.Export.Interview
             var entitiesByRosterScope = interviewEntities
                 .ToLookup(x => new ValueVector<Guid>(questionnaire.GetRosterSizeSourcesForEntity(x.Identity.Id)));
 
+            var interviewEntitiesLookup = interviewEntities.ToDictionary(i => i.Identity);
+
             foreach (var scopedEntities in entitiesByRosterScope)
             {
                 var rosterScope = scopedEntities.Key;
                 var entities = scopedEntities.ToList();
+                var entitiesLevelLookup = entities.ToLookup(e => e.Identity.RosterVector);
 
                 var rosterVectors = entities.Select(x => x.Identity?.RosterVector ?? RosterVector.Empty).Distinct()
                     .ToList();
@@ -50,7 +53,7 @@ namespace WB.Services.Export.Interview
                     if (rosterVector.Length > 0)
                     {
                         var rosterIdentitiesInLevel = questionnaire.GetRostersInLevel(rosterScope).Select(x => new Identity(x, rosterVector));
-                        var allGroupAreDisabled = CheckIfAllRostersAreDisabled(rosterIdentitiesInLevel, interviewEntities);
+                        var allGroupAreDisabled = CheckIfAllRostersAreDisabled(rosterIdentitiesInLevel, interviewEntitiesLookup);
 
                         if (allGroupAreDisabled)
                             continue;
@@ -62,7 +65,7 @@ namespace WB.Services.Export.Interview
                         RosterScope = rosterScope
                     };
 
-                    foreach (var entity in entities.Where(x => x.Identity.RosterVector == rosterVector))
+                    foreach (var entity in entitiesLevelLookup[rosterVector])
                     {
                         switch (entity.EntityType)
                         {
@@ -77,15 +80,7 @@ namespace WB.Services.Export.Interview
                         }
                     }
 
-                    var keyParts = rosterScope.Select(x => x.FormatGuid()).ToList();
-                    if (rosterVector.Length == 0)
-                        keyParts.Add("#");
-                    else
-                    {
-                        keyParts.AddRange(rosterVector.Select(x => x.ToString()));
-                    }
-
-                    var levelKey = string.Join("-", keyParts);
+                    var levelKey = InterviewLevel.GetLevelKeyName(rosterScope, rosterVector);
                     levels.Add(levelKey, interviewLevel);
                 }
             }
@@ -93,19 +88,21 @@ namespace WB.Services.Export.Interview
             return levels;
         }
 
-        private bool CheckIfAllRostersAreDisabled(IEnumerable<Identity> rosterIdentitiesInLevel, List<InterviewEntity> interviewEntities)
+        
+
+        private bool CheckIfAllRostersAreDisabled(IEnumerable<Identity> rosterIdentitiesInLevel, Dictionary<Identity, InterviewEntity> interviewEntities)
         {
             foreach (var rosterIdentity in rosterIdentitiesInLevel)
             {
-                var roster = interviewEntities.FirstOrDefault(x => x.Identity.Equals(rosterIdentity));
-                if (roster == null)
+                if (interviewEntities.TryGetValue(rosterIdentity, out var roster))
                 {
-                    // no records in DB that roster was disabled, because disablement event hasn't been raised 
+                    if (roster.IsEnabled)
+                        return false;
+                }
+                else
+                {
                     return false;
                 }
-
-                if (roster.IsEnabled)
-                    return false;
             }
 
             return true;

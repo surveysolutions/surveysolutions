@@ -48,6 +48,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.InstructionViewModel = instructionViewModel;
             this.Answering = answering;
             this.liteEventRegistry = liteEventRegistry;
+
+            this.SaveAnswerCommand = new MvxAsyncCommand(this.SendAnswer);
+            ShouldAlwaysRaiseInpcOnUserInterfaceThread(true);
         }
 
         public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
@@ -71,7 +74,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private Identity questionIdentity;
         public Identity Identity => this.questionIdentity;
 
-        public IMvxAsyncCommand SaveAnswerCommand => new MvxAsyncCommand(this.SendAnswer);
+        public IMvxAsyncCommand SaveAnswerCommand { get; }
 
         private IMvxAsyncCommand answerRemoveCommand;
         public IMvxAsyncCommand RemoveAnswerCommand
@@ -87,13 +90,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 await this.Answering.SendRemoveAnswerCommandAsync(command);
 
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
+
+                this.AnswerRemoved?.Invoke(this, EventArgs.Empty);
             }
             catch (InterviewException ex)
             {
                 this.QuestionState.Validity.ProcessException(ex);
             }
-
-            this.AnswerRemoved?.Invoke(this, EventArgs.Empty);
         }
 
         private async Task SendAnswer()
@@ -129,8 +132,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public string Answer
         {
-            get { return this.answer; }
-            set { this.answer = value; this.RaisePropertyChanged(); }
+            get => this.answer;
+            set => this.SetProperty(ref this.answer, value);
         }
 
         public void Dispose()

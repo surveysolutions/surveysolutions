@@ -19,4 +19,8 @@ namespace Ncqrs.Eventing.Storage
         /// <param name="eventStream">The <see cref="UncommittedEventStream"/> to commit.</param>
         CommittedEventStream Store(UncommittedEventStream eventStream);
     }
+
+    public interface IInMemoryEventStore : IEventStore
+    {
+    }
 }

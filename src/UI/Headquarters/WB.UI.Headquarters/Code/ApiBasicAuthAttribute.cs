@@ -37,6 +37,7 @@ namespace WB.UI.Headquarters.Code
                 if (FallbackToCookieAuth)
                 {
                     await basicAuth.OnAuthorizationAsync(actionContext, cancellationToken);
+                    appendBasicAuthHeader(actionContext);
                     return;
                 }
 
@@ -87,7 +88,12 @@ namespace WB.UI.Headquarters.Code
             {
                 ReasonPhrase = string.Format(TabletSyncMessages.InvalidUserFormat, actionContext.Request.RequestUri.GetLeftPart(UriPartial.Authority))
             };
-            actionContext.Response.Headers.Add(AuthHeader, $@"Basic realm=""{actionContext.Request.RequestUri.DnsSafeHost}""");
+            appendBasicAuthHeader(actionContext);
+        }
+
+        private static void appendBasicAuthHeader(HttpActionContext actionContext)
+        {
+            actionContext.Response?.Headers.Add(AuthHeader, $@"Basic realm=""{actionContext.Request.RequestUri.DnsSafeHost}""");
         }
 
         private void RespondWithMessageThatUserIsNoPermittedRole(HttpActionContext actionContext)

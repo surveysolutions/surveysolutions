@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
+using WB.Services.Export.Models;
 using WB.Services.Export.Services.Processing;
 using WB.Services.Export.Utils;
 using WB.Services.Infrastructure.FileSystem;
@@ -16,11 +17,11 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
         
         public BinaryFormatDataExportHandler(
             IFileSystemAccessor fileSystemAccessor,
-            IFilebasedExportedDataAccessor filebasedExportedDataAccessor,
+            IFileBasedExportedDataAccessor fileBasedExportedDataAccessor,
             IOptions<InterviewDataExportSettings> interviewDataExportSettings,
             IDataExportProcessesService dataExportProcessesService,
             IDataExportFileAccessor dataExportFileAccessor, IBinaryDataSource binaryDataSource)
-            : base(fileSystemAccessor, filebasedExportedDataAccessor, interviewDataExportSettings,
+            : base(fileSystemAccessor, fileBasedExportedDataAccessor, interviewDataExportSettings,
                 dataExportProcessesService, dataExportFileAccessor)
         {
             this.binaryDataSource = binaryDataSource;
@@ -28,7 +29,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
 
         protected override DataExportFormat Format => DataExportFormat.Binary;
 
-        protected override async Task ExportDataIntoArchive(IZipArchive archive, ExportSettings settings,
+        protected override async Task ExportDataIntoArchiveAsync(IZipArchive archive, ExportSettings settings,
             IProgress<int> progress,
             CancellationToken cancellationToken)
         {

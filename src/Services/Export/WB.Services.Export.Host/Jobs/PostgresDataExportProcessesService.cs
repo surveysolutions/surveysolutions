@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using WB.Services.Export.Models;
 using WB.Services.Export.Services.Processing;
 using WB.Services.Infrastructure.Tenant;
 using WB.Services.Scheduler.Model;
@@ -30,7 +31,8 @@ namespace WB.Services.Export.Host.Jobs
         {
             var job = await this.jobService.AddNewJobAsync(new JobItem
             {
-                Tenant = args.Tenant.ToString(),
+                Tenant = args.ExportSettings.Tenant.ToString(),
+                TenantName = args.ExportSettings.Tenant.Name,
                 Args = JsonConvert.SerializeObject(args),
                 Tag = args.NaturalId,
                 Type = ExportJobRunner.Name,

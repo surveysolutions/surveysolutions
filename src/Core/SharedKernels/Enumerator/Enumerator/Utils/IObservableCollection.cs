@@ -6,7 +6,7 @@ using System.ComponentModel;
 namespace WB.Core.SharedKernels.Enumerator.Utils
 {
     public interface IObservableCollection<out T>:
-        ICollection,
+        IList,
         IEnumerable<T>, 
         INotifyCollectionChanged, 
         INotifyPropertyChanged

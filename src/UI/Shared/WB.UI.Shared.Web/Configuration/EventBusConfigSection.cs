@@ -40,7 +40,7 @@ namespace WB.UI.Shared.Web.Configuration
                 IgnoredAggregateRoots =
                     this.IgnoredAggregateRoots.OfType<IgnoredAggregateRootConfigurationElement>()
                         .Select(x => x.Value)
-                        .ToHashSet()
+                        .ToList()
             };
         }
     }

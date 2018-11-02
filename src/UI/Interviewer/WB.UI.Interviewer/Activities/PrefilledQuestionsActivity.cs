@@ -9,13 +9,20 @@ namespace WB.UI.Interviewer.Activities
     [Activity(Label = "", Theme = "@style/BlueAppTheme",
         HardwareAccelerated = true,
         WindowSoftInputMode = SoftInput.StateAlwaysHidden | SoftInput.AdjustPan,
-        ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
+        ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize,
+        Exported = false)]
     public class PrefilledQuestionsActivity : BasePrefilledQuestionsActivity<PrefilledQuestionsViewModel>
     {
         protected override int LanguagesMenuGroupId => Resource.Id.interview_languages;
         protected override int OriginalLanguageMenuItemId => Resource.Id.interview_language_original;
         protected override int LanguagesMenuItemId => Resource.Id.interview_language;
         protected override int MenuId => Resource.Menu.interview;
+
+        public override void OnBackPressed()
+        {
+            this.ViewModel.NavigateBack();
+            this.Finish();
+        }
 
         protected override MenuDescription MenuDescriptor => new MenuDescription
         {

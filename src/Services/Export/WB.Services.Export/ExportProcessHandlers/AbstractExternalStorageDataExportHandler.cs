@@ -4,23 +4,23 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
+using WB.Services.Export.Models;
 using WB.Services.Export.Services.Processing;
 using WB.Services.Export.Utils;
 
 namespace WB.Services.Export.ExportProcessHandlers
 {
-    internal abstract class AbstractExternalStorageDataExportHandler : AbstractDataExportHandler,
-        IExportProcessHandler<DataExportProcessArgs>
+    internal abstract class AbstractExternalStorageDataExportHandler : AbstractDataExportHandler
     {
         private readonly IBinaryDataSource binaryDataSource;
 
         protected AbstractExternalStorageDataExportHandler(IFileSystemAccessor fileSystemAccessor,
-            IFilebasedExportedDataAccessor filebasedExportedDataAccessor,
+            IFileBasedExportedDataAccessor fileBasedExportedDataAccessor,
             IOptions<InterviewDataExportSettings> interviewDataExportSettings,
             IDataExportProcessesService dataExportProcessesService, 
             IDataExportFileAccessor dataExportFileAccessor,
             IBinaryDataSource binaryDataSource) :
-            base(fileSystemAccessor, filebasedExportedDataAccessor, interviewDataExportSettings,
+            base(fileSystemAccessor, fileBasedExportedDataAccessor, interviewDataExportSettings,
                 dataExportProcessesService, dataExportFileAccessor)
         {
             this.binaryDataSource = binaryDataSource;
@@ -37,7 +37,7 @@ namespace WB.Services.Export.ExportProcessHandlers
             {
                 var applicationFolder = await this.CreateApplicationFolderAsync();
 
-                string GetInterviewFolder(Guid interviewId) => $"{settings.ArchiveName}/{interviewId.FormatGuid()}";
+                string GetInterviewFolder(Guid interviewId) => $"{settings.QuestionnaireId}/{interviewId.FormatGuid()}";
 
                 await binaryDataSource.ForEachMultimediaAnswerAsync(settings, async data =>
                 {

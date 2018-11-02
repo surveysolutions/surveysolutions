@@ -58,7 +58,7 @@ namespace WB.UI.Shared.Enumerator.CustomServices
             this.viewModel.OnCancel += ViewModel_OnCancel;
             this.viewModel.OnDone += ViewModel_OnDone;
 
-            var parentActivity = this.topActivity.Activity;
+            var parentActivity = Plugin.CurrentActivity.CrossCurrentActivity.Current.Activity;
 
             //keep ref to context not to be collected by GC
             this.modalDialogBindingContext = new MvxAndroidBindingContext(parentActivity,

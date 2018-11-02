@@ -204,7 +204,7 @@
       <HintPath>..\..\..\..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate, Version=5.1.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\NHibernate.5.1.2\lib\net461\NHibernate.dll</HintPath>
+      <HintPath>..\..\..\..\packages\NHibernate.5.1.3\lib\net461\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\NLog.4.5.6\lib\net45\NLog.dll</HintPath>
@@ -231,7 +231,7 @@
       <HintPath>..\..\..\..\packages\RecaptchaNet.2.1.0\lib\net451\Recaptcha.Web.dll</HintPath>
     </Reference>
     <Reference Include="Refit, Version=4.6.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\Refit.4.6.30\lib\net461\Refit.dll</HintPath>
+      <HintPath>..\..\..\..\packages\Refit.4.6.48\lib\net461\Refit.dll</HintPath>
     </Reference>
     <Reference Include="Remotion.Linq, Version=2.2.0.0, Culture=neutral, PublicKeyToken=fee00910d6e5f53b, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Remotion.Linq.2.2.0\lib\net45\Remotion.Linq.dll</HintPath>
@@ -284,6 +284,7 @@
       <HintPath>..\..\..\..\packages\System.Runtime.CompilerServices.Unsafe.4.5.1\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\System.Threading.Tasks.Extensions.4.5.1\lib\netstandard2.0\System.Threading.Tasks.Extensions.dll</HintPath>
@@ -941,7 +942,6 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
-    <EmbeddedResource Include="Migrations\ReadSide\M001-100\interview_update.sql" />
     <Content Include="Scripts\bloodhound.js" />
     <Content Include="Scripts\bootbox.js" />
     <Content Include="Scripts\bootbox.min.js" />
@@ -1202,7 +1202,9 @@
     <None Include="job_scheduling_data_2_0.xsd">
       <SubType>Designer</SubType>
     </None>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="Scripts\jquery-2.1.3.intellisense.js" />
     <Content Include="Scripts\jquery-2.1.3.js" />
     <Content Include="Scripts\jquery-2.1.3.min.js" />
@@ -1742,7 +1744,7 @@
     <Content Include="Views\HQ\SampleCreationResult.cshtml" />
     <Content Include="Views\Reports\TeamsAndStatuses.cshtml" />
     <Content Include="Views\Reports\SurveysAndStatuses.cshtml" />
-    <Content Include="Views\HQ\TakeNew.cshtml" />
+    <Content Include="Views\HQ\TakeNewAssignment.cshtml" />
     <Content Include="Views\ControlPanel\CreateHeadquarters.cshtml" />
     <Content Include="Views\ControlPanel\ResetPrivilegedUserPassword.cshtml" />
     <Content Include="Views\Shared\SupervisorMainMenu.cshtml" />
@@ -2274,76 +2276,9 @@
     <Compile Include="Code\CustomAutofacHubActivator.cs" />
     <Compile Include="Implementation\Maps\JsonMapResponse.cs" />
     <Compile Include="Implementation\Maps\MapService.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M201805031628_AllowNullForResponsibleName.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M201804231416_AddAuditLogTable.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M024_AddAllowExportVariablesColumnToQuestionnaireBrowseItem.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M020_AddContentType.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M021_AddIndexOnQuestionnaierBrowseItems_QuestionnaireId.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M022_AddQuestionnaireIdColumn_to_Assignmenst.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M201710021139_ChangeJsonToJsonB.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M201709291647_RemoveQuestionnaireQuestionsInfos.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M201709081246_MergeSettingsTables.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M201805211530_Add_Default_Responsible_to_ImportAssignments.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M201805071404_Add_Status_to_ImportAssignments.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M201804061653_ImportAssignments.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M201802191312_AddColumnsToRetryReprocessBrokenPackages.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M201711141615_ImportUsers.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M201710161320_UserMaps.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M201710051530_MapBrowseItems.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M201802201015_AddInterviewKeyToPackage.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M201804031536_MakeUserPreloadingOptionalFields.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M201805101216_AddProtectedVariables.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M201805311125_AddResponsibleIdIndexForAssignments.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M201806151438_AddQuestionnaireVariableToQuestionnaireBrowseItems.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M201808151843_AddDisabledByToQuestionnaires.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M201809031621_AddReceivedAtToAssignment.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M201809101449_AddExportServiceKey.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M201709081506_RemoveInterviewStatusTimespans.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M201709071054_Remove_Readsideversions.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M024_DeleteInterviewEntitiesTable.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M021_CreateInterviewsTable.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M017_AddQuestionnaireIdentityColumn.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M015_Add_indexes_for_interviewSummary.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M014_AddStatusIndexToStatusHistory.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M012_DeleteDeletedInterviews.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M013_AddIndexesForQuantityReport.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M016_AddQuestionnaireIdAndVersionIndexesToInterviewSummary.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M023AddInterviewEntitiesTable.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M018_RemoveInterviewReferencesTable.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M019_RemoveLastInterviewStatusAndAddColumnsToCumulativeChart.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M020_RemoveInterviewStatuses.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M201709071637_AddIndexToCumulativeReportStatusChangesTable.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M201709081726_RemoveInterviewLinkedQuestionOptions.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M201709281806_RemoveMapReportPointsTable.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M201709251028_AddWasCompletedFlagToSummary.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M201711061216_RemovelastpublishedeventpositionforhandlersTable.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M201709291355_ChangeJsonToJsonB.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M201802011630_SpeedupMapReport.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M201801051838_SpeedupUploadInterview.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M201712051138_RemoveExportTable.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M201802121400_ExtractQuestionnaireDocumentStructure.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M201802201614_AddInterviewingTotalTime.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M201802121510_AddIdToInterviewSummaryId.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M201802121640_AddSlimdownInterviewsTable.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M201802131620_AddIndexesAndViewsToSlimInterviewTable.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M201804161300_Add_categorical_report_function.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M201804161242_Add_materialized_view_report_tabulate_data_view.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M201804171241_ChangeHasErrorsToNumberOfErrors.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M201804151700_AddRepotRelatedMetadataToQuestionnaireEntities.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M201804201634_RemoveHasErrorsPropery.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M201805071800_Add_get_numerical_report_function.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M201805121700_Add_categorical_pivot.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M201805141156_AddIndexForInterviewStatusChangeHistory.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M201805141242_CreateSyncPackageTrackingTable.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M201806191234_AddErrorsCountToInterviewSummary.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M201806191240_FillErrorsCountInInterviewSummary.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M201808131420_AddIndicesForInterviewSummariesAndComments.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M201806271400_AddUniqueConstraintOnInterviewEntities.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M201808210950_AddTabulateReportData.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\QuestionnaireEntityMigration.cs" />
-    <Compile Include="Migrations\Users\M005_AddDeviceAppVersionToProfile.cs" />
-    <Compile Include="Migrations\Users\M201807241755_ReplaceEmptyEmailToNull.cs" />
-    <Compile Include="Migrations\Users\M201709081340_RemovedUserDocumentAndRolesTables.cs" />
+    <Compile Include="Implementation\Services\SecureStorage.cs" />
+    <Compile Include="Injections\ILocalExportServiceRunner.cs" />
+    <Compile Include="Injections\LocalExportServiceRunner.cs" />
     <Compile Include="Models\Admin\SettingsModel.cs" />
     <Compile Include="Models\DownloadModel.cs" />
     <Compile Include="Models\InterviewsDataTableRequest.cs" />
@@ -2368,29 +2303,11 @@
     <Compile Include="Filters\BrowsersRestriction.cs" />
     <Compile Include="Filters\ObserverNotAllowedAttribute.cs" />
     <Compile Include="Implementation\Services\InterviewCreatorFromAssignment.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M009_AddInterviewIdColumnAndEnumeratorIndex.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M010_AddAssignmentsTables.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M011_RenamePrefilledQuestionsToIdentifyingOnAssignments.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M012_AddAllowAssignmentsColumnToQuestionnaireBrowseItem.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M013_AddCascadingForeignKeyToIdentifyingDataOfAssignments.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M014_AddAnswerAsStringColumnForAssignments.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M015_RenameCapacityToQuantityInAssignments.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M016_AddColumnRosterVectorToIdentifyingQuestion.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M017_AlterColumnRosterVectorToIdentifyingQuestionToNullable.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M018_AddColumnAnswersToAssignments.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M019_AddAudioFileStorage.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M009_AddAssignmentIdToInterview.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M010_Add_index_for_interviewSummary_assignmentid.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M011_AddOriginalHumanIdToInterviewSummary.cs" />
-    <Compile Include="Migrations\Users\M004_RemoveOldMigrationSchemas.cs" />
     <Compile Include="Models\Account\FinishIntallationModel.cs" />
     <Compile Include="Models\Account\IPasswordRequired.cs" />
     <Compile Include="Models\Account\UserModelBase.cs" />
     <Compile Include="Models\Api\AssignmentProfile.cs" />
     <Compile Include="Models\Api\TeamsAndStatusesReportResponse.cs" />
-    <Compile Include="Migrations\Users\M001_AddUsersHqIdentityModel.cs" />
-    <Compile Include="Migrations\Users\M002_MigrateUsersFromUserDocumentStore.cs" />
-    <Compile Include="Migrations\Users\M003_AddDeviceAppVersionToProfile.cs" />
     <Compile Include="Models\InterviewerHqModel.cs" />
     <Compile Include="Models\Reports\MapReportModel.cs" />
     <Compile Include="Models\VersionCheck\VersionCheckingInfo.cs" />
@@ -2405,22 +2322,6 @@
     <Compile Include="Filters\ObserverNotAllowedApiAttribute.cs" />
     <Compile Include="Filters\TokenValidationAuthorizationAttribute.cs" />
     <Compile Include="Filters\TypedDirectRouteProvider.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M001_InitDb.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M005_QuestionnaireRosterStructures.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M004_QuestionnaireImportDate.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M003_AddTranslations.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M008_MoveAssemblyToDB.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M007_AddAssembly.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M006_AddMinInterviewerVersion.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M005_AddTeamLeatIdIndex.cs" />
-    <Compile Include="Migrations\PlainStore\M001-100\M002_AddUsersIndex.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M001_InitDb.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M002_AddMissingIndexes.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M003_RemoveFeedTables.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M004_RemoveOldSyncTables.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M006_AddSortOrderToFeaturedQuestions.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M007_AddIsAssignedToInterviewerToInterviewSummary.cs" />
-    <Compile Include="Migrations\ReadSide\M001-100\M008_AddInterviewKey.cs" />
     <Compile Include="Models\AllQuestionnairesListViewModel.cs" />
     <Compile Include="API\PublicApi\Models\AssignChangeApiModel.cs" />
     <Compile Include="Models\Api\BaseApiView.cs" />
@@ -2661,7 +2562,6 @@
     <Folder Include="App_Data\Elmah\" />
     <Folder Include="App_Start\OwinSecurity\" />
     <Folder Include="Dependencies\dist\" />
-    <Folder Include="Migrations\ReadSide\M101-200\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\WB.Core.BoundedContexts.Headquarters.csproj">
@@ -2695,6 +2595,10 @@
     <ProjectReference Include="..\..\..\Infrastructure\WB.Infrastructure.Native\WB.Infrastructure.Native.csproj">
       <Project>{048bbba2-7bbf-44a5-a1b1-e4d32bba2797}</Project>
       <Name>WB.Infrastructure.Native</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Infrastructure\WB.Persistence.Headquarters\WB.Persistence.Headquarters.csproj">
+      <Project>{2f99741b-8182-4814-a726-8cfeb3781e31}</Project>
+      <Name>WB.Persistence.Headquarters</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\Shared\WB.UI.Shared.Web\WB.UI.Shared.Web.csproj">
       <Project>{75470164-4087-4E9B-845A-5400C038A499}</Project>
@@ -2759,10 +2663,12 @@
     <Error Condition="!Exists('..\..\..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
     <Error Condition="!Exists('..\..\..\..\packages\Esri.ArcGISRuntime.WPF.100.2.1\build\net452\Esri.ArcGISRuntime.WPF.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\Esri.ArcGISRuntime.WPF.100.2.1\build\net452\Esri.ArcGISRuntime.WPF.targets'))" />
     <Error Condition="!Exists('..\..\..\..\packages\Microsoft.Net.Compilers.2.9.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\Microsoft.Net.Compilers.2.9.0\build\Microsoft.Net.Compilers.props'))" />
-    <Error Condition="!Exists('..\..\..\..\packages\Refit.4.6.30\build\net461\refit.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\Refit.4.6.30\build\net461\refit.targets'))" />
+    <Error Condition="!Exists('..\..\..\..\packages\RazorGenerator.MsBuild.2.5.0\build\RazorGenerator.MsBuild.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\RazorGenerator.MsBuild.2.5.0\build\RazorGenerator.MsBuild.targets'))" />
+    <Error Condition="!Exists('..\..\..\..\packages\Refit.4.6.48\build\net461\refit.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\Refit.4.6.48\build\net461\refit.targets'))" />
   </Target>
   <Import Project="..\..\..\..\packages\Esri.ArcGISRuntime.WPF.100.2.1\build\net452\Esri.ArcGISRuntime.WPF.targets" Condition="Exists('..\..\..\..\packages\Esri.ArcGISRuntime.WPF.100.2.1\build\net452\Esri.ArcGISRuntime.WPF.targets')" />
-  <Import Project="..\..\..\..\packages\Refit.4.6.30\build\net461\refit.targets" Condition="Exists('..\..\..\..\packages\Refit.4.6.30\build\net461\refit.targets')" />
+  <Import Project="..\..\..\..\packages\RazorGenerator.MsBuild.2.5.0\build\RazorGenerator.MsBuild.targets" Condition="Exists('..\..\..\..\packages\RazorGenerator.MsBuild.2.5.0\build\RazorGenerator.MsBuild.targets')" />
+  <Import Project="..\..\..\..\packages\Refit.4.6.48\build\net461\refit.targets" Condition="Exists('..\..\..\..\packages\Refit.4.6.48\build\net461\refit.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

@@ -34,8 +34,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly SpecialValuesViewModel specialValues;
         private Identity questionIdentity;
         private string interviewId;
-        private readonly Timer timer;
-        protected internal int ThrottlePeriod { get; set; } = Constants.ThrottlePeriod;
 
         public IQuestionStateViewModel QuestionState => this.questionState;
         public SpecialValuesViewModel SpecialValues => this.specialValues;
@@ -43,6 +41,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public QuestionInstructionViewModel InstructionViewModel { get; }
 
         public AnsweringViewModel Answering { get; private set; }
+
+        private readonly ThrottlingViewModel throttlingModel;
 
         private bool isRosterSizeQuestion;
         private int answerMaxValue;
@@ -112,7 +112,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             AnsweringViewModel answering,
             QuestionInstructionViewModel instructionViewModel,
             ILiteEventRegistry liteEventRegistry,
-            SpecialValuesViewModel specialValues)
+            SpecialValuesViewModel specialValues, 
+            ThrottlingViewModel throttlingModel)
         {
             this.principal = principal;
             this.questionnaireRepository = questionnaireRepository;
@@ -124,8 +125,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.Answering = answering;
             this.liteEventRegistry = liteEventRegistry;
             this.specialValues = specialValues;
-
-            this.timer = new Timer(async _ => { await AnswerQuestion(); }, null, Timeout.Infinite, Timeout.Infinite);
+            this.throttlingModel = throttlingModel;
+            this.throttlingModel.Init(AnswerQuestion);
         }
 
         public Identity Identity => this.questionIdentity;
@@ -162,6 +163,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.ProtectedAnswer = answerModel.ProtectedAnswer?.Value;
 
             InitSpecialValues(interviewId, entityIdentity);
+
+            if (!this.specialValues.HasSpecialValues)
+                this.throttlingModel.ThrottlePeriod = 0;
         }
 
         public int? ProtectedAnswer
@@ -212,10 +216,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             await EnqueueSaveAnswer(this.Answer, specialValues.IsSpecialValueSelected(this.Answer));
         }
 
-        private void ResetTimer() {
-            timer.Change(ThrottlePeriod, Timeout.Infinite);
-        }
-
+        
         private decimal? answerOrSelectedValueToSave = null;
         private bool isSpecialValueToSave = false;
 
@@ -223,14 +224,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             this.answerOrSelectedValueToSave = answeredOrSelectedValue;
             this.isSpecialValueToSave = isSpecialValueSelected;
-            if (this.ThrottlePeriod == 0)
-            {
-                await AnswerQuestion();
-            }
-            else
-            {
-                this.ResetTimer();
-            }
+
+            await this.throttlingModel.ExecuteActionIfNeeded();
         }
 
         private async Task AnswerQuestion()
@@ -316,6 +311,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.specialValues.SpecialValueChanged -= SpecialValueChanged;
             this.specialValues.SpecialValueRemoved -= SpecialValueRemoved;
             this.specialValues.Dispose();
+
+            this.throttlingModel.Dispose();
         }
 
         public async void Handle(AnswersRemoved @event)

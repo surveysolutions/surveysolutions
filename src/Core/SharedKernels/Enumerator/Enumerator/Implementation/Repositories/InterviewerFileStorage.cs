@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.Views.BinaryData;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
@@ -15,25 +16,24 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
     {
         private readonly IPlainStorage<TMetadataView> fileMetadataViewStorage;
         private readonly IPlainStorage<TFileView> fileViewStorage;
+        private readonly IEncryptionService encryptionService;
 
         protected InterviewerFileStorage(
             IPlainStorage<TMetadataView> fileMetadataViewStorage,
-            IPlainStorage<TFileView> fileViewStorage)
+            IPlainStorage<TFileView> fileViewStorage,
+            IEncryptionService encryptionService)
         {
             this.fileMetadataViewStorage = fileMetadataViewStorage;
             this.fileViewStorage = fileViewStorage;
+            this.encryptionService = encryptionService;
         }
 
         public byte[] GetInterviewBinaryData(Guid interviewId, string fileName)
         {
-            var metadataView =
-                this.fileMetadataViewStorage.FirstOrDefault(metadata => metadata.InterviewId == interviewId && metadata.FileName == fileName);
+            var metadataView = this.fileMetadataViewStorage.FirstOrDefault(metadata =>
+                metadata.InterviewId == interviewId && metadata.FileName == fileName);
 
-            if (metadataView == null) return null;
-
-            var fileView = this.fileViewStorage.GetById(metadataView.FileId);
-
-            return fileView?.File;
+            return metadataView == null ? null : this.GetFileById(metadataView.FileId);
         }
 
         public List<InterviewBinaryDataDescriptor> GetBinaryFilesForInterview(Guid interviewId)
@@ -44,13 +44,14 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
                     m.InterviewId,
                     m.FileName,
                     m.ContentType,
-                    () => this.fileViewStorage.GetById(m.FileId).File
+                    () => this.GetFileById(m.FileId)
                 )
             ).ToList();
         }
 
         public void StoreInterviewBinaryData(Guid interviewId, string fileName, byte[] data, string contentType)
         {
+            var encryptedData = this.encryptionService.Encrypt(data);
             var metadataView =
                 this.fileMetadataViewStorage.FirstOrDefault(metadata => metadata.InterviewId == interviewId && metadata.FileName == fileName);
 
@@ -60,7 +61,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
                 this.fileViewStorage.Store(new TFileView
                 {
                     Id = fileId,
-                    File = data
+                    File = encryptedData
                 });
 
                 this.fileMetadataViewStorage.Store(new TMetadataView
@@ -77,7 +78,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
                 this.fileViewStorage.Store(new TFileView
                 {
                     Id = metadataView.FileId,
-                    File = data
+                    File = encryptedData
                 });
             }
         }
@@ -96,6 +97,13 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
         {
             return this.fileMetadataViewStorage
                 .FirstOrDefault(metadata => metadata.InterviewId == interviewId && metadata.FileName == fileName);
+        }
+
+        private byte[] GetFileById(string fileId)
+        {
+            var fileView = this.fileViewStorage.GetById(fileId);
+
+            return fileView == null ? null : this.encryptionService.Decrypt(fileView.File);
         }
     }
 }

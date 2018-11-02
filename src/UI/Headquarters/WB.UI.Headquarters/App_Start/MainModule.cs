@@ -13,12 +13,15 @@ using WB.Core.BoundedContexts.Headquarters.WebInterview.Jobs;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Aggregates;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.EventBus.Lite.Implementation;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Implementation;
+using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Enumerator.Native.JsonConversion;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Models;
@@ -114,6 +117,9 @@ namespace WB.UI.Headquarters
             registry.BindWithConstructorArgumentInPerLifetimeScope<ILiteEventBus, NcqrCompatibleEventDispatcher>(
                 "eventBusSettings",
                 settingsProvider.GetSection<EventBusConfigSection>("eventBus").GetSettings());
+
+            registry.Bind<ISecureStorage, SecureStorage>();
+            registry.Bind<IEncryptionService, RsaEncryptionService>();
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)

@@ -14,7 +14,8 @@ namespace WB.UI.Supervisor.Activities
     [Activity(WindowSoftInputMode = SoftInput.StateHidden, 
         HardwareAccelerated = true,
         Theme = "@style/GrayAppTheme", 
-        ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize)]
+        ConfigurationChanges = ConfigChanges.Orientation | ConfigChanges.ScreenSize,
+        Exported = false)]
     public class FinishInstallationActivity : BaseActivity<FinishInstallationViewModel>
     {
         protected override int ViewResourceId => Resource.Layout.finish_installation;

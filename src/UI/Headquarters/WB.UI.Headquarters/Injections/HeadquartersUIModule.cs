@@ -1,5 +1,4 @@
 using System;
-using System.Diagnostics;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -12,6 +11,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation;
 using WB.Core.GenericSubdomains.Portable.Implementation.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.UI.Headquarters.Views;
 using WB.UI.Shared.Web.Filters;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
@@ -19,6 +19,7 @@ using WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles;
 using WB.Core.BoundedContexts.Headquarters.MoveUserToAnotherTeam;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
+using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
@@ -103,35 +104,20 @@ namespace WB.UI.Headquarters.Injections
 
             registry.Bind<IQRCodeHelper, QRCodeHelper>();
 
+            registry.BindAsSingleton<ILocalExportServiceRunner, LocalExportServiceRunner>();
+
             registry.BindToMethod<IExportServiceApi>(ctx =>
             {
                 var settings = ctx.Get<InterviewDataExportSettings>();
                 var cfg = ctx.Get<IConfigurationManager>();
 
-                if (HttpContext.Current != null)
-                {
-                    var httpCtx = HttpContext.Current;
+                string key = null;
 
-                    var servicePath = httpCtx.Server.MapPath(@"~/.bin/Export");
-                    var serviceExe = System.IO.Path.Combine(servicePath, "WB.Services.Export.Host.exe");
+                var localRunner = ctx.Get<ILocalExportServiceRunner>();
+                localRunner.Run();
 
-
-                    if (System.IO.File.Exists(serviceExe))
-                    {
-                        var pid = System.IO.Path.Combine(servicePath, "pid");
-
-                        if (!System.IO.File.Exists(pid))
-                        {
-                            var processStartInfo = new ProcessStartInfo(serviceExe, "--console")
-                            {
-                                WorkingDirectory = servicePath
-                            };
-                            System.Diagnostics.Process.Start(processStartInfo);
-                        }
-                    }
-                }
                 var exportServiceSettings = ctx.Get<IPlainKeyValueStorage<ExportServiceSettings>>();
-                string key = exportServiceSettings.GetById(AppSetting.ExportServiceStorageKey).Key;
+                key = exportServiceSettings.GetById(AppSetting.ExportServiceStorageKey).Key;
 
                 var http = new HttpClient
                 {

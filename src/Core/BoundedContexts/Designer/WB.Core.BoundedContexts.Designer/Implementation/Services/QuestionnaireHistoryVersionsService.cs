@@ -102,11 +102,12 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                 .Where(y => y.QuestionnaireId == sQuestionnaireId).Select(y => (int?) y.Sequence).Max());
 
             var previousChange = this.questionnaireChangeItemStorage.Query(_ => (from h in _
-                where h.Sequence == maxSequenceByQuestionnaire 
-                      && h.QuestionnaireId == sQuestionnaireId
-                select h).FirstOrDefault());
+                where h.QuestionnaireId == sQuestionnaireId && h.ResultingQuestionnaireDocument != null
+                orderby h.Sequence descending 
+                select h
+                    ).FirstOrDefault());
 
-            if (previousChange?.ResultingQuestionnaireDocument != null)
+            if (previousChange != null && questionnaireDocument != null)
             {
                 var previousVersion = previousChange.ResultingQuestionnaireDocument;
                 var left = this.entitySerializer.Serialize(questionnaireDocument);

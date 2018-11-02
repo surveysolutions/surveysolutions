@@ -31,12 +31,12 @@ namespace Ncqrs.Eventing.Storage
 
         public Type ResolveType(string eventName)
         {
-            if (!KnownEventDataTypes.ContainsKey(eventName))
+            if (KnownEventDataTypes.TryGetValue(eventName, out var type))
             {
-                throw new ArgumentException($"There is no event with name {eventName} registered", nameof(eventName));
+                return type;
             }
 
-            return KnownEventDataTypes[eventName];
+            throw new ArgumentException($"There is no event with name {eventName} registered", nameof(eventName));
         }
 
         internal void RegisterEventDataType(Type eventDataType)
@@ -50,8 +50,7 @@ namespace Ncqrs.Eventing.Storage
 
         private void ThrowIfThereIsAnotherEventWithSameName(Type @event)
         {
-            Type anotherEventWithSameName;
-            KnownEventDataTypes.TryGetValue(@event.Name, out anotherEventWithSameName);
+            KnownEventDataTypes.TryGetValue(@event.Name, out var anotherEventWithSameName);
 
             if (anotherEventWithSameName != null && anotherEventWithSameName != @event)
                 throw new ArgumentException(string.Format("Two different events share same type name:{0}{1}{0}{2}",

@@ -17,7 +17,7 @@
     <AssemblyName>WB.UI.Designer</AssemblyName>
     <TargetFrameworkVersion>v4.7.1</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
-    <UseIISExpress>true</UseIISExpress>
+    <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
@@ -149,6 +149,9 @@
     <Reference Include="Remotion.Linq.EagerFetching, Version=2.2.0.0, Culture=neutral, PublicKeyToken=fee00910d6e5f53b, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Remotion.Linq.EagerFetching.2.2.0\lib\net45\Remotion.Linq.EagerFetching.dll</HintPath>
     </Reference>
+    <Reference Include="Shark.PdfConvert, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Shark.PdfConvert.1.0.3\lib\net451\Shark.PdfConvert.dll</HintPath>
+    </Reference>
     <Reference Include="StackExchange.Exceptional, Version=2.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\StackExchange.Exceptional.2.0.0-alpha3-00183\lib\net451\StackExchange.Exceptional.dll</HintPath>
     </Reference>
@@ -255,6 +258,7 @@
     <Compile Include="Code\ConfigurationManager\DeskConfigSection.cs" />
     <Compile Include="Code\CustomWebApiAuthorizeFilter.cs" />
     <Compile Include="Code\DesignerOldCompatibilityBinder.cs" />
+    <Compile Include="Code\UrlExtensions.cs" />
     <Compile Include="Controllers\DeskController.cs" />
     <Compile Include="Api\Designer\TranslationsController.cs" />
     <Compile Include="Api\Designer\AttachmentsController.cs" />
@@ -499,7 +503,7 @@
     <Content Include="questionnaire\content\i\chekboxes2k.png" />
     <Content Include="questionnaire\content\i\designer-left-icons-2-3.png" />
     <Content Include="questionnaire\content\i\designer-left-icons-3.png" />
-    <Content Include="questionnaire\content\i\icons3.png" />
+    <Content Include="questionnaire\content\i\icons4.png" />
     <Content Include="questionnaire\content\i\logo-designer.png" />
     <Content Include="questionnaire\content\i\logo.png" />
     <Content Include="questionnaire\details\scripts\controllers\alert.js" />

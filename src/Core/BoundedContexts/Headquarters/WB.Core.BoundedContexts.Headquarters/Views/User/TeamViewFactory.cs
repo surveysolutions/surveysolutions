@@ -126,7 +126,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
         {
             string searchLowerText = searchBy?.ToLower();
 
-            return sessionProvider.Session.Connection.Query<(string userName, Guid userId)>(@"
+            return sessionProvider.Session.Connection.Query<UsersViewItem>(@"
                 SELECT u.username, u.userid 
                 FROM (
                     SELECT DISTINCT coalesce(i1.teamleadname, i2.responsiblename) username, coalesce(i1.teamleadid, i2.responsibleid) userid
@@ -141,13 +141,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                         limit = pageSize,
                         searchText = searchLowerText,
                         searchTextForLike = $"%{searchLowerText}%",
-                    })
-                .Select(x => new UsersViewItem
-                {
-                    UserId = x.userId,
-                    UserName = x.userName
-                })
-                .ToList();
+                    }).ToList();
         }
 
         private int GetCountUsersFilteredByTeamLeadAndResponsible(string searchBy)

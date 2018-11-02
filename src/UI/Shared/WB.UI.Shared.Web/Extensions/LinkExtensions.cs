@@ -9,7 +9,7 @@ namespace WB.UI.Shared.Web.Extensions
         public static IHtmlString GenerateFavicon(this System.Web.Mvc.WebViewPage page, string faviconHref)
         {
             return new HtmlString(string.Format(
-                @"<link rel='icon' sizes='192x192' href='{0}-192x192.png'> 
+                @"<link rel='icon' type='image/png' sizes='192x192' href='{0}-192x192.png'> 
                 <link rel='apple-touch-icon-precomposed' sizes='180x180' href='{0}-180x180.png'>
                 <link rel='apple-touch-icon-precomposed' sizes='152x152' href='{0}-152x152.png'>
                 <link rel='apple-touch-icon-precomposed' sizes='144x144' href='{0}-144x144.png'>

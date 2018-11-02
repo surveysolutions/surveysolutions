@@ -1,4 +1,7 @@
-﻿@model WB.Core.SharedKernels.SurveyManagement.Web.Models.BatchUploadModel
+@using System.Web.Optimization
+@using WB.Core.SharedKernels.DataCollection.Implementation.Entities
+@using WB.Core.SharedKernels.SurveyManagement.Web.Models
+@model WB.Core.SharedKernels.SurveyManagement.Web.Models.BatchUploadModel
 @{
     Layout = "~/Views/Shared/_MainLayout.cshtml";
     ViewBag.Title = BatchUpload.BatchUpload_Title;
@@ -261,7 +264,7 @@
             <div class="col-md-4 col-sm-5 text-page">
                 <p>
                     @{
-                        string link = string.Format("<a href='{0}'>{1}</a>", Url.Action("TakeNew", "HQ", new { id = Model.QuestionnaireId, version = Model.QuestionnaireVersion }), BatchUpload.ManualModeLinkTitle);
+                        string link = string.Format("<a href='{0}'>{1}</a>", Url.Action("TakeNew", "HQ", new { questionnaireId = new QuestionnaireIdentity(Model.QuestionnaireId, Model.QuestionnaireVersion).ToString() }), BatchUpload.ManualModeLinkTitle);
                         string textWithLink = string.Format(BatchUpload.ManualModeDescription, link);
                     }
                     @Html.Raw(textWithLink)

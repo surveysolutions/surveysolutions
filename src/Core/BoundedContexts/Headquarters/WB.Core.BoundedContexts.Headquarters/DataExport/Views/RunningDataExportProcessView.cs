@@ -7,10 +7,14 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
 {
     public class RunningDataExportProcessView
     {
+        public RunningDataExportProcessView(string questionnaireId)
+        { 
+            this.QuestionnaireIdentity = QuestionnaireIdentity.Parse(questionnaireId);
+        }
+
         public string DataExportProcessId { get;  set; }
         public DateTime BeginDate { get;  set; }
         public DateTime LastUpdateDate { get;  set; }
-        public string DataExportProcessName { get;  set; }
         public int Progress { get;  set; }
         public DataExportType Type { get;  set; }
         public DataExportFormat Format { get;  set; }

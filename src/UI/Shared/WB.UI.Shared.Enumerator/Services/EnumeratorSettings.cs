@@ -86,6 +86,9 @@ namespace WB.UI.Shared.Enumerator.Services
                 ? EnumeratorApplicationType.WithMaps
                 : EnumeratorApplicationType.WithoutMaps;
 
+        public bool Encrypted => this.CurrentSettings.Encrypted ?? false;
+        public void SetEncrypted(bool encrypted) => this.SaveCurrentSettings(s => s.Encrypted = encrypted);
+
         public string GetApplicationVersionName() => this.appPackageInfo.VersionName;
 
         public string GetDeviceTechnicalInformation() => $"Version: {this.GetApplicationVersionName()} {Environment.NewLine}" +

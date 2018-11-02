@@ -10,9 +10,11 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection.Implementation;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -37,8 +39,10 @@ namespace WB.UI.Supervisor.ServiceLocation
 
             var pathToLocalDirectory = AndroidPathUtils.GetPathToInternalDirectory();
 
-            registry.BindAsSingletonWithConstructorArgument<IBackupRestoreService, BackupRestoreService>(
-                "privateStorage", pathToLocalDirectory);
+            registry.BindAsSingletonWithConstructorArguments<IBackupRestoreService, BackupRestoreService>(
+                new ConstructorArgument("privateStorage", context => pathToLocalDirectory),
+                new ConstructorArgument("encryptionService",
+                    context => new RsaEncryptionService(context.Get<ISecureStorage>())));
 
             registry.BindAsSingletonWithConstructorArgument<IQuestionnaireAssemblyAccessor, InterviewerQuestionnaireAssemblyAccessor>(
                 "pathToAssembliesDirectory", AndroidPathUtils.GetPathToSubfolderInLocalDirectory("assemblies"));

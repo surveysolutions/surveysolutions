@@ -92,7 +92,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                 case QuestionType.TextList:
                     return this.BuildAnswerListForQuestionByHeader(question.AsObject(), header);
                 default:
-                    return new string[0];
+                    return Array.Empty<string>();
             }
         }
 
@@ -192,6 +192,10 @@ namespace WB.Services.Export.CsvExport.Exporters
                     {
                         FillMultioptionOrderedAnswers(answers, header, result);
                     }
+                    else if (header.QuestionSubType.Value == QuestionSubtype.MultyOption_Linked)
+                    {
+                        FillMultioptionLinked(answers, header, result);
+                    }
                     else
                     {
                         this.PutAnswersAsStringValuesIntoResultArray(answers, header, result);
@@ -205,6 +209,14 @@ namespace WB.Services.Export.CsvExport.Exporters
 
 
             return result;
+        }
+
+        private void FillMultioptionLinked(object[] answers, ExportedQuestionHeaderItem header, string[] result)
+        {
+            for (int i = 0; i < result.Length; i++)
+            {
+                result[i] = answers.Length > i ? this.ConvertAnswerToStringValue(answers[i], header) : ExportFormatSettings.MissingNumericQuestionValue;
+            }
         }
 
         private static void FillMultioptionAnswers(object[] answers, ExportedQuestionHeaderItem header, string[] result)

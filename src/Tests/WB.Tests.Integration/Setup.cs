@@ -98,7 +98,7 @@ namespace WB.Tests.Integration
                 .Setup(locator => locator.GetInstance<SideBarOverviewViewModel>())
                 .Returns(() => new SideBarOverviewViewModel(mvxMessenger, Create.ViewModel.DynamicTextViewModel(
                     liteEventRegistry,
-                    interviewRepository: interviewsRepository), Mock.Of<InterviewStateViewModel>()));
+                    interviewRepository: interviewsRepository), Mock.Of<InterviewStateViewModel>(), Mock.Of<AnswerNotifier>()));
 
             Mock.Get(ServiceLocator.Current)
                 .Setup(locator => locator.GetInstance<SideBarSectionViewModel>())

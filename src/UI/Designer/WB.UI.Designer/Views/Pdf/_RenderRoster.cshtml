@@ -10,7 +10,7 @@
 <div class="roster">
     <div class="roster_container">
         <div class="breacrumbs">@questionnaire.GetBreadcrumbsForGroup(roster.PublicKey)</div>
-        <div class="roster-title"><span>@PdfStrings.Roster</span>@questionnaire.GetGroupTitle(roster)</div>
+        <div class="roster-title" id="@questionnaire.GetItemRef(roster.PublicKey)"><span>@PdfStrings.Roster</span>@questionnaire.GetGroupTitle(roster)</div>
         <div class="generated_by">
             <div>
                 <div style="float: left; overflow: hidden;"> 

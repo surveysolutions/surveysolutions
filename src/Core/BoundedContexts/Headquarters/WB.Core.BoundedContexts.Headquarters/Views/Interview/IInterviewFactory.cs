@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
@@ -23,8 +22,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
 
         IEnumerable<InterviewEntity> GetInterviewEntities(IEnumerable<Guid> interviews, Guid[] entityIds = null);
         List<InterviewEntity> GetInterviewEntities(Guid interviewId);
-        Dictionary<string, InterviewLevel> GetInterviewDataLevels(IQuestionnaire questionnaire,
-            List<InterviewEntity> interviewEntities);
         void Save(InterviewState interviewState);
         InterviewGpsAnswerWithTimeStamp[] GetGpsAnswersForInterviewer(Guid interviewerId);
         bool HasAnyGpsAnswerForInterviewer(Guid interviewerId);

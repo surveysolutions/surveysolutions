@@ -11,7 +11,8 @@ namespace WB.UI.Supervisor.Activities.Interview
         Theme = "@style/BlueAppTheme",
         HardwareAccelerated = true,
         WindowSoftInputMode = SoftInput.StateAlwaysHidden | SoftInput.AdjustPan,
-        ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
+        ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize,
+        Exported = false)]
     public class InterviewActivity : BaseInterviewActivity<SupervisorInterviewViewModel>
     {
         protected override int LanguagesMenuGroupId => Resource.Id.interview_languages;

@@ -10,8 +10,8 @@ namespace WB.UI.Supervisor.Activities
         Theme = "@style/GrayAppTheme",
         WindowSoftInputMode = SoftInput.StateHidden,
         HardwareAccelerated = true,
-        ConfigurationChanges =
-            Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
+        ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize,
+        Exported = false)]
     public class OfflineSupervisorSyncActitivy : GoogleApiConnectedActivity<SupervisorOfflineSyncViewModel>
     {
         protected override int ViewResourceId => Resource.Layout.offline_sync;

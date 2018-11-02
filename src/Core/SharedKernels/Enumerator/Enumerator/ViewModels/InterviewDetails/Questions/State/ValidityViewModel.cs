@@ -143,11 +143,23 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         }
         public virtual async void ProcessException(Exception exception)
         {
-            if (exception is InterviewException)
+            if (exception is InterviewException interviewException)
             {
-                this.exceptionErrorMessageFromViewModel = exception.Message;
+                this.exceptionErrorMessageFromViewModel = interviewException.Message;
 
-                await this.UpdateValidStateAsync();
+                if (interviewException.ExceptionType != InterviewDomainExceptionType.QuestionIsMissing)
+                {
+                    await this.UpdateValidStateAsync();
+                }
+                else
+                {
+                    await mainThreadDispatcher.ExecuteOnMainThreadAsync(() =>
+                    {
+                        this.Error.Caption = UIResources.Validity_NotAnswered_InterviewException_ErrorCaption;
+                        this.Error.ChangeValidationErrors(UIResources.Validity_QuestionDoesntExist.ToEnumerable());
+                        this.IsInvalid = true;
+                    });
+                }
             }
         }
 

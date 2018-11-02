@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using WB.Services.Export.Infrastructure;
@@ -50,7 +51,7 @@ namespace WB.Services.Export.CsvExport.Exporters
         }
 
         public async Task ExportAsync(TenantInfo tenant, QuestionnaireId questionnaireIdentity, List<Guid> interviewIdsToExport,
-            string basePath, IProgress<int> progress)
+            string basePath, IProgress<int> progress, CancellationToken cancellationToken = default)
         {
             var actionFilePath = Path.Combine(basePath, Path.ChangeExtension(this.InterviewActionsFileName, this.dataFileExtension));
             var batchSize = this.interviewDataExportSettings.Value.MaxRecordsCountPerOneExportQuery;
@@ -63,13 +64,15 @@ namespace WB.Services.Export.CsvExport.Exporters
 
             foreach (var interviewsBatch in interviewIdsToExport.Batch(batchSize))
             {
+                cancellationToken.ThrowIfCancellationRequested();
                 var interviewIdsStrings = interviewsBatch.ToArray();
                 var actionsChunk = await this.QueryActionsChunkFromReadSide(api, interviewIdsStrings);
-
+                cancellationToken.ThrowIfCancellationRequested();
                 this.csvWriter.WriteData(actionFilePath, actionsChunk, ExportFileSettings.DataFileSeparator.ToString());
 
                 totalProcessedCount += interviewIdsStrings.Length;
                 progress.Report(totalProcessedCount.PercentOf(interviewIdsToExport.Count));
+                cancellationToken.ThrowIfCancellationRequested();
             }
 
             progress.Report(100);
