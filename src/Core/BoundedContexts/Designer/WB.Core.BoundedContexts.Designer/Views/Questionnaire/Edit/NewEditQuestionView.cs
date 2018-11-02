@@ -62,7 +62,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public Breadcrumb[] Breadcrumbs { get; set; }
         public bool WereOptionsTruncated { get; set; }
         public int OptionsCount { get; set; }
-        public bool HideIfDisabled { get; set; }
+        public bool? HideIfDisabled { get; set; }
         public int Quality { get; set; }
         public List<QualityOption> QualityOptions { get; set; }
     }

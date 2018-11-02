@@ -1140,4 +1140,7 @@
   <data name="DeleteCommentConfirm" xml:space="preserve">
     <value>Вы уверены, что хотите удалить комментарий?</value>
   </data>
+  <data name="SettingsHideIfDisabled" xml:space="preserve">
+    <value>Скрывать элемент когда он выключен</value>
+  </data>
 </root>
