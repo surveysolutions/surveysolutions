@@ -1834,6 +1834,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hide element when it is disabled.
+        /// </summary>
+        public static string SettingsHideIfDisabled {
+            get {
+                return ResourceManager.GetString("SettingsHideIfDisabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invite.
         /// </summary>
         public static string SettingsInvite {
