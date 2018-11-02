@@ -12,19 +12,19 @@
                 </template>
             </h4>
             <div class="answer" v-if="item.State != 3">
-                <div v-if="item.ControlType === 'image'">
+                <div v-if="item.controlType === 'image'">
                     <wb-attachment :filename="item.Answer" :previewOnly="true"></wb-attachment>
                 </div>
-                <div v-else-if="item.ControlType === 'audio'">
+                <div v-else-if="item.controlType === 'audio'">
                     <audio controls preload="auto" 
                         style="width:300px" 
                         :src="audioRecordPath">
                     </audio>
                 </div>
-                <div v-else-if="item.ControlType === 'area'">
+                <div v-else-if="item.controlType === 'area'">
                     <iframe width="100%" height="250px" frameBorder="0" :src="areaAnswerUrl"></iframe>
                 </div>
-                <div v-else-if="item.ControlType === 'map'">
+                <div v-else-if="item.controlType === 'map'">
                     <img v-bind:src="googleMapPosition" draggable="false" />
                 </div>
                 <div v-else>
