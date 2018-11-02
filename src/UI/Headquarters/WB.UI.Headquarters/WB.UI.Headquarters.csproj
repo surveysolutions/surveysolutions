@@ -1949,7 +1949,7 @@
     <Compile Include="API\PublicApi\Models\Statistics\QuestionnaireDto.cs" />
     <Compile Include="API\PublicApi\Models\Statistics\QuestionDto.cs" />
     <Compile Include="API\PublicApi\Models\Statistics\SurveyStatisticsQuery.cs" />
-    <Compile Include="API\PublicApi\UsersTypeaheadController.cs" />
+    <Compile Include="API\UsersTypeaheadController.cs" />
     <Compile Include="API\ReportDataApiController.Dto.cs" />
     <Compile Include="API\DataCollection\Supervisor\v1\SupervisorApiController.cs" />
     <Compile Include="API\DataCollection\Supervisor\v1\DevicesApiV1Controller.cs" />
