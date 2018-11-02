@@ -871,6 +871,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Nested from questionnaire.
+        /// </summary>
+        public static string HideIfDisabledNested {
+            get {
+                return ResourceManager.GetString("HideIfDisabledNested", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hide resolved comments.
         /// </summary>
         public static string HideResolvedComments {
