@@ -1143,4 +1143,7 @@
   <data name="SettingsHideIfDisabled" xml:space="preserve">
     <value>Скрывать элемент когда он выключен</value>
   </data>
+  <data name="HideIfDisabledNested" xml:space="preserve">
+    <value>Унаследовано от опросника</value>
+  </data>
 </root>
