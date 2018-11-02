@@ -446,6 +446,29 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return section.Children.Where(x => !(x is InterviewTreeVariable)).Select(x => x.Identity);
         }
 
+        public IEnumerable<Identity> GetUnderlyingEntitiesForReviewRecursive(Identity sectionId)
+        {
+            var section = this.Tree.GetNodeByIdentity(sectionId);
+            
+            if (section == null)
+            {
+                throw new ArgumentException($"Section not found", nameof(sectionId))
+                {
+                    Data =
+                    {
+                        { "SectionId", sectionId },
+                        { "InterviewId", Id }
+                    }
+                };
+            }
+
+            return section
+                .TreeToEnumerableDepthFirst(s => s.Children)
+                .Where(x => !(x is InterviewTreeVariable))
+                .Select(x => x.Identity);
+        }
+        
+
         public IEnumerable<Identity> GetAllIdentitiesForEntityId(Guid id)
             => this.Tree.AllNodes.Where(node => node.Identity.Id == id).Select(node => node.Identity);
 
