@@ -1,5 +1,5 @@
 ﻿<template>
-    <wb-question :question="$me" questionCssClassName="numeric-question">
+    <wb-question :question="$me" questionCssClassName="numeric-question" :no-comments="noComments">
         <div class="question-unit">
             <div class="options-group">
                 <div class="form-group" v-if="$me.isProtected">
@@ -57,6 +57,7 @@
             },
         name: 'Integer',
         mixins: [entityDetails],
+        props: ['noComments'],
         computed: { 
             isSpecialValueSelected(){
                 if (this.$me.answer == null || this.$me.answer == undefined)

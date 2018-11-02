@@ -17,25 +17,21 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
     {
         private readonly IInterviewerInterviewAccessor interviewFactory;
         private readonly IPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage;
-        private readonly IPlainStorage<InterviewFileView> imagesStorage;
+        private readonly IImageFileStorage imagesStorage;
         private readonly IAudioFileStorage audioFileStorage;
-        private readonly ISynchronizationService synchronizationService;
-        private readonly ILogger logger;
 
         protected UploadInterviews(IInterviewerInterviewAccessor interviewFactory,
             IPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage,
             ILogger logger,
-            IPlainStorage<InterviewFileView> imagesStorage,
+            IImageFileStorage imagesStorage,
             IAudioFileStorage audioFileStorage,
             ISynchronizationService synchronizationService,
             int sortOrder) : base(sortOrder, synchronizationService, logger)
         {
             this.interviewFactory = interviewFactory ?? throw new ArgumentNullException(nameof(interviewFactory));
             this.interviewMultimediaViewStorage = interviewMultimediaViewStorage ?? throw new ArgumentNullException(nameof(interviewMultimediaViewStorage));
-            this.logger = logger ?? throw new ArgumentNullException(nameof(logger));
             this.imagesStorage = imagesStorage ?? throw new ArgumentNullException(nameof(imagesStorage));
             this.audioFileStorage = audioFileStorage ?? throw new ArgumentNullException(nameof(audioFileStorage));
-            this.synchronizationService = synchronizationService ?? throw new ArgumentNullException(nameof(synchronizationService));
         }
 
         public override async Task ExecuteAsync()
@@ -126,17 +122,16 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
                 if (uploadState.ImagesFilesNames.Contains(imageView.FileName)) continue;
 
                 cancellationToken.ThrowIfCancellationRequested();
-                var fileView = this.imagesStorage.GetById(imageView.FileId);
 
                 await this.synchronizationService.UploadInterviewImageAsync(
                     imageView.InterviewId,
                     imageView.FileName,
-                    fileView.File,
+                    this.imagesStorage.GetInterviewBinaryData(interviewId, imageView.FileName),
                     transferProgress,
                     cancellationToken);
 
                 this.interviewMultimediaViewStorage.Remove(imageView.Id);
-                this.imagesStorage.Remove(fileView.Id);
+                this.imagesStorage.RemoveInterviewBinaryData(interviewId, imageView.FileName);
             }
         }
 

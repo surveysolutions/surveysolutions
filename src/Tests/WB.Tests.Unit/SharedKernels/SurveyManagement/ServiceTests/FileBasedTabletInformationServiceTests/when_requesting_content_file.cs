@@ -6,7 +6,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.FileBasedTab
     internal class when_requesting_content_file : FileBasedTabletInformationServiceTestContext
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
-            fileBasedTabletInformationService = CreateFileBasedTabletInformationService();
+            fileBasedTabletInformationService = CreateFileBasedTabletInformationService(writeAllBytesCallback: null);
             BecauseOf();
         }
 

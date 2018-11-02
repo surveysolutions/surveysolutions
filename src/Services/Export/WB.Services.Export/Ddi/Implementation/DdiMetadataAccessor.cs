@@ -45,11 +45,11 @@ namespace WB.Services.Export.Ddi.Implementation
             var archiveFilePath = this.exportFileNameService.GetFileNameForDdiByQuestionnaire(questionnaireId, pathToDdiMetadata);
 
             if (this.fileSystemAccessor.IsFileExists(archiveFilePath))
-                return archiveFilePath;
+                this.fileSystemAccessor.DeleteFile(archiveFilePath);
 
             var filesToArchive = new List<string>
             {
-                await this.ddiMetadataFactory.CreateDDIMetadataFileForQuestionnaireInFolder(tenant, questionnaireId, pathToDdiMetadata)
+                await this.ddiMetadataFactory.CreateDDIMetadataFileForQuestionnaireInFolderAsync(tenant, questionnaireId, pathToDdiMetadata)
             };
 
             dataExportFileAccessor.RecreateExportArchive(pathToDdiMetadata, filesToArchive, archiveFilePath, password);

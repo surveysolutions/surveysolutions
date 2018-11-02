@@ -2,7 +2,9 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
+using WB.Services.Scheduler;
 
 namespace WB.Services.Scheduler.Migrations
 {
@@ -60,9 +62,15 @@ namespace WB.Services.Scheduler.Migrations
                         .IsRequired()
                         .HasColumnName("tenant");
 
+                    b.Property<string>("TenantName")
+                        .HasColumnName("tenant_name");
+
                     b.Property<string>("Type")
                         .IsRequired()
                         .HasColumnName("type");
+
+                    b.Property<string>("WorkerId")
+                        .HasColumnName("worker_id");
 
                     b.HasKey("Id")
                         .HasName("pk_jobs");

@@ -37,7 +37,7 @@ html, body {
         header {
             .questionnaire-logo {
                 background: url("../i/logo-designer.png") no-repeat;
-                width: 210px;
+                width: 270px;
                 height: 54px;
                 margin: 12px 33px;
                 position: absolute;
@@ -132,7 +132,15 @@ html, body {
                 }
 
                 .disabled a {
-                    color: @gray-lighter;
+                    color: @error-text;
+                }
+            }
+        }
+
+        .edit-form {
+            .form-group {
+                .field-validation-error {
+                    color: @error-text;
                 }
             }
         }

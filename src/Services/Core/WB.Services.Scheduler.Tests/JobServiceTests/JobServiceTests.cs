@@ -47,7 +47,7 @@ namespace WB.Services.Scheduler.Tests.JobServiceTests
             var tenant2 = new TenantInfo("http://localhost/2", "apiKey2", "test2");
 
             await CreateNewJobs(
-                Create.Entity.Job(tag: "job1", tenant: tenant1.ToString()).Start(),
+                Create.Entity.Job(tag: "job1", tenant: tenant1.ToString()).Start("worker1"),
                 Create.Entity.Job(tag: "job2", tenant: tenant1.ToString()),
                 Create.Entity.Job(tag: "job1", tenant: tenant2.ToString()));
 

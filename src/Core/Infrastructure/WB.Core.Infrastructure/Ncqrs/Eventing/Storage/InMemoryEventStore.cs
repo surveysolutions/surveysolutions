@@ -11,7 +11,7 @@ namespace Ncqrs.Eventing.Storage
     /// An in memory event store that can be used for unit testing purpose. We can't
     /// think of any situation where you want to use this in production.
     /// </summary>
-    public class InMemoryEventStore : IEventStore, ISnapshotStore
+    public class InMemoryEventStore : IInMemoryEventStore, ISnapshotStore
     {
         private readonly Dictionary<Guid, Queue<CommittedEvent>> _events = new Dictionary<Guid, Queue<CommittedEvent>>();
         private readonly Dictionary<Guid, Snapshot> _snapshots = new Dictionary<Guid, Snapshot>();

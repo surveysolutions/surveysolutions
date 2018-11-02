@@ -69,10 +69,6 @@ namespace WB.Services.Scheduler.Services.Implementation
                 logger.LogError(e, $"Error during job run: [{job.Type}] {job.Tenant} {job.Args}");
                 progressReporter.FailJob(job.Id, e);
             }
-            finally
-            {
-                linkedCancellation.Dispose();
-            }
         }
     }
 }

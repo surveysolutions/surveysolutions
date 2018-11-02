@@ -1,19 +1,11 @@
 ﻿using System;
 using System.IO;
 using System.Text.RegularExpressions;
-using WB.Services.Export.ExportProcessHandlers;
 
 namespace WB.Services.Export.Infrastructure.Implementation
 {
     internal class FileSystemAccessor : IFileSystemAccessor
     {
-        private readonly ITempPathProvider tempPathProvider;
-
-        public FileSystemAccessor(ITempPathProvider tempPathProvider)
-        {
-            this.tempPathProvider = tempPathProvider;
-        }
-
         public Stream OpenOrCreateFile(string pathToFile, bool append)
         {
             var stream = File.OpenWrite(pathToFile);
@@ -59,7 +51,7 @@ namespace WB.Services.Export.Infrastructure.Implementation
             File.WriteAllBytes(filePath, data);
         }
 
-        public string GetTempPath(string basePath) => tempPathProvider.GetTempPath(basePath);
+        public string GetTempPath(string basePath) => Path.Combine(basePath, ".temp", Guid.NewGuid().ToString());
         public DateTime GetModificationTime(string filePath)
             => this.IsFileExists(filePath) ? new FileInfo(filePath).LastWriteTime : DateTime.MinValue;
 

@@ -18,18 +18,15 @@ namespace WB.UI.Headquarters.API
     {
         private readonly ILogger logger;
         private readonly IExportSettings exportSettings;
-        private readonly IDataExportProcessesService dataExportProcessesService;
         private readonly IAuditLog auditLog;
         private readonly IExportServiceApi exportServiceApi;
 
         public ExportSettingsApiController(ILogger logger, 
             IExportSettings exportSettings,
-            IDataExportProcessesService dataExportProcessesService,
             IAuditLog auditLog,
             IExportServiceApi exportServiceApi)
         {
             this.exportSettings = exportSettings;
-            this.dataExportProcessesService = dataExportProcessesService;
             this.auditLog = auditLog;
             this.exportServiceApi = exportServiceApi;
             this.logger = logger;
@@ -45,7 +42,7 @@ namespace WB.UI.Headquarters.API
         [HttpPost]
         public async Task<HttpResponseMessage> ChangeState(ChangeSettingsModel changeSettingsState)
         {
-            if (this.IsExistsDataExportInProgress())
+            if (await this.IsExistsDataExportInProgress())
                 return Request.CreateErrorResponse(HttpStatusCode.Forbidden, message: DataExport.ErrorThereAreRunningProcesses);
 
             ExportSettingsModel oldState = new ExportSettingsModel(this.exportSettings.EncryptionEnforced(), this.exportSettings.GetPassword());
@@ -64,7 +61,7 @@ namespace WB.UI.Headquarters.API
         [HttpPost]
         public async Task<HttpResponseMessage> RegeneratePassword()
         {
-            if (this.IsExistsDataExportInProgress())
+            if (await this.IsExistsDataExportInProgress())
                 return Request.CreateErrorResponse(HttpStatusCode.Forbidden, message: DataExport.ErrorThereAreRunningProcesses); 
 
             ExportSettingsModel model = new ExportSettingsModel(this.exportSettings.EncryptionEnforced(), this.exportSettings.GetPassword());
@@ -76,7 +73,7 @@ namespace WB.UI.Headquarters.API
             }
 
 
-            this.logger.Info($"Export settings were changed by {base.User.Identity.Name}. Encryption password was chagned.");
+            this.logger.Info($@"Export settings were changed by {base.User.Identity.Name}. Encryption password was changed.");
 
             var newExportSettingsModel = new ExportSettingsModel(this.exportSettings.EncryptionEnforced(), this.exportSettings.GetPassword());
             return Request.CreateResponse(newExportSettingsModel);
@@ -87,9 +84,9 @@ namespace WB.UI.Headquarters.API
             return exportServiceApi.DeleteAll();
         }
 
-        private bool IsExistsDataExportInProgress()
+        private async Task<bool> IsExistsDataExportInProgress()
         {
-            return this.dataExportProcessesService.GetRunningExportProcesses().Any();
+            return (await this.exportServiceApi.GetRunningExportJobs()).Any();
         }
     }
 }

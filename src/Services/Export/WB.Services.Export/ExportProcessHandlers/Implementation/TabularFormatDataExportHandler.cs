@@ -6,6 +6,7 @@ using Microsoft.Extensions.Options;
 using WB.Services.Export.CsvExport;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
+using WB.Services.Export.Models;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Services.Processing;
 using WB.Services.Infrastructure.Tenant;
@@ -23,12 +24,12 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             IOptions<InterviewDataExportSettings> interviewDataExportSettings,
             ITabularFormatExportService tabularFormatExportService,
             IEnvironmentContentService environmentContentService,
-            IFilebasedExportedDataAccessor filebasedExportedDataAccessor,
+            IFileBasedExportedDataAccessor fileBasedExportedDataAccessor,
             IDataExportProcessesService dataExportProcessesService,
             ILogger<TabularFormatDataExportHandler> logger,
             IQuestionnaireExportStructureFactory questionnaireExportStructureStorage,
             IDataExportFileAccessor dataExportFileAccessor) :
-            base(fileSystemAccessor, filebasedExportedDataAccessor, interviewDataExportSettings, dataExportProcessesService, dataExportFileAccessor)
+            base(fileSystemAccessor, fileBasedExportedDataAccessor, interviewDataExportSettings, dataExportProcessesService, dataExportFileAccessor)
         {
             this.tabularFormatExportService = tabularFormatExportService;
             this.environmentContentService = environmentContentService;
@@ -40,23 +41,19 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
         protected override async Task ExportDataIntoDirectoryAsync(ExportSettings settings,
             IProgress<int> progress, CancellationToken cancellationToken)
         {
-            this.GenerateDescriptionTxt(settings.Tenant, settings.QuestionnaireId, settings.ExportTempDirectory);
+            await this.tabularFormatExportService.GenerateDescriptionFileAsync(settings.Tenant, settings.QuestionnaireId, ExportTempDirectoryPath, ExportFileSettings.TabDataFileExtension);
 
-            await this.tabularFormatExportService.ExportInterviewsInTabularFormat(settings, progress, cancellationToken);
+            await this.tabularFormatExportService.ExportInterviewsInTabularFormatAsync(settings, ExportTempDirectoryPath, progress, cancellationToken);
 
-            await this.CreateDoFilesForQuestionnaire(settings.Tenant, settings.QuestionnaireId, settings.ExportTempDirectory, cancellationToken);
+            await this.CreateDoFilesForQuestionnaireAsync(settings.Tenant, settings.QuestionnaireId, ExportTempDirectoryPath, cancellationToken);
         }
 
-        private void GenerateDescriptionTxt(TenantInfo tenant, QuestionnaireId questionnaireIdentity, string directoryPath)
-            => this.tabularFormatExportService.GenerateDescriptionFileAsync(tenant, questionnaireIdentity, directoryPath, ExportFileSettings.TabDataFileExtension);
-
-        private async Task CreateDoFilesForQuestionnaire(TenantInfo tenant, QuestionnaireId questionnaireIdentity, string directoryPath, CancellationToken cancellationToken)
+        private async Task CreateDoFilesForQuestionnaireAsync(TenantInfo tenant, QuestionnaireId questionnaireIdentity, string directoryPath, CancellationToken cancellationToken)
         {
             var questionnaireExportStructure = await this.questionnaireExportStructureStorage
                 .GetQuestionnaireExportStructureAsync(tenant, questionnaireIdentity);
 
             this.environmentContentService.CreateEnvironmentFiles(questionnaireExportStructure, directoryPath, cancellationToken);
-
         }
     }
 }

@@ -16,28 +16,35 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Da
             this.sessionProvider = sessionProvider;
         }
 
-        public void Refresh()
-        {
-            var connection = this.sessionProvider.Session.Connection;
-            connection.Execute("DO $$ BEGIN PERFORM readside.refresh_report_data(); END $$;", commandTimeout: 3600);
-        }
-
         public List<Guid> QuestionsForQuestionnaireWithData(QuestionnaireIdentity questionnaireIdentity)
         {
             return this.sessionProvider.Session.Connection
-                .Query<Guid>(@"select distinct entityid
-                from readside.report_tabulate_data_view rv
-                where @questionnaireidentity = questionnaireidentity",
-                    new { questionnaireidentity = questionnaireIdentity.ToString() })
+                .Query<Guid>(@"with questionnaires as (
+	                    select id, entityid from readside.questionnaire_entities
+	                    where questionnaireidentity = @Id	
+                    )
+                    select q.entityid from questionnaires q
+                    where exists (
+	                    select 1 from readside.report_tabulate_data rd
+	                    where rd.entity_id = q.id)",
+                    new { Id = questionnaireIdentity.ToString() })
                 .ToList();
         }
 
         public List<QuestionnaireIdentity> QuestionnairesWithData(Guid? teamLeadId)
         {
             return this.sessionProvider.Session.Connection
-                .Query<string>(@"select distinct questionnaireidentity
-                from readside.report_tabulate_data_view rv
-                where @TeamLeadId is null or @TeamLeadId = teamleadid", new { teamLeadId })
+                .Query<string>(@"with questionnaires as (
+	                select distinct questionnaireidentity
+	                from readside.interviewsummaries
+	                where @TeamLeadId is null or @TeamLeadId = teamleadid)
+                select q.questionnaireidentity
+                from questionnaires q
+                where exists (
+	                select 1
+	                from readside.report_tabulate_data rd
+	                JOIN readside.questionnaire_entities qe ON qe.id = rd.entity_id
+	                where qe.questionnaireidentity = q.questionnaireidentity)", new { teamLeadId })
                 .Select(QuestionnaireIdentity.Parse).ToList();
         }
 

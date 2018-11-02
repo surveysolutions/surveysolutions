@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Text;
 using System.Threading.Tasks;
 using Amazon.S3;
 using Amazon.S3.Model;
@@ -107,7 +108,7 @@ namespace WB.Services.Export.Storage
 
         private S3StorageSettings S3Settings => s3Settings.Value;
 
-        public string GetDirectLink(string key, TimeSpan expiration)
+        public string GetDirectLink(string key, TimeSpan expiration, string asFilename = null)
         {
             var protocol = (client.Config.ServiceURL ?? "https://")
                 .StartsWith("https://", StringComparison.OrdinalIgnoreCase)
@@ -115,14 +116,22 @@ namespace WB.Services.Export.Storage
                 : Protocol.HTTP;
 
             log.LogDebug($"GetDirectLink: {S3Settings.BucketName}/{key}");
-            
-            return client.GetPreSignedURL(new GetPreSignedUrlRequest
+
+            var preSignedUrlRequest = new GetPreSignedUrlRequest
             {
                 Protocol = protocol,
                 BucketName = S3Settings.BucketName,
                 Key = GetKey(key),
                 Expires = DateTime.UtcNow.Add(expiration)
-            });
+             };
+
+            if (!string.IsNullOrWhiteSpace(asFilename))
+            {
+                asFilename = WebUtility.UrlEncode(asFilename)?.Replace('+', ' ');
+                preSignedUrlRequest.ResponseHeaderOverrides.ContentDisposition = $"attachment; filename =\"{asFilename}\"";
+            }
+
+            return client.GetPreSignedURL(preSignedUrlRequest);
         }
 
         public async Task<FileObject> StoreAsync(string key, Stream inputStream, string contentType, IProgress<int> progress = null)
@@ -166,7 +175,8 @@ namespace WB.Services.Export.Storage
         {
             try
             {
-                var response = await client.GetObjectMetadataAsync(S3Settings.BucketName, GetKey(key));
+                var requestKey = GetKey(key);
+                var response = await client.GetObjectMetadataAsync(S3Settings.BucketName, requestKey);
 
                 if (response.HttpStatusCode == HttpStatusCode.OK)
                     return new FileObject
@@ -208,8 +218,9 @@ namespace WB.Services.Export.Storage
         {
             try
             {
-                this.log.LogTrace($"Removing file {S3Settings.BucketName}/{GetKey(path)}");
-                await client.DeleteObjectAsync(S3Settings.BucketName, GetKey(path));
+                var keyPath = GetKey(path);
+                this.log.LogTrace("Removing file {bucketName}/{key}", S3Settings.BucketName, keyPath);
+                await client.DeleteObjectAsync(S3Settings.BucketName, keyPath);
             }
             catch (AmazonS3Exception e) when (e.StatusCode == HttpStatusCode.NotFound)
             {
@@ -220,6 +231,19 @@ namespace WB.Services.Export.Storage
                 LogError($"Unable to remove object in S3. Path: {path}", e);
                 throw;
             }
+        }
+
+        private bool IsKeyNameContainsSpecialChars(string key)
+        {
+            const int MaxAnsiCode = 255;
+
+            if (string.IsNullOrWhiteSpace(key)) return false;
+
+            foreach (var c in key)
+            {
+                if (c > MaxAnsiCode) return true;
+            }
+            return false;
         }
     }
 }

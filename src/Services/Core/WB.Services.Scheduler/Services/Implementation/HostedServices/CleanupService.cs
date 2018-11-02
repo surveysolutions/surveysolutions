@@ -39,10 +39,10 @@ namespace WB.Services.Scheduler.Services.Implementation.HostedServices
 
                     try
                     {
-                        await Task.Delay(TimeSpan.FromMinutes(options.Value.ClearStaleJobsInSeconds),
+                        await Task.Delay(TimeSpan.FromSeconds(options.Value.ClearStaleJobsInSeconds),
                             cancellationToken);
                     }
-                    catch (TaskCanceledException tce)
+                    catch (TaskCanceledException)
                     {
                         logger.LogInformation("Cancellation received.");
                     }

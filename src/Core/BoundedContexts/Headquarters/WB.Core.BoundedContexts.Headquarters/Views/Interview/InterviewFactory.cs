@@ -11,12 +11,10 @@ using System.Runtime.Caching;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Interview;
 using WB.Core.SharedKernels.Questionnaire.Documents;
@@ -488,152 +486,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
             }
         }
 
-        #region Obsolete InterviewData
         public List<InterviewEntity> GetInterviewEntities(Guid interviews)
         {
             return GetInterviewEntities(new[] { interviews }).ToList();
         }
-
-        public Dictionary<string, InterviewLevel> GetInterviewDataLevels(
-            IQuestionnaire questionnaire,
-            List<InterviewEntity> interviewEntities)
-        {
-            var levels = new Dictionary<string, InterviewLevel>();
-
-            var rostersInLevels = questionnaire.GetAllGroups()
-                .Select(x => new
-                {
-                    RosterScope = new ValueVector<Guid>(questionnaire.GetRosterSizeSourcesForEntity(x)),
-                    RosterId = x
-                })
-                .GroupBy(x => x.RosterScope)
-                .ToDictionary(x => x.Key, x => x.Select(e => e.RosterId).ToList());
-
-            var entitiesByRosterScope = interviewEntities
-                // store this in DB for each entity. Static info
-                .ToLookup(x => new ValueVector<Guid>(questionnaire.GetRosterSizeSourcesForEntity(x.Identity.Id)));
-
-            foreach (var scopedEntities in entitiesByRosterScope)
-            {
-                var entities = scopedEntities;
-                var rosterScope = scopedEntities.Key;
-
-                var rosterVectors = entities.Select(x => x.Identity?.RosterVector ?? RosterVector.Empty).Distinct()
-                    .ToList();
-
-                foreach (var rosterVector in rosterVectors)
-                {
-                    if (rosterVector.Length > 0)
-                    {
-                        var rosterIdentitiesInLevel = rostersInLevels[rosterScope].Select(x => new Identity(x, rosterVector));
-                        var allGroupAreDisabled = CheckIfAllRostersAreDisabled(rosterIdentitiesInLevel, interviewEntities);
-
-                        if (allGroupAreDisabled)
-                            continue;
-                    }
-
-                    var interviewLevel = new InterviewLevel
-                    {
-                        RosterVector = rosterVector,
-                        RosterScope = rosterScope
-                    };    
-
-                    foreach (var entity in  entities.Where(x => x.Identity.RosterVector == rosterVector))
-                    {
-                        switch (entity.EntityType)
-                        {
-                            case EntityType.Question:
-                                var question = ToQuestion(entity);
-                                interviewLevel.QuestionsSearchCache.Add(question.Id, question);
-                                break;
-                            case EntityType.Variable:
-                                interviewLevel.Variables.Add(entity.Identity.Id, ToObjectAnswer(entity));
-                                if (entity.IsEnabled == false)
-                                    interviewLevel.DisabledVariables.Add(entity.Identity.Id);
-                                break;
-                            case EntityType.Section:
-                                break;
-                            case EntityType.StaticText:
-                                break;
-                        }
-                    }
-
-                    var keyParts = rosterScope.Select(x => x.FormatGuid()).ToList();
-                    if (rosterVector.Length == 0)
-                        keyParts.Add("#");
-                    else
-                    {
-                        rosterVector.Select(x => x.ToString()).ForEach(x => keyParts.Add(x));
-                    }
-                    
-                    var levelKey = string.Join("-", keyParts);
-                    levels.Add(levelKey, interviewLevel);
-                }
-            }
-
-            return levels;
-        }
-
-        private bool CheckIfAllRostersAreDisabled(IEnumerable<Identity> rosterIdentitiesInLevel, List<InterviewEntity> interviewEntities)
-        {
-            foreach (var rosterIdentity in rosterIdentitiesInLevel)
-            {
-                var roster = interviewEntities.FirstOrDefault(x => x.Identity.Equals(rosterIdentity));
-                if (roster == null)
-                {
-                    // no records in DB that roster was disabled, because disablement event hasn't been raised 
-                    return false;
-                }
-
-                if (roster.IsEnabled)
-                    return false;
-            }
-
-            return true;
-        }
-
-        private InterviewQuestion ToQuestion(InterviewEntity entity)
-        {
-            var objectAnswer = ToObjectAnswer(entity);
-
-            return new InterviewQuestion
-            {
-                Id = entity.Identity.Id,
-                Answer = objectAnswer,
-                FailedValidationConditions = entity.InvalidValidations?.Select(x => new FailedValidationCondition(x)).ToReadOnlyCollection(),
-                FailedWarningConditions = entity.WarningValidations?.Select(x => new FailedValidationCondition(x)).ToReadOnlyCollection(),
-                QuestionState = ToQuestionState(entity, objectAnswer != null)
-            };
-        }
-
-        private QuestionState ToQuestionState(InterviewEntity entity, bool hasAnswer)
-        {
-            QuestionState state = 0;
-
-            if (entity.IsEnabled) state = state.With(QuestionState.Enabled);
-            if (entity.IsReadonly) state = state.With(QuestionState.Readonly);
-            if (entity.InvalidValidations == null) state = state.With(QuestionState.Valid);
-            if (entity.HasFlag) state = state.With(QuestionState.Flagged);
-            if (hasAnswer) state = state.With(QuestionState.Answered);
-
-            return state;
-        }
-
-        private object ToObjectAnswer(InterviewEntity entity) => entity.AsString ?? entity.AsInt ?? entity.AsDouble ??
-                                                                 entity.AsDateTime ?? entity.AsLong ??
-                                                                 entity.AsBool ?? entity.AsGps ?? entity.AsIntArray ??
-                                                                 entity.AsList ?? entity.AsYesNo ??
-                                                                 entity.AsIntMatrix ?? entity.AsArea ??
-                                                                 (object)entity.AsAudio;
-
-        public static string CreateLevelIdFromPropagationVector(decimal[] vector)
-        {
-
-            if (vector.Length == 0)
-                return "#";
-            return vector.ToString();
-        }
-        #endregion
 
         private static void ThrowIfInterviewReceivedByInterviewer(InterviewSummary interview)
         {

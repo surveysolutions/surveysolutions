@@ -60,13 +60,18 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             var interviewFactory = new Mock<IInterviewFactory>();
             interviewFactory.SetupIgnoreArgs(x => x.GetInterviewDataLevels(null, null))
                 .Returns(new Dictionary<string, InterviewLevel>());
+            interviewFactory.SetupIgnoreArgs(x => x.GetInterviewEntities(null, null))
+                .Returns(Task.FromResult(new List<InterviewEntity>()));
 
             var exporter = Create.InterviewsExporter(csvWriter, interviewFactory.Object);
 
             //act
-            await exporter.ExportAsync(Create.Tenant(), questionnaireExportStructure, questionnaire, interviewIdsToExport, "", new Progress<int>(), CancellationToken.None);
+            await exporter.ExportAsync(Create.Tenant(), questionnaireExportStructure, questionnaire, interviewIdsToExport, "", 
+                new Progress<int>(), CancellationToken.None);
 
             //assert
+            Assert.That(dataInCsvFile, Has.Count.EqualTo(2));
+
             Assert.That(dataInCsvFile[0].File, Is.EqualTo("MyQuestionnaire.tab"));
 
             Assert.That(dataInCsvFile[0].Data[0], Has.Length.EqualTo(dataInCsvFile[1].Data[0].Length),
@@ -411,6 +416,94 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             // assert
             GetLevel(result, new[] { rosterId }).Records[0].GetPlainAnswers().First().Length.Should().Be(2);
             GetLevel(result, new[] {rosterId}).Records[0].GetPlainAnswers().First().First().Should().Be("0");
+        }
+
+        [Test]
+        public void when_creating_interview_export_view_by_interview_with_nested_roster_triggered_by_text_list_question()
+        {
+            var questionInsideRosterGroupId = Guid.Parse("12222222222222222222222222222222");
+            var rosterId = Guid.Parse("13333333333333333333333333333333");
+            var nestedRosterId = Guid.Parse("13333333333333333333333333333334");
+            var rosterSizeQuestionId = Guid.Parse("10000000000000000000000000000000");
+            var questionnaireDocument = Create.QuestionnaireDocumentWithOneChapter(
+                new Group()
+                {
+                    VariableName = "r1",
+                    PublicKey = rosterId,
+                    IsRoster = true,
+                    RosterSizeSource = RosterSizeSourceType.FixedTitles,
+                    FixedRosterTitles = new []
+                    {
+                        new FixedRosterTitle(1, "1"),
+                        new FixedRosterTitle(2, "2"),
+                    },
+
+                    Children = new List<IQuestionnaireEntity>
+                    {
+                        new TextListQuestion()
+                        {
+                            PublicKey = rosterSizeQuestionId,
+                            QuestionType = QuestionType.TextList,
+                            VariableName = "list",
+                            MaxAnswerCount = 5
+                        },
+                        new Group()
+                        {
+                            VariableName = "nestedR",
+                            PublicKey = nestedRosterId,
+                            IsRoster = true,
+                            RosterSizeQuestionId = rosterSizeQuestionId,
+                            Children = new List<IQuestionnaireEntity>
+                            {
+                                new NumericQuestion()
+                                {
+                                    PublicKey = questionInsideRosterGroupId,
+                                    QuestionType = QuestionType.Numeric,
+                                    VariableName = "q1"
+                                }
+                            }
+                        }
+                    }
+                });
+
+            InterviewData interviewData = CreateInterviewData();
+
+            var valueVector1 = new ValueVector<Guid> { rosterId };
+            var vector1 = new[] { 1 };
+            var vector2 = new[] { 2 };
+
+            var newLevel1 = new InterviewLevel(valueVector1, null, vector1);
+
+            interviewData.Levels.Add(InterviewLevel.GetLevelKeyName(valueVector1, vector1), newLevel1);
+
+            string someAnswer = "some answer";
+
+            if (!newLevel1.QuestionsSearchCache.ContainsKey(rosterSizeQuestionId))
+                newLevel1.QuestionsSearchCache.Add(rosterSizeQuestionId,
+                    Create.InterviewEntity(identity: Create.Identity(rosterSizeQuestionId), asList: new[] { new InterviewTextListAnswer(1, someAnswer) })
+                );
+
+            var newLevel2 = new InterviewLevel(valueVector1, null, vector2);
+            interviewData.Levels.Add(InterviewLevel.GetLevelKeyName(valueVector1, vector2), newLevel2);
+
+            var valueVector11 = new ValueVector<Guid> { rosterId, rosterSizeQuestionId };
+            var vector11 = new[] { 1, 1 };
+            var newLevel11 = new InterviewLevel(valueVector11, null, vector11);
+
+            if (!newLevel11.QuestionsSearchCache.ContainsKey(questionInsideRosterGroupId))
+                newLevel11.QuestionsSearchCache.Add(questionInsideRosterGroupId,
+                    Create.InterviewEntity(identity: Create.Identity(questionInsideRosterGroupId), asInt: 1));
+
+            interviewData.Levels.Add(InterviewLevel.GetLevelKeyName(valueVector11, vector11), newLevel11);
+
+            var exporter = Create.InterviewsExporter();
+
+            //act
+            var result = exporter.CreateInterviewDataExportView(Create.QuestionnaireExportStructure(questionnaireDocument),
+                interviewData, questionnaireDocument);
+            
+            //assert
+            GetLevel(result, new Guid[] { rosterId, rosterSizeQuestionId }).Records[0].ReferenceValues[0].Should().Be(someAnswer);
         }
 
         public static InterviewDataExportLevelView GetLevel(InterviewDataExportView interviewDataExportView, Guid[] levelVector)

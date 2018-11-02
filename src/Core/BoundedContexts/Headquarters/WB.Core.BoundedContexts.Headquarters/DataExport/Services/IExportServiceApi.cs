@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Refit;
@@ -17,7 +18,6 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
             InterviewStatus? status,
             DateTime? from,
             DateTime? to,
-            string archiveName,
             string archivePassword,
             string accessToken,
             ExternalStorageType? storageType);
@@ -25,13 +25,16 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Services
         [Get("/api/v1/job/status")]
         Task<DataExportStatusView> GetDataExportStatusForQuestionnaireAsync(
             [Query]string questionnaireId,
-            [Query]string archiveName,
             [Query]InterviewStatus? status,
             [Query]DateTime? fromDate,
             [Query]DateTime? toDate);
 
+        [Get("/api/v1/job/running")]
+        Task<List<string>> GetRunningExportJobs();
+
         [Get("/api/v1/job/download")]
-        Task<HttpResponseMessage> DownloadArchive([Query] string questionnaireId,
+        Task<HttpResponseMessage> DownloadArchive(
+            [Query] string questionnaireId,
             [Query] string archiveName,
             [Query] DataExportFormat format,
             [Query] InterviewStatus? status,

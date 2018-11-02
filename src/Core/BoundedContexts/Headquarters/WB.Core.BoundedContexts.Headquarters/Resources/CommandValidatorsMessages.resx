@@ -118,7 +118,7 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="QuestionnaireNameUniqueFormat" xml:space="preserve">
-    <value>You have already imported another questionnaire with title '{0}' from Designer. If you still want to import this particular one, please give it a different name it in Designer.</value>
+    <value>You have already imported another questionnaire with title '{0}' from Designer. If you still want to import this particular one, please give it a different name in the Designer.</value>
   </data>
   <data name="QuestionnaireVariableUniqueFormat" xml:space="preserve">
     <value>You have already imported another questionnaire with questionnaire variable '{0}' from Designer. If you still want to import this particular one, please give it a different questionnaire variable in Designer.</value>

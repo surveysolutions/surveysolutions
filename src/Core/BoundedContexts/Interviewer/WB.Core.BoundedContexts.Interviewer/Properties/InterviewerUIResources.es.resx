@@ -501,12 +501,6 @@
   <data name="DashboardItem_AssignmentLeftComment" xml:space="preserve">
     <value>{0} entrevistas</value>
   </data>
-  <data name="Diagnostics_Backup_Description" xml:space="preserve">
-    <value>Toda la información colectada será almacenada en un archivo de respaldo en este dispositivo</value>
-  </data>
-  <data name="Diagnostics_Backup_Title" xml:space="preserve">
-    <value>Respaldar toda la información colectada</value>
-  </data>
   <data name="Diagnostics_BackupDate_Title" xml:space="preserve">
     <value>Cuando se ha guardado:</value>
   </data>

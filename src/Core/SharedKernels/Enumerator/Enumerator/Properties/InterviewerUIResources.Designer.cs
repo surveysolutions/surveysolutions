@@ -362,6 +362,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Searching....
+        /// </summary>
+        public static string Dashboard_Searching {
+            get {
+                return ResourceManager.GetString("Dashboard_Searching", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to {0} elements found.
         /// </summary>
         public static string Dashboard_SearchResult {
@@ -908,6 +917,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         public static string FailedToLoadInterview {
             get {
                 return ResourceManager.GetString("FailedToLoadInterview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Interview is in invalid state and will be removed. Please synchronize to get correct state..
+        /// </summary>
+        public static string FailedToLoadInterviewDescription {
+            get {
+                return ResourceManager.GetString("FailedToLoadInterviewDescription", resourceCulture);
             }
         }
         

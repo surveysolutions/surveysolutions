@@ -21,7 +21,7 @@ namespace WB.Services.Scheduler.Services.Implementation.HostedServices
         {
             this.scope = serviceProvider.CreateScope();
             this.jobProgressReporter = scope.ServiceProvider.GetService<IJobProgressReporter>();
-            this.jobProgressReporter.Start();
+            this.jobProgressReporter.StartProgressReporter();
             return Task.CompletedTask;
         }
 

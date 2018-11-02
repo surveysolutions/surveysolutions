@@ -37,6 +37,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly ILiteEventRegistry eventRegistry;
         private readonly IMvxMainThreadAsyncDispatcher mainThreadDispatcher;
         protected IStatefulInterview interview;
+        private readonly ThrottlingViewModel throttlingModel;
 
         public SingleOptionLinkedQuestionViewModel(
             IPrincipal principal,
@@ -46,7 +47,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             IMvxMainThreadAsyncDispatcher mainThreadDispatcher,
             QuestionStateViewModel<SingleOptionLinkedQuestionAnswered> questionStateViewModel,
             QuestionInstructionViewModel instructionViewModel,
-            AnsweringViewModel answering)
+            AnsweringViewModel answering, 
+            ThrottlingViewModel throttlingModel)
         {
             if (principal == null) throw new ArgumentNullException(nameof(principal));
             this.userId = principal.CurrentUserIdentity.UserId;
@@ -57,8 +59,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.questionState = questionStateViewModel;
             this.InstructionViewModel = instructionViewModel;
             this.Answering = answering;
+            this.throttlingModel = throttlingModel;
             this.questionnaireRepository = questionnaireStorage ?? throw new ArgumentNullException("questionnaireStorage");
-            this.timer = new Timer(async _ => { await SaveAnswer(); }, null, Timeout.Infinite, Timeout.Infinite);
+            this.throttlingModel.Init(SaveAnswer);
         }
 
         private Guid interviewId;
@@ -137,6 +140,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 option.BeforeSelected -= this.OptionSelected;
                 option.AnswerRemoved -= this.RemoveAnswer;
             }
+            this.throttlingModel.Dispose();
         }
 
         private IEnumerable<SingleOptionLinkedQuestionOptionViewModel> CreateOptions()
@@ -193,10 +197,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             }
         }
 
-        private readonly Timer timer;
-
-        protected internal int ThrottlePeriod { get; set; } = Constants.ThrottlePeriod;
-
         private decimal[] previousOptionToReset = null;
 
         private decimal[] selectedOptionToSave = null;
@@ -208,14 +208,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
             this.Options.Where(option => option.Selected && option != selectedOption).ForEach(x => x.Selected = false);
 
-            if (this.ThrottlePeriod == 0)
-            {
-                await SaveAnswer();
-            }
-            else
-            {
-                timer.Change(ThrottlePeriod, Timeout.Infinite);
-            }
+            await this.throttlingModel.ExecuteActionIfNeeded();
         }
 
         private SingleOptionLinkedQuestionOptionViewModel GetOptionByValue(decimal[] value)
@@ -229,7 +222,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             try
             {
-                timer.Change(Timeout.Infinite, Timeout.Infinite);
+                this.throttlingModel.CancelPendingAction();
+                
                 await this.Answering.SendRemoveAnswerCommandAsync(
                     new RemoveAnswerCommand(this.interviewId,
                         this.userId,
@@ -326,7 +320,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         {
             var optionViewModel = new SingleOptionLinkedQuestionOptionViewModel
             {
-                Enablement = this.questionState.Enablement,
                 RosterVector = linkedOption,
                 Title = interview.GetLinkedOptionTitle(this.Identity, linkedOption),
                 Selected = linkedOption.Equals(answeredOption),

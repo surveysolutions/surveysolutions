@@ -26,7 +26,7 @@ namespace WB.UI.Shared.Enumerator.Converters
                     return Resource.Color.dashboard_rejected_tab;
 
                 case DashboardInterviewStatus.ApprovedBySupervisor:
-                    return Resource.Color.dashboard_approved_by_supervsor;
+                    return Resource.Color.dashboard_approved_by_supervisor;
 
                 case DashboardInterviewStatus.RejectedByHeadquarters:
                     return Resource.Color.dashboard_rejected_by_headquarter;

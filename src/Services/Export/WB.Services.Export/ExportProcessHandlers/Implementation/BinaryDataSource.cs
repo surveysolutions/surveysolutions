@@ -8,6 +8,7 @@ using Microsoft.Extensions.Options;
 using Refit;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
+using WB.Services.Export.Models;
 using WB.Services.Export.Questionnaire.Services;
 using WB.Services.Export.Services;
 using WB.Services.Export.Utils;
@@ -62,6 +63,9 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
 
                 cancellationToken.ThrowIfCancellationRequested();
 
+                long filesUploaded = 0;
+                var interviewProgress = interviewsProcessed.PercentOf(interviewsToExport.Count);
+
                 foreach (var answer in allMultimediaAnswers)
                 {
                     try
@@ -81,13 +85,21 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
                             default:
                                 continue;
                         }
-
+                        
                         await action(new BinaryData
                         {
                             InterviewId = answer.InterviewId,
                             Answer = answer.Answer,
                             Content = content
                         });
+
+                        filesUploaded++;
+
+                        var filesPercent = filesUploaded / (double) allMultimediaAnswers.Count;
+                        var batchProgress = (long) (interviewIds.Length * filesPercent );
+                        var batchInterviewsProgress = batchProgress.PercentOf(interviewsToExport.Count);
+                        
+                        progress.Report(interviewProgress + batchInterviewsProgress);
                     }
                     catch(ApiException e) when (e.StatusCode == HttpStatusCode.NotFound)
                     {

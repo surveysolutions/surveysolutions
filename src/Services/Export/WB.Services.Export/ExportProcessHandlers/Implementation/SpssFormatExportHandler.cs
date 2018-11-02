@@ -6,6 +6,7 @@ using Microsoft.Extensions.Options;
 using WB.Services.Export.CsvExport;
 using WB.Services.Export.Infrastructure;
 using WB.Services.Export.Interview;
+using WB.Services.Export.Models;
 using WB.Services.Export.Questionnaire;
 using WB.Services.Export.Services;
 using WB.Services.Export.Services.Processing;
@@ -20,12 +21,12 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
         public SpssFormatExportHandler(IFileSystemAccessor fileSystemAccessor,
             IOptions<InterviewDataExportSettings> interviewDataExportSettings,
             ITabularFormatExportService tabularFormatExportService,
-            IFilebasedExportedDataAccessor filebasedExportedDataAccessor,
+            IFileBasedExportedDataAccessor fileBasedExportedDataAccessor,
             ITabularDataToExternalStatPackageExportService tabularDataToExternalStatPackageExportService,
             IDataExportProcessesService dataExportProcessesService,
             ILogger<SpssFormatExportHandler> logger,
             IDataExportFileAccessor dataExportFileAccessor)
-            : base(fileSystemAccessor, filebasedExportedDataAccessor, interviewDataExportSettings,
+            : base(fileSystemAccessor, fileBasedExportedDataAccessor, interviewDataExportSettings,
                 dataExportProcessesService, tabularFormatExportService, dataExportFileAccessor)
         {
             this.tabularDataToExternalStatPackageExportService = tabularDataToExternalStatPackageExportService;
@@ -36,18 +37,18 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
         protected override async Task ExportDataIntoDirectoryAsync(ExportSettings settings, IProgress<int> progress,
             CancellationToken cancellationToken)
         {
-            var tabFiles = await this.CreateTabularDataFiles(settings, progress, cancellationToken);
+            var tabFiles = await this.CreateTabularDataFilesAsync(settings, progress, cancellationToken);
 
-            this.CreateSpssDataFilesFromTabularDataFiles(settings.Tenant, settings.QuestionnaireId, tabFiles, progress,
+            await this.CreateSpssDataFilesFromTabularDataFilesAsync(settings.Tenant, settings.QuestionnaireId, tabFiles, progress,
                 cancellationToken);
 
             this.DeleteTabularDataFiles(tabFiles, cancellationToken);
 
-            this.GenerateDescriptionTxt(settings.Tenant, settings.QuestionnaireId, settings.ExportTempDirectory,
+            await this.GenerateDescriptionTxtAsync(settings.Tenant, settings.QuestionnaireId, ExportTempDirectoryPath,
                 ExportFileSettings.SpssDataFileExtension);
         }
 
-        private void CreateSpssDataFilesFromTabularDataFiles(TenantInfo tenant, QuestionnaireId questionnaireIdentity,
+        private async Task CreateSpssDataFilesFromTabularDataFilesAsync(TenantInfo tenant, QuestionnaireId questionnaireIdentity,
             string[] tabDataFiles,
             IProgress<int> progress, CancellationToken cancellationToken)
         {
@@ -55,7 +56,7 @@ namespace WB.Services.Export.ExportProcessHandlers.Implementation
             exportProgress.ProgressChanged +=
                 (sender, donePercent) => progress.Report(50 + (donePercent / 2));
 
-            tabularDataToExternalStatPackageExportService.CreateAndGetSpssDataFilesForQuestionnaireAsync(
+            await tabularDataToExternalStatPackageExportService.CreateAndGetSpssDataFilesForQuestionnaireAsync(
                 tenant,
                 questionnaireIdentity,
                 tabDataFiles,

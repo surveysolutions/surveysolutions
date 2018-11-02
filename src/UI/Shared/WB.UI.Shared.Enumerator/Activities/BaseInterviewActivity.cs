@@ -73,14 +73,14 @@ namespace WB.UI.Shared.Enumerator.Activities
             }
         }
 
-        private async void OnSectionChange(SectionChangeMessage msg) =>
-            await Mvx.Resolve<IMvxMainThreadAsyncDispatcher>().ExecuteOnMainThreadAsync(() =>
+        private void OnSectionChange(SectionChangeMessage msg) =>
+            RunOnUiThread(() =>
             {
                 try
                 {
                     this.drawerLayout.CloseDrawers();
                 }
-                catch(ArgumentException)
+                catch (ArgumentException)
                 {
                     //ignore System.ArgumentExceptionHandle must be valid. Parameter name: instance
                 }

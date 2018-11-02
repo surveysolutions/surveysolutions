@@ -212,7 +212,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
 
                 InScopeExecutor.Current.ExecuteActionInScope((serviceLocator) =>
                 {
-                    var interviewsLocal = serviceLocator.GetInstance<IQueryableReadSideRepositoryReader<InterviewSummary>>();
+                    var interviewsLocal =
+                        serviceLocator.GetInstance<IQueryableReadSideRepositoryReader<InterviewSummary>>();
                     existingInterviewKey = interviewsLocal.GetById(interview.InterviewId)?.Key;
                     var aggregateRootEvents = serviceLocator.GetInstance<IJsonAllTypesSerializer>()
                         .Deserialize<AggregateRootEvent[]>(interview.Events.Replace(@"\u0000", ""));
@@ -242,9 +243,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                         $"Interview events by {interview.InterviewId} deserialized. Took {innerwatch.Elapsed:g}.");
                     innerwatch.Restart();
 
-                    bool shouldChangeInterviewKey = CheckIfInterviewKeyNeedsToBeChanged(interviewsLocal, interview.InterviewId, serializedEvents);
-                    
-                    bool shouldChangeSupervisorId = CheckIfInterviewerWasMovedToAnotherTeam(serviceLocator.GetInstance<IUserRepository>(), 
+                    bool shouldChangeInterviewKey =
+                        CheckIfInterviewKeyNeedsToBeChanged(interviewsLocal, interview.InterviewId, serializedEvents);
+
+                    bool shouldChangeSupervisorId = CheckIfInterviewerWasMovedToAnotherTeam(
+                        serviceLocator.GetInstance<IUserRepository>(),
                         interview.ResponsibleId, serializedEvents, out Guid? newSupervisorId);
 
                     if (shouldChangeSupervisorId && !newSupervisorId.HasValue)
@@ -260,18 +263,22 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                             questionnaireVersion: interview.QuestionnaireVersion,
                             interviewStatus: interview.InterviewStatus,
                             createdOnClient: interview.IsCensusInterview,
-                            interviewKey: shouldChangeInterviewKey ? serviceLocator.GetInstance<IInterviewUniqueKeyGenerator>().Get() : null,
+                            interviewKey: shouldChangeInterviewKey
+                                ? serviceLocator.GetInstance<IInterviewUniqueKeyGenerator>().Get()
+                                : null,
                             synchronizedEvents: serializedEvents,
                             newSupervisorId: shouldChangeSupervisorId ? newSupervisorId : null),
-                            this.syncSettings.Origin);
+                        this.syncSettings.Origin);
 
                     RecordProcessedPackageInfo(packageTrackr, aggregateRootEvents);
                 });
-                
+
             }
             catch (Exception exception)
             {
-                this.logger.Error($"Interview events by {interview.InterviewId} processing failed. Reason: '{exception.Message}'", exception);
+                this.logger.Error(
+                    $"Interview events by {interview.InterviewId} processing failed. Reason: '{exception.Message}'",
+                    exception);
 
                 var interviewException = exception as InterviewException;
                 if (interviewException == null)
@@ -279,38 +286,40 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                     interviewException = exception.UnwrapAllInnerExceptions()
                         .OfType<InterviewException>()
                         .FirstOrDefault();
-                }
 
-                var exceptionType = interviewException?.ExceptionType.ToString() ?? UnknownExceptionType;
+                    var exceptionType = interviewException?.ExceptionType.ToString() ?? UnknownExceptionType;
 
-                using (var brokenPackageUow = new UnitOfWork(ServiceLocator.Current.GetInstance<ISessionFactory>()))
-                {
-                    brokenPackageUow.Session.Save(new BrokenInterviewPackage
+                    using (var brokenPackageUow = new UnitOfWork(ServiceLocator.Current.GetInstance<ISessionFactory>()))
                     {
-                        InterviewId = interview.InterviewId,
-                        InterviewKey = existingInterviewKey,
-                        QuestionnaireId = interview.QuestionnaireId,
-                        QuestionnaireVersion = interview.QuestionnaireVersion,
-                        InterviewStatus = interview.InterviewStatus,
-                        ResponsibleId = interview.ResponsibleId,
-                        IsCensusInterview = interview.IsCensusInterview,
-                        IncomingDate = interview.IncomingDate,
-                        Events = interview.Events,
-                        PackageSize = interview.Events?.Length ?? 0,
-                        ProcessingDate = DateTime.UtcNow,
-                        ExceptionType = exceptionType,
-                        ExceptionMessage = exception.Message,
-                        ExceptionStackTrace = string.Join(Environment.NewLine, exception.UnwrapAllInnerExceptions().Select(ex => $"{ex.Message} {ex.StackTrace}")),
-                        ReprocessAttemptsCount = interview.ProcessAttemptsCount,
-                    });
-                    brokenPackageUow.AcceptChanges();
+                        brokenPackageUow.Session.Save(new BrokenInterviewPackage
+                        {
+                            InterviewId = interview.InterviewId,
+                            InterviewKey = existingInterviewKey,
+                            QuestionnaireId = interview.QuestionnaireId,
+                            QuestionnaireVersion = interview.QuestionnaireVersion,
+                            InterviewStatus = interview.InterviewStatus,
+                            ResponsibleId = interview.ResponsibleId,
+                            IsCensusInterview = interview.IsCensusInterview,
+                            IncomingDate = interview.IncomingDate,
+                            Events = interview.Events,
+                            PackageSize = interview.Events?.Length ?? 0,
+                            ProcessingDate = DateTime.UtcNow,
+                            ExceptionType = exceptionType,
+                            ExceptionMessage = exception.Message,
+                            ExceptionStackTrace = string.Join(Environment.NewLine,
+                                exception.UnwrapAllInnerExceptions().Select(ex => $"{ex.Message} {ex.StackTrace}")),
+                            ReprocessAttemptsCount = interview.ProcessAttemptsCount,
+                        }, null);
+                        brokenPackageUow.AcceptChanges();
+                    }
+
+                    this.logger.Debug(
+                        $"Interview events by {interview.InterviewId} moved to broken packages. Took {innerwatch.Elapsed:g}.");
+                    innerwatch.Restart();
                 }
 
-                this.logger.Debug($"Interview events by {interview.InterviewId} moved to broken packages. Took {innerwatch.Elapsed:g}.");
-                innerwatch.Restart();
+                innerwatch.Stop();
             }
-
-            innerwatch.Stop();
         }
 
         private void RecordProcessedPackageInfo(IPlainStorageAccessor<ReceivedPackageLogEntry> packageTrackr, AggregateRootEvent[] aggregateRootEvents)

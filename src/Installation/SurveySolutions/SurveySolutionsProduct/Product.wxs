@@ -14,11 +14,10 @@
            UpgradeCode="2EBD5061-5E46-4313-A73E-CDAF570512D9">
     <Package InstallerVersion="200" Compressed="yes" InstallScope="perMachine" Platform="x64"/>
 
-    <util:CloseApplication Id="CloseExportService" CloseMessage="yes" Target="WB.Services.Export.Host.exe" />
+    <util:CloseApplication Id="CloseExportService" CloseMessage="yes" Timeout="10" RebootPrompt="no" TerminateProcess="3" Target="WB.Services.Export.Host.exe" />
 
     <!--Will override all files-->
     <Property Id="REINSTALLMODE" Value="amus" />
-
 
     <!--old product upgrade code 0C543B8A-9023-4486-89C9-421D875F5AFA-->
 
@@ -134,15 +133,8 @@
 
     <!-- MODIFY CONFIGURATIONS -->
 
-    <PanelSW:FileRegex  Id="updateSettingsRegex" FilePath="[INSTALLFOLDER]Site\.bin\Export\appsettings.json"
-        Regex="(\{FROM_INSTALLER\})" 
-        Replacement="Server=[CONNSERVER];Port=[CONNPORT];User Id=[CONNUSERNAME];Password=[CONNPASSWORD];Database=SurveySolutions;" 
-        IgnoreCase="yes" Encoding="AutoDetect">
-        <![CDATA[Not Installed]]>
-    </PanelSW:FileRegex>
-
     <Property Id="ModifyExportSettings" Value="INSTALLFOLDER=[INSTALLFOLDER];Server=[CONNSERVER];Port=[CONNPORT];User Id=[CONNUSERNAME];Password=[CONNPASSWORD];Database=SurveySolutions;" ></Property>
-      
+     
 
     <!-- Use DISM to setup IIS (see also http://support.microsoft.com/kb/2736284) -->
     <!-- Build path to dism.exe (full path is important, just calling dism.exe without path will fail) -->

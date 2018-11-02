@@ -24,9 +24,9 @@ namespace WB.Services.Scheduler.Services.Implementation
             this.logger = logger;
         }
 
-        public void Start()
+        public void StartProgressReporter()
         {
-            Task.Run(async () =>
+            Task.Factory.StartNew(async () =>
             {
                 db.ChangeTracker.AutoDetectChangesEnabled = false;
                 db.Database.AutoTransactionsEnabled = false;
@@ -51,13 +51,7 @@ namespace WB.Services.Scheduler.Services.Implementation
                 }
 
                 queueCompletion.SetResult(true);
-            });
-        }
-
-        public void StartJob(long jobId)
-        {
-            if (!queue.IsAddingCompleted)
-                queue.Add(new StartJobEvent(jobId));
+            }, TaskCreationOptions.LongRunning);
         }
 
         public void CompleteJob(long jobId)
