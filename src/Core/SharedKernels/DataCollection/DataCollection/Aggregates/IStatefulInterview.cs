@@ -173,6 +173,8 @@ namespace WB.Core.SharedKernels.DataCollection.Aggregates
 
         IEnumerable<Identity> GetUnderlyingEntitiesForReview(Identity sectionId);
 
+        IEnumerable<Identity> GetUnderlyingEntitiesForReviewRecursive(Identity sectionId);
+
         IEnumerable<IInterviewTreeNode> GetAllInterviewNodes();
 
         IEnumerable<Identity> GetAllIdentitiesForEntityId(Guid id);
