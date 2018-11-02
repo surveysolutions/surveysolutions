@@ -471,12 +471,18 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             }
             switch (action)
             {
+                case InterviewHistoricalAction.QuestionEnabled:
+                case InterviewHistoricalAction.QuestionDisabled:
+                case InterviewHistoricalAction.GroupDisabled:
+                case InterviewHistoricalAction.GroupEnabled:
+                {
+                        // ignore
+                        return null;
+                }
                 case InterviewHistoricalAction.AnswerSet:
                 case InterviewHistoricalAction.CommentSet:
                 case InterviewHistoricalAction.QuestionDeclaredInvalid:
                 case InterviewHistoricalAction.QuestionDeclaredValid:
-                case InterviewHistoricalAction.QuestionEnabled:
-                case InterviewHistoricalAction.QuestionDisabled:
                 {
                     var newParameters = new Dictionary<string, string>();
                     if (parameters.ContainsKey("questionId"))
@@ -503,15 +509,6 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                             }
                         }
                     }
-                    return new InterviewHistoricalRecordView(0, action, userName, userRole, newParameters, timestamp, offset);
-                }
-                case InterviewHistoricalAction.GroupDisabled:
-                case InterviewHistoricalAction.GroupEnabled:
-                {
-                    var newParameters = new Dictionary<string, string>();
-                    var groupId = parameters["groupId"];
-                    newParameters["group"] = groupId;
-                    newParameters["roster"] = parameters["roster"];
                     return new InterviewHistoricalRecordView(0, action, userName, userRole, newParameters, timestamp, offset);
                 }
                 case InterviewHistoricalAction.InterviewerAssigned 
