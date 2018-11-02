@@ -32,6 +32,21 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Interview.Overview
             HasComment = treeQuestion.AnswerComments.Count > 0;
             this.AnswerTimeUtc = treeQuestion.AnswerTimeUtc;
             this.SupportsComments = true;
+
+            if (treeQuestion.IsAudio)
+                ControlType = "audio";
+            if (treeQuestion.IsArea)
+                ControlType = "area";
+            if (treeQuestion.IsGps)
+                ControlType = "map";
+            if (treeQuestion.IsMultimedia)
+            {
+                ControlType = "image";
+                if (!string.IsNullOrWhiteSpace(this.Answer))
+                {
+                    this.Answer = $@"?interviewId={interview.Id}&questionId={treeQuestion.Identity}&filename={Answer}";
+                }
+            }
         }
 
         public bool HasErrors { get; set; }
@@ -43,6 +58,8 @@ namespace WB.Core.SharedKernels.DataCollection.Views.Interview.Overview
         public bool HasComment { get; set; }
 
         public bool HasWarnings { get; set; }
+
+        public string ControlType { get; set; } = "text";
 
         public sealed override OverviewNodeState State { get; set; }
     }

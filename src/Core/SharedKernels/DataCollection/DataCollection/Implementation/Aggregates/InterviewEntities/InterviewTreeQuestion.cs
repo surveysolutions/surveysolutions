@@ -594,6 +594,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 return string.Join(", ", refListOptions.Select(o => o.Text));
             }
 
+            if (this.IsAudio)
+                return this.GetAsInterviewTreeAudioQuestion().GetAnswer()?.FileName;
+
             return string.Empty;
         }
 
