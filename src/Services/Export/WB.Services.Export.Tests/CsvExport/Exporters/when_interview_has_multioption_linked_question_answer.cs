@@ -38,7 +38,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             InterviewDataExportLevelView first = result.Levels.First();
             var exportedQuestion = first.Records.First().GetPlainAnswers().First();
             exportedQuestion.Length.Should().Be(2);
-            exportedQuestion.Should().BeEquivalentTo(new[] {"2", ExportFormatSettings.MissingStringQuestionValue});
+            exportedQuestion.Should().BeEquivalentTo(new[] {"2", ExportFormatSettings.MissingNumericQuestionValue});
         }
 
         static QuestionnaireExportStructure exportStructure;

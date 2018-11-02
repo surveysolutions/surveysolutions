@@ -22,8 +22,8 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.SingleOptionRosterLi
                 Stub.MvxMainThreadAsyncDispatcher(),
                 Stub<QuestionStateViewModel<SingleOptionLinkedQuestionAnswered>>.WithNotEmptyValues,
                 Substitute.For<QuestionInstructionViewModel>(),
-                Substitute.For<AnsweringViewModel>()
-                );
+                Substitute.For<AnsweringViewModel>(),
+                Create.ViewModel.ThrottlingViewModel());
         }
     }
 }

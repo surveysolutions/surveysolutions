@@ -9,7 +9,7 @@ namespace WB.Services.Export.Storage
     public interface IExternalFileStorage
     {
         bool IsEnabled();
-        string GetDirectLink(string path, TimeSpan expiration);
+        string GetDirectLink(string key, TimeSpan expiration, string asFilename = null);
         Task<byte[]> GetBinaryAsync(string key);
         Task<List<FileObject>> ListAsync(string prefix);
 

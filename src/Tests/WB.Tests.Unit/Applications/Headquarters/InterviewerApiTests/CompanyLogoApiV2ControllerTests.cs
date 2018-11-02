@@ -2,10 +2,12 @@
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using Moq;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Tests.Abc;
 using WB.UI.Headquarters.API.DataCollection.Interviewer.v2;
 using WB.UI.Headquarters.Models.CompanyLogo;
@@ -72,7 +74,8 @@ namespace WB.Tests.Unit.Applications.Headquarters.InterviewerApiTests
             string requestEtag = null, IPlainKeyValueStorage<InterviewerSettings> interviewerSettingsStorage = null)
         {
             var companyLogoApiV2Controller = new SettingsV2Controller(logoStorage ?? new InMemoryKeyValueStorage<CompanyLogo>(),
-                interviewerSettingsStorage ?? new InMemoryKeyValueStorage<InterviewerSettings>());
+                interviewerSettingsStorage ?? new InMemoryKeyValueStorage<InterviewerSettings>(),
+                Mock.Of<ISecureStorage>());
             var httpRequestMessage = new HttpRequestMessage();
             if (requestEtag != null)
             {

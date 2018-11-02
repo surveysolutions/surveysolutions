@@ -85,13 +85,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                 await this.Answering.SendRemoveAnswerCommandAsync(command);
 
                 this.QuestionState.Validity.ExecutedWithoutExceptions();
+
+                this.AnswerRemoved?.Invoke(this, EventArgs.Empty);
             }
             catch (InterviewException ex)
             {
                 this.QuestionState.Validity.ProcessException(ex);
             }
-
-            this.AnswerRemoved?.Invoke(this, EventArgs.Empty);
         }
 
         private async Task SendAnswerAsync(DateTime answerValue)
@@ -125,8 +125,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public string Answer
         {
-            get { return this.answer; }
-            set { this.answer = value; this.RaisePropertyChanged(); }
+            get => this.answer;
+            set => this.SetProperty(ref this.answer, value);
         }
 
         public void Dispose()

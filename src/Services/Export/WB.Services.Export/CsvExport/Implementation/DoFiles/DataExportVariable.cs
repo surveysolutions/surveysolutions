@@ -21,7 +21,7 @@ namespace WB.Services.Export.CsvExport.Implementation.DoFiles
             this.ValueType = valueType;
         }
 
-        public DataExportVariable(string variableName, string label):this(variableName,label,null, new VariableValueLabel[0], ExportValueType.Unknown)
+        public DataExportVariable(string variableName, string label):this(variableName,label,null, Array.Empty<VariableValueLabel>(), ExportValueType.Unknown)
         {
         }
 

@@ -19,13 +19,13 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
 
         public DropboxBinaryDataExportHandler(
             IFileSystemAccessor fileSystemAccessor,
-            IFilebasedExportedDataAccessor filebasedExportedDataAccessor,
+            IFileBasedExportedDataAccessor fileBasedExportedDataAccessor,
             IOptions<InterviewDataExportSettings> interviewDataExportSettings,
             IDataExportProcessesService dataExportProcessesService,
             IBinaryDataSource binaryDataSource,
             IDataExportFileAccessor dataExportFileAccessor,
             ILogger<DropboxBinaryDataExportHandler> logger)
-            : base(fileSystemAccessor, filebasedExportedDataAccessor, interviewDataExportSettings,
+            : base(fileSystemAccessor, fileBasedExportedDataAccessor, interviewDataExportSettings,
                 dataExportProcessesService, dataExportFileAccessor, binaryDataSource)
         {
             this.logger = logger;

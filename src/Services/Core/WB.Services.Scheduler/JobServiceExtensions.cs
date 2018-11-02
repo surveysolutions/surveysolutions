@@ -8,10 +8,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Console;
+using Prometheus.Advanced;
 using WB.Services.Infrastructure.Health;
 using WB.Services.Scheduler.Services;
 using WB.Services.Scheduler.Services.Implementation;
 using WB.Services.Scheduler.Services.Implementation.HostedServices;
+using WB.Services.Scheduler.Stats;
 using WB.Services.Scheduler.Storage;
 
 namespace WB.Services.Scheduler
@@ -57,6 +59,8 @@ namespace WB.Services.Scheduler
                     .UseNpgsql(configuration.GetConnectionString(connectionName)));
 
             services.Configure<JobSettings>(jobSettingsSection);
+
+            services.AddTransient<IOnDemandCollector, SchedulerStatsCollector>();
             
             services.RegisterJobHandler<StaleJobCleanupService>(StaleJobCleanupService.Name);
         }

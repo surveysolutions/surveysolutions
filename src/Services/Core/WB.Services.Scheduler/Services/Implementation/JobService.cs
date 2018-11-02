@@ -59,7 +59,7 @@ namespace WB.Services.Scheduler.Services.Implementation
 
         public async Task<JobItem> GetFreeJobAsync(CancellationToken token = default)
         {
-            using (var tr = db.Database.BeginTransaction())
+            using (var tr = await db.Database.BeginTransactionAsync())
             {
                 await db.AcquireLockAsync(lock_add_value);
 
@@ -95,7 +95,7 @@ namespace WB.Services.Scheduler.Services.Implementation
                
                 if (job != null)
                 {
-                    job.Start();
+                    job.Start(jobSettings.Value.WorkerId);
                     db.Jobs.Update(job);
                 }
 

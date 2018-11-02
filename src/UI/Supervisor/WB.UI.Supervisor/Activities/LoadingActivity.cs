@@ -13,8 +13,8 @@ namespace WB.UI.Supervisor.Activities
         Theme = "@style/GrayAppTheme",
         WindowSoftInputMode = SoftInput.StateHidden,
         NoHistory = true,
-        ConfigurationChanges =
-            Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize)]
+        ConfigurationChanges = Android.Content.PM.ConfigChanges.Orientation | Android.Content.PM.ConfigChanges.ScreenSize,
+        Exported = false)]
     public class LoadingActivity : BaseActivity<LoadingViewModel>
     {
         protected override int ViewResourceId => Resource.Layout.loading;

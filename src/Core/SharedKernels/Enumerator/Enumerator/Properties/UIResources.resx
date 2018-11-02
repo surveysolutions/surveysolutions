@@ -663,4 +663,7 @@ You can create or edit your questionnaires in Survey Solutions Designer</value>
   <data name="OfflineSync_Supervisor_Title" xml:space="preserve">
     <value>Synchronization of assignments and interviews</value>
   </data>
+  <data name="Validity_QuestionDoesntExist" xml:space="preserve">
+    <value>The current roster does not exist anymore. Please navigate to the next available section or roster using the navigation menu.</value>
+  </data>
 </root>

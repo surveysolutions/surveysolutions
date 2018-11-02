@@ -761,7 +761,8 @@ namespace WB.Tests.Abc.TestFactories
             return new SupervisorSynchronizeHandler(
                 interviewerViewRepository ?? Mock.Of<IPlainStorage<InterviewerDocument>>(),
                 settings ?? Mock.Of<ISupervisorSettings>(),
-                fileSystemAccessor: fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>());
+                fileSystemAccessor: fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
+                secureStorage: Mock.Of<ISecureStorage>());
         }
 
         public SupervisorInterviewsHandler SupervisorInterviewsHandler(ILiteEventBus eventBus = null,
@@ -880,36 +881,6 @@ namespace WB.Tests.Abc.TestFactories
             };
 
             return result;
-        }
-
-        public InterviewerUploadInterviews InterviewerUploadInterviews(
-            IInterviewerInterviewAccessor interviewFactory = null,
-            IPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage = null,
-            ILogger logger = null,
-            IPlainStorage<InterviewFileView> imagesStorage = null,
-            IAudioFileStorage audioFileStorage = null,
-            ISynchronizationService synchronizationService = null,
-            int sortOrder = 0,
-            IPlainStorage<InterviewView> interviewViewRepository = null)
-        {
-            var step = new InterviewerUploadInterviews(
-                interviewFactory ?? Mock.Of<IInterviewerInterviewAccessor>(),
-                interviewMultimediaViewStorage ?? new InMemoryPlainStorage<InterviewMultimediaView>(),
-                logger ?? Mock.Of<ILogger>(),
-                imagesStorage ?? new InMemoryPlainStorage<InterviewFileView>(),
-                audioFileStorage ?? Mock.Of<IAudioFileStorage>(),
-                synchronizationService ?? Mock.Of<ISynchronizationService>(),
-                sortOrder,
-                interviewViewRepository ?? Mock.Of<IPlainStorage<InterviewView>>()
-            );
-
-            step.Context = new EnumeratorSynchonizationContext
-            {
-                Progress = new Progress<SyncProgressInfo>(),
-                Statistics = new SynchronizationStatistics()
-            };
-
-            return step;
         }
 
         public InterviewsToExportViewFactory InterviewsToExportViewFactory(

@@ -43,6 +43,20 @@ namespace WB.Services.Infrastructure.FileSystem
             zipStream.Dispose();
         }
 
+        public void CreateEntry(string path, Stream content)
+        {
+            var entry = new ZipEntry(path);
+
+            zipStream.PutNextEntry(entry);
+
+            if (content.Length != 0)
+            {
+                content.CopyTo(zipStream);
+            }
+
+            zipStream.CloseEntry();
+        }
+
         public void CreateEntry(string path, byte[] content)
         {
             var entry = new ZipEntry(path);

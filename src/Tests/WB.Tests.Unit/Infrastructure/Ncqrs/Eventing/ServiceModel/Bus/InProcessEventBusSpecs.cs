@@ -1,17 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using Moq;
+using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
 using NUnit.Framework;
 using Rhino.Mocks;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
+using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus;
 using WB.Tests.Abc;
+using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 using MockRepository = Rhino.Mocks.MockRepository;
 
-namespace Ncqrs.Tests.Eventing.ServiceModel.Bus
+namespace WB.Tests.Unit.Infrastructure.Ncqrs.Eventing.ServiceModel.Bus
 {
     [TestFixture]
     internal class InProcessEventBusSpecs
@@ -60,6 +63,11 @@ namespace Ncqrs.Tests.Eventing.ServiceModel.Bus
 
             aDomainEventHandler.AssertWasCalled(h => h.Handle(null),
                 options => options.IgnoreArguments().Repeat.Times(6));
+        }
+
+        private static InProcessEventBus GetEventBus()
+        {
+            return new InProcessEventBus(new EventBusSettings(), Mock.Of<ILogger>());
         }
 
         [Test]
@@ -206,7 +214,7 @@ namespace Ncqrs.Tests.Eventing.ServiceModel.Bus
             var bus = new InProcessEventBus(
                 new EventBusSettings()
                 {
-                    IgnoredAggregateRoots = new HashSet<string>(new[] {eventSourceToIgnore.FormatGuid()})
+                    IgnoredAggregateRoots = new List<string>(new[] {eventSourceToIgnore.FormatGuid()})
                 },
                 Mock.Of<ILogger>());
             bus.RegisterHandler(catchAllEventHandler);

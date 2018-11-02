@@ -3,7 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Threading;
 using WB.Core.GenericSubdomains.Portable;
 
 namespace WB.Core.SharedKernels.Enumerator.Utils
@@ -15,10 +17,36 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
     /// </remarks>
     public class CompositeCollection<T> : IObservableCollection<T>
     {
-        private object lockObject = new object();
+        private readonly ReaderWriterLockSlim itemsLock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+        private Object syncRoot;
+
         private readonly List<IObservableCollection<T>> collections = new List<IObservableCollection<T>>();
 
         public bool IsReadOnly => true;
+
+        public object this[int index]
+        {
+            get
+            {
+                int processedItemsCount = 0;
+                for (int i = 0; i < this.collections.Count; i++)
+                {
+                    var currentCollection = this.collections[i];
+                    if (processedItemsCount + currentCollection.Count > index)
+                    {
+                        return currentCollection[index - processedItemsCount];
+                    }
+                    else
+                    {
+                        processedItemsCount += currentCollection.Count;
+                    }
+                }
+
+                throw new IndexOutOfRangeException();
+            }
+
+            set => throw new NotImplementedException();
+        }
 
         public void CopyTo(Array array, int index)
         {
@@ -27,36 +55,116 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
                     array.SetValue(item, index++);
         }
 
-        public int Count { get ; private set; }
+        public int Count { get; private set; }
         public bool IsSynchronized => false;
-        public object SyncRoot => this.lockObject;
+        object ICollection.SyncRoot
+        {
+            get
+            {
+                if (this.syncRoot == null)
+                {
+                    this.itemsLock.EnterReadLock();
+
+                    try
+                    {
+                        Interlocked.CompareExchange<Object>(ref this.syncRoot, new Object(), null);
+                    }
+                    finally
+                    {
+                        this.itemsLock.ExitReadLock();
+                    }
+                }
+
+                return this.syncRoot;
+            }
+        }
+
+        public int Add(object value)
+        {
+            this.AddCollection(new CovariantObservableCollection<T>(((T)value).ToEnumerable()));
+            return this.Count;
+        }
 
         public void Clear()
         {
-            var removedItems = this.ToList();
+            try
+            {
+                this.itemsLock.EnterWriteLock();
 
-            this.collections.OfType<INotifyCollectionChanged>().ForEach(x => x.CollectionChanged-= this.HandleChildCollectionChanged);
-            this.collections.Clear();
-            this.Count = 0;
+                var removedItems = this.ToList();
 
-            this.NotifyItemsRemoved(removedItems, offset: 0);
+                this.collections.OfType<INotifyCollectionChanged>().ForEach(x => x.CollectionChanged -= this.HandleChildCollectionChanged);
+                this.collections.Clear();
+                this.Count = 0;
+
+                this.NotifyItemsRemoved(removedItems, offset: 0);
+            }
+            finally
+            {
+                this.itemsLock.ExitWriteLock();
+            }
         }
+
+        public bool Contains(object value)
+        {
+            return this.Contains((T) value);
+        }
+
+        [ExcludeFromCodeCoverage]
+        public int IndexOf(object value)
+        {
+            throw new NotImplementedException();
+        }
+
+        [ExcludeFromCodeCoverage]
+        public void Insert(int index, object value)
+        {
+            throw new NotImplementedException();
+        }
+
+        [ExcludeFromCodeCoverage]
+        public void Remove(object value)
+        {
+            throw new NotImplementedException();
+        }
+
+        [ExcludeFromCodeCoverage]
+        public void RemoveAt(int index)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool IsFixedSize => false;
 
         public bool Contains(T item)
         {
-            foreach (var coll in this.collections)
-                if (coll.Contains(item))
-                    return true;
-            return false;
+            try
+            {
+                this.itemsLock.EnterReadLock();
+                foreach (var coll in this.collections)
+                    if (coll.Contains(item))
+                        return true;
+                return false;
+            }
+            finally
+            {
+                this.itemsLock.ExitReadLock();
+            }
         }
 
         public IEnumerator<T> GetEnumerator()
         {
-            lock (SyncRoot)
+            this.itemsLock.EnterReadLock();
+
+            try
             {
                 foreach (var coll in this.collections)
-                foreach (var item in coll ?? Enumerable.Empty<T>())
-                    yield return item;
+                    foreach (var item in coll ?? Enumerable.Empty<T>())
+                        yield return item;
+            }
+            finally
+            {
+                this.itemsLock.ExitReadLock();
             }
         }
 
@@ -67,10 +175,7 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
 
         public void Add(T item)
         {
-            lock (SyncRoot)
-            {
-                this.AddCollection(new CovariantObservableCollection<T>(item.ToEnumerable()));
-            }
+            this.AddCollection(new CovariantObservableCollection<T>(item.ToEnumerable()));
         }
 
         public event NotifyCollectionChangedEventHandler CollectionChanged;
@@ -79,18 +184,25 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
 
         public void AddCollection(IObservableCollection<T> collection)
         {
-            lock (SyncRoot)
+            this.itemsLock.EnterWriteLock();
+
+            try
             {
                 this.collections.Add(collection);
+
+            }
+            finally
+            {
+                this.itemsLock.ExitWriteLock();
             }
 
             collection.CollectionChanged += this.HandleChildCollectionChanged;
             var offset = this.Count;
 
-            var addedCollectionCount = collection.Count();
+            var addedCollectionCount = collection.Count;
             this.Count += addedCollectionCount;
 
-            this.NotifyItemsAdded(collection.ToList(), offset);
+            this.NotifyItemsAdded(collection, offset);
         }
 
         private void HandleChildCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -107,13 +219,18 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
                 return;
 
             var offset = 0;
-            lock (SyncRoot)
+            this.itemsLock.EnterReadLock();
+            try
             {
                 foreach (var coll in this.collections)
                     if (sender == coll)
                         break;
                     else
                         offset += coll.Count();
+            }
+            finally
+            {
+                this.itemsLock.ExitReadLock();
             }
 
             var newIndex = e.NewStartingIndex == -1 ? -1 : e.NewStartingIndex + offset;
@@ -163,7 +280,7 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
 
         public void NotifyItemChanged(T item)
         {
-            var localIndex = this.Select((collectionItem, index) => new {x = collectionItem, index}).FirstOrDefault(x => x.x.Equals(item))?.index ?? -1;
+            var localIndex = this.Select((collectionItem, index) => new { x = collectionItem, index }).FirstOrDefault(x => x.x.Equals(item))?.index ?? -1;
             this.CollectionChanged?.Invoke(this, new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Replace, item, item, localIndex));
         }
 

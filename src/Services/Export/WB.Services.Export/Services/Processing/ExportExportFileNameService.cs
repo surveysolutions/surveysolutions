@@ -1,5 +1,7 @@
 ﻿using System;
 using WB.Services.Export.Infrastructure;
+using WB.Services.Export.Interview;
+using WB.Services.Export.Models;
 using WB.Services.Export.Questionnaire;
 
 namespace WB.Services.Export.Services.Processing
@@ -13,29 +15,25 @@ namespace WB.Services.Export.Services.Processing
             this.fileSystemAccessor = fileSystemAccessor;
         }
 
-        public string GetFileNameForBatchUploadByQuestionnaire(string questionnaireFilename)
-        {
-            return $"template_{questionnaireFilename}.zip";
-        }
-
         public string GetFileNameForDdiByQuestionnaire(QuestionnaireId questionnaire, string pathToDdiMetadata)
         {
             return this.fileSystemAccessor.Combine(pathToDdiMetadata, $"{questionnaire}_ddi.zip");
         }
 
-        public string GetFileNameForTabByQuestionnaire(string questionnaireFilename, string pathToExportedData,
-            DataExportFormat format, string statusSuffix, DateTime? fromDate = null, DateTime? toDate = null)
+        public string GetFileNameForExportArchive(ExportSettings exportSettings, string withQuestionnaireName = null)
         {
-            var fromDatePrefix = fromDate == null ? "" : $"_{fromDate.Value:yyyyMMddTHHmm}Z";
-            var toDatePrefix = toDate == null ? "" : $"_{toDate.Value:yyyyMMddTHHmm}Z";
+            var statusSuffix = exportSettings.Status != null && exportSettings.ExportFormat != DataExportFormat.Binary 
+                ? exportSettings.Status.ToString() 
+                : "All";
 
-            var archiveName = $"{questionnaireFilename}_{format}_{statusSuffix}{fromDatePrefix}{toDatePrefix}.zip";
-            return this.fileSystemAccessor.Combine(pathToExportedData, archiveName);
-        }
+            var fromDatePrefix = exportSettings.FromDate == null || exportSettings.ExportFormat == DataExportFormat.Binary 
+                ? "" : $"_{exportSettings.FromDate.Value:yyyyMMddTHHmm}Z";
+            var toDatePrefix = exportSettings.ToDate == null || exportSettings.ExportFormat == DataExportFormat.Binary 
+                ? "" : $"_{exportSettings.ToDate.Value:yyyyMMddTHHmm}Z";
 
-        public string GetFileNameForAssignmentTemplate(string questionnaireFilename)
-        {
-            return $"{questionnaireFilename}.tab";
+            var archiveName = $"{withQuestionnaireName ?? exportSettings.QuestionnaireId.ToString()}_" +
+                              $"{exportSettings.ExportFormat}_{statusSuffix}{fromDatePrefix}{toDatePrefix}.zip";
+            return archiveName;
         }
     }
 }

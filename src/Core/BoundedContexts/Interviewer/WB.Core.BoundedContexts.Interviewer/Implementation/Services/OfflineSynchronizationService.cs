@@ -221,6 +221,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             return syncClient.SendAsync(new LogAssignmentAsHandledRequest { Id = id }, cancellationToken);
         }
 
+        public async Task<string> GetPublicKeyForEncryptionAsync(CancellationToken cancellationToken)
+        {
+            var response = await syncClient.SendAsync<GetPublicKeyForEncryptionRequest, GetPublicKeyForEncryptionResponse>(
+                new GetPublicKeyForEncryptionRequest(), cancellationToken);
+
+            return response.PublicKey;
+        }
+
         public async Task<List<AssignmentApiView>> GetAssignmentsAsync(CancellationToken cancellationToken)
         {
             var response = await

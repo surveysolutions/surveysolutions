@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
@@ -12,19 +13,19 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
     internal class DataExportStatusReader : IDataExportStatusReader
     {
         private readonly IExportServiceApi exportServiceApi;
-        private readonly IExportFileNameService ExportFileNameService;
+        private readonly IExportFileNameService exportFileNameService;
 
         public DataExportStatusReader(IExportServiceApi exportServiceApi,
             IExportFileNameService exportFileNameService)
         {
             this.exportServiceApi = exportServiceApi;
-            this.ExportFileNameService = exportFileNameService;
+            this.exportFileNameService = exportFileNameService;
         }
 
         public async Task<DataExportArchive> GetDataArchive(QuestionnaireIdentity questionnaireIdentity, DataExportFormat format,
             InterviewStatus? status = null, DateTime? from = null, DateTime? to = null)
         {
-            var archiveFileName = ExportFileNameService.GetQuestionnaireTitleWithVersion(questionnaireIdentity);
+            var archiveFileName = exportFileNameService.GetQuestionnaireTitleWithVersion(questionnaireIdentity);
             var result = await exportServiceApi.DownloadArchive(questionnaireIdentity.ToString(), archiveFileName, format, status, from, to);
 
             result.EnsureSuccessStatusCode();
@@ -50,9 +51,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
             DateTime? fromDate = null,
             DateTime? toDate = null)
         {
-            var archiveFileName = ExportFileNameService.GetQuestionnaireTitleWithVersion(questionnaireIdentity);
-            var result = await exportServiceApi.GetDataExportStatusForQuestionnaireAsync(questionnaireIdentity.ToString(),
-                archiveFileName, status, fromDate, toDate);
+            var result = await exportServiceApi.GetDataExportStatusForQuestionnaireAsync(
+                questionnaireIdentity.ToString(), status, fromDate, toDate);
             return result;
         }
     }

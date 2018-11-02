@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.TabletInformation;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.DataCollection.Services;
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.FileBasedTabletInformationServiceTests
 {
@@ -25,7 +27,21 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.FileBasedTab
             if (fileNamesInDirectory != null)
                 fileSystemAccessorMock.Setup(x => x.GetFilesInDirectory(It.IsAny<string>(), It.IsAny<string>())).Returns(() => fileNamesInDirectory);
 
-            return new FileBasedTabletInformationService(string.Empty, fileSystemAccessorMock.Object);
+            var archiveUtils = Mock.Of<IArchiveUtils>(x =>
+                x.GetArchivedFileNamesAndSize(It.IsAny<byte[]>()) == new Dictionary<string, long>());
+
+            return new FileBasedTabletInformationService(string.Empty, fileSystemAccessorMock.Object,
+                archiveUtils, Mock.Of<IEncryptionService>());
         }
+
+        protected static FileBasedTabletInformationService CreateFileBasedTabletInformationService(
+            IFileSystemAccessor fileSystemAccessor = null,
+            IArchiveUtils archiveUtils = null,
+            IEncryptionService encryptionService = null) 
+            => new FileBasedTabletInformationService(
+                "path to internal folder",
+                fileSystemAccessor ?? Mock.Of<IFileSystemAccessor>(),
+                archiveUtils ?? Mock.Of<IArchiveUtils>(),
+                encryptionService ?? Mock.Of<IEncryptionService>());
     }
 }

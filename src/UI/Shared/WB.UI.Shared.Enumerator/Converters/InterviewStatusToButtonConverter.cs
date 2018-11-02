@@ -23,6 +23,10 @@ namespace WB.UI.Shared.Enumerator.Converters
 
                 case DashboardInterviewStatus.Rejected:
                     return Resource.Drawable.group_with_invalid_answers;
+                case DashboardInterviewStatus.ApprovedBySupervisor:
+                    return Resource.Drawable.interview_approved_by_sv;
+                case DashboardInterviewStatus.RejectedByHeadquarters:
+                    return Resource.Drawable.interview_rejected_by_hq;
             }
 
             return Resource.Drawable.default_input_button;

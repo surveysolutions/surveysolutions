@@ -19,10 +19,13 @@ namespace WB.Core.SharedKernels.Enumerator.Views
 
         public DateTime DateTimeUtc { get; set; }
 
+        [Obsolete("Since 18.12")]
         public string JsonEvent { get; set; }
 
         public string EventType { get; set; }
 
         public int? ExistsOnHq { get; set; } // library does not support good way of handling default values and bools https://github.com/praeclarum/sqlite-net/issues/326
+
+        public string EncryptedJsonEvent { get; set; }
     }
 }

@@ -18,13 +18,13 @@ namespace WB.Services.Export.ExportProcessHandlers.Externals
         
         public OnedriveBinaryDataExportHandler(
             IFileSystemAccessor fileSystemAccessor,
-            IFilebasedExportedDataAccessor filebasedExportedDataAccessor,
+            IFileBasedExportedDataAccessor fileBasedExportedDataAccessor,
             IOptions<InterviewDataExportSettings> interviewDataExportSettings,
             IDataExportProcessesService dataExportProcessesService,
             IBinaryDataSource binaryDataSource,
             IDataExportFileAccessor dataExportFileAccessor,
             ILogger<OnedriveBinaryDataExportHandler> logger)
-            : base(fileSystemAccessor, filebasedExportedDataAccessor, interviewDataExportSettings,
+            : base(fileSystemAccessor, fileBasedExportedDataAccessor, interviewDataExportSettings,
                 dataExportProcessesService, dataExportFileAccessor, binaryDataSource)
         {
             this.logger = logger;

@@ -28,6 +28,7 @@ namespace WB.Services.Export.Questionnaire
             QuestionnaireId questionnaireId)
         {
             var questionnaire = await this.questionnaireStorage.GetQuestionnaireAsync(tenant, questionnaireId);
+            if (questionnaire == null) return null;
             return GetQuestionnaireExportStructure(tenant, questionnaire);
         }
 
@@ -396,6 +397,16 @@ namespace WB.Services.Export.Questionnaire
                 headerStructureForLevel.LevelLabels =
                     @group.FixedRosterTitles.Select(title => new LabelItem() { Caption = title.Value.ToString(CultureInfo.InvariantCulture), Title = title.Title })
                         .ToArray();
+            }
+            else if (@group.IsRoster && headerStructureForLevel.LevelLabels == null)
+            {
+                var trigger = questionnaire.FirstOrDefault<Question>(x => x.PublicKey == @group.RosterSizeQuestionId);
+                if (trigger.QuestionType == QuestionType.MultyOption)
+                {
+                    headerStructureForLevel.LevelLabels =
+                        trigger.Answers.Select(title => new LabelItem() { Caption = title.AnswerValue, Title = title.AnswerText})
+                            .ToArray();
+                }
             }
 
             foreach (var groupChild in @group.Children)

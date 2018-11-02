@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -144,23 +145,19 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
 
         private static Type[] GetHandledEventTypes(ILiteEventHandler handler)
         {
-            var type = handler.GetType();
-            if (!HandledEventTypesCache.ContainsKey(type))
+            return HandledEventTypesCache.GetOrAdd(handler.GetType(), type =>
             {
-                var handledEvents = handler
+                return handler
                     .GetType()
                     .GetTypeInfo()
                     .ImplementedInterfaces
                     .Where(t => IsEventHandlerInterface(t) || IsPublishedEventHandlerInterface(t))
                     .Select(GetEventType)
                     .ToArray();
-                HandledEventTypesCache[type] = handledEvents;
-            }
-
-            return HandledEventTypesCache[type];
+            });
         }
 
-        private static readonly Dictionary<Type, Type[]> HandledEventTypesCache = new Dictionary<Type, Type[]>();
+        private static readonly ConcurrentDictionary<Type, Type[]> HandledEventTypesCache = new ConcurrentDictionary<Type, Type[]>();
 
         private static Type GetEventType(Type type)
         {

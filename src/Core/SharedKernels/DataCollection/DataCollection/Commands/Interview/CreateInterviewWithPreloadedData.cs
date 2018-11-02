@@ -7,6 +7,16 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Core.SharedKernels.DataCollection.Commands.Interview
 {
+    public class CreateTemporaryInterviewCommand : InterviewCommand
+    {
+        public QuestionnaireIdentity QuestionnaireId { get; }
+
+        public CreateTemporaryInterviewCommand(Guid interviewId, Guid userId, QuestionnaireIdentity questionnaireId) : base(interviewId, userId)
+        {
+            QuestionnaireId = questionnaireId;
+        }
+    }
+
     public class CreateInterview : InterviewCommand
     {
         public CreateInterview(Guid interviewId,

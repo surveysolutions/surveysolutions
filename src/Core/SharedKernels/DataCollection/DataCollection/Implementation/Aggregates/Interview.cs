@@ -1118,7 +1118,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var questionIdentity = new Identity(questionId, rosterVector);
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
-
+            
             var treeQuestion = this.Tree.GetQuestion(questionIdentity);
 
             if (treeQuestion.IsLinkedToListQuestion)
@@ -1411,7 +1411,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         public bool IsAnswerProtected(Identity questionIdentity, decimal value)
         {
             var question = this.Tree.GetQuestion(questionIdentity);
-            return question.IsAnswerProtected(value);
+            return question?.IsAnswerProtected(value) ?? false;
         }
 
         public void RemoveAnswer(Guid questionId, RosterVector rosterVector, Guid userId, DateTimeOffset originDate)
@@ -1476,6 +1476,26 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
         #endregion
 
         #region Other handlers
+
+        public void CreateTemporaryInterview(CreateTemporaryInterviewCommand command)
+        {
+            this.QuestionnaireIdentity = command.QuestionnaireId;
+            
+            //apply events
+            this.ApplyEvent(new InterviewCreated(
+                command.UserId,
+                this.QuestionnaireIdentity.QuestionnaireId,
+                this.QuestionnaireIdentity.Version,
+                null,
+                command.OriginDate,
+                true));
+
+            this.ApplyEvent(new SupervisorAssigned(command.UserId, command.UserId, command.OriginDate));
+            this.ApplyEvent(new InterviewKeyAssigned(new InterviewKey(0), command.OriginDate));
+
+            this.ApplyEvent(new InterviewStatusChanged(InterviewStatus.InterviewerAssigned, comment: null,
+                previousStatus: InterviewStatus.SupervisorAssigned, originDate: command.OriginDate));
+        }
 
         public void CreateInterview(CreateInterview command)
         {

@@ -2249,5 +2249,12 @@ namespace WB.Tests.Abc.TestFactories
         {
             return new DashboardSubTitleViewModel();
         }
+
+        public InterviewTreeQuestion InterviewTreeSingleOptionQuestion(Identity singleOptionQuestionIdentity, int answer)
+        {
+            var result = Create.Entity.InterviewTreeQuestion(singleOptionQuestionIdentity, answer: answer,
+                questionType: QuestionType.SingleOption);
+            return result;
+        }
     }
 }

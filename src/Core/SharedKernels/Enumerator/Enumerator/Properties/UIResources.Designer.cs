@@ -1647,6 +1647,15 @@ namespace WB.Core.SharedKernels.Enumerator.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The current roster does not exist anymore. Please navigate to the next available section or roster using the navigation menu..
+        /// </summary>
+        public static string Validity_QuestionDoesntExist {
+            get {
+                return ResourceManager.GetString("Validity_QuestionDoesntExist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to &lt;empty&gt;.
         /// </summary>
         public static string VariableEmptyValue {
