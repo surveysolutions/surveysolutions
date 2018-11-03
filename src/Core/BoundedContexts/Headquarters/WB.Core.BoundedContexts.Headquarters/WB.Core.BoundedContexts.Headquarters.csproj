@@ -35,6 +35,7 @@
     <PackageReference Include="Dropbox.Api" Version="4.9.0" />
     <PackageReference Include="EntityFramework" Version="6.2.0" />
     <PackageReference Include="EPPlus" Version="4.5.2.1" />
+    <PackageReference Include="GeoJSON.Net" Version="1.1.70" />
     <PackageReference Include="Google.Apis.Drive.v3" Version="1.35.1.1330" />
     <PackageReference Include="Iesi.Collections" Version="4.0.4" />
     <PackageReference Include="Iteedee.ApkReader" Version="1.0.1" />

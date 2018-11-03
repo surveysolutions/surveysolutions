@@ -1,7 +1,11 @@
-﻿namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views
+﻿using GeoJSON.Net.Feature;
+
+namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views
 {
     public class MapReportView
     {
-        public MapPointView[] Points { get; set; }
+        public double[] InitialBounds { get; set; }
+        public FeatureCollection FeatureCollection { get; set; }
+        public int TotalPoint { get; set; }
     }
 }

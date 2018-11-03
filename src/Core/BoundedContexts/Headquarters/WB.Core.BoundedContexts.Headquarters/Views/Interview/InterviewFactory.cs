@@ -161,12 +161,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         {
             var result = sessionProvider.GetSession().Connection.Query<InterviewGpsAnswer>(
                 $@"with interviews as(
-                    select teamleadid, interviewid, latitude, longitude
+                    select teamleadid, interviewid, rostervector, latitude, longitude
                     from
                         (
                             select
                                 s.teamleadid,
                                 s.interviewid,
+                                i.rostervector,
                                 (i.asgps ->> 'Latitude')::float8 as latitude,
                                 (i.asgps ->> 'Longitude')::float8 as longitude
                             from
@@ -186,8 +187,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                 ) 
                 select  interviewid, latitude, longitude
                 from interviews
-                where (@supervisorId is null or teamleadid = @supervisorId)
-                limit @MaxCount;",
+                where (@supervisorId is null or teamleadid = @supervisorId)",
                 new
                 {
                     supervisorId,
