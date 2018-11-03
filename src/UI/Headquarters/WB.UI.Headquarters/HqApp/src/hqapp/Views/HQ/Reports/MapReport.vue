@@ -7,11 +7,6 @@
             <FilterBlock :title="$t('Reports.Variables')">
                 <Typeahead :placeholder="$t('Common.AllGpsQuestions')" :values="gpsQuestions" :value="gpsQuestionId" noSearch @selected="selectGpsQuestion" />
             </FilterBlock>
-            <FilterBlock v-if="markerlimitReached">
-                <div class="alert-warning">
-                    <span>{{$t('MapReport.NotAllMarkers')}}</span>
-                </div>
-            </FilterBlock>
             <div class="preset-filters-container">
                 <div class="center-block" style="margin-left: 0">
                     <button class="btn btn-default btn-lg" id="reloadMarkersInBounds" v-if="readyToUpdate" @click="reloadMarkersInBounds">{{$t("MapReport.ReloadMarkers")}}</button>
@@ -40,275 +35,271 @@
     </HqLayout>
 </template>
 <script>
-import MarkerClusterer from "@google/markerclustererplus";
 import infoBubble from "js-info-bubble";
 import * as toastr from "toastr";
 import Vue from "vue";
 
 export default {
-  data() {
-    return {
-      questionnaireId: null,
-      gpsQuestionId: null,
-      gpsQuestions: null,
-      interviewDetailsTooltip: new InfoBubble(),
-      selectedTooltip: {},
-      readyToUpdate: false,
-      map: null,
-      markers: [],
-      markersLimit: 50000,
-      markerlimitReached: false,
-      mapClusterer: null,
-      mapClustererOptions: {
-        gridSize: 50,
-        maxZoom: 15,
-        styles: [
-          {
-            height: 53,
-            url: "../Content/img/google-maps-markers/m1.png",
-            width: 53
-          },
-          {
-            height: 56,
-            url: "../Content/img/google-maps-markers/m2.png",
-            width: 56
-          },
-          {
-            height: 66,
-            url: "../Content/img/google-maps-markers/m3.png",
-            width: 66
-          },
-          {
-            height: 78,
-            url: "../Content/img/google-maps-markers/m4.png",
-            width: 78
-          },
-          {
-            height: 90,
-            url: "../Content/img/google-maps-markers/m5.png",
-            width: 90
-          }
-        ]
-      }
-    };
-  },
-  computed: {
-    model() {
-      return this.$config.model;
-    },
-    questionnaires() {
-      return this.model.questionnaires;
-    }
-  },
-  mounted() {
-    this.setMapCanvasStyle();
-    this.initializeMap();
-
-    if (this.questionnaires.length > 0)
-      this.selectQuestionnaire(this.questionnaires[0]);
-  },
-  methods: {
-    setMapCanvasStyle() {
-      $("body").addClass("map-report");
-      var windowHeight = $(window).height();
-      var navigationHeight = $(".navbar.navbar-fixed-top").height();
-      $("#map-canvas").css(
-        "min-height",
-        windowHeight - navigationHeight + "px"
-      );
-    },
-    selectQuestionnaire(value) {
-      this.questionnaireId = value;
-
-      this.selectGpsQuestion(null);
-      this.gpsQuestions = [];
-
-      if (_.isNull(value)) return;
-
-      const self = this;
-      this.$http
-        .get(this.model.api.gpsQuestionsByQuestionnaireUrl + "/" + this.questionnaireId.key)
-        .then(response => {
-          self.gpsQuestions = response.data;
-          if (self.gpsQuestions.length > 0) {
-            if (self.gpsQuestions.length === 1) {
-              self.selectGpsQuestion(self.gpsQuestions[0]);
+    data() {
+        return {
+            questionnaireId: null,
+            gpsQuestionId: null,
+            gpsQuestions: null,
+            interviewDetailsTooltip: new InfoBubble(),
+            selectedTooltip: {},
+            readyToUpdate: false,
+            map: null,
+            totalAnswers: 0,
+            mapClustererOptions: {
+                styles: [
+                    {
+                        url: "../Content/img/google-maps-markers/m1.png", dark: true
+                    },
+                    {
+                        url: "../Content/img/google-maps-markers/m2.png", dark: false
+                    },
+                    {
+                        url: "../Content/img/google-maps-markers/m3.png", dark: true
+                    },
+                    {
+                        url: "../Content/img/google-maps-markers/m4.png", dark: true
+                    },
+                    {
+                        url: "../Content/img/google-maps-markers/m5.png", dark: true
+                    }
+                ]
             }
-          } else {
-            toastr.info(this.$t("MapReport.NoGpsQuestionsByQuestionnaire"));
-          }
-        });
+        };
     },
-    selectGpsQuestion(value) {
-      this.gpsQuestionId = value;
-
-      this.clearAllMarkers();
-
-      if (_.isNull(value)) {
-        this.readyToUpdate = false;
-        return;
-      }
-
-      this.showPointsOnMap(180, 90, -180, -90, true);
-      this.readyToUpdate = true;
+    computed: {
+        model() {
+            return this.$config.model;
+        },
+        questionnaires() {
+            return this.model.questionnaires;
+        }
     },
+    mounted() {
+        this.setMapCanvasStyle();
+        this.initializeMap();
 
-    clearAllMarkers() {
-      for (var i = 0; i < this.markers.length; i++) {
-        this.markers[i].setMap(null);
-      }
-
-      this.markers = [];
-      this.mapClusterer.clearMarkers();
-      this.interviewDetailsTooltip.close();
-      this.markerlimitReached = false;
+        if (this.questionnaires.length > 0)
+            this.selectQuestionnaire(this.questionnaires[0]);
     },
-
-    initializeMap() {
-      var mapOptions = {
-        zoom: 9,
-        mapTypeControl: true,
-        mapTypeControlOptions: {
-          style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
-          position: google.maps.ControlPosition.TOP_CENTER
-        },
-        panControl: true,
-        panControlOptions: {
-          position: google.maps.ControlPosition.TOP_RIGHT
-        },
-        zoomControl: true,
-        zoomControlOptions: {
-          style: google.maps.ZoomControlStyle.LARGE,
-          position: google.maps.ControlPosition.TOP_RIGHT
-        },
-        minZoom: 3,
-        scaleControl: true,
-        streetViewControl: false
-      };
-
-      this.map = new google.maps.Map(
-        document.getElementById("map-canvas"),
-        mapOptions
-      );
-      this.mapClusterer = new MarkerClusterer(
-        this.map,
-        [],
-        this.mapClustererOptions
-      );
-
-      var washingtonCoordinates = new google.maps.LatLng(38.895111, -77.036667);
-
-      var self = this;
-
-      if (!("geolocation" in navigator)) {
-        this.map.setCenter(washingtonCoordinates);
-      } else {
-        navigator.geolocation.getCurrentPosition(
-          position => {
-            self.map.setCenter(
-              new google.maps.LatLng(
-                position.coords.latitude,
-                position.coords.longitude
-              )
+    methods: {
+        setMapCanvasStyle() {
+            $("body").addClass("map-report");
+            var windowHeight = $(window).height();
+            var navigationHeight = $(".navbar.navbar-fixed-top").height();
+            $("#map-canvas").css(
+                "min-height",
+                windowHeight - navigationHeight + "px"
             );
-          },
-          () => {
-            self.map.setCenter(washingtonCoordinates);
-          }
-        );
-      }
-    },
-    reloadMarkersInBounds() {
-      this.clearAllMarkers();
-      var bounds = this.map.getBounds();
+        },
 
-      this.showPointsOnMap(
-        bounds.getNorthEast().lng(),
-        bounds.getNorthEast().lat(),
-        bounds.getSouthWest().lng(),
-        bounds.getSouthWest().lat(),
-        false
-      );
-    },
-    showPointsOnMap(
-      northEastCornerLongtitude,
-      northEastCornerLatitude,
-      southWestCornerLongtitude,
-      southWestCornerLatitude,
-      extendBounds
-    ) {
-      var request = {
-        Variable: this.gpsQuestionId.key,
-        QuestionnaireId: this.questionnaireId.key,
+        selectQuestionnaire(value) {
+            this.questionnaireId = value;
 
-        NorthEastCornerLongtitude: northEastCornerLongtitude,
-        NorthEastCornerLatitude: northEastCornerLatitude,
-        SouthWestCornerLongtitude: southWestCornerLongtitude,
-        SouthWestCornerLatitude: southWestCornerLatitude
-      };
+            this.selectGpsQuestion(null);
+            this.gpsQuestions = [];
 
-      const self = this;
+            if (_.isNull(value)) return;
 
-      this.$http.post(self.model.api.mapReportUrl, request).then(response => {
-        var mapPoints = response.data.Points;
-
-        if (mapPoints.length == 0) {
-          toastr.error(window.input.settings.messages.notifyNoMarkersText);
-          return;
-        }
-
-        if (mapPoints.length >= self.markersLimit) {
-          toastr.error(
-            window.input.settings.messages.notifyNoMarkersLimitReachedText
-          );
-          self.markerlimitReached = true;
-        }
-
-        var bounds = new google.maps.LatLngBounds();
-
-        for (var i = 0; i < mapPoints.length; i++) {
-          var mapPoint = mapPoints[i];
-          var mapPointAnswers = mapPoint.Answers.split("|");
-
-          for (var j = 0; j < mapPointAnswers.length; j++) {
-            var points = mapPointAnswers[j].split(";");
-            var marker = new google.maps.Marker({
-              position: new google.maps.LatLng(points[0] * 1, points[1] * 1)
-            });
-            marker.interviewId = mapPoint.Id;
-
-            google.maps.event.addListener(marker, "click", function() {
-              var marker = this;
-              self.$http
-                .post(self.model.api.interiewSummaryUrl, {
-                  InterviewId: marker.interviewId
-                })
+            const self = this;
+            this.$http
+                .get(
+                    this.model.api.gpsQuestionsByQuestionnaireUrl +
+                        "/" +
+                        this.questionnaireId.key
+                )
                 .then(response => {
-                  const data = response.data;
-
-                  if (data == undefined || data == null) return;
-
-                  data["InterviewId"] = marker.interviewId;
-
-                  self.selectedTooltip = data;
-
-                  Vue.nextTick(function() {
-                    self.interviewDetailsTooltip.setContent(
-                      $(self.$refs.tooltip).html()
-                    );
-                    self.interviewDetailsTooltip.open(self.map, marker);
-                  });
+                    self.gpsQuestions = response.data;
+                    if (self.gpsQuestions.length > 0) {
+                        if (self.gpsQuestions.length === 1) {
+                            self.selectGpsQuestion(self.gpsQuestions[0]);
+                        }
+                    } else {
+                        toastr.info(
+                            this.$t("MapReport.NoGpsQuestionsByQuestionnaire")
+                        );
+                    }
                 });
-            });
-            self.markers.push(marker);
-            if (extendBounds) bounds.extend(marker.getPosition());
-          }
-        }
+        },
 
-        self.mapClusterer.addMarkers(self.markers);
-        if (extendBounds) self.map.fitBounds(bounds);
-      });
+        selectGpsQuestion(value) {
+            this.gpsQuestionId = value;
+
+            if (_.isNull(value)) {
+                this.readyToUpdate = false;
+                return;
+            }
+
+            this.showPointsOnMap(180, 180, -180, -180, true);
+            this.readyToUpdate = true;
+        },
+
+        getMapOptions() {
+            return {
+                zoom: 9,
+                mapTypeControl: true,
+                mapTypeControlOptions: {
+                    style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+                    position: google.maps.ControlPosition.TOP_CENTER
+                },
+                panControl: true,
+                panControlOptions: {
+                    position: google.maps.ControlPosition.TOP_RIGHT
+                },
+                zoomControl: true,
+                zoomControlOptions: {
+                    style: google.maps.ZoomControlStyle.LARGE,
+                    position: google.maps.ControlPosition.TOP_RIGHT
+                },
+                minZoom: 3,
+                scaleControl: true,
+                streetViewControl: false
+            };
+        },
+
+        initializeMap() {
+            const self = this;
+
+            this.map = new google.maps.Map(
+                document.getElementById("map-canvas"),
+                this.getMapOptions()
+            );
+
+            this.map.addListener("zoom_changed", () => {
+                if(this.gpsQuestionId != null)
+                  delayedReload();
+            });
+
+            const delayedReload = _.debounce(
+                () => this.reloadMarkersInBounds(),
+                100
+            );
+
+            this.map.addListener("bounds_changed", () => {
+                if(this.gpsQuestionId != null)
+                delayedReload();
+            });
+
+            this.map.data.setStyle(function(feature) {
+                const styles = self.mapClustererOptions.styles;
+                const count = feature.getProperty("count");
+
+                if (count > 0) {
+                    const max = self.totalAnswers;
+                    const percent = (count / max) * styles.length;
+                    const index = Math.min(styles.length - 1, Math.round(percent))
+                    const style = styles[index]
+                    
+                    const ratio = 1
+                    const extend = 20
+                    const radius = 60 + index * extend * ratio;
+                    style.scaledSize = new google.maps.Size(radius, radius);
+                    style.anchor = new google.maps.Point(radius / 2 , radius / 2)
+                    return ({
+                        label: {
+                            fontSize: "12px",
+                            text: count,
+                            color: style.dark ? '#fff' : '#000'
+                        },
+                        icon: style
+                    });
+                }
+                return {}
+            });
+
+            var washingtonCoordinates = new google.maps.LatLng(
+                38.895111,
+                -77.036667
+            );
+
+            if (!("geolocation" in navigator)) {
+                this.map.setCenter(washingtonCoordinates);
+            } else {
+                navigator.geolocation.getCurrentPosition(
+                    position => {
+                        self.map.setCenter(
+                            new google.maps.LatLng(
+                                position.coords.latitude,
+                                position.coords.longitude
+                            )
+                        );
+                    },
+                    () => {
+                        self.map.setCenter(washingtonCoordinates);
+                    }
+                );
+            }
+        },
+        reloadMarkersInBounds() {
+            var bounds = this.map.getBounds();
+
+            if (bounds == null) {
+                this.showPointsOnMap(180, 180, -180, -180, true);
+            } else {
+                this.showPointsOnMap(
+                    bounds.getNorthEast().lng(),
+                    bounds.getNorthEast().lat(),
+                    bounds.getSouthWest().lng(),
+                    bounds.getSouthWest().lat(),
+                    false
+                );
+            }
+        },
+
+        showPointsOnMap(
+            northEastCornerLongtitude,
+            northEastCornerLatitude,
+            southWestCornerLongtitude,
+            southWestCornerLatitude,
+            extendBounds
+        ) {
+            var request = {
+                Variable: this.gpsQuestionId.key,
+                QuestionnaireId: this.questionnaireId.key,
+                Zoom: this.map.getZoom(),
+                NorthEastCornerLongtitude: northEastCornerLongtitude,
+                NorthEastCornerLatitude: northEastCornerLatitude,
+                SouthWestCornerLongtitude: southWestCornerLongtitude,
+                SouthWestCornerLatitude: southWestCornerLatitude
+            };
+
+            const self = this;
+
+            this.$http
+                .post(self.model.api.mapReportUrl, request)
+                .then(response => {
+                    const toRemove = [];
+                    this.totalAnswers = response.data.TotalPoint;
+
+                    this.map.data.forEach(feature => {
+                        toRemove.push(feature);
+                    });
+
+                    this.map.data.addGeoJson(response.data.FeatureCollection);
+                    if (extendBounds) {
+                        const bounds = response.data.InitialBounds;
+
+                        const sw = new google.maps.LatLng(bounds[1], bounds[0]);
+                        const ne = new google.maps.LatLng(bounds[3], bounds[2]);
+                        const latlngBounds = new google.maps.LatLngBounds(
+                            sw,
+                            ne
+                        );
+
+                        self.map.fitBounds(latlngBounds);
+                    }
+
+                    _.delay(() => {
+                        _.forEach(toRemove, remove => {
+                            this.map.data.remove(remove);
+                        });
+                    }, 50);
+                });
+        }
     }
-  }
 };
 </script>
