@@ -15,5 +15,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels
 
         public double SouthWestCornerLongtitude { get; set; }
         public double SouthWestCornerLatitude { get; set; }
+        public int Zoom { get; set; }
     }
 }
