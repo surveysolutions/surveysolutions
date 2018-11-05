@@ -9,7 +9,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public string ItemId { get; set; }
         public string Title { get; set; }
         public string EnablementCondition { get; set; }
-        public bool? HideIfDisabled { get; set; }
+        public bool HideIfDisabled { get; set; }
         public string VariableName { get; set; }
 
         public RosterType Type { get; set; }

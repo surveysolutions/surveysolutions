@@ -20,7 +20,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public string AttachmentName { get; set; }
 
         public string EnablementCondition { get; set; }
-        public bool? HideIfDisabled { get; set; }
+        public bool HideIfDisabled { get; set; }
         public List<ValidationCondition> ValidationConditions { get; private set; }
 
         public Breadcrumb[] Breadcrumbs { get; set; }
