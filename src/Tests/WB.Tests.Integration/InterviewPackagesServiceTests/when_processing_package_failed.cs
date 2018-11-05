@@ -1,17 +1,23 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using FluentAssertions;
 using Moq;
 using NHibernate;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters;
+using WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization;
 using WB.Core.BoundedContexts.Headquarters.Mappings;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.EventBus;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Events.Interview;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
@@ -55,6 +61,26 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
             serviceLocatorNestedMock.Setup(x => x.GetInstance<IJsonAllTypesSerializer>())
                 .Returns(newtonJsonSerializer);
 
+            serviceLocatorNestedMock.Setup(x => x.GetInstance<IInterviewUniqueKeyGenerator>())
+                .Returns(Mock.Of<IInterviewUniqueKeyGenerator>);
+
+            var receivedPackageLogEntry = new Mock<IPlainStorageAccessor<ReceivedPackageLogEntry>>();
+            receivedPackageLogEntry.Setup(x => x
+                .Query(It.IsAny<Func<IQueryable<ReceivedPackageLogEntry>, List<ReceivedPackageLogEntry>>>()))
+                .Returns(new List<ReceivedPackageLogEntry>());
+
+            serviceLocatorNestedMock.Setup(x => x.GetInstance<IPlainStorageAccessor<ReceivedPackageLogEntry>>())
+                .Returns(receivedPackageLogEntry.Object);
+
+            Guid interviewerId = Id.g10;
+            Guid supervisorId = Id.g9;
+
+            var users = new Mock<IUserRepository>();
+            users.Setup(x => x.FindByIdAsync(It.IsAny<Guid>())).Returns(Task.FromResult(new HqUser() { Profile = new HqUserProfile() { SupervisorId = supervisorId } }));
+
+            serviceLocatorNestedMock.Setup(x => x.GetInstance<IUserRepository>()).Returns(users.Object);
+
+
             var executor = new Mock<IInScopeExecutor>();
             executor.Setup(x => x.ExecuteActionInScope(It.IsAny<Action<IServiceLocator>>())).Callback(
                 (Action<IServiceLocator> action) => { action.Invoke(serviceLocatorNestedMock.Object); });
@@ -79,6 +105,7 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
                 uniqueKeyGenerator: Mock.Of<IInterviewUniqueKeyGenerator>(),
                 interviews: new TestInMemoryWriter<InterviewSummary>());
 
+
             expectedCommand = Create.Command.SynchronizeInterviewEventsCommand(
                 interviewId: Guid.Parse("11111111111111111111111111111111"),
                 questionnaireId: Guid.Parse("22222222222222222222222222222222"),
@@ -90,8 +117,8 @@ namespace WB.Tests.Integration.InterviewPackagesServiceTests
                 new IEvent[]
                 {
                     Create.Event.InterviewOnClientCreated(Guid.NewGuid(), 111),
-                    new InterviewerAssigned(Guid.NewGuid(), Guid.NewGuid(), DateTimeOffset.Now),
-                    new SupervisorAssigned(Guid.NewGuid(), Guid.NewGuid(), DateTimeOffset.Now),
+                    new InterviewerAssigned(Guid.NewGuid(), interviewerId, DateTimeOffset.Now),
+                    new SupervisorAssigned(Guid.NewGuid(), supervisorId, DateTimeOffset.Now),
                     new DateTimeQuestionAnswered(Guid.NewGuid(), Guid.NewGuid(), new decimal[] {2, 5, 8},
                         DateTime.UtcNow, DateTime.Today),
                 });
