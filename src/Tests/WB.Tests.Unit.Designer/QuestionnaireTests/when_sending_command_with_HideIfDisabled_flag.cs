@@ -42,7 +42,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests
                 new UpdateDateTimeQuestion(questionnaireId: Guid.Parse("22222222222222222222222222222222"), questionId: questionDateTimeId, 
                 isPreFilled: false, scope: QuestionScope.Interviewer, responsibleId: responsibleId, validationConditions: new List<ValidationCondition>(), 
                 commonQuestionParameters: new CommonQuestionParameters{Title = "title", VariableName = "variableName1",
-                VariableLabel = "variableLabel", EnablementCondition = null, HideIfDisabled = true, Instructions = null}, isTimestamp: false));
+                VariableLabel = "variableLabel", EnablementCondition = null, HideIfDisabled = true, Instructions = null}, isTimestamp: false, defaultDate: null));
 
             questionnaire.UpdateGpsCoordinatesQuestion(
                 new UpdateGpsCoordinatesQuestion(questionnaire.Id, questionGpsCoordinatesId, responsibleId,
