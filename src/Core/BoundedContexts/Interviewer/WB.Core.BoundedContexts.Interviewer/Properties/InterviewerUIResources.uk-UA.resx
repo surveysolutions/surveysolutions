@@ -455,12 +455,6 @@
   <data name="Diagnostics_BackupScope_Title" xml:space="preserve">
     <value>Обсяг:</value>
   </data>
-  <data name="Diagnostics_Backup_Description" xml:space="preserve">
-    <value>Всі зібрані дані будуть збережені як резервна копія на цьому пристрої.</value>
-  </data>
-  <data name="Diagnostics_Backup_Title" xml:space="preserve">
-    <value>Створити резервну копію зібраної інформації</value>
-  </data>
   <data name="Diagnostics_BandwidthTestConnectionAbsent_Title" xml:space="preserve">
     <value>&lt;font color="red"&gt;З'єднання з інтернетом відсутнє&lt;/font&gt;</value>
   </data>

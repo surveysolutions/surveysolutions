@@ -4,6 +4,7 @@
 		<provider android:name="android.support.v4.content.FileProvider" android:authorities="org.worldbank.solutions.Vtester.fileprovider" android:exported="false" android:grantUriPermissions="true">
 			<meta-data android:name="android.support.FILE_PROVIDER_PATHS" android:resource="@xml/file_paths"></meta-data>
 		</provider>
+		<meta-data android:name="net.hockeyapp.android.appIdentifier" android:value="e77a488dd76b43009a378716f5b2faa7" />
 	</application>
 	<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 	<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />

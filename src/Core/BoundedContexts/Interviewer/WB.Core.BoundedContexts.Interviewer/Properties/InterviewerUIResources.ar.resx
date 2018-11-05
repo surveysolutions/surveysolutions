@@ -253,12 +253,6 @@
   <data name="DashboardItem_Title" xml:space="preserve">
     <value>{0} (v{1})</value>
   </data>
-  <data name="Diagnostics_Backup_Description" xml:space="preserve">
-    <value>سيتم حفظ جميع البيانات التي تم جمعها إلى ملف النسخ الاحتياطي على هذا الجهاز.</value>
-  </data>
-  <data name="Diagnostics_Backup_Title" xml:space="preserve">
-    <value>النسخ الاحتياطي لجميع المعلومات</value>
-  </data>
   <data name="Diagnostics_BackupDate_Title" xml:space="preserve">
     <value>عند الحفظ</value>
   </data>

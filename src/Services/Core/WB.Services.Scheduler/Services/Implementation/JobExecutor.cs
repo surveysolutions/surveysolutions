@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using WB.Services.Scheduler.Model;
 using WB.Services.Scheduler.Storage;
@@ -45,18 +46,25 @@ namespace WB.Services.Scheduler.Services.Implementation
             {
                 if (SchedulerGlobalConfiguration.JubRunnerHandlers.TryGetValue(job.Type, out var runner))
                 {
-                    await db.TryAcquireLockAsync(job.Id);
-                    var exportJob = serviceProvider.GetService(runner) as IJob;
-
-                    if (exportJob == null)
+                    using (var tr = await db.Database.BeginTransactionAsync(token))
                     {
-                        progressReporter.FailJob(job.Id,
-                            new NotImplementedException("Cannot handle job of type: " + job.Type));
-                        return;
-                    }
+                        await db.AcquireXactLockAsync(job.Id);
 
-                    await exportJob.ExecuteAsync(job.Args, new JobExecutingContext(job), linkedCancellation.Token);
-                    progressReporter.CompleteJob(job.Id);
+                        var exportJob = serviceProvider.GetService(runner) as IJob;
+
+                        if (exportJob == null)
+                        {
+                            progressReporter.FailJob(job.Id,
+                                new NotImplementedException("Cannot handle job of type: " + job.Type));
+                            return;
+                        }
+
+                        await exportJob.ExecuteAsync(job.Args, new JobExecutingContext(job),
+                            linkedCancellation.Token);
+                        progressReporter.CompleteJob(job.Id);
+
+                        tr.Commit();
+                    }
                 }
             }
             catch (OperationCanceledException oce)
@@ -69,6 +77,7 @@ namespace WB.Services.Scheduler.Services.Implementation
                 logger.LogError(e, $"Error during job run: [{job.Type}] {job.Tenant} {job.Args}");
                 progressReporter.FailJob(job.Id, e);
             }
+
         }
     }
 }

@@ -4,14 +4,16 @@ namespace support
 {
     public class ConfigurationManagerSettings : IConfigurationManagerSettings
     {
-        private bool _isInitialized;
+        private bool isInitialized;
+        public bool IsInitialized => isInitialized;
+
         public void SetPhysicalPathToWebsite(string path)
         {
-            if (this._isInitialized) return;
+            if (this.isInitialized) return;
 
             NConfigurator.UsingFiles($@"{path}\Configuration\Headquarters.Web.config",
                 $@"{path}\Web.config").SetAsSystemDefault();
-            this._isInitialized = true;
+            this.isInitialized = true;
         }
     }
 }

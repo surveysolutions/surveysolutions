@@ -1,4 +1,4 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.27130.2010
@@ -7,7 +7,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{6B97CFA4-4
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{04266C1B-4C1A-4FF3-8CC8-7823A3E92200}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Τests", "Τests", "{D24FEFE4-20B4-41B5-BB49-E5EFE58E6D53}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{D24FEFE4-20B4-41B5-BB49-E5EFE58E6D53}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.UI.Designer", "UI\Designer\WB.UI.Designer\WB.UI.Designer.csproj", "{3464F3AE-094C-4DEC-8725-59506328E597}"
 EndProject
@@ -88,6 +88,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WB.UI.Supervisor", "UI\Supervisor\WB.UI.Supervisor\WB.UI.Supervisor.csproj", "{7090D2BF-8B25-4744-9E7E-3AA31098C76B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.Core.BoundedContexts.Supervisor", "Core\BoundedContexts\Supervisor\WB.Core.BoundedContexts.Supervisor\WB.Core.BoundedContexts.Supervisor.csproj", "{51A31F37-36A0-45E4-B746-D6A66803E7A8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WB.Persistence.Headquarters", "Infrastructure\WB.Persistence.Headquarters\WB.Persistence.Headquarters.csproj", "{A937FA31-06DD-44CB-AE4B-D878808F69AB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -2137,6 +2139,7 @@ Global
 		{2E701301-76FF-4738-9049-E28FE1B33D86} = {85ACC0C3-4F28-4A77-8B31-2EF3C87C8D0E}
 		{7090D2BF-8B25-4744-9E7E-3AA31098C76B} = {04266C1B-4C1A-4FF3-8CC8-7823A3E92200}
 		{51A31F37-36A0-45E4-B746-D6A66803E7A8} = {4AF59B27-8A65-45AC-9D9E-04B25D976E05}
+		{A937FA31-06DD-44CB-AE4B-D878808F69AB} = {CA9E537B-E2ED-4A63-B936-834C9A8C194B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8EEFBE6B-8C94-4A13-A5D3-B9D122ED6FE0}
