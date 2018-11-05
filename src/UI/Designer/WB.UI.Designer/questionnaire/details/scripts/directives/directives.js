@@ -91,8 +91,7 @@
             return {
                 restrict: 'A',
                 require: 'ngModel',
-                link: function (scope, element, attrs, ngModelCtrl) {
-                    jqueryDatepicker($);
+                link: function (scope, element) {
                     $(element).datepicker({
                         dateFormat: 'yy-mm-dd',
 
