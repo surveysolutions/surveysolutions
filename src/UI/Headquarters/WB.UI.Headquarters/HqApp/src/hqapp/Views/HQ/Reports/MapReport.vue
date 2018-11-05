@@ -223,9 +223,14 @@ export default {
             });
 
             this.map.data.addListener("click", event => {
-                console.log(event.feature);
+                
                 if (event.feature.getProperty("count") > 0) {
-                    console.log("Need to zoom to " + event.feature.getId());
+                    const expand = event.feature.getProperty("expand")
+                    const sw = new google.maps.LatLng(expand.South, expand.West);
+                    const ne = new google.maps.LatLng(expand.North, expand.East);
+                    const latlngBounds = new google.maps.LatLngBounds(sw, ne);
+
+                    self.map.fitBounds(latlngBounds);
                 } else {
                     const interviewId = event.feature.getProperty(
                         "interviewId"
@@ -296,20 +301,20 @@ export default {
         },
 
         showPointsOnMap(
-            northEastCornerLongtitude,
-            northEastCornerLatitude,
-            southWestCornerLongtitude,
-            southWestCornerLatitude,
+            east,
+            north,
+            west,
+            south,
             extendBounds
         ) {
+            const zoom = extendBounds ? -1 : this.map.getZoom()
+           
             var request = {
                 Variable: this.gpsQuestionId.key,
                 QuestionnaireId: this.questionnaireId.key,
-                Zoom: this.map.getZoom(),
-                NorthEastCornerLongtitude: northEastCornerLongtitude,
-                NorthEastCornerLatitude: northEastCornerLatitude,
-                SouthWestCornerLongtitude: southWestCornerLongtitude,
-                SouthWestCornerLatitude: southWestCornerLatitude
+                Zoom: zoom,
+                MapWidth: this.map.getDiv().clientWidth,
+                east, north, west, south
             };
 
             const self = this;
@@ -336,11 +341,10 @@ export default {
                     if (extendBounds) {
                         const bounds = response.data.InitialBounds;
 
-                        const sw = new google.maps.LatLng(bounds[1], bounds[0]);
-                        const ne = new google.maps.LatLng(bounds[3], bounds[2]);
+                        const sw = new google.maps.LatLng(bounds.South, bounds.West);
+                        const ne = new google.maps.LatLng(bounds.North, bounds.East);
                         const latlngBounds = new google.maps.LatLngBounds(
-                            sw,
-                            ne
+                            sw, ne
                         );
 
                         self.map.fitBounds(latlngBounds);

@@ -11,7 +11,6 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
-using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -43,28 +42,24 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(input.QuestionnaireIdentity, null);
             var gpsQuestionId = questionnaire.GetQuestionIdByVariable(input.Variable);
 
-            if(!gpsQuestionId.HasValue) throw new ArgumentNullException(nameof(gpsQuestionId));
+            if (!gpsQuestionId.HasValue) throw new ArgumentNullException(nameof(gpsQuestionId));
 
             var gpsAnswers = this.interviewFactory.GetGpsAnswers(
                 input.QuestionnaireIdentity,
-                gpsQuestionId.Value, 0, 180, -180, 180, -180,
-                this.authorizedUser.IsSupervisor ? this.authorizedUser.Id : (Guid?) null);
+                gpsQuestionId.Value, null, new GeoBounds(input.South, input.West, input.North, input.East), 
+                this.authorizedUser.IsSupervisor ? this.authorizedUser.Id : (Guid?)null);
 
             var superCluster = new SuperCluster();
 
-            (double minLat, double maxLat, double minLong, double maxLong) bounds
-                = (double.MaxValue, double.MinValue, double.MaxValue, double.MinValue);
+            GeoBounds bounds = GeoBounds.Inverse;
 
-            superCluster.Load(gpsAnswers.Select(g=>
+            superCluster.Load(gpsAnswers.Select(g =>
             {
-                if (g.Longitude < bounds.minLong) bounds.minLong = g.Longitude;
-                if (g.Longitude > bounds.maxLong) bounds.maxLong = g.Longitude;
-                if (g.Latitude < bounds.minLat) bounds.minLat = g.Latitude;
-                if (g.Latitude > bounds.maxLat) bounds.maxLat = g.Latitude;
+                bounds.AdjustMinMax(g.Latitude, g.Longitude);
 
                 return new SuperCluster.GeoPoint
                 {
-                    Position = new[] {g.Longitude, g.Latitude},
+                    Position = new[] { g.Longitude, g.Latitude },
                     Props = new Dictionary<string, object>
                     {
                         ["interviewId"] = g.InterviewId.ToString()
@@ -72,26 +67,41 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 };
             }));
 
-            var result = superCluster.GetClusters(input.Zoom,
-                input.SouthWestCornerLongtitude, input.SouthWestCornerLatitude,
-                input.NorthEastCornerLongtitude, input.NorthEastCornerLatitude);
+            if (input.Zoom == -1)
+            {
+                // https://stackoverflow.com/a/6055653/41483
+                const int GLOBE_WIDTH = 256; // a constant in Google's map projection
+
+                var angle = bounds.East - bounds.West;
+                if (angle < 0)
+                {
+                    angle += 360;
+                }
+
+                input.Zoom = (int)Math.Round(Math.Log(input.MapWidth * 360 / angle / GLOBE_WIDTH) / Math.Log(2)) - 1;
+            }
+
+            var result = superCluster.GetClusters(new GeoBounds(input.South, input.West, input.North, input.East), input.Zoom);
 
             var collection = new FeatureCollection();
 
             collection.Features.AddRange(result.Select(p =>
             {
                 var props = p.UserData.Props ?? new Dictionary<string, object>();
-                if(p.UserData.NumPoints.HasValue)
+                if (p.UserData.NumPoints.HasValue)
+                {
                     props["count"] = p.UserData.NumPoints;
-                
+                    props["expand"] = superCluster.GetClusterExpansionZoom(p.UserData.Index);
+                }
+
                 return new Feature(
-                    new Point(new Position(p.Latitude,p.Longitude)),
+                    new Point(new Position(p.Latitude, p.Longitude)),
                     props, id: p.UserData.Index.ToString("X"));
             }));
 
             return new MapReportView
             {
-                InitialBounds = new [] {bounds.minLong, bounds.minLat, bounds.maxLong, bounds.maxLat},
+                InitialBounds = bounds,
                 FeatureCollection = collection,
                 TotalPoint = gpsAnswers.Length
             };

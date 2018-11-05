@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 
 namespace KDBush
@@ -15,7 +16,7 @@ namespace KDBush
     {
         internal readonly int nodeSize;
         internal List<Point<T>> points;
-
+        private Dictionary<int, Point<T>> origingPoints { get; set; } = new Dictionary<int, Point<T>>();
         /// <summary>
         /// Initialize a KDBush
         /// </summary>
@@ -35,9 +36,21 @@ namespace KDBush
         public void Index(IEnumerable<Point<T>> points)
         {
             this.points.Clear();
-            this.points.AddRange(points);
+            this.origingPoints.Clear();
+
+            var index = 0;
+            foreach (var point in points)
+            {
+                origingPoints[index++] = point;
+                this.points.Add(point);
+            }
 
             Sort(0, this.points.Count - 1, 0);
+        }
+
+        public Point<T> GetByOriginIndex(int index)
+        {
+            return origingPoints[index];
         }
 
         /// <summary>
