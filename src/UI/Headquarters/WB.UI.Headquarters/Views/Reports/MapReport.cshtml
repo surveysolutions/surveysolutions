@@ -5,7 +5,7 @@
     Layout = "~/Views/Shared/_MainLayoutHq.cshtml";
 }
 @section Scripts{
-    <script type="text/javascript" async defer
+    <script type="text/javascript" 
             src="@AppSettings.Instance.GoogleMapApiBaseUrl/maps/api/js?key=@AppSettings.Instance.GoogleMapApiKey&sensor=false">
     </script>
     @Html.RenderHqConfig(Model)
