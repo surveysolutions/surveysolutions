@@ -261,6 +261,7 @@
                         break;
                     case "DateTime":
                         command.isTimestamp = question.isTimestamp;
+                        command.defaultDate = question.defaultDate;
                         break;
                     case "GpsCoordinates":
                     case "Text":
