@@ -67,8 +67,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                     Position = new[] {g.Longitude, g.Latitude},
                     Props = new Dictionary<string, object>
                     {
-                        ["interviewId"] = g.InterviewId.ToString(),
-                        ["id"] = $"{g.InterviewId.FormatGuid()}_{g.RosterVector}"
+                        ["interviewId"] = g.InterviewId.ToString()
                     }
                 };
             }));
@@ -82,11 +81,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             collection.Features.AddRange(result.Select(p =>
             {
                 var props = p.UserData.Props ?? new Dictionary<string, object>();
-                props["count"] = p.UserData.NumPoints;
-
+                if(p.UserData.NumPoints.HasValue)
+                    props["count"] = p.UserData.NumPoints;
+                
                 return new Feature(
                     new Point(new Position(p.Latitude,p.Longitude)),
-                    props);
+                    props, id: p.UserData.Index.ToString("X"));
             }));
 
             return new MapReportView
