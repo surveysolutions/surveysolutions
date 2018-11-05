@@ -286,40 +286,39 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                     interviewException = exception.UnwrapAllInnerExceptions()
                         .OfType<InterviewException>()
                         .FirstOrDefault();
-
-                    var exceptionType = interviewException?.ExceptionType.ToString() ?? UnknownExceptionType;
-
-                    using (var brokenPackageUow = new UnitOfWork(ServiceLocator.Current.GetInstance<ISessionFactory>()))
-                    {
-                        brokenPackageUow.Session.Save(new BrokenInterviewPackage
-                        {
-                            InterviewId = interview.InterviewId,
-                            InterviewKey = existingInterviewKey,
-                            QuestionnaireId = interview.QuestionnaireId,
-                            QuestionnaireVersion = interview.QuestionnaireVersion,
-                            InterviewStatus = interview.InterviewStatus,
-                            ResponsibleId = interview.ResponsibleId,
-                            IsCensusInterview = interview.IsCensusInterview,
-                            IncomingDate = interview.IncomingDate,
-                            Events = interview.Events,
-                            PackageSize = interview.Events?.Length ?? 0,
-                            ProcessingDate = DateTime.UtcNow,
-                            ExceptionType = exceptionType,
-                            ExceptionMessage = exception.Message,
-                            ExceptionStackTrace = string.Join(Environment.NewLine,
-                                exception.UnwrapAllInnerExceptions().Select(ex => $"{ex.Message} {ex.StackTrace}")),
-                            ReprocessAttemptsCount = interview.ProcessAttemptsCount,
-                        }, null);
-                        brokenPackageUow.AcceptChanges();
-                    }
-
-                    this.logger.Debug(
-                        $"Interview events by {interview.InterviewId} moved to broken packages. Took {innerwatch.Elapsed:g}.");
-                    innerwatch.Restart();
                 }
 
-                innerwatch.Stop();
+                var exceptionType = interviewException?.ExceptionType.ToString() ?? UnknownExceptionType;
+
+                using (var brokenPackageUow = new UnitOfWork(ServiceLocator.Current.GetInstance<ISessionFactory>()))
+                {
+                    brokenPackageUow.Session.Save(new BrokenInterviewPackage
+                    {
+                        InterviewId = interview.InterviewId,
+                        InterviewKey = existingInterviewKey,
+                        QuestionnaireId = interview.QuestionnaireId,
+                        QuestionnaireVersion = interview.QuestionnaireVersion,
+                        InterviewStatus = interview.InterviewStatus,
+                        ResponsibleId = interview.ResponsibleId,
+                        IsCensusInterview = interview.IsCensusInterview,
+                        IncomingDate = interview.IncomingDate,
+                        Events = interview.Events,
+                        PackageSize = interview.Events?.Length ?? 0,
+                        ProcessingDate = DateTime.UtcNow,
+                        ExceptionType = exceptionType,
+                        ExceptionMessage = exception.Message,
+                        ExceptionStackTrace = string.Join(Environment.NewLine,
+                            exception.UnwrapAllInnerExceptions().Select(ex => $"{ex.Message} {ex.StackTrace}")),
+                        ReprocessAttemptsCount = interview.ProcessAttemptsCount,
+                    });
+                    brokenPackageUow.AcceptChanges();
+                }
+
+                this.logger.Debug(
+                    $"Interview events by {interview.InterviewId} moved to broken packages. Took {innerwatch.Elapsed:g}.");
+                innerwatch.Restart();
             }
+            innerwatch.Stop();
         }
 
         private void RecordProcessedPackageInfo(IPlainStorageAccessor<ReceivedPackageLogEntry> packageTrackr, AggregateRootEvent[] aggregateRootEvents)
