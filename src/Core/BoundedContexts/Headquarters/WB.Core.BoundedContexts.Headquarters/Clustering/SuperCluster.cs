@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text;
 using KDBush;
 
 namespace WB.Core.BoundedContexts.Headquarters.Clustering
@@ -45,34 +46,73 @@ namespace WB.Core.BoundedContexts.Headquarters.Clustering
                 this.trees[z] = leafz;
             }
         }
-
-        public List<Point<Cluster>> GetClusters(int zoom, params double[] bbox)
+        
+        public List<Point<Cluster>> GetClusters(GeoBounds bounds, int zoom)
         {
-            return GetClusters(bbox, zoom);
-        }
+            var minLng = ((bounds.West + 180) % 360 + 360) % 360 - 180;
+            var minLat = Math.Max(-90, Math.Min(90, bounds.South));
+            var maxLng = Math.Abs(bounds.East - 180) < 0.01 ? 180 : ((bounds.East + 180) % 360 + 360) % 360 - 180;
+            var maxLat = Math.Max(-90, Math.Min(90, bounds.North));
 
-        public List<Point<Cluster>> GetClusters(double[] bbox, int zoom)
-        {
-            var minLng = ((bbox[0] + 180) % 360 + 360) % 360 - 180;
-            var minLat = Math.Max(-90, Math.Min(90, bbox[1]));
-            var maxLng = Math.Abs(bbox[2] - 180) < 0.01 ? 180 : ((bbox[2] + 180) % 360 + 360) % 360 - 180;
-            var maxLat = Math.Max(-90, Math.Min(90, bbox[3]));
-
-            if (bbox[2] - bbox[0] >= 360)
+            if (bounds.East - bounds.West >= 360)
             {
                 minLng = -180;
                 maxLng = 180;
             }
             else if (minLng > maxLng)
             {
-                var easternHem = GetClusters(new[] { minLng, minLat, 180, maxLat }, zoom);
-                var westernHem = GetClusters(new[] { -180, minLat, maxLng, maxLat }, zoom);
+                var easternHem = GetClusters(new GeoBounds(minLat, minLng, maxLat, 180), zoom);
+                var westernHem = GetClusters(new GeoBounds(minLat, -180, maxLat, maxLng), zoom);
                 easternHem.AddRange(westernHem);
                 return easternHem;
             }
 
             var tree = this.trees[this.limitZoom(zoom)];
             return tree.Query(lngX(minLng), latY(minLat), lngX(maxLng), latY(maxLat));
+        }
+        
+        public GeoBounds GetClusterExpansionZoom(int clusterId)
+        {
+            int clusterZoom = clusterId % 32 - 1;
+            List<Point<Cluster>> children = null;
+            
+            while (clusterZoom <= this._options.MaxZoom)
+            {
+                children = this.GetChildren(clusterId);
+                clusterZoom++;
+                if (children.Count != 1) break;
+                clusterId = children[0].UserData.Index;
+            }
+
+            GeoBounds bounds = null;
+
+            if (children != null)
+            {
+                bounds = GeoBounds.Inverse;
+
+                foreach (var child in children)
+                {
+                    bounds.AdjustMinMax(child.Latitude, child.Longitude);
+                }
+            }
+
+            return bounds;
+        }
+
+        List<Point<Cluster>> GetChildren(int clusterId)
+        {
+            var originId = clusterId >> 5;
+            var originZoom = limitZoom(clusterId % 32);
+            const string errorMsg = "No cluster with the specified id.";
+
+            var index = this.trees[originZoom];
+            if (index == null) throw new Exception(errorMsg);
+
+            var origin = index.GetByOriginIndex(originId);
+            if (origin == null) throw new Exception(errorMsg);
+
+            var r = this._options.Radius / (this._options.Extent * Math.Pow(2, originZoom - 1));
+            return index.Query(origin.X, origin.Y, r);
         }
 
         int limitZoom(int zoom)
@@ -123,6 +163,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Clustering
                     wy += neighbor.Y * innerPoints;
 
                     numPoints += innerPoints;
+                    neighbor.UserData.ParentId = id;
 
                     /*
                         if (reduce) {

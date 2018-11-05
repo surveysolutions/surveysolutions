@@ -6,7 +6,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Clustering
     public class Cluster
     {
         public int Zoom { get; set; }
-        public long Index { get; set; }
+        public int Index { get; set; }
         public int ParentId { get; set; }
         public int? NumPoints { get; set; }
         public Dictionary<string, object> Props { get; set; }
