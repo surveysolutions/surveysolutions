@@ -187,7 +187,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Clustering
             /// <summary>
             /// Minimum zoom level at which clusters are generated.
             /// </summary>
-            public int MinZoom { get; set; } = 0;
+            public int MinZoom { get; set; } = 3;
 
             /// <summary>
             /// Maximum zoom level at which clusters are generated.
@@ -197,12 +197,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Clustering
             /// <summary>
             /// Cluster radius, in pixels.
             /// </summary>
-            public int Radius { get; set; } = 60;
+            public int Radius { get; set; } = 90;
 
             /// <summary>
             /// (Tiles) Tile extent. Radius is calculated relative to this value
             /// </summary>
-            public int Extent { get; set; } = 256;
+            public int Extent { get; set; } = 512;
 
             /// <summary>
             /// Size of the KD-tree leaf node. Affects performance.

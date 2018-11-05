@@ -35,7 +35,7 @@
     </HqLayout>
 </template>
 <script>
-import infoBubble from "js-info-bubble";
+
 import * as toastr from "toastr";
 import Vue from "vue";
 
@@ -45,7 +45,7 @@ export default {
             questionnaireId: null,
             gpsQuestionId: null,
             gpsQuestions: null,
-            interviewDetailsTooltip: new InfoBubble(),
+            infoWindow: null,
             selectedTooltip: {},
             readyToUpdate: false,
             map: null,
@@ -53,19 +53,24 @@ export default {
             mapClustererOptions: {
                 styles: [
                     {
-                        url: "../Content/img/google-maps-markers/m1.png", dark: true
+                        url: "../Content/img/google-maps-markers/m1.png",
+                        dark: true
                     },
                     {
-                        url: "../Content/img/google-maps-markers/m2.png", dark: false
+                        url: "../Content/img/google-maps-markers/m2.png",
+                        dark: false
                     },
                     {
-                        url: "../Content/img/google-maps-markers/m3.png", dark: true
+                        url: "../Content/img/google-maps-markers/m3.png",
+                        dark: true
                     },
                     {
-                        url: "../Content/img/google-maps-markers/m4.png", dark: true
+                        url: "../Content/img/google-maps-markers/m4.png",
+                        dark: true
                     },
                     {
-                        url: "../Content/img/google-maps-markers/m5.png", dark: true
+                        url: "../Content/img/google-maps-markers/m5.png",
+                        dark: true
                     }
                 ]
             }
@@ -169,9 +174,10 @@ export default {
                 this.getMapOptions()
             );
 
+            this.infoWindow = new google.maps.InfoWindow();
+
             this.map.addListener("zoom_changed", () => {
-                if(this.gpsQuestionId != null)
-                  delayedReload();
+                if (this.gpsQuestionId != null) delayedReload();
             });
 
             const delayedReload = _.debounce(
@@ -180,8 +186,7 @@ export default {
             );
 
             this.map.addListener("bounds_changed", () => {
-                if(this.gpsQuestionId != null)
-                delayedReload();
+                if (this.gpsQuestionId != null) delayedReload();
             });
 
             this.map.data.setStyle(function(feature) {
@@ -191,24 +196,63 @@ export default {
                 if (count > 0) {
                     const max = self.totalAnswers;
                     const percent = (count / max) * styles.length;
-                    const index = Math.min(styles.length - 1, Math.round(percent))
-                    const style = styles[index]
-                    
-                    const ratio = 1
-                    const extend = 20
+                    const index = Math.min(
+                        styles.length - 1,
+                        Math.round(percent)
+                    );
+                    const style = styles[index];
+
+                    const ratio = 1;
+                    const extend = 20;
                     const radius = 60 + index * extend * ratio;
                     style.scaledSize = new google.maps.Size(radius, radius);
-                    style.anchor = new google.maps.Point(radius / 2 , radius / 2)
-                    return ({
+                    style.anchor = new google.maps.Point(
+                        radius / 2,
+                        radius / 2
+                    );
+                    return {
                         label: {
                             fontSize: "12px",
                             text: count,
-                            color: style.dark ? '#fff' : '#000'
+                            color: style.dark ? "#fff" : "#000"
                         },
                         icon: style
-                    });
+                    };
                 }
-                return {}
+                return {};
+            });
+
+            this.map.data.addListener("click", event => {
+                console.log(event.feature);
+                if (event.feature.getProperty("count") > 0) {
+                    console.log("Need to zoom to " + event.feature.getId());
+                } else {
+                    const interviewId = event.feature.getProperty(
+                        "interviewId"
+                    );
+                    self.$http
+                        .post(self.model.api.interiewSummaryUrl, {
+                            InterviewId: interviewId
+                        })
+                        .then(response => {
+                            const data = response.data;
+
+                            if (data == undefined || data == null) return;
+
+                            data["InterviewId"] = interviewId;
+
+                            self.selectedTooltip = data;
+
+                            Vue.nextTick(function() {
+                                self.infoWindow.setContent($(self.$refs.tooltip).html())
+                                self.infoWindow.setPosition(event.latLng);
+                                self.infoWindow.setOptions({
+                                  pixelOffset: new google.maps.Size(0, -30)
+                                });
+                                self.infoWindow.open(self.map);
+                            });
+                        });
+                }
             });
 
             var washingtonCoordinates = new google.maps.LatLng(
@@ -234,6 +278,7 @@ export default {
                 );
             }
         },
+
         reloadMarkersInBounds() {
             var bounds = this.map.getBounds();
 
@@ -272,14 +317,22 @@ export default {
             this.$http
                 .post(self.model.api.mapReportUrl, request)
                 .then(response => {
-                    const toRemove = [];
+                    const toRemove = {};
                     this.totalAnswers = response.data.TotalPoint;
 
                     this.map.data.forEach(feature => {
-                        toRemove.push(feature);
+                        toRemove[feature.getId()] = feature;
                     });
 
                     this.map.data.addGeoJson(response.data.FeatureCollection);
+
+                    _.forEach(
+                        response.data.FeatureCollection.features,
+                        feature => {
+                            delete toRemove[feature.id];
+                        }
+                    );
+
                     if (extendBounds) {
                         const bounds = response.data.InitialBounds;
 
@@ -294,8 +347,8 @@ export default {
                     }
 
                     _.delay(() => {
-                        _.forEach(toRemove, remove => {
-                            this.map.data.remove(remove);
+                        _.forEach(Object.keys(toRemove), key => {
+                            self.map.data.remove(toRemove[key]);
                         });
                     }, 50);
                 });
