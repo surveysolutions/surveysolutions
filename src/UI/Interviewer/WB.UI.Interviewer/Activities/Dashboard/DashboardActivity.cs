@@ -177,7 +177,7 @@ namespace WB.UI.Interviewer.Activities.Dashboard
         {
             base.OnViewModelSet();
             this.ViewModel.Synchronization.SyncBgService = this;
-            this.ViewModel.OnOfflineSynchonizationStarted += OnOfflineSynchonizationStarted;
+            this.ViewModel.OnOfflineSynchronizationStarted += OnOfflineSynchronizationStarted;
             this.ViewModel.PropertyChanged += OnPropertyChanged;
         }
 
@@ -308,13 +308,13 @@ namespace WB.UI.Interviewer.Activities.Dashboard
                 this.GoogleApi?.Dispose();
                 this.GoogleApi = null;
                 ServiceLocator.Current.GetInstance<IGoogleApiClientFactory>().GoogleApiClient = null;
-                this.ViewModel.OnOfflineSynchonizationStarted -= this.OnOfflineSynchonizationStarted;
+                this.ViewModel.OnOfflineSynchronizationStarted -= this.OnOfflineSynchronizationStarted;
             }
 
             base.Dispose(disposing);
         }
 
-        private void OnOfflineSynchonizationStarted(object sender, EventArgs e)
+        private void OnOfflineSynchronizationStarted(object sender, EventArgs e)
         {
             if (!this.CheckPlayServices()) return;
 

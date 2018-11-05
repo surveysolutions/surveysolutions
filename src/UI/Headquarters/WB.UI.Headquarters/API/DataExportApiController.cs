@@ -1,21 +1,20 @@
 ﻿using System;
-using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Http;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
-using WB.Core.BoundedContexts.Headquarters.DataExport.DataExportDetails;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Ddi;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Dtos;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Views;
 using WB.Core.BoundedContexts.Headquarters.Factories;
+using WB.Core.BoundedContexts.Headquarters.Services;
+using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Shared.Web.Filters;
@@ -25,85 +24,91 @@ namespace WB.UI.Headquarters.API
     [Authorize(Roles = "Administrator, Headquarter")]
     public class DataExportApiController : ApiController
     {
-        private readonly IFilebasedExportedDataAccessor exportedFilesAccessor;
         private readonly IFileSystemAccessor fileSystemAccessor;
-
         private readonly IDataExportStatusReader dataExportStatusReader;
-        private readonly IDataExportProcessesService dataExportProcessesService;
-        private readonly IDataExportFileAccessor exportFileAccessor;
-
-        private readonly IDdiMetadataAccessor ddiMetadataAccessor;
-        private readonly IExternalFileStorage externalFileStorage;
-
+        private readonly IExportFileNameService exportFileNameService;
+        private readonly IExportServiceApi exportServiceApi;
+        private readonly IExportSettings exportSettings;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
+        private readonly IAuditLog auditLog;
         private readonly ISerializer serializer;
 
         public DataExportApiController(
             IFileSystemAccessor fileSystemAccessor,
             IDataExportStatusReader dataExportStatusReader,
-            IDataExportProcessesService dataExportProcessesService,
-            IDataExportFileAccessor exportFileAccessor,
-            IFilebasedExportedDataAccessor filebasedExportedDataAccessor, 
-            IDdiMetadataAccessor ddiMetadataAccessor,
             ISerializer serializer,
-            IExternalFileStorage externalFileStorage,
-            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory)
+            IExportSettings exportSettings,
+            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory, 
+            IExportFileNameService exportFileNameService,
+            IExportServiceApi exportServiceApi,
+            IAuditLog auditLog)
         {
             this.fileSystemAccessor = fileSystemAccessor;
             this.dataExportStatusReader = dataExportStatusReader;
-            this.dataExportProcessesService = dataExportProcessesService;
-            this.exportFileAccessor = exportFileAccessor;
-            this.exportedFilesAccessor = filebasedExportedDataAccessor;
-            this.ddiMetadataAccessor = ddiMetadataAccessor;
-            this.externalFileStorage = externalFileStorage;
+            this.exportSettings = exportSettings;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
+            this.exportFileNameService = exportFileNameService;
+            this.exportServiceApi = exportServiceApi;
+            this.auditLog = auditLog;
             this.serializer = serializer;
         }
-
+        
         [HttpGet]
         [ObserverNotAllowedApi]
-        public HttpResponseMessage Paradata(Guid id, long version, DateTime? from = null, DateTime? to = null)
+        [ApiNoCache]
+        public async Task<HttpResponseMessage> AllData(Guid id, long version, DataExportFormat format, 
+            InterviewStatus? status = null, 
+            DateTime? from = null, 
+            DateTime? to = null)
         {
-            return CreateFile(this.exportedFilesAccessor.GetArchiveFilePathForExportedData(
-                new QuestionnaireIdentity(id, version), DataExportFormat.Paradata, null, @from?.ToUniversalTime(),
-                to?.ToUniversalTime()));
+            var result = await this.dataExportStatusReader.GetDataArchive(
+                new QuestionnaireIdentity(id, version), format, status, from , to);
+
+            if (result.Redirect != null)
+            {
+                var response = Request.CreateResponse(HttpStatusCode.Redirect);
+                response.Headers.Location = new Uri(result.Redirect);
+                return response;
+            }
+            else
+            {
+                var response = Request.CreateResponse(HttpStatusCode.OK);
+                response.Content = new StreamContent(result.Data);
+                response.Content.Headers.ContentType = new MediaTypeHeaderValue(@"application/octet-stream");
+                response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue(@"attachment")
+                {
+                    FileName = WebUtility.UrlDecode(result.FileName)
+                };
+                return response;
+            }
         }
 
         [HttpGet]
         [ObserverNotAllowedApi]
         [ApiNoCache]
-        public HttpResponseMessage AllData(Guid id, long version, DataExportFormat format, InterviewStatus? status = null, DateTime? from = null, DateTime? to = null)
+        public async Task<HttpResponseMessage> DDIMetadata(Guid id, long version)
         {
-            var filenameFullPath = this.exportedFilesAccessor.GetArchiveFilePathForExportedData(
-                new QuestionnaireIdentity(id, version), format, status, @from?.ToUniversalTime(),
-                to?.ToUniversalTime());
+            var questionnaireIdentity = new QuestionnaireIdentity(id, version);
 
-            if (format == DataExportFormat.Binary && externalFileStorage.IsEnabled())
+            var archivePassword = this.exportSettings.EncryptionEnforced() ? this.exportSettings.GetPassword() : null;
+            var result = await exportServiceApi.GetDdiArchive(questionnaireIdentity.ToString(),
+                archivePassword);
+
+            var fileName = this.exportFileNameService.GetFileNameForDdiByQuestionnaire(questionnaireIdentity);
+
+            var response = Request.CreateResponse(HttpStatusCode.OK);
+            response.Content = new ByteArrayContent(await result.ReadAsByteArrayAsync());
+            response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue(@"attachment")
             {
-                var filename = this.fileSystemAccessor.GetFileName(filenameFullPath);
-                var externalStoragePath = this.exportFileAccessor.GetExternalStoragePath(filename);
+                FileNameStar = fileSystemAccessor.GetFileName(fileName)
+            };
 
-                if (this.externalFileStorage.IsExist(externalStoragePath))
-                {
-                    var directLink = this.externalFileStorage.GetDirectLink(externalStoragePath, TimeSpan.FromMinutes(30));
-
-                    var response = Request.CreateResponse(HttpStatusCode.Moved);
-                    response.Headers.Location = new Uri(directLink);
-                    return response;
-                }
-            }
-
-            return CreateFile(filenameFullPath);
+            return response;
         }
-
-        [HttpGet]
-        [ObserverNotAllowedApi]
-        public HttpResponseMessage DDIMetadata(Guid id, long version)
-            => CreateFile(this.ddiMetadataAccessor.GetFilePathToDDIMetadata(new QuestionnaireIdentity(id, version)));
 
         [HttpPost]
         [ObserverNotAllowedApi]
-        public HttpResponseMessage RequestUpdate(Guid id, long version,
+        public async Task<HttpResponseMessage> RequestUpdate(Guid id, long version,
             DataExportFormat format, InterviewStatus? status, DateTime? from = null, DateTime? to = null)
         {
             var questionnaireIdentity = new QuestionnaireIdentity(id, version);
@@ -112,14 +117,24 @@ namespace WB.UI.Headquarters.API
             if (questionnaireBrowseItem == null)
                 throw new HttpException(404, @"Questionnaire not found");
 
+            return await RequestExportUpdateAsync(questionnaireBrowseItem, format, status, @from, to);
+        }
+
+        private async Task<HttpResponseMessage> RequestExportUpdateAsync(
+            QuestionnaireBrowseItem questionnaireBrowseItem, DataExportFormat format, InterviewStatus? status,
+            DateTime? @from,
+            DateTime? to, string accessToken = null, ExternalStorageType? externalStorageType = null)
+        {
             try
             {
-                this.dataExportProcessesService.AddDataExport(new DataExportProcessDetails(format, questionnaireIdentity, questionnaireBrowseItem.Title)
-                {
-                    FromDate = from?.ToUniversalTime(),
-                    ToDate = to?.ToUniversalTime(),
-                    InterviewStatus = status
-                });
+                await this.exportServiceApi.RequestUpdate(questionnaireBrowseItem.Id,
+                    format, status,
+                    @from?.ToUniversalTime(),
+                    to?.ToUniversalTime(), GetPasswordFromSettings(), accessToken, externalStorageType);
+
+                this.auditLog.ExportStared(
+                    $@"{questionnaireBrowseItem.Title} v{questionnaireBrowseItem.Version} {status?.ToString() ?? ""}",
+                    format);
             }
             catch (Exception e)
             {
@@ -131,44 +146,30 @@ namespace WB.UI.Headquarters.API
 
         [HttpPost]
         [ObserverNotAllowedApi]
-        public HttpResponseMessage DeleteDataExportProcess(string id)
+        public async Task<HttpResponseMessage> DeleteDataExportProcess(string id)
         {
             try
             {
-                this.dataExportProcessesService.DeleteDataExport(id);
+                await this.exportServiceApi.DeleteProcess(id);
+                return Request.CreateResponse(true);
             }
             catch (Exception)
             {
                 return Request.CreateResponse(false);
             }
-
-            return Request.CreateResponse(true);
         }
 
         [HttpPost]
         [ObserverNotAllowedApi]
-        public DataExportStatusView GetExportStatus(Guid id, long version, InterviewStatus? status, DateTime? from = null, DateTime? to = null)
-            => this.dataExportStatusReader.GetDataExportStatusForQuestionnaire(new QuestionnaireIdentity(id, version), status, from?.ToUniversalTime(), to?.ToUniversalTime());
-
-        private HttpResponseMessage CreateFile(string filePath)
-        {
-            if (!fileSystemAccessor.IsFileExists(filePath))
-                throw new HttpException(404, @"file is absent");
-
-            Stream exportZipStream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
-            var result = new ProgressiveDownload(this.Request).ResultMessage(exportZipStream, @"application/zip");
-            
-            result.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue(@"attachment")
-            {
-                FileNameStar = fileSystemAccessor.GetFileName(filePath)
-            };
-
-            return result;
-        }
+        public Task<DataExportStatusView> GetExportStatus(Guid id, long version, InterviewStatus? status, DateTime? from = null, DateTime? to = null)
+            => this.dataExportStatusReader.GetDataExportStatusForQuestionnaireAsync(new QuestionnaireIdentity(id, version), 
+                status, 
+                fromDate: @from?.ToUniversalTime(), 
+                toDate: to?.ToUniversalTime());
 
         [HttpPost]
         [AllowAnonymous]
-        public void ExportToExternalStorage(ExportToExternalStorageModel model)
+        public async Task ExportToExternalStorage(ExportToExternalStorageModel model)
         {
             var state = this.serializer.Deserialize<ExternalStorageStateModel>(model.State);
             if(state == null)
@@ -178,14 +179,18 @@ namespace WB.UI.Headquarters.API
             if (questionnaireBrowseItem == null)
                 throw new HttpException(404, @"Questionnaire not found");
 
-            this.dataExportProcessesService.AddDataExport(new ExportBinaryToExternalStorage(DataExportFormat.Binary, state.QuestionnaireIdentity, questionnaireBrowseItem.Title)
-            {
-                AccessToken = model.Access_token,
-                InterviewStatus = state.InterviewStatus,
-                FromDate = state.FromDate,
-                ToDate = state.ToDate,
-                StorageType = state.Type
-            });
+            await RequestExportUpdateAsync(questionnaireBrowseItem, DataExportFormat.Binary, 
+                null,
+                state.FromDate?.ToUniversalTime(),
+                state.ToDate?.ToUniversalTime(),
+                model.Access_token, state.Type);
+        }
+
+        private string GetPasswordFromSettings()
+        {
+            return this.exportSettings.EncryptionEnforced()
+                ? this.exportSettings.GetPassword()
+                : null;
         }
 
         public class ExportToExternalStorageModel

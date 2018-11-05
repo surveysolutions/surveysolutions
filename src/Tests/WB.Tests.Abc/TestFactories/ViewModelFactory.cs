@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Main.Core.Documents;
 using Moq;
 using MvvmCross.Base;
@@ -340,7 +341,7 @@ namespace WB.Tests.Abc.TestFactories
                 .Setup(locator => locator.GetInstance<SideBarOverviewViewModel>())
                 .Returns(() => new SideBarOverviewViewModel(mvxMessenger, Create.ViewModel.DynamicTextViewModel(
                     liteEventRegistry,
-                    interviewRepository: interviewsRepository), Mock.Of<InterviewStateViewModel>()));
+                    interviewRepository: interviewsRepository), Mock.Of<InterviewStateViewModel>(), Mock.Of<AnswerNotifier>()));
 
             Mock.Get(ServiceLocator.Current)
                 .Setup(locator => locator.GetInstance<SideBarCompleteSectionViewModel>())
@@ -354,11 +355,13 @@ namespace WB.Tests.Abc.TestFactories
                 .Returns((Func<SideBarSectionViewModel>) SideBarSectionViewModel);
             Setup.InstanceToMockedServiceLocator(Mock.Of<InterviewStateViewModel>());
 
+
             var sidebarViewModel = new SideBarSectionsViewModel(
                 statefulInterviewRepository: interviewsRepository,
                 questionnaireRepository: questionnaireRepository,
                 modelsFactory: sideBarSectionViewModelsFactory,
-                eventRegistry: liteEventRegistry);
+                eventRegistry: liteEventRegistry,
+                mainThreadDispatcher: Stub.MvxMainThreadAsyncDispatcher());
 
             sidebarViewModel.Init("", navigationState);
 
@@ -474,5 +477,22 @@ namespace WB.Tests.Abc.TestFactories
                 ThrottlePeriod = 0
             };
         }
+        
+        public SearchViewModel SearchViewModel(
+            IPrincipal principal = null,
+            IViewModelNavigationService viewModelNavigationService = null,
+            IInterviewViewModelFactory viewModelFactory = null,
+            IPlainStorage<InterviewView> interviewViewRepository = null,
+            IPlainStorage<PrefilledQuestionView> identifyingQuestionsRepo = null,
+            IAssignmentDocumentsStorage assignmentsRepository = null,
+            IMvxMessenger messenger = null)
+            => new SearchViewModel(
+                principal ?? Mock.Of<IPrincipal>(),
+                viewModelNavigationService ?? Mock.Of<IViewModelNavigationService>(),
+                viewModelFactory ?? Mock.Of<IInterviewViewModelFactory>(),
+                interviewViewRepository ?? Mock.Of<IPlainStorage<InterviewView>>(m => m.LoadAll() == Enumerable.Empty<InterviewView>().ToReadOnlyCollection()),
+                identifyingQuestionsRepo ?? Mock.Of<IPlainStorage<PrefilledQuestionView>>(m => m.LoadAll() == Enumerable.Empty<PrefilledQuestionView>().ToReadOnlyCollection()),
+                assignmentsRepository ?? Mock.Of<IAssignmentDocumentsStorage>(),
+                messenger ?? Mock.Of<IMvxMessenger>());
     }
 }

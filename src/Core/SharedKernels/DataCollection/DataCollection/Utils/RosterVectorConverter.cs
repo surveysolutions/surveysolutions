@@ -6,23 +6,23 @@ using Newtonsoft.Json;
 
 namespace WB.Core.SharedKernels.DataCollection.Utils
 {
-    [Obsolete("Should be removed as soon as we sure that there is no stored json events with decimal arrays")]
     public class RosterVectorConverter : JsonConverter
     {
         public override void WriteJson(JsonWriter writer, object value, JsonSerializer serializer)
         {
             var vector = (RosterVector)value;
 
-            if (serializer.TypeNameHandling == TypeNameHandling.All || serializer.TypeNameHandling == TypeNameHandling.Auto)
+            if (serializer.TypeNameHandling == TypeNameHandling.All)
             {
                 writer.WriteStartObject();
                 writer.WritePropertyName("$type");
                 writer.WriteValue(FullRosterVectorTypeName);
                 writer.WritePropertyName("$values");
                 writer.WriteStartArray();
-                foreach (var coordinate in vector.Coordinates)
+
+                for (int i = 0; i < vector.Array.Length; i++)
                 {
-                    writer.WriteValue(coordinate);
+                    writer.WriteValue(vector.Array[i]);
                 }
 
                 writer.WriteEndArray();
@@ -30,13 +30,13 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
             }
             else
             {
-                serializer.Serialize(writer, vector.Coordinates);
+                serializer.Serialize(writer, vector.Array);
             }
         }
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
         {
-            var vector = new List<decimal>();
+            var vector = new List<int>();
 
             if (reader.TokenType == JsonToken.StartObject)
             {
@@ -57,15 +57,23 @@ namespace WB.Core.SharedKernels.DataCollection.Utils
             return new RosterVector(vector);
         }
 
-        private static List<decimal> ParseArray(JsonReader reader)
+        private static List<int> ParseArray(JsonReader reader)
         {
-            List<decimal> vector = new List<decimal>();
+            List<int> vector = new List<int>();
 
             while (reader.Read() && reader.TokenType != JsonToken.EndArray)
             {
                 if (reader.TokenType != JsonToken.Comment)
                 {
-                    vector.Add(Convert.ToDecimal(reader.Value));
+                    switch (reader.Value)
+                    {
+                        case Double val: vector.Add((int)val); break;
+                        case long val: vector.Add((int)val); break;
+                        case int val: vector.Add(val); break;
+                        case decimal val: vector.Add((int)val); break;
+                        default:
+                            vector.Add((int) Convert.ToDecimal(reader.Value)); break;
+                    }
                 }
             }
 

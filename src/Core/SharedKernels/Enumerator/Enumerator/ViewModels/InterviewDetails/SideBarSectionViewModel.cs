@@ -154,10 +154,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.OnSectionUpdated?.Invoke(this, new ToggleSectionEventArgs{ ToggledSection = SectionIdentity, IsExpandedNow = Expanded });
         }
 
-        private async Task NavigateToSection()
+        private Task NavigateToSection()
         {
             this.messenger.Publish(new SectionChangeMessage(this));
-            await this.NavigationState.NavigateTo(NavigationIdentity.CreateForGroup(this.SectionIdentity));
+            return this.NavigationState.NavigateTo(NavigationIdentity.CreateForGroup(this.SectionIdentity));
         }
 
         private void UpdateSelection(Identity targetGroup)

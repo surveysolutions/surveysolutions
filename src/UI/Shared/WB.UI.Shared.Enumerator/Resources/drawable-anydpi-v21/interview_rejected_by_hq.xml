@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ripple xmlns:android="http://schemas.android.com/apk/res/android" 
+        xmlns:local="http://schemas.android.com/apk/res-auto"
+        android:color="@color/group_with_invalid_answers">
+    <item>
+        <shape>
+            <corners android:radius="@dimen/button_corners_radius" />
+            <solid android:color="@color/dashboard_rejected_by_headquarter" />
+        </shape>
+    </item>
+</ripple>

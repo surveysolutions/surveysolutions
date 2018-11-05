@@ -1,6 +1,6 @@
 <template>
     <wb-question :question="$me"
-                 questionCssClassName="text-question">
+                 questionCssClassName="text-question" :no-comments="noComments">
         <div class="question-unit">
             <div class="options-group">
                 <div class="form-group">
@@ -46,6 +46,7 @@
     export default {
         name: 'TextQuestion',
         mixins: [entityDetails],
+        props: ['noComments'],
         computed: {
             hasMask(){
                 return this.$me.mask!=null;

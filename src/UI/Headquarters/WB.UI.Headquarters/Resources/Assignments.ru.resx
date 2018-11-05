@@ -280,4 +280,10 @@
   <data name="Tooltip_Filter_Received" xml:space="preserve">
     <value>Отображать только задания которые получены или не получены планшетами.</value>
   </data>
+  <data name="AssignTo" xml:space="preserve">
+    <value>Назначить на</value>
+  </data>
+  <data name="CreatingNewAssignment" xml:space="preserve">
+    <value>Создание новой задачи для опросника {{questionnaire}}</value>
+  </data>
 </root>

@@ -8,7 +8,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.FileBasedTab
     internal class when_requesting_list_of_packages_and_storage_is_empty : FileBasedTabletInformationServiceTestContext
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
-            fileBasedTabletInformationService = CreateFileBasedTabletInformationService();
+            fileBasedTabletInformationService = CreateFileBasedTabletInformationService(writeAllBytesCallback: null);
             BecauseOf();
         }
 

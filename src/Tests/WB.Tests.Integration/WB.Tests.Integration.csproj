@@ -10,18 +10,6 @@
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <None Remove="FullStackIntegration\Hq\assembly.dll" />
-    <None Remove="FullStackIntegration\Hq\Enumerator Questions Automation.zip" />
-    <None Remove="FullStackIntegration\Hq\expectedExport.zip" />
-    <None Remove="FullStackIntegration\Hq\syncPackage.json" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="FullStackIntegration\Hq\assembly.dll" />
-    <EmbeddedResource Include="FullStackIntegration\Hq\Enumerator Questions Automation.zip" />
-    <EmbeddedResource Include="FullStackIntegration\Hq\expectedExport.zip" />
-    <EmbeddedResource Include="FullStackIntegration\Hq\syncPackage.json" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\WB.Core.BoundedContexts.Interviewer.csproj" />
     <ProjectReference Include="..\..\Core\BoundedContexts\Designer\WB.Core.BoundedContexts.Designer\WB.Core.BoundedContexts.Designer.csproj" />
     <ProjectReference Include="..\..\Core\BoundedContexts\Headquarters\WB.Core.BoundedContexts.Headquarters\WB.Core.BoundedContexts.Headquarters.csproj" />
@@ -59,9 +47,10 @@
     <PackageReference Include="Microsoft.NETCore.Platforms" Version="2.0.1" />
     <PackageReference Include="Microsoft.Win32.Primitives" Version="4.3.0" />
     <PackageReference Include="Moq" Version="4.9.0" />
-    <PackageReference Include="MvvmCross.Plugin.Messenger" Version="6.1.2" />
+    <PackageReference Include="MvvmCross.Plugin.Messenger" Version="6.2.1" />
+    <PackageReference Include="MvvmCross.Tests" Version="6.2.1" />
     <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
-    <PackageReference Include="NHibernate" Version="5.1.2" />
+    <PackageReference Include="NHibernate" Version="5.1.3" />
     <PackageReference Include="Ninject" Version="3.3.4" />
     <PackageReference Include="Npgsql" Version="3.2.7" />
     <PackageReference Include="NUnit" Version="3.10.1" />
@@ -88,6 +77,9 @@
   <ItemGroup>
     <Reference Include="AutoFixture">
       <HintPath>..\..\..\..\..\Users\Victo\.nuget\packages\autofixture\4.0.1\lib\net452\AutoFixture.dll</HintPath>
+    </Reference>
+    <Reference Include="MvvmCross.Tests">
+      <HintPath>C:\Users\slava\.nuget\packages\mvvmcross.tests\6.2.0\lib\netstandard2.0\MvvmCross.Tests.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Windows" />

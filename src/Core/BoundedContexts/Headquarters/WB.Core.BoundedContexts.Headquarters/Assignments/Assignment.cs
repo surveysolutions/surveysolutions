@@ -3,6 +3,9 @@ using System.Linq;
 using System.Collections.Generic;
 using WB.Core.BoundedContexts.Headquarters.Aggregates;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -115,6 +118,39 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
         public virtual void MarkAsReceivedByTablet()
         {
             this.ReceivedByTabletAtUtc = DateTime.UtcNow;
+        }
+
+        public static Assignment PrefillFromInterview(IStatefulInterview interview, IQuestionnaire questionnaire)
+        {
+            Assignment result = new Assignment();
+
+            result.QuestionnaireId = interview.QuestionnaireIdentity;
+            var prefilledQuestions = questionnaire.GetPrefilledQuestions();
+            foreach (var prefilledQuestion in prefilledQuestions)
+            {
+                var questionIdentity = new Identity(prefilledQuestion, RosterVector.Empty);
+
+                var question = interview.GetQuestion(questionIdentity);
+                if (question.IsAnswered())
+                {
+                    var answer = interview.GetAnswerAsString(questionIdentity);
+                    if (question.IsSingleFixedOption)
+                    {
+                        answer = question.GetAsInterviewTreeSingleOptionQuestion().GetAnswer().SelectedValue.ToString();
+                    }
+
+                    result.IdentifyingData.Add(IdentifyingAnswer.Create(result, questionnaire, answer, questionIdentity));
+
+                    result.Answers.Add(
+                        new InterviewAnswer
+                        {
+                            Identity = questionIdentity,
+                            Answer = question.InterviewQuestion.Answer
+                        });
+                }
+            }
+
+            return result;
         }
     }
 

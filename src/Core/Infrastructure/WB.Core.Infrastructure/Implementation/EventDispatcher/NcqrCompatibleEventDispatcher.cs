@@ -25,9 +25,11 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
         private readonly IEventStore eventStore;
         private readonly EventBusSettings eventBusSettings;
         private readonly ILogger logger;
+        private readonly IInMemoryEventStore inMemoryEventStore;
         
-        public NcqrCompatibleEventDispatcher(IEventStore eventStore, EventBusSettings eventBusSettings, ILogger logger, IEnumerable<IEventHandler> eventHandlers)
+        public NcqrCompatibleEventDispatcher(IEventStore eventStore, IInMemoryEventStore inMemoryEventStore, EventBusSettings eventBusSettings, ILogger logger, IEnumerable<IEventHandler> eventHandlers)
         {
+            this.inMemoryEventStore = inMemoryEventStore;
             this.eventStore = eventStore;
             this.eventBusSettings = eventBusSettings;
             this.logger = logger;
@@ -86,49 +88,49 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
 
             Guid firstEventSourceId = events.First().EventSourceId;
 
-            if (this.eventBusSettings.IgnoredAggregateRoots.Contains(firstEventSourceId.FormatGuid()))
-                return;
-
             var errorsDuringHandling = new List<Exception>();
 
-            foreach (var functionalEventHandler in functionalHandlers)
+            if (!this.eventBusSettings.IsIgnoredAggregate(firstEventSourceId))
             {
-                var handler = (IFunctionalEventHandler)functionalEventHandler.Handler;
+                foreach (var functionalEventHandler in functionalHandlers)
+                {
+                    var handler = (IFunctionalEventHandler) functionalEventHandler.Handler;
 
-                functionalEventHandler.Bus.OnCatchingNonCriticalEventHandlerException +=
+                    functionalEventHandler.Bus.OnCatchingNonCriticalEventHandlerException +=
                         this.OnCatchingNonCriticalEventHandlerException;
-                try
-                {
-                    handler.Handle(events, firstEventSourceId);
-                }
-                catch (Exception exception)
-                {
-                    var eventHandlerType = handler.GetType();
-                    var shouldIgnoreException =
-                        this.eventBusSettings.EventHandlerTypesWithIgnoredExceptions.Contains(eventHandlerType);
-
-                    var eventHandlerException = new EventHandlerException(eventHandlerType: eventHandlerType,
-                        eventType: events.First().GetType(), isCritical: !shouldIgnoreException,
-                        innerException: exception);
-
-                    if (shouldIgnoreException)
+                    try
                     {
-                        this.logger.Error(
-                            $"Failed to handle {eventHandlerException.EventType.Name} in {eventHandlerException.EventHandlerType} by event source '{firstEventSourceId}'.",
-                            eventHandlerException);
-
-                        this.OnCatchingNonCriticalEventHandlerException?.Invoke(
-                            eventHandlerException);
+                        handler.Handle(events, firstEventSourceId);
                     }
-                    else
+                    catch (Exception exception)
                     {
-                        errorsDuringHandling.Add(eventHandlerException);
+                        var eventHandlerType = handler.GetType();
+                        var shouldIgnoreException =
+                            this.eventBusSettings.EventHandlerTypesWithIgnoredExceptions.Contains(eventHandlerType);
+
+                        var eventHandlerException = new EventHandlerException(eventHandlerType: eventHandlerType,
+                            eventType: events.First().GetType(), isCritical: !shouldIgnoreException,
+                            innerException: exception);
+
+                        if (shouldIgnoreException)
+                        {
+                            this.logger.Error(
+                                $"Failed to handle {eventHandlerException.EventType.Name} in {eventHandlerException.EventHandlerType} by event source '{firstEventSourceId}'.",
+                                eventHandlerException);
+
+                            this.OnCatchingNonCriticalEventHandlerException?.Invoke(
+                                eventHandlerException);
+                        }
+                        else
+                        {
+                            errorsDuringHandling.Add(eventHandlerException);
+                        }
                     }
-                }
-                finally
-                {
-                    functionalEventHandler.Bus.OnCatchingNonCriticalEventHandlerException -=
-                        this.OnCatchingNonCriticalEventHandlerException;
+                    finally
+                    {
+                        functionalEventHandler.Bus.OnCatchingNonCriticalEventHandlerException -=
+                            this.OnCatchingNonCriticalEventHandlerException;
+                    }
                 }
             }
 
@@ -165,6 +167,10 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
         public IEnumerable<CommittedEvent> CommitUncommittedEvents(IEventSourcedAggregateRoot aggregateRoot, string origin)
         {
             var eventStream = new UncommittedEventStream(origin, aggregateRoot.GetUnCommittedChanges());
+            if (this.eventBusSettings.IsIgnoredAggregate(aggregateRoot.EventSourceId))
+            {
+                return this.inMemoryEventStore.Store(eventStream);
+            }
 
             return this.eventStore.Store(eventStream);
         }

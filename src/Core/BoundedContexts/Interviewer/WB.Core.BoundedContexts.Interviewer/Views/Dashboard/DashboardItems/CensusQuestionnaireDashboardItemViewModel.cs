@@ -105,7 +105,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems
 
         public void Dispose()
         {
-            interviewViewRepository?.Dispose();
         }
     }
 }

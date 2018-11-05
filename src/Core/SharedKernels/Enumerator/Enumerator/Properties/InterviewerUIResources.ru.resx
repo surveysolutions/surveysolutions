@@ -863,4 +863,8 @@
     <value>Отмена</value>
     <comment>Отмена</comment>
   </data>
+    <data name="Dashboard_Searching" xml:space="preserve">
+    <value>Поиск...</value>
+    <comment>Поиск...</comment>
+  </data>
 </root>

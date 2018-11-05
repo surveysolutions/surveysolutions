@@ -284,13 +284,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
 
                 this.transactionManager.RollbackCommandTransaction();
 
-                var interviewException = exception as InterviewException;
-                if (interviewException == null)
-                {
-                    interviewException = interviewException?.UnwrapAllInnerExceptions()
+                var interviewException = exception.UnwrapAllInnerExceptions()
                         .OfType<InterviewException>()
                         .FirstOrDefault();
-                }
 
                 var exceptionType = interviewException?.ExceptionType.ToString() ?? UnknownExceptionType;
 
@@ -309,7 +305,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
                     ProcessingDate = DateTime.UtcNow,
                     ExceptionType = exceptionType,
                     ExceptionMessage = exception.Message,
-                    ExceptionStackTrace = string.Join(Environment.NewLine, exception.UnwrapAllInnerExceptions().Select(ex => $"{ex.Message} {ex.StackTrace}")),
+                    ExceptionStackTrace = string.Join(Environment.NewLine, exception.UnwrapAllInnerExceptions()
+                        .Select(ex => $"{ex.Message} {ex.StackTrace}")),
                     ReprocessAttemptsCount = interview.ProcessAttemptsCount,
                 }, null);
                 

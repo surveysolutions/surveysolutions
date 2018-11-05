@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Plugin.Permissions.Abstractions;
@@ -9,6 +10,8 @@ using SQLitePCL;
 using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.DataCollection.Implementation;
+using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Utils;
@@ -24,6 +27,10 @@ namespace WB.UI.Shared.Enumerator.Services
         private readonly IDeviceSettings deviceSettings;
         private readonly IRestService restService;
         private readonly IPrincipal principal;
+        private readonly ISecureStorage secureStorage;
+        private readonly IEncryptionService encryptionService;
+        private readonly ISerializer serializer;
+        private readonly IUserInteractionService userInteractionService;
         private readonly string privateStorage;
 
         public BackupRestoreService(
@@ -34,7 +41,11 @@ namespace WB.UI.Shared.Enumerator.Services
             IPermissions permissions,
             IDeviceSettings deviceSettings,
             IRestService restService,
-            IPrincipal principal)
+            IPrincipal principal,
+            ISecureStorage secureStorage,
+            IEncryptionService encryptionService,
+            ISerializer serializer,
+            IUserInteractionService userInteractionService)
         {
             this.archiver = archiver;
             this.fileSystemAccessor = fileSystemAccessor;
@@ -44,6 +55,10 @@ namespace WB.UI.Shared.Enumerator.Services
             this.deviceSettings = deviceSettings;
             this.restService = restService;
             this.principal = principal;
+            this.secureStorage = secureStorage;
+            this.encryptionService = encryptionService;
+            this.serializer = serializer;
+            this.userInteractionService = userInteractionService;
         }
 
         public async Task<string> BackupAsync()
@@ -74,9 +89,11 @@ namespace WB.UI.Shared.Enumerator.Services
                 await Task.Run(() => this.BackupSqliteDbs()).ConfigureAwait(false);
 
                 this.fileSystemAccessor.CopyFileOrDirectory(this.privateStorage, backupTempFolder, false,
-                    new[] {".log", ".dll", ".back", ".info", ".delta"});
+                    new[] {".log", ".dll", ".back", ".info", ".dat"});
 
                 var backupFolderFilesPath = this.fileSystemAccessor.CombinePath(backupTempFolder, "files");
+
+                this.EncryptKeyStore(backupFolderFilesPath);
 
                 await this.archiver.ZipDirectoryToFileAsync(backupFolderFilesPath, backupFilePath)
                     .ConfigureAwait(false);
@@ -247,11 +264,7 @@ namespace WB.UI.Shared.Enumerator.Services
 
             if (this.fileSystemAccessor.IsFileExists(backupFilePath))
             {
-                if (this.fileSystemAccessor.IsDirectoryExists(this.privateStorage))
-                {
-                    this.fileSystemAccessor.DeleteDirectory(this.privateStorage);
-                    this.fileSystemAccessor.CreateDirectory(this.privateStorage);
-                }
+                this.ReCreatePrivateDirectory();
 
                 await this.archiver.UnzipAsync(backupFilePath, this.privateStorage, true);
 
@@ -260,7 +273,28 @@ namespace WB.UI.Shared.Enumerator.Services
                     var destFileName = Path.ChangeExtension(tempBackupFile, null);
                     File.Move(tempBackupFile, destFileName);
                 }
+
+                try
+                {
+                    this.DecryptKeyStore();
+                }
+                catch (Exception e)
+                {
+                    this.logger.Error("Restore unhandled exception", e);
+
+                    this.ReCreatePrivateDirectory();
+
+                    await this.userInteractionService.AlertAsync("Could not restore encrypted data", "Warning");
+                }
             }
+        }
+
+        private void ReCreatePrivateDirectory()
+        {
+            if (!this.fileSystemAccessor.IsDirectoryExists(this.privateStorage)) return;
+
+            this.fileSystemAccessor.DeleteDirectory(this.privateStorage);
+            this.fileSystemAccessor.CreateDirectory(this.privateStorage);
         }
 
         private void CreateDeviceInfoFile()
@@ -268,6 +302,46 @@ namespace WB.UI.Shared.Enumerator.Services
             var tabletInfoFilePath = this.fileSystemAccessor.CombinePath(this.privateStorage, "device.info");
             var deviceTechnicalInformation = this.deviceSettings.GetDeviceTechnicalInformation();
             this.fileSystemAccessor.WriteAllText(tabletInfoFilePath, deviceTechnicalInformation);
+        }
+
+        private void DecryptKeyStore()
+        {
+            var keyStorePasswordFile = this.fileSystemAccessor.CombinePath(this.privateStorage, "keystore.info");
+            if (!this.fileSystemAccessor.IsFileExists(keyStorePasswordFile)) return;
+
+            var keyStorePasswordFileText = this.fileSystemAccessor.ReadAllText(keyStorePasswordFile);
+
+
+            var serializedKeyChain = this.serializer.Deserialize<KeyChain>(keyStorePasswordFileText);
+
+            this.secureStorage.Store("key", Convert.FromBase64String(serializedKeyChain.Key));
+            this.secureStorage.Store("iv", Convert.FromBase64String(serializedKeyChain.Iv));
+        }
+
+        private void EncryptKeyStore(string backupFolderFilesPath)
+        {
+            if (!this.secureStorage.Contains(RsaEncryptionService.PublicKey)) return;
+
+            this.fileSystemAccessor.DeleteFile(this.fileSystemAccessor.CombinePath(backupFolderFilesPath, "keystore.dat"));
+
+            var securedKeyChain = new KeyChain
+            {
+                Key = Convert.ToBase64String(this.secureStorage.Retrieve("key")),
+                Iv = Convert.ToBase64String(this.secureStorage.Retrieve("iv"))
+            };
+
+            var serializedKeyChain = this.serializer.Serialize(securedKeyChain);
+
+            var keyStorePasswordFile = this.fileSystemAccessor.CombinePath(backupFolderFilesPath, "keystore.info");
+
+            this.fileSystemAccessor.WriteAllText(keyStorePasswordFile,
+                this.encryptionService.Encrypt(serializedKeyChain));
+        }
+
+        private class KeyChain
+        {
+            public string Key { get; set; }
+            public string Iv { get; set; }
         }
     }
 }

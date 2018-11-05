@@ -11,6 +11,8 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Tests.Abc;
 using WB.UI.Headquarters.API.WebInterview.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
+using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Enumerator.Native.WebInterview;
 
@@ -30,6 +32,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
         private IPlainTransactionManagerProvider plainTransactionManagerProvider;
         private WebInterviewConfig webInterviewConfig;
         private Mock<IAuthorizedUser> authorizedUserMock;
+        private EventBusSettings eventBusSettings;
+
 
         [SetUp]
         public void Setup()
@@ -45,17 +49,19 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
             webInterviewConfig = new WebInterviewConfig();
             webInterviewConfigProvider = Mock.Of<IWebInterviewConfigProvider>(tmp => tmp.Get(It.IsAny<QuestionnaireIdentity>()) == webInterviewConfig);
             authorizedUserMock = new Mock<IAuthorizedUser>();
+            eventBusSettings = new EventBusSettings();
 
             webInterviewAllowService = new WebInterviewAllowService(transactionManagerProvider, 
                 plainTransactionManagerProvider,
                 interviewSummaryRepoMock.Object, 
                 webInterviewConfigProvider,
-                authorizedUserMock.Object);
+                authorizedUserMock.Object,
+                eventBusSettings);
         }
 
         private void Act()
         {
-            webInterviewAllowService.CheckWebInterviewAccessPermissions(interviewId.ToString());
+            webInterviewAllowService.CheckWebInterviewAccessPermissions(interviewId.FormatGuid());
         }
 
         private void ArrangeTest(
@@ -198,6 +204,19 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
 
             var exception = Assert.Throws<InterviewAccessException>(Act);
             Assert.That(exception.Reason, Is.EqualTo(InterviewAccessExceptionReason.InterviewExpired));
+        }
+
+        [Test]
+        public void should_allow_administrator_to_access_ignored_web_interview()
+        {
+            this.authorizedUserMock.Setup(x => x.Id).Returns(Id.g1);
+            this.authorizedUserMock.Setup(x => x.IsAuthenticated).Returns(true);
+            this.authorizedUserMock.Setup(x => x.IsHeadquarter).Returns(true);
+
+            eventBusSettings.IgnoredAggregateRoots.Add(interviewId.FormatGuid());
+
+            // Act
+            Assert.DoesNotThrow(Act);
         }
     }
 }

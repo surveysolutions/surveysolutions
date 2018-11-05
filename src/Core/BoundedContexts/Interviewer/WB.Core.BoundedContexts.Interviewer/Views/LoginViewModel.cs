@@ -1,4 +1,5 @@
 using MvvmCross.Navigation;
+using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -20,7 +21,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views
             IPasswordHasher passwordHasher,
             IPlainStorage<InterviewerIdentity> interviewersPlainStorage,
             IPlainStorage<CompanyLogo> logoStorage,
-            ISynchronizationService synchronizationService,
+            IOnlineSynchronizationService synchronizationService,
             ILogger logger,
             IAuditLogService auditLogService)
             : base(viewModelNavigationService, principal, passwordHasher, logoStorage, synchronizationService, logger, auditLogService)

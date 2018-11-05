@@ -1,5 +1,9 @@
 ![Link Text](http://build.mysurvey.solutions/app/rest/builds/buildType:`(id:CI)`/statusIcon)
 
+# 18.12
+- Manual step is required for Headquarters release. In order to utilize Microsoft.Graph API login endpoint and scope should be updated for Onedrive export token
+> `deploy-tools\utils\Release.18.10.ps1` should be executed in `deploy-tools` repository. It will update all existing client configs
+
 # 18.10
 - Manual step is required for Designer release. In order to shrink questionnaire history tool should be used
 > ShrinkQuestionnaireHistory "%Connection string to database"

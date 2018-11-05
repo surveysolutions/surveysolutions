@@ -18,7 +18,9 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Implementation;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
@@ -92,6 +94,11 @@ namespace WB.UI.Shared.Enumerator
             registry.BindAsSingleton<IConnectionsApiLimits, ConnectionsApiLimits>();
             registry.BindAsSingleton<IGoogleApiClientFactory, GoogleApiClientFactory>();
             registry.BindAsSingleton<INearbyConnectionClient, NearbyConnectionClient>();
+
+            // SecureStorage is singleton because very very long getting secret keys
+            registry.BindAsSingleton<ISecureStorage, SecureStorage>();
+
+            registry.Bind<IEncryptionService, AesEncryptionService>();
 
             SetupLoggingFacility(registry);
         }

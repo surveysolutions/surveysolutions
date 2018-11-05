@@ -98,7 +98,7 @@ namespace WB.UI.Headquarters.API.WebInterview
             take = Math.Min(take, 100);
 
             var interview = GetCallerInterview();
-            var overview = this.overviewService.GetOverview(interview).ToList();
+            var overview = this.overviewService.GetOverview(interview, IsReviewMode).ToList();
             var result = overview.Skip(skip).Take(take).ToList();
 
             var isLastPage = skip + result.Count >= overview.Count;
@@ -111,6 +111,14 @@ namespace WB.UI.Headquarters.API.WebInterview
                 Skip = skip,
                 Total = overview.Count
             };
+        }
+
+        public OverviewItemAdditionalInfo OverviewItemAdditionalInfo(string id)
+        {
+            var statefulInterview = this.GetCallerInterview();
+            var currentUserId = this.authorizedUser.Id;
+            var additionalInfo = this.overviewService.GetOverviewItemAdditionalInfo(statefulInterview, id, currentUserId);
+            return additionalInfo;
         }
 
         [SuppressMessage("ReSharper", "UnusedMember.Global", Justification = "Used by HqApp @filters.js")]
