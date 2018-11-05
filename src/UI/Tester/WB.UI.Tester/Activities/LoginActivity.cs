@@ -9,7 +9,9 @@ using WB.UI.Shared.Enumerator.Activities;
 
 namespace WB.UI.Tester.Activities
 {
-    [Activity(WindowSoftInputMode = SoftInput.StateHidden, Theme = "@style/GrayAppTheme")]
+    [Activity(WindowSoftInputMode = SoftInput.StateHidden, 
+        Theme = "@style/GrayAppTheme",
+        Exported = false)]
     public class LoginActivity : BaseActivity<LoginViewModel>
     {
 

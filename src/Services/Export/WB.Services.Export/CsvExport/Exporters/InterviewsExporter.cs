@@ -57,13 +57,13 @@ namespace WB.Services.Export.CsvExport.Exporters
         {
             Stopwatch stopwatch = Stopwatch.StartNew();
 
-            await this.DoExport(tenant, questionnaireExportStructure, questionnaire, basePath, interviewsToExport, progress, cancellationToken);
+            await this.DoExportAsync(tenant, questionnaireExportStructure, questionnaire, basePath, interviewsToExport, progress, cancellationToken);
             stopwatch.Stop();
             this.logger.Log(LogLevel.Information, $"Export of {interviewsToExport.Count:N0} interview datas for questionnaire" +
                                                   $" {questionnaireExportStructure.QuestionnaireId} finised. Took {stopwatch.Elapsed:c} to complete");
         }
 
-        private Task DoExport(TenantInfo tenant,
+        private Task DoExportAsync(TenantInfo tenant,
             QuestionnaireExportStructure questionnaireExportStructure,
             QuestionnaireDocument questionnaire,
             string basePath,
@@ -72,7 +72,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             CancellationToken cancellationToken)
         {
             this.CreateDataSchemaForInterviewsInTabular(questionnaireExportStructure, basePath);
-            return this.ExportInterviews(tenant, interviewIdsToExport, basePath, questionnaireExportStructure, questionnaire, progress, cancellationToken);
+            return this.ExportInterviewsAsync(tenant, interviewIdsToExport, basePath, questionnaireExportStructure, questionnaire, progress, cancellationToken);
         }
 
         private void CreateDataSchemaForInterviewsInTabular(QuestionnaireExportStructure questionnaireExportStructure, string basePath)
@@ -110,7 +110,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             this.errorsExporter.WriteHeader(hasAtLeastOneRoster, questionnaireExportStructure.MaxRosterDepth, errorsExportFilePath);
         }
 
-        private async Task ExportInterviews(TenantInfo tenant, List<InterviewToExport> interviewIdsToExport,
+        private async Task ExportInterviewsAsync(TenantInfo tenant, List<InterviewToExport> interviewIdsToExport,
             string basePath,
             QuestionnaireExportStructure questionnaireExportStructure,
             QuestionnaireDocument questionnaire,
@@ -287,7 +287,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                 {
                     referenceValues = new[]
                     {
-                        this.GetTextValueForTextListQuestion(interview, dataByLevel.RosterVector, headerStructureForLevel.LevelScopeVector.Last())
+                        this.GetTextValueForTextListQuestion(interview, dataByLevel.RosterVector, headerStructureForLevel.LevelScopeVector)
                     };
                 }
 
@@ -338,15 +338,18 @@ namespace WB.Services.Export.CsvExport.Exporters
             return result.ToArray();
         }
 
-        private string GetTextValueForTextListQuestion(InterviewData interview, RosterVector rosterVector, Guid id)
+        private string GetTextValueForTextListQuestion(InterviewData interview, RosterVector rosterVector, ValueVector<Guid> levelScopeVector)
         {
             decimal itemToSearch = rosterVector.Last();
+            Guid id = levelScopeVector.Last();
+
 
             for (var i = 1; i <= rosterVector.Length; i++)
             {
-                var levelForVector =
-                    interview.Levels.GetOrNull(
-                        this.CreateLevelIdFromPropagationVector(rosterVector.Take(rosterVector.Length - i)));
+                var levelForVector = interview.Levels.GetOrNull(
+                        InterviewLevel.GetLevelKeyName(
+                            new ValueVector<Guid>(levelScopeVector.Take(levelScopeVector.Length - i)), 
+                            rosterVector.Take(rosterVector.Length - i)));
 
                 var questionToCheck = levelForVector?.QuestionsSearchCache.GetOrNull(id);
 
@@ -365,11 +368,6 @@ namespace WB.Services.Export.CsvExport.Exporters
             }
 
             return string.Empty;
-        }
-
-        private string CreateLevelIdFromPropagationVector(RosterVector vector)
-        {
-            return vector.Length == 0 ? "#" : vector.ToString();
         }
 
         private List<InterviewLevel> GetLevelsFromInterview(InterviewData interview, ValueVector<Guid> levelVector)

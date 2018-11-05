@@ -5,7 +5,8 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.DbMigrations;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
-using WB.UI.Headquarters.Migrations.PlainStore;
+using WB.Persistence.Headquarters.Migrations.PlainStore;
+using WB.Persistence.Headquarters.Migrations.ReadSide;
 
 namespace WB.Tests.Integration.PostgreSQLEventStoreTests
 {
@@ -62,8 +63,7 @@ namespace WB.Tests.Integration.PostgreSQLEventStoreTests
                         break;
                     case DbType.ReadSide:
                         DbMigrationsRunner.MigrateToLatest(connectionStringBuilder.ConnectionString, schemaName,
-                            new DbUpgradeSettings(typeof(WB.UI.Headquarters.Migrations.ReadSide.M001_InitDb).Assembly,
-                                typeof(WB.UI.Headquarters.Migrations.ReadSide.M001_InitDb).Namespace));
+                            new DbUpgradeSettings(typeof(M001_InitDb).Assembly, typeof(M001_InitDb).Namespace));
                         break;
                 }
             }

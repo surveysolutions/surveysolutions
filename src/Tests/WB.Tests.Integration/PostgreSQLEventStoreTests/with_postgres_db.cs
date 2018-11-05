@@ -7,7 +7,7 @@ using WB.Core.Infrastructure.EventBus;
 using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.DbMigrations;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
-using WB.Infrastructure.Native.Storage.Postgre.Implementation.Migrations;
+using WB.Persistence.Headquarters.Migrations.Events;
 
 namespace WB.Tests.Integration.PostgreSQLEventStoreTests
 {

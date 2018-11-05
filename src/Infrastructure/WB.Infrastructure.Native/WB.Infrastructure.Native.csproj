@@ -65,4 +65,7 @@
       <LastGenOutput>Modules.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Storage\Postgre\Implementation\Migrations\" />
+  </ItemGroup>
 </Project>

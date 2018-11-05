@@ -6,7 +6,7 @@ namespace WB.Services.Export.Ddi
 {
     internal interface IDdiMetadataFactory
     {
-        Task<string> CreateDDIMetadataFileForQuestionnaireInFolder(TenantInfo tenant, QuestionnaireId questionnaireId,
+        Task<string> CreateDDIMetadataFileForQuestionnaireInFolderAsync(TenantInfo tenant, QuestionnaireId questionnaireId,
             string basePath);
     }
 }

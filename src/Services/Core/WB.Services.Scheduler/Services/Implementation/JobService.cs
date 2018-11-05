@@ -26,7 +26,8 @@ namespace WB.Services.Scheduler.Services.Implementation
             this.logger = logger;
         }
 
-        private static long lock_add_value = -95599;
+        // Using this lock we ensure that only one thread in all workers cluster can add job
+        private static long lock_add_value = -777;
 
         public async Task<JobItem> AddNewJobAsync(JobItem job)
         {
@@ -34,7 +35,7 @@ namespace WB.Services.Scheduler.Services.Implementation
 
             using (var tr = await db.Database.BeginTransactionAsync())
             {
-                await db.AcquireLockAsync(lock_add_value);
+                await db.AcquireXactLockAsync(lock_add_value);
 
                 var existingJob = await db.Jobs
                     .Where(j =>
@@ -59,9 +60,9 @@ namespace WB.Services.Scheduler.Services.Implementation
 
         public async Task<JobItem> GetFreeJobAsync(CancellationToken token = default)
         {
-            using (var tr = db.Database.BeginTransaction())
+            using (var tr = await db.Database.BeginTransactionAsync(token))
             {
-                await db.AcquireLockAsync(lock_add_value);
+                await db.AcquireXactLockAsync(lock_add_value);
 
                 var running = JobStatus.Running.ToString().ToLowerInvariant();
                 var created = JobStatus.Created.ToString().ToLowerInvariant();
@@ -95,7 +96,7 @@ namespace WB.Services.Scheduler.Services.Implementation
                
                 if (job != null)
                 {
-                    job.Start();
+                    job.Start(jobSettings.Value.WorkerId);
                     db.Jobs.Update(job);
                 }
 

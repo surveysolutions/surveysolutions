@@ -120,7 +120,7 @@ namespace WB.Services.Export.Host.Infra
                     return type.BaseType.GetField("_originalContent", bindFlags);
                 });
 
-                var val = field.GetValue(result.Content) as HttpContent;
+                var val = field?.GetValue(result.Content) as HttpContent;
                 return val?.Headers.ContentLength;
             }
         }

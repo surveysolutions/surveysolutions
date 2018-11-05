@@ -116,31 +116,27 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
 
         public bool IsQuestion(IComposite item)
         {
-            var question = item as IQuestion;
-            return question != null;
+            return item is IQuestion;
         }
 
         public bool IsGroup(IComposite item)
         {
-            var group = item as IGroup;
-            return group != null;
+            return item is IGroup;
         }
 
         public bool IsRoster(IComposite item)
         {
-            return this.IsGroup(item) && (item as IGroup).IsRoster;
+            return this.IsGroup(item) && ((IGroup) item).IsRoster;
         }
 
         public bool IsStaticText(IComposite item)
         {
-            var text = item as IStaticText;
-            return text != null;
+            return item is IStaticText;
         }
 
         public bool IsVariable(IComposite item)
         {
-            var variable = item as IVariable;
-            return variable != null;
+            return item is IVariable;
         }
 
         public string GetBreadcrumbsForGroup(Guid groupId)
@@ -378,10 +374,10 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
                     return  QuestionsWithLongInstructions.IndexOf(question) + 1;
                 }
                 case "F":
-                    {
-                        var question = Find<IQuestion>(entityId);
-                        return QuestionsWithLongOptionsFilterExpression.IndexOf(question) + 1;
-                    }
+                {
+                    var question = Find<IQuestion>(entityId);
+                    return QuestionsWithLongOptionsFilterExpression.IndexOf(question) + 1;
+                }
                 case "O":
                 {
                     var question = Find<IQuestion>(entityId);

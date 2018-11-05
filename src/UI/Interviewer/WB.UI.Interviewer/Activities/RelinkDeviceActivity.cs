@@ -10,7 +10,8 @@ namespace WB.UI.Interviewer.Activities
 {
     [Activity(WindowSoftInputMode = SoftInput.StateHidden,
         Theme = "@style/GrayAppTheme",
-        NoHistory = true)]
+        NoHistory = true,
+        Exported = false)]
     public class RelinkDeviceActivity : BaseActivity<RelinkDeviceViewModel>
     {
         protected override int ViewResourceId => Resource.Layout.relink;
