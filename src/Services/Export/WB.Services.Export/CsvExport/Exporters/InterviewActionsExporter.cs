@@ -38,10 +38,6 @@ namespace WB.Services.Export.CsvExport.Exporters
         private readonly ICsvWriter csvWriter;
         private readonly ITenantApi<IHeadquartersApi> tenantApi;
         public InterviewActionsExporter(IOptions<InterviewDataExportSettings> interviewDataExportSettings,
-        protected InterviewActionsExporter()
-        {
-        }
-
             ICsvWriter csvWriter,
             ITenantApi<IHeadquartersApi> tenantApi)
         {
