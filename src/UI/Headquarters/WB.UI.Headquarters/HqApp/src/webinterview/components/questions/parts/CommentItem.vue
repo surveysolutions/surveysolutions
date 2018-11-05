@@ -1,7 +1,7 @@
 <template>
     <div :class="{'enumerators-comment': isInterviewersComment}">
         <h6>{{ commentTitle }}</h6>
-        <p :class="{'overloaded': isCollapsed}">{{ text }}<button v-if="isCollapsed" type="button" v-on:click="toggle()" class="btn btn-link btn-horizontal-hamburger"><span></span></button></p>
+        <p :class="{'overloaded': isCollapsed}"> <span v-html="text"></span><button v-if="isCollapsed" type="button" v-on:click="toggle()" class="btn btn-link btn-horizontal-hamburger"><span></span></button></p>
     </div>
 </template>
 
