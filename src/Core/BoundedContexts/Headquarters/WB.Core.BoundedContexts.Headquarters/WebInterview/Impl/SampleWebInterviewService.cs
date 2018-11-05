@@ -1,20 +1,20 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text.RegularExpressions;
 using CsvHelper;
 using CsvHelper.Configuration;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Infrastructure.Native.Sanitizer;
 
 namespace WB.Core.BoundedContexts.Headquarters.WebInterview.Impl
 {
     internal class SampleWebInterviewService : ISampleWebInterviewService
     {
-        private static readonly Regex TitlesCleanupRegex = new Regex(@"(\r\n?|\n|\t)", RegexOptions.Compiled | RegexOptions.CultureInvariant);
+        protected internal const string AssignmentLink = "assignment__link";
+        protected internal const string AssignmentId = "assignment__id";
         private readonly IAssignmentsService assignmentsService;
         private readonly IQuestionnaireStorage questionnaireStorage;
 
@@ -45,10 +45,10 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview.Impl
                 {
                     using (CsvWriter csvWriter = new CsvWriter(streamWriter, csvConfiguration))
                     {
-                        this.WriteHeaderRow(csvWriter, questionnaireDocument, assignmentsToExport.FirstOrDefault());
+                        var header = this.WriteHeaderRow(csvWriter, questionnaireDocument, assignmentsToExport);
                         foreach (var assignment in assignmentsToExport)
                         {
-                            PushAssignment(assignment, csvWriter, baseUrl);
+                            PushAssignment(header, assignment, questionnaireDocument, csvWriter, baseUrl);
                         }
                     }
                 }
@@ -57,34 +57,57 @@ namespace WB.Core.BoundedContexts.Headquarters.WebInterview.Impl
             }
         }
 
-        private void WriteHeaderRow(CsvWriter csvWriter, IQuestionnaire questionnaire, Assignment sampleAssignment)
+        private List<string> WriteHeaderRow(CsvWriter csvWriter, IQuestionnaire questionnaire, List<Assignment> sampleAssignment)
         {
-            csvWriter.WriteField("assignment__link");
-            csvWriter.WriteField("assignment__id");
+            List<string> header = new List<string>();
+            header.Add(AssignmentLink);
+            header.Add(AssignmentId);
 
-            if (sampleAssignment != null)
+            foreach (var identifyingAnswer in sampleAssignment.SelectMany(x => x.IdentifyingData))
             {
-                foreach (var questionItem in sampleAssignment.IdentifyingData.Select(x => questionnaire.GetQuestionVariableName(x.Identity.Id)))
+                if (identifyingAnswer != null)
                 {
-                    csvWriter.WriteField(TitlesCleanupRegex.Replace(questionItem.RemoveHtmlTags(), ""));
+                    var variableName = questionnaire.GetQuestionVariableName(identifyingAnswer.Identity.Id);
+                    if (!header.Contains(variableName))
+                    {
+                        header.Add(variableName);
+                    }
                 }
             }
 
+            foreach (var column in header)
+            {
+                csvWriter.WriteField(column);
+            }
+
             csvWriter.NextRecord();
+            return header;
         }
 
-        private static void PushAssignment(Assignment assignment,
+        private static void PushAssignment(List<string> header,
+            Assignment assignment,
+            IQuestionnaire questionnaire,
             CsvWriter csvWriter,
             string baseUrl)
         {
-                csvWriter.WriteField($"{baseUrl}/{assignment.Id}/Start");
-                csvWriter.WriteField(assignment.Id);
-
-                foreach (var prefilledQuestion in assignment.IdentifyingData)
+            foreach (var columnName in header)
+            {
+                if (columnName.Equals(AssignmentLink, StringComparison.Ordinal))
                 {
-                    csvWriter.WriteField(prefilledQuestion.Answer);
+                    csvWriter.WriteField($"{baseUrl}/{assignment.Id}/Start");
                 }
-                csvWriter.NextRecord();
+                else if (columnName.Equals(AssignmentId, StringComparison.Ordinal))
+                {
+                    csvWriter.WriteField(assignment.Id);
+                }
+                else
+                {
+                    var questionId = questionnaire.GetQuestionIdByVariable(columnName);
+                    var answer = assignment.IdentifyingData.FirstOrDefault(x => x.Identity.Id == questionId);
+                    csvWriter.WriteField(answer?.Answer ?? string.Empty);
+                }
+            }
+            csvWriter.NextRecord();
         }
 
         private List<Assignment> GetAssignments(QuestionnaireIdentity questionnaire)

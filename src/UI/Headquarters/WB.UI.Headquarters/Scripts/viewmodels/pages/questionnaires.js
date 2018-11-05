@@ -38,7 +38,7 @@
 
     self.addNewInterview = function (key, opt) {
         var selectedRow = self.selectRowAndGetData(opt.$trigger);
-        window.location.href = $newInterviewUrl + '/' + selectedRow.questionnaireId + '?version=' + selectedRow.version;
+        window.location.href = $newInterviewUrl + '?questionnaireId=' + encodeURI(selectedRow.questionnaireId + '$' + selectedRow.version);
     };
 
     self.webInterviewSetup = function (key, opt) {

@@ -419,4 +419,7 @@ Contact support for assistance.</value>
   <data name="Interview_Overview_NotAnswered" xml:space="preserve">
     <value>Not answered</value>
   </data>
+  <data name="Interview_Overview_AdditionalInformation" xml:space="preserve">
+    <value>Additional question information</value>
+  </data>
 </root>

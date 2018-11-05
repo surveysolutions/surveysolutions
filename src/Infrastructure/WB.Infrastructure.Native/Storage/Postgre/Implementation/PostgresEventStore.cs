@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
+using System.IO;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
+using Dapper;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using Newtonsoft.Json;
@@ -13,6 +17,7 @@ using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 {
+    [Localizable(false)]
     public class PostgresEventStore  : IHeadquartersEventStore
     {
         private readonly PostgreConnectionSettings connectionSettings;
@@ -60,23 +65,25 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             using (NpgsqlConnection connection = new NpgsqlConnection(this.connectionSettings.ConnectionString))
             {
                 connection.Open();
-                using (connection.BeginTransaction())
-                {
-                    var command = connection.CreateCommand();
-                    command.CommandText = $"SELECT * FROM {tableNameWithSchema} WHERE eventsourceid=:sourceId AND eventsequence >= :minVersion ORDER BY eventsequence LIMIT :batchSize OFFSET :processed";
-                    command.Parameters.AddWithValue("sourceId", NpgsqlDbType.Uuid, id);
-                    command.Parameters.AddWithValue("minVersion", minVersion);
-                    command.Parameters.AddWithValue("batchSize", BatchSize);
-                    command.Parameters.AddWithValue("processed", processed);
 
-                    using (var reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
+                using (var tr = connection.BeginTransaction())
+                {
+                    var rawEvents = connection.Query<RawEvent>(
+                        $"SELECT id, eventsourceid, origin, eventsequence, timestamp, globalsequence, eventtype, value::text " +
+                        $"FROM {tableNameWithSchema} " +
+                        $"WHERE eventsourceid= @sourceId AND eventsequence >= @minVersion " +
+                        $"ORDER BY eventsequence LIMIT @batchSize OFFSET @processed",
+                        new
                         {
-                            var singleEvent = this.ReadSingleEvent(reader);
-                            if (singleEvent != null)
-                                yield return singleEvent;
-                        }
+                            sourceId = id,
+                            minVersion = minVersion,
+                            batchSize = BatchSize,
+                            processed = processed
+                        }, buffered: true, transaction: tr);
+
+                    foreach (var committedEvent in ToCommittedEvent(rawEvents))
+                    {
+                        yield return committedEvent;
                     }
                 }
             }
@@ -249,62 +256,81 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             }
         }
 
-        private IEnumerable<CommittedEvent> ReadEventsBatch(int processed)
+        private struct RawEvent
         {
-            using (NpgsqlConnection conn = new NpgsqlConnection(this.connectionSettings.ConnectionString))
+            public Guid Id { get; set; }
+            public Guid eventSourceId { get; set; }
+            public string origin { get; set; }
+            public int eventSequence { get; set; }
+            public DateTime timeStamp { get; set; }
+            public long globalSequence { get; set; }
+            public string eventType { get; set; }
+            public string value { get; set; }
+        }
+
+        public async Task<EventsFeedPage> GetEventsFeedAsync(long startWithGlobalSequence, int pageSize)
+        {
+            var rawEventsData = await this.sessionProvider.GetSession().Connection
+                .QueryAsync<RawEvent>
+                 ($@"SELECT id, eventsourceid, origin, eventsequence, timestamp, globalsequence, eventtype, value::text 
+                   FROM {tableNameWithSchema} 
+                   WHERE globalsequence > @minVersion 
+                   ORDER BY globalsequence 
+                   LIMIT @batchSize", 
+                   new { minVersion = startWithGlobalSequence, batchSize = pageSize });
+
+            var events = ToCommittedEvent(rawEventsData).ToList();
+
+            return new EventsFeedPage(GetLastGlobalSequence(), events);
+        }
+
+        private IEnumerable<CommittedEvent> ToCommittedEvent(IEnumerable<RawEvent> rawEventsData)
+        {
+            // reusing serializer to save few bytes of allocation
+            var serializer = JsonSerializer.CreateDefault(EventSerializerSettings.BackwardCompatibleJsonSerializerSettings);
+
+            IEvent Deserialize(string value, Type type)
             {
-                conn.Open();
-
-                var npgsqlCommand = conn.CreateCommand();
-                npgsqlCommand.CommandText = $"SELECT * FROM {tableNameWithSchema} ORDER BY globalsequence LIMIT :batchSize OFFSET :processed";
-                npgsqlCommand.Parameters.AddWithValue("batchSize", BatchSize);
-                npgsqlCommand.Parameters.AddWithValue("processed", processed);
-
-                using (var reader = npgsqlCommand.ExecuteReader())
+                using (var sr = new StringReader(value))
                 {
-                    while (reader.Read())
+                    using (JsonTextReader jsonTextReader = new JsonTextReader(sr))
                     {
-                        var singleEvent = this.ReadSingleEvent(reader);
-                        if (singleEvent != null)
-                            yield return singleEvent;
+                        return (IEvent) serializer.Deserialize(jsonTextReader, type);
                     }
                 }
             }
-        }
 
-        private CommittedEvent ReadSingleEvent(IDataReader npgsqlDataReader)
-        {
-            string value = (string) npgsqlDataReader["value"];
+            foreach (var raw in rawEventsData)
+            {
+                if (obsoleteEvents.Contains(raw.eventType.ToLower()))
+                {
+                    continue;
+                }
 
-            string eventType = (string) npgsqlDataReader["eventtype"];
+                var resolvedEventType = this.eventTypeResolver.ResolveType(raw.eventType);
+                IEvent typedEvent = Deserialize(raw.value, resolvedEventType);
 
-            if (obsoleteEvents.Contains(eventType.ToLower()))
-                return null;
-
-            var resolvedEventType = this.eventTypeResolver.ResolveType(eventType);
-            IEvent typedEvent = JsonConvert.DeserializeObject(value, resolvedEventType, EventSerializerSettings.BackwardCompatibleJsonSerializerSettings) as IEvent;
-
-            var origin = npgsqlDataReader["origin"];
-
-            var eventIdentifier = (Guid) npgsqlDataReader["id"];
-            var eventSourceId = (Guid) npgsqlDataReader["eventsourceid"];
-            var eventSequence = (int) npgsqlDataReader["eventsequence"];
-            var eventTimeStamp = (DateTime) npgsqlDataReader["timestamp"];
-            var globalSequence = (int) npgsqlDataReader["globalsequence"];
-
-            var commitedEvent = new CommittedEvent(Guid.Empty,
-                origin is DBNull ? null : (string) origin,
-                eventIdentifier,
-                eventSourceId,
-                eventSequence,
-                eventTimeStamp,
-                globalSequence,
-                typedEvent
+                yield return new CommittedEvent(
+                    Guid.Empty,
+                    raw.origin,
+                    raw.Id,
+                    raw.eventSourceId,
+                    raw.eventSequence,
+                    raw.timeStamp,
+                    raw.globalSequence,
+                    typedEvent
                 );
-            return commitedEvent;
+            }
         }
 
         private long GetNextSequence()
+        {
+            GetLastGlobalSequence();
+
+            return Interlocked.Increment(ref lastUsedGlobalSequence);
+        }
+
+        private long GetLastGlobalSequence()
         {
             if (lastUsedGlobalSequence == -1)
             {
@@ -317,7 +343,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
                 }
             }
 
-            return Interlocked.Increment(ref lastUsedGlobalSequence);
+            return lastUsedGlobalSequence;
         }
 
         private void FillLastUsedSequenceInEventStore()

@@ -11,10 +11,8 @@ namespace WB.Core.BoundedContexts.Interviewer.Services
 {
     public interface IInterviewerSynchronizationService : ISynchronizationService
     {
-        Task<List<QuestionnaireIdentity>> GetCensusQuestionnairesAsync(CancellationToken token);
-
         Task<InterviewerApiView> GetInterviewerAsync(RestCredentials credentials = null, CancellationToken? token = null);
-
+        Task<List<QuestionnaireIdentity>> GetCensusQuestionnairesAsync(CancellationToken token);
         Task<Guid> GetCurrentSupervisor(CancellationToken token, RestCredentials credentials);
     }
 }

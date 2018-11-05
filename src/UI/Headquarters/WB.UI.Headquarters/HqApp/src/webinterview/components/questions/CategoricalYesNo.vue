@@ -1,5 +1,5 @@
 <template>
-    <wb-question :question="$me" :questionCssClassName="$me.ordered ? 'yes-no-question ordered' : 'yes-no-question'">
+    <wb-question :question="$me" :questionCssClassName="$me.ordered ? 'yes-no-question ordered' : 'yes-no-question'"  :no-comments="noComments">
         <div class="question-unit">
             <div class="yes-no-mark">{{ $t("WebInterviewUI.Yes") }} <b>/</b> {{ $t("WebInterviewUI.No")}}</div>
             <div class="options-group">
@@ -49,6 +49,7 @@
     import * as $ from "jquery"
     import modal from "../modal"
     import { findIndex, filter } from "lodash"
+    import { shouldShowAnsweredOptionsOnlyForMulti } from "./question_helpers"
     
     export default {
         name: 'CategoricalYesNo',
@@ -57,6 +58,7 @@
                 showAllOptions: false
             }
         },
+        props: ['noComments'],
         computed: {
             allAnswersGiven() {
                 const yesAnswers = $.grep(this.$me.answer, function(e){ return e.yes; });
@@ -64,8 +66,7 @@
                 return isMaxLimitReached;
             },
             shouldShowAnsweredOptionsOnly(){
-                return !this.showAllOptions && this.$store.getters.isReviewMode && !this.noOptions &&                     
-                    this.$me.answer.length > 0 && this.$me.answer.length < this.$me.options.length;
+                 return shouldShowAnsweredOptionsOnlyForMulti(this);
             },
             answeredOrAllOptions(){
                 if(!this.shouldShowAnsweredOptionsOnly)

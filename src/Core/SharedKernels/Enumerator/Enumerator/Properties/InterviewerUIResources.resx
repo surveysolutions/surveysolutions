@@ -786,6 +786,9 @@ Downloaded {3}%</value>
   <data name="Dashboard_NeedTextForSearch" xml:space="preserve">
     <value>Perform search to display results</value>
   </data>
+  <data name="Dashboard_Searching" xml:space="preserve">
+    <value>Searching...</value>
+  </data>
   <data name="Dashboard_SearchWatermark" xml:space="preserve">
     <value>Enter text for search</value>
   </data>

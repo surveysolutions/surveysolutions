@@ -1,27 +1,34 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
+using Dapper;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
+using WB.Infrastructure.Native.Storage.Postgre.Implementation;
+
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.User
 {
     public class TeamViewFactory : ITeamViewFactory 
     {
-        readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader;
+        private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader;
         private readonly IUserRepository userRepository;
+        private readonly ISessionProvider sessionProvider;
 
         public TeamViewFactory(IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader, 
-            IUserRepository userRepository)
+            IUserRepository userRepository,
+            ISessionProvider sessionProvider)
         {
             this.interviewSummaryReader = interviewSummaryReader;
             this.userRepository = userRepository;
+            this.sessionProvider = sessionProvider;
         }
-
-        public UsersView GetAssigneeSupervisorsAndDependentInterviewers(int pageSize, string searchBy)
+         
+        public UsersView GetAssigneeSupervisors(int pageSize, string searchBy)
         {
-            var assigneeSupervisorsAndDependentInterviewers = new UsersView()
+            var assigneeSupervisors = new UsersView()
             {
                 Users = this.interviewSummaryReader.Query(interviews =>
                     ApplyFilterByTeamLead(searchBy: searchBy, interviews: interviews)
@@ -30,8 +37,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
 
                 TotalCountByQuery = this.interviewSummaryReader.Query(interviews =>
                     ApplyFilterByTeamLead(searchBy: searchBy, interviews: interviews)
-                        .ToList()
                         .Count())
+            };
+            FillUserRoles(assigneeSupervisors);
+            return assigneeSupervisors;
+        }     
+        
+        public UsersView GetAssigneeSupervisorsAndDependentInterviewers(int pageSize, string searchBy)
+        {
+            var assigneeSupervisorsAndDependentInterviewers = new UsersView()
+            {
+                Users = GetUsersFilteredByTeamLeadAndResponsible(searchBy, pageSize),
+                TotalCountByQuery = GetCountUsersFilteredByTeamLeadAndResponsible(searchBy)
             };
             FillUserRoles(assigneeSupervisorsAndDependentInterviewers);
             return assigneeSupervisorsAndDependentInterviewers;
@@ -102,6 +119,47 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                 .OrderBy(x => x.UserName);
 
             return responsiblesFromInterviews;
+        }
+
+        private List<UsersViewItem> GetUsersFilteredByTeamLeadAndResponsible(string searchBy, int pageSize)
+        {
+            string searchLowerText = searchBy?.ToLower();
+
+            return sessionProvider.GetSession().Connection.Query<UsersViewItem>(@"
+                SELECT u.username, u.userid 
+                FROM (
+                    SELECT DISTINCT coalesce(i1.teamleadname, i2.responsiblename) username, coalesce(i1.teamleadid, i2.responsibleid) userid
+                      FROM readside.interviewsummaries i1
+                        FULL JOIN readside.interviewsummaries AS i2 ON 1 = 2
+                ) AS u
+                WHERE @searchText is NULL OR LOWER(u.username) like @searchTextForLike
+                ORDER BY u.username
+                LIMIT @limit",
+                    new
+                    {
+                        limit = pageSize,
+                        searchText = searchLowerText,
+                        searchTextForLike = $"%{searchLowerText}%",
+                    }).ToList();
+        }
+
+        private int GetCountUsersFilteredByTeamLeadAndResponsible(string searchBy)
+        {
+            string searchLowerText = searchBy?.ToLower();
+
+            return sessionProvider.GetSession().Connection.QuerySingle<int>(@"
+                SELECT COUNT(u.username) 
+                FROM (
+                    SELECT DISTINCT coalesce(i1.teamleadname, i2.responsiblename) username
+                      FROM readside.interviewsummaries i1
+                        FULL JOIN readside.interviewsummaries AS i2 ON 1 = 2
+                ) AS u
+                WHERE @searchText is NULL OR LOWER(u.username) like @searchTextForLike",
+                    new
+                    {
+                        searchText = searchLowerText,
+                        searchTextForLike = $"%{searchLowerText}%",
+                    });
         }
     }
 }

@@ -8,8 +8,11 @@ namespace WB.Core.BoundedContexts.Headquarters.Assignments
 {
     public class IdentifyingAnswer
     {
-        public static IdentifyingAnswer Create(Assignment assignment, IQuestionnaire questionnaire, string answer,
-            Identity questionId = null, string variableName = null, bool transformAnswers = false)
+        public static IdentifyingAnswer Create(Assignment assignment, IQuestionnaire questionnaire, 
+            string answer,
+            Identity questionId = null, 
+            string variableName = null, 
+            bool transformAnswers = false)
         {
             var result = new IdentifyingAnswer
             {

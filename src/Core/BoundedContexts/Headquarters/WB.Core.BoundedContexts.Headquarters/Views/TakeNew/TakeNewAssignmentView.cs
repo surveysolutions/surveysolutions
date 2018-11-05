@@ -7,11 +7,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.TakeNew
 {
     public class TakeNewAssignmentView
     {
-        public TakeNewAssignmentView(IQuestionnaireDocument questionnaire, long questionnaireVersion)
+        public TakeNewAssignmentView(IQuestionnaireDocument questionnaire)
         {
             this.QuestionnaireTitle = questionnaire.Title;
             this.QuestionnaireId = questionnaire.PublicKey;
-            this.QuestionnaireVersion = questionnaireVersion;
             this.FeaturedQuestions = new List<FeaturedQuestionView>();
 
             foreach (IQuestion q in questionnaire.Find<IQuestion>(x => x.Featured))

@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <LangVersion>7.1</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Jobs\**" />
+    <EmbeddedResource Remove="Jobs\**" />
+    <None Remove="Jobs\**" />
+  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Dapper" Version="1.50.5" />
+        <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.1.4">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="2.1.4" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="2.1.1" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="2.1.1" />
+        <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="2.1.1" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="2.1.1" />
+        <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+        <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="2.1.2" />
+        <PackageReference Include="Npgsql" Version="4.0.3" />
+        <PackageReference Include="prometheus-net" Version="2.1.3" />
+        <PackageReference Include="System.Reactive" Version="4.1.2" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\WB.Services.Infrastructure\WB.Services.Infrastructure.csproj" />
+    </ItemGroup>
+
+</Project>

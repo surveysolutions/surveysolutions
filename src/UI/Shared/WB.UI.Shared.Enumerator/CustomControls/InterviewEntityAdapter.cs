@@ -6,7 +6,6 @@ using MvvmCross.Droid.Support.V7.RecyclerView;
 using MvvmCross.Platforms.Android;
 using MvvmCross.Platforms.Android.Binding.BindingContext;
 using WB.UI.Shared.Enumerator.Activities;
-using Object = Java.Lang.Object;
 
 namespace WB.UI.Shared.Enumerator.CustomControls
 {
@@ -31,25 +30,23 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             return new View(context);
         }
 
-        public override void OnViewDetachedFromWindow(Object holder)
+        public override void OnViewDetachedFromWindow(Java.Lang.Object holder)
         {
             // we do this, because same bindings use focus as triger, 
             // but in new version of MvvmCross focus event is raised after clear data in control
             bool isFocusedChildren = IsThereChildrenWithFocus(holder);
             if (isFocusedChildren) 
             {
-                IMvxAndroidCurrentTopActivity topActivity = Mvx.Resolve<IMvxAndroidCurrentTopActivity>();
-                var activity = topActivity.Activity;
-                activity.RemoveFocusFromEditText();
+                var topActivity = Plugin.CurrentActivity.CrossCurrentActivity.Current.Activity;
+                topActivity.RemoveFocusFromEditText();
             }
 
             base.OnViewDetachedFromWindow(holder);
         }
 
-        private bool IsThereChildrenWithFocus(Object holder)
+        private bool IsThereChildrenWithFocus(Java.Lang.Object holder)
         {
-            var viewHolder = holder as RecyclerView.ViewHolder;
-            if (viewHolder != null)
+            if (holder is RecyclerView.ViewHolder viewHolder)
                 return IsThereChildrenWithFocus(viewHolder.ItemView);
 
             var view = holder as View;
@@ -60,8 +57,7 @@ namespace WB.UI.Shared.Enumerator.CustomControls
             if (view.IsFocused)
                 return true;
 
-            var viewGroup = view as ViewGroup;
-            if (viewGroup != null)
+            if (view is ViewGroup viewGroup)
                 return IsThereChildrenWithFocus(viewGroup.FocusedChild);
 
             return false;

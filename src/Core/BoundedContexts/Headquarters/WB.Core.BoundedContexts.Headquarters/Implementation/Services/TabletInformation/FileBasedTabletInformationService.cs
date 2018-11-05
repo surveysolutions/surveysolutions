@@ -5,6 +5,7 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.TabletInformation;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.DataCollection.Services;
 
 namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.TabletInformation
 {
@@ -15,11 +16,19 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.TabletInf
         private const char Separator = '@';
         private const char USERDELIMITER = '!';
         private readonly IFileSystemAccessor fileSystemAccessor;
+        private readonly IArchiveUtils archiveUtils;
+        private readonly IEncryptionService encryptionService;
         private readonly string zipExtension = ".zip";
 
-        public FileBasedTabletInformationService(string parentFolder, IFileSystemAccessor fileSystemAccessor)
+        public FileBasedTabletInformationService(string parentFolder, 
+            IFileSystemAccessor fileSystemAccessor,
+            IArchiveUtils archiveUtils,
+            IEncryptionService encryptionService)
         {
             this.fileSystemAccessor = fileSystemAccessor;
+            this.archiveUtils = archiveUtils;
+            this.encryptionService = encryptionService;
+
             this.basePath = fileSystemAccessor.CombinePath(parentFolder, TabletInformationFolderName);
             if (!fileSystemAccessor.IsDirectoryExists(this.basePath))
                 fileSystemAccessor.CreateDirectory(this.basePath);
@@ -27,8 +36,32 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.TabletInf
 
         public void SaveTabletInformation(byte[] content, string androidId, UserView user)
         {
-            this.fileSystemAccessor.WriteAllBytes(this.fileSystemAccessor.CombinePath(this.basePath, this.CreateFileName(androidId, user)),
-                content);
+            var tableInfoFile = this.fileSystemAccessor.CombinePath(this.basePath, this.CreateFileName(androidId, user));
+            this.fileSystemAccessor.WriteAllBytes(tableInfoFile, content);
+
+            var keystoreInfoFileName = "keystore.info";
+            var zippedFiles = this.archiveUtils.GetArchivedFileNamesAndSize(content);
+
+            if (zippedFiles.ContainsKey(keystoreInfoFileName))
+                this.DecryptEnumeratorKeysInZip(tableInfoFile);
+        }
+
+        private void DecryptEnumeratorKeysInZip(string tableInfoFile)
+        {
+            var extractToFolder = this.fileSystemAccessor.CombinePath(this.basePath,
+                this.fileSystemAccessor.GetFileNameWithoutExtension(tableInfoFile));
+
+            this.archiveUtils.Unzip(tableInfoFile, extractToFolder, true);
+
+            var keyStoreInfoFile = this.fileSystemAccessor.CombinePath(extractToFolder, "keystore.info");
+
+            var encryptedText = this.fileSystemAccessor.ReadAllText(keyStoreInfoFile);
+            var decryptedText = this.encryptionService.Decrypt(encryptedText);
+
+            this.fileSystemAccessor.WriteAllText(keyStoreInfoFile, decryptedText);
+
+            this.archiveUtils.ZipDirectoryToFile(extractToFolder, tableInfoFile);
+            this.fileSystemAccessor.DeleteDirectory(extractToFolder);
         }
 
         public List<TabletInformationView> GetAllTabletInformationPackages()
@@ -36,7 +69,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services.TabletInf
             return this.fileSystemAccessor.GetFilesInDirectory(this.basePath, $"*{this.zipExtension}")
                 .Select(this.ToTabletInfoView)
                 .Where(tabletInfo => tabletInfo != null)
-                .OrderBy(tabletInfo => tabletInfo.CreationDate)
+                .OrderByDescending(tabletInfo => tabletInfo.CreationDate)
                 .ToList();
         }
 

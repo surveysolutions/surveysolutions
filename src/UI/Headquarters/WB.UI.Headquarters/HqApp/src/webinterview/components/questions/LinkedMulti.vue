@@ -28,6 +28,7 @@
     import { entityDetails } from "../mixins"
 
     import { map, find, isEqual, filter } from "lodash";
+    import { shouldShowAnsweredOptionsOnlyForMulti } from "./question_helpers"
     
     export default {
         name: 'LinkedMulti',
@@ -38,8 +39,7 @@
         },
         computed: {
             shouldShowAnsweredOptionsOnly(){
-                return !this.showAllOptions && this.$store.getters.isReviewMode && !this.noOptions && this.$me.answer.length > 0 && 
-                        this.$me.answer.length < this.$me.options.length;
+                 return shouldShowAnsweredOptionsOnlyForMulti(this);
             },
             answeredOrAllOptions(){
                 if(!this.shouldShowAnsweredOptionsOnly)

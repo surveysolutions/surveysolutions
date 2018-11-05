@@ -10,6 +10,7 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Modularity;
 using WB.UI.Shared.Web.Controllers;
 using WB.UI.Shared.Web.Resources;
+using WB.UI.Shared.Web.Settings;
 
 namespace WB.UI.Shared.Web.Filters
 {
@@ -18,18 +19,21 @@ namespace WB.UI.Shared.Web.Filters
         public override Task OnActionExecutingAsync(HttpActionContext actionContext, CancellationToken cancellationToken)
         {
             var status = ServiceLocator.Current.GetInstance<UnderConstructionInfo>();
-#if RELEASE
             if (status.Status != UnderConstructionStatus.Finished)
             {
-                actionContext.Response = new HttpResponseMessage(System.Net.HttpStatusCode.OK)
+                if (CoreSettings.IsDevelopmentEnvironment)
                 {
-                    Content = new StringContent(status.Message ?? UnderConstruction.ServerInitializing),
-                };
+                    status.Completed.Wait(cancellationToken);
+                }
+                else
+                {
+                    actionContext.Response = new HttpResponseMessage(System.Net.HttpStatusCode.OK)
+                    {
+                        Content = new StringContent(status.Message ?? UnderConstruction.ServerInitializing),
+                    };
+                }
                 return Task.CompletedTask;
             }
-#elif DEBUG
-            status.Completed.Wait(cancellationToken);
-#endif
 
             return base.OnActionExecutingAsync(actionContext, cancellationToken);
         }
@@ -43,15 +47,14 @@ namespace WB.UI.Shared.Web.Filters
             {
                 var status = ServiceLocator.Current.GetInstance<UnderConstructionInfo>();
 
-#if RELEASE
                 if (status.Status != UnderConstructionStatus.Finished)
                 {
-                    filterContext.Result = new RedirectToRouteResult("", new RouteValueDictionary(new {controller = "UnderConstruction", action = "Index"}));
+                    if (CoreSettings.IsDevelopmentEnvironment)
+                        status.Completed.Wait();
+                    else
+                        filterContext.Result = new RedirectToRouteResult("", new RouteValueDictionary(new {controller = "UnderConstruction", action = "Index"}));
                     return;
                 }
-#elif DEBUG
-                status.Completed.Wait();
-#endif
             }
 
             base.OnActionExecuting(filterContext);

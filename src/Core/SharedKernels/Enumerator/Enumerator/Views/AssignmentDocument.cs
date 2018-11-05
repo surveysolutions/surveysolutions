@@ -63,6 +63,9 @@ namespace WB.Core.SharedKernels.Enumerator.Views
             public string Question { get; set; }
 
             public string AnswerAsString { get; set; }
+            public string EncryptedQuestion { get; set; }
+            public string EncryptedAnswerAsString { get; set; }
+            public string EncryptedSerializedAnswer { get; set; }
         }
 
         public class AssignmentProtectedVariable

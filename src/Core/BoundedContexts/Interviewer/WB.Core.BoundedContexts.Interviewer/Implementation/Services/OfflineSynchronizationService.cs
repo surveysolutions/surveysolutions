@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Threading;
 using System.Threading.Tasks;
 using Ncqrs.Eventing;
@@ -22,8 +21,7 @@ using WB.Core.SharedKernels.Questionnaire.Translations;
 
 namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
 {
-    [ExcludeFromCodeCoverage]
-    public class OfflineSynchronizationService : IInterviewerSynchronizationService
+    public class OfflineSynchronizationService : IOfflineSynchronizationService
     {
         private readonly IOfflineSyncClient syncClient;
         private readonly IInterviewerPrincipal principal;
@@ -221,6 +219,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
         public Task LogAssignmentAsHandledAsync(int id, CancellationToken cancellationToken)
         {
             return syncClient.SendAsync(new LogAssignmentAsHandledRequest { Id = id }, cancellationToken);
+        }
+
+        public async Task<string> GetPublicKeyForEncryptionAsync(CancellationToken cancellationToken)
+        {
+            var response = await syncClient.SendAsync<GetPublicKeyForEncryptionRequest, GetPublicKeyForEncryptionResponse>(
+                new GetPublicKeyForEncryptionRequest(), cancellationToken);
+
+            return response.PublicKey;
         }
 
         public async Task<List<AssignmentApiView>> GetAssignmentsAsync(CancellationToken cancellationToken)

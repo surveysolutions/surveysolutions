@@ -53,6 +53,7 @@ namespace WB.UI.Headquarters.API.DataCollection.Supervisor
                 c => c.Action<TranslationsApiV1Controller>(x => x.Get(Param.Any<string>())));
             config.TypedRoute("api/supervisor/v1/companyLogo", c => c.Action<SettingsV1Controller>(x => x.CompanyLogo()));
             config.TypedRoute("api/supervisor/v1/autoupdate", c => c.Action<SettingsV1Controller>(x => x.AutoUpdateEnabled()));
+            config.TypedRoute("api/supervisor/v1/encryption-key", c => c.Action<SettingsV1Controller>(x => x.PublicKeyForEncryption()));
 
             config.TypedRoute("api/supervisor/v1/questionnaires/list",
                 c => c.Action<QuestionnairesApiV1Controller>(x => x.List()));

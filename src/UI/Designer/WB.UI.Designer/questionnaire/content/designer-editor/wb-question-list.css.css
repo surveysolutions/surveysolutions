@@ -1,4 +1,9 @@
-﻿.broken-links {
+﻿.brighttheme-notice {
+  background-color: #ffffa2;
+  border: 0 solid #ff0;
+  color: #4f4f00;
+}
+.broken-links {
   max-height: 500px;
   overflow-y: auto;
 }
@@ -21,7 +26,7 @@
 .icon {
   width: 20px;
   height: 20px;
-  background: url(../i/icons3.png);
+  background: url(../i/icons4.png);
   background-position-x: 0;
   overflow: hidden;
 }
@@ -79,6 +84,9 @@
 .icon-audio {
   background-position: 0 -570px;
 }
+.icon-questionnaire {
+  background-position: 0 -600px;
+}
 .icon-error.icon-numeric {
   background-position: -30px 0;
 }
@@ -132,4 +140,7 @@
 }
 .icon-error.icon-audio {
   background-position: -30px -570px;
+}
+.icon-error.icon-questionnaire {
+  background-position: -30px -600px;
 }

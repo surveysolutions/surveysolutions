@@ -24,10 +24,10 @@ using WB.Tests.Abc.Storage;
 
 namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProcessTests
 {
-    [TestOf(typeof(InterviewerSynchronizationProcess))]
+    [TestOf(typeof(InterviewerOnlineSynchronizationProcess))]
     internal class when_synchronize_and_upload_sync_statistics
     {
-        private Mock<IInterviewerSynchronizationService> synchronizationServiceMock;
+        private Mock<IOnlineSynchronizationService> synchronizationServiceMock;
 
         private readonly long downloadedBytes = 4000;
         private readonly long uploadedBytes = 6000;
@@ -60,7 +60,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 censusInterview
             });
 
-            this.synchronizationServiceMock = new Mock<IInterviewerSynchronizationService>();
+            this.synchronizationServiceMock = new Mock<IOnlineSynchronizationService>();
 
             synchronizationServiceMock.Setup(x => x.GetCensusQuestionnairesAsync(It.IsAny<CancellationToken>()))
                 .ReturnsAsync(new List<QuestionnaireIdentity>(new[] { questionnaireIdentity }));
@@ -89,7 +89,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.Services.SynchronizationProc
                 interviewersPlainStorage: localInterviewers,
                 interviewViewRepository: interviewViewRepository,
                 httpStatistician: httpStatistician.Object,
-                interviewerSynchronizationService: synchronizationServiceMock.Object
+                synchronizationService: synchronizationServiceMock.Object
             );
 
             this.sw = new Stopwatch();

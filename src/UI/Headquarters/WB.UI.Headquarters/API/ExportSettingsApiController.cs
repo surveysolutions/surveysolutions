@@ -1,15 +1,13 @@
 ﻿using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Threading.Tasks;
 using System.Web.Http;
 using Resources;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Accessors;
-using WB.Core.BoundedContexts.Headquarters.DataExport.Ddi;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Services;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.UI.Headquarters.Models;
 
@@ -20,27 +18,17 @@ namespace WB.UI.Headquarters.API
     {
         private readonly ILogger logger;
         private readonly IExportSettings exportSettings;
-        private readonly IFilebasedExportedDataAccessor filebasedExportedDataAccessor;
-        private readonly IFileSystemAccessor fileSystemAccessor;
-        private readonly IDataExportProcessesService dataExportProcessesService;
-        private readonly IDdiMetadataAccessor ddiMetadataAccessor;
         private readonly IAuditLog auditLog;
+        private readonly IExportServiceApi exportServiceApi;
 
         public ExportSettingsApiController(ILogger logger, 
             IExportSettings exportSettings,
-            IFilebasedExportedDataAccessor filebasedExportedDataAccessor,
-            IFileSystemAccessor fileSystemAccessor,
-            IDataExportProcessesService dataExportProcessesService,
-            IDdiMetadataAccessor ddiMetadataAccessor,
-            IAuditLog auditLog)
-
+            IAuditLog auditLog,
+            IExportServiceApi exportServiceApi)
         {
             this.exportSettings = exportSettings;
-            this.filebasedExportedDataAccessor = filebasedExportedDataAccessor;
-            this.fileSystemAccessor = fileSystemAccessor;
-            this.dataExportProcessesService = dataExportProcessesService;
-            this.ddiMetadataAccessor = ddiMetadataAccessor;
             this.auditLog = auditLog;
+            this.exportServiceApi = exportServiceApi;
             this.logger = logger;
         }
 
@@ -48,14 +36,13 @@ namespace WB.UI.Headquarters.API
         public ExportSettingsModel ExportSettings()
         {
             ExportSettingsModel model = new ExportSettingsModel(this.exportSettings.EncryptionEnforced(), this.exportSettings.GetPassword());
-
             return model;
         }
 
         [HttpPost]
-        public HttpResponseMessage ChangeState(ChangeSettingsModel changeSettingsState)
+        public async Task<HttpResponseMessage> ChangeState(ChangeSettingsModel changeSettingsState)
         {
-            if (this.IsExistsDataExportInProgress())
+            if (await this.IsExistsDataExportInProgress())
                 return Request.CreateErrorResponse(HttpStatusCode.Forbidden, message: DataExport.ErrorThereAreRunningProcesses);
 
             ExportSettingsModel oldState = new ExportSettingsModel(this.exportSettings.EncryptionEnforced(), this.exportSettings.GetPassword());
@@ -63,7 +50,7 @@ namespace WB.UI.Headquarters.API
             if (oldState.IsEnabled != changeSettingsState.EnableState)
             {
                 this.exportSettings.SetEncryptionEnforcement(changeSettingsState.EnableState);
-                this.ClearExportData();
+                await this.ClearExportData();
             }
 
             this.auditLog.ExportEncriptionChanged(changeSettingsState.EnableState);
@@ -72,9 +59,9 @@ namespace WB.UI.Headquarters.API
         }
 
         [HttpPost]
-        public HttpResponseMessage RegeneratePassword()
+        public async Task<HttpResponseMessage> RegeneratePassword()
         {
-            if (this.IsExistsDataExportInProgress())
+            if (await this.IsExistsDataExportInProgress())
                 return Request.CreateErrorResponse(HttpStatusCode.Forbidden, message: DataExport.ErrorThereAreRunningProcesses); 
 
             ExportSettingsModel model = new ExportSettingsModel(this.exportSettings.EncryptionEnforced(), this.exportSettings.GetPassword());
@@ -82,29 +69,24 @@ namespace WB.UI.Headquarters.API
             if (model.IsEnabled)
             {
                 this.exportSettings.RegeneratePassword();
-                this.ClearExportData();
+                await this.ClearExportData();
             }
 
 
-            this.logger.Info($"Export settings were changed by {base.User.Identity.Name}. Encryption password was chagned.");
+            this.logger.Info($@"Export settings were changed by {base.User.Identity.Name}. Encryption password was changed.");
 
             var newExportSettingsModel = new ExportSettingsModel(this.exportSettings.EncryptionEnforced(), this.exportSettings.GetPassword());
             return Request.CreateResponse(newExportSettingsModel);
         }
 
-        private void ClearExportData()
+        private Task ClearExportData()
         {
-            var exportedDataDirectoryPath = this.filebasedExportedDataAccessor.GetExportDirectory();
-
-            this.fileSystemAccessor.DeleteDirectory(exportedDataDirectoryPath);
-            this.fileSystemAccessor.CreateDirectory(exportedDataDirectoryPath);
-
-            this.ddiMetadataAccessor.ClearFiles();
+            return exportServiceApi.DeleteAll();
         }
 
-        private bool IsExistsDataExportInProgress()
+        private async Task<bool> IsExistsDataExportInProgress()
         {
-            return this.dataExportProcessesService.GetRunningExportProcesses().Any();
+            return (await this.exportServiceApi.GetRunningExportJobs()).Any();
         }
     }
 }

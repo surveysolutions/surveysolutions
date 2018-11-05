@@ -189,7 +189,7 @@
       <HintPath>..\..\..\..\packages\Newtonsoft.Json.11.0.2\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate, Version=5.1.0.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <HintPath>..\..\..\..\packages\NHibernate.5.1.2\lib\net461\NHibernate.dll</HintPath>
+      <HintPath>..\..\..\..\packages\NHibernate.5.1.3\lib\net461\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="Ninject, Version=3.3.4.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Ninject.3.3.4\lib\net45\Ninject.dll</HintPath>
@@ -245,6 +245,9 @@
     <Reference Include="Recaptcha.Web, Version=2.1.0.0, Culture=neutral, PublicKeyToken=171a6ec5fa4b1644, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\RecaptchaNet.2.1.0\lib\net451\Recaptcha.Web.dll</HintPath>
     </Reference>
+    <Reference Include="Refit, Version=4.6.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\Refit.4.6.48\lib\net461\Refit.dll</HintPath>
+    </Reference>
     <Reference Include="Remotion.Linq, Version=2.2.0.0, Culture=neutral, PublicKeyToken=fee00910d6e5f53b, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Remotion.Linq.2.2.0\lib\net45\Remotion.Linq.dll</HintPath>
     </Reference>
@@ -293,6 +296,7 @@
       <HintPath>..\..\..\..\packages\System.Runtime.CompilerServices.Unsafe.4.5.1\lib\netstandard2.0\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\System.Threading.Tasks.Extensions.4.5.1\lib\netstandard2.0\System.Threading.Tasks.Extensions.dll</HintPath>
@@ -1726,7 +1730,9 @@
     <Content Include="Scripts\viewmodels\surveymanagmentheader.js" />
     <Content Include="Scripts\viewmodels\viewmodelbase.js" />
     <Content Include="Views\Reports\CumulativeInterviewChart.cshtml" />
-    <Content Include="Configuration\SlavaDesktop.Headquarters.Web.config" />
+    <Content Include="Configuration\SlavaDesktop.Headquarters.Web.config">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Configuration\SPuV.Headquarters.Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -1743,14 +1749,13 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\AdminMenu.cshtml" />
     <Content Include="Views\Template\LoginToDesigner.cshtml" />
-    <Content Include="Views\HQ\Assign.cshtml" />
     <Content Include="Views\SurveySetup\BatchUpload.cshtml" />
     <Content Include="Views\HQ\Interviews.cshtml" />
     <Content Include="Views\Reports\MapReport.cshtml" />
     <Content Include="Views\HQ\SampleCreationResult.cshtml" />
     <Content Include="Views\Reports\TeamsAndStatuses.cshtml" />
     <Content Include="Views\Reports\SurveysAndStatuses.cshtml" />
-    <Content Include="Views\HQ\TakeNew.cshtml" />
+    <Content Include="Views\HQ\TakeNewAssignment.cshtml" />
     <Content Include="Views\ControlPanel\CreateHeadquarters.cshtml" />
     <Content Include="Views\ControlPanel\ResetPrivilegedUserPassword.cshtml" />
     <Content Include="Views\Shared\SupervisorMainMenu.cshtml" />
@@ -1879,6 +1884,7 @@
     <Content Include="Views\UnderConstruction\Index.cshtml" />
     <Content Include="Views\Download\Supervisor.cshtml" />
     <Content Include="Views\ControlPanel\AppUpdates.cshtml" />
+    <Content Include="Views\ControlPanel\ExportService.cshtml" />
     <None Include="WB.UI.Headquarters.wpp.targets" />
     <Content Include="HostMap.config">
       <SubType>Designer</SubType>
@@ -1922,6 +1928,11 @@
     <Compile Include="API\DataCollection\Supervisor\v1\InterviewersApiController.cs" />
     <Compile Include="API\DataCollection\Supervisor\v1\TranslationsApiV1Controller.cs" />
     <Compile Include="API\DataCollection\TranslationsControllerBase.cs" />
+    <Compile Include="API\Export\EventsApiController.cs" />
+    <Compile Include="API\Export\InterviewsExportApiController.cs" />
+    <Compile Include="API\Export\InterviewsExportBinaryApiController.cs" />
+    <Compile Include="API\Export\QuestionnaireApiController.cs" />
+    <Compile Include="API\Filters\ServiceApiKeyAuthorizationAttribute.cs" />
     <Compile Include="API\Helpers.cs" />
     <Compile Include="API\DataCollection\Interviewer\v2\AssignmentsApiV2Controller.cs" />
     <Compile Include="API\DataCollection\Interviewer\v2\AuditLogApiV2Controller.cs" />
@@ -1937,7 +1948,7 @@
     <Compile Include="API\PublicApi\Models\Statistics\QuestionnaireDto.cs" />
     <Compile Include="API\PublicApi\Models\Statistics\QuestionDto.cs" />
     <Compile Include="API\PublicApi\Models\Statistics\SurveyStatisticsQuery.cs" />
-    <Compile Include="API\PublicApi\UsersTypeaheadController.cs" />
+    <Compile Include="API\UsersTypeaheadController.cs" />
     <Compile Include="API\ReportDataApiController.Dto.cs" />
     <Compile Include="API\DataCollection\Supervisor\v1\SupervisorApiController.cs" />
     <Compile Include="API\DataCollection\Supervisor\v1\DevicesApiV1Controller.cs" />
@@ -2276,6 +2287,9 @@
     <Compile Include="Controllers\WebInterviewController.Actions.cs" />
     <Compile Include="Implementation\Maps\JsonMapResponse.cs" />
     <Compile Include="Implementation\Maps\MapService.cs" />
+    <Compile Include="Implementation\Services\SecureStorage.cs" />
+    <Compile Include="Injections\ILocalExportServiceRunner.cs" />
+    <Compile Include="Injections\LocalExportServiceRunner.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M201805031628_AllowNullForResponsibleName.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M201804231416_AddAuditLogTable.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M024_AddAllowExportVariablesColumnToQuestionnaireBrowseItem.cs" />
@@ -2298,6 +2312,8 @@
     <Compile Include="Migrations\PlainStore\M001-100\M201805311125_AddResponsibleIdIndexForAssignments.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M201806151438_AddQuestionnaireVariableToQuestionnaireBrowseItems.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M201809031621_AddReceivedAtToAssignment.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M201810101543_AddRsaEncryptionKeys.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M201809101449_AddExportServiceKey.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201709081506_RemoveInterviewStatusTimespans.cs" />
     <Compile Include="Migrations\ReadSide\M001-100\M201709071054_Remove_Readsideversions.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M024_DeleteInterviewEntitiesTable.cs" />
@@ -2344,6 +2360,7 @@
     <Compile Include="Migrations\Users\M005_AddDeviceAppVersionToProfile.cs" />
     <Compile Include="Migrations\Users\M201807241755_ReplaceEmptyEmailToNull.cs" />
     <Compile Include="Migrations\Users\M201709081340_RemovedUserDocumentAndRolesTables.cs" />
+    <Compile Include="Models\Admin\SettingsModel.cs" />
     <Compile Include="Models\DownloadModel.cs" />
     <Compile Include="Models\InterviewsDataTableRequest.cs" />
     <Compile Include="Models\Maps\MapsModel.cs" />
@@ -2759,8 +2776,12 @@
     <Error Condition="!Exists('..\..\..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
     <Error Condition="!Exists('..\..\..\..\packages\Esri.ArcGISRuntime.WPF.100.2.1\build\net452\Esri.ArcGISRuntime.WPF.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\Esri.ArcGISRuntime.WPF.100.2.1\build\net452\Esri.ArcGISRuntime.WPF.targets'))" />
     <Error Condition="!Exists('..\..\..\..\packages\Microsoft.Net.Compilers.2.9.0\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\Microsoft.Net.Compilers.2.9.0\build\Microsoft.Net.Compilers.props'))" />
+    <Error Condition="!Exists('..\..\..\..\packages\RazorGenerator.MsBuild.2.5.0\build\RazorGenerator.MsBuild.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\RazorGenerator.MsBuild.2.5.0\build\RazorGenerator.MsBuild.targets'))" />
+    <Error Condition="!Exists('..\..\..\..\packages\Refit.4.6.48\build\net461\refit.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\..\..\packages\Refit.4.6.48\build\net461\refit.targets'))" />
   </Target>
   <Import Project="..\..\..\..\packages\Esri.ArcGISRuntime.WPF.100.2.1\build\net452\Esri.ArcGISRuntime.WPF.targets" Condition="Exists('..\..\..\..\packages\Esri.ArcGISRuntime.WPF.100.2.1\build\net452\Esri.ArcGISRuntime.WPF.targets')" />
+  <Import Project="..\..\..\..\packages\RazorGenerator.MsBuild.2.5.0\build\RazorGenerator.MsBuild.targets" Condition="Exists('..\..\..\..\packages\RazorGenerator.MsBuild.2.5.0\build\RazorGenerator.MsBuild.targets')" />
+  <Import Project="..\..\..\..\packages\Refit.4.6.48\build\net461\refit.targets" Condition="Exists('..\..\..\..\packages\Refit.4.6.48\build\net461\refit.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

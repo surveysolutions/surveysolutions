@@ -93,6 +93,7 @@ namespace WB.UI.Shared.Enumerator.Activities
             this.answerAcceptedSubsribtion = messenger.SubscribeOnMainThread<AnswerAcceptedMessage>(ShowAnswerTime);
         }
 
+        private Toast toast;
         private void ShowAnswerTime(AnswerAcceptedMessage msg)
         {
             if (!enumeratorSettings.ShowAnswerTime) return;
@@ -100,13 +101,13 @@ namespace WB.UI.Shared.Enumerator.Activities
             var message = string.Format(UIResources.AnswerRecordedMsg,
                 msg.Elapsed.Humanize(maxUnit: TimeUnit.Minute));
 
-            Toast.MakeText(this, message, ToastLength.Long).Show();
-            //var rootLayout = this.FindViewById(Resource.Id.rootLayout);
-            //Snackbar.Make(rootLayout,
-            //        message,
-            //        Snackbar.LengthIndefinite)
-            //    .SetAction(UIResources.AnswerRecordedMsgDismiss, view => { })
-            //    .Show();
+            if (this.toast != null)
+            {
+                this.toast.Cancel();
+            }
+
+            this.toast = Toast.MakeText(this, message, ToastLength.Short);
+            toast.Show();
         }
 
         public override bool OnCreateOptionsMenu(IMenu menu)

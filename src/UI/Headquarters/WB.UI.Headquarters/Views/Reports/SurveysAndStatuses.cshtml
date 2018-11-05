@@ -23,7 +23,7 @@
             var $surveyAndStatusesReportUrl =
                 '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "ReportDataApi", action = "HeadquarterSurveysAndStatusesReport"})';
             var responsiblesUrl =
-                '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "AssigneeSupervisorsAndDependentInterviewers"})';
+                '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "Teams", action = "AssigneeSupervisors"})';
 
             var model = new Supervisor.VM.SurveysAndStatuses($surveyAndStatusesReportUrl, responsiblesUrl);
             model.getDataTableColumns = function () {

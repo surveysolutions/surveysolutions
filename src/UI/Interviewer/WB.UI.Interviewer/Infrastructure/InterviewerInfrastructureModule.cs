@@ -9,9 +9,11 @@ using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection.Implementation;
 using WB.Core.SharedKernels.DataCollection.Implementation.Accessors;
 using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
+using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Services;
@@ -36,7 +38,9 @@ namespace WB.UI.Interviewer.Infrastructure
             var pathToLocalDirectory = AndroidPathUtils.GetPathToInternalDirectory();
 
             registry.BindAsSingletonWithConstructorArgument<IBackupRestoreService, BackupRestoreService>(
-                "privateStorage", pathToLocalDirectory);
+                new ConstructorArgument("privateStorage", context => pathToLocalDirectory),
+                new ConstructorArgument("encryptionService",
+                    context => new RsaEncryptionService(context.Get<ISecureStorage>())));
 
             registry.BindAsSingletonWithConstructorArgument<IQuestionnaireAssemblyAccessor, InterviewerQuestionnaireAssemblyAccessor>(
                 "pathToAssembliesDirectory", AndroidPathUtils.GetPathToSubfolderInLocalDirectory("assemblies"));
@@ -66,9 +70,10 @@ namespace WB.UI.Interviewer.Infrastructure
                 PathToInterviewsDirectory = AndroidPathUtils.GetPathToSubfolderInLocalDirectory($"data{Path.DirectorySeparatorChar}interviews")
             });
 
-
             registry.BindAsSingleton(typeof(IPlainStorage<,>), typeof(SqlitePlainStorage<,>));
             registry.BindAsSingleton(typeof(IPlainStorage<>), typeof(SqlitePlainStorage<>));
+
+            registry.BindAsSingleton<IPlainStorage<PrefilledQuestionView>, PrefilledQuestionsRepository>();
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)

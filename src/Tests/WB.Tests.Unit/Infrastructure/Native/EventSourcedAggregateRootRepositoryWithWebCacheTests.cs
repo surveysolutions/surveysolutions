@@ -6,7 +6,9 @@ using Ncqrs.Eventing;
 using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using NUnit.Framework;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Aggregates;
+using WB.Core.Infrastructure.EventBus;
 using WB.Infrastructure.Native.Monitoring;
 using WB.Infrastructure.Native.Storage;
 using WB.Tests.Abc;
@@ -26,7 +28,7 @@ namespace WB.Tests.Unit.Infrastructure.Native
                 .Setup(dr => dr.Load(It.IsAny<Type>(), It.IsAny<Guid>(), null, It.IsAny<IEnumerable<CommittedEvent>>()))
                 .Returns<Type, Guid, Snapshot, IEnumerable<CommittedEvent>>((type, id, s, ce) => Mock.Of<IEventSourcedAggregateRoot>(ar => ar.EventSourceId == id));
 
-            var repo = new EventSourcedAggregateRootRepositoryWithWebCache(eventStore.Object, snapshotStore.Object, domainRepo.Object,
+            var repo = new EventSourcedAggregateRootRepositoryWithWebCache(eventStore.Object, Mock.Of<IInMemoryEventStore>(), new EventBusSettings(), snapshotStore.Object, domainRepo.Object,
                 new Stub.StubAggregateLock());
 
             CommonMetrics.StateFullInterviewsCount.Set(0);
@@ -48,9 +50,9 @@ namespace WB.Tests.Unit.Infrastructure.Native
         [Test]
         public void should_evict_from_cache_if_aggregate_root_is_dirty()
         {
-            var eventStore    = new Mock<IEventStore>();
+            var eventStore = new Mock<IEventStore>();
             var snapshotStore = new Mock<ISnapshotStore>();
-            var domainRepo    = new Mock<IDomainRepository>();
+            var domainRepo = new Mock<IDomainRepository>();
 
             const int versionForNewObjects = 100;
             const int changedVersion = 200;
@@ -61,7 +63,7 @@ namespace WB.Tests.Unit.Infrastructure.Native
                 .Returns<Type, Guid, Snapshot, IEnumerable<CommittedEvent>>((type, id, s, ce)
                     => Mock.Of<IEventSourcedAggregateRoot>(ar => ar.EventSourceId == id && ar.Version == versionForNewObjects));
 
-            var repo = new EventSourcedAggregateRootRepositoryWithWebCache(eventStore.Object, snapshotStore.Object, domainRepo.Object,
+            var repo = new EventSourcedAggregateRootRepositoryWithWebCache(eventStore.Object, Mock.Of<IInMemoryEventStore>(), new EventBusSettings(), snapshotStore.Object, domainRepo.Object,
                 new Stub.StubAggregateLock());
 
             CommonMetrics.StateFullInterviewsCount.Set(0);
@@ -78,9 +80,53 @@ namespace WB.Tests.Unit.Infrastructure.Native
 
             // act
             entity = repo.GetLatest(typeof(IEventSourcedAggregateRoot), Id.g1);
-            
+
             // assert
             Assert.That(entity.Version, Is.EqualTo(versionForNewObjects), "Dirty entity should be evicted and read from domainRepo");
+        }
+
+        [Test]
+        public void should_read_ignored_aggregate_from_in_memory_event_store()
+        {
+            var aggregateRootId = Id.gA;
+            var aggregateFromInMemoryEvents = Mock.Of<IEventSourcedAggregateRoot>();
+            var committedEvents = new List<CommittedEvent>();
+
+            var inMemoryEventStoreMock = new Mock<IInMemoryEventStore>();
+            inMemoryEventStoreMock.Setup(x => x.Read(aggregateRootId, 0))
+                .Returns(committedEvents);
+
+            var domainRepositoryMock = new Mock<IDomainRepository>();
+            domainRepositoryMock.Setup(x => x.Load(typeof(IEventSourcedAggregateRoot), aggregateRootId, null, committedEvents))
+                .Returns(aggregateFromInMemoryEvents);
+
+            var eventBusSettings = new EventBusSettings();
+            eventBusSettings.IgnoredAggregateRoots.Add(aggregateRootId.FormatGuid());
+
+            var repository = GetRepository(inMemoryEventStore: inMemoryEventStoreMock.Object,
+                domainRepository: domainRepositoryMock.Object,
+                eventBusSettings: eventBusSettings);
+        
+            // Act
+            var aggregate = repository.GetLatest(typeof(IEventSourcedAggregateRoot), aggregateRootId);
+
+            // Assert
+            Assert.That(aggregate, Is.SameAs(aggregateFromInMemoryEvents));
+        }
+
+        private EventSourcedAggregateRootRepositoryWithWebCache GetRepository(EventBusSettings eventBusSettings = null,
+            IDomainRepository domainRepository = null,
+            IEventStore eventStore = null,
+            IInMemoryEventStore inMemoryEventStore = null)
+        {
+            return new EventSourcedAggregateRootRepositoryWithWebCache(
+                eventStore ?? Mock.Of<IEventStore>(), 
+                inMemoryEventStore ?? Mock.Of<IInMemoryEventStore>(), 
+                eventBusSettings ?? new EventBusSettings(), 
+                Mock.Of<ISnapshotStore>(), 
+                domainRepository ?? Mock.Of<IDomainRepository>(),
+                new Stub.StubAggregateLock()
+                );
         }
     }
 }

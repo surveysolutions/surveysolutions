@@ -15,7 +15,6 @@ using MvvmCross.Platforms.Android.Presenters.Attributes;
 using WB.Core.BoundedContexts.Supervisor.Properties;
 using WB.Core.BoundedContexts.Supervisor.ViewModel.Dashboard;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.GenericSubdomains.Portable.Tasks;
 
 namespace WB.UI.Supervisor.Activities.Dashboard
 {
@@ -59,7 +58,7 @@ namespace WB.UI.Supervisor.Activities.Dashboard
             base.OnDestroyView();
         }
 
-        private async void MenuFragment_AfterNavigate(object sender, MvvmCross.Navigation.EventArguments.NavigateEventArgs e)
+        private async void MenuFragment_AfterNavigate(object sender, MvvmCross.Navigation.EventArguments.IMvxNavigateEventArgs e)
         {
             int? menuItemId = null;
             switch (e.ViewModel)

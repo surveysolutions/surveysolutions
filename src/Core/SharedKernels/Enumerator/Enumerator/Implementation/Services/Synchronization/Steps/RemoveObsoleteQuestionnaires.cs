@@ -13,7 +13,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
 {
     public class RemoveObsoleteQuestionnaires : SynchronizationStep
     {
-        private readonly ISynchronizationService synchronizationService;
         private readonly IInterviewerQuestionnaireAccessor questionnairesAccessor;
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
         private readonly IAttachmentsCleanupService attachmentsCleanupService;
@@ -24,7 +23,6 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronizati
             ILogger logger,
             int sortOrder) : base(sortOrder, synchronizationService, logger)
         {
-            this.synchronizationService = synchronizationService ?? throw new ArgumentNullException(nameof(synchronizationService));
             this.questionnairesAccessor = questionnairesAccessor ?? throw new ArgumentNullException(nameof(questionnairesAccessor));
             this.interviewViewRepository = interviewViewRepository ?? throw new ArgumentNullException(nameof(interviewViewRepository));
             this.attachmentsCleanupService = attachmentsCleanupService ?? throw new ArgumentNullException(nameof(attachmentsCleanupService));
