@@ -80,7 +80,8 @@ const paths = {
     'node_modules/xss/dist/xss.js',
     'node_modules/i18next/i18next.min.js',
     'node_modules/i18next-xhr-backend/i18nextXHRBackend.min.js',
-    'node_modules/ng-i18next/dist/ng-i18next.js'
+    'node_modules/ng-i18next/dist/ng-i18next.js',
+    'node_modules/jquery-datepicker/jquery-datepicker.js'
   ]  
 };
 
@@ -167,7 +168,7 @@ gulp.task('copyFilesNeededForBundler', function(){
     'node_modules/jquery-contextmenu/dist/jquery.contextMenu.min.css',
     'node_modules/bootbox/bootbox.min.js',
 	'node_modules/bootstrap-select/dist/js/bootstrap-select.min.js',
-	'node_modules/bootstrap-select/dist/css/bootstrap-select.min.css'
+    'node_modules/bootstrap-select/dist/css/bootstrap-select.min.css'
   ])
     //.pipe(debug({ title: 'copyFilesNeededForBundler task:' }))
     .pipe(gulp.dest('../Content/plugins'));
