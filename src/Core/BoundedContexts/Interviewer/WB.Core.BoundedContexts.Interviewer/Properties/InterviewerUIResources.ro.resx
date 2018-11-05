@@ -281,12 +281,6 @@ Trebuie să le finalizați pentru a fi sincronizate</value>
   <data name="Diagnostics_BackupScope_Title" xml:space="preserve">
     <value>Scop:</value>
   </data>
-  <data name="Diagnostics_Backup_Description" xml:space="preserve">
-    <value>Toate datele colectate vor fi salvate în fișierul de copie de siguranță de pe acest dispozitiv.</value>
-  </data>
-  <data name="Diagnostics_Backup_Title" xml:space="preserve">
-    <value>Realizare copie de siguranță pentru informațiile colectate</value>
-  </data>
   <data name="Diagnostics_BandwidthTestConnectionAbsent_Title" xml:space="preserve">
     <value>&lt;font color='red'&gt;Fără conexiune la internet&lt;/font&gt;</value>
   </data>

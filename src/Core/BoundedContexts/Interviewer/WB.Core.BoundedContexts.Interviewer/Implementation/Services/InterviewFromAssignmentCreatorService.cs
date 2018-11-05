@@ -66,9 +66,19 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
             try
             {
                 this.messenger.Publish(new StartingLongOperationMessage(this));
+
+                var assignment = this.assignmentsRepository.GetById(assignmentId);
+
+                if (assignment.CreatedInterviewsCount.HasValue && assignment.Quantity.HasValue &&
+                    (assignment.CreatedInterviewsCount.Value >= assignment.Quantity.Value))
+                {
+                    await this.viewModelNavigationService.NavigateToDashboardAsync();
+                    return;
+                }
+
                 var interviewId = Guid.NewGuid();
                 var interviewerIdentity = this.interviewerPrincipal.CurrentUserIdentity;
-                var assignment = this.assignmentsRepository.GetById(assignmentId);
+                
                 this.assignmentsRepository.FetchPreloadedData(assignment);
                 var questionnaireIdentity = QuestionnaireIdentity.Parse(assignment.QuestionnaireId);
 

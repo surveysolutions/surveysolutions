@@ -106,8 +106,9 @@ namespace WB.UI.Headquarters.API.DataCollection
         {
             var doesEventsExists = this.packagesService.IsPackageDuplicated(eventStreamSignatureTag);
 
-            var imageNames = this.imageFileStorage.GetBinaryFilesForInterview(id).Select(bf => bf.FileName).ToHashSet();
-            var audioNames = this.audioFileStorage.GetBinaryFilesForInterview(id).Select(bf => bf.FileName).ToHashSet();
+            // KP-12038 media files are not updated if interviewer changes them after reject
+            var imageNames = new HashSet<string>(); //this.imageFileStorage.GetBinaryFilesForInterview(id).Select(bf => bf.FileName).ToHashSet();
+            var audioNames = new HashSet<string>(); //this.audioFileStorage.GetBinaryFilesForInterview(id).Select(bf => bf.FileName).ToHashSet();
 
             return new InterviewUploadState
             {

@@ -69,6 +69,9 @@ namespace WB.Services.Scheduler.Migrations
                         .IsRequired()
                         .HasColumnName("type");
 
+                    b.Property<string>("WorkerId")
+                        .HasColumnName("worker_id");
+
                     b.HasKey("Id")
                         .HasName("pk_jobs");
 

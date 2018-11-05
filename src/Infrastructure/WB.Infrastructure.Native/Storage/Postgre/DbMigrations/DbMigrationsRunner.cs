@@ -3,6 +3,7 @@ using FluentMigrator.Runner.Initialization;
 using FluentMigrator.Runner.Processors;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 
 namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
 {
@@ -14,6 +15,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.DbMigrations
             var serviceProvider = new ServiceCollection()
                 // Logging is the replacement for the old IAnnouncer
                 .AddSingleton<ILoggerProvider, NLogLoggerProvider>()
+                .AddSingleton<LegacyAssemblySettings>((s) => ServiceLocator.Current.GetInstance<LegacyAssemblySettings>())
                 .AddSingleton(new DefaultConventionSet(defaultSchemaName: null, workingDirectory: null))
                 .Configure<ProcessorOptions>(opt => { opt.PreviewOnly = false; })
                 .Configure<TypeFilterOptions>(opt => { opt.Namespace = dbUpgradeSettings.MigrationsNamespace; })

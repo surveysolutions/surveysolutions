@@ -51,10 +51,6 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
         IUpdateHandler<InterviewHistoryView, InterviewHardDeleted>,
         IUpdateHandler<InterviewHistoryView, AnswersDeclaredInvalid>,
         IUpdateHandler<InterviewHistoryView, AnswersDeclaredValid>,
-        IUpdateHandler<InterviewHistoryView, QuestionsDisabled>,
-        IUpdateHandler<InterviewHistoryView, QuestionsEnabled>,
-        IUpdateHandler<InterviewHistoryView, GroupsDisabled>,
-        IUpdateHandler<InterviewHistoryView, GroupsEnabled>,
         IUpdateHandler<InterviewHistoryView, AnswerRemoved>,
         IUpdateHandler<InterviewHistoryView, AnswersRemoved>,
         IUpdateHandler<InterviewHistoryView, UnapprovedByHeadquarters>,
@@ -475,12 +471,18 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
             }
             switch (action)
             {
+                case InterviewHistoricalAction.QuestionEnabled:
+                case InterviewHistoricalAction.QuestionDisabled:
+                case InterviewHistoricalAction.GroupDisabled:
+                case InterviewHistoricalAction.GroupEnabled:
+                {
+                        // ignore
+                        return null;
+                }
                 case InterviewHistoricalAction.AnswerSet:
                 case InterviewHistoricalAction.CommentSet:
                 case InterviewHistoricalAction.QuestionDeclaredInvalid:
                 case InterviewHistoricalAction.QuestionDeclaredValid:
-                case InterviewHistoricalAction.QuestionEnabled:
-                case InterviewHistoricalAction.QuestionDisabled:
                 {
                     var newParameters = new Dictionary<string, string>();
                     if (parameters.ContainsKey("questionId"))
@@ -507,15 +509,6 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                             }
                         }
                     }
-                    return new InterviewHistoricalRecordView(0, action, userName, userRole, newParameters, timestamp, offset);
-                }
-                case InterviewHistoricalAction.GroupDisabled:
-                case InterviewHistoricalAction.GroupEnabled:
-                {
-                    var newParameters = new Dictionary<string, string>();
-                    var groupId = parameters["groupId"];
-                    newParameters["group"] = groupId;
-                    newParameters["roster"] = parameters["roster"];
                     return new InterviewHistoricalRecordView(0, action, userName, userRole, newParameters, timestamp, offset);
                 }
                 case InterviewHistoricalAction.InterviewerAssigned 
@@ -696,54 +689,6 @@ namespace WB.Core.BoundedContexts.Headquarters.EventHandler
                     @event.Payload.OriginDate?.LocalDateTime ?? @event.EventTimeStamp, 
                     @event.Payload.OriginDate?.Offset,
                 this.CreateQuestionParameters(question.Id, question.RosterVector));
-            }
-            return view;
-        }
-
-        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<QuestionsDisabled> @event)
-        {
-            foreach (var question in @event.Payload.Questions)
-            {
-                this.AddHistoricalRecord(view, InterviewHistoricalAction.QuestionDisabled, null,
-                    @event.Payload.OriginDate?.LocalDateTime ?? @event.EventTimeStamp,
-                    @event.Payload.OriginDate?.Offset,
-                this.CreateQuestionParameters(question.Id, question.RosterVector));
-            }
-            return view;
-        }
-
-        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<QuestionsEnabled> @event)
-        {
-            foreach (var question in @event.Payload.Questions)
-            {
-                this.AddHistoricalRecord(view, InterviewHistoricalAction.QuestionEnabled, null,
-                    @event.Payload.OriginDate?.LocalDateTime ?? @event.EventTimeStamp,
-                    @event.Payload.OriginDate?.Offset,
-                this.CreateQuestionParameters(question.Id, question.RosterVector));
-            }
-            return view;
-        }
-
-        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<GroupsDisabled> @event)
-        {
-            foreach (var group in @event.Payload.Groups)
-            {
-                this.AddHistoricalRecord(view, InterviewHistoricalAction.GroupDisabled, null,
-                    @event.Payload.OriginDate?.LocalDateTime ?? @event.EventTimeStamp,
-                    @event.Payload.OriginDate?.Offset,
-                this.CreateGroupParameters(group.Id, group.RosterVector));
-            }
-            return view;
-        }
-
-        public InterviewHistoryView Update(InterviewHistoryView view, IPublishedEvent<GroupsEnabled> @event)
-        {
-            foreach (var group in @event.Payload.Groups)
-            {
-                this.AddHistoricalRecord(view, InterviewHistoricalAction.GroupEnabled, null,
-                    @event.Payload.OriginDate?.LocalDateTime ?? @event.EventTimeStamp,
-                    @event.Payload.OriginDate?.Offset,
-                this.CreateGroupParameters(group.Id, group.RosterVector));
             }
             return view;
         }

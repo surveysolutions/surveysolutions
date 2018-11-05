@@ -4,6 +4,7 @@
 @using WB.Core.BoundedContexts.Designer.Implementation.Services
 @using WB.Core.BoundedContexts.Designer.Resources
 @using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf
+@using WB.UI.Designer.Code
 @using WB.UI.Designer.Utils
 @model WB.Core.BoundedContexts.Designer.Views.Questionnaire.Pdf.PdfQuestionnaireModel
 
@@ -17,7 +18,7 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <title>@questionnaire.Title</title>
-    @Styles.Render("~/Content/pdf.css")
+    @Styles.Render(Url.ContentAbsolute("~/Content/pdf.css"))
 </head>
 <body>
 	<header>
@@ -71,7 +72,7 @@
 		</div>
 		<div class="column_header">
 			<a href="https://solutions.worldbank.org/" target="_blank" class="logo">
-				<img src="~/Content/images/pdf_logo.png" alt="Survey Solutions" />
+				<img src="@Url.ContentAbsolute("~/Content/images/pdf_logo.png")" alt="Survey Solutions" />
 			</a>
 		</div>
 
@@ -329,10 +330,33 @@
 		@foreach (var sectionId in questionnaire.SectionIds)
 		{
 		<section class="section">
-			<div class="section_header">
-				<h2 id="@questionnaire.GetItemRef(sectionId)">@questionnaire.GetGroupTitle(sectionId, true)</h2>
-			</div>
-			@Html.Partial("_RenderChildren", sectionId)
+            <div class="section_header">
+                <h2 id="@questionnaire.GetItemRef(sectionId)">@questionnaire.GetGroupTitle(sectionId, true)</h2>
+                
+                @{ var group = questionnaire.Find<Group>(sectionId);}
+                
+                @if (questionnaire.GroupHasEnablementCondition(group))
+                    {
+                        <div class="common-info">
+                            <div class="condition">
+                                <span>E</span>@questionnaire.GetExpressionExcerpt(group.ConditionExpression)
+                                @if (questionnaire.ExpressionIsTooLong(group.ConditionExpression))
+                                {
+                                    <div class="more">
+                                        <a href="#@questionnaire.GetConditionRef(group.PublicKey)">
+                                            @Pdf.Format(PdfStrings.AppendixLink, group.ConditionExpression.Length - questionnaire.Settings.ExpressionExcerptLength, questionnaire.GetEntityIndexInAppendix(group.PublicKey, "E"))
+                                        </a>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+
+            </div>
+            
+            
+
+		    @Html.Partial("_RenderChildren", sectionId)
 		</section>
 		}
 	</article>
@@ -520,8 +544,8 @@
 		<h2 id="legend_appendix">@PdfStrings.Legend</h2>
 		<section>
 			<h3>@PdfStrings.PdfLegend</h3>
-			<img src="~/Content/images/pdf-question-legend.png" />
-			<img src="~/Content/images/pdf-roster-legend.png" />
+			<img src="@Url.ContentAbsolute("~/Content/images/pdf-question-legend.png")" />
+			<img src="@Url.ContentAbsolute("~/Content/images/pdf-roster-legend.png")" />
 		</section>
 	</article>
 </body>

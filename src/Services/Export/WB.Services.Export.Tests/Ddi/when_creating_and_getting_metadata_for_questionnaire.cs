@@ -69,8 +69,8 @@ namespace WB.Services.Export.Tests.Ddi
 
         private async Task BecauseOf()
         {
-            filePath = await 
-                ddiMetadataFactory.CreateDDIMetadataFileForQuestionnaireInFolder(Create.Tenant(), new QuestionnaireId(questionnaireId), "");
+            filePath = await ddiMetadataFactory.CreateDDIMetadataFileForQuestionnaireInFolderAsync(
+                Create.Tenant(), new QuestionnaireId(questionnaireId), "");
         }
 
         [NUnit.Framework.Test] public void should_call_write_xml () =>

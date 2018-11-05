@@ -14,5 +14,6 @@ namespace WB.Services.Export.Interview
         public string Roster { get; set; }
         public int[] RosterVector { get; set; } = Array.Empty<int>();
         public string Comment { get; set; }
+        public string InterviewKey { get; set; }
     }
 }

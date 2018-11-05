@@ -38,7 +38,7 @@ namespace WB.Services.Export.ExportProcessHandlers
                 {
                     using (var archive = dataExportFileAccessor.CreateExportArchive(archiveFile, processArgs.ArchivePassword))
                     {
-                        await this.ExportDataIntoArchive(archive, exportSettings, exportProgress, cancellationToken);
+                        await this.ExportDataIntoArchiveAsync(archive, exportSettings, exportProgress, cancellationToken);
                     }
                 }
 
@@ -58,7 +58,7 @@ namespace WB.Services.Export.ExportProcessHandlers
             }
         }
 
-        protected abstract Task ExportDataIntoArchive(IZipArchive archive, ExportSettings exportSettings,
+        protected abstract Task ExportDataIntoArchiveAsync(IZipArchive archive, ExportSettings exportSettings,
             IProgress<int> exportProgress, CancellationToken cancellationToken);
     }
 }
