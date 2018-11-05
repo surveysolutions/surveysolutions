@@ -125,8 +125,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
         public string Answer
         {
-            get { return this.answer; }
-            set { this.answer = value; this.RaisePropertyChanged(); }
+            get => this.answer;
+            set => this.SetProperty(ref this.answer, value);
         }
 
         public void Dispose()

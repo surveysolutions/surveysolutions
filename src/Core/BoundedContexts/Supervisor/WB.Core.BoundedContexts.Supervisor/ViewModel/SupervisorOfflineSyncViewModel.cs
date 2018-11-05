@@ -5,8 +5,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.Commands;
-using MvvmCross.Logging;
-using Plugin.Permissions.Abstractions;
 using WB.Core.BoundedContexts.Supervisor.Properties;
 using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.GenericSubdomains.Portable;
@@ -16,9 +14,6 @@ using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.ViewModels;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
-using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
-using WB.Core.SharedKernels.Enumerator.Utils;
-using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.BoundedContexts.Supervisor.ViewModel
 {
@@ -238,8 +233,6 @@ namespace WB.Core.BoundedContexts.Supervisor.ViewModel
             this.isInitialized = true;
 
             this.cancellationTokenSource = new CancellationTokenSource();
-
-            Log.Trace("StartAdvertising");
 
             SetStatus(ConnectionStatus.StartAdvertising, $"Starting advertising");
 

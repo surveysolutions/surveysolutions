@@ -12,13 +12,41 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
 {
     public class InterviewOverviewService : IInterviewOverviewService
     {
-        public IEnumerable<OverviewNode> GetOverview(IStatefulInterview interview)
+        public IEnumerable<OverviewNode> GetOverview(IStatefulInterview interview, bool isReviewMode)
         {
-            var interviewEntities = interview.GetUnderlyingInterviewerEntities();
-            var sections = interview.GetEnabledSections().Select(x => x.Identity).ToHashSet();
-            return interviewEntities
-                .Where(interview.IsEnabled)
-                .Select(x => BuildOverviewNode(x, interview, sections));
+            var enabledSectionIds = interview.GetEnabledSections().Select(x => x.Identity).ToHashSet();
+
+            foreach (var enabledSectionId in enabledSectionIds)
+            {
+                var interviewEntities = isReviewMode
+                    ? interview.GetUnderlyingEntitiesForReviewRecursive(enabledSectionId)
+                    : interview.GetUnderlyingInterviewerEntities(enabledSectionId);
+                
+                foreach (var interviewEntity in interviewEntities.Where(interview.IsEnabled))
+                    yield return BuildOverviewNode(interviewEntity, interview, enabledSectionIds);
+            }
+        }
+
+        public OverviewItemAdditionalInfo GetOverviewItemAdditionalInfo(IStatefulInterview interview, string entityId, Guid currentUserId)
+        {
+            if (!Identity.TryParse(entityId, out Identity identity))
+            {
+                return null;
+            }
+
+            var question = interview.GetQuestion(identity);
+            if (question != null)
+            {
+                return new OverviewItemAdditionalInfo(question, interview, currentUserId);
+            }
+
+            var staticText = interview.GetStaticText(identity);
+            if (staticText != null)
+            {
+                return new OverviewItemAdditionalInfo(staticText, interview);
+            }
+
+            return null;
         }
 
         private OverviewNode BuildOverviewNode(Identity interviewerEntityIdentity,

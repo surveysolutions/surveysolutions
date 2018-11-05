@@ -28,7 +28,6 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
-using WB.Core.BoundedContexts.Headquarters.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
@@ -371,37 +370,6 @@ namespace WB.Tests.Abc.TestFactories
                 InterviewerName = "inter",
                 SupervisorName = "supervisor",
                 TimeSpanWithPreviousStatus = timeSpanWithPreviousStatus
-            };
-
-        public InterviewDiagnosticsInfo InterviewDiagnosticsInfo(
-            Guid? interviewId = null,
-            string interviewKey = null,
-            InterviewStatus status = InterviewStatus.InterviewerAssigned,
-            Guid? responsibleId = null, 
-            string responsibleName = null, 
-            int numberOfInterviewers = 0, 
-            int numberRejectionsBySupervisor = 0, 
-            int numberRejectionsByHq = 0, 
-            int numberValidQuestions = 0, 
-            int numberInvalidEntities = 0, 
-            int numberUnansweredQuestions = 0, 
-            int numberCommentedQuestions = 0, 
-            long? interviewDuration = null)
-            => new InterviewDiagnosticsInfo
-            {
-                InterviewId = interviewId ?? Guid.NewGuid(),
-                InterviewKey = interviewKey,
-                Status = status,
-                ResponsibleId = responsibleId ?? Guid.NewGuid(),
-                ResponsibleName = responsibleName,
-                NumberOfInterviewers = numberOfInterviewers,
-                NumberRejectionsBySupervisor = numberRejectionsBySupervisor,
-                NumberRejectionsByHq = numberRejectionsByHq,
-                NumberValidQuestions = numberValidQuestions,
-                NumberInvalidEntities = numberInvalidEntities,
-                NumberUnansweredQuestions = numberUnansweredQuestions,
-                NumberCommentedQuestions = numberCommentedQuestions,
-                InterviewDuration = interviewDuration
             };
 
         public InterviewData InterviewData(
@@ -1362,6 +1330,9 @@ namespace WB.Tests.Abc.TestFactories
         public ValidationCondition ValidationCondition(string expression = "self != null", string message = "should be answered", ValidationSeverity severity = ValidationSeverity.Error)
             => new ValidationCondition(expression, message) { Severity =  severity };
 
+        public ValidationCondition WarningCondition(string expression = "self != null", string message = "warning about unanswered question") 
+            => this.ValidationCondition(expression, message, ValidationSeverity.Warning);
+
         public Variable Variable(Guid? id = null, VariableType type = VariableType.LongInteger, string variableName = "v1", string expression = "2*2")
             => new Variable(
                 id ?? Guid.NewGuid(),
@@ -1901,7 +1872,6 @@ namespace WB.Tests.Abc.TestFactories
 
             var exportViewFactory = new ExportViewFactory(
                 fileSystemAccessor.Object,
-                Mock.Of<IExportQuestionService>(),
                 Mock.Of<IQuestionnaireStorage>(),
                 new RosterStructureService(),
                 Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>());
@@ -2274,6 +2244,13 @@ namespace WB.Tests.Abc.TestFactories
         public DashboardSubTitleViewModel DashboardSubTitleViewModel()
         {
             return new DashboardSubTitleViewModel();
+        }
+
+        public InterviewTreeQuestion InterviewTreeSingleOptionQuestion(Identity singleOptionQuestionIdentity, int answer)
+        {
+            var result = Create.Entity.InterviewTreeQuestion(singleOptionQuestionIdentity, answer: answer,
+                questionType: QuestionType.SingleOption);
+            return result;
         }
     }
 }

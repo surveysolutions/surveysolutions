@@ -124,6 +124,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Assign to.
+        /// </summary>
+        public static string AssignTo {
+            get {
+                return ResourceManager.GetString("AssignTo", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Edit size for assignment {{assignmentId}}.
         /// </summary>
         public static string ChangeSizeModalTitle {
@@ -174,6 +183,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string CreateInterview {
             get {
                 return ResourceManager.GetString("CreateInterview", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Create new assignment for questionnaire {{questionnaire}}.
+        /// </summary>
+        public static string CreatingNewAssignment {
+            get {
+                return ResourceManager.GetString("CreatingNewAssignment", resourceCulture);
             }
         }
         

@@ -27,11 +27,9 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
     {
         private readonly IInterviewerPrincipal principal;
 
-        private readonly IViewModelNavigationService viewModelNavigationService;
         private readonly IInterviewerSettings interviewerSettings;
         private readonly IPlainStorage<InterviewView> interviewsRepository;
         private readonly IAuditLogService auditLogService;
-        private readonly ISynchronizationMode synchronizationMode;
         private readonly IOfflineSyncClient syncClient;
         private readonly IMvxMessenger messenger;
 
@@ -58,17 +56,14 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             IPermissionsService permissionsService,
             INearbyConnection nearbyConnection,
             IRestService restService,
-            ISynchronizationMode synchronizationMode,
             IOfflineSyncClient syncClient) : base(principal, viewModelNavigationService, permissionsService,
             nearbyConnection, interviewerSettings, restService)
         {
             this.messenger = messenger;
-            this.viewModelNavigationService = viewModelNavigationService;
             this.principal = principal;
             this.interviewerSettings = interviewerSettings;
             this.interviewsRepository = interviewsRepository;
             this.auditLogService = auditLogService;
-            this.synchronizationMode = synchronizationMode;
             this.syncClient = syncClient;
             this.Synchronization = synchronization;
             this.syncSubscription = synchronizationCompleteSource.SynchronizationEvents.Subscribe(async r =>
@@ -97,6 +92,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         public override void Prepare(DashboardViewModelArgs parameter)
         {
             this.LastVisitedInterviewId = parameter.InterviewId;
+            this.SelectTypeOfInterviewsByInterviewId(this.LastVisitedInterviewId);
         }
 
         public override async Task Initialize()
@@ -195,7 +191,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
         private async void OnInterviewRemoved(object sender, InterviewRemovedArgs e)
         {
-            this.RaisePropertyChanged(() => this.DashboardTitle);
+            await this.RaisePropertyChanged(() => this.DashboardTitle);
             this.CreateNew.UpdateAssignment(e.AssignmentId);
             await this.CreateNew.LoadAsync(this.Synchronization);
         }
@@ -213,7 +209,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 this.RejectedInterviews.LoadAsync(lastVisitedInterviewId),
                 this.CompletedInterviews.LoadAsync(lastVisitedInterviewId));
 
-            this.RaisePropertyChanged(() => this.DashboardTitle);
+            await this.RaisePropertyChanged(() => this.DashboardTitle);
         }
 
         private void SelectTypeOfInterviewsByInterviewId(Guid? lastVisitedInterviewId)
@@ -245,10 +241,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
                 this.viewModelNavigationService.ShowWaitMessage();
                 return;
             }
-
-            this.synchronizationMode.Set(SynchronizationWithHqEnabled 
-                ? SynchronizationMode.Online 
-                : SynchronizationMode.Offline);
 
             this.Synchronization.IsSynchronizationInProgress = true;
             this.Synchronization.Synchronize();
@@ -332,7 +324,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
         #region Offline synchronization
 
         public IMvxCommand StartOfflineSyncCommand => new MvxCommand(this.StartOfflineSynchronization);
-        public event EventHandler OnOfflineSynchonizationStarted;
+        public event EventHandler OnOfflineSynchronizationStarted;
 
         private void StartOfflineSynchronization()
         {
@@ -347,7 +339,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
             this.Synchronization.IsSynchronizationInProgress = true;
             this.Synchronization.IsSynchronizationInfoShowed = true;
 
-            this.OnOfflineSynchonizationStarted?.Invoke(this, EventArgs.Empty);
+            this.OnOfflineSynchronizationStarted?.Invoke(this, EventArgs.Empty);
         }
 
         protected override async Task OnStartDiscovery()
@@ -382,8 +374,6 @@ namespace WB.Core.BoundedContexts.Interviewer.Views.Dashboard
 
             using (new CommunicationSession())
             {
-                this.synchronizationMode.Set(SynchronizationMode.Offline);
-
                 this.RunSynchronization();
             }
         }

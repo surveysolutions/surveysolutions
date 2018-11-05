@@ -62,7 +62,7 @@ namespace WB.UI.WebTester
             {
                 DisabledEventHandlerTypes = Array.Empty<Type>(),
                 EventHandlerTypesWithIgnoredExceptions = Array.Empty<Type>(),
-                IgnoredAggregateRoots = new HashSet<string>()
+                IgnoredAggregateRoots = new List<string>()
             });
 
             registry.Bind<WebTesterStatefulInterview>();
@@ -149,7 +149,9 @@ namespace WB.UI.WebTester
 
             registry.RegisterDenormalizer<InterviewLifecycleEventHandler>();
 
-            registry.BindAsSingleton<IEventStore, ISnapshotStore, InMemoryEventStore>();
+            registry.BindAsSingleton<IInMemoryEventStore, ISnapshotStore, InMemoryEventStore>();
+            registry.BindToMethod<IEventStore>(f => f.Resolve<IInMemoryEventStore>());
+
             registry.BindAsSingleton<IPlainKeyValueStorage<QuestionnaireDocument>, InMemoryKeyValueStorage<QuestionnaireDocument>>();
             registry.BindAsSingleton(typeof(ICacheStorage<,>), typeof(InMemoryCacheStorage<,>));
             registry.BindAsSingleton(typeof(IPlainStorageAccessor<>), typeof(InMemoryPlainStorageAccessor<>));

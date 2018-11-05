@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using MvvmCross.Base;
+using MvvmCross.Logging;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Interviewer.Views.Dashboard.DashboardItems;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
@@ -13,6 +15,9 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.InterviewDashboar
         [Test]
         public void should_put_answers_for_each_interview()
         {
+            base.Setup();
+            Ioc.RegisterSingleton(Stub.MvxMainThreadAsyncDispatcher);
+
             Guid interviewId = Id.gA;
             var questionnaireIdentity = Create.Entity.QuestionnaireIdentity();
 
@@ -21,7 +26,8 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer.ViewModels.InterviewDashboar
             viewModel.Init(Create.Entity.InterviewView(interviewId: interviewId,
                    questionaireTitle: "Sample",
                     questionnaireId: questionnaireIdentity.ToString(),
-                    status: InterviewStatus.InterviewerAssigned),
+                    status: InterviewStatus.InterviewerAssigned
+                    ),
                 new List<PrefilledQuestion>
                 {
                     new PrefilledQuestion(){ Answer = "A", Question = "B"},

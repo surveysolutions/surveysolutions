@@ -2,15 +2,12 @@
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Supervisor;
 using WB.Core.BoundedContexts.Supervisor.Services;
 using WB.Core.BoundedContexts.Supervisor.Services.Implementation.OfflineSyncHandlers;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Messages;
-using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
-using WB.Core.SharedKernels.Enumerator.Utils;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Tests.Abc;
 
@@ -111,11 +108,12 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             var users = new Mock<IPlainStorage<InterviewerDocument>>();
             users.Setup(x => x.GetById(userId.FormatGuid())).Returns(new InterviewerDocument() { SecurityStamp = userToken });
 
-            var handler = Create.Service.SupervisorSynchronizeHandler(interviewerViewRepository: users.Object,
-                settings: Mock.Of<ISupervisorSettings>(s => s.LastHqSyncTimestamp == 1));
+            var buildNumber = 2;
 
-            var expectedVersion = ReflectionUtils.GetAssemblyVersion(typeof(SupervisorBoundedContextAssemblyIndicator));
-            var response = await handler.CanSynchronize(new CanSynchronizeRequest(expectedVersion.Revision, userId, "new token", null));
+            var handler = Create.Service.SupervisorSynchronizeHandler(interviewerViewRepository: users.Object,
+                settings: Mock.Of<ISupervisorSettings>(s => s.LastHqSyncTimestamp == 1 && s.GetApplicationVersionCode() == buildNumber));
+
+            var response = await handler.CanSynchronize(new CanSynchronizeRequest(buildNumber, userId, "new token", null));
 
             Assert.That(response, Has.Property(nameof(response.CanSyncronize)).False);
             Assert.AreEqual(response.Reason, SyncDeclineReason.InvalidPassword);
@@ -131,12 +129,13 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             var users = new Mock<IPlainStorage<InterviewerDocument>>();
             users.Setup(x => x.GetById(userId.FormatGuid())).Returns(new InterviewerDocument());
 
-            var handler = Create.Service.SupervisorSynchronizeHandler(interviewerViewRepository: users.Object,
-                settings: Mock.Of<ISupervisorSettings>(s => s.LastHqSyncTimestamp == supervisorLastHqTimestamp));
+            var buildNumber = 2;
 
-            var expectedVersion = ReflectionUtils.GetAssemblyVersion(typeof(SupervisorBoundedContextAssemblyIndicator));
+            var handler = Create.Service.SupervisorSynchronizeHandler(interviewerViewRepository: users.Object,
+                settings: Mock.Of<ISupervisorSettings>(s => s.LastHqSyncTimestamp == supervisorLastHqTimestamp && s.GetApplicationVersionCode() == buildNumber));
+
             var response = await handler.CanSynchronize(
-                new CanSynchronizeRequest(expectedVersion.Revision, userId, String.Empty, interviewerLastHqTimestamp));
+                new CanSynchronizeRequest(buildNumber, userId, String.Empty, interviewerLastHqTimestamp));
 
             Assert.That(response, Has.Property(nameof(response.CanSyncronize)).False);
             Assert.AreEqual(response.Reason, SyncDeclineReason.SupervisorRequireOnlineSync);
@@ -150,11 +149,12 @@ namespace WB.Tests.Unit.BoundedContexts.Supervisor.Services
             var users = new Mock<IPlainStorage<InterviewerDocument>>();
             users.Setup(x => x.GetById(userId.FormatGuid())).Returns(new InterviewerDocument() { SecurityStamp = userToken });
 
-            var handler = Create.Service.SupervisorSynchronizeHandler(interviewerViewRepository: users.Object,
-                settings: Mock.Of<ISupervisorSettings>(s => s.LastHqSyncTimestamp == null));
+            var buildNumber = 2;
 
-            var expectedVersion = ReflectionUtils.GetAssemblyVersion(typeof(SupervisorBoundedContextAssemblyIndicator));
-            var response = await handler.CanSynchronize(new CanSynchronizeRequest(expectedVersion.Revision, userId, "new token", null));
+            var handler = Create.Service.SupervisorSynchronizeHandler(interviewerViewRepository: users.Object,
+                settings: Mock.Of<ISupervisorSettings>(s => s.LastHqSyncTimestamp == null && s.GetApplicationVersionCode() == buildNumber));
+
+            var response = await handler.CanSynchronize(new CanSynchronizeRequest(buildNumber, userId, "new token", null));
 
             Assert.That(response, Has.Property(nameof(response.CanSyncronize)).False);
             Assert.AreEqual(response.Reason, SyncDeclineReason.SupervisorRequireOnlineSync);

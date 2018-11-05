@@ -14,7 +14,16 @@ namespace WB.Core.BoundedContexts.Supervisor.Synchronization
     {
         private readonly IPlainStorage<InterviewView> interviewViewRepository;
 
-        public SupervisorUploadInterviews(IInterviewerInterviewAccessor interviewFactory, IPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage, ILogger logger, IPlainStorage<InterviewFileView> imagesStorage, IAudioFileStorage audioFileStorage, ISynchronizationService synchronizationService, int sortOrder, IPlainStorage<InterviewView> interviewViewRepository) : base(interviewFactory, interviewMultimediaViewStorage, logger, imagesStorage, audioFileStorage, synchronizationService, sortOrder)
+        public SupervisorUploadInterviews(
+            IInterviewerInterviewAccessor interviewFactory,
+            IPlainStorage<InterviewMultimediaView> interviewMultimediaViewStorage, 
+            ILogger logger,
+            IImageFileStorage imagesStorage, 
+            IAudioFileStorage audioFileStorage,
+            ISynchronizationService synchronizationService, 
+            int sortOrder,
+            IPlainStorage<InterviewView> interviewViewRepository) : base(interviewFactory,
+            interviewMultimediaViewStorage, logger, imagesStorage, audioFileStorage, synchronizationService, sortOrder)
         {
             this.interviewViewRepository = interviewViewRepository;
         }

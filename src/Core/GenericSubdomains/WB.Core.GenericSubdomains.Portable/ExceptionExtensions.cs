@@ -9,9 +9,9 @@ namespace WB.Core.GenericSubdomains.Portable
         public static TException GetSelfOrInnerAs<TException>(this Exception source)
             where TException : Exception
         {
-            if (source is TException)
+            if (source is TException exception)
             {
-                return (TException) source;
+                return exception;
             }
 
             while (source.InnerException != null)
@@ -39,13 +39,15 @@ namespace WB.Core.GenericSubdomains.Portable
 
         public static IEnumerable<Exception> UnwrapAllInnerExceptions(this Exception exception)
         {
-            if (exception == null) throw new ArgumentNullException("exception");
+            if (exception == null) throw new ArgumentNullException(nameof(exception));
 
             yield return exception;
 
-            IEnumerable<Exception> innerExceptions = exception is AggregateException
-                ? ((AggregateException) exception).InnerExceptions
-                : exception.InnerException != null ? exception.InnerException.ToEnumerable() : new Exception[] { };
+            IEnumerable<Exception> innerExceptions = exception is AggregateException aggregateException
+                ? aggregateException.InnerExceptions
+                : exception.InnerException != null 
+                    ? exception.InnerException.ToEnumerable() 
+                    : Array.Empty<Exception>();
 
             foreach (var unwrappedException in innerExceptions.SelectMany(UnwrapAllInnerExceptions))
             {

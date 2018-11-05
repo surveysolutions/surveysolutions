@@ -54,5 +54,11 @@ namespace WB.UI.Interviewer.ViewModel
         });
 
         public IMvxCommand NavigateToMapsCommand => new MvxAsyncCommand(this.viewModelNavigationService.NavigateToAsync<MapsViewModel>);
+
+
+        public async Task NavigateBack()
+        {
+            await this.viewModelNavigationService.NavigateToDashboardAsync(this.InterviewId);
+        }
     }
 }

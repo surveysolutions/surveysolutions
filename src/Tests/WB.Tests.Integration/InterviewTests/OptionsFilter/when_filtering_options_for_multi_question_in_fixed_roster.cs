@@ -18,7 +18,7 @@ namespace WB.Tests.Integration.InterviewTests.OptionsFilter
         public void BecauseOf() =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
-                Setup.MockedServiceLocator();
+                SetUp.MockedServiceLocator();
 
                 List<Answer> options = new List<Answer>
                 {

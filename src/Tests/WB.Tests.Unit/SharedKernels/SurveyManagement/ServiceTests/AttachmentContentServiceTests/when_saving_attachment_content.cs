@@ -3,12 +3,11 @@ using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Tests.Abc;
-using WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DataExport.CommentsExporterTests;
 
 
 namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.AttachmentContentServiceTests
 {
-    class when_saving_attachment_content : CommentsExporterTestsContext
+    class when_saving_attachment_content 
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
             attachmentContentService = Create.Service.AttachmentContentService(mockOfAttachmentContentPlainStorage.Object);

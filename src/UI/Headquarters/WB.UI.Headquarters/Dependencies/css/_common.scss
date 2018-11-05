@@ -558,7 +558,12 @@ main.hidden.display-block{
 		top: 60px;
 	}
 	.interviews-large-screen{
-		display: none;
+		.table-with-scroll, .wrapper-modal-dropdown, .dataTables_info{
+			display: none;
+		}
+		.dataTables_paginate {
+			display: none !important;
+		}
 	}
 	.page-header .neighbor-block-to-search{
 		padding-right: 0;

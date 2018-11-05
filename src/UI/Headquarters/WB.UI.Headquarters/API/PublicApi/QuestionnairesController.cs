@@ -18,7 +18,7 @@ using WB.UI.Headquarters.Code;
 namespace WB.UI.Headquarters.API.PublicApi
 {
     [RoutePrefix("api/v1/questionnaires")]
-    [ApiBasicAuth(new[] {UserRoles.ApiUser, UserRoles.Administrator}, TreatPasswordAsPlain = true, FallbackToCookieAuth = true)]
+    [ApiBasicAuth(UserRoles.ApiUser, UserRoles.Administrator, TreatPasswordAsPlain = true, FallbackToCookieAuth = true)]
     public class QuestionnairesController : BaseApiServiceController
     {
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
@@ -99,8 +99,8 @@ namespace WB.UI.Headquarters.API.PublicApi
                 throw new HttpResponseException(HttpStatusCode.NotFound);
             }
 
-            var questionnaireDocumentVersionedSrialized = this.serializer.Serialize(questionnaireDocumentVersioned);
-            var response = this.Request.CreateResponse(questionnaireDocumentVersionedSrialized);
+            var questionnaireDocumentVersionedSerialized = this.serializer.Serialize(questionnaireDocumentVersioned);
+            var response = this.Request.CreateResponse(questionnaireDocumentVersionedSerialized);
             return response;
         }
 

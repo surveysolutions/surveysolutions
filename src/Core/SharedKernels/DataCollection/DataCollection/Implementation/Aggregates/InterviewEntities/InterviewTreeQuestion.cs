@@ -170,7 +170,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             }
         }
 
-        internal BaseInterviewQuestion InterviewQuestion { get; set; }
+        public BaseInterviewQuestion InterviewQuestion { get; set; }
         
         public InterviewTreeLinkedToListQuestion AsLinkedToList => 
             this.IsSingleLinkedToList ? 
@@ -205,6 +205,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 return this.FailedErrors.Count == 0; 
             }
         }
+
+        public DateTime? AnswerTimeUtc => this.InterviewQuestion?.AnswerTimeUtc;
 
         public bool IsPlausible => this.FailedWarnings.Count == 0;
 
@@ -319,7 +321,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             return this.InterviewQuestion.InterviewQuestionType.ToString("D");
         }
 
-        public void SetAnswer(AbstractAnswer answer)
+        public void SetAnswer(AbstractAnswer answer, DateTime? answerTimeUtc)
         {
             if (answer == null)
             {
@@ -384,6 +386,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                     default:
                         throw new InvalidOperationException();
                 }
+
+                this.InterviewQuestion.SetAnswerTime(answerTimeUtc);
             }
         }
 
@@ -589,6 +593,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 var refListOptions = refListQuestionAllOptions?.Where(x => multiToListAnswers?.Contains(x.Value) ?? false).ToArray();
                 return string.Join(", ", refListOptions.Select(o => o.Text));
             }
+
+            if (this.IsAudio)
+                return this.GetAsInterviewTreeAudioQuestion().GetAnswer()?.FileName;
 
             return string.Empty;
         }
@@ -835,47 +842,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
 
         public abstract void RemoveAnswer();
         public abstract bool EqualByAnswer(BaseInterviewQuestion question);
-    }
 
-    [DebuggerDisplay("{ToString()}")]
-    public class InterviewTreeDateTimeQuestion : BaseInterviewQuestion
-    {
-        public InterviewTreeDateTimeQuestion() : base(InterviewQuestionType.DateTime){}
-
-        private DateTimeAnswer answer;
-        public InterviewTreeDateTimeQuestion(object answer, bool isTimestamp):base (InterviewQuestionType.DateTime)
+        public void SetAnswerTime(DateTime? answerTimeUtc)
         {
-            this.IsTimestamp = isTimestamp;
-            this.answer = answer == null ? null : DateTimeAnswer.FromDateTime(Convert.ToDateTime(answer));
+            this.AnswerTimeUtc = answerTimeUtc;
         }
 
-        public override bool IsAnswered() => this.answer != null;
+        public DateTime? AnswerTimeUtc { get; set; }
 
-        public bool IsTimestamp { get; private set; }
-
-        //public override AbstractAnswer GetAnswer() => this.answer;
-        public DateTimeAnswer GetAnswer() => this.answer;
-
-        public void SetAnswer(DateTimeAnswer answer) => this.answer = answer;
-        public override void RemoveAnswer() => this.answer = null;
-
-        public override bool EqualByAnswer(BaseInterviewQuestion question)
-        {
-            return (question as InterviewTreeDateTimeQuestion)?.answer == this.answer;
-        }
-
-        
-
-        public override BaseInterviewQuestion Clone() => (InterviewTreeDateTimeQuestion) this.MemberwiseClone();
-
-        public string UiFormatString => IsTimestamp ? DateTimeFormat.DateWithTimeFormat : DateTimeFormat.DateFormat;
-
-        public override string ToString() => this.answer?.Value.ToString(UiFormatString) ?? "NO ANSWER";
-
-        public override void RunImportInvariants(InterviewQuestionInvariants questionInvariants)
-        {
-            questionInvariants.RequireDateTimePreloadValueAllowed();
-        }
+        public abstract AbstractAnswer Answer { get; }
     }
 
     [DebuggerDisplay("{ToString()}")]
@@ -898,6 +873,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public override void RemoveAnswer() => this.answer = null;
 
         public override bool EqualByAnswer(BaseInterviewQuestion question) => (question as InterviewTreeGpsQuestion)?.answer == this.answer;
+        public override AbstractAnswer Answer => this.answer;
 
         public override BaseInterviewQuestion Clone() => (InterviewTreeGpsQuestion) this.MemberwiseClone();
 
@@ -929,6 +905,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public override void RemoveAnswer() => this.answer = null;
 
         public override bool EqualByAnswer(BaseInterviewQuestion question) => (question as InterviewTreeAudioQuestion)?.answer == this.answer;
+        public override AbstractAnswer Answer => this.answer;
 
         public override BaseInterviewQuestion Clone() => (InterviewTreeAudioQuestion)this.MemberwiseClone();
 
@@ -959,6 +936,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public override BaseInterviewQuestion Clone() => (InterviewTreeMultimediaQuestion) this.MemberwiseClone();
 
         public override string ToString() => this.answer?.ToString() ?? "NO ANSWER";
+        public override AbstractAnswer Answer => this.answer;
     }
 
     [DebuggerDisplay("{ToString()}")]
@@ -985,6 +963,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         public override BaseInterviewQuestion Clone() => (InterviewTreeAreaQuestion)this.MemberwiseClone();
 
         public override string ToString() => this.answer?.ToString() ?? "NO ANSWER";
+        public override AbstractAnswer Answer => this.answer;
     }
 
     [DebuggerDisplay("{ToString()}")]
@@ -1033,6 +1012,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             return this.ProtectedAnswer?.Value == (int) value;
         }
+
+        public override AbstractAnswer Answer => this.answer;
     }
 
     [DebuggerDisplay("{ToString()}")]
@@ -1064,6 +1045,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             questionInvariants.RequireNumericRealPreloadValueAllowed();
         }
+
+        public override AbstractAnswer Answer => this.answer;
     }
 
     [DebuggerDisplay("{ToString()}")]
@@ -1094,6 +1077,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             questionInvariants.RequireQRBarcodePreloadValueAllowed();
         }
+
+        public override AbstractAnswer Answer => this.answer;
     }
 
     [DebuggerDisplay("{ToString()}")]
@@ -1123,6 +1108,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             questionInvariants.RequireTextPreloadValueAllowed();
         }
+
+        public override AbstractAnswer Answer => this.answer;
     }
     
     [DebuggerDisplay("{ToString()}")]
@@ -1185,6 +1172,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             questionInvariants.RequireYesNoPreloadValueAllowed(answer);
         }
+
+        public override AbstractAnswer Answer => this.answer;
     }
 
     [DebuggerDisplay("{ToString()}")]
@@ -1254,6 +1243,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             return this.ProtectedAnswer?.Rows.Any(x => x.Value == value) ?? false;
         }
+
+        public override AbstractAnswer Answer => this.answer;
     }
 
     [DebuggerDisplay("{ToString()}")]
@@ -1292,6 +1283,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             questionInvariants.RequireFixedSingleOptionPreloadValueAllowed(answer.SelectedValue);
         }
+
+        public override AbstractAnswer Answer => this.answer;
     }
 
     [DebuggerDisplay("{ToString()}")]
@@ -1353,6 +1346,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         {
             return this.ProtectedAnswer?.CheckedValues.Contains((int) value) ?? false;
         }
+
+        public override AbstractAnswer Answer => this.answer;
     }
 
     [DebuggerDisplay("{ToString()}")]
@@ -1386,6 +1381,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         }
 
         public override string ToString() => this.answer?.ToString() ?? "NO ANSWER";
+
+        public override AbstractAnswer Answer => this.answer;
     }
 
     [DebuggerDisplay("{ToString()}")]
@@ -1427,6 +1424,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         }
 
         public override string ToString() => this.answer?.ToString() ?? "NO ANSWER";
+
+        public override AbstractAnswer Answer => this.answer;
     }
 
     [DebuggerDisplay("{ToString()}")]
@@ -1517,6 +1516,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         }
 
         public override string ToString() => this.answer?.ToString() ?? "NO ANSWER";
+
+        public override AbstractAnswer Answer => this.answer;
     }
 
     [DebuggerDisplay("{ToString()}")]
@@ -1543,6 +1544,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
         }
 
         public override string ToString() => this.answer?.ToString() ?? "NO ANSWER";
+
+        public override AbstractAnswer Answer => this.answer;
     }
 
     [DebuggerDisplay("{ToString()}")]

@@ -115,7 +115,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         public virtual void OnRemove(TableQuery<TEntity> query, TKey entityId) { }
         
         public IReadOnlyCollection<TEntity> Where(Expression<Func<TEntity, bool>> predicate)
-            => this.RunInTransaction(table => table.Where(predicate).ToReadOnlyCollection());
+            => this.RunInTransaction(table => ToModifiedCollection(table.Where(predicate)).ToReadOnlyCollection());
 
         public IReadOnlyCollection<TResult> WhereSelect<TResult>(Expression<Func<TEntity, bool>> wherePredicate,
             Expression<Func<TEntity, TResult>> selectPredicate) where TResult : class
@@ -127,18 +127,18 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
         public int Count()
             => this.RunInTransaction(table => table.Count());
 
-        public TEntity FirstOrDefault() => this.RunInTransaction(table => table.FirstOrDefault());
+        public TEntity FirstOrDefault() => this.RunInTransaction(table => ToModifiedEntity(table.FirstOrDefault()));
 
         public TEntity FirstOrDefault(Expression<Func<TEntity, bool>> predicate)
             => this.RunInTransaction(table => table.FirstOrDefault(predicate));
 
         public virtual IReadOnlyCollection<TEntity> LoadAll()
         {
-            return this.RunInTransaction(table => table.Connection.Table<TEntity>().ToReadOnlyCollection());
+            return this.RunInTransaction(table => ToModifiedCollection(table.Connection.Table<TEntity>()).ToReadOnlyCollection());
         }
 
         public IReadOnlyCollection<TEntity> FixedQuery(Expression<Func<TEntity, bool>> wherePredicate, Expression<Func<TEntity, int>> orderPredicate, int takeCount, int skip = 0)
-            => this.RunInTransaction(table => table.Where(wherePredicate).OrderBy(orderPredicate).Skip(skip).Take(takeCount).ToReadOnlyCollection());
+            => this.RunInTransaction(table => ToModifiedCollection(table.Where(wherePredicate).OrderBy(orderPredicate).Skip(skip).Take(takeCount)).ToReadOnlyCollection());
 
         public IReadOnlyCollection<TResult> FixedQueryWithSelection<TResult>(
             Expression<Func<TEntity, bool>> wherePredicate, Expression<Func<TEntity, int>> orderPredicate,
@@ -174,5 +174,10 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
                     () => function.Invoke(this.connection.Table<TEntity>()));
             }
         }
+
+        private IEnumerable<TEntity> ToModifiedCollection(IEnumerable<TEntity> entity)
+            => entity.Select(ToModifiedEntity);
+
+        protected virtual TEntity ToModifiedEntity(TEntity entity) => entity;
     }
 }

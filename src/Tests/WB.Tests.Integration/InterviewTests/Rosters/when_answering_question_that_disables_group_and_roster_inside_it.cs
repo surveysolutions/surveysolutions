@@ -20,7 +20,7 @@ namespace WB.Tests.Integration.InterviewTests.Rosters
         public void BecauseOf() =>
             results = Execute.InStandaloneAppDomain(appDomainContext.Domain, () =>
             {
-                Setup.MockedServiceLocator();
+                SetUp.MockedServiceLocator();
 
                 var questionnaireDocument = Abc.Create.Entity.QuestionnaireDocumentWithOneChapter(QuestionnaireId,
                     Abc.Create.Entity.NumericIntegerQuestion(q1Id, variable: "q1"),
