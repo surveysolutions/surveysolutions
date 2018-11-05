@@ -261,7 +261,7 @@
                         break;
                     case "DateTime":
                         command.isTimestamp = question.isTimestamp;
-                        command.defaultDate = question.defaultDate;
+                        command.defaultDate = _.isEmpty(question.defaultDate) ? null : moment.utc(question.defaultDate, moment.HTML5_FMT.DATE, true);
                         break;
                     case "GpsCoordinates":
                     case "Text":

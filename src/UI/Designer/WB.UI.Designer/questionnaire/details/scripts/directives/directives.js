@@ -92,6 +92,7 @@
                 restrict: 'A',
                 require: 'ngModel',
                 link: function (scope, element) {
+                    jqueryDatepicker($);
                     $(element).datepicker({
                         dateFormat: 'yy-mm-dd',
 
