@@ -1159,6 +1159,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Selected file is not supported as attachment.
+        /// </summary>
+        public static string NotSupportedAttachment {
+            get {
+                return ResourceManager.GetString("NotSupportedAttachment", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to OK.
         /// </summary>
         public static string Ok {

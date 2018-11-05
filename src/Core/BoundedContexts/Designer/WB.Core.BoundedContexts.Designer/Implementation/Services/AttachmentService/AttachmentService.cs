@@ -168,6 +168,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
                 return GetImageAttachmentDetails(binaryContent);
             }
 
+            if (contentType.StartsWith("application/pdf") || contentType.StartsWith("video/") || contentType.StartsWith("audio/"))
+            {
+                return new AttachmentDetails();
+            }
+
             throw new FormatException(ExceptionMessages.Attachments_Unsupported_content);
         }
 

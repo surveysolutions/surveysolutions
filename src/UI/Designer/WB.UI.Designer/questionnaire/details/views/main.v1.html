@@ -232,7 +232,7 @@
                         </div>
                         <button class="btn btn-default btn-lg pull-left" ng-class="{'btn-primary': !isReadOnlyForUser}"
                                 ngf-select ngf-change="createAndUploadFile($file);$event.stopPropagation()"
-                                ngf-accept="'image/*'" ngf-max-size="100MB" type="file" ngf-select-disabled="isReadOnlyForUser"
+                                ngf-accept="'.pdf,image/*,video/*,audio/*'" ngf-max-size="100MB" type="file" ngf-select-disabled="isReadOnlyForUser"
                                 ngf-drop-disabled="isReadOnlyForUser"
                                 ng-i18next="SideBarAttachmentsUpload">
                             Upload new
@@ -283,7 +283,7 @@
                                                     <button type="button" class="btn lighter-hover" ng-click="cancel(attachment);$event.stopPropagation()" ng-i18next>Cancel</button>
                                                 </div>
                                                 <div class="permanent-actions pull-right clearfix">
-                                                    <button ng-disabled="isReadOnlyForUser" class="btn btn-default pull-right" ngf-select="" ngf-accept="'image/*'" ngf-max-size="100MB" ngf-change="fileSelected(attachment, $file);$event.stopPropagation()" type="file">
+                                                    <button ng-disabled="isReadOnlyForUser" class="btn btn-default pull-right" ngf-select="" ngf-accept="'.pdf,image/*,video/*,audio/*'" ngf-max-size="100MB" ngf-change="fileSelected(attachment, $file);$event.stopPropagation()" type="file">
                                                         <span ng-i18next>Update</span>
                                                     </button>
                                                     <a href="{{downloadLookupFileBaseUrl  + '/' + attachment.attachmentId}}" class="btn btn-default pull-right" target="_blank" ng-i18next>Download</a>
@@ -686,7 +686,7 @@
 <script type="text/ng-template" id="Image-attachment-info-template.html">
     <p>
         <span class="file-name">{{attachment.meta.fileName}}</span>, &nbsp;
-        <span ng-class="{'error': isAttachmentResolutionTooBig(attachment)}" ng-i18next="({width: attachment.content.details.width, height: attachment.content.details.height})SideBarAttachmentDetailsResolution"></span>,&nbsp; 
+        <span ng-class="{'error': isAttachmentResolutionTooBig(attachment)}" ng-if="attachment.content.details.width" ng-i18next="({width: attachment.content.details.width, height: attachment.content.details.height})SideBarAttachmentDetailsResolution"></span>{{attachment.content.details.width ? ',&nbsp;' : ''}} 
         <span ng-i18next="({type: attachment.content.type})SideBarAttachmentDetailsFormat"></span>, 
         <span ng-class="{'error': isAttachmentSizeTooBig(attachment)}" ng-i18next="({size: formatBytes(attachment.content.size)})SideBarAttachmentDetailsSize"></span>
     </p>
