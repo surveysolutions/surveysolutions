@@ -1,14 +1,15 @@
 ﻿<div class="row">
-    <div class="col-md-5 inline-inputs">
-        <input id="cb-is-timestamp" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isTimestamp" />
+    <div class="col-xs-3">
+        <input id="cb-is-timestamp" type="checkbox" class="wb-checkbox" ng-model="activeQuestion.isTimestamp"/>
         <label for="cb-is-timestamp"><span></span>{{'QuestionCurrentTime' | i18next}}</label>
         <help key="isTimestamp"></help>
     </div>
-</div>
-<div class="row" ng-if="!activeQuestion.isTimestamp">
-    <div class="col-md-5 inline-inputs">
-        <input id="dt-default-date" name="programStartDate" type="text" jqdatepicker ng-model="activeQuestion.defaultDate" class="form-control small-date-input" />
-        <label for="dt-default-date"><span>{{'QuestionDefaultDate' | i18next}}</span></label>
-        <help key="defaultDate"></help>
+    <div class="col-xs-6" ng-if="!activeQuestion.isTimestamp">
+        <div class="form-group singleline-group">
+            <label for="dt-default-date">{{'QuestionDefaultDate' | i18next}}</label>
+            <input id="dt-default-date" type="text" jqdatepicker ng-model="activeQuestion.defaultDate" class="form-control small-date-input" readonly="readonly"/>
+            <help key="defaultDate"></help>
+        </div>
     </div>
+
 </div>

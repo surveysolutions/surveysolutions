@@ -7923,6 +7923,9 @@ input#edit-group-title {
 .question-editor .small-numeric-input {
   width: 80px !important;
 }
+.question-editor .small-date-input {
+  width: 120px !important;
+}
 .question-editor .form-group.singleline-group label,
 .question-editor .form-group.singleline-group input {
   display: inline-block;
