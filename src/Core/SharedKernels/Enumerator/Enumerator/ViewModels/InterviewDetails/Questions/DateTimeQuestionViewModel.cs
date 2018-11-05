@@ -29,6 +29,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private string interviewId;
 
         private readonly ILiteEventRegistry liteEventRegistry;
+        private readonly IQuestionnaireStorage questionnaireRepository;
         public AnsweringViewModel Answering { get; private set; }
 
         public DateTimeQuestionViewModel(
@@ -37,7 +38,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             QuestionStateViewModel<DateTimeQuestionAnswered> questionStateViewModel, 
             AnsweringViewModel answering,
             QuestionInstructionViewModel instructionViewModel, 
-            ILiteEventRegistry liteEventRegistry)
+            ILiteEventRegistry liteEventRegistry,
+            IQuestionnaireStorage questionnaireRepository)
         {
             this.principal = principal;
             this.interviewRepository = interviewRepository;
@@ -46,6 +48,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.InstructionViewModel = instructionViewModel;
             this.Answering = answering;
             this.liteEventRegistry = liteEventRegistry;
+            this.questionnaireRepository = questionnaireRepository;
         }
 
         public IQuestionStateViewModel QuestionState => this.questionState;
@@ -70,6 +73,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             {
                 this.SetToView(answerModel.GetAnswer().Value);
             }
+
+            var questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
+
+            this.DefaultDate = questionnaire.GetDefaultDateForDateQuestion(this.questionIdentity.Id);
         }
 
         public IMvxAsyncCommand<DateTime> AnswerCommand => new MvxAsyncCommand<DateTime>(this.SendAnswerAsync);
@@ -128,6 +135,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             get => this.answer;
             set => this.SetProperty(ref this.answer, value);
         }
+
+        public DateTime? DefaultDate { get; private set; }
 
         public void Dispose()
         {
