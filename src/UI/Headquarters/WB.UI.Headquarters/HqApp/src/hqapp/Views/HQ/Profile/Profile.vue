@@ -30,7 +30,6 @@
                 points: new Map(),
                 lines: [],
                 interviewerId: this.$route.params.interviewerId,
-                interviewDetailsTooltip: new InfoBubble(),
                 selectedTooltips: {},
                 colorMap:{
                     red: "#e74924",
@@ -113,7 +112,7 @@
                 
                 this.markerCluster = new MarkerClusterer(this.map, markers,
                 {
-                    imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
+                    imagePath: '../../Content/img/google-maps-markers/m',
                     enableRetinaIcons: true,
                     minimumClusterSize: this.minimumClusterSize,
                     averageCenter: true
