@@ -11,6 +11,11 @@ namespace WB.Core.SharedKernels.Questionnaire.Api
         public long Size { get; set; }
 
         public byte[] Content { get; set; }
+
+        public bool IsImage()
+        {
+            return this.ContentType.StartsWith("image", StringComparison.OrdinalIgnoreCase);
+        }
     }
 
     public class QuestionnaireLiteInfo
