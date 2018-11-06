@@ -129,6 +129,7 @@
     <Compile Include="Configuration\ExternalStoragesConfigSection.cs" />
     <Compile Include="Controllers\UnderConstructionController.cs" />
     <Compile Include="Extensions\IPrincipalExtensions.cs" />
+    <Compile Include="Extensions\ProgressiveDownload.cs" />
     <Compile Include="Filters\ApiNoCacheAttribute.cs" />
     <Compile Include="Attributes\NoTransactionAttribute.cs" />
     <Compile Include="Captcha\ICaptchaService.cs" />

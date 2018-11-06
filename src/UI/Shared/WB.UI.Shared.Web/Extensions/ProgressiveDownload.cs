@@ -4,7 +4,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 
-namespace WB.UI.Headquarters.API
+namespace WB.UI.Shared.Web.Extensions
 {
     /// <summary>
     /// Taken from https://github.com/ErikNoren/WebApi.ProgressiveDownloads/blob/master/VikingErik.Net.Http.ProgressiveDownload/ProgressiveDownload.cs
@@ -20,6 +20,16 @@ namespace WB.UI.Headquarters.API
 
         public bool IsRangeRequest => this.request.Headers.Range != null &&
                                       this.request.Headers.Range.Ranges.Count > 0;
+
+        public HttpResponseMessage HeaderInfoMessage(long contentLength, string mediaType)
+        {
+            var response = this.request.CreateResponse();
+            response.Content = new ByteArrayContent(Array.Empty<byte>());
+            response.Content.Headers.ContentType = MediaTypeHeaderValue.Parse(mediaType);
+            response.Content.Headers.ContentLength = contentLength;
+            response.Headers.AcceptRanges.Add("bytes");
+            return response;
+        }
 
         public HttpResponseMessage ResultMessage(Stream stream, string mediaType)
         {
