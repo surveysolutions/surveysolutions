@@ -182,6 +182,10 @@
                     fillFileMetaInfo();
                 }
 
+                if (file.type.startsWith('audio')) {
+                    fillFileMetaInfo();
+                }
+
                 if (file.type.startsWith('image')) {
                     Upload.imageDimensions(file).then(function (dimensions) {
                             fillFileMetaInfo();
