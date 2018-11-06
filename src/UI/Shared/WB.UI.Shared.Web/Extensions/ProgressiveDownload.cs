@@ -3,6 +3,7 @@ using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Shared.Web.Extensions
 {
