@@ -70,7 +70,6 @@
     "i18next-xhr-backend": "^1.4.3",
     "jquery": "3.3.1",
     "jquery-contextmenu": "^2.6.3",
-    "jquery-datepicker": "^1.12.3",
     "jquery-mousewheel": "^3.1.13",
     "jquery-placeholder": "^2.3.1",
     "jquery-validation": "^1.17.0",
@@ -86,6 +85,7 @@
     "pnotify": "^3.2.1",
     "roboto-fontface": "^0.8.0",
     "underscore": "^1.8.3",
-    "xss": "^0.3.7"
+    "xss": "^0.3.7",
+    "zebra_datepicker": "^1.9.12"
   }
 }
