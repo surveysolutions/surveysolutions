@@ -81,7 +81,9 @@ const paths = {
     'node_modules/i18next/i18next.min.js',
     'node_modules/i18next-xhr-backend/i18nextXHRBackend.min.js',
     'node_modules/ng-i18next/dist/ng-i18next.js',
-    'node_modules/jquery-datepicker/jquery-datepicker.js'
+    'node_modules/zebra_datepicker/dist/css/bootstrap/icons.png',
+    'node_modules/zebra_datepicker/dist/css/bootstrap/zebra_datepicker.min.css',
+    'node_modules/zebra_datepicker/dist/zebra_datepicker.min.js'
   ]  
 };
 
@@ -113,6 +115,12 @@ gulp.task("bowerCss", function () {
         //.pipe(debug())
         .pipe(concat('libs.css'))
         .pipe(plugins.rev())
+        .pipe(gulp.dest('build'));
+});
+
+gulp.task("bowerImages", function () {
+    return gulp.src(paths.vendor)
+        .pipe(plugins.filter(['**/*.png']))
         .pipe(gulp.dest('build'));
 });
 
@@ -221,7 +229,7 @@ gulp.task("dev", ["resx2json", "copyFilesNeededForBundler", "copyFontsNeededForB
 
 gulp.task('default', function(callback){
 	runSequence('clean', 
-		['templates', 'devJs', 'bowerJs', 'styles', 'bowerCss', 'resx2json', 'copyFilesNeededForBundler', 'copyFontsNeededForBundler'],
+		['templates', 'devJs', 'bowerJs', 'bowerImages', 'styles', 'bowerCss', 'resx2json', 'copyFilesNeededForBundler', 'copyFontsNeededForBundler'],
 		'index', 
 		callback);
 });
