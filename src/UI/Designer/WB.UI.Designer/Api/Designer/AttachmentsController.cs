@@ -4,6 +4,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Web.Hosting;
 using System.Web.Http;
 using ImageResizer;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -53,16 +54,43 @@ namespace WB.UI.Designer.Api
 
             var attachmentContent = this.attachmentService.GetContent(attachment.ContentId);
 
-            var response = new HttpResponseMessage(HttpStatusCode.OK)
+            if (attachmentContent.IsImage())
             {
-                Content = new ByteArrayContent(GetTrasformedContent(attachmentContent.Content, sizeToScale))
-            };
+                var response = new HttpResponseMessage(HttpStatusCode.OK)
+                {
+                    Content = new ByteArrayContent(GetTrasformedContent(attachmentContent.Content, sizeToScale))
+                };
 
-            response.Content.Headers.ContentType = new MediaTypeHeaderValue(attachmentContent.ContentType);
-            response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment") { FileNameStar = attachment.FileName };
-            response.Headers.ETag = new EntityTagHeaderValue("\"" + attachmentContent.ContentId + "\"");
-            
-            return response;
+                response.Content.Headers.ContentType = new MediaTypeHeaderValue(attachmentContent.ContentType);
+                response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment") {FileNameStar = attachment.FileName};
+                response.Headers.ETag = new EntityTagHeaderValue("\"" + attachmentContent.ContentId + "\"");
+                return response;
+            }
+
+            string imagePath = null;
+            if (attachmentContent.IsAudio())
+            {
+                imagePath = HostingEnvironment.MapPath("~/Content/images/icons-files-audio.svg");
+            }
+            if (attachmentContent.IsPdf())
+            {
+                imagePath = HostingEnvironment.MapPath("~/Content/images/icons-files-pdf.svg");
+            }
+
+            if (imagePath != null)
+            {
+                var byteArrayContent = new ByteArrayContent(File.ReadAllBytes(imagePath));
+                byteArrayContent.Headers.ContentType = new MediaTypeHeaderValue("image/svg+xml");
+
+                var httpResponseMessage = new HttpResponseMessage
+                {
+                    Content = byteArrayContent
+                };
+
+                return httpResponseMessage;
+            }
+
+            return new HttpResponseMessage(HttpStatusCode.NoContent);
         }
 
         private static byte[] GetTrasformedContent(byte[] source, int? sizeToScale = null)
