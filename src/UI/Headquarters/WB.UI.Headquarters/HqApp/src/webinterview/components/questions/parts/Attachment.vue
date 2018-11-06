@@ -1,7 +1,7 @@
 <template>
 
     <div>
-        <div v-if="contentType.startsWith('image')" class="image-zoom-box image-wrapper" :class="customCssClass">
+        <div v-if="localContentType === 'image'" class="image-zoom-box image-wrapper" :class="customCssClass">
             <img :src="thumbPath" alt="custom photo" class="zoomImg" @click="showModal(true)" :style="previewStyle">
             <div class="modal-img" :style="modalView" @click="showModal(false)">
                 <span class="close-zoomming-img">×</span>
@@ -9,15 +9,15 @@
                 <span class="caption"></span>
             </div>
         </div>
-        <div v-if="contentType.startsWith('audio')">
+        <div v-if="localContentType === 'audio'">
             <audio controls preload="auto" style="width:300px" :src="contentUrl">
             </audio>
         </div>
-        <div v-if="contentType.startsWith('video')">
+        <div v-if="localContentType === 'video'">
             <video controls preload="auto" style="width:300px" :src="contentUrl">
             </video>
         </div>
-        <div v-if="contentType.startsWith('application/pdf')">
+        <div v-if="localContentType === 'pdf'">
             <div class="instructions-wrapper">
                 <a class="btn btn-link" :href="contentUrl" target="_blank">{{$t("Common.Download")}}</a>
             </div>
@@ -28,6 +28,7 @@
 <script lang="js">
     import axios from "axios"
     import appendquery from "append-query"
+    import { startsWith } from "lodash"
 
     function appendSearchParam(uri, name, value) {
         const args = {
@@ -112,6 +113,16 @@
                 }
 
                 return {}
+            },
+            localContentType(){
+                if(startsWith(this.contentType, 'image'))
+                    return 'image'
+                if(startsWith(this.contentType, 'application/pdf'))
+                    return 'pdf'
+                if(startsWith(this.contentType, 'audio'))
+                    return 'audio'
+                if(startsWith(this.contentType, 'video'))
+                    return 'video'
             },
             modalView() {
                 return {
