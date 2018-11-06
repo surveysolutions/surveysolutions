@@ -47,6 +47,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
         public bool? IsFilteredCombobox { get; set; }
         public bool? IsSignature { get; set; }
         public bool IsTimestamp { get; set; }
+        public DateTime? DefaultDate { get; set; }
 
         public string CascadeFromQuestionId { get; set; }
 
