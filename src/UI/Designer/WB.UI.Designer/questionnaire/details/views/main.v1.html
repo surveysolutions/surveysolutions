@@ -259,7 +259,7 @@
                                     <div class="attachment">
                                         <div class="attachment-preview">
                                             <div class="attachment-preview-cover clearfix">
-                                                <img class="pull-right" ng-click="previewAttachment(attachment)" ngf-size="{width: 156, height: 140}" ngf-thumbnail="attachment.file || '{{downloadLookupFileBaseUrl + '/thumbnail/' + attachment.attachmentId}}'">
+                                                <img class="pull-right" ng-click="previewAttachment(attachment)" ngf-size="{width: 156, height: 140}" ng-src='{{downloadLookupFileBaseUrl + "/thumbnail/" + attachment.attachmentId}}'>
                                             </div>
                                         </div>
                                         <div class="attachment-content">
