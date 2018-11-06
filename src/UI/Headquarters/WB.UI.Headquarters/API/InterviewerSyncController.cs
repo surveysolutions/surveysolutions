@@ -18,6 +18,7 @@ using WB.UI.Headquarters.Controllers;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Resources;
 using WB.UI.Shared.Web.Attributes;
+using WB.UI.Shared.Web.Extensions;
 
 namespace WB.UI.Headquarters.API
 {

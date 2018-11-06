@@ -24,6 +24,7 @@ using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Implementation.Maps;
 using WB.UI.Headquarters.Models;
 using WB.UI.Headquarters.Models.Api;
+using WB.UI.Shared.Web.Extensions;
 using ILogger = WB.Core.GenericSubdomains.Portable.Services.ILogger;
 
 namespace WB.UI.Headquarters.Controllers
