@@ -130,6 +130,7 @@
                 $scope.fileSelected(attachment, file, function () {
                     commandService.updateAttachment($state.params.questionnaireId, attachment.attachmentId, attachment).then(function () {
                         dataBind(attachment.checkpoint, attachment);
+                        attachment.file = null;
                         $scope.attachments.push(attachment);
                         setTimeout(function () {
                             utilityService.focus("focusAttachment" + attachment.attachmentId);
@@ -191,7 +192,6 @@
                             fillFileMetaInfo();
                             attachment.content.details.height = dimensions.height;
                             attachment.content.details.width = dimensions.width;
-
                         })
                         .catch(function () {
                             notificationService.error($i18next.t('NotSupportedAttachment'));
@@ -210,6 +210,7 @@
                     attachment.attachmentId = newAttachmentId;
                     dataBind(attachment.checkpoint, attachment);
                     attachment.form.$setPristine();
+
                 });
             };
 

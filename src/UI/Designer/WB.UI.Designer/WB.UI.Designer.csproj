@@ -481,6 +481,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\admin.css" />
+    <Content Include="Content\images\icons-files-audio.svg" />
+    <Content Include="Content\images\icons-files-pdf.svg" />
     <Content Include="Content\under-construction.css" />
     <Content Include="Content\identity\favicon-designer-114x114.png" />
     <Content Include="Content\identity\favicon-designer-120x120.png" />
