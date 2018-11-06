@@ -46,7 +46,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
             var gpsAnswers = this.interviewFactory.GetGpsAnswers(
                 input.QuestionnaireIdentity,
-                gpsQuestionId.Value, null, new GeoBounds(input.South, input.West, input.North, input.East), 
+                gpsQuestionId.Value, null, GeoBounds.Open, 
                 this.authorizedUser.IsSupervisor ? this.authorizedUser.Id : (Guid?)null);
 
             var superCluster = new SuperCluster();

@@ -2,7 +2,7 @@
     <HqLayout :hasFilter="true" :hasHeader="false">
         <Filters slot="filters">
             <FilterBlock :title="$t('Reports.Questionnaire')">
-                <Typeahead :placeholder="$t('Common.AllQuestionnaires')" :values="questionnaires" :value="questionnaireId" noSearch @selected="selectQuestionnaire" />
+                <Typeahead :placeholder="$t('Common.AllQuestionnaires')" :values="questionnaires" :value="questionnaireId" fuzzy @selected="selectQuestionnaire" />
             </FilterBlock>
             <FilterBlock :title="$t('Reports.Variables')">
                 <Typeahead :placeholder="$t('Common.AllGpsQuestions')" :values="gpsQuestions" :value="gpsQuestionId" noSearch @selected="selectGpsQuestion" />
@@ -182,7 +182,7 @@ export default {
 
             const delayedReload = _.debounce(
                 () => this.reloadMarkersInBounds(),
-                100
+                50
             );
 
             this.map.addListener("bounds_changed", () => {
@@ -328,15 +328,24 @@ export default {
                     this.map.data.forEach(feature => {
                         toRemove[feature.getId()] = feature;
                     });
-
-                    this.map.data.addGeoJson(response.data.FeatureCollection);
+                
+                    const markers = {
+                        features: [],
+                        type: "FeatureCollection"
+                    }
 
                     _.forEach(
                         response.data.FeatureCollection.features,
                         feature => {
-                            delete toRemove[feature.id];
+                            if(toRemove[feature.id]) {
+                                delete toRemove[feature.id]
+                            } else {
+                                markers.features.push(feature)
+                            }
                         }
                     );
+
+                    this.map.data.addGeoJson(markers);
 
                     if (extendBounds) {
                         const bounds = response.data.InitialBounds;
@@ -350,11 +359,9 @@ export default {
                         self.map.fitBounds(latlngBounds);
                     }
 
-                    _.delay(() => {
-                        _.forEach(Object.keys(toRemove), key => {
-                            self.map.data.remove(toRemove[key]);
-                        });
-                    }, 50);
+                    _.forEach(Object.keys(toRemove), key => {
+                        self.map.data.remove(toRemove[key])
+                    });
                 });
         }
     }
