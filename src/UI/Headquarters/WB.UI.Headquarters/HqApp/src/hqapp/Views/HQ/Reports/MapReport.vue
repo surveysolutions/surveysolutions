@@ -60,12 +60,12 @@
 
 .progress .progress-bar.active {
     font-weight: 700;
-    animation: progress-bar-stripes .5s linear infinite;
+    animation: progress-bar-stripes 0.5s linear infinite;
 }
 
 .dotdotdot:after {
     font-weight: 300;
-    content: '...';
+    content: "...";
     display: inline-block;
     width: 20px;
     text-align: left;
@@ -73,10 +73,18 @@
 }
 
 @keyframes dotdotdot {
-  0%   { content: '...'; }
-  25% { content: ''; }
-  50% { content: '.'; }
-  75% { content: '..'; }
+    0% {
+        content: "...";
+    }
+    25% {
+        content: "";
+    }
+    50% {
+        content: ".";
+    }
+    75% {
+        content: "..";
+    }
 }
 </style>
 <script>
@@ -251,10 +259,7 @@ export default {
                 if (this.gpsQuestionId != null) delayedReload();
             });
 
-            const delayedReload = _.debounce(
-                () => this.reloadMarkersInBounds(),
-                50
-            );
+            const delayedReload = _.debounce(() => this.reloadMarkersInBounds(), 50);
 
             this.map.addListener("bounds_changed", () => {
                 if (this.gpsQuestionId != null) delayedReload();
@@ -267,20 +272,20 @@ export default {
                 if (count > 1) {
                     const max = self.totalAnswers;
                     const percent = (count / max) * styles.length;
+
                     const index = Math.min(
                         styles.length - 1,
                         Math.round(percent)
                     );
+
                     const style = styles[index];
 
                     const ratio = 1;
                     const extend = 20;
                     const radius = 60 + index * extend * ratio;
                     style.scaledSize = new google.maps.Size(radius, radius);
-                    style.anchor = new google.maps.Point(
-                        radius / 2,
-                        radius / 2
-                    );
+                    style.anchor = new google.maps.Point(radius / 2, radius / 2);
+
                     return {
                         label: {
                             fontSize: "12px",
@@ -296,12 +301,11 @@ export default {
             this.map.data.addListener("click", event => {
                 if (event.feature.getProperty("count") > 1) {
                     const expand = event.feature.getProperty("expand");
-                    self.map.setZoom(expand)
-                    self.map.panTo(event.latLng)
+                    self.map.setZoom(expand);
+                    self.map.panTo(event.latLng);
                 } else {
-                    const interviewId = event.feature.getProperty(
-                        "interviewId"
-                    );
+                    const interviewId = event.feature.getProperty("interviewId");
+                    
                     self.$http
                         .post(self.model.api.interiewSummaryUrl, {
                             InterviewId: interviewId
@@ -370,7 +374,7 @@ export default {
         },
 
         showPointsOnMap(east, north, west, south, extendBounds) {
-            const zoom = extendBounds ? 1 : this.map.getZoom();
+            const zoom = extendBounds ? -1 : this.map.getZoom();
 
             var request = {
                 Variable: this.gpsQuestionId.key,
@@ -384,23 +388,22 @@ export default {
 
             const self = this;
 
-            let loading = true;
+            let stillLoading = true;
 
             _.delay(() => {
-                if (loading == true) this.isLoading = true;
+                if (stillLoading == true) this.isLoading = true;
             }, 5000);
 
             this.$http
                 .post(self.model.api.mapReportUrl, request)
                 .then(response => {
-                    const toRemove = {}
-                    loading = false
-                   
+                    const toRemove = {};
+                    stillLoading = false;
+                    this.isLoading = false;
+
                     this.totalAnswers = response.data.TotalPoint;
-                    
-                    const heatmapData = {
-                        data: []
-                    };
+                    const features = response.data.FeatureCollection.features;
+                    const heatmapData = { data: [] };
 
                     this.map.data.forEach(feature => {
                         toRemove[feature.getId()] = feature;
@@ -411,27 +414,24 @@ export default {
                         type: "FeatureCollection"
                     };
 
-                    _.forEach(
-                        response.data.FeatureCollection.features,
-                        feature => {
-                            if (toRemove[feature.id]) {
-                                delete toRemove[feature.id];
-                            } else {
-                                markers.features.push(feature);
-                            }
-
-                            const coords = feature.geometry.coordinates;
-                            const count = feature.properties.count || 1;
-
-                            heatmapData.data.push({
-                                location: new google.maps.LatLng(
-                                    coords[1],
-                                    coords[0]
-                                ),
-                                weight: count
-                            });
+                    _.forEach(features, feature => {
+                        if (toRemove[feature.id]) {
+                            delete toRemove[feature.id];
+                        } else {
+                            markers.features.push(feature);
                         }
-                    );
+
+                        const coords = feature.geometry.coordinates;
+                        const count = feature.properties.count || 1;
+
+                        heatmapData.data.push({
+                            location: new google.maps.LatLng(
+                                coords[1],
+                                coords[0]
+                            ),
+                            weight: count
+                        });
+                    });
 
                     if (self.showHeatmap) {
                         this.map.data.forEach(feature => {
@@ -449,20 +449,28 @@ export default {
                     });
 
                     if (extendBounds) {
-                        var bounds = new google.maps.LatLngBounds();
+                        // special handling extend for single point
+                        if (features.length == 1) {
+                            const feature = response.data.FeatureCollection.features[0];
+                            self.map.setZoom(feature.properties["expand"] || self.getMapOptions().maxZoom);
+                            self.map.panTo(
+                                new google.maps.LatLng(
+                                    feature.geometry.coordinates[1],
+                                    feature.geometry.coordinates[0]
+                                )
+                            );
+                        } else {
+                            let bounds = new google.maps.LatLngBounds();
 
-                        self.map.setZoom(1);
-
-                        self.map.data.forEach(feature => {
-                            feature.getGeometry().forEachLatLng(pos => {
-                                bounds.extend(pos);
+                            self.map.data.forEach(feature => {
+                                feature.getGeometry().forEachLatLng(pos => {
+                                    bounds = bounds.extend(pos);
+                                });
                             });
-                        });
 
-                        self.map.fitBounds(bounds);
+                            self.map.fitBounds(bounds);
+                        }
                     }
-
-                    this.isLoading = false;
                 });
         }
     }
