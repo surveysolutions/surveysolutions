@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Factories;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -88,6 +89,11 @@ namespace WB.UI.Headquarters.API.Export
         [ApiNoCache]
         public HttpResponseMessage GetInterviewCommentariesBatch([FromUri] Guid[] id)
         {
+            var keys = this.interviewStatuses.Query(_ => _
+                    .Where(x => id.Contains(x.InterviewId))
+                    .Select(x => new { x.InterviewId, x.Key }).ToList())
+                .ToDictionary(x => x.InterviewId.FormatGuid(), x => x.Key);
+
             var result = id
                 .SelectMany(i => this.viewFactory.GetInterviewComments(i))
                 .Select(c => new
@@ -96,9 +102,10 @@ namespace WB.UI.Headquarters.API.Export
                     c.Comment, c.CommentSequence,
                     c.OriginatorName, c.OriginatorRole,
                     c.Roster, RosterVector = new RosterVector(c.RosterVector).Array,
-                    c.Timestamp
-                }).ToList();
-            
+                    c.Timestamp, InterviewKey = keys.ContainsKey(c.InterviewId)? keys[c.InterviewId] : ""
+                })
+                .ToList();
+
             return Request.CreateResponse(HttpStatusCode.OK, result);
         }
 

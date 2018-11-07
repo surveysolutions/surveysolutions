@@ -7,7 +7,7 @@ namespace WB.Services.Export.Interview
     {
         public const string ColumnDelimiter = "__";
         //Id of the row
-        public static readonly string InterviewRandom = "ssSys_IRnd";
+        public static readonly string InterviewRandom = "sssys_irnd";
         public static readonly string HasAnyError = $"has{ColumnDelimiter}errors";
         public static readonly string Key = $"interview{ColumnDelimiter}key";
         public static readonly string InterviewId = $"interview{ColumnDelimiter}id";
@@ -17,7 +17,7 @@ namespace WB.Services.Export.Interview
         public static readonly string IdSuffixFormat = $"{{0}}{ColumnDelimiter}id";
 
         //prefix to identify parent record
-        public const string ParentId = "ParentId";
+        public const string ParentId = "parentId";
 
         public const string ResponsibleColumnName = "_responsible";
         public const string AssignmentsCountColumnName = "_quantity";

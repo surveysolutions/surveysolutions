@@ -26,16 +26,16 @@ namespace WB.Services.Export.CsvExport.Implementation.DoFiles
 
             if (levelRosterVector.Count == 0 && level.LevelIdColumnName == ServiceColumns.InterviewId) // main file
             {
-                variableLabels.Add(new DataExportVariable(ServiceColumns.InterviewId, "Unique 32-character long identifier of the interview", null, levelVariableValueLabel, ExportValueType.Unknown));
-                variableLabels.Add(new DataExportVariable(ServiceColumns.Key, "Unique 8-digit long identifier of the interview", null, levelVariableValueLabel, ExportValueType.Unknown));
+                variableLabels.Add(new DataExportVariable(ServiceColumns.InterviewId, "Unique 32-character long identifier of the interview", null, levelVariableValueLabel, ExportValueType.String));
+                variableLabels.Add(new DataExportVariable(ServiceColumns.Key, "Unique 8-digit long identifier of the interview", null, levelVariableValueLabel, ExportValueType.String));
                 variableLabels.Add(new DataExportVariable(ServiceColumns.InterviewRandom, "Random number in the range 0..1 associated with interview", null, levelVariableValueLabel, ExportValueType.Unknown));
                 variableLabels.Add(new DataExportVariable(ServiceColumns.HasAnyError, "Errors count in the interview", null, levelVariableValueLabel, ExportValueType.Unknown));
-                variableLabels.Add(new DataExportVariable(ServiceColumns.InterviewStatus, "Status of the interview", null, levelVariableValueLabel, ExportValueType.Unknown));
+                variableLabels.Add(new DataExportVariable(ServiceColumns.InterviewStatus, "Status of the interview", null, levelVariableValueLabel, ExportValueType.String));
             }
             else
             {
-                variableLabels.Add(new DataExportVariable(level.LevelIdColumnName, string.Empty, null, levelVariableValueLabel, ExportValueType.Unknown));
-                variableLabels.Add(new DataExportVariable(ServiceColumns.Key, "Unique 8-digit long identifier of the interview", null, levelVariableValueLabel, ExportValueType.Unknown));
+                variableLabels.Add(new DataExportVariable(level.LevelIdColumnName, string.Empty, null, levelVariableValueLabel, ExportValueType.String));
+                variableLabels.Add(new DataExportVariable(ServiceColumns.Key, "Unique 8-digit long identifier of the interview", null, levelVariableValueLabel, ExportValueType.String));
             }
 
             foreach (IExportedHeaderItem headerItem in level.HeaderItems.Values)

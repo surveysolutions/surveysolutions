@@ -30,19 +30,20 @@ namespace WB.Services.Export.CsvExport.Exporters
 
         public DoExportFileHeader[] CommentsFileColumns => new []
         {
-            new DoExportFileHeader("Order", "Sequential order of the comment"),
-            new DoExportFileHeader("Originator", "Login name of the person leaving the comment"),
-            new DoExportFileHeader("Role", "System role of the person leaving the comment"),
-            new DoExportFileHeader("Date", "Date when the comment was left"),
-            new DoExportFileHeader("Time", "Time when the comment was left"),
-            new DoExportFileHeader("Variable", "Variable name for the commented question"),
-            new DoExportFileHeader("interview__id", "Unique 32-character long identifier of the interview"),
-            new DoExportFileHeader("Comment", "Text of the comment"),
-            new DoExportFileHeader("Roster", "Name of the roster containing the variable"),
-            new DoExportFileHeader("Id1", "Roster ID of the 1st level of nesting", true),
-            new DoExportFileHeader("Id2", "Roster ID of the 2nd level of nesting", true),
-            new DoExportFileHeader("Id3", "Roster ID of the 3rd level of nesting", true),
-            new DoExportFileHeader("Id4", "Roster ID of the 4th level of nesting", true),
+            CommonHeaderItems.InterviewKey,
+            CommonHeaderItems.InterviewId,
+            CommonHeaderItems.Roster,
+            CommonHeaderItems.Id1,
+            CommonHeaderItems.Id2,
+            CommonHeaderItems.Id3,
+            CommonHeaderItems.Id4,
+            new DoExportFileHeader("order", "Sequential order of the comment", ExportValueType.NumericInt),
+            new DoExportFileHeader("originator", "Login name of the person leaving the comment", ExportValueType.String),
+            new DoExportFileHeader("role", "System role of the person leaving the comment", ExportValueType.String),
+            new DoExportFileHeader("date", "Date when the comment was left", ExportValueType.String),
+            new DoExportFileHeader("time", "Time when the comment was left", ExportValueType.String),
+            new DoExportFileHeader("variable", "Variable name for the commented question", ExportValueType.String),
+            new DoExportFileHeader("comment", "Text of the comment", ExportValueType.String)
         };
 
         public CommentsExporter(
@@ -104,24 +105,24 @@ namespace WB.Services.Export.CsvExport.Exporters
             {
                 var resultRow = new List<string>
                 {
-                    comment.CommentSequence.ToString(),
-                    comment.OriginatorName,
-                    this.GetUserRole(comment.OriginatorRole),
-                    comment.Timestamp.ToString("d", CultureInfo.InvariantCulture),
-                    comment.Timestamp.ToString("T", CultureInfo.InvariantCulture),
-                    comment.Variable
+                    comment.InterviewKey,
+                    comment.InterviewId.ToString("N")
                 };
 
                 if (hasAtLeastOneRoster)
                     resultRow.Add(comment.Roster);
 
-                resultRow.Add(comment.InterviewId.ToString("N"));
-
                 for (int i = 0; i < maxRosterDepthInQuestionnaire; i++)
                 {
                     resultRow.Add(comment.RosterVector.Length > i ? comment.RosterVector[i].ToString(CultureInfo.InvariantCulture) : "");
                 }
-
+                
+                resultRow.Add(comment.Variable);
+                resultRow.Add(comment.CommentSequence.ToString());
+                resultRow.Add(comment.Timestamp.ToString("d", CultureInfo.InvariantCulture));
+                resultRow.Add(comment.Timestamp.ToString("T", CultureInfo.InvariantCulture));
+                resultRow.Add(comment.OriginatorName);
+                resultRow.Add(this.GetUserRole(comment.OriginatorRole));
                 resultRow.Add(comment.Comment);
 
                 result.Add(resultRow.ToArray());
@@ -145,8 +146,8 @@ namespace WB.Services.Export.CsvExport.Exporters
                 var exportFileHeader = CommentsFileColumns.SingleOrDefault(c => c.Title.Equals(header, StringComparison.CurrentCultureIgnoreCase));
                 if (exportFileHeader != null)
                 {
-                    if (exportFileHeader.AddCapture)
-                        doContent.AppendCaptureLabelToVariableMatching(exportFileHeader.Title, exportFileHeader.Description);
+                    if (exportFileHeader.AddCaption)
+                        doContent.AppendCaptionLabelToVariableMatching(exportFileHeader.Title, exportFileHeader.Description);
                     else
                         doContent.AppendLabelToVariableMatching(exportFileHeader.Title, exportFileHeader.Description);
                 }
@@ -171,19 +172,24 @@ namespace WB.Services.Export.CsvExport.Exporters
 
         private List<string> GetHeadersList(bool hasAtLeastOneRoster, int maxRosterDepthInQuestionnaire)
         {
-            var commentsHeader = new List<string> {"Order", "Originator", "Role", "Date", "Time", "Variable"};
+            var commentsHeader = new List<string> { "interview__key", "interview__id"};
 
             if (hasAtLeastOneRoster)
-                commentsHeader.Add("Roster");
-
-            commentsHeader.Add("interview__id");
-
+                commentsHeader.Add("roster");
+            
             for (int i = 1; i <= maxRosterDepthInQuestionnaire; i++)
             {
-                commentsHeader.Add($"Id{i}");
+                commentsHeader.Add($"id{i}");
             }
 
-            commentsHeader.Add("Comment");
+            commentsHeader.Add("variable");
+            commentsHeader.Add("order");
+            commentsHeader.Add("date");
+            commentsHeader.Add("time");
+            commentsHeader.Add("originator");
+            commentsHeader.Add("role");
+            
+            commentsHeader.Add("comment");
             return commentsHeader;
         }
 

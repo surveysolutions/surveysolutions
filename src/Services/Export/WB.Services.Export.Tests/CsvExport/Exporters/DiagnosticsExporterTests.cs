@@ -53,7 +53,7 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
                     numberInvalidEntities: 5,
                     numberUnansweredQuestions: 4,
                     numberCommentedQuestions: 3,
-                    interviewDuration: 200000),
+                    interviewDuration: 20000000),
                 Create.InterviewDiagnosticsInfo(
                     interviewId3,
                     interviewKey: "key3",
@@ -91,10 +91,10 @@ namespace WB.Services.Export.Tests.CsvExport.Exporters
             await exporter.ExportAsync(new List<Guid>() { interviewId1, interviewId2, interviewId3 }, "", Create.Tenant(), new Progress<int>(), CancellationToken.None);
 
             Assert.That(fileData.Count, Is.EqualTo(3 /*interviews*/ + 1 /*header*/));
-            Assert.That(fileData[0], Is.EqualTo(new[] { "interview__id", "interview__key", "interview_status", "responsible", "n_of_Interviewers", "n_rejections_by_supervisor", "n_rejections_by_hq", "n_entities_errors", "n_questions_comments", "interview_duration" }));
-            Assert.That(fileData[1], Is.EqualTo(new[] { interviewId1.ToString() ,"key1", "InterviewerAssigned", "int1", "1", "2", "3", "5", "7", "00:00:00.0100000" }));
-            Assert.That(fileData[2], Is.EqualTo(new[] { interviewId2.ToString(), "key2", "RejectedByHeadquarters", "int2", "9", "8", "7", "5", "3", "00:00:00.0200000" }));
-            Assert.That(fileData[3], Is.EqualTo(new[] { interviewId3.ToString(), "key3", "RejectedBySupervisor", "int1", "2", "4", "6", "9", "2", "00:02:55.8237000" }));
+            Assert.That(fileData[0], Is.EqualTo(new[] { "interview__key", "interview__id", "interview__status", "responsible", "interviewers", "rejections__sup", "rejections__hq", "entities__errors", "questions__comments", "interview__duration" }));
+            Assert.That(fileData[1], Is.EqualTo(new[] { "key1", interviewId1.ToString() ,"InterviewerAssigned", "int1", "1", "2", "3", "5", "7", "00.00:00:00" }));
+            Assert.That(fileData[2], Is.EqualTo(new[] { "key2", interviewId2.ToString(), "RejectedByHeadquarters", "int2", "9", "8", "7", "5", "3", "00.00:00:02" }));
+            Assert.That(fileData[3], Is.EqualTo(new[] { "key3", interviewId3.ToString(), "RejectedBySupervisor", "int1", "2", "4", "6", "9", "2", "00.00:02:55" }));
         }
     }
 }
