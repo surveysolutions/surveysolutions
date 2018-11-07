@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web.Caching;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
+using KDBush;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.BoundedContexts.Headquarters.Clustering;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -57,7 +58,23 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 
             (SuperCluster superCluster, int total) = ((SuperCluster superCluster, int total)) cacheLine;
 
-            var result = superCluster.GetClusters(new GeoBounds(input.South, input.West, input.North, input.East), input.Zoom);
+            List<Point<Cluster>> GetClusters(int zoom)
+            {
+                return superCluster.GetClusters(new GeoBounds(input.South, input.West, input.North, input.East), zoom);
+            }
+
+            if (input.Zoom == -1)
+            {
+                input.Zoom = 16;
+                var res = GetClusters(input.Zoom);
+                while (res.Count > 400)
+                {
+                    input.Zoom--;
+                    res = GetClusters(input.Zoom);
+                }
+            }
+
+            var result = GetClusters(input.Zoom);
 
             var collection = new FeatureCollection();
             collection.Features.AddRange(result.Select(p =>
