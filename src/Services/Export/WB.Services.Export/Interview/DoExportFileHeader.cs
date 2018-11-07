@@ -2,19 +2,23 @@
 {
     public class DoExportFileHeader
     {
-        public DoExportFileHeader(string title, string description)
+        public DoExportFileHeader(string title, string description, ExportValueType valueType)
         {
             Title = title;
             Description = description;
+            this.ValueType = valueType;
         }
 
-        public DoExportFileHeader(string title, string description, bool addCapture) : this(title, description)
+        public DoExportFileHeader(string title, string description, ExportValueType valueType, bool addCaption) 
+            : this(title, description, valueType)
         {
-            AddCapture = addCapture;
+            AddCaption = addCaption;
         }
 
         public string Title { get; }
         public string Description { get; }
-        public bool AddCapture { get; }
+        public bool AddCaption { get; }
+
+        public ExportValueType ValueType { get;}
     }
 }
