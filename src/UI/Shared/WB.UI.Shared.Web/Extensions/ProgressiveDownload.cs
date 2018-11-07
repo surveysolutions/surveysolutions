@@ -27,7 +27,6 @@ namespace WB.UI.Shared.Web.Extensions
             response.Content = new ByteArrayContent(Array.Empty<byte>());
             response.Content.Headers.ContentType = MediaTypeHeaderValue.Parse(mediaType);
             response.Content.Headers.ContentLength = contentLength;
-            response.Headers.AcceptRanges.Add("bytes");
             return response;
         }
 
