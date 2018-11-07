@@ -31,7 +31,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             doContent.AppendLine($"label variable {variableName} `\"{this.RemoveNotAllowedChars(labelName)}\"'");
         }
 
-        public void AppendCaptureLabelToVariableMatching(string variableName, string labelName)
+        public void AppendCaptionLabelToVariableMatching(string variableName, string labelName)
         {
             doContent.AppendLine($"capture label variable {variableName} `\"{this.RemoveNotAllowedChars(labelName)}\"'");
         }
