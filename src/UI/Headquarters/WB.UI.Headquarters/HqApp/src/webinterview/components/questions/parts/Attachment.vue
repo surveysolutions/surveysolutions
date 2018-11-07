@@ -30,7 +30,8 @@
             cache: { type: Number},
             thumb: { type: String }, // optional
             image: { type: String },
-            customCssClass:{}
+            customCssClass:{},
+            previewOnly: {type: Boolean, required: false, default: false}
         },
         computed: {
             thumbPath() {
@@ -75,6 +76,8 @@
                 return appendSearchParam(uri, 'cache', this.cache)
             },
             showModal(show) {
+                if (this.previewOnly)
+                    return;
                 this.modal = show
             }
         },

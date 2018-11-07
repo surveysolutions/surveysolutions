@@ -73,6 +73,7 @@ namespace WB.Core.BoundedContexts.Interviewer.Implementation.Services
                     (assignment.CreatedInterviewsCount.Value >= assignment.Quantity.Value))
                 {
                     await this.viewModelNavigationService.NavigateToDashboardAsync();
+                    return;
                 }
 
                 var interviewId = Guid.NewGuid();

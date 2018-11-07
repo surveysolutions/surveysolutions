@@ -469,9 +469,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                 values.Add(this.GetSystemValue(interview, header));
             }
             return values.ToArray();
-
         }
-
 
         private string GetSystemValue(InterviewData interview, ServiceVariable serviceVariable)
         {

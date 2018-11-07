@@ -31,7 +31,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             doContent.AppendLine($"label variable {variableName} `\"{this.RemoveNotAllowedChars(labelName)}\"'");
         }
 
-        public void AppendCaptureLabelToVariableMatching(string variableName, string labelName)
+        public void AppendCaptionLabelToVariableMatching(string variableName, string labelName)
         {
             doContent.AppendLine($"capture label variable {variableName} `\"{this.RemoveNotAllowedChars(labelName)}\"'");
         }
@@ -48,7 +48,7 @@ namespace WB.Services.Export.CsvExport.Exporters
             {
                 if (decimal.TryParse(label.Value, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal value) && value < limitValue && (value % 1) == 0)
                 {
-                    localBuilder.Append($"{label.Value } `\"{this.RemoveNotAllowedChars(label.Label)}\"' ");
+                    localBuilder.Append($"{value:N0} `\"{this.RemoveNotAllowedChars(label.Label)}\"' ");
                     hasValidValue = true;
                 }
                 else

@@ -53,6 +53,11 @@ namespace WB.Services.Scheduler.Storage
 
         public static Task AcquireLockAsync(this DbContext db, long id)
         {
+            return db.Database.ExecuteSqlCommandAsync($"select pg_advisory_lock ({id})");
+        }
+
+        public static Task AcquireXactLockAsync(this DbContext db, long id)
+        {
             return db.Database.ExecuteSqlCommandAsync($"select pg_advisory_xact_lock ({id})");
         }
 

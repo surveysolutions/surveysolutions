@@ -2,6 +2,7 @@
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
+using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Tests.Abc;
 using WB.UI.Headquarters.API.WebInterview.Services;
@@ -21,7 +22,7 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
             var interviewerQuestionIdentity = Identity.Create(Guid.Parse("44444444444444444444444444444444"), RosterVector.Empty);
 
             var statefullInterview = Setup.StatefulInterview(
-                Create.Entity.QuestionnaireDocumentWithOneChapter(
+                Create.Entity.QuestionnaireDocumentWithOneChapter(Id.g9,
                     Create.Entity.TextQuestion(hiddenQuestionIdentity.Id, scope: QuestionScope.Hidden),
                     Create.Entity.TextQuestion(identifyingIdentity.Id, scope: QuestionScope.Headquarter),
                     Create.Entity.TextQuestion(supervisorQuestionIdentity.Id, scope: QuestionScope.Supervisor),
@@ -32,11 +33,12 @@ namespace WB.Tests.Unit.Applications.Headquarters.WebInterview
             // act
             var overviewNodes = service.GetOverview(statefullInterview, true).ToArray();
             // assert
-            Assert.That(overviewNodes.Length, Is.EqualTo(4));
-            Assert.That(overviewNodes[0].Id, Is.EqualTo(hiddenQuestionIdentity.ToString()));
-            Assert.That(overviewNodes[1].Id, Is.EqualTo(identifyingIdentity.ToString()));
-            Assert.That(overviewNodes[2].Id, Is.EqualTo(supervisorQuestionIdentity.ToString()));
-            Assert.That(overviewNodes[3].Id, Is.EqualTo(interviewerQuestionIdentity.ToString()));
+            Assert.That(overviewNodes.Length, Is.EqualTo(5));
+            Assert.That(overviewNodes[0].Id, Is.EqualTo(Id.g9.FormatGuid()));
+            Assert.That(overviewNodes[1].Id, Is.EqualTo(hiddenQuestionIdentity.ToString()));
+            Assert.That(overviewNodes[2].Id, Is.EqualTo(identifyingIdentity.ToString()));
+            Assert.That(overviewNodes[3].Id, Is.EqualTo(supervisorQuestionIdentity.ToString()));
+            Assert.That(overviewNodes[4].Id, Is.EqualTo(interviewerQuestionIdentity.ToString()));
         }
 
         [Test]
