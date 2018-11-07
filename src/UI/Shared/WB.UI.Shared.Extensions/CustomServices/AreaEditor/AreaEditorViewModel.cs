@@ -335,8 +335,6 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             if (!IsLocationServiceSwitchEnabled)
                 return;
 
-            //temporary catch for KP-9486
-            //esri was notified
             try
             {
                 IsLocationServiceSwitchEnabled = false;
