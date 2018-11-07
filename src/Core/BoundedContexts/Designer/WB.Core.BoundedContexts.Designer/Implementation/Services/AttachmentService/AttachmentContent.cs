@@ -13,20 +13,10 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
         public virtual AttachmentDetails Details { get; set; }
         public virtual string ContentType { get; set; }
 
-        public virtual bool IsImage()
-        {
-            return this.ContentType.StartsWith("image", StringComparison.OrdinalIgnoreCase);
-        }
-
-        public virtual bool IsAudio()
-        {
-            return this.ContentType.StartsWith("audio", StringComparison.OrdinalIgnoreCase);
-        }
-
-        public virtual bool IsPdf()
-        {
-            return this.ContentType.StartsWith("application/pdf", StringComparison.OrdinalIgnoreCase);
-        }
+        public virtual bool IsImage() => this.ContentType.StartsWith("image", StringComparison.OrdinalIgnoreCase);
+        public virtual bool IsAudio() => this.ContentType.StartsWith("audio", StringComparison.OrdinalIgnoreCase);
+        public virtual bool IsVideo() => this.ContentType.StartsWith("video", StringComparison.OrdinalIgnoreCase);
+        public virtual bool IsPdf() => this.ContentType.StartsWith("application/pdf", StringComparison.OrdinalIgnoreCase);
     }
 
     [PlainStorage]
@@ -50,6 +40,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
             {
                 cmp.Property(x => x.Height, ptp => ptp.Column("AttachmentHeight"));
                 cmp.Property(x => x.Width, ptp => ptp.Column("AttachmentWidth"));
+                cmp.Property(x => x.Thumbnail, ptp => { ptp.Lazy(true); });
             });
         }
     }
