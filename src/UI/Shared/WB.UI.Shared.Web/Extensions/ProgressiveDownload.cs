@@ -36,9 +36,10 @@ namespace WB.UI.Shared.Web.Extensions
         {
             try
             {
+                var mediaTypeHeaderValue = MediaTypeHeaderValue.Parse(mediaType);
                 if (IsRangeRequest)
                 {
-                    var content = new ByteRangeStreamContent(stream, this.request.Headers.Range, mediaType, 16 * 1024);
+                    var content = new ByteRangeStreamContent(stream, this.request.Headers.Range, mediaTypeHeaderValue);
                     var response = this.request.CreateResponse(HttpStatusCode.PartialContent);
                     response.Headers.AcceptRanges.Add("bytes");
                     response.Content = content;
@@ -51,7 +52,7 @@ namespace WB.UI.Shared.Web.Extensions
                     var response = this.request.CreateResponse(HttpStatusCode.OK);
                     response.Headers.AcceptRanges.Add("bytes");
                     response.Content = content;
-                    response.Content.Headers.ContentType = MediaTypeHeaderValue.Parse(mediaType);
+                    response.Content.Headers.ContentType = mediaTypeHeaderValue;
 
                     return response;
                 }
