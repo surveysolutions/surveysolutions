@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
+using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Migrations;
 using System.Linq;
+using System.Threading.Tasks;
+using WB.Core.BoundedContexts.Headquarters.InterviewerProfiles;
 using WB.Core.BoundedContexts.Headquarters.Views.Device;
 
 namespace WB.Core.BoundedContexts.Headquarters.Repositories
@@ -41,6 +45,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
 
             return result ?? this.dbContext.DeviceSyncInfo.OrderByDescending(deviceInfo => deviceInfo.Id)
                 .FirstOrDefault(deviceInfo => deviceInfo.InterviewerId == interviewerId);
+        }
+
+        public Dictionary<Guid, long> GetInterviewersTrafficUsage(Guid[] interviewersIds)
+        {
+            var trafficUsage = this.dbContext.DeviceSyncInfo.Where(x => interviewersIds.Contains(x.InterviewerId))
+                .Select(x => new {x.InterviewerId, Traffic = x.Statistics.TotalDownloadedBytes + x.Statistics.TotalUploadedBytes})
+                .GroupBy(x => x.InterviewerId)
+                .Select(x => new {InterviewerId = x.Key, Traffic = x.Sum(s => s.Traffic)})
+                .ToList();
+
+            return trafficUsage.ToDictionary(x => x.InterviewerId, x => x.Traffic);
         }
 
         public IEnumerable<DeviceSyncInfo> GetLastSyncByInterviewersList(Guid[] interviewerIds)
@@ -88,10 +103,48 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
             }
         }
 
-        public int GetRegistredDeviceCount(Guid interviewerId)
+        public int GetRegisteredDeviceCount(Guid interviewerId)
             => this.dbContext.DeviceSyncInfo
                 .Where(deviceInfo => deviceInfo.InterviewerId == interviewerId)
                 .Select(info => info.DeviceId).Distinct().Count();
+
+        public List<InterviewerDailyTrafficUsage> GetTrafficUsageForInterviewer(Guid interviewerId)
+        {
+            List<InterviewerDailyTrafficUsage> trafficUsageForUser = this.dbContext.DeviceSyncInfo
+                .Where(deviceInfo => deviceInfo.InterviewerId == interviewerId)
+                .Join(this.dbContext.SyncStatistics, deviceInfo => deviceInfo.StatisticsId, statistics => statistics.Id, 
+                    (deviceInfo, statistics) => new
+                    {
+                        Date = deviceInfo.SyncDate,
+                        TotalUploadedBytes = statistics.TotalUploadedBytes,
+                        TotalDownloadedBytes = statistics.TotalDownloadedBytes
+                    })
+                .GroupBy(x => DbFunctions.TruncateTime(x.Date))
+                .Select(x => new InterviewerDailyTrafficUsage
+                {
+                    DownloadedBytes = x.Sum(s => s.TotalDownloadedBytes),
+                    UploadedBytes =  x.Sum(s => s.TotalUploadedBytes),
+                    Year = x.Key.Value.Year,
+                    Month = x.Key.Value.Month,
+                    Day = x.Key.Value.Day
+                })
+                .Take(30)
+                .ToList();
+            return trafficUsageForUser;
+        }
+
+        public async Task<long> GetTotalTrafficUsageForInterviewer(Guid interviewerId)
+        {
+            var totalTrafficUsed = await this.dbContext.DeviceSyncInfo
+                .Where(deviceInfo => deviceInfo.InterviewerId == interviewerId)
+                .Join(this.dbContext.SyncStatistics, deviceInfo => deviceInfo.StatisticsId, statistics => statistics.Id,
+                    (deviceInfo, statistics) => new
+                    {
+                        Traffic = statistics.TotalUploadedBytes + statistics.TotalDownloadedBytes
+                    })
+                .SumAsync(x => x.Traffic);
+            return totalTrafficUsed;
+        }
 
         public double? GetAverageSynchronizationSpeedInBytesPerSeconds(Guid interviewerId)
             => this.dbContext.DeviceSyncInfo.OrderByDescending(d => d.SyncDate)

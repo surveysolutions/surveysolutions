@@ -124,6 +124,16 @@
                         "defaultContent":
                             "@HttpUtility.JavaScriptStringEncode(Pages.Interviewers_InterviewerNeverConnected)",
                         "class": "changed-recently"
+                    },
+                    {
+                        orderable: false,
+                        data: "trafficUsed",
+                        name: "TrafficUsed", // case-sensitive!
+                        class: "type-numeric",
+                        render: function (data, type, row) {
+                            var formattedKB = data.toLocaleString();
+                            return data > 0 ? formattedKB + " Kb" : "0";
+                        }
                     }
                 ];
             };
@@ -269,25 +279,26 @@
 					<table id="data_holder" class="table table-striped table-ordered table-bordered table-hover table-with-checkboxes"
 						   data-order="[[ 1, &quot;asc&quot; ]]" data-searching="true">
 						<thead>
-							<tr>
-								@if (isAdminOrHQ && !authorizedUser.IsObserving)
+                            <tr>
+                                @if (isAdminOrHQ && !authorizedUser.IsObserving)
                                 {
-								<th class="sorting_disabled checkbox-cell">
-									<input class="double-checkbox" id="check-all" type="checkbox">
-									<label for="check-all">
-										<span class="tick"></span>
-									</label>
-								</th>
-								}
-								<th>@Pages.Interviewers_UserNameTitle</th>
-								<th class="for-tablets" title="@Pages.Interviewers_CreationDateTooltip">@Pages.Interviewers_CreationDateTitle</th>
-								<th class="for-mobile-devices">@Pages.Interviewers_EmailTitle</th>
-								@if (isAdminOrHQ)
-								{
-								<th title="@Pages.Interviewers_SupervisorTooltip">@Pages.Interviewers_SupervisorTitle</th>
-								}
-								<th title="@Pages.Interviewers_InterviewerVersionTooltip">@Pages.Interviewers_InterviewerVersion</th>
-							</tr>
+                                    <th class="sorting_disabled checkbox-cell">
+                                        <input class="double-checkbox" id="check-all" type="checkbox">
+                                        <label for="check-all">
+                                            <span class="tick"></span>
+                                        </label>
+                                    </th>
+                                }
+                                <th>@Pages.Interviewers_UserNameTitle</th>
+                                <th class="for-tablets" title="@Pages.Interviewers_CreationDateTooltip">@Pages.Interviewers_CreationDateTitle</th>
+                                <th class="for-mobile-devices">@Pages.Interviewers_EmailTitle</th>
+                                @if (isAdminOrHQ)
+                                {
+                                    <th title="@Pages.Interviewers_SupervisorTooltip">@Pages.Interviewers_SupervisorTitle</th>
+                                }
+                                <th title="@Pages.Interviewers_InterviewerVersionTooltip">@Pages.Interviewers_InterviewerVersion</th>
+                                <th title="@Pages.InterviewerProfile_TotalTrafficUsedTooltip">@Pages.InterviewerProfile_TotalTrafficUsed</th>
+                            </tr>
 						</thead>
 					</table>
 				</div>

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Data.Entity;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
-using WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles;
+using WB.Core.BoundedContexts.Headquarters.InterviewerProfiles;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviewer;
 using WB.Core.BoundedContexts.Headquarters.Views.Responsible;
@@ -229,7 +229,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                     DeviceId = x.Profile.DeviceId,
                     IsArchived = x.IsArchived,
                     EnumeratorVersion = x.Profile.DeviceAppVersion,
-                    EnumeratorBuild = x.Profile.DeviceAppBuildVersion
+                    EnumeratorBuild = x.Profile.DeviceAppBuildVersion,
+                    TrafficUsed = repository.DeviceSyncInfos
+                        .Where(d => d.InterviewerId == x.Id)
+                        .Sum(d => d.Statistics.TotalDownloadedBytes + d.Statistics.TotalUploadedBytes)
                 });
             };
 

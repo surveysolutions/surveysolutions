@@ -23,5 +23,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interviewer
         public string EnumeratorVersion { get; set; }
         public int? EnumeratorBuild { get; set; }
         public Guid? SupervisorId { get; set; }
+        public long TrafficUsed { get; set; }
     }
 }
