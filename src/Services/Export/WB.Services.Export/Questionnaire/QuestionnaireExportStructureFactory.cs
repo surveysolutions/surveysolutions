@@ -114,11 +114,16 @@ namespace WB.Services.Export.Questionnaire
                 new HeaderColumn()
                 {
                     Name = variable.Name,
-                    Title = variable.Label,
+                    Title = GetVariableLabel(variable),
                     ExportType = GetStorageType(variable)
                 }};
 
             return exportedHeaderItem;
+        }
+
+        private string GetVariableLabel(Variable variable)
+        {
+            return !string.IsNullOrEmpty(variable.Label) ? variable.Label : $"Calculated variable of type {Enum.GetName(typeof(VariableType), variable.Type)}";
         }
 
         private ExportValueType GetStorageType(Variable variable)
