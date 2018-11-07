@@ -1,6 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
+using System.Linq;
+using GeoJSON.Net.Feature;
+using GeoJSON.Net.Geometry;
 using KDBush;
 
 namespace WB.Core.BoundedContexts.Headquarters.Clustering
@@ -20,12 +22,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Clustering
             this.trees = new KDBush<Cluster>[_options.MaxZoom + 2];
         }
 
-        public void Load(IEnumerable<GeoPoint> points)
+        public void Load(IEnumerable<Feature> features)
         {
             // generate a cluster object for each point and index input points into a KD-tree
             var clusters = new List<Point<Cluster>>();
             int i = 0;
-            foreach (var point in points)
+
+            foreach (var point in features.Where(f => f.Geometry is Point))
             {
                 var cluster = CreatePointCluster(point, i++);
                 clusters.Add(cluster);
@@ -71,38 +74,25 @@ namespace WB.Core.BoundedContexts.Headquarters.Clustering
             return tree.Query(lngX(minLng), latY(minLat), lngX(maxLng), latY(maxLat));
         }
         
-        public GeoBounds GetClusterExpansionZoom(int clusterId)
+        public int GetClusterExpansionZoom(int clusterId)
         {
             int clusterZoom = clusterId % 32 - 1;
-            List<Point<Cluster>> children = null;
-            
+
             while (clusterZoom <= this._options.MaxZoom)
             {
-                children = this.GetChildren(clusterId);
+                var children = this.GetChildren(clusterId);
                 clusterZoom++;
                 if (children.Count != 1) break;
                 clusterId = children[0].UserData.Index;
             }
 
-            GeoBounds bounds = null;
-
-            if (children != null)
-            {
-                bounds = GeoBounds.Inverse;
-
-                foreach (var child in children)
-                {
-                    bounds.AdjustMinMax(child.Latitude, child.Longitude);
-                }
-            }
-
-            return bounds;
+            return clusterZoom;
         }
-
-        List<Point<Cluster>> GetChildren(int clusterId)
+        
+        public List<Point<Cluster>> GetChildren(int clusterId)
         {
             var originId = clusterId >> 5;
-            var originZoom = limitZoom(clusterId % 32);
+            var originZoom = clusterId % 32;
             const string errorMsg = "No cluster with the specified id.";
 
             var index = this.trees[originZoom];
@@ -137,17 +127,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Clustering
                 var tree = this.trees[zoom + 1];
                 var neighbors = tree.Query(p.X, p.Y, r);
 
-                var numPoints = p.UserData.NumPoints ?? 1;
+                var numPoints = p.UserData.NumPoints;
                 var wx = p.X * numPoints;
                 var wy = p.Y * numPoints;
-
-                /*
-                     if (reduce) {
-                        clusterProperties = initial();
-                        this._accumulate(clusterProperties, p);
-                    }       
-                */
-
+                
                 // encode both zoom and point index on which the cluster originated
                 var id = (i << 5) + (zoom + 1);
 
@@ -158,18 +141,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Clustering
 
                     neighbor.UserData.Zoom = zoom;// save the zoom (so it doesn't get processed twice)
 
-                    var innerPoints = neighbor.UserData.NumPoints ?? 1;
+                    var innerPoints = neighbor.UserData.NumPoints;
                     wx += neighbor.X * innerPoints;
                     wy += neighbor.Y * innerPoints;
 
                     numPoints += innerPoints;
                     neighbor.UserData.ParentId = id;
-
-                    /*
-                        if (reduce) {
-                            this._accumulate(clusterProperties, b);
-                        }    
-                    */
                 }
 
                 if (numPoints == 1)
@@ -193,15 +170,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Clustering
             return clusters;
         }
 
-        Point<Cluster> CreatePointCluster(GeoPoint p, int id)
+        Point<Cluster> CreatePointCluster(Feature p, int id)
         {
-            return new Point<Cluster>(lngX(p.Position[0]), latY(p.Position[1]),
+            var point = p.Geometry as Point;
+            return new Point<Cluster>(lngX(point.Coordinates.Longitude), latY(point.Coordinates.Latitude),
                 new Cluster
                 {
                     Zoom = int.MaxValue,
                     Index = id,
                     ParentId = -1,
-                    Props = p.Props
+                    Props = p.Properties
                 });
         }
 
@@ -215,12 +193,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Clustering
             double sin = Math.Sin(lat * Math.PI / 180);
             var y = (0.5 - 0.25 * Math.Log((1 + sin) / (1 - sin)) / Math.PI);
             return y < 0 ? 0 : y > 1 ? 1 : y;
-        }
-
-        public class GeoPoint
-        {
-            public double[] Position { get; set; }
-            public Dictionary<string, object> Props { get; set; }
         }
 
         public class SuperClusterOptions
