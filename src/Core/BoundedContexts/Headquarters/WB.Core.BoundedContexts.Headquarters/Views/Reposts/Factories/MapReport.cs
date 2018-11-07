@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using GeoJSON.Net.CoordinateReferenceSystem;
+using System.Web.Caching;
 using GeoJSON.Net.Feature;
 using GeoJSON.Net.Geometry;
 using Main.Core.Entities.SubEntities.Question;
@@ -24,8 +24,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
         private readonly IPlainStorageAccessor<QuestionnaireBrowseItem> questionnairesAccessor;
         private readonly IAuthorizedUser authorizedUser;
 
-        public MapReport(IInterviewFactory interviewFactory, IQuestionnaireStorage questionnaireStorage,
-            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnairesAccessor, IAuthorizedUser authorizedUser)
+        public MapReport(IInterviewFactory interviewFactory, 
+            IQuestionnaireStorage questionnaireStorage,
+            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnairesAccessor, 
+            IAuthorizedUser authorizedUser)
         {
             this.interviewFactory = interviewFactory;
             this.questionnaireStorage = questionnaireStorage;
@@ -37,57 +39,31 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             => this.questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity)
                 .Find<GpsCoordinateQuestion>().Select(question => question.StataExportCaption).ToList();
 
+        protected static Cache Cache => System.Web.HttpRuntime.Cache;
+
         public MapReportView Load(MapReportInputModel input)
         {
-            var questionnaire = this.questionnaireStorage.GetQuestionnaire(input.QuestionnaireIdentity, null);
-            var gpsQuestionId = questionnaire.GetQuestionIdByVariable(input.Variable);
+            var key = $"{input.QuestionnaireIdentity};{input.Variable};{this.authorizedUser.Id}";
 
-            if (!gpsQuestionId.HasValue) throw new ArgumentNullException(nameof(gpsQuestionId));
-
-            var gpsAnswers = this.interviewFactory.GetGpsAnswers(
-                input.QuestionnaireIdentity,
-                gpsQuestionId.Value, null, GeoBounds.Open, 
-                this.authorizedUser.IsSupervisor ? this.authorizedUser.Id : (Guid?)null);
-
-            var superCluster = new SuperCluster();
-
-            GeoBounds bounds = GeoBounds.Inverse;
-
-            superCluster.Load(gpsAnswers.Select(g =>
+            var cacheLine = Cache?.Get(key);
+            
+            if (cacheLine == null)
             {
-                bounds.AdjustMinMax(g.Latitude, g.Longitude);
+                cacheLine = InitializeSuperCluster(input);
 
-                return new SuperCluster.GeoPoint
-                {
-                    Position = new[] { g.Longitude, g.Latitude },
-                    Props = new Dictionary<string, object>
-                    {
-                        ["interviewId"] = g.InterviewId.ToString()
-                    }
-                };
-            }));
-
-            if (input.Zoom == -1)
-            {
-                // https://stackoverflow.com/a/6055653/41483
-                const int GLOBE_WIDTH = 256; // a constant in Google's map projection
-
-                var angle = bounds.East - bounds.West;
-                if (angle < 0)
-                {
-                    angle += 360;
-                }
-
-                input.Zoom = (int)Math.Round(Math.Log(input.MapWidth * 360 / angle / GLOBE_WIDTH) / Math.Log(2)) - 1;
+                Cache?.Add(key, cacheLine, null, Cache.NoAbsoluteExpiration, TimeSpan.FromMinutes(15),
+                    CacheItemPriority.Default, null);
             }
+
+            (SuperCluster superCluster, GeoBounds bounds, int total) = ((SuperCluster superCluster, GeoBounds bounds, int total)) cacheLine;
 
             var result = superCluster.GetClusters(new GeoBounds(input.South, input.West, input.North, input.East), input.Zoom);
 
             var collection = new FeatureCollection();
-
             collection.Features.AddRange(result.Select(p =>
             {
                 var props = p.UserData.Props ?? new Dictionary<string, object>();
+
                 if (p.UserData.NumPoints.HasValue)
                 {
                     props["count"] = p.UserData.NumPoints;
@@ -98,13 +74,46 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                     new Point(new Position(p.Latitude, p.Longitude)),
                     props, id: p.UserData.Index.ToString("X"));
             }));
-
+            
             return new MapReportView
             {
                 InitialBounds = bounds,
                 FeatureCollection = collection,
-                TotalPoint = gpsAnswers.Length
+                TotalPoint = total
             };
+        }
+
+        private (SuperCluster cluster, GeoBounds bounds, int total) InitializeSuperCluster(MapReportInputModel input)
+        {
+            var questionnaire = this.questionnaireStorage.GetQuestionnaire(input.QuestionnaireIdentity, null);
+            var gpsQuestionId = questionnaire.GetQuestionIdByVariable(input.Variable);
+
+            if (!gpsQuestionId.HasValue) throw new ArgumentNullException(nameof(gpsQuestionId));
+            
+            var gpsAnswers = this.interviewFactory.GetGpsAnswers(
+                input.QuestionnaireIdentity,
+                gpsQuestionId.Value, null, GeoBounds.Open,
+                this.authorizedUser.IsSupervisor ? this.authorizedUser.Id : (Guid?) null);
+
+            var bounds = GeoBounds.Inverse;
+
+            var cluster = new SuperCluster();
+
+            cluster.Load(gpsAnswers.Select(g =>
+            {
+                bounds.AdjustMinMax(g.Latitude, g.Longitude);
+
+                return new SuperCluster.GeoPoint
+                {
+                    Position = new[] {g.Longitude, g.Latitude},
+                    Props = new Dictionary<string, object>
+                    {
+                        ["interviewId"] = g.InterviewId.ToString()
+                    }
+                };
+            }));
+
+            return (cluster, bounds, gpsAnswers.Length);
         }
 
         public List<QuestionnaireBrowseItem> GetQuestionnaireIdentitiesWithPoints() =>

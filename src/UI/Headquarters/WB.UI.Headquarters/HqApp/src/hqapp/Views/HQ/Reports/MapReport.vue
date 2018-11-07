@@ -7,11 +7,30 @@
             <FilterBlock :title="$t('Reports.Variables')">
                 <Typeahead :placeholder="$t('Common.AllGpsQuestions')" :values="gpsQuestions" :value="gpsQuestionId" noSearch @selected="selectGpsQuestion" />
             </FilterBlock>
+            <FilterBlock>
+                <div class="center-block">
+                  <Checkbox :label="$t('Reports.HeatMapView')" name="pivot"
+                    :value="showHeatmap" @input="toggleHeatMap" />
+                </div>
+             </FilterBlock>
+             <FilterBlock :title="$t('Reports.HeatRadius')" v-if="showHeatmap">
+                <input type="range" min="1" max="200" value="50" class="slider" id="myRange" v-model="heatMapOptions.radius" @change="updateHeatMap" />
+             </FilterBlock>
+             <FilterBlock v-if="isLoading" :title="$t('Reports.MapDataLoading')">
+                 <div class="progress">
+                    <div class="progress-bar progress-bar-striped active" role="progressbar" 
+                        aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%" ></div>
+                </div>
+             </FilterBlock>
             <div class="preset-filters-container">
                 <div class="center-block" style="margin-left: 0">
-                    <button class="btn btn-default btn-lg" id="reloadMarkersInBounds" v-if="readyToUpdate" @click="reloadMarkersInBounds">{{$t("MapReport.ReloadMarkers")}}</button>
+                    <button class="btn btn-default btn-lg" 
+                        id="reloadMarkersInBounds" 
+                        v-if="readyToUpdate" 
+                        @click="reloadMarkersInBounds">{{$t("MapReport.ReloadMarkers")}}</button>
                 </div>
             </div>
+             
         </Filters>
         <div style="display:none;">
             <div ref="tooltip">
@@ -34,8 +53,33 @@
         <div id="map-canvas"></div>
     </HqLayout>
 </template>
-<script>
+<style>
+.progress {
+    margin: 15px;
+}
 
+.progress .progress-bar.active {
+    font-weight: 700;
+    animation: progress-bar-stripes .5s linear infinite;
+}
+
+.dotdotdot:after {
+    font-weight: 300;
+    content: '...';
+    display: inline-block;
+    width: 20px;
+    text-align: left;
+    animation: dotdotdot 1.5s linear infinite;
+}
+
+@keyframes dotdotdot {
+  0%   { content: '...'; }
+  25% { content: ''; }
+  50% { content: '.'; }
+  75% { content: '..'; }
+}
+</style>
+<script>
 import * as toastr from "toastr";
 import Vue from "vue";
 
@@ -49,6 +93,15 @@ export default {
             selectedTooltip: {},
             readyToUpdate: false,
             map: null,
+            heatmap: null,
+            showHeatmap: false,
+            isLoading: false,
+            heatMapOptions: {
+                radius: 30,
+                dissipating: true,
+                gradient: "",
+                maxIntensity: null
+            },
             totalAnswers: 0,
             mapClustererOptions: {
                 styles: [
@@ -76,6 +129,7 @@ export default {
             }
         };
     },
+
     computed: {
         model() {
             return this.$config.model;
@@ -100,6 +154,19 @@ export default {
                 "min-height",
                 windowHeight - navigationHeight + "px"
             );
+        },
+
+        updateHeatMap() {
+            this.heatmap.setOptions({
+                radius: this.heatMapOptions.radius,
+                dissipating: this.heatMapOptions.dissipating,
+                maxIntensity: this.heatMapOptions.maxIntensity
+            });
+        },
+
+        toggleHeatMap() {
+            this.showHeatmap = !this.showHeatmap;
+            this.reloadMarkersInBounds();
         },
 
         selectQuestionnaire(value) {
@@ -174,6 +241,10 @@ export default {
                 this.getMapOptions()
             );
 
+            this.heatmap = new google.maps.visualization.HeatmapLayer({
+                map: this.map
+            });
+
             this.infoWindow = new google.maps.InfoWindow();
 
             this.map.addListener("zoom_changed", () => {
@@ -223,11 +294,16 @@ export default {
             });
 
             this.map.data.addListener("click", event => {
-                
                 if (event.feature.getProperty("count") > 0) {
-                    const expand = event.feature.getProperty("expand")
-                    const sw = new google.maps.LatLng(expand.South, expand.West);
-                    const ne = new google.maps.LatLng(expand.North, expand.East);
+                    const expand = event.feature.getProperty("expand");
+                    const sw = new google.maps.LatLng(
+                        expand.South,
+                        expand.West
+                    );
+                    const ne = new google.maps.LatLng(
+                        expand.North,
+                        expand.East
+                    );
                     const latlngBounds = new google.maps.LatLngBounds(sw, ne);
 
                     self.map.fitBounds(latlngBounds);
@@ -249,10 +325,12 @@ export default {
                             self.selectedTooltip = data;
 
                             Vue.nextTick(function() {
-                                self.infoWindow.setContent($(self.$refs.tooltip).html())
+                                self.infoWindow.setContent(
+                                    $(self.$refs.tooltip).html()
+                                );
                                 self.infoWindow.setPosition(event.latLng);
                                 self.infoWindow.setOptions({
-                                  pixelOffset: new google.maps.Size(0, -30)
+                                    pixelOffset: new google.maps.Size(0, -30)
                                 });
                                 self.infoWindow.open(self.map);
                             });
@@ -300,68 +378,100 @@ export default {
             }
         },
 
-        showPointsOnMap(
-            east,
-            north,
-            west,
-            south,
-            extendBounds
-        ) {
-            const zoom = extendBounds ? -1 : this.map.getZoom()
-           
+        showPointsOnMap(east, north, west, south, extendBounds) {
+            const zoom = extendBounds ? 1 : this.map.getZoom();
+
             var request = {
                 Variable: this.gpsQuestionId.key,
                 QuestionnaireId: this.questionnaireId.key,
-                Zoom: zoom,
-                MapWidth: this.map.getDiv().clientWidth,
-                east, north, west, south
+                Zoom: this.showHeatmap ? zoom + 3 : zoom,
+                east,
+                north,
+                west,
+                south
             };
 
             const self = this;
 
+            let loading = true;
+
+            _.delay(() => {
+                if (loading == true) this.isLoading = true;
+            }, 5000);
+
             this.$http
                 .post(self.model.api.mapReportUrl, request)
                 .then(response => {
-                    const toRemove = {};
+                    const toRemove = {}
+                    loading = false
+                   
                     this.totalAnswers = response.data.TotalPoint;
+                    
+                    const heatmapData = {
+                        data: []
+                    };
 
                     this.map.data.forEach(feature => {
                         toRemove[feature.getId()] = feature;
                     });
-                
+
                     const markers = {
                         features: [],
                         type: "FeatureCollection"
-                    }
+                    };
 
                     _.forEach(
                         response.data.FeatureCollection.features,
                         feature => {
-                            if(toRemove[feature.id]) {
-                                delete toRemove[feature.id]
+                            if (toRemove[feature.id]) {
+                                delete toRemove[feature.id];
                             } else {
-                                markers.features.push(feature)
+                                markers.features.push(feature);
                             }
+
+                            const coords = feature.geometry.coordinates;
+                            const count = feature.properties.count || 0;
+
+                            heatmapData.data.push({
+                                location: new google.maps.LatLng(
+                                    coords[1],
+                                    coords[0]
+                                ),
+                                weight: count
+                            });
                         }
                     );
 
-                    this.map.data.addGeoJson(markers);
+                    if (self.showHeatmap) {
+                        this.map.data.forEach(feature => {
+                            this.map.data.remove(feature);
+                        });
 
-                    if (extendBounds) {
-                        const bounds = response.data.InitialBounds;
-
-                        const sw = new google.maps.LatLng(bounds.South, bounds.West);
-                        const ne = new google.maps.LatLng(bounds.North, bounds.East);
-                        const latlngBounds = new google.maps.LatLngBounds(
-                            sw, ne
-                        );
-
-                        self.map.fitBounds(latlngBounds);
+                        this.heatmap.setData(heatmapData.data);
+                    } else {
+                        this.map.data.addGeoJson(markers);
+                        this.heatmap.setData([]);
                     }
 
                     _.forEach(Object.keys(toRemove), key => {
-                        self.map.data.remove(toRemove[key])
+                        self.map.data.remove(toRemove[key]);
                     });
+
+                    if (extendBounds) {
+                        var bounds = new google.maps.LatLngBounds();
+
+                        self.map.setZoom(1);
+
+                        self.map.data.forEach(feature => {
+                            feature.getGeometry().forEachLatLng(pos => {
+                                bounds.extend(pos);
+                            });
+                        });
+
+                        self.map.fitBounds(bounds);
+                    }
+
+                    this.isLoading = false;
                 });
         }
     }
