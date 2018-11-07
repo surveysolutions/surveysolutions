@@ -20,10 +20,5 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels
         /// Will be -1 if zoom is not known at that moment
         /// </summary>
         public int Zoom { get; set; }
-
-        /// <summary>
-        /// Client map width required to calculate zoom level on server side
-        /// </summary>
-        public int MapWidth { get; set; }
     }
 }
