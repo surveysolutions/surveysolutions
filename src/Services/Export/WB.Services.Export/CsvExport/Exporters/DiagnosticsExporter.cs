@@ -95,7 +95,7 @@ namespace WB.Services.Export.CsvExport.Exporters
                 }
 
                 this.csvWriter.WriteData(diagnosticsFilePath, data, ExportFileSettings.DataFileSeparator.ToString());
-
+                data.Clear();
                 totalProcessed+= interviews.Length;
                 progress.Report(totalProcessed.PercentOf(interviewIdsToExport.Count));
                 cancellationToken.ThrowIfCancellationRequested();
