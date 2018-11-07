@@ -49,6 +49,7 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.TopologicalSorter;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.Core.SharedKernels.NonConficltingNamespace;
+using WB.Core.SharedKernels.Questionnaire.Services;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
@@ -1215,7 +1216,8 @@ namespace WB.Tests.Unit.Designer
             IPlainStorageAccessor<AttachmentMeta> attachmentMetaStorage = null)
         {
             return new AttachmentService(attachmentContentStorage: attachmentContentStorage,
-                attachmentMetaStorage: attachmentMetaStorage);
+                attachmentMetaStorage: attachmentMetaStorage, videoConverter: Mock.Of<IVideoConverter>(),
+                pdfConverter: Mock.Of<IPdfConverter>());
         }
 
         public static QuestionnaireHistoryVersionsService QuestionnireHistoryVersionsService(

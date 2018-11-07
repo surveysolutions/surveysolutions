@@ -7,6 +7,7 @@ using System.Net.Http.Headers;
 using System.Web.Hosting;
 using System.Web.Http;
 using ImageResizer;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 using WB.Core.BoundedContexts.Designer.Services;
 
 namespace WB.UI.Designer.Api
@@ -53,44 +54,63 @@ namespace WB.UI.Designer.Api
                 return this.Request.CreateResponse(HttpStatusCode.NotModified);
 
             var attachmentContent = this.attachmentService.GetContent(attachment.ContentId);
+            
+            var thumbnailBytes = GetThumbnailBytes(attachmentContent, sizeToScale);
 
-            if (attachmentContent.IsImage())
+            if (thumbnailBytes != null)
             {
-                var response = new HttpResponseMessage(HttpStatusCode.OK)
+                if (attachmentContent.IsVideo() || attachmentContent.IsImage() || attachmentContent.IsPdf())
                 {
-                    Content = new ByteArrayContent(GetTrasformedContent(attachmentContent.Content, sizeToScale))
-                };
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        Content = new ByteArrayContent(GetTrasformedContent(thumbnailBytes, sizeToScale))
+                        {
+                            Headers =
+                            {
+                                ContentType = new MediaTypeHeaderValue(attachmentContent.ContentType),
+                                ContentDisposition = new ContentDispositionHeaderValue("attachment"){FileNameStar = attachment.FileName}
+                            }
+                        },
+                        Headers =
+                        {
+                            ETag = new EntityTagHeaderValue("\"" + attachmentContent.ContentId + "\"")
+                        }
+                    };
+                }
 
-                response.Content.Headers.ContentType = new MediaTypeHeaderValue(attachmentContent.ContentType);
-                response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment") {FileNameStar = attachment.FileName};
-                response.Headers.ETag = new EntityTagHeaderValue("\"" + attachmentContent.ContentId + "\"");
-                return response;
-            }
-
-            string imagePath = null;
-            if (attachmentContent.IsAudio())
-            {
-                imagePath = HostingEnvironment.MapPath("~/Content/images/icons-files-audio.svg");
-            }
-            if (attachmentContent.IsPdf())
-            {
-                imagePath = HostingEnvironment.MapPath("~/Content/images/icons-files-pdf.svg");
-            }
-
-            if (imagePath != null)
-            {
-                var byteArrayContent = new ByteArrayContent(File.ReadAllBytes(imagePath));
-                byteArrayContent.Headers.ContentType = new MediaTypeHeaderValue("image/svg+xml");
-
-                var httpResponseMessage = new HttpResponseMessage
+                if (attachmentContent.IsAudio())
                 {
-                    Content = byteArrayContent
-                };
-
-                return httpResponseMessage;
+                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    {
+                        Content = new ByteArrayContent(thumbnailBytes)
+                        {
+                            Headers = {ContentType = new MediaTypeHeaderValue("image/svg+xml")}
+                        }
+                    };
+                }
             }
 
             return new HttpResponseMessage(HttpStatusCode.NoContent);
+        }
+
+        private byte[] GetThumbnailBytes(AttachmentContent attachmentContent, int? sizeToScale)
+        {
+            if (attachmentContent.IsVideo())
+                return GetTrasformedContent(attachmentContent.Details?.Thumbnail, sizeToScale);
+            if (attachmentContent.IsImage())
+                return GetTrasformedContent(attachmentContent.Content, sizeToScale);
+            if (attachmentContent.IsAudio())
+                return File.ReadAllBytes(HostingEnvironment.MapPath(@"~/Content/images/icons-files-audio.svg"));
+            if (attachmentContent.IsPdf())
+            {
+                var thumbnail = attachmentContent.Details?.Thumbnail;
+
+                return thumbnail != null
+                    ? GetTrasformedContent(thumbnail, sizeToScale)
+                    : File.ReadAllBytes(HostingEnvironment.MapPath(@"~/Content/images/icons-files-pdf.svg"));
+            }
+
+            return null;
         }
 
         private static byte[] GetTrasformedContent(byte[] source, int? sizeToScale = null)
