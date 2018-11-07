@@ -8,7 +8,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Clustering
         public int Zoom { get; set; }
         public int Index { get; set; }
         public int ParentId { get; set; }
-        public int? NumPoints { get; set; }
+        public int NumPoints { get; set; } = 1;
         public Dictionary<string, object> Props { get; set; }
 
         public override string ToString()
@@ -19,7 +19,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Clustering
             {
                 sb.Append($"{kv.Key}: {kv.Value};");
             }
-            return $"#{Index} {NumPoints ?? 0} points {sb}";
+            return $"#{Index} {NumPoints} points {sb}";
         }
     }
 }

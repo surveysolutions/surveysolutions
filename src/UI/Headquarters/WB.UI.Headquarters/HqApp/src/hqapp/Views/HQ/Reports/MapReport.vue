@@ -264,7 +264,7 @@ export default {
                 const styles = self.mapClustererOptions.styles;
                 const count = feature.getProperty("count");
 
-                if (count > 0) {
+                if (count > 1) {
                     const max = self.totalAnswers;
                     const percent = (count / max) * styles.length;
                     const index = Math.min(
@@ -294,19 +294,10 @@ export default {
             });
 
             this.map.data.addListener("click", event => {
-                if (event.feature.getProperty("count") > 0) {
+                if (event.feature.getProperty("count") > 1) {
                     const expand = event.feature.getProperty("expand");
-                    const sw = new google.maps.LatLng(
-                        expand.South,
-                        expand.West
-                    );
-                    const ne = new google.maps.LatLng(
-                        expand.North,
-                        expand.East
-                    );
-                    const latlngBounds = new google.maps.LatLngBounds(sw, ne);
-
-                    self.map.fitBounds(latlngBounds);
+                    self.map.setZoom(expand)
+                    self.map.panTo(event.latLng)
                 } else {
                     const interviewId = event.feature.getProperty(
                         "interviewId"
@@ -430,7 +421,7 @@ export default {
                             }
 
                             const coords = feature.geometry.coordinates;
-                            const count = feature.properties.count || 0;
+                            const count = feature.properties.count || 1;
 
                             heatmapData.data.push({
                                 location: new google.maps.LatLng(

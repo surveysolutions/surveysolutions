@@ -39,7 +39,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             => this.questionnaireStorage.GetQuestionnaireDocument(questionnaireIdentity)
                 .Find<GpsCoordinateQuestion>().Select(question => question.StataExportCaption).ToList();
 
-        protected static Cache Cache => System.Web.HttpRuntime.Cache;
+        protected static Cache Cache => System.Web.HttpContext.Current?.Cache;
 
         public MapReportView Load(MapReportInputModel input)
         {
@@ -55,7 +55,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                     CacheItemPriority.Default, null);
             }
 
-            (SuperCluster superCluster, GeoBounds bounds, int total) = ((SuperCluster superCluster, GeoBounds bounds, int total)) cacheLine;
+            (SuperCluster superCluster, int total) = ((SuperCluster superCluster, int total)) cacheLine;
 
             var result = superCluster.GetClusters(new GeoBounds(input.South, input.West, input.North, input.East), input.Zoom);
 
@@ -64,7 +64,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             {
                 var props = p.UserData.Props ?? new Dictionary<string, object>();
 
-                if (p.UserData.NumPoints.HasValue)
+                if (p.UserData.NumPoints > 1)
                 {
                     props["count"] = p.UserData.NumPoints;
                     props["expand"] = superCluster.GetClusterExpansionZoom(p.UserData.Index);
@@ -77,13 +77,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             
             return new MapReportView
             {
-                InitialBounds = bounds,
                 FeatureCollection = collection,
                 TotalPoint = total
             };
         }
 
-        private (SuperCluster cluster, GeoBounds bounds, int total) InitializeSuperCluster(MapReportInputModel input)
+        private (SuperCluster cluster, int total) InitializeSuperCluster(MapReportInputModel input)
         {
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(input.QuestionnaireIdentity, null);
             var gpsQuestionId = questionnaire.GetQuestionIdByVariable(input.Variable);
@@ -95,25 +94,13 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 gpsQuestionId.Value, null, GeoBounds.Open,
                 this.authorizedUser.IsSupervisor ? this.authorizedUser.Id : (Guid?) null);
 
-            var bounds = GeoBounds.Inverse;
-
             var cluster = new SuperCluster();
 
-            cluster.Load(gpsAnswers.Select(g =>
-            {
-                bounds.AdjustMinMax(g.Latitude, g.Longitude);
+            cluster.Load(gpsAnswers.Select(g => 
+                new Feature(new Point(new Position(g.Latitude, g.Longitude)), 
+                    new Dictionary<string, object> { ["interviewId"] = g.InterviewId.ToString() })));
 
-                return new SuperCluster.GeoPoint
-                {
-                    Position = new[] {g.Longitude, g.Latitude},
-                    Props = new Dictionary<string, object>
-                    {
-                        ["interviewId"] = g.InterviewId.ToString()
-                    }
-                };
-            }));
-
-            return (cluster, bounds, gpsAnswers.Length);
+            return (cluster, gpsAnswers.Length);
         }
 
         public List<QuestionnaireBrowseItem> GetQuestionnaireIdentitiesWithPoints() =>
