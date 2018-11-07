@@ -19,8 +19,7 @@ namespace WB.UI.Shared.Web.Extensions
             this.request = request;
         }
 
-        public bool IsRangeRequest => this.request.Headers.Range != null &&
-                                      this.request.Headers.Range.Ranges.Count > 0;
+        public bool IsRangeRequest => this.request.Headers.Range != null;
 
         public HttpResponseMessage HeaderInfoMessage(long contentLength, string mediaType)
         {
@@ -28,7 +27,6 @@ namespace WB.UI.Shared.Web.Extensions
             response.Content = new ByteArrayContent(Array.Empty<byte>());
             response.Content.Headers.ContentType = MediaTypeHeaderValue.Parse(mediaType);
             response.Content.Headers.ContentLength = contentLength;
-            response.Headers.AcceptRanges.Add("bytes");
             return response;
         }
 
@@ -39,10 +37,8 @@ namespace WB.UI.Shared.Web.Extensions
                 var mediaTypeHeaderValue = MediaTypeHeaderValue.Parse(mediaType);
                 if (IsRangeRequest)
                 {
-                    var content = new ByteRangeStreamContent(stream, this.request.Headers.Range, mediaTypeHeaderValue);
                     var response = this.request.CreateResponse(HttpStatusCode.PartialContent);
-                    response.Headers.AcceptRanges.Add("bytes");
-                    response.Content = content;
+                    response.Content = new ByteRangeStreamContent(stream, this.request.Headers.Range, mediaTypeHeaderValue);
 
                     return response;
                 }
@@ -50,7 +46,6 @@ namespace WB.UI.Shared.Web.Extensions
                 {
                     var content = new StreamContent(stream);
                     var response = this.request.CreateResponse(HttpStatusCode.OK);
-                    response.Headers.AcceptRanges.Add("bytes");
                     response.Content = content;
                     response.Content.Headers.ContentType = mediaTypeHeaderValue;
 
