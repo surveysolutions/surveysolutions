@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Security.Cryptography;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.Questionnaire.Services;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService
 {
@@ -14,13 +16,19 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
     {
         private readonly IPlainStorageAccessor<AttachmentContent> attachmentContentStorage;
         private readonly IPlainStorageAccessor<AttachmentMeta> attachmentMetaStorage;
-        
+        private readonly IVideoConverter videoConverter;
+        private readonly IPdfConverter pdfConverter;
+
         public AttachmentService(
             IPlainStorageAccessor<AttachmentContent> attachmentContentStorage,
-            IPlainStorageAccessor<AttachmentMeta> attachmentMetaStorage)
+            IPlainStorageAccessor<AttachmentMeta> attachmentMetaStorage,
+            IVideoConverter videoConverter,
+            IPdfConverter pdfConverter)
         {
             this.attachmentContentStorage = attachmentContentStorage;
             this.attachmentMetaStorage = attachmentMetaStorage;
+            this.videoConverter = videoConverter;
+            this.pdfConverter = pdfConverter;
         }
         
         public void DeleteAllByQuestionnaireId(Guid questionnaireId)
@@ -161,16 +169,24 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
             this.attachmentMetaStorage.Store(clonedAttachmentMeta, newAttachmentId);
         }
 
-        private static AttachmentDetails GetAttachmentDetails(byte[] binaryContent, string contentType)
+        private AttachmentDetails GetAttachmentDetails(byte[] binaryContent, string contentType)
         {
             if (contentType.StartsWith("image/"))
-            {
                 return GetImageAttachmentDetails(binaryContent);
-            }
 
-            if (contentType.StartsWith("application/pdf") || contentType.StartsWith("video/") || contentType.StartsWith("audio/"))
-            {
+            if(contentType.StartsWith("audio/"))
                 return new AttachmentDetails();
+
+            if (contentType.StartsWith("application/pdf"))
+                return new AttachmentDetails {Thumbnail = this.pdfConverter.CreateThumbnail(binaryContent)};
+
+            if (contentType.StartsWith("video/"))
+            {
+                var thumbnail = this.videoConverter.CreateThumbnail(binaryContent);
+                var details = GetImageAttachmentDetails(thumbnail);
+                details.Thumbnail = thumbnail;
+
+                return details;
             }
 
             throw new FormatException(ExceptionMessages.Attachments_Unsupported_content);
