@@ -13,7 +13,7 @@ using Microsoft.AspNet.Identity;
 using Resources;
 using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
-using WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles;
+using WB.Core.BoundedContexts.Headquarters.InterviewerProfiles;
 using WB.Core.BoundedContexts.Headquarters.MoveUserToAnotherTeam;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -121,7 +121,8 @@ namespace WB.UI.Headquarters.Controllers
                     DeviceId = x.DeviceId,
                     IsArchived = x.IsArchived,
                     EnumeratorVersion = x.EnumeratorVersion,
-                    IsUpToDate = interviewerApkVersion.HasValue && interviewerApkVersion.Value <= x.EnumeratorBuild
+                    IsUpToDate = interviewerApkVersion.HasValue && interviewerApkVersion.Value <= x.EnumeratorBuild,
+                    TrafficUsed = x.TrafficUsed.InKb()
                 })
             };
         }
@@ -169,6 +170,7 @@ namespace WB.UI.Headquarters.Controllers
             public virtual string EnumeratorVersion { get; set; }
             public bool IsUpToDate { get; set; }
             public virtual Guid? SupervisorId { get; set; }
+            public virtual long TrafficUsed { get; set; }
         }
 
         [HttpPost]

@@ -1,7 +1,7 @@
 ﻿@using Humanizer
 @using Main.Core.Entities.SubEntities
 @using Newtonsoft.Json
-@using WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
+@using WB.Core.BoundedContexts.Headquarters.InterviewerProfiles
 @using WB.Core.BoundedContexts.Headquarters.Services
 @using WB.Core.GenericSubdomains.Portable
 @using WB.Core.GenericSubdomains.Portable.ServiceLocation
@@ -10,7 +10,7 @@
 @using WB.Core.BoundedContexts.Headquarters.Services
 @using WB.UI.Headquarters.Code
 @using WB.Core.SharedKernels.DataCollection.ValueObjects;
-@model WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles.InterviewerProfileModel
+@model WB.Core.BoundedContexts.Headquarters.InterviewerProfiles.InterviewerProfileModel
 
 @{
     ViewBag.ActivePage = MenuItem.Interviewers;
@@ -70,9 +70,6 @@
                     });
             }
         </script>
-        @*<script async defer
-                src="@string.Format("{0}/maps/api/js?key={1}", @AppSettings.Instance.GoogleMapApiBaseUrl, ServiceLocator.Current.GetInstance<GoogleApiSettings>().ApiKey)">
-        </script>*@
     }
     <script type="text/javascript"
             src="@AppSettings.Instance.GoogleMapApiBaseUrl/maps/api/js?key=@AppSettings.Instance.GoogleMapApiKey">
@@ -159,29 +156,24 @@
                     <div class="amount-of-questionnaires">@Model.ApprovedInterviewsByHqCount</div>
                     <div class="description">@Pages.InterviewerProfile_Approved</div>
                 </div>
-                </div>
+            </div>
 
         </div>
     </div>
 </div>
-<div class="container-fluid" style='@(Model.HasAnyGpsAnswerForInterviewer ? "" : "display: none;")'>
-    <div class="row">
-        <div class="col-sm-9 map">
-            @Html.RenderHqConfig(new
-            {
-                ShowMap = Model.HasAnyGpsAnswerForInterviewer,
-                InitialLocation = new {lat = Model.DeviceLocationOrLastKnownLocationLat ?? 0, lng = Model.DeviceLocationOrLastKnownLocationLon ?? 0},
-                Api = new
-                {
-                    InterviewerPoints = Url.RouteUrl("Default", new {httproute = "", controller = "Interviewer", action = "InterviewerPoints"}),
-                    InteriewSummaryUrl = Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "InterviewApi", action = "InterviewSummaryForMapPoints"}),
-                    InterviewDetailsUrl = Url.RouteUrl("Default", new {httproute = "", controller = "Interview", action = "Review"})
-                }
-            })
-            <div id="vueApp"></div>
-        </div>
-    </div>
-</div>
+@Html.RenderHqConfig(new
+{
+    ShowMap = Model.HasAnyGpsAnswerForInterviewer,
+    InitialLocation = new {lat = Model.DeviceLocationOrLastKnownLocationLat ?? 0, lng = Model.DeviceLocationOrLastKnownLocationLon ?? 0},
+    Api = new
+    {
+        InterviewerPoints = Url.RouteUrl("Default", new {httproute = "", controller = "Interviewer", action = "InterviewerPoints"}),
+        InteriewSummaryUrl = Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "InterviewApi", action = "InterviewSummaryForMapPoints"}),
+        InterviewDetailsUrl = Url.RouteUrl("Default", new {httproute = "", controller = "Interview", action = "Review"}),
+        InterviewerTrafficUsage = Url.RouteUrl("Default", new { httproute = "", controller = "Interviewer", action = "TrafficUsage" }),
+    }
+})
+<div id="vueApp"></div>
 
     @if (Model.HasDeviceInfo)
     {
@@ -276,7 +268,6 @@
                             </div>
                         </div>
                     </div>
-                    
                 </div>
             </div>
         </div>
@@ -301,11 +292,14 @@
                         </li>
                         @if (Model.DeviceAssignmentDate.HasValue)
                         {
-                            <li><b>@Pages.InterviewerProfile_DeviceAssignmentDate: @Model.DeviceAssignmentDate.Value.ToString(@"dd MMM yyyy, hh:mm:ss") (UTC)
+                            <li>
+                                <b>
+                                    @Pages.InterviewerProfile_DeviceAssignmentDate: @Model.DeviceAssignmentDate.Value.ToString(@"dd MMM yyyy, hh:mm:ss") (UTC)
                                     @if (Model.RegistredDevicesCount > 1)
                                     {
-                                    <span style="color: red;">(@Pages.InterviewerProfile_Relinked)</span>
-                                    }</b>
+                                        <span style="color: red;">(@Pages.InterviewerProfile_Relinked)</span>
+                                    }
+                                </b>
                             </li>
                         }
                     </ul>
@@ -317,6 +311,7 @@
                                                                               ? "n/a"
                                                                               : Model.AverageSyncSpeedBytesPerSecond.Value.Bytes().Per(TimeSpan.FromSeconds(1)).Humanize(@"0.00"))
                         </li>
+                        <li>@Pages.InterviewerProfile_TotalTrafficUsed: @($"{Model.TrafficUsed:n0} Kb") </li>
                     </ul>
                     @ConnectionStats(Pages.InterviewerProfile_LastSuccessSync, Model.LastSuccessfulSync)
 
@@ -324,7 +319,7 @@
                     {
                         @ConnectionStats(Pages.InterviewerProfile_LastFailedSync, Model.LastFailedSync)
                     }
-                    
+
                     @if (Model.LastCommunicationDate.HasValue)
                     {
                         <ul class="list-unstyled">

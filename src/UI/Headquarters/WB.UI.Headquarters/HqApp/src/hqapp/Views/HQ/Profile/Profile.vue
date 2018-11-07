@@ -1,17 +1,47 @@
 <template>
-<div>
-    <div ref="map" id="map-canvas" style="width:100%; height: 400px">
-
+<div class="container-fluid">
+    <div class="row" v-if="showMap">
+        <div class="col-sm-9 map">
+            <div ref="map" id="map-canvas" class="extra-margin-bottom" style="width:100%; height: 400px"></div>
+            <div style="display:none;">
+                <div ref="tooltip" >
+                    <div class="map-tooltip-info" v-for="selectedTooltip in selectedTooltips" :key="selectedTooltip.InterviewKey">
+                        <p><span>#{{selectedTooltip.InterviewKey}}</span> <span>({{$t("MapReport.Assignment")}} {{selectedTooltip.AssignmentId}})</span></p>
+                        <p><strong>{{$t("Users.Interviewer")}} :</strong>&nbsp;{{selectedTooltip.InterviewerName}}</p>
+                        <p><strong>{{$t("Users.Supervisor")}} :</strong>&nbsp;{{selectedTooltip.SupervisorName}}</p>
+                        <p><strong>{{$t("Common.Status")}} :</strong>&nbsp;{{selectedTooltip.LastStatus}}</p>
+                        <p><strong>{{$t("Reports.LastUpdatedDate")}} :</strong>&nbsp;{{selectedTooltip.LastUpdatedDate}}</p>
+                        <p><a v-bind:href="model.api.interviewDetailsUrl + '/' + selectedTooltip.InterviewId" target="_blank">{{$t("MapReport.ViewInterviewContent")}}</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div style="display:none;">
-        <div ref="tooltip" >
-            <div class="map-tooltip-info" v-for="selectedTooltip in selectedTooltips" :key="selectedTooltip.InterviewKey">
-                <p><span>#{{selectedTooltip.InterviewKey}}</span> <span>({{$t("MapReport.Assignment")}} {{selectedTooltip.AssignmentId}})</span></p>
-                <p><strong>{{$t("Users.Interviewer")}} :</strong>&nbsp;{{selectedTooltip.InterviewerName}}</p>
-                <p><strong>{{$t("Users.Supervisor")}} :</strong>&nbsp;{{selectedTooltip.SupervisorName}}</p>
-                <p><strong>{{$t("Common.Status")}} :</strong>&nbsp;{{selectedTooltip.LastStatus}}</p>
-                <p><strong>{{$t("Reports.LastUpdatedDate")}} :</strong>&nbsp;{{selectedTooltip.LastUpdatedDate}}</p>
-                <p><a v-bind:href="model.api.interviewDetailsUrl + '/' + selectedTooltip.InterviewId" target="_blank">{{$t("MapReport.ViewInterviewContent")}}</a></p>
+    <div class="row">
+        <div class="col-sm-12 clearfix">
+            <h3>{{$t("Pages.InterviewerProfile_TrafficUsageHeader")}}</h3>
+            <div class="graphic-wrapper traffic-usage">
+                <div class="t-monthly-usage" v-for="monthlyUsage in trafficUsage" :key="monthlyUsage.month">
+                    <div class="t-month">{{monthlyUsage.month}}</div>
+                    <div class="t-daily-usage" v-for="dailyUsage in monthlyUsage.dailyUsage" :key="dailyUsage.timestamp">
+                        <div class="t-unit-wrapper">
+                            <div class="t-up" data-toggle="tooltip" data-placement="right" :title="formatKb(dailyUsage.up)" :style="{ height: dailyUsage.upInPer + '%' }" ></div>
+                            <div class="t-down" data-toggle="tooltip" data-placement="right"  :title="formatKb(dailyUsage.down)" :style="{ height: dailyUsage.downInPer + '%' }"></div>
+                        </div>
+                        <div class="t-day" :class="{'t-no-sync': dailyUsage.up + dailyUsage.down === 0 }">{{dailyUsage.day}}</div>
+                    </div>
+                </div>   
+                <div class="graphic-explanation">
+                    <div class="legend-block">
+                        <div class="legend">
+                            <div class="legend-unit up-unit"><span></span>{{$t("Pages.InterviewerProfile_IncomingTraffic")}}</div>
+                            <div class="legend-unit down-unit"><span></span>{{$t("Pages.InterviewerProfile_OutgoingTraffic")}}</div>
+                        </div>
+                    </div>
+                    <div class="total">
+                        <p class="primary-text">{{$t("Pages.InterviewerProfile_TotalTrafficUsed")}}: <span>{{formatKb(totalTrafficUsed)}}</span></p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -37,13 +67,35 @@
                     green: "#2c7613",
                     blue: "#0042c8"
                 },
-                minimumClusterSize: 5
+                minimumClusterSize: 5,
+                totalTrafficUsed: 0,
+                trafficUsage: [],
+                maxDailyUsage: 0
             };
         },
         mounted() {
             this.initializeMap();
+            this.initializeTrafficUsage();
         },
         methods: {
+            formatKb(kb){
+                return kb.toLocaleString() + " Kb";
+
+            },
+            initializeTrafficUsage(){
+                const self = this;
+                this.$http
+                    .get(this.model.api.interviewerTrafficUsage + "/" + this.interviewerId)
+                    .then(response => {
+                        var trafficUsage = response.data || {};
+                        this.totalTrafficUsed = trafficUsage.totalTrafficUsed || 0;
+                        this.trafficUsage = trafficUsage.trafficUsages || [];
+                        this.maxDailyUsage =  trafficUsage.maxDailyUsage  || 0;
+                        Vue.nextTick(function () {
+                            $('[data-toggle="tooltip"]').tooltip()
+                        })
+                    });
+            },
             loadPoints() {
                 const self = this;
                 this.$http
@@ -257,6 +309,9 @@
         computed: {
             model() {
                 return this.$config.model;
+            },
+            showMap(){
+                return this.$config.model.showMap;
             }
         }
     }; 

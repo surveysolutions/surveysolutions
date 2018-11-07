@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
@@ -15,7 +16,7 @@ using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.SharedKernels.DataCollection.ValueObjects;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
-namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
+namespace WB.Core.BoundedContexts.Headquarters.InterviewerProfiles
 {
     public interface IInterviewerProfileFactory
     {
@@ -24,6 +25,8 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
         ReportView GetInterviewersReport(Guid[] interviewersIdsToExport);
 
         IEnumerable<InterviewerPoint> GetInterviewerCheckinPoints(Guid interviewerId);
+
+        Task<InterviewerTrafficUsage> GetInterviewerTrafficUsageAsync(Guid interviewerId);
     }
 
     public class InterviewerProfileFactory : IInterviewerProfileFactory
@@ -80,6 +83,68 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
             return checkinPoints;
         }
 
+        public async Task<InterviewerTrafficUsage> GetInterviewerTrafficUsageAsync(Guid interviewerId)
+        {
+            var interviewerDailyTrafficUsages = this.deviceSyncInfoRepository.GetTrafficUsageForInterviewer(interviewerId);
+
+            var maxDailyUsage = interviewerDailyTrafficUsages.Max(x => x.DownloadedBytes + x.UploadedBytes);
+
+            var months = interviewerDailyTrafficUsages.Select(x => new DateTime(x.Year, x.Month, 1)).Distinct().OrderBy(x => x).ToList();
+            var formattedDates = new Dictionary<DateTime, string>();
+
+            for (int i = 0; i < months.Count; i++)
+            {
+                var dateFormat = (i > 0 && months[i - 1].Year != months[i].Year) ||
+                                 (i < months.Count - 1 && months[i + 1].Year != months[i].Year)
+                    ? "MMM yy"
+                    : "MMM";
+                
+                formattedDates.Add(months[i], months[i].ToString(dateFormat, CultureInfo.CurrentUICulture));
+            }
+
+            var monthlyTrafficUsages= interviewerDailyTrafficUsages.GroupBy(x => new DateTime(x.Year, x.Month, 1))
+                .Select(x => new InterviewerMonthlyTrafficUsageView
+                {
+                    Month = formattedDates[x.Key],
+                    Date = x.Key, 
+                    DailyUsage = x.Select(d => new InterviewerDailyTrafficUsageView
+                    {
+                        Day = d.Day,
+                        Up = d.UploadedBytes.InKb(),
+                        Down = d.DownloadedBytes.InKb(),
+                        UpInPer = (int)Math.Floor(100*(double)d.UploadedBytes/maxDailyUsage),
+                        DownInPer = (int)Math.Floor(100*(double)d.DownloadedBytes/maxDailyUsage),
+                    }).ToList()
+                })
+                .ToList();
+
+            foreach (var monthlyTrafficUsage in monthlyTrafficUsages)
+            {
+                var daysWithData = monthlyTrafficUsage.DailyUsage.Count();
+                if (daysWithData >= 3) continue;
+
+                var daysInMonth = DateTime.DaysInMonth(monthlyTrafficUsage.Date.Year, monthlyTrafficUsage.Date.Month);
+                var days = Enumerable.Range(1, daysInMonth).Except(monthlyTrafficUsage.DailyUsage.Select(x => x.Day)).ToList();
+
+                monthlyTrafficUsage.DailyUsage.AddRange(
+                    days.Skip(Math.Max(0, days.Count - 3 + daysWithData)).Take(3 - daysWithData)
+                        .Select(x => new InterviewerDailyTrafficUsageView
+                        {
+                            Day = x
+                        }));
+
+                monthlyTrafficUsage.DailyUsage = monthlyTrafficUsage.DailyUsage.OrderBy(x => x.Day).ToList();
+            }
+
+            var totalTrafficUsed = await this.deviceSyncInfoRepository.GetTotalTrafficUsageForInterviewer(interviewerId);
+            return new InterviewerTrafficUsage
+            {
+                TrafficUsages = monthlyTrafficUsages,
+                TotalTrafficUsed = totalTrafficUsed.InKb(),
+                MaxDailyUsage = maxDailyUsage.InKb()
+            };
+        }
+
         private bool HasAccessToInterview(InterviewGpsAnswerWithTimeStamp answer)
         {
             if (currentUser.IsHeadquarter || currentUser.IsAdministrator)
@@ -128,10 +193,10 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
             var supervisor = await this.userManager.FindByIdAsync(interviewer.Profile.SupervisorId.Value);
 
             var lastSuccessDeviceInfo = this.deviceSyncInfoRepository.GetLastSuccessByInterviewerId(userId);
-            var registredDeviceCount = this.deviceSyncInfoRepository.GetRegistredDeviceCount(userId);
-
+            var registredDeviceCount = this.deviceSyncInfoRepository.GetRegisteredDeviceCount(userId);
+            var trafficUsed = (await this.deviceSyncInfoRepository.GetTotalTrafficUsageForInterviewer(userId)).InKb();
             InterviewerProfileModel profile = 
-                this.FillInterviewerProfileForExport(new InterviewerProfileModel(), interviewer, supervisor, lastSuccessDeviceInfo) as InterviewerProfileModel;
+                this.FillInterviewerProfileForExport(new InterviewerProfileModel(), interviewer, supervisor, lastSuccessDeviceInfo, trafficUsed) as InterviewerProfileModel;
 
             if (profile == null) return null;
 
@@ -192,6 +257,7 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
                     "t_manufacturer",
                     "t_model",
                     "t_buildNumber",
+                    "s_traffic_used",
                     "s_language",
                     "s_androidVersion",
                     "s_updatedDate",
@@ -235,6 +301,7 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
                     x.DeviceManufacturer,
                     x.DeviceModel,
                     x.DeviceBuildNumber,
+                    x.TrafficUsed,
                     x.DeviceLanguage,
                     x.AndroidVersion,
                     x.LastSurveySolutionsUpdatedDate,
@@ -282,18 +349,22 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
                 .GetLastSyncByInterviewersList(interviewersIds)
                 .ToDictionary(x => x.InterviewerId, x => x);
 
+            var trafficUsages = this.deviceSyncInfoRepository.GetInterviewersTrafficUsage(interviewersIds);
+
             return interviewerProfiles
                 .Select(interviewer => FillInterviewerProfileForExport(
                         new InterviewerProfileToExport(), 
                         interviewer, 
                         interviewer.Profile.SupervisorId.HasValue? supervisorsProfiles.GetOrNull(interviewer.Profile.SupervisorId.Value) : null,
-                    deviceSyncInfos.GetOrNull(interviewer.Id)));
+                    deviceSyncInfos.GetOrNull(interviewer.Id),
+                    trafficUsages.ContainsKey(interviewer.Id) ? trafficUsages[interviewer.Id] : 0));
         }
 
         private InterviewerProfileToExport FillInterviewerProfileForExport(InterviewerProfileToExport profile,
             HqUser interviewer, 
             HqUser supervisor, 
-            DeviceSyncInfo lastSuccessDeviceInfo)
+            DeviceSyncInfo lastSuccessDeviceInfo,
+            long trafficUsed)
         {
             var interviewerId = interviewer.Id;
 
@@ -402,6 +473,8 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
             profile.CompletedInterviewsReceivedFromInterviewer = lastSuccessDeviceInfo.Statistics?.UploadedInterviewsCount ?? 0;
             profile.NewInterviewsOnDevice = lastSuccessDeviceInfo.Statistics?.NewInterviewsOnDeviceCount ?? 0;
             profile.RejectedInterviewsOnDevice = lastSuccessDeviceInfo.Statistics?.RejectedInterviewsOnDeviceCount ?? 0;
+
+            profile.TrafficUsed = trafficUsed;
 
             return profile;
         }

@@ -1411,6 +1411,15 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Incoming Traffic.
+        /// </summary>
+        public static string InterviewerProfile_IncomingTraffic {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_IncomingTraffic", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Edit personal info.
         /// </summary>
         public static string InterviewerProfile_Info {
@@ -1542,6 +1551,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string InterviewerProfile_NumberOfSuccessSynchronizations {
             get {
                 return ResourceManager.GetString("InterviewerProfile_NumberOfSuccessSynchronizations", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Outgoing Traffic.
+        /// </summary>
+        public static string InterviewerProfile_OutgoingTraffic {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_OutgoingTraffic", resourceCulture);
             }
         }
         
@@ -1686,6 +1704,33 @@ namespace WB.UI.Headquarters.Resources {
         public static string InterviewerProfile_TotalSyncTime {
             get {
                 return ResourceManager.GetString("InterviewerProfile_TotalSyncTime", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total traffic used.
+        /// </summary>
+        public static string InterviewerProfile_TotalTrafficUsed {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_TotalTrafficUsed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Total sum of incouming and outgoing traffics for user on all devices.
+        /// </summary>
+        public static string InterviewerProfile_TotalTrafficUsedTooltip {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_TotalTrafficUsedTooltip", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Traffic usage.
+        /// </summary>
+        public static string InterviewerProfile_TrafficUsageHeader {
+            get {
+                return ResourceManager.GetString("InterviewerProfile_TrafficUsageHeader", resourceCulture);
             }
         }
         

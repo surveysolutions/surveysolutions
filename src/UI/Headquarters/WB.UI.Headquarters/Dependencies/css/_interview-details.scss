@@ -246,7 +246,7 @@
 .question-editor.for-supervisor{
 	.options-group{
 		background-color: #bbd5ec;
-		input, textarea {
+		input, textarea{
 			color: $blue;
 			&::-webkit-input-placeholder { /* Chrome/Opera/Safari */
 				color: lighten($blue, 10%) !important;

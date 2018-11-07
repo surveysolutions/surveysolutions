@@ -1,7 +1,7 @@
 ﻿using System;
 using WB.Core.BoundedContexts.Headquarters.Views.Device;
 
-namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
+namespace WB.Core.BoundedContexts.Headquarters.InterviewerProfiles
 {
     public class InterviewerProfileModel : InterviewerProfileToExport
     {
@@ -80,5 +80,6 @@ namespace WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles
         public string Phone { get; set; }
         public double? DeviceLocationOrLastKnownLocationLat { get; set; }
         public double? DeviceLocationOrLastKnownLocationLon { get; set; }
+        public long TrafficUsed { get; set; }
     }
 }

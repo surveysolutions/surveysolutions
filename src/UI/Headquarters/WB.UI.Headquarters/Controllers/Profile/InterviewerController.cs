@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Linq;
+using System.Net.Mime;
+using System.Text;
 using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using Main.Core.Entities.SubEntities;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Resources;
-using WB.Core.BoundedContexts.Headquarters.IntreviewerProfiles;
+using WB.Core.BoundedContexts.Headquarters.InterviewerProfiles;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
@@ -104,6 +108,28 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Controllers
             if (points.Count == 0) return this.HttpNotFound("No points");
 
             return this.Json(points, JsonRequestBehavior.AllowGet);
+        }
+
+        
+        [AuthorizeOr403(Roles = "Administrator, Headquarter, Supervisor, Interviewer")]
+        [ActionName("TrafficUsage")]
+        [CamelCase]
+        public async Task<ActionResult> InterviewerTrafficUsage(Guid? id)
+        {
+            var userId = id ?? this.authorizedUser.Id;
+            var interviewer = await this.userManager.FindByIdAsync(userId);
+            if (interviewer == null || !interviewer.IsInRole(UserRoles.Interviewer)) return this.HttpNotFound();
+
+            InterviewerTrafficUsage trafficUsage = await interviewerProfileFactory.GetInterviewerTrafficUsageAsync(userId);
+
+            if (trafficUsage == null) return this.HttpNotFound();
+
+            return new ContentResult
+            {
+                ContentType = "application/json",
+                Content = JsonConvert.SerializeObject(trafficUsage, new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver() }),
+                ContentEncoding = Encoding.UTF8
+            };
         }
 
         [AuthorizeOr403(Roles = "Administrator, Headquarter, Supervisor")]

@@ -169,9 +169,8 @@ body > .ui-pnotify{
   width: 660px;
 }
 .modal-content{
-	padding: 20px;
     border: none;
-    box-shadow: none;
+    box-shadow: 0 0 15px rgba(0,0,0,.5);
     h3{
         font-size: 14px;
         line-height: 16px;
@@ -181,17 +180,13 @@ body > .ui-pnotify{
     p + h3{
         margin-top: 25px;
     }
+    
 	.modal-header{
-		border: none;
-		padding: 0;
+        border: none;
+        border-top-left-radius: 6px;
+        border-top-right-radius: 6px;
+        padding: 20px 20px 0;
 		margin-bottom: 25px;
-		// .close{
-		// 	position: relative;
-		// 	@include opacity(0.5);
-		// 	span{
-		// 		@include cancel(20px);
-		// 	}
-		// }
     }
     .close{
         position: relative;
@@ -201,7 +196,7 @@ body > .ui-pnotify{
         }
     }
 	.modal-body{
-		padding: 0 0 10px;
+		padding: 0 20px 10px;
         .bootbox-body{
             h3{
                 font: 18px/20px RobotoRegular;
@@ -235,12 +230,23 @@ body > .ui-pnotify{
     .modal-footer{
         border: none;
         text-align: left;
-        padding-left: 0;
-        padding-right: 0;
+        padding: 20px;
         .btn-link{
             padding: 0;
             margin-right: 20px;
         }
+    }
+}
+#confirmApprove{
+    .modal-header{
+        border-top: 6px solid #28a428;
+        color: #28a428;
+    }
+}
+#rejectConfirm{
+    .modal-header{
+        border-top: 6px solid #dd2c2c;
+        color: #dd2c2c;
     }
 }
 .modal-dropdown{
@@ -593,7 +599,7 @@ body > .ui-pnotify{
         right: auto;
         left: 50%;
         transform: translate(-50%, 100%);
-        z-index: 5;
+        z-index: 15;
         &:after{
             top: auto;
             bottom: 99%;
@@ -603,5 +609,64 @@ body > .ui-pnotify{
             margin-left: -25px;
             border-color: transparent transparent #fff transparent;
         }
+    }
+}
+#serverEditor{
+    .modal-header{
+        h2{
+            margin: 5px 0;
+        }
+        h3{
+            font: 20px/22px "RobotoLight";
+        }
+        .sub-header .label{
+            font: inherit;
+        }
+        border-bottom: 1px solid rgb(221, 221, 221);
+        
+    }
+    .modal-body{
+        padding: 0;
+        .alert{
+            @extend .alert-warning;
+            border-radius: 0;
+            padding: 15px 20px;
+            border-top: 1px solid #faebcc;
+            border-bottom: 1px solid #faebcc;
+        }
+        .details{
+            padding: 0 20px;
+            margin: 10px 0;
+            p{
+                margin-bottom: 5px;
+                &:last-of-type{
+                    margin-bottom: 0;
+                    label{
+                        margin-bottom: 0;
+                    }
+                }
+            }
+            .form-group:last-of-type{
+                margin-bottom: 5px;
+            }
+            &.administration-block{
+                border-top: 1px solid #337ab7;
+                border-bottom: 1px solid #337ab7;
+                background-color: #c6def3;
+                padding: 15px 20px;
+                .radio{
+                    label{
+                        padding: 8px;
+                    }
+                    input{
+                        margin-top: 0;
+                    }
+                    & + .radio{
+                        margin-top: 0;
+                    }
+                } 
+            }
+        }
+        
     }
 }

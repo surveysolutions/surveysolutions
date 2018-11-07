@@ -1229,4 +1229,19 @@
   <data name="InterviewOverview" xml:space="preserve">
     <value>Interview overview</value>
   </data>
+  <data name="InterviewerProfile_TrafficUsageHeader" xml:space="preserve">
+    <value>Traffic usage</value>
+  </data>
+  <data name="InterviewerProfile_IncomingTraffic" xml:space="preserve">
+    <value>Incoming Traffic</value>
+  </data>
+  <data name="InterviewerProfile_OutgoingTraffic" xml:space="preserve">
+    <value>Outgoing Traffic</value>
+  </data>
+  <data name="InterviewerProfile_TotalTrafficUsed" xml:space="preserve">
+    <value>Total traffic used</value>
+  </data>
+  <data name="InterviewerProfile_TotalTrafficUsedTooltip" xml:space="preserve">
+    <value>Total sum of incouming and outgoing traffics for user on all devices</value>
+  </data>
 </root>
