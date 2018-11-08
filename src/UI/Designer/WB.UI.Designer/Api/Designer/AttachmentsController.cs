@@ -59,11 +59,11 @@ namespace WB.UI.Designer.Api
 
             if (thumbnailBytes != null)
             {
-                if (attachmentContent.IsVideo() || attachmentContent.IsImage() || attachmentContent.IsPdf())
+                if (attachmentContent.IsVideo() || attachmentContent.IsImage() || (attachmentContent.IsPdf() && attachmentContent.Details?.Thumbnail != null))
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)
                     {
-                        Content = new ByteArrayContent(GetTrasformedContent(thumbnailBytes, sizeToScale))
+                        Content = new ByteArrayContent(thumbnailBytes)
                         {
                             Headers =
                             {
@@ -78,7 +78,7 @@ namespace WB.UI.Designer.Api
                     };
                 }
 
-                if (attachmentContent.IsAudio())
+                if (attachmentContent.IsAudio() || (attachmentContent.IsPdf() && attachmentContent.Details?.Thumbnail == null))
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)
                     {
