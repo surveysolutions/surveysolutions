@@ -14,6 +14,7 @@ using WB.UI.Designer.Implementation.Services;
 using WB.UI.Designer.Services;
 using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.Modules;
+using WB.UI.Shared.Web.Services;
 using WB.UI.Shared.Web.Settings;
 using IKernel = Ninject.IKernel;
 

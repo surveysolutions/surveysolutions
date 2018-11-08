@@ -117,8 +117,6 @@ namespace WB.UI.Headquarters
 
             registry.Bind<ISecureStorage, SecureStorage>();
             registry.Bind<IEncryptionService, RsaEncryptionService>();
-            registry.Bind<IVideoConverter, VideoConverter>();
-            registry.Bind<IPdfConverter, PdfConverter>();
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)

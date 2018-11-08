@@ -23,6 +23,7 @@ using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Groups;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
+using WB.Core.SharedKernels.Questionnaire.Services;
 
 namespace WB.Core.SharedKernels.Enumerator
 {
@@ -60,6 +61,7 @@ namespace WB.Core.SharedKernels.Enumerator
             registry.BindAsSingleton<INearbyConnection, NearbyConnection>();
 
             registry.BindAsSingleton<ISynchronizationCompleteSource, SynchronizationCompleteSource>();
+            registry.Bind<IVideoConverter, VideoConverter>();
 
             RegisterViewModels(registry);
         }
