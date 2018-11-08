@@ -7,6 +7,7 @@ using System.Reflection;
 using Ncqrs.Domain;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
+using Ncqrs.Eventing.Storage;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -25,18 +26,23 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
         private readonly EventBusSettings eventBusSettings;
         private readonly ILogger logger;
         private IServiceLocator serviceLocator;
+        private readonly IEventStore eventStore;
+        private readonly IInMemoryEventStore inMemoryEventStore;
 
         public NcqrCompatibleEventDispatcher(
             IServiceLocator serviceLocator,
             EventBusSettings eventBusSettings, 
             ILogger logger,
+            IEventStore eventStore,
+            IInMemoryEventStore inMemoryEventStore,
             IEnumerable<IEventHandler> eventHandlers)
         {
             this.eventBusSettings = eventBusSettings;
             this.logger = logger;
             this.handlersToIgnore = eventBusSettings.DisabledEventHandlerTypes;
-            this.getInProcessEventBus = () => new InProcessEventBus(eventBusSettings, logger);
-
+            this.getInProcessEventBus = () => new InProcessEventBus(eventStore, eventBusSettings, logger);
+            this.eventStore = eventStore;
+            this.inMemoryEventStore = inMemoryEventStore;
             this.serviceLocator = serviceLocator;
 
             foreach (var handler in eventHandlers)
@@ -167,6 +173,16 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
                     errorsDuringHandling);
         }
 
+        public IEnumerable<CommittedEvent> CommitUncommittedEvents(IEventSourcedAggregateRoot aggregateRoot, string origin)
+        {
+            var eventStream = new UncommittedEventStream(origin, aggregateRoot.GetUnCommittedChanges());
+            if (this.eventBusSettings.IsIgnoredAggregate(aggregateRoot.EventSourceId))
+            {
+                return this.inMemoryEventStore.Store(eventStream);
+            }
+
+            return this.eventStore.Store(eventStream);
+        }
 
         public void PublishCommittedEvents(IEnumerable<CommittedEvent> committedEvents) => this.Publish(committedEvents);
 
