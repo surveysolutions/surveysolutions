@@ -380,7 +380,6 @@
   </data>
   <data name="ShowOnMap" xml:space="preserve">
     <value>Показать на карте</value>
-    <comment>Показать на карте</comment>
   </data>
   <data name="WebTesterSessionOver" xml:space="preserve">
     <value>Сессия окончена</value>
@@ -407,12 +406,14 @@ Oбратитесь в тех. поддержку за помощью</value>
   </data>
   <data name="NumberCannotBeLessThanProtected" xml:space="preserve">
     <value>Введенное значение не может быть меньше чем защищенный ответ</value>
-    <comment>Введенное значение не может быть меньше чем защищенный ответ</comment>
   </data>
   <data name="Interview_Overview_NotAnswered" xml:space="preserve">
     <value>Не отвечен</value>
   </data>
   <data name="Interview_Overview_AdditionalInformation" xml:space="preserve">
     <value>Дополнительная информация о вопросе</value>
+  </data>
+  <data name="MultimediaNotSupported" xml:space="preserve">
+    <value>Воспроизведение мультимедиа не поддерживается вашим браузером. Вы можете скачать файл.</value>
   </data>
 </root>
