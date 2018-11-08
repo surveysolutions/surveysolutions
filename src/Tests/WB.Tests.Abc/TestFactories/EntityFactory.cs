@@ -28,6 +28,7 @@ using WB.Core.BoundedContexts.Headquarters.DataExport.Views.Labels;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
+using WB.Core.BoundedContexts.Headquarters.InterviewerProfiles;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
@@ -2268,6 +2269,23 @@ namespace WB.Tests.Abc.TestFactories
             var result = Create.Entity.InterviewTreeQuestion(singleOptionQuestionIdentity, answer: answer,
                 questionType: QuestionType.SingleOption);
             return result;
+        }
+
+        public InterviewerDailyTrafficUsage InterviewerDailyTrafficUsage(
+            int uploadedBytes = 0,
+            int downloadedBytes = 0,
+            int year = 0,
+            int month = 0,
+            int day = 0)
+        {
+            return new InterviewerDailyTrafficUsage
+            {
+                UploadedBytes = uploadedBytes,
+                DownloadedBytes = downloadedBytes,
+                Year = year,
+                Month = month,
+                Day = day
+            };
         }
     }
 }
