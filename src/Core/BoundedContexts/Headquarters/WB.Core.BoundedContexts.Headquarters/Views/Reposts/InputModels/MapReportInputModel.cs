@@ -20,5 +20,6 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels
         /// Will be -1 if zoom is not known at that moment
         /// </summary>
         public int Zoom { get; set; }
+        public int ClientMapWidth { get; set; }
     }
 }
