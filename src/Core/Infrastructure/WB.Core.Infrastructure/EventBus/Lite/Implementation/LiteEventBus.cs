@@ -18,6 +18,13 @@ namespace WB.Core.Infrastructure.EventBus.Lite.Implementation
             this.eventStore = eventStore;
         }
 
+        public IEnumerable<CommittedEvent> CommitUncommittedEvents(IEventSourcedAggregateRoot aggregateRoot, string origin)
+        {
+            var eventStream = new UncommittedEventStream(origin, aggregateRoot.GetUnCommittedChanges());
+
+            return this.eventStore.Store(eventStream);
+        }
+
         public void PublishCommittedEvents(IEnumerable<CommittedEvent> committedEvents)
         {
             foreach (var uncommittedChange in committedEvents)

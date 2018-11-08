@@ -9,6 +9,8 @@ namespace WB.Core.Infrastructure
     {
         void PublishEventToHandlers(IPublishableEvent eventMessage, IReadOnlyDictionary<IEventHandler, Stopwatch> handlersWithStopwatch);
 
+
+
         void Register(IEventHandler handler);
         void Unregister(IEventHandler handler);
     }
