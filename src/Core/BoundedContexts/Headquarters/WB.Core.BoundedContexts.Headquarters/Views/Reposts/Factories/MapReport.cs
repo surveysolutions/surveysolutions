@@ -56,22 +56,16 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                     CacheItemPriority.Default, null);
             }
 
-            (SuperCluster superCluster, int total) = ((SuperCluster superCluster, int total)) cacheLine;
+            var map = (MapReportCacheLine) cacheLine;
 
             List<Point<Cluster>> GetClusters(int zoom)
             {
-                return superCluster.GetClusters(new GeoBounds(input.South, input.West, input.North, input.East), zoom);
+                return map.Cluster.GetClusters(new GeoBounds(input.South, input.West, input.North, input.East), zoom);
             }
 
             if (input.Zoom == -1)
             {
-                input.Zoom = 16;
-                var res = GetClusters(input.Zoom);
-                while (res.Count > 400)
-                {
-                    input.Zoom--;
-                    res = GetClusters(input.Zoom);
-                }
+                input.Zoom = map.Bounds.ApproximateGoogleMapsZoomLevel(input.ClientMapWidth);
             }
 
             var result = GetClusters(input.Zoom);
@@ -84,7 +78,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 if (p.UserData.NumPoints > 1)
                 {
                     props["count"] = p.UserData.NumPoints;
-                    props["expand"] = superCluster.GetClusterExpansionZoom(p.UserData.Index);
+                    props["expand"] = map.Cluster.GetClusterExpansionZoom(p.UserData.Index);
                 }
 
                 return new Feature(
@@ -95,11 +89,12 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
             return new MapReportView
             {
                 FeatureCollection = collection,
-                TotalPoint = total
+                InitialBounds = map.Bounds,
+                TotalPoint = map.Total
             };
         }
 
-        private (SuperCluster cluster, int total) InitializeSuperCluster(MapReportInputModel input)
+        private MapReportCacheLine InitializeSuperCluster(MapReportInputModel input)
         {
             var questionnaire = this.questionnaireStorage.GetQuestionnaire(input.QuestionnaireIdentity, null);
             var gpsQuestionId = questionnaire.GetQuestionIdByVariable(input.Variable);
@@ -112,15 +107,31 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
                 this.authorizedUser.IsSupervisor ? this.authorizedUser.Id : (Guid?) null);
 
             var cluster = new SuperCluster();
+            var bounds = GeoBounds.Closed;
 
-            cluster.Load(gpsAnswers.Select(g => 
-                new Feature(new Point(new Position(g.Latitude, g.Longitude)), 
-                    new Dictionary<string, object> { ["interviewId"] = g.InterviewId.ToString() })));
+            cluster.Load(gpsAnswers.Select(g =>
+            {
+                bounds.Expand(g.Latitude, g.Longitude);
+                return new Feature(new Point(new Position(g.Latitude, g.Longitude)),
+                    new Dictionary<string, object> {["interviewId"] = g.InterviewId.ToString()});
+            }));
 
-            return (cluster, gpsAnswers.Length);
+            return new MapReportCacheLine
+            {
+                Cluster = cluster,
+                Bounds = bounds,
+                Total = gpsAnswers.Length
+            };
         }
 
         public List<QuestionnaireBrowseItem> GetQuestionnaireIdentitiesWithPoints() =>
             this.questionnairesAccessor.Query(_ => _.Where(x => !x.IsDeleted).ToList());
+
+        private struct MapReportCacheLine
+        {
+            public SuperCluster Cluster { get; set; }
+            public GeoBounds Bounds { get; set; }
+            public int Total { get; set; }
+        }
     }
 }
