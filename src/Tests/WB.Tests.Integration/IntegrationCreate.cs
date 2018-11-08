@@ -357,7 +357,7 @@ namespace WB.Tests.Integration
         }
 
         public static DesignerEngineVersionService DesignerEngineVersionService()
-            => new DesignerEngineVersionService();
+            => new DesignerEngineVersionService(Mock.Of<IAttachmentService>());
 
         public static PostgreReadSideStorage<TEntity> PostgresReadSideRepository<TEntity>(
             ISessionProvider sessionProvider = null)
