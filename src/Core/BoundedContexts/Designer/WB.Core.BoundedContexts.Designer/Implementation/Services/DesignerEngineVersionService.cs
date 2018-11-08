@@ -12,7 +12,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
 {
     internal class DesignerEngineVersionService : IDesignerEngineVersionService
     {
+        private readonly IAttachmentService attachmentService;
+
+        public DesignerEngineVersionService(IAttachmentService attachmentService)
+        {
+            this.attachmentService = attachmentService;
+        }
+
         private const int OldestQuestionnaireContentVersion = 16;
+
         private class QuestionnaireContentVersion
         {
             public int Version { get; set; }
@@ -25,7 +33,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             public Func<QuestionnaireDocument, bool> HasQuestionnaire { get; set; }
         }
 
-        private readonly List<QuestionnaireContentVersion> questionnaireContentVersions = new List<QuestionnaireContentVersion>
+        private List<QuestionnaireContentVersion> questionnaireContentVersions => new List<QuestionnaireContentVersion>
         {
             new QuestionnaireContentVersion
             {
@@ -118,7 +126,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
             },
             new QuestionnaireContentVersion
             {
-                Version = ApiVersion.MaxQuestionnaireVersion, // old versions for history and could be removed later
+                Version = 23,
                 NewFeatures = new []
                 {
                     new QuestionnaireFeature
@@ -128,7 +136,23 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                     }
                 }
             }
+            ,
+            new QuestionnaireContentVersion
+            {
+                Version = ApiVersion.MaxQuestionnaireVersion, // old versions for history and could be removed later
+                NewFeatures = new []
+                {
+                    new QuestionnaireFeature
+                    {
+                        HasQuestionnaire = questionnaire => questionnaire.Attachments.Any(a => IsNonImageAttachment(a.ContentId)),
+                        Description = "New types of attachments added"
+                    }
+                }
+            }
         };
+
+        private bool IsNonImageAttachment(string contentId) =>
+            !this.attachmentService.GetContent(contentId).IsImage();
 
         public int LatestSupportedVersion => this.questionnaireContentVersions.OrderBy(x => x.Version).Last().Version;
 
