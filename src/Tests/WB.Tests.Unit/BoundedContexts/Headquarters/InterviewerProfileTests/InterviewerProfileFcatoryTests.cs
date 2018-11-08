@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
 using Moq;
@@ -8,7 +10,7 @@ using WB.Core.BoundedContexts.Headquarters.Repositories;
 using WB.Tests.Abc;
 using WB.Tests.Abc.TestFactories;
 
-namespace WB.Tests.Unit.BoundedContexts.Headquarters.IntreviewerProfileTests
+namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewerProfileTests
 {
     public class InterviewerProfileFactoryTests
     {
@@ -17,12 +19,24 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.IntreviewerProfileTests
         {
             var interviewersIdsToExport = new[] { Id.g1, Id.g2 };
 
-            var users = new[] { Create.Entity.HqUser(Id.g1, Id.g3, userName: "u1"), Create.Entity.HqUser(Id.g2, Id.g3, userName: "u2"), Create.Entity.HqUser(Id.g3, userName: "super", role: UserRoles.Supervisor) };
+            var users = new[]
+            {
+                Create.Entity.HqUser(Id.g1, Id.g3, userName: "u1"), 
+                Create.Entity.HqUser(Id.g2, Id.g3, userName: "u2"), 
+                Create.Entity.HqUser(Id.g3, userName: "super", role: UserRoles.Supervisor)
+            };
 
             var userManager = Mock.Of<TestHqUserManager>(x => x.Users == users.AsQueryable());
 
             var deviceSyncInfos = new[] { Create.Entity.DeviceSyncInfo(Id.g1, "device1") };
-            var deviceSyncInfoRepository = Mock.Of<IDeviceSyncInfoRepository>(x => x.GetLastSyncByInterviewersList(interviewersIdsToExport) == deviceSyncInfos);
+            var trafficUsage = new Dictionary<Guid, long>
+            {
+                { Id.g1, 30000 }
+            };
+
+            var deviceSyncInfoRepository = Mock.Of<IDeviceSyncInfoRepository>(x 
+                => x.GetLastSyncByInterviewersList(interviewersIdsToExport) == deviceSyncInfos 
+                && x.GetInterviewersTrafficUsage(interviewersIdsToExport) == trafficUsage);
 
             var factory = Create.Service.InterviewerProfileFactory(userManager: userManager, deviceSyncInfoRepository: deviceSyncInfoRepository);
             
@@ -31,18 +45,18 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.IntreviewerProfileTests
             Assert.That(report.Data.Length, Is.EqualTo(2));
 
             Assert.That(report.Data[0], Is.EquivalentTo(new object[]{ "u1", Id.g1, "super", "AppVersion", false, null, 0, 0, null, null, "device1",
-                "DeviceSerialNumber", "DeviceType", "DeviceManufacturer", "DeviceModel", "DeviceBuildNumber", "DeviceLanguage", "Android AndroidSdkVersionName(25)",
+                "DeviceSerialNumber", "DeviceType", "DeviceManufacturer", "DeviceModel", "DeviceBuildNumber", 30000, "DeviceLanguage", "Android AndroidSdkVersionName(25)",
                 deviceSyncInfos[0].LastAppUpdatedDate, 14.15, 16.17, "AppOrientation", 88, "BatteryPowerSource", false,
                 5242880, 2097152000, 52428800, 1073741824, 76546048,
                 deviceSyncInfos[0].SyncDate, deviceSyncInfos[0].DeviceDate, "NetworkType", "NetworkSubType", 0, 0, 0, 10, 0, 0 }));
 
             Assert.That(report.Data[1], Is.EquivalentTo(new object[]{ "u2", Id.g2, "super", null, false, null, 0, 0, null, null,
-                null, null, null, null, null, null, null, null, null, null, null, null, null, null, null, null,
+                null, null, null, null, null, null, 0, null, null, null, null, null, null, null, null, null, null,
                 null, null, null, null, null, null, null, null, 0, 0, 0, 0, 0, 0 }));
         }
 
         [Test]
-        public void When()
+        public void When_getting_interviewer_profile()
         {
             var inter = Create.Entity.HqUser(Id.g1, Id.g3, userName: "u1");
             var super = Create.Entity.HqUser(Id.g3, userName: "super", role: UserRoles.Supervisor);
@@ -53,7 +67,9 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.IntreviewerProfileTests
             );
 
             var deviceSyncInfo = Create.Entity.DeviceSyncInfo(Id.g1, "device1");
-            var deviceSyncInfoRepository = Mock.Of<IDeviceSyncInfoRepository>(x => x.GetLastSuccessByInterviewerId(Id.g1) == deviceSyncInfo);
+            var deviceSyncInfoRepository = Mock.Of<IDeviceSyncInfoRepository>(x 
+                => x.GetLastSuccessByInterviewerId(Id.g1) == deviceSyncInfo
+                && x.GetTotalTrafficUsageForInterviewer(Id.g1) == Task.FromResult(2*1024l));
 
             var factory = Create.Service.InterviewerProfileFactory(userManager: userManager, deviceSyncInfoRepository: deviceSyncInfoRepository);
 
@@ -89,6 +105,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.IntreviewerProfileTests
             Assert.That(profile.RamTotalInBytes, Is.EqualTo(1024 * 1024 * 1024));
             Assert.That(profile.StorageFreeInBytes, Is.EqualTo(5 * 1024 * 1024));
             Assert.That(profile.StorageTotalInBytes, Is.EqualTo(2000 * 1024 * 1024));
+            Assert.That(profile.TrafficUsed, Is.EqualTo(2));
         }
     }
 }
