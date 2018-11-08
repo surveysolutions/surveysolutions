@@ -1,5 +1,5 @@
 ﻿using GeoJSON.Net.Feature;
-using WB.Core.BoundedContexts.Headquarters.Clustering;
+using Supercluster;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views
 {
