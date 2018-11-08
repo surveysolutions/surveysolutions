@@ -379,11 +379,9 @@ export default {
             var request = {
                 Variable: this.gpsQuestionId.key,
                 QuestionnaireId: this.questionnaireId.key,
-                Zoom: this.showHeatmap ? zoom + 3 : zoom,
-                east,
-                north,
-                west,
-                south
+                Zoom: (this.showHeatmap && zoom != -1) ? zoom + 3 : zoom,
+                east, north, west, south,
+                clientMapWidth:  this.map.getDiv().clientWidth
             };
 
             const self = this;
@@ -448,28 +446,14 @@ export default {
                         self.map.data.remove(toRemove[key]);
                     });
 
-                    if (extendBounds) {
-                        // special handling extend for single point
-                        if (features.length == 1) {
-                            const feature = response.data.FeatureCollection.features[0];
-                            self.map.setZoom(feature.properties["expand"] || self.getMapOptions().maxZoom);
-                            self.map.panTo(
-                                new google.maps.LatLng(
-                                    feature.geometry.coordinates[1],
-                                    feature.geometry.coordinates[0]
-                                )
-                            );
-                        } else {
-                            let bounds = new google.maps.LatLngBounds();
+                    if (extendBounds) {                    
+                        const bounds = response.data.InitialBounds;
 
-                            self.map.data.forEach(feature => {
-                                feature.getGeometry().forEachLatLng(pos => {
-                                    bounds = bounds.extend(pos);
-                                });
-                            });
+                        const sw = new google.maps.LatLng(bounds.South, bounds.West);
+                        const ne = new google.maps.LatLng(bounds.North, bounds.East);
+                        const latlngBounds = new google.maps.LatLngBounds(sw, ne);
 
-                            self.map.fitBounds(bounds);
-                        }
+                        self.map.fitBounds(latlngBounds);
                     }
                 });
         }
