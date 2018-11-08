@@ -33,13 +33,13 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.UserViewFactoryTests
                 supervisor1, supervisor2, supervisor3,
                 interviewer11, interviewer12,
                 interviewer21,
-                interviewer31, interviewer32, interviewer33, interviewer34);
+                interviewer31, interviewer32, interviewer33, interviewer34)
+                .WithDeviceInfo(Create.Entity.DeviceSyncInfo(interviewer11Id, "device1"));
 
             interviewersViewFactory = CreateInterviewersViewFactory(readerWithUsers);
-            BecauseOf();
-        }
 
-        public void BecauseOf() => result = interviewersViewFactory.GetInterviewers(0, 20, null, null, true, null, null);
+            result = interviewersViewFactory.GetInterviewers(0, 20, null, null, true, null, null);
+        }
 
         [NUnit.Framework.Test] public void should_return_3_interviewers () 
         {

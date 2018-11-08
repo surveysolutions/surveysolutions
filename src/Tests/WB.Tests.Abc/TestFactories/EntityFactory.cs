@@ -1975,7 +1975,24 @@ namespace WB.Tests.Abc.TestFactories
                 RAMFreeInBytes = 50 * 1024 * 1024,
                 RAMTotalInBytes = 1024 * 1024 * 1024,
                 StorageFreeInBytes = 5 * 1024 * 1024,
-                StorageTotalInBytes = 2000 * 1024 * 1024
+                StorageTotalInBytes = 2000 * 1024 * 1024,
+                Statistics = new SyncStatistics
+                {
+                    UploadedInterviewsCount = 0,
+                    DownloadedInterviewsCount = 0,
+                    DownloadedQuestionnairesCount = 0,
+                    RejectedInterviewsOnDeviceCount  = 0,
+                    NewInterviewsOnDeviceCount  = 0,
+                    NewAssignmentsCount = 0,
+                    RemovedAssignmentsCount = 0,
+                    RemovedInterviewsCount  = 0,
+                    AssignmentsOnDeviceCount  = 0,
+                    TotalUploadedBytes  = 0,
+                    TotalDownloadedBytes = 0,
+                    TotalConnectionSpeed = 0,
+                    TotalSyncDuration  = TimeSpan.FromSeconds(5),
+                    SyncFinishDate = DateTime.UtcNow
+                }
             };
         }
 
