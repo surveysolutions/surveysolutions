@@ -4,7 +4,7 @@ using Android.Media;
 using WB.Core.SharedKernels.Questionnaire.Services;
 using Path = System.IO.Path;
 
-namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
+namespace WB.UI.Shared.Enumerator.Services
 {
     public class VideoConverter : IVideoConverter
     {
