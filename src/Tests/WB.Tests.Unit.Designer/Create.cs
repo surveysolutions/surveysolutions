@@ -1398,7 +1398,7 @@ namespace WB.Tests.Unit.Designer
                 substitutionService ?? substitutionServiceInstance,
                 keywordsProvider ?? new KeywordsProvider(substitutionServiceInstance),
                 expressionProcessorGenerator ?? questionnireExpressionProcessorGeneratorMock.Object,
-                new DesignerEngineVersionService(Mock.Of<IAttachmentService>()),
+                new DesignerEngineVersionService(Mock.Of<IAttachmentService>(a => a.GetContent(It.IsAny<string>()) == new AttachmentContent(){ContentType = "image/png"})),
                 macrosSubstitutionServiceImp,
                 lookupTableService ?? lookupTableServiceMock.Object,
                 attachmentService ?? attachmentServiceMock,
