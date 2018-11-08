@@ -252,7 +252,7 @@ namespace WB.Tests.Unit.Designer
 
         public static IDesignerEngineVersionService DesignerEngineVersionService()
         {
-            return new DesignerEngineVersionService();
+            return new DesignerEngineVersionService(Mock.Of<IAttachmentService>());
         }
 
         public static DownloadQuestionnaireRequest DownloadQuestionnaireRequest(Guid? questionnaireId, QuestionnaireVersion questionnaireVersion = null)
@@ -1398,7 +1398,7 @@ namespace WB.Tests.Unit.Designer
                 substitutionService ?? substitutionServiceInstance,
                 keywordsProvider ?? new KeywordsProvider(substitutionServiceInstance),
                 expressionProcessorGenerator ?? questionnireExpressionProcessorGeneratorMock.Object,
-                new DesignerEngineVersionService(),
+                new DesignerEngineVersionService(Mock.Of<IAttachmentService>()),
                 macrosSubstitutionServiceImp,
                 lookupTableService ?? lookupTableServiceMock.Object,
                 attachmentService ?? attachmentServiceMock,
