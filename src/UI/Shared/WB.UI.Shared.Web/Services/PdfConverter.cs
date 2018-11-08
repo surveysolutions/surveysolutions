@@ -15,6 +15,7 @@ namespace WB.UI.Shared.Web.Services
 
             try
             {
+#warning Enable 32-Bit Applications should be set to true for IIS Application Pool
                 var errors = Pdf2Image.Convert(tempPdfFile, tempPdfImage);
                 var thumbnailBytes = File.ReadAllBytes(tempPdfImage);
 
