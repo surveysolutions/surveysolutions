@@ -9,7 +9,6 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 using WB.Core.Infrastructure.Modularity;
-using WB.Core.SharedKernels.Questionnaire.Services;
 using WB.UI.Designer.Implementation.Services;
 using WB.UI.Designer.Services;
 using WB.UI.Shared.Web.Filters;

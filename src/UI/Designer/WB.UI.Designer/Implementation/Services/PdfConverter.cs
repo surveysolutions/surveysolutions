@@ -1,8 +1,9 @@
 ﻿using System.IO;
 using cs_pdf_to_image;
-using WB.Core.SharedKernels.Questionnaire.Services;
+using WB.Core.BoundedContexts.Designer.Services;
+using WB.UI.Designer.Services;
 
-namespace WB.UI.Shared.Web.Services
+namespace WB.UI.Designer.Implementation.Services
 {
     public class PdfConverter : IPdfConverter
     {
