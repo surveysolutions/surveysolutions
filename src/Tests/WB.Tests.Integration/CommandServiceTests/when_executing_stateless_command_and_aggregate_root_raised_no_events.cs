@@ -78,8 +78,8 @@ namespace WB.Tests.Integration.CommandServiceTests
             commandService.Execute(new DoNothingCommand(), null);
 
         [NUnit.Framework.Test] public void should_store_events () =>
-            eventStore.Verify(
-                bus => bus.Store(Moq.It.IsAny<UncommittedEventStream>()),
+            eventBusMock.Verify(
+                bus => bus.CommitUncommittedEvents(aggregateFromRepository, null),
                 Times.Once);
 
         [NUnit.Framework.Test] public void should_publish_events () =>
