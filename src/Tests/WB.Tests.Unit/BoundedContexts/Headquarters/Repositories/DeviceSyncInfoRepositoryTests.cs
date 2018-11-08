@@ -10,7 +10,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Device;
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.Repositories
 {
     [TestOf(typeof(DeviceSyncInfoRepository))]
-    [Ignore("If DbSet<DeviceSyncInfo> is marked as virtual, migration frameworks skips it. Either test, either migration should be fixed")]
+    //[Ignore("If DbSet<DeviceSyncInfo> is marked as virtual, migration frameworks skips it. Either test, either migration should be fixed")]
     internal class DeviceSyncInfoRepositoryTests
     {
         private DeviceSyncInfoRepository Create(params DeviceSyncInfo[] data)

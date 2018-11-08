@@ -629,8 +629,9 @@ namespace WB.Tests.Abc.TestFactories
             IInterviewerVersionReader interviewerVersionReader = null,
             IInterviewFactory interviewFactory = null)
         {
+            var defaultUserManager = Mock.Of<TestHqUserManager>(x => x.Users == (new HqUser[0]).AsQueryable());
             return new InterviewerProfileFactory(
-                userManager ?? Mock.Of<HqUserManager>(),
+                userManager ?? defaultUserManager,
                 interviewRepository ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(),
                 deviceSyncInfoRepository ?? Mock.Of<IDeviceSyncInfoRepository>(),
                 interviewerVersionReader ?? Mock.Of<IInterviewerVersionReader>(),
