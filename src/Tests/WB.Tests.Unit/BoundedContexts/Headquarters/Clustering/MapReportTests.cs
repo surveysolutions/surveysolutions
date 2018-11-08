@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Moq;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Headquarters.Clustering;
+using Supercluster;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
