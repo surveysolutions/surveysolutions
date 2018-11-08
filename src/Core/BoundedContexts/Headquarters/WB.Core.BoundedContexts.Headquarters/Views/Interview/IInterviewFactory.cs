@@ -1,6 +1,6 @@
 using System;
 using System.Collections.Generic;
-using WB.Core.BoundedContexts.Headquarters.Clustering;
+using Supercluster;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 

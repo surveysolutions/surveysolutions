@@ -15,13 +15,7 @@
     <Compile Remove="SharedKernels\DataCollection\InterviewItemIdTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="BoundedContexts\Headquarters\Clustering\places.json" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="..\..\UI\Shared\WB.UI.Shared.Enumerator\Services\DevicePasswordHasher.cs" Link="GenericSubdomains\Utils\PasswordHasherTests\DevicePasswordHasher.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="BoundedContexts\Headquarters\Clustering\places.json" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Core\BoundedContexts\Interviewer\WB.Core.BoundedContexts.Interviewer\WB.Core.BoundedContexts.Interviewer.csproj" />

@@ -4,7 +4,7 @@ using System.Linq;
 using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Headquarters.Clustering;
+using Supercluster;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.Transactions;
