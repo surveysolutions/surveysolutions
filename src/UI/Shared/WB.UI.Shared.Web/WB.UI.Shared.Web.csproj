@@ -44,6 +44,9 @@
     <Reference Include="CaptchaMvc, Version=2.5.0.0, Culture=neutral, PublicKeyToken=fe46ad421dd3b0e6, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\CaptchaMvc.Mvc5.1.5.0\lib\net45-full\CaptchaMvc.dll</HintPath>
     </Reference>
+    <Reference Include="cs-pdf-to-image">
+      <HintPath>..\..\Headquarters\WB.UI.Headquarters\Bin\cs-pdf-to-image.dll</HintPath>
+    </Reference>
     <Reference Include="Iesi.Collections, Version=4.0.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Iesi.Collections.4.0.4\lib\net461\Iesi.Collections.dll</HintPath>
     </Reference>
@@ -79,6 +82,9 @@
     </Reference>
     <Reference Include="Ninject.Web.WebApi, Version=3.3.0.0, Culture=neutral, PublicKeyToken=c7192dc5380945e7, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\Ninject.Web.WebApi.3.3.0\lib\net45\Ninject.Web.WebApi.dll</HintPath>
+    </Reference>
+    <Reference Include="NReco.VideoConverter, Version=1.1.3.0, Culture=neutral, PublicKeyToken=395ccb334978a0cd, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\NReco.VideoConverter.1.1.3\lib\net20\NReco.VideoConverter.dll</HintPath>
     </Reference>
     <Reference Include="Recaptcha.Web, Version=2.1.0.0, Culture=neutral, PublicKeyToken=171a6ec5fa4b1644, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\RecaptchaNet.2.1.0\lib\net451\Recaptcha.Web.dll</HintPath>
@@ -200,6 +206,8 @@
     </Compile>
     <Compile Include="Services\IImageProcessingService.cs" />
     <Compile Include="Services\ImageProcessingService.cs" />
+    <Compile Include="Services\PdfConverter.cs" />
+    <Compile Include="Services\VideoConverter.cs" />
     <Compile Include="Settings\CoreSettings.cs" />
     <Compile Include="Settings\ISettingsProvider.cs" />
     <Compile Include="Settings\SettingsProvider.cs" />

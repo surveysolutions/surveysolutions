@@ -2,7 +2,7 @@
 using cs_pdf_to_image;
 using WB.Core.SharedKernels.Questionnaire.Services;
 
-namespace WB.UI.Headquarters.Implementation.Services
+namespace WB.UI.Shared.Web.Services
 {
     public class PdfConverter : IPdfConverter
     {
