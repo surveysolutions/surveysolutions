@@ -10,12 +10,24 @@
             </div>
         </div>
         <div v-if="localContentType === 'audio'">
-            <audio controls preload="auto" style="width:300px" :src="contentUrl">
-            </audio>
+            <div class="instructions-wrapper">
+                <a class="btn btn-link" :href="contentUrl" target="_blank">{{$t("Common.Download")}}</a>
+            </div>
+            <div>
+                <audio controls preload="auto" style="width:300px" :src="contentUrl">
+                    {{ $t('WebInterviewUI.MultimediaNotSupported') }}
+                </audio>
+            </div>
         </div>
         <div v-if="localContentType === 'video'">
-            <video controls preload="auto" style="width:300px" :src="contentUrl">
-            </video>
+            <div class="instructions-wrapper">
+                <a class="btn btn-link" :href="contentUrl" target="_blank">{{$t("Common.Download")}}</a>
+            </div>
+            <div>
+                <video controls preload="auto" style="width:300px" :src="contentUrl">
+                    {{ $t('WebInterviewUI.MultimediaNotSupported') }}
+                </video>
+            </div>
         </div>
         <div v-if="localContentType === 'pdf'">
             <div class="instructions-wrapper">
@@ -28,7 +40,9 @@
 <script lang="js">
     import axios from "axios"
     import appendquery from "append-query"
-    import { startsWith } from "lodash"
+    import {
+        startsWith
+    } from "lodash"
 
     function appendSearchParam(uri, name, value) {
         const args = {
@@ -114,14 +128,14 @@
 
                 return {}
             },
-            localContentType(){
-                if(startsWith(this.contentType, 'image'))
+            localContentType() {
+                if (startsWith(this.contentType, 'image'))
                     return 'image'
-                if(startsWith(this.contentType, 'application/pdf'))
+                if (startsWith(this.contentType, 'application/pdf'))
                     return 'pdf'
-                if(startsWith(this.contentType, 'audio'))
+                if (startsWith(this.contentType, 'audio'))
                     return 'audio'
-                if(startsWith(this.contentType, 'video'))
+                if (startsWith(this.contentType, 'video'))
                     return 'video'
             },
             modalView() {
