@@ -1,4 +1,4 @@
-﻿namespace WB.Core.SharedKernels.Questionnaire.Services
+﻿namespace WB.Core.BoundedContexts.Designer.Services
 {
     public interface IPdfConverter
     {
