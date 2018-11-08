@@ -1,19 +1,24 @@
 ﻿using System.IO;
+using Android.Graphics;
+using Android.Media;
 using WB.Core.SharedKernels.Questionnaire.Services;
+using Path = System.IO.Path;
 
-namespace WB.UI.Designer.Implementation.Services
+namespace WB.Core.SharedKernels.Enumerator.Implementation.Services
 {
     public class VideoConverter : IVideoConverter
     {
         public byte[] CreateThumbnail(string pathToVideo)
         {
-            using (var stream = new MemoryStream())
-            {
-                var ffMpeg = new NReco.VideoConverter.FFMpegConverter();
-                ffMpeg.GetVideoThumbnail(pathToVideo, stream);
+            var retriever = new MediaMetadataRetriever();
+            retriever.SetDataSource(pathToVideo);
+            var bitmap = retriever.GetFrameAtTime(1);
+            if (bitmap == null) return null;
 
-                return stream.ToArray();
-            }
+            var stream = new MemoryStream();
+            bitmap.Compress(Bitmap.CompressFormat.Png, 0, stream);
+
+            return stream.ToArray();
         }
 
         public byte[] CreateThumbnail(byte[] videoBytes)
