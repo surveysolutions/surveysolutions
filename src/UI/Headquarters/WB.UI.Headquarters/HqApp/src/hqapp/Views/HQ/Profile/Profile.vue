@@ -28,6 +28,7 @@
                 map: null,
                 markerCluster: null,
                 points: new Map(),
+                infoWindow: null,
                 lines: [],
                 interviewerId: this.$route.params.interviewerId,
                 selectedTooltips: {},
@@ -73,7 +74,7 @@
                     offset: '100%'
                 };
 
-                var infowindow = new google.maps.InfoWindow();
+                this.infoWindow = new google.maps.InfoWindow();
                 var bounds = new google.maps.LatLngBounds();
                 var markers = [];
                 points.forEach(point => {
@@ -212,10 +213,10 @@
                         self.selectedTooltips = data;
 
                         Vue.nextTick(function() {
-                            self.interviewDetailsTooltip.setContent(
+                            self.infoWindow.setContent(
                                 $(self.$refs.tooltip).html()
                             );
-                            self.interviewDetailsTooltip.open(self.map, marker);
+                            self.infoWindow.open(self.map, marker);
                         });
                     });
             },
