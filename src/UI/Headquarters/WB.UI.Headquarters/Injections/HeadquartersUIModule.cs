@@ -28,7 +28,6 @@ using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
-using WB.Core.SharedKernels.Questionnaire.Services;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code.CommandDeserialization;
 using WB.Core.Synchronization.MetaInfo;
@@ -67,8 +66,6 @@ namespace WB.UI.Headquarters.Injections
             registry.Bind<IExceptionFilter, HandleUIExceptionAttribute>();
 
             registry.Bind<IImageProcessingService, ImageProcessingService>();
-            registry.Bind<IVideoConverter, VideoConverter>();
-            registry.Bind<IPdfConverter, PdfConverter>();
 
             registry.BindAsSingleton<IVersionCheckService, VersionCheckService>();
             registry.BindAsSingleton<IHttpStatistician, HttpStatistician>();

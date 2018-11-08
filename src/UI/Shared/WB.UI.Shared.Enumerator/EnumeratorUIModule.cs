@@ -32,7 +32,6 @@ using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
-using WB.Core.SharedKernels.Questionnaire.Services;
 using WB.UI.Shared.Enumerator.Activities;
 using WB.UI.Shared.Enumerator.CustomServices;
 using WB.UI.Shared.Enumerator.OfflineSync.Services.Implementation;
@@ -100,7 +99,6 @@ namespace WB.UI.Shared.Enumerator
             registry.BindAsSingleton<ISecureStorage, SecureStorage>();
 
             registry.Bind<IEncryptionService, AesEncryptionService>();
-            registry.Bind<IVideoConverter, VideoConverter>();
 
             SetupLoggingFacility(registry);
         }

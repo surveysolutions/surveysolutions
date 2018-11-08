@@ -8,7 +8,6 @@ using System.Security.Cryptography;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.SharedKernels.Questionnaire.Services;
 
 namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService
 {
