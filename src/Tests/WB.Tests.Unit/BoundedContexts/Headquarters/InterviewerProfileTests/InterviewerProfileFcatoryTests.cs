@@ -15,6 +15,59 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.InterviewerProfileTests
     public class InterviewerProfileFactoryTests
     {
         [Test]
+        public async Task When_getting_traffic_usage()
+        {
+
+            var trafficUsage = new List<InterviewerDailyTrafficUsage>
+            {
+                Create.Entity.InterviewerDailyTrafficUsage(1024*2, 1024*1, 2018, 9, 30),
+                Create.Entity.InterviewerDailyTrafficUsage(1024*3, 1024*1, 2018, 10, 1),
+                Create.Entity.InterviewerDailyTrafficUsage(1024*4, 1024*0, 2018, 10, 5),
+                Create.Entity.InterviewerDailyTrafficUsage(1024*5, 1024*2, 2018, 10, 6),
+                Create.Entity.InterviewerDailyTrafficUsage(1024*2, 1024*4, 2018, 11, 29),
+                Create.Entity.InterviewerDailyTrafficUsage(1024*3, 1024*7, 2018, 11, 30),
+                Create.Entity.InterviewerDailyTrafficUsage(1024*4, 1024*5, 2019, 1, 1),
+                Create.Entity.InterviewerDailyTrafficUsage(1024*6, 1024*1, 2019, 1, 2),
+                Create.Entity.InterviewerDailyTrafficUsage(1024*6, 1024*1, 2020, 1, 2)
+            };
+
+            var deviceSyncInfoRepository = Mock.Of<IDeviceSyncInfoRepository>(x => 
+                x.GetTrafficUsageForInterviewer(Id.g1) == trafficUsage &&
+                x.GetTotalTrafficUsageForInterviewer(Id.g1) == Task.FromResult(1024 * 48l));
+
+            var factory = Create.Service.InterviewerProfileFactory(deviceSyncInfoRepository: deviceSyncInfoRepository);
+            
+            var monthlyUsage = await factory.GetInterviewerTrafficUsageAsync(Id.g1);
+
+            Assert.That(monthlyUsage.TrafficUsages.Count(), Is.EqualTo(5));
+            Assert.That(monthlyUsage.TrafficUsages.ElementAt(0).Month, Is.EqualTo("Sep"));
+            Assert.That(monthlyUsage.TrafficUsages.ElementAt(1).Month, Is.EqualTo("Oct"));
+            Assert.That(monthlyUsage.TrafficUsages.ElementAt(2).Month, Is.EqualTo("Nov 18"));
+            Assert.That(monthlyUsage.TrafficUsages.ElementAt(3).Month, Is.EqualTo("Jan 19"));
+            Assert.That(monthlyUsage.TrafficUsages.ElementAt(4).Month, Is.EqualTo("Jan 20"));
+
+            foreach (var monthlyTrafficUsage in monthlyUsage.TrafficUsages)
+            {
+                Assert.That(monthlyTrafficUsage.DailyUsage.Count, Is.AtLeast(3));
+            }
+
+            CollectionAssert.AreEqual(monthlyUsage.TrafficUsages.ElementAt(0).DailyUsage.Select(x => x.Day), new [] {28, 29, 30});
+            CollectionAssert.IsOrdered(monthlyUsage.TrafficUsages.ElementAt(0).DailyUsage.Select(x => x.Day));
+
+            CollectionAssert.AreEqual(monthlyUsage.TrafficUsages.ElementAt(2).DailyUsage.Select(x => x.Day), new [] {28, 29, 30});
+            CollectionAssert.IsOrdered(monthlyUsage.TrafficUsages.ElementAt(2).DailyUsage.Select(x => x.Day));
+
+            CollectionAssert.AreEqual(monthlyUsage.TrafficUsages.ElementAt(3).DailyUsage.Select(x => x.Day), new [] {1, 2, 31});
+            CollectionAssert.IsOrdered(monthlyUsage.TrafficUsages.ElementAt(3).DailyUsage.Select(x => x.Day));
+
+            CollectionAssert.AreEqual(monthlyUsage.TrafficUsages.ElementAt(4).DailyUsage.Select(x => x.Day), new [] {2, 30, 31});
+            CollectionAssert.IsOrdered(monthlyUsage.TrafficUsages.ElementAt(4).DailyUsage.Select(x => x.Day));
+
+            Assert.That(monthlyUsage.TotalTrafficUsed, Is.EqualTo(48));
+            Assert.That(monthlyUsage.MaxDailyUsage, Is.EqualTo(10));
+            
+        }
+        [Test]
         public void When_getting_profile_report_for_2_users()
         {
             var interviewersIdsToExport = new[] { Id.g1, Id.g2 };
