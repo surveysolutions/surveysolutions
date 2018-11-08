@@ -9,6 +9,7 @@ using Ncqrs.Eventing.Storage;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Aggregates;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 
@@ -24,11 +25,11 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
         private readonly IAggregateSnapshotter snapshooter;
         private readonly IServiceLocator serviceLocator;
         private readonly IAggregateRootCacheCleaner aggregateRootCacheCleaner;
+        private readonly EventBusSettings eventBusSettings;
 
         private static int executingCommandsCount = 0;
         private static readonly object executionCountLock = new object();
         private TaskCompletionSource<object> executionAwaiter = null;
-        private readonly IEventStore eventStore;
 
         public CommandService(
             IEventSourcedAggregateRootRepository eventSourcedRepository,
@@ -37,8 +38,7 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             IServiceLocator serviceLocator,
             IPlainAggregateRootRepository plainRepository,
             IAggregateLock aggregateLock, 
-            IAggregateRootCacheCleaner aggregateRootCacheCleaner,
-            IEventStore eventStore)
+            IAggregateRootCacheCleaner aggregateRootCacheCleaner)
         {
             this.eventSourcedRepository = eventSourcedRepository;
             this.eventBus = eventBus;
@@ -47,7 +47,7 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             this.plainRepository = plainRepository;
             this.aggregateLock = aggregateLock;
             this.aggregateRootCacheCleaner = aggregateRootCacheCleaner;
-            this.eventStore = eventStore;
+            
         }
 
         public Task ExecuteAsync(ICommand command, string origin, CancellationToken cancellationToken)
@@ -218,12 +218,10 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             if (!aggregate.HasUncommittedChanges())
                 return;
 
+            //var eventStream = new UncommittedEventStream(origin, aggregate.GetUnCommittedChanges());
 
-            var eventStream = new UncommittedEventStream(origin, aggregate.GetUnCommittedChanges());
+            var commitedEvents = this.eventBus.CommitUncommittedEvents(aggregate, origin);
 
-            var commitedEvents = this.eventStore.Store(eventStream);
-
-            //var commitedEvents = this.eventBus.CommitUncommittedEvents(aggregate, origin);
             aggregate.MarkChangesAsCommitted();
 
             try

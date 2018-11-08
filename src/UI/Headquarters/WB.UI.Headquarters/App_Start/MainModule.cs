@@ -110,13 +110,17 @@ namespace WB.UI.Headquarters
 
             registry.Bind<IEventSourcedAggregateRootRepository, EventSourcedAggregateRootRepositoryWithWebCache>();
             registry.Bind<IAggregateRootCacheCleaner, EventSourcedAggregateRootRepositoryWithWebCache>();
-            
+
+
+            EventBusSettings eventBusSettings = settingsProvider.GetSection<EventBusConfigSection>("eventBus").GetSettings();
+            registry.BindToConstant(() => eventBusSettings);
+
             //todo:af
             //could be expensive
             //rethink registration
             registry.BindWithConstructorArgumentInPerLifetimeScope<ILiteEventBus, NcqrCompatibleEventDispatcher>(
                 "eventBusSettings",
-                settingsProvider.GetSection<EventBusConfigSection>("eventBus").GetSettings());
+                eventBusSettings);
 
             registry.Bind<ISecureStorage, SecureStorage>();
             registry.Bind<IEncryptionService, RsaEncryptionService>();

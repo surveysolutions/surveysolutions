@@ -25,13 +25,13 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
         }
 
         private readonly List<EventHandlerMethod> eventHandlerMethods = new List<EventHandlerMethod>();
-        //private readonly IEventStore eventStore;
+        private readonly IEventStore eventStore;
         private readonly EventBusSettings eventBusSettings;
         private readonly ILogger logger;
 
-        public InProcessEventBus(/*IEventStore eventStore,*/ EventBusSettings eventBusSettings, ILogger logger)
+        public InProcessEventBus(IEventStore eventStore, EventBusSettings eventBusSettings, ILogger logger)
         {
-            //this.eventStore = eventStore;
+            this.eventStore = eventStore;
             this.eventBusSettings = eventBusSettings;
             this.logger = logger;
         }
@@ -55,6 +55,13 @@ namespace Ncqrs.Eventing.ServiceModel.Bus
             {
                 PublishToHandlers(eventMessage, eventHandlerMethodsByEventType);
             }
+        }
+
+        public IEnumerable<CommittedEvent> CommitUncommittedEvents(IEventSourcedAggregateRoot aggregateRoot, string origin)
+        {
+            var eventStream = new UncommittedEventStream(origin, aggregateRoot.GetUnCommittedChanges());
+
+            return this.eventStore.Store(eventStream);
         }
 
         public bool CanHandleEvent(IPublishableEvent eventMessage)

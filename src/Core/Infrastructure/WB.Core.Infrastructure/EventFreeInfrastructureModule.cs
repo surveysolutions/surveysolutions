@@ -73,6 +73,11 @@ namespace WB.Core.Infrastructure
 
         public class DummyEventBus : ILiteEventBus
         {
+            public IEnumerable<CommittedEvent> CommitUncommittedEvents(IEventSourcedAggregateRoot aggregateRoot, string origin)
+            {
+                throw new NotImplementedException("This application is event free.");
+            }
+
             public void PublishCommittedEvents(IEnumerable<CommittedEvent> committedEvents)
             {
                 throw new NotImplementedException("This application is event free.");

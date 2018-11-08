@@ -131,8 +131,7 @@ namespace WB.Tests.Abc.TestFactories
                 serviceLocator ?? Mock.Of<IServiceLocator>(),
                 plainRepository ?? Mock.Of<IPlainAggregateRootRepository>(),
                 aggregateLock ?? Stub.Lock(),
-                aggregateRootCacheCleaner ?? Mock.Of<IAggregateRootCacheCleaner>(),
-                eventStore ?? Mock.Of<IEventStore>());
+                aggregateRootCacheCleaner ?? Mock.Of<IAggregateRootCacheCleaner>());
         }
 
         public IAsyncRunner AsyncRunner() => new SyncAsyncRunner();
@@ -248,7 +247,8 @@ namespace WB.Tests.Abc.TestFactories
             IServiceLocator serviceLocator = null,
             params IEventHandler[] handlers)
             => new NcqrCompatibleEventDispatcher(
-                //eventStore: () => Mock.Of<IEventStore>(),
+                eventStore: Mock.Of<IEventStore>(),
+                inMemoryEventStore: Mock.Of<IInMemoryEventStore>(),
                 serviceLocator: serviceLocator ?? Mock.Of<IServiceLocator>(),
                 eventBusSettings: eventBusSettings ?? Create.Entity.EventBusSettings(),
                 logger: logger ?? Mock.Of<ILogger>(),

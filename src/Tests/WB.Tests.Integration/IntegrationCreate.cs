@@ -307,8 +307,9 @@ namespace WB.Tests.Integration
                 snapshooter ?? Mock.Of<IAggregateSnapshotter>(), Mock.Of<IServiceLocator>(),
                 Mock.Of<IPlainAggregateRootRepository>(),
                 new AggregateLock(),
-                Mock.Of<IAggregateRootCacheCleaner>(),
-                Mock.Of<IEventStore>());
+                Mock.Of<IAggregateRootCacheCleaner>()
+                //,Mock.Of<IEventStore>()
+                );
         }
 
         public static Answer Answer(string answer, decimal value, decimal? parentValue = null)

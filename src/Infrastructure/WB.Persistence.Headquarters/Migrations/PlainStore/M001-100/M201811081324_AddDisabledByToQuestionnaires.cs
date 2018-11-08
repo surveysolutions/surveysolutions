@@ -1,9 +1,9 @@
 ﻿using FluentMigrator;
 
-namespace WB.UI.Headquarters.Migrations.PlainStore
+namespace WB.Persistence.Headquarters.Migrations.PlainStore
 {
-    [Migration(201808151843)]
-    public class M201808151843_AddDisabledByToQuestionnaires : Migration
+    [Migration(201811081324)]
+    public class M201811081324_AddDisabledByToQuestionnaires : Migration
     {
         public override void Up()
         {
