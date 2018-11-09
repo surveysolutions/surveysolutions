@@ -1,0 +1,8 @@
+<input type="checkbox" class="wb-checkbox"
+       disabled="disabled" checked="checked" ng-if="questionnaire.hideIfDisabled"
+       title="{{ 'HideIfDisabledNested' | i18next }}" />
+
+<input id="cb-hideIfDisabled" type="checkbox" class="wb-checkbox" ng-model="hideValue" ng-if="!questionnaire.hideIfDisabled" />
+<label for="cb-hideIfDisabled"><span title="{{questionnaire.hideIfDisabled ? ('HideIfDisabledNested' | i18next) : ''}}"></span>{{'HideIfDisabled'
+    | i18next}}
+    <help key="hideIfDisabled" /></label>

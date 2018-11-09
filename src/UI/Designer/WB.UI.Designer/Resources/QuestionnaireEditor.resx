@@ -1132,4 +1132,10 @@
   <data name="DeleteCommentConfirm" xml:space="preserve">
     <value>Are you sure you want to delete comment?</value>
   </data>
+  <data name="SettingsHideIfDisabled" xml:space="preserve">
+    <value>Hide element when it is disabled</value>
+  </data>
+  <data name="HideIfDisabledNested" xml:space="preserve">
+    <value>Nested from questionnaire</value>
+  </data>
 </root>

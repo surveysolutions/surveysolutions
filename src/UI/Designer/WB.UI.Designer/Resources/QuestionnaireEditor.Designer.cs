@@ -871,6 +871,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Nested from questionnaire.
+        /// </summary>
+        public static string HideIfDisabledNested {
+            get {
+                return ResourceManager.GetString("HideIfDisabledNested", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hide resolved comments.
         /// </summary>
         public static string HideResolvedComments {
@@ -1830,6 +1839,15 @@ namespace WB.UI.Designer.Resources {
         public static string SettingsCan {
             get {
                 return ResourceManager.GetString("SettingsCan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hide element when it is disabled.
+        /// </summary>
+        public static string SettingsHideIfDisabled {
+            get {
+                return ResourceManager.GetString("SettingsHideIfDisabled", resourceCulture);
             }
         }
         
