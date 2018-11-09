@@ -1170,7 +1170,7 @@ namespace WB.Tests.Unit.Designer
 
             public static UpdateQuestionnaire UpdateQuestionnaire(Guid questionnaireId, Guid responsibleId, string title = "title", string variable = "questionnaire", bool isPublic = false, bool isResponsibleAdmin = false)
             {
-                return new UpdateQuestionnaire(questionnaireId, title, variable, isPublic, responsibleId, isResponsibleAdmin);
+                return new UpdateQuestionnaire(questionnaireId, title, variable, false, isPublic, responsibleId, isResponsibleAdmin);
             }
             public static DeleteQuestionnaire DeleteQuestionnaire(Guid questionnaireId, Guid responsibleId)
             {
@@ -1324,7 +1324,7 @@ namespace WB.Tests.Unit.Designer
         }
 
         public static UpdateQuestionnaire UpdateQuestionnaire(string title, bool isPublic, Guid responsibleId, bool isResponsibleAdmin = false, string variable = "questionnaire")
-            => new UpdateQuestionnaire(Guid.NewGuid(), title, variable, isPublic, responsibleId, isResponsibleAdmin);
+            => new UpdateQuestionnaire(Guid.NewGuid(), title, variable, false, isPublic, responsibleId, isResponsibleAdmin);
 
         public static QuestionnaireListViewItem QuestionnaireListViewItem(Guid? id = null, bool isPublic = false, SharedPerson[] sharedPersons = null)
             => QuestionnaireListViewItem(id ?? Guid.Empty, isPublic, null, sharedPersons);

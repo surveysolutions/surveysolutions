@@ -976,6 +976,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         public bool ShouldBeHiddenIfDisabled(Guid entityId)
         {
+            if (this.innerDocument.HideIfDisabled)
+                return true;
+
             IComposite entity = this.GetEntityOrThrow(entityId);
 
             var question = entity as IQuestion;
