@@ -2271,6 +2271,16 @@ namespace WB.Tests.Abc.TestFactories
             return result;
         }
 
+        public InterviewGpsAnswer InterviewGpsAnswer(Guid interviewId, double latitude, double longitude)
+        {
+            return new InterviewGpsAnswer
+            {
+                InterviewId = interviewId,
+                Latitude = latitude,
+                Longitude = longitude
+            };
+        }
+
         public InterviewerDailyTrafficUsage InterviewerDailyTrafficUsage(
             int uploadedBytes = 0,
             int downloadedBytes = 0,

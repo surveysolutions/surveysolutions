@@ -66,7 +66,7 @@ namespace WB.Tests.Abc.TestFactories
         }
 
         public SQLiteConnectionWithLock InMemorySqLiteConnection =>
-            new SQLiteConnectionWithLock(new SQLiteConnectionString(":memory:", true),
+            new SQLiteConnectionWithLock(new SQLiteConnectionString(":memory:", true, null),
                 openFlags: SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex);
 
         public InMemoryCacheStorage<MultimediaFile, string> MediaStorage()
