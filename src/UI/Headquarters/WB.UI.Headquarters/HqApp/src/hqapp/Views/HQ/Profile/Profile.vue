@@ -17,7 +17,7 @@
             </div>
         </div>
     </div>
-    <div class="row">
+    <div class="row" v-if="totalTrafficUsed > 0">
         <div class="col-sm-12 clearfix">
             <h3>{{$t("Pages.InterviewerProfile_TrafficUsageHeader")}}</h3>
             <div class="graphic-wrapper traffic-usage">

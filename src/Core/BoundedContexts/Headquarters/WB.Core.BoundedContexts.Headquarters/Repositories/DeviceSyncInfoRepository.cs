@@ -141,7 +141,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
                     {
                         Traffic = statistics.TotalUploadedBytes + statistics.TotalDownloadedBytes
                     })
-                .SumAsync(x => x.Traffic);
+                .Select(x => x.Traffic)
+                .DefaultIfEmpty(0l)
+                .SumAsync();
             return totalTrafficUsed;
         }
 
