@@ -18,17 +18,17 @@ namespace WB.Services.Export.CsvExport.Exporters
 
         private readonly DoExportFileHeader[] errorsFileColumns =
         {
-            new DoExportFileHeader("variable", "Variable name for the question, where validation error occurred"),
-            new DoExportFileHeader("type", "Type of the variable where the validation error occurred"),
-            new DoExportFileHeader("interview__id", "Unique 32-character long identifier of the interview"),
-            new DoExportFileHeader("interview__key", "Identifier of the interview"),
-            new DoExportFileHeader("message_number", "Numeric index of the validation rule that has fired"),
-            new DoExportFileHeader("message", "Text of the error message"),
-            new DoExportFileHeader("roster", "Name of the roster containing the variable"),
-            new DoExportFileHeader("Id1", "Roster ID of the 1st level of nesting", true),
-            new DoExportFileHeader("Id2", "Roster ID of the 2nd level of nesting", true),
-            new DoExportFileHeader("Id3", "Roster ID of the 3rd level of nesting", true),
-            new DoExportFileHeader("Id4", "Roster ID of the 4th level of nesting", true),
+            CommonHeaderItems.InterviewKey,
+            CommonHeaderItems.InterviewId,
+            CommonHeaderItems.Roster,
+            CommonHeaderItems.Id1,
+            CommonHeaderItems.Id2,
+            CommonHeaderItems.Id3,
+            CommonHeaderItems.Id4,
+            new DoExportFileHeader("variable", "Variable name for the question, where validation error occurred", ExportValueType.String),
+            new DoExportFileHeader("type", "Type of the variable where the validation error occurred", ExportValueType.String),
+            new DoExportFileHeader("message__number", "Numeric index of the validation rule that has fired", ExportValueType.String),
+            new DoExportFileHeader("message", "Text of the error message", ExportValueType.String)
         };
 
 
@@ -67,11 +67,10 @@ namespace WB.Services.Export.CsvExport.Exporters
             int maxRosterDepthInQuestionnaire, int failedValidationConditionIndex, string interviewKey)
         {
             List<string> exportRow = new List<string>();
-            exportRow.Add(error.EntityType == EntityType.Question
-                ? questionnaire.GetQuestionVariableName(error.Identity.Id)
-                : "");
-            exportRow.Add(error.EntityType.ToString());
 
+            exportRow.Add(interviewKey);
+            exportRow.Add(error.InterviewId.FormatGuid());
+            
             if (error.Identity.RosterVector.Length > 0)
             {
                 var parentRosters = questionnaire.GetRostersFromTopToSpecifiedEntity(error.Identity.Id);
@@ -85,13 +84,15 @@ namespace WB.Services.Export.CsvExport.Exporters
                 exportRow.Add("");
             }
 
-            exportRow.Add(error.InterviewId.FormatGuid());
-            exportRow.Add(interviewKey);
-
             for (int i = 0; i < maxRosterDepthInQuestionnaire; i++)
             {
                 exportRow.Add(error.Identity.RosterVector.Length > i ? error.Identity.RosterVector[i].ToString() : "");
             }
+
+            exportRow.Add(error.EntityType == EntityType.Question
+                ? questionnaire.GetQuestionVariableName(error.Identity.Id)
+                : "");
+            exportRow.Add(error.EntityType.ToString());
 
             exportRow.Add((failedValidationConditionIndex + 1).ToString());
             exportRow.Add(questionnaire.GetValidationMessage(error.Identity.Id, failedValidationConditionIndex).RemoveHtmlTags());
@@ -122,8 +123,8 @@ namespace WB.Services.Export.CsvExport.Exporters
                 var exportFileHeader = errorsFileColumns.SingleOrDefault(c => c.Title.Equals(header, StringComparison.CurrentCultureIgnoreCase));
                 if (exportFileHeader != null)
                 {
-                    if (exportFileHeader.AddCapture)
-                        doContent.AppendCaptureLabelToVariableMatching(exportFileHeader.Title, exportFileHeader.Description);
+                    if (exportFileHeader.AddCaption)
+                        doContent.AppendCaptionLabelToVariableMatching(exportFileHeader.Title, exportFileHeader.Description);
                     else
                         doContent.AppendLabelToVariableMatching(exportFileHeader.Title, exportFileHeader.Description);
                 }
@@ -151,19 +152,20 @@ namespace WB.Services.Export.CsvExport.Exporters
 
         private static List<string> GetHeaders(bool hasAtLeastOneRoster, int maxRosterDepthInQuestionnaire)
         {
-            var headers = new List<string> {"variable", "type"};
+            var headers = new List<string> { "interview__key", "interview__id"};
+
             if (hasAtLeastOneRoster)
                 headers.Add("roster");
-
-            headers.Add("interview__id");
-            headers.Add("interview__key");
 
             for (int i = 1; i <= maxRosterDepthInQuestionnaire; i++)
             {
                 headers.Add($"id{i}");
             }
 
-            headers.Add("message_number");
+            headers.Add("variable");
+            headers.Add("type");
+
+            headers.Add("message__number");
             headers.Add("message");
             return headers;
         }

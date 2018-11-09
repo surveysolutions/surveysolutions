@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -28,18 +27,18 @@ namespace WB.Services.Export.CsvExport.Exporters
 
         public DoExportFileHeader[] DiagnosticsFileColumns => new []
         {
-            new DoExportFileHeader("interview__id", "Unique 32-character long identifier of the interview"),
-            new DoExportFileHeader("interview__key", "Short identifier of the interview"),
-            new DoExportFileHeader("interview_status", "Last status of interview"),
-            new DoExportFileHeader("responsible", "Last responsible person"),
-            new DoExportFileHeader("n_of_Interviewers", "Number of interviewers who worked on this interview"),
-            new DoExportFileHeader("n_rejections_by_supervisor", "How many times this interview was rejected by supervisors"),
-            new DoExportFileHeader("n_rejections_by_hq", "How many times this interview was rejected by HQ"),
+            CommonHeaderItems.InterviewKey,
+            CommonHeaderItems.InterviewId,
+            new DoExportFileHeader("interview__status", "Last status of interview", ExportValueType.String),
+            new DoExportFileHeader("responsible", "Last responsible person", ExportValueType.String),
+            new DoExportFileHeader("interviewers", "Number of interviewers who worked on this interview", ExportValueType.String),
+            new DoExportFileHeader("rejections__sup", "How many times this interview was rejected by supervisors", ExportValueType.String),
+            new DoExportFileHeader("rejections__hq", "How many times this interview was rejected by HQ", ExportValueType.String),
             //new DoExportFileHeader("n_questions_valid", "Number of valid questions"),
-            new DoExportFileHeader("n_entities_errors", "Number of questions and static texts with errors"),
+            new DoExportFileHeader("entities__errors", "Number of questions and static texts with errors", ExportValueType.String),
             //new DoExportFileHeader("n_questions_unanswered", "Number of unanswered questions"),
-            new DoExportFileHeader("n_questions_comments", "Number of questions with comments"),
-            new DoExportFileHeader("interview_duration", "Active time it took to complete the interview"),
+            new DoExportFileHeader("questions__comments", "Number of questions with comments", ExportValueType.String),
+            new DoExportFileHeader("interview__duration", "Active time it took to complete the interview, DD.HH:MM:SS", ExportValueType.String),
         };
 
         public DiagnosticsExporter(
@@ -78,8 +77,8 @@ namespace WB.Services.Export.CsvExport.Exporters
                 {
                     data.Add(new string[]
                     {
-                        diagInfo.InterviewId.ToString(),
                         diagInfo.InterviewKey,
+                        diagInfo.InterviewId.ToString(),
                         diagInfo.Status.ToString(),
                         diagInfo.ResponsibleName,
                         diagInfo.NumberOfInterviewers.ToString(),
@@ -90,13 +89,13 @@ namespace WB.Services.Export.CsvExport.Exporters
                         //diagInfoew.NumberUnansweredQuestions.ToString(),
                         diagInfo.NumberCommentedQuestions.ToString(),
                         diagInfo.InterviewDuration != null
-                            ? new TimeSpan(diagInfo.InterviewDuration.Value).ToString("c", CultureInfo.InvariantCulture)
+                            ? new TimeSpan(diagInfo.InterviewDuration.Value).ToString(@"dd\.hh\:mm\:ss", CultureInfo.InvariantCulture)
                             : string.Empty,
                     });
                 }
 
                 this.csvWriter.WriteData(diagnosticsFilePath, data, ExportFileSettings.DataFileSeparator.ToString());
-
+                data.Clear();
                 totalProcessed+= interviews.Length;
                 progress.Report(totalProcessed.PercentOf(interviewIdsToExport.Count));
                 cancellationToken.ThrowIfCancellationRequested();
@@ -114,8 +113,8 @@ namespace WB.Services.Export.CsvExport.Exporters
 
             foreach (var exportFileHeader in DiagnosticsFileColumns)
             {
-                if (exportFileHeader.AddCapture)
-                    doContent.AppendCaptureLabelToVariableMatching(exportFileHeader.Title, exportFileHeader.Description);
+                if (exportFileHeader.AddCaption)
+                    doContent.AppendCaptionLabelToVariableMatching(exportFileHeader.Title, exportFileHeader.Description);
                 else
                     doContent.AppendLabelToVariableMatching(exportFileHeader.Title, exportFileHeader.Description);
             }
