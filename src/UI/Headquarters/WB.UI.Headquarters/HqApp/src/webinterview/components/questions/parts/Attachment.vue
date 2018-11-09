@@ -14,7 +14,7 @@
                 <a class="btn btn-link" :href="contentUrl" target="_blank">{{$t("Common.Download")}}</a>
             </div>
             <div>
-                <audio controls preload="auto" style="width:300px" :src="contentUrl">
+                <audio controls preload="auto" :src="contentUrl">
                     {{ $t('WebInterviewUI.MultimediaNotSupported') }}
                 </audio>
             </div>
