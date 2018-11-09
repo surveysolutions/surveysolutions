@@ -709,7 +709,7 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to This date will be showed as started date for selection on a tablet.
+        ///   Looks up a localized string similar to This date will be shown as started date for selection on a tablet.
         /// </summary>
         public static string HelpDefaultDate {
             get {
