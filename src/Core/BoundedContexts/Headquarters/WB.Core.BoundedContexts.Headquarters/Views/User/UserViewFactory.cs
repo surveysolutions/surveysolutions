@@ -232,7 +232,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.User
                     EnumeratorBuild = x.Profile.DeviceAppBuildVersion,
                     TrafficUsed = repository.DeviceSyncInfos
                         .Where(d => d.InterviewerId == x.Id)
-                        .Sum(d => d.Statistics.TotalDownloadedBytes + d.Statistics.TotalUploadedBytes)
+                        .Select(d => d.Statistics.TotalDownloadedBytes + d.Statistics.TotalUploadedBytes)
+                        .DefaultIfEmpty(0l)
+                        .Sum()
                 });
             };
 
