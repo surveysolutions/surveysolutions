@@ -8,6 +8,7 @@ using Android.Support.V4.Widget;
 using Android.Support.V7.Widget;
 using Android.Views;
 using Android.Widget;
+using Com.Google.Android.Exoplayer2.UI;
 using FFImageLoading.Cross;
 using MvvmCross;
 using MvvmCross.Binding.Bindings.Target.Construction;
@@ -161,6 +162,7 @@ namespace WB.UI.Shared.Enumerator
             registry.RegisterCustomBindingFactory<EditText>("TextChanged", (editText) => new EditTextChangedBinding(editText));
             registry.RegisterCustomBindingFactory<FrameLayout>("CurrentScreen", (frameLayout) => new FrameLayoutCurrentScreenBinding(frameLayout));
             registry.RegisterCustomBindingFactory<ImageView>("BitmapWithFallback", (img) => new ImageViewBitmapWithFallbackBinding(img));
+            registry.RegisterCustomBindingFactory<PlayerView>("VideoPath", player => new VideoViewPathBinding(player));
             registry.RegisterCustomBindingFactory<View>("SizeByNoiseLevel", (view) => new AudioSizeByNoiseLevelBinding(view));
             registry.RegisterCustomBindingFactory<View>("Tag", (img) => new ViewTagBinding(img));
             registry.RegisterCustomBindingFactory<SignaturePadView>("Signature", (view) => new SignatureBinding(view));
