@@ -58,9 +58,9 @@
                 map: null,
                 markerCluster: null,
                 points: new Map(),
+                infoWindow: null,
                 lines: [],
                 interviewerId: this.$route.params.interviewerId,
-                interviewDetailsTooltip: new InfoBubble(),
                 selectedTooltips: {},
                 colorMap:{
                     red: "#e74924",
@@ -126,7 +126,7 @@
                     offset: '100%'
                 };
 
-                var infowindow = new google.maps.InfoWindow();
+                this.infoWindow = new google.maps.InfoWindow();
                 var bounds = new google.maps.LatLngBounds();
                 var markers = [];
                 points.forEach(point => {
@@ -165,7 +165,7 @@
                 
                 this.markerCluster = new MarkerClusterer(this.map, markers,
                 {
-                    imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m',
+                    imagePath: '../../Content/img/google-maps-markers/m',
                     enableRetinaIcons: true,
                     minimumClusterSize: this.minimumClusterSize,
                     averageCenter: true
@@ -265,10 +265,10 @@
                         self.selectedTooltips = data;
 
                         Vue.nextTick(function() {
-                            self.interviewDetailsTooltip.setContent(
+                            self.infoWindow.setContent(
                                 $(self.$refs.tooltip).html()
                             );
-                            self.interviewDetailsTooltip.open(self.map, marker);
+                            self.infoWindow.open(self.map, marker);
                         });
                     });
             },

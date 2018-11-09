@@ -179,7 +179,7 @@ namespace WB.UI.Shared.Enumerator.Services
                 try
                 {
                     string destDBPath;
-                    var backupConnectionString = new SQLiteConnectionString(dbPathToBackup, true);
+                    var backupConnectionString = new SQLiteConnectionString(dbPathToBackup, true, null);
                     using (var connection = new SQLiteConnectionWithLock(backupConnectionString, openFlags: SQLiteOpenFlags.ReadOnly))
                     {
                         destDBPath = $"{connection.DatabasePath}.{DateTime.UtcNow:yyyy-MM-dd_HH-mm-ss-fff}";
