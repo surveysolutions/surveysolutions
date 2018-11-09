@@ -7,7 +7,10 @@ namespace WB.Persistence.Headquarters.Migrations.PlainStore
     {
         public override void Up()
         {
-            Create.Column("disabledby").OnTable("questionnairebrowseitems").AsGuid().Nullable();
+            if (!Schema.Table("questionnairebrowseitems").Column("disabledby").Exists())
+            {
+                Create.Column("disabledby").OnTable("questionnairebrowseitems").AsGuid().Nullable();
+            }
         }
 
         public override void Down()
