@@ -4,11 +4,17 @@
     style="@style/Interview_QuestionWithDivider"
     local:MvxBind="HideKeyboardOnClick .">
 
-
   <ImageView style="@style/Interview_Attachment_Picture"
           android:scaleType="centerCrop"
           android:adjustViewBounds="true"
           local:MvxBind="BitmapWithFallback Attachment.Content; 
                          Visible Attachment.IsImage;"/>
-  
+
+    <com.google.android.exoplayer2.ui.PlayerView android:id="@+id/player_view"
+         android:layout_width="400dp"
+         android:layout_height="400dp"
+         android:paddingLeft="@dimen/dashboard_card_base_margin"
+         android:paddingTop="@dimen/dashboard_card_base_margin"
+         local:MvxBind="VideoPath Attachment.ContentPath; Visible Attachment.IsVideo;" />
+
 </LinearLayout>
