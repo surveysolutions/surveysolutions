@@ -87,7 +87,7 @@
     }
   },
   "browserslist": [
-    "defaults",
+    "last 2 versions",
     "not ie <= 9"
   ],
   "jest": {
