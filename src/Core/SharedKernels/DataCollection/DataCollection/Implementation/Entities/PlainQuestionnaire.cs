@@ -1785,9 +1785,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
         {
             IQuestion question = this.GetQuestionOrThrow(dateQuestionId);
 
-            if (question.QuestionType != QuestionType.DateTime || question.IsTimestamp)
+            if (question.QuestionType != QuestionType.DateTime)
                 throw new QuestionnaireException(
-                    $"Cannot return default date for question with id '{dateQuestionId}' because it's type does not support that parameter.");
+                    $"Cannot return default date for question with id '{dateQuestionId}' because it's type {question.QuestionType} does not support that parameter.");
 
             return question.Properties?.DefaultDate;
         }
