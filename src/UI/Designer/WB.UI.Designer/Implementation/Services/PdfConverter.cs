@@ -1,7 +1,7 @@
 ﻿using System.IO;
+using System.Linq;
 using cs_pdf_to_image;
 using WB.Core.BoundedContexts.Designer.Services;
-using WB.UI.Designer.Services;
 
 namespace WB.UI.Designer.Implementation.Services
 {
@@ -18,11 +18,8 @@ namespace WB.UI.Designer.Implementation.Services
             {
 #warning Enable 32-Bit Applications should be set to true for IIS Application Pool
                 var errors = Pdf2Image.Convert(tempPdfFile, tempPdfImage);
-                var thumbnailBytes = File.ReadAllBytes(tempPdfImage);
 
-                File.Delete(tempPdfImage);
-
-                return thumbnailBytes;
+                return errors.Any() ? null : File.ReadAllBytes(tempPdfImage);
             }
             catch
             {
@@ -31,6 +28,7 @@ namespace WB.UI.Designer.Implementation.Services
             finally
             {
                 File.Delete(tempPdfFile);
+                File.Delete(tempPdfImage);
             }
         }
     }
