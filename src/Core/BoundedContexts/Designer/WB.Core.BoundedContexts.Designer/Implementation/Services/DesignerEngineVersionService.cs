@@ -135,8 +135,7 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services
                         Description = "New set of functions and geography question in conditions"
                     }
                 }
-            }
-            ,
+            },
             new QuestionnaireContentVersion
             {
                 Version = ApiVersion.MaxQuestionnaireVersion, // old versions for history and could be removed later
