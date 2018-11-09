@@ -5,7 +5,6 @@ namespace WB.UI.Designer.Implementation.Services
 {
     public class VideoConverter : IVideoConverter
     {
-
         public byte[] CreateThumbnail(byte[] videoBytes)
         {
             string tempVideoFile = Path.Combine(Path.GetTempPath(), Path.GetRandomFileName());
@@ -14,12 +13,19 @@ namespace WB.UI.Designer.Implementation.Services
 
             using (var stream = new MemoryStream())
             {
+
                 var ffMpeg = new NReco.VideoConverter.FFMpegConverter();
-                ffMpeg.GetVideoThumbnail(tempVideoFile, stream);
 
-                File.Delete(tempVideoFile);
+                try
+                {
+                    ffMpeg.GetVideoThumbnail(tempVideoFile, stream);
 
-                return stream.ToArray();
+                    return stream.ToArray();
+                }
+                finally
+                {
+                    File.Delete(tempVideoFile);
+                }
             }
         }
     }
