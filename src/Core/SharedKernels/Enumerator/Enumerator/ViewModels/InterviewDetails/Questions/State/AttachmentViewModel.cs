@@ -1,11 +1,11 @@
 ﻿using System;
+using System.IO;
 using MvvmCross.ViewModels;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Views;
-
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State
 {
@@ -29,7 +29,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.attachmentContentStorage = attachmentContentStorage;
         }
 
-
         public void Init(string interviewId, Identity entityIdentity)
         {
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
@@ -49,11 +48,38 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     this.Content = this.attachmentContentStorage.GetContent(attachment.ContentId);
                     this.RaisePropertyChanged(() => Content);
                 }
+
+                if (IsVideo)
+                {
+                    var backingFile = Path.Combine(
+                        Environment.GetFolderPath(Environment.SpecialFolder.Personal),
+                        interview.QuestionnaireIdentity.Id,
+                        attachment.ContentId);
+
+                    if (!File.Exists(backingFile))
+                    {
+                        var dirName = Path.GetDirectoryName(backingFile);
+                        if (!Directory.Exists(dirName))
+                        {
+                            Directory.CreateDirectory(dirName);
+                        }
+                        
+                        File.WriteAllBytes(backingFile, this.attachmentContentStorage.GetContent(attachment.ContentId));
+                    }
+
+                    this.ContentPath = backingFile;
+                    this.RaisePropertyChanged(() => ContentPath);
+                }
             }
         }
 
-        public bool IsImage => this.attachmentContentMetadata != null 
-            && this.attachmentContentMetadata.ContentType.StartsWith(this.imageMimeType);
+        public string ContentPath { get; set; }
+
+        public bool IsImage => this.attachmentContentMetadata != null
+            && this.attachmentContentMetadata.ContentType.StartsWith(this.imageMimeType, StringComparison.OrdinalIgnoreCase);
+
+        public bool IsVideo => this.attachmentContentMetadata != null
+            && this.attachmentContentMetadata.ContentType.StartsWith("video/", StringComparison.OrdinalIgnoreCase);
 
         public byte[] Content { get; private set; }
     }
