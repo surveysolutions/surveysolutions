@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.Caching;
+using Supercluster;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.PlainStorage;
@@ -155,18 +156,17 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
         });
 
         public InterviewGpsAnswer[] GetGpsAnswers(QuestionnaireIdentity questionnaireIdentity,
-            Guid gpsQuestionId, int maxAnswersCount, double northEastCornerLatitude,
-            double southWestCornerLatitude, double northEastCornerLongtitude, double southWestCornerLongtitude,
-            Guid? supervisorId)
+            Guid gpsQuestionId, int? maxAnswersCount, GeoBounds bounds, Guid? supervisorId)
         {
             var result = sessionProvider.GetSession().Connection.Query<InterviewGpsAnswer>(
                 $@"with interviews as(
-                    select teamleadid, interviewid, latitude, longitude
+                    select teamleadid, interviewid, rostervector, latitude, longitude
                     from
                         (
                             select
                                 s.teamleadid,
                                 s.interviewid,
+                                i.rostervector,
                                 (i.asgps ->> 'Latitude')::float8 as latitude,
                                 (i.asgps ->> 'Longitude')::float8 as longitude
                             from
@@ -180,24 +180,21 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Interview
                                 and i.entityid = @QuestionId
                                 and i.isenabled = true
                         ) as q
-                    where latitude > @SouthWestCornerLatitude and latitude < @NorthEastCornerLatitude
-                        and longitude > @SouthWestCornerLongtitude {(northEastCornerLongtitude >= southWestCornerLongtitude ? "AND" : "OR")} 
-                            longitude < @NorthEastCornerLongtitude
+                    where latitude > @south and latitude < @north
+                        and longitude > @west {(bounds.East >= bounds.West ? "AND" : "OR")} 
+                            longitude < @east
                 ) 
-                select  interviewid, latitude, longitude
-                from interviews
-                where (@supervisorId is null or teamleadid = @supervisorId)
-                limit @MaxCount;",
+                select interviewid, latitude, longitude
+                from interviews" 
+                + (supervisorId.HasValue ? " where teamleadid = @supervisorId" : "")
+                + (maxAnswersCount.HasValue ? " limit @MaxCount" : ""),
                 new
                 {
                     supervisorId,
                     Questionnaire = questionnaireIdentity.ToString(),
                     QuestionId = gpsQuestionId,
                     MaxCount = maxAnswersCount,
-                    SouthWestCornerLatitude = southWestCornerLatitude,
-                    NorthEastCornerLatitude = northEastCornerLatitude,
-                    SouthWestCornerLongtitude = southWestCornerLongtitude,
-                    NorthEastCornerLongtitude = northEastCornerLongtitude
+                    bounds.South, bounds.North, bounds.East, bounds.West
                 })
             .ToArray();
             return result;
