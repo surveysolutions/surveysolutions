@@ -54,7 +54,7 @@ namespace WB.Core.SharedKernels.Enumerator.Views
 
         private SQLiteConnectionWithLock CreateConnection(string connectionString)
         {
-            var sqConnection = new SQLiteConnectionString(connectionString, true);
+            var sqConnection = new SQLiteConnectionString(connectionString, true, null);
             var connection = new SQLiteConnectionWithLock(sqConnection,
                 openFlags: SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex);
 
