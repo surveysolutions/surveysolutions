@@ -4,16 +4,10 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Security.Authentication.ExtendedProtection;
 using System.Web;
-using System.Web.Mvc;
-using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Shared.Web.Extensions
 {
-    /// <summary>
-    /// Taken from https://github.com/ErikNoren/WebApi.ProgressiveDownloads/blob/master/VikingErik.Net.Http.ProgressiveDownload/ProgressiveDownload.cs
-    /// </summary>
     public class ProgressiveDownload
     {
         private readonly HttpRequestMessage request;
@@ -22,8 +16,6 @@ namespace WB.UI.Shared.Web.Extensions
         {
             this.request = request;
         }
-
-        public bool IsRangeRequest => this.request.Headers.Range != null;
 
         public HttpResponseMessage HeaderInfoMessage(long contentLength, string mediaType)
         {
