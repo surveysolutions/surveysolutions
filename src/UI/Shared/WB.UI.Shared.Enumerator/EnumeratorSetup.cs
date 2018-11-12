@@ -7,6 +7,7 @@ using Android.Runtime;
 using Android.Support.V4.Widget;
 using Android.Support.V7.Widget;
 using Android.Views;
+using Android.Webkit;
 using Android.Widget;
 using Com.Google.Android.Exoplayer2.UI;
 using FFImageLoading.Cross;
@@ -20,6 +21,7 @@ using MvvmCross.Logging;
 using MvvmCross.Platforms.Android.Presenters;
 using MvvmCross.ViewModels;
 using MvvmCross.Views;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.SharedKernels.Enumerator;
 using WB.Core.SharedKernels.Enumerator.ViewModels;
@@ -88,11 +90,12 @@ namespace WB.UI.Shared.Enumerator
                 {typeof (EnumerationStageViewModel), typeof (InterviewEntitiesListFragment)},
                 {typeof(CoverInterviewViewModel), typeof (CoverInterviewFragment)},
                 {typeof(OverviewViewModel), typeof (OverviewFragment)},
+                {typeof(PdfViewModel), typeof (PdfViewFragment)},
                 {typeof(OverviewNodeDetailsViewModel), typeof(OverviewNodeDetailsFragment)},
                 {typeof(SelectResponsibleForAssignmentViewModel), typeof(SelectResponsibleForAssignmentFragment)},
             };
 
-            var container = Mvx.Resolve<IMvxViewsContainer>();
+            var container = ServiceLocator.Current.GetInstance<IMvxViewsContainer>();
             container.AddAll(viewModelViewLookup);
         }
 
@@ -166,6 +169,7 @@ namespace WB.UI.Shared.Enumerator
             registry.RegisterCustomBindingFactory<View>("SizeByNoiseLevel", (view) => new AudioSizeByNoiseLevelBinding(view));
             registry.RegisterCustomBindingFactory<View>("Tag", (img) => new ViewTagBinding(img));
             registry.RegisterCustomBindingFactory<SignaturePadView>("Signature", (view) => new SignatureBinding(view));
+            registry.RegisterCustomBindingFactory<WebView>("PdfFilePath", (view) => new WebViewPdfFilePathBinding(view));
             registry.RegisterCustomBindingFactory<SignaturePadView>("SignaturePadSettings", (view) => new SignaturePadSettingsBinding(view));
             registry.RegisterCustomBindingFactory<ImageButton>("Playback", (view) => new ImageButtonPlaybackToggleBinding(view));
             registry.RegisterCustomBindingFactory<RecyclerView>("ScrollToPosition", view => new RecyclerViewScrollToPositionBinding(view));

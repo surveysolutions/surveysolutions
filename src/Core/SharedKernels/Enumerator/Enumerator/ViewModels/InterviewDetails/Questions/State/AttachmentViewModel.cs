@@ -1,4 +1,5 @@
 ﻿using System;
+using MvvmCross.Commands;
 using MvvmCross.ViewModels;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -15,9 +16,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IAttachmentContentStorage attachmentContentStorage;
         
         private AttachmentContentMetadata attachmentContentMetadata;
-
+        
         private const string ImageMimeType = "image";
         private const string VideMimeType = "video";
+        private const string PdfMimeType = "application/pdf";
 
         public AttachmentViewModel(
             IQuestionnaireStorage questionnaireRepository,
@@ -66,6 +68,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public bool IsVideo => this.attachmentContentMetadata != null
             && this.attachmentContentMetadata.ContentType.StartsWith(VideMimeType, StringComparison.OrdinalIgnoreCase);
 
+        public bool IsPdf => this.attachmentContentMetadata != null 
+            && this.attachmentContentMetadata.ContentType.StartsWith(PdfMimeType, StringComparison.OrdinalIgnoreCase);
+
+        
         public byte[] Content { get; private set; }
     }
 }

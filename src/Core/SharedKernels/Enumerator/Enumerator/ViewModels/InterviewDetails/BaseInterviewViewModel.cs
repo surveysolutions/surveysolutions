@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Main.Core.Entities.SubEntities;
+using MvvmCross;
 using MvvmCross.Base;
 using MvvmCross.Commands;
+using MvvmCross.IoC;
 using MvvmCross.ViewModels;
 using Newtonsoft.Json;
 using WB.Core.GenericSubdomains.Portable;
@@ -192,7 +194,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     IEnumerable<Identity> questionsToListen = interview.GetChildQuestions(eventArgs.TargetGroup);
                     this.answerNotifier.Init(this.InterviewId, questionsToListen.ToArray());
                     this.UpdateGroupStatus(eventArgs.TargetGroup);
-                    break;
+                break;
             }
 
             this.targetNavigationIdentity = new NavigationIdentity
@@ -273,6 +275,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     var overviewViewModel = this.interviewViewModelFactory.GetNew<OverviewViewModel>();
                     overviewViewModel.Configure(this.InterviewId);
                     return overviewViewModel;
+                case ScreenType.PdfView:
+                    var pdfViewModel = MvxIoCProvider.Instance.IoCConstruct<PdfViewModel>(); 
+                    pdfViewModel.Configure(this.InterviewId, eventArgs.TargetGroup);
+                    return pdfViewModel;
                 default:
                     return null;
             }

@@ -1,4 +1,5 @@
 ﻿using System;
+using MvvmCross.Commands;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
@@ -8,6 +9,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         IInterviewEntityViewModel,
         IDisposable
     {
+        private NavigationState navigationState;
         public DynamicTextViewModel Text { get; }
         public AttachmentViewModel Attachment { get; }
         public StaticTextStateViewModel QuestionState { get; }
@@ -29,12 +31,16 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
 
+            this.navigationState = navigationState;
             this.Identity = entityIdentity;
 
             this.Text.Init(interviewId, entityIdentity);
             this.Attachment.Init(interviewId, entityIdentity);
             this.QuestionState.Init(interviewId, entityIdentity);
         }
+
+        public IMvxAsyncCommand ShowPdf =>
+            new MvxAsyncCommand(() => this.navigationState.NavigateTo(NavigationIdentity.CreateForPdfView(this.Identity)));
 
         public void Dispose()
         {

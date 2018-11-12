@@ -10,21 +10,19 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
 {
     public class OverviewStaticTextViewModel : OverviewStaticText
     {
-        private readonly IUserInteractionService userInteractionService;
-
         public OverviewStaticTextViewModel(InterviewTreeStaticText treeNode,
             AttachmentViewModel attachmentViewModel,
-            IStatefulInterview interview,
-            IUserInteractionService userInteractionService) : base(treeNode, interview)
+            IStatefulInterview interview, IUserInteractionService userInteractionService) : base(treeNode, interview)
         {
             this.userInteractionService = userInteractionService;
             this.Attachment = attachmentViewModel;
             this.Attachment.Init(treeNode.Tree.InterviewId, treeNode.Identity);
         }
 
+        private readonly IUserInteractionService userInteractionService;
+
         public AttachmentViewModel Attachment { get; set; }
 
-        
         public IMvxCommand ShowErrors => new MvxCommand(() =>
         {
             foreach (var error in this.ErrorMessages)

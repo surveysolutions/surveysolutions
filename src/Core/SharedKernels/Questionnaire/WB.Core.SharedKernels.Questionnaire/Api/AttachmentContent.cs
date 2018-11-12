@@ -16,6 +16,16 @@ namespace WB.Core.SharedKernels.Questionnaire.Api
         {
             return this.ContentType.StartsWith("image", StringComparison.OrdinalIgnoreCase);
         }
+
+        public bool IsVideo()
+        {
+            return this.ContentType.StartsWith("video", StringComparison.OrdinalIgnoreCase);
+        }
+
+        public bool IsPdf()
+        {
+            return this.ContentType.StartsWith("application/pdf", StringComparison.OrdinalIgnoreCase);
+        }
     }
 
     public class QuestionnaireLiteInfo
