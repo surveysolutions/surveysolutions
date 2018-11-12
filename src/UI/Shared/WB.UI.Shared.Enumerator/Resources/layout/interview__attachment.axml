@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:local="http://schemas.android.com/apk/res-auto"
     style="@style/Interview_QuestionWithDivider"
+    android:layout_width="match_parent"
     local:MvxBind="HideKeyboardOnClick .">
 
   <ImageView style="@style/Interview_Attachment_Picture"
@@ -10,11 +11,9 @@
           local:MvxBind="BitmapWithFallback Attachment.Content; 
                          Visible Attachment.IsImage;"/>
 
-    <com.google.android.exoplayer2.ui.PlayerView android:id="@+id/player_view"
-         android:layout_width="400dp"
-         android:layout_height="400dp"
-         android:paddingLeft="@dimen/dashboard_card_base_margin"
-         android:paddingTop="@dimen/dashboard_card_base_margin"
-         local:MvxBind="VideoPath Attachment.ContentPath; Visible Attachment.IsVideo;" />
+  <com.google.android.exoplayer2.ui.PlayerView android:id="@+id/player_view"
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       local:MvxBind="VideoPath Attachment.ContentPath; Visible Attachment.IsVideo;" />
 
 </LinearLayout>

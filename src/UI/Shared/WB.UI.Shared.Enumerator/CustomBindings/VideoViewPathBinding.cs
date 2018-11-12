@@ -21,27 +21,26 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
         {
             if (string.IsNullOrWhiteSpace(value)) return;
 
-            var traskSelector = new DefaultTrackSelector();
-
-            var exoPlayer = ExoPlayerFactory.NewSimpleInstance(view.Context, traskSelector);
-            
-            string playerInfo = Util.GetUserAgent(view.Context, "ExoPlayerInfo");
+            var exoPlayer = ExoPlayerFactory.NewSimpleInstance(view.Context, new DefaultTrackSelector());
 
             var dataSourceFactory = new DefaultDataSourceFactory(
-                view.Context, playerInfo
+                view.Context, Util.GetUserAgent(view.Context, "ExoPlayerInfo")
             );
 
-            var file = new File(value);
-            var uri = Uri.FromFile(file);
-            var mediaSource = new ExtractorMediaSource.Factory(dataSourceFactory)
-                .SetExtractorsFactory(new DefaultExtractorsFactory())
-                .CreateMediaSource(uri);
+            var uri = Uri.FromFile(new File(value));
 
-            exoPlayer.Prepare(mediaSource);
-            //_player.PlayWhenReady = true;
+            exoPlayer.Prepare(new ExtractorMediaSource.Factory(dataSourceFactory)
+                .SetExtractorsFactory(new DefaultExtractorsFactory())
+                .CreateMediaSource(uri));
+            
+            exoPlayer.RenderedFirstFrame += (sender, args) =>
+            {
+                var ratio = (float) exoPlayer.VideoFormat.Height / (float)exoPlayer.VideoFormat.Width / (float)exoPlayer.VideoFormat.PixelWidthHeightRatio;
+                view.SetMinimumHeight((int)(view.Width * ratio));
+                view.HideController();
+            };
 
             exoPlayer.SeekTo(1);
-
             view.Player = exoPlayer;
         }
     }
