@@ -9,7 +9,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         Complete = 1000,
         Cover = 5000,
         Identifying = 11000,
-        Overview  = 100500 
+        Overview  = 100500,
+        PdfView = 100600
     }
 
     public class NavigationIdentity : EventArgs
@@ -45,6 +46,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         public static NavigationIdentity CreateForGroup(Identity groupIdentity, Identity anchoredElementIdentity = null)
         {
             return new NavigationIdentity(ScreenType.Group, targetGroup: groupIdentity, anchoredElementIdentity: anchoredElementIdentity);
+        }
+
+        public static NavigationIdentity CreateForPdfView(Identity targetStaticText)
+        {
+            return new NavigationIdentity(ScreenType.PdfView, targetStaticText, null);
         }
 
         private NavigationIdentity(ScreenType targetScreen, Identity targetGroup, Identity anchoredElementIdentity = null)

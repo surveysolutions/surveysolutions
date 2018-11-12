@@ -103,8 +103,14 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.RaisePropertyChanged(() => this.SideBarGroupState);
         }
 
-        private void OnScreenChanged(ScreenChangedEventArgs eventArgs) => this.UpdateSelection(eventArgs.TargetGroup);
-        
+        private void OnScreenChanged(ScreenChangedEventArgs eventArgs)
+        {
+            if (eventArgs.TargetStage != ScreenType.PdfView)
+            {
+                this.UpdateSelection(eventArgs.TargetGroup);
+            }
+        }
+
         public string Tag { get; private set; }
 
         public GroupStateViewModel SideBarGroupState { get; private set; }

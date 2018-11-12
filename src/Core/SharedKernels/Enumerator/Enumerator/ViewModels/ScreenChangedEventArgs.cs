@@ -5,7 +5,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
 {
     public class ScreenChangedEventArgs : EventArgs
     {
-        public ScreenChangedEventArgs(ScreenType targetStage, Identity targetGroup, Identity anchoredElementIdentity, ScreenType previousStage, Identity previousGroup)
+        public ScreenChangedEventArgs(ScreenType targetStage,
+            Identity targetGroup, 
+            Identity anchoredElementIdentity, 
+            ScreenType previousStage, 
+            Identity previousGroup)
         {
             this.TargetStage = targetStage;
             this.TargetGroup = targetGroup;
