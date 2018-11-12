@@ -1,5 +1,4 @@
 ﻿using System;
-using System.IO;
 using MvvmCross.ViewModels;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -14,10 +13,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
         private readonly IAttachmentContentStorage attachmentContentStorage;
-
+        
         private AttachmentContentMetadata attachmentContentMetadata;
 
-        private readonly string imageMimeType = "image";
+        private const string ImageMimeType = "image";
+        private const string VideMimeType = "video";
 
         public AttachmentViewModel(
             IQuestionnaireStorage questionnaireRepository,
@@ -51,22 +51,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
 
                 if (IsVideo)
                 {
-                    var backingFile = Path.Combine(
-                        Environment.GetFolderPath(Environment.SpecialFolder.Personal),
-                        interview.QuestionnaireIdentity.Id,
-                        attachment.ContentId);
-
-                    if (!File.Exists(backingFile))
-                    {
-                        var dirName = Path.GetDirectoryName(backingFile);
-                        if (!Directory.Exists(dirName))
-                        {
-                            Directory.CreateDirectory(dirName);
-                        }
-                        
-                        File.WriteAllBytes(backingFile, this.attachmentContentStorage.GetContent(attachment.ContentId));
-                    }
-
+                    var backingFile = this.attachmentContentStorage.GetFileCacheLocation(attachment.ContentId);
                     this.ContentPath = backingFile;
                     this.RaisePropertyChanged(() => ContentPath);
                 }
@@ -76,10 +61,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public string ContentPath { get; set; }
 
         public bool IsImage => this.attachmentContentMetadata != null
-            && this.attachmentContentMetadata.ContentType.StartsWith(this.imageMimeType, StringComparison.OrdinalIgnoreCase);
+            && this.attachmentContentMetadata.ContentType.StartsWith(ImageMimeType, StringComparison.OrdinalIgnoreCase);
 
         public bool IsVideo => this.attachmentContentMetadata != null
-            && this.attachmentContentMetadata.ContentType.StartsWith("video/", StringComparison.OrdinalIgnoreCase);
+            && this.attachmentContentMetadata.ContentType.StartsWith(VideMimeType, StringComparison.OrdinalIgnoreCase);
 
         public byte[] Content { get; private set; }
     }

@@ -1,4 +1,5 @@
-﻿using WB.Core.SharedKernels.Enumerator.Views;
+﻿using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Questionnaire.Api;
 
 namespace WB.Core.SharedKernels.Enumerator.Repositories
@@ -9,5 +10,7 @@ namespace WB.Core.SharedKernels.Enumerator.Repositories
         AttachmentContentMetadata GetMetadata(string attachmentContentId);
         bool Exists(string attachmentContentId);
         byte[] GetContent(string attachmentContentId);
+        string GetFileCacheLocation(string attachmentContentId);
+        void Remove(string attachmentContentId);
     }
 }
