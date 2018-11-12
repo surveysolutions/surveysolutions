@@ -177,7 +177,7 @@ namespace WB.UI.Headquarters.Controllers
                 return response;
             }
 
-            var invalidMaps = new List<string>();
+            var invalidMaps = new List<Tuple<string, Exception>>();
             try
             {
                 var extractedFiles = archiveUtils.GetFilesFromArchive(file.FileBytes);
@@ -191,12 +191,12 @@ namespace WB.UI.Headquarters.Controllers
                     catch (Exception e)
                     {
                         logger.Error($"Error on maps import map {map.Name}", e);
-                        invalidMaps.Add(map.Name);
+                        invalidMaps.Add(new Tuple<string, Exception>(map.Name, e));
                     }
                 }
 
                 if (invalidMaps.Count > 0)
-                    response.Errors.AddRange(invalidMaps.Select(x => String.Format(Maps.MapLoadingInvalidFile, x)).ToList());
+                    response.Errors.AddRange(invalidMaps.Select(x => String.Format(Maps.MapLoadingInvalidFile, x.Item1, x.Item2.Message)).ToList());
                 else
                     response.IsSuccess = true;
             }
