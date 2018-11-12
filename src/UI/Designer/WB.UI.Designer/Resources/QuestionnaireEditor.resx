@@ -1135,4 +1135,10 @@
   <data name="NotSupportedAttachment" xml:space="preserve">
     <value>Selected file is not supported as attachment</value>
   </data>
+  <data name="SettingsHideIfDisabled" xml:space="preserve">
+    <value>Hide element when it is disabled</value>
+  </data>
+  <data name="HideIfDisabledNested" xml:space="preserve">
+    <value>Nested from questionnaire</value>
+  </data>
 </root>
