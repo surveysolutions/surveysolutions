@@ -2252,5 +2252,15 @@ namespace WB.Tests.Abc.TestFactories
                 questionType: QuestionType.SingleOption);
             return result;
         }
+
+        public InterviewGpsAnswer InterviewGpsAnswer(Guid interviewId, double latitude, double longitude)
+        {
+            return new InterviewGpsAnswer
+            {
+                InterviewId = interviewId,
+                Latitude = latitude,
+                Longitude = longitude
+            };
+        }
     }
 }

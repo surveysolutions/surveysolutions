@@ -5,6 +5,7 @@
         $scope.questionnaire = questionnaire;
         $scope.questionnaire.editedTitle = questionnaire.title;
         $scope.questionnaire.editedVariable = questionnaire.variable;
+        $scope.questionnaire.editedHideIfDisabled = questionnaire.hideIfDisabled;
 
         $scope.shareTypeOptions = [{ text: $i18next.t('SettingsShareEdit'), name: "Edit" }, { name: "View", text: $i18next.t('SettingsShareView') }];
         
@@ -55,10 +56,15 @@
         };
 
         $scope.updateTitle = function () {
-            var updateRequest = shareService.udpateQuestionnaire($scope.questionnaire.questionnaireId, $scope.questionnaire.editedTitle, $scope.questionnaire.editedVariable, $scope.questionnaire.isPublic);
+            var updateRequest = shareService.udpateQuestionnaire($scope.questionnaire.questionnaireId, 
+                $scope.questionnaire.editedTitle,
+                $scope.questionnaire.editedVariable,
+                $scope.questionnaire.editedHideIfDisabled,
+                $scope.questionnaire.isPublic);
             updateRequest.then(function () {
                 $scope.questionnaire.title = $scope.questionnaire.editedTitle;
                 $scope.questionnaire.variable = $scope.questionnaire.editedVariable;
+                $scope.questionnaire.hideIfDisabled = $scope.questionnaire.editedHideIfDisabled;
                 $uibModalInstance.close();
                 $scope.questionnaireForm.$setPristine();
             });
