@@ -41,7 +41,7 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
             });
 
             // storing video files in filesystem for video playback
-            if (attachmentContent.ContentType.Split('/').FirstOrDefault()?.ToUpper() == "VIDEO")
+            if (attachmentContent.IsVideo() || attachmentContent.IsPdf())
             {
                 var fileCache = GetFileCacheLocation(attachmentContent.Id);
 

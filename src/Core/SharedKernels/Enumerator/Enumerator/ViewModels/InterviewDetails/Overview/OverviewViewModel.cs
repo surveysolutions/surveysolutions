@@ -80,7 +80,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
             var staticText = interview.GetStaticText(interviewerEntityIdentity);
             if (staticText != null)
             {
-                return new OverviewStaticTextViewModel(staticText, Mvx.Resolve<AttachmentViewModel>(), interview, userInteractionService)
+                return new OverviewStaticTextViewModel(staticText, Mvx.IoCProvider.Create<AttachmentViewModel>(), interview, userInteractionService)
                 {
                     Id = staticText.Identity.ToString(),
                     Title = staticText.Title.Text

@@ -16,4 +16,9 @@
        android:layout_height="wrap_content"
        local:MvxBind="VideoPath Attachment.ContentPath; Visible Attachment.IsVideo;" />
 
+    <TextView style="@style/Interview_Question_Show_Pdf"
+      local:MvxBind="Text Localization('Interview_ShowPdf'); 
+                   Click ShowPdf; 
+                   Visible Attachment.IsPdf;
+                   Tag Format('Show_Pdf_{0}', Identity)"/>
 </LinearLayout>
