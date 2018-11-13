@@ -10,9 +10,9 @@ using Java.IO;
 
 namespace WB.UI.Shared.Enumerator.CustomBindings
 {
-    public class VideoViewPathBinding : BaseBinding<PlayerView, string>
+    public class ExoPlayerBinding : BaseBinding<PlayerView, string>
     {
-        public VideoViewPathBinding(PlayerView view) : base(view)
+        public ExoPlayerBinding(PlayerView view) : base(view)
         {
           
         }
