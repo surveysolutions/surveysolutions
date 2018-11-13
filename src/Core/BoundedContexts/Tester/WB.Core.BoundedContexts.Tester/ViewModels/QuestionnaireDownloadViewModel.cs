@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using MvvmCross.ViewModels;
-using WB.Core.BoundedContexts.Tester.Implementation.Services;
 using WB.Core.BoundedContexts.Tester.Properties;
 using WB.Core.BoundedContexts.Tester.Services;
 using WB.Core.GenericSubdomains.Portable;
@@ -13,8 +13,6 @@ using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
-using WB.Core.SharedKernels.DataCollection.Commands.Interview.Base;
-using WB.Core.SharedKernels.DataCollection.DataTransferObjects.Synchronization;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -251,6 +249,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 return;
 
             var attachments = questionnaire.Document.Attachments;
+            this.CleanupAttachments();
 
             foreach (var attachment in attachments)
             {
@@ -269,6 +268,14 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                     this.attachmentContentStorage.Store(attachmentContent);
                 }
             }
+        }
+
+        private void CleanupAttachments()
+        {
+            var attachmentsPath = this.attachmentContentStorage.GetFileCacheLocation(string.Empty);
+
+            if(Directory.Exists(attachmentsPath))
+                Directory.Delete(attachmentsPath, true);
         }
     }
 }
