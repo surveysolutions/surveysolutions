@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Threading.Tasks;
 using WB.Core.Infrastructure.PlainStorage;
@@ -98,7 +99,40 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
 
         public async Task<ClassificationsSearchResult> SearchAsync(string query, Guid? groupId)
         {
-            return await Task.FromResult(new ClassificationsSearchResult());
+            var dbEntities = classificationsStorage.Query(_ =>
+            {
+                var searchQuery = ApplySearchFilter(_, query, groupId);
+
+                var ids = searchQuery.Select(x => x.Type == ClassificationEntityType.Classification ? x.Id : x.Parent)
+                    .GroupBy(x => x)
+                    .Select(x => x.Key)
+                    .Take(20)
+                    .ToList();
+
+                var items = _.Where(x => ids.Contains(x.Id));
+
+                return items.ToList();
+            });
+
+            var total = classificationsStorage.Query(_ => ApplySearchFilter(_, query, groupId).Count());
+
+            return await Task.FromResult(new ClassificationsSearchResult
+            {
+                Classifications = dbEntities,  
+                Total = total
+            });
+        }
+
+        private IQueryable<ClassificationEntity> ApplySearchFilter(IQueryable<ClassificationEntity> entities, 
+            string query, Guid? groupId)
+        {
+            var lowercaseQuery = query.ToLower();
+            var searchQuery = entities.Where(x => x.Title.Contains(lowercaseQuery));
+            if (groupId.HasValue)
+            {
+                searchQuery = searchQuery.Where(x => x.Parent == groupId);
+            }
+            return searchQuery;
         }
 
         public void Store(ClassificationEntity[] classifications)
@@ -118,5 +152,7 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
 
     public class ClassificationsSearchResult
     {
+        public List<ClassificationEntity> Classifications { get; set; }
+        public int Total { get; set; }
     }
 }

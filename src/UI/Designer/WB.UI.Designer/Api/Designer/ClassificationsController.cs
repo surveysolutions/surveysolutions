@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Web.Http;
 using Newtonsoft.Json;
 using WB.Core.BoundedContexts.Designer.Classifications;
+using WB.UI.Designer.Filters;
 using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Designer.Api.Designer
@@ -14,6 +15,7 @@ namespace WB.UI.Designer.Api.Designer
     [ApiNoCache]
     [Authorize]
     [RoutePrefix("api")]
+    [CamelCase]
     public class ClassificationsController : ApiController
     {
         private readonly IClassificationsStorage classificationsStorage;
@@ -69,7 +71,6 @@ namespace WB.UI.Designer.Api.Designer
         [Route("classifications")]
         public async Task<IEnumerable<Classification>> GetClassifications()
         {
-            
             return await classificationsStorage.GetClassifications();
         }
 
@@ -82,11 +83,15 @@ namespace WB.UI.Designer.Api.Designer
 
         [HttpGet]
         [Route("classifications/search")]
-        public async Task<ClassificationsSearchResult> Search([FromUri] string query, [FromUri] Guid? groupId)
+        public async Task<ClassificationsSearchResult> Search([FromUri] SearchQueryModel model)
         {
-            return await classificationsStorage.SearchAsync(query, groupId);
+            return await classificationsStorage.SearchAsync(model.Query, model.GroupId);
         }
+    }
 
-        
+    public class SearchQueryModel
+    {
+        public string Query { get; set; }
+        public Guid? GroupId{ get; set; }
     }
 }

@@ -18,6 +18,10 @@ namespace WB.UI.Designer.Migrations.PlainStore
                     .WithColumn("type").AsInt16()
                     .WithColumn("value").AsInt32().Nullable()
                     .WithColumn("index").AsInt32().Nullable();
+
+                this.Create.Index($"parent_{tableName}_idx")
+                    .OnTable(tableName)
+                    .OnColumn("parent");
             }
         }
 
