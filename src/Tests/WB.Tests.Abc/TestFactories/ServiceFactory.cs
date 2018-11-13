@@ -42,6 +42,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.InterviewHistory;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
+using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.BoundedContexts.Interviewer.Services;
@@ -927,6 +928,18 @@ namespace WB.Tests.Abc.TestFactories
             return new InterviewFactory(
                 summaryRepository ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(),
                 sessionProvider ?? Mock.Of<IUnitOfWork>());
+        }
+
+        public MapReport MapReport(IInterviewFactory interviewFactory = null,
+            IQuestionnaireStorage questionnaireStorage = null,
+            IPlainStorageAccessor<QuestionnaireBrowseItem> questionnairesAccessor = null,
+            IAuthorizedUser authorizedUser = null)
+        {
+            return new MapReport(
+                interviewFactory ?? Mock.Of<IInterviewFactory>(),
+                questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
+                questionnairesAccessor ?? Mock.Of<IPlainStorageAccessor<QuestionnaireBrowseItem>>(),
+                authorizedUser ?? Mock.Of<IAuthorizedUser>());
         }
     }
 
