@@ -82,6 +82,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Services
                     Size = mapFile.Size,
 
                     Wkid = properties.Wkid,
+                    //WkText = properties.WkText,
                     XMaxVal = properties.XMax,
                     YMaxVal = properties.YMax,
                     XMinVal = properties.XMin,

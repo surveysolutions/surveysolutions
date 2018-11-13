@@ -85,6 +85,7 @@
     "pnotify": "^3.2.1",
     "roboto-fontface": "^0.8.0",
     "underscore": "^1.8.3",
-    "xss": "^0.3.7"
+    "xss": "^0.3.7",
+    "zebra_datepicker": "^1.9.12"
   }
 }
