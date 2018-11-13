@@ -443,6 +443,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 EnablementCondition = question.ConditionExpression,
                 IsPreFilled = question.Featured,
                 IsTimestamp = question.IsTimestamp,
+                DefaultDate = question.Properties?.DefaultDate,
                 IsFilteredCombobox = question.IsFilteredCombobox,
                 QuestionScope = question.QuestionScope,
                 HideIfDisabled = question.HideIfDisabled,
@@ -501,6 +502,7 @@ namespace WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit
                 case QuestionType.DateTime:
                     var dateTimeQuestion = (DateTimeQuestion)question;
                     questionView.IsTimestamp = dateTimeQuestion.IsTimestamp;
+                    questionView.DefaultDate = dateTimeQuestion.Properties.DefaultDate;
                     return questionView;
                 case QuestionType.Multimedia:
                     var multimediaQuestion = (MultimediaQuestion) question;

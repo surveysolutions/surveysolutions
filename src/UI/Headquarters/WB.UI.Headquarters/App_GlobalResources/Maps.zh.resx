@@ -151,7 +151,7 @@
     <value>地图组件未初始化。请联系系统管理员。</value>
   </data>
   <data name="MapLoadingInvalidFile" xml:space="preserve">
-    <value>无效的文件{0}</value>
+    <value>无效的文件{0}. 错误: {1}</value>
   </data>
   <data name="MapLoadingNoMapsInArchive" xml:space="preserve">
     <value>发生错误。归档不包括地图文件</value>

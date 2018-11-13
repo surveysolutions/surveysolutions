@@ -1783,5 +1783,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             foreach (var variableId in this.GetAllUnderlyingVariablesOutsideRosters(subGroupId))
                 yield return variableId;
         }
+
+        public DateTime? GetDefaultDateForDateQuestion(Guid dateQuestionId)
+        {
+            IQuestion question = this.GetQuestionOrThrow(dateQuestionId);
+
+            if (question.QuestionType != QuestionType.DateTime)
+                throw new QuestionnaireException(
+                    $"Cannot return default date for question with id '{dateQuestionId}' because it's type {question.QuestionType} does not support that parameter.");
+
+            return question.Properties?.DefaultDate;
+        }
     }
 }

@@ -17,7 +17,8 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             QuestionScope scope,
             bool isPreFilled,
             List<ValidationCondition> validationConditions,
-            bool isTimestamp)
+            bool isTimestamp,
+            DateTime? defaultDate)
              : base(
                 responsibleId: responsibleId, questionnaireId: questionnaireId, questionId: questionId, 
                 commonQuestionParameters: commonQuestionParameters,
@@ -26,6 +27,7 @@ namespace WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Question
             this.IsTimestamp = isTimestamp;
             this.IsPreFilled = isPreFilled;
             this.Scope = scope;
+            this.Properties.DefaultDate = defaultDate;
         }
 
         public QuestionScope Scope { get; set; }
