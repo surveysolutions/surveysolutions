@@ -709,6 +709,15 @@ namespace WB.UI.Designer.Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to This date will be shown as started date for selection on a tablet.
+        /// </summary>
+        public static string HelpDefaultDate {
+            get {
+                return ResourceManager.GetString("HelpDefaultDate", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to A logical expression that is calculated depending on the answers on the other questions..
         /// </summary>
         public static string HelpExpression {
@@ -867,6 +876,15 @@ namespace WB.UI.Designer.Resources {
         public static string HideIfDisabled {
             get {
                 return ResourceManager.GetString("HideIfDisabled", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nested from questionnaire.
+        /// </summary>
+        public static string HideIfDisabledNested {
+            get {
+                return ResourceManager.GetString("HideIfDisabledNested", resourceCulture);
             }
         }
         
@@ -1344,6 +1362,15 @@ namespace WB.UI.Designer.Resources {
         public static string QuestionDecimalPlaces {
             get {
                 return ResourceManager.GetString("QuestionDecimalPlaces", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Default date.
+        /// </summary>
+        public static string QuestionDefaultDate {
+            get {
+                return ResourceManager.GetString("QuestionDefaultDate", resourceCulture);
             }
         }
         
@@ -1830,6 +1857,15 @@ namespace WB.UI.Designer.Resources {
         public static string SettingsCan {
             get {
                 return ResourceManager.GetString("SettingsCan", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Hide element when it is disabled.
+        /// </summary>
+        public static string SettingsHideIfDisabled {
+            get {
+                return ResourceManager.GetString("SettingsHideIfDisabled", resourceCulture);
             }
         }
         

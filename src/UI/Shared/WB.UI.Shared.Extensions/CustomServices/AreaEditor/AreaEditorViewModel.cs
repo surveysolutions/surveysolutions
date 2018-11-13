@@ -5,7 +5,6 @@ using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Android.Views;
 using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Location;
@@ -28,13 +27,6 @@ using GeometryType = WB.Core.SharedKernels.Questionnaire.Documents.GeometryType;
 
 namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 {
-    public class AreaEditorViewModelArgs
-    {
-        public string Geometry { get; set; }
-        public string MapName { get; set; }
-        public WB.Core.SharedKernels.Questionnaire.Documents.GeometryType? RequestedGeometryType { set; get; }
-    }
-
     public class AreaEditorViewModel : BaseViewModel<AreaEditorViewModelArgs>
     {
         public event Action<AreaEditorResult> OnAreaEditCompleted;
@@ -142,7 +134,6 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                             {
                                 {
                                     var basemap = package.Maps.First().Basemap.Clone();
-                                    
                                     return basemap;
                                 }
                             }
@@ -163,6 +154,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 
                             await layer.LoadAsync().ConfigureAwait(false);
                             return new Basemap(layer);
+                            
                         }
                     case ".tif":
                         {
@@ -171,6 +163,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                             await newRasterLayer.LoadAsync().ConfigureAwait(false);
 
                             //add error display
+                            //
                             if (newRasterLayer.SpatialReference.IsProjected)
                             {
                                 return new Basemap(newRasterLayer);
@@ -179,11 +172,8 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                         }
                 }
             }
-
             return null;
         }
-
-
 
         public async Task UpdateBaseMap()
         {
@@ -228,20 +218,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             set => this.RaiseAndSetIfChanged(ref this.map, value);
         }
 
-        private MapView mapView;
-        public MapView MapView
-        {
-            get => this.mapView;
-            set
-            {
-                this.mapView = value;
-                mapView.ViewAttachedToWindow += delegate (object sender, View.ViewAttachedToWindowEventArgs args)
-                {
-                    //StartEditAreaCommand.Execute();
-                };
-
-            }
-        }
+        public MapView MapView { get; set; }
 
         public IMvxAsyncCommand<MapDescription> SwitchMapCommand => new MvxAsyncCommand<MapDescription>(async (mapDescription) =>
         {
@@ -252,17 +229,15 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             await this.UpdateBaseMap();
 
             //update internal structures
-            //spatialreferense of new map could differ from initial
+            //Spatialreferense of new map could differ from initial
             if (geometry != null)
             {
                 if (this.MapView != null && geometry != null && !this.MapView.SpatialReference.IsEqual(geometry.SpatialReference))
                     geometry = GeometryEngine.Project(geometry, this.MapView.SpatialReference);
 
                 this.MapView?.SketchEditor.ClearGeometry();
-
-                var geometryReplaced = this.MapView?.SketchEditor.ReplaceGeometry(geometry);
+                this.MapView?.SketchEditor.ReplaceGeometry(geometry);
             }
-
         });
 
 
@@ -307,7 +282,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
                 ShapefileFeatureTable myShapefile = await ShapefileFeatureTable.OpenAsync(AvailableShapefiles.First().FullPath);
                 // Create a feature layer to display the shapefile
                 FeatureLayer newFeatureLayer = new FeatureLayer(myShapefile);
-
+                
                 await newFeatureLayer.LoadAsync();
 
                 SimpleLineSymbol lineSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, Color.Aqua, 1.0);
@@ -335,6 +310,8 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             if (!IsLocationServiceSwitchEnabled)
                 return;
 
+            //try to workaround Esri crash with location service
+            //Esri case 02209395
             try
             {
                 IsLocationServiceSwitchEnabled = false;
@@ -399,8 +376,8 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 
         private async Task EditGeometry()
         {
-            //if(this.Map == null)
             this.IsEditing = true;
+
             try
             {
                 this.MapView.SketchEditor.GeometryChanged += delegate (object sender, GeometryChangedEventArgs args)
@@ -424,7 +401,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
 
                 if (this.Geometry == null)
                 {
-                    await this.MapView.SetViewpointRotationAsync(0).ConfigureAwait(false); //workaround to fix Map is not prepared.
+                    await this.MapView.SetViewpointRotationAsync(0).ConfigureAwait(false); //workaround to fix Map is not prepared Esri error.
                 }
                 else
                 {
@@ -655,7 +632,7 @@ namespace WB.UI.Shared.Extensions.CustomServices.AreaEditor
             set => this.RaiseAndSetIfChanged(ref this.isLocationServiceSwitchEnabled, value);
         }
 
-        private async Task<Geometry> GetGeometry(WB.Core.SharedKernels.Questionnaire.Documents.GeometryType? geometryType, Geometry geometry)
+        private async Task<Geometry> GetGeometry(GeometryType? geometryType, Geometry geometry)
         {
             switch (geometryType)
             {

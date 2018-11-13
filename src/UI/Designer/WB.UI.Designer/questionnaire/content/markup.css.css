@@ -7923,6 +7923,9 @@ input#edit-group-title {
 .question-editor .small-numeric-input {
   width: 80px !important;
 }
+.question-editor .small-date-input {
+  width: 128px !important;
+}
 .question-editor .form-group.singleline-group label,
 .question-editor .form-group.singleline-group input {
   display: inline-block;
@@ -10024,7 +10027,6 @@ li.chapter-panel-item:hover > .holder > .inner > .handler span {
 .share-question-dialog .form-group p {
   color: #a94442;
 }
-.share-question-dialog .form-group .update-button,
 .share-question-dialog .form-group .invite-button {
   margin-top: 20px;
 }

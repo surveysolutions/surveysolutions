@@ -89,7 +89,7 @@
     <PackageReference Include="Remotion.Linq" Version="2.2.0" />
     <PackageReference Include="Remotion.Linq.EagerFetching" Version="2.2.0" />
     <PackageReference Include="RhinoMocks" Version="3.6.1" />
-    <PackageReference Include="sqlite-net-pcl" Version="1.4.118" />
+    <PackageReference Include="sqlite-net-pcl" Version="1.5.231" />
     <PackageReference Include="SQLitePCL.native.sqlite3.v110_xp" Version="0.9.3" />
     <PackageReference Include="SQLitePCL.plugin.sqlite3.net45" Version="0.9.3" />
     <PackageReference Include="SQLitePCLRaw.bundle_green" Version="1.1.11" />

@@ -135,6 +135,9 @@
     <Reference Include="FluentMigrator.Abstractions, Version=3.1.3.0, Culture=neutral, PublicKeyToken=aacfc7de5acabf05, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\FluentMigrator.Abstractions.3.1.3\lib\net461\FluentMigrator.Abstractions.dll</HintPath>
     </Reference>
+    <Reference Include="GeoJSON.Net, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\..\packages\GeoJSON.Net.1.1.70\lib\net45\GeoJSON.Net.dll</HintPath>
+    </Reference>
     <Reference Include="HtmlSanitizationLibrary, Version=4.3.0.0, Culture=neutral, PublicKeyToken=d127efab8a9c114f, processorArchitecture=MSIL">
       <HintPath>..\..\..\..\packages\AntiXSS.4.3.0\lib\net40\HtmlSanitizationLibrary.dll</HintPath>
     </Reference>
