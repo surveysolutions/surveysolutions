@@ -117,6 +117,7 @@ namespace WB.Enumerator.Native.WebInterview.Models
     {
         public bool IsTimestamp { get; set; }
         public DateTime? Answer { get; set; }
+        public DateTime? DefaultDate { get; set; }
     }
 
     public class InterviewGpsQuestion : GenericQuestion

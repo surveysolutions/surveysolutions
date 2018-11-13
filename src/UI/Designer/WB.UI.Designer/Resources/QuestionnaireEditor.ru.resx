@@ -1140,6 +1140,12 @@
   <data name="DeleteCommentConfirm" xml:space="preserve">
     <value>Вы уверены, что хотите удалить комментарий?</value>
   </data>
+    <data name="QuestionDefaultDate" xml:space="preserve">
+    <value>Дата по умолчанию</value>
+  </data>
+    <data name="HelpDefaultDate" xml:space="preserve">
+    <value>Эта дата будет показана как начальная дата для выбора на планшете</value>
+    </data>
   <data name="SettingsHideIfDisabled" xml:space="preserve">
     <value>Скрывать элемент когда он выключен</value>
   </data>
