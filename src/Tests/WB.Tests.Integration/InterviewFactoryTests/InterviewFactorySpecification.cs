@@ -128,7 +128,8 @@ namespace WB.Tests.Integration.InterviewFactoryTests
         {
             return new InterviewFactory(
                 summaryRepository: interviewSummaryRepository,
-                sessionProvider: this.UnitOfWork);
+                sessionProvider: this.UnitOfWork,
+                questionnaireItems: Mock.Of<IPlainStorageAccessor<QuestionnaireCompositeItem>>());
         }
     }
 }
