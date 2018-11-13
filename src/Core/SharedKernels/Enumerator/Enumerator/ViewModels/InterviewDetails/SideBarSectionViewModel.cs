@@ -105,10 +105,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
 
         private void OnScreenChanged(ScreenChangedEventArgs eventArgs)
         {
-            if (eventArgs.TargetStage != ScreenType.PdfView)
-            {
-                this.UpdateSelection(eventArgs.TargetGroup);
-            }
+            this.UpdateSelection(eventArgs.TargetGroup);
         }
 
         public string Tag { get; private set; }
