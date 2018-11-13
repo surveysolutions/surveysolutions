@@ -44,6 +44,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateDateTimeQuestion
             question.ValidationConditions.First().Expression.Should().Be(validationExpression);
             question.ValidationConditions.First().Message.Should().Be(validationMessage);
             question.IsTimestamp.Should().Be(isTimestamp);
+            question.Properties.DefaultDate.Should().Be(defaultDate);
         }
 
         private static Questionnaire questionnaire;
@@ -59,7 +60,8 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateDateTimeQuestion
         private static string validationExpression = "some validation";
         private static string validationMessage = "validation message";
         private static bool isTimestamp = true;
-        
+        private static DateTime defaultDate = new DateTime(2012, 11, 1);
+
         private static readonly UpdateDateTimeQuestion command = new UpdateDateTimeQuestion(
             questionnaireId: Guid.Parse("22222222222222222222222222222222"),
             questionId: questionId,
@@ -80,6 +82,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.Designer.UpdateDateTimeQuestion
                 HideIfDisabled = false,
                 Instructions = instructions
             },
-            isTimestamp: isTimestamp);
+            isTimestamp: isTimestamp,
+            defaultDate: defaultDate);
     }
 }

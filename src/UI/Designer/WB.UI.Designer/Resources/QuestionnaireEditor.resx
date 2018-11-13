@@ -712,6 +712,9 @@
   <data name="QuestionCurrentTime" xml:space="preserve">
     <value>Current time</value>
   </data>
+  <data name="QuestionDefaultDate" xml:space="preserve">
+    <value>Default date</value>
+  </data>
   <data name="GeometryType" xml:space="preserve">
     <value>Geometry type</value>
   </data>
@@ -843,6 +846,9 @@
   </data>
   <data name="HelpIsTimestamp" xml:space="preserve">
     <value>This option allows the user to stamp the current time on tablet</value>
+  </data>
+    <data name="HelpDefaultDate" xml:space="preserve">
+    <value>This date will be shown as started date for selection on a tablet</value>
   </data>
   <data name="HelpMask" xml:space="preserve">
     <value>Formatted entry for alpha-numerical values: phone numbers, ID codes, etc. Examples:"~" - Represents an alpha character (A-Z,a-z), "#" - Represents a numeric character (0-9), "*" - Represents an alphanumeric character (A-Z,a-z,0-9). "##/##/####" - date, "(###) ###-####" - phone number, "AA####" - flight number operated by American AirLines or "~*-###-~###"</value>

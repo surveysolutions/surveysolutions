@@ -194,7 +194,10 @@ namespace WB.Enumerator.Native.WebInterview.Services
                         });
                         break;
                     case InterviewQuestionType.DateTime:
-                        result = this.autoMapper.Map<InterviewDateQuestion>(question);
+                        result = this.Map<InterviewDateQuestion>(question, res =>
+                        {
+                            res.DefaultDate = questionnaire.GetDefaultDateForDateQuestion(identity.Id);
+                        });
                         break;
                     case InterviewQuestionType.TextList:
                         {
