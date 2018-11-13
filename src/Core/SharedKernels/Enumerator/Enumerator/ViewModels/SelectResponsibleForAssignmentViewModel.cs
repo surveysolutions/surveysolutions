@@ -171,7 +171,8 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
         {
             var interviewsQuantityByInterviewer = this.assignmentsStorage.WhereSelect(
                 @where => @where.ResponsibleId == interviewer.InterviewerId,
-                @select => new InterviewsQuantity
+                @select =>
+                new InterviewsQuantity
                 {
                     Quantity = @select.Quantity,
                     CreatedInterviewsCount = @select.CreatedInterviewsCount
