@@ -9,7 +9,7 @@ using WB.Core.SharedKernels.Enumerator.Views;
 
 namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State
 {
-    public class AttachmentViewModel : MvxNotifyPropertyChanged
+    public class AttachmentViewModel : MvxViewModel
     {
         private readonly IQuestionnaireStorage questionnaireRepository;
         private readonly IStatefulInterviewRepository interviewRepository;
@@ -17,8 +17,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         
         private AttachmentContentMetadata attachmentContentMetadata;
         
-        private const string ImageMimeType = "image";
-        private const string VideMimeType = "video";
+        private const string ImageMimeType = "image/";
+        private const string VideoMimeType = "video/";
+        private const string AudioMimeType = "audio/";
         private const string PdfMimeType = "application/pdf";
 
         public AttachmentViewModel(
@@ -51,9 +52,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     this.RaisePropertyChanged(() => Content);
                 }
 
-                if (IsVideo)
+                if (IsVideo || IsAudio)
                 {
                     var backingFile = this.attachmentContentStorage.GetFileCacheLocation(attachment.ContentId);
+                    
                     this.ContentPath = backingFile;
                     this.RaisePropertyChanged(() => ContentPath);
                 }
@@ -66,12 +68,20 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             && this.attachmentContentMetadata.ContentType.StartsWith(ImageMimeType, StringComparison.OrdinalIgnoreCase);
 
         public bool IsVideo => this.attachmentContentMetadata != null
-            && this.attachmentContentMetadata.ContentType.StartsWith(VideMimeType, StringComparison.OrdinalIgnoreCase);
+            && this.attachmentContentMetadata.ContentType.StartsWith(VideoMimeType, StringComparison.OrdinalIgnoreCase);
+
+        public bool IsAudio => this.attachmentContentMetadata != null
+            && this.attachmentContentMetadata.ContentType.StartsWith(AudioMimeType, StringComparison.OrdinalIgnoreCase);
 
         public bool IsPdf => this.attachmentContentMetadata != null 
             && this.attachmentContentMetadata.ContentType.StartsWith(PdfMimeType, StringComparison.OrdinalIgnoreCase);
 
         
         public byte[] Content { get; private set; }
+
+        public override void ViewDisappearing()
+        {
+            base.ViewDisappearing();
+        }
     }
 }

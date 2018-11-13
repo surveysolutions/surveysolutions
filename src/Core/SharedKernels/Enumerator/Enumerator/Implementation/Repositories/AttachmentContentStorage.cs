@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using WB.Core.Infrastructure.FileSystem;
@@ -27,21 +28,17 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
 
         public void Store(AttachmentContent attachmentContent)
         {
-            this.attachmentContentDataRepository.Store(new AttachmentContentData
-            {
-                Id = attachmentContent.Id,
-                Content = attachmentContent.Content
-            });
+            var storeInFileSystem = IsStoredInFileSystem(attachmentContent);
 
-            this.attachmentContentMetadataRepository.Store(new AttachmentContentMetadata
+            if (!storeInFileSystem)
             {
-                ContentType = attachmentContent.ContentType,
-                Id = attachmentContent.Id,
-                Size = attachmentContent.Size,
-            });
-
-            // storing video files in filesystem for video playback
-            if (attachmentContent.IsVideo() || attachmentContent.IsPdf())
+                this.attachmentContentDataRepository.Store(new AttachmentContentData
+                {
+                    Id = attachmentContent.Id,
+                    Content = attachmentContent.Content
+                });
+            }
+            else
             {
                 var fileCache = GetFileCacheLocation(attachmentContent.Id);
 
@@ -49,12 +46,24 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
                 {
                     if (!files.IsDirectoryExists(FileCacheDirectory))
                     {
-                        files.CreateDirectory(FileCacheDirectory); 
+                        files.CreateDirectory(FileCacheDirectory);
                     }
 
                     files.WriteAllBytes(fileCache, attachmentContent.Content);
                 }
             }
+
+            this.attachmentContentMetadataRepository.Store(new AttachmentContentMetadata
+            {
+                ContentType = attachmentContent.ContentType,
+                Id = attachmentContent.Id,
+                Size = attachmentContent.Size,
+            });
+        }
+
+        private bool IsStoredInFileSystem(AttachmentContent attachmentContent)
+        {
+            return attachmentContent.IsVideo() || attachmentContent.IsPdf() || attachmentContent.IsAudio();
         }
 
         public void Remove(string attachmentContentId)
@@ -90,7 +99,18 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
         private string FileCacheDirectory =>
             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "_attachments");
 
-        public string GetFileCacheLocation(string attachmentId) 
+        public string GetFileCacheLocation(string attachmentId)
             => Path.Combine(FileCacheDirectory, attachmentId);
+
+        public IEnumerable<string> EnumerateCache()
+        {
+            if (this.files.IsDirectoryExists(FileCacheDirectory))
+            {
+                foreach (var file in this.files.GetFilesInDirectory(FileCacheDirectory))
+                {
+                    yield return Path.GetFileName(file);
+                }
+            }
+        }
     }
 }
