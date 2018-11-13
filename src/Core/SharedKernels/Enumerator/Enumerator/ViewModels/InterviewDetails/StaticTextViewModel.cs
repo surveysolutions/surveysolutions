@@ -40,7 +40,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         }
 
         public IMvxAsyncCommand ShowPdf =>
-            new MvxAsyncCommand(() => this.navigationState.NavigateTo(NavigationIdentity.CreateForPdfView(this.Identity)));
+            new MvxAsyncCommand(() => this.navigationState.NavigateTo(NavigationIdentity.CreateForPdfView(navigationState.CurrentGroup, this.Identity)));
 
         public void Dispose()
         {

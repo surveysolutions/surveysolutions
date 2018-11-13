@@ -277,7 +277,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     return overviewViewModel;
                 case ScreenType.PdfView:
                     var pdfViewModel = MvxIoCProvider.Instance.IoCConstruct<PdfViewModel>(); 
-                    pdfViewModel.Configure(this.InterviewId, eventArgs.TargetGroup);
+                    pdfViewModel.Configure(this.InterviewId, eventArgs.AnchoredElementIdentity);
                     return pdfViewModel;
                 default:
                     return null;

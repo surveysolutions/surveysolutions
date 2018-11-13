@@ -48,9 +48,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
             return new NavigationIdentity(ScreenType.Group, targetGroup: groupIdentity, anchoredElementIdentity: anchoredElementIdentity);
         }
 
-        public static NavigationIdentity CreateForPdfView(Identity targetStaticText)
+        public static NavigationIdentity CreateForPdfView(Identity targetGroupIdentity, Identity targetStaticText)
         {
-            return new NavigationIdentity(ScreenType.PdfView, targetStaticText, null);
+            return new NavigationIdentity(ScreenType.PdfView, targetGroupIdentity, targetStaticText);
         }
 
         private NavigationIdentity(ScreenType targetScreen, Identity targetGroup, Identity anchoredElementIdentity = null)

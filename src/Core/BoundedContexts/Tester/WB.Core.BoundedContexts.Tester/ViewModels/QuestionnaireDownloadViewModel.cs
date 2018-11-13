@@ -117,7 +117,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                     }
                     else
                     {
-                        await this.viewModelNavigationService.NavigateToInterviewAsync(interviewId.FormatGuid(), navigationIdentity);
+                        await this.viewModelNavigationService.NavigateToInterviewAsync(interviewId.FormatGuid(),
+                            NavigationIdentity.CreateForGroup(navigationIdentity.TargetGroup));
                     }
                 }
                 catch (Exception e)
