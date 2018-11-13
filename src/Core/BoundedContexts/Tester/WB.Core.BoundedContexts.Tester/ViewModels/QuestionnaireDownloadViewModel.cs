@@ -41,15 +41,15 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
 
         public QuestionnaireDownloadViewModel(
             IPrincipal principal,
-            IDesignerApiService designerApiService, 
-            ICommandService commandService, 
+            IDesignerApiService designerApiService,
+            ICommandService commandService,
             IQuestionnaireImportService questionnaireImportService,
             IViewModelNavigationService viewModelNavigationService,
             IFriendlyErrorMessageService friendlyErrorMessageService,
             IUserInteractionService userInteractionService,
             ILogger logger,
             IExecutedCommandsStorage executedCommandsStorage,
-            IAttachmentContentStorage attachmentContentStorage, 
+            IAttachmentContentStorage attachmentContentStorage,
             IQuestionnaireStorage questionnaireRepository)
         {
             this.principal = principal;
@@ -99,7 +99,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                     progress.Report(TesterUIResources.ImportQuestionnaire_CreateInterview);
 
                     var interviewId = Guid.NewGuid();
-                    
+
                     var existingInterviewCommands = this.executedCommandsStorage.Get(interview.Id);
                     foreach (var existingInterviewCommand in existingInterviewCommands)
                     {
@@ -129,7 +129,7 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                     await this.viewModelNavigationService.NavigateToPrefilledQuestionsAsync(newInterviewId.FormatGuid());
                 }
                 finally
-                { 
+                {
                     this.executedCommandsStorage.Clear(interview.Id);
                 }
             }
@@ -209,8 +209,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 interviewId: interviewId,
                 userId: this.principal.CurrentUserIdentity.UserId,
                 questionnaireId: questionnaireIdentity,
-                answers: new List<InterviewAnswer>(), 
-                protectedVariables: new List<string>(), 
+                answers: new List<InterviewAnswer>(),
+                protectedVariables: new List<string>(),
                 supervisorId: Guid.NewGuid(),
                 interviewerId: Guid.NewGuid(),
                 interviewKey: null,
@@ -250,7 +250,8 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 return;
 
             var attachments = questionnaire.Document.Attachments;
-            this.CleanupAttachments();
+
+            var requiredAttachments = new HashSet<string>();
 
             foreach (var attachment in attachments)
             {
@@ -261,22 +262,24 @@ namespace WB.Core.BoundedContexts.Tester.ViewModels
                 {
                     var attachmentContent = await this.designerApiService.GetAttachmentContentAsync(
                         attachmentContentId,
-                        new Progress<TransferProgress>(downloadProgress 
+                        new Progress<TransferProgress>(downloadProgress
                             => progress.Report(string.Format(
                                 TesterUIResources.ImportQuestionnaireAttachments_DownloadProgress, downloadProgress))),
                         token: cancellationToken);
 
                     this.attachmentContentStorage.Store(attachmentContent);
                 }
-            }
-        }
 
-        private void CleanupAttachments()
-        {
+                requiredAttachments.Add(attachment.ContentId);
+            }
+
             var attachmentsPath = this.attachmentContentStorage.GetFileCacheLocation(string.Empty);
 
-            if(Directory.Exists(attachmentsPath))
-                Directory.Delete(attachmentsPath, true);
+            foreach (var contentId in this.attachmentContentStorage.EnumerateCache())
+            {
+                if (!requiredAttachments.Contains(contentId))
+                    this.attachmentContentStorage.Remove(contentId);
+            }
         }
     }
 }
