@@ -48,12 +48,14 @@ namespace WB.UI.Designer.Api.Portal
 
             var roles = Roles.GetRolesForUser(account.UserName);
 
+            
             return new PortalUserModel
             {
                 Id = account.ProviderUserKey,
                 Login = account.UserName,
                 Email = account.Email,
-                Roles = roles
+                Roles = roles,
+                FullName = account.FullName
             };
         }
 

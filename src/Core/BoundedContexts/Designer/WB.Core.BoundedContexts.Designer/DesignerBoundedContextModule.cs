@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Ncqrs.Eventing.Storage;
 using WB.Core.BoundedContexts.Designer.Aggregates;
+using WB.Core.BoundedContexts.Designer.Classifications;
 using WB.Core.BoundedContexts.Designer.CodeGenerationV2;
 using WB.Core.BoundedContexts.Designer.Commands.Account;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
@@ -69,6 +70,7 @@ namespace WB.Core.BoundedContexts.Designer
 
             registry.Bind<IQuestionnaireListViewFactory, QuestionnaireListViewFactory>();
             registry.Bind<IPublicFoldersStorage, PublicFoldersStorage>();
+            registry.Bind<IClassificationsStorage, ClassificationsStorage>();
             registry.Bind<IQuestionnaireChangeHistoryFactory, QuestionnaireChangeHistoryFactory>();
             registry.Bind<IQuestionnaireViewFactory, QuestionnaireViewFactory>();
             registry.Bind<IChapterInfoViewFactory, ChapterInfoViewFactory>();

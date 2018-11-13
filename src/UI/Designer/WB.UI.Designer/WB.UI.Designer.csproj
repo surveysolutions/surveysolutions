@@ -250,6 +250,7 @@
   <ItemGroup>
     <Compile Include="Api\Attributes\ApiBasicAuthAttribute.cs" />
     <Compile Include="Api\Attributes\IncludeOnlyPublicApiDocumentFilter.cs" />
+    <Compile Include="Api\Designer\ClassificationsController.cs" />
     <Compile Include="Api\Designer\CommentsController.cs" />
     <Compile Include="Api\Designer\FindReplaceController.cs" />
     <Compile Include="Api\Designer\QuestionnairePermissionsAttribute.cs" />
@@ -319,6 +320,7 @@
     <Compile Include="Migrations\PlainStore\M001-100\M016_AddQuestionnaireCompilationForOldVersionsTable.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M018_AddFolderIdToQuestionnaireListViewItemTable.cs" />
     <Compile Include="Migrations\PlainStore\M001-100\M201806041250_RemoveObsoleteTables.cs" />
+    <Compile Include="Migrations\PlainStore\M001-100\M201811121456_AddClassificationsTable.cs" />
     <Compile Include="Models\AddCommentModel.cs" />
     <Compile Include="Models\ControlPanel\AllowedAddressModel.cs" />
     <Compile Include="Models\ControlPanel\CompilationVersionModel.cs" />
@@ -518,6 +520,7 @@
     <Content Include="questionnaire\details\scripts\controllers\alert.js" />
     <Content Include="questionnaire\details\scripts\controllers\comments.js" />
     <Content Include="questionnaire\details\scripts\controllers\commentsEditor.js" />
+    <Content Include="questionnaire\details\scripts\controllers\addClassification.js" />
     <Content Include="questionnaire\details\scripts\controllers\findReplace.js" />
     <Content Include="questionnaire\details\scripts\controllers\metadata.js" />
     <Content Include="questionnaire\details\scripts\controllers\translations.js" />
@@ -532,6 +535,7 @@
     <Content Include="questionnaire\details\scripts\services\translate.js" />
     <Content Include="questionnaire\details\scripts\services\webTesterService.js" />
     <Content Include="questionnaire\details\views\alert.html" />
+    <Content Include="questionnaire\details\views\add-classification.html" />
     <Content Include="questionnaire\details\views\find-replace.html" />
     <Content Include="questionnaire\details\views\question-details\Area-template.html" />
     <Content Include="questionnaire\details\views\question-details\OptionsEditor-template.html" />
@@ -1010,6 +1014,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Classifications\" />
     <Folder Include="Views\Comments\" />
   </ItemGroup>
   <ItemGroup>

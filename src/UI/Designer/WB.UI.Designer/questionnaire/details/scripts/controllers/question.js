@@ -1,6 +1,7 @@
 ﻿angular.module('designerApp')
     .controller('QuestionCtrl',
-        function ($rootScope, $scope, $state, $i18next, $timeout, utilityService, questionnaireService, commandService, $log, confirmService, hotkeys, optionsService, alertService) {
+        function ($rootScope, $scope, $state, $i18next, $timeout, utilityService, questionnaireService, commandService, $log, confirmService, 
+            hotkeys, optionsService, alertService, $uibModal) {
             $scope.currentChapterId = $state.params.chapterId;
             var dictionnaires = {};
 
@@ -169,6 +170,18 @@
 
                         utilityService.setFocusIn(focusId);
                     });
+            };
+
+            $scope.showAddClassificationModal = function() {
+                var modalInstance = $uibModal.open({
+                    templateUrl: 'views/add-classification.html',
+                    backdrop: false,
+                    windowClass: "addClassification dragAndDrop",
+                    controller: 'addClassificationCtrl',
+                    resolve: {
+                        isReadOnlyForUser: $scope.questionnaire.isReadOnlyForUser || false
+                    }
+                });
             };
 
             var hasQuestionEnablementConditions = function(question) {
