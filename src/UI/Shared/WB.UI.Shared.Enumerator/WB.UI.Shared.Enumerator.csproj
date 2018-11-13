@@ -298,7 +298,7 @@
     <Compile Include="Converters\EnumToStringConverter.cs" />
     <Compile Include="CustomBindings\AssignToInterviewerTextBinding.cs" />
     <Compile Include="CustomBindings\ProgressBarProgressBinding.cs" />
-    <Compile Include="CustomBindings\VideoViewPathBinding.cs" />
+    <Compile Include="CustomBindings\ExoPlayerBinding.cs" />
     <Compile Include="OfflineSync\Activities\BluetoothReceiver.cs" />
     <Compile Include="OfflineSync\Activities\GoogleApiConnectedActivity.cs" />
     <Compile Include="Activities\Dashboard\RecyclerViewAdapter.cs" />
