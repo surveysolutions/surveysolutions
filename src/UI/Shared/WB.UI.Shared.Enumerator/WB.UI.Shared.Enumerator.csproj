@@ -2218,84 +2218,6 @@
     <AndroidAsset Include="Assets\pdfjs\web\images\loading-small%402x.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\pdfjs\web\images\secondaryToolbarButton-documentProperties.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidAsset Include="Assets\pdfjs\web\images\secondaryToolbarButton-documentProperties%402x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidAsset Include="Assets\pdfjs\web\images\secondaryToolbarButton-firstPage.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidAsset Include="Assets\pdfjs\web\images\secondaryToolbarButton-firstPage%402x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidAsset Include="Assets\pdfjs\web\images\secondaryToolbarButton-handTool.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidAsset Include="Assets\pdfjs\web\images\secondaryToolbarButton-handTool%402x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidAsset Include="Assets\pdfjs\web\images\secondaryToolbarButton-lastPage.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidAsset Include="Assets\pdfjs\web\images\secondaryToolbarButton-lastPage%402x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidAsset Include="Assets\pdfjs\web\images\secondaryToolbarButton-rotateCcw.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidAsset Include="Assets\pdfjs\web\images\secondaryToolbarButton-rotateCcw%402x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidAsset Include="Assets\pdfjs\web\images\secondaryToolbarButton-rotateCw.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidAsset Include="Assets\pdfjs\web\images\secondaryToolbarButton-rotateCw%402x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidAsset Include="Assets\pdfjs\web\images\secondaryToolbarButton-scrollHorizontal.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidAsset Include="Assets\pdfjs\web\images\secondaryToolbarButton-scrollHorizontal%402x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidAsset Include="Assets\pdfjs\web\images\secondaryToolbarButton-scrollVertical.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidAsset Include="Assets\pdfjs\web\images\secondaryToolbarButton-scrollVertical%402x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidAsset Include="Assets\pdfjs\web\images\secondaryToolbarButton-scrollWrapped.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidAsset Include="Assets\pdfjs\web\images\secondaryToolbarButton-scrollWrapped%402x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidAsset Include="Assets\pdfjs\web\images\secondaryToolbarButton-selectTool.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidAsset Include="Assets\pdfjs\web\images\secondaryToolbarButton-selectTool%402x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidAsset Include="Assets\pdfjs\web\images\secondaryToolbarButton-spreadEven.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidAsset Include="Assets\pdfjs\web\images\secondaryToolbarButton-spreadEven%402x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidAsset Include="Assets\pdfjs\web\images\secondaryToolbarButton-spreadNone.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidAsset Include="Assets\pdfjs\web\images\secondaryToolbarButton-spreadNone%402x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidAsset Include="Assets\pdfjs\web\images\secondaryToolbarButton-spreadOdd.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidAsset Include="Assets\pdfjs\web\images\secondaryToolbarButton-spreadOdd%402x.png" />
-  </ItemGroup>
-  <ItemGroup>
     <AndroidAsset Include="Assets\pdfjs\web\images\shadow.png" />
   </ItemGroup>
   <ItemGroup>
@@ -2318,12 +2240,6 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\pdfjs\web\images\toolbarButton-menuArrows%402x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidAsset Include="Assets\pdfjs\web\images\toolbarButton-openFile.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidAsset Include="Assets\pdfjs\web\images\toolbarButton-openFile%402x.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\pdfjs\web\images\toolbarButton-pageDown-rtl.png" />
@@ -2356,12 +2272,6 @@
     <AndroidAsset Include="Assets\pdfjs\web\images\toolbarButton-presentationMode%402x.png" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidAsset Include="Assets\pdfjs\web\images\toolbarButton-print.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidAsset Include="Assets\pdfjs\web\images\toolbarButton-print%402x.png" />
-  </ItemGroup>
-  <ItemGroup>
     <AndroidAsset Include="Assets\pdfjs\web\images\toolbarButton-search.png" />
   </ItemGroup>
   <ItemGroup>
@@ -2390,12 +2300,6 @@
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\pdfjs\web\images\toolbarButton-sidebarToggle%402x.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidAsset Include="Assets\pdfjs\web\images\toolbarButton-viewAttachments.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <AndroidAsset Include="Assets\pdfjs\web\images\toolbarButton-viewAttachments%402x.png" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\pdfjs\web\images\toolbarButton-viewOutline-rtl.png" />
