@@ -923,11 +923,13 @@ namespace WB.Tests.Abc.TestFactories
 
         public InterviewFactory InterviewFactory(
             IQueryableReadSideRepositoryReader<InterviewSummary> summaryRepository = null,
-            IUnitOfWork sessionProvider = null)
+            IUnitOfWork sessionProvider = null,
+            IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireItems = null)
         {
             return new InterviewFactory(
                 summaryRepository ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(),
-                sessionProvider ?? Mock.Of<IUnitOfWork>());
+                sessionProvider ?? Mock.Of<IUnitOfWork>(),
+                questionnaireItems ?? Mock.Of<IPlainStorageAccessor<QuestionnaireCompositeItem>>());
         }
 
         public MapReport MapReport(IInterviewFactory interviewFactory = null,
