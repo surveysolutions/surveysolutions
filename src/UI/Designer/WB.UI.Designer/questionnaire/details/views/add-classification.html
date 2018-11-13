@@ -9,17 +9,20 @@
         <div class="col-xs-12">
             <div class="input-group">
                 <div class="input-group-btn">
-                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Action <span class="caret"></span></button>
-                    <ul class="dropdown-menu">
-                        <li><a href="#">Action</a></li>
-                        <li><a href="#">Another action</a></li>
-                        <li><a href="#">Something else here</a></li>
-                        <li role="separator" class="divider"></li>
-                        <li><a href="#">Separated link</a></li>
+                    <button class="btn dropdown-toggle" id="classification-group" data-toggle="dropdown" uib-dropdown-toggle type="button">
+                        {{selectedGroup.title }}
+                        <span class="dropdown-arrow"></span>
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="classification-group-dropdown">
+                        <li role="presentation" ng-repeat="group in groups">
+                            <a role="menuitem" tabindex="-1" ng-click="changeClassificationGroup(group)">{{group.title}}</a>
+                        </li>
                     </ul>
                 </div><!-- /btn-group -->
-                <input type="text" class="form-control" aria-label="...">
+                <input type="text" ng-model="searchText" class="form-control" id="searchFor" aria-label="classification-search">
             </div><!-- /input-group -->
+            <p>{{ classifications.length }} classifications</p>
+            <p>{{searchText}}</p>
         </div><!-- /.col-lg-6 -->
     </div><!-- /.row -->
 </div>
