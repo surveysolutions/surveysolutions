@@ -21,7 +21,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
         }
 
         public void BecauseOf() =>
-                deleteQuestionnaireService.DeleteQuestionnaire(questionnaireId, questionnaireVersion, userId);
+                deleteQuestionnaireService.DisableQuestionnaire(questionnaireId, questionnaireVersion, userId);
 
         [NUnit.Framework.Test] public void should_never_execute_DisableQuestionnaire_Command () =>
             commandServiceMock.Verify(x => x.Execute(Moq.It.IsAny<DisableQuestionnaire>(), Moq.It.IsAny<string>()), Times.Never);

@@ -71,7 +71,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.WebInterview
         private IReviewAllowedService SetupService(IQueryableReadSideRepositoryReader<InterviewSummary> summaries = null, 
             IAuthorizedUser authorizedUser = null)
         {
-            return new ReviewAllowedService(Create.Service.TransactionManagerProvider(), 
+            return new ReviewAllowedService(
                 summaries ?? new TestInMemoryWriter<InterviewSummary>(),
                 authorizedUser ?? Mock.Of<IAuthorizedUser>());
         }

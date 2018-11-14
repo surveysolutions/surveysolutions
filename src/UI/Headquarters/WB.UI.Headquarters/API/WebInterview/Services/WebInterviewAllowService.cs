@@ -5,21 +5,21 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.WebInterview;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.Infrastructure.Transactions;
+//using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Enumerator.Native.WebInterview;
+using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.UI.Headquarters.API.WebInterview.Services
 {
     class WebInterviewAllowService : IWebInterviewAllowService
     {
-        private readonly ITransactionManagerProvider transactionManagerProvider;
         private readonly IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage;
         private readonly IWebInterviewConfigProvider webInterviewConfigProvider;
         private readonly IAuthorizedUser authorizedUser;
         private readonly EventBusSettings eventBusSettings;
-        private readonly IPlainTransactionManagerProvider plainTransactionManagerProvider;
+        
         private static readonly List<InterviewStatus> AllowedInterviewStatuses = new List<InterviewStatus>
         {
             InterviewStatus.InterviewerAssigned,
@@ -33,19 +33,15 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
         };
 
         public WebInterviewAllowService(
-            ITransactionManagerProvider transactionManagerProvider,
-            IPlainTransactionManagerProvider plainTransactionManagerProvider,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryStorage,
-            IWebInterviewConfigProvider webInterviewConfigProvider, 
+            IWebInterviewConfigProvider webInterviewConfigProvider,
             IAuthorizedUser authorizedUser,
             EventBusSettings EventBusSettings)
         {
-            this.transactionManagerProvider = transactionManagerProvider;
             this.interviewSummaryStorage = interviewSummaryStorage;
             this.webInterviewConfigProvider = webInterviewConfigProvider;
             this.authorizedUser = authorizedUser;
-            eventBusSettings = EventBusSettings;
-            this.plainTransactionManagerProvider = plainTransactionManagerProvider;
+            this.eventBusSettings = EventBusSettings;
         }
 
         public void CheckWebInterviewAccessPermissions(string interviewId)
@@ -61,8 +57,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
                 }
 
             Guid interviewGuid = Guid.Parse(interviewId);
-            var interview = transactionManagerProvider.GetTransactionManager()
-                .ExecuteInQueryTransaction(() => interviewSummaryStorage.GetById(interviewGuid));
+            var interview = interviewSummaryStorage.GetById(interviewGuid);
 
             if (interview == null)
                 throw new InterviewAccessException(InterviewAccessExceptionReason.InterviewNotFound, Enumerator.Native.Resources.WebInterview.Error_NotFound);
@@ -83,10 +78,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
 
             QuestionnaireIdentity questionnaireIdentity = new QuestionnaireIdentity(interview.QuestionnaireId, interview.QuestionnaireVersion);
 
-            WebInterviewConfig webInterviewConfig = plainTransactionManagerProvider
-                .GetPlainTransactionManager()
-                    .ExecuteInPlainTransaction(
-                        () => webInterviewConfigProvider.Get( questionnaireIdentity));
+            WebInterviewConfig webInterviewConfig = webInterviewConfigProvider.Get( questionnaireIdentity);
 
             //interview is not public available and logged in user is not current interview responsible
             if (!webInterviewConfig.Started && interview.Status == InterviewStatus.InterviewerAssigned && this.authorizedUser.IsAuthenticated)

@@ -1,6 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using WB.UI.Designer.Resources;
-using WB.UI.Shared.Web.DataAnnotations;
 
 namespace WB.UI.Designer.Models
 {   

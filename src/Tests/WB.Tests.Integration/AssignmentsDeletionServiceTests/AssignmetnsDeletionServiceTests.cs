@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Moq;
 using NHibernate;
 using Npgsql;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Mappings;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.Transactions;
+using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Tests.Abc;
 using WB.Tests.Integration.PostgreSQLEventStoreTests;
@@ -19,7 +20,7 @@ namespace WB.Tests.Integration.AssignmentsDeletionServiceTests
     public class AssignmetnsDeletionServiceTests 
     {
         private ISessionFactory sessionFactory;
-        private PlainPostgresTransactionManager plainPostgresTransactionManager;
+        private IUnitOfWork UnitOfWork;
         private string connectionString;
 
         [OneTimeSetUp]
@@ -34,9 +35,14 @@ namespace WB.Tests.Integration.AssignmentsDeletionServiceTests
                     typeof(ReadonlyUserMap),
                     typeof(AssignmentMap),
                     typeof(QuestionnaireLiteViewItemMap),
-                    typeof(Core.BoundedContexts.Headquarters.Assignments.InterviewSummaryMap)
+                    typeof(InterviewSummaryMap),
+                    typeof(QuestionAnswerMap),
+                    typeof(InterviewCommentedStatusMap),
+                    typeof(TimeSpanBetweenStatusesMap)
+
                 }, true, "plainstore");
-            plainPostgresTransactionManager = new PlainPostgresTransactionManager(sessionFactory);
+
+            UnitOfWork = IntegrationCreate.UnitOfWork(sessionFactory);
         }
 
         [Test]
@@ -52,17 +58,17 @@ namespace WB.Tests.Integration.AssignmentsDeletionServiceTests
             assignment.SetAnswers(null);
             assignment.SetProtectedVariables(null);
 
-            IPlainStorageAccessor<Assignment> assignments = new PostgresPlainStorageRepository<Assignment>(plainPostgresTransactionManager);
+            IPlainStorageAccessor<Assignment> assignments = new PostgresPlainStorageRepository<Assignment>(UnitOfWork);
 
-            this.plainPostgresTransactionManager.ExecuteInPlainTransaction(() => assignments.Store(assignment, null));
+            assignments.Store(assignment, null);
 
-            var service = new AssignmetnsDeletionService(sessionFactory);
+            var service = new AssignmetnsDeletionService(UnitOfWork);
 
             // act 
             service.Delete(questionnaireIdentity);
 
             // assert
-            var actual = this.plainPostgresTransactionManager.ExecuteInPlainTransaction(() => assignments.Query(_ => _.Count()));
+            var actual = assignments.Query(_ => _.Count());
             Assert.That(actual, Is.EqualTo(0), "All assignments should be deleted");
 
             using (NpgsqlConnection connection = new NpgsqlConnection(this.connectionString))
@@ -72,14 +78,15 @@ namespace WB.Tests.Integration.AssignmentsDeletionServiceTests
                 npgsqlCommand.CommandText = "SELECT COUNT(*) from plainstore.assignmentsidentifyinganswers";
                 var identifyingQuestionsCount = await npgsqlCommand.ExecuteScalarAsync();
 
-                Assert.That(identifyingQuestionsCount, Is.EqualTo(0), "All identifying question answers should be removed with assignment`");
+                Assert.That(identifyingQuestionsCount, Is.EqualTo(0), 
+                    "All identifying question answers should be removed with assignment`");
             }
         }
 
         [OneTimeTearDown]
         public void OneTimeTearDown()
         {
-            this.plainPostgresTransactionManager.Dispose();
+            this.UnitOfWork.Dispose();
             this.sessionFactory.Dispose();
             DatabaseTestInitializer.DropDb(this.connectionString);
         }

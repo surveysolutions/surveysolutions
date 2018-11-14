@@ -23,7 +23,6 @@ using WB.Enumerator.Native.Questionnaire;
 using WB.Infrastructure.Native.Logging;
 using WB.Infrastructure.Native.Monitoring;
 using WB.Infrastructure.Native.Storage;
-using WB.UI.Shared.Enumerator.Services.Internals;
 using WB.UI.WebTester.Infrastructure;
 using WB.UI.WebTester.Infrastructure.AppDomainSpecific;
 using IDisposable = System.IDisposable;

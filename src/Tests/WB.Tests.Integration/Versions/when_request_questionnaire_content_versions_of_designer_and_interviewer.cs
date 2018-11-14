@@ -1,6 +1,5 @@
 using FluentAssertions;
 using WB.Core.BoundedContexts.Designer.Implementation.Services;
-using WB.Core.BoundedContexts.Interviewer.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 
 namespace WB.Tests.Integration.Versions

@@ -12,7 +12,6 @@ using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membersh
 using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Services.Accounts;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.Infrastructure.Transactions;
 using WB.UI.Designer.Resources;
 
 namespace WB.UI.Designer.Api.Attributes
@@ -26,8 +25,6 @@ namespace WB.UI.Designer.Api.Attributes
         private IAllowedAddressService allowedAddressService => ServiceLocator.Current.GetInstance<IAllowedAddressService>();
 
         private IIpAddressProvider ipAddressProvider => ServiceLocator.Current.GetInstance<IIpAddressProvider>();
-
-        private IPlainTransactionManagerProvider TransactionManagerProvider => ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>();
 
         private IAccountRepository AccountRepository => ServiceLocator.Current.GetInstance<IAccountRepository>();
 
@@ -52,56 +49,49 @@ namespace WB.UI.Designer.Api.Attributes
                 this.ThrowUnathorizedException(actionContext, ErrorMessages.User_Not_authorized);
                 return;
             }
-            this.TransactionManagerProvider.GetPlainTransactionManager().BeginTransaction();
-            try
+
+            if (!this.Authorize(credentials.Username, credentials.Password))
             {
-                if (!this.Authorize(credentials.Username, credentials.Password))
-                {
-                    this.ThrowUnathorizedException(actionContext, ErrorMessages.User_Not_authorized);
-                    return;
-                }
+                this.ThrowUnathorizedException(actionContext, ErrorMessages.User_Not_authorized);
+                return;
+            }
 
-                var account = this.AccountRepository.GetByNameOrEmail(credentials.Username);
-                var identity = new GenericIdentity(account.UserName, "Basic");
-                var principal = new GenericPrincipal(identity, null);
+            var account = this.AccountRepository.GetByNameOrEmail(credentials.Username);
+            var identity = new GenericIdentity(account.UserName, "Basic");
+            var principal = new GenericPrincipal(identity, null);
 
-                Thread.CurrentPrincipal = principal;
-                if (HttpContext.Current != null)
-                {
-                    HttpContext.Current.User = principal;
-                }
+            Thread.CurrentPrincipal = principal;
+            if (HttpContext.Current != null)
+            {
+                HttpContext.Current.User = principal;
+            }
 
-                if (IsAccountLockedOut())
-                {
-                    this.ThrowLockedOutException(actionContext);
-                    return;
-                }
+            if (IsAccountLockedOut())
+            {
+                this.ThrowLockedOutException(actionContext);
+                return;
+            }
 
-                if (this.IsAccountNotApproved())
-                {
-                    this.ThrowNotApprovedException(actionContext);
-                    return;
-                }
+            if (this.IsAccountNotApproved())
+            {
+                this.ThrowNotApprovedException(actionContext);
+                return;
+            }
 
-                if (this.onlyAllowedAddresses)
+            if (this.onlyAllowedAddresses)
+            {
+                if (!this.MembershipService.WebUser.MembershipUser.CanImportOnHq)
                 {
-                    if (!this.MembershipService.WebUser.MembershipUser.CanImportOnHq)
+                    var clientIpAddress = ipAddressProvider.GetClientIpAddress();
+                    if (!this.allowedAddressService.IsAllowedAddress(clientIpAddress))
                     {
-                        var clientIpAddress = ipAddressProvider.GetClientIpAddress();
-                        if (!this.allowedAddressService.IsAllowedAddress(clientIpAddress))
-                        {
-                            this.ThrowForbiddenException(actionContext, string.Format(ErrorMessages.UserNeedToContactSupportFormat, clientIpAddress));
-                            return;
-                        }
+                        this.ThrowForbiddenException(actionContext, string.Format(ErrorMessages.UserNeedToContactSupportFormat, clientIpAddress));
+                        return;
                     }
                 }
+            }
 
-                base.OnAuthorization(actionContext);
-            }
-            finally
-            {
-                this.TransactionManagerProvider.GetPlainTransactionManager().RollbackTransaction();
-            }
+            base.OnAuthorization(actionContext);
         }
 
         private static BasicCredentials ParseCredentials(HttpActionContext actionContext)
