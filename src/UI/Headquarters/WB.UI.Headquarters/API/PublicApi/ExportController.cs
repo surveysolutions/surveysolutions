@@ -1,7 +1,10 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 using System.Web.Http;
 using System.Web.Http.Description;
@@ -35,9 +38,9 @@ namespace WB.UI.Headquarters.API.PublicApi
 
         public ExportController(
             IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
-            IDataExportStatusReader dataExportStatusReader, 
-            IExportServiceApi exportServiceApi, 
-            IExportSettings exportSettings, 
+            IDataExportStatusReader dataExportStatusReader,
+            IExportServiceApi exportServiceApi,
+            IExportSettings exportSettings,
             IAuditLog auditLog)
         {
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
@@ -61,9 +64,9 @@ namespace WB.UI.Headquarters.API.PublicApi
         /// <response code="404">Questionnaire was not found</response>
         [HttpPost]
         [Route(@"{exportType}/{id?}/start")]
-        public async Task<IHttpActionResult> StartProcess(string id, 
-            DataExportFormat exportType, 
-            InterviewStatus? status = null, 
+        public async Task<IHttpActionResult> StartProcess(string id,
+            DataExportFormat exportType,
+            InterviewStatus? status = null,
             DateTime? from = null, DateTime? to = null)
         {
             switch (exportType)
@@ -77,12 +80,12 @@ namespace WB.UI.Headquarters.API.PublicApi
                     var questionnaireBrowseItem = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
                     if (questionnaireBrowseItem == null)
                         return this.Content(HttpStatusCode.NotFound, @"Questionnaire not found");
-                    
+
                     await this.exportServiceApi.RequestUpdate(questionnaireIdentity.ToString(),
                         exportType, status, from, to, GetPasswordFromSettings(), null, null);
-                    
+
                     this.auditLog.ExportStared(
-                        $@"{questionnaireBrowseItem.Title} v{questionnaireBrowseItem.Version} {status?.ToString() ?? ""}", 
+                        $@"{questionnaireBrowseItem.Title} v{questionnaireBrowseItem.Version} {status?.ToString() ?? ""}",
                         exportType);
 
                     break;
@@ -155,7 +158,7 @@ namespace WB.UI.Headquarters.API.PublicApi
             var questionnaireBrowseItem = this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
             if (questionnaireBrowseItem == null)
                 return this.Content(HttpStatusCode.NotFound, @"Questionnaire not found");
-            
+
             var allExportStatuses = await this.dataExportStatusReader.GetDataExportStatusForQuestionnaireAsync(questionnaireIdentity);
 
             var exportStatusByExportType = allExportStatuses?.DataExports?.FirstOrDefault(x =>
@@ -180,6 +183,58 @@ namespace WB.UI.Headquarters.API.PublicApi
                 }
             });
         }
+
+        /// <summary>
+        /// Downloads export file. It will return either 200 status code with export file content or 302 redirect to export location.
+        /// </summary>
+        /// <param name="id">Questionnaire id in format [QuestionnaireGuid$Version]</param>
+        /// <param name="exportType">Format of export data to download</param>
+        /// <param name="status">Status of exported interviews</param>
+        /// <param name="from">Started date for time frame of exported interviews (when change was done to an interview). Should be in UTC date</param>
+        /// <param name="to">Finished date for time frame of exported interviews (when change was done to an interview). Should be in UTC date</param>
+        /// 
+        /// <response code="200">Returns content of the export file as zip archive</response>
+        /// <response code="302">Location header contains location of export file for download</response>
+        /// <response code="404">Export file was not generated yet</response>
+        /// <response code="400">Questionnaire id is malformed</response>
+        [HttpGet]
+        [Route(@"{exportType}/{id}")]
+        public async Task<HttpResponseMessage> Get(string id, DataExportFormat exportType, InterviewStatus? status = null, DateTime? from = null, DateTime? to = null)
+        {
+            if (!QuestionnaireIdentity.TryParse(id, out var questionnaireIdentity))
+                return Request.CreateErrorResponse(HttpStatusCode.BadRequest, @"Invalid questionnaire identity");
+
+            if (exportType == DataExportFormat.DDI)
+            {
+                var archivePassword =
+                    this.exportSettings.EncryptionEnforced() ? this.exportSettings.GetPassword() : null;
+                var ddiArchiveResponse = await exportServiceApi.GetDdiArchive(questionnaireIdentity.ToString(),
+                    archivePassword);
+
+                var response = Request.CreateResponse(HttpStatusCode.OK);
+                response.Content = new ByteArrayContent(await ddiArchiveResponse.ReadAsByteArrayAsync());
+
+                return response;
+            }
+
+            var result = await this.dataExportStatusReader.GetDataArchive(
+                questionnaireIdentity, exportType, status, from, to);
+
+            if (result == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound);
+            }
+
+            if (result.Redirect != null)
+            {
+                var redirect = Request.CreateResponse(HttpStatusCode.Redirect);
+                redirect.Headers.Location = new Uri(result.Redirect);
+                return redirect;
+            }
+
+            return new ProgressiveDownload(Request).ResultMessage(result.Data, "application/zip");
+        }
+
 
         public class ExportDetails
         {
