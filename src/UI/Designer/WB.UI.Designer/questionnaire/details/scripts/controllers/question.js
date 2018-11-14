@@ -176,11 +176,36 @@
                 var modalInstance = $uibModal.open({
                     templateUrl: 'views/add-classification.html',
                     backdrop: false,
-                    windowClass: "addClassification dragAndDrop",
+                    windowClass: "add-classification-modal dragAndDrop",
                     controller: 'addClassificationCtrl',
                     resolve: {
-                        isReadOnlyForUser: $scope.questionnaire.isReadOnlyForUser || false
+                        isReadOnlyForUser: $scope.questionnaire.isReadOnlyForUser || false,
+                        hasOptions: $scope.activeQuestion.optionsCount > 0
                     }
+                });
+
+                modalInstance.result.then(function (selectedClassification) {
+                    if (selectedClassification == null)
+                        return;
+                    var replaceOptions = function()
+                    {
+                        $scope.activeQuestion.options = selectedClassification.categories;
+                    }
+                    if ($scope.activeQuestion.options.length > 0) {
+                        var modalInstance =
+                            confirmService.open(
+                                utilityService.replaceOptionsConfirmationPopup($scope.activeQuestion.title || $i18next.t('UntitledQuestion')));
+
+                        modalInstance.result.then(function(confirmResult) {
+                            if (confirmResult === 'ok') {
+                                replaceOptions();
+                            }
+                        });
+                    } else {
+                        replaceOptions();
+                    }
+                }, function () {
+                    
                 });
             };
 
