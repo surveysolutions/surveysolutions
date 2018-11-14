@@ -28,6 +28,8 @@ namespace WB.Core.BoundedContexts.Headquarters.DataExport.Views
             var archiveFileName = exportFileNameService.GetQuestionnaireTitleWithVersion(questionnaireIdentity);
             var result = await exportServiceApi.DownloadArchive(questionnaireIdentity.ToString(), archiveFileName, format, status, from, to);
 
+            if (result.StatusCode == HttpStatusCode.NotFound) return null;
+
             result.EnsureSuccessStatusCode();
 
             if(result.Headers.TryGetValues("NewLocation", out var values))

@@ -61,10 +61,12 @@ namespace WB.UI.Headquarters.API
             DateTime? from = null, 
             DateTime? to = null)
         {
-            var result = await this.dataExportStatusReader.GetDataArchive(
-                new QuestionnaireIdentity(id, version), format, status, from , to);
-
-            if (result.Redirect != null)
+            var result = await this.dataExportStatusReader.GetDataArchive(new QuestionnaireIdentity(id, version), format, status, from , to);
+            if (result == null)
+            {
+                return Request.CreateResponse(HttpStatusCode.NotFound);
+            }
+            else if (result.Redirect != null)
             {
                 var response = Request.CreateResponse(HttpStatusCode.Redirect);
                 response.Headers.Location = new Uri(result.Redirect);
