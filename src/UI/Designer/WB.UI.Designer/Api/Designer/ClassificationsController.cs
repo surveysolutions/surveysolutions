@@ -87,6 +87,13 @@ namespace WB.UI.Designer.Api.Designer
         {
             return await classificationsStorage.SearchAsync(model.Query, model.GroupId);
         }
+
+        [HttpGet]
+        [Route("classification/{id}/categories")]
+        public async Task<IEnumerable<Category>> Categories([FromUri] Guid id)
+        {
+            return await classificationsStorage.GetCategories(id);
+        }
     }
 
     public class SearchQueryModel

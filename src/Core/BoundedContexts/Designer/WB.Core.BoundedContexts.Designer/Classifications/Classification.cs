@@ -1,10 +1,11 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Data.Common;
 using System.Linq;
+using System.Reflection.Metadata;
 using System.Threading.Tasks;
+using WB.Core.BoundedContexts.Designer.Verifier;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.BoundedContexts.Designer.Classifications
 {
@@ -26,6 +27,9 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
     {
         public Guid Id { get; set;}
         public string Title { get;set; }
+        public ClassificationGroup Group { get; set; }
+        public int CategoriesCount { get; set; }
+
     }
 
     public class ClassificationGroup : IClassificationEntity
@@ -109,16 +113,46 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
                     .Take(20)
                     .ToList();
 
-                var items = _.Where(x => ids.Contains(x.Id));
+                var items = _.Where(x => ids.Contains(x.Id) || x.Type == ClassificationEntityType.Group);
 
                 return items.ToList();
             });
 
-            var total = classificationsStorage.Query(_ => ApplySearchFilter(_, query, groupId).Count());
+            var classificationIds = dbEntities.Where(x => x.Type == ClassificationEntityType.Classification).Select(x => x.Id).ToList();
+
+            var categoriesCounts = classificationsStorage.Query(_ =>
+            {
+                var items = _.Where(x => x.Parent != null && classificationIds.Contains(x.Parent.Value))
+                    .GroupBy(x => x.Parent)
+                    .Select(x => new {Id = x.Key, Count = x.Count()});
+
+                return items.ToList();
+            }).ToDictionary(x => x.Id, x => x.Count);
+
+            var groups = dbEntities.Where(x => x.Type == ClassificationEntityType.Group).ToDictionary(x => x.Id, x =>
+                new ClassificationGroup
+                {
+                    Id = x.Id,
+                    Title = x.Title
+                });
+
+            var classifications = dbEntities.Where(x => x.Type == ClassificationEntityType.Classification)
+                .Select(x => new Classification
+                {
+                    Id = x.Id,
+                    Title = x.Title,
+                    Group = (groups.ContainsKey(x.Parent ?? Guid.Empty) ? groups[x.Parent ?? Guid.Empty] : null) ?? groups.Values.FirstOrDefault(),
+                    CategoriesCount = categoriesCounts.ContainsKey(x.Id) ? categoriesCounts[x.Id] : 0
+                }).ToList();
+
+            var total = classificationsStorage.Query(_ => ApplySearchFilter(_, query, groupId)
+                .Select(x => x.Type == ClassificationEntityType.Classification ? x.Id : x.Parent)
+                .GroupBy(x => x)
+                .Count());
 
             return await Task.FromResult(new ClassificationsSearchResult
             {
-                Classifications = dbEntities,  
+                Classifications = classifications,  
                 Total = total
             });
         }
@@ -126,8 +160,13 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
         private IQueryable<ClassificationEntity> ApplySearchFilter(IQueryable<ClassificationEntity> entities, 
             string query, Guid? groupId)
         {
-            var lowercaseQuery = query.ToLower();
-            var searchQuery = entities.Where(x => x.Title.Contains(lowercaseQuery));
+            var searchQuery = entities;
+            var lowercaseQuery = (query?? string.Empty).ToLower().Trim();
+            if (!string.IsNullOrWhiteSpace(lowercaseQuery))
+            {
+                searchQuery = entities.Where(x => x.Title.ToLower().Contains(lowercaseQuery));
+            }
+
             if (groupId.HasValue)
             {
                 searchQuery = searchQuery.Where(x => x.Parent == groupId);
@@ -140,6 +179,23 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
             classificationsStorage.Store(entities: classifications.Select(x =>
                 new Tuple<ClassificationEntity, object>(x, x.Id)));
         }
+
+        public Task<List<Category>> GetCategories(Guid classificationId)
+        {
+            var dbEntities = classificationsStorage.Query(_ => _.Where(x => x.Parent == classificationId).Take(AbstractVerifier.MaxOptionLength).ToList());
+
+            var categories = dbEntities.Select(x => new Category
+                {
+                    Id = x.Id,
+                    Value = x.Value ?? 0,
+                    Title = x.Title,
+                    Order = x.Index ?? 0
+                })
+                .OrderBy(x => x.Order).ThenBy(x => x.Value)
+                .ToList();
+
+            return Task.FromResult(categories);
+        }
     }
 
     public interface IClassificationsStorage
@@ -148,11 +204,12 @@ namespace WB.Core.BoundedContexts.Designer.Classifications
         Task<IEnumerable<Classification>> GetClassifications();
         Task<ClassificationsSearchResult> SearchAsync(string query, Guid? groupId);
         void Store(ClassificationEntity[] bdEntities);
+        Task<List<Category>> GetCategories(Guid classificationId);
     }
 
     public class ClassificationsSearchResult
     {
-        public List<ClassificationEntity> Classifications { get; set; }
+        public List<Classification> Classifications { get; set; }
         public int Total { get; set; }
     }
 }

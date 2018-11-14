@@ -10313,3 +10313,222 @@ input.checkbox-filter:checked:disabled ~ label:focus .tick {
     right: -32px;
   }
 }
+.add-classification-modal {
+  /* Safari */
+}
+.add-classification-modal .modal-body {
+  padding-left: 20px;
+  padding-right: 0;
+}
+.add-classification-modal.modal .modal-dialog {
+  width: 800px;
+}
+.add-classification-modal .header-block {
+  border-bottom: 1px solid #edeff1;
+  margin-bottom: 15px;
+  margin-right: 20px;
+}
+.add-classification-modal .custom-dropdown .dropdown-toggle {
+  width: 250px;
+  background: transparent;
+  position: relative;
+  float: left;
+  text-align: left;
+  font: 14px/16px Arial, Helvetica, sans-serif;
+  border: 1px solid #dbdfe2;
+  text-transform: none;
+  color: #555;
+  height: 42px;
+  letter-spacing: normal;
+  color: #a6a8a9;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  border-radius: 5px 0 0 5px;
+  padding-right: 30px;
+}
+.add-classification-modal .custom-dropdown .dropdown-toggle:after {
+  content: "";
+  position: absolute;
+  top: 15px;
+  right: 10px;
+  width: 0;
+  height: 0;
+  display: block;
+  border-top: 12px solid #a6a8a9;
+  border-right: 7px solid transparent;
+  border-left: 7px solid transparent;
+  border-bottom: none;
+}
+.add-classification-modal .custom-dropdown .dropdown-menu {
+  width: 250px;
+}
+.add-classification-modal .custom-dropdown .dropdown-menu ul {
+  max-height: 300px;
+}
+.add-classification-modal .custom-dropdown .dropdown-menu ul li > a {
+  display: block;
+  font-weight: normal;
+  letter-spacing: normal;
+  padding: 5px 10px;
+  cursor: pointer;
+  white-space: pre-wrap;
+  color: #333333;
+}
+.add-classification-modal .custom-dropdown-search {
+  margin-bottom: 15px;
+}
+.add-classification-modal .custom-dropdown-search .form-control {
+  font: 14px/16px Arial, Helvetica, sans-serif;
+  border: 1px solid #dbdfe2;
+  color: #555;
+  height: 42px;
+  padding-right: 45px;
+  color: #333;
+  width: 100%;
+}
+.add-classification-modal .custom-dropdown-search .form-control::-moz-placeholder {
+  font: 14px/16px Arial, Helvetica, sans-serif;
+}
+.add-classification-modal .custom-dropdown-search .form-control:-ms-input-placeholder {
+  font: 14px/16px Arial, Helvetica, sans-serif;
+}
+.add-classification-modal .custom-dropdown-search .form-control::-webkit-input-placeholder {
+  font: 14px/16px Arial, Helvetica, sans-serif;
+}
+.add-classification-modal .custom-dropdown-search .search {
+  position: relative;
+  width: 100%;
+}
+.add-classification-modal .custom-dropdown-search .search-icon {
+  position: absolute;
+  right: 15px;
+  font-size: 21px;
+  color: #dbdfe2;
+  line-height: 40px;
+  width: 40px;
+  height: 40px;
+  z-index: 5;
+}
+.add-classification-modal .custom-dropdown-search .search-icon.loading:after {
+  position: absolute;
+  top: 0;
+  right: 8px;
+  content: "";
+  display: block;
+  width: 100%;
+  height: 100%;
+  border: 4px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 4px solid #3498db;
+  -webkit-animation: spin 1.5s linear infinite;
+  /* Safari */
+  animation: spin 1.5s linear infinite;
+}
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+.add-classification-modal .group-summary {
+  font: 12px/14px Arial, Helvetica, sans-serif;
+  color: #a6a8a9;
+  margin-bottom: 5px;
+}
+.add-classification-modal .tile-wrapper {
+  max-height: 600px;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-right: 20px;
+}
+.add-classification-modal .tile {
+  width: 370px;
+  padding: 10px 15px 20px;
+  border-radius: 5px;
+  border: 2px solid #edeff1;
+  margin-bottom: 10px;
+}
+.add-classification-modal .tile:hover,
+.add-classification-modal .tile:focus {
+  border-color: #d7e4ee;
+}
+.add-classification-modal .tile h4 {
+  font: 16px/18px 'Open Sans Light', sans-serif;
+  word-break: break-word;
+}
+.add-classification-modal .tile .show-answers {
+  color: #337ab7;
+  font: 12px/14px "Lucida Console", Monaco, monospace;
+  display: inline-block;
+  position: relative;
+  padding-left: 15px;
+  margin-bottom: 10px;
+}
+.add-classification-modal .tile .show-answers:hover,
+.add-classification-modal .tile .show-answers:focus,
+.add-classification-modal .tile .show-answers:active {
+  text-decoration: none;
+  color: #285f8f;
+}
+.add-classification-modal .tile .show-answers.collapsed:hover:before,
+.add-classification-modal .tile .show-answers.collapsed:focus:before,
+.add-classification-modal .tile .show-answers.collapsed:active:before {
+  border-left-color: #285f8f;
+}
+.add-classification-modal .tile .show-answers:before {
+  position: absolute;
+  top: 2px;
+  left: 0;
+  display: block;
+  content: "";
+  width: 0;
+  height: 0;
+  border-right: 5px solid transparent;
+  border-left: 5px solid transparent;
+  border-top: 5px solid #337ab7;
+}
+.add-classification-modal .tile .show-answers.collapsed:before {
+  border-left-color: #337ab7;
+  border-right: none;
+  border-top-color: transparent;
+  border-bottom: 5px solid transparent;
+  top: 0;
+}
+.add-classification-modal .tile .scroller {
+  margin-bottom: 10px;
+}
+.add-classification-modal .tile ul {
+  margin-right: 15px;
+  margin-bottom: 10px;
+  color: #333;
+  font-size: 12px;
+  line-height: 14px;
+  max-height: 300px;
+}
+.add-classification-modal .tile ul li {
+  margin: 5px 0;
+  word-break: break-word;
+}
+.add-classification-modal .classification-group-tag a {
+  font-size: 12px;
+  line-height: 14px;
+  display: inline-block;
+  padding: 5px;
+  border-radius: 3px;
+}
+.add-classification-modal .classification-group-tag a:hover,
+.add-classification-modal .classification-group-tag a:focus {
+  text-decoration: none;
+}

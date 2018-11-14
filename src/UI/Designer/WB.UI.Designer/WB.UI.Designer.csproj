@@ -945,6 +945,7 @@
     <Content Include="Views\UnderConstruction\Index.cshtml" />
     <Content Include="Views\Account\_UpdateUserProfile.cshtml" />
     <Content Include="Views\Account\_ChangePassword.cshtml" />
+    <Content Include="questionnaire\content\designer-editor\wb-classifications.less" />
     <None Include="WB.UI.Designer.wpp.targets" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
