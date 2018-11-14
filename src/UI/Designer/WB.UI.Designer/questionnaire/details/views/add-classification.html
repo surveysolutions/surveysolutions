@@ -1,31 +1,69 @@
-﻿<div class="modal-header">
+﻿<div class="modal-header blue-strip">
     <button type="button" class="close" aria-hidden="true" ng-click="$close()"></button>
     <h3 class="modal-title">
         Question Bank. Classifications
     </h3>
 </div>
 <div class="modal-body">
-    <div class="row">
-        <div class="col-xs-12">
-            <div class="input-group">
-                <div class="input-group-btn">
+    <div class="header-block clearfix">
+        <form>
+            <div class="input-group custom-dropdown-search">
+                <div class="input-group-btn custom-dropdown">
                     <button class="btn dropdown-toggle" id="classification-group" data-toggle="dropdown" uib-dropdown-toggle type="button">
                         {{selectedGroup.title }}
                         <span class="dropdown-arrow"></span>
                     </button>
-                    <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="classification-group-dropdown">
-                        <li role="presentation" ng-repeat="group in groups">
-                            <a role="menuitem" tabindex="-1" ng-click="changeClassificationGroup(group)">{{group.title}}</a>
-                        </li>
-                    </ul>
+                    <div class="dropdown-menu" role="menu" aria-labelledby="classification-group-dropdown">
+                        <perfect-scrollbar class="scroller">
+                            <ul class="list-unstyled">
+                                <li ng-repeat="group in groups">
+                                    <a role="menuitem" tabindex="-1" ng-click="changeClassificationGroup(group)">{{group.title}}</a>
+                                </li>
+                            </ul>
+                        </perfect-scrollbar>
+                    </div>
                 </div><!-- /btn-group -->
                 <input type="text" ng-model="searchText" class="form-control" id="searchFor" aria-label="classification-search">
             </div><!-- /input-group -->
-            <p>{{ classifications.length }} classifications</p>
-            <p>{{searchText}}</p>
-        </div><!-- /.col-lg-6 -->
-    </div><!-- /.row -->
-</div>
-<div class="modal-footer">
-    Footer
+        </form>
+        <span class="group-summary pull-right">{{ totalResults }} classifications</span>
+    </div>
+    <perfect-scrollbar class="scroller">
+        <div class="tile-wrapper">
+            <div class="tile-column">
+                <div class="tile" ng-repeat="classification in classifications1">
+                    <h4>{{classification.title}}</h4>
+                    <button class="btn btn-link show-answers"  ng-class="{'collapsed': classification.categoriesAreOpen == false}" ng-click="toggleCategories(classification)">
+                        Show categories ({{classification.categoriesCount}})
+                    </button>
+                    <div class="collapse" ng-class="{'in': classification.categoriesAreOpen}"  ng-show="classification.categoriesAreOpen" >
+                        <ul>
+                            <li  ng-repeat="category in classification.categories">{{category.title}}</li>
+                        </ul>
+                    </div>
+                    <div class="classification-group-tag">
+                        <a class="bg-info" ng-click="changeClassificationGroup(classification.group)">{{classification.group.title}}</a>
+                    </div>
+                    <button class="btn btn-link" ng-click="replaceOptions(classification)">Add</button>
+                </div>
+            </div>
+            <div class="tile-column">
+                <div class="tile" ng-repeat="classification in classifications2">
+                    <h4>{{classification.title}}</h4>
+                    <button class="btn btn-link show-answers" ng-class="{'collapsed': classification.categoriesAreOpen == false}" ng-click="toggleCategories(classification)">
+                        Show categories ({{classification.categoriesCount}})
+                    </button>
+                    <div class="collapse" ng-class="{'in': classification.categoriesAreOpen}" ng-show="classification.categoriesAreOpen">
+                        <ul>
+                            <li ng-repeat="category in classification.categories">{{category.title}}</li>
+                        </ul>
+                    </div>
+                    <div class="classification-group-tag">
+                        <a class="bg-info" ng-click="changeClassificationGroup(classification.group)">{{classification.group.title}}</a>
+                    </div>
+                    <button class="btn btn-link" ng-click="replaceOptions(classification)">Add</button>
+                </div>
+            </div>
+        </div>
+    </perfect-scrollbar>
 </div>

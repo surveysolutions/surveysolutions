@@ -99,6 +99,16 @@
                 };
             };
 
+            utilityService.replaceOptionsConfirmationPopup = function (title) {
+                var trimmedTitle = utilityService.sanitize(title).substring(0, 50) + (title.length > 50 ? "..." : "");
+                var message = $i18next.t('ReplaceOptionsConfirmation',  {trimmedTitle: trimmedTitle});
+                return {
+                    title: message,
+                    okButtonTitle: $i18next.t("Yes"),
+                    cancelButtonTitle: $i18next.t("No")
+                };
+            };
+
             utilityService.createEmptyGroup = function (parent) {
                 var newId = utilityService.guid();
                 var emptyGroup = {
