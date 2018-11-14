@@ -77,6 +77,8 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Questionnaire
 
         public virtual bool Disabled { get; set; }
 
+        public virtual Guid? DisabledBy { get; set; }
+
         public virtual long QuestionnaireContentVersion { get; set; }
 
         public virtual IList<FeaturedQuestionItem> FeaturedQuestions { get; protected set; }

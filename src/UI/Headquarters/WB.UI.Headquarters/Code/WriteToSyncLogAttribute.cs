@@ -16,13 +16,11 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.SynchronizationLog;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.WebApi;
-
 using WB.UI.Headquarters.Resources;
 using WB.UI.Headquarters.Utils;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -38,21 +36,6 @@ namespace WB.UI.Headquarters.Code
         private const string UnknownStringArgumentValue = "unknown";
 
         private readonly SynchronizationLogType logAction;
-        private HqSignInManager signInManager
-            => ServiceLocator.Current.GetInstance<HqSignInManager>();
-
-        private IPlainStorageAccessor<SynchronizationLogItem> synchronizationLogItemPlainStorageAccessor
-            => ServiceLocator.Current.GetInstance<IPlainStorageAccessor<SynchronizationLogItem>>();
-
-        private IAuthorizedUser authorizedUser => ServiceLocator.Current.GetInstance<IAuthorizedUser>();
-
-        private IQuestionnaireBrowseViewFactory questionnaireBrowseItemFactory => ServiceLocator.Current.GetInstance<IQuestionnaireBrowseViewFactory>();
-        private IQuestionnaireStorage questionnaireStorage => ServiceLocator.Current.GetInstance<IQuestionnaireStorage>();
-
-        private IUserViewFactory userViewFactory => ServiceLocator.Current.GetInstance<IUserViewFactory>();
-        private IInterviewAnswerSerializer answerSerializer => ServiceLocator.Current.GetInstance<IInterviewAnswerSerializer>();
-
-        private ILogger logger => ServiceLocator.Current.GetInstance<ILoggerProvider>().GetFor<WriteToSyncLogAttribute>();
 
         public WriteToSyncLogAttribute(SynchronizationLogType logAction)
         {
@@ -61,11 +44,25 @@ namespace WB.UI.Headquarters.Code
 
         public override async Task OnActionExecutedAsync(HttpActionExecutedContext context, CancellationToken cancellationToken)
         {
+            var currentContextScope = context.Request.GetDependencyScope();
+
+            var signInManager = currentContextScope.GetService(typeof(HqSignInManager)) as HqSignInManager;
+            var synchronizationLogItemPlainStorageAccessor =
+                currentContextScope.GetService(typeof(IPlainStorageAccessor<SynchronizationLogItem>)) as IPlainStorageAccessor<SynchronizationLogItem>;
+            IAuthorizedUser authorizedUser = currentContextScope.GetService(typeof(IAuthorizedUser)) as IAuthorizedUser;
+            IQuestionnaireBrowseViewFactory questionnaireBrowseItemFactory =
+                currentContextScope.GetService(typeof(IQuestionnaireBrowseViewFactory)) as IQuestionnaireBrowseViewFactory;
+
+            IQuestionnaireStorage questionnaireStorage = currentContextScope.GetService(typeof(IQuestionnaireStorage)) as IQuestionnaireStorage;
+            IInterviewAnswerSerializer answerSerializer = currentContextScope.GetService(typeof(IInterviewAnswerSerializer)) as IInterviewAnswerSerializer;
+
+            ILogger logger = (currentContextScope.GetService(typeof(ILoggerProvider)) as ILoggerProvider).GetFor<WriteToSyncLogAttribute>();
+
             await base.OnActionExecutedAsync(context, cancellationToken);
 
             try
             {
-                if (!this.authorizedUser.IsAuthenticated)
+                if (!authorizedUser.IsAuthenticated)
                 {
                     var authHeader = context.Request?.Headers?.Authorization?.ToString();
 
@@ -75,9 +72,9 @@ namespace WB.UI.Headquarters.Code
 
                 var logItem = new SynchronizationLogItem
                 {
-                    DeviceId = this.authorizedUser.IsAuthenticated ? this.authorizedUser.DeviceId : null,
-                    InterviewerId = this.authorizedUser.IsAuthenticated ? this.authorizedUser.Id : Guid.Empty,
-                    InterviewerName = this.authorizedUser.IsAuthenticated ? this.authorizedUser.UserName : string.Empty, 
+                    DeviceId = authorizedUser.IsAuthenticated ? authorizedUser.DeviceId : null,
+                    InterviewerId = authorizedUser.IsAuthenticated ? authorizedUser.Id : Guid.Empty,
+                    InterviewerName = authorizedUser.IsAuthenticated ? authorizedUser.UserName : string.Empty, 
                     LogDate = DateTime.UtcNow,
                     Type = this.logAction
                 };
@@ -110,19 +107,19 @@ namespace WB.UI.Headquarters.Code
                         logItem.Log = this.GetInterviewerLogMessage(context);
                         break;
                     case SynchronizationLogType.GetCensusQuestionnaires:
-                        logItem.Log = this.GetQuestionnairesLogMessage(context);
+                        logItem.Log = this.GetQuestionnairesLogMessage(context, questionnaireBrowseItemFactory);
                         break;
                     case SynchronizationLogType.GetQuestionnaire:
-                        logItem.Log = this.GetQuestionnaireLogMessage(SyncLogMessages.GetQuestionnaire, context);
+                        logItem.Log = this.GetQuestionnaireLogMessage(SyncLogMessages.GetQuestionnaire, context, questionnaireBrowseItemFactory);
                         break;
                     case SynchronizationLogType.QuestionnaireProcessed:
-                        logItem.Log = this.GetQuestionnaireLogMessage(SyncLogMessages.QuestionnaireProcessed, context);
+                        logItem.Log = this.GetQuestionnaireLogMessage(SyncLogMessages.QuestionnaireProcessed, context, questionnaireBrowseItemFactory);
                         break;
                     case SynchronizationLogType.GetQuestionnaireAssembly:
-                        logItem.Log = this.GetQuestionnaireLogMessage(SyncLogMessages.GetQuestionnaireAssembly, context);
+                        logItem.Log = this.GetQuestionnaireLogMessage(SyncLogMessages.GetQuestionnaireAssembly, context, questionnaireBrowseItemFactory);
                         break;
                     case SynchronizationLogType.QuestionnaireAssemblyProcessed:
-                        logItem.Log = this.GetQuestionnaireLogMessage(SyncLogMessages.QuestionnaireAssemblyProcessed, context);
+                        logItem.Log = this.GetQuestionnaireLogMessage(SyncLogMessages.QuestionnaireAssemblyProcessed, context, questionnaireBrowseItemFactory);
                         break;
                     case SynchronizationLogType.GetInterviewPackage:
                         logItem.Log = SyncLogMessages.GetInterviewPackage.FormatString(context.GetActionArgumentOrDefault<string>("id", string.Empty));
@@ -144,7 +141,7 @@ namespace WB.UI.Headquarters.Code
                         logItem.InterviewId = idAsGuid;
                         break;
                     case SynchronizationLogType.GetQuestionnaireAttachments:
-                        logItem.Log = this.GetQuestionnaireLogMessage(SyncLogMessages.GetQuestionnaireAttachments, context);
+                        logItem.Log = this.GetQuestionnaireLogMessage(SyncLogMessages.GetQuestionnaireAttachments, context, questionnaireBrowseItemFactory);
                         break;
                     case SynchronizationLogType.GetAttachmentContent:
                         logItem.Log = SyncLogMessages.GetAttachmentContent.FormatString(context.GetActionArgumentOrDefault<string>("id", string.Empty));
@@ -164,7 +161,7 @@ namespace WB.UI.Headquarters.Code
                         if (questionnaireId != null)
                         {
                             var questionnaireIdentity = QuestionnaireIdentity.Parse(questionnaireId);
-                            var questionnaireInfo = this.questionnaireBrowseItemFactory.GetById(questionnaireIdentity);
+                            var questionnaireInfo = questionnaireBrowseItemFactory.GetById(questionnaireIdentity);
                             logItem.Log = SyncLogMessages.GetTranslations.FormatString(questionnaireInfo.Title, questionnaireInfo.Version);
                         }
                         else
@@ -180,10 +177,10 @@ namespace WB.UI.Headquarters.Code
                             : SyncLogMessages.InterviewerFailedToLogin;
                         break;
                     case SynchronizationLogType.GetAssignmentsList:
-                        logItem.Log = GetAssignmentsLogMessage(context);
+                        logItem.Log = GetAssignmentsLogMessage(context, questionnaireStorage);
                         break;
                     case SynchronizationLogType.GetAssignment:
-                        logItem.Log = GetAssignmentLogMessage(context);
+                        logItem.Log = GetAssignmentLogMessage(context, answerSerializer, questionnaireStorage);
                         break;
                     case SynchronizationLogType.GetMapList:
                         logItem.Log = this.GetMapListLogMessage(context);
@@ -232,12 +229,12 @@ namespace WB.UI.Headquarters.Code
                 }
 
                 messagesTotal.Labels(this.logAction.ToString()).Inc();
-                this.synchronizationLogItemPlainStorageAccessor.Store(logItem, Guid.NewGuid());
+                synchronizationLogItemPlainStorageAccessor.Store(logItem, Guid.NewGuid());
 
             }
             catch (Exception exception)
             {
-                this.logger.Error($"Error updating sync log on action '{this.logAction}'.", exception);
+                logger.Error($"Error updating sync log on action '{this.logAction}'.", exception);
             }
         }
 
@@ -277,18 +274,20 @@ namespace WB.UI.Headquarters.Code
 
         private string GetInterviewerLogMessage(HttpActionExecutedContext context)
         {
+            IUserViewFactory userViewFactory = context.Request.GetDependencyScope().GetService(typeof(IUserViewFactory)) as IUserViewFactory;
+
             var interviewerApiView = this.GetResponseObject<InterviewerApiView>(context);
 
-            var supervisorInfo = this.userViewFactory.GetUser(new UserViewInputModel(interviewerApiView.SupervisorId));
+            var supervisorInfo = userViewFactory.GetUser(new UserViewInputModel(interviewerApiView.SupervisorId));
             return SyncLogMessages.GetInterviewer.FormatString(supervisorInfo.UserName, supervisorInfo.PublicKey.FormatGuid());
         }
 
-        private string GetQuestionnairesLogMessage(HttpActionExecutedContext context)
+        private string GetQuestionnairesLogMessage(HttpActionExecutedContext context, IQuestionnaireBrowseViewFactory questionnaireBrowseItemFactory)
         {
             List<QuestionnaireIdentity> censusQuestionnaireIdentities =
                 this.GetResponseObject<List<QuestionnaireIdentity>>(context);
 
-            var censusQuestionnaires = censusQuestionnaireIdentities.Select(x => this.questionnaireBrowseItemFactory.GetById(new QuestionnaireIdentity(x.QuestionnaireId, x.Version)));
+            var censusQuestionnaires = censusQuestionnaireIdentities.Select(x => questionnaireBrowseItemFactory.GetById(new QuestionnaireIdentity(x.QuestionnaireId, x.Version)));
 
             var messagesByCensusQuestionnaires = censusQuestionnaires.Select(
                 censusQuestionnaire => SyncLogMessages.CensusQuestionnaire.FormatString(censusQuestionnaire.Title,
@@ -297,9 +296,9 @@ namespace WB.UI.Headquarters.Code
             return SyncLogMessages.GetCensusQuestionnaires.FormatString(string.Join("<br>", messagesByCensusQuestionnaires));
         }
 
-        private string GetQuestionnaireLogMessage(string messageFormat, HttpActionExecutedContext context)
+        private string GetQuestionnaireLogMessage(string messageFormat, HttpActionExecutedContext context, IQuestionnaireBrowseViewFactory questionnaireBrowseItemFactory)
         {
-            var questionnaire = this.questionnaireBrowseItemFactory.GetById(
+            var questionnaire = questionnaireBrowseItemFactory.GetById(
                 new QuestionnaireIdentity(context.GetActionArgumentOrDefault("id", Guid.Empty),
                     context.GetActionArgumentOrDefault<int>("version", -1)));
 
@@ -309,42 +308,44 @@ namespace WB.UI.Headquarters.Code
             return messageFormat.FormatString(questionnaire.Title, new QuestionnaireIdentity(questionnaire.QuestionnaireId, questionnaire.Version));
         }
 
-        private string GetAssignmentsLogMessage(HttpActionExecutedContext context)
+        private string GetAssignmentsLogMessage(HttpActionExecutedContext context, IQuestionnaireStorage questionnaireStorage)
         {
             var assignmentsApiView = this.GetResponseObject<List<AssignmentApiView>>(context);
             
             return SyncLogMessages.GetAssignmentsFormat.FormatString(assignmentsApiView.Count,
-                string.Join("", assignmentsApiView.Select(av => $"<li>{GetAssignmentLogMessage(av)}</li>")));
+                string.Join("", assignmentsApiView.Select(av => $"<li>{GetAssignmentLogMessage(av, questionnaireStorage)}</li>")));
         }
 
-        private string GetAssignmentLogMessage(AssignmentApiView view)
+        private string GetAssignmentLogMessage(AssignmentApiView view, IQuestionnaireStorage questionnaireStorage)
         {
             QuestionnaireIdentity assignmentQuestionnaireId = view.QuestionnaireId;
-            var questionnaire = this.questionnaireStorage.GetQuestionnaire(assignmentQuestionnaireId, null);
+            var questionnaire = questionnaireStorage.GetQuestionnaire(assignmentQuestionnaireId, null);
             return $"{view.Id}: <strong>{questionnaire.Title}</strong> [{view.QuestionnaireId}]";
         }
 
-        private string GetAssignmentLogMessage(HttpActionExecutedContext context)
+        private string GetAssignmentLogMessage(HttpActionExecutedContext context, IInterviewAnswerSerializer answerSerializer, IQuestionnaireStorage questionnaireStorage)
         {
             var apiView = this.GetResponseObject<AssignmentApiDocument>(context);
             QuestionnaireIdentity assignmentQuestionnaireId = apiView.QuestionnaireId;
-            var questionnaire = this.questionnaireStorage.GetQuestionnaire(assignmentQuestionnaireId, null);
+            var questionnaire = questionnaireStorage.GetQuestionnaire(assignmentQuestionnaireId, null);
             var identityQuestions = questionnaire.GetPrefilledQuestions().ToHashSet();
 
             var answers = apiView.Answers
                 .Where(x => !string.IsNullOrEmpty(x.SerializedAnswer))
                 .Where(x => identityQuestions.Contains(x.Identity.Id))
-                .Select(_ => GetAssignmentIdentifyingQuestionRow(_, questionnaire));
+                .Select(_ => GetAssignmentIdentifyingQuestionRow(_, questionnaire, answerSerializer));
 
             var answersString = string.Join("", answers);
             return SyncLogMessages.GetAssignmentFormat.FormatString(
                 $"{apiView.Id}: <strong>{questionnaire.Title}</strong> [{apiView.QuestionnaireId}] <ul>{answersString}</ul>");
         }
 
-        private string GetAssignmentIdentifyingQuestionRow(AssignmentApiDocument.InterviewSerializedAnswer _, Core.SharedKernels.DataCollection.Aggregates.IQuestionnaire questionnaire)
+        private string GetAssignmentIdentifyingQuestionRow(AssignmentApiDocument.InterviewSerializedAnswer _, 
+            Core.SharedKernels.DataCollection.Aggregates.IQuestionnaire questionnaire,
+            IInterviewAnswerSerializer answerSerializer)
         {
             string questionTitle = questionnaire.GetQuestionTitle(_.Identity.Id).RemoveHtmlTags();
-            var abstractAnswer = this.answerSerializer.Deserialize<AbstractAnswer>(_.SerializedAnswer);
+            var abstractAnswer = answerSerializer.Deserialize<AbstractAnswer>(_.SerializedAnswer);
             var stringAnswer = abstractAnswer?.ToString();
             return $"<li title='{questionTitle}'>{LimitStringLength(questionTitle)}: {stringAnswer}</li>";
         }

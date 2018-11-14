@@ -23,9 +23,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiBasicAuthAttribute
             mockOfUserManager.Setup(_ => _.FindByNameAsync(Moq.It.IsAny<string>()))
                 .Returns(Task.FromResult(Create.Entity.HqUser(role: UserRoles.Headquarter, passwordHash: "open sesame")));
 
-            attribute = CreateApiBasicAuthAttribute((userName, password) => true, mockOfUserManager.Object);
+            attribute = CreateApiBasicAuthAttribute();
 
-            actionContext = CreateActionContext();
+            actionContext = CreateActionContext((userName, password) => true, mockOfUserManager.Object);
             actionContext.Request.Headers.Authorization = new AuthenticationHeaderValue("Basic", "QWxhZGRpbjpvcGVuIHNlc2FtZQ==");
             BecauseOf();
         }

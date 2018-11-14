@@ -73,7 +73,6 @@ using WB.Core.Infrastructure.Implementation.EventDispatcher;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 using WB.Core.Infrastructure.TopologicalSorter;
-using WB.Core.Infrastructure.Transactions;
 using WB.Core.Infrastructure.WriteSide;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -104,7 +103,7 @@ using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Storage;
-using WB.Infrastructure.Native.Storage.Postgre.Implementation;
+using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Tests.Abc.Storage;
 using WB.UI.Headquarters.API.WebInterview.Services;
 using WB.UI.Shared.Web.Captcha;
@@ -123,7 +122,8 @@ namespace WB.Tests.Abc.TestFactories
             IAggregateSnapshotter snapshooter = null,
             IServiceLocator serviceLocator = null,
             IAggregateLock aggregateLock = null,
-            IAggregateRootCacheCleaner aggregateRootCacheCleaner = null)
+            IAggregateRootCacheCleaner aggregateRootCacheCleaner = null,
+            IEventStore eventStore = null)
         {
             return new CommandService(
                 repository ?? Mock.Of<IEventSourcedAggregateRootRepository>(),
@@ -244,10 +244,13 @@ namespace WB.Tests.Abc.TestFactories
             => new LiteEventRegistry();
 
         public NcqrCompatibleEventDispatcher NcqrCompatibleEventDispatcher(EventBusSettings eventBusSettings = null,
-            ILogger logger = null, IInMemoryEventStore inMemoryEventStore = null, params IEventHandler[] handlers)
+            ILogger logger = null,
+            IServiceLocator serviceLocator = null,
+            params IEventHandler[] handlers)
             => new NcqrCompatibleEventDispatcher(
                 eventStore: Mock.Of<IEventStore>(),
-                inMemoryEventStore: inMemoryEventStore ?? Mock.Of<IInMemoryEventStore>(),
+                inMemoryEventStore: Mock.Of<IInMemoryEventStore>(),
+                serviceLocator: serviceLocator ?? Mock.Of<IServiceLocator>(),
                 eventBusSettings: eventBusSettings ?? Create.Entity.EventBusSettings(),
                 logger: logger ?? Mock.Of<ILogger>(),
                 eventHandlers: handlers);
@@ -273,18 +276,10 @@ namespace WB.Tests.Abc.TestFactories
 
         public TeamViewFactory TeamViewFactory(
             IQueryableReadSideRepositoryReader<InterviewSummary> interviewSummaryReader = null)
-            => new TeamViewFactory(interviewSummaryReader, Mock.Of<IUserRepository>(), Mock.Of<ISessionProvider>());
+            => new TeamViewFactory(interviewSummaryReader, Mock.Of<IUserRepository>(), Mock.Of<IUnitOfWork>());
 
         public ITopologicalSorter<T> TopologicalSorter<T>()
             => new TopologicalSorter<T>();
-
-        public TransactionManagerProvider TransactionManagerProvider(
-            Func<ICqrsPostgresTransactionManager> transactionManagerFactory = null,
-            Func<ICqrsPostgresTransactionManager> noTransactionTransactionManagerFactory = null,
-            ICqrsPostgresTransactionManager rebuildReadSideTransactionManager = null)
-            => new TransactionManagerProvider(
-                transactionManagerFactory ?? (() => Mock.Of<ICqrsPostgresTransactionManager>()),
-                noTransactionTransactionManagerFactory ?? (() => Mock.Of<ICqrsPostgresTransactionManager>()));
 
         public VariableToUIStringService VariableToUIStringService()
             => new VariableToUIStringService();
@@ -337,12 +332,6 @@ namespace WB.Tests.Abc.TestFactories
             return new TeamInterviewsFactory(interviewSummarys ??
                                              Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>());
         }
-
-        public PlainPostgresTransactionManager PlainPostgresTransactionManager(ISessionFactory sessionFactory = null)
-            => new PlainPostgresTransactionManager(sessionFactory ?? Stub<ISessionFactory>.WithNotEmptyValues);
-
-        public CqrsPostgresTransactionManager CqrsPostgresTransactionManager(ISessionFactory sessionFactory = null)
-            => new CqrsPostgresTransactionManager(sessionFactory ?? Stub<ISessionFactory>.WithNotEmptyValues);
 
         public IConfigurationManager ConfigurationManager(NameValueCollection appSettings = null,
             NameValueCollection membershipSettings = null)
@@ -598,7 +587,7 @@ namespace WB.Tests.Abc.TestFactories
             IUserRepository userStorage = null,
             IUserImportVerifier userImportVerifier = null,
             IAuthorizedUser authorizedUser = null,
-            ISessionProvider sessionProvider = null,
+            IUnitOfWork sessionProvider = null,
             UsersImportTask usersImportTask = null)
         {
             usersImportTask = usersImportTask ?? new UsersImportTask(Mock.Of<IScheduler>(x =>
@@ -613,7 +602,7 @@ namespace WB.Tests.Abc.TestFactories
                 userStorage ?? Stub<IUserRepository>.WithNotEmptyValues,
                 userImportVerifier ?? new UserImportVerifier(userPreloadingSettings),
                 authorizedUser ?? Stub<IAuthorizedUser>.WithNotEmptyValues,
-                sessionProvider ?? Stub<ISessionProvider>.WithNotEmptyValues,
+                sessionProvider ?? Stub<IUnitOfWork>.WithNotEmptyValues,
                 usersImportTask ?? Stub<UsersImportTask>.WithNotEmptyValues);
         }
 
@@ -655,7 +644,6 @@ namespace WB.Tests.Abc.TestFactories
             IInterviewUniqueKeyGenerator uniqueKeyGenerator = null,
             SyncSettings syncSettings = null,
             IQueryableReadSideRepositoryReader<InterviewSummary> interviews = null,
-            ITransactionManager transactionManager = null,
             IUserRepository userRepository = null)
         {
             InterviewKey generatedInterviewKey = new InterviewKey(5533);
@@ -673,25 +661,19 @@ namespace WB.Tests.Abc.TestFactories
             return new InterviewPackagesService(
                 syncSettings: syncSettings ?? Mock.Of<SyncSettings>(),
                 logger: logger ?? Mock.Of<ILogger>(),
-                serializer: serializer ?? new JsonAllTypesSerializer(),
                 interviewPackageStorage: interviewPackageStorage ?? Mock.Of<IPlainStorageAccessor<InterviewPackage>>(),
-                brokenInterviewPackageStorage: brokenInterviewPackageStorage ??
-                                               Mock.Of<IPlainStorageAccessor<BrokenInterviewPackage>>(),
-                commandService: commandService ?? Mock.Of<ICommandService>(),
-                uniqueKeyGenerator: uniqueKeyGenerator ?? Mock.Of<IInterviewUniqueKeyGenerator>(x => x.Get() == generatedInterviewKey),
-                interviews: interviews ?? new TestInMemoryWriter<InterviewSummary>(),
-                transactionManager: transactionManager ?? Mock.Of<ITransactionManager>(),
-                userRepository: userRepository ?? userRepositoryMock.Object,
-                packagesTracker: new TestPlainStorage<ReceivedPackageLogEntry>(),
-                eventStore: Mock.Of<IHeadquartersEventStore>());
+                brokenInterviewPackageStorage: brokenInterviewPackageStorage ?? Mock.Of<IPlainStorageAccessor<BrokenInterviewPackage>>(),
+                packagesTracker: new TestPlainStorage<ReceivedPackageLogEntry>());
         }
 
         public ImportDataVerifier ImportDataVerifier(IFileSystemAccessor fileSystem = null,
             IInterviewTreeBuilder interviewTreeBuilder = null,
-            IUserViewFactory userViewFactory = null)
+            IUserViewFactory userViewFactory = null,
+            IQuestionOptionsRepository optionsRepository = null)
             => new ImportDataVerifier(fileSystem ?? new FileSystemIOAccessor(),
                 interviewTreeBuilder ?? Mock.Of<IInterviewTreeBuilder>(),
-                userViewFactory ?? Mock.Of<IUserViewFactory>());
+                userViewFactory ?? Mock.Of<IUserViewFactory>(),
+                optionsRepository ?? Mock.Of<IQuestionOptionsRepository>());
 
         public IAssignmentsUpgrader AssignmentsUpgrader(IPreloadedDataVerifier importService = null,
             IQuestionnaireStorage questionnaireStorage = null,
@@ -701,8 +683,7 @@ namespace WB.Tests.Abc.TestFactories
             return new AssignmentsUpgrader(assignments ?? new TestPlainStorage<Assignment>(),
                 importService ?? Mock.Of<IPreloadedDataVerifier>(s => s.VerifyWithInterviewTree(It.IsAny<List<InterviewAnswer>>(), It.IsAny<Guid?>(), It.IsAny<IQuestionnaire>()) == null),
                 questionnaireStorage ?? Mock.Of<IQuestionnaireStorage>(),
-                upgradeService ?? Mock.Of<IAssignmentsUpgradeService>(),
-                Create.Service.PlainPostgresTransactionManager());
+                upgradeService ?? Mock.Of<IAssignmentsUpgradeService>());
         }
 
         public AssignmentsImportFileConverter AssignmentsImportFileConverter(IFileSystemAccessor fs = null, IUserViewFactory userViewFactory = null)
@@ -719,7 +700,7 @@ namespace WB.Tests.Abc.TestFactories
         public AssignmentsImportService AssignmentsImportService(IUserViewFactory userViewFactory = null,
             IPreloadedDataVerifier verifier = null,
             IAuthorizedUser authorizedUser = null,
-            IPlainSessionProvider sessionProvider = null,
+            IUnitOfWork sessionProvider = null,
             IPlainStorageAccessor<AssignmentsImportProcess> importAssignmentsProcessRepository = null,
             IPlainStorageAccessor<AssignmentToImport> importAssignmentsRepository = null,
             IInterviewCreatorFromAssignment interviewCreatorFromAssignment = null,
@@ -730,7 +711,7 @@ namespace WB.Tests.Abc.TestFactories
                 x.Query<AssignmentsImportProcess>() == GetNhQueryable<AssignmentsImportProcess>() &&
                 x.Query<AssignmentToImport>() == GetNhQueryable<AssignmentToImport>());
 
-            sessionProvider = sessionProvider ?? Mock.Of<IPlainSessionProvider>(x => x.GetSession() == session);
+            sessionProvider = sessionProvider ?? Mock.Of<IUnitOfWork>(x => x.Session == session);
             userViewFactory = userViewFactory ?? Mock.Of<IUserViewFactory>();
 
             return new AssignmentsImportService(userViewFactory,
@@ -942,12 +923,12 @@ namespace WB.Tests.Abc.TestFactories
 
         public InterviewFactory InterviewFactory(
             IQueryableReadSideRepositoryReader<InterviewSummary> summaryRepository = null,
-            ISessionProvider sessionProvider = null,
+            IUnitOfWork sessionProvider = null,
             IPlainStorageAccessor<QuestionnaireCompositeItem> questionnaireItems = null)
         {
             return new InterviewFactory(
                 summaryRepository ?? Mock.Of<IQueryableReadSideRepositoryReader<InterviewSummary>>(),
-                sessionProvider ?? Mock.Of<ISessionProvider>(),
+                sessionProvider ?? Mock.Of<IUnitOfWork>(),
                 questionnaireItems ?? Mock.Of<IPlainStorageAccessor<QuestionnaireCompositeItem>>());
         }
 

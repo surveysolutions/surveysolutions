@@ -14,11 +14,13 @@ using WB.Core.BoundedContexts.Interviewer.Services;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.SurveySolutions;
+using WB.Enumerator.Native.Questionnaire.Impl;
 using WB.Tests.Abc.Storage;
 using WB.UI.WebTester.Services;
 using WB.UI.WebTester.Services.Implementation;
@@ -39,7 +41,7 @@ namespace WB.Tests.Abc.TestFactories
         public IPlainStorageAccessor<TEntity> InMemoryPlainStorage<TEntity>() where TEntity : class => new InMemoryPlainStorageAccessor<TEntity>();
         public TestInMemoryWriter<TEntity> InMemoryReadeSideStorage<TEntity>() where TEntity : class, IReadSideRepositoryEntity => new TestInMemoryWriter<TEntity>();
 
-        public IUserViewFactory UserViewFactory(params HqUser[] users) => new UserViewFactory(this.UserRepository(users), this.UserProfileFactory());
+        public IUserViewFactory UserViewFactory(params HqUser[] users) => new UserViewFactory(this.UserRepository(users));
 
         public IUserRepository UserRepository(params HqUser[] users)
             => Mock.Of<IUserRepository>(x => x.Users == users.AsQueryable());
@@ -97,6 +99,14 @@ namespace WB.Tests.Abc.TestFactories
                 storage.Store(entity);
 
             return storage;
+        }
+
+        public QuestionnaireQuestionOptionsRepository QuestionnaireQuestionOptionsRepository(IQuestionnaire questionnaire = null)
+        {
+            var optionsRepository = new QuestionnaireQuestionOptionsRepository();
+            
+
+            return optionsRepository;
         }
     }
 }

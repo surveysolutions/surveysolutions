@@ -3,8 +3,7 @@ using WB.Core.Infrastructure.Modularity;
 
 namespace WB.UI.Shared.Web.Modules
 {
-    public interface IWebModule : IInitModule
+    public interface IWebModule : IModule<IWebIocRegistry>
     {
-        void Load(IWebIocRegistry registry);
     }
 }

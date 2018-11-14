@@ -1,7 +1,6 @@
 using Main.Core.Documents;
 using System;
 using System.Linq;
-using System.Web.Security;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.Base;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
@@ -10,7 +9,6 @@ using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.CommandBus;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.UI.Designer.Extensions;
 
 namespace WB.UI.Designer.Code.Implementation
 {

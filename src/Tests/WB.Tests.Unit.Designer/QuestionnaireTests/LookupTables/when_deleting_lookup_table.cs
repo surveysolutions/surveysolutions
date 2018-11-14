@@ -1,6 +1,5 @@
 using System;
 using FluentAssertions;
-using Ninject.Infrastructure.Language;
 using WB.Core.BoundedContexts.Designer.Aggregates;
 using WB.Core.BoundedContexts.Designer.Commands.Questionnaire.LookupTables;
 
@@ -20,7 +19,7 @@ namespace WB.Tests.Unit.Designer.BoundedContexts.QuestionnaireTests.LookupTables
         private void BecauseOf() => questionnaire.DeleteLookupTable(deleteLookupTable);
 
         [NUnit.Framework.Test] public void should_doesnt_contain_LookupTable_with_EntityId_specified () =>
-            questionnaire.QuestionnaireDocument.LookupTables.ToEnumerable().Should().NotContain(t => t.Key == lookupTableId);
+            questionnaire.QuestionnaireDocument.LookupTables.ContainsKey(lookupTableId).Should().BeFalse();
 
 
         private static DeleteLookupTable deleteLookupTable;

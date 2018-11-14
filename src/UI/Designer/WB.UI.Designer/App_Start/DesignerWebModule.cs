@@ -2,7 +2,6 @@
 using System.Web.Mvc;
 using System.Web.WebPages;
 using WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts.Membership;
-using WB.Core.GenericSubdomains.Portable.Implementation;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.UI.Designer.Code.Implementation;
@@ -12,7 +11,9 @@ using WB.Core.Infrastructure.FileSystem;
 using WB.Core.Infrastructure.Modularity;
 using WB.Infrastructure.Native.Files.Implementation.FileSystem;
 using WB.Infrastructure.Native.Storage;
+using WB.Infrastructure.Native.Storage.Postgre;
 using WB.UI.Designer.Api.WebTester;
+using WB.UI.Designer.Code;
 using WB.UI.Designer.Implementation.Services;
 using WB.UI.Designer.Services;
 using WB.UI.Shared.Web.Modules;
@@ -27,21 +28,19 @@ namespace WB.UI.Designer
         public void Load(IWebIocRegistry registry)
         {
             //registry.Bind<ILog>().ToConstant(new Log()).InSingletonScope();
-            registry.BindMvcFilterInSingletonScope<CustomHandleErrorFilter>(FilterScope.Global, 0);
-            registry.BindMvcFilterInSingletonScope<CustomAuthorizeFilter>(FilterScope.Global, 0);
+            registry.BindMvcExceptionFilter<CustomHandleErrorFilter>();
+            registry.BindMvcAuthorizationFilter<CustomAuthorizeFilter>();
 
-            registry.BindToMethod<IJsonAllTypesSerializer>(() => new JsonAllTypesSerializer());
+            registry.Bind<IJsonAllTypesSerializer, JsonAllTypesSerializer>();
 
-            registry.BindAsSingleton<IQuestionnairePackageComposer, QuestionnairePackageComposer>();
+            registry.Bind<IQuestionnairePackageComposer, QuestionnairePackageComposer>();
+            registry.BindAsSingleton<QuestionnaireChacheStorage, QuestionnaireChacheStorage>();
             registry.Bind<IArchiveUtils, ZipArchiveUtils>();
-            registry.BindToConstant<IMembershipHelper>(() => new MembershipHelper());
-            registry.BindToConstructorInSingletonScope<IMembershipWebUser>(x => new MembershipWebUser(x.Inject<IMembershipHelper>()));
-            registry.BindToConstructorInSingletonScope<IMembershipWebServiceUser>(x => new MembershipWebServiceUser(x.Inject<IMembershipHelper>()));
-            registry.BindToConstructorInSingletonScope<IMembershipUserService>(x =>
-                    new MembershipUserService(
-                        x.Inject<IMembershipHelper>(),
-                        x.Inject<IMembershipWebUser>(),
-                        x.Inject<IMembershipWebServiceUser>()));
+            registry.Bind<IMembershipHelper, MembershipHelper>();
+
+            registry.Bind<IMembershipWebUser, MembershipWebUser>();
+            registry.Bind<IMembershipWebServiceUser, MembershipWebServiceUser>();
+            registry.Bind<IMembershipUserService, MembershipUserService>();
 
             registry.Bind<IRecipientNotifier, MailNotifier>();
 
@@ -56,6 +55,9 @@ namespace WB.UI.Designer
             });
 
             registry.BindAsSingleton<IWebTesterService, WebTesterService>();
+
+            // override registration
+            registry.BindInPerUnitOfWorkOrPerRequestScope<IUnitOfWork, UnitOfWork>();
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)

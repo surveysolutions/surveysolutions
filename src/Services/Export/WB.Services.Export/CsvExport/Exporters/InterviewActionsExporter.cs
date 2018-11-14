@@ -37,7 +37,6 @@ namespace WB.Services.Export.CsvExport.Exporters
         private readonly string dataFileExtension = "tab";
         private readonly ICsvWriter csvWriter;
         private readonly ITenantApi<IHeadquartersApi> tenantApi;
-
         public InterviewActionsExporter(IOptions<InterviewDataExportSettings> interviewDataExportSettings,
             ICsvWriter csvWriter,
             ITenantApi<IHeadquartersApi> tenantApi)

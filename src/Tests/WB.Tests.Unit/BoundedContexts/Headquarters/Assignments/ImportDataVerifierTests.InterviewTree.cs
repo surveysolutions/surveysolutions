@@ -6,7 +6,6 @@ using WB.Core.GenericSubdomains.Portable;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Enumerator.Native.Questionnaire.Impl;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
@@ -16,7 +15,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
         [Test]
         public void when_verify_answers_on_interview_tree_and_questionnaire_has_no_question_Should_report_error()
         {
-            var questionnaireDocument = Create.Entity.PlainQuestionnaire();
+            var questionnaireDocument = Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneQuestion());
             var verifier = Create.Service.ImportDataVerifier();
 
             var answers = new List<InterviewAnswer>
@@ -40,20 +39,25 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
             var answer = 9999m;
             var expectedParentValue = 0m;
 
+            var optionsRepository = Create.Storage.QuestionnaireQuestionOptionsRepository();
+
             var questionnaire = Create.Entity.PlainQuestionnaire(
                 Create.Entity.QuestionnaireDocumentWithOneChapter(
                     Create.Entity.SingleOptionQuestion(parentCascadingQuestionId, answerCodes: new[] { answerOnParentQuestion, answer }),
                     Create.Entity.SingleOptionQuestion(cascadingQuestionId,
                         cascadeFromQuestionId: parentCascadingQuestionId, answerCodes: new[] { answerOnParentQuestion, answer },
-                        parentCodes: new[] { 1m, expectedParentValue })));
+                        parentCodes: new[] { 1m, expectedParentValue })),
+                version: 1,
+                questionOptionsRepository: optionsRepository);
 
             var questionnaireRepository = Mock.Of<IQuestionnaireStorage>(repository
                 => repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire);
 
             Setup.InstanceToMockedServiceLocator(questionnaireRepository);
-            Setup.InstanceToMockedServiceLocator<IQuestionOptionsRepository>(new QuestionnaireQuestionOptionsRepository(questionnaireRepository));
 
-            var verifier = Create.Service.ImportDataVerifier(interviewTreeBuilder: Create.Service.InterviewTreeBuilder());
+            var verifier = Create.Service.ImportDataVerifier(
+                interviewTreeBuilder: Create.Service.InterviewTreeBuilder(),
+                optionsRepository: optionsRepository);
 
             var answers = new List<InterviewAnswer>
             {

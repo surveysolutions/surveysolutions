@@ -112,7 +112,7 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                 verifier.VerifyProtectedVariables(
                         preloadedFileName, 
                         preloadedFile,
-                        Create.Entity.PlainQuestionnaire())
+                        Create.Entity.PlainQuestionnaire(Create.Entity.QuestionnaireDocumentWithOneQuestion()))
                     .ToList();
 
             errors.Should().Contain(x => x.Code == "PL0047");

@@ -22,7 +22,7 @@ namespace WB.Core.SharedKernels.DataCollection
                 "rootDirectoryPath", this.basePath);
 
             registry.Bind<IQuestionnaireTranslator, QuestionnaireTranslator>();
-            registry.BindAsSingleton<IQuestionnaireStorage, QuestionnaireStorage>();
+            registry.Bind<IQuestionnaireStorage, QuestionnaireStorage>();
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
