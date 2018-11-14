@@ -274,7 +274,7 @@ namespace WB.Enumerator.Native.WebInterview.Services
                 InterviewStaticText result = this.autoMapper.Map<InterviewTreeStaticText, InterviewStaticText>(staticText);
 
                 var attachment = questionnaire.GetAttachmentForEntity(identity.Id);
-                result.AttachmentContent = attachment.ContentId;
+                result.AttachmentContent = attachment?.ContentId;
 
                 this.ApplyDisablement(result, identity, questionnaire);
                 this.PutValidationMessages(result.Validity, callerInterview, identity);
