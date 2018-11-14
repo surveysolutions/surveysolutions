@@ -34,41 +34,46 @@ namespace WB.UI.Designer.Api
         [Route("thumbnail/{id:Guid}", Name = "AttachmentThumbnail")]
         public HttpResponseMessage Thumbnail(Guid id)
         {
-            return this.CreateAttachmentResponse(id, defaultImageSizeToScale);
+            return this.CreateAttachmentResponse(id, defaultImageSizeToScale, true);
         }
 
         [HttpGet]
         [Route("thumbnail/{id:Guid}/{size:int}", Name = "AttachmentThumbnailWithSize")]
         public HttpResponseMessage Thumbnail(Guid id, int size)
         {
-            return this.CreateAttachmentResponse(id, size);
+            return this.CreateAttachmentResponse(id, size, true);
         }
 
-        private HttpResponseMessage CreateAttachmentResponse(Guid attachmentId, int? sizeToScale = null)
+        private HttpResponseMessage CreateAttachmentResponse(Guid attachmentId, int? sizeToScale = null, bool thumbnail = false)
         {
-            var attachment = this.attachmentService.GetAttachmentMeta(attachmentId);
+            AttachmentMeta attachment = this.attachmentService.GetAttachmentMeta(attachmentId);
 
             if (attachment == null) return this.Request.CreateResponse(HttpStatusCode.NotFound);
 
             if (this.Request.Headers.IfNoneMatch.Any(x => x.Tag.Trim('"') == attachment.ContentId))
                 return this.Request.CreateResponse(HttpStatusCode.NotModified);
 
-            var attachmentContent = this.attachmentService.GetContent(attachment.ContentId);
+            AttachmentContent attachmentContent = this.attachmentService.GetContent(attachment.ContentId);
             
-            var thumbnailBytes = GetThumbnailBytes(attachmentContent, sizeToScale);
+            var content = thumbnail ? GetThumbnailBytes(attachmentContent, sizeToScale) : attachmentContent.Content;
 
-            if (thumbnailBytes != null)
+            return Attachment(attachmentContent, attachment.FileName, content);
+        }
+
+        private HttpResponseMessage Attachment(AttachmentContent attachmentContent, string filename, byte[] content)
+        {
+            if (content != null)
             {
                 if (attachmentContent.IsVideo() || attachmentContent.IsImage() || (attachmentContent.IsPdf() && attachmentContent.Details?.Thumbnail != null))
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)
                     {
-                        Content = new ByteArrayContent(thumbnailBytes)
+                        Content = new ByteArrayContent(content)
                         {
                             Headers =
                             {
                                 ContentType = new MediaTypeHeaderValue(attachmentContent.ContentType),
-                                ContentDisposition = new ContentDispositionHeaderValue("attachment"){FileNameStar = attachment.FileName}
+                                ContentDisposition = new ContentDispositionHeaderValue("attachment"){FileNameStar = filename}
                             }
                         },
                         Headers =
@@ -82,9 +87,9 @@ namespace WB.UI.Designer.Api
                 {
                     return new HttpResponseMessage(HttpStatusCode.OK)
                     {
-                        Content = new ByteArrayContent(thumbnailBytes)
+                        Content = new ByteArrayContent(content)
                         {
-                            Headers = {ContentType = new MediaTypeHeaderValue("image/svg+xml")}
+                            Headers = { ContentType = new MediaTypeHeaderValue("image/svg+xml") }
                         }
                     };
                 }
