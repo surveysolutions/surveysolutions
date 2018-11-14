@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Net.Http;
 using System.Web.Http;
-using System.Web.Http.Hosting;
 using Microsoft.Owin.Security;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
@@ -19,7 +18,6 @@ using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Tests.Abc.Storage;
-using WB.UI.Headquarters.API.DataCollection;
 using WB.UI.Headquarters.API.DataCollection.Interviewer;
 using WB.UI.Headquarters.Controllers;
 
@@ -67,9 +65,8 @@ namespace WB.Tests.Abc.TestFactories
                     syncVersionProvider ?? Mock.Of<IInterviewerSyncProtocolVersionProvider>(),
                     authorizedUser ?? Mock.Of<IAuthorizedUser>(),
                     productVersion ?? Mock.Of<IProductVersion>(),
-                    signInManager ?? new HqSignInManager(Create.Storage.HqUserManager(), Mock.Of<IAuthenticationManager>()),
-                    questionnaireBrowseViewFactory ??
-                    Mock.Of<IQuestionnaireBrowseViewFactory>(x => x.GetByIds(It.IsAny<QuestionnaireIdentity[]>()) == new List<QuestionnaireBrowseItem>()),
+                    signInManager ?? new HqSignInManager(Create.Storage.HqUserManager(), Mock.Of<IAuthenticationManager>(), Mock.Of<IHashCompatibilityProvider>()),
+                    questionnaireBrowseViewFactory ?? Mock.Of<IQuestionnaireBrowseViewFactory>(x => x.GetByIds(It.IsAny<QuestionnaireIdentity[]>()) == new List<QuestionnaireBrowseItem>()),
                     assignmentsService ?? Mock.Of<IAssignmentsService>()
                 );
                 result.Request = new HttpRequestMessage();

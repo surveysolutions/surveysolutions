@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using System.Web;
 using WB.Core.SharedKernels.SurveyManagement.Web.Code;
 using WB.UI.Headquarters.Resources;

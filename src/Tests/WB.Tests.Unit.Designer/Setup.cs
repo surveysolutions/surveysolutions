@@ -16,7 +16,6 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.ChangeHistory;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit.QuestionnaireInfo;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 
@@ -119,14 +118,9 @@ namespace WB.Tests.Unit.Designer
         }
 
         public static void ServiceLocatorForCustomWebApiAuthorizeFilter(
-            IPlainTransactionManagerProvider transactionManagerProvider = null,
             IMembershipUserService membershipUserService = null)
         {
             var serviceLocatorMock = new Mock<IServiceLocator> { DefaultValue = DefaultValue.Mock };
-
-            serviceLocatorMock
-                .Setup(locator => locator.GetInstance<IPlainTransactionManagerProvider>())
-                .Returns(transactionManagerProvider ?? Mock.Of<IPlainTransactionManagerProvider>(t => t.GetPlainTransactionManager() == Mock.Of<IPlainTransactionManager>()));
 
             serviceLocatorMock
                 .Setup(locator => locator.GetInstance<IMembershipUserService>())

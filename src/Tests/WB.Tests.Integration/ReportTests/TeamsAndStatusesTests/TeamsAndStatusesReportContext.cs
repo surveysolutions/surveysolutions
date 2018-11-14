@@ -1,13 +1,14 @@
 using System;
 using Moq;
-using NHibernate;
 using Npgsql;
 using NUnit.Framework;
 using WB.Core.BoundedContexts.Headquarters.Mappings;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Infrastructure.Native.Storage;
+using WB.Infrastructure.Native.Storage.Postgre;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 using WB.Tests.Integration.PostgreSQLTests;
 
@@ -43,38 +44,22 @@ namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests
                 typeof(QuestionAnswerMap),
                 typeof(InterviewCommentedStatusMap)
             }, true);
-            postgresTransactionManager = new CqrsPostgresTransactionManager(sessionFactory ?? Mock.Of<ISessionFactory>());
 
-            pgSqlConnection = new NpgsqlConnection(ConnectionStringBuilder.ConnectionString);
-            pgSqlConnection.Open();
-
-            return new PostgreReadSideStorage<InterviewSummary>(postgresTransactionManager, Mock.Of<ILogger>());
+            UnitOfWork = IntegrationCreate.UnitOfWork(sessionFactory);
+            return new PostgreReadSideStorage<InterviewSummary>(UnitOfWork, Mock.Of<ILogger>(), Mock.Of<IServiceLocator>());
         }
 
         protected static void ExecuteInCommandTransaction(Action action)
         {
-            try
-            {
-                postgresTransactionManager.BeginCommandTransaction();
-
-                action();
-
-                postgresTransactionManager.CommitCommandTransaction();
-            }
-            catch
-            {
-                postgresTransactionManager.RollbackCommandTransaction();
-                throw;
-            }
+            action();
         }
 
         [OneTimeTearDown]
         public void TearDown()
         {
-            pgSqlConnection.Close();
+            UnitOfWork.Dispose();
         }
 
-        protected static NpgsqlConnection pgSqlConnection;
-        protected static CqrsPostgresTransactionManager postgresTransactionManager;
+        protected static IUnitOfWork UnitOfWork;
     }
 }

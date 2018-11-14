@@ -65,7 +65,7 @@ namespace WB.Tests.Integration.InterviewTests.EnablementAndValidness
 
             Moq.Mock.Get(ServiceLocator.Current).Setup(_ => _.GetInstance<IQuestionOptionsRepository>()).Returns(optionsRepo);
 
-            interview = SetupStatefullInterview(questionnaire);
+            interview = SetupStatefullInterview(questionnaire, questionOptionsRepository: optionsRepo);
 
             interview.AnswerSingleOptionQuestion(userId, parentQuestionId, RosterVector.Empty, DateTime.Now, 1);
             interview.AnswerSingleOptionQuestion(userId, cascadingQuestionId, RosterVector.Empty, DateTime.Now, 1);

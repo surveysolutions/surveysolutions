@@ -80,13 +80,14 @@ namespace WB.Tests.Abc.TestFactories
             return repository.Object;
         }
 
-        public IQuestionnaireStorage QuestionnaireRepository(KeyValuePair<string, QuestionnaireDocument>[] questionnairesWithTranslations)
+        public IQuestionnaireStorage QuestionnaireRepository(KeyValuePair<string, QuestionnaireDocument>[] questionnairesWithTranslations,
+            IQuestionOptionsRepository optionsRepository = null)
         {
             var questionnairesStorage = new Mock<IQuestionnaireStorage>();
 
             foreach (var questionnaire in questionnairesWithTranslations)
             {
-                IQuestionnaire plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaire.Value);
+                IQuestionnaire plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaire.Value, 1, questionOptionsRepository: optionsRepository);
 
                 questionnairesStorage.Setup(repository =>
                     repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), questionnaire.Key)).Returns(plainQuestionnaire);

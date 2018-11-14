@@ -8,7 +8,6 @@ using Main.Core.Entities.Composite;
 using Main.Core.Entities.SubEntities;
 using Main.Core.Entities.SubEntities.Question;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.DataTransferObjects;
 using WB.Core.SharedKernels.DataCollection.Exceptions;
@@ -25,20 +24,9 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 {
     public class PlainQuestionnaire : IQuestionnaire
     {
-        public ISubstitutionService SubstitutionService
-        {
-            get => this.substitutionService ??
-                   (this.substitutionService = ServiceLocator.Current.GetInstance<ISubstitutionService>());
-            set => this.substitutionService = value;
-        }
+        public ISubstitutionService SubstitutionService { get; }
 
-        private ISubstitutionService substitutionService;
-
-        public IQuestionOptionsRepository QuestionOptionsRepository => 
-            this.questionOptionsRepository ?? 
-            (this.questionOptionsRepository = ServiceLocator.Current.GetInstance<IQuestionOptionsRepository>());
-
-        private IQuestionOptionsRepository questionOptionsRepository;
+        private readonly IQuestionOptionsRepository questionOptionsRepository;
 
         #region State
 
@@ -209,12 +197,23 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
         #endregion
 
-        public PlainQuestionnaire(QuestionnaireDocument document, long version, Translation translation = null)
+        public PlainQuestionnaire(QuestionnaireDocument document,
+            long version,
+            IQuestionOptionsRepository questionOptionsRepository,
+            ISubstitutionService substitutionService,
+            Translation translation = null)
         {
             this.innerDocument = document;
+            
             this.Version = version;
             this.translation = translation;
+            this.questionOptionsRepository = questionOptionsRepository;
+            this.SubstitutionService = substitutionService;
+
+            this.QuestionnaireIdentity = new QuestionnaireIdentity(this.QuestionnaireId, Version);
         }
+
+        public QuestionnaireIdentity QuestionnaireIdentity { get; set; }
 
         public void WarmUpPriorityCaches()
         {
@@ -373,7 +372,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
             //filtered and cascadings
             if (question.CascadeFromQuestionId.HasValue || (question.IsFilteredCombobox ?? false))
             {
-                return QuestionOptionsRepository.GetOptionsForQuestion(new QuestionnaireIdentity(this.QuestionnaireId, Version),
+                return questionOptionsRepository.GetOptionsForQuestion(this.QuestionnaireIdentity,
                     questionId, parentQuestionValue, searchFor, this.translation);
             }
 
@@ -388,8 +387,8 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
             if (question.CascadeFromQuestionId.HasValue || (question.IsFilteredCombobox ?? false))
             {
-                return QuestionOptionsRepository.GetOptionForQuestionByOptionText(
-                    new QuestionnaireIdentity(this.QuestionnaireId, Version),
+                return questionOptionsRepository.GetOptionForQuestionByOptionText(
+                    this.QuestionnaireIdentity,
                     questionId,
                     optionText, 
                     parentQuestionValue,
@@ -451,7 +450,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Entities
 
             if (question.CascadeFromQuestionId.HasValue || (question.IsFilteredCombobox ?? false))
             {
-                return QuestionOptionsRepository.GetOptionForQuestionByOptionValue(new QuestionnaireIdentity(this.QuestionnaireId, Version),
+                return questionOptionsRepository.GetOptionForQuestionByOptionValue(this.QuestionnaireIdentity,
                     questionId, optionValue, this.translation);
             }
 

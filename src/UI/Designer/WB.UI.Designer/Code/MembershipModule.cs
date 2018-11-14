@@ -16,8 +16,7 @@ namespace WB.UI.Designer.Code
         {
             registry.BindAsSingleton<IPasswordStrategy, HashPasswordStrategy>();
             registry.BindToConstant<IPasswordPolicy>(() => PasswordPolicyFactory.CreatePasswordPolicy());
-            registry.BindToConstant<IAccountRepository>(() => AccountRepositoryFactory.CreateRepository());
-            registry.BindAsSingleton<IRoleRepository, CQRSRoleRepository>();
+            registry.Bind<IRoleRepository, CQRSRoleRepository>();
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)

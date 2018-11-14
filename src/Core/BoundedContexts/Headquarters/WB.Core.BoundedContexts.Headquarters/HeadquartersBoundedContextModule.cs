@@ -57,6 +57,7 @@ using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.Core.BoundedContexts.Headquarters.InterviewerAuditLog;
+using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services.Internal;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
 using WB.Core.BoundedContexts.Headquarters.Views.ChangeStatus;
@@ -143,7 +144,7 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             registry.Bind<Questionnaire>();
             registry.Bind<IPlainAggregateRootRepository<Questionnaire>, QuestionnaireRepository>();
-            registry.BindAsSingleton<IQuestionnaireExportStructureStorage, QuestionnaireExportStructureStorage>();
+            registry.Bind<IQuestionnaireExportStructureStorage, QuestionnaireExportStructureStorage>();
             registry.Bind<IQuestionOptionsRepository, QuestionnaireQuestionOptionsRepository>();
 
             registry.Bind<IAndroidPackageReader, AndroidPackageReader>();
@@ -159,14 +160,14 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IAttachmentContentService, AttachmentContentService>();
             registry.Bind<IInterviewAnswerSerializer, NewtonInterviewAnswerJsonSerializer>();
 
-            registry.BindAsSingletonWithConstructorArgument<IMapStorageService, FileSystemMapStorageService>("folderPath", this.currentFolderPath);
+            registry.BindWithConstructorArgument<IMapStorageService, FileSystemMapStorageService>("folderPath", this.currentFolderPath);
 
             //commented because auto registered somewhere 
             //registry.Bind<IMetaDescriptionFactory>().To<MetaDescriptionFactory>();
             registry.Bind<IBrokenInterviewPackagesViewFactory, BrokenInterviewPackagesViewFactory>();
             registry.Bind<ISynchronizationLogViewFactory, SynchronizationLogViewFactory>();
             registry.Bind<IInterviewsToDeleteFactory, InterviewsToDeleteFactory>();
-            registry.BindToMethod<Func<IInterviewsToDeleteFactory>>(context => () => context.Get<IInterviewsToDeleteFactory>());
+            //registry.BindToMethod<Func<IInterviewsToDeleteFactory>>(context => () => context.Get<IInterviewsToDeleteFactory>());
             registry.Bind<IInterviewHistoryFactory, InterviewHistoryFactory>();
             registry.Bind<IInterviewInformationFactory, InterviewerInterviewsFactory>();
             registry.Bind<IDatasetWriterFactory, DatasetWriterFactory>();
@@ -175,7 +176,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IQuestionnaireVersionProvider, QuestionnaireVersionProvider>();
             registry.Bind<ITranslationManagementService, TranslationManagementService>();
             registry.Bind<IAssemblyService, AssemblyService>();
-            registry.BindAsSingleton<IExportSettings, Implementation.ExportSettings>();
+            registry.Bind<IExportSettings, Implementation.ExportSettings>();
             registry.Bind<IArchiveUtils, IProtectedArchiveUtils, ZipArchiveUtils>();
             
             registry.Bind<IAllInterviewsFactory, AllInterviewsFactory>();
@@ -189,7 +190,7 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IAllUsersAndQuestionnairesFactory, AllUsersAndQuestionnairesFactory>();
             registry.Bind<IQuestionnairePreloadingDataViewFactory, QuestionnairePreloadingDataViewFactory>();
             registry.Bind<ITeamViewFactory, TeamViewFactory>();
-            registry.BindToMethod<IUserViewFactory>(context => new UserViewFactory());
+            registry.BindToMethod<IUserViewFactory>(context => new UserViewFactory(context.Resolve<IUserRepository>()));
             registry.Bind<ITeamUsersAndQuestionnairesFactory, TeamUsersAndQuestionnairesFactory>();
             registry.Bind<IInterviewFactory, InterviewFactory>();
             registry.Bind<IInterviewSummaryViewFactory, InterviewSummaryViewFactory>();
@@ -209,7 +210,6 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IInterviewUniqueKeyGenerator, InterviewUniqueKeyGenerator>();
             registry.BindAsSingleton<IRandomValuesSource, RandomValuesSource>();
 
-            registry.Unbind<ISupportedVersionProvider>();
             registry.Bind<ISupportedVersionProvider, SupportedVersionProvider>();
 
             registry.BindAsSingleton<IInterviewerSyncProtocolVersionProvider, InterviewerSyncProtocolVersionProvider>();
@@ -235,7 +235,7 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             registry.Bind<IInterviewPackagesService, IInterviewBrokenPackagesService, InterviewPackagesService>();
 
-            registry.BindAsSingleton<IDeleteQuestionnaireService, DeleteQuestionnaireService>();
+            registry.Bind<IDeleteQuestionnaireService, DeleteQuestionnaireService>();
             registry.Bind<IAtomicHealthCheck<EventStoreHealthCheckResult>, EventStoreHealthChecker>();
             registry.BindWithConstructorArgument<IAtomicHealthCheck<FolderPermissionCheckResult>, FolderPermissionChecker>("folderPath", this.currentFolderPath);
             registry.Bind<IAtomicHealthCheck<NumberOfUnhandledPackagesHealthCheckResult>, NumberOfUnhandledPackagesChecker>();
@@ -247,9 +247,9 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             registry.Bind<ITranslationStorage, TranslationStorage>();
             registry.Bind<IQuestionnaireTranslator, QuestionnaireTranslator>();
-            registry.BindAsSingleton<IQuestionnaireStorage, HqQuestionnaireStorage>(); // has internal cache, so should be singleton
+            registry.Bind<IQuestionnaireStorage, HqQuestionnaireStorage>(); 
 
-            registry.BindAsSingleton<IQuestionnaireAssemblyAccessor, QuestionnaireAssemblyAccessor>();
+            registry.Bind<IQuestionnaireAssemblyAccessor, QuestionnaireAssemblyAccessor>();
            
             registry.Bind<IInterviewExpressionStatePrototypeProvider, InterviewExpressionStatePrototypeProvider>();
             registry.Bind<IVariableToUIStringService, VariableToUIStringService>();
@@ -265,6 +265,8 @@ namespace WB.Core.BoundedContexts.Headquarters
 
             registry.Bind<IDataExportFileAccessor, DataExportFileAccessor>();
          
+            //registry.Bind<IDataExportProcessesService, DataExportProcessesService>();
+
             registry.Bind<ITabularFormatExportService, ReadSideToTabularFormatExportService>();
             registry.Bind<ICsvWriterService, CsvWriterService>();
             registry.Bind<ICsvWriter, CsvWriter>();
@@ -288,10 +290,10 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<IAuditLogReader, AuditLogReader>();
 
             registry.BindAsSingleton<IPauseResumeQueue, PauseResumeQueue>();
-            registry.BindAsSingleton<IAuditLogFactory, AuditLogFactory>();
+            registry.Bind<IAuditLogFactory, AuditLogFactory>();
             registry.BindToConstant<IAuditLogTypeResolver>(() => new AuditLogTypeResolver(typeof(IAuditLogEntity).Assembly));
 
-            registry.BindAsSingleton<IAssignmentsUpgradeService, AssignmentsUpgradeService>();
+            registry.Bind<IAssignmentsUpgradeService, AssignmentsUpgradeService>();
             registry.Bind<IAssignmentsUpgrader, AssignmentsUpgrader>();
             registry.Bind<IInterviewReportDataRepository, InterviewReportDataRepository>();
         }

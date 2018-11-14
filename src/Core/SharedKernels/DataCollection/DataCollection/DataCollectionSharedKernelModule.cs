@@ -13,7 +13,7 @@ namespace WB.Core.SharedKernels.DataCollection
     {
         public void Load(IIocRegistry registry)
         {
-            registry.BindAsSingleton<IStatefulInterviewRepository, StatefulInterviewRepository>();
+            registry.Bind<IStatefulInterviewRepository, StatefulInterviewRepository>();
             registry.Bind<StatefulInterview>();
         }
 

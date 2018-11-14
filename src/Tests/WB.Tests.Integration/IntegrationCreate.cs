@@ -9,6 +9,7 @@ using Main.Core.Events;
 using Moq;
 using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing;
+using Ncqrs.Eventing.Storage;
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Cfg.MappingSchema;
@@ -134,12 +135,31 @@ namespace WB.Tests.Integration
         public static Interview Interview(
             Guid? questionnaireId = null,
             IQuestionnaireStorage questionnaireRepository = null, 
-            IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null)
+            IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null,
+            IQuestionOptionsRepository questionOptionsRepository = null)
         {
-            var interview = new Interview(questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
-                expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>(),
+            var qRepository = questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>();
+            Mock.Get(ServiceLocator.Current)
+                .Setup(locator => locator.GetInstance<IQuestionnaireStorage>())
+                .Returns(qRepository);
+
+            var expressionsProvider = expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>();
+            Mock.Get(ServiceLocator.Current)
+                .Setup(locator => locator.GetInstance<IInterviewExpressionStatePrototypeProvider>())
+                .Returns(expressionsProvider);
+
+            var optionsRepository = questionOptionsRepository ?? Mock.Of<IQuestionOptionsRepository>();
+            Mock.Get(ServiceLocator.Current)
+                .Setup(locator => locator.GetInstance<IQuestionOptionsRepository>())
+                .Returns(optionsRepository);
+            
+            var interview = new Interview(
+                //questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
+                //expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>(),
                 Create.Service.SubstitutionTextFactory(),
-                Create.Service.InterviewTreeBuilder());
+                Create.Service.InterviewTreeBuilder()
+                //,questionOptionsRepository ?? Mock.Of<IQuestionOptionsRepository>()
+                );
 
             interview.CreateInterview(Create.Command.CreateInterview(
                 interviewId: interview.EventSourceId, 
@@ -158,10 +178,28 @@ namespace WB.Tests.Integration
             IQuestionnaireStorage questionnaireRepository = null, 
             IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null)
         {
-            var interview = new StatefulInterview(questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
-                expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>(),
+            var qRepository = questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>();
+            Mock.Get(ServiceLocator.Current)
+                .Setup(locator => locator.GetInstance<IQuestionnaireStorage>())
+                .Returns(qRepository);
+
+            var expressionsProvider = expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>();
+            Mock.Get(ServiceLocator.Current)
+                .Setup(locator => locator.GetInstance<IInterviewExpressionStatePrototypeProvider>())
+                .Returns(expressionsProvider);
+
+            var optionsRepository = Mock.Of<IQuestionOptionsRepository>();
+            Mock.Get(ServiceLocator.Current)
+                .Setup(locator => locator.GetInstance<IQuestionOptionsRepository>())
+                .Returns(optionsRepository);
+
+            var interview = new StatefulInterview(
+                //questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
+                //expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>(),
                 Create.Service.SubstitutionTextFactory(),
-                Create.Service.InterviewTreeBuilder());
+                Create.Service.InterviewTreeBuilder()
+                //,Mock.Of<IQuestionOptionsRepository>()
+                );
           
             interview.CreateInterview(Create.Command.CreateInterview(
                 interviewId: Guid.NewGuid(),
@@ -195,13 +233,31 @@ namespace WB.Tests.Integration
         public static StatefulInterview StatefulInterview(QuestionnaireIdentity questionnaireIdentity,
             IQuestionnaireStorage questionnaireRepository = null, 
             IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null,
-            List<InterviewAnswer> answersOnPrefilledQuestions = null)
+            List<InterviewAnswer> answersOnPrefilledQuestions = null,
+            IQuestionOptionsRepository questionOptionsRepository = null)
         {
+            var qRepository = questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>();
+            Mock.Get(ServiceLocator.Current)
+                .Setup(locator => locator.GetInstance<IQuestionnaireStorage>())
+                .Returns(qRepository);
+
+            var expressionsProvider = expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>();
+            Mock.Get(ServiceLocator.Current)
+                .Setup(locator => locator.GetInstance<IInterviewExpressionStatePrototypeProvider>())
+                .Returns(expressionsProvider);
+
+            var optionsRepository = questionOptionsRepository ?? Mock.Of<IQuestionOptionsRepository>();
+            Mock.Get(ServiceLocator.Current)
+                .Setup(locator => locator.GetInstance<IQuestionOptionsRepository>())
+                .Returns(optionsRepository);
+
             var interview = new StatefulInterview(
-                questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
-                expressionProcessorStatePrototypeProvider ?? Stub<IInterviewExpressionStatePrototypeProvider>.WithNotEmptyValues,
+                //questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
+                //expressionProcessorStatePrototypeProvider ?? Stub<IInterviewExpressionStatePrototypeProvider>.WithNotEmptyValues,
                 Create.Service.SubstitutionTextFactory(),
-                Create.Service.InterviewTreeBuilder());
+                Create.Service.InterviewTreeBuilder()
+                //,questionOptionsRepository ?? Mock.Of<IQuestionOptionsRepository>()
+                 );
 
             interview.CreateInterview(Create.Command.CreateInterview(
                 interviewId: interview.EventSourceId,
@@ -251,7 +307,9 @@ namespace WB.Tests.Integration
                 snapshooter ?? Mock.Of<IAggregateSnapshotter>(), Mock.Of<IServiceLocator>(),
                 Mock.Of<IPlainAggregateRootRepository>(),
                 new AggregateLock(),
-                Mock.Of<IAggregateRootCacheCleaner>());
+                Mock.Of<IAggregateRootCacheCleaner>()
+                //,Mock.Of<IEventStore>()
+                );
         }
 
         public static Answer Answer(string answer, decimal value, decimal? parentValue = null)
@@ -288,12 +346,12 @@ namespace WB.Tests.Integration
         }
 
         public static PostgresReadSideKeyValueStorage<TEntity> PostgresReadSideKeyValueStorage<TEntity>(
-            ISessionProvider sessionProvider = null, PostgreConnectionSettings postgreConnectionSettings = null)
+            IUnitOfWork sessionProvider = null, UnitOfWorkConnectionSettings postgreConnectionSettings = null)
             where TEntity : class, IReadSideRepositoryEntity
         {
             return new PostgresReadSideKeyValueStorage<TEntity>(
-                sessionProvider ?? Mock.Of<ISessionProvider>(),
-                postgreConnectionSettings ?? new PostgreConnectionSettings(),
+                sessionProvider ?? Mock.Of<IUnitOfWork>(),
+                postgreConnectionSettings ?? new UnitOfWorkConnectionSettings(),
                 Mock.Of<ILogger>(),
                 new EntitySerializer<TEntity>());
         }
@@ -320,6 +378,11 @@ namespace WB.Tests.Integration
             }
 
             return cfg.BuildSessionFactory();
+        }
+
+        public static IUnitOfWork UnitOfWork(ISessionFactory factory)
+        {
+            return new UnitOfWork(factory);
         }
 
         private static HbmMapping GetMappingsFor(IEnumerable<Type> painStorageEntityMapTypes)
@@ -360,12 +423,13 @@ namespace WB.Tests.Integration
             => new DesignerEngineVersionService();
 
         public static PostgreReadSideStorage<TEntity> PostgresReadSideRepository<TEntity>(
-            ISessionProvider sessionProvider = null)
+            IUnitOfWork sessionProvider = null)
             where TEntity : class, IReadSideRepositoryEntity
         {
             return new PostgreReadSideStorage<TEntity>(
-                sessionProvider ?? Mock.Of<ISessionProvider>(),
-                Mock.Of<ILogger>());
+                sessionProvider ?? Mock.Of<IUnitOfWork>(),
+                Mock.Of<ILogger>(),
+                Mock.Of<IServiceLocator>());
         }
 
         public static AnswerNotifier AnswerNotifier(ILiteEventRegistry registry = null)

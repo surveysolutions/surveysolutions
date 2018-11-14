@@ -79,5 +79,6 @@ namespace WB.Core.GenericSubdomains.Portable.ServiceLocation
         /// </exception>
         /// <returns>A sequence of instances of the requested <typeparamref name="TService" />.</returns>
         IEnumerable<TService> GetAllInstances<TService>();
+        
     }
 }

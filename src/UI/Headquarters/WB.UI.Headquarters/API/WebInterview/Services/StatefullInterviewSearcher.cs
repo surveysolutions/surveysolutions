@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
-using WB.Core.SharedKernels.DataCollection.Views.Interview;
 
 namespace WB.UI.Headquarters.API.WebInterview.Services
 {

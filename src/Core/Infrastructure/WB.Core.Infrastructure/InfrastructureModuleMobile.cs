@@ -19,7 +19,7 @@ namespace WB.Core.Infrastructure
         {
             registry.Bind<IClock, DateTimeBasedClock>();
 
-            registry.BindAsSingleton<IEventSourcedAggregateRootRepositoryWithCache, EventSourcedAggregateRootRepositoryWithCache>();
+            registry.Bind<IEventSourcedAggregateRootRepositoryWithCache, EventSourcedAggregateRootRepositoryWithCache>();
             registry.BindToRegisteredInterface<IEventSourcedAggregateRootRepository, IEventSourcedAggregateRootRepositoryWithCache>(); 
             registry.BindToRegisteredInterface<IEventSourcedAggregateRootRepositoryCacheCleaner, IEventSourcedAggregateRootRepositoryWithCache>(); 
             registry.BindAsSingleton<ILiteEventRegistry, LiteEventRegistry>();
