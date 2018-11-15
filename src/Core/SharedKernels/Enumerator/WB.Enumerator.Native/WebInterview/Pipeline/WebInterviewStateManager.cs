@@ -1,8 +1,10 @@
 using System;
 using Microsoft.AspNet.SignalR.Hubs;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.Infrastructure.Modularity;
 using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 
 namespace WB.Enumerator.Native.WebInterview.Pipeline
@@ -10,13 +12,10 @@ namespace WB.Enumerator.Native.WebInterview.Pipeline
     public class WebInterviewStateManager : HubPipelineModule
     {
         private readonly IProductVersion productVersion;
-        private readonly IStatefulInterviewRepository statefulInterviewRepository;
-
-        public WebInterviewStateManager(IProductVersion productVersion, 
-            IStatefulInterviewRepository statefulInterviewRepository)
+        
+        public WebInterviewStateManager(IProductVersion productVersion)
         {
             this.productVersion = productVersion;
-            this.statefulInterviewRepository = statefulInterviewRepository;
         }
 
         protected override bool OnBeforeConnect(IHub hub)
@@ -28,7 +27,14 @@ namespace WB.Enumerator.Native.WebInterview.Pipeline
         protected override void OnAfterConnect(IHub hub)
         {
             var interviewId = hub.Context.QueryString[@"interviewId"];
-            var interview = this.statefulInterviewRepository.Get(interviewId);
+            IStatefulInterview interview = null;
+
+            InScopeExecutor.Current.ExecuteActionInScope((locator) =>
+            {
+                IStatefulInterviewRepository statefulInterviewRepository = locator.GetInstance<IStatefulInterviewRepository>();
+                interview = statefulInterviewRepository.Get(interviewId);
+            });
+            
             if (interview == null)
             {
                 hub.Clients.Caller.shutDown();

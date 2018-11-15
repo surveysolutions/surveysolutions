@@ -3,18 +3,16 @@ using System.Web.Http.Controllers;
 using System.Web.Http.Filters;
 using WB.Core.BoundedContexts.Headquarters.Resources;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.UI.Headquarters.Resources;
 
 namespace WB.UI.Headquarters.Filters
 {
     public class ObserverNotAllowedApiAttribute : ActionFilterAttribute
     {
-        private IAuthorizedUser authorizedUser => ServiceLocator.Current.GetInstance<IAuthorizedUser>();
-
         public override void OnActionExecuting(HttpActionContext filterContext)
         {
-            if (this.authorizedUser.IsObserver)
+            IAuthorizedUser authorizedUser  = filterContext.Request.GetDependencyScope().GetService(typeof(IAuthorizedUser)) as IAuthorizedUser;
+
+            if (authorizedUser.IsObserver)
             {
                 filterContext.Response = new HttpResponseMessage(System.Net.HttpStatusCode.Forbidden)
                 {

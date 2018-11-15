@@ -17,7 +17,6 @@ using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.SurveyManagement.Web.Filters;
 using WB.UI.Headquarters.Code;
-using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Resources;
 
 namespace WB.UI.Headquarters.Controllers

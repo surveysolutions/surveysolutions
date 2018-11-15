@@ -1,5 +1,4 @@
-﻿using System;
-using System.Web.Configuration;
+﻿using System.Web.Configuration;
 using NConfig;
 using WB.UI.Shared.Web.Extensions;
 

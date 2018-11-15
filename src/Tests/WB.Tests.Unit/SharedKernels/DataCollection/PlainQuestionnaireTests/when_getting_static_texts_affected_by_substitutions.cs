@@ -17,7 +17,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
                 children: new List<IComposite>
                 {
                     Create.Entity.NumericIntegerQuestion(rosterSizeId),
-                    Create.Entity.Roster(rosterSizeQuestionId: rosterSizeId,
+                    Create.Entity.Roster(
+                        rosterSizeQuestionId: rosterSizeId,
                         rosterTitleQuestionId: rosterTitleid,
                         children: new List<IComposite>
                         {
@@ -26,13 +27,15 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
                         })
                 });
 
-            plainQuestionnaire = Create.Entity.PlainQuestionnaire(document: questionnaire);
+            var substitutionService = Create.Service.SubstitutionService();
+            plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaire, 1, substitutionService: substitutionService);
             BecauseOf();
         }  
 
         public void BecauseOf() => affectedStaticTexts = plainQuestionnaire.GetSubstitutedStaticTexts(rosterTitleid);
 
-        [NUnit.Framework.Test] public void should_find_roster_title_substitutions () => affectedStaticTexts.Should().Contain(substitutionTargetStaticTextId);
+        [NUnit.Framework.Test] public void should_find_roster_title_substitutions () => 
+            affectedStaticTexts.Should().Contain(substitutionTargetStaticTextId);
 
         private static PlainQuestionnaire plainQuestionnaire;
         private static Guid substitutionTargetStaticTextId;

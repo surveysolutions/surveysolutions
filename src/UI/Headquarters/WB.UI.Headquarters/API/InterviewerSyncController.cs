@@ -97,7 +97,6 @@ namespace WB.UI.Headquarters.API
 
         [HttpGet]
         [AllowAnonymous]
-        [NoTransaction]
         public HttpResponseMessage GetLatestVersion()
         {
             string pathToFile = this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(ClientApkInfo.Directory), ClientApkInfo.InterviewerFileName);
@@ -107,7 +106,6 @@ namespace WB.UI.Headquarters.API
 
         [HttpGet]
         [AllowAnonymous]
-        [NoTransaction]
         public HttpResponseMessage GetLatestSupervisor()
         {
             string pathToFile = this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(ClientApkInfo.Directory), ClientApkInfo.SupervisorFileName);
@@ -134,7 +132,6 @@ namespace WB.UI.Headquarters.API
 
         [HttpGet]
         [AllowAnonymous]
-        [NoTransaction]
         public HttpResponseMessage GetLatestExtendedVersion()
         {
             string pathToFile = this.fileSystemAccessor.CombinePath(HostingEnvironment.MapPath(ClientApkInfo.Directory), ClientApkInfo.InterviewerExtendedFileName);

@@ -8,8 +8,8 @@ using Ncqrs.Domain;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.ServiceModel.Bus;
 using Ncqrs.Eventing.Storage;
-
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus;
@@ -22,19 +22,28 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
         private readonly Dictionary<Type, EventHandlerWrapper> registredHandlers = new Dictionary<Type, EventHandlerWrapper>();
         private readonly Type[] handlersToIgnore;
         private readonly Func<InProcessEventBus> getInProcessEventBus;
-        private readonly IEventStore eventStore;
+        
         private readonly EventBusSettings eventBusSettings;
         private readonly ILogger logger;
+        private IServiceLocator serviceLocator;
+        private readonly IEventStore eventStore;
         private readonly IInMemoryEventStore inMemoryEventStore;
-        
-        public NcqrCompatibleEventDispatcher(IEventStore eventStore, IInMemoryEventStore inMemoryEventStore, EventBusSettings eventBusSettings, ILogger logger, IEnumerable<IEventHandler> eventHandlers)
+
+        public NcqrCompatibleEventDispatcher(
+            IServiceLocator serviceLocator,
+            EventBusSettings eventBusSettings, 
+            ILogger logger,
+            IEventStore eventStore,
+            IInMemoryEventStore inMemoryEventStore,
+            IEnumerable<IEventHandler> eventHandlers)
         {
-            this.inMemoryEventStore = inMemoryEventStore;
-            this.eventStore = eventStore;
             this.eventBusSettings = eventBusSettings;
             this.logger = logger;
             this.handlersToIgnore = eventBusSettings.DisabledEventHandlerTypes;
             this.getInProcessEventBus = () => new InProcessEventBus(eventStore, eventBusSettings, logger);
+            this.eventStore = eventStore;
+            this.inMemoryEventStore = inMemoryEventStore;
+            this.serviceLocator = serviceLocator;
 
             foreach (var handler in eventHandlers)
             {
@@ -81,7 +90,7 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
                 return;
 
             var functionalHandlers =
-               this.registredHandlers.Values.Where(h => (h.Handler as IFunctionalEventHandler) != null).ToList();
+               this.registredHandlers.Values.Where(h => typeof(IFunctionalEventHandler).IsAssignableFrom(h.Handler)).ToList();
 
             var oldStyleHandlers =
                this.registredHandlers.Values.Except(functionalHandlers).ToList();
@@ -94,7 +103,7 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
             {
                 foreach (var functionalEventHandler in functionalHandlers)
                 {
-                    var handler = (IFunctionalEventHandler) functionalEventHandler.Handler;
+                var handler = (IFunctionalEventHandler)this.serviceLocator.GetInstance(functionalEventHandler.Handler);
 
                     functionalEventHandler.Bus.OnCatchingNonCriticalEventHandlerException +=
                         this.OnCatchingNonCriticalEventHandlerException;
@@ -134,9 +143,9 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
                 }
             }
 
-            foreach (var publishableEvent in events)
+            foreach (IPublishableEvent publishableEvent in events)
             {
-                foreach (var handler in oldStyleHandlers)
+                foreach (EventHandlerWrapper handler in oldStyleHandlers)
                 {
                     if (!handler.Bus.CanHandleEvent(publishableEvent))
                         continue;
@@ -238,17 +247,12 @@ namespace WB.Core.Infrastructure.Implementation.EventDispatcher
                 functionalDenormalizer.RegisterHandlersInOldFashionNcqrsBus(inProcessBus);
             }
 
-            this.registredHandlers.Add(handler.GetType(), new EventHandlerWrapper(handler, inProcessBus));
+            this.registredHandlers.Add(handler.GetType(), new EventHandlerWrapper(handler.GetType(), inProcessBus));
         }
 
         public void Unregister(IEventHandler handler)
         {
             this.registredHandlers.Remove(handler.GetType());
-        }
-
-        public IEventHandler[] GetAllRegistredEventHandlers()
-        {
-            return this.registredHandlers.Values.Select(v => v.Handler).ToArray();
         }
 
         private static bool IsIEventHandlerInterface(Type type)

@@ -4,7 +4,6 @@ using FluentAssertions;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Interviews;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Infrastructure.Native.Storage.Postgre.Implementation;
 
@@ -32,14 +31,14 @@ namespace WB.Tests.Integration.TeamInterviewsFactoryTests
             PostgreReadSideStorage<QuestionAnswer> featuredQuestionAnswersReader;
             var reportFactory = CreateTeamInterviewsFactory(out repository, out featuredQuestionAnswersReader);
 
-            ExecuteInCommandTransaction(() => interviews.ForEach(x => repository.Store(x, x.InterviewId.FormatGuid())));
+            interviews.ForEach(x => repository.Store(x, x.InterviewId.FormatGuid()));
 
             // Act
-            var report = postgresTransactionManager.ExecuteInQueryTransaction(() => reportFactory.Load(new TeamInterviewsInputModel()
+            var report = reportFactory.Load(new TeamInterviewsInputModel()
             {
                 QuestionnaireId = questionnaireId,
                 QuestionnaireVersion = version,
-            }));
+            });
 
             // Assert
             report.TotalCount.Should().Be(3);

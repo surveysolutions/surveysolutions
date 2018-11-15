@@ -15,13 +15,15 @@ using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.DataCollection.Views.Interview.Overview;
 using WB.Enumerator.Native.WebInterview;
 using WB.Enumerator.Native.WebInterview.Models;
+using WB.Infrastructure.Native.Storage.Postgre;
 using WB.UI.Headquarters.API.WebInterview.Pipeline;
+using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.API.WebInterview
 {
     [HubName(@"interview")]
     [WebInterviewAuthorize]
-    public class WebInterviewHub : Enumerator.Native.WebInterview.WebInterview
+    public class WebInterviewHub : Enumerator.Native.WebInterview.WebInterview, ILifetimeHub
     {
         private readonly IInterviewBrokenPackagesService interviewBrokenPackagesService;
         private readonly IAuthorizedUser authorizedUser;
@@ -29,6 +31,10 @@ namespace WB.UI.Headquarters.API.WebInterview
         private readonly IInterviewFactory interviewFactory;
         private readonly IStatefullInterviewSearcher statefullInterviewSearcher;
         private readonly IInterviewOverviewService overviewService;
+        private IUnitOfWork unitOfWork;
+
+        //separate interview logic into interface implementation from hub logic and inject it 
+        
 
         public WebInterviewHub(IStatefulInterviewRepository statefulInterviewRepository,
             ICommandService commandService,
@@ -42,7 +48,8 @@ namespace WB.UI.Headquarters.API.WebInterview
             IChangeStatusFactory changeStatusFactory,
             IInterviewFactory interviewFactory,
             IStatefullInterviewSearcher statefullInterviewSearcher,
-            IInterviewOverviewService overviewService) : base(statefulInterviewRepository,
+            IInterviewOverviewService overviewService,
+            IUnitOfWork unitOfWork) : base(statefulInterviewRepository,
             commandService,
             questionnaireRepository,
             webInterviewNotificationService,
@@ -56,6 +63,7 @@ namespace WB.UI.Headquarters.API.WebInterview
             this.interviewFactory = interviewFactory;
             this.statefullInterviewSearcher = statefullInterviewSearcher;
             this.overviewService = overviewService;
+            this.unitOfWork = unitOfWork;
         }
 
         protected override bool IsReviewMode =>
@@ -193,6 +201,20 @@ namespace WB.UI.Headquarters.API.WebInterview
             var interviewDetails = base.GetInterviewDetails();
             interviewDetails.DoesBrokenPackageExist = this.interviewBrokenPackagesService.IsNeedShowBrokenPackageNotificationForInterview(Guid.Parse(this.CallerInterviewId));
             return interviewDetails;
+        }
+        
+        public event EventHandler OnDisposing;
+
+        protected override void Dispose(bool disposing)
+        {
+            unitOfWork.AcceptChanges();
+
+            base.Dispose(disposing);
+            if (disposing)
+            {
+                var handler = OnDisposing;
+                handler?.Invoke(this, EventArgs.Empty);
+            }
         }
     }
 }

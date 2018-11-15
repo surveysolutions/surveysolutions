@@ -71,6 +71,7 @@ using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.WebApi;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization.Steps;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Utils;
@@ -84,6 +85,7 @@ using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
+using WB.Enumerator.Native.Questionnaire.Impl;
 using WB.Infrastructure.Native.Storage;
 
 using AttachmentContent = WB.Core.BoundedContexts.Headquarters.Views.Questionnaire.AttachmentContent;
@@ -780,7 +782,8 @@ namespace WB.Tests.Abc.TestFactories
         public PlainQuestionnaire PlainQuestionnaire(QuestionnaireDocument document = null, long version = 1)
             => Create.Entity.PlainQuestionnaire(document, version, null);
 
-        public PlainQuestionnaire PlainQuestionnaire(QuestionnaireDocument document, long version, Translation translation = null)
+        public PlainQuestionnaire PlainQuestionnaire(QuestionnaireDocument document, long version, Translation translation = null, 
+            ISubstitutionService substitutionService = null, IQuestionOptionsRepository questionOptionsRepository = null)
         {
             if (document != null)
             {
@@ -788,7 +791,8 @@ namespace WB.Tests.Abc.TestFactories
                 document.ExpressionsPlayOrder = document.ExpressionsPlayOrder ?? Create.Service.ExpressionsPlayOrderProvider().GetExpressionsPlayOrder(
                     document.AsReadOnly().AssignMissingVariables());
             }
-            return new PlainQuestionnaire(document, version, translation);
+            return new PlainQuestionnaire(document, version, questionOptionsRepository ?? Mock.Of<IQuestionOptionsRepository>(), 
+                substitutionService ?? Mock.Of<ISubstitutionService>(), translation);
         }
 
         public QRBarcodeQuestion QRBarcodeQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,

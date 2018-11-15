@@ -64,7 +64,6 @@ namespace WB.Tests.Unit.Infrastructure.Ncqrs.Eventing.ServiceModel.Bus
             aDomainEventHandler.AssertWasCalled(h => h.Handle(null),
                 options => options.IgnoreArguments().Repeat.Times(6));
         }
-
         private static InProcessEventBus GetEventBus()
         {
             return new InProcessEventBus(Mock.Of<IEventStore>(), new EventBusSettings(), Mock.Of<ILogger>());
@@ -212,7 +211,7 @@ namespace WB.Tests.Unit.Infrastructure.Ncqrs.Eventing.ServiceModel.Bus
             
             var catchAllEventHandler = MockRepository.GenerateMock<IEventHandler<IEvent>>();
             var bus = new InProcessEventBus(Mock.Of<IEventStore>(),
-                new EventBusSettings
+                new EventBusSettings()
                 {
                     IgnoredAggregateRoots = new List<string>(new[] {eventSourceToIgnore.FormatGuid()})
                 },
@@ -231,4 +230,3 @@ namespace WB.Tests.Unit.Infrastructure.Ncqrs.Eventing.ServiceModel.Bus
         }
     }
 }
-

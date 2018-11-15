@@ -14,9 +14,6 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts
     public class MembershipProvider : ExtendedMembershipProvider
     {
         private const int TokenSizeInBytes = 16;
-        private IPasswordPolicy passwordPolicy;
-        private IPasswordStrategy passwordStrategy;
-        private IAccountRepository userService;
 
         public override string ApplicationName { get; set; }
 
@@ -42,59 +39,11 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.Accounts
 
         public override bool RequiresUniqueEmail => this.AccountRepository.IsUniqueEmailRequired;
 
-        protected IAccountRepository AccountRepository
-        {
-            get
-            {
-                if (this.userService == null)
-                {
-                    this.userService = ServiceLocator.Current.GetInstance<IAccountRepository>();
-                    if (this.userService == null)
-                    {
-                        throw new InvalidOperationException(
-                            "You need to assign a locator to the ServiceLocator property and it should be able to lookup IAccountRepository.");
-                    }
-                }
+        protected IAccountRepository AccountRepository => ServiceLocator.Current.GetInstance<IAccountRepository>();
 
-                return this.userService;
-            }
-        }
+        protected IPasswordPolicy PasswordPolicy => ServiceLocator.Current.GetInstance<IPasswordPolicy>();
 
-        protected IPasswordPolicy PasswordPolicy
-        {
-            get
-            {
-                if (this.passwordPolicy == null)
-                {
-                    this.passwordPolicy = ServiceLocator.Current.GetInstance<IPasswordPolicy>();
-                    if (this.passwordPolicy == null)
-                    {
-                        throw new InvalidOperationException(
-                            "You need to add an IPasswordPolicy implementation to your IoC container.");
-                    }
-                }
-
-                return this.passwordPolicy;
-            }
-        }
-
-        protected IPasswordStrategy PasswordStrategy
-        {
-            get
-            {
-                if (this.passwordStrategy == null)
-                {
-                    this.passwordStrategy = ServiceLocator.Current.GetInstance<IPasswordStrategy>();
-                    if (this.passwordStrategy == null)
-                    {
-                        throw new InvalidOperationException(
-                            "You need to assign a locator to the ServiceLocator property and it should be able to lookup IPasswordStrategy.");
-                    }
-                }
-
-                return this.passwordStrategy;
-            }
-        }
+        protected IPasswordStrategy PasswordStrategy => ServiceLocator.Current.GetInstance<IPasswordStrategy>();
 
         public override bool ChangePassword(string username, string oldPassword, string newPassword)
         {

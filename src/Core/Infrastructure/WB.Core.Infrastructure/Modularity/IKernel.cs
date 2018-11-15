@@ -4,7 +4,7 @@ namespace WB.Core.Infrastructure.Modularity
 {
     public interface IKernel
     {
-        void Load(params IModule[] modules);
+        void Load<T>(params IModule<T>[] modules) where T : IIocRegistry;
 
         Task Init();
     }

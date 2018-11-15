@@ -140,6 +140,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Aggregates
             if (browseItem != null)
             {
                 browseItem.Disabled = true;
+                browseItem.DisabledBy = command.ResponsibleId;
                 this.questionnaireBrowseItemStorage.Store(browseItem, browseItem.Id);
             }
         }
