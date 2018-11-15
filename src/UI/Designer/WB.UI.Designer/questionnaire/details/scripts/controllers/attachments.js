@@ -56,7 +56,7 @@
 
                 if (!_.isUndefined(attachmentDto.content) && !_.isNull(attachmentDto.content)) {
                     attachment.content.size = attachmentDto.content.size;
-                    attachment.content.type = attachmentDto.content.contentType;
+                    attachment.content.type = attachmentDto.content.contentType || attachmentDto.content.type;
 
                     if (!_.isUndefined(attachmentDto.content.details) && !_.isNull(attachmentDto.content.details)) {
                         attachment.content.details.height = attachmentDto.content.details.height;
@@ -65,7 +65,7 @@
                 }
 
                 if (!_.isUndefined(attachmentDto.meta) && !_.isNull(attachmentDto.meta)) {
-                    attachment.meta.lastUpdated = moment.utc(attachmentDto.meta.lastUpdateDate).local();
+                    attachment.meta.lastUpdated = attachmentDto.meta.lastUpdated || moment.utc(attachmentDto.meta.lastUpdateDate).local();
                     attachment.meta.fileName = attachmentDto.meta.fileName;
                 }
             };
