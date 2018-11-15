@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Linq;
 using Main.Core.Entities.SubEntities;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Portable;
 using WB.Core.SharedKernels.Questionnaire.Documents;
@@ -103,13 +104,37 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
             this.SelectedValue = selectedValue;
         }
 
-        public int SelectedValue { get; set; }
+        private int _selectedValue;
+        public int SelectedValue
+        {
+            get => _selectedValue;
+            set {
+                if(_selectedValue != value)
+                {
+                    TextAnswer = null;
+                }
+                _selectedValue = value;
+            }
+        }
 
         public static CategoricalFixedSingleOptionAnswer FromInt(int selectedValue) => new CategoricalFixedSingleOptionAnswer(selectedValue);
 
         public static CategoricalFixedSingleOptionAnswer FromDecimal(decimal selectedValue) => new CategoricalFixedSingleOptionAnswer((int)selectedValue);
 
         public override string ToString() => SelectedValue.ToString();
+
+        private (Guid? translation, string answer)? TextAnswer { get; set; }
+
+        public string GetAnswerAsText(IQuestionnaire questionnaire, Guid questionId)
+        {
+            if(TextAnswer == null || TextAnswer.Value.translation != questionnaire.Translation?.Id)
+            {
+                var option = questionnaire.GetOptionForQuestionByOptionValue(questionId, SelectedValue);
+                TextAnswer = (questionnaire.Translation?.Id, option.Title);
+            }
+
+            return TextAnswer?.answer;
+        }
     }
 
     [DebuggerDisplay("{ToString()}")]
