@@ -156,6 +156,7 @@
     <Compile Include="CustomServices\AreaEditor\AreaEditorActivity.cs" />
     <Compile Include="CustomServices\AreaEditor\AreaEditorResult.cs" />
     <Compile Include="CustomServices\AreaEditor\AreaEditorViewModel.cs" />
+    <Compile Include="CustomServices\AreaEditor\AreaEditorViewModelArgs.cs" />
     <Compile Include="CustomServices\AreaEditor\AreaEditService.cs" />
     <Compile Include="Resources\Resource.designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

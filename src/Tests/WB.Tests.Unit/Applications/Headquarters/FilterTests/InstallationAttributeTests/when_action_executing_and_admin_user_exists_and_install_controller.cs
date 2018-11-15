@@ -13,9 +13,10 @@ namespace WB.Tests.Unit.Applications.Headquarters.FilterTests.InstallationAttrib
         [NUnit.Framework.Test]
         public void should_exception_status_code_be_equal_to_404()
         {
-            attribute = CreateInstallationAttribute(Create.Storage.UserRepository(Create.Entity.HqUser(role: UserRoles.Administrator)));
+            attribute = CreateInstallationAttribute();
             var exception = Assert.Throws<HttpException>(() =>
-                attribute.OnActionExecuting(CreateFilterContext(new InstallController(null, null, null, null, null))));
+                attribute.OnActionExecuting(CreateFilterContext(new InstallController(null, null, null, null, null),
+                    Create.Storage.UserRepository(Create.Entity.HqUser(role: UserRoles.Administrator)))));
 
             exception.GetHttpCode().Should().Be(404);
         }

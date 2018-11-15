@@ -9,7 +9,6 @@ using System.Net;
 using System.Net.Http;
 using System.Web.Http;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
-using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -26,7 +25,6 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.UI.Headquarters.API.PublicApi.Models;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Code.CommandTransformation;
-using WB.UI.Headquarters.Services;
 
 namespace WB.UI.Headquarters.API.PublicApi
 {
@@ -42,6 +40,7 @@ namespace WB.UI.Headquarters.API.PublicApi
         private readonly IAuditLog auditLog;
         private readonly IInterviewCreatorFromAssignment interviewCreatorFromAssignment;
         private readonly IPreloadedDataVerifier verifier;
+        private readonly ICommandTransformator commandTransformator;
 
         public AssignmentsController(
             IAssignmentViewFactory assignmentViewFactory,
@@ -52,7 +51,8 @@ namespace WB.UI.Headquarters.API.PublicApi
             IQuestionnaireStorage questionnaireStorage,
             IAuditLog auditLog,
             IInterviewCreatorFromAssignment interviewCreatorFromAssignment,
-            IPreloadedDataVerifier verifier) : base(logger)
+            IPreloadedDataVerifier verifier,
+            ICommandTransformator commandTransformator) : base(logger)
         {
             this.assignmentViewFactory = assignmentViewFactory;
             this.assignmentsStorage = assignmentsStorage;
@@ -62,6 +62,7 @@ namespace WB.UI.Headquarters.API.PublicApi
             this.auditLog = auditLog;
             this.interviewCreatorFromAssignment = interviewCreatorFromAssignment;
             this.verifier = verifier;
+            this.commandTransformator = commandTransformator;
         }
 
         /// <summary>
@@ -214,7 +215,7 @@ namespace WB.UI.Headquarters.API.PublicApi
                 KeyValuePair<Guid, AbstractAnswer> answer;
                 try
                 {
-                    answer = CommandTransformator.ParseQuestionAnswer(new UntypedQuestionAnswer
+                    answer = this.commandTransformator.ParseQuestionAnswer(new UntypedQuestionAnswer
                     {
                         Id = identity.Id,
                         Answer = item.Answer,

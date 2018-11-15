@@ -39,7 +39,7 @@ namespace WB.UI.Supervisor.ServiceLocation
 
             var pathToLocalDirectory = AndroidPathUtils.GetPathToInternalDirectory();
 
-            registry.BindAsSingletonWithConstructorArgument<IBackupRestoreService, BackupRestoreService>(
+            registry.BindAsSingletonWithConstructorArguments<IBackupRestoreService, BackupRestoreService>(
                 new ConstructorArgument("privateStorage", context => pathToLocalDirectory),
                 new ConstructorArgument("encryptionService",
                     context => new RsaEncryptionService(context.Get<ISecureStorage>())));

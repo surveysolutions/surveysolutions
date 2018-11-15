@@ -27,7 +27,7 @@
         signalrPath: '@Url.Content(@"~/signalr/hubs")',
         verboseLogging: false,
         supportedTransports: ["webSockets", "longPolling"],
-        appVersion: '@(ServiceLocator.Current.GetInstance<IProductVersion>().ToString())',
+        appVersion: '@(DependencyResolver.Current.GetService<IProductVersion>().ToString())',
 		googleApiKey: '@Model.GoogleMapsKey',
 		googleMapsApiBaseUrl: 'https://maps.googleapis.com',
         googleMapsBaseUrl: 'https://www.google.com',

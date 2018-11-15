@@ -9,10 +9,9 @@ namespace WB.UI.Shared.Web.Captcha
 {
     public static class Extensions
     {
-        public static IHtmlString RenderCaptcha(this HtmlHelper helper)
+        public static IHtmlString RenderCaptcha(this HtmlHelper helper, ICaptchaProvider captchaProvider)
         {
-            var provider = ServiceLocator.Current.GetInstance<ICaptchaProvider>();
-            return provider?.RenderCaptcha(helper) ?? new MvcHtmlString(string.Empty);
+            return captchaProvider?.RenderCaptcha(helper) ?? new MvcHtmlString(string.Empty);
         }
 
         public static string GetCaptchaService(this IConfigurationManager manager)

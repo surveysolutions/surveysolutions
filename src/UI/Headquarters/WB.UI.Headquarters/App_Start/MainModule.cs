@@ -4,6 +4,7 @@ using Newtonsoft.Json;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.Maps;
+using WB.Core.BoundedContexts.Headquarters.Questionnaires.Jobs;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Synchronization.Schedulers.InterviewDetailsDataScheduler;
@@ -29,6 +30,7 @@ using WB.Infrastructure.Native.Monitoring;
 using WB.Infrastructure.Native.Storage;
 using WB.UI.Headquarters.API.Attributes;
 using WB.UI.Headquarters.API.PublicApi;
+using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Filters;
 using WB.UI.Headquarters.Implementation.Maps;
 using WB.UI.Headquarters.Implementation.Services;
@@ -64,13 +66,14 @@ namespace WB.UI.Headquarters
 
             registry.BindToConstant<LegacyAssemblySettings>(() => legacyAssemblySettings);
 
+            registry.BindWebApiAuthorizationFilter<CustomWebApiAuthorizeFilter>();
 
             registry.BindToConstant<ITokenVerifier>(() => new SimpleTokenVerifier(settingsProvider.AppSettings["Synchronization.Key"]));
 
-            registry.BindHttpFilterWhenControllerHasAttribute<TokenValidationAuthorizationFilter, TokenValidationAuthorizationAttribute>(FilterScope.Controller);
+            registry.BindWebApiAuthorizationFilterWhenControllerOrActionHasAttribute<TokenValidationAuthorizationFilter, TokenValidationAuthorizationAttribute>();
 
-            registry.BindHttpFilterWhenControllerHasAttribute<TokenValidationAuthorizationFilter, ApiValidationAntiForgeryTokenAttribute>(
-                FilterScope.Controller, new ConstructorArgument("tokenVerifier", _ => new ApiValidationAntiForgeryTokenVerifier()));
+            registry.BindWebApiAuthorizationFilterWhenControllerOrActionHasAttribute<TokenValidationAuthorizationFilter, ApiValidationAntiForgeryTokenAttribute>(
+                new ConstructorArgument("tokenVerifier", _ => new ApiValidationAntiForgeryTokenVerifier()));
             
             registry.BindToConstant<IMapper>(_ => new MapperConfiguration(cfg =>
             {
@@ -105,12 +108,17 @@ namespace WB.UI.Headquarters
 
             registry.Bind<IMapService, MapService>();
 
-            registry.BindAsSingleton<IEventSourcedAggregateRootRepository, IAggregateRootCacheCleaner, EventSourcedAggregateRootRepositoryWithWebCache>();
+            registry.Bind<IEventSourcedAggregateRootRepository, EventSourcedAggregateRootRepositoryWithWebCache>();
+            registry.Bind<IAggregateRootCacheCleaner, EventSourcedAggregateRootRepositoryWithWebCache>();
+
 
             EventBusSettings eventBusSettings = settingsProvider.GetSection<EventBusConfigSection>("eventBus").GetSettings();
             registry.BindToConstant(() => eventBusSettings);
 
-            registry.BindAsSingletonWithConstructorArgument<ILiteEventBus, NcqrCompatibleEventDispatcher>(
+            //todo:af
+            //could be expensive
+            //rethink registration
+            registry.BindWithConstructorArgumentInPerLifetimeScope<ILiteEventBus, NcqrCompatibleEventDispatcher>(
                 "eventBusSettings",
                 eventBusSettings);
 
@@ -124,6 +132,7 @@ namespace WB.UI.Headquarters
             serviceLocator.GetInstance<UsersImportTask>().Run();
             serviceLocator.GetInstance<AssignmentsImportTask>().Schedule(repeatIntervalInSeconds: 300);
             serviceLocator.GetInstance<AssignmentsVerificationTask>().Schedule(repeatIntervalInSeconds: 300);
+            serviceLocator.GetInstance<DeleteQuestionnaireJobScheduler>().Configure();
             serviceLocator.GetInstance<PauseResumeJobScheduler>().Configure();
             serviceLocator.GetInstance<UpgradeAssignmentJobScheduler>().Configure();
 

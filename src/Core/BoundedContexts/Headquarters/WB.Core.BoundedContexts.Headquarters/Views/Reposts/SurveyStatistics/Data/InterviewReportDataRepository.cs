@@ -3,22 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using Dapper;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Infrastructure.Native.Storage.Postgre.Implementation;
+using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Data
 {
     partial class InterviewReportDataRepository : IInterviewReportDataRepository
     {
-        private readonly IPlainSessionProvider sessionProvider;
+        private readonly IUnitOfWork sessionProvider;
         
-        public InterviewReportDataRepository(IPlainSessionProvider sessionProvider)
+        public InterviewReportDataRepository(IUnitOfWork sessionProvider)
         {
             this.sessionProvider = sessionProvider;
         }
 
         public List<Guid> QuestionsForQuestionnaireWithData(QuestionnaireIdentity questionnaireIdentity)
         {
-            return this.sessionProvider.GetSession().Connection
+            return this.sessionProvider.Session.Connection
                 .Query<Guid>(@"with questionnaires as (
 	                    select id, entityid from readside.questionnaire_entities
 	                    where questionnaireidentity = @Id	
@@ -33,7 +33,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Da
 
         public List<QuestionnaireIdentity> QuestionnairesWithData(Guid? teamLeadId)
         {
-            return this.sessionProvider.GetSession().Connection
+            return this.sessionProvider.Session.Connection
                 .Query<string>(@"with questionnaires as (
 	                select distinct questionnaireidentity
 	                from readside.interviewsummaries
@@ -52,7 +52,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Da
             QuestionnaireIdentity questionnaireIdentity,
             Guid variableA, Guid variableB)
         {
-            var connection = this.sessionProvider.GetSession().Connection;
+            var connection = this.sessionProvider.Session.Connection;
             var questionnaire = questionnaireIdentity.ToString();
             return connection.Query<GetReportCategoricalPivotReportItem>(@"select a as colvalue, b as rowvalue, count
                 from readside.get_report_categorical_pivot(@teamLeadId, @questionnaire, @variableA, @variableB)", new
@@ -66,7 +66,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Da
 
         public List<GetCategoricalReportItem> GetCategoricalReportData(GetCategoricalReportParams @params)
         {
-            var connection = this.sessionProvider.GetSession().Connection;
+            var connection = this.sessionProvider.Session.Connection;
 
             const string SqlQuery = @"select teamleadname, responsiblename, answer, count
                     from readside.get_categorical_report(@questionnaireIdentity, @detailed, @totals, @teamLeadId, 
@@ -83,7 +83,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.SurveyStatistics.Da
             Guid? teamLeadId,
             bool detailedView, long minAnswer = long.MinValue, long maxAnswer = long.MaxValue)
         {
-            var session = this.sessionProvider.GetSession();
+            var session = this.sessionProvider.Session;
             var result = session.Connection.Query<GetNumericalReportItem>(@"
                 select teamleadname, responsiblename,
                     count, avg as average, median, min, max, sum,

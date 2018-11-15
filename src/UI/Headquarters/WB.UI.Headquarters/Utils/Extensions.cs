@@ -1,8 +1,5 @@
 using System;
-using System.ComponentModel;
-using System.Resources;
 using System.Web.Http.Filters;
-using WB.UI.Headquarters.Models;
 
 namespace WB.UI.Headquarters.Utils
 {

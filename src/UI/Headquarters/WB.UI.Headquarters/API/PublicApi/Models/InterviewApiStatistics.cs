@@ -1,5 +1,4 @@
 ﻿using System;
-using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.UI.Headquarters.API.PublicApi.Models
 {
