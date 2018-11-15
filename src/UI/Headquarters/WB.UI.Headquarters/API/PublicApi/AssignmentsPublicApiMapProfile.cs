@@ -60,16 +60,16 @@ namespace WB.UI.Headquarters.API.PublicApi
 
         private IQuestionnaire GetQuestionnaire(ResolutionContext context, QuestionnaireIdentity questionnaireIdentity)
         {
-            var questionnaierStorage = context.Resolve<IQuestionnaireStorage>();
-            return questionnaierStorage.GetQuestionnaire(questionnaireIdentity, null);
+            var storage = context.Resolve<IQuestionnaireStorage>();
+            return storage.GetQuestionnaire(questionnaireIdentity, null);
         }
 
         private string GetVariableName(ResolutionContext ctx, Guid? questionId)
         {
             if (questionId == null) return null;
 
-            var questionnaier = ctx.Get<IQuestionnaire>();
-            return questionnaier.GetQuestionVariableName(questionId.Value);
+            var questionnaire = ctx.Get<IQuestionnaire>();
+            return questionnaire.GetQuestionVariableName(questionId.Value);
         }
     }
 }
