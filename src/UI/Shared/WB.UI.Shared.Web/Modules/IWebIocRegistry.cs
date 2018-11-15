@@ -1,22 +1,42 @@
-﻿using System.Web.Http.Filters;
+﻿using System;
 using WB.Core.Infrastructure.Modularity;
 
 namespace WB.UI.Shared.Web.Modules
 {
     public interface IWebIocRegistry : IIocRegistry
     {
-        void BindMvcFilter<T>(System.Web.Mvc.FilterScope filterScope, int? order);
+        void BindWebApiFilter<T>() 
+            where T : System.Web.Http.Filters.ActionFilterAttribute;
 
-        void BindMvcFilterInSingletonScope<T>(System.Web.Mvc.FilterScope filterScope, int? order);
+        void BindMvcActionFilter<T>(int order = -1) 
+            where T : System.Web.Mvc.ActionFilterAttribute;
 
-        void BindMvcFilterWhenActionMethodHasNoAttribute<T, TAttribute>(System.Web.Mvc.FilterScope filterScope, int? order);
+        void BindWebApiExceptionFilter<T>()
+            where T : System.Web.Http.Filters.ExceptionFilterAttribute;
 
-        void BindHttpFilter<T>(System.Web.Http.Filters.FilterScope filterScope, int? order) where T : IFilter;
+        void BindMvcExceptionFilter<T>(int order = -1) 
+            where T : System.Web.Mvc.IExceptionFilter;
 
-        void BindHttpFilterWhenActionMethodHasNoAttribute<T, TAttribute>(System.Web.Http.Filters.FilterScope filterScope, int? order = null) where T : IFilter;
+        void BindWebApiAuthorizationFilter<T>() 
+            where T : System.Web.Http.Filters.AuthorizationFilterAttribute;
 
-        void BindHttpFilterWhenControllerHasAttribute<T, TAttribute>(System.Web.Http.Filters.FilterScope filterScope, int? order = null) where T : IFilter;
+        void BindMvcAuthorizationFilter<T>(int order = -1) 
+            where T : System.Web.Mvc.IAuthorizationFilter;
 
-        void BindHttpFilterWhenControllerHasAttribute<T, TAttribute>(System.Web.Http.Filters.FilterScope filterScope, ConstructorArgument constructorArgument) where T : IFilter;
+        void BindMvcActionFilterWhenControllerOrActionHasNoAttribute<T, TAttribute>(int order = -1) 
+            where T : System.Web.Mvc.ActionFilterAttribute
+            where TAttribute : Attribute;
+
+        void BindWebApiActionFilterWhenControllerOrActionHasNoAttribute<T, TAttribute>() 
+            where T : System.Web.Http.Filters.ActionFilterAttribute
+            where TAttribute : Attribute;
+
+        void BindWebApiAuthorizationFilterWhenControllerOrActionHasAttribute<T, TAttribute>()
+            where T : System.Web.Http.Filters.AuthorizationFilterAttribute
+            where TAttribute : Attribute;
+
+        void BindWebApiAuthorizationFilterWhenControllerOrActionHasAttribute<T, TAttribute>(ConstructorArgument constructorArgument)
+            where T : System.Web.Http.Filters.AuthorizationFilterAttribute
+            where TAttribute : Attribute;
     }
 }

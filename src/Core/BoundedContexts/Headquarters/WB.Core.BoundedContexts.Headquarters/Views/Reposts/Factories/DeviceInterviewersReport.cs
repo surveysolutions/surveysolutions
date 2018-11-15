@@ -16,10 +16,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories
 {
     public class DeviceInterviewersReport : IDeviceInterviewersReport
     {
-        private readonly PostgresPlainStorageSettings plainStorageSettings;
+        private readonly UnitOfWorkConnectionSettings plainStorageSettings;
         private readonly IInterviewerVersionReader interviewerVersionReader;
 
-        public DeviceInterviewersReport(PostgresPlainStorageSettings plainStorageSettings,
+        public DeviceInterviewersReport(UnitOfWorkConnectionSettings plainStorageSettings,
             IInterviewerVersionReader interviewerVersionReader)
         {
             this.plainStorageSettings = plainStorageSettings;

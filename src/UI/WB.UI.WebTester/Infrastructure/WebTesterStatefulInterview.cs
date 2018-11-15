@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.UI.WebTester.Services;
 
@@ -14,12 +12,20 @@ namespace WB.UI.WebTester.Infrastructure
         private readonly IAppdomainsPerInterviewManager appdomainsPerInterviewManager;
 
         public WebTesterStatefulInterview(
-            IQuestionnaireStorage questionnaireRepository, 
-            IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider, 
+            //IQuestionnaireStorage questionnaireRepository, 
+            //IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider, 
             ISubstitutionTextFactory substitutionTextFactory,
             IAppdomainsPerInterviewManager appdomainsPerInterviewManager,
-            IInterviewTreeBuilder treeBuilder) 
-            : base(questionnaireRepository, expressionProcessorStatePrototypeProvider, substitutionTextFactory, treeBuilder)
+            IInterviewTreeBuilder treeBuilder
+            //,IQuestionOptionsRepository questionOptionsRepository
+            ) 
+            : base(
+                //questionnaireRepository, 
+                //expressionProcessorStatePrototypeProvider, 
+                substitutionTextFactory, 
+                treeBuilder
+                //,questionOptionsRepository
+                )
         {
             this.appdomainsPerInterviewManager = appdomainsPerInterviewManager;
         }

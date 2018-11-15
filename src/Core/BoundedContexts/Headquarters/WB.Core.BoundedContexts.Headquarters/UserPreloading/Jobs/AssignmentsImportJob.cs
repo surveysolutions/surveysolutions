@@ -4,79 +4,71 @@ using System.Threading.Tasks;
 using Quartz;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
 using WB.Core.BoundedContexts.Headquarters.UserPreloading.Dto;
+using WB.Core.BoundedContexts.Headquarters.UserPreloading.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.SampleImport;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
-using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.Transactions;
-using WB.Core.SharedKernels.DataCollection.Aggregates;
+using WB.Core.Infrastructure.Modularity;
 using WB.Core.SharedKernels.DataCollection.Repositories;
-using WB.Infrastructure.Native.Threading;
+using WB.Enumerator.Native.WebInterview;
 
 namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
 {
     [DisallowConcurrentExecution]
     internal class AssignmentsImportJob : IJob
     {
-        private ILogger logger => ServiceLocator.Current.GetInstance<ILoggerProvider>()
-            .GetFor<AssignmentsImportJob>();
+        private readonly IServiceLocator serviceLocator;
+        private readonly ILogger logger;
+        private readonly IAssignmentsImportService assignmentsImportService;
+
+        public AssignmentsImportJob(IServiceLocator serviceLocator, ILogger logger, IAssignmentsImportService assignmentsImportService)
+        {
+            this.serviceLocator = serviceLocator;
+            this.logger = logger;
+            this.assignmentsImportService = assignmentsImportService;
+        }
         
-        private IAssignmentsImportService importAssignmentsService => ServiceLocator.Current
-            .GetInstance<IAssignmentsImportService>();
-
-        private IPlainTransactionManager plainTransactionManager => ServiceLocator.Current
-            .GetInstance<IPlainTransactionManager>();
-
-        private SampleImportSettings sampleImportSettings => ServiceLocator.Current
-            .GetInstance<SampleImportSettings>();
-
-        private IQuestionnaireStorage questionnaireStorage => ServiceLocator.Current
-            .GetInstance<IQuestionnaireStorage>();
-
-        private T ExecuteInPlain<T>(Func<T> func) => this.plainTransactionManager.ExecuteInPlainTransaction(func);
-        private void ExecuteInPlain(Action func) => this.plainTransactionManager.ExecuteInPlainTransaction(func);
-
         public void Execute(IJobExecutionContext context)
         {
             try
             {
-                var importProcess = this.ExecuteInPlain(() => this.importAssignmentsService.GetImportStatus());
-                if (importProcess?.ProcessStatus != AssignmentsImportProcessStatus.Import) return;
+                var sampleImportSettings = serviceLocator.GetInstance<SampleImportSettings>();
 
-                var allAssignmentIds = this.ExecuteInPlain(() => this.importAssignmentsService.GetAllAssignmentIdsToImport());
+                AssignmentsImportStatus importProcessStatus = assignmentsImportService.GetImportStatus();
+                if (importProcessStatus?.ProcessStatus != AssignmentsImportProcessStatus.Import)
+                    return;
+
+                var allAssignmentIds = assignmentsImportService.GetAllAssignmentIdsToImport();
+                
+                if (importProcessStatus?.ProcessStatus != AssignmentsImportProcessStatus.Import)
+                    return;
 
                 this.logger.Debug("Assignments import job: Started");
                 var sw = new Stopwatch();
                 sw.Start();
 
                 Parallel.ForEach(allAssignmentIds,
-                    new ParallelOptions { MaxDegreeOfParallelism = this.sampleImportSettings.InterviewsImportParallelTasksLimit },
+                    new ParallelOptions { MaxDegreeOfParallelism = sampleImportSettings.InterviewsImportParallelTasksLimit },
                     assignmentId =>
                     {
-                        try
+                        InScopeExecutor.Current.ExecuteActionInScope((serviceLocatorLocal) =>
                         {
-                            ThreadMarkerManager.MarkCurrentThreadAsIsolated();
+                            var threadImportAssignmentsService = serviceLocatorLocal.GetInstance<IAssignmentsImportService>();
 
-                            var questionnaire = this.ExecuteInPlain(() => this.questionnaireStorage.GetQuestionnaire(importProcess.QuestionnaireIdentity, null));
+                            var questionnaire = serviceLocatorLocal.GetInstance<IQuestionnaireStorage>().GetQuestionnaire(importProcessStatus.QuestionnaireIdentity, null);
                             if (questionnaire == null)
                             {
-                                this.ExecuteInPlain(() => this.importAssignmentsService.RemoveAssignmentToImport(assignmentId));
+                                threadImportAssignmentsService.RemoveAssignmentToImport(assignmentId);
                                 return;
                             }
 
-                            this.ImportAssignment(assignmentId, importProcess.AssignedTo, questionnaire);
-                            this.ExecuteInPlain(() => this.importAssignmentsService.RemoveAssignmentToImport(assignmentId));
-
-                        }
-                        finally
-                        {
-                            ThreadMarkerManager.ReleaseCurrentThreadFromIsolation();
-                        }
+                            threadImportAssignmentsService.ImportAssignment(assignmentId, importProcessStatus.AssignedTo, questionnaire);
+                            threadImportAssignmentsService.RemoveAssignmentToImport(assignmentId);
+                        });
                     });
 
-                this.ExecuteInPlain(() => this.importAssignmentsService.SetImportProcessStatus(
-                    AssignmentsImportProcessStatus.ImportCompleted));
-
+                assignmentsImportService.SetImportProcessStatus(AssignmentsImportProcessStatus.ImportCompleted);
+                
                 sw.Stop();
                 this.logger.Debug($"Assignments import job: Finished. Elapsed time: {sw.Elapsed}");
             }
@@ -84,23 +76,6 @@ namespace WB.Core.BoundedContexts.Headquarters.UserPreloading.Jobs
             {
                 this.logger.Error($"Assignments import job: FAILED. Reason: {ex.Message} ", ex);
             }
-        }
-
-        private void ImportAssignment(int assignmentId, Guid defaultResponsible, IQuestionnaire questionnaire)
-        {
-            var transactionManager = ServiceLocator.Current.GetInstance<ITransactionManagerProvider>().GetTransactionManager();
-
-            try
-            {
-                transactionManager.BeginCommandTransaction();
-                this.ExecuteInPlain(() => this.importAssignmentsService.ImportAssignment(assignmentId, defaultResponsible, questionnaire));
-                transactionManager.CommitCommandTransaction();
-            }
-            catch
-            {
-                transactionManager.RollbackCommandTransaction();
-            }
-            
         }
     }
 }

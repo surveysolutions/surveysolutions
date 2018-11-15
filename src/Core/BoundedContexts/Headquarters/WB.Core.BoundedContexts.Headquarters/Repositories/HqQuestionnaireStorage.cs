@@ -10,6 +10,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Repositories;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.BoundedContexts.Headquarters.Views.Questionnaire;
+using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
 
 namespace WB.Core.BoundedContexts.Headquarters.Repositories
@@ -21,8 +22,10 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
         public HqQuestionnaireStorage(IPlainKeyValueStorage<QuestionnaireDocument> repository,
             ITranslationStorage translationStorage,
             IQuestionnaireTranslator translator,
-            IReadSideRepositoryWriter<QuestionnaireCompositeItem, int> questionnaireItemsWriter)
-            : base(repository, translationStorage, translator)
+            IReadSideRepositoryWriter<QuestionnaireCompositeItem, int> questionnaireItemsWriter,
+            IQuestionOptionsRepository questionOptionsRepository,
+            ISubstitutionService substitutionService)
+            : base(repository, translationStorage, translator, questionOptionsRepository, substitutionService)
         {
             this.questionnaireItemsWriter = questionnaireItemsWriter;
         }

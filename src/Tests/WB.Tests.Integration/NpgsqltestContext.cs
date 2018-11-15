@@ -3,17 +3,18 @@ using System.Configuration;
 using Npgsql;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Infrastructure.Native.Storage.Postgre.Implementation;
+using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Tests.Integration
 {
     internal abstract class NpgsqlTestContext
     {
         protected NpgsqlConnection pgSqlConnection;
-        protected CqrsPostgresTransactionManager transactionManager;
         protected static NpgsqlConnectionStringBuilder connectionStringBuilder;
         protected static string TestConnectionString;
         private static string databaseName;
+
+        protected IUnitOfWork UnitOfWork;
 
         [SetUp]
         public void Context()
@@ -41,7 +42,13 @@ namespace WB.Tests.Integration
         [TearDown]
         public void Cleanup()
         {
-            pgSqlConnection.Close();
+            if (UnitOfWork != null)
+            {
+                UnitOfWork.AcceptChanges();
+                UnitOfWork.Dispose();
+            }
+
+            //pgSqlConnection.Close();
 
             using (var connection = new NpgsqlConnection(TestConnectionString))
             {
@@ -55,23 +62,6 @@ namespace WB.Tests.Integration
                     sqlCommand.ExecuteNonQuery();
                 }
                 connection.Close();
-            }
-        }
-
-        protected void ExecuteInCommandTransaction(Action action)
-        {
-            try
-            {
-                transactionManager.BeginCommandTransaction();
-
-                action();
-
-                transactionManager.CommitCommandTransaction();
-            }
-            catch
-            {
-                transactionManager.RollbackCommandTransaction();
-                throw;
             }
         }
     }

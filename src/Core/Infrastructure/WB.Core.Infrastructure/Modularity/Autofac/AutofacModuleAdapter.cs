@@ -1,87 +1,24 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using Autofac;
 using Autofac.Core;
-using WB.Core.Infrastructure.EventBus;
+using Autofac.Core.Lifetime;
 
 namespace WB.Core.Infrastructure.Modularity.Autofac
 {
-
-    public class AutofacModuleContext : IModuleContext
+    public class AutofacModuleAdapter : AutofacModuleAdapter<IIocRegistry>
     {
-        const string TargetTypeParameterName = "Autofac.AutowiringPropertyInjector.InstanceType";
-
-        private readonly IComponentContext ctx;
-        private readonly IEnumerable<Parameter> parameters;
-
-        public AutofacModuleContext(IComponentContext ctx, IEnumerable<Parameter> parameters)
+        public AutofacModuleAdapter(IModule<IIocRegistry> module) : base(module)
         {
-            this.ctx = ctx;
-            this.parameters = parameters;
-        }
-
-        public T Resolve<T>()
-        {
-            return ctx.Resolve<T>();
-        }
-
-        public Type MemberDeclaringType
-        {
-            get
-            {
-                var targetType = parameters.OfType<NamedParameter>()
-                    .FirstOrDefault(np => np.Name == TargetTypeParameterName && np.Value is Type);
-
-                return (Type) targetType?.Value;
-            }
-        }
-
-        public T Inject<T>()
-        {
-            return Resolve<T>();
-        }
-
-        public T Get<T>()
-        {
-            return Resolve<T>();
-        }
-
-        public T Get<T>(string name)
-        {
-            return Resolve<T>();
-        }
-
-        public object Get(Type type)
-        {
-            return this.ctx.Resolve(type);
-        }
-
-        public object GetServiceWithGenericType(Type type, params Type[] genericType)
-        {
-            return ctx.Resolve(type.MakeGenericType(genericType));
-        }
-
-        public Type GetGenericArgument()
-        {
-            var targetType = parameters.OfType<NamedParameter>()
-                .FirstOrDefault(np => np.Value is Type);
-
-            return (Type) targetType?.Value;
-        }
-
-        public Type[] GetGenericArguments()
-        {
-            return parameters.OfType<NamedParameter>().Select(np => np.Value).OfType<Type>().ToArray();
         }
     }
 
-    public class AutofacModuleAdapter : Module, IIocRegistry
+    public abstract class AutofacModuleAdapter<TIoc> : Module, IIocRegistry where TIoc : class, IIocRegistry 
     {
-        private readonly IModule module;
-        private ContainerBuilder containerBuilder;
+        protected readonly IModule<TIoc> module;
+        protected ContainerBuilder containerBuilder;
 
-        public AutofacModuleAdapter(IModule module)
+        protected AutofacModuleAdapter(IModule<TIoc> module)
         {
             this.module = module;
         }
@@ -89,7 +26,7 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
         protected override void Load(ContainerBuilder builder)
         {
             containerBuilder = builder;
-            this.module.Load(this);
+            this.module.Load(this as TIoc);
         }
 
         void IIocRegistry.Bind<TInterface, TImplementation>()
@@ -99,7 +36,14 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
 
         public void Bind(Type @interface, Type implementation)
         {
-            containerBuilder.RegisterType(implementation).As(@interface);
+            if (@interface.IsGenericType && implementation.IsGenericType)
+            {
+                containerBuilder.RegisterGeneric(implementation).As(@interface);
+            }
+            else
+            {
+                containerBuilder.RegisterType(implementation).As(@interface);
+            }
         }
 
         public void Bind<TInterface1, TInterface2, TImplementation>() where TImplementation : TInterface1, TInterface2
@@ -110,9 +54,20 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
         public void Bind<TInterface, TImplementation>(params ConstructorArgument[] constructorArguments) where TImplementation : TInterface
         {
             var registrationBuilder = containerBuilder.RegisterType<TImplementation>().As<TInterface>();
+            
             foreach (var constructorArgument in constructorArguments)
             {
-                registrationBuilder.WithParameter(constructorArgument.Name, constructorArgument.Value);
+                //var value = constructorArgument.Value.Invoke(null);
+
+                //object Callback(IContext context) => constructorArgument.Value.Invoke(new NinjectModuleContext(context));
+                registrationBuilder.WithParameter(
+                    new ResolvedParameter(
+                        (pi, ctx) => pi.Name == constructorArgument.Name, //pi.ParameterType == typeof(string) &&
+                        (pi, ctx) => constructorArgument.Value.Invoke(new AutofacModuleContext(ctx, new List<Parameter>() )))
+                        //constructorArgument.Value.Invoke(new AutofacModuleContext(ctx, new List<Parameter>())) 
+
+                    //constructorArgument.Name, constructorArgument.Value.Invoke()
+                    );
             }
         }
 
@@ -127,23 +82,28 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
                 .WithParameter(argumentName, argumentValue);
         }
 
-        public void BindGeneric(Type implemenation)
+        public void BindInPerUnitOfWorkOrPerRequestScope<TInterface, TImplementation>() where TImplementation : TInterface
         {
-            containerBuilder.RegisterGeneric(implemenation);
+            containerBuilder.RegisterType<TImplementation>().As<TInterface>()
+                .InstancePerMatchingLifetimeScope(
+                    AutofacServiceLocatorConstants.UnitOfWorkScope,
+                    MatchingScopeLifetimeTags.RequestLifetimeScopeTag);
         }
 
-        public void Unbind<T>()
+        public void BindWithConstructorArgumentInPerLifetimeScope<TInterface, TImplementation>(string argumentName, object argumentValue) where TImplementation : TInterface
         {
+            containerBuilder.RegisterType<TImplementation>().As<TInterface>()
+                .WithParameter(argumentName, argumentValue).InstancePerLifetimeScope();
         }
 
-        public bool HasBinding<T>()
+        public void BindGeneric(Type implementation)
         {
-            return false; 
+            containerBuilder.RegisterGeneric(implementation);
         }
 
-        public void BindInIsolatedThreadScopeOrRequestScopeOrThreadScope<T>()
+        public void BindInPerLifetimeScope<T1, T2>() where T2 : T1
         {
-            throw new NotImplementedException();
+            containerBuilder.RegisterType<T2>().As<T1>().InstancePerLifetimeScope();
         }
 
         void IIocRegistry.BindAsSingleton<TInterface, TImplementation>()
@@ -151,9 +111,14 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
             containerBuilder.RegisterType<TImplementation>().As<TInterface>().SingleInstance();
         }
 
-        void IIocRegistry.BindAsSingleton<TInterface1, TInterface2, TImplementation>()
+        public void BindAsSingleton<TInterface1, TInterface2, TImplementation>() where TImplementation : TInterface2, TInterface1
         {
             containerBuilder.RegisterType<TImplementation>().As<TInterface1, TInterface2>().SingleInstance();
+        }
+
+        public void BindAsSingleton<TInterface1, TInterface2, TInterface3, TImplementation>() where TImplementation : TInterface3, TInterface2, TInterface1
+        {
+            containerBuilder.RegisterType<TImplementation>().As<TInterface1, TInterface2, TInterface3>().SingleInstance();
         }
 
         void IIocRegistry.BindAsSingletonWithConstructorArgument<TInterface, TImplementation>(string argumentName, object argumentValue)
@@ -162,7 +127,7 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
                 .WithParameter(argumentName, argumentValue).SingleInstance();
         }
 
-        public void BindAsSingletonWithConstructorArgument<TInterface, TImplementation>(
+        public void BindAsSingletonWithConstructorArguments<TInterface, TImplementation>(
             params ConstructorArgument[] constructorArguments) where TImplementation : TInterface
         {
             var registrationBuilder = containerBuilder.RegisterType<TImplementation>().As<TInterface>();
@@ -213,17 +178,12 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
 
         public void BindToMethodInRequestScope<T>(Func<IModuleContext, T> func)
         {
-            throw new NotImplementedException();
+            containerBuilder.Register((ctx, p) => func(new AutofacModuleContext(ctx, p))).InstancePerRequest();
         }
 
         public void BindToMethod<T>(Func<T> func)
         {
             containerBuilder.Register(ctx => func());
-        }
-
-        public void BindToMethod<T>(Func<IModuleContext, T> func)
-        {
-            throw new NotImplementedException();
         }
 
         public void BindToConstant<T>(Func<T> func)
@@ -233,17 +193,7 @@ namespace WB.Core.Infrastructure.Modularity.Autofac
 
         public void BindToConstant<T>(Func<IModuleContext, T> func)
         {
-            throw new NotImplementedException();
-        }
-
-        public void BindToConstructorInSingletonScope<T>(Func<IConstructorContext, T> func)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void BindToConstructorInSingletonScope<T>(Func<IModuleContext, T> func)
-        {
-            throw new NotImplementedException();
+            containerBuilder.Register((ctx, p) => func(new AutofacModuleContext(ctx, p))).SingleInstance();
         }
 
         public void BindAsSingleton(Type @interface, Type implementation)

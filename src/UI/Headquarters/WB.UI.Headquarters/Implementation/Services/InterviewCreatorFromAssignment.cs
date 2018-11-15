@@ -9,21 +9,15 @@ using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.CommandBus;
-using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.Infrastructure.Transactions;
-using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Commands.Interview;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Services;
-using WB.UI.Headquarters.Services;
 
 namespace WB.UI.Headquarters.Implementation.Services
 {
     public class InterviewCreatorFromAssignment : IInterviewCreatorFromAssignment
     {
-        private readonly IPlainTransactionManagerProvider plainTransactionManagerProvider;
-        private readonly ITransactionManagerProvider transactionManagerProvider;
         private readonly IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory;
         private readonly IInterviewUniqueKeyGenerator interviewKeyGenerator;
         private readonly IInterviewAnswerSerializer answerSerializer;
@@ -31,20 +25,13 @@ namespace WB.UI.Headquarters.Implementation.Services
         private readonly IUserViewFactory userViewFactory;
         private readonly IAuthorizedUser authorizedUser;
 
-        private IPlainTransactionManager plainTransactionManager => plainTransactionManagerProvider.GetPlainTransactionManager();
-
-
-        public InterviewCreatorFromAssignment(IPlainTransactionManagerProvider plainTransactionManagerProvider,
-            ITransactionManagerProvider transactionManagerProvider,
-            IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
+        public InterviewCreatorFromAssignment(IQuestionnaireBrowseViewFactory questionnaireBrowseViewFactory,
             IInterviewUniqueKeyGenerator interviewKeyGenerator,
             IInterviewAnswerSerializer answerSerializer,
             ICommandService commandService,
             IUserViewFactory userViewFactory,
             IAuthorizedUser authorizedUser)
         {
-            this.plainTransactionManagerProvider = plainTransactionManagerProvider;
-            this.transactionManagerProvider = transactionManagerProvider;
             this.questionnaireBrowseViewFactory = questionnaireBrowseViewFactory;
             this.interviewKeyGenerator = interviewKeyGenerator;
             this.answerSerializer = answerSerializer;
@@ -103,17 +90,13 @@ namespace WB.UI.Headquarters.Implementation.Services
                 interviewKey: this.interviewKeyGenerator.Get(),
                 assignmentId: assignmentId);
 
-            this.transactionManagerProvider.GetTransactionManager()
-                .ExecuteInQueryTransaction(
-                    () => this.plainTransactionManager.ExecuteInPlainTransaction(
-                        () => { this.commandService.Execute(command); }));
+            this.commandService.Execute(command); 
         }
 
         private bool IsSupportAssignments(QuestionnaireIdentity questionnaireIdentity)
         {
             var questionnaireBrowseItem =
-                this.plainTransactionManager.ExecuteInQueryTransaction(
-                    () => this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity));
+                     this.questionnaireBrowseViewFactory.GetById(questionnaireIdentity);
 
             bool isSupportAssignments = questionnaireBrowseItem.AllowAssignments;
             return isSupportAssignments;

@@ -23,8 +23,8 @@ namespace WB.Infrastructure.Native.Storage.Postgre
 
         public void Load(IIocRegistry registry)
         {
-            registry.BindAsSingletonWithConstructorArgument<IHeadquartersEventStore, PostgresEventStore>("connectionSettings", this.eventStoreSettings);
-            registry.BindToMethod<IEventStore>(context => context.Get<IHeadquartersEventStore>());
+            registry.BindWithConstructorArgument<IHeadquartersEventStore, PostgresEventStore>("connectionSettings", this.eventStoreSettings);
+            registry.BindWithConstructorArgument<IEventStore, PostgresEventStore>("connectionSettings", this.eventStoreSettings);
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)

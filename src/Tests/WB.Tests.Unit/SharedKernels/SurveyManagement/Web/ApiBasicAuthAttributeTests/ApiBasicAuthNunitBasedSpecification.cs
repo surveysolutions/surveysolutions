@@ -2,6 +2,8 @@ using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using System.Web.Http.Controllers;
+using System.Web.Http.Dependencies;
+using System.Web.Http.Hosting;
 using Main.Core.Entities.SubEntities;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
@@ -33,11 +35,12 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiBasicAuthAttribute
 
         protected ApiBasicAuthAttribute CreateApiBasicAuthAttribute()
         {
-            this.userManager = Create.Storage.HqUserManager(this.UserStore.Object, this.HashCompatibilityProvider.Object);
+            /*this.userManager = Create.Storage.HqUserManager(this.UserStore.Object, this.HashCompatibilityProvider.Object);
             var auth = new Mock<IAuthenticationManager>();
-            var hqSignInManager = new HqSignInManager(userManager, auth.Object, this.ApiTokenProviderProvider.Object);
+            var hashCompatibilityProvider = Mock.Of<IHashCompatibilityProvider>();
+            var hqSignInManager = new HqSignInManager(userManager, auth.Object, hashCompatibilityProvider, this.ApiTokenProviderProvider.Object);
             Setup.InstanceToMockedServiceLocator(hqSignInManager);
-            Setup.InstanceToMockedServiceLocator(this.HashCompatibilityProvider.Object);
+            Setup.InstanceToMockedServiceLocator(this.HashCompatibilityProvider.Object);*/
 
             return new ApiBasicAuthAttribute(UserRoles.Interviewer);
         }
@@ -52,14 +55,28 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiBasicAuthAttribute
         protected Mock<IHashCompatibilityProvider> HashCompatibilityProvider = new Mock<IHashCompatibilityProvider>();
         protected Mock<IApiTokenProvider<Guid>> ApiTokenProviderProvider = new Mock<IApiTokenProvider<Guid>>();
 
-        protected static HttpActionContext CreateActionContext()
+        protected HttpActionContext CreateActionContext()
         {
-            return
+            var context =
                 new HttpActionContext(
-                    new HttpControllerContext(new HttpRequestContext(), 
+                    new HttpControllerContext(
+                        new HttpRequestContext(), 
                         new HttpRequestMessage(new HttpMethod("POST"), new Uri("http://hq.org/api/sync")),
                         new HttpControllerDescriptor(), Mock.Of<IHttpController>()), 
                     new ReflectedHttpActionDescriptor());
+
+            
+            userManager = Create.Storage.HqUserManager(this.UserStore.Object, this.HashCompatibilityProvider.Object);
+            var auth = new Mock<IAuthenticationManager>();
+
+            //var hashCompatibilityProvider = Mock.Of<IHashCompatibilityProvider>();
+            var hqSignInManager = new HqSignInManager(userManager, auth.Object, this.HashCompatibilityProvider.Object, this.ApiTokenProviderProvider.Object);
+
+            var scopeMock = new Mock<IDependencyScope>();
+            scopeMock.Setup(x => x.GetService(typeof(HqSignInManager))).Returns(hqSignInManager);
+            context.Request.Properties.Add(HttpPropertyKeys.DependencyScope, scopeMock.Object);
+
+            return context;
         }
     }
 }
