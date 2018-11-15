@@ -1259,12 +1259,15 @@
     <value>Исходящий трафик</value>
   </data>
   <data name="InterviewerProfile_TotalTrafficUsed" xml:space="preserve">
-    <value>Всего ипользовано трафика</value>
+    <value>Всего иcпользовано трафика</value>
   </data>
   <data name="InterviewerProfile_TotalTrafficUsedTooltip" xml:space="preserve">
     <value>Общая сумма входящего и исходящего трафика по пользователю на всех устройствах</value>
   </data>
   <data name="InterviewerProfile_TrafficUsageHeader" xml:space="preserve">
     <value>Использования трафика</value>
+  </data>
+  <data name="Kb" xml:space="preserve">
+    <value>Кб</value>
   </data>
 </root>
