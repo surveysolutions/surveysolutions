@@ -5,7 +5,7 @@ namespace WB.UI.Headquarters.Code
     public static class AutoMapperResolutionContextExtensions
     {
         /// <summary>
-        /// Simple storage accesser for resolution context items
+        /// Simple storage accessor for resolution context items
         /// </summary>
         public static T Get<T>(this ResolutionContext ctx) where T : class
         {

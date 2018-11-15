@@ -782,13 +782,15 @@ namespace WB.Tests.Abc.TestFactories
         public PlainQuestionnaire PlainQuestionnaire(QuestionnaireDocument document = null, long version = 1)
             => Create.Entity.PlainQuestionnaire(document, version, null);
 
-        public PlainQuestionnaire PlainQuestionnaire(QuestionnaireDocument document, long version, Translation translation = null, 
+        public PlainQuestionnaire PlainQuestionnaire(QuestionnaireDocument document, long version, 
+            Translation translation = null, 
             ISubstitutionService substitutionService = null, IQuestionOptionsRepository questionOptionsRepository = null)
         {
             if (document != null)
             {
                 document.IsUsingExpressionStorage = true;
-                document.ExpressionsPlayOrder = document.ExpressionsPlayOrder ?? Create.Service.ExpressionsPlayOrderProvider().GetExpressionsPlayOrder(
+                document.ExpressionsPlayOrder = document.ExpressionsPlayOrder 
+                    ?? Create.Service.ExpressionsPlayOrderProvider().GetExpressionsPlayOrder(
                     document.AsReadOnly().AssignMissingVariables());
             }
             return new PlainQuestionnaire(document, version, questionOptionsRepository ?? Mock.Of<IQuestionOptionsRepository>(), 
@@ -930,6 +932,24 @@ namespace WB.Tests.Abc.TestFactories
                     }
                 }.ToReadOnlyCollection(),
                 Translations = new List<Translation>(languages.Select(x=>Create.Entity.Translation(Guid.NewGuid(), x)))
+            };
+
+
+        public QuestionnaireDocument QuestionnaireDocumentWithOneChapterAndLanguages(Guid chapterId, 
+            List<Translation> translations, Guid? defaultTranslation, params IComposite[] children)
+            => new QuestionnaireDocument
+            {
+                PublicKey = Guid.NewGuid(),
+                Children = new List<IComposite>
+                {
+                    new Group("Chapter")
+                    {
+                        PublicKey = chapterId,
+                        Children = children?.ToReadOnlyCollection() ?? new ReadOnlyCollection<IComposite>(new List<IComposite>())
+                    }
+                }.ToReadOnlyCollection(),
+                DefaultTranslation = defaultTranslation,
+                Translations = translations
             };
 
         public QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Guid? chapterId = null, Guid? id = null, params IComposite[] children)
