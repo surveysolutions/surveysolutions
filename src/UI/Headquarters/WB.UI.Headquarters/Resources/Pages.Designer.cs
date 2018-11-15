@@ -1186,7 +1186,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Average synch speed.
+        ///   Looks up a localized string similar to Average sync speed.
         /// </summary>
         public static string InterviewerProfile_AverageSyncSpeed {
             get {
@@ -1717,7 +1717,7 @@ namespace WB.UI.Headquarters.Resources {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Total sum of incouming and outgoing traffics for user on all devices.
+        ///   Looks up a localized string similar to Total sum of incoming and outgoing traffic for user on all devices.
         /// </summary>
         public static string InterviewerProfile_TotalTrafficUsedTooltip {
             get {
@@ -2118,6 +2118,15 @@ namespace WB.UI.Headquarters.Resources {
         public static string Interviews_Selected {
             get {
                 return ResourceManager.GetString("Interviews_Selected", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Kb.
+        /// </summary>
+        public static string Kb {
+            get {
+                return ResourceManager.GetString("Kb", resourceCulture);
             }
         }
         

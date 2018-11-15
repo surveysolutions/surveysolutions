@@ -39,7 +39,7 @@
                         </div>
                     </div>
                     <div class="total">
-                        <p class="primary-text">{{$t("Pages.InterviewerProfile_TotalTrafficUsed")}}: <span>{{formatKb(totalTrafficUsed)}}</span></p>
+                        <p class="primary-text">{{$t("Pages.InterviewerProfile_TotalTrafficUsed")}}: <span v-html="formatKb(totalTrafficUsed)"></span></p>
                     </div>
                 </div>
             </div>
@@ -79,7 +79,7 @@
         },
         methods: {
             formatKb(kb){
-                return kb.toLocaleString() + " Kb";
+                return kb.toLocaleString() + "&nbsp;" + this.$t("Pages.Kb");
 
             },
             initializeTrafficUsage(){
@@ -92,7 +92,7 @@
                         this.trafficUsage = trafficUsage.trafficUsages || [];
                         this.maxDailyUsage =  trafficUsage.maxDailyUsage  || 0;
                         Vue.nextTick(function () {
-                            $('[data-toggle="tooltip"]').tooltip()
+                            $('[data-toggle="tooltip"]').tooltip({html: true})
                         })
                     });
             },

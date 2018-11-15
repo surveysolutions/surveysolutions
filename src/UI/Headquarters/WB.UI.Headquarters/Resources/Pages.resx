@@ -510,7 +510,7 @@
     <comment>{0}, {1} - Data amount </comment>
   </data>
   <data name="InterviewerProfile_AverageSyncSpeed" xml:space="preserve">
-    <value>Average synch speed</value>
+    <value>Average sync speed</value>
   </data>
   <data name="InterviewerProfile_SignalStrength" xml:space="preserve">
     <value>Signal strength</value>
@@ -1242,6 +1242,10 @@
     <value>Total traffic used</value>
   </data>
   <data name="InterviewerProfile_TotalTrafficUsedTooltip" xml:space="preserve">
-    <value>Total sum of incouming and outgoing traffics for user on all devices</value>
+    <value>Total sum of incoming and outgoing traffic for user on all devices</value>
+  </data>
+  <data name="Kb" xml:space="preserve">
+    <value>Kb</value>
+    <comment>Kilobytes</comment>
   </data>
 </root>
