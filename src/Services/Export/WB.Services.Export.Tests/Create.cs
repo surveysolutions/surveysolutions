@@ -129,7 +129,7 @@ namespace WB.Services.Export.Tests
             var QuestionnaireExportStructureFactory = new QuestionnaireExportStructureFactory(
                 new MemoryCache(new MemoryCacheOptions()), 
                 Mock.Of<IQuestionnaireStorage>());
-            return QuestionnaireExportStructureFactory.GetQuestionnaireExportStructure(Create.Tenant(), questionnaire);
+            return QuestionnaireExportStructureFactory.CreateQuestionnaireExportStructure(questionnaire);
         }
 
         public static InterviewSummary InterviewSummary( InterviewExportedAction status = InterviewExportedAction.ApprovedBySupervisor,
