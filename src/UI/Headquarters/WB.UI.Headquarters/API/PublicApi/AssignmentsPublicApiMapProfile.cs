@@ -56,17 +56,26 @@ namespace WB.UI.Headquarters.API.PublicApi
 
         private void PrepareQuestionnaire(ResolutionContext context, QuestionnaireIdentity questionnaireIdentity)
         {
-            var document = this.GetQuestionnaire(questionnaireIdentity);
+            var document = this.GetQuestionnaire(context, questionnaireIdentity);
             context.Set(document);
         }
 
-        private IQuestionnaire GetQuestionnaire(QuestionnaireIdentity questionnaireIdentity)
+        private IQuestionnaire GetQuestionnaire(ResolutionContext context, QuestionnaireIdentity questionnaireIdentity)
         {
-            // https://stackoverflow.com/a/24509451/72174
-            var httpRequestMessage = HttpContext.Current.Items["MS_HttpRequestMessage"] as HttpRequestMessage;
-            var currentDependencyScope = httpRequestMessage.GetDependencyScope();
-            var questionnaireStorage = (IQuestionnaireStorage)currentDependencyScope.GetService(typeof(IQuestionnaireStorage));
-            return questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
+            if (HttpContext.Current != null)
+            {
+                // https://stackoverflow.com/a/24509451/72174
+                var httpRequestMessage = HttpContext.Current.Items["MS_HttpRequestMessage"] as HttpRequestMessage;
+                var currentDependencyScope = httpRequestMessage.GetDependencyScope();
+                var questionnaireStorage =
+                    (IQuestionnaireStorage) currentDependencyScope.GetService(typeof(IQuestionnaireStorage));
+                return questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
+            }
+            else
+            {
+                var storage = context.Resolve<IQuestionnaireStorage>();
+                return storage.GetQuestionnaire(questionnaireIdentity, null);
+            }
         }
 
         private string GetVariableName(ResolutionContext ctx, Guid? questionId)
