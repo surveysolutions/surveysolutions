@@ -106,15 +106,22 @@ namespace WB.Core.BoundedContexts.Headquarters.InterviewerProfiles
                 .Select(x => new InterviewerMonthlyTrafficUsageView
                 {
                     Month = formattedDates[x.Key],
-                    Date = x.Key, 
-                    DailyUsage = x.Select(d => new InterviewerDailyTrafficUsageView
-                    {
-                        Day = d.Day,
-                        Up = d.UploadedBytes.InKb(),
-                        Down = d.DownloadedBytes.InKb(),
-                        UpInPer = (int)Math.Floor(100*(double)d.UploadedBytes/maxDailyUsage),
-                        DownInPer = (int)Math.Floor(100*(double)d.DownloadedBytes/maxDailyUsage),
-                    }).ToList()
+                    Date = x.Key,
+                    DailyUsage = x.Select(d =>
+                        {
+                            var upInPer = (int) Math.Floor(100 * (double) d.UploadedBytes / maxDailyUsage);
+                            var downInPer = (int) Math.Floor(100 * (double) d.DownloadedBytes / maxDailyUsage);
+                            return new InterviewerDailyTrafficUsageView
+                            {
+                                Day = d.Day,
+                                Up = d.UploadedBytes.InKb(),
+                                Down = d.DownloadedBytes.InKb(),
+                                UpInPer = d.UploadedBytes > 0 ? Math.Max(1, upInPer) : 0,
+                                DownInPer = d.DownloadedBytes > 0 ? Math.Max(1, downInPer) : 0,
+                            };
+                        })
+                        .OrderBy(d => d.Day)
+                        .ToList()
                 })
                 .ToList();
 
@@ -124,7 +131,7 @@ namespace WB.Core.BoundedContexts.Headquarters.InterviewerProfiles
                 if (daysWithData >= 3) continue;
 
                 var daysInMonth = DateTime.DaysInMonth(monthlyTrafficUsage.Date.Year, monthlyTrafficUsage.Date.Month);
-                var days = Enumerable.Range(1, daysInMonth).Except(monthlyTrafficUsage.DailyUsage.Select(x => x.Day)).ToList();
+                var days = Enumerable.Range(1, daysInMonth).Except(monthlyTrafficUsage.DailyUsage.Select(x => x.Day)).OrderBy(x => x).ToList();
 
                 monthlyTrafficUsage.DailyUsage.AddRange(
                     days.Skip(Math.Max(0, days.Count - 3 + daysWithData)).Take(3 - daysWithData)
