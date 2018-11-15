@@ -1,5 +1,7 @@
 using System;
 using System.ComponentModel;
+using System.Net.Http;
+using System.Web;
 using AutoMapper;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
@@ -54,14 +56,17 @@ namespace WB.UI.Headquarters.API.PublicApi
 
         private void PrepareQuestionnaire(ResolutionContext context, QuestionnaireIdentity questionnaireIdentity)
         {
-            var document = this.GetQuestionnaire(context, questionnaireIdentity);
+            var document = this.GetQuestionnaire(questionnaireIdentity);
             context.Set(document);
         }
 
-        private IQuestionnaire GetQuestionnaire(ResolutionContext context, QuestionnaireIdentity questionnaireIdentity)
+        private IQuestionnaire GetQuestionnaire(QuestionnaireIdentity questionnaireIdentity)
         {
-            var storage = context.Resolve<IQuestionnaireStorage>();
-            return storage.GetQuestionnaire(questionnaireIdentity, null);
+            // https://stackoverflow.com/a/24509451/72174
+            var httpRequestMessage = HttpContext.Current.Items["MS_HttpRequestMessage"] as HttpRequestMessage;
+            var currentDependencyScope = httpRequestMessage.GetDependencyScope();
+            var questionnaireStorage = (IQuestionnaireStorage)currentDependencyScope.GetService(typeof(IQuestionnaireStorage));
+            return questionnaireStorage.GetQuestionnaire(questionnaireIdentity, null);
         }
 
         private string GetVariableName(ResolutionContext ctx, Guid? questionId)
