@@ -149,7 +149,8 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var userId = Create.Entity.Identity(42).Id;
             
             var optionsRepo = Moq.Mock.Of<IQuestionOptionsRepository>(x =>
-                x.GetOptionForQuestionByOptionValue(Moq.It.IsAny<QuestionnaireIdentity>(), cascadingIdentity.Id, 2, Moq.It.IsAny<Translation>()) == new CategoricalOption
+                x.GetOptionForQuestionByOptionValue(Moq.It.IsAny<QuestionnaireIdentity>(), cascadingIdentity.Id, 2, 
+                    Moq.It.IsAny<Translation>()) == new CategoricalOption
                 {
                     Value = 2,
                     ParentValue = 2,

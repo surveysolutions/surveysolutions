@@ -572,7 +572,10 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Intervi
                 this.Tree.GetOptionForQuestionByOptionValue(this.Identity.Id, answerOptionValue);
 
             if (this.IsSingleFixedOption || this.IsCascading)
-                return AnswerUtils.AnswerToString(Convert.ToDecimal(((InterviewTreeSingleOptionQuestion)this.InterviewQuestion).GetAnswer()?.SelectedValue), GetCategoricalAnswerOptionText);
+            {
+                var answer = ((InterviewTreeSingleOptionQuestion)this.InterviewQuestion).GetAnswer();              
+                return answer.GetAnswerAsText(this.Tree.Questionnaire, this.Identity.Id);
+            }
             if (this.IsMultiFixedOption)
                 return AnswerUtils.AnswerToString(((InterviewTreeMultiOptionQuestion)this.InterviewQuestion).GetAnswer()?.ToDecimals()?.ToArray(), GetCategoricalAnswerOptionText);
             if (this.IsYesNo)

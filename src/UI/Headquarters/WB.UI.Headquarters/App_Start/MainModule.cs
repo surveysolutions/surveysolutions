@@ -66,7 +66,7 @@ namespace WB.UI.Headquarters
 
             registry.BindToConstant<LegacyAssemblySettings>(() => legacyAssemblySettings);
 
-            registry.BindWebApiAuthorizationFilter<CustomWebApiAuthorizeFilter>();
+            //registry.BindWebApiAuthorizationFilter<CustomWebApiAuthorizeFilter>();
 
             registry.BindToConstant<ITokenVerifier>(() => new SimpleTokenVerifier(settingsProvider.AppSettings["Synchronization.Key"]));
 
