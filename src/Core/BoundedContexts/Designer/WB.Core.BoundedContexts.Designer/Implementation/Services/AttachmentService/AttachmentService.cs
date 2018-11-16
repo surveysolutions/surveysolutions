@@ -16,18 +16,15 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
         private readonly IPlainStorageAccessor<AttachmentContent> attachmentContentStorage;
         private readonly IPlainStorageAccessor<AttachmentMeta> attachmentMetaStorage;
         private readonly IVideoConverter videoConverter;
-        private readonly IPdfConverter pdfConverter;
 
         public AttachmentService(
             IPlainStorageAccessor<AttachmentContent> attachmentContentStorage,
             IPlainStorageAccessor<AttachmentMeta> attachmentMetaStorage,
-            IVideoConverter videoConverter,
-            IPdfConverter pdfConverter)
+            IVideoConverter videoConverter)
         {
             this.attachmentContentStorage = attachmentContentStorage;
             this.attachmentMetaStorage = attachmentMetaStorage;
             this.videoConverter = videoConverter;
-            this.pdfConverter = pdfConverter;
         }
         
         public void DeleteAllByQuestionnaireId(Guid questionnaireId)
@@ -174,10 +171,13 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
                 return GetImageAttachmentDetails(binaryContent);
 
             if(contentType.StartsWith("audio/"))
-                return new AttachmentDetails();
+                return new AttachmentDetails
+                {
+                    ContentType = "icon/audio"
+                };
 
             if (contentType.StartsWith("application/pdf"))
-                return new AttachmentDetails {Thumbnail = this.pdfConverter.CreateThumbnail(binaryContent)};
+                return new AttachmentDetails();
 
             if (contentType.StartsWith("video/"))
             {
