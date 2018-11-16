@@ -86,6 +86,7 @@ namespace WB.Core.SharedKernels.Enumerator.Utils
                             break;
                         case HttpStatusCode.BadRequest:
                         case HttpStatusCode.Redirect:
+                        case HttpStatusCode.MethodNotAllowed:
                             exceptionMessage = InterviewerUIResources.InvalidEndpoint;
                             exceptionType = SynchronizationExceptionType.InvalidUrl;
                             break;
