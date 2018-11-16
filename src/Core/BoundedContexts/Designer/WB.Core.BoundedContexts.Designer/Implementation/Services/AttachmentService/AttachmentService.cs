@@ -170,11 +170,8 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
             if (contentType.StartsWith("image/"))
                 return GetImageAttachmentDetails(binaryContent);
 
-            if(contentType.StartsWith("audio/"))
-                return new AttachmentDetails
-                {
-                    ContentType = "icon/audio"
-                };
+            if (contentType.StartsWith("audio/"))
+                return new AttachmentDetails();
 
             if (contentType.StartsWith("application/pdf"))
                 return new AttachmentDetails();
