@@ -38,7 +38,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AttachmentViewModelT
             BecauseOf();
         }
 
-        public void BecauseOf() => viewModel.Init("interview", Create.Identity(entityId, Empty.RosterVector));
+        public void BecauseOf() => viewModel.Init("interview", Create.Identity(entityId, Empty.RosterVector), Create.Other.NavigationState());
 
         [Test] public void should_initialize_attachment_as_image() => viewModel.IsImage.Should().BeTrue();
 
