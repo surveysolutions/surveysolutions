@@ -17,7 +17,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         
         private AttachmentContentMetadata attachmentContentMetadata;
         private NavigationState navigationState;
-        private Identity identity;
+        public Identity Identity { get; private set; }
 
         private const string ImageMimeType = "image/";
         private const string VideoMimeType = "video/";
@@ -40,7 +40,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
 
             this.navigationState = navigationState ?? throw new ArgumentNullException(nameof(navigationState));
-            this.identity = entityIdentity;
+            this.Identity = entityIdentity;
 
             var interview = this.interviewRepository.Get(interviewId);
             IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
@@ -83,7 +83,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             && this.attachmentContentMetadata.ContentType.StartsWith(PdfMimeType, StringComparison.OrdinalIgnoreCase);
 
         public IMvxAsyncCommand ShowPdf =>
-            new MvxAsyncCommand(() => this.navigationState.NavigateTo(NavigationIdentity.CreateForPdfView(navigationState.CurrentGroup, this.identity)));
+            new MvxAsyncCommand(() => this.navigationState.NavigateTo(NavigationIdentity.CreateForPdfView(navigationState.CurrentGroup, this.Identity)));
 
         public byte[] Content { get; private set; }
 

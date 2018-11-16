@@ -1,0 +1,18 @@
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+       xmlns:local="http://schemas.android.com/apk/res-auto">
+    <ImageView style="@style/Interview_Attachment_Picture"
+               android:scaleType="centerCrop"
+               android:adjustViewBounds="true"
+               local:MvxBind="BitmapWithFallback Attachment.Content; 
+                         Visible Attachment.IsImage;"/>
+
+    <com.google.android.exoplayer2.ui.PlayerView android:id="@+id/player_view"
+                                                 android:layout_width="match_parent"
+                                                 android:layout_height="wrap_content"
+                                                 local:MvxBind="VideoPath Attachment.ContentPath; Visible Attachment.IsVideo;" />
+
+    <com.google.android.exoplayer2.ui.PlayerView android:id="@+id/player_view2"
+                                                 android:layout_width="match_parent"
+                                                 android:layout_height="@dimen/abc_action_button_min_width_material"
+                                                 local:MvxBind="VideoPath Attachment.ContentPath; Visible Attachment.IsAudio;" />
+</merge>

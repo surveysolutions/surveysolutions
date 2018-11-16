@@ -2346,6 +2346,16 @@
   <ItemGroup>
     <AndroidAsset Include="Assets\pdfjs\web\viewer.js" />
   </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\interview_overview__attachment.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
+  <ItemGroup>
+    <AndroidResource Include="Resources\layout\interview__attachment_multimedia.axml">
+      <SubType>Designer</SubType>
+    </AndroidResource>
+  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
