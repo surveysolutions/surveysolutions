@@ -59,4 +59,20 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             view.Player = exoPlayer;
         }
     }
+
+    public class ExoPlayerAudioAttachmentBinding : ExoPlayerBinding
+    {
+        public ExoPlayerAudioAttachmentBinding(PlayerView view) : base(view)
+        {
+
+        }
+
+        protected override void SetValueToView(PlayerView view, string value)
+        {
+            base.SetValueToView(view, value);
+            view.ControllerShowTimeoutMs = 0;
+            view.ControllerHideOnTouch = false;
+            view.ShowController();
+        }
+    }
 }
