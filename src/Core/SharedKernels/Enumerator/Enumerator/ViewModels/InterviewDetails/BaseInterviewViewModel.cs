@@ -273,7 +273,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
                     return activeStageViewModel;
                 case ScreenType.Overview:
                     var overviewViewModel = this.interviewViewModelFactory.GetNew<OverviewViewModel>();
-                    overviewViewModel.Configure(this.InterviewId);
+                    overviewViewModel.Configure(this.InterviewId, this.navigationState);
                     return overviewViewModel;
                 case ScreenType.PdfView:
                     var pdfViewModel = MvxIoCProvider.Instance.IoCConstruct<PdfViewModel>(); 
@@ -293,7 +293,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
         private GroupStatus status;
         public GroupStatus Status
         {
-            get { return this.status; }
+            get => this.status;
             private set
             {
                 if (this.status != value)

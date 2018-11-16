@@ -41,7 +41,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
             this.nameViewModel = nameViewModel;
         }
 
-        public void Configure(string interviewId)
+        public void Configure(string interviewId, NavigationState navigationState)
         {
             this.InterviewId = interviewId;
             var interview = interviewRepository.Get(interviewId);
@@ -51,14 +51,15 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
 
             this.Name = nameViewModel;
             this.Name.InitAsStatic(UIResources.Interview_Overview_Name);
-            this.Items = interviewEntities.Where(x => interview.IsEnabled(x)).Select(x => BuildOverviewNode(x, interview, sections)).ToList();
+            this.Items = interviewEntities.Where(x => interview.IsEnabled(x)).Select(x => BuildOverviewNode(x, interview, sections, navigationState)).ToList();
         }
 
         public string InterviewId { get; set; }
 
         private OverviewNode BuildOverviewNode(Identity interviewerEntityIdentity,
             IStatefulInterview interview,
-            ICollection<Identity> sections)
+            ICollection<Identity> sections, 
+            NavigationState navigationState)
         {
             var question = interview.GetQuestion(interviewerEntityIdentity);
 
@@ -80,7 +81,10 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Overview
             var staticText = interview.GetStaticText(interviewerEntityIdentity);
             if (staticText != null)
             {
-                return new OverviewStaticTextViewModel(staticText, Mvx.IoCProvider.Create<AttachmentViewModel>(), interview, userInteractionService)
+                return new OverviewStaticTextViewModel(staticText, Mvx.IoCProvider.Create<AttachmentViewModel>(), 
+                    interview, 
+                    userInteractionService,
+                    navigationState)
                 {
                     Id = staticText.Identity.ToString(),
                     Title = staticText.Title.Text

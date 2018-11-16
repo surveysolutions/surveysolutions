@@ -16,7 +16,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         private readonly IAttachmentContentStorage attachmentContentStorage;
         
         private AttachmentContentMetadata attachmentContentMetadata;
-        
+        private NavigationState navigationState;
+        private Identity identity;
+
         private const string ImageMimeType = "image/";
         private const string VideoMimeType = "video/";
         private const string AudioMimeType = "audio/";
@@ -32,10 +34,13 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             this.attachmentContentStorage = attachmentContentStorage;
         }
 
-        public void Init(string interviewId, Identity entityIdentity)
+        public void Init(string interviewId, Identity entityIdentity, NavigationState navigationState)
         {
             if (interviewId == null) throw new ArgumentNullException(nameof(interviewId));
             if (entityIdentity == null) throw new ArgumentNullException(nameof(entityIdentity));
+
+            this.navigationState = navigationState ?? throw new ArgumentNullException(nameof(navigationState));
+            this.identity = entityIdentity;
 
             var interview = this.interviewRepository.Get(interviewId);
             IQuestionnaire questionnaire = this.questionnaireRepository.GetQuestionnaire(interview.QuestionnaireIdentity, interview.Language);
@@ -60,6 +65,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
                     this.RaisePropertyChanged(() => ContentPath);
                 }
             }
+            
         }
 
         public string ContentPath { get; set; }
@@ -76,7 +82,9 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
         public bool IsPdf => this.attachmentContentMetadata != null 
             && this.attachmentContentMetadata.ContentType.StartsWith(PdfMimeType, StringComparison.OrdinalIgnoreCase);
 
-        
+        public IMvxAsyncCommand ShowPdf =>
+            new MvxAsyncCommand(() => this.navigationState.NavigateTo(NavigationIdentity.CreateForPdfView(navigationState.CurrentGroup, this.identity)));
+
         public byte[] Content { get; private set; }
 
         public override void ViewDisappearing()
