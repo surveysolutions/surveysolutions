@@ -27,7 +27,7 @@ namespace WB.UI.Shared.Web.Extensions
             return response;
         }
 
-        public HttpResponseMessage ResultMessage(Stream stream, string mediaType)
+        public HttpResponseMessage ResultMessage(Stream stream, string mediaType, string fileName = null)
         {
             var rangeHeader = this.request.Headers.Range?.Ranges.FirstOrDefault();
             if (rangeHeader != null)
@@ -66,6 +66,14 @@ namespace WB.UI.Shared.Web.Extensions
                     }
                 });
 
+                if (!string.IsNullOrEmpty(fileName))
+                {
+                    partialResponse.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+                    {
+                        FileName = fileName
+                    };
+                }
+
                 partialResponse.Content.Headers.ContentType = byteRange.Headers.ContentType;
                 partialResponse.Content.Headers.ContentLength = byteRange.Headers.ContentLength;
                 partialResponse.Content.Headers.ContentRange = byteRange.Headers.ContentRange;
@@ -77,6 +85,13 @@ namespace WB.UI.Shared.Web.Extensions
 
             nonPartialResponse.Content = new StreamContent(stream);
             nonPartialResponse.Content.Headers.ContentType = new MediaTypeHeaderValue(mediaType);
+            if (!string.IsNullOrEmpty(fileName))
+            {
+                nonPartialResponse.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+                {
+                    FileName = fileName
+                };
+            }
             return nonPartialResponse;
         }
     }
