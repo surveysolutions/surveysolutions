@@ -35,7 +35,6 @@ namespace WB.UI.Designer.App_Start
             registry.Bind<QuestionnaireDowngradeService>();
             registry.Bind<IQuestionnaireHistoryVersionsService, QuestionnaireHistoryVersionsService>();
             registry.Bind<IVideoConverter, VideoConverter>();
-            registry.Bind<IPdfConverter, PdfConverter>();
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)

@@ -1216,8 +1216,7 @@ namespace WB.Tests.Unit.Designer
             IPlainStorageAccessor<AttachmentMeta> attachmentMetaStorage = null)
         {
             return new AttachmentService(attachmentContentStorage: attachmentContentStorage,
-                attachmentMetaStorage: attachmentMetaStorage, videoConverter: Mock.Of<IVideoConverter>(),
-                pdfConverter: Mock.Of<IPdfConverter>());
+                attachmentMetaStorage: attachmentMetaStorage, videoConverter: Mock.Of<IVideoConverter>());
         }
 
         public static QuestionnaireHistoryVersionsService QuestionnireHistoryVersionsService(
