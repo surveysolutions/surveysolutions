@@ -5,10 +5,10 @@ namespace WB.Services.Export.Questionnaire
 {
     public interface IQuestionnaireExportStructureFactory
     {
-        QuestionnaireExportStructure GetQuestionnaireExportStructure(TenantInfo tenant,
-            QuestionnaireDocument questionnaire);
+        QuestionnaireExportStructure CreateQuestionnaireExportStructure(QuestionnaireDocument questionnaire);
 
-        Task<QuestionnaireExportStructure> GetQuestionnaireExportStructureAsync(TenantInfo tenant,
+        Task<QuestionnaireExportStructure> GetQuestionnaireExportStructureAsync(
+            TenantInfo tenant,
             QuestionnaireId questionnaireId);
     }
 }

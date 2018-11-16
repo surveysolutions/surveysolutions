@@ -46,8 +46,7 @@ namespace WB.Services.Export.Ddi.Implementation
             QuestionnaireId questionnaireId, string basePath)
         {
             var bigTemplateObject = await questionnaireStorage.GetQuestionnaireAsync(tenant, questionnaireId);
-            QuestionnaireExportStructure questionnaireExportStructure = 
-                this.questionnaireExportStructureStorage.GetQuestionnaireExportStructure(tenant, bigTemplateObject);
+            QuestionnaireExportStructure questionnaireExportStructure = this.questionnaireExportStructureStorage.CreateQuestionnaireExportStructure(bigTemplateObject);
 
             if (questionnaireExportStructure == null || bigTemplateObject == null)
             {
