@@ -54,71 +54,76 @@ namespace WB.UI.Designer.Api
                 return this.Request.CreateResponse(HttpStatusCode.NotModified);
 
             AttachmentContent attachmentContent = this.attachmentService.GetContent(attachment.ContentId);
-            
-            var content = thumbnail ? GetThumbnailBytes(attachmentContent, sizeToScale) : attachmentContent.Content;
 
-            return Attachment(attachmentContent, attachment.FileName, content);
-        }
-
-        private HttpResponseMessage Attachment(AttachmentContent attachmentContent, string filename, byte[] content)
-        {
-            if (content != null)
+            HttpResponseMessage CreateResponse(byte[] data, string contentType)
             {
-                if (attachmentContent.IsVideo() || attachmentContent.IsImage() || (attachmentContent.IsPdf() && attachmentContent.Details?.Thumbnail != null))
+                var message = new HttpResponseMessage(HttpStatusCode.OK)
                 {
-                    return new HttpResponseMessage(HttpStatusCode.OK)
+                    Content = new ByteArrayContent(data)
                     {
-                        Content = new ByteArrayContent(content)
-                        {
-                            Headers =
-                            {
-                                ContentType = new MediaTypeHeaderValue(attachmentContent.ContentType),
-                                ContentDisposition = new ContentDispositionHeaderValue("attachment"){FileNameStar = filename}
-                            }
-                        },
                         Headers =
                         {
-                            ETag = new EntityTagHeaderValue("\"" + attachmentContent.ContentId + "\"")
+                            ContentType = new MediaTypeHeaderValue(contentType)
                         }
-                    };
-                }
+                    }
+                };
 
-                if (attachmentContent.IsAudio() || (attachmentContent.IsPdf() && attachmentContent.Details?.Thumbnail == null))
-                {
-                    return new HttpResponseMessage(HttpStatusCode.OK)
-                    {
-                        Content = new ByteArrayContent(content)
-                        {
-                            Headers = { ContentType = new MediaTypeHeaderValue("image/svg+xml") }
-                        }
-                    };
-                }
+                return message;
             }
 
-            return new HttpResponseMessage(HttpStatusCode.NoContent);
-        }
-
-        private byte[] GetThumbnailBytes(AttachmentContent attachmentContent, int? sizeToScale)
-        {
-            if (attachmentContent.IsVideo())
-                return GetTrasformedContent(attachmentContent.Details?.Thumbnail, sizeToScale);
-            if (attachmentContent.IsImage())
-                return GetTrasformedContent(attachmentContent.Content, sizeToScale);
-            if (attachmentContent.IsAudio())
-                return File.ReadAllBytes(HostingEnvironment.MapPath(@"~/Content/images/icons-files-audio.svg"));
-            if (attachmentContent.IsPdf())
+            if (thumbnail)
             {
-                var thumbnail = attachmentContent.Details?.Thumbnail;
+                string contentType = "image/jpg";
+                byte[] thumbBytes = null;
+                if (attachmentContent.Details.Thumbnail == null)
+                {
+                    if (attachmentContent.IsImage())
+                    {
+                        thumbBytes = attachmentContent.Content;
+                    }
 
-                return thumbnail != null
-                    ? GetTrasformedContent(thumbnail, sizeToScale)
-                    : File.ReadAllBytes(HostingEnvironment.MapPath(@"~/Content/images/icons-files-pdf.svg"));
+                    if (attachmentContent.IsAudio())
+                    {
+                        thumbBytes = File.ReadAllBytes(HostingEnvironment.MapPath(@"~/Content/images/icons-files-audio.svg"));
+                        contentType = @"image/svg+xml";
+                    }
+
+                    if (attachmentContent.IsPdf())
+                    {
+                        thumbBytes = File.ReadAllBytes(HostingEnvironment.MapPath(@"~/Content/images/icons-files-pdf.svg"));
+                        contentType = @"image/svg+xml";
+                    }
+                }
+                else
+                {
+                    thumbBytes = attachmentContent.Details.Thumbnail;
+                }
+
+                if (thumbBytes == null)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.NoContent);
+                }
+
+                if (sizeToScale != null && contentType == "image/jpg")
+                {
+                    thumbBytes = GetTransformedContent(thumbBytes, sizeToScale);
+                }
+
+                return CreateResponse(thumbBytes, contentType);
             }
 
-            return null;
+            if (attachmentContent.Content == null) return new HttpResponseMessage(HttpStatusCode.NoContent);
+
+            var response = CreateResponse(attachmentContent.Content, attachmentContent.ContentType);
+            response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+            {
+                FileNameStar = attachment.FileName
+            };
+            response.Headers.ETag = new EntityTagHeaderValue("\"" + attachmentContent.ContentId + "\"");
+            return response;
         }
 
-        private static byte[] GetTrasformedContent(byte[] source, int? sizeToScale = null)
+        private static byte[] GetTransformedContent(byte[] source, int? sizeToScale = null)
         {
             if (!sizeToScale.HasValue) return source;
 
