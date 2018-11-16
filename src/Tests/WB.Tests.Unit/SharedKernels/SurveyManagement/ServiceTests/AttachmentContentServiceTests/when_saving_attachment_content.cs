@@ -15,7 +15,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.AttachmentCo
         }
 
         public void BecauseOf() =>
-            attachmentContentService.SaveAttachmentContent(contentHash, contentType, content);
+            attachmentContentService.SaveAttachmentContent(contentHash, contentType, null, content);
 
         [NUnit.Framework.Test] public void should_store_attachment_content_to_plain_storage () =>
             mockOfAttachmentContentPlainStorage.Verify(x=>x.Store(Moq.It.IsAny<AttachmentContent>(), contentHash), Times.Once);

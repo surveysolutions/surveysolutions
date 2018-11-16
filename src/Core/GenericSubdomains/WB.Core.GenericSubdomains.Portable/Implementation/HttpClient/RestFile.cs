@@ -14,7 +14,7 @@ namespace WB.Core.GenericSubdomains.Portable.Implementation
             this.StatusCode = statusCode;
         }
 
-        private string FileName { get; }
+        public string FileName { get; }
         public HttpStatusCode StatusCode { get; }
         public string ContentHash { get; }
         public long? ContentLength { get; }

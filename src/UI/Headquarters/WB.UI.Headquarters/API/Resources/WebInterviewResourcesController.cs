@@ -88,7 +88,7 @@ namespace WB.UI.Headquarters.API.Resources
                 return this.BinaryResponseMessageWithEtag(resultFile);
             }
 
-            return new ProgressiveDownload(Request).ResultMessage(new MemoryStream(attachment.Content), attachment.ContentType);
+            return new ProgressiveDownload(Request).ResultMessage(new MemoryStream(attachment.Content), attachment.ContentType, attachment.FileName);
         }
 
         [HttpGet]
