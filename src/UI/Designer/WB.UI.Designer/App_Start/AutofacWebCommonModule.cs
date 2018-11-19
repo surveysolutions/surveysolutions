@@ -10,6 +10,7 @@ using WB.UI.Designer.Implementation.Services;
 using WB.UI.Designer.Services;
 using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.Modules;
+using WB.UI.Shared.Web.Services;
 using WB.UI.Shared.Web.Modules.Filters;
 using WB.UI.Shared.Web.Settings;
 
@@ -33,6 +34,7 @@ namespace WB.UI.Designer.App_Start
             registry.Bind<IRecaptchaService, RecaptchaService>();
             registry.Bind<QuestionnaireDowngradeService>();
             registry.Bind<IQuestionnaireHistoryVersionsService, QuestionnaireHistoryVersionsService>();
+            registry.Bind<IVideoConverter, VideoConverter>();
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)

@@ -4,8 +4,10 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Web.Hosting;
 using System.Web.Http;
 using ImageResizer;
+using WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentService;
 using WB.Core.BoundedContexts.Designer.Services;
 
 namespace WB.UI.Designer.Api
@@ -32,40 +34,96 @@ namespace WB.UI.Designer.Api
         [Route("thumbnail/{id:Guid}", Name = "AttachmentThumbnail")]
         public HttpResponseMessage Thumbnail(Guid id)
         {
-            return this.CreateAttachmentResponse(id, defaultImageSizeToScale);
+            return this.CreateAttachmentResponse(id, defaultImageSizeToScale, true);
         }
 
         [HttpGet]
         [Route("thumbnail/{id:Guid}/{size:int}", Name = "AttachmentThumbnailWithSize")]
         public HttpResponseMessage Thumbnail(Guid id, int size)
         {
-            return this.CreateAttachmentResponse(id, size);
+            return this.CreateAttachmentResponse(id, size, true);
         }
 
-        private HttpResponseMessage CreateAttachmentResponse(Guid attachmentId, int? sizeToScale = null)
+        private HttpResponseMessage CreateAttachmentResponse(Guid attachmentId, int? sizeToScale = null, bool thumbnail = false)
         {
-            var attachment = this.attachmentService.GetAttachmentMeta(attachmentId);
+            AttachmentMeta attachment = this.attachmentService.GetAttachmentMeta(attachmentId);
 
             if (attachment == null) return this.Request.CreateResponse(HttpStatusCode.NotFound);
 
             if (this.Request.Headers.IfNoneMatch.Any(x => x.Tag.Trim('"') == attachment.ContentId))
                 return this.Request.CreateResponse(HttpStatusCode.NotModified);
 
-            var attachmentContent = this.attachmentService.GetContent(attachment.ContentId);
+            AttachmentContent attachmentContent = this.attachmentService.GetContent(attachment.ContentId);
 
-            var response = new HttpResponseMessage(HttpStatusCode.OK)
+            HttpResponseMessage CreateResponse(byte[] data, string contentType)
             {
-                Content = new ByteArrayContent(GetTrasformedContent(attachmentContent.Content, sizeToScale))
-            };
+                var message = new HttpResponseMessage(HttpStatusCode.OK)
+                {
+                    Content = new ByteArrayContent(data)
+                    {
+                        Headers =
+                        {
+                            ContentType = new MediaTypeHeaderValue(contentType)
+                        }
+                    }
+                };
 
-            response.Content.Headers.ContentType = new MediaTypeHeaderValue(attachmentContent.ContentType);
-            response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment") { FileNameStar = attachment.FileName };
+                return message;
+            }
+
+            if (thumbnail)
+            {
+                string contentType = "image/jpg";
+                byte[] thumbBytes = null;
+                if (attachmentContent.Details.Thumbnail == null)
+                {
+                    if (attachmentContent.IsImage())
+                    {
+                        thumbBytes = attachmentContent.Content;
+                    }
+
+                    if (attachmentContent.IsAudio())
+                    {
+                        thumbBytes = File.ReadAllBytes(HostingEnvironment.MapPath(@"~/Content/images/icons-files-audio.svg"));
+                        contentType = @"image/svg+xml";
+                    }
+
+                    if (attachmentContent.IsPdf())
+                    {
+                        thumbBytes = File.ReadAllBytes(HostingEnvironment.MapPath(@"~/Content/images/icons-files-pdf.svg"));
+                        contentType = @"image/svg+xml";
+                    }
+                }
+                else
+                {
+                    thumbBytes = attachmentContent.Details.Thumbnail;
+                }
+
+                if (thumbBytes == null)
+                {
+                    return new HttpResponseMessage(HttpStatusCode.NoContent);
+                }
+
+                if (sizeToScale != null && contentType == "image/jpg")
+                {
+                    thumbBytes = GetTransformedContent(thumbBytes, sizeToScale);
+                }
+
+                return CreateResponse(thumbBytes, contentType);
+            }
+
+            if (attachmentContent.Content == null) return new HttpResponseMessage(HttpStatusCode.NoContent);
+
+            var response = CreateResponse(attachmentContent.Content, attachmentContent.ContentType);
+            response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+            {
+                FileNameStar = attachment.FileName
+            };
             response.Headers.ETag = new EntityTagHeaderValue("\"" + attachmentContent.ContentId + "\"");
-            
             return response;
         }
 
-        private static byte[] GetTrasformedContent(byte[] source, int? sizeToScale = null)
+        private static byte[] GetTransformedContent(byte[] source, int? sizeToScale = null)
         {
             if (!sizeToScale.HasValue) return source;
 
