@@ -39,8 +39,6 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels
                         return NavigationIdentity.CreateForPrefieldScreen();
                     case ScreenType.Overview:
                         return NavigationIdentity.CreateForOverviewScreen();
-                    case ScreenType.PdfView:
-                        return NavigationIdentity.CreateForPdfView(this.CurrentGroup, null);
                     default:
                         return NavigationIdentity.CreateForGroup(this.CurrentGroup);
                 }
