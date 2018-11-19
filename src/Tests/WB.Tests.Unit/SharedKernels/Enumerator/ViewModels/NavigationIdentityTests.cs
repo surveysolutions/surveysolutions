@@ -9,12 +9,12 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels
     public class NavigationIdentityTests
     {
         [Test]
-        public void when_creating_for_pdf_should_use_static_text_as_anchored_eleemnt()
+        public void when_creating_for_pdf_should_use_static_text_as_anchored_element()
         {
             var targetStaticText = Create.Identity(Id.gA);
 
             // Act
-            var navigationIdentity = NavigationIdentity.CreateForPdfView(Create.Identity(), targetStaticText);
+            var navigationIdentity = NavigationIdentity.CreateForPdfView(targetStaticText);
 
             // Assert
             Assert.That(navigationIdentity.AnchoredElementIdentity, Is.EqualTo(targetStaticText));
