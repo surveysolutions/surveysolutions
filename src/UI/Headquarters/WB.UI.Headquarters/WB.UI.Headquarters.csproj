@@ -2136,7 +2136,6 @@
     <Compile Include="API\DataCollection\Interviewer\v2\SettingsV2Controller.cs" />
     <Compile Include="API\DataCollection\Interviewer\v2\TranslationsApiV2Controller.cs" />
     <Compile Include="API\MetricsController.cs" />
-    <Compile Include="API\ProgressiveDownload.cs" />
     <Compile Include="API\ControlPanelApiController.cs" />
     <Compile Include="API\DataExportApiController.cs" />
     <Compile Include="API\ExportSettingsApiController.cs" />

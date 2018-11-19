@@ -1,6 +1,7 @@
 ![Link Text](http://build.mysurvey.solutions/app/rest/builds/buildType:`(id:CI)`/statusIcon)
 
 # 18.12
+- For Designer's website app pool: Advanced Settings -> Enable 32-Bit Applications = true
 - Manual step is required for Headquarters release. In order to utilize Microsoft.Graph API login endpoint and scope should be updated for Onedrive export token
 > `deploy-tools\utils\Release.18.10.ps1` should be executed in `deploy-tools` repository. It will update all existing client configs
 

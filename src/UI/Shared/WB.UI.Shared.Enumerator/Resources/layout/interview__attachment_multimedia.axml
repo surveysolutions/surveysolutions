@@ -1,0 +1,25 @@
+<merge xmlns:android="http://schemas.android.com/apk/res/android"
+       xmlns:local="http://schemas.android.com/apk/res-auto">
+    <ImageView style="@style/Interview_Attachment_Picture"
+               android:scaleType="centerCrop"
+               android:adjustViewBounds="true"
+               local:MvxBind="BitmapWithFallback Attachment.Content; 
+                         Visible Attachment.IsImage;"/>
+
+    <com.google.android.exoplayer2.ui.PlayerView android:id="@+id/player_view"
+             android:layout_width="match_parent"
+             android:layout_height="wrap_content"
+             local:controller_layout_id="@layout/simple_video_controls"
+             local:MvxBind="VideoPath Attachment.ContentPath; Visible Attachment.IsVideo;" />
+
+    <com.google.android.exoplayer2.ui.PlayerView 
+        android:id="@+id/player_view2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/Interview_Entity_margin_with_border_left"
+        android:paddingRight="@dimen/Interview_Entity_margin_with_border_right"
+        android:paddingBottom="@@dimen/Interview_Entity_margin_vertical"
+        local:use_artwork="false"
+        local:controller_layout_id="@layout/simple_audio_controls"
+        local:MvxBind="AudioPath Attachment.ContentPath; Visible Attachment.IsAudio;" />
+</merge>
