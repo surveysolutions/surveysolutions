@@ -1,4 +1,5 @@
 ﻿using System;
+using MvvmCross.Commands;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
 
@@ -32,7 +33,7 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails
             this.Identity = entityIdentity;
 
             this.Text.Init(interviewId, entityIdentity);
-            this.Attachment.Init(interviewId, entityIdentity);
+            this.Attachment.Init(interviewId, entityIdentity, navigationState);
             this.QuestionState.Init(interviewId, entityIdentity);
         }
 

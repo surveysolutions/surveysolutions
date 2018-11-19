@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 using System.Security.Cryptography;
 using WB.Core.BoundedContexts.Designer.Resources;
 using WB.Core.BoundedContexts.Designer.Services;
@@ -14,13 +15,16 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
     {
         private readonly IPlainStorageAccessor<AttachmentContent> attachmentContentStorage;
         private readonly IPlainStorageAccessor<AttachmentMeta> attachmentMetaStorage;
-        
+        private readonly IVideoConverter videoConverter;
+
         public AttachmentService(
             IPlainStorageAccessor<AttachmentContent> attachmentContentStorage,
-            IPlainStorageAccessor<AttachmentMeta> attachmentMetaStorage)
+            IPlainStorageAccessor<AttachmentMeta> attachmentMetaStorage,
+            IVideoConverter videoConverter)
         {
             this.attachmentContentStorage = attachmentContentStorage;
             this.attachmentMetaStorage = attachmentMetaStorage;
+            this.videoConverter = videoConverter;
         }
         
         public void DeleteAllByQuestionnaireId(Guid questionnaireId)
@@ -161,11 +165,24 @@ namespace WB.Core.BoundedContexts.Designer.Implementation.Services.AttachmentSer
             this.attachmentMetaStorage.Store(clonedAttachmentMeta, newAttachmentId);
         }
 
-        private static AttachmentDetails GetAttachmentDetails(byte[] binaryContent, string contentType)
+        private AttachmentDetails GetAttachmentDetails(byte[] binaryContent, string contentType)
         {
             if (contentType.StartsWith("image/"))
-            {
                 return GetImageAttachmentDetails(binaryContent);
+
+            if (contentType.StartsWith("audio/"))
+                return new AttachmentDetails();
+
+            if (contentType.StartsWith("application/pdf"))
+                return new AttachmentDetails();
+
+            if (contentType.StartsWith("video/"))
+            {
+                var thumbnail = this.videoConverter.CreateThumbnail(binaryContent);
+                var details = GetImageAttachmentDetails(thumbnail);
+                details.Thumbnail = thumbnail;
+
+                return details;
             }
 
             throw new FormatException(ExceptionMessages.Attachments_Unsupported_content);

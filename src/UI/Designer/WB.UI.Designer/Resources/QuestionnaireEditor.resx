@@ -1138,6 +1138,9 @@
   <data name="DeleteCommentConfirm" xml:space="preserve">
     <value>Are you sure you want to delete comment?</value>
   </data>
+  <data name="NotSupportedAttachment" xml:space="preserve">
+    <value>Selected file is not supported as attachment</value>
+  </data>
   <data name="SettingsHideIfDisabled" xml:space="preserve">
     <value>Hide element when it is disabled</value>
   </data>

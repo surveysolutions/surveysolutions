@@ -20,6 +20,7 @@ using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection;
 using WB.UI.Headquarters.Code;
 using WB.UI.Headquarters.Resources;
+using WB.UI.Shared.Web.Extensions;
 using WB.UI.Shared.Web.Filters;
 
 namespace WB.UI.Headquarters.API.DataCollection.Interviewer
