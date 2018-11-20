@@ -4,38 +4,20 @@ using System.Configuration.Provider;
 using System.Linq;
 using System.Web.Hosting;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
-using WB.Core.Infrastructure.Transactions;
 
 namespace WB.Core.BoundedContexts.Designer.MembershipProvider.Roles
 {
     public class RoleProvider : System.Web.Security.RoleProvider
     {
-        private IRoleRepository _roleService;
-
-        private IPlainTransactionManagerProvider TransactionProvider => ServiceLocator.Current.GetInstance<IPlainTransactionManagerProvider>();
-
         /// <summary>
         /// Gets repository used to retrieve information from the data source.
         /// </summary>
-        protected IRoleRepository Repository
-        {
-            get
-            {
-                if (this._roleService == null)
-                {
-                    this._roleService = ServiceLocator.Current.GetInstance<IRoleRepository>();
-                    if (this._roleService == null)
-                        throw new InvalidOperationException(
-                            "You need to assign a locator to the ServiceLocator property and it should be able to lookup IRoleRepository.");
-                }
-                return this._roleService;
-            }
-        }
+        protected IRoleRepository Repository => ServiceLocator.Current.GetInstance<IRoleRepository>();
 
         #region Overrides of RoleProvider
 
         /// <summary>
-        /// Gets or sets the name of the application to store and retrieve role information for.
+        /// Gets or sets the name of the application to store and retrieve role information for. 
         /// </summary>
         /// <returns>
         /// The name of the application to store and retrieve role information for.
@@ -83,26 +65,8 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider.Roles
         /// <param name="username">The user name to search for.</param><param name="roleName">The role to search in.</param>
         public override bool IsUserInRole(string username, string roleName)
         {
-            var transactionManager = this.TransactionProvider.GetPlainTransactionManager();
-            var shouldUseOwnTransaction = !transactionManager.TransactionStarted;
-
-            if (shouldUseOwnTransaction)
-            {
-                transactionManager.BeginTransaction();
-            }
-
-            try
-            {
-                var user = this.Repository.GetUser(this.ApplicationName, username);
-                return user.IsInRole(roleName);
-            }
-            finally
-            {
-                if (shouldUseOwnTransaction)
-                {
-                    transactionManager.RollbackTransaction();
-                }
-            }
+            var user = this.Repository.GetUser(this.ApplicationName, username);
+            return user.IsInRole(roleName);
         }
 
         /// <summary>
@@ -114,29 +78,10 @@ namespace WB.Core.BoundedContexts.Designer.MembershipProvider.Roles
         /// <param name="username">The user to return a list of roles for.</param>
         public override string[] GetRolesForUser(string username)
         {
-            var transactionManager = this.TransactionProvider.GetPlainTransactionManager();
-            var shouldUseOwnTransaction = !transactionManager.TransactionStarted;
-
-            if (shouldUseOwnTransaction)
-            {
-                transactionManager.BeginTransaction();
-            }
-
-
-            try
-            {
-                var user = this.Repository.GetUser(this.ApplicationName, username);
-                if (user == null)
-                    return new string[0];
-                return user.GetRoles().ToArray();
-            }
-            finally
-            {
-                if (shouldUseOwnTransaction)
-                {
-                    transactionManager.RollbackTransaction();
-                }
-            }
+            var user = this.Repository.GetUser(this.ApplicationName, username);
+            if (user == null)
+                return new string[0];
+            return user.GetRoles().ToArray();
         }
 
         /// <summary>

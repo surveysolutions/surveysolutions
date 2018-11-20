@@ -171,14 +171,21 @@ namespace WB.Services.Export.Services
             }
         }
 
-        private static void UpdateMetaWithLabels(IDatasetMeta meta, Dictionary<string, string> serviceLabels)
+        private static void UpdateMetaWithLabels(IDatasetMeta meta, Dictionary<string, HeaderItemDescription> serviceLabels)
         {
-            foreach (var variable in meta.Variables)
+            for (int index = 0; index < meta.Variables.Length; index++)
             {
-                if (!serviceLabels.ContainsKey(variable.VarName))
+                if (!serviceLabels.ContainsKey(meta.Variables[index].VarName))
                     continue;
 
-                variable.VarLabel = serviceLabels[variable.VarName];
+                var variableLabels = serviceLabels[meta.Variables[index].VarName];
+
+                meta.Variables[index] = new DatasetVariable(meta.Variables[index].VarName)
+                {
+                    Storage = GetStorageType(variableLabels.ValueType)
+                };
+
+                meta.Variables[index].VarLabel = variableLabels.Label;
             }
         }
 

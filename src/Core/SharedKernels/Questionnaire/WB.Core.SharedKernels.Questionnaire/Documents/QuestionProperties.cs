@@ -1,3 +1,4 @@
+using System;
 using WB.Core.SharedKernels.Questionnaire.Documents;
 
 namespace WB.Core.SharedKernels.QuestionnaireEntities
@@ -20,5 +21,8 @@ namespace WB.Core.SharedKernels.QuestionnaireEntities
         public string OptionsFilterExpression { get; set; }
 
         public GeometryType? GeometryType { get; set; }
+
+        // for date question
+        public DateTime? DefaultDate { get; set; }
     }
 }

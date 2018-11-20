@@ -9,6 +9,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Reposts;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.UI.Headquarters.API;
 using WB.UI.Headquarters.Models.Api;
+using WB.UI.Shared.Web.Extensions;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Api
 {

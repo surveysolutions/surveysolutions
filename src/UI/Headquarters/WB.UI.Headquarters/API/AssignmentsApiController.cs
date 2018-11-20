@@ -5,8 +5,6 @@ using System.Net;
 using System.Web.Http;
 using Main.Core.Entities.SubEntities;
 using Newtonsoft.Json;
-using WB.Core.BoundedContexts.Headquarters.AssignmentImport;
-using WB.Core.BoundedContexts.Headquarters.AssignmentImport.Preloading;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
 using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Services.Preloading;
@@ -33,6 +31,7 @@ namespace WB.UI.Headquarters.API
         private readonly IInterviewCreatorFromAssignment interviewCreatorFromAssignment;
         private readonly IAuditLog auditLog;
         private readonly IPreloadedDataVerifier verifier;
+        private readonly ICommandTransformator commandTransformator;
 
         public AssignmentsApiController(IAssignmentViewFactory assignmentViewFactory,
             IAuthorizedUser authorizedUser,
@@ -40,7 +39,8 @@ namespace WB.UI.Headquarters.API
             IQuestionnaireStorage questionnaireStorage,
             IInterviewCreatorFromAssignment interviewCreatorFromAssignment,
             IAuditLog auditLog,
-            IPreloadedDataVerifier verifier)
+            IPreloadedDataVerifier verifier,
+            ICommandTransformator commandTransformator)
         {
             this.assignmentViewFactory = assignmentViewFactory;
             this.authorizedUser = authorizedUser;
@@ -49,6 +49,7 @@ namespace WB.UI.Headquarters.API
             this.interviewCreatorFromAssignment = interviewCreatorFromAssignment;
             this.auditLog = auditLog;
             this.verifier = verifier;
+            this.commandTransformator = commandTransformator;
         }
         
         [Route("")]
@@ -209,7 +210,7 @@ namespace WB.UI.Headquarters.API
             var answers = new List<InterviewAnswer>();
             var identifyingAnswers = new List<IdentifyingAnswer>();
 
-            foreach (var answer in untypedQuestionAnswers.Select(x => CommandTransformator.ParseQuestionAnswer(x, questionnaire)))
+            foreach (var answer in untypedQuestionAnswers.Select(x => this.commandTransformator.ParseQuestionAnswer(x, questionnaire)))
             {
                 identifyingAnswers.Add(IdentifyingAnswer.Create(assignment, questionnaire, answer.Value.ToString(), Identity.Create(answer.Key, null)));
                 answers.Add(new InterviewAnswer

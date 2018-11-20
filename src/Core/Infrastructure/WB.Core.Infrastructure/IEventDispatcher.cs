@@ -8,8 +8,8 @@ namespace WB.Core.Infrastructure
     public interface IEventDispatcher : IEventBus
     {
         void PublishEventToHandlers(IPublishableEvent eventMessage, IReadOnlyDictionary<IEventHandler, Stopwatch> handlersWithStopwatch);
-        
-        IEventHandler[] GetAllRegistredEventHandlers();
+
+
 
         void Register(IEventHandler handler);
         void Unregister(IEventHandler handler);

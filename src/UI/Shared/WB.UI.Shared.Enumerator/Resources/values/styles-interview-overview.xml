@@ -49,6 +49,11 @@
         <item name="android:layout_marginBottom">@dimen/Interview_Overview_top_margin</item>
         <item name="android:textColor">@color/recordedAnswerText</item>
     </style> 
+
+    <style name="Interview_Question__Overview_Show_Pdf" parent="Interview_Question_Instruction_ShowInstruction">
+        <item name="android:layout_marginLeft">@dimen/Interview_Overview_left_margin</item>
+    </style>
+
     <style name="Overview_NodeDetails_SubTitle">
         <item name="android:letterSpacing">0.05</item>
         <item name="android:textSize">@dimen/textsize_16</item>

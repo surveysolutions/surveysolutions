@@ -1,4 +1,9 @@
-﻿using WB.Core.SharedKernels.Enumerator.Repositories;
+﻿using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using WB.Core.Infrastructure.FileSystem;
+using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Questionnaire.Api;
@@ -9,27 +14,68 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
     {
         private readonly IPlainStorage<AttachmentContentMetadata> attachmentContentMetadataRepository;
         private readonly IPlainStorage<AttachmentContentData> attachmentContentDataRepository;
+        private readonly IFileSystemAccessor files;
 
-        public AttachmentContentStorage(IPlainStorage<AttachmentContentMetadata> attachmentContentMetadataRepository,
-            IPlainStorage<AttachmentContentData> attachmentContentDataRepository)
+        public AttachmentContentStorage(
+            IPlainStorage<AttachmentContentMetadata> attachmentContentMetadataRepository,
+            IPlainStorage<AttachmentContentData> attachmentContentDataRepository,
+            IFileSystemAccessor files)
         {
             this.attachmentContentMetadataRepository = attachmentContentMetadataRepository;
             this.attachmentContentDataRepository = attachmentContentDataRepository;
+            this.files = files;
         }
 
         public void Store(AttachmentContent attachmentContent)
         {
-            this.attachmentContentDataRepository.Store(new AttachmentContentData
+            var storeInFileSystem = IsStoredInFileSystem(attachmentContent);
+
+            if (!storeInFileSystem)
             {
-                Id = attachmentContent.Id,
-                Content = attachmentContent.Content
-            });
+                this.attachmentContentDataRepository.Store(new AttachmentContentData
+                {
+                    Id = attachmentContent.Id,
+                    Content = attachmentContent.Content
+                });
+            }
+            else
+            {
+                var fileCache = GetFileCacheLocation(attachmentContent.Id);
+
+                if (!files.IsFileExists(fileCache))
+                {
+                    if (!files.IsDirectoryExists(FileCacheDirectory))
+                    {
+                        files.CreateDirectory(FileCacheDirectory);
+                    }
+
+                    files.WriteAllBytes(fileCache, attachmentContent.Content);
+                }
+            }
+
             this.attachmentContentMetadataRepository.Store(new AttachmentContentMetadata
             {
                 ContentType = attachmentContent.ContentType,
                 Id = attachmentContent.Id,
                 Size = attachmentContent.Size,
             });
+        }
+
+        private bool IsStoredInFileSystem(AttachmentContent attachmentContent)
+        {
+            return attachmentContent.IsVideo() || attachmentContent.IsPdf() || attachmentContent.IsAudio();
+        }
+
+        public void Remove(string attachmentContentId)
+        {
+            this.attachmentContentMetadataRepository.Remove(attachmentContentId);
+            this.attachmentContentDataRepository.Remove(attachmentContentId);
+
+            var fileCache = GetFileCacheLocation(attachmentContentId);
+            if (files.IsFileExists(fileCache))
+            {
+                files.DeleteFile(fileCache);
+            }
         }
 
         public AttachmentContentMetadata GetMetadata(string attachmentContentId)
@@ -48,6 +94,23 @@ namespace WB.Core.SharedKernels.Enumerator.Implementation.Repositories
         {
             var attachmentContentData = this.attachmentContentDataRepository.GetById(attachmentContentId);
             return attachmentContentData?.Content;
+        }
+
+        private string FileCacheDirectory =>
+            Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "_attachments");
+
+        public string GetFileCacheLocation(string attachmentId)
+            => Path.Combine(FileCacheDirectory, attachmentId);
+
+        public IEnumerable<string> EnumerateCache()
+        {
+            if (this.files.IsDirectoryExists(FileCacheDirectory))
+            {
+                foreach (var file in this.files.GetFilesInDirectory(FileCacheDirectory))
+                {
+                    yield return Path.GetFileName(file);
+                }
+            }
         }
     }
 }

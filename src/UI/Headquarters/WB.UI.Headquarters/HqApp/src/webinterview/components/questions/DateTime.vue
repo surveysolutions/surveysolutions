@@ -42,19 +42,31 @@
     import flatPickr from './ui/vue-flatpickr'
     import { DateFormats } from "~/shared/helpers"
 
-    const parseUTC = date => new Date(Date.UTC(date.getFullYear(), date.getMonth(), date.getDate(), date.getHours(), date.getMinutes(), date.getSeconds(), date.getMilliseconds()));
-
     export default {
         name: "DateTime",
         mixins: [entityDetails],
         props: ['noComments'],
         data() {
+            var self = this;
+
             return {
                 pickerOpts: {
                     dateFormat: "Y-m-d",
                     onChange: (selectedDate) => {
                         this.answerDate(selectedDate[0])
-                    }
+                    },
+                    onOpen: [
+                        function(selectedDates, dateStr, instance){
+                            if(self.$me.isAnswered) return;
+                            if(self.$me.defaultDate == null) return;
+
+                            var defaultDate = moment(self.$me.defaultDate).toDate();
+
+                            instance.jumpToDate(defaultDate);
+                            instance.now = defaultDate;
+                            instance.redraw();
+                        }
+                    ],
                 }
             }
         },

@@ -6,7 +6,6 @@ using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Tests.Integration.ReportTests.SurveyAndStatusesTests
@@ -20,7 +19,7 @@ namespace WB.Tests.Integration.ReportTests.SurveyAndStatusesTests
             var report = Sv.SurveyAndStatuses();
 
             // act
-            var view = transactionManager.ExecuteInQueryTransaction(() => report.Load(new SurveysAndStatusesReportInputModel()));
+            var view = report.Load(new SurveysAndStatusesReportInputModel());
 
             //assert
             Assert.That(view.TotalCount, Is.EqualTo(0));
@@ -53,12 +52,12 @@ namespace WB.Tests.Integration.ReportTests.SurveyAndStatusesTests
             var report = Sv.SurveyAndStatuses(interviews);
 
             // act
-            var view = transactionManager.ExecuteInQueryTransaction(() => report.Load(new SurveysAndStatusesReportInputModel
+            var view = report.Load(new SurveysAndStatusesReportInputModel
             {
                 // this filter doesm't work in tests for some reasons
                 TeamLeadName = firstTeamLeadId.FormatGuid(),
                 Order = "CompletedCount ASC"
-            }));
+            });
             
             //assert
             Assert.That(view.TotalCount, Is.EqualTo(1));

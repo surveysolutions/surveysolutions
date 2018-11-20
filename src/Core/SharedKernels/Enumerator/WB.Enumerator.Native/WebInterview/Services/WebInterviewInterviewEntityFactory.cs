@@ -194,7 +194,10 @@ namespace WB.Enumerator.Native.WebInterview.Services
                         });
                         break;
                     case InterviewQuestionType.DateTime:
-                        result = this.autoMapper.Map<InterviewDateQuestion>(question);
+                        result = this.Map<InterviewDateQuestion>(question, res =>
+                        {
+                            res.DefaultDate = questionnaire.GetDefaultDateForDateQuestion(identity.Id);
+                        });
                         break;
                     case InterviewQuestionType.TextList:
                         {
@@ -268,18 +271,10 @@ namespace WB.Enumerator.Native.WebInterview.Services
             InterviewTreeStaticText staticText = callerInterview.GetStaticText(identity);
             if (staticText != null)
             {
-                InterviewStaticText result = this.autoMapper.Map<InterviewTreeStaticText, InterviewStaticText>(staticText, map =>
-                {
-                    map.AfterMap((text, interviewStaticText) =>
-                    {
-                        var callerQuestionnaire = questionnaire;
-                        var attachment = callerQuestionnaire.GetAttachmentForEntity(identity.Id);
-                        if (attachment != null)
-                        {
-                            interviewStaticText.AttachmentContent = attachment.ContentId;
-                        }
-                    });
-                });
+                InterviewStaticText result = this.autoMapper.Map<InterviewTreeStaticText, InterviewStaticText>(staticText);
+
+                var attachment = questionnaire.GetAttachmentForEntity(identity.Id);
+                result.AttachmentContent = attachment?.ContentId;
 
                 this.ApplyDisablement(result, identity, questionnaire);
                 this.PutValidationMessages(result.Validity, callerInterview, identity);

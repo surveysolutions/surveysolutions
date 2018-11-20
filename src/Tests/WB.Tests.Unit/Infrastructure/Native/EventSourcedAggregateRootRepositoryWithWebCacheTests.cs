@@ -7,6 +7,7 @@ using Ncqrs.Eventing.Sourcing.Snapshotting;
 using Ncqrs.Eventing.Storage;
 using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus;
 using WB.Infrastructure.Native.Monitoring;
@@ -28,7 +29,13 @@ namespace WB.Tests.Unit.Infrastructure.Native
                 .Setup(dr => dr.Load(It.IsAny<Type>(), It.IsAny<Guid>(), null, It.IsAny<IEnumerable<CommittedEvent>>()))
                 .Returns<Type, Guid, Snapshot, IEnumerable<CommittedEvent>>((type, id, s, ce) => Mock.Of<IEventSourcedAggregateRoot>(ar => ar.EventSourceId == id));
 
-            var repo = new EventSourcedAggregateRootRepositoryWithWebCache(eventStore.Object, Mock.Of<IInMemoryEventStore>(), new EventBusSettings(), snapshotStore.Object, domainRepo.Object,
+            var repo = new EventSourcedAggregateRootRepositoryWithWebCache(
+                eventStore.Object, 
+                Mock.Of<IInMemoryEventStore>(), 
+                new EventBusSettings(), 
+                snapshotStore.Object,
+                domainRepo.Object,
+                ServiceLocator.Current,
                 new Stub.StubAggregateLock());
 
             CommonMetrics.StateFullInterviewsCount.Set(0);
@@ -64,6 +71,7 @@ namespace WB.Tests.Unit.Infrastructure.Native
                     => Mock.Of<IEventSourcedAggregateRoot>(ar => ar.EventSourceId == id && ar.Version == versionForNewObjects));
 
             var repo = new EventSourcedAggregateRootRepositoryWithWebCache(eventStore.Object, Mock.Of<IInMemoryEventStore>(), new EventBusSettings(), snapshotStore.Object, domainRepo.Object,
+                ServiceLocator.Current,
                 new Stub.StubAggregateLock());
 
             CommonMetrics.StateFullInterviewsCount.Set(0);
@@ -125,6 +133,7 @@ namespace WB.Tests.Unit.Infrastructure.Native
                 eventBusSettings ?? new EventBusSettings(), 
                 Mock.Of<ISnapshotStore>(), 
                 domainRepository ?? Mock.Of<IDomainRepository>(),
+                ServiceLocator.Current,
                 new Stub.StubAggregateLock()
                 );
         }

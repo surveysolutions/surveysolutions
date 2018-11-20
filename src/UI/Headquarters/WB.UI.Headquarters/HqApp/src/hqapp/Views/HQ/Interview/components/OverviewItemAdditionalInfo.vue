@@ -8,14 +8,14 @@
             <div v-if="errors.length > 0">
                 <div class="information-block text-danger">
                     <h6>{{ $t("WebInterviewUI.AnswerIsInvalid") }}</h6>
-                    <p v-for="(error, index) in errors" :key="index">{{error}}</p>
+                    <p v-for="(error, index) in errors" :key="index"><span v-html="error"></span></p>
                 </div>
                 <hr />
             </div>
             <div v-if="warnings.length > 0">
                 <div class="information-block text-warning">
                     <h6>{{ $t("WebInterviewUI.WarningsHeader") }}</h6>
-                    <p v-for="(warning, index) in warnings" :key="index">{{warning}}</p>
+                    <p v-for="(warning, index) in warnings" :key="index"><span v-html="warning"></span></p>
                 </div>
                 <hr />
             </div>

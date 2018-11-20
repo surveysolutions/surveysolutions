@@ -1,5 +1,4 @@
-﻿using System;
-using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
+﻿using WB.Core.BoundedContexts.Headquarters.Implementation.Services.Export;
 using WB.UI.Headquarters.Models.Api;
 
 namespace WB.UI.Headquarters.API.PublicApi.Models.Statistics

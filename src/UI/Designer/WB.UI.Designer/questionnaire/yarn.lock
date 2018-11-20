@@ -54,17 +54,17 @@ amdefine@>=0.0.4:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/amdefine/-/amdefine-1.0.1.tgz#4a5282ac164729e93619bcfd3ad151f817ce91f5"
 
-angular-animate@1.6.9:
-  version "1.6.9"
-  resolved "https://registry.yarnpkg.com/angular-animate/-/angular-animate-1.6.9.tgz#a0f926c1ba3190bd8929ef966a7fa79760682622"
+angular-animate@^1.7.5:
+  version "1.7.5"
+  resolved "https://registry.yarnpkg.com/angular-animate/-/angular-animate-1.7.5.tgz#1ffc6c2a9cdee227a2ba79cc6cd8f71ec44db5dc"
 
 angular-block-ui@0.2.2:
   version "0.2.2"
   resolved "https://registry.yarnpkg.com/angular-block-ui/-/angular-block-ui-0.2.2.tgz#466613cd80ad286eb4b588cfced00fec6ac5e975"
 
-angular-cookies@1.6.9:
-  version "1.6.9"
-  resolved "https://registry.yarnpkg.com/angular-cookies/-/angular-cookies-1.6.9.tgz#7cadddab1eda8a2fce6901d19e651be5cd320758"
+angular-cookies@^1.7.5:
+  version "1.7.5"
+  resolved "https://registry.yarnpkg.com/angular-cookies/-/angular-cookies-1.7.5.tgz#1c5ab3c05cdc43f1777be9506e64587cb3543634"
 
 angular-elastic@2.5.1:
   version "2.5.1"
@@ -80,9 +80,9 @@ angular-loading-bar@^0.9.0:
   version "0.9.0"
   resolved "https://registry.yarnpkg.com/angular-loading-bar/-/angular-loading-bar-0.9.0.tgz#37ef52c25f102c216e7b3cdfd2fc5a5df9628e45"
 
-angular-moment@^1.2.0:
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/angular-moment/-/angular-moment-1.2.0.tgz#a09e4902bc8d48ce06832af8c74169841b613bae"
+angular-moment@^1.3.0:
+  version "1.3.0"
+  resolved "https://registry.yarnpkg.com/angular-moment/-/angular-moment-1.3.0.tgz#f501f66b6fcc832d8d36f8905cc7a93123ab2af0"
   dependencies:
     moment ">=2.8.0 <3.0.0"
 
@@ -101,13 +101,13 @@ angular-pnotify@^0.1.2:
     jquery ">=1.9"
     pnotify "~3.0.0"
 
-angular-resource@1.6.9:
-  version "1.6.9"
-  resolved "https://registry.yarnpkg.com/angular-resource/-/angular-resource-1.6.9.tgz#d02334b7cb96353e245966ad044c0c673df7b685"
+angular-resource@^1.7.5:
+  version "1.7.5"
+  resolved "https://registry.yarnpkg.com/angular-resource/-/angular-resource-1.7.5.tgz#80007af3aed8b6278bf2344e8e5257ea7bca333e"
 
-angular-sanitize@1.6.9:
-  version "1.6.9"
-  resolved "https://registry.yarnpkg.com/angular-sanitize/-/angular-sanitize-1.6.9.tgz#1adba33f6f513e5f93e3aca8071bef53666739ea"
+angular-sanitize@^1.7.5:
+  version "1.7.5"
+  resolved "https://registry.yarnpkg.com/angular-sanitize/-/angular-sanitize-1.7.5.tgz#75d49e15071ca9c70581e76d20940f26372e24d2"
 
 angular-ui-bootstrap@2.5.6:
   version "2.5.6"
@@ -127,9 +127,13 @@ angular-ui-utils@^0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/angular-ui-utils/-/angular-ui-utils-0.1.1.tgz#ff8b5c4abb2aebeb08ee05d09a78c4cfbfb65009"
 
-angular@1.6.9, angular@>=1.0.6, angular@^1.0.8:
+angular@>=1.0.6, angular@^1.0.8:
   version "1.6.9"
   resolved "https://registry.yarnpkg.com/angular/-/angular-1.6.9.tgz#bc812932e18909038412d594a5990f4bb66c0619"
+
+angular@^1.7.5:
+  version "1.7.5"
+  resolved "https://registry.yarnpkg.com/angular/-/angular-1.7.5.tgz#d1c1c01c6f5dc835638f3f9aa51012857bdac49e"
 
 angular@~1.5.5:
   version "1.5.11"
@@ -3316,9 +3320,9 @@ unc-path-regex@^0.1.0:
   version "0.1.2"
   resolved "https://registry.yarnpkg.com/unc-path-regex/-/unc-path-regex-0.1.2.tgz#e73dd3d7b0d7c5ed86fbac6b0ae7d8c6a69d50fa"
 
-underscore@^1.8.3:
-  version "1.8.3"
-  resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.8.3.tgz#4f3fb53b106e6097fcf9cb4109f2a5e9bdfa5022"
+underscore@^1.9.1:
+  version "1.9.1"
+  resolved "https://registry.yarnpkg.com/underscore/-/underscore-1.9.1.tgz#06dce34a0e68a7babc29b365b8e74b8925203961"
 
 union-value@^0.2.3:
   version "0.2.4"
@@ -3538,3 +3542,7 @@ yargs@~3.10.0:
     cliui "^2.1.0"
     decamelize "^1.0.0"
     window-size "0.1.0"
+
+zebra_datepicker@^1.9.12:
+  version "1.9.12"
+  resolved "https://registry.yarnpkg.com/zebra_datepicker/-/zebra_datepicker-1.9.12.tgz#b6aa721ec5e84933c85b0270e4c859886c60bf4f"

@@ -12,18 +12,19 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
 {
     public class InterviewOverviewService : IInterviewOverviewService
     {
-        public IEnumerable<OverviewNode> GetOverview(IStatefulInterview interview, bool isReviewMode)
+        public IEnumerable<OverviewNode> GetOverview(IStatefulInterview interview, IQuestionnaire questionnaire,
+            bool isReviewMode)
         {
             var enabledSectionIds = interview.GetEnabledSections().Select(x => x.Identity).ToHashSet();
 
             foreach (var enabledSectionId in enabledSectionIds)
             {
                 var interviewEntities = isReviewMode
-                    ? interview.GetUnderlyingEntitiesForReview(enabledSectionId)
+                    ? interview.GetUnderlyingEntitiesForReviewRecursive(enabledSectionId)
                     : interview.GetUnderlyingInterviewerEntities(enabledSectionId);
-
+                
                 foreach (var interviewEntity in interviewEntities.Where(interview.IsEnabled))
-                    yield return BuildOverviewNode(interviewEntity, interview, enabledSectionIds);
+                    yield return BuildOverviewNode(interviewEntity, interview, questionnaire, enabledSectionIds);
             }
         }
 
@@ -51,6 +52,7 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
 
         private OverviewNode BuildOverviewNode(Identity interviewerEntityIdentity,
             IStatefulInterview interview,
+            IQuestionnaire questionnaire,
             ICollection<Identity> sections)
         {
             var question = interview.GetQuestion(interviewerEntityIdentity);
@@ -63,10 +65,11 @@ namespace WB.UI.Headquarters.API.WebInterview.Services
             var staticText = interview.GetStaticText(interviewerEntityIdentity);
             if (staticText != null)
             {
-                return new OverviewStaticText(staticText, interview)
+                return new OverviewWebStaticTextNode(staticText, interview)
                 {
                     Id = staticText.Identity.ToString(),
-                    Title = staticText.Title.Text
+                    Title = staticText.Title.Text,
+                    AttachmentContentId = questionnaire.GetAttachmentForEntity(staticText.Identity.Id)?.ContentId
                 };
             }
 

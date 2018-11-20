@@ -50,6 +50,24 @@ namespace WB.UI.Shared.Enumerator.Activities
         private static void EncryptMultimedia(IEncryptionService encryptionService)
         {
             EncryptPictures(encryptionService);
+            EncryptAudio(encryptionService);
+        }
+
+        private static void EncryptAudio(IEncryptionService encryptionService)
+        {
+            IPlainStorage<AudioFileMetadataView> audioViewStorage =
+                ServiceLocator.Current.GetInstance<IPlainStorage<AudioFileMetadataView>>();
+
+            IPlainStorage<AudioFileView> fileViewStorage =
+                ServiceLocator.Current.GetInstance<IPlainStorage<AudioFileView>>();
+
+            foreach (var audioInfo in audioViewStorage.LoadAll())
+            {
+                var audioFile = fileViewStorage.GetById(audioInfo.FileId);
+
+                audioFile.File = encryptionService.Encrypt(audioFile.File);
+                fileViewStorage.Store(audioFile);
+            }
         }
 
         private static void EncryptPictures(IEncryptionService encryptionService)
@@ -76,7 +94,7 @@ namespace WB.UI.Shared.Enumerator.Activities
 
             foreach (var interviewFile in fileAccessor.GetFilesInDirectory(eventsSettings.PathToInterviewsDirectory))
             {
-                var sqConnection = new SQLiteConnectionString(interviewFile, true);
+                var sqConnection = new SQLiteConnectionString(interviewFile, true, null);
                 var connection = new SQLiteConnectionWithLock(sqConnection,
                     openFlags: SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.FullMutex);
 

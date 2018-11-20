@@ -1,4 +1,6 @@
-﻿using WB.UI.Designer.CommandDeserialization;
+﻿using Moq;
+using WB.Core.GenericSubdomains.Portable.Services;
+using WB.UI.Designer.CommandDeserialization;
 
 namespace WB.Tests.Unit.Designer.Applications.CommandDeserializerTests
 {
@@ -6,7 +8,7 @@ namespace WB.Tests.Unit.Designer.Applications.CommandDeserializerTests
     {
         public static DesignerCommandDeserializer CreateCommandDeserializer()
         {
-            return new DesignerCommandDeserializer();
+            return new DesignerCommandDeserializer(Mock.Of<ILogger>());
         }
     }
 }

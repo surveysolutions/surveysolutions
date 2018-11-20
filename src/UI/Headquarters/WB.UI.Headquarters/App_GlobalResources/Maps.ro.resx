@@ -127,7 +127,7 @@
     <value>Componenta Hărți nu a fost inițializată. Contactați administratorul de sistem.</value>
   </data>
   <data name="MapLoadingInvalidFile" xml:space="preserve">
-    <value>Fișierul '{0}' conține date pe care sistemul nu le poate procesa.</value>
+    <value>Fișierul '{0}' conține date pe care sistemul nu le poate procesa. Eroare: {1}</value>
   </data>
   <data name="MapLoadingInvalidFilesError" xml:space="preserve">
     <value>A apărut o eroare.Următoarele fișiere au fost ignorate:</value>

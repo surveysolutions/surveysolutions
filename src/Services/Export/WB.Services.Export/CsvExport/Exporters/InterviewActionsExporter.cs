@@ -23,21 +23,20 @@ namespace WB.Services.Export.CsvExport.Exporters
 
         public DoExportFileHeader[] ActionFileColumns => new []
         {
-            new DoExportFileHeader("interview__id", "Unique 32-character long identifier of the interview"),
-            new DoExportFileHeader("interview__key", "Identifier of the interview"),
-            new DoExportFileHeader("Action", "Type of action taken"),
-            new DoExportFileHeader("Originator", "Login name of the person performing the action"),
-            new DoExportFileHeader("Role", "System role of the person performing the action"),
-            new DoExportFileHeader("ResponsibleName", "Login name of the person now responsible for the interview"),
-            new DoExportFileHeader("ResponsibleRole", "System role of the person now responsible for the interview"),
-            new DoExportFileHeader("Date", "Date when the action was taken"),
-            new DoExportFileHeader("Time", "Time when the action was taken")
+            CommonHeaderItems.InterviewKey,
+            CommonHeaderItems.InterviewId,
+            new DoExportFileHeader("date", "Date when the action was taken", ExportValueType.String),
+            new DoExportFileHeader("time", "Time when the action was taken", ExportValueType.String),
+            new DoExportFileHeader("action", "Type of action taken", ExportValueType.String),
+            new DoExportFileHeader("originator", "Login name of the person performing the action", ExportValueType.String),
+            new DoExportFileHeader("role", "System role of the person performing the action", ExportValueType.String),
+            new DoExportFileHeader("responsible__name", "Login name of the person now responsible for the interview", ExportValueType.String),
+            new DoExportFileHeader("responsible__role", "System role of the person now responsible for the interview", ExportValueType.String)
         };
 
         private readonly string dataFileExtension = "tab";
         private readonly ICsvWriter csvWriter;
         private readonly ITenantApi<IHeadquartersApi> tenantApi;
-
         public InterviewActionsExporter(IOptions<InterviewDataExportSettings> interviewDataExportSettings,
             ICsvWriter csvWriter,
             ITenantApi<IHeadquartersApi> tenantApi)
@@ -103,15 +102,15 @@ namespace WB.Services.Export.CsvExport.Exporters
             {
                 var resultRow = new List<string>
                 {
-                    interview.InterviewId.FormatGuid(),
                     interview.Key,
+                    interview.InterviewId.FormatGuid(),
+                    interview.Timestamp.ToString(ExportFormatSettings.ExportDateFormat, CultureInfo.InvariantCulture),
+                    interview.Timestamp.ToString("T", CultureInfo.InvariantCulture),
                     interview.Status.ToString(),
                     interview.StatusChangeOriginatorName,
                     this.GetUserRole(interview.StatusChangeOriginatorRole),
                     this.GetResponsibleName(interview.Status, interview.InterviewerName, interview.SupervisorName, interview.StatusChangeOriginatorName),
-                    this.GetResponsibleRole(interview.Status, interview.StatusChangeOriginatorRole, interview.InterviewerName),
-                    interview.Timestamp.ToString(ExportFormatSettings.ExportDateFormat, CultureInfo.InvariantCulture),
-                    interview.Timestamp.ToString("T", CultureInfo.InvariantCulture)
+                    this.GetResponsibleRole(interview.Status, interview.StatusChangeOriginatorRole, interview.InterviewerName)
                 };
                 result.Add(resultRow.ToArray());
             }
