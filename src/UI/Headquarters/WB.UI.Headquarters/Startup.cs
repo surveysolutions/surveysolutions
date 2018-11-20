@@ -90,8 +90,6 @@ namespace WB.UI.Headquarters
             autofacKernel.Init().Wait();
             var container = autofacKernel.Container;
 
-            UnitOfWorkScopeManager.SetScopeAdapter(container);
-
             InScopeExecutor.Init(new UnitOfWorkInScopeExecutor(container));
 
             var resolver = new AutofacWebApiDependencyResolver(container);
