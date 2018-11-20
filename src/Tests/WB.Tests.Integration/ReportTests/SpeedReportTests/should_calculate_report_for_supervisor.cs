@@ -5,7 +5,6 @@ using WB.Core.BoundedContexts.Headquarters.Views.DataExport;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.Transactions;
 using WB.Tests.Abc;
 
 namespace WB.Tests.Integration.ReportTests.SpeedReportTests
@@ -23,7 +22,7 @@ namespace WB.Tests.Integration.ReportTests.SpeedReportTests
             var interview = CreateCompletedInterviewWithDuration(TimeSpan.FromMinutes(15), supervisorId, interviewerId, reportEndDate);
             var interviewSummaries =  CreateInterviewSummaryRepository();
 
-            ExecuteInCommandTransaction(() => interviewSummaries.Store(interview, interview.SummaryId));
+            interviewSummaries.Store(interview, interview.SummaryId);
 
             var report = CreateSpeedReport(interviewSummaries);
 
@@ -36,7 +35,7 @@ namespace WB.Tests.Integration.ReportTests.SpeedReportTests
                 From = reportEndDate
             };
 
-            var reportValue = transactionManager.ExecuteInQueryTransaction(() => report.Load(speedBySupervisorsReportInputModel));
+            var reportValue = report.Load(speedBySupervisorsReportInputModel);
 
             // Assert
             Assert.That(reportValue.Items.FirstOrDefault().Average, Is.EqualTo(15));
@@ -57,8 +56,8 @@ namespace WB.Tests.Integration.ReportTests.SpeedReportTests
 
             var interviewSummaries =  CreateInterviewSummaryRepository();
 
-            ExecuteInCommandTransaction(() => interviewSummaries.Store(interview1, interview1.SummaryId));
-            ExecuteInCommandTransaction(() => interviewSummaries.Store(interview2, interview2.SummaryId));
+            interviewSummaries.Store(interview1, interview1.SummaryId);
+            interviewSummaries.Store(interview2, interview2.SummaryId);
 
             var report = CreateSpeedReport(interviewSummaries);
 
@@ -71,7 +70,7 @@ namespace WB.Tests.Integration.ReportTests.SpeedReportTests
                 From = reportEndDate
             };
 
-            var reportValue = transactionManager.ExecuteInQueryTransaction(() => report.Load(speedBySupervisorsReportInputModel));
+            var reportValue = report.Load(speedBySupervisorsReportInputModel);
 
             // Assert
             Assert.That(reportValue.Items.FirstOrDefault().Average, Is.EqualTo((firstInterviewDuration + secondInterviewDuration) / 2));
