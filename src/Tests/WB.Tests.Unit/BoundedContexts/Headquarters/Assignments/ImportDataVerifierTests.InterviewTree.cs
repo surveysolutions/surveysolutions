@@ -47,12 +47,8 @@ namespace WB.Tests.Unit.BoundedContexts.Headquarters.Assignments
                     Create.Entity.SingleOptionQuestion(cascadingQuestionId,
                         cascadeFromQuestionId: parentCascadingQuestionId, answerCodes: new[] { answerOnParentQuestion, answer },
                         parentCodes: new[] { 1m, expectedParentValue })),
-                version: 1);
-
-            var questionnaireRepository = Mock.Of<IQuestionnaireStorage>(repository
-                => repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), It.IsAny<string>()) == questionnaire);
-
-            Setup.InstanceToMockedServiceLocator(questionnaireRepository);
+                version: 1,
+                questionOptionsRepository: optionsRepository);
 
             var verifier = Create.Service.ImportDataVerifier(
                 interviewTreeBuilder: Create.Service.InterviewTreeBuilder(),

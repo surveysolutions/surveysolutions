@@ -8,6 +8,7 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
+using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invariants
@@ -30,13 +31,17 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
             public static readonly string ProtectedAnswer = "ProtectedAnswer";
         }
 
+        private readonly IQuestionOptionsRepository questionOptionsRepository;
+
         public InterviewQuestionInvariants(Identity questionIdentity, 
             IQuestionnaire questionnaire, 
-            InterviewTree interviewTree)
+            InterviewTree interviewTree,
+            IQuestionOptionsRepository questionOptionsRepository)
         {
             this.QuestionIdentity = questionIdentity;
             this.Questionnaire = questionnaire;
             this.InterviewTree = interviewTree;
+            this.questionOptionsRepository = questionOptionsRepository;
         }
 
         public Identity QuestionIdentity { get; }
@@ -145,7 +150,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
                 .RequireQuestionExists(QuestionType.SingleOption)
                 .RequireOptionExists(selectedValue)
                 .RequireQuestionEnabled()
-                .RequireCascadingQuestionAnswerCorrespondsToParentAnswer(selectedValue, questionnaireIdentity, this.Questionnaire.Translation);
+                .RequireCascadingQuestionAnswerCorrespondsToParentAnswer(selectedValue, this.Questionnaire.Translation);
 
         public void RequireLinkedToListSingleOptionAnswerAllowed(int selectedValue)
             => this
@@ -706,14 +711,15 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
             return this;
         }
 
-        private InterviewQuestionInvariants RequireCascadingQuestionAnswerCorrespondsToParentAnswer(decimal answer, QuestionnaireIdentity questionnaireId, Translation translation)
+        private InterviewQuestionInvariants RequireCascadingQuestionAnswerCorrespondsToParentAnswer(decimal answer, Translation translation)
         {
             var question = this.InterviewTree.GetQuestion(this.QuestionIdentity);
 
             if (!question.IsCascading)
                 return this;
 
-            var answerOption = this.Questionnaire.GetOptionForQuestionByOptionValueFromStructure(this.QuestionIdentity.Id, answer);
+            var answerOption = this.questionOptionsRepository.GetOptionForQuestionByOptionValue(this.Questionnaire,
+                this.QuestionIdentity.Id, answer, translation);
 
             if (!answerOption.ParentValue.HasValue)
                 throw new QuestionnaireException(

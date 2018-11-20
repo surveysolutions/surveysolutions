@@ -23,8 +23,9 @@ namespace WB.Core.BoundedContexts.Headquarters.Repositories
             ITranslationStorage translationStorage,
             IQuestionnaireTranslator translator,
             IReadSideRepositoryWriter<QuestionnaireCompositeItem, int> questionnaireItemsWriter,
+            IQuestionOptionsRepository questionOptionsRepository,
             ISubstitutionService substitutionService)
-            : base(repository, translationStorage, translator, substitutionService)
+            : base(repository, translationStorage, translator, questionOptionsRepository, substitutionService)
         {
             this.questionnaireItemsWriter = questionnaireItemsWriter;
         }

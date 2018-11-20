@@ -91,7 +91,7 @@ namespace WB.Tests.Abc.TestFactories
             foreach (var questionnaire in questionnairesWithTranslations)
             {
                 IQuestionnaire plainQuestionnaire = Create.Entity.PlainQuestionnaire(
-                    questionnaire.Value, 1);
+                    questionnaire.Value, 1, questionOptionsRepository: optionsRepository);
                 
                 questionnairesStorage.Setup(repository =>
                     repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), questionnaire.Key))
@@ -111,7 +111,7 @@ namespace WB.Tests.Abc.TestFactories
             foreach (var questionnaire in questionnairesWithTranslations)
             {
                 IQuestionnaire plainQuestionnaire = Create.Entity.PlainQuestionnaire(
-                    questionnaire.Value, 1,
+                    questionnaire.Value, 1, questionOptionsRepository: optionsRepository,
                     translation: translations.FirstOrDefault(t => t.Id == questionnaire.Value.DefaultTranslation));
 
                 questionnairesStorage.Setup(repository =>

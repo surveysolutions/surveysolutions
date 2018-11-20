@@ -39,7 +39,7 @@ namespace WB.UI.WebTester.Infrastructure
         
         public void StoreQuestionnaire(Guid id, long version, QuestionnaireDocument questionnaireDocument)
         {
-            Questionnaire = new PlainQuestionnaire(questionnaireDocument, version, substitutionService);
+            Questionnaire = new PlainQuestionnaire(questionnaireDocument, version, questionOptionsRepository, substitutionService);
         }
 
         public QuestionnaireDocument GetQuestionnaireDocument(QuestionnaireIdentity identity)
