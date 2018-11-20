@@ -6,7 +6,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation
 {
     public class ExportSettings : IExportSettings
     {
-        private ExportEncryptionSettings settingCache = null;
+        private static ExportEncryptionSettings settingCache = null;
 
         private readonly IPlainKeyValueStorage<ExportEncryptionSettings> appSettingsStorage;
         private readonly IPlainKeyValueStorage<ExportServiceSettings> exportServiceSettings;
@@ -23,18 +23,18 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation
 
         public bool EncryptionEnforced()
         {
-            if (this.settingCache == null)
-                this.settingCache = this.appSettingsStorage.GetById(ExportEncryptionSettings.EncriptionSettingId);
+            if (settingCache == null)
+                settingCache = this.appSettingsStorage.GetById(ExportEncryptionSettings.EncriptionSettingId);
 
-            return this.settingCache != null && this.settingCache.IsEnabled;
+            return settingCache != null && settingCache.IsEnabled;
         }
 
         public string GetPassword()
         {
-            if (this.settingCache == null)
-                this.settingCache = this.appSettingsStorage.GetById(ExportEncryptionSettings.EncriptionSettingId);
+            if (settingCache == null)
+                settingCache = this.appSettingsStorage.GetById(ExportEncryptionSettings.EncriptionSettingId);
 
-            return this.settingCache != null ? this.settingCache.Value : string.Empty;
+            return settingCache != null ? settingCache.Value : string.Empty;
         }
 
         public void SetEncryptionEnforcement(bool enabled)
@@ -45,7 +45,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation
             var newSetting = new ExportEncryptionSettings(enabled, password);
             this.appSettingsStorage.Store(newSetting, ExportEncryptionSettings.EncriptionSettingId);
 
-            this.settingCache = newSetting;
+            settingCache = newSetting;
         }
 
         public void RegeneratePassword()
@@ -56,7 +56,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation
                 var newSetting = new ExportEncryptionSettings(setting.IsEnabled, GeneratePassword());
                 this.appSettingsStorage.Store(newSetting, ExportEncryptionSettings.EncriptionSettingId);
 
-                this.settingCache = newSetting;
+                settingCache = newSetting;
             }
         }
 

@@ -9,7 +9,6 @@ using WB.Core.BoundedContexts.Designer.Services;
 using WB.Core.BoundedContexts.Designer.ValueObjects;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.Edit;
 using WB.Core.BoundedContexts.Designer.Views.Questionnaire.QuestionnaireList;
-using WB.Core.BoundedContexts.Designer.Views.Questionnaire.SharedPersons;
 using WB.Core.SharedKernel.Structures.Synchronization.Designer;
 using WB.UI.Designer.Resources;
 

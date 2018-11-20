@@ -142,7 +142,7 @@
     <value>composante des cartes n'a pas été initialisé. Veuillez contacter l'administrateur du système</value>
   </data>
   <data name="MapLoadingInvalidFile" xml:space="preserve">
-    <value>Fichier non valide {0}</value>
+    <value>Fichier non valide {0}. Erreur: {1}</value>
   </data>
   <data name="MapLoadingInvalidFilesError" xml:space="preserve">
     <value>Une erreur est survenue. Les fichiers suivants ont été ignorés:</value>

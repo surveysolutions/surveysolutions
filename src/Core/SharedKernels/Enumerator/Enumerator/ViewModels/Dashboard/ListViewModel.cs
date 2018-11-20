@@ -33,8 +33,11 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.Dashboard
             try
             {
                 var newItems = this.GetUiItems().ToList();
-                this.UiItems.ToList().ForEach(uiItem => uiItem.DisposeIfDisposable());
-                this.UiItems.ReplaceWith(newItems);
+                lock (this.UiItems)
+                {
+                    this.UiItems.ToList().ForEach(uiItem => uiItem.DisposeIfDisposable());
+                    this.UiItems.ReplaceWith(newItems);
+                }
             }
             finally
             {

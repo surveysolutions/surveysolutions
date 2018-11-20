@@ -20,7 +20,7 @@ using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Events.Interview.Dtos;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Infrastructure.Native.Storage.Postgre.Implementation;
+using WB.Infrastructure.Native.Storage.Postgre;
 
 namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 {
@@ -29,7 +29,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         private readonly IUserViewFactory userViewFactory;
         private readonly IPreloadedDataVerifier verifier;
         private readonly IAuthorizedUser authorizedUser;
-        private readonly IPlainSessionProvider sessionProvider;
+        private readonly IUnitOfWork sessionProvider;
         private readonly IPlainStorageAccessor<AssignmentsImportProcess> importAssignmentsProcessRepository;
         private readonly IPlainStorageAccessor<AssignmentToImport> importAssignmentsRepository;
         private readonly IInterviewCreatorFromAssignment interviewCreatorFromAssignment;
@@ -39,7 +39,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         public AssignmentsImportService(IUserViewFactory userViewFactory,
             IPreloadedDataVerifier verifier,
             IAuthorizedUser authorizedUser,
-            IPlainSessionProvider sessionProvider,
+            IUnitOfWork sessionProvider,
             IPlainStorageAccessor<AssignmentsImportProcess> importAssignmentsProcessRepository,
             IPlainStorageAccessor<AssignmentToImport> importAssignmentsRepository,
             IInterviewCreatorFromAssignment interviewCreatorFromAssignment,
@@ -198,15 +198,15 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
 
         public void RemoveAllAssignmentsToImport()
         {
-            this.sessionProvider.GetSession().Query<AssignmentToImport>().Delete();
-            this.sessionProvider.GetSession().Query<AssignmentsImportProcess>().Delete();
+            this.sessionProvider.Session.Query<AssignmentToImport>().Delete();
+            this.sessionProvider.Session.Query<AssignmentsImportProcess>().Delete();
         }
 
         public void SetResponsibleToAllImportedAssignments(Guid responsibleId)
         {
             var responsible = this.userViewFactory.GetUser(new UserViewInputModel(responsibleId));
 
-            this.sessionProvider.GetSession().Query<AssignmentToImport>()
+            this.sessionProvider.Session.Query<AssignmentToImport>()
                 .UpdateBuilder()
                 .Set(c => c.Interviewer, c => responsible.IsInterviewer() ? responsible.PublicKey : (Guid?) null)
                 .Set(c => c.Supervisor, c => responsible.IsInterviewer() ? responsible.Supervisor.Id : responsible.PublicKey)
@@ -241,7 +241,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
         }
 
         public void SetVerifiedToAssignment(int assignmentId, string errorMessage = null)
-            => this.sessionProvider.GetSession().Query<AssignmentToImport>()
+            => this.sessionProvider.Session.Query<AssignmentToImport>()
                 .Where(c => c.Id == assignmentId)
                 .UpdateBuilder()
                 .Set(c => c.Verified, c => true)
@@ -252,7 +252,7 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport
             => this.importAssignmentsRepository.Remove(assignmentId);
 
         public void SetImportProcessStatus(AssignmentsImportProcessStatus status)
-            => this.sessionProvider.GetSession().Query<AssignmentsImportProcess>()
+            => this.sessionProvider.Session.Query<AssignmentsImportProcess>()
                 .UpdateBuilder()
                 .Set(c => c.Status, c => status)
                 .Update();

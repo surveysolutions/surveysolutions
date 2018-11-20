@@ -7,6 +7,7 @@ using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.SharedKernels.DataCollection;
+using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
@@ -147,40 +148,46 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.InterviewTests
             var substituteIdentity = Create.Entity.Identity(30);
 
             var userId = Create.Entity.Identity(42).Id;
-
-            var interview = Setup.StatefulInterviewWithMultilanguageQuestionnaires(
-                new KeyValuePair<string, IComposite[]>(null, new IComposite[]
-                {
-                    Create.Entity.SingleOptionQuestion(questionIdentity.Id, "combobox",
-                        answers: new List<Answer> {Create.Entity.Answer("EnValue1", 1), Create.Entity.Answer("EnvValue2", 2)}),
-                    Create.Entity.SingleOptionQuestion(cascadingIdentity.Id, "cascading", cascadeFromQuestionId: questionIdentity.Id,
-                        answers: new List<Answer> {Create.Entity.Answer("Default language %combobox% 1", 1, 1), Create.Entity.Answer("Default %combobox% value 2", 2, 2)}),
-                    Create.Entity.TextQuestion(substituteIdentity.Id, "subst", text: "Sub me, and then, %combobox% и %cascading%")
-                }),
-
-                new KeyValuePair<string, IComposite[]>(ruTranslationName, new IComposite[]
-                {
-                    Create.Entity.SingleOptionQuestion(questionIdentity.Id, "combobox",
-                        answers: new List<Answer> {Create.Entity.Answer("Значение1", 1), Create.Entity.Answer("Значение2", 2)}),
-                    Create.Entity.SingleOptionQuestion(cascadingIdentity.Id, "cascading", cascadeFromQuestionId: questionIdentity.Id,
-                        answers: new List<Answer> {Create.Entity.Answer("Опция значения %combobox% 1", 1, 1), Create.Entity.Answer("Опция значения %combobox% 2", 2, 2)}),
-                    Create.Entity.TextQuestion(substituteIdentity.Id, "subst", text: "Саб ми, %combobox% и %cascading%")
-                })
-            );
             
             var optionsRepo = Moq.Mock.Of<IQuestionOptionsRepository>(x =>
-                x.GetOptionForQuestionByOptionValue(Moq.It.IsAny<QuestionnaireIdentity>(), cascadingIdentity.Id, 2, Moq.It.IsAny<Translation>()) == new CategoricalOption
+                x.GetOptionForQuestionByOptionValue(Moq.It.IsAny<IQuestionnaire>(), cascadingIdentity.Id, 2, 
+                    Moq.It.IsAny<Translation>()) == new CategoricalOption
                 {
                     Value = 2,
                     ParentValue = 2,
                     Title = "Опция значения 2"
                 }
-                && x.GetOptionsForQuestion(Moq.It.IsAny<QuestionnaireIdentity>(), cascadingIdentity.Id, 2, "", Moq.It.IsAny<Translation>()) == new CategoricalOption
+                && x.GetOptionsForQuestion(Moq.It.IsAny<IQuestionnaire>(), cascadingIdentity.Id, 2, "", Moq.It.IsAny<Translation>()) == new CategoricalOption
                 {
                     Value = 2,
                     ParentValue = 2,
                     Title = "Опция значения 2"
                 }.ToEnumerable()
+            );
+
+            var interview = Setup.StatefulInterviewWithMultilanguageQuestionnaires(
+                new[] {
+
+                    new KeyValuePair<string, IComposite[]>(null, new IComposite[]
+                    {
+                        Create.Entity.SingleOptionQuestion(questionIdentity.Id, "combobox",
+                            answers: new List<Answer> {Create.Entity.Answer("EnValue1", 1), Create.Entity.Answer("EnvValue2", 2)}),
+                        Create.Entity.SingleOptionQuestion(cascadingIdentity.Id, "cascading", cascadeFromQuestionId: questionIdentity.Id,
+                            answers: new List<Answer> {Create.Entity.Answer("Default language %combobox% 1", 1, 1), Create.Entity.Answer("Default %combobox% value 2", 2, 2)}),
+                        Create.Entity.TextQuestion(substituteIdentity.Id, "subst", text: "Sub me, and then, %combobox% и %cascading%")
+                    }),
+
+                    new KeyValuePair<string, IComposite[]>(ruTranslationName, new IComposite[]
+                    {
+                        Create.Entity.SingleOptionQuestion(questionIdentity.Id, "combobox",
+                            answers: new List<Answer> {Create.Entity.Answer("Значение1", 1), Create.Entity.Answer("Значение2", 2)}),
+                        Create.Entity.SingleOptionQuestion(cascadingIdentity.Id, "cascading", cascadeFromQuestionId: questionIdentity.Id,
+                            answers: new List<Answer> {Create.Entity.Answer("Опция значения %combobox% 1", 1, 1), Create.Entity.Answer("Опция значения %combobox% 2", 2, 2)}),
+                        Create.Entity.TextQuestion(substituteIdentity.Id, "subst", text: "Саб ми, %combobox% и %cascading%")
+                    })
+
+                },
+                optionsRepo
             );
 
             Moq.Mock.Get(ServiceLocator.Current).Setup(_ => _.GetInstance<IQuestionOptionsRepository>()).Returns(optionsRepo);

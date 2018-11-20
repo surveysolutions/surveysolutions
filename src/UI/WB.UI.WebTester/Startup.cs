@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Web.Hosting;
@@ -15,9 +14,10 @@ using NLog;
 using Owin;
 using StackExchange.Exceptional.Stores;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
+using WB.Core.Infrastructure.Modularity.Autofac;
 using WB.Enumerator.Native.WebInterview;
-using WB.UI.Shared.Enumerator.Services.Internals;
 using WB.UI.WebTester.Hub;
+using WB.UI.WebTester.Infrastructure;
 using WB.UI.WebTester.Services;
 using WB.UI.WebTester.Services.Implementation;
 
@@ -46,6 +46,7 @@ namespace WB.UI.WebTester
             DependencyResolver.SetResolver(new Autofac.Integration.Mvc.AutofacDependencyResolver(container));
             config.DependencyResolver = new AutofacWebApiDependencyResolver(container);
 
+            InScopeExecutor.Init(new NoScopeInScopeExecutor(container));
             ServiceLocator.SetLocatorProvider(() => new AutofacServiceLocatorAdapter(container));
             WebInterviewModule.Configure(app, WebTesterModule.HubPipelineModules);
             

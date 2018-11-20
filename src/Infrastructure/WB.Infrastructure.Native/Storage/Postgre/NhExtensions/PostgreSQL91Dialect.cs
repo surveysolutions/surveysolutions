@@ -303,7 +303,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.NhExtensions
 
     public abstract class PostgresEntityJson<T> : IUserType where T : class
     {
-        protected IEntitySerializer<T> JsonConvert { get; } = ServiceLocator.Current.GetInstance<IEntitySerializer<T>>();
+        protected IEntitySerializer<T> JsonConvert { get; } = new EntitySerializer<T>();
 
         public new bool Equals(object x, object y)
         {
@@ -380,7 +380,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.NhExtensions
 
     public class PostgresJson<T> : IUserType where T : class
     {
-        private IInterviewAnswerSerializer JsonConvert { get; } = ServiceLocator.Current.GetInstance<IInterviewAnswerSerializer>();
+        private IInterviewAnswerSerializer JsonConvert { get; } = new NewtonInterviewAnswerJsonSerializer();
 
         public new bool Equals(object x, object y)
         {

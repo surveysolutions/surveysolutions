@@ -28,6 +28,7 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
 using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 using WB.Tests.Abc.Storage;
 
 namespace WB.Tests.Abc
@@ -244,25 +245,40 @@ namespace WB.Tests.Abc
         }
 
         internal static StatefulInterview StatefulInterviewWithMultilanguageQuestionnaires(
-            params KeyValuePair<string, IComposite[]>[] questionnaires)
+             KeyValuePair<string, IComposite[]>[] questionnaires, 
+             IQuestionOptionsRepository questionOptionsRepository = null)
         {
             var chapterId = Guid.Parse("33333333333333333333333333333333");
 
             var questionnaireDocuments = new List<KeyValuePair<string, QuestionnaireDocument>>();
 
+            var langs = questionnaires.Select(x => x.Key).Where(x => x != null).ToArray();
+
+            var translations = new List<Translation>(
+                langs.Select(x => Create.Entity.Translation(Guid.NewGuid(), x)));
+
+            var translationIndex = 0;
+
             foreach (var questionnaire in questionnaires)
             {
-                var questionnaireDocumentWithOneChapterAndLanguages = Create.Entity.QuestionnaireDocumentWithOneChapterAndLanguages(
+                var questionnaireDocumentWithOneChapterAndLanguages =
+                    Create.Entity.QuestionnaireDocumentWithOneChapterAndLanguages(
                         chapterId,
-                        questionnaires.Select(x => x.Key).Where(x => x != null).ToArray(),
+                        translations,
+                        questionnaire.Key ==null ? null : translations[translationIndex++]?.Id,
                         questionnaire.Value);
 
-                questionnaireDocuments.Add(new KeyValuePair<string, QuestionnaireDocument>(questionnaire.Key, questionnaireDocumentWithOneChapterAndLanguages));
+                questionnaireDocuments.Add(
+                    new KeyValuePair<string, QuestionnaireDocument>(
+                        questionnaire.Key, questionnaireDocumentWithOneChapterAndLanguages));
             }
 
-            var questionnaireRepository = Create.Fake.QuestionnaireRepository(questionnaireDocuments.ToArray());
+            var questionnaireRepository = Create.Fake.QuestionnaireRepository(
+                questionnaireDocuments.ToArray(), translations, questionOptionsRepository);
 
-            return Create.AggregateRoot.StatefulInterview(questionnaireRepository: questionnaireRepository);
+            return Create.AggregateRoot.StatefulInterview(
+                questionnaireRepository: questionnaireRepository, 
+                questionOptionsRepository: questionOptionsRepository);
         }
 
         public static Mock<T> GetMock<T>(this IFixture fixture) where T : class

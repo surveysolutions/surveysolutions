@@ -343,4 +343,13 @@
   <data name="Supervisor" xml:space="preserve">
     <value>Супервизор</value>
   </data>
+  <data name="HeatMapView" xml:space="preserve">
+    <value>Показать тепловую карту</value>
+  </data>
+  <data name="HeatRadius" xml:space="preserve">
+    <value>Радиус</value>
+  </data>
+  <data name="MapDataLoading" xml:space="preserve">
+    <value>Данные карты загружаются</value>
+  </data>
 </root>

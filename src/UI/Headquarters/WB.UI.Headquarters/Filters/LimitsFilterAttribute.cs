@@ -2,28 +2,17 @@
 using System.Web.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Implementation.Services;
 using WB.Core.BoundedContexts.Headquarters.Views.Interview;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.ReadSide.Repository.Accessors;
-using WB.Core.Infrastructure.Transactions;
 
 namespace WB.Core.SharedKernels.SurveyManagement.Web.Filters
 {
     public class LimitsFilterAttribute : ActionFilterAttribute
     {
-        private InterviewPreconditionsServiceSettings InterviewPreconditionsServiceSettings
-        {
-            get { return ServiceLocator.Current.GetInstance<InterviewPreconditionsServiceSettings>(); }
-        }
+        private InterviewPreconditionsServiceSettings InterviewPreconditionsServiceSettings =>
+            DependencyResolver.Current.GetService<InterviewPreconditionsServiceSettings>();
 
-        private ITransactionManagerProvider TransactionManagerProvider
-        {
-            get { return ServiceLocator.Current.GetInstance<ITransactionManagerProvider>(); }
-        }
-
-        private IQueryableReadSideRepositoryReader<InterviewSummary> InterviewSummaryStorage
-        {
-            get { return ServiceLocator.Current.GetInstance<IQueryableReadSideRepositoryReader<InterviewSummary>>(); }
-        }
+        private IQueryableReadSideRepositoryReader<InterviewSummary> InterviewSummaryStorage =>
+            DependencyResolver.Current.GetService<IQueryableReadSideRepositoryReader<InterviewSummary>>();
 
         public override void OnActionExecuted(ActionExecutedContext filterContext)
         {
@@ -51,23 +40,7 @@ namespace WB.Core.SharedKernels.SurveyManagement.Web.Filters
 
         private int QueryInterviewsCount()
         {
-            var shouldUseOwnTransaction = !TransactionManagerProvider.GetTransactionManager().TransactionStarted;
-
-            if (shouldUseOwnTransaction)
-            {
-                this.TransactionManagerProvider.GetTransactionManager().BeginCommandTransaction();
-            }
-            try
-            {
-                return InterviewSummaryStorage.Query(_ => _.Select(i => i.InterviewId).Count());
-            }
-            finally
-            {
-                if (shouldUseOwnTransaction)
-                {
-                    this.TransactionManagerProvider.GetTransactionManager().RollbackCommandTransaction();
-                }
-            }
+            return InterviewSummaryStorage.Query(_ => _.Select(i => i.InterviewId).Count());
         }
     }
 }

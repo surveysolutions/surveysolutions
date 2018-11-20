@@ -148,11 +148,11 @@ namespace ASP
             return new HtmlString($@"<script>{script};window.CONFIG.model={ model?.AsJsonValue() ?? new HtmlString(@"null") }</script>");
         }
 
-        public static IHtmlString AuthorizedUserInfoJson(this HtmlHelper helper)
+        /*public static IHtmlString AuthorizedUserInfoJson(this HtmlHelper helper)
         {
             var authorizedUser = ServiceLocator.Current.GetInstance<IAuthorizedUser>();
             if (authorizedUser == null) return new HtmlString("{}");
             return new HtmlString(JsonConvert.SerializeObject(authorizedUser));
-        }
+        }*/
     }
 }

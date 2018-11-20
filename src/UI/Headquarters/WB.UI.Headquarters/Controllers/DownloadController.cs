@@ -1,6 +1,5 @@
 ﻿using System.Web.Mvc;
 using WB.Core.BoundedContexts.Headquarters.Services;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.UI.Headquarters.Models;
 
 namespace WB.UI.Headquarters.Controllers

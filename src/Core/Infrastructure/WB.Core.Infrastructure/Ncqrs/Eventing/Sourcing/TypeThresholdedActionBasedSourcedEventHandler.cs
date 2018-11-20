@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace Ncqrs.Eventing.Sourcing
@@ -84,29 +86,35 @@ namespace Ncqrs.Eventing.Sourcing
         /// <returns><c>true</c> when this event should be handled; otherwise, <c>false</c>.</returns>
         private bool ShouldHandleThisEventData(object evnt)
         {
-            var shouldHandle = false;
-
             var dataType = evnt.GetType();
 
-            // This is true when the eventTypeThreshold is 
-            // true if event type and the threshold type represent the same type, or if the theshold type is in the inheritance hierarchy 
-            // of the event type, or if the threshold type is an interface that event type implements.
-            if (_eventTypeThreshold.GetTypeInfo().IsAssignableFrom(dataType))
+            return _assignableCache.GetOrAdd((_eventTypeThreshold, dataType, _exact), tuple =>
             {
-                if (_exact)
-                {
-                    // Only handle the event when there is an exact match.
-                    shouldHandle = (_eventTypeThreshold == dataType);
-                }
-                else
-                {
-                    // Handle the event, since it the threshold is assignable from the event type.
-                    shouldHandle = true;
-                }
-            }
+                var shouldHandle = false;
 
-            return shouldHandle;
+                // This is true when the eventTypeThreshold is 
+                // true if event type and the threshold type represent the same type, or if the theshold type is in the inheritance hierarchy 
+                // of the event type, or if the threshold type is an interface that event type implements.
+                if (tuple.threshold.GetTypeInfo().IsAssignableFrom(tuple.data))
+                {
+                    if (tuple.exact)
+                    {
+                        // Only handle the event when there is an exact match.
+                        shouldHandle = (tuple.threshold == tuple.data);
+                    }
+                    else
+                    {
+                        // Handle the event, since it the threshold is assignable from the event type.
+                        shouldHandle = true;
+                    }
+                }
+
+                return shouldHandle;
+            });
         }
+
+        private static ConcurrentDictionary<(Type threshold, Type data, bool exact), bool> _assignableCache 
+            = new ConcurrentDictionary<(Type, Type, bool), bool>();
 
         public override string ToString()
         {

@@ -4,9 +4,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using Ncqrs.Domain;
 using Ncqrs.Domain.Storage;
+using Ncqrs.Eventing;
+using Ncqrs.Eventing.Storage;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Aggregates;
+using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.EventBus.Lite;
 using WB.Core.Infrastructure.Implementation.Aggregates;
 
@@ -22,11 +25,11 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
         private readonly IAggregateSnapshotter snapshooter;
         private readonly IServiceLocator serviceLocator;
         private readonly IAggregateRootCacheCleaner aggregateRootCacheCleaner;
+        private readonly EventBusSettings eventBusSettings;
 
-        private int executingCommandsCount = 0;
-        private readonly object executionCountLock = new object();
+        private static int executingCommandsCount = 0;
+        private static readonly object executionCountLock = new object();
         private TaskCompletionSource<object> executionAwaiter = null;
-
 
         public CommandService(
             IEventSourcedAggregateRootRepository eventSourcedRepository,
@@ -44,6 +47,7 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             this.plainRepository = plainRepository;
             this.aggregateLock = aggregateLock;
             this.aggregateRootCacheCleaner = aggregateRootCacheCleaner;
+            
         }
 
         public Task ExecuteAsync(ICommand command, string origin, CancellationToken cancellationToken)
@@ -72,19 +76,19 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
 
         private void RegisterCommandExecution()
         {
-            lock (this.executionCountLock)
+            lock (executionCountLock)
             {
-                this.executingCommandsCount++;
+                executingCommandsCount++;
             }
         }
 
         private void UnregisterCommandExecution()
         {
-            lock (this.executionCountLock)
+            lock (executionCountLock)
             {
-                this.executingCommandsCount--;
+                executingCommandsCount--;
 
-                if (this.executingCommandsCount > 0)
+                if (executingCommandsCount > 0)
                     return;
 
                 if (this.executionAwaiter != null)
@@ -97,9 +101,9 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
 
         public Task WaitPendingCommandsAsync()
         {
-            lock (this.executionCountLock)
+            lock (executionCountLock)
             {
-                if (this.executingCommandsCount == 0)
+                if (executingCommandsCount == 0)
                     return Task.FromResult(null as object);
 
                 if (this.executionAwaiter == null)
@@ -111,7 +115,7 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             }
         }
 
-        public bool HasPendingCommands => this.executingCommandsCount > 0;
+        public bool HasPendingCommands => executingCommandsCount > 0;
 
         protected virtual void ExecuteImpl(ICommand command, string origin, CancellationToken cancellationToken)
         {
@@ -214,7 +218,10 @@ namespace WB.Core.Infrastructure.CommandBus.Implementation
             if (!aggregate.HasUncommittedChanges())
                 return;
 
+            //var eventStream = new UncommittedEventStream(origin, aggregate.GetUnCommittedChanges());
+
             var commitedEvents = this.eventBus.CommitUncommittedEvents(aggregate, origin);
+
             aggregate.MarkChangesAsCommitted();
 
             try

@@ -6,6 +6,7 @@ using Ncqrs.Domain.Storage;
 using Ncqrs.Eventing;
 using Ncqrs.Eventing.Storage;
 using WB.Core.GenericSubdomains.Portable;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure.Aggregates;
 using WB.Core.Infrastructure.EventBus;
 using WB.Core.Infrastructure.Implementation.Aggregates;
@@ -18,6 +19,7 @@ namespace WB.Infrastructure.Native.Storage
     {
         private readonly IInMemoryEventStore inMemoryEventStore;
         private readonly EventBusSettings eventBusSettings;
+        private readonly IServiceLocator serviceLocator;
         private readonly IAggregateLock aggregateLock;
 
         private static readonly ConcurrentDictionary<string, bool> CacheCountTracker = new ConcurrentDictionary<string, bool>();
@@ -26,12 +28,14 @@ namespace WB.Infrastructure.Native.Storage
             IInMemoryEventStore inMemoryEventStore,
             EventBusSettings eventBusSettings,
             ISnapshotStore snapshotStore,
-            IDomainRepository repository, 
+            IDomainRepository repository,
+            IServiceLocator serviceLocator,
             IAggregateLock aggregateLock)
             : base(eventStore, snapshotStore, repository)
         {
             this.inMemoryEventStore = inMemoryEventStore;
             this.eventBusSettings = eventBusSettings;
+            this.serviceLocator = serviceLocator;
             this.aggregateLock = aggregateLock;
         }
 
@@ -77,10 +81,12 @@ namespace WB.Infrastructure.Native.Storage
                 return null;
             }
 
+            this.serviceLocator.InjectProperties(cachedAggregate);
+
             return cachedAggregate;
         }
 
-        protected static Cache Cache => System.Web.HttpRuntime.Cache;
+        private static Cache Cache => System.Web.HttpRuntime.Cache;
         protected virtual TimeSpan Expiration => TimeSpan.FromMinutes(5);
 
         private void PutToCache(IEventSourcedAggregateRoot aggregateRoot)

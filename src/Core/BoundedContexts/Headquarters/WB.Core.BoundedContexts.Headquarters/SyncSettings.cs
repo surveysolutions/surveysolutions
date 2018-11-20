@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace WB.Core.BoundedContexts.Headquarters
+﻿namespace WB.Core.BoundedContexts.Headquarters
 {
     public class SyncSettings
     {

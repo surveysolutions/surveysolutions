@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 using System.Web.Mvc;
-using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Resources;
 using WB.Core.BoundedContexts.Headquarters.AssignmentImport;

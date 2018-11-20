@@ -4,10 +4,8 @@ using System.Linq;
 using NHibernate;
 using NHibernate.Criterion;
 using NHibernate.Impl;
-using NHibernate.Linq;
 using NHibernate.Loader.Criteria;
 using NHibernate.Persister.Entity;
-using Ninject;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
@@ -21,8 +19,12 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
             INativeReadSideStorage<TEntity>
         where TEntity : class, IReadSideRepositoryEntity
     {
-        public PostgreReadSideStorage([Named(PostgresReadSideModule.SessionProviderName)]ISessionProvider sessionProvider, 
-            ILogger logger) : base(sessionProvider, logger)
+        
+
+        public PostgreReadSideStorage(
+            IUnitOfWork unitOfWork, 
+            ILogger logger,
+            IServiceLocator serviceLocator) : base(unitOfWork, logger, serviceLocator)
         {
         }
     }
@@ -31,29 +33,32 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
         INativeReadSideStorage<TEntity,TKey>
         where TEntity : class, IReadSideRepositoryEntity
     {
-        private readonly ISessionProvider sessionProvider;
+        private readonly IUnitOfWork unitOfWork;
         private readonly ILogger logger;
+        private IServiceLocator serviceLocator;
 
-        public PostgreReadSideStorage([Named(PostgresReadSideModule.SessionProviderName)]ISessionProvider sessionProvider, 
-            ILogger logger)
+        public PostgreReadSideStorage(IUnitOfWork unitOfWork, 
+            ILogger logger,
+            IServiceLocator serviceLocator)
         {
-            this.sessionProvider = sessionProvider;
+            this.unitOfWork = unitOfWork;
             this.logger = logger;
+            this.serviceLocator = serviceLocator;
         }
 
         public virtual int Count()
         {
-            return this.sessionProvider.GetSession().QueryOver<TEntity>().RowCount();
+            return this.unitOfWork.Session.QueryOver<TEntity>().RowCount();
         }
 
         public virtual TEntity GetById(TKey id)
         {
-            return this.sessionProvider.GetSession().Get<TEntity>(id);
+            return this.unitOfWork.Session.Get<TEntity>(id);
         }
 
         public virtual void Remove(TKey id)
         {
-            var session = this.sessionProvider.GetSession();
+            var session = this.unitOfWork.Session;
 
             var entity = session.Get<TEntity>(id);
 
@@ -65,7 +70,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         public virtual void Store(TEntity entity, TKey id)
         {
-            ISession session = this.sessionProvider.GetSession();
+            ISession session = this.unitOfWork.Session;
 
             var storedEntity = session.Get<TEntity>(id);
             if (!object.ReferenceEquals(storedEntity, entity) && storedEntity != null)
@@ -94,21 +99,12 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         public void Flush()
         {
-            this.sessionProvider.GetSession().Flush();
-        }
-
-        public virtual void Clear()
-        {
-            ISession session = this.sessionProvider.GetSession();
-
-            string entityName = typeof(TEntity).Name;
-
-            session.Delete(string.Format("from {0} e", entityName));
+            this.unitOfWork.Session.Flush();
         }
 
         public int CountDistinctWithRecursiveIndex<TResult>(Func<IQueryOver<TEntity, TEntity>, IQueryOver<TResult,TResult>> query)
         {
-            var queryable= query.Invoke(this.sessionProvider.GetSession().QueryOver<TEntity>());
+            var queryable= query.Invoke(this.unitOfWork.Session.QueryOver<TEntity>());
 
             var countQuery = this.GenerateCountRowsQuery(queryable.UnderlyingCriteria);
 
@@ -119,7 +115,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         public IQuery GenerateCountRowsQuery(ICriteria criteria)
         {
-            ISession session = this.sessionProvider.GetSession();
+            ISession session = this.unitOfWork.Session;
             
             var criteriaImpl = (CriteriaImpl)criteria;
             var sessionImpl = (SessionImpl)criteriaImpl.Session;
@@ -155,18 +151,15 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         public virtual TResult QueryOver<TResult>(Func<IQueryOver<TEntity, TEntity>, TResult> query)
         {
-            return query.Invoke(this.sessionProvider.GetSession().QueryOver<TEntity>());
+            return query.Invoke(this.unitOfWork.Session.QueryOver<TEntity>());
         }
 
         public virtual TResult Query<TResult>(Func<IQueryable<TEntity>, TResult> query)
         {
-            return query.Invoke(this.sessionProvider.GetSession().Query<TEntity>());
+            return query.Invoke(this.unitOfWork.Session.Query<TEntity>());
         }
 
-        public Type ViewType
-        {
-            get { return typeof(TEntity); }
-        }
+        public Type ViewType => typeof(TEntity);
 
         public string GetReadableStatus()
         {
@@ -175,7 +168,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         private void FastBulkStore(List<Tuple<TEntity, TKey>> bulk)
         {
-            var sessionFactory = ServiceLocator.Current.GetInstance<ISessionFactory>(PostgresReadSideModule.ReadSideSessionFactoryName);
+            var sessionFactory = serviceLocator.GetInstance<ISessionFactory>();
 
             foreach (var subBulk in bulk.Batch(2048))
             {
@@ -197,7 +190,7 @@ namespace WB.Infrastructure.Native.Storage.Postgre.Implementation
 
         private void SlowBulkStore(List<Tuple<TEntity, TKey>> bulk)
         {
-            var sessionFactory = ServiceLocator.Current.GetInstance<ISessionFactory>(PostgresReadSideModule.ReadSideSessionFactoryName);
+            var sessionFactory = serviceLocator.GetInstance<ISessionFactory>();
             using (ISession session = sessionFactory.OpenSession())
             using (ITransaction transaction = session.BeginTransaction())
             {

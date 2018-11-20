@@ -1,10 +1,7 @@
 ﻿using NHibernate.Mapping.ByCode;
 using NHibernate.Mapping.ByCode.Conformist;
-using ThirdParty.Json.LitJson;
 using WB.Core.BoundedContexts.Headquarters.InterviewerAuditLog;
 using WB.Core.Infrastructure.PlainStorage;
-using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog;
-using WB.Infrastructure.Native.Storage.Postgre.NhExtensions;
 
 namespace WB.Core.BoundedContexts.Headquarters.Mappings
 {

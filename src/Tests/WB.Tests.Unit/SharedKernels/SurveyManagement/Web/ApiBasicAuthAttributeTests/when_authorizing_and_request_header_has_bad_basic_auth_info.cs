@@ -12,9 +12,9 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.Web.ApiBasicAuthAttribute
     internal class when_authorizing_and_request_header_has_bad_basic_auth_info : ApiBasicAuthAttributeTestsContext
     {
         [NUnit.Framework.OneTimeSetUp] public void context () {
-            attribute = CreateApiBasicAuthAttribute((userName, password)=> false);
+            attribute = CreateApiBasicAuthAttribute();
 
-            actionContext = CreateActionContext();
+            actionContext = CreateActionContext((userName, password) => false);
             actionContext.Request.Headers.Authorization = new AuthenticationHeaderValue("Basic", "aaaaaaaa");
             BecauseOf();
         }

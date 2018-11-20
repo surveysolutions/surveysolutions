@@ -30,7 +30,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.StaticTextViewModelT
         }
 
         public void BecauseOf() =>
-            viewModel.Init("interview", Create.Identity(staticTextId, RosterVector.Empty), null);
+            viewModel.Init("interview", Create.Identity(staticTextId, RosterVector.Empty), Create.Other.NavigationState());
 
         [NUnit.Framework.Test] public void should_mark_static_text_view_model_as_invalid () =>
             viewModel.QuestionState.Validity.IsInvalid.Should().BeTrue();

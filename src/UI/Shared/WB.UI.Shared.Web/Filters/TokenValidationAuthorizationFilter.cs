@@ -9,7 +9,7 @@ using System.Web.Http.Filters;
 
 namespace WB.UI.Shared.Web.Filters
 {
-    public class TokenValidationAuthorizationFilter : IAuthorizationFilter
+    public class TokenValidationAuthorizationFilter : AuthorizationFilterAttribute
     {
         public const string Apikey = "acsrfToken";
         private readonly ITokenVerifier tokenVerifier;
@@ -19,12 +19,7 @@ namespace WB.UI.Shared.Web.Filters
             this.tokenVerifier = tokenVerifier;
         }
 
-        public bool AllowMultiple 
-        {
-            get { return false; }
-        }
-
-        public Task<HttpResponseMessage> ExecuteAuthorizationFilterAsync(HttpActionContext actionContext, CancellationToken cancellationToken, Func<Task<HttpResponseMessage>> continuation)
+        public override Task OnAuthorizationAsync(HttpActionContext actionContext, CancellationToken cancellationToken)
         {
             try
             {
@@ -55,7 +50,7 @@ namespace WB.UI.Shared.Web.Filters
                 return this.FromResult(actionContext.Response);
             }
 
-            return continuation();
+            return base.OnAuthorizationAsync(actionContext, cancellationToken);
         }
 
 

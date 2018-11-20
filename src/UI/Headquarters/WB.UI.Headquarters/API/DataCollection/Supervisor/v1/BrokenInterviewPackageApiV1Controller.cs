@@ -1,11 +1,8 @@
-﻿using System;
-using System.Web.Http;
+﻿using System.Web.Http;
 using Main.Core.Entities.SubEntities;
-using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Views;
 using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.SharedKernels.DataCollection.WebApi;
-using WB.Enumerator.Native.WebInterview;
 using WB.UI.Headquarters.Code;
 
 namespace WB.UI.Headquarters.API.DataCollection.Supervisor.v1
