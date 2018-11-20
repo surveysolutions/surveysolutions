@@ -86,5 +86,12 @@ namespace WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions
             new MvxAsyncCommand(() => this.navigationState.NavigateTo(NavigationIdentity.CreateForPdfView(this.Identity)));
 
         public byte[] Content { get; private set; }
+
+
+        public override void ViewDestroy(bool viewFinishing = true)
+        {
+            this.ContentPath = null;
+            base.ViewDestroy(viewFinishing);
+        }
     }
 }
