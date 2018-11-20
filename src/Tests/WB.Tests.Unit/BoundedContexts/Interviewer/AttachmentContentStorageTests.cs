@@ -4,6 +4,7 @@ using NUnit.Framework;
 using WB.Core.GenericSubdomains.Portable;
 using WB.Core.Infrastructure.FileSystem;
 using WB.Core.SharedKernels.Enumerator.Implementation.Repositories;
+using WB.Core.SharedKernels.Enumerator.Services;
 using WB.Core.SharedKernels.Enumerator.Services.Infrastructure.Storage;
 using WB.Core.SharedKernels.Enumerator.Views;
 using WB.Core.SharedKernels.Questionnaire.Api;
@@ -20,10 +21,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer
             var contentId = Id.g10.FormatGuid();
             var content = new byte[] {1, 2, 3, 4};
 
-            var storage = new AttachmentContentStorage(
-                Mock.Of<IPlainStorage<AttachmentContentMetadata>>(),
-                Mock.Of<IPlainStorage<AttachmentContentData>>(),
-                fs.Object);
+            var storage = Create.Service.AttachmentContentStorage(files: fs.Object);
 
             var cachedFile = storage.GetFileCacheLocation(contentId);
 
@@ -49,10 +47,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer
             var contentId = Id.g10.FormatGuid();
             var content = new byte[] {1, 2, 3, 4};
 
-            var storage = new AttachmentContentStorage(
-                Mock.Of<IPlainStorage<AttachmentContentMetadata>>(),
-                Mock.Of<IPlainStorage<AttachmentContentData>>(),
-                fs.Object);
+            var storage = Create.Service.AttachmentContentStorage(files: fs.Object);
 
             var cachedFile = storage.GetFileCacheLocation(contentId);
 
@@ -77,10 +72,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer
             var contentId = Id.g10.FormatGuid();
             var content = new byte[] {1, 2, 3, 4};
 
-            var storage = new AttachmentContentStorage(
-                Mock.Of<IPlainStorage<AttachmentContentMetadata>>(),
-                Mock.Of<IPlainStorage<AttachmentContentData>>(),
-                fs.Object);
+            var storage = Create.Service.AttachmentContentStorage(files: fs.Object);
 
             var cachedFile = storage.GetFileCacheLocation(contentId);
             var cacheDir = Path.GetDirectoryName(cachedFile);
@@ -106,10 +98,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer
             var contentId = Id.g10.FormatGuid();
             var content = new byte[] { 1, 2, 3, 4 };
 
-            var storage = new AttachmentContentStorage(
-                Mock.Of<IPlainStorage<AttachmentContentMetadata>>(),
-                Mock.Of<IPlainStorage<AttachmentContentData>>(),
-                fs.Object);
+            var storage = Create.Service.AttachmentContentStorage(files: fs.Object);
 
             var cachedFile = storage.GetFileCacheLocation(contentId);
             var cacheDir = Path.GetDirectoryName(cachedFile);
