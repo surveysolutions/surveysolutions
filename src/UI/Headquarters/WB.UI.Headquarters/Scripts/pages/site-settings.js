@@ -1,4 +1,4 @@
-﻿Supervisor.VM.SiteSettings = function (ajax, notifier, $dataUrl, $changeStateUrl, $regenPasswordUrl, $messageUrl) {
+﻿Supervisor.VM.SiteSettings = function (ajax, notifier, $dataUrl, $changeStateUrl, $regenPasswordUrl, $globalNoticeSettingsUrl, $autoUpdateSettingsUrl) {
     Supervisor.VM.SiteSettings.superclass.constructor.apply(this, arguments);
 
     var self = this;
@@ -21,14 +21,25 @@
             self.password(data.Password);
         }, true, true);
 
-        self.SendRequest($messageUrl,
+        self.SendRequest($globalNoticeSettingsUrl,
+            {},
+            function (data) {
+                if (!data) return;
+
+                self.message(data.GlobalNotice);
+            }, true, true);
+
+        self.loadAutoUpdateSettings();
+    };
+
+    self.loadAutoUpdateSettings = function() {
+        self.SendRequest($autoUpdateSettingsUrl,
             {},
             function (data) {
                 if (!data) return;
 
                 self.isInterviewerAutomaticUpdatesEnabled(data.InterviewerAutoUpdatesEnabled);
                 self.howManyMajorReleaseDontNeedUpdate(data.HowManyMajorReleaseDontNeedUpdate);
-                self.message(data.GlobalNotice);
             }, true, true);
     };
 
@@ -63,15 +74,31 @@
     });
 
     self.updateMessage = function() {
-        ajax.sendRequest($messageUrl, "POST",
+        ajax.sendRequest($globalNoticeSettingsUrl, "POST",
             {
                 globalNotice: self.message(),
+            }, false,
+            //onSuccess
+            function() {
+                location.reload();
+            });
+    };
+
+    self.updateHowManyMajorReleaseDontNeedUpdate = function (obj, event) {
+        if (event.originalEvent) { //user changed
+            self.updateAutoUpdateSettings();
+        } 
+    }
+
+    self.updateAutoUpdateSettings = function() {
+        ajax.sendRequest($autoUpdateSettingsUrl, "POST",
+            {
                 interviewerAutoUpdatesEnabled: self.isInterviewerAutomaticUpdatesEnabled(),
                 howManyMajorReleaseDontNeedUpdate: self.howManyMajorReleaseDontNeedUpdate()
             }, false,
             //onSuccess
             function() {
-                location.reload();
+                self.loadAutoUpdateSettings();
             });
     };
 
