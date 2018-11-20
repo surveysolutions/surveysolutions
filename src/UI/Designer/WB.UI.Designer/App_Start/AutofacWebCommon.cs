@@ -110,30 +110,8 @@ namespace WB.UI.Designer.App_Start
             // init
             kernel.Init().Wait();
 
-            UnitOfWorkScopeManager.SetScopeAdapter(kernel.Container);
-
-            ServiceLocator.SetLocatorProvider(() =>
-            {
-                // MVC request
-                var requestLifetimeScopeFromContext = HttpContext.Current?.Items[(object) typeof(ILifetimeScope)] as ILifetimeScope;
-                if (requestLifetimeScopeFromContext != null)
-                    return new AutofacServiceLocatorAdapter(requestLifetimeScopeFromContext);
-
-                // WebApi v2 request
-                HttpRequestMessage httpRequestMessage = HttpContext.Current?.Items["MS_HttpRequestMessage"] as HttpRequestMessage;
-                if (httpRequestMessage != null)
-                {
-                    var lifetimeScope = httpRequestMessage.GetDependencyScope().GetRequestLifetimeScope();
-                    if (lifetimeScope != null)
-                        return new AutofacServiceLocatorAdapter(lifetimeScope);
-                }
-
-                var requestLifetimeScope = GlobalConfiguration.Configuration.DependencyResolver.GetRequestLifetimeScope();
-                if (requestLifetimeScope != null)
-                    return new AutofacServiceLocatorAdapter(requestLifetimeScope);
-
-                throw new ArgumentException("Can't found current scope. Supports only web request scopes.");
-            });
+            var serviceLocatorFactory = new AutofacServiceLocatorFactory();
+            ServiceLocator.SetLocatorProvider(() => serviceLocatorFactory.GetServiceLocator());
 
             // DependencyResolver
             GlobalConfiguration.Configuration.DependencyResolver = new AutofacWebApiDependencyResolver(kernel.Container);
