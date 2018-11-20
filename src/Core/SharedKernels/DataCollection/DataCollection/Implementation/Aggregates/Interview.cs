@@ -75,19 +75,21 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             return expressionStorageCached ?? (expressionStorageCached = this.expressionProcessorStatePrototypeProvider.GetExpressionStorage(this.QuestionnaireIdentity));
         }
 
+        public IServiceLocator ServiceLocatorInstance { get; set; }
+
         /// <remarks>
         /// Repository operations are time-consuming.
         /// So this repository may be used only in command handlers.
         /// And should never be used in event handlers!!
         /// </remarks>
         public IQuestionnaireStorage questionnaireRepository => 
-            ServiceLocator.Current.GetInstance<IQuestionnaireStorage>();
+            ServiceLocatorInstance.GetInstance<IQuestionnaireStorage>();
         private IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider => 
-            ServiceLocator.Current.GetInstance<IInterviewExpressionStatePrototypeProvider>();
+            ServiceLocatorInstance.GetInstance<IInterviewExpressionStatePrototypeProvider>();
         private readonly ISubstitutionTextFactory substitutionTextFactory;
         private readonly IInterviewTreeBuilder treeBuilder;
         public IQuestionOptionsRepository questionOptionsRepository => 
-            ServiceLocator.Current.GetInstance<IQuestionOptionsRepository>();
+            ServiceLocatorInstance.GetInstance<IQuestionOptionsRepository>();
 
         protected InterviewKey interviewKey;
 
