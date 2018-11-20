@@ -14,21 +14,18 @@ namespace WB.UI.Designer.Code.Implementation
 {
     public class MailNotifier : IRecipientNotifier
     {
-        public MailNotifier(ILogger logger)
+        public MailNotifier(ILogger logger, ISystemMailer mailer)
         {
             this.logger = logger;
-        }
-
-        private ISystemMailer Mailer
-        {
-            get { return ServiceLocator.Current.GetInstance<ISystemMailer>(); }
+            this.mailer = mailer;
         }
 
         private readonly ILogger logger;
-        
+        private readonly ISystemMailer mailer;
+
         public void NotifyTargetPersonAboutShareChange(ShareChangeType shareChangeType, string email, string userName, string questionnaireId, string questionnaireTitle, ShareType shareType, string actionPersonEmail)
         {
-            var message = this.Mailer.GetShareChangeNotificationEmail(
+            var message = this.mailer.GetShareChangeNotificationEmail(
                                 new SharingNotificationModel
                                 {
                                     ShareChangeType = shareChangeType,
@@ -44,7 +41,7 @@ namespace WB.UI.Designer.Code.Implementation
         
         public void NotifyOwnerAboutShareChange(ShareChangeType shareChangeType, string email, string userName, string questionnaireId, string questionnaireTitle, ShareType shareType, string actionPersonEmail, string sharedWithPersonEmail)
         {
-            var message = this.Mailer.GetOwnerShareChangeNotificationEmail(
+            var message = this.mailer.GetOwnerShareChangeNotificationEmail(
                                 new SharingNotificationModel
                                 {
                                     ShareChangeType = shareChangeType,
