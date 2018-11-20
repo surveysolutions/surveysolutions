@@ -105,8 +105,9 @@ namespace WB.UI.Headquarters.API.WebInterview
         {
             take = Math.Min(take, 100);
 
-            var interview = GetCallerInterview();
-            var overview = this.overviewService.GetOverview(interview, IsReviewMode).ToList();
+            var interview = this.GetCallerInterview();
+            var questionnaire = this.GetCallerQuestionnaire();
+            var overview = this.overviewService.GetOverview(interview, questionnaire, IsReviewMode).ToList();
             var result = overview.Skip(skip).Take(take).ToList();
 
             var isLastPage = skip + result.Count >= overview.Count;
