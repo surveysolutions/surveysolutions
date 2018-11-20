@@ -15,7 +15,7 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
     {
         public ExoPlayerBinding(PlayerView view) : base(view)
         {
-
+            
         }
 
         protected override void Dispose(bool isDisposing)
@@ -24,12 +24,10 @@ namespace WB.UI.Shared.Enumerator.CustomBindings
             Target.Player.Release();
         }
 
+
         protected override void SetValueToView(PlayerView view, string value)
         {
-            if (view.Player != null)
-            {
-                view.Player.Release();
-            }
+            view.Player?.Release();
 
             if (string.IsNullOrWhiteSpace(value) || !System.IO.File.Exists(value))
             {
