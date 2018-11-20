@@ -104,7 +104,7 @@ namespace WB.UI.Headquarters
             DependencyResolver.SetResolver(new Autofac.Integration.Mvc.AutofacDependencyResolver(container));
             ModelBinders.Binders.DefaultBinder = new AutofacBinderResolver(container);
 
-            var scopeResolver = new AutofacServiceLocatorAdapterWithLifeScopeResolver(container);
+            var scopeResolver = new AutofacServiceLocatorAdapter(container);
             ServiceLocator.SetLocatorProvider(() => scopeResolver);
 
             app.UseAutofacMiddleware(container);
