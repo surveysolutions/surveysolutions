@@ -1,12 +1,14 @@
+using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Reflection;
+using System.Web;
 using System.Web.Configuration;
 using System.Web.Http;
 using System.Web.Mvc;
 using Autofac;
 using Autofac.Integration.Mvc;
 using Autofac.Integration.WebApi;
-using Microsoft.Web.Infrastructure.DynamicModuleHelper;
 using WB.Core.BoundedContexts.Designer;
 using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.Infrastructure;
@@ -25,10 +27,9 @@ using WB.UI.Shared.Web.Kernel;
 using WB.UI.Shared.Web.Modules;
 using WB.UI.Shared.Web.Settings;
 using WB.UI.Shared.Web.Versions;
-using WebActivatorEx;
 
-[assembly: PreApplicationStartMethod(typeof (AutofacWebCommon), "Start")]
-[assembly: ApplicationShutdownMethod(typeof (AutofacWebCommon), "Stop")]
+[assembly: WebActivatorEx.PreApplicationStartMethod(typeof (AutofacWebCommon), "Start")]
+[assembly: WebActivatorEx.ApplicationShutdownMethod(typeof (AutofacWebCommon), "Stop")]
 
 namespace WB.UI.Designer.App_Start
 {
@@ -110,8 +111,29 @@ namespace WB.UI.Designer.App_Start
             kernel.Init().Wait();
 
             UnitOfWorkScopeManager.SetScopeAdapter(kernel.Container);
-            var scopeResolver = new AutofacServiceLocatorAdapterWithLifeScopeResolver(kernel.Container);
-            ServiceLocator.SetLocatorProvider(() => scopeResolver);
+
+            ServiceLocator.SetLocatorProvider(() =>
+            {
+                // MVC request
+                var requestLifetimeScopeFromContext = HttpContext.Current?.Items[(object) typeof(ILifetimeScope)] as ILifetimeScope;
+                if (requestLifetimeScopeFromContext != null)
+                    return new AutofacServiceLocatorAdapter(requestLifetimeScopeFromContext);
+
+                // WebApi v2 request
+                HttpRequestMessage httpRequestMessage = HttpContext.Current?.Items["MS_HttpRequestMessage"] as HttpRequestMessage;
+                if (httpRequestMessage != null)
+                {
+                    var lifetimeScope = httpRequestMessage.GetDependencyScope().GetRequestLifetimeScope();
+                    if (lifetimeScope != null)
+                        return new AutofacServiceLocatorAdapter(lifetimeScope);
+                }
+
+                var requestLifetimeScope = GlobalConfiguration.Configuration.DependencyResolver.GetRequestLifetimeScope();
+                if (requestLifetimeScope != null)
+                    return new AutofacServiceLocatorAdapter(requestLifetimeScope);
+
+                throw new ArgumentException("Can't found current scope. Supports only web request scopes.");
+            });
 
             // DependencyResolver
             GlobalConfiguration.Configuration.DependencyResolver = new AutofacWebApiDependencyResolver(kernel.Container);
