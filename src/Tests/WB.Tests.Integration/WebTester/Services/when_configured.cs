@@ -51,7 +51,7 @@ namespace WB.Tests.Integration.WebTester.Services
             }
 
             var rules = Assembly.Load(Convert.FromBase64String(supportingAssembly));
-            Assert.That(rules.FullName, Does.StartWith($"rules-{questionnaire.PublicKey:N}"), "Recheck previous assert because naming rules for assebmly has changed and it might not catch that assembly was loaded when it shouldn't");
+            Assert.That(rules.FullName, Does.StartWith($"rules-{questionnaire.PublicKey:N}"), "Recheck previous assert because naming rules for assembly has changed and it might not catch that assembly was loaded when it shouldn't");
         }
 
         [TearDown]
