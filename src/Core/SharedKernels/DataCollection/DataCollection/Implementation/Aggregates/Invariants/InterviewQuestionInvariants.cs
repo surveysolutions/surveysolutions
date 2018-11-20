@@ -8,7 +8,6 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invariants
@@ -31,17 +30,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
             public static readonly string ProtectedAnswer = "ProtectedAnswer";
         }
 
-        private readonly IQuestionOptionsRepository questionOptionsRepository;
-
         public InterviewQuestionInvariants(Identity questionIdentity, 
             IQuestionnaire questionnaire, 
-            InterviewTree interviewTree,
-            IQuestionOptionsRepository questionOptionsRepository)
+            InterviewTree interviewTree)
         {
             this.QuestionIdentity = questionIdentity;
             this.Questionnaire = questionnaire;
             this.InterviewTree = interviewTree;
-            this.questionOptionsRepository = questionOptionsRepository;
         }
 
         public Identity QuestionIdentity { get; }
@@ -718,8 +713,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invaria
             if (!question.IsCascading)
                 return this;
 
-            var answerOption = this.questionOptionsRepository.GetOptionForQuestionByOptionValue(questionnaireId,
-                this.QuestionIdentity.Id, answer, translation);
+            var answerOption = this.Questionnaire.GetOptionForQuestionByOptionValueFromStructure(this.QuestionIdentity.Id, answer);
 
             if (!answerOption.ParentValue.HasValue)
                 throw new QuestionnaireException(

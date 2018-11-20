@@ -33,7 +33,7 @@ namespace WB.UI.WebTester.Infrastructure
         public PlainQuestionnaire Translate(QuestionnaireDocument questionnaire, long version, string language)
         {
             QuestionnaireDocument result = storage.GetTranslated(questionnaire, version, language, out Translation translation);
-            return new PlainQuestionnaire(result, version, questionOptionsRepository, substitutionService, translation);
+            return new PlainQuestionnaire(result, version, substitutionService, translation);
         }
     }
 }

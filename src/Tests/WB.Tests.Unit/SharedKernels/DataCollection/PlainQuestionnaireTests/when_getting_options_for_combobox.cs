@@ -27,14 +27,12 @@ namespace WB.Tests.Unit.SharedKernels.DataCollection.PlainQuestionnaireTests
                     Create.Entity.SingleQuestion(id:questionId,isFilteredCombobox:true, options:answers)
                 });
 
-            var questionOptionsRepository = new QuestionnaireQuestionOptionsRepository();
-            plainQuestionnaire = Create.Entity.PlainQuestionnaire(document: questionnaire, 1,questionOptionsRepository: questionOptionsRepository);
+            plainQuestionnaire = Create.Entity.PlainQuestionnaire(document: questionnaire, 1);
 
             var questionnaireRepository = Mock.Of<IQuestionnaireStorage>(repository
                 => repository.GetQuestionnaire(Moq.It.IsAny<QuestionnaireIdentity>(), Moq.It.IsAny<string>()) == Create.Entity.PlainQuestionnaire(questionnaire, 1));
 
             Setup.InstanceToMockedServiceLocator<IQuestionnaireStorage>(questionnaireRepository);
-            Setup.InstanceToMockedServiceLocator<IQuestionOptionsRepository>(new QuestionnaireQuestionOptionsRepository());
             BecauseOf();
         }  
 

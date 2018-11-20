@@ -135,8 +135,7 @@ namespace WB.Tests.Integration
         public static Interview Interview(
             Guid? questionnaireId = null,
             IQuestionnaireStorage questionnaireRepository = null, 
-            IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null,
-            IQuestionOptionsRepository questionOptionsRepository = null)
+            IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider = null)
         {
             var qRepository = questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>();
             Mock.Get(ServiceLocator.Current)
@@ -148,11 +147,6 @@ namespace WB.Tests.Integration
                 .Setup(locator => locator.GetInstance<IInterviewExpressionStatePrototypeProvider>())
                 .Returns(expressionsProvider);
 
-            var optionsRepository = questionOptionsRepository ?? Mock.Of<IQuestionOptionsRepository>();
-            Mock.Get(ServiceLocator.Current)
-                .Setup(locator => locator.GetInstance<IQuestionOptionsRepository>())
-                .Returns(optionsRepository);
-            
             var interview = new Interview(
                 //questionnaireRepository ?? Mock.Of<IQuestionnaireStorage>(),
                 //expressionProcessorStatePrototypeProvider ?? Mock.Of<IInterviewExpressionStatePrototypeProvider>(),
@@ -382,7 +376,7 @@ namespace WB.Tests.Integration
 
         public static IUnitOfWork UnitOfWork(ISessionFactory factory)
         {
-            return new UnitOfWork(factory);
+            return new UnitOfWork(factory, Mock.Of<ILogger>());
         }
 
         private static HbmMapping GetMappingsFor(IEnumerable<Type> painStorageEntityMapTypes)

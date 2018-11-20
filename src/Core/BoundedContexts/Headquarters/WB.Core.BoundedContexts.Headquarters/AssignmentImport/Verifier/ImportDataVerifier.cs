@@ -18,7 +18,6 @@ using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEn
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities.Answers;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invariants;
 using WB.Core.SharedKernels.DataCollection.MaskFormatter;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
 using messages = WB.Core.BoundedContexts.Headquarters.Resources.PreloadingVerificationMessages;
 
@@ -37,17 +36,14 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
         private readonly IFileSystemAccessor fileSystem;
         private readonly IInterviewTreeBuilder interviewTreeBuilder;
         private readonly IUserViewFactory userViewFactory;
-        private IQuestionOptionsRepository questionOptionsRepository;
 
         public ImportDataVerifier(IFileSystemAccessor fileSystem,
             IInterviewTreeBuilder interviewTreeBuilder,
-            IUserViewFactory userViewFactory,
-            IQuestionOptionsRepository questionOptionsRepository)
+            IUserViewFactory userViewFactory)
         {
             this.fileSystem = fileSystem;
             this.interviewTreeBuilder = interviewTreeBuilder;
             this.userViewFactory = userViewFactory;
-            this.questionOptionsRepository = questionOptionsRepository;
         }
 
         public IEnumerable<PanelImportVerificationError> VerifyProtectedVariables(string originalFileName, PreloadedFile file, IQuestionnaire questionnaire)
@@ -123,12 +119,12 @@ namespace WB.Core.BoundedContexts.Headquarters.AssignmentImport.Verifier
                         var interviewTreeQuestion = tree.GetQuestion(answer.Identity);
                         if (interviewTreeQuestion == null)
                         {
-                            new InterviewQuestionInvariants(answer.Identity, questionnaire, tree, questionOptionsRepository).RequireQuestionExists();
+                            new InterviewQuestionInvariants(answer.Identity, questionnaire, tree).RequireQuestionExists();
                         }
 
                         interviewTreeQuestion.SetAnswer(answer.Answer, DateTime.UtcNow);
 
-                        interviewTreeQuestion.RunImportInvariantsOrThrow(new InterviewQuestionInvariants(answer.Identity, questionnaire, tree, questionOptionsRepository));
+                        interviewTreeQuestion.RunImportInvariantsOrThrow(new InterviewQuestionInvariants(answer.Identity, questionnaire, tree));
                     }
                     tree.ActualizeTree();
                 }

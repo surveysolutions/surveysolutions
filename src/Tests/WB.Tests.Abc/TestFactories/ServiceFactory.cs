@@ -663,7 +663,8 @@ namespace WB.Tests.Abc.TestFactories
                 logger: logger ?? Mock.Of<ILogger>(),
                 interviewPackageStorage: interviewPackageStorage ?? Mock.Of<IPlainStorageAccessor<InterviewPackage>>(),
                 brokenInterviewPackageStorage: brokenInterviewPackageStorage ?? Mock.Of<IPlainStorageAccessor<BrokenInterviewPackage>>(),
-                packagesTracker: new TestPlainStorage<ReceivedPackageLogEntry>());
+                packagesTracker: new TestPlainStorage<ReceivedPackageLogEntry>(),
+                sessionFactory: Mock.Of<ISessionFactory>());
         }
 
         public ImportDataVerifier ImportDataVerifier(IFileSystemAccessor fileSystem = null,
@@ -672,8 +673,7 @@ namespace WB.Tests.Abc.TestFactories
             IQuestionOptionsRepository optionsRepository = null)
             => new ImportDataVerifier(fileSystem ?? new FileSystemIOAccessor(),
                 interviewTreeBuilder ?? Mock.Of<IInterviewTreeBuilder>(),
-                userViewFactory ?? Mock.Of<IUserViewFactory>(),
-                optionsRepository ?? Mock.Of<IQuestionOptionsRepository>());
+                userViewFactory ?? Mock.Of<IUserViewFactory>());
 
         public IAssignmentsUpgrader AssignmentsUpgrader(IPreloadedDataVerifier importService = null,
             IQuestionnaireStorage questionnaireStorage = null,

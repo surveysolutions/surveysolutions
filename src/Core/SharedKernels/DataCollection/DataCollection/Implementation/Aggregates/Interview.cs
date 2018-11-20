@@ -88,8 +88,6 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             ServiceLocatorInstance.GetInstance<IInterviewExpressionStatePrototypeProvider>();
         private readonly ISubstitutionTextFactory substitutionTextFactory;
         private readonly IInterviewTreeBuilder treeBuilder;
-        public IQuestionOptionsRepository questionOptionsRepository => 
-            ServiceLocatorInstance.GetInstance<IQuestionOptionsRepository>();
 
         protected InterviewKey interviewKey;
 
@@ -1031,7 +1029,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree, questionOptionsRepository)
+            new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree)
                 .RequireTextAnswerAllowed();
 
             var changedInterviewTree = this.Tree.Clone();
@@ -1053,7 +1051,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree, questionOptionsRepository)
+            new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree)
                 .RequireDateTimeAnswerAllowed();
 
             var changedInterviewTree = this.Tree.Clone();
@@ -1077,7 +1075,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree, questionOptionsRepository)
+            new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree)
                 .RequireNumericIntegerAnswerAllowed(answer, this.tree.GetQuestion(questionIdentity)?.GetAsInterviewTreeIntegerQuestion()?.ProtectedAnswer?.Value);
 
             var changedInterviewTree = this.Tree.Clone();
@@ -1100,7 +1098,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             var questionIdentity = new Identity(questionId, rosterVector);
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree, questionOptionsRepository)
+            new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree)
                 .RequireNumericRealAnswerAllowed(answer);
 
             var changedInterviewTree = this.Tree.Clone();
@@ -1125,12 +1123,12 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (treeQuestion.IsLinkedToListQuestion)
             {
-                new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree, questionOptionsRepository)
+                new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree)
                     .RequireLinkedToListSingleOptionAnswerAllowed(selectedValue);
             }
             else
             {
-                new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree, questionOptionsRepository)
+                new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree)
                     .RequireFixedSingleOptionAnswerAllowed(selectedValue, this.QuestionnaireIdentity);
             }
 
@@ -1170,7 +1168,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree, questionOptionsRepository)
+            new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree)
                 .RequireLinkedToRosterSingleOptionAnswerAllowed(selectedRosterVector);
 
             var changedInterviewTree = this.Tree.Clone();
@@ -1197,13 +1195,13 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             if (isLinkedToList)
             {
-                new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree, questionOptionsRepository)
+                new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree)
                     .RequireLinkedToListMultipleOptionsAnswerAllowed(selectedValues);
             }
             else
             {
                 var protectedValues = answeredQuestion.GetAsInterviewTreeMultiOptionQuestion()?.ProtectedAnswer?.CheckedValues;
-                new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree, questionOptionsRepository)
+                new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree)
                     .RequireFixedMultipleOptionsAnswerAllowed(selectedValues, protectedValues);
             }
 
@@ -1234,7 +1232,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree, questionOptionsRepository)
+            new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree)
                 .RequireLinkedToRosterMultipleOptionsAnswerAllowed(selectedRosterVectors);
 
             var changedInterviewTree = this.Tree.Clone();
@@ -1257,7 +1255,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            new InterviewQuestionInvariants(command.Question, questionnaire, this.Tree, questionOptionsRepository)
+            new InterviewQuestionInvariants(command.Question, questionnaire, this.Tree)
                 .RequireYesNoAnswerAllowed(YesNoAnswer.FromAnsweredYesNoOptions(command.AnsweredOptions));
 
             var changedInterviewTree = this.Tree.Clone();
@@ -1282,7 +1280,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree, questionOptionsRepository)
+            new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree)
                 .RequireTextListAnswerAllowed(answers, 
                     this.tree.GetQuestion(questionIdentity)?.GetAsInterviewTreeTextListQuestion()?.ProtectedAnswer?.Rows ?? Array.Empty<TextListAnswerRow>());
 
@@ -1308,7 +1306,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
             var questionIdentity = new Identity(questionId, rosterVector);
 
-            new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree, questionOptionsRepository)
+            new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree)
                 .RequireGpsCoordinatesAnswerAllowed();
 
             var changedInterviewTree = this.Tree.Clone();
@@ -1331,7 +1329,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree, questionOptionsRepository)
+            new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree)
                 .RequireQRBarcodeAnswerAllowed();
 
             var changedInterviewTree = this.Tree.Clone();
@@ -1351,7 +1349,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree, questionOptionsRepository)
+            new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree)
                 .RequireAreaAnswerAllowed();
 
             var changedInterviewTree = this.Tree.Clone();
@@ -1375,7 +1373,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree, questionOptionsRepository)
+            new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree)
                 .RequirePictureAnswerAllowed();
 
             var changedInterviewTree = this.Tree.Clone();
@@ -1397,7 +1395,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree, questionOptionsRepository)
+            new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree)
                 .RequireAudioAnswerAllowed();
 
             var changedInterviewTree = this.Tree.Clone();
@@ -1425,7 +1423,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree, questionOptionsRepository)
+            new InterviewQuestionInvariants(questionIdentity, questionnaire, this.Tree)
                 .RequireQuestionExists()
                 .RequireQuestionEnabled();
 
@@ -1586,7 +1584,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
                     interviewTreeQuestion.SetAnswer(answer.Answer, DateTime.UtcNow);
 
-                    interviewTreeQuestion.RunImportInvariantsOrThrow(new InterviewQuestionInvariants(answer.Identity, questionnaire, changedInterviewTree, questionOptionsRepository));
+                    interviewTreeQuestion.RunImportInvariantsOrThrow(new InterviewQuestionInvariants(answer.Identity, questionnaire, changedInterviewTree));
 
                     if (commandAssignmentId.HasValue && questionnaire.IsPrefilled(answer.Identity.Id))
                     {
@@ -1656,7 +1654,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             IQuestionnaire questionnaire = this.GetQuestionnaireOrThrow();
 
-            new InterviewQuestionInvariants(new Identity(questionId, rosterVector), questionnaire, this.Tree, questionOptionsRepository)
+            new InterviewQuestionInvariants(new Identity(questionId, rosterVector), questionnaire, this.Tree)
                 .RequireQuestionExists();
 
             this.ApplyEvent(new AnswerCommented(userId, questionId, rosterVector, originDate, comment));
