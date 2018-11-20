@@ -61,6 +61,24 @@ namespace Resources {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Interviewer/Supervisor app is allowed to synchronize:.
+        /// </summary>
+        internal static string AllowedToSync {
+            get {
+                return ResourceManager.GetString("AllowedToSync", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Any.
+        /// </summary>
+        internal static string Any {
+            get {
+                return ResourceManager.GetString("Any", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Are you sure you want to change protection state? You will need to regenerate exported data in order to open it..
         /// </summary>
         internal static string ChangeStateConfirm {
@@ -282,6 +300,15 @@ namespace Resources {
         internal static string Settings_Title {
             get {
                 return ResourceManager.GetString("Settings_Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to {0} or newer.
+        /// </summary>
+        internal static string VersionOrNewer {
+            get {
+                return ResourceManager.GetString("VersionOrNewer", resourceCulture);
             }
         }
     }
