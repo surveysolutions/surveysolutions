@@ -4,6 +4,7 @@ using System.Web.Http;
 using Microsoft.Owin.Security;
 using Moq;
 using WB.Core.BoundedContexts.Headquarters.Assignments;
+using WB.Core.BoundedContexts.Headquarters.DataExport.Security;
 using WB.Core.BoundedContexts.Headquarters.Factories;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity;
 using WB.Core.BoundedContexts.Headquarters.Services;
@@ -14,6 +15,7 @@ using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Headquarters.Views.UsersAndQuestionnaires;
 using WB.Core.Infrastructure.FileSystem;
+using WB.Core.Infrastructure.PlainStorage;
 using WB.Core.Infrastructure.Versions;
 using WB.Core.SharedKernels.DataCollection;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
@@ -67,7 +69,8 @@ namespace WB.Tests.Abc.TestFactories
                     productVersion ?? Mock.Of<IProductVersion>(),
                     signInManager ?? new HqSignInManager(Create.Storage.HqUserManager(), Mock.Of<IAuthenticationManager>(), Mock.Of<IHashCompatibilityProvider>()),
                     questionnaireBrowseViewFactory ?? Mock.Of<IQuestionnaireBrowseViewFactory>(x => x.GetByIds(It.IsAny<QuestionnaireIdentity[]>()) == new List<QuestionnaireBrowseItem>()),
-                    assignmentsService ?? Mock.Of<IAssignmentsService>()
+                    assignmentsService ?? Mock.Of<IAssignmentsService>(),
+                    Mock.Of<IPlainKeyValueStorage<InterviewerSettings>>()
                 );
                 result.Request = new HttpRequestMessage();
                 result.Request.SetConfiguration(new HttpConfiguration());

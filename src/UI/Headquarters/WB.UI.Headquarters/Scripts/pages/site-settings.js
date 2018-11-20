@@ -1,5 +1,5 @@
-﻿Supervisor.VM.ExportSettings = function (ajax, notifier, $dataUrl, $changeStateUrl, $regenPasswordUrl, $messageUrl) {
-    Supervisor.VM.ExportSettings.superclass.constructor.apply(this, arguments);
+﻿Supervisor.VM.SiteSettings = function (ajax, notifier, $dataUrl, $changeStateUrl, $regenPasswordUrl, $messageUrl) {
+    Supervisor.VM.SiteSettings.superclass.constructor.apply(this, arguments);
 
     var self = this;
     self.Url = $dataUrl;
@@ -9,6 +9,7 @@
 
     self.isEnabled = ko.observable(false);
     self.isInterviewerAutomaticUpdatesEnabled = ko.observable(true);
+    self.howManyMajorReleaseDontNeedUpdate = ko.observable(null);
 
     self.password = ko.observable('');
     self.message = ko.observable('');
@@ -26,6 +27,7 @@
                 if (!data) return;
 
                 self.isInterviewerAutomaticUpdatesEnabled(data.InterviewerAutoUpdatesEnabled);
+                self.howManyMajorReleaseDontNeedUpdate(data.HowManyMajorReleaseDontNeedUpdate);
                 self.message(data.GlobalNotice);
             }, true, true);
     };
@@ -61,7 +63,12 @@
     });
 
     self.updateMessage = function() {
-        ajax.sendRequest($messageUrl, "POST", { globalNotice: self.message(), interviewerAutoUpdatesEnabled: self.isInterviewerAutomaticUpdatesEnabled() }, false,
+        ajax.sendRequest($messageUrl, "POST",
+            {
+                globalNotice: self.message(),
+                interviewerAutoUpdatesEnabled: self.isInterviewerAutomaticUpdatesEnabled(),
+                howManyMajorReleaseDontNeedUpdate: self.howManyMajorReleaseDontNeedUpdate()
+            }, false,
             //onSuccess
             function() {
                 location.reload();
@@ -133,4 +140,4 @@
         return true;
     };
 };
-Supervisor.Framework.Classes.inherit(Supervisor.VM.ExportSettings, Supervisor.VM.BasePage);
+Supervisor.Framework.Classes.inherit(Supervisor.VM.SiteSettings, Supervisor.VM.BasePage);
