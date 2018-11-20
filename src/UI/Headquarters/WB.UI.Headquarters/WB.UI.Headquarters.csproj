@@ -2547,7 +2547,6 @@
     <Compile Include="Utils\EnumExtensions.cs" />
     <Compile Include="Utils\ExceptionExtensoins.cs" />
     <Compile Include="Utils\Extensions.cs" />
-    <Compile Include="Utils\Threading\AsyncQuestionnaireUpdater.cs" />
     <Compile Include="Views\DesignerQuestionnaireApiRestServiceSettings.cs" />
     <Compile Include="Views\Shared\HtmlExtensions.cs" />
   </ItemGroup>
