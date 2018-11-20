@@ -36,6 +36,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
         private readonly IPlainStorageAccessor<BrokenInterviewPackage> brokenInterviewPackageStorage;
         private readonly IPlainStorageAccessor<ReceivedPackageLogEntry> packagesTracker;
         private readonly ILogger logger;
+        private readonly ISessionFactory sessionFactory;
         private readonly SyncSettings syncSettings;
         
         public InterviewPackagesService(
@@ -43,12 +44,14 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
             IPlainStorageAccessor<BrokenInterviewPackage> brokenInterviewPackageStorage,
             IPlainStorageAccessor<ReceivedPackageLogEntry> packagesTracker,
             ILogger logger,
+            ISessionFactory sessionFactory,
             SyncSettings syncSettings)
         {
             this.interviewPackageStorage = interviewPackageStorage;
             this.brokenInterviewPackageStorage = brokenInterviewPackageStorage;
             this.packagesTracker = packagesTracker;
             this.logger = logger;
+            this.sessionFactory = sessionFactory;
             this.syncSettings = syncSettings;
         }
 
@@ -290,7 +293,7 @@ namespace WB.Core.BoundedContexts.Headquarters.Implementation.Synchronization
 
                 var exceptionType = interviewException?.ExceptionType.ToString() ?? UnknownExceptionType;
 
-                using (var brokenPackageUow = new UnitOfWork(ServiceLocator.Current.GetInstance<ISessionFactory>()))
+                using (var brokenPackageUow = new UnitOfWork(this.sessionFactory, logger))
                 {
                     brokenPackageUow.Session.Save(new BrokenInterviewPackage
                     {

@@ -21,19 +21,16 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
         private static ConcurrentDictionary<string, QuestionnaireDocument> questionnaireDocumentsCache = new ConcurrentDictionary<string, QuestionnaireDocument>();
         private static ConcurrentDictionary<string, PlainQuestionnaire> plainQuestionnairesCache = new ConcurrentDictionary<string, PlainQuestionnaire>();
 
-        private readonly IQuestionOptionsRepository questionOptionsRepository;
         private ISubstitutionService substitutionService;
 
         public QuestionnaireStorage(IPlainKeyValueStorage<QuestionnaireDocument> repository, 
             ITranslationStorage translationStorage, 
             IQuestionnaireTranslator translator,
-            IQuestionOptionsRepository questionOptionsRepository,
             ISubstitutionService substitutionService)
         {
             this.repository = repository;
             this.translationStorage = translationStorage;
             this.translator = translator;
-            this.questionOptionsRepository = questionOptionsRepository;
             this.substitutionService = substitutionService;
         }
 
@@ -63,8 +60,7 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Repositories
                 questionnaireDocument = this.translator.Translate(questionnaireDocument, translation);
             }
 
-            var plainQuestionnaire = new PlainQuestionnaire(questionnaireDocument, identity.Version, 
-                questionOptionsRepository, substitutionService,translationId);
+            var plainQuestionnaire = new PlainQuestionnaire(questionnaireDocument, identity.Version, substitutionService,translationId);
 
             plainQuestionnaire.WarmUpPriorityCaches();
 
