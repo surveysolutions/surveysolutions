@@ -145,6 +145,8 @@ namespace WB.Core.BoundedContexts.Headquarters
             registry.Bind<Questionnaire>();
             registry.Bind<IPlainAggregateRootRepository<Questionnaire>, QuestionnaireRepository>();
             registry.Bind<IQuestionnaireExportStructureStorage, QuestionnaireExportStructureStorage>();
+            registry.Bind<IQuestionOptionsRepository, QuestionnaireQuestionOptionsRepository>();
+
             registry.Bind<IAndroidPackageReader, AndroidPackageReader>();
            
             registry.BindWithConstructorArgument<IPreloadingTemplateService, AssignmentImportTemplateGenerator>("folderPath", this.currentFolderPath);

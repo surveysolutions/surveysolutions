@@ -11,6 +11,7 @@ using WB.Core.BoundedContexts.Headquarters.Services;
 using WB.Core.BoundedContexts.Headquarters.Storage.AmazonS3;
 using WB.Core.BoundedContexts.Headquarters.Views.User;
 using WB.Core.BoundedContexts.Interviewer.Services;
+using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 using WB.Core.GenericSubdomains.Portable.Services;
 using WB.Core.Infrastructure.Implementation;
 using WB.Core.Infrastructure.PlainStorage;
@@ -104,8 +105,8 @@ namespace WB.Tests.Abc.TestFactories
 
         public QuestionnaireQuestionOptionsRepository QuestionnaireQuestionOptionsRepository(IQuestionnaire questionnaire = null)
         {
-            var optionsRepository = new QuestionnaireQuestionOptionsRepository(Mock.Of<IQuestionnaireStorage>());
-            
+            var optionsRepository = new QuestionnaireQuestionOptionsRepository(
+                );
 
             return optionsRepository;
         }
