@@ -168,6 +168,7 @@
     <Compile Include="Filters\ApiValidationAntiForgeryTokenAttribute.cs" />
     <Compile Include="Filters\NoCacheAttribute.cs" />
     <Compile Include="Filters\TokenValidationAuthorizationFilter.cs" />
+    <Compile Include="Kernel\AutofacServiceLocatorFactory.cs" />
     <Compile Include="Kernel\AutofacWebKernel.cs" />
     <Compile Include="Kernel\CustomWebApiDependencyResolver.cs" />
     <Compile Include="Mappings\ProductVersionChangeMap.cs" />
