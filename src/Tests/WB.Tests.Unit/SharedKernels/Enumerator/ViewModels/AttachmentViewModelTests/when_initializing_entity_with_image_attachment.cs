@@ -1,6 +1,8 @@
 using System;
+using System.IO;
 using FluentAssertions;
 using Moq;
+using NUnit.Framework;
 using WB.Core.SharedKernels.DataCollection.Aggregates;
 using WB.Core.SharedKernels.Enumerator.Repositories;
 using WB.Core.SharedKernels.Enumerator.ViewModels.InterviewDetails.Questions.State;
@@ -12,7 +14,9 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AttachmentViewModelT
 {
     internal class when_initializing_entity_with_image_attachment : AttachmentViewModelTestContext
     {
-        [NUnit.Framework.OneTimeSetUp] public void context () {
+        [OneTimeSetUp]
+        public void context()
+        {
             entityId = Guid.Parse("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
             var attachmentContentId = "cccccc";
             var attachment = Create.Entity.Attachment(attachmentContentId);
@@ -20,7 +24,7 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AttachmentViewModelT
             attachmentContentData = Create.Entity.AttachmentContentData(new byte[] { 1, 2, 3 });
             var questionnaireIdentity = Create.Entity.QuestionnaireIdentity(Guid.NewGuid());
 
-            var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireIdentity, _ 
+            var questionnaireRepository = Setup.QuestionnaireRepositoryWithOneQuestionnaire(questionnaireIdentity, _
                 => _.GetAttachmentForEntity(entityId) == attachment);
 
             var interview = Mock.Of<IStatefulInterview>(i => i.QuestionnaireIdentity == questionnaireIdentity);
@@ -34,11 +38,11 @@ namespace WB.Tests.Unit.SharedKernels.Enumerator.ViewModels.AttachmentViewModelT
             BecauseOf();
         }
 
-        public void BecauseOf() => viewModel.Init("interview", Create.Identity(entityId, Empty.RosterVector));
+        public void BecauseOf() => viewModel.Init("interview", Create.Identity(entityId, Empty.RosterVector), Create.Other.NavigationState());
 
-        [NUnit.Framework.Test] public void should_initialize_attachment_as_image () => viewModel.IsImage.Should().BeTrue();
+        [Test] public void should_initialize_attachment_as_image() => viewModel.IsImage.Should().BeTrue();
 
-        [NUnit.Framework.Test] public void should_initialize_image_content () => viewModel.Content.Should().BeEquivalentTo(attachmentContentData.Content);
+        [Test] public void should_initialize_image_content() => viewModel.Content.Should().BeEquivalentTo(attachmentContentData.Content);
 
         static AttachmentViewModel viewModel;
         private static Guid entityId;

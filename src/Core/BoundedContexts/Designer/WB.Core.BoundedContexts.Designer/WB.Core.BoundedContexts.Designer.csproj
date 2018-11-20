@@ -43,7 +43,6 @@
     <PackageReference Include="Microsoft.AspNet.WebPages.Data" Version="3.2.3" />
     <PackageReference Include="Microsoft.AspNet.WebPages.WebData" Version="3.2.3" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="2.9.0" />
-    <PackageReference Include="Ninject" Version="3.3.4" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\Infrastructure\WB.Infrastructure.Native\WB.Infrastructure.Native.csproj" />
@@ -57,6 +56,9 @@
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.ApplicationServices" />
+    <Reference Include="WB.Core.SharedKernels.Questionnaire">
+      <HintPath>..\..\..\..\UI\Headquarters\WB.UI.Headquarters\Bin\WB.Core.SharedKernels.Questionnaire.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <None Update="CodeGenerationV2\CodeTemplates\ConditionMethodTemplate.tt">

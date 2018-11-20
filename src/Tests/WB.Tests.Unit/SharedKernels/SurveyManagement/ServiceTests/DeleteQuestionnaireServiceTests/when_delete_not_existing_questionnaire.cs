@@ -14,7 +14,7 @@ namespace WB.Tests.Unit.SharedKernels.SurveyManagement.ServiceTests.DeleteQuesti
             deleteQuestionnaireService = CreateDeleteQuestionnaireService(commandService: commandServiceMock.Object);
 
             Assert.DoesNotThrow(() =>
-                deleteQuestionnaireService.DeleteQuestionnaire(questionnaireId, questionnaireVersion, userId));
+                deleteQuestionnaireService.DisableQuestionnaire(questionnaireId, questionnaireVersion, userId));
         }
 
         private static DeleteQuestionnaireService deleteQuestionnaireService;

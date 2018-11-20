@@ -7,7 +7,6 @@ using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Factories;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.InputModels;
 using WB.Core.BoundedContexts.Headquarters.Views.Reposts.Views;
 using WB.Core.GenericSubdomains.Portable;
-using WB.Core.Infrastructure.Transactions;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 
 namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests.Sv
@@ -26,15 +25,17 @@ namespace WB.Tests.Integration.ReportTests.TeamsAndStatusesTests.Sv
             };
 
             var repository = CreateInterviewSummaryRepository();
-            ExecuteInCommandTransaction(() => interviews.ForEach(x => repository.Store(x, x.InterviewId.FormatGuid())));
+            interviews.ForEach(x => repository.Store(x, x.InterviewId.FormatGuid()));
 
             reportFactory = CreateSvTeamsAndStatusesReport(repository);
             BecauseOf();
         }
 
-        public void BecauseOf() => report = postgresTransactionManager.ExecuteInQueryTransaction(() => reportFactory.GetBySupervisorAndDependentInterviewers(new TeamsAndStatusesInputModel { ViewerId = viewerId }));
+        public void BecauseOf() => 
+            report = reportFactory.GetBySupervisorAndDependentInterviewers(new TeamsAndStatusesInputModel { ViewerId = viewerId });
 
-        [NUnit.Framework.Test] public void should_count_number_of_interviews_for_teamlead () => report.Items.First().CompletedCount.Should().Be(2);
+        [NUnit.Framework.Test] public void should_count_number_of_interviews_for_teamlead () => 
+            report.Items.First().CompletedCount.Should().Be(2);
 
         static TeamsAndStatusesReport reportFactory;
         static TeamsAndStatusesReportView report;

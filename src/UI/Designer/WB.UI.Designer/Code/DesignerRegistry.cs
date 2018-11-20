@@ -18,6 +18,7 @@ using WB.UI.Designer.Services;
 using WB.UI.Shared.Web.Attributes;
 using WB.UI.Shared.Web.Filters;
 using WB.UI.Shared.Web.Modules;
+using WB.UI.Shared.Web.Modules.Filters;
 
 namespace WB.UI.Designer.Code
 {
@@ -48,10 +49,10 @@ namespace WB.UI.Designer.Code
 
         public void Load(IWebIocRegistry registry)
         {
-            registry.BindHttpFilter<UnderConstructionHttpFilter>(System.Web.Http.Filters.FilterScope.Controller, 0);
-            registry.BindMvcFilter<UnderConstructionMvcFilter>(FilterScope.First, 0);
-            registry.BindMvcFilterWhenActionMethodHasNoAttribute<PlainTransactionFilter, NoTransactionAttribute>(FilterScope.First, 0);
-            registry.BindHttpFilterWhenActionMethodHasNoAttribute<PlainApiTransactionFilter, NoTransactionAttribute>(System.Web.Http.Filters.FilterScope.Global);
+            registry.BindMvcActionFilter<UnderConstructionMvcFilter>();
+            registry.BindWebApiFilter<UnderConstructionHttpFilter>(/*System.Web.Http.Filters.FilterScope.Controller, 0*/);
+            registry.BindMvcActionFilterWhenControllerOrActionHasNoAttribute<TransactionFilter, NoTransactionAttribute>(/*FilterScope.First,*/ 1);
+            registry.BindWebApiActionFilterWhenControllerOrActionHasNoAttribute<ApiTransactionFilter, NoTransactionAttribute>(/*System.Web.Http.Filters.FilterScope.Global, 1*/);
 
             registry.Bind<ICommandInflater, CommandInflater>();
             registry.Bind<IQuestionnaireHelper, QuestionnaireHelper>();

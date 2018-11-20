@@ -22,11 +22,35 @@ namespace WB.Core.Infrastructure
             registry.Bind<IEventSourcedAggregateRootRepository, DummyEventSourcedAggregateRootRepository>();
             registry.Bind<ILiteEventBus, DummyEventBus>();
             registry.Bind<IAggregateSnapshotter, DummyAggregateSnapshotter>();
+            registry.Bind<IEventStore, DummyEventStore>();
         }
 
         public Task Init(IServiceLocator serviceLocator, UnderConstructionInfo status)
         {
             return Task.CompletedTask;
+        }
+
+        public class DummyEventStore : IEventStore
+        {
+            public IEnumerable<CommittedEvent> Read(Guid id, int minVersion)
+            {
+                throw new NotImplementedException("This application is event free.");
+            }
+
+            public IEnumerable<CommittedEvent> Read(Guid id, int minVersion, IProgress<EventReadingProgress> progress, CancellationToken cancellationToken)
+            {
+                throw new NotImplementedException("This application is event free.");
+            }
+
+            public int? GetLastEventSequence(Guid id)
+            {
+                throw new NotImplementedException("This application is event free.");
+            }
+
+            public CommittedEventStream Store(UncommittedEventStream eventStream)
+            {
+                throw new NotImplementedException("This application is event free.");
+            }
         }
 
         public class DummyEventSourcedAggregateRootRepository : IEventSourcedAggregateRootRepository

@@ -111,9 +111,9 @@ namespace WB.Tests.Unit.Applications.Headquarters
 
             // Assert
             mockOfRestService.Verify(x => x.DownloadFileAsync(It.IsAny<string>(), null, It.IsAny<RestCredentials>(), null, null), Times.Exactly(2));
-            mockOfAttachmentContentService.Verify(x => x.SaveAttachmentContent(questionnaireAttachments[0].ContentId, It.IsAny<string>(), It.IsAny<byte[]>()), Times.Never);
-            mockOfAttachmentContentService.Verify(x => x.SaveAttachmentContent(questionnaireAttachments[1].ContentId, It.IsAny<string>(), It.IsAny<byte[]>()), Times.Once);
-            mockOfAttachmentContentService.Verify(x => x.SaveAttachmentContent(questionnaireAttachments[2].ContentId, It.IsAny<string>(), It.IsAny<byte[]>()), Times.Once);
+            mockOfAttachmentContentService.Verify(x => x.SaveAttachmentContent(questionnaireAttachments[0].ContentId, It.IsAny<string>(),It.IsAny<string>(), It.IsAny<byte[]>()), Times.Never);
+            mockOfAttachmentContentService.Verify(x => x.SaveAttachmentContent(questionnaireAttachments[1].ContentId, It.IsAny<string>(),It.IsAny<string>(), It.IsAny<byte[]>()), Times.Once);
+            mockOfAttachmentContentService.Verify(x => x.SaveAttachmentContent(questionnaireAttachments[2].ContentId, It.IsAny<string>(),It.IsAny<string>(), It.IsAny<byte[]>()), Times.Once);
         }
 
         [Test]

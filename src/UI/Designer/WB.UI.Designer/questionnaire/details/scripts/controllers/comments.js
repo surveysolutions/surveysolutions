@@ -51,9 +51,12 @@
                     thread.comments = _.filter(thread.comments, function(comment) {
                         return comment.id !== data.id;
                     });
+                    thread.resolvedComments = _.filter(thread.resolvedComments, function (comment) {
+                        return comment.id !== data.id;
+                    });
                 });
                 $scope.commentThreads = _.filter($scope.commentThreads, function(thread) {
-                    return thread.comments.length > 0;
+                    return thread.comments.length > 0 || thread.resolvedComments.length > 0;
                 });
             });
 

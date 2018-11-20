@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
@@ -24,6 +25,7 @@ using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Entities;
 using WB.Core.SharedKernels.Enumerator.OfflineSync.Services;
 using WB.Core.SharedKernels.Enumerator.Utils;
+using WB.Core.SharedKernels.SurveySolutions.Documents;
 using IEvent = WB.Core.Infrastructure.EventBus.IEvent;
 
 namespace WB.Tests.Abc.TestFactories
@@ -80,20 +82,46 @@ namespace WB.Tests.Abc.TestFactories
             return repository.Object;
         }
 
-        public IQuestionnaireStorage QuestionnaireRepository(KeyValuePair<string, QuestionnaireDocument>[] questionnairesWithTranslations)
+        public IQuestionnaireStorage QuestionnaireRepository(
+            KeyValuePair<string, QuestionnaireDocument>[] questionnairesWithTranslations,
+            IQuestionOptionsRepository optionsRepository = null)
+        {
+            var questionnairesStorage = new Mock<IQuestionnaireStorage>();
+            
+            foreach (var questionnaire in questionnairesWithTranslations)
+            {
+                IQuestionnaire plainQuestionnaire = Create.Entity.PlainQuestionnaire(
+                    questionnaire.Value, 1, questionOptionsRepository: optionsRepository);
+                
+                questionnairesStorage.Setup(repository =>
+                    repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), questionnaire.Key))
+                    .Returns(plainQuestionnaire);
+            }
+            
+            return questionnairesStorage.Object;
+        }
+
+        public IQuestionnaireStorage QuestionnaireRepository(
+            KeyValuePair<string, QuestionnaireDocument>[] questionnairesWithTranslations,
+            List<Translation> translations,
+            IQuestionOptionsRepository optionsRepository = null)
         {
             var questionnairesStorage = new Mock<IQuestionnaireStorage>();
 
             foreach (var questionnaire in questionnairesWithTranslations)
             {
-                IQuestionnaire plainQuestionnaire = Create.Entity.PlainQuestionnaire(questionnaire.Value);
+                IQuestionnaire plainQuestionnaire = Create.Entity.PlainQuestionnaire(
+                    questionnaire.Value, 1, questionOptionsRepository: optionsRepository,
+                    translation: translations.FirstOrDefault(t => t.Id == questionnaire.Value.DefaultTranslation));
 
                 questionnairesStorage.Setup(repository =>
-                    repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), questionnaire.Key)).Returns(plainQuestionnaire);
+                        repository.GetQuestionnaire(It.IsAny<QuestionnaireIdentity>(), questionnaire.Key))
+                    .Returns(plainQuestionnaire);
             }
-            
+
             return questionnairesStorage.Object;
         }
+
 
         public ISnapshotStore SnapshotStore(Guid aggregateRootId, Snapshot snapshot = null)
             => Mock.Of<ISnapshotStore>(_

@@ -71,6 +71,7 @@ using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog;
 using WB.Core.SharedKernels.DataCollection.Views.InterviewerAuditLog.Entities;
 using WB.Core.SharedKernels.DataCollection.Views.Questionnaire;
 using WB.Core.SharedKernels.DataCollection.WebApi;
+using WB.Core.SharedKernels.Enumerator.Implementation.Services;
 using WB.Core.SharedKernels.Enumerator.Implementation.Services.Synchronization.Steps;
 using WB.Core.SharedKernels.Enumerator.Services.Synchronization;
 using WB.Core.SharedKernels.Enumerator.Utils;
@@ -84,6 +85,7 @@ using WB.Core.SharedKernels.Questionnaire.Translations;
 using WB.Core.SharedKernels.QuestionnaireEntities;
 using WB.Core.SharedKernels.SurveyManagement.Web.Models;
 using WB.Core.SharedKernels.SurveySolutions.Documents;
+using WB.Enumerator.Native.Questionnaire.Impl;
 using WB.Infrastructure.Native.Storage;
 
 using AttachmentContent = WB.Core.BoundedContexts.Headquarters.Views.Questionnaire.AttachmentContent;
@@ -780,15 +782,19 @@ namespace WB.Tests.Abc.TestFactories
         public PlainQuestionnaire PlainQuestionnaire(QuestionnaireDocument document = null, long version = 1)
             => Create.Entity.PlainQuestionnaire(document, version, null);
 
-        public PlainQuestionnaire PlainQuestionnaire(QuestionnaireDocument document, long version, Translation translation = null)
+        public PlainQuestionnaire PlainQuestionnaire(QuestionnaireDocument document, long version, 
+            Translation translation = null, 
+            ISubstitutionService substitutionService = null, IQuestionOptionsRepository questionOptionsRepository = null)
         {
             if (document != null)
             {
                 document.IsUsingExpressionStorage = true;
-                document.ExpressionsPlayOrder = document.ExpressionsPlayOrder ?? Create.Service.ExpressionsPlayOrderProvider().GetExpressionsPlayOrder(
+                document.ExpressionsPlayOrder = document.ExpressionsPlayOrder 
+                    ?? Create.Service.ExpressionsPlayOrderProvider().GetExpressionsPlayOrder(
                     document.AsReadOnly().AssignMissingVariables());
             }
-            return new PlainQuestionnaire(document, version, translation);
+            return new PlainQuestionnaire(document, version, questionOptionsRepository ?? Mock.Of<IQuestionOptionsRepository>(), 
+                substitutionService ?? Mock.Of<ISubstitutionService>(), translation);
         }
 
         public QRBarcodeQuestion QRBarcodeQuestion(Guid? questionId = null, string enablementCondition = null, string validationExpression = null,
@@ -926,6 +932,24 @@ namespace WB.Tests.Abc.TestFactories
                     }
                 }.ToReadOnlyCollection(),
                 Translations = new List<Translation>(languages.Select(x=>Create.Entity.Translation(Guid.NewGuid(), x)))
+            };
+
+
+        public QuestionnaireDocument QuestionnaireDocumentWithOneChapterAndLanguages(Guid chapterId, 
+            List<Translation> translations, Guid? defaultTranslation, params IComposite[] children)
+            => new QuestionnaireDocument
+            {
+                PublicKey = Guid.NewGuid(),
+                Children = new List<IComposite>
+                {
+                    new Group("Chapter")
+                    {
+                        PublicKey = chapterId,
+                        Children = children?.ToReadOnlyCollection() ?? new ReadOnlyCollection<IComposite>(new List<IComposite>())
+                    }
+                }.ToReadOnlyCollection(),
+                DefaultTranslation = defaultTranslation,
+                Translations = translations
             };
 
         public QuestionnaireDocument QuestionnaireDocumentWithOneChapter(Guid? chapterId = null, Guid? id = null, params IComposite[] children)
@@ -2251,6 +2275,16 @@ namespace WB.Tests.Abc.TestFactories
             var result = Create.Entity.InterviewTreeQuestion(singleOptionQuestionIdentity, answer: answer,
                 questionType: QuestionType.SingleOption);
             return result;
+        }
+
+        public InterviewGpsAnswer InterviewGpsAnswer(Guid interviewId, double latitude, double longitude)
+        {
+            return new InterviewGpsAnswer
+            {
+                InterviewId = interviewId,
+                Latitude = latitude,
+                Longitude = longitude
+            };
         }
     }
 }

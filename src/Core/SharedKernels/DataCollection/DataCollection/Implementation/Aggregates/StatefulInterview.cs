@@ -12,20 +12,30 @@ using WB.Core.SharedKernels.DataCollection.Exceptions;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.InterviewEntities;
 using WB.Core.SharedKernels.DataCollection.Implementation.Aggregates.Invariants;
 using WB.Core.SharedKernels.DataCollection.Implementation.Entities;
-using WB.Core.SharedKernels.DataCollection.Repositories;
 using WB.Core.SharedKernels.DataCollection.Services;
 using WB.Core.SharedKernels.DataCollection.ValueObjects.Interview;
 using WB.Core.SharedKernels.Enumerator.Events;
 
 namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 {
+    //stored in global cache
+    //references to repositories should be resolved on demand 
     public class StatefulInterview : Interview, IStatefulInterview
     {
-        public StatefulInterview(IQuestionnaireStorage questionnaireRepository,
-                                 IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider,
-                                 ISubstitutionTextFactory substitutionTextFactory,
-                                 IInterviewTreeBuilder treeBuilder)
-            : base(questionnaireRepository, expressionProcessorStatePrototypeProvider, substitutionTextFactory, treeBuilder)
+        public StatefulInterview(
+            //IQuestionnaireStorage questionnaireRepository,
+            //IInterviewExpressionStatePrototypeProvider expressionProcessorStatePrototypeProvider,
+            ISubstitutionTextFactory substitutionTextFactory,
+            IInterviewTreeBuilder treeBuilder
+            //,IQuestionOptionsRepository questionOptionsRepository
+            )
+            : base(
+                //questionnaireRepository, 
+                //expressionProcessorStatePrototypeProvider, 
+                substitutionTextFactory, 
+                treeBuilder
+                //,questionOptionsRepository
+                )
         {
         }
 
@@ -445,6 +455,29 @@ namespace WB.Core.SharedKernels.DataCollection.Implementation.Aggregates
 
             return section.Children.Where(x => !(x is InterviewTreeVariable)).Select(x => x.Identity);
         }
+
+        public IEnumerable<Identity> GetUnderlyingEntitiesForReviewRecursive(Identity sectionId)
+        {
+            var section = this.Tree.GetNodeByIdentity(sectionId);
+            
+            if (section == null)
+            {
+                throw new ArgumentException($"Section not found", nameof(sectionId))
+                {
+                    Data =
+                    {
+                        { "SectionId", sectionId },
+                        { "InterviewId", Id }
+                    }
+                };
+            }
+
+            return section
+                .TreeToEnumerableDepthFirst(s => s.Children)
+                .Where(x => !(x is InterviewTreeVariable))
+                .Select(x => x.Identity);
+        }
+        
 
         public IEnumerable<Identity> GetAllIdentitiesForEntityId(Guid id)
             => this.Tree.AllNodes.Where(node => node.Identity.Id == id).Select(node => node.Identity);

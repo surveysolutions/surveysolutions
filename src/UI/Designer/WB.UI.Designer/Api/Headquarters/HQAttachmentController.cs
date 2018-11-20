@@ -1,3 +1,4 @@
+using System;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -19,7 +20,7 @@ namespace WB.UI.Designer.Api.Headquarters
 
         [HttpGet]
         [Route("{id}")]
-        public HttpResponseMessage Get(string id)
+        public HttpResponseMessage Get(string id, [FromUri] Guid? attachmentId)
         {
             var attachment = this.attachmentService.GetContent(id);
 
@@ -32,6 +33,15 @@ namespace WB.UI.Designer.Api.Headquarters
 
             response.Content.Headers.ContentType = new MediaTypeHeaderValue(attachment.ContentType);
             response.Headers.ETag = new EntityTagHeaderValue("\"" + attachment.ContentId + "\"");
+
+            if (attachmentId.HasValue)
+            {
+                var attachmentMeta = this.attachmentService.GetAttachmentMeta(attachmentId.Value);
+                response.Content.Headers.ContentDisposition = new ContentDispositionHeaderValue("attachment")
+                {
+                    FileName = attachmentMeta.FileName
+                };
+            }
 
             return response;
         }

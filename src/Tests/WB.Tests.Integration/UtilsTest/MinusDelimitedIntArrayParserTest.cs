@@ -1,5 +1,4 @@
 using NUnit.Framework;
-using WB.Core.BoundedContexts.Headquarters;
 using WB.Core.SharedKernels.DataCollection;
 
 namespace WB.Tests.Integration.UtilsTest

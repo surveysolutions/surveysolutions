@@ -12,18 +12,22 @@ using WB.Core.GenericSubdomains.Portable;
 using System.Threading;
 using System.Web;
 using WB.Core.BoundedContexts.Headquarters.OwinSecurity.Providers;
-using WB.Core.GenericSubdomains.Portable.ServiceLocation;
 
 namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 {
     public class HqSignInManager : SignInManager<HqUser, Guid>
     {
+        private readonly IHashCompatibilityProvider hashCompatibilityProvider;
         private IApiTokenProvider<Guid> ApiTokenProvider { get; set; }
 
-        public HqSignInManager(HqUserManager userManager, IAuthenticationManager authenticationManager, IApiTokenProvider<Guid> tokenProvider = null)
+        public HqSignInManager(HqUserManager userManager, 
+            IAuthenticationManager authenticationManager,
+            IHashCompatibilityProvider hashCompatibilityProvider,
+            IApiTokenProvider<Guid> tokenProvider = null)
             : base(userManager, authenticationManager)
         {
             this.ApiTokenProvider = tokenProvider ?? new ApiAuthTokenProvider<HqUser, Guid>(userManager);
+            this.hashCompatibilityProvider = hashCompatibilityProvider;
         }
 
         public async Task<SignInStatus> SignInAsync(string userName, string password, bool isPersistent = false)
@@ -181,8 +185,7 @@ namespace WB.Core.BoundedContexts.Headquarters.OwinSecurity
 
         private bool IsInCompatibilityMode(HqUser userInfo)
         {
-            var compatibilityProvider = ServiceLocator.Current.GetInstance<IHashCompatibilityProvider>();
-            return compatibilityProvider.IsInSha1CompatibilityMode() && userInfo.IsInRole(UserRoles.Interviewer);
+            return hashCompatibilityProvider.IsInSha1CompatibilityMode() && userInfo.IsInRole(UserRoles.Interviewer);
         }
 
         private bool CheckHashedPassword(HqUser userInfo, BasicCredentials basicCredentials)

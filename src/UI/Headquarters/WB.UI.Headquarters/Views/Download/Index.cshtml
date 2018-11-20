@@ -2,12 +2,11 @@
 @using WB.Core.GenericSubdomains.Portable.ServiceLocation
 @using WB.Core.Infrastructure.Versions
 @using WB.Core.SharedKernels.SurveyManagement.Web.Code
-@using WB.UI.Headquarters.Code
 @using WB.UI.Shared.Web.Extensions
 @model WB.UI.Headquarters.Models.DownloadModel
 @{
     Layout = null;
-    var qRCodeHelper = ServiceLocator.Current.GetInstance<IQRCodeHelper>();
+    var qRCodeHelper = DependencyResolver.Current.GetService<IQRCodeHelper>();
 }
 <!DOCTYPE html>
 <html>
@@ -46,7 +45,7 @@
                             <div class="form-actions">
                                 <a href="@Url.HttpRouteUrl("DefaultApiWithAction", new {action = "GetLatestVersion", controller = "InterviewerSync"})" class="get-interviewer-app" id="dowload">
                                     <span>@Pages.GetLatestApp</span>
-                                    <span class="version">@Pages.DownloadPage_Version @(ServiceLocator.Current.GetInstance<IProductVersion>())</span>
+                                    <span class="version">@Pages.DownloadPage_Version @(DependencyResolver.Current.GetService<IProductVersion>())</span>
                                 </a>
                                 @if (qRCodeHelper.SupportQRCodeGeneration())
                                 {
@@ -80,7 +79,7 @@
             &copy; @DateTime.Now.Year.ToString() <a href="http://www.worldbankgroup.org">@Pages.Layout_WorldBank</a>, @Pages.Layout_RightsReserved <a href="http://go.worldbank.org/OS6V7NIUD0">@Pages.Layout_Legal</a>.
         </div>
         <div class="text-left">
-            @(ServiceLocator.Current.GetInstance<IProductVersion>())
+            @(DependencyResolver.Current.GetService<IProductVersion>())
             @if (AppSettings.IsDebugBuilded)
             {
                 <span id="build-config">[.NET Debug]</span>
