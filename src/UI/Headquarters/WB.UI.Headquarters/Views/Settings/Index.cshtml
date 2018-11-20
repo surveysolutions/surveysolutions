@@ -13,11 +13,12 @@
         var $dataUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "ExportSettingsApi", action = "ExportSettings" })';
         var $changeStateUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "ExportSettingsApi", action = "ChangeState" })';
         var $regenPasswordUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "ExportSettingsApi", action = "RegeneratePassword" })';
-        var $messageUrl = '@Url.RouteUrl("DefaultApi", new {httproute = "", controller = "AdminSettings" })';
+        var $globalNoticeSettingsUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "AdminSettings", action = "GlobalNoticeSettings" })';
+        var $autoUpdateSettingsUrl = '@Url.RouteUrl("DefaultApiWithAction", new {httproute = "", controller = "AdminSettings", action = "AutoUpdateSettings" })';
 
         $(function () {
             var notifier = new Notifier();
-            var model = new Supervisor.VM.SiteSettings(new Ajax(notifier), notifier, $dataUrl, $changeStateUrl, $regenPasswordUrl, $messageUrl);
+            var model = new Supervisor.VM.SiteSettings(new Ajax(notifier), notifier, $dataUrl, $changeStateUrl, $regenPasswordUrl, $globalNoticeSettingsUrl, $autoUpdateSettingsUrl);
             ko.applyBindings(model);
             model.load();
         });
@@ -109,7 +110,7 @@
             <div class="col-sm-12">
                 <div class="block-filter">
                     <div class="form-group">
-                        <input class="checkbox-filter single-checkbox" data-bind="checked: isInterviewerAutomaticUpdatesEnabled, click: updateMessage" id="interviewerAutomaticUpdatesEnabled" type="checkbox">
+                        <input class="checkbox-filter single-checkbox" data-bind="checked: isInterviewerAutomaticUpdatesEnabled, click: updateAutoUpdateSettings" id="interviewerAutomaticUpdatesEnabled" type="checkbox">
                         <label for="interviewerAutomaticUpdatesEnabled" style="font-weight: bold">
                             <span class="tick"></span>@Settings.InterviewerAutoUpdate
                         </label>
@@ -117,7 +118,7 @@
                 </div>
                 <div class="block-filter">
                     <label for="allowed-to-sync">@Settings.AllowedToSync</label>
-                    <select id="allowed-to-sync" data-bind="value: howManyMajorReleaseDontNeedUpdate, onchange: updateMessage" class="selectpicker">
+                    <select id="allowed-to-sync" data-bind="value: howManyMajorReleaseDontNeedUpdate, event:{ change: updateHowManyMajorReleaseDontNeedUpdate}" class="selectpicker">
                         <option value="null">@Settings.Any</option>
                         <option value='4'>@string.Format(Settings.VersionOrNewer, GetVersionForReleasesAgo(4))</option>
                         <option value='8'>@string.Format(Settings.VersionOrNewer, GetVersionForReleasesAgo(8))</option>
