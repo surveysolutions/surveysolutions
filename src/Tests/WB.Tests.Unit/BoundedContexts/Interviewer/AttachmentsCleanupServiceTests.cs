@@ -89,12 +89,13 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer
         public void when_questionnaire_has_stored_file_it_should_be_removed()
         {
             var contentId = "meta";
+            var contentFile = contentId + ".attachment";
             metadataStorage.Store(new AttachmentContentMetadata { Id = contentId, ContentType = "video/data", Size = 4 });
             contentStorage.Store(new AttachmentContentData { Content = new byte[] { 1, 2, 3 }, Id = contentId });
 
             var fileSystemAccessor = new Mock<IFileSystemAccessor>();
-
-            fileSystemAccessor.Setup(fs => fs.IsFileExists(It.Is<string>(f => f.EndsWith(contentId)))).Returns(true);
+        
+            fileSystemAccessor.Setup(fs => fs.IsFileExists(It.Is<string>(f => f.EndsWith(contentFile)))).Returns(true);
             
             var service = this.CreateAttachmentsCleanupService(
                 metadataStorage: metadataStorage,
@@ -106,7 +107,7 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer
             service.RemovedOrphanedAttachments();
 
             // assert
-            fileSystemAccessor.Verify(fs => fs.DeleteFile(It.Is<string>(f => f.EndsWith(contentId))), Times.Once);
+            fileSystemAccessor.Verify(fs => fs.DeleteFile(It.Is<string>(f => f.EndsWith(contentFile))), Times.Once);
 
             var dbMetaAfterRemoval = metadataStorage.GetById(contentId);
             var dbDataAfterRemoval = contentStorage.GetById(contentId);
