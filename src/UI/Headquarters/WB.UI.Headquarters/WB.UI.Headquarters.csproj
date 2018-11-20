@@ -2232,7 +2232,6 @@
     <Compile Include="Code\CommandTransformation\IntreviewCommand.cs" />
     <Compile Include="Code\CommandTransformation\UntypedQuestionAnswer.cs" />
     <Compile Include="Code\AuthorizeOr403Attribute.cs" />
-    <Compile Include="Code\CustomWebApiAuthorizeFilter.cs" />
     <Compile Include="Code\EnumToStringConverter.cs" />
     <Compile Include="Code\HtmlEncodeStringPropertiesConverter.cs" />
     <Compile Include="Code\HtmlHelper.cs" />
