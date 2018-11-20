@@ -673,7 +673,8 @@ namespace WB.Tests.Abc.TestFactories
             IQuestionOptionsRepository optionsRepository = null)
             => new ImportDataVerifier(fileSystem ?? new FileSystemIOAccessor(),
                 interviewTreeBuilder ?? Mock.Of<IInterviewTreeBuilder>(),
-                userViewFactory ?? Mock.Of<IUserViewFactory>());
+                userViewFactory ?? Mock.Of<IUserViewFactory>(),
+                optionsRepository ?? Mock.Of<IQuestionOptionsRepository>());
 
         public IAssignmentsUpgrader AssignmentsUpgrader(IPreloadedDataVerifier importService = null,
             IQuestionnaireStorage questionnaireStorage = null,
