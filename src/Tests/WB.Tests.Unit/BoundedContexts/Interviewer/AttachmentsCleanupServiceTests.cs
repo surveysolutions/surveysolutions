@@ -85,7 +85,6 @@ namespace WB.Tests.Unit.BoundedContexts.Interviewer
         }
 
         [Test]
-        [Ignore("KP-12123")]
         public void when_questionnaire_has_stored_file_it_should_be_removed()
         {
             var contentId = "meta";
